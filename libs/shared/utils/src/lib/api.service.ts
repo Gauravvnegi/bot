@@ -5,7 +5,7 @@ import { throwError as observableThrowError, Observable } from 'rxjs';
 
 @Injectable()
 export class ApiService {
-  baseUrl = 'https://api.botshot.in:8443/';
+  baseUrl = 'https://api.botshot.in:8443';
 
   constructor(protected httpClient: HttpClient) {}
 

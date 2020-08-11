@@ -1,0 +1,31 @@
+<div [ngStyle]="settings.style.detailWrapperStyles">
+  <mat-label
+    *ngIf="settings.label && settings.value"
+    [ngClass]="defaultClasses && defaultClasses.fieldMasterLabelClasses"
+    [ngStyle]="settings.style.detailLabelStyles"
+  >
+    {{ settings.label }}</mat-label
+  >
+
+  <ng-container *ngIf="settings.status && settings.status.code">
+    <div [ngStyle]="settings.style.detailPrefixIconStyles">
+      <mat-icon
+        [ngStyle]="settings.style.detailMatIconStyles"
+        [ngClass]=""
+        matSuffix
+        >{{ settings.status[settings.status.code].prefixIcon }}</mat-icon
+      >
+
+      <div
+        [style]="settings.style.detailValueStyles"
+        [innerHTML]="
+          settings.status[settings.status.code] | linkifyText | safeHtml
+        "
+      ></div>
+    </div>
+  </ng-container>
+
+  <div [style]="settings.style.detailValueStyles">
+    {{ settings.value }}
+  </div>
+</div>

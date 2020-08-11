@@ -1,0 +1,21 @@
+<div *ngIf="isRendered">
+  <div class="container">
+    <div class="payment-wrapper">
+      <hospitality-bot-payment-summary
+        *ngIf="hotelPaymentConfig"
+        [parentForm]="parentForm"
+        [reservationData]="reservationData"
+      ></hospitality-bot-payment-summary>
+      <hospitality-bot-payment-details
+        *ngIf="hotelPaymentConfig"
+        [parentForm]="parentForm"
+        [cardType]="cardType"
+      ></hospitality-bot-payment-details>
+    </div>
+  </div>
+
+  <div class="main-template-button">
+    <ng-container button-renderer [config]="buttonConfig" [context]="self">
+    </ng-container>
+  </div>
+</div>

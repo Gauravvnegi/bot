@@ -1,0 +1,124 @@
+@import 'temp-covid000001';
+
+.covid__page--header {
+  padding: $padding-large;
+  position: sticky;
+  top: 0px;
+  background-color: white;
+  // position: relative;
+  box-shadow: 0px 1px 7px 1px darkgray;
+  z-index: 22;
+  @include flex-space-between();
+  align-items: center;
+  .option__menu{
+    position: absolute;
+    z-index: 11;
+    top: 51px;
+    left: 0;
+    display: none;
+    border-radius: 5px;
+    background-color: $icon-color;
+    a{
+      text-decoration: none;
+      font-size: $font-responsive-small;
+      display: block;
+      padding: 7px;
+      font-weight: $bold;
+      color: $white;
+    }
+  }
+  .show_option_menu{
+    display: block;
+  }
+    .logo_and_menu {
+    @include flex-item-center();
+    .change .bar1 {
+      transform: rotate(-45deg) translate(-8px, 7px);
+    }
+
+    .change .bar2 {
+      opacity: 0;
+    }
+
+    .change .bar3 {
+      transform: rotate(45deg) translate(-8px, -8px);
+    }
+    .menu_button {
+      display: none;
+      margin-right: $margin-medium;
+      .bar1,
+      .bar2,
+      .bar3 {
+        width: 35px;
+        height: 5px;
+        background-color: $icon-color;
+        border-radius: $border-radius-smaller;
+        margin: 6px 0;
+        transition: 0.4s;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .logo {
+      width: 150px;
+      height: 23px;
+      img {
+        width: $full-width;
+        height: $full-width;
+      }
+      @media only screen and (max-width: $M) {
+        width: 122px;
+        height: 19px;
+      }
+    }
+    @media only screen and (max-width: $M) {
+      .menu_button {
+        display: block;
+      }
+    }
+  }
+  .links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    a {
+      text-decoration: none;
+      color: #856f6f;
+    }
+    .link--item {
+      font-size: $font-small;
+      font-weight: $bold;
+      &:hover {
+        cursor: pointer;
+        color: $icon-color;
+      }
+    }
+    @media only screen and (max-width: $M) {
+      display: none;
+    }
+  }
+  .request__button {
+    border: none;
+    border-radius: 5px;
+    padding: 13px 28px;
+    letter-spacing: 1px;
+    font-size: $font-responsive-small;
+    font-weight: $bold;
+    background-color: $icon-color;
+    color: $white;
+    opacity: 0.85;
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+  @media only screen and (max-width: $M) {
+    padding: 12px $padding-medium;
+    font-size: $font-responsive-smaller;
+  }
+  }
+  @media only screen and (max-width: $M) {
+    padding: $padding-small;
+  }
+}

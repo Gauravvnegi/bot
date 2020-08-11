@@ -1,0 +1,47 @@
+<div class="custom_stepper--container">
+  
+  <div class="flex-wrapper">
+    <div class="single-chart">
+      <div class="circle-inside-text">
+        <div>
+          <p>STEP</p>
+          <p>{{ selectedIndex + 1 }} OF {{ parentForm.controls.length }}</p>
+        </div>
+      </div>
+      <svg viewBox="0 0 36 36" class="circular-chart orange">
+        <path
+          class="circle-bg"
+          d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+        />
+        <path
+          id="mask"
+          class="circle"
+          stroke-dasharray="progress"
+          d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+        />
+        <text x="18" y="16.35" class="percentage">
+          STEP
+        </text>
+        <text x="18" y="23.65" class="percentage">
+          {{ selectedIndex + 1 }} OF {{ parentForm.controls.length }}
+        </text>
+      </svg>
+    </div>
+    <div class="text">
+      <ng-container
+        [ngTemplateOutlet]="selected.stepLabel.template"
+        [ngTemplateOutletContext]="{ data: 'dataContext' }"
+      >
+        <!-- <p class="current">Current : Stay Details</p>
+        <p class="next">Next : Guest Details</p> -->
+      </ng-container>
+    </div>
+  </div>
+  <div>
+    <ng-container [ngTemplateOutlet]="selected.content"> </ng-container>
+  </div>
+</div>

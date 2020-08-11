@@ -1,0 +1,22 @@
+.clearSign {
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid grey;
+}
+
+.signContainer {
+  margin: 15px 15px 0 15px;
+  padding: 20px;
+  background-color: rgb(243, 241, 241);
+  border-radius: 10px;
+  @media only screen and (max-width: 780px) {
+    padding: 5px;
+    margin: 5px;
+  }
+}
+
+.close {
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+}

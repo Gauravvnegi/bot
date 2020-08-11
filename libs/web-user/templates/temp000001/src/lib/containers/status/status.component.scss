@@ -1,0 +1,78 @@
+@import 'main';
+
+.modal__conatiner {
+  position: relative;
+  .modal--header {
+    text-align: center;
+    p {
+      margin-bottom: $margin-small;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .last-updated {
+      color: lightgray;
+    }
+  }
+  .cross_icon {
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    height: 20px;
+    width: 20px;
+    img {
+      height: 100%;
+    }
+  }
+  .status {
+    p {
+      font-size: 20px;
+      font-weight: 700;
+      color: lightblue;
+      b {
+        color: red;
+      }
+    }
+  }
+  .modal__data__conatiner {
+    .modal__data__conatiner--title {
+      padding: 10px;
+      background-color: blue;
+      font-weight: 600;
+      color: white;
+      border-radius: 10px;
+      margin: $margin-small 0px;
+    }
+
+    .modal__data__conatiner--text {
+      padding: 0px 10px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      p {
+        font-weight: 500;
+        font-size: 13px;
+      }
+      .success__and__text {
+        display: flex;
+        svg {
+          margin-right: 10px;
+        }
+      }
+      .user__info {
+        label {
+          color: lightgrey;
+          font-size: 12px;
+          font-weight: 500;
+          b {
+            color: black;
+          }
+        }
+        p {
+          font-weight: 600;
+          margin-top: $margin-small;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

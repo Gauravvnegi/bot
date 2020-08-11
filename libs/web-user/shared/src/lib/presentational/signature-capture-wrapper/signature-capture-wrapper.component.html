@@ -1,0 +1,81 @@
+<div
+  [ngClass]="settings.styles.imageContainerStyle"
+  (click)="openSignatureModal(content)"
+>
+  <div [ngClass]="settings.styles.signatureCaptureStyle">
+    <div
+      style="text-align: center;"
+      *ngIf="signature.signatureImg === '' && signature.signatureText === ''"
+    >
+      <i style="margin-bottom: 10px;" class="fas fa-pen-nib"></i>
+      <p [ngClass]="settings.styles.taglineClass">{{ settings.label }}</p>
+    </div>
+    <img
+      style="height: 100%;"
+      [src]="signature.signatureImg"
+      *ngIf="signature.signatureImg !== ''"
+    />
+    <p
+      [ngClass]="settings.styles.taglineClass"
+      *ngIf="signature.signatureText !== ''"
+    >
+      {{ signature.signatureText }}
+    </p>
+  </div>
+</div>
+<ng-template #content>
+  <div [ngClass]="settings.styles.modal.container">
+    <div [ngClass]="settings.styles.modal.header">
+      <h5 [ngClass]="settings.styles.modal.title">Signature</h5>
+      <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+    </div>
+    <div [ngClass]="settings.styles.modal.body">
+      <mat-tab-group #matTab dynamicHeight>
+        <!-- #enddocregion dynamic-height -->
+        <mat-tab *ngFor="let option of settings.options" [label]="option.label">
+          <hospitality-bot-signature-pad
+            *ngIf="option.type === 'scribble'"
+            #signatuePadScribbleComponent
+            [settings]="option.settings"
+          ></hospitality-bot-signature-pad>
+          <div
+            [ngClass]="option.styles.container"
+            *ngIf="option.type === 'text'"
+          >
+            <div [ngClass]="option.styles.signature"></div>
+            <!-- todo remove class from component after gettig the solution -->
+            <web-user-input
+              [parentForm]="signatureForm"
+              class="signature-input"
+              [name]="'textSignature'"
+              [settings]="option.settings"
+            ></web-user-input>
+          </div>
+          <div
+            [ngClass]="option.styles.container"
+            *ngIf="option.type === 'file'"
+          >
+            <web-user-file-upload
+              [parentForm]="signatureForm"
+              [name]="'imageSignature'"
+              [url]="signatureForm.get('imageSignature').value"
+              (documentData)="signatureUploadFile($event, {})"
+            ></web-user-file-upload>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <div [ngClass]="settings.styles.modal.footer">
+      <div class="example-button-row">
+        <web-user-button
+          #saveButton
+          buttonTemplateSwitch
+          (click)="onUploadSignature()"
+          [settings]="{ label: 'Save' }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+        ></web-user-button>
+      </div>
+    </div>
+  </div>
+</ng-template>

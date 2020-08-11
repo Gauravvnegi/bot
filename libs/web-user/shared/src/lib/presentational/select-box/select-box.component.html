@@ -1,0 +1,34 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+  [style]="settings.style"
+>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label>
+
+  <div [ngClass]="defaultClasses.fieldParentWrapperClasses">
+    <mat-form-field
+      [ngClass]="defaultClasses.fieldContainerWrapperClasses"
+      [style]="settings.style"
+    >
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
+        settings.label
+      }}</mat-label>
+      <mat-select
+        matNativeControl
+        (selectionChange)="change($event)"
+        [formControlName]="name"
+        [ngClass]="defaultClasses.fieldClasses"
+      >
+        <!-- <option value="" selected>None</option> -->
+        <mat-option
+          *ngFor="let option of settings.options"
+          [value]="option.key"
+          >{{ option.value }}</mat-option
+        >
+      </mat-select>
+      <mat-error>{{ errorMsg }}</mat-error>
+    </mat-form-field>
+  </div>
+</div>

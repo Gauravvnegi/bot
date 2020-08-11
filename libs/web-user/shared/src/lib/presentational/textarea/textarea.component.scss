@@ -1,0 +1,16 @@
+.flex__column {
+  display: flex;
+  flex-direction: column;
+}
+mat-label {
+  font-size: 17px;
+  padding: 13px 0;
+  color: black;
+}
+
+:host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-start {
+  border-color: #288ad6;
+}
+:host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-end {
+  border-color: #288ad6;
+}

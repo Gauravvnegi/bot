@@ -1,0 +1,96 @@
+<form [formGroup]="paymentDetailsForm">
+  <!-- <mat-accordion>
+    <mat-expansion-panel #panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="panel_title">
+          <span class="container__title">Payment Method</span>
+          <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+          <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header> -->
+      <div class="payment__details--header">
+        Payment Method
+      </div>
+  <div
+    *ngIf="hotelConfig && hotelConfig.payAtDesk"
+    class="payment__type border"
+  >
+    <label class="checkbox_container"
+      >Pay On Desk
+      <input
+        type="checkbox"
+        [checked]="isPayAtDesk"
+        (click)="changePaymentMethod()"
+      />
+      <span class="checkmark"></span>
+    </label>
+  </div>
+  <div *ngIf="hotelConfig && hotelConfig.onlinePayment" class="payment-options">
+    <div class="payment__type">
+      <label class="checkbox_container"
+        >Pay with Credit Card
+        <input
+          type="checkbox"
+          [checked]="!isPayAtDesk"
+          (click)="changePaymentMethod()"
+        />
+        <span class="checkmark"></span>
+      </label>
+    </div>
+    <div *ngIf="!isPayAtDesk" class="payment__details">
+      <div class="payment__details--card">
+        <web-user-payment-card
+          [cardDetail]="paymentInfo"
+          [cardIcon]="cardType"
+        ></web-user-payment-card>
+      </div>
+      <div class="payment__details--input">
+        <div>
+          <web-user-input
+            [parentForm]="paymentDetailsForm"
+            [name]="'name'"
+            [settings]="paymentDetailsConfig.name"
+          >
+          </web-user-input>
+          <web-user-input
+            [parentForm]="paymentDetailsForm"
+            [name]="'cardNumber'"
+            [settings]="paymentDetailsConfig.cardNumber"
+          >
+          </web-user-input>
+        </div>
+        <p class="payment__details--exp-text">Expiration Date</p>
+
+        <div class="payment__details__exp-section">
+          <div class="payment__details__exp-section-exp">
+            <web-user-select-box
+              [parentForm]="paymentDetailsForm"
+              [name]="'month'"
+              [settings]="paymentDetailsConfig.month"
+              class="expiry-select"
+            >
+            </web-user-select-box>
+            <web-user-select-box
+              [parentForm]="paymentDetailsForm"
+              [name]="'year'"
+              [settings]="paymentDetailsConfig.year"
+              class="expiry-select"
+            >
+            </web-user-select-box>
+          </div>
+          <web-user-input
+            [parentForm]="paymentDetailsForm"
+            [name]="'cvv'"
+            [settings]="paymentDetailsConfig.cvv"
+          >
+          </web-user-input>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <web-user-file-upload></web-user-file-upload> -->
+  <!-- </mat-expansion-panel>
+  </mat-accordion> -->
+</form>
+<!-- <web-user-button></web-user-button> -->

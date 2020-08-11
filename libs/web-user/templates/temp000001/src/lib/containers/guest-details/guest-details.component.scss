@@ -1,0 +1,59 @@
+@import 'temp000001';
+
+.expand-icon {
+  margin-left: auto;
+}
+
+mat-icon {
+  @include mat-icon();
+
+}
+
+.container__body--info {
+  &-primary {
+    width: 55%;
+    @include flex-space-between();
+    @include display-block-on-breakpoint($tab-size);
+    @media only screen and (max-width: $tab-size) {
+      width: 97%;
+      padding-left: 5px;
+    }
+
+    &-prefix {
+      width: 20%;
+      @media only screen and (max-width: $tab-size) {
+        width: 25%;
+      }
+    }
+    &-main {
+      width: 73%;
+      @media only screen and (max-width: $tab-size) {
+        width: 65%;
+      }
+    }
+  }
+  &-secondary {
+    width: 40%;
+    @media only screen and (max-width: $tab-size) {
+      width: 97%;
+      padding-left: 5px;
+    }
+  }
+
+  @include flex-space-between();
+  @include display-block-on-breakpoint($tab-size);
+  @include full-width-on-breakpoint($tab-size);
+  @media only screen and (max-width: $tab-size) {
+    flex-direction: column;
+  }
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  @media only screen and (max-width: $tab-size) {
+    font-size: $font-responsive-small;
+  }
+}
+
+:host ::ng-deep .mat-form-field-suffix {
+  z-index: 22;
+}

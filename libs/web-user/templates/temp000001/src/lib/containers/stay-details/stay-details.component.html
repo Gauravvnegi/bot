@@ -1,0 +1,63 @@
+<form [formGroup]="stayDetailsForm">
+  <mat-accordion>
+    <mat-expansion-panel #panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="container__title">Stay Details</span>
+          <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+          <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="wrapper">
+        <div class="wrapper__item">
+          <web-user-date-picker
+            [parentForm]="stayDetailsForm"
+            [name]="'arrivalTime'"
+            [settings]="stayDetailsConfig.startDate"
+          ></web-user-date-picker>
+        </div>
+        <div class="wrapper__item">
+          <web-user-date-picker
+            [parentForm]="stayDetailsForm"
+            [name]="'departureTime'"
+            [settings]="stayDetailsConfig.endDate"
+          ></web-user-date-picker>
+        </div>
+      </div>
+      <div class="wrapper">
+        <div class="wrapper__item">
+          <web-user-select-box
+            [parentForm]="stayDetailsForm"
+            [name]="'roomType'"
+            [settings]="stayDetailsConfig.roomType"
+          ></web-user-select-box>
+        </div>
+        <div class="wrapper__item travelling__info">
+          <web-user-label
+            [settings]="stayDetailsConfig.travellingWithLabel"
+          ></web-user-label>
+          <div class="travelling__info--block">
+            <div class="travelling__info--block-item">
+              <div class="wrapper__input">
+                <web-user-input
+                  [parentForm]="stayDetailsForm"
+                  [name]="'adultsCount'"
+                  [settings]="stayDetailsConfig.adultGuest"
+                ></web-user-input>
+              </div>
+            </div>
+            <div class="travelling__info--block-item">
+              <div class="wrapper__input">
+                <web-user-input
+                  [parentForm]="stayDetailsForm"
+                  [name]="'kidsCount'"
+                  [settings]="stayDetailsConfig.kidsGuest"
+                ></web-user-input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

@@ -1,0 +1,29 @@
+<div [formGroup]="parentForm" class="upload-btn-wrapper">
+  <!-- <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label> -->
+  <div class="upload__box">
+    <img
+      loading="'lazy'"
+      [ngStyle]="{ width: url ? '100%' : null , height: url ? '83%' : null }"
+      [src]="url"
+      class="upload__box__child"
+    />
+    <img
+      loading="'lazy'"
+      class="upload__box-file_icon"
+      [src]="fileConfig.fileIcon"
+    />
+    <input
+      #fileInput
+      type="file"
+      [accept]="fileConfig.accept"
+      [attr.disabled]="settings && settings.disable ? '' : null"
+      (click)="fileInput.value = null"
+      (change)="onSelectFile($event)"
+    />
+    <input type="hidden" [formControlName]="name" />
+    <span *ngIf="!isValidDocument">{{ error }}</span>
+    <mat-label>{{ documentType }}{{ settings && settings.label }}</mat-label>
+  </div>
+</div>

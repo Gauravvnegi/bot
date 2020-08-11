@@ -1,0 +1,16 @@
+<button
+  *ngIf="!isTemplateVisible; else loader"
+  [isClickedTemplateSwitch]="settings.isClickedTemplateSwitch"
+  mat-raised-button
+  color="primary"
+  [ngClass]="buttonClass"
+>
+  {{ settings.label }}
+</button>
+
+<ng-template #loader>
+  <button mat-raised-button color="primary" [ngClass]="buttonClass">
+    <i class="fa fa-spinner fa-spin"></i>
+    {{ settings.loaderLabel }}
+  </button>
+</ng-template>

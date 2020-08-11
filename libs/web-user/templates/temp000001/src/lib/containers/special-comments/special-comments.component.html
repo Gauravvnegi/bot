@@ -1,0 +1,20 @@
+  <form [formGroup]="specialCommentsForm">
+    <mat-accordion>
+      <mat-expansion-panel #panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="container__title">Special Requests</span>
+            <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+            <mat-icon class="expand-icon" *ngIf="panel.expanded"
+              >remove</mat-icon
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <web-user-textarea
+          [parentForm]="specialCommentsForm"
+          [name]="'comments'"
+          [settings]="commentsDetailsConfig.comments"
+        ></web-user-textarea>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>

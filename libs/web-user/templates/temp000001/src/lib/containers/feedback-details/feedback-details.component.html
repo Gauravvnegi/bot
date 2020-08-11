@@ -1,0 +1,49 @@
+<div class="container">
+  <form [formGroup]="feedbackDetailsForm" (ngSubmit)="onSubmit()">
+    <mat-accordion>
+      <mat-expansion-panel #panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="container__title">
+            Your overall experience on the scale of 1-{{
+              ratingScale && ratingScale.length
+            }}
+            <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+            <mat-icon class="expand-icon" *ngIf="panel.expanded"
+              >remove</mat-icon
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <web-user-rating
+          [ratingScale]="ratingScale"
+          [ratingScaleConfig]="ratingScaleConfig"
+          (ratingData)="setRating($event)"
+        ></web-user-rating>
+        <ng-container *ngIf="rating && rating.value">
+          <h3>{{ title }}</h3>
+          <div class="hotel__services--images">
+            <div *ngFor="let service of HotelServices" class="img-with-text">
+              <div
+                class="image"
+                (click)="SetHotelServices(service)"
+                imageClass
+                [styleConfig]="'#2187d5'"
+              >
+                <img [src]="service.url" class="hotel-services-images" />
+              </div>
+              <p>{{ service.label }}</p>
+            </div>
+          </div>
+          <div>
+            <web-user-textarea
+              [parentForm]="feedbackDetailsForm"
+              [name]="'feedback'"
+              [settings]="feedbackDetailsConfig.feedbackComents"
+            ></web-user-textarea>
+          </div>
+        </ng-container>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</div>
+
+<!-- {{ suggestionArray | json }} -->

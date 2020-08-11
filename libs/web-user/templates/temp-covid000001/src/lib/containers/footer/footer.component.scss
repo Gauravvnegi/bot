@@ -1,0 +1,147 @@
+@import 'temp-covid000001';
+
+.footer--container {
+  padding-top: 40px;
+  background: url('../../../../../../../../apps/web-user/src/assets/bgimages.png');
+  background-repeat: no-repeat;
+  height: 380px;
+  position: relative;
+  margin-bottom: 200px;
+  .text {
+    text-align: center;
+    p {
+      margin-bottom: $margin-medium;
+    }
+    .tagline {
+      font-size: $font-large;
+      font-weight: $bold;
+      letter-spacing: $large-spacing;
+      color: $white;
+    }
+    .heading {
+      font-size: $heading-font;
+      letter-spacing: $small-spacing;
+      font-weight: $bold;
+      color: $white;
+    }
+  }
+  .video_slider {
+    position: absolute;
+    z-index: 3;
+    top: 227px;
+    right: -5px;
+    left: -5px;
+    @include flex-space-between();
+  }
+  @media only screen and (max-width: $M) {
+    height: 100px;
+    background-size: $full-width;
+    padding: $padding-small;
+    padding-left: 0px;
+    margin-bottom: 150px;
+    .text {
+      p {
+        margin-bottom: $margin-small;
+      }
+      .tagline {
+        font-size: $font-responsive-small;
+      }
+      .heading {
+        font-size: $font-small;
+      }
+    }
+    .video_slider {
+      top: 73px;
+      .next {
+        @include slider-buttons-responsive();
+        right: 12px;
+      }
+      .prev {
+        @include slider-buttons-responsive();
+        left: 12px;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .slider__image {
+  height: 310px;
+  width: 350px;
+  position: relative;
+  img {
+    height: $full-width;
+    width: $full-width;
+  }
+  &--text {
+    position: absolute;
+    bottom: 15px;
+    left: 12px;
+    font-size: $font-large;
+    color: white;
+    width: 250px;
+    font-weight: $bolder;
+  }
+  &:hover {
+    transition: transform 0.3s;
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    height: 100px;
+    width: 100px;
+    &--text {
+      font-size: 9px;
+      width: 90px;
+      bottom: 5px;
+      left: 5px;
+    }
+  }
+}
+:host ::ng-deep .draggable {
+  width: 111%;
+  padding: 50px 0px;
+  @media only screen and (max-width: $M) {
+    padding: $padding-medium 0px;
+  }
+  @media only screen and (max-width: 450px) {
+    width: 117%;
+  }
+}
+
+:host ::ng-deep .slick-prev {
+  z-index: 2;
+  &::before {
+    font-size: 47px;
+    @media only screen and (max-width: $M) {
+      font-size: 25px;
+    }
+  }
+}
+
+:host ::ng-deep .slick-next {
+  z-index: 2;
+  &::before {
+    font-size: 47px;
+    @media only screen and (max-width: $M) {
+      font-size: 25px;
+    }
+  }
+}
+
+:host ::ng-deep .slick-prev {
+  left: 4px;
+  @media only screen and (max-width: $M) {
+    left: 10px;
+  }
+}
+
+:host ::ng-deep .slick-next {
+  right: 32px;
+  @media only screen and (max-width: $M) {
+    right: 2px;
+  }
+}
+
+:host ::ng-deep .slick-dots {
+  display: none !important;
+}

@@ -1,0 +1,22 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+  [style]="settings.style"
+>
+  <div *ngIf="!!settings.master_label">
+    <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+      settings.master_label
+    }}</mat-label>
+  </div>
+  <mat-form-field
+    [appearance]="settings.appearance"
+    [ngClass]="defaultClasses.fieldContainerWrapperClasses"
+  >
+    <textarea
+      [formControlName]="name"
+      matInput
+      [placeholder]="settings.placeholder"
+    ></textarea>
+    <mat-error>{{ errorMsg }}</mat-error>
+  </mat-form-field>
+</div>

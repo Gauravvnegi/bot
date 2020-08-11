@@ -1,0 +1,36 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+  [style]="settings.style"
+  class="input_feild"
+>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label>
+
+  <div [ngClass]="defaultClasses.fieldParentWrapperClasses">
+    <mat-form-field
+      [ngClass]="defaultClasses.fieldContainerWrapperClasses"
+      [appearance]="settings.appearance"
+    >
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
+        settings.label
+      }}</mat-label>
+
+      <input
+        [ngClass]="defaultClasses.fieldClasses"
+        [type]="settings.type"
+        [formControlName]="name"
+        [placeholder]="settings.placeholder"
+        matInput
+        [textMask]="{ mask: settings.maskPattern, guide: false }"
+      />
+
+      <mat-icon [ngClass]="defaultClasses.fieldIconClasses" matSuffix>{{
+        settings.icon
+      }}</mat-icon>
+
+      <mat-error>{{ errorMsg }}</mat-error>
+    </mat-form-field>
+  </div>
+</div>

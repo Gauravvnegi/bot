@@ -1,0 +1,18 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label>
+
+  <section class="checkbox-section">
+    <mat-checkbox
+      [checked]="settings.checked"
+      [disabled]="settings.disable"
+      (change)="changeEvent($event)"
+    >
+      {{ settings.label }}
+    </mat-checkbox>
+  </section>
+</div>

@@ -1,0 +1,61 @@
+{
+  "npmScope": "hospitality-bot",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "projects": {
+    "web-user": {
+      "tags": []
+    },
+    "web-user-e2e": {
+      "tags": [],
+      "implicitDependencies": ["web-user"]
+    },
+    "admin": {
+      "tags": []
+    },
+    "admin-e2e": {
+      "tags": [],
+      "implicitDependencies": ["admin"]
+    },
+    "admin-shared": {
+      "tags": []
+    },
+    "web-user-shared": {
+      "tags": []
+    },
+    "shared-auth": {
+      "tags": []
+    },
+    "web-user-template-renderer": {
+      "tags": []
+    },
+    "web-user-templates": {
+      "tags": []
+    },
+    "web-user-templates-temp000001": {
+      "tags": []
+    },
+    "web-user-templates-temp000002": {
+      "tags": []
+    },
+    "web-user-templates-temp-covid000001": {
+      "tags": []
+    }
+  }
+}

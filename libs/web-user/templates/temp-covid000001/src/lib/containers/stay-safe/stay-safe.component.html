@@ -1,0 +1,44 @@
+<div #precautionaryMeasures class="stay__safe--conatiner">
+  <div class="heading--text">
+    <p class="tagline">STAY SAFE</p>
+    <p class="heading">PRECAUTIONARY MEASURES</p>
+  </div>
+  <div class="precautions">
+    <div *ngFor="let measure of safeMeasures" class="image_with_text">
+        <div class="precuation__image">
+          <img src="{{measure.imageUrl}}" />
+        </div>
+        <p class="precaution__text">{{measure.title}}</p>
+      </div>
+    <!-- <div class="image_with_text">
+      <div class="precuation__image">
+        <img src="assets/1.png" />
+      </div>
+      <p class="precaution__text">Avoid Close Contact</p>
+    </div>
+    <div class="image_with_text">
+      <div class="precuation__image">
+        <img src="assets/2.png" />
+      </div>
+      <p class="precaution__text">Cover cough & Sneezes</p>
+    </div>
+    <div class="image_with_text">
+      <div class="precuation__image">
+        <img src="assets/3.png" />
+      </div>
+      <p class="precaution__text">Always wear your mask</p>
+    </div>
+    <div class="image_with_text">
+      <div class="precuation__image">
+        <img src="assets/1.png" />
+      </div>
+      <p class="precaution__text">Avoid Close Contact</p>
+    </div>
+    <div class="image_with_text">
+      <div class="precuation__image">
+        <img src="assets/2.png" />
+      </div>
+      <p class="precaution__text">Cover cough & Sneezes</p>
+    </div> -->
+  </div>
+</div>

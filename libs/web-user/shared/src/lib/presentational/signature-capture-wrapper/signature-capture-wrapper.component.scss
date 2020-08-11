@@ -1,0 +1,205 @@
+@import 'temp000001';
+
+// todo remove whole ng-deep from code and use host with the perfect solution
+
+
+.example-button-row {
+  @include flex-justify-center();
+  // padding-top: $padding-large;
+}
+
+@media only screen and (max-width: $tab-size) {
+  .user-button {
+    width: $half-width;
+  }
+}
+
+:host ::ng-deep .back-button {
+  @include footer-back();
+}
+:host ::ng-deep .next-button {
+  @include footer-next();
+}
+
+.payment-wrapper {
+  background-color: $white;
+  border-radius: $border-radius-small;
+}
+
+.example-small-box,
+.example-large-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.modal-header {
+  padding: 2px 8px;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.modal-title {
+  font-size: large;
+  font-weight: bold;
+}
+
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.modal-footer {
+  padding: 2px 16px;
+  padding-top: 10px;
+}
+
+.close {
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.signContainer {
+  margin: 15px 15px 0 15px;
+  padding: 15px 60px 15px 60px;
+  background-color: rgb(243, 241, 241);
+  border-radius: 10px;
+}
+
+.signature-image-container {
+  padding: 20px;
+  padding-top: 10px;
+  background-color: rgb(243, 241, 241);
+  border-radius: 10px;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    cursor: pointer;
+  }
+  .signature--tagline {
+    text-align: center;
+  }
+}
+
+.text-container {
+  margin: 15px 15px 0 15px;
+  padding: 20px;
+  background-color: rgb(243, 241, 241);
+  border-radius: 10px;
+  height: 305px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media only screen and (max-width: 780px) {
+    padding: 5px;
+    margin: 5px;
+  }
+}
+
+::ng-deep .text-container {
+  .upload__box {
+    height: 300px !important;
+  }
+}
+
+.signature-capture-style {
+  height: 50px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  @media only screen and (max-width: $tab-size) {
+    font-size: 14px;
+  }
+}
+
+.text-signature {
+  height: 202px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.clearSign {
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid grey;
+}
+
+.colorOptions {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: -75px;
+}
+
+:host ::ng-deep .radio-custom-black + .radio-custom-label:before {
+  border-radius: 50%;
+  background-color: black;
+}
+
+.upload__box {
+  height: 300px;
+}
+
+::ng-deep .signature-input {
+  input {
+    text-align: center;
+    font-size: 45px;
+  @media only screen and (max-width: $M) {
+    font-size: 20px;
+  }
+  }
+}
+
+:host ::ng-deep .radio-custom-black:checked + .radio-custom-label:before {
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  color: #bbb;
+}
+
+:host ::ng-deep .radio-custom-red + .radio-custom-label:before {
+  border-radius: 50%;
+  background-color: red;
+}
+
+:host ::ng-deep .radio-custom-red:checked + .radio-custom-label:before {
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  color: #bbb;
+}
+
+:host ::ng-deep .radio-custom-blue + .radio-custom-label:before {
+  border-radius: 50%;
+  background-color: rgb(14, 25, 124);
+}
+
+:host ::ng-deep .radio-custom-blue:checked + .radio-custom-label:before {
+  content: '\f00c';
+  font-family: 'FontAwesome';
+  color: #bbb;
+}
+
+::ng-deep .next-button {
+  background-image: var(--stepper-dynamic-background-image, blue);
+  width: 150px;
+  font-weight: 700;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    width: 100px;
+  }
+}
+
+::ng-deep .mat-tab-label-content {
+  font-weight: 700;
+  font-size: 16px;
+}

@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons&display=swap');
+
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import 'main.scss';
+/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+
+  font-family: 'Montserrat';
+}
+
+body {
+  overflow-x: hidden; // hidden the scrollbar at the end of the slider
+}
+// this below code is for hiding and showing data in case of responsive //
+
+// code is only for covid 19 UI
+
+.show_on_mobile {
+  display: none !important;
+}
+.hide_on_mobile {
+  display: block !important;
+}
+@media only screen and (max-width: 990px) {
+  .show_on_mobile {
+    display: block !important;
+  }
+  .hide_on_mobile {
+    display: none !important;
+  }
+}
+
+// Global class to change snackbar background
+.danger {
+  background-color: #ee5955 !important;
+}
+
+.success {
+  background-color: #7ab243 !important;
+}
+
+.mat-snack-bar-handset {
+  @media only screen and (max-width: 480px) {
+    width: 80% !important;
+  }
+}
+.mat-dialog-container {
+  @media only screen and (max-width: 480px) {
+    padding: 10px !important;
+  }
+}

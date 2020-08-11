@@ -1,0 +1,88 @@
+:host ::ng-deep .mat-step-header .mat-step-icon {
+  background-image: var(--stepper-dynamic-background-image, blue);
+}
+
+:host
+  ::ng-deep
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:last-child)::after {
+  border-top-width: 3px;
+}
+
+:host ::ng-deep .mat-step-icon-selected {
+  color: green; // your styles
+}
+
+:host::ng-deep .mat-step-header .mat-step-icon {
+  background-image: var(--stepper-dynamic-background-image, blue);
+}
+
+:host ::ng-deep .mat-stepper-horizontal,
+.mat-stepper-vertical {
+  background-color: transparent;
+}
+
+:host ::ng-deep .mat-stepper-horizontal-line {
+  border-top-width: 3px;
+  border-top-style: solid;
+  flex: auto;
+  height: 0;
+  // margin: 0 -16px;
+  min-width: 32px;
+  background-image: var(--stepper-dynamic-background-image, blue);
+  border-color: #ffc837;
+}
+
+:host
+  ::ng-deep
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:last-child)::after,
+[dir='rtl']
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:first-child)::after {
+  right: 0;
+  border-top-width: 3px;
+  border-top-style: solid;
+  flex: auto;
+  height: 0;
+  // margin: 0 -16px;
+  min-width: 32px;
+  border-color: #ffc837;
+  background-image: var(--stepper-dynamic-background-image, blue);
+}
+
+:host
+  ::ng-deep
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:first-child)::before,
+[dir='rtl']
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:last-child)::before {
+  left: 0;
+  border-top-width: 3px;
+  border-top-style: solid;
+  flex: auto;
+  height: 0;
+  // margin: 0 -16px;
+  min-width: 32px;
+  border-color: #ffc837;
+  background-image: var(--stepper-dynamic-background-image, blue);
+}
+// only for vertical stepper
+:host ::ng-deep .mat-vertical-stepper-header {
+  padding-left: 9px;
+}
+:host ::ng-deep .mat-stepper-vertical-line::before {
+  left: -16px;
+  border-color: #ffc837;
+}
+:host ::ng-deep .mat-vertical-content {
+  padding: 0 5px 24px 0px;
+}
+
+@media only screen and (max-width: 500px) {
+  :host ::ng-deep .mat-expansion-panel-body {
+    margin: 0px 5px 16px;
+    padding: 20px 15px !important;
+  }
+}

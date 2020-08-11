@@ -1,0 +1,12 @@
+<div *ngIf="isRendered">
+  <hospitality-bot-documents-details
+    #documentDetailsComp
+    [parentForm]="parentForm"
+    (addFGEvent)="addFGEvent($event)"
+    [reservationData]="reservationData"
+  ></hospitality-bot-documents-details>
+  <div class="main-template-button">
+    <ng-container button-renderer [config]="buttonConfig" [context]="self">
+    </ng-container>
+  </div>
+</div>

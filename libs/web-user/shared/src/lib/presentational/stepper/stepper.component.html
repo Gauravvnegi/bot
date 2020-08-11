@@ -1,0 +1,101 @@
+<div #stepperWrapper>
+  <mat-horizontal-stepper
+    [labelPosition]="stepperConfig.labelPosition"
+    [linear]="stepperConfig.isLinear"
+    (selectionChange)="onStepChange($event)"
+    [selectedIndex]="selectedIndex"
+    #stepper
+    *ngIf="stepperConfig.position == 'horizontal'; else verticalStepper"
+  >
+    <ng-container
+      *ngFor="
+        let formGroup of parentForm.controls;
+        let stepperIndex = index;
+        trackBy: stepperIndex
+      "
+      [stepperIndex]="stepperIndex"
+    >
+      <mat-step
+        [stepControl]="formGroup"
+        [optional]="!stepperConfig.stepConfigs[stepperIndex].required"
+        [editable]="stepperConfig.stepConfigs[stepperIndex].editable"
+      >
+        <form [formGroup]="formGroup">
+          <ng-template matStepLabel
+            >{{ stepperConfig.stepConfigs[stepperIndex].stepperName }}
+          </ng-template>
+          <ng-container [stepperIndex]="stepperIndex" #stepperContent>
+          </ng-container>
+
+          <ng-container
+            *ngIf="stepperConfig.stepConfigs[stepperIndex].buttons.next"
+          >
+            <button mat-button matStepperNext>Next</button>
+          </ng-container>
+          <ng-container
+            *ngIf="stepperConfig.stepConfigs[stepperIndex].buttons.back"
+          >
+            <button mat-button matStepperPrevious>Back</button>
+          </ng-container>
+          <ng-container
+            *ngIf="stepperConfig.stepConfigs[stepperIndex].buttons.reset"
+          >
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </ng-container>
+        </form>
+      </mat-step>
+    </ng-container>
+  </mat-horizontal-stepper>
+</div>
+
+<!-- ***********************************Vertical*************************************** -->
+
+<ng-template #verticalStepper>
+  <web-user-custom-stepper
+    [labelPosition]="stepperConfig.labelPosition"
+    [linear]="stepperConfig.isLinear"
+    (selectionChange)="onStepChange($event)"
+    [selectedIndex]="selectedIndex"
+    [parentForm]="parentForm"
+    #stepper
+  >
+    <ng-container
+      *ngFor="
+        let formGroup of parentForm.controls;
+        let stepperIndex = index;
+        trackBy: stepperIndex
+      "
+      [stepperIndex]="stepperIndex"
+    >
+      <cdk-step>
+        <form [formGroup]="formGroup">
+          <ng-template cdkStepLabel>
+            <p class="current">
+              Current :
+              {{ stepperConfig.stepConfigs[stepperIndex].stepperName }}
+            </p>
+            <p
+              *ngIf="
+                stepperConfig.stepConfigs[stepperIndex + 1] &&
+                stepperConfig.stepConfigs[stepperIndex + 1].stepperName
+              "
+              class="next"
+            >
+              Next :
+              {{ stepperConfig.stepConfigs[stepperIndex + 1].stepperName }}
+            </p>
+          </ng-template>
+          <!-- Step content here -->
+
+          <ng-container
+            [stepperIndex]="stepperIndex"
+            [dataContext="'temp'"
+            ]
+            #stepperContent
+          >
+          </ng-container>
+        </form>
+      </cdk-step>
+    </ng-container>
+  </web-user-custom-stepper>
+</ng-template>

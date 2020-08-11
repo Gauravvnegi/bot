@@ -1,0 +1,72 @@
+@import 'temp000001';
+
+.expand-icon {
+  margin-left: auto;
+}
+
+mat-icon {
+  @include mat-icon();
+}
+
+.img-with-text {
+  width: $quarter-width;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: $font-medium;
+  font-weight: $bold;
+  @media only screen and (max-width: 900px) {
+    width: 50%;
+  }
+}
+
+.hotel__services--images {
+  display: flex;
+  margin: 25px 0px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  @media only screen and (max-width: 900px) {
+    font-size: $font-responsive-small;
+  }
+}
+
+.img-with-text {
+  .image {
+    border-radius: 50%;
+    background-color: #f3f3f3;
+    padding: $padding-large;
+    &:hover {
+      cursor: pointer;
+      // background-color: $icon-color;
+      // .hotel-services-images {
+      //   filter: invert(1);
+      // }
+      // removed due to issue in services tapping
+    }
+  }
+  p {
+    margin-top: $margin-large;
+    @media only screen and (max-width: 900px) {
+      font-size: 14px;
+      margin: 10px auto;
+    }
+  }
+}
+
+.hotel-services-images {
+  width: 80px;
+
+  @media only screen and (max-width: 900px) {
+    width: 50px;
+  }
+}
+
+:host ::ng-deep .mat-form-field {
+  width: $full-width;
+}
+
+:host ::ng-deep .container__title {
+  font-size: 16px;
+  align-items: center;
+}

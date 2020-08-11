@@ -1,0 +1,45 @@
+<div class="covid__page--header">
+  <div
+    class="option__menu"
+    (click)="toggleMenuButton()"
+    [ngClass]="status ? 'show_option_menu' : ''"
+  >
+    <a (click)="setHyperLinkElement('precautionaryMeasures')">
+      Precautionary Measures
+    </a>
+    <a (click)="setHyperLinkElement('advisories')">
+      Travel Advisories
+    </a>
+    <a (click)="setHyperLinkElement('safety')">
+      Our Efforts for your Safety
+    </a>
+  </div>
+  <div class="logo_and_menu">
+    <div
+      class="menu_button"
+      (click)="toggleMenuButton()"
+      [ngClass]="status ? 'change' : ''"
+    >
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+    </div>
+    <div class="logo">
+      <img src="assets/logo.png" />
+    </div>
+  </div>
+  <div class="links">
+    <a (click)="setHyperLinkElement('precautionaryMeasures')" class="link--item">
+      Precautionary Measures
+    </a>
+    <a (click)="setHyperLinkElement('advisories')" class="link--item">
+      Travel Advisories
+    </a>
+    <a (click)="setHyperLinkElement('safety')" class="link--item">
+      Our Efforts for your Safety
+    </a>
+  </div>
+  <button class="request__button" (click)="openDialog()">
+    RAISE REQUEST
+  </button>
+</div>

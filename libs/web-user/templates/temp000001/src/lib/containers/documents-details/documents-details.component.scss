@@ -1,0 +1,69 @@
+@import 'temp000001';
+
+
+.expand-icon {
+  margin-left: auto;
+}
+
+mat-icon {
+  @include mat-icon();
+}
+.citizen__info {
+  @include flex-space-between();
+  &--country {
+    width: 45%;
+  }
+  &--doc {
+    width: 45%;
+  }
+}
+.doc__upload__section {
+  @include flex-space-between();
+  &--doc {
+    width: 45%;
+  }
+}
+.doc__warning_section {
+  margin-top: $margin-large;
+  & mat-icon {
+    transform: rotate(180deg);
+    margin-right: 5px;
+    color: $document-icon-color;
+  }
+  & p {
+    display: flex;
+    margin: $margin-small 0px;
+    color: $paragraph-color;
+    align-items: center;
+    & span {
+      margin-left: $margin-small;
+    }
+    @include MQ(M){
+      font-size: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .citizen__info {
+    flex-direction: column;
+    &--country {
+      width: $full-width;
+    }
+    &--doc {
+      width: $full-width;
+    }
+  }
+  .doc__upload__section {
+    flex-direction: column;
+    &--doc {
+      width: $full-width;
+    }
+    & .passport {
+      margin-top: $margin-large;
+    }
+  }
+  .doc__warning_section {
+    flex-direction: column !important;
+  }
+}

@@ -1,0 +1,98 @@
+@import 'temp000001';
+
+// Global CSS for Template
+
+.background__wrapper {
+  background: url('../../../../../../../../apps/web-user/src/assets/bg.png');
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  min-width: $full-width;
+  min-height: $full-width;
+}
+
+:host ::ng-deep .main-template-button{
+  @include template-footer-button();
+  @media only screen and (max-width: $M) {
+    web-user-button{
+      width: 100%;
+    }
+  }
+}
+
+:host ::ng-deep .container {
+  max-width: 1300px;
+  margin: 0 auto;
+  margin-bottom: $margin-large;
+
+  &__title {
+    font-size: $font-medium;
+    font-weight: $bold;
+  }
+  @media only screen and (max-width: $M) {
+    margin: 10px 10px;
+    overflow: scroll;
+    overflow-x: hidden;
+    border-radius: 5px;
+    height: calc(100vh - 235px);
+  }
+}
+
+::ng-deep .mat {
+  &-horizontal-stepper-header-container {
+    padding: 0 4%;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  &-step-label {
+    font-weight: $bold;
+    font-size: $font16;
+    color: $white;
+  }
+  &-step-header .mat-step-label.mat-step-label-active {
+    color: $white;
+  }
+  &-icon.expand-icon {
+    margin-right: -16px;
+    width: 20px;
+    height: 20px;
+    font-size: $font-medium;
+    color: $icon-color;
+  }
+  &-expansion-indicator::after {
+    display: none !important;
+  }
+  &-step-icon {
+    height: 30px;
+    width: 30px;
+  }
+  &-expansion-panel {
+    border-radius: $border-radius-small !important;
+    margin-bottom: $margin-large !important;
+  }
+  &-expansion-panel-body {
+    margin: 0 24px 16px;
+    padding: $padding-large $padding30 !important;
+    border: 2px solid $border-color;
+    border-radius: $border-radius-medium;
+    position: relative;
+
+    &::after {
+      @include half-circle();
+      right: -2px;
+      border-bottom-left-radius: $border-radius-large;
+      border-top-left-radius: $border-radius-large;
+      border-right: 0;
+    }
+
+    &::before {
+      @include half-circle();
+      left: -2px;
+      border-bottom-right-radius: $border-radius-large;
+      border-top-right-radius: $border-radius-large;
+      border-left: 0;
+    }
+  }
+}
+

@@ -1,0 +1,36 @@
+@import 'temp000001';
+
+
+.expand-icon {
+  margin-left: auto;
+}
+
+mat-icon {
+  @include mat-icon();
+
+}
+.container__wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+:host ::ng-deep .mat-expansion-panel-body {
+  border: none;
+  padding: 0px $padding30 !important;
+  &::after,
+  &::before {
+    content: none;
+  }
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-outline
+  .mat-form-field-infix
+  > textarea {
+  height: 93px;
+}
+
+:host ::ng-deep .mat-form-field-wrapper{
+  padding-bottom: 0px;
+}

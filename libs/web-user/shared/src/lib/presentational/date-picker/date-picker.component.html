@@ -1,0 +1,30 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+  [style]="settings.style"
+>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label>
+
+  <div [ngClass]="defaultClasses.fieldParentWrapperClasses">
+    <mat-form-field [ngClass]="defaultClasses.fieldContainerWrapperClasses">
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
+        settings.label
+      }}</mat-label>
+      <input
+        matInput
+        [min]="minDate"
+        [matDatepicker]="picker"
+        [formControlName]="name"
+        disabled
+        [ngClass]="defaultClasses.fieldClasses"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker disabled="settings.disable"></mat-datepicker>
+      <mat-error [ngClass]="defaultClasses.fieldErrorClasses">{{
+        errorMsg
+      }}</mat-error>
+    </mat-form-field>
+  </div>
+</div>

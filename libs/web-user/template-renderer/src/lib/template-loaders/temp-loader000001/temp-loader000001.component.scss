@@ -1,0 +1,217 @@
+.background__wrapper {
+  background: url('../../../../../../../apps/web-user/src/assets/bg.png');
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  min-width: 100%;
+  min-height: 100%;
+}
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.shine {
+  background: #f6f7f8;
+  background-image: linear-gradient(
+    to right,
+    #f6f7f8 0%,
+    #edeef1 20%,
+    #f6f7f8 40%,
+    #f6f7f8 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  position: relative;
+
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+}
+
+.header {
+  padding: 15px 20px;
+  background-color: white;
+  .header_effect {
+    height: 35px;
+  }
+}
+
+.shimmer_container {
+  padding: 35px 70px;
+  .responsive-stepper{
+    display: none;
+  }
+  .stepper {
+    padding: 0px 30px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 55px;
+    .dot {
+      height: 30px;
+      width: 30px;
+      background-color: white;
+      border-radius: 50%;
+    }
+    .line {
+      height: 2px;
+      width: 22%;
+      background-color: white;
+    }
+  }
+  .details {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    .detail_header {
+      height: 30px;
+      width: 250px;
+      margin-bottom: 15px;
+      margin-left: 15px;
+    }
+    .detail_wrapper {
+      margin: 0 24px 16px;
+      padding: 20px 30px;
+      border: 2px solid #e6e6e6;
+      border-radius: 15px;
+      position: relative;
+      &::before {
+        content: '';
+        width: 15px;
+        height: 20px;
+        position: absolute;
+        background-color: #fff;
+        border: 2px solid #e6e6e6;
+        top: 50%;
+        box-sizing: border-box;
+        transform: translateY(-50%);
+        left: -2px;
+        border-bottom-right-radius: 20px;
+        border-top-right-radius: 20px;
+        border-left: 0;
+      }
+      &::after {
+        content: '';
+        width: 15px;
+        height: 20px;
+        position: absolute;
+        background-color: #fff;
+        border: 2px solid #e6e6e6;
+        top: 50%;
+        box-sizing: border-box;
+        transform: translateY(-50%);
+        right: -2px;
+        border-bottom-left-radius: 20px;
+        border-top-left-radius: 20px;
+        border-right: 0;
+      }
+      .detail_data {
+        display: flex;
+        justify-content: space-between;
+        .data {
+          width: 48%;
+          .title {
+            height: 30px;
+            width: 50%;
+            margin-bottom: 15px;
+          }
+          .feild {
+            height: 30px;
+            width: 100%;
+          }
+        }
+      }
+      .detail_data-responsive{
+        display: none;
+        .data {
+          width: 48%;
+          .title {
+            height: 30px;
+            width: 50%;
+            margin-bottom: 15px;
+          }
+          .feild {
+            height: 30px;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  .second_details {
+    padding: 20px 30px;
+    background-color: white;
+    border-radius: 10px;
+    .second_detail_header {
+      height: 30px;
+      width: 250px;
+    }
+  }
+
+  @media only screen and (max-width: 990px) {
+    padding: 15px 10px;
+    .responsive-stepper{
+      display: flex;
+      align-items: center;
+      margin: 20px auto;
+      .circle{
+        height: 80px;
+        width: 80px;
+        border-radius: 50%;
+      }
+      .text_box{
+        width: 200px;
+        height:25px;
+        margin-left: 20px;
+      }
+    }
+    .stepper {
+      display: none;
+    }
+    .details {
+      margin-top: 30px;
+      padding: 10px;
+      .detail_header {
+        width: 200px;
+        height: 20px;
+        margin-left: 0px;
+      }
+      .detail_wrapper{
+        margin: 0px;
+        padding: 15px;
+        padding-top: 25px;
+        .detail_data{
+          display: none;
+        }
+        .detail_data-responsive{
+          display: block;
+          .data{
+            width: auto;
+            margin-bottom: 20px;
+            .title{
+              height: 20px;
+            }
+            .feild{
+              height: 20px;
+            }
+          }
+        }
+      }
+    }
+    .second_details {
+      .second_detail_header {
+        width: 200px;
+        height: 20px;
+      }
+    }
+  }
+}

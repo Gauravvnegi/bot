@@ -1,0 +1,108 @@
+@import 'temp-covid000001';
+
+.about__section--banner {
+  height: 531px;
+  background: url('../../../../../../../../apps/web-user/src/assets/banner.png');
+  background-repeat: no-repeat;
+  &--text {
+    width: 53%;
+    padding: 100px $padding30;
+    padding-right: 0px;
+    .title {
+      font-size: $font-medium;
+      font-weight: $bold;
+      letter-spacing: $small-spacing;
+      color: $white;
+      margin-bottom: $margin-small;
+    }
+    .tagline {
+      font-size: $covid-heading-font;
+      font-weight: $bolder;
+      color: $white;
+      line-height: 75px;
+      letter-spacing: $small-spacing;
+    }
+  }
+  .blank {
+    width: 47%;
+  }
+  @media only screen and (max-width: $M) {
+    background-size: $full-width;
+    height: 145px;
+    .about__section--banner--text {
+      width: 39%;
+      padding: $padding-small;
+      .title {
+        font-size: $font-responsive-smaller;
+        letter-spacing: 0px;
+      }
+      .tagline {
+        font-size: $font-small;
+        line-height: 22px;
+        letter-spacing: 0px;
+      }
+    }
+  }
+}
+.about__section--disease {
+  padding: $padding30;
+  @include flex-space-between();
+  .image {
+    width: 48%;
+    img {
+      height: $full-width;
+      width: $full-width;
+    }
+  }
+  .disease__text {
+    width: 48%;
+    padding-top: 40px;
+    p {
+      margin-bottom: $margin-medium;
+    }
+    .heading {
+      color: $icon-color;
+      letter-spacing: $large-spacing;
+      font-weight: $bold;
+      font-size: $font-large;
+    }
+    .covid__heading {
+      font-size: $heading-font;
+      font-weight: $bolder;
+      letter-spacing: $small-spacing;
+
+      color: $heading-black;
+    }
+    .paragraph {
+      font-weight: $bold;
+      line-height: 38px;
+      font-size: $font-large;
+      color: $paragraph-color;
+    }
+  }
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: initial;
+    padding: $padding-small;
+    .image {
+      width: auto;
+    }
+    .disease__text {
+      width: auto;
+      text-align: center;
+      .heading {
+        font-size: $font-responsive-small;
+        letter-spacing: $medium-spacing;
+      }
+      .covid__heading {
+        font-size: $font-medium;
+      }
+      .paragraph {
+        font-size: $font-responsive-small;
+        font-weight: $bold;
+        text-align: left;
+        line-height: 21px;
+      }
+    }
+  }
+}

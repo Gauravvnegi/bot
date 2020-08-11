@@ -1,0 +1,40 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@hospitality-bot/admin/shared": ["libs/admin/shared/src/index.ts"],
+      "@hospitality-bot/web-user/shared": ["libs/web-user/shared/src/index.ts"],
+      "@hospitality-bot/shared/auth": ["libs/shared/auth/src/index.ts"],
+      "@hospitality-bot/web-user/template-renderer": [
+        "libs/web-user/template-renderer/src/index.ts"
+      ],
+      "@hospitality-bot/web-user/templates": [
+        "libs/web-user/templates/src/index.ts"
+      ],
+      "@hospitality-bot/web-user/templates/temp000002": [
+        "libs/web-user/templates/temp000002/src/index.ts"
+      ],
+      "@hospitality-bot/web-user/templates/temp000001": [
+        "libs/web-user/templates/temp000001/src/index.ts"
+      ],
+      "@hospitality-bot/web-user/templates/temp-covid000001": [
+        "libs/web-user/templates/temp-covid000001/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

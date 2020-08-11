@@ -1,0 +1,181 @@
+import {
+  Directive,
+  Input,
+  ComponentFactoryResolver,
+  OnChanges,
+  ViewContainerRef,
+  ComponentRef,
+} from '@angular/core';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState,
+} from '@angular/cdk/layout';
+
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+
+import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
+import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
+import { GuestDetailsWrapperComponent } from '../containers/guest-details-wrapper/guest-details-wrapper.component';
+import { HealthDeclarationComponent } from '../containers/health-declaration/health-declaration.component';
+import { DocumentsDetailsWrapperComponent } from '../containers/documents-details-wrapper/documents-details-wrapper.component';
+import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
+import { FeedbackDetailsWrapperComponent } from '../containers/feedback-details-wrapper/feedback-details-wrapper.component';
+import { BillSummaryDetailsWrapperComponent } from '../containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
+import { HealthDeclarationWrapperComponent } from '../containers/health-declaration-wrapper/health-declaration-wrapper.component';
+import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
+
+const componentMapping = {
+  'stay-details-wrapper': StayDetailsWrapperComponent,
+  'guest-details-wrapper': GuestDetailsWrapperComponent,
+  'health-declaration-wrapper': HealthDeclarationWrapperComponent,
+  'payment-details-wrapper': PaymentDetailsWrapperComponent,
+  'document-details-wrapper': DocumentsDetailsWrapperComponent,
+  'feedback-details-wrapper': FeedbackDetailsWrapperComponent,
+  'bill-summary-details-wrapper': BillSummaryDetailsWrapperComponent,
+  'summary-wrapper': SummaryWrapperComponent,
+};
+
+@Directive({ selector: '[stepper-content-renderer]' })
+export class StepperContentRendererDirective implements OnChanges {
+  @Input() stepperConfig;
+  @Input() parentForm;
+  @Input() dataToPopulate;
+
+  private _stepperComponentObj: ComponentRef<StepperComponent>;
+  private isStepperRendered: boolean = false;
+
+  constructor(
+    private _resolver: ComponentFactoryResolver,
+    private _container: ViewContainerRef,
+    private _breakpointObserver: BreakpointObserver,
+    private _templateLoadingService: TemplateLoaderService,
+    private _stepperService: StepperService
+  ) {}
+
+  ngOnChanges() {
+    if (this.stepperConfig && this.parentForm && this.dataToPopulate) {
+      this.renderStepper();
+    }
+  }
+
+  renderStepper() {
+    this.createStepperFactory();
+    this.registerListeners();
+  }
+
+  private registerListeners() {
+    this.listenForViewChanged();
+  }
+
+  private createStepperFactory() {
+    const stepperFactoryComponent = this._resolver.resolveComponentFactory(
+      StepperComponent
+    );
+
+    this._stepperComponentObj = this._container.createComponent(
+      stepperFactoryComponent
+    );
+  }
+
+  private listenForViewChanged() {
+    this._breakpointObserver
+      .observe([Breakpoints.XSmall])
+      .subscribe((state: BreakpointState) => {
+        if (this.isStepperRendered) {
+          this._stepperComponentObj.destroy();
+          this.createStepperFactory();
+        }
+
+        if (state.breakpoints[Breakpoints.XSmall]) {
+          this.stepperConfig.position = 'vertical';
+        } else {
+          this.stepperConfig.position = 'horizontal';
+        }
+
+        this.setStepperConfig();
+
+        this._listenForStepperRenderer();
+      });
+  }
+
+  private setStepperConfig() {
+    this._stepperComponentObj.instance.parentForm = this.parentForm;
+    this._stepperComponentObj.instance.stepperConfig = this.stepperConfig;
+
+    this._stepperService.setSelectedIndex(
+      this.dataToPopulate.stateCompletedSteps >=
+        this.stepperConfig.stepConfigs.length
+        ? 0
+        : this.dataToPopulate.stateCompletedSteps
+    );
+
+    this._stepperService.totalSteps =
+      this.stepperConfig.stepConfigs && this.stepperConfig.stepConfigs.length;
+  }
+
+  private _listenForStepperRenderer() {
+    this._stepperComponentObj.instance.isComponentRendered.subscribe(
+      (isRendered: boolean) => {
+        if (isRendered && this.dataToPopulate) {
+          this.isStepperRendered = true;
+          this.createStepperContentComponents();
+        }
+      }
+    );
+  }
+
+  private createStepperContentComponents() {
+    this._stepperComponentObj.instance.stepperContent.map(
+      (item: ViewContainerRef, index: number) => {
+        const componentToRender =
+          this._stepperComponentObj.instance.stepperConfig.stepConfigs[index]
+            .component &&
+          this._stepperComponentObj.instance.stepperConfig.stepConfigs[index]
+            .component.name;
+
+        if (componentToRender) {
+          const factoryComponent = this._resolver.resolveComponentFactory(
+            componentMapping[
+              this._stepperComponentObj.instance.stepperConfig.stepConfigs[
+                index
+              ].component.name
+            ]
+          );
+
+          const componentObj = item.createComponent(factoryComponent);
+
+          const props = {
+            formGroup: this.parentForm.at(index),
+            reservationData: this.dataToPopulate,
+            stepperIndex: index,
+            buttonConfig: this.stepperConfig.stepConfigs[index].buttons,
+          };
+          this.addPropsToComponentInstance(componentObj, props);
+        }
+      }
+    );
+  }
+
+  private addPropsToComponentInstance(componentObj: ComponentRef<any>, props) {
+    componentObj.instance.parentForm = props.formGroup;
+    componentObj.instance.reservationData = props.reservationData;
+    componentObj.instance.stepperIndex = props.stepperIndex;
+    componentObj.instance.buttonConfig = props.buttonConfig;
+
+    this.listenForWrapperRendered(componentObj);
+
+    this.stepperConfig.position == 'vertical' &&
+      componentObj.changeDetectorRef.detectChanges();
+  }
+
+  private listenForWrapperRendered(componentObj: ComponentRef<any>) {
+    try {
+      componentObj.instance.isWrapperRendered$.subscribe((val) => {
+        this._templateLoadingService.isTemplateLoading$.next(false);
+        componentObj.instance.isRendered = true;
+      });
+    } catch (error) {}
+  }
+}

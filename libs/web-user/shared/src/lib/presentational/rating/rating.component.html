@@ -1,0 +1,21 @@
+<div class="rating__container">
+  <div class="rating-scale">
+    <!-- ngStyle can be removed -->
+    <div
+      *ngFor="let rating of ratingScale"
+      class="rating-box"
+      [ngClass]="{ ratingActive: selectedRating === rating }"
+      [ngStyle]="
+        selectedRating >= rating
+          ? { 'background-color': ratingColor, color: 'white' }
+          : {}
+      "
+      (click)="setRatingValue(rating)"
+    >
+      {{ rating }}
+    </div>
+  </div>
+  <div class="rating-scale-bar" [ngStyle]="{ 'background-color': ratingColor }">
+    {{ ratingValue }}
+  </div>
+</div>

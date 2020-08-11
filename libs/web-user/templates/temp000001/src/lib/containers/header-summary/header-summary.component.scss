@@ -1,0 +1,59 @@
+@import 'temp000001';
+
+.cross_icon {
+  height: 15px;
+  &:hover {
+    cursor: pointer;
+  }
+  img {
+    height: 100%;
+  }
+}
+
+.container {
+  min-height: 50px;
+  overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.modal-header {
+  padding: 2px 8px;
+  display: flex;
+  padding-bottom: $padding-small;
+  width: $full-width;
+  position: relative;
+}
+
+.close_wrapper {
+  position: absolute;
+  right: 14px;
+  top: -13px;
+}
+
+.modal-title {
+  width: 96%;
+  text-align: center;
+  p {
+    text-align: center;
+    font-weight: 700;
+  }
+  span {
+    text-align: center;
+    font-weight: 100;
+    color: #a7a1a1;
+    padding: 5px;
+  }
+}
+
+.close {
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.modal-body {
+  max-height: calc(70vh - 100px);
+  overflow-y: auto;
+}

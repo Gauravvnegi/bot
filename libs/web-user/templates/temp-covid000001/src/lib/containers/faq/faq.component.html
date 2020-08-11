@@ -1,0 +1,88 @@
+<div #advisories class="faq--container">
+  <div class="heading--text">
+    <p class="tagline">FAQ&apos;S</p>
+    <p class="heading">TRAVEL ADVISORIES</p>
+  </div>
+  <div class="advisories">
+    <div class="advisories__buttons hide_on_mobile">
+      <div
+        *ngFor="let category of faqCategories"
+        class="button"
+        (click)="onCategorySelect(category.button.label)"
+        [ngClass]="{ active: selectingCategory === category.button.label }"
+      >
+        <p class="text">{{ category.button.label }}</p>
+        <div class="arrow">
+          <i class="fa fa-caret-right" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <div class="advisories__buttons__mobile show_on_mobile">
+      <div class="category-dropdown">
+        <div (click)="categorySelection()" class="dropdown">
+          <p>{{ selectingCategory }}</p>
+          <i class="fa fa-angle-down" aria-hidden="true"></i>
+        </div>
+        <div class="options" [ngStyle]="dropdown?{'display':'block'}:{'display':'none'}">
+          <div
+            *ngFor="let category of faqCategories"
+            class="button"
+            (click)="onCategorySelect(category.button.label)"
+          >
+            <p class="advisories_tag">{{ category.button.label }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="advisories__expanded_form">
+      <mat-accordion class="question">
+        <mat-expansion-panel *ngFor="let questions of faqQuestions">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <p class="question__text">{{ questions.question }}</p>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p class="answer">{{ questions.answer }}</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <!-- <div class="expanded_box">
+        <div class="question">
+          <div class="arrow">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+          <p class="question__text">
+            Can hotels change regulation without notice?
+          </p>
+        </div>
+        <p class="answer">
+          Hotels may change their rules without notice, at their discretion,
+          please refer to hotel policies for the most recent update. For any
+          amendments and cancellations, you will be charged as per the latest
+          hotel policy applicable.
+        </p>
+      </div>
+      <div class="expanded_box">
+        <div class="question">
+          <div class="arrow">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+          <p class="question__text">
+            Is Thermal Screening mandatory? What are its implications?
+          </p>
+        </div>
+        <p class="answer show_on_click"></p>
+      </div>
+      <div class="expanded_box">
+        <div class="question">
+          <div class="arrow">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+          <p class="question__text">
+            What are its cancellation policies?
+          </p>
+        </div>
+        <p class="answer show_on_click"></p>
+      </div> -->
+    </div>
+  </div>
+</div>

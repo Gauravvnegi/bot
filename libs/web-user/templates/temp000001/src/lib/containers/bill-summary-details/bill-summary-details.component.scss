@@ -1,0 +1,229 @@
+@import 'temp000001';
+
+.payment-summary-wrapper {
+  padding: 0px $padding-medium;
+@media only screen and (max-width: $M) {
+  padding: 0px;
+}
+}
+
+.summary-details-wrapper {
+  background-color: white;
+  padding: $padding-large;
+  border-radius: $border-radius-small;
+  &--title {
+    color: $icon-color;
+    font-weight: $bolder;
+    font-size: 25px;
+  }
+@media only screen and (max-width: $M) {
+  padding: 5px;
+  &--title{
+    font-size: $font-small;
+  }
+}
+}
+
+.user__info--wrapper {
+  padding: 25px 0px;
+@media only screen and (max-width: $M) {
+  padding: 5px 0px;
+}
+}
+
+.user__info {
+  @include flex-between-center();
+  margin-top: $margin-large;
+  &--details {
+    @include flex-between-center();
+    width: 30%;
+    font-size: $font-large;
+    font-weight: $bolder;
+    label {
+      color: #929292;
+    }
+    p {
+      text-align: left;
+      min-width: 36%;
+    }
+  }
+@media only screen and (max-width: $M) {
+  margin-top: 5px;
+  &--details{
+    font-size: 8px;
+    p{
+      min-width: 32%;
+    }
+  }
+}
+}
+.remove-gap {
+  justify-content: inherit;
+  .user__info--details {
+    margin-right: 5%;
+  }
+}
+
+.total__details {
+  @include flex-space-between();
+  margin: $margin-large 0px;
+  padding: 0px $padding-large;
+  &--manager {
+    width: 30%;
+    font-weight: $bolder;
+    padding-top: 21%;
+    &--text {
+      color: #a1a1a1;
+    }
+    &--name {
+      margin-top: $margin-small;
+    }
+    &--signature {
+      margin-top: $margin-large
+    }
+  }
+  &--amounts {
+    width: 30%;
+    font-weight: $bolder;
+
+    &--wrapper {
+      @include flex-between-center();
+      font-size: $font-large;
+       margin-top: $margin-large;
+      .label{
+        text-align: right;
+        min-width: 35%;
+      }
+      .final__label {
+        color: $icon-color;
+        font-size: 25px;
+      }
+      .final__amount {
+        color: $icon-color;
+        font-size: 27px;
+      }
+    }
+  }
+@media only screen and (max-width: $M) {
+  padding: 0px 5px;
+  margin: 5px 0px;
+  &--manager{
+    width: 41%;
+    font-size: $font-responsive-small;
+    padding-top: 61%;
+  }
+  &--amounts{
+    width: $half-width;
+    &--wrapper{
+      font-size: $font-responsive-small;
+      .final__label{
+        font-size: $font-responsive-small;
+      }
+      .final__amount{
+        font-size: $font-small;
+      }
+    }
+  }
+}
+}
+
+.add__more__gst{
+  @include flex-between-center();
+
+  font-size: $font-large;
+  font-weight: $bolder;
+  padding: 0px $padding-large;
+
+
+  .add__gst{
+    text-decoration: underline;
+    color: #a1a1a1;
+    font-weight: $medium;
+  }
+@media only screen and (max-width: $M) {
+  font-size: $font-small;
+  padding: 0px 5px;
+  .add__gst{
+    font-size: $font-responsive-small;
+  }
+}
+}
+
+.description-table-wrapper {
+  margin-top: $margin-large;
+}
+
+.description-table {
+  width: $full-width;
+  border-collapse: collapse;
+  tr{
+    border: 0;
+   @include flex-between-center();
+  }
+  .header {
+    background-color: $icon-color;
+    font-size: $font-medium;
+    font-weight: $bold;
+    color: white;
+    border-radius: $border-radius-small;
+
+    td {
+      padding: $padding-medium;
+      width: 16%;
+      text-align: center;
+    }
+  }
+
+  .order-details {
+    font-size: $font-medium;
+    font-weight: $bold;
+    border-bottom: 1px solid darkgray;
+    td {
+      padding: $padding-medium;
+      width: 16%;
+      text-align: center;
+      p {
+        color: #a1a1a1;
+      }
+    }
+  }
+  .total-amount {
+    td {
+      font-size: 16px;
+      color: $icon-color;
+      text-align: right;
+      font-weight: $bold;
+      padding: $padding-large;
+      b {
+        color: black;
+        font-weight: $bolder;
+        font-size: $font-large;
+      }
+    }
+  }
+@media only screen and (max-width: $M) {
+  .header{
+    font-size: 8px;
+    td{
+      padding: 5px;
+    }
+  }
+  .order-details{
+    font-size: 8px;
+    td{
+      padding: 5px;
+    }
+  }
+}
+}
+
+.verify__button{
+  border: none;
+  border-radius: 5px;
+  height: 36px;
+  @include footer-next();
+  &:focus {
+    border: none;
+    outline: none;
+  }
+}

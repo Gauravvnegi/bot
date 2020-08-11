@@ -1,0 +1,185 @@
+<div class="container">
+  <div class="summary-details-wrapper">
+    <div class="payment-summary-wrapper">
+      <span class="summary-details-wrapper--title">Payment Summary</span>
+      <div class="user__info--wrapper">
+        <div class="user__info">
+          <div class="user__info--details">
+            <label>Billed To :&nbsp;</label>
+            <p>
+              {{ staySummaryDetails.billedGuestFirstname }}
+              {{ staySummaryDetails.billedGuestLastname }}
+            </p>
+          </div>
+          <div class="user__info--details">
+            <label>Arrival Date :&nbsp;</label>
+            <p>{{ staySummaryDetails.arrivalDate }}</p>
+          </div>
+          <div class="user__info--details">
+            <label>CurrentDate :&nbsp;</label>
+            <p>{{ staySummaryDetails.kidsCount }}</p>
+          </div>
+        </div>
+
+        <div class="user__info">
+          <div class="user__info--details">
+            <label>Room No. :&nbsp;</label>
+            <p>{{ staySummaryDetails.roomNumber }}</p>
+          </div>
+          <div class="user__info--details">
+            <label>Departure Date :&nbsp;</label>
+            <p>{{ staySummaryDetails.departureDate }}</p>
+          </div>
+          <div class="user__info--details">
+            <label>Booking No. :&nbsp;</label>
+            <p>{{ staySummaryDetails.bookingNumber }}</p>
+          </div>
+        </div>
+
+        <div class="user__info remove-gap">
+          <div class="user__info--details">
+            <label>Room Type :&nbsp;</label>
+            <p>{{ staySummaryDetails.roomType }}</p>
+          </div>
+          <div class="user__info--details">
+            <label>No. of Adults :&nbsp;</label>
+            <p>{{ staySummaryDetails.adultsCount }}</p>
+          </div>
+        </div>
+
+        <div class="user__info remove-gap">
+          <div class="user__info--details">
+            <label>No. of Rooms :&nbsp;</label>
+            <p>{{ staySummaryDetails.unit }}</p>
+          </div>
+          <div class="user__info--details">
+            <label>No. of Children :&nbsp;</label>
+            <p>{{ staySummaryDetails.kidsCount }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="description-table-wrapper">
+      <table class="description-table" cellspacing="0" cellpadding="0">
+        <tr class="header">
+          <td style="text-align: left;">Discription</td>
+          <td>Unit</td>
+          <td>Unit Price</td>
+          <td>Amount</td>
+          <td>Discount</td>
+          <td>Total Amount</td>
+        </tr>
+        <tr class="order-details">
+          <td style="text-align: left;">
+            Room Rental
+            <p>Luxury</p>
+          </td>
+          <td>{{ billSummaryDetails.unit }}</td>
+          <td>
+            {{ billSummaryDetails.currencyCode }}&nbsp;{{
+              billSummaryDetails.baseRate
+            }}
+          </td>
+          <td>
+            {{ billSummaryDetails.unit }} x
+            {{ billSummaryDetails.currencyCode }}
+            {{ billSummaryDetails.baseRate }}
+          </td>
+          <td>-{{ billSummaryDetails.currencyCode }} 0</td>
+          <td>
+            {{ billSummaryDetails.currencyCode }}
+            {{ billSummaryDetails.totalRate }}
+          </td>
+        </tr>
+        <!-- <tr class="total-amount">
+          <td colspan="6">
+            Subtotal:&nbsp;&nbsp;<b
+              >{{ billSummaryDetails.currencyCode }}
+              {{ billSummaryDetails.totalRate }}</b
+            >
+          </td>
+        </tr>
+        <tr class="total-amount">
+          <td colspan="6">
+            Paid Amount:&nbsp;&nbsp;<b
+              >{{ billSummaryDetails.currencyCode }}
+              {{ billSummaryDetails.paidAmount }}</b
+            >
+          </td>
+        </tr>
+        <tr class="total-amount">
+          <td colspan="6">
+            Tax:&nbsp;&nbsp;<b
+              >{{ billSummaryDetails.currencyCode }}
+              {{ billSummaryDetails.tax }}</b
+            >
+          </td>
+        </tr>
+        <tr class="total-amount">
+          <td colspan="6">
+            Total Amount:&nbsp;&nbsp;<b
+              >{{ billSummaryDetails.currencyCode }}
+              {{ billSummaryDetails.totalAmount }}</b
+            >
+          </td>
+        </tr> -->
+      </table>
+    </div>
+    <div class="total__details">
+      <div class="total__details--manager">
+        <p class="total__details--manager--text">Manager Name</p>
+        <p class="total__details--manager--name">G. Murry</p>
+      </div>
+      <div class="total__details--amounts">
+        <div class="total__details--amounts--wrapper">
+          <p class="label">Total Amount</p>
+          <b class="amount"
+            >{{ billSummaryDetails.currencyCode }}
+            {{ billSummaryDetails.totalAmount }}</b
+          >
+        </div>
+        <div class="total__details--amounts--wrapper">
+          <p class="label">Total Savings</p>
+          <b class="amount">{{ billSummaryDetails.currencyCode }} 20%</b>
+        </div>
+        <div class="total__details--amounts--wrapper">
+          <p class="label">Paid Amount</p>
+          <b class="amount"
+            >{{ billSummaryDetails.currencyCode }}
+            {{ billSummaryDetails.paidAmount }}</b
+          >
+        </div>
+        <div class="total__details--amounts--wrapper">
+          <p class="label">Tax</p>
+          <b class="amount"
+            >{{ billSummaryDetails.currencyCode }}
+            {{ billSummaryDetails.tax }}</b
+          >
+        </div>
+        <div class="total__details--amounts--wrapper">
+          <p class="label">CGST</p>
+          <b class="amount">{{ billSummaryDetails.currencyCode }} 18%</b>
+        </div>
+        <div class="total__details--amounts--wrapper">
+          <p class="label">SGST</p>
+          <b class="amount">{{ billSummaryDetails.currencyCode }} 18%</b>
+        </div>
+        <div class="total__details--amounts--wrapper">
+          <p class="final__label">Amount to Pay</p>
+          <b class="final__amount">{{ billSummaryDetails.currencyCode }} 612</b>
+        </div>
+      </div>
+    </div>
+    <div class="add__more__gst">
+      <p class="manager__signature">Guest Signature</p>
+      <p class="add__gst">+Add Gst Details</p>
+    </div>
+    <div>
+      <hospitality-bot-signature-capture-wrapper
+        [imgUrl]="signature"
+        (signatureData)="signatureUploadFile($event)"
+      ></hospitality-bot-signature-capture-wrapper>
+    </div>
+  </div>
+</div>
+<div class="main-template-button"></div>

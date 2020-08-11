@@ -1,0 +1,99 @@
+@import 'temp000001';
+
+.mat__field--heading {
+  font-size: $font16;
+  font-weight: $bold;
+  letter-spacing: $small-spacing;
+  line-height: 27px;
+  margin-right: 15px;
+}
+
+.expand-icon {
+  margin-left: auto;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+  font-size: $font16;
+}
+
+.wrapper {
+  &__item {
+    width: 45%;
+    margin: 5px 0;
+    @media only screen and (max-width: $M) {
+      width: auto;
+    }
+  }
+
+  @include flex-space-between();
+  @include display-block-on-breakpoint($M);
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: inherit;
+  }
+}
+
+.wrapper__item--gender {
+  width: 45%;
+  margin-bottom: $margin-large;
+  &-heading {
+    margin-top: -3px;
+    font-size: $font16;
+    margin-bottom: 5px;
+  }
+  @include full-width-on-breakpoint($M);
+}
+
+.wrapper__input {
+  width: 40px;
+  .mat-form-field-underline {
+    height: 0;
+  }
+}
+
+.travelling__info {
+  width: 45%;
+
+  &--heading {
+    font-size: $font16;
+  }
+  &--block {
+    @include flex-space-between();
+
+    &-label {
+      font-weight: $bold;
+    }
+
+    &-item {
+      width: 25%;
+      align-items: center;
+      @include flex-space-between();
+    }
+  }
+  @include full-width-on-breakpoint($M);
+}
+
+:host ::ng-deep .mat-form-field-underline {
+  background-image: none !important;
+  border-bottom: 1px solid lightgray !important;
+}
+
+:host ::ng-deep .mat-vertical-content-container {
+  margin: 0px 18px;
+}
+
+:host ::ng-deep .input_feild {
+  display: flex;
+  align-items: center;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  width: 10px;
+}
+
+:host ::ng-deep .mat__field--heading {
+  margin-right: 3rem;
+  @media only screen and (max-width: $M) {
+    margin-right: 5px;
+  }
+}

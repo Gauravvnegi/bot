@@ -1,0 +1,14 @@
+@import 'temp000001';
+
+
+
+
+:host ::ng-deep .next-button {
+  @include footer-next();
+}
+
+@media only screen and (max-width: $M) {
+  .user-button{
+    width: $full-width;
+  }
+}

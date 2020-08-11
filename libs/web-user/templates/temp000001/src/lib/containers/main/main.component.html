@@ -1,0 +1,10 @@
+<div class="parent_block">
+  <hospitality-bot-header *ngIf="isReservationData"></hospitality-bot-header>
+  <ng-container
+    stepper-content-renderer
+    [stepperConfig]="stepperData"
+    [parentForm]="parentForm"
+    [dataToPopulate]="reservationData"
+  ></ng-container>
+</div>
+<hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

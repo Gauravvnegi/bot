@@ -1,0 +1,21 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+>
+  <!-- <mat-label>{{ settings.label }}</mat-label> -->
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label>
+  <mat-radio-group
+    [formControlName]="name"
+    [ngClass]="defaultClasses.fieldClasses"
+  >
+    <mat-radio-button
+      [style]="settings.style"
+      *ngFor="let option of settings.options"
+      [value]="option.value"
+    >
+      {{ option.key }}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>

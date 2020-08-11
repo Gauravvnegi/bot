@@ -1,0 +1,26 @@
+<div class="dialog__container">
+  <div (click)="close()" class="cross">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </div>
+  <form [formGroup]="raiseRequestForm" (ngSubmit)="onSubmit()">
+    <div class="popup__header">
+      <h3>RAISE REQUEST</h3>
+      <div class="hr"></div>
+    </div>
+    <web-user-textarea
+      [parentForm]="raiseRequestForm"
+      [name]="'message'"
+      [settings]="raiseRequestConfig.message"
+    ></web-user-textarea>
+    <web-user-input
+      [parentForm]="raiseRequestForm"
+      [name]="'emailId'"
+      [settings]="raiseRequestConfig.emailId"
+    ></web-user-input>
+    <div class="footer">
+      <button mat-raised-button type="submit" [disabled]="!raiseRequestForm.valid" class="submit">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

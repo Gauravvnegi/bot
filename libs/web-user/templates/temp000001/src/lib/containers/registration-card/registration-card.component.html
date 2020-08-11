@@ -1,0 +1,48 @@
+<!-- <div (click)="openRegCardModal(content)">
+  <div>{{ settings.label }}<span [ngClass]="settings.styles.link">{{ settings.linkLabel }}</span></div>
+</div> -->
+<div>
+  <div [ngClass]="settings.modal.style.container">
+    <div [ngClass]="settings.modal.style.header">
+      <div [ngClass]="settings.modal.style.title">
+        <h3>{{ settings.modal.title }}</h3>
+      </div>
+      <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+    </div>
+    <div [ngClass]="settings.modal.style.body">
+      <div [ngClass]="settings.modal.style.pdfHeader">
+        <!-- <img [src]="" /> -->
+        <div></div>
+        <a [href]="regCardSrc" [download]="regCard.fileName">
+          <mat-icon style="margin-right: 10px;">
+            {{ settings.modal.pdf.icon }}
+          </mat-icon>
+        </a>
+      </div>
+      <div [ngClass]="settings.styles.regCardContainer">
+        <pdf-viewer
+          [src]="regCard.URL"
+          [render-text]="true"
+          style="display: block;"
+        ></pdf-viewer>
+      </div>
+      <div [ngClass]="settings.styles.signatureContainer">
+        <hospitality-bot-signature-capture-wrapper
+          [settings]="{ uploadAPI: settings.signatureUploadAPI }"
+          (signatureData)="signatureUploadFile($event)"
+        >
+        </hospitality-bot-signature-capture-wrapper>
+      </div>
+    </div>
+    <div [ngClass]="settings.modal.style.footer">
+      <div class="save-button">
+        <web-user-button
+          [settings]="{ label: 'Save' }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+          (click)="onClose()"
+        ></web-user-button>
+      </div>
+    </div>
+  </div>
+</div>

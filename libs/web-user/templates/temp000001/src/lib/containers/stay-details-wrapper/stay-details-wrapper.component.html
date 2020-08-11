@@ -1,0 +1,19 @@
+<div *ngIf="isRendered">
+  <div class="container">
+    <hospitality-bot-stay-details
+      [parentForm]="parentForm"
+      [reservationData]="reservationData"
+      (addFGEvent)="addFGEvent($event)"
+    ></hospitality-bot-stay-details>
+    <hospitality-bot-special-comments
+      [parentForm]="parentForm"
+      [reservationData]="reservationData"
+      (addFGEvent)="addFGEvent($event)"
+    ></hospitality-bot-special-comments>
+  </div>
+
+  <div class="main-template-button">
+    <ng-container button-renderer [config]="buttonConfig" [context]="self">
+    </ng-container>
+  </div>
+</div>

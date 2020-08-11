@@ -21,11 +21,11 @@ export class TempCovid000001Component implements OnInit {
 
   ngOnInit(): void {
     this._hotelService.covidHotelId = this.config['hotelId'];
-
     this._hotelService
       .getHotelConfigById(this._hotelService.covidHotelId)
       .subscribe((hotel) => {
-        console.log();
+        this._hotelService.hotelConfig = hotel;
+        this.hotelConfig = hotel;
       });
   }
 }

@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { RaiseRequestWrapperComponent } from '../raise-request-wrapper/raise-request-wrapper.component';
 import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
 import { debug } from 'util';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
   selector: 'hospitality-bot-header',
@@ -19,10 +20,12 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    private _hotelService: HotelService,
     public _hyperlink: HyperlinkElementService
   ) { }
 
   ngOnInit(): void {
+    this.hotelLogo;
   }
 
   openDialog() {
@@ -39,5 +42,9 @@ export class HeaderComponent implements OnInit {
 
   setHyperLinkElement(element) {
     this._hyperlink.setSelectedElement(element);
+  }
+
+  get hotelLogo(){
+    return this._hotelService.hotelConfig && this._hotelService.hotelConfig.logo
   }
 }

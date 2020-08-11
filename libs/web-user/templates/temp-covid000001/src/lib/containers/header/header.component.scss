@@ -1,7 +1,7 @@
 @import 'temp-covid000001';
 
 .covid__page--header {
-  padding: $padding-large;
+  padding: 10px 20px;
   position: sticky;
   top: 0px;
   background-color: white;
@@ -61,15 +61,12 @@
       }
     }
     .logo {
-      width: 150px;
-      height: 23px;
+      height: 45px;
       img {
-        width: $full-width;
         height: $full-width;
       }
       @media only screen and (max-width: $M) {
-        width: 122px;
-        height: 19px;
+        height: 25px;
       }
     }
     @media only screen and (max-width: $M) {

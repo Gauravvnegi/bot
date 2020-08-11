@@ -30,6 +30,8 @@ import { LinkifyTextPipe } from './pipes/linkify-text.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 import { CheckboxComponent } from './presentational/checkbox/checkbox.component';
+import { FileUploadCssDirective } from './directives/file-upload.directive';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -66,6 +68,7 @@ import { CheckboxComponent } from './presentational/checkbox/checkbox.component'
     CheckboxComponent,
     LinkifyTextPipe,
     SafeHtmlPipe,
+    FileUploadCssDirective,
   ],
   declarations: [
     StepperComponent,
@@ -92,6 +95,7 @@ import { CheckboxComponent } from './presentational/checkbox/checkbox.component'
     CheckboxComponent,
     LinkifyTextPipe,
     SafeHtmlPipe,
+    FileUploadCssDirective,
   ],
   // exports: [SharedMaterialModule, ReactiveFormsModule, FormsModule, StepperComponent, RadioComponent, TextareaComponent, SelectBoxComponent, InputComponent, FileUploadComponent, ButtonComponent, DatePickerComponent, PaymentCardComponent],
   // declarations: [StepperComponent,RadioComponent, TextareaComponent, SelectBoxComponent, InputComponent, FileUploadComponent, ButtonComponent, DatePickerComponent, PaymentCardComponent],

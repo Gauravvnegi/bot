@@ -4,8 +4,9 @@
   }}</mat-label> -->
   <div class="upload__box">
     <img
+      file-upload-css
+      [url]="url"
       loading="'lazy'"
-      [ngStyle]="{ width: url ? '100%' : null , height: url ? '83%' : null }"
       [src]="url"
       class="upload__box__child"
     />

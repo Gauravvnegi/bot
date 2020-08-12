@@ -52,3 +52,9 @@ body {
     padding: 10px !important;
   }
 }
+
+.cdk-overlay-pane {
+  @media only screen and (max-width: 480px) {
+    width: 80vw !important;
+  }
+}

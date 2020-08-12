@@ -7,6 +7,10 @@
   font-size: 25px;
   font-weight: 700;
   color: $icon-color;
+  @media only screen and (max-width: $M) {
+    font-size: 14px;
+    width: 190px;
+  }
 }
 
 .spinner > div {
@@ -18,6 +22,10 @@
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
   animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  @media only screen and (max-width: $M) {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .spinner .bounce1 {

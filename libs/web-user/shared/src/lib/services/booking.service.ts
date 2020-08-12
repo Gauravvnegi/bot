@@ -15,7 +15,7 @@ export class ReservationService {
   private _reservationData;
 
   constructor(protected apiService: ApiService) {
-    this.apiService.baseUrl = 'https://api.botshot.in:8443';
+    this.apiService.baseUrl = 'https://stageapi.botshot.in:8443';
   }
 
   getReservationDetails(reservationId): Observable<ReservationDetails> {

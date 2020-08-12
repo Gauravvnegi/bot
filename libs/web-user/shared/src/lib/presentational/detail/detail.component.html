@@ -25,7 +25,13 @@
     </div>
   </ng-container>
 
-  <div [style]="settings.style.detailValueStyles">
+  <div [style]="settings.style.detailValueStyles" *ngIf="!settings.repeater">
     {{ settings.value }}
+  </div>
+
+  <div [style]="settings.style.detailValueStyles" *ngIf="settings.repeater">
+    <div *ngFor="let value of settings.value">
+      {{ settings | repeater: value }}
+    </div>
   </div>
 </div>

@@ -220,6 +220,9 @@ export class ApplicationStatusComponent implements OnInit, AfterViewInit {
             ),
           },
           valueType: config.component.valueType || '',
+          repeater: config.component.repeater || false,
+          path: config.component.path,
+          pathType: config.component.pathType,
         };
 
         componentObj.instance.name = key;

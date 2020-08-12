@@ -412,6 +412,7 @@ export class DocumentsDetailsComponent implements OnInit {
           );
         },
         ({ error }) => {
+          this.updateDocumentFG(guestId, doc_type, doc_page, '');
           this._snackBarService.openSnackBarAsText(error.cause);
         }
       );

@@ -8,32 +8,34 @@
         <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
       </mat-panel-title>
     </mat-expansion-panel-header> -->
-    <div class="payment__wrapper--header">
-      Payment Summary
-    </div>
-    <div class="table__wrapper">
-  <table class="description-table" cellspacing="0" cellpadding="0">
-    <tr class="header">
-      <td style="text-align: left;">Discription</td>
-      <td>Unit</td>
-      <td>Amount</td>
-      <td>Discount</td>
-      <td>Total</td>
-    </tr>
-    <tr class="order__details" *ngFor="let summary of paymentSummary">
-      <td style="text-align: left;">Room Rental<b>({{ summary.roomType }})</b></td>
-      <td>{{ summary.unit }}</td>
-      <td>{{ summary.unit }} x {{ currency }} {{ summary.baseRate }}</td>
-      <td>-{{ currency }} 0</td>
-      <td>{{ currency }} {{ summary.totalRate }}</td>
-    </tr>
-    <tr class="total__amount">
-      <td colspan="5">
-        Total Amount:&nbsp;&nbsp;<b>{{ currency }} {{ totalAmount }}</b>
-      </td>
-    </tr>
-  </table>
-</div>
+  <div class="payment__wrapper--header">
+    Payment Summary
+  </div>
+  <div class="table__wrapper">
+    <table class="description-table" cellspacing="0" cellpadding="0">
+      <tr class="header">
+        <td style="text-align: left;">Description</td>
+        <td>Unit</td>
+        <td>Amount</td>
+        <td>Discount</td>
+        <td>Total</td>
+      </tr>
+      <tr class="order__details" *ngFor="let summary of paymentSummary">
+        <td style="text-align: left;">
+          Room Rental<b>({{ summary.roomType }})</b>
+        </td>
+        <td>{{ summary.unit }}</td>
+        <td>{{ summary.unit }} x {{ currency }} {{ summary.baseRate }}</td>
+        <td>-{{ currency }} 0</td>
+        <td>{{ currency }} {{ summary.totalRate }}</td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="5">
+          Total Amount:&nbsp;&nbsp;<b>{{ currency }} {{ totalAmount }}</b>
+        </td>
+      </tr>
+    </table>
+  </div>
 
   <!-- <web-user-file-upload></web-user-file-upload> -->
   <!-- </mat-expansion-panel>

@@ -35,6 +35,9 @@
 .modal-title {
   width: 96%;
   text-align: center;
+  .title{
+    margin-bottom: 10px;
+  }
   p {
     text-align: center;
     font-weight: 700;
@@ -44,6 +47,9 @@
     font-weight: 100;
     color: #a7a1a1;
     padding: 5px;
+  }
+  @media only screen and (max-width: $M) {
+    font-size: 12px;
   }
 }
 

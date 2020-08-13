@@ -20,6 +20,7 @@ export class FieldSchema implements Deserializable {
   mediaQuery?;
   icon?: string;
   url?: string;
+  isUpload?: boolean;
   appearance?: string;
   maskPattern?;
   options?: { key: string; value: string }[];
@@ -39,7 +40,8 @@ export class FieldSchema implements Deserializable {
       _.set({}, 'appearance', _.get(input, ['appearance'])),
       _.set({}, 'maskPattern', _.get(input, ['maskPattern'], false)),
       _.set({}, 'options', _.get(input, ['options'])),
-      _.set({}, 'placeholder', _.get(input, ['placeholder']))
+      _.set({}, 'placeholder', _.get(input, ['placeholder'])),
+      _.set({}, 'isUpload', _.get(input, ['isUpload']))
     );
     return this;
   }

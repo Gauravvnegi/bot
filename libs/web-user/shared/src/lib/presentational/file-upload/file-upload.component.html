@@ -27,4 +27,7 @@
     <span *ngIf="!isValidDocument">{{ error }}</span>
     <mat-label>{{ documentType }}{{ settings && settings.label }}</mat-label>
   </div>
+  <ng-container *ngIf="isUpload">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-container>
 </div>

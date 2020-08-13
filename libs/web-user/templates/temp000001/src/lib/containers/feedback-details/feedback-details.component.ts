@@ -32,6 +32,7 @@ export class FeedbackDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.ratingScale = this.ratingScaleRange;
     this.ratingScaleConfig = this.ratingConfig;
+    this._feedbackDetailsService.selectedServices = this.suggestionArray;
     this.feedbackDetailsConfig = this.setFieldConfiguration();
     this.setfeedbackDetails();
   }
@@ -42,7 +43,7 @@ export class FeedbackDetailsComponent implements OnInit {
   initFeedBackDetailForm() {
     this.feedbackDetailsForm = this._fb.group({
       feedback: [''],
-      rating: [''],
+      rating: ['', [Validators.required]],
     });
   }
 

@@ -3,6 +3,7 @@ import { ReservationService } from './booking.service';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import { FeedbackDetailsConfigI, FeedbackConfigI, FeedbackConfigDS, FeedbackData, Service } from '../data-models/feedbackDetailsConfig.model';
 import { Observable } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class FeedbackDetailsService extends ReservationService {
@@ -44,6 +45,19 @@ export class FeedbackDetailsService extends ReservationService {
     feedbackData.comments = feedbackValues.feedback;
     feedbackData.rating = feedbackValues.rating;
     return feedbackData;
+  }
+
+  validateFeedbackDetailForm(feedbackDetailForm: FormGroup) {
+    let status = [];
+    
+    if (feedbackDetailForm.invalid) {
+      status.push({
+        validity: false,
+        msg: 'Please select the Rating',
+        data: {},
+      });
+    }
+    return status;
   }
 
   set selectedServices(services) {

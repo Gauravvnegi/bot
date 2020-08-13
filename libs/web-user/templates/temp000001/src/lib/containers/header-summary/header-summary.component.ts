@@ -26,7 +26,7 @@ export class HeaderSummaryComponent implements OnInit {
   constructor(
     private _stepperService: StepperService,
     private _date: DateService,
-    public dialogRef: MatDialogRef<HeaderSummaryComponent>,
+    public dialogRef: MatDialogRef<HeaderSummaryComponent>
   ) {
     this.context = this;
   }
@@ -277,6 +277,8 @@ export class HeaderSummaryComponent implements OnInit {
                   pathType: 'array',
                   type: 'detail',
                   appearance: '',
+                  arrayPropPath: 'guestDetail.secondaryGuest.$',
+                  repeater: true,
                 },
               },
               {
@@ -307,6 +309,8 @@ export class HeaderSummaryComponent implements OnInit {
                   pathType: 'array',
                   type: 'detail',
                   appearance: '',
+                  arrayPropPath: 'guestDetail.secondaryGuest.$',
+                  repeater: true,
                 },
               },
               {
@@ -336,6 +340,8 @@ export class HeaderSummaryComponent implements OnInit {
                   pathType: 'array',
                   type: 'detail',
                   appearance: '',
+                  arrayPropPath: 'guestDetail.secondaryGuest.$',
+                  repeater: true,
                 },
               },
             ],

@@ -95,6 +95,8 @@ export class BaseComponent
     };
     transforms: Function[];
     valueType: string;
+    repeater?: boolean;
+    arrayPropPath?: string;
   }) {
     this._settings = { ...this._defaultValue, ...value };
   }

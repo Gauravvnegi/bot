@@ -68,23 +68,24 @@ export class ReservationSummaryService {
     if (component.pathType == 'array') {
       value = '';
 
-      for (const path of searchPaths) {
-        const arrayPropPath: string = this.getArrayFieldName(path);
-        const pathArray: string[] = this.convertPathToArray(path);
+      for (const formValue of formValues) {
+        const arrayPropPath: string = this.getArrayFieldName(
+          component.arrayPropPath
+        );
+        const nestedArrayField = this.getNestedProp(formValue, arrayPropPath);
 
-        for (const formValue of formValues) {
-          const nestedArrayField = this.getNestedProp(formValue, arrayPropPath);
+        /* for (const val of nestedArrayField) {
+          for (const path of searchPaths) {
+            const pathArray: string[] = this.convertPathToArray(path);
+            const tempVal = _.get(val, pathArray[pathArray.length - 1]);
 
-          if (nestedArrayField) {
-            for (const val of nestedArrayField) {
-              const tempVal = _.get(val, pathArray[pathArray.length - 1]);
-
-              if (tempVal) {
-                value = value.concat(tempVal).concat(' ');
-              }
+            if (tempVal) {
+              value = value.concat(tempVal).concat(' ');
             }
           }
-        }
+        } */
+
+        if (nestedArrayField) return nestedArrayField;
       }
     }
 

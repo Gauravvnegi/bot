@@ -28,9 +28,11 @@ import { SignaturePadScribbleComponent } from './presentational/signature-pad-sc
 import { SignatureCaptureWrapperComponent } from './presentational/signature-capture-wrapper/signature-capture-wrapper.component';
 import { LinkifyTextPipe } from './pipes/linkify-text.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { RepeaterPipe } from './pipes/repeater.pipe';
 
 import { CheckboxComponent } from './presentational/checkbox/checkbox.component';
 import { FileUploadCssDirective } from './directives/file-upload.directive';
+import { from } from 'rxjs';
 
 @NgModule({
   imports: [
@@ -69,6 +71,7 @@ import { FileUploadCssDirective } from './directives/file-upload.directive';
     LinkifyTextPipe,
     SafeHtmlPipe,
     FileUploadCssDirective,
+    RepeaterPipe,
   ],
   declarations: [
     StepperComponent,
@@ -96,6 +99,7 @@ import { FileUploadCssDirective } from './directives/file-upload.directive';
     LinkifyTextPipe,
     SafeHtmlPipe,
     FileUploadCssDirective,
+    RepeaterPipe,
   ],
   // exports: [SharedMaterialModule, ReactiveFormsModule, FormsModule, StepperComponent, RadioComponent, TextareaComponent, SelectBoxComponent, InputComponent, FileUploadComponent, ButtonComponent, DatePickerComponent, PaymentCardComponent],
   // declarations: [StepperComponent,RadioComponent, TextareaComponent, SelectBoxComponent, InputComponent, FileUploadComponent, ButtonComponent, DatePickerComponent, PaymentCardComponent],

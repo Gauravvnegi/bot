@@ -6,4 +6,9 @@ import { BaseComponent } from '../base.component';
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
 })
-export class DetailComponent extends BaseComponent {}
+export class DetailComponent extends BaseComponent {
+  repeater(value) {
+    debugger;
+    console.log(value);
+  }
+}

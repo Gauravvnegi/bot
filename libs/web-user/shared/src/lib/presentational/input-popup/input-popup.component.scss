@@ -4,6 +4,9 @@
     position: absolute;
     right: 5px;
     top: -20px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   &--heading {
     text-align: center;
@@ -38,12 +41,12 @@
   justify-content: center;
 }
 
-:host ::ng-deep .mat-raised-button{
-    background-image: var(--stepper-dynamic-background-image, blue);
-    width: 150px;
-    font-weight: 700;
-    color: white;
-    &:hover {
-      cursor: pointer;
-    }
+:host ::ng-deep .mat-raised-button {
+  background-image: var(--stepper-dynamic-background-image, blue);
+  width: 150px;
+  font-weight: 700;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
 }

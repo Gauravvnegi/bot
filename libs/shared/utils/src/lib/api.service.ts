@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { throwError as observableThrowError, Observable } from 'rxjs';
+import { environment } from '@hospitality-bot/web-user/environment';
 
 @Injectable()
 export class ApiService {
-  baseUrl = 'https://stageapi.botshot.in:8443';
+  baseUrl = environment.baseUrl;
 
   constructor(protected httpClient: HttpClient) {}
 

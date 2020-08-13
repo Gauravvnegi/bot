@@ -6,6 +6,7 @@ import {
   ReservationDetails,
   FileDetails,
 } from '../data-models/reservationDetails';
+import { environment } from '@hospitality-bot/web-user/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class ReservationService {
   private _reservationData;
 
   constructor(protected apiService: ApiService) {
-    this.apiService.baseUrl = 'https://stageapi.botshot.in:8443';
+    this.apiService.baseUrl = environment.baseUrl;
   }
 
   getReservationDetails(reservationId): Observable<ReservationDetails> {

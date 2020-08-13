@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  name: 'default',
+  baseUrl: 'https://api.botshot.in:8443',
 };
 
 /*

@@ -18,7 +18,7 @@
     <input
       #fileInput
       type="file"
-      [accept]="fileConfig.accept"
+      accept="image/*"
       [attr.disabled]="settings && settings.disable ? '' : null"
       (click)="fileInput.value = null"
       (change)="onSelectFile($event)"

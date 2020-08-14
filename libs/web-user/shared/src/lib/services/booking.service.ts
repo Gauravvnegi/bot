@@ -15,9 +15,7 @@ export class ReservationService {
   private _reservationId: string;
   private _reservationData;
 
-  constructor(protected apiService: ApiService) {
-    this.apiService.baseUrl = environment.baseUrl;
-  }
+  constructor(protected apiService: ApiService) {}
 
   getReservationDetails(reservationId): Observable<ReservationDetails> {
     return this.apiService.get(`/api/v1/reservation/${reservationId}?raw=true`);

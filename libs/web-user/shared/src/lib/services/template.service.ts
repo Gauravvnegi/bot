@@ -5,9 +5,7 @@ import { environment } from '@hospitality-bot/web-user/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TemplateService {
-  constructor(protected apiService: ApiService) {
-    this.apiService.baseUrl = environment.baseUrl;
-  }
+  constructor(protected apiService: ApiService) {}
 
   getTemplateData(templateId, journey?): Observable<any> {
     return journey

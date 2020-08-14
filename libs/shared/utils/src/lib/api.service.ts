@@ -6,7 +6,7 @@ import { environment } from '@hospitality-bot/web-user/environment';
 
 @Injectable()
 export class ApiService {
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.base_url;
 
   constructor(protected httpClient: HttpClient) {}
 

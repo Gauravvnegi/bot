@@ -63,12 +63,12 @@
                       guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
                       guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront
                       " 
-                    [isUpload]="
+                    [isUploading]="
                     guestDetailsConfig &&
                     guestDetailsConfig[guestGroup.get('id').value].documents &&
                     guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
                     guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront.isUpload
+                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront.isUploading
                     "
                       (documentData)="
                       saveDocument($event, {
@@ -91,12 +91,12 @@
                       guestDetailsConfig[guestGroup.get('id').value].documents &&
                       guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
                       guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack"
-                    [isUpload]="
+                    [isUploading]="
                     guestDetailsConfig &&
                     guestDetailsConfig[guestGroup.get('id').value].documents &&
                     guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
                     guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack.isUpload
+                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack.isUploading
                     "
                       (documentData)="
                       saveDocument($event, {

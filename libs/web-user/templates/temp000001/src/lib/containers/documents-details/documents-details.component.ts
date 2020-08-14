@@ -384,6 +384,7 @@ export class DocumentsDetailsComponent implements OnInit {
   }
 
   saveDocument(event, { guestId, doc_page, doc_type, doc_issue_place }) {
+    this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, true );
     let formData = new FormData();
     formData.append('file', event.file);
     formData.append('doc_type', doc_type);
@@ -405,6 +406,7 @@ export class DocumentsDetailsComponent implements OnInit {
             doc_page,
             response.fileDownloadUrl
           );
+          this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, false );
           this._snackBarService.openSnackBarAsText(
             'Document upload successful',
             '',
@@ -413,9 +415,24 @@ export class DocumentsDetailsComponent implements OnInit {
         },
         ({ error }) => {
           this.updateDocumentFG(guestId, doc_type, doc_page, '');
+          this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, false);
           this._snackBarService.openSnackBarAsText(error.cause);
         }
       );
+  }
+
+  updateDocumentUploadingStatus( guestId, doc_page, doc_type, isUploading ){
+    let documentIndex;
+      documentIndex = this.guestDetailsConfig[guestId].documents
+                      .findIndex(doc => (doc.documentFileFront.label.split(' '))[0] == doc_type);
+      if(documentIndex >= 0){
+        Object.keys(this.guestDetailsConfig[guestId].documents[documentIndex])
+        .forEach(key =>{
+        if(this.guestDetailsConfig[guestId].documents[documentIndex][key].type === doc_page){
+          this.guestDetailsConfig[guestId].documents[documentIndex][key].isUploading = isUploading;
+        }
+      })
+    }
   }
 
   updateDocumentFG(guestId, doc_type, doc_page, data) {

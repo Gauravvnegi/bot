@@ -1,9 +1,8 @@
 @import 'temp000001';
 
-.spinner {
+.loading{
   margin: 80px auto 0;
   text-align: center;
-  width: 254px;
   font-size: 25px;
   font-weight: 700;
   color: $icon-color;
@@ -11,6 +10,10 @@
     font-size: 14px;
     width: 150px;
   }
+}
+
+.spinner {
+  text-align: center;
 }
 
 .spinner > div {

@@ -19,6 +19,7 @@
       "@hospitality-bot/web-user/environment": [
         "apps/web-user/src/environments/environment.ts"
       ],
+      "@hospitality-bot/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@hospitality-bot/admin/shared": ["libs/admin/shared/src/index.ts"],
       "@hospitality-bot/web-user/shared": ["libs/web-user/shared/src/index.ts"],
       "@hospitality-bot/shared/auth": ["libs/shared/auth/src/index.ts"],

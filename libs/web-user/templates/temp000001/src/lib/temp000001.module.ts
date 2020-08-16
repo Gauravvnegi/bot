@@ -10,7 +10,6 @@ import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { FooterComponent } from './containers/footer/footer.component';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { ButtonDirective } from './directives/button-renderer.directive';
@@ -35,7 +34,6 @@ import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.s
     FooterComponent,
   ],
   providers: [
-    ApiService,
     ReservationService,
     StayDetailsService,
     GuestDetailsService,

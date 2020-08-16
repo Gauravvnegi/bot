@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
@@ -6,12 +7,11 @@ import {
   PaymentDetailsConfigI,
 } from '../data-models/PaymentDetailsConfig.model';
 import { Months, Years } from '../data-models/year';
-import { ReservationService } from './booking.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PaymentDetailsService extends ReservationService {
+export class PaymentDetailsService extends ApiService {
   private _paymentDetailDS: PaymentDetailDS;
   private _payAtDesk: boolean;
 
@@ -60,22 +60,15 @@ export class PaymentDetailsService extends ReservationService {
   }
 
   getPaymentConfiguration(hotelId): Observable<any> {
-    return this.apiService.get(
-      `/api/v1/hotel/${hotelId}/payment-configuration`
-    );
+    return this.get(`/api/v1/hotel/${hotelId}/payment-configuration`);
   }
 
   initiatePayment(reservationId) {
-    return this.apiService.get(
-      `/api/v1/reservation/${reservationId}/payment/webhook?`
-    );
+    return this.get(`/api/v1/reservation/${reservationId}/payment/webhook?`);
   }
 
   updatePaymentStatus(reservationId, data) {
-    return this.apiService.put(
-      `/api/v1/reservation/${reservationId}/payment`,
-      data
-    );
+    return this.put(`/api/v1/reservation/${reservationId}/payment`, data);
   }
 
   set payAtDesk(paymentOption) {

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
 import {
   BillSummaryDetailDS,
   SummaryDetailsConfigI,
 } from '../data-models/billSummaryConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-import { ReservationService } from './booking.service';
 
 @Injectable()
-export class BillSummaryService extends ReservationService {
+export class BillSummaryService extends ApiService {
   private _billSummaryDetailDS: BillSummaryDetailDS;
 
   initBillSummaryDetailDS(summaryDetails, paymentData) {
@@ -34,9 +34,7 @@ export class BillSummaryService extends ReservationService {
   }
 
   getBillingSummary(reservationId): Observable<any> {
-    return this.apiService.get(
-      `/api/v1/reservation/${reservationId}/bill-summary`
-    );
+    return this.get(`/api/v1/reservation/${reservationId}/bill-summary`);
   }
 
   get billSummaryDetails() {

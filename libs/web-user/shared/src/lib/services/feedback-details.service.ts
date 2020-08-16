@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
 import {
   FeedbackConfigDS,
@@ -9,10 +10,9 @@ import {
   Service,
 } from '../data-models/feedbackDetailsConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-import { ReservationService } from './booking.service';
 
 @Injectable()
-export class FeedbackDetailsService extends ReservationService {
+export class FeedbackDetailsService extends ApiService {
   private _feedBackConfigDS: FeedbackConfigDS;
   public _selectedServices;
 
@@ -36,14 +36,11 @@ export class FeedbackDetailsService extends ReservationService {
   }
 
   getFeedback(): Observable<FeedbackConfigI> {
-    return this.apiService.get(`/api/v1/cms/feedback-form`);
+    return this.get(`/api/v1/cms/feedback-form`);
   }
 
   addFeedback(reservationId, data) {
-    return this.apiService.post(
-      `/api/v1/reservation/${reservationId}/feedback`,
-      data
-    );
+    return this.post(`/api/v1/reservation/${reservationId}/feedback`, data);
   }
 
   mapFeedbackData(feedbackValues) {

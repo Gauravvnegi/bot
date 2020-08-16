@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import {
   ContactDetails,
   Guest,
@@ -13,10 +14,9 @@ import {
   GuestDetailDS,
   GuestDetailsConfigI,
 } from '../data-models/guestDetailsConfig.model';
-import { ReservationService } from './booking.service';
 
 @Injectable()
-export class GuestDetailsService extends ReservationService {
+export class GuestDetailsService extends ApiService {
   private _guestDetailDS: GuestDetailDS;
   guestDetailDS$ = new Subject();
   guestDetailForm;
@@ -130,10 +130,7 @@ export class GuestDetailsService extends ReservationService {
   }
 
   updateGuestDetails(reservationId, data): Observable<ReservationDetails> {
-    return this.apiService.put(
-      `/api/v1/reservation/${reservationId}/guests`,
-      data
-    );
+    return this.put(`/api/v1/reservation/${reservationId}/guests`, data);
   }
 
   mapGuestDetailValues(data, value) {

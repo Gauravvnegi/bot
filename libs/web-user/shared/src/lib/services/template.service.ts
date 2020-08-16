@@ -3,14 +3,10 @@ import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class TemplateService {
-  constructor(protected apiService: ApiService) {}
-
+export class TemplateService extends ApiService {
   getTemplateData(templateId, journey?): Observable<any> {
     return journey
-      ? this.apiService.get(
-          `/api/v1/cms/template/${templateId}?journey=${journey}`
-        )
-      : this.apiService.get(`/api/v1/cms/template/${templateId}`);
+      ? this.get(`/api/v1/cms/template/${templateId}?journey=${journey}`)
+      : this.get(`/api/v1/cms/template/${templateId}`);
   }
 }

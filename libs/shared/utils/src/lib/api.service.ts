@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError as observableThrowError, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { environment } from '@hospitality-bot/web-user/environment';
+import { Observable, throwError as observableThrowError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ApiService {
   baseUrl = environment.base_url;
 

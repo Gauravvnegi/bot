@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { FaqConfigI, FaqDetailDS } from '../data-models/faqConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-import { ReservationService } from './booking.service';
 
 @Injectable()
-export class FaqService extends ReservationService {
+export class FaqService extends ApiService {
   private _faqDetailDS: FaqDetailDS;
 
   initFaqDetailDS(faqDetails: any) {
@@ -23,7 +23,7 @@ export class FaqService extends ReservationService {
   }
 
   getFaqs(hotelId: any): Observable<any> {
-    return this.apiService.get(`/api/v1/hotel/${hotelId}/covid-faqs`);
+    return this.get(`/api/v1/hotel/${hotelId}/covid-faqs`);
   }
 
   get faqDetails() {

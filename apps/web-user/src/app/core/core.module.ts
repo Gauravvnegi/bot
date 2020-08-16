@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-import { HomeComponent } from './container/home/home.component';
 // import {
 //   TokenInterceptor,
 //   LogResponseInterceptor
@@ -8,7 +7,6 @@ import { HomeComponent } from './container/home/home.component';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 
 @NgModule({
-  declarations: [HomeComponent],
   imports: [CommonModule],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {

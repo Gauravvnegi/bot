@@ -1,25 +1,24 @@
 import {
+  ComponentFactoryResolver,
+  ComponentRef,
   Directive,
+  Input,
   OnChanges,
   OnInit,
-  Input,
   ViewContainerRef,
-  ComponentRef,
-  ComponentFactoryResolver,
 } from '@angular/core';
-
-import { TempLoader000001Component } from '../template-loaders/temp-loader000001/temp-loader000001.component';
 import { TemplateLoaderService } from '../../../../shared/src/lib/services/template-loader.service';
+import { TempLoader000001Component } from '../template-loaders/temp-loader000001/temp-loader000001.component';
 
 const componentMapping = {
   temp000001: TempLoader000001Component,
 };
 
 @Directive({ selector: '[template-loader]' })
-export class TemplateLoaderDirective implements OnChanges, OnInit {
+export class TemplateLoaderDirective implements OnChanges {
   @Input() templateId: string;
 
-  _loaderCompObj: ComponentRef<any>;
+  private _loaderCompObj: ComponentRef<any>;
 
   constructor(
     protected _container: ViewContainerRef,
@@ -50,6 +49,4 @@ export class TemplateLoaderDirective implements OnChanges, OnInit {
       }
     );
   }
-
-  ngOnInit() {}
 }

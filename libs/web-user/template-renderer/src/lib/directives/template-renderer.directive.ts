@@ -1,13 +1,13 @@
 import {
-  Directive,
   Compiler,
+  ComponentRef,
+  Directive,
   Injector,
-  OnChanges,
-  OnInit,
   Input,
   NgModuleFactory,
+  OnChanges,
+  OnInit,
   ViewContainerRef,
-  ComponentRef,
 } from '@angular/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 

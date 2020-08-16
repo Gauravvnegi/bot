@@ -1,5 +1,5 @@
-import { Injectable, Renderer2 } from '@angular/core';
 import { BreakpointState } from '@angular/cdk/layout';
+import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class UtilityService {

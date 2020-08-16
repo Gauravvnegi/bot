@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-import { ReservationService } from './booking.service';
+import { FormArray, FormGroup } from '@angular/forms';
+import {
+  ContactDetails,
+  Guest,
+  GuestDetails,
+  ReservationDetails,
+} from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { Observable, Subject } from 'rxjs';
+import { CountryCodes } from '../../../../shared/src/lib/data-models/countryCode';
+import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   GuestDetailDS,
   GuestDetailsConfigI,
 } from '../data-models/guestDetailsConfig.model';
-import { CountryCodes } from '../../../../shared/src/lib/data-models/countryCode';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-import {
-  ContactDetails,
-  GuestDetails,
-  Guest,
-  ReservationDetails,
-} from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-
-import { Subject, Observable } from 'rxjs';
-import { FormGroup, FormArray } from '@angular/forms';
+import { ReservationService } from './booking.service';
 
 @Injectable()
 export class GuestDetailsService extends ReservationService {

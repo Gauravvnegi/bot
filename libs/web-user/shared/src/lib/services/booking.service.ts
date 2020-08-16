@@ -1,12 +1,7 @@
-import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import {
-  ReservationDetails,
-  FileDetails,
-} from '../data-models/reservationDetails';
-import { environment } from '@hospitality-bot/web-user/environment';
+import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
+import { ReservationDetails } from '../data-models/reservationDetails';
 
 @Injectable({
   providedIn: 'root',

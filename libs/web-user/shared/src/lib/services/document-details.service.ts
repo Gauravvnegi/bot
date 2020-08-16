@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ReservationService } from './booking.service';
+import { FormGroup } from '@angular/forms';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { isEmpty } from 'lodash';
+import { Observable, Subject } from 'rxjs';
 import {
   DocumentDetailDS,
   DocumentDetailsConfigI,
   FileDetailConfigI,
 } from '../data-models/documentDetailsConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-
-import { isEmpty } from 'lodash';
-import { Subject, Observable } from 'rxjs';
 import {
-  GuestDetails,
-  Guest,
   ContactDetails,
   DocumentDetails,
-  ReservationDetails,
   FileDetails,
+  ReservationDetails,
 } from '../data-models/reservationDetails';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class DocumentDetailsService extends ApiService {

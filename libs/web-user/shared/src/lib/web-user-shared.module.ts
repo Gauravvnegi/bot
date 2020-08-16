@@ -1,38 +1,36 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedMaterialModule } from '../../../../shared/material/src';
-import { StepperComponent } from './presentational/stepper/stepper.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RadioComponent } from './presentational/radio/radio.component';
-import { TextareaComponent } from './presentational/textarea/textarea.component';
-import { SelectBoxComponent } from './presentational/select-box/select-box.component';
-import { InputComponent } from './presentational/input/input.component';
-import { FileUploadComponent } from './presentational/file-upload/file-upload.component';
-import { ButtonComponent } from './presentational/button/button.component';
-import { DatePickerComponent } from './presentational/date-picker/date-picker.component';
-import { FieldsetComponent } from './presentational/fieldset/fieldset.component';
-import { PaymentCardComponent } from './presentational/payment-card/payment-card.component';
-import { TextMaskModule } from 'angular2-text-mask';
-import { LabelComponent } from './presentational/label/label.component';
-import { ErrorComponent } from './presentational/error/error.component';
-import { ModalComponent } from './presentational/modal/modal.component';
-import { RatingComponent } from './presentational/rating/rating.component';
-import { CustomStepperComponent } from './presentational/custom-stepper/custom-stepper.component';
-import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
-import { DetailComponent } from './presentational/detail/detail.component';
-import { ImageClassDirective } from './directives/image-class.directive';
-import { InputPopupComponent } from './presentational/input-popup/input-popup.component';
-import { SignaturePadModule } from 'angular2-signaturepad';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
-import { SignaturePadScribbleComponent } from './presentational/signature-pad-scribble/signature-pad-scribble.component';
-import { SignatureCaptureWrapperComponent } from './presentational/signature-capture-wrapper/signature-capture-wrapper.component';
-import { LinkifyTextPipe } from './pipes/linkify-text.pipe';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
-import { RepeaterPipe } from './pipes/repeater.pipe';
-
-import { CheckboxComponent } from './presentational/checkbox/checkbox.component';
+import { SignaturePadModule } from 'angular2-signaturepad';
+import { TextMaskModule } from 'angular2-text-mask';
+import { SharedMaterialModule } from '../../../../shared/material/src';
+import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
 import { FileUploadCssDirective } from './directives/file-upload.directive';
-import { from } from 'rxjs';
+import { ImageClassDirective } from './directives/image-class.directive';
+import { LinkifyTextPipe } from './pipes/linkify-text.pipe';
+import { RepeaterPipe } from './pipes/repeater.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { ButtonComponent } from './presentational/button/button.component';
+import { CheckboxComponent } from './presentational/checkbox/checkbox.component';
+import { CustomStepperComponent } from './presentational/custom-stepper/custom-stepper.component';
+import { DatePickerComponent } from './presentational/date-picker/date-picker.component';
+import { DetailComponent } from './presentational/detail/detail.component';
+import { ErrorComponent } from './presentational/error/error.component';
+import { FieldsetComponent } from './presentational/fieldset/fieldset.component';
+import { FileUploadComponent } from './presentational/file-upload/file-upload.component';
+import { InputPopupComponent } from './presentational/input-popup/input-popup.component';
+import { InputComponent } from './presentational/input/input.component';
+import { LabelComponent } from './presentational/label/label.component';
+import { ModalComponent } from './presentational/modal/modal.component';
+import { PaymentCardComponent } from './presentational/payment-card/payment-card.component';
+import { RadioComponent } from './presentational/radio/radio.component';
+import { RatingComponent } from './presentational/rating/rating.component';
+import { SelectBoxComponent } from './presentational/select-box/select-box.component';
+import { SignatureCaptureWrapperComponent } from './presentational/signature-capture-wrapper/signature-capture-wrapper.component';
+import { SignaturePadScribbleComponent } from './presentational/signature-pad-scribble/signature-pad-scribble.component';
+import { StepperComponent } from './presentational/stepper/stepper.component';
+import { TextareaComponent } from './presentational/textarea/textarea.component';
 
 @NgModule({
   imports: [
@@ -101,7 +99,5 @@ import { from } from 'rxjs';
     FileUploadCssDirective,
     RepeaterPipe,
   ],
-  // exports: [SharedMaterialModule, ReactiveFormsModule, FormsModule, StepperComponent, RadioComponent, TextareaComponent, SelectBoxComponent, InputComponent, FileUploadComponent, ButtonComponent, DatePickerComponent, PaymentCardComponent],
-  // declarations: [StepperComponent,RadioComponent, TextareaComponent, SelectBoxComponent, InputComponent, FileUploadComponent, ButtonComponent, DatePickerComponent, PaymentCardComponent],
 })
 export class WebUserSharedModule {}

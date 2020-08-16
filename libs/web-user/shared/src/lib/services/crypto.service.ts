@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import CryptoJS from 'crypto-js';
 
 @Injectable({ providedIn: 'root' })
 export class CryptoService extends ApiService {

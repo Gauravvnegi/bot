@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { Observable, Subject } from 'rxjs';
+import { FieldSchema } from '../data-models/fieldSchema.model';
+import { ReservationDetails } from '../data-models/reservationDetails';
 import {
+  SpecialCommentsConfigI,
   StayDetailDS,
   StayDetailsConfigI,
-  SpecialCommentsConfigI,
 } from '../data-models/stayDetailsConfig.model';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-
-import { ReservationDetails } from '../data-models/reservationDetails';
-import { Observable, Subject } from 'rxjs';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 
 @Injectable()
 export class StayDetailsService extends ApiService {

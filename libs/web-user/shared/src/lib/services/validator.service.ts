@@ -1,8 +1,7 @@
-import { Injectable, InjectionToken, Inject } from '@angular/core';
-
-import { untilDestroyed } from 'ngx-take-until-destroy';
-import { Subject, combineLatest, of, merge } from 'rxjs';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { merge, of, Subject } from 'rxjs';
 
 export const defaultErrors = {
   required: (error, label, msg?) => `${label} is required`,

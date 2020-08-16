@@ -1,28 +1,35 @@
 import { Injectable } from '@angular/core';
-import { ReservationService } from './booking.service';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-import { FeedbackDetailsConfigI, FeedbackConfigI, FeedbackConfigDS, FeedbackData, Service } from '../data-models/feedbackDetailsConfig.model';
-import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import {
+  FeedbackConfigDS,
+  FeedbackConfigI,
+  FeedbackData,
+  FeedbackDetailsConfigI,
+  Service,
+} from '../data-models/feedbackDetailsConfig.model';
+import { FieldSchema } from '../data-models/fieldSchema.model';
+import { ReservationService } from './booking.service';
 
 @Injectable()
 export class FeedbackDetailsService extends ReservationService {
-
   private _feedBackConfigDS: FeedbackConfigDS;
   public _selectedServices;
 
-  initFeedbackConfigDS( feedbackConfig ) {
+  initFeedbackConfigDS(feedbackConfig) {
     this._feedBackConfigDS = new FeedbackConfigDS().deserialize(feedbackConfig);
   }
-  
+
   setFieldConfigForFeedbackDetails() {
     let feedbackDetailsFieldSchema = {};
 
-    feedbackDetailsFieldSchema['feedbackComents'] = new FieldSchema().deserialize({
+    feedbackDetailsFieldSchema[
+      'feedbackComents'
+    ] = new FieldSchema().deserialize({
       label: '',
       disable: false,
       appearance: 'outline',
-      placeholder: 'Tell us what went wrong'
+      placeholder: 'Tell us what went wrong',
     });
 
     return feedbackDetailsFieldSchema as FeedbackDetailsConfigI;
@@ -33,10 +40,13 @@ export class FeedbackDetailsService extends ReservationService {
   }
 
   addFeedback(reservationId, data) {
-    return this.apiService.post(`/api/v1/reservation/${reservationId}/feedback`, data);
+    return this.apiService.post(
+      `/api/v1/reservation/${reservationId}/feedback`,
+      data
+    );
   }
 
-  mapFeedbackData(feedbackValues){
+  mapFeedbackData(feedbackValues) {
     const selectedServices = this.selectedServices;
     let feedbackData = new FeedbackData();
     feedbackData.services = new Array<Service>();
@@ -49,7 +59,7 @@ export class FeedbackDetailsService extends ReservationService {
 
   validateFeedbackDetailForm(feedbackDetailForm: FormGroup) {
     let status = [];
-    
+
     if (feedbackDetailForm.invalid) {
       status.push({
         validity: false,
@@ -64,7 +74,7 @@ export class FeedbackDetailsService extends ReservationService {
     this._selectedServices = services;
   }
 
-  get selectedServices(){
+  get selectedServices() {
     return this._selectedServices;
   }
 

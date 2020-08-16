@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { get, toLower, find } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationSummaryService {
@@ -13,7 +13,7 @@ export class ReservationSummaryService {
   }
 
   private getNestedProp(obj, arrayPropName) {
-    const nestedProp = _.get(obj, arrayPropName);
+    const nestedProp = get(obj, arrayPropName);
     return nestedProp ? nestedProp : '';
   }
 
@@ -54,9 +54,9 @@ export class ReservationSummaryService {
     if (component.pathType == 'object') {
       value = '';
 
-      _.find(formValues, (formValue) => {
+      find(formValues, (formValue) => {
         for (const path of searchPaths) {
-          const tempValue = _.get(formValue, path);
+          const tempValue = get(formValue, path);
           //to be removed and replaced with transformation
           if (tempValue) {
             value = value.concat(tempValue).concat(' ');
@@ -97,7 +97,7 @@ export class ReservationSummaryService {
 
     parentForm.controls.forEach((control) => {
       if (control.get(controlName)) {
-        controlStatus = _.toLower(control.get(controlName).status);
+        controlStatus = toLower(control.get(controlName).status);
       }
     });
 

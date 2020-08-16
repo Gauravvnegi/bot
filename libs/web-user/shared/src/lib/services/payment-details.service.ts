@@ -8,9 +8,7 @@ import {
 } from '../data-models/PaymentDetailsConfig.model';
 import { Months, Years } from '../data-models/year';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class PaymentDetailsService extends ApiService {
   private _paymentDetailDS: PaymentDetailDS;
   private _payAtDesk: boolean;

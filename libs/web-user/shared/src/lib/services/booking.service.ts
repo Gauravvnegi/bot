@@ -3,9 +3,7 @@ import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReservationDetails } from '../data-models/reservationDetails';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ReservationService extends ApiService {
   private _reservationId: string;
   private _reservationData;

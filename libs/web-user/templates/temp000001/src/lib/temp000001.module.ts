@@ -1,22 +1,29 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Route } from '@angular/router';
-import { Temp000001RoutingModule } from './temp000001-routing.module';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
-import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
-import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
+import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
-import { FooterComponent } from './containers/footer/footer.component';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { SignaturePadModule } from 'angular2-signaturepad';
-import { ButtonDirective } from './directives/button-renderer.directive';
-import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
+import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
+import { ReservationSummaryService } from 'libs/web-user/shared/src/lib/services/reservation-summary.service';
+import { SignatureService } from 'libs/web-user/shared/src/lib/services/signature.service';
+import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { FooterComponent } from './containers/footer/footer.component';
+import { ButtonDirective } from './directives/button-renderer.directive';
+import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
+import { Temp000001RoutingModule } from './temp000001-routing.module';
 
 @NgModule({
   imports: [
@@ -34,15 +41,22 @@ import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.s
     FooterComponent,
   ],
   providers: [
+    HotelService,
     ReservationService,
+    ParentFormService,
+    StepperService,
     StayDetailsService,
     GuestDetailsService,
     DateService,
     DocumentDetailsService,
+    PaymentDetailsService,
     FeedbackDetailsService,
+    ReservationSummaryService,
     BillSummaryService,
     HealthDetailsService,
     RegCardService,
+    SummaryService,
+    SignatureService,
   ],
 })
 export class Temp000001Module {}

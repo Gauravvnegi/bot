@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { SummaryDetailsConfigI } from '../data-models/billSummaryConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SummaryService {
   setFieldConfigForGuestDetails() {
     let summaryDetailsFieldSchema = {};

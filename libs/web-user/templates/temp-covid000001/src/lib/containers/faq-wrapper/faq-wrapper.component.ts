@@ -24,7 +24,7 @@ export class FaqWrapperComponent implements OnInit {
 
   getFaqs() {
     this._faqService
-      .getFaqs(this._hotelService.covidHotelId)
+      .getFaqs(this._hotelService.hotelId)
       .subscribe((faqResponse) => {
         this.faq = true;
         this.initFaqDetailsDs(faqResponse);

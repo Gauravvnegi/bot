@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ParentFormService {
   parentFormValueAndValidity$ = new ReplaySubject(1);
 }

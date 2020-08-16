@@ -34,9 +34,7 @@ export const FORM_ERRORS = new InjectionToken('FORM_ERRORS', {
   factory: () => defaultErrors,
 });
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ValidatorService {
   errorMessageEvent = new Subject();
   constructor(@Inject(FORM_ERRORS) private errors) {}

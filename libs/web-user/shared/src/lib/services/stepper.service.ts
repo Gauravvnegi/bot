@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class StepperService {
   _selectedIndex;
   stepperSelectedIndex$ = new BehaviorSubject(0);

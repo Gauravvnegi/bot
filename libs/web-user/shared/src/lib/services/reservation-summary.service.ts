@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { get, toLower, find } from 'lodash';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ReservationSummaryService {
   private convertPathToArray(searchPath: string): string[] {
     return searchPath.split('.');

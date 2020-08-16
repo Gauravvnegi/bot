@@ -9,6 +9,7 @@ import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise-request.service';
 import { HyperlinkElementService } from '../../../../shared/src/lib/services/hyperlink-element.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @NgModule({
   imports: [
@@ -22,6 +23,12 @@ import { HyperlinkElementService } from '../../../../shared/src/lib/services/hyp
     TempCovid000001RoutingModule.components,
     TempCovid000001Component,
   ],
-  providers: [FaqService, SafeMeasuresService, RaiseRequestService, HyperlinkElementService],
+  providers: [
+    HotelService,
+    FaqService,
+    SafeMeasuresService,
+    RaiseRequestService,
+    HyperlinkElementService,
+  ],
 })
 export class TempCovid000001Module {}

@@ -12,10 +12,10 @@
   min-height: $full-width;
 }
 
-:host ::ng-deep .main-template-button{
+:host ::ng-deep .main-template-button {
   @include template-footer-button();
   @media only screen and (max-width: $M) {
-    web-user-button{
+    web-user-button {
       width: 100%;
     }
   }
@@ -71,6 +71,10 @@
     border-radius: $border-radius-small !important;
     margin-bottom: $margin-large !important;
   }
+
+  &-expansion-panel-header {
+    height: 50px !important;
+  }
   &-expansion-panel-body {
     margin: 0 24px 16px;
     padding: $padding-large $padding30 !important;
@@ -95,4 +99,3 @@
     }
   }
 }
-

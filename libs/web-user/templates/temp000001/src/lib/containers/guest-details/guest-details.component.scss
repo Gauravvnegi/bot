@@ -6,7 +6,6 @@
 
 mat-icon {
   @include mat-icon();
-
 }
 
 .container__body--info {
@@ -56,4 +55,9 @@ mat-icon {
 
 :host ::ng-deep .mat-form-field-suffix {
   z-index: 22;
+}
+
+:host ::ng-deep .mat-icon {
+  color: rgba(0, 0, 0, 0.38);
+  font-size: 18px;
 }

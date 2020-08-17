@@ -32,7 +32,7 @@
 
 .single-chart {
   width: 19%;
-  margin: 30px $margin-medium;
+  margin: 25px $margin-medium;
 }
 
 .circular-chart {
@@ -66,16 +66,17 @@
 .percentage {
   fill: white;
   font-family: sans-serif;
+  font-weight: $bolder;
   font-size: 6px;
   text-anchor: middle;
 }
 
 :host ::ng-deep .current {
-  font-size: $font-small;
+  font-size: $font-medium;
 }
 
 :host ::ng-deep .next {
-  font-size: $font-responsive-smaller;
+  font-size: 16px;
   margin-top: 5px;
   font-weight: $medium;
 }

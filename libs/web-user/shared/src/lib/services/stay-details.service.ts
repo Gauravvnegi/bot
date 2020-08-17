@@ -47,7 +47,7 @@ export class StayDetailsService extends ApiService {
       master_label: 'Kids',
     });
     stayDetailsFieldSchema['roomType'] = new FieldSchema().deserialize({
-      label: 'RoomType',
+      label: 'Room Type',
       disable: true,
       options: [
         { key: 'DELUXE', value: 'DELUXE' },

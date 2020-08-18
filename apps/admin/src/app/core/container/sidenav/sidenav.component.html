@@ -1,0 +1,67 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="#">Link 1</a>
+      <a mat-list-item href="#">Link 2</a>
+      <a mat-list-item href="#">Link 3</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <!-- <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+    </mat-toolbar>
+  </mat-sidenav-content> -->
+</mat-sidenav-container>
+
+<!-- <mat-drawer-container class="example-container mat-typography" autosize>
+  <mat-drawer #drawer mode="side" disableClose="true" opened="true">
+    <button
+      mat-mini-fab
+      (click)="isExpanded = !isExpanded"
+      color="warn"
+      style="margin: 10px;"
+    >
+      <mat-icon aria-label="Menu">menu</mat-icon>
+    </button>
+
+    <mat-nav-list>
+      <mat-list-item>
+        <mat-icon mat-list-icon>person</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Management A</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>assignment</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Management B</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>domain</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Management C</h4>
+      </mat-list-item>
+      <mat-list-item>
+        <mat-icon mat-list-icon>folder_shared</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Management X</h4>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    You cards and screen Contents goes here.. Will be pushed towards right on
+    expanding side navbar.
+  </div>
+</mat-drawer-container> -->

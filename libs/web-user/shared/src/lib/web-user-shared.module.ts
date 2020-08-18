@@ -31,6 +31,8 @@ import { SignatureCaptureWrapperComponent } from './presentational/signature-cap
 import { SignaturePadScribbleComponent } from './presentational/signature-pad-scribble/signature-pad-scribble.component';
 import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
+import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   imports: [
@@ -41,11 +43,13 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     TextMaskModule,
     SignaturePadModule,
     MatTabsModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     SharedMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxMaterialTimepickerModule,
     StepperComponent,
     RadioComponent,
     TextareaComponent,
@@ -55,6 +59,7 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     PaymentCardComponent,
     ButtonComponent,
     DatePickerComponent,
+    TimePickerComponent,
     TextMaskModule,
     LabelComponent,
     FieldsetComponent,
@@ -98,6 +103,7 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
+    TimePickerComponent,
   ],
 })
 export class WebUserSharedModule {}

@@ -20,7 +20,7 @@ export class FeedbackDetailsService extends ApiService {
     this._feedBackConfigDS = new FeedbackConfigDS().deserialize(feedbackConfig);
   }
 
-  setFieldConfigForFeedbackDetails() {
+  setFieldConfigForFeedbackDetails(feedbackText) {
     let feedbackDetailsFieldSchema = {};
 
     feedbackDetailsFieldSchema[
@@ -29,7 +29,7 @@ export class FeedbackDetailsService extends ApiService {
       label: '',
       disable: false,
       appearance: 'outline',
-      placeholder: 'Tell us what went wrong',
+      placeholder: feedbackText,
     });
 
     return feedbackDetailsFieldSchema as FeedbackDetailsConfigI;

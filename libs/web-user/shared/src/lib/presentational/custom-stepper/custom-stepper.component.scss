@@ -32,7 +32,7 @@
 
 .single-chart {
   width: 19%;
-  margin: 25px $margin-medium;
+  margin: 8% $margin-medium;
 }
 
 .circular-chart {
@@ -72,11 +72,11 @@
 }
 
 :host ::ng-deep .current {
-  font-size: $font-medium;
+  font-size: $font-small;
 }
 
 :host ::ng-deep .next {
-  font-size: 16px;
+  font-size: $font-responsive-small;
   margin-top: 5px;
   font-weight: $medium;
 }

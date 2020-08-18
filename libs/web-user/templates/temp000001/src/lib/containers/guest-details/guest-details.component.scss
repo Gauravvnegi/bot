@@ -21,14 +21,11 @@ mat-icon {
     &-prefix {
       width: 20%;
       @media only screen and (max-width: $tab-size) {
-        width: 25%;
+        width: 16%;
       }
     }
     &-main {
       width: 73%;
-      @media only screen and (max-width: $tab-size) {
-        width: 65%;
-      }
     }
   }
   &-secondary {

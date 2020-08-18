@@ -1,9 +1,11 @@
 <div class="container">
   <form [formGroup]="guestsFA">
-    <ng-container *ngFor="
+    <ng-container
+      *ngFor="
         let guestGroup of guestsFA['controls'];
         let guestGroupIndex = index
-      ">
+      "
+    >
       <mat-accordion #accordian="matAccordion" [multi]="true">
         <mat-expansion-panel #panel [expanded]="0 === guestGroupIndex">
           <mat-expansion-panel-header>
@@ -14,107 +16,168 @@
                   : 'Secondary'
               }}
               Guest
-              <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
-              <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+              <mat-icon class="expand-icon" *ngIf="!panel.expanded"
+                >add</mat-icon
+              >
+              <mat-icon class="expand-icon" *ngIf="panel.expanded"
+                >remove</mat-icon
+              >
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div class="citizen__info">
             <div class="citizen__info--country">
-              <web-user-select-box [parentForm]="guestGroup" [name]="'nationality'" [index]="guestGroupIndex"
+              <web-user-select-box
+                [parentForm]="guestGroup"
+                [name]="'nationality'"
+                [index]="guestGroupIndex"
                 [settings]="
                   guestDetailsConfig &&
                   guestDetailsConfig[guestGroup.get('id').value] &&
                   guestDetailsConfig[guestGroup.get('id').value].nationality
-                " (optionChange)="
+                "
+                (optionChange)="
                   onNationalityChange($event, guestGroup.get('id').value)
-                ">
+                "
+              >
               </web-user-select-box>
             </div>
             <div class="citizen__info--doc">
-              <web-user-select-box [parentForm]="guestGroup" [name]="'selectedDocumentType'" [index]="guestGroupIndex"
+              <web-user-select-box
+                [parentForm]="guestGroup"
+                [name]="'selectedDocumentType'"
+                [index]="guestGroupIndex"
                 [settings]="
                   guestDetailsConfig &&
                   guestDetailsConfig[guestGroup.get('id').value] &&
                   guestDetailsConfig[guestGroup.get('id').value]
                     .selectedDocumentType
-                " (optionChange)="
+                "
+                (optionChange)="
                   onSelectedDocumentTypeChange(
                     $event,
                     guestGroup.get('id').value
                   )
-                ">
+                "
+              >
               </web-user-select-box>
             </div>
           </div>
           <div class="doc__upload__section">
-            <ng-container *ngFor="
+            <ng-container
+              *ngFor="
                 let documentFG of guestGroup.get('documents')['controls'];
                 let documentFGIndex = index
-              ">
+              "
+            >
               <ng-container>
                 <div class="doc__upload__section--doc">
-                  <web-user-file-upload [parentForm]="documentFG" [fileSize]="maxFileSize" [fileType]="validFileType"
-                    [name]="'documentFileFront'" 
+                  <web-user-file-upload
+                    [parentForm]="documentFG"
+                    [fileSize]="maxFileSize"
+                    [fileType]="validFileType"
+                    [name]="'documentFileFront'"
                     [index]="documentFGIndex"
-                    [url]="documentFG.get('documentFileFront').value" 
+                    [url]="documentFG.get('documentFileFront').value"
                     [settings]="
                       guestDetailsConfig &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront
-                      " 
-                    [isUploading]="
-                    guestDetailsConfig &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileFront.isUploading
+                      guestDetailsConfig[guestGroup.get('id').value]
+                        .documents &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ] &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileFront
                     "
-                      (documentData)="
+                    [isUploading]="
+                      guestDetailsConfig &&
+                      guestDetailsConfig[guestGroup.get('id').value]
+                        .documents &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ] &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileFront &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileFront.isUploading
+                    "
+                    (documentData)="
                       saveDocument($event, {
                         guestId: guestGroup.get('id').value,
                         doc_page: 'front',
                         doc_type: documentFG.get('documentType').value,
                         doc_issue_place: guestGroup.get('nationality').value
                       })
-                    "></web-user-file-upload>
+                    "
+                  ></web-user-file-upload>
                 </div>
-                <div *ngIf="
+                <div
+                  *ngIf="
                     guestGroup.get('selectedDocumentType').value ||
                     documentFG.get('documentType').value !== 'VISA'
-                  " class="doc__upload__section--doc passport">
-                  <web-user-file-upload [parentForm]="documentFG" [fileSize]="maxFileSize" [fileType]="validFileType"
-                    [name]="'documentFileBack'" [index]="documentFGIndex"
-                    [url]="documentFG.get('documentFileBack').value" 
+                  "
+                  class="doc__upload__section--doc passport"
+                >
+                  <web-user-file-upload
+                    [parentForm]="documentFG"
+                    [fileSize]="maxFileSize"
+                    [fileType]="validFileType"
+                    [name]="'documentFileBack'"
+                    [index]="documentFGIndex"
+                    [url]="documentFG.get('documentFileBack').value"
                     [settings]="
                       guestDetailsConfig &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack"
-                    [isUploading]="
-                    guestDetailsConfig &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex] &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack &&
-                    guestDetailsConfig[guestGroup.get('id').value].documents[documentFGIndex].documentFileBack.isUploading
+                      guestDetailsConfig[guestGroup.get('id').value]
+                        .documents &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ] &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileBack
                     "
-                      (documentData)="
+                    [isUploading]="
+                      guestDetailsConfig &&
+                      guestDetailsConfig[guestGroup.get('id').value]
+                        .documents &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ] &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileBack &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileBack.isUploading
+                    "
+                    (documentData)="
                       saveDocument($event, {
                         guestId: guestGroup.get('id').value,
                         doc_page: 'back',
                         doc_type: documentFG.get('documentType').value,
                         doc_issue_place: guestGroup.get('nationality').value
                       })
-                    "></web-user-file-upload>
+                    "
+                  ></web-user-file-upload>
                 </div>
               </ng-container>
             </ng-container>
           </div>
-          <div class="doc__warning_section" fxLayout fxLayoutGap="70px" fxLayoutAlign="center">
-            <div *ngIf="
+          <div
+            class="doc__warning_section"
+            fxLayout
+            fxLayoutGap="70px"
+            fxLayoutAlign="center"
+          >
+            <div
+              class="hide_on_mobile"
+              *ngIf="
                 guestGroup.get('documents')['controls'] &&
                 guestGroup.get('documents')['controls'].length
-              ">
+              "
+            >
               <p>
                 <mat-icon matSuffix>error_outline</mat-icon>
                 <span>Upload Complete</span>
@@ -124,10 +187,37 @@
                 <span>Clearly Visible</span>
               </p>
             </div>
-            <div *ngIf="
+            <div
+              class="hide_on_mobile"
+              *ngIf="
                 guestGroup.get('documents')['controls'] &&
                 guestGroup.get('documents')['controls'].length
-              ">
+              "
+            >
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>Document in Valid Period</span>
+              </p>
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>No larger than 3 mb in size</span>
+              </p>
+            </div>
+            <div
+              class="show_on_mobile"
+              *ngIf="
+                guestGroup.get('documents')['controls'] &&
+                guestGroup.get('documents')['controls'].length
+              "
+            >
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>Upload Complete</span>
+              </p>
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>Clearly Visible</span>
+              </p>
               <p>
                 <mat-icon matSuffix>error_outline</mat-icon>
                 <span>Document in Valid Period</span>

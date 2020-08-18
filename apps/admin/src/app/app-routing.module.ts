@@ -1,10 +1,8 @@
-import { environment } from '../environments/environment';
-
 import { NgModule } from '@angular/core';
-import { RouterModule, Route } from '@angular/router';
-
-import { PreloadModulesStrategy } from './core/strategies/preload-modules.strategy';
+import { Route, RouterModule } from '@angular/router';
+import { environment } from '../environments/environment';
 import { HomeComponent } from './core/container/home/home.component';
+import { PreloadModulesStrategy } from './core/strategies/preload-modules.strategy';
 
 const appRoutes: Route[] = [{ path: '', component: HomeComponent }];
 

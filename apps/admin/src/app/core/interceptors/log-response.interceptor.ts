@@ -4,7 +4,7 @@ import { NGXLogger, NGXLogInterface } from 'ngx-logger';
 
 @Injectable()
 export class LogResponseInterceptor extends SharedLogResponseInterceptor {
-  constructor(private logger: NGXLogger) {
-    super(logger);
-  }
+  // constructor(private logger: NGXLogger) {
+  //   super(logger);
+  // }
 }

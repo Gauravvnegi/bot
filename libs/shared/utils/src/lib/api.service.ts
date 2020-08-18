@@ -35,10 +35,10 @@ export class ApiService {
    * PATCH request
    */
   patch(uri: string, data: any): Observable<any> {
-    this.httpOptions.headers.append(
-      'Content-Type',
-      'application/json;charset=UTF-8'
-    );
+    // this.httpOptions.headers.append(
+    //   'Content-Type',
+    //   'application/json;charset=UTF-8'
+    // );
     return this.httpClient
       .patch(this.getBaseUrl() + uri, data, this.httpOptions)
       .pipe(catchError((err) => this.handleError(err)));
@@ -48,10 +48,10 @@ export class ApiService {
    * PUT request
    */
   put(uri: string, data: any): Observable<any> {
-    this.httpOptions.headers.append(
-      'Content-Type',
-      'application/json;charset=UTF-8'
-    );
+    // this.httpOptions.headers.append(
+    //   'Content-Type',
+    //   'application/json;charset=UTF-8'
+    // );
     return this.httpClient
       .put(this.getBaseUrl() + uri, data, this.httpOptions)
       .pipe(catchError((err) => this.handleError(err)));
@@ -61,7 +61,7 @@ export class ApiService {
    * POST request
    */
   post(uri: string, data: any): Observable<any> {
-    this.httpOptions.headers.append('oauth-token', '');
+    // this.httpOptions.headers.append('oauth-token', '');
     return this.httpClient
       .post(this.getBaseUrl() + uri, data, this.httpOptions)
       .pipe(catchError((err) => this.handleError(err)));
@@ -71,7 +71,7 @@ export class ApiService {
    * DELETE request
    */
   delete(uri: string): Observable<any> {
-    this.httpOptions.headers.append('oauth-token', '');
+    // this.httpOptions.headers.append('oauth-token', '');
     return this.httpClient
       .delete(this.getBaseUrl() + uri, this.httpOptions)
       .pipe(catchError((err) => this.handleError(err)));
@@ -81,7 +81,7 @@ export class ApiService {
    * UPLOAD document request
    */
   uploadDocument(uri: string, data: any): Observable<any> {
-    this.httpOptions.headers.append('Content-Type', 'multipart/form-data;');
+    // this.httpOptions.headers.append('Content-Type', 'multipart/form-data;');
     return this.httpClient
       .put(this.getBaseUrl() + uri, data, this.httpOptions)
       .pipe(catchError((err) => this.handleError(err)));

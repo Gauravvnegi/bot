@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
@@ -20,14 +21,16 @@ import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-d
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { FooterComponent } from './containers/footer/footer.component';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
 
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     WebUserSharedModule,
     RouterModule,
     Temp000001RoutingModule,
@@ -38,9 +41,14 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     Temp000001RoutingModule.components,
     StepperContentRendererDirective,
     ButtonDirective,
-    FooterComponent,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenRetievalInterceptor,
+      multi: true,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     HotelService,
     ReservationService,
     ParentFormService,

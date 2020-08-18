@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
@@ -23,9 +24,9 @@ import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.se
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
-import { Temp000001RoutingModule } from './temp000001-routing.module';
-import { TokenInterceptor } from './interceptors/token.interceptor';
 import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { Temp000001RoutingModule } from './temp000001-routing.module';
 
 @NgModule({
   imports: [
@@ -65,6 +66,7 @@ import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interce
     RegCardService,
     SummaryService,
     SignatureService,
+    AccessTokenService,
   ],
 })
 export class Temp000001Module {}

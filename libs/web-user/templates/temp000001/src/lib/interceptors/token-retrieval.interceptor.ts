@@ -8,9 +8,11 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { isEmpty } from 'lodash';
+import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 @Injectable()
 export class TokenRetievalInterceptor implements HttpInterceptor {
+  constructor(private _accessTokenService: AccessTokenService) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -18,8 +20,10 @@ export class TokenRetievalInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
-          let x = event.headers.get('x-access-token');
-          console.log('event--->>>', event);
+          let accessToken = event.headers.get('x-access-token');
+          if (!isEmpty(accessToken)) {
+            this._accessTokenService.setAccessToken(accessToken);
+          }
         }
         return event;
       })

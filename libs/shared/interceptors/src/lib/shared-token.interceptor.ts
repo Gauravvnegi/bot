@@ -17,7 +17,7 @@ export class SharedTokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (!(isEmpty(this.tokenHeaderName) && isEmpty(this.tokenValue))) {
+    if (!isEmpty(this.tokenHeaderName) && !isEmpty(this.tokenValue)) {
       const modifiedRequest = req.clone({
         setHeaders: {
           [`${this.tokenHeaderName}`]: this.tokenValue,

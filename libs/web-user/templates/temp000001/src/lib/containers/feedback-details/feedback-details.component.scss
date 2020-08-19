@@ -54,6 +54,13 @@ mat-icon {
   }
 }
 
+:host ::ng-deep .service-background-color {
+  background-color: $icon-color;
+  .hotel-services-images {
+    filter: invert(1);
+  }
+}
+
 .hotel-services-images {
   width: 80px;
 
@@ -67,6 +74,6 @@ mat-icon {
 }
 
 :host ::ng-deep .container__title {
-  font-size: 16px;
+  font-size: 13px;
   align-items: center;
 }

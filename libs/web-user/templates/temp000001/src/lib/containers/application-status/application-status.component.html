@@ -1,9 +1,11 @@
 <ng-template #loader>
-  <div class="spinner">
-    Loading Summary
-    <div class="bounce1"></div>
-    <div class="bounce2"></div>
-    <div class="bounce3"></div>
+  <div>
+    <p class="loading">Loading Summary</p>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
   </div>
 </ng-template>
 <ng-container *ngIf="!isLoaderVisible; else loader" #parentPanelContent>

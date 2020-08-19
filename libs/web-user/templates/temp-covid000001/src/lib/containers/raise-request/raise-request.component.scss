@@ -32,6 +32,13 @@
       }
     }
   }
+  @media only screen and (max-width: $M) {
+    width: auto;
+    .cross{
+      top: -4px;
+      right: 5px;
+    }
+  }
 }
 
 .popup__header {

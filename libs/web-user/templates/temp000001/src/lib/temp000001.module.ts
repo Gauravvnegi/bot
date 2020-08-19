@@ -22,8 +22,14 @@ import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.se
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FooterComponent } from './containers/footer/footer.component';
 import { ButtonDirective } from './directives/button-renderer.directive';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
+import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
+import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
+import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
+import { ComplimentaryServiceComponent } from './containers/complimentary-service/complimentary-service.component';
+import { PaidServiceComponent } from './containers/paid-service/paid-service.component';
 
 @NgModule({
   imports: [
@@ -33,12 +39,15 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     Temp000001RoutingModule,
     SignaturePadModule,
     PdfViewerModule,
+    SlickCarouselModule,
   ],
   declarations: [
     Temp000001RoutingModule.components,
     StepperContentRendererDirective,
     ButtonDirective,
     FooterComponent,
+    ComplimentaryServiceComponent,
+    PaidServiceComponent,
   ],
   providers: [
     HotelService,
@@ -57,6 +66,9 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     RegCardService,
     SummaryService,
     SignatureService,
+    AmenitiesService,
+    ComplimentaryService,
+    PaidService,
   ],
 })
 export class Temp000001Module {}

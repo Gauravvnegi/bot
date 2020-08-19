@@ -5,6 +5,11 @@
       [reservationData]="reservationData"
       (addFGEvent)="addFGEvent($event)"
     ></hospitality-bot-stay-details>
+    <hospitality-bot-aminities *ngIf="amenities"
+      [parentForm]="parentForm"
+      [reservationData]="reservationData"
+      (addAmenitiesFGEvent)="addAmenitiesFGEvent($event)">
+    </hospitality-bot-aminities>
     <hospitality-bot-special-comments
       [parentForm]="parentForm"
       [reservationData]="reservationData"

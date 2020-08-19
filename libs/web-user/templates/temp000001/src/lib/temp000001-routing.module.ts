@@ -26,6 +26,7 @@ import { StayDetailsComponent } from './containers/stay-details/stay-details.com
 import { SummaryWrapperComponent } from './containers/summary-wrapper/summary-wrapper.component';
 import { SummaryComponent } from './containers/summary/summary.component';
 import { Temp000001Component } from './containers/temp000001/temp000001.component';
+import { AminitiesComponent } from './containers/aminities/aminities.component';
 
 export const sharedAuthRoutes: Route[] = [
   { path: '', component: Temp000001Component },
@@ -64,5 +65,6 @@ export class Temp000001RoutingModule {
     SummaryComponent,
     ApplicationStatusComponent,
     HeaderSummaryComponent,
+    AminitiesComponent
   ];
 }

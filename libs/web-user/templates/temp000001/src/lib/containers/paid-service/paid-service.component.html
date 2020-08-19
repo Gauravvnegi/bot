@@ -1,0 +1,17 @@
+<div>
+    <h3>What would you like to book for special amenities ?</h3>
+
+    <ngx-slick-carousel
+    class="carousel"
+    #slickModal="slick-carousel"
+    [config]="slideConfig"
+  >
+    <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+      <div class="slider__image">
+        <img src="{{ slide.imgUrl }}" />
+        <span>{{slide.currencyCode}}/{{slide.rate}}</span>
+        <span class="slider__image--text">{{slide.amenityName}}</span>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+</div>

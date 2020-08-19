@@ -57,6 +57,7 @@ export class BaseComponent
     style?: {
       fieldSetWrapperStyles: '';
       labelWrapperStyles: '';
+      childLabelStyles:'';
       detailLabelStyles: '';
       detailValueStyles: '';
       detailWrapperStyles: '';

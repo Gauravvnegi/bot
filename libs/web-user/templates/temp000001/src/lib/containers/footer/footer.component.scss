@@ -14,7 +14,7 @@
     }
     @media only screen and (max-width: $M) {
       height: 15px;
-      width: 40%;
+      width: 30%;
     }
   }
   &--text {
@@ -44,13 +44,14 @@
       }
     }
     @media only screen and (max-width: $M) {
-      font-size: $font-responsive-smaller;
+      width: 40%;
+      font-size: 9px;
       text-align: center;
-      width: 30%;
       .social_icons {
+        margin-bottom: 5px;
         .icon {
-          height: 15px;
-          width: 15px;
+          height:25px;
+          width: 25px;
           margin: 0px 2px;
         }
       }

@@ -5,7 +5,7 @@
   font-weight: $bold;
   letter-spacing: $small-spacing;
   line-height: 27px;
-  margin-right: 15px;
+  margin-right: $margin-medium;
 }
 
 .expand-icon {
@@ -93,7 +93,9 @@
 
 :host ::ng-deep .mat__field--heading {
   margin-right: 3rem;
+  margin-bottom: 13px;
   @media only screen and (max-width: $M) {
-    margin-right: 5px;
+    margin-right: $margin-small;
+    margin-bottom: $margin-medium;
   }
 }

@@ -16,7 +16,7 @@ export class AminitiesComponent implements OnInit {
   addAmenitiesFGEvent = new EventEmitter();
   
   constructor(
-    private _amenitiesService: AmenitiesService
+    private _amenitiesService: AmenitiesService,
   ) { }
 
   ngOnInit(): void {

@@ -30,6 +30,9 @@ import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/comp
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { ComplimentaryServiceComponent } from './containers/complimentary-service/complimentary-service.component';
 import { PaidServiceComponent } from './containers/paid-service/paid-service.component';
+import { AirportPickupComponent } from './containers/airport-pickup/airport-pickup.component';
+import { BreakfastComponent } from './containers/breakfast/breakfast.component';
+import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 
 @NgModule({
   imports: [
@@ -48,6 +51,8 @@ import { PaidServiceComponent } from './containers/paid-service/paid-service.com
     FooterComponent,
     ComplimentaryServiceComponent,
     PaidServiceComponent,
+    AirportPickupComponent,
+    BreakfastComponent,
   ],
   providers: [
     HotelService,
@@ -69,6 +74,7 @@ import { PaidServiceComponent } from './containers/paid-service/paid-service.com
     AmenitiesService,
     ComplimentaryService,
     PaidService,
+    AirportService
   ],
 })
 export class Temp000001Module {}

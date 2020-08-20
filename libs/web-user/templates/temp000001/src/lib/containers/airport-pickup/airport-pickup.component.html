@@ -1,0 +1,26 @@
+<div>
+    <form>
+        <h3>Enter Airport Pickup details</h3>
+        <web-user-select-box
+            [parentForm]="airportForm"
+            [name]="'airportName'"
+            [settings]="airportConfig.airportName"
+        ></web-user-select-box>
+        <web-user-input
+            [parentForm]="airportForm"
+            [name]="'terminal'"
+            [settings]="airportConfig.terminal"
+        ></web-user-input>
+        <web-user-input
+            [parentForm]="airportForm"
+            [name]="'flightNumber'"
+            [settings]="airportConfig.flightNumber"
+        ></web-user-input>
+        <web-user-time-picker
+            [parentForm]="airportForm"
+            [name]="'pickupTime'"
+            [settings]="airportConfig.pickupTime"
+          ></web-user-time-picker>
+        <h4>Note: Our in house chaffeur will call you on registered number.</h4>
+    </form>
+</div>

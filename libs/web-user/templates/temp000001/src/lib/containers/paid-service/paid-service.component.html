@@ -7,11 +7,14 @@
     [config]="slideConfig"
   >
     <div ngxSlickItem *ngFor="let slide of slides" class="slide">
-      <div class="slider__image">
+      <div class="slider__image" (click)="servicePackage(slide.packageCode)">
         <img src="{{ slide.imgUrl }}" />
         <span>{{slide.currencyCode}}/{{slide.rate}}</span>
         <span class="slider__image--text">{{slide.amenityName}}</span>
       </div>
     </div>
   </ngx-slick-carousel>
+  <div #serviceMetadata>
+
+  </div>
 </div>

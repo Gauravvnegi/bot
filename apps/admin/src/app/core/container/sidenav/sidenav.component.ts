@@ -13,6 +13,8 @@ export class SidenavComponent implements OnInit, AfterViewInit, OnDestroy {
   public activeFontColor: string;
   public normalFontColor: string;
   public dividerBgColor: string;
+  isExpanded=true;
+  status:boolean=false
   constructor(public settingsService: SettingsService) {
     this.menuItems = ROUTES;
     this.activeFontColor = 'rgba(0,0,0,.6)';
@@ -44,6 +46,11 @@ export class SidenavComponent implements OnInit, AfterViewInit, OnDestroy {
     this.settingsService.sidebarFilterUpdate.unsubscribe();
     this.settingsService.sidebarColorUpdate.unsubscribe();
   }
+
+  toggleMenuButton(){
+    this.status=!this.status;
+    this.isExpanded=!this.isExpanded
+ }
 
   ngAfterViewInit() {}
 }

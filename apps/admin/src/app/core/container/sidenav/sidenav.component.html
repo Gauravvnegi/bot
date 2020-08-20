@@ -67,8 +67,15 @@
 </mat-drawer-container> -->
 
 <div class="logo text-uppercase" [style.color]="normalFontColor">
-  <!-- <img src="../../assets/img/angular2-logo.png" class="logo-img" alt="logo" /> -->
-  Dashboard Pro
+  <div
+    class="menu_button"
+    (click)="toggleMenuButton()"
+    [ngClass]="status ? 'change' : ''"
+  >
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
+  </div>
 </div>
 <div class="divider" [style.background-color]="dividerBgColor"></div>
 <div class="sidebar-wrapper">
@@ -89,8 +96,8 @@
           [style.background-color]="rla.isActive ? color : 'transparent'"
           [style.color]="rla.isActive ? activeFontColor : normalFontColor"
         >
-          <i class="material-icons">{{ menuItem.icon }}</i>
-          <span>{{ menuItem.title }}</span>
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <span *ngIf="isExpanded">{{ menuItem.title }}</span>
         </a>
         <div [hidden]="menuItem.children === null" class="collapse-container">
           <a
@@ -102,8 +109,8 @@
             [style.color]="normalFontColor"
           >
             <i class="material-icons">{{ menuItem.icon }}</i>
-            <span>{{ menuItem.title }}</span>
-            <b class="caret" [style.color]="normalFontColor"></b>
+            <span *ngIf="isExpanded">{{ menuItem.title }}</span>
+            <b *ngIf="isExpanded" class="caret" [style.color]="normalFontColor"></b>
           </a>
           <div id="component" class="collapse" [id]="[menuItem.id]">
             <ul class="nav">
@@ -126,7 +133,7 @@
                   <span style="margin-left: 5px; width: 21px;">{{
                     subItem.icon
                   }}</span>
-                  <span>{{ subItem.title }}</span>
+                  <span *ngIf="isExpanded">{{ subItem.title }}</span>
                 </a>
               </li>
             </ul>

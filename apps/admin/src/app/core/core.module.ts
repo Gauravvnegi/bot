@@ -16,9 +16,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { ProfileComponentComponent } from './container/profile-component/profile-component.component';
+import { PriceTableComponent } from './container/price-table/price-table.component';
 
 @NgModule({
-  declarations: [HomeComponent, SidenavComponent],
+  declarations: [HomeComponent, SidenavComponent, ProfileComponentComponent, PriceTableComponent],
   imports: [
     CommonModule,
     RouterModule,

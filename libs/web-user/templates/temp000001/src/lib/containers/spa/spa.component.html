@@ -1,0 +1,18 @@
+<div>
+    <form [formGroup]="spaForm" (ngSubmit)="submit()">
+        <h3>Enter details to book spa:</h3>
+        <web-user-input
+            [parentForm]="spaForm"
+            [name]="'personCount'"
+            [settings]="spaConfig.personCount"
+        ></web-user-input>
+        <web-user-time-picker
+          [parentForm]="spaForm"
+          [name]="'usageTime'"
+          [settings]="spaConfig.usageTime"
+          >
+          </web-user-time-picker>
+          <button type="button" (click)="resetSpaData()">Reset</button>
+        <button type="submit">Submit</button>
+    </form>
+</div>

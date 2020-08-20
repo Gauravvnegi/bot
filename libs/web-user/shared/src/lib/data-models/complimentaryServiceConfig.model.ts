@@ -34,7 +34,8 @@ export class ComplimentaryServiceDetail implements Deserializable {
         set({}, 'currencyCode', get(input, ['currencyCode'])),
         set({}, 'packageCode', get(input, ['packageCode'])),
         set({}, 'amenityName', get(input, ['amenityName'])),
-        set({}, 'hotelId', get(input, ['hotelId']))
+        set({}, 'hotelId', get(input, ['hotelId'])),
+        set({}, 'imgUrl', get(input, ['imgUrl']))
       );
       return this;
     }

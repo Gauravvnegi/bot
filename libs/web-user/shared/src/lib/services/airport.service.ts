@@ -10,7 +10,7 @@ export class AirportService extends ApiService{
     let airportFormFieldSchema = {};
 
     airportFormFieldSchema['airportName'] = new FieldSchema().deserialize({
-      label: ' ',
+      label: 'Select nearby Airport',
       disable: false,
       placeholder: 'Select nearby Airport',
       options: [

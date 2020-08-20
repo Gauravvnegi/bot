@@ -1,5 +1,5 @@
 <div>
-    <form>
+    <form [formGroup]="airportForm" (ngSubmit)="submit()">
         <h3>Enter Airport Pickup details</h3>
         <web-user-select-box
             [parentForm]="airportForm"
@@ -22,5 +22,8 @@
             [settings]="airportConfig.pickupTime"
           ></web-user-time-picker>
         <h4>Note: Our in house chaffeur will call you on registered number.</h4>
+        <!-- <button mat-stroked-button (click)="resetAirportData($event)">Reset</button> -->
+        <button type="button" (click)="resetAirportData()">Reset</button>
+        <button type="submit">Submit</button>
     </form>
 </div>

@@ -1,1 +1,18 @@
-<p>breakfast works!</p>
+<div>
+    <form [formGroup]="breakfastForm" (ngSubmit)="submit()">
+        <h3>Enter details to book breakfast/lunch/dinner:</h3>
+        <web-user-input
+            [parentForm]="breakfastForm"
+            [name]="'personCount'"
+            [settings]="breakfastConfig.personCount"
+        ></web-user-input>
+        <web-user-select-box
+            [parentForm]="breakfastForm"
+            [name]="'foodPackage'"
+            [settings]="breakfastConfig.foodPackage"
+        ></web-user-select-box>
+        <!-- <button type="button" (click)="resetBreakfastData()">Reset</button> -->
+        <button type="button" (click)="resetBreakfastData()">Reset</button>
+        <button type="submit">Submit</button>
+    </form>
+</div>

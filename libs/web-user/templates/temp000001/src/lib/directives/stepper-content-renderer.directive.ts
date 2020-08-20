@@ -142,7 +142,6 @@ export class StepperContentRendererDirective implements OnChanges {
           );
 
           const componentObj = item.createComponent(factoryComponent);
-
           const props = {
             formGroup: this.parentForm.at(index),
             reservationData: this.dataToPopulate,

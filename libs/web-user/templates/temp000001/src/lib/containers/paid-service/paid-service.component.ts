@@ -1,15 +1,16 @@
 import { Component, OnInit, ComponentFactoryResolver,
   ViewContainerRef,
   ViewChild,
-  ComponentFactory,
-  OnDestroy,} from '@angular/core';
+  OnDestroy} from '@angular/core';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { AirportPickupComponent } from '../airport-pickup/airport-pickup.component';
 import { BreakfastComponent } from '../breakfast/breakfast.component';
+import { SpaComponent } from '../spa/spa.component';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
   'BF': BreakfastComponent,
+  'SPA': SpaComponent
 };
 
 @Component({
@@ -17,7 +18,7 @@ const componentMapping = {
   templateUrl: './paid-service.component.html',
   styleUrls: ['./paid-service.component.scss']
 })
-export class PaidServiceComponent implements OnInit {
+export class PaidServiceComponent implements OnInit, OnDestroy {
  
   @ViewChild("serviceMetadata", { read: ViewContainerRef }) serviceContainer;
  
@@ -35,12 +36,12 @@ export class PaidServiceComponent implements OnInit {
 
   constructor(
     private _paidService: PaidService,
-    private _resolver: ComponentFactoryResolver,
-    private _container: ViewContainerRef,
+    private _resolver: ComponentFactoryResolver
   ) { }
 
   ngOnInit(): void {
     this.slides = this.hotelComplimentaryAmenities;
+    this.listenForServiceCompletion();
   }
 
   servicePackage(packageCode){
@@ -49,9 +50,19 @@ export class PaidServiceComponent implements OnInit {
   }
 
   createComponent(component) {
-    this.serviceContainer.clear(); 
+    this.clearContainer(); 
     const factory = this._resolver.resolveComponentFactory(component);
     this.componentRef = this.serviceContainer.createComponent(factory);
+  }
+
+  clearContainer(){
+    this.serviceContainer.clear();  
+  }
+
+  listenForServiceCompletion(){
+    this._paidService.isServiceCompleted$.subscribe(() =>{
+       this.clearContainer();
+    })
   }
 
   ngOnDestroy() {

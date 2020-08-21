@@ -8,8 +8,9 @@
 
 :host ::ng-deep .draggable {
   margin: 3% 0px;
-  height: 54vh;
   .slick-track {
+    height: 54vh;
+    display: inline-block;
     div:focus {
       border: none;
       outline: none;

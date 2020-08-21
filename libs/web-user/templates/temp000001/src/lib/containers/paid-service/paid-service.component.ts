@@ -34,6 +34,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy {
     autoplay: true,
   };
 
+  selectedService='';
+
   constructor(
     private _paidService: PaidService,
     private _resolver: ComponentFactoryResolver
@@ -46,6 +48,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy {
 
   servicePackage(packageCode){
     let component = componentMapping[packageCode];
+    this.selectedService=packageCode;
     this.createComponent(component);
   }
 

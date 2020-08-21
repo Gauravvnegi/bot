@@ -18,9 +18,10 @@ import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { ProfileComponentComponent } from './container/profile-component/profile-component.component';
 import { PriceTableComponent } from './container/price-table/price-table.component';
+import { SettingsComponent } from './container/settings/settings.component';
 
 @NgModule({
-  declarations: [HomeComponent, SidenavComponent, ProfileComponentComponent, PriceTableComponent],
+  declarations: [HomeComponent, SidenavComponent, ProfileComponentComponent, PriceTableComponent, SettingsComponent],
   imports: [
     CommonModule,
     RouterModule,

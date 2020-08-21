@@ -13,6 +13,7 @@ export const ROUTES = [
       { path: '/components/wizard', title: 'Wizard', icon: 'W' },
     ],
   },
+  { path: '/settings', title: 'Settings', icon: 'settings', children: null },
   // {
   //   path: 'notification',
   //   title: 'Notification',

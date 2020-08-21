@@ -6,12 +6,17 @@
   >
     <div
       class="sidebar-background"
-      [style.background-image]="'url(assets/sidebar-'+ id +'.jpg)'"
+      [style.background-image]="'url(assets/sidebar-' + id + '.jpg)'"
     ></div>
     <admin-sidenav></admin-sidenav>
   </div>
   <div class="main-panel" id="main-panel">
-    hello sir ji
-    <router-outlet></router-outlet>
+    <div class="main-panel--header">
+      hello sir ji
+    </div>
+
+    <div class="main-panel--container">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

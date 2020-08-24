@@ -16,8 +16,8 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
-  BF: BreakfastComponent,
-  SPA: SpaComponent,
+  'BF': BreakfastComponent,
+  'SPA': SpaComponent,
 };
 
 @Component({

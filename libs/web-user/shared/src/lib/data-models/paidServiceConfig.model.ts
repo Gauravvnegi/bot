@@ -14,7 +14,12 @@ export class PaidServiceDetailDS implements Deserializable {
       input.forEach(service => {
          this.paidService.push(new PaidServiceDetail().deserialize(service));
       });
-      this.paidService = new PaidServiceDetail().checkForSelectedAmenity(this.paidService, selectedAmenities);
+      
+      selectedAmenities.forEach(selectedAmenity => {
+        this.paidService = new PaidServiceDetail().
+        checkForSelectedAmenity(this.paidService, selectedAmenity.packageCode, selectedAmenity.metaData);
+      })
+      
       return this;
     }
   }
@@ -46,12 +51,10 @@ export class PaidServiceDetail implements Deserializable {
       return this;
     }
 
-    checkForSelectedAmenity(allAmenities,selectedAmenities){
-      selectedAmenities.forEach(selectedAmenity => {
-        const index = allAmenities.findIndex( amenity => amenity.id === selectedAmenity.specialAmenitiesId)
-        allAmenities[index].isSelected = true;
-        allAmenities[index].metaData = selectedAmenity.metaData;
-      });
+    checkForSelectedAmenity(allAmenities, packageCode, metaData) {
+      const index = allAmenities.findIndex( amenity => amenity.packageCode === packageCode)
+      allAmenities[index].isSelected = true;
+      allAmenities[index].metaData = metaData;
       return allAmenities;
     }
   }

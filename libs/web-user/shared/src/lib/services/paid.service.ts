@@ -22,6 +22,10 @@ export class PaidService extends ApiService{
     return this.put(`/api/v1/reservation/${reservationId}/special-amenities`, data);
   }
 
+  updateAmenitiesDS(){
+    
+  }
+
   set amenityForm(form){
     this._amenityForm = form;
   }

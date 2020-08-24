@@ -1,18 +1,24 @@
 <div>
-    <form [formGroup]="spaForm" (ngSubmit)="submit()">
-        <h3>Enter details to book spa:</h3>
+  <form [formGroup]="spaForm" (ngSubmit)="submit()">
+    <h3>Enter details to book spa:</h3>
+    <div class="wrapper">
+      <div class="wrapper__item">
         <web-user-input
-            [parentForm]="spaForm"
-            [name]="'personCount'"
-            [settings]="spaConfig.personCount"
+          [parentForm]="spaForm"
+          [name]="'personCount'"
+          [settings]="spaConfig.personCount"
         ></web-user-input>
+      </div>
+      <div class="wrapper__item">
         <web-user-time-picker
           [parentForm]="spaForm"
           [name]="'usageTime'"
           [settings]="spaConfig.usageTime"
-          >
-          </web-user-time-picker>
-          <button type="button" (click)="resetSpaData()">Reset</button>
-        <button type="submit">Submit</button>
-    </form>
+        >
+        </web-user-time-picker>
+      </div>
+    </div>
+    <button type="button" (click)="resetSpaData()">Reset</button>
+    <button type="submit">Submit</button>
+  </form>
 </div>

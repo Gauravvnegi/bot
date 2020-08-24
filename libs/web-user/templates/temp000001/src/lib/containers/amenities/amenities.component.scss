@@ -56,3 +56,9 @@
       }
     }
   }
+
+  :host ::ng-deep .mat-expansion-panel-body{
+    @media only screen and (max-width: $M) {
+      padding: 20px 5px !important;
+    }
+  }

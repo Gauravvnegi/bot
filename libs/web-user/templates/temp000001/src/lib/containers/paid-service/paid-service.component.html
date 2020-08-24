@@ -14,3 +14,35 @@
   <ng-container #serviceMetadata>
   </ng-container>
 </div>
+<!-- <div class="paid__service__wrapper">
+  <h3 class="paid__service__wrapper--heading">
+    What would you like to book for special amenities ?
+  </h3>
+
+  <ngx-slick-carousel
+    class="carousel"
+    #slickModal="slick-carousel"
+    [config]="slideConfig"
+    responsive="breakpoints"
+  >
+    <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+      <div
+        [ngClass]="{active: selectedService === slide.packageCode}"
+        class="paid__service__data"
+        (click)="servicePackage(slide.packageCode)"
+      >
+        <div class="slider__image">
+          <img src="{{ slide.imgUrl }}" />
+          <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
+        </div>
+        <div class="slider__text">
+          <p class="label">{{ slide.amenityName }}</p>
+          <p class="description">
+            I have worked on realizing the changes required.
+          </p>
+        </div>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+  <div #serviceMetadata></div>
+</div> -->

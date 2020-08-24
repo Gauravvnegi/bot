@@ -1,4 +1,7 @@
-import { Component, OnInit, ComponentFactoryResolver,
+import {
+  Component,
+  OnInit,
+  ComponentFactoryResolver,
   ViewContainerRef,
   ViewChild,
   OnDestroy,
@@ -13,14 +16,14 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
-  'BF': BreakfastComponent,
-  'SPA': SpaComponent
+  BF: BreakfastComponent,
+  SPA: SpaComponent,
 };
 
 @Component({
   selector: 'hospitality-bot-paid-service',
   templateUrl: './paid-service.component.html',
-  styleUrls: ['./paid-service.component.scss']
+  styleUrls: ['./paid-service.component.scss'],
 })
 export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
  
@@ -41,7 +44,17 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     infinite: true,
     speed: 100,
     autoplay: true,
+    responsive: [
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
+
+  selectedService = '';
 
   constructor(
     private _fb: FormBuilder,
@@ -109,8 +122,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     return aminityData;
   }
 
-  clearContainer(){
-    this.serviceContainer.clear();  
+  clearContainer() {
+    this.serviceContainer.clear();
   }
 
   listenForComponentRender(){
@@ -152,12 +165,14 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.componentRef.destroy(); 
-   }
+    this.componentRef.destroy();
+  }
 
-  get hotelComplimentaryAmenities(){
-    return this._paidService.paidAmenities && 
-    this._paidService.paidAmenities.paidService;
+  get hotelComplimentaryAmenities() {
+    return (
+      this._paidService.paidAmenities &&
+      this._paidService.paidAmenities.paidService
+    );
   }
 
   get amenitiesForm(){

@@ -34,12 +34,14 @@
         </div>
         <div class="wrapper__item">
           <web-user-time-picker
-          [parentForm]="stayDetailsForm"
-          [name]="'expectedTime'"
-          [settings]="stayDetailsConfig.expectedTime"
+            [parentForm]="stayDetailsForm"
+            [name]="'expectedTime'"
+            [settings]="stayDetailsConfig.expectedTime"
           >
           </web-user-time-picker>
         </div>
+      </div>
+      <div class="wrapper">
         <div class="wrapper__item travelling__info">
           <web-user-label
             [settings]="stayDetailsConfig.travellingWithLabel"

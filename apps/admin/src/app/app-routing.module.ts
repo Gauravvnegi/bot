@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { environment } from '../environments/environment';
-import { HomeComponent } from './core/container/home/home.component';
 import { PreloadModulesStrategy } from './core/strategies/preload-modules.strategy';
 import { ProfileComponentComponent } from './core/container/profile-component/profile-component.component';
 import { PriceTableComponent } from './core/container/price-table/price-table.component';
-import { SettingsComponent } from './core/container/settings/settings.component';
+import { LayoutOneComponent } from 'libs/shared/theme/src/lib/containers/layouts/layout-one/layout-one.component';
+import { SettingsComponent } from 'libs/shared/theme/src/lib/containers/settings/settings.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    component: HomeComponent,
+    component: LayoutOneComponent,
     children: [
       { path: 'profile', component: ProfileComponentComponent },
       { path: 'components/price-table', component: PriceTableComponent },

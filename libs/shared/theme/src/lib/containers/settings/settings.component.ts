@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingsService } from '../sidenav/settings.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
-  selector: 'admin-settings',
+  selector: 'hospitality-bot-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
 })

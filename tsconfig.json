@@ -37,7 +37,8 @@
       ],
       "@hospitality-bot/web-user/templates/temp-covid000001": [
         "libs/web-user/templates/temp-covid000001/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/shared/theme": ["libs/shared/theme/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

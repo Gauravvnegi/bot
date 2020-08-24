@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingsService } from '../sidenav/settings.service';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
-  selector: 'admin-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: 'hospitality-bot-layout-one',
+  templateUrl: './layout-one.component.html',
+  styleUrls: ['./layout-one.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class LayoutOneComponent implements OnInit {
   public id: number;
   public backgroundColor: string;
   constructor(public settingService: SettingsService) {

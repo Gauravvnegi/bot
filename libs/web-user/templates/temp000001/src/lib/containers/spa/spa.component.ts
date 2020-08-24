@@ -29,7 +29,7 @@ export class SpaComponent implements OnInit {
   initSpaForm() {
     this.spaForm = this._fb.group({
       personCount: ['', [Validators.required]],
-      usageTime: ['', [Validators.required]],
+      usageTime: [''],
     });
   }
 
@@ -43,6 +43,6 @@ export class SpaComponent implements OnInit {
 
   submit(){
     console.log(this.spaForm.getRawValue());
-    this._paidService.isServiceCompleted$.next(true);
+    //this._paidService.isServiceAdded$.next(true);
   }
 }

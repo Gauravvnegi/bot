@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { AirportConfigI } from 'libs/web-user/shared/src/lib/data-models/airportConfig.model';
@@ -11,6 +11,12 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 })
 export class AirportPickupComponent implements OnInit {
 
+  @Input() packageCode;
+  @Input() amenityData;
+  @Input() paidAmenitiesForm;
+  @Output() removeEvent : EventEmitter<any> = new EventEmitter<any>();
+  @Output() addEvent : EventEmitter<any> = new EventEmitter<any>(); 
+  
   airportForm: FormGroup;
   airportConfig: AirportConfigI;
 
@@ -24,6 +30,8 @@ export class AirportPickupComponent implements OnInit {
 
   ngOnInit(): void {
     this.airportConfig = this.setFieldConfiguration();
+     this.addForm();
+     this.populateFormData();
   }
 
   initAirportForm() {
@@ -32,7 +40,18 @@ export class AirportPickupComponent implements OnInit {
       terminal: ['', [Validators.required]],
       flightNumber: ['', [Validators.required]],
       pickupTime: [''],
+      personCount: ['', [Validators.required]]
     });
+  }
+
+  addForm(){
+    this._paidService.packageCode = this.packageCode;
+    this._paidService.amenityForm = this.airportForm;
+    this._paidService.isComponentRendered$.next(true);
+  }
+
+  populateFormData(){
+    this.airportForm.patchValue(this.amenityData);
   }
 
   setFieldConfiguration() {
@@ -40,11 +59,18 @@ export class AirportPickupComponent implements OnInit {
   }
 
   submit(){
-    console.log(this.airportForm.getRawValue());
-    this._paidService.isServiceCompleted$.next(true);
+    this.paidAmenitiesForm.get('isSelected').patchValue(true);
+    this._paidService.amenityData = this.paidAmenitiesForm.getRawValue();
+    this.addEvent.emit(this.packageCode);
   }
 
-  resetAirportData(){
-    this.airportForm.reset();
+  resetAirportData(event){
+    // event.preventDefault();
+    // this.airportForm.reset();
+    // this.removeEvent.emit(this.amenityName);
   }
+
+  // get amenityForm(){
+  //   return this.paidAmenitiesForm.get(this.amenityName);
+  // }
 }

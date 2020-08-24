@@ -1,0 +1,8 @@
+<div [formGroup]="amenityForm">
+    <div class="slider__image" (click)="servicePackage()">
+        <img src="{{ slide.imgUrl }}" />
+        <span>{{slide.currencyCode}}/{{slide.rate}}</span>
+        <input type="hidden"  />
+        <span class="slider__image--text">{{slide.label}}--{{slide.isSelected}}</span>
+    </div>
+</div>

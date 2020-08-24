@@ -33,6 +33,7 @@ import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
 import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { SlideComponent } from './presentational/slide/slide.component';
 
 @NgModule({
   imports: [
@@ -75,6 +76,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
+    SlideComponent
   ],
   declarations: [
     StepperComponent,
@@ -104,6 +106,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     FileUploadCssDirective,
     RepeaterPipe,
     TimePickerComponent,
+    SlideComponent,
   ],
 })
 export class WebUserSharedModule {}

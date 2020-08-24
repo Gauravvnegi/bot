@@ -1,20 +1,16 @@
 <div>
-    <h3>What would you like to book for special amenities ?</h3>
+  <h3>What would you like to book for special amenities ?</h3>
 
-    <ngx-slick-carousel
-    class="carousel"
-    #slickModal="slick-carousel"
-    [config]="slideConfig"
-  >
+  <ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig">
     <div ngxSlickItem *ngFor="let slide of slides" class="slide">
-      <div class="slider__image" (click)="servicePackage(slide.packageCode)">
-        <img src="{{ slide.imgUrl }}" />
-        <span>{{slide.currencyCode}}/{{slide.rate}}</span>
-        <span class="slider__image--text">{{slide.amenityName}}</span>
-      </div>
+      <web-user-slide
+      [amenityForm]="getAminityForm(slide.packageCode)"
+      [slide]="slide"
+      [name]='isSelected'
+      (slideData)= servicePackage($event)>
+      </web-user-slide>
     </div>
   </ngx-slick-carousel>
-  <div #serviceMetadata>
-
-  </div>
+  <ng-container #serviceMetadata>
+  </ng-container>
 </div>

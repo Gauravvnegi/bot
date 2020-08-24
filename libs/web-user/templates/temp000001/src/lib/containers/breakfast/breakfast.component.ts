@@ -43,7 +43,7 @@ export class BreakfastComponent implements OnInit {
 
   submit(){
     console.log(this.breakfastForm.getRawValue());
-    this._paidService.isServiceCompleted$.next(true);
+    //this._paidService.isServiceAdded$.next(true);
   }
 
 }

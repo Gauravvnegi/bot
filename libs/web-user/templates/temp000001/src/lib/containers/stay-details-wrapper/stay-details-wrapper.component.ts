@@ -54,17 +54,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     this.parentForm.addControl(data.name, data.value);
   }
 
-  addAmenitiesFGEvent(data) {
-    this.parentForm.addControl(data.name, data.value);
-  }
-
   getHotelAmenities(){
-    //use this._hotelService.hotelId
-    this._amenitiesService.getHotelAmenities('caf7ada8-e4bb-427e-8fb8-01e9c3ff3713')
+    this._amenitiesService.getHotelAmenities(this._hotelService.hotelId)
     .subscribe(response =>{
       this.amenities = response;
       this._complimentaryService.initComplimentaryAmenitiesDetailDS(this.amenities && this.amenities.complimentryAmenities);
-      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidAmenities);
+      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidAmenities, this.reservationData.specialAmenities.paidAmenities);
     })
   }
 

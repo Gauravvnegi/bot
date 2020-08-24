@@ -1,11 +1,11 @@
 <div>
     <form [formGroup]="airportForm" (ngSubmit)="submit()">
         <h3>Enter Airport Pickup details</h3>
-        <web-user-select-box
+        <web-user-input
             [parentForm]="airportForm"
             [name]="'airportName'"
             [settings]="airportConfig.airportName"
-        ></web-user-select-box>
+        ></web-user-input>
         <web-user-input
             [parentForm]="airportForm"
             [name]="'terminal'"
@@ -21,9 +21,28 @@
             [name]="'pickupTime'"
             [settings]="airportConfig.pickupTime"
           ></web-user-time-picker>
+          <web-user-input
+            [parentForm]="airportForm"
+            [name]="'personCount'"
+            [settings]="airportConfig.personCount"
+        ></web-user-input>
         <h4>Note: Our in house chaffeur will call you on registered number.</h4>
-        <!-- <button mat-stroked-button (click)="resetAirportData($event)">Reset</button> -->
-        <button type="button" (click)="resetAirportData()">Reset</button>
-        <button type="submit">Submit</button>
+        <div class="save-button">
+            <web-user-button
+            [settings]="{ label: 'Reset' }"
+            [buttonClass]="''"
+            class="user-button"
+            (click)="resetAirportData($event)"
+            ></web-user-button>
+            <web-user-button
+            [settings]="{ label: 'Done' }"
+            [buttonClass]="'next-button'"
+            class="user-button"
+            (click)="submit()"
+            ></web-user-button>
+        </div>
+        
+        <!-- <button type="button" (click)="resetAirportData()">Reset</button> -->
+        <!-- <button type="submit">Submit</button> -->
     </form>
 </div>

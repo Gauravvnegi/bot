@@ -11,14 +11,15 @@
                 >
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <ng-container>
+            
               <hospitality-bot-complimentary-service>
               </hospitality-bot-complimentary-service>
 
-              <hospitality-bot-paid-service>
+              <hospitality-bot-paid-service
+              [parentForm]="parentForm">
               </hospitality-bot-paid-service>
 
-            </ng-container>
+            
           </mat-expansion-panel>
         </mat-accordion>
       </form>

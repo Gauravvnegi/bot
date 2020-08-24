@@ -13,12 +13,9 @@ export class AirportService extends ApiService{
       label: 'Select nearby Airport',
       disable: false,
       placeholder: 'Select nearby Airport',
-      options: [
-        { key: 'IGI Airport', value: 'IGI Airport' },
-      ],
     });
     airportFormFieldSchema['terminal'] = new FieldSchema().deserialize({
-      label: ' ',
+      label: 'Enter Terminal',
       disable: false,
       placeholder: 'Enter Terminal'
     });
@@ -27,9 +24,14 @@ export class AirportService extends ApiService{
       disable: false
     });
     airportFormFieldSchema['flightNumber'] = new FieldSchema().deserialize({
-      label: ' ',
+      label: 'Enter Flight No',
       disable: false,
       placeholder: 'Enter Flight No.'
+    });
+    airportFormFieldSchema['personCount'] = new FieldSchema().deserialize({
+      label: 'No. of Persons',
+      disable: false,
+      placeholder: 'No. of Persons'
     });
 
     return airportFormFieldSchema as AirportConfigI;

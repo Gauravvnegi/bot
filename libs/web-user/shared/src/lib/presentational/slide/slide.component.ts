@@ -12,8 +12,10 @@ export class SlideComponent extends BaseComponent {
   @Input() slide;
   @Output()
   slideData = new EventEmitter();
+  selectedService='';
 
-  servicePackage(){
+  servicePackage(value){
+    this.selectedService=value;
     this.slideData.emit(this.slide);
   }
 }

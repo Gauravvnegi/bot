@@ -1,8 +1,20 @@
-<div [formGroup]="amenityForm">
-    <div class="slider__image" (click)="servicePackage()">
-        <img src="{{ slide.imgUrl }}" />
-        <span>{{slide.currencyCode}}/{{slide.rate}}</span>
-        <input type="hidden"  />
-        <span class="slider__image--text">{{slide.label}}--{{slide.isSelected}}</span>
-    </div>
+<div class="paid__service__data" [formGroup]="amenityForm">
+  <div
+    class="slider__image"
+    (click)="servicePackage(slide.packageCode)"
+    [ngClass]="{ active: selectedService === slide.packageCode }"
+  >
+    <img src="{{ slide.imgUrl }}" />
+    <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
+    <input type="hidden" />
+    <!-- <span class="slider__image--text"
+      >{{ slide.label }}--{{ slide.isSelected }}</span
+    > -->
+  </div>
+  <div class="slider__text">
+    <p class="label">{{ slide.label }}</p>
+    <p class="description">
+      I have worked on realizing the changes required.
+    </p>
+  </div>
 </div>

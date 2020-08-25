@@ -1,9 +1,10 @@
-<div class="paid__service__data" [formGroup]="amenityForm">
-  <div
-    class="slider__image"
-    (click)="servicePackage(slide.packageCode)"
-    [ngClass]="{ active: selectedService === slide.packageCode }"
-  >
+<div
+  class="paid__service__data"
+  [formGroup]="amenityForm"
+  (click)="servicePackage(slide.packageCode)"
+  [ngClass]="{ active: selectedService === slide.packageCode }"
+>
+  <div class="slider__image">
     <img src="{{ slide.imgUrl }}" />
     <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
     <input type="hidden" />

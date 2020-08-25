@@ -33,7 +33,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
  
   slides;
   componentRef;
-  ameni
+  selectedService = '';
 
   paidAmenitiesForm: FormGroup;
 
@@ -53,8 +53,6 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
       },
     ],
   };
-
-  selectedService = '';
 
   constructor(
     private _fb: FormBuilder,
@@ -93,6 +91,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   servicePackage(slideData){
+    this.selectedService = slideData.packageCode;
     let component = componentMapping[slideData.packageCode];
     this.createComponent(component, slideData.id, slideData.packageCode);
   }

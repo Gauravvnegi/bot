@@ -1,6 +1,6 @@
 <div>
     <form [formGroup]="airportForm" (ngSubmit)="submit()">
-        <h3>Enter Airport Pickup details</h3>
+        <h3 class="heading">Enter Airport Pickup details</h3>
         <web-user-input
             [parentForm]="airportForm"
             [name]="'airportName'"
@@ -30,7 +30,7 @@
         <div class="save-button">
             <web-user-button
             [settings]="{ label: 'Remove' }"
-            [buttonClass]="''"
+            [buttonClass]="'back-button'"
             class="user-button"
             (click)="resetAirportData($event)"
             ></web-user-button>

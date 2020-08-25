@@ -108,7 +108,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
 
   addPropsToComponentInstance(amenityId, packageCode){
     this.componentRef.instance.paidAmenitiesForm = this.paidAmenityForm.get(packageCode) as FormGroup;
-    this.componentRef.instance.packageCode = packageCode;
+    this.componentRef.instance.uniqueData = {code:packageCode, id:amenityId};
     this.componentRef.instance.amenityData = this.getAminityData(packageCode);
   }
 
@@ -128,24 +128,25 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
 
   listenForComponentRender(){
     this._paidService.isComponentRendered$.subscribe(()=>{
-      this.getAminityForm(this._paidService.packageCode).addControl('metaData', this._paidService.amenityForm);
+      this.getAminityForm(this._paidService.uniqueData.code).addControl('metaData', this._paidService.amenityForm);
     })
   }
 
   listenForServiceAddition(){
     this.componentRef && this.componentRef.instance.addEvent.subscribe(packageCode => {
       this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData.metaData);
-      const index = this.slides.findIndex(amenity => amenity.packageCode === packageCode);
-      this.slides[index].selected = true;
+      this.addAmenity(packageCode, this._paidService.amenityData.metaData);
       this.clearContainer();
     })
   }
 
-  addAmenity(packageCode){
-    let data;
-    this._paidService.addAmenity(this._reservationService.reservationId,data)
+  addAmenity(packageCode, metaData){
+    let data = this._paidService.mapDataForAminity(this._paidService.amenityData, this._paidService.uniqueData.id);
+    this._paidService.addAmenity(this._reservationService.reservationId, data)
     .subscribe(response =>{
-     
+      const index = this.slides.findIndex(amenity => amenity.packageCode === packageCode);
+      this.slides[index].selected = true;
+      // this._paidService.updateAmenitiesDS(packageCode, metaData);
     })
   }
 

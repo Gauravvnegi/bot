@@ -16,11 +16,15 @@ export class PaidServiceDetailDS implements Deserializable {
       });
       
       selectedAmenities.forEach(selectedAmenity => {
-        this.paidService = new PaidServiceDetail().
-        checkForSelectedAmenity(this.paidService, selectedAmenity.packageCode, selectedAmenity.metaData);
+        this.updateAminities(this.paidService, selectedAmenity.packageCode, selectedAmenity.metaData);
       })
-      
       return this;
+    }
+
+    updateAminities(paidAmenities, packageCode, metaData){
+      this.paidService = new PaidServiceDetail()
+        .checkForSelectedAmenity(paidAmenities, packageCode, metaData);
+      return this.paidService;
     }
   }
 
@@ -34,6 +38,7 @@ export class PaidServiceDetail implements Deserializable {
     hotelId: string;
     isSelected: boolean;
     metaData: any;
+    description: string;
   
     deserialize(input: any) {
       Object.assign(
@@ -45,6 +50,7 @@ export class PaidServiceDetail implements Deserializable {
         set({}, 'label', get(input, ['amenityName'])),
         set({}, 'imgUrl', get(input, ['imgUrl'])),
         set({}, 'hotelId', get(input, ['hotelId'])),
+        set({}, 'description', get(input, ['amenityDescription'])),
         set({}, 'metaData',{}),
         set({}, 'isSelected', false)
       );
@@ -57,4 +63,17 @@ export class PaidServiceDetail implements Deserializable {
       allAmenities[index].metaData = metaData;
       return allAmenities;
     }
+  }
+
+  export class Amenity{
+    id: string;
+    metaData: Metadata;
+  }
+
+  export class Metadata{
+    airportName: string;
+    flightNumber: string;
+    personCount: number;
+    pickupTime: string;
+    terminal: string;
   }

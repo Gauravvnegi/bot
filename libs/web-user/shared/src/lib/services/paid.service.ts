@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { PaidServiceDetailDS } from '../data-models/paidServiceConfig.model';
+import { PaidServiceDetailDS, Amenity, Metadata } from '../data-models/paidServiceConfig.model';
 import { Subject } from 'rxjs/internal/Subject';
 import { FormGroup } from '@angular/forms';
 
@@ -9,7 +9,7 @@ export class PaidService extends ApiService{
 
   isComponentRendered$ = new Subject();
   _amenityForm: FormGroup;
-  _packageCode: string;
+  _uniqueData;
   _amenitiesData;
 
   private _paidServiceDetailDS: PaidServiceDetailDS;
@@ -19,12 +19,24 @@ export class PaidService extends ApiService{
   } 
 
   addAmenity(reservationId, data){
-    return this.put(`/api/v1/reservation/${reservationId}/special-amenities`, data);
+    return this.put(`/api/v1/reservation/${reservationId}/special-amenity`, data);
   }
 
-  updateAmenitiesDS(){
-    
+  mapDataForAminity(amenityData,id){
+    let data = new Amenity();
+    data.id = id;
+    data.metaData = new Metadata();
+    data.metaData.airportName = amenityData.metaData.airportName;
+    data.metaData.flightNumber = amenityData.metaData.flightNumber;
+    data.metaData.personCount = amenityData.metaData.personCount;
+    data.metaData.pickupTime = amenityData.metaData.pickupTime;
+    data.metaData.terminal = amenityData.metaData.terminal;
+    return data;
   }
+
+  // updateAmenitiesDS(packageCode, metaData){ 
+    
+  // }
 
   set amenityForm(form){
     this._amenityForm = form;
@@ -34,8 +46,8 @@ export class PaidService extends ApiService{
     this._amenitiesData = data;
   }
 
-  set packageCode(name:string){
-    this._packageCode = name;
+  set uniqueData(uniqueData){
+    this._uniqueData = uniqueData;
   }
 
   get amenityForm(){
@@ -46,8 +58,8 @@ export class PaidService extends ApiService{
     return this._amenitiesData;
   }
 
-  get packageCode(){
-    return this._packageCode;
+  get uniqueData(){
+    return this._uniqueData;
   }
 
   get paidAmenities(){

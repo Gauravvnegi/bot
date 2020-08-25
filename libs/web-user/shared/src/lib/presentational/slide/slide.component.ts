@@ -15,7 +15,7 @@ export class SlideComponent extends BaseComponent {
   selectedService='';
 
   servicePackage(value){
-    this.selectedService=value;
+    this.selectedService = value;
     this.slideData.emit(this.slide);
   }
 }

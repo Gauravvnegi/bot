@@ -11,7 +11,7 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 })
 export class AirportPickupComponent implements OnInit {
 
-  @Input() packageCode;
+  @Input() uniqueData;
   @Input() amenityData;
   @Input() paidAmenitiesForm;
   @Output() removeEvent : EventEmitter<any> = new EventEmitter<any>();
@@ -45,7 +45,7 @@ export class AirportPickupComponent implements OnInit {
   }
 
   addForm(){
-    this._paidService.packageCode = this.packageCode;
+    this._paidService.uniqueData = this.uniqueData;
     this._paidService.amenityForm = this.airportForm;
     this._paidService.isComponentRendered$.next(true);
   }
@@ -61,7 +61,7 @@ export class AirportPickupComponent implements OnInit {
   submit(){
     this.paidAmenitiesForm.get('isSelected').patchValue(true);
     this._paidService.amenityData = this.paidAmenitiesForm.getRawValue();
-    this.addEvent.emit(this.packageCode);
+    this.addEvent.emit(this.uniqueData.code);
   }
 
   resetAirportData(event){

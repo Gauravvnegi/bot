@@ -28,8 +28,7 @@ export class BreakfastComponent implements OnInit {
 
   initBreakfastForm() {
     this.breakfastForm = this._fb.group({
-      personCount: ['', [Validators.required]],
-      foodPackage: ['', [Validators.required]],
+      personCount: ['', [Validators.required]]
     });
   }
 

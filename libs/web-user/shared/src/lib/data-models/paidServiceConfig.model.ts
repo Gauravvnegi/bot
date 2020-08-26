@@ -7,23 +7,26 @@ export interface Deserializable {
 
 export class PaidServiceDetailDS implements Deserializable {
     paidService: PaidServiceDetail[];
-  
+    selectedService: PaidServiceDetail[];
+
     deserialize(input: any, selectedAmenities: any) {
       this.paidService = new Array<PaidServiceDetail>();
+      this.selectedService = new Array<PaidServiceDetail>();
 
       input.forEach(service => {
-         this.paidService.push(new PaidServiceDetail().deserialize(service));
+        this.paidService.push(new PaidServiceDetail().deserialize(service));
+      });
+
+      selectedAmenities.forEach(service => {
+        this.selectedService.push(new PaidServiceDetail().deserialize(service));
       });
       
-      selectedAmenities.forEach(selectedAmenity => {
-        this.updateAminities(this.paidService, selectedAmenity.packageCode, selectedAmenity.metaData);
-      })
+      this.paidService = this.updateAminities(this.paidService, this.selectedService);
       return this;
     }
 
-    updateAminities(paidAmenities, packageCode, metaData){
-      this.paidService = new PaidServiceDetail()
-        .checkForSelectedAmenity(paidAmenities, packageCode, metaData);
+    updateAminities( paidService, selectedService ){
+      this.paidService = new PaidServiceDetail().checkForSelectedAmenity(paidService, selectedService);
       return this.paidService;
     }
   }
@@ -51,17 +54,26 @@ export class PaidServiceDetail implements Deserializable {
         set({}, 'imgUrl', get(input, ['imgUrl'])),
         set({}, 'hotelId', get(input, ['hotelId'])),
         set({}, 'description', get(input, ['amenityDescription'])),
-        set({}, 'metaData',{}),
+        set({}, 'metaData',get(input, ['metaData'])),
         set({}, 'isSelected', false)
       );
       return this;
     }
 
-    checkForSelectedAmenity(allAmenities, packageCode, metaData) {
-      const index = allAmenities.findIndex( amenity => amenity.packageCode === packageCode)
-      allAmenities[index].isSelected = true;
-      allAmenities[index].metaData = metaData;
-      return allAmenities;
+    checkForSelectedAmenity(paidService, selectedService) {
+     paidService.forEach((paidAmenity, index)=> {
+       let isSelected = false;
+       let metaData ='';
+       selectedService.forEach(selectedAminity => {
+         if(paidAmenity.packageCode === selectedAminity.packageCode){
+            isSelected = true;
+            metaData = selectedAminity.metaData;
+          }
+       });
+       paidService[index].isSelected = isSelected;
+       paidService[index].metaData = metaData;
+     });
+    return paidService;
     }
   }
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { PaidServiceDetailDS, Amenity, Metadata } from '../data-models/paidServiceConfig.model';
-import { Subject } from 'rxjs/internal/Subject';
 import { FormGroup } from '@angular/forms';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { Subject } from 'rxjs/internal/Subject';
+import { Amenity, Metadata, PaidServiceDetailDS } from '../data-models/paidServiceConfig.model';
 
 @Injectable()
 export class PaidService extends ApiService{
@@ -18,6 +18,15 @@ export class PaidService extends ApiService{
     this._paidServiceDetailDS = new PaidServiceDetailDS().deserialize(amenities, selectedAmenities);
   } 
 
+  updateAmenitiesDS(selectedAmenities){ 
+    this._paidServiceDetailDS.paidService = 
+    new PaidServiceDetailDS().updateAminities(this.paidAmenities.paidService, selectedAmenities);
+  }
+
+  removeAmenity(reservationId, aminityId){
+    return this.delete(`/api/v1/reservation/${reservationId}/special-amenity/${aminityId}`);
+  }
+
   addAmenity(reservationId, data){
     return this.put(`/api/v1/reservation/${reservationId}/special-amenity`, data);
   }
@@ -26,17 +35,13 @@ export class PaidService extends ApiService{
     let data = new Amenity();
     data.id = id;
     data.metaData = new Metadata();
-    data.metaData.airportName = amenityData.metaData.airportName;
-    data.metaData.flightNumber = amenityData.metaData.flightNumber;
-    data.metaData.personCount = amenityData.metaData.personCount;
-    data.metaData.pickupTime = amenityData.metaData.pickupTime;
-    data.metaData.terminal = amenityData.metaData.terminal;
+    data.metaData.airportName = amenityData.airportName;
+    data.metaData.flightNumber = amenityData.flightNumber;
+    data.metaData.personCount = amenityData.personCount;
+    data.metaData.pickupTime = amenityData.pickupTime;
+    data.metaData.terminal = amenityData.terminal;
     return data;
   }
-
-  // updateAmenitiesDS(packageCode, metaData){ 
-    
-  // }
 
   set amenityForm(form){
     this._amenityForm = form;

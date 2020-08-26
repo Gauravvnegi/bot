@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { AirportConfigI } from '../data-models/airportConfig.model';
+import { FormGroup } from '@angular/forms';
 
 @Injectable()
 export class AirportService extends ApiService{
@@ -33,8 +34,24 @@ export class AirportService extends ApiService{
       disable: false,
       placeholder: 'No. of Persons'
     });
+    airportFormFieldSchema['removeButtonConfig'] = new FieldSchema().deserialize({
+      label: 'Remove',
+      disable: false,
+    });
 
     return airportFormFieldSchema as AirportConfigI;
+  }
+
+  validateAirportForm(airportForm: FormGroup) {
+    let status = [];
+
+    if (airportForm.invalid) {
+      status.push({
+        validity: false,
+        msg: 'Invalid form. Please fill required fields.'
+      });
+    }
+    return status;
   }
 
 }

@@ -1,0 +1,21 @@
+<div class="popup__wrapper">
+    <div (click)="close()" class="cross">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+    <div>
+      <h4 class="popup__wrapper--heading">Are you sure to remove the Amenity ?</h4>
+      <web-user-button
+      [settings]="{ label: 'Cancel' }"
+      [buttonClass]="'back-button'"
+      class="user-button"
+      (click)=close()
+      ></web-user-button>
+      <web-user-button
+        [settings]="{ label: 'Remove' }"
+        [buttonClass]="'next-button'"
+        class="user-button"
+        (click)=submit()
+      ></web-user-button>
+    </div>
+  </div>
+  

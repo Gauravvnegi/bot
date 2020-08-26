@@ -1,0 +1,59 @@
+@import 'temp000001';
+
+.popup__wrapper {
+    position: relative;
+    .cross {
+      position: absolute;
+      right: 5px;
+      top: -20px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &--heading {
+      text-align: center;
+      margin: 20px 0px;
+      font-weight: 700;
+    }
+  }
+  
+  :host ::ng-deep .mat-form-field {
+    width: 100%;
+  }
+  
+  :host ::ng-deep .mat-form-field-infix > textarea::placeholder {
+    font-size: 10px;
+  }
+  
+  :host ::ng-deep .mat-form-field-infix > textarea {
+    min-height: 60px;
+  }
+  
+  :host ::ng-deep .mat-form-field-infix {
+    border-top: 0.2em solid transparent;
+  }
+  
+  :host ::ng-deep mat-label {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .user-button {
+    display: flex;
+    justify-content: center;
+  }
+
+  :host ::ng-deep .back-button {
+    @include footer-back();
+  }
+  
+  :host ::ng-deep .mat-raised-button {
+    background-image: var(--stepper-dynamic-background-image, blue);
+    width: 150px;
+    font-weight: 700;
+    color: white;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  

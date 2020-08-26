@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AirportConfigI } from 'libs/web-user/shared/src/lib/data-models/airportConfig.model';
+import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -16,6 +18,8 @@ export class AirportPickupComponent implements OnInit {
   @Input() paidAmenitiesForm;
   @Output() removeEvent : EventEmitter<any> = new EventEmitter<any>();
   @Output() addEvent : EventEmitter<any> = new EventEmitter<any>(); 
+
+  @ViewChild('saveButton') saveButton;
   
   airportForm: FormGroup;
   airportConfig: AirportConfigI;
@@ -23,7 +27,9 @@ export class AirportPickupComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _airportService: AirportService,
-    private _paidService: PaidService
+    private _snackBarService: SnackBarService,
+    private _paidService: PaidService,
+    private _buttonService: ButtonService
   ) {
     this.initAirportForm();
    }
@@ -51,6 +57,9 @@ export class AirportPickupComponent implements OnInit {
   }
 
   populateFormData(){
+    if(this.amenityData === ""){
+      this.airportConfig.removeButtonConfig.disable = true;
+    }
     this.airportForm.patchValue(this.amenityData);
   }
 
@@ -59,18 +68,31 @@ export class AirportPickupComponent implements OnInit {
   }
 
   submit(){
+    const status = this._airportService.validateAirportForm(
+      this.airportForm
+    ) as Array<any>;
+
+    if (status.length) {
+      this.performActionIfNotValid(status);
+      this._buttonService.buttonLoading$.next(this.saveButton);
+      return;
+    }
+
     this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    this._paidService.amenityData = this.paidAmenitiesForm.getRawValue();
+    this._paidService.amenityData = this.paidAmenitiesForm.getRawValue().metaData;
     this.addEvent.emit(this.uniqueData.code);
   }
 
-  resetAirportData(event){
-    // event.preventDefault();
-    // this.airportForm.reset();
-    // this.removeEvent.emit(this.amenityName);
+  private performActionIfNotValid(status: any[]) {
+    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    return;
   }
 
-  // get amenityForm(){
-  //   return this.paidAmenitiesForm.get(this.amenityName);
-  // }
+  resetAirportData(event){
+     event.preventDefault();
+     if(this.airportForm.valid){
+      this.removeEvent.emit(this.uniqueData.id);
+     }
+    
+  }
 }

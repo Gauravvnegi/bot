@@ -34,6 +34,7 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
 import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SlideComponent } from './presentational/slide/slide.component';
+import { ConfirmationPopupComponent } from './presentational/confirmation-popup/confirmation-popup.component';
 
 @NgModule({
   imports: [
@@ -107,6 +108,7 @@ import { SlideComponent } from './presentational/slide/slide.component';
     RepeaterPipe,
     TimePickerComponent,
     SlideComponent,
+    ConfirmationPopupComponent,
   ],
 })
 export class WebUserSharedModule {}

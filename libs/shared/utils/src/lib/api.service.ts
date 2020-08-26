@@ -71,7 +71,10 @@ export class ApiService {
    * DELETE request
    */
   delete(uri: string): Observable<any> {
-    this.httpOptions.headers.append('oauth-token', '');
+    this.httpOptions.headers.append(
+      'Content-Type',
+      'application/json;charset=UTF-8'
+    );
     return this.httpClient
       .delete(this.getBaseUrl() + uri, this.httpOptions)
       .pipe(catchError((err) => this.handleError(err)));

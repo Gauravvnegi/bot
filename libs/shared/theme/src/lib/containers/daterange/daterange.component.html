@@ -1,11 +1,12 @@
-<div style="display: flex; justify-content: space-between;">
+<div class="wrapper">
   <p>hey</p>
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Choose a date</mat-label>
     <input
       matInput
       type="text"
       name="daterangeInput"
+
       daterangepicker
       [options]="config"
       (selected)="selectedDate($event, daterange)"

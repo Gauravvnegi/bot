@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-import { BreakfastConfigI } from '../data-models/breakfastConfig.model';
+import { CakeConfigI } from '../data-models/cakeConfig.model';
 import { FormGroup } from '@angular/forms';
 
 @Injectable()
-export class BreakfastService extends ApiService {
+export class CakeService {
 
-  setFieldConfigForBreakfastDetails() {
+  constructor() { }
+
+  setFieldConfigForCakeDetails() {
     let breakfastFormFieldSchema = {};
 
     breakfastFormFieldSchema['personCount'] = new FieldSchema().deserialize({
@@ -16,26 +18,15 @@ export class BreakfastService extends ApiService {
       placeholder: 'No.of Persons'
     });
 
-    // breakfastFormFieldSchema['foodPackage'] = new FieldSchema().deserialize({
-    //   label: 'Select Package',
-    //   disable: false,
-    //   placeholder: 'Select Package',
-    //   options: [
-    //     { key: 'Breakfast', value: 'Breakfast' },
-    //     { key: 'Lunch', value: 'Lunch' },
-    //     { key: 'Dinner', value: 'Dinner' },
-    //   ],
-    // });
-
     breakfastFormFieldSchema['removeButton'] = new FieldSchema().deserialize({
       label: 'Remove',
       disable: false,
     });
 
-    return breakfastFormFieldSchema as BreakfastConfigI;
+    return breakfastFormFieldSchema as CakeConfigI;
   }
 
-  validateBreakFastForm(breakfastForm: FormGroup) {
+  validateCakeForm(breakfastForm: FormGroup) {
     let status = [];
 
     if (breakfastForm.invalid) {
@@ -46,5 +37,4 @@ export class BreakfastService extends ApiService {
     }
     return status;
   }
-
 }

@@ -18,7 +18,23 @@
         </web-user-time-picker>
       </div>
     </div>
-    <button type="button" (click)="resetSpaData()">Reset</button>
-    <button type="submit">Submit</button>
+    <div class="save-button">
+      <web-user-button
+      #removeButton
+      buttonTemplateSwitch
+      [settings]="spaConfig.removeButton"
+      [buttonClass]="'back-button'"
+      class="user-button"
+      (click)="removeSpaData($event)"
+      ></web-user-button>
+      <web-user-button
+      #saveButton
+      buttonTemplateSwitch
+      [settings]="{ label: 'Add' }"
+      [buttonClass]="'next-button'"
+      class="user-button"
+      (click)="submit()"
+      ></web-user-button>
+  </div>
   </form>
 </div>

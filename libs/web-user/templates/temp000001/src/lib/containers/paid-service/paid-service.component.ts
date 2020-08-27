@@ -21,6 +21,7 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
   'BF': BreakfastComponent,
+  'DNI': BreakfastComponent,
   'SPA': SpaComponent,
 };
 
@@ -139,13 +140,15 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   listenForServiceAddition(){
-    this.componentRef && this.componentRef.instance.addEvent.subscribe(packageCode => {
+    this.componentRef && 
+    this.componentRef.instance.addEvent &&
+    this.componentRef.instance.addEvent.subscribe(packageCode => {
       this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
-      this.addAmenity(packageCode);
+      this.addAmenity();
     })
   }
 
-  addAmenity(packageCode){
+  addAmenity(){
     let data = this._paidService.mapDataForAminity(this._paidService.amenityData, this._paidService.uniqueData.id);
     this._paidService.addAmenity(this._reservationService.reservationId, data)
     .subscribe(response =>{
@@ -175,7 +178,10 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      this._buttonService.buttonLoading$.next(this.componentRef.instance.removeButton);
+      if(result){
+        this._buttonService.buttonLoading$.next(this.componentRef.instance.removeButton);
+      }
+      
     });
   }
 
@@ -198,6 +204,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     },
     (error) => {
       this._snackbarService.openSnackBarAsText('Some error occured');
+      this._buttonService.buttonLoading$.next(this.componentRef.instance.removeButton);
     })
   }
 

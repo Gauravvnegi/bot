@@ -31,10 +31,10 @@
             <web-user-button
             #removeButton
             buttonTemplateSwitch
-            [settings]="airportConfig.removeButtonConfig"
+            [settings]="airportConfig.removeButton"
             [buttonClass]="'back-button'"
             class="user-button"
-            (click)="resetAirportData($event)"
+            (click)="removeAirportData($event)"
             ></web-user-button>
             <web-user-button
             #saveButton

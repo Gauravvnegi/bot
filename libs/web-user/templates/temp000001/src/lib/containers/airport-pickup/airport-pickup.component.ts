@@ -5,6 +5,8 @@ import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.se
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
+import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -45,9 +47,17 @@ export class AirportPickupComponent implements OnInit {
     this.airportForm = this._fb.group({
       airportName: ['', [Validators.required]],
       terminal: ['', [Validators.required]],
-      flightNumber: ['', [Validators.required]],
+      flightNumber: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.ALPHANUMERIC_REGEX,
+          msg: 'Please enter valid Flight number',
+        })]],
       pickupTime: [''],
-      personCount: ['', [Validators.required]]
+      personCount: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.NUMBER_REGEX,
+          msg: 'Please enter valid Person count',
+        }),]]
     });
   }
 
@@ -59,7 +69,7 @@ export class AirportPickupComponent implements OnInit {
 
   populateFormData(){
     if(this.amenityData === ""){
-      this.airportConfig.removeButtonConfig.disable = true;
+      this.airportConfig.removeButton.disable = true;
     }
     this.airportForm.patchValue(this.amenityData);
   }
@@ -80,7 +90,7 @@ export class AirportPickupComponent implements OnInit {
     }
 
     this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    this._paidService.amenityData = this.paidAmenitiesForm.getRawValue().metaData;
+    this._paidService.amenityData = this.airportForm.getRawValue();
     this.addEvent.emit(this.uniqueData.code);
   }
 
@@ -89,7 +99,7 @@ export class AirportPickupComponent implements OnInit {
     return;
   }
 
-  resetAirportData(event){
+  removeAirportData(event){
      event.preventDefault();
      if(this.airportForm.valid){
       this.removeEvent.emit(this.uniqueData.id);

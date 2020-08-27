@@ -1,18 +1,13 @@
 @import 'temp000001';
+.save-button {
+    @include flex-justify-center();
+    margin-top: 15px;
+  }
 
-.wrapper {
-    &__item {
-      width: 45%;
-      margin: 5px 0;
-      @media only screen and (max-width: $M) {
-        width: auto;
-      }
-    }
-  
-    @include flex-space-between();
-    @include display-block-on-breakpoint($M);
-    @media only screen and (max-width: $M) {
-      flex-direction: column;
-      justify-content: inherit;
-    }
+  :host ::ng-deep .back-button {
+    @include footer-back();
+  }
+
+  .heading{
+    margin-bottom: 15px;
   }

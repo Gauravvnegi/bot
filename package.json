@@ -54,6 +54,7 @@
     "jszip-utils": "^0.1.0",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
+    "ng2-daterangepicker": "^3.0.1",
     "ng2-pdf-viewer": "^6.3.2",
     "ngx-page-scroll": "^7.0.2",
     "ngx-slick-carousel": "^0.5.1",

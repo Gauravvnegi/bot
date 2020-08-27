@@ -6,13 +6,14 @@
   >
     <div
       class="sidebar-background"
-      [style.background-image]="'url(assets/sidebar-' + id + '.jpg)'"
+      [style.background-image]="'url(' + background_image + ')'"
     ></div>
     <hospitality-bot-sidenav></hospitality-bot-sidenav>
   </div>
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
-      Header goes in here
+      <!-- Header goes in here -->
+      <hospitality-bot-daterange></hospitality-bot-daterange>
     </div>
 
     <div class="main-panel--container">

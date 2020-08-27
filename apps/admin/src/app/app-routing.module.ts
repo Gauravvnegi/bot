@@ -6,10 +6,17 @@ import { ProfileComponentComponent } from './core/container/profile-component/pr
 import { PriceTableComponent } from './core/container/price-table/price-table.component';
 import { LayoutOneComponent } from 'libs/shared/theme/src/lib/containers/layouts/layout-one/layout-one.component';
 import { SettingsComponent } from 'libs/shared/theme/src/lib/containers/settings/settings.component';
+import { LoginComponent } from './core/container/login/login.component';
+import { AuthGuard } from './core/guards/auth-guard';
 
 const appRoutes: Route[] = [
   {
+    path: 'auth',
+    component: LoginComponent,
+  },
+  {
     path: '',
+    canActivate: [AuthGuard],
     component: LayoutOneComponent,
     children: [
       { path: 'profile', component: ProfileComponentComponent },

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'hospitality-bot-layout-one',
@@ -9,9 +10,16 @@ import { SettingsService } from '../../../services/settings.service';
 export class LayoutOneComponent implements OnInit {
   public id: number;
   public backgroundColor: string;
-  constructor(public settingService: SettingsService) {
+  public background_image: string;
+  constructor(
+    public settingService: SettingsService,
+    private _themeService: ThemeService
+  ) {
     this.id = settingService.getSidebarImageIndex() + 1;
-    this.backgroundColor = settingService.getSidebarColor();
+    this.backgroundColor = this._themeService.themeConfig.sidenav.background_colour;
+    this.background_image = this._themeService.themeConfig.sidenav.background_image;
+    this.backgroundColor =
+      this.backgroundColor || settingService.getSidebarColor();
   }
 
   ngOnInit() {

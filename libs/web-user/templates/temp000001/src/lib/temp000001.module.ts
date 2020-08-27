@@ -36,6 +36,7 @@ import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.se
 import { BreakfastService } from 'libs/web-user/shared/src/lib/services/breakfast.service';
 import { SpaComponent } from './containers/spa/spa.component';
 import { SpaService } from 'libs/web-user/shared/src/lib/services/spa.service';
+import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
 import { CakeComponent } from './containers/cake/cake.component';
 
 @NgModule({
@@ -82,7 +83,8 @@ import { CakeComponent } from './containers/cake/cake.component';
     PaidService,
     AirportService,
     BreakfastService,
-    SpaService
+    SpaService,
+    CakeService
   ],
 })
 export class Temp000001Module {}

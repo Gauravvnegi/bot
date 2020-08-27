@@ -7,15 +7,37 @@ import { FormGroup } from '@angular/forms';
 @Injectable()
 export class CakeService {
 
-  constructor() { }
-
   setFieldConfigForCakeDetails() {
     let breakfastFormFieldSchema = {};
 
-    breakfastFormFieldSchema['personCount'] = new FieldSchema().deserialize({
-      label: ' ',
+    breakfastFormFieldSchema['date'] = new FieldSchema().deserialize({
+      label: 'Date',
       disable: false,
-      placeholder: 'No.of Persons'
+      placeholder: 'Enter Date'
+    });
+
+    breakfastFormFieldSchema['flavour'] = new FieldSchema().deserialize({
+      label: 'Flavour',
+      disable: false,
+      placeholder: 'Enter Flavour'
+    });
+
+    breakfastFormFieldSchema['quantity'] = new FieldSchema().deserialize({
+      label: 'Quantity',
+      disable: false,
+      placeholder: 'Enter Quantity (In Pounds)'
+    });
+
+    breakfastFormFieldSchema['expectedTime'] = new FieldSchema().deserialize({
+      label: 'Expected Time',
+      disable: false,
+      placeholder: 'Enter Expected Time'
+    });
+
+    breakfastFormFieldSchema['message'] = new FieldSchema().deserialize({
+      label: 'Message',
+      disable: false,
+      placeholder: 'Enter Message'
     });
 
     breakfastFormFieldSchema['removeButton'] = new FieldSchema().deserialize({
@@ -26,10 +48,10 @@ export class CakeService {
     return breakfastFormFieldSchema as CakeConfigI;
   }
 
-  validateCakeForm(breakfastForm: FormGroup) {
+  validateCakeForm(cakeForm: FormGroup) {
     let status = [];
 
-    if (breakfastForm.invalid) {
+    if (cakeForm.invalid) {
       status.push({
         validity: false,
         msg: 'Invalid form. Please fill required fields.'

@@ -5,6 +5,8 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 import { BreakfastService } from 'libs/web-user/shared/src/lib/services/breakfast.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
+import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 
 @Component({
   selector: 'hospitality-bot-breakfast',
@@ -43,7 +45,11 @@ export class BreakfastComponent implements OnInit {
 
   initBreakfastForm() {
     this.breakfastForm = this._fb.group({
-      personCount: ['', [Validators.required]]
+      personCount: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.NUMBER_REGEX,
+          msg: 'Please enter valid count',
+        })]]
     });
   }
 

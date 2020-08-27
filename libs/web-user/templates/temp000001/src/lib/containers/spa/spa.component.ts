@@ -5,6 +5,8 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 import { SpaService } from 'libs/web-user/shared/src/lib/services/spa.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
+import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 
 @Component({
   selector: 'hospitality-bot-spa',
@@ -41,7 +43,11 @@ export class SpaComponent implements OnInit {
 
   initSpaForm() {
     this.spaForm = this._fb.group({
-      personCount: ['', [Validators.required]],
+      personCount: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.NUMBER_REGEX,
+          msg: 'Please enter valid count',
+        })]],
       usageTime: [''],
     });
   }

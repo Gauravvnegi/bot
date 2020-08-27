@@ -20,6 +20,7 @@ export class AirportPickupComponent implements OnInit {
   @Output() addEvent : EventEmitter<any> = new EventEmitter<any>(); 
 
   @ViewChild('saveButton') saveButton;
+  @ViewChild('removeButton') removeButton;
   
   airportForm: FormGroup;
   airportConfig: AirportConfigI;

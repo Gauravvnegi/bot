@@ -16,6 +16,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { ConfirmationPopupComponent } from 'libs/web-user/shared/src/lib/presentational/confirmation-popup/confirmation-popup.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
@@ -63,7 +64,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     private _paidService: PaidService,
     private _reservationService: ReservationService,
     private _snackbarService: SnackBarService,
-    private _resolver: ComponentFactoryResolver
+    private _resolver: ComponentFactoryResolver,
+    private _buttonService: ButtonService
   ) { 
     this.initPaidAmenitiesForm();
   }
@@ -153,9 +155,11 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
       this._snackbarService.openSnackBarAsText('Amenity added successfully', '', {
         panelClass: 'success',
       });
+      this._buttonService.buttonLoading$.next(this.componentRef.instance.saveButton);
     },
     (error) => {
       this._snackbarService.openSnackBarAsText('Some error occured');
+      this._buttonService.buttonLoading$.next(this.componentRef.instance.saveButton);
     })
   }
 
@@ -169,6 +173,10 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
       this.removeAmenity(aminityId);
       dialogRef.close()
     })
+
+    dialogRef.afterClosed().subscribe(result => {
+      this._buttonService.buttonLoading$.next(this.componentRef.instance.removeButton);
+    });
   }
 
   listenForServiceRemoval(){
@@ -186,6 +194,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
       this._snackbarService.openSnackBarAsText('Amenity removed successfully', '', {
         panelClass: 'success',
       });
+      this._buttonService.buttonLoading$.next(this.componentRef.instance.removeButton);
     },
     (error) => {
       this._snackbarService.openSnackBarAsText('Some error occured');

@@ -59,6 +59,7 @@
     "ngx-page-scroll": "^7.0.2",
     "ngx-slick-carousel": "^0.5.1",
     "ngx-take-until-destroy": "^5.4.0",
+    "primeng": "^10.0.0-rc.3",
     "rxjs": "^6.5.5",
     "slick-carousel": "^1.8.1",
     "zone.js": "^0.10.2"

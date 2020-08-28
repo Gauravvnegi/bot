@@ -8,6 +8,8 @@ import { SettingsComponent } from './containers/settings/settings.component';
 import { DaterangeComponent } from './containers/daterange/daterange.component';
 import { SharedMaterialModule } from '../../../../shared/material/src';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { DatatableComponent } from './containers/datatable/datatable.component';
+import { TableModule } from 'primeng/table';
 
 export interface CustomConfig {
   ROUTES: any;
@@ -19,18 +21,26 @@ export interface CustomConfig {
 }
 
 @NgModule({
-  imports: [CommonModule, RouterModule, SharedMaterialModule, Daterangepicker],
+  imports: [
+    CommonModule,
+    RouterModule,
+    SharedMaterialModule,
+    Daterangepicker,
+    TableModule,
+  ],
   declarations: [
     SidenavComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
+    DatatableComponent,
   ],
   exports: [
     SidenavComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
+    DatatableComponent,
   ],
 })
 export class SharedThemeModule {

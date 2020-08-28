@@ -20,7 +20,7 @@ const appRoutes: Route[] = [
     canActivate: [AuthGuard],
     component: MainComponent,
     children: [
-      { path: 'profile', component: ProfileComponentComponent },
+      { path: '', component: ProfileComponentComponent },
       { path: 'components/price-table', component: PriceTableComponent },
       { path: 'settings', component: SettingsComponent },
     ],

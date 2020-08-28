@@ -1,5 +1,5 @@
 <div>
-    <form [formGroup]="airportForm" (ngSubmit)="submit()">
+    <form [formGroup]="cakeForm" (ngSubmit)="submit()">
         <h3 class="heading">Enter details to book anniversary/birthday Cake</h3>
         <web-user-date-picker
         [parentForm]="cakeForm"
@@ -24,7 +24,7 @@
           <web-user-input
             [parentForm]="cakeForm"
             [name]="'message'"
-            [settings]="cakeConfig.personCount"
+            [settings]="cakeConfig.message"
         ></web-user-input>
         <h4>Note: Our in house chaffeur will call you on registered number.</h4>
         <div class="save-button">

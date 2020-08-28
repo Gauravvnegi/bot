@@ -30,6 +30,8 @@
     // padding: 20px;
     padding: 10px;
     box-shadow: 0px 0px 4px 0px lightgray;
+    display: flex;
+    justify-content: flex-end;
   }
   &--container {
     max-height: calc(100vh - 50px);

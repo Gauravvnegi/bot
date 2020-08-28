@@ -11,6 +11,7 @@ import { ROUTES } from './configs/sidebar-routes.config';
 // } from '../../../../../libs/shared/interceptors/src';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 import { LoginComponent } from './container/login/login.component';
+import { MainComponent } from './container/main/main.component';
 
 const customConfig = {
   ROUTES: ROUTES,
@@ -26,6 +27,7 @@ const customConfig = {
     ProfileComponentComponent,
     PriceTableComponent,
     LoginComponent,
+    MainComponent,
   ],
   imports: [
     CommonModule,

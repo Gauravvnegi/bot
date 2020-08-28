@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChildren,
+  ViewContainerRef,
+  QueryList,
+  ViewChild,
+} from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
 import { ThemeService } from '../../../services/theme.service';
 
@@ -11,6 +18,13 @@ export class LayoutOneComponent implements OnInit {
   public id: number;
   public backgroundColor: string;
   public background_image: string;
+
+  @ViewChild('dynamicHeaderContainer', { read: ViewContainerRef })
+  dynamicHeaderContainer: ViewContainerRef;
+
+  @ViewChildren('headerListItems', { read: ViewContainerRef })
+  headerListItems: ViewContainerRef;
+
   constructor(
     public settingService: SettingsService,
     private _themeService: ThemeService

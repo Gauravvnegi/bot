@@ -13,7 +13,10 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- Header goes in here -->
-      <hospitality-bot-daterange></hospitality-bot-daterange>
+      <ng-container #headerListItems>
+        <ng-container #dynamicHeaderContainer></ng-container>
+        <hospitality-bot-daterange></hospitality-bot-daterange>
+      </ng-container>
     </div>
 
     <div class="main-panel--container">

@@ -8,6 +8,7 @@ import { LayoutOneComponent } from 'libs/shared/theme/src/lib/containers/layouts
 import { SettingsComponent } from 'libs/shared/theme/src/lib/containers/settings/settings.component';
 import { LoginComponent } from './core/container/login/login.component';
 import { AuthGuard } from './core/guards/auth-guard';
+import { MainComponent } from './core/container/main/main.component';
 
 const appRoutes: Route[] = [
   {
@@ -17,7 +18,7 @@ const appRoutes: Route[] = [
   {
     path: '',
     canActivate: [AuthGuard],
-    component: LayoutOneComponent,
+    component: MainComponent,
     children: [
       { path: 'profile', component: ProfileComponentComponent },
       { path: 'components/price-table', component: PriceTableComponent },

@@ -26,7 +26,12 @@ export interface CustomConfig {
     SettingsComponent,
     DaterangeComponent,
   ],
-  exports: [SidenavComponent],
+  exports: [
+    SidenavComponent,
+    LayoutOneComponent,
+    SettingsComponent,
+    DaterangeComponent,
+  ],
 })
 export class SharedThemeModule {
   public static forRoot(config: CustomConfig): ModuleWithProviders {

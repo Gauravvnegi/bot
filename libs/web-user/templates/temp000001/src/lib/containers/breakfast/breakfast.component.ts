@@ -45,12 +45,11 @@ export class BreakfastComponent implements OnInit {
 
   initBreakfastForm() {
     this.breakfastForm = this._fb.group({
-      personCount: ['', [Validators.required]]
-      // personCount: ['', [Validators.required,
-      //   customPatternValid({
-      //     pattern: Regex.NUMBER_REGEX,
-      //     msg: 'Please enter valid count',
-      //   })]]
+      personCount: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.NUMBER_REGEX,
+          msg: 'Please enter valid count',
+        })]]
     });
   }
 

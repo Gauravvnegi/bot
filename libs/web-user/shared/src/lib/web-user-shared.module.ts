@@ -35,6 +35,7 @@ import { TimePickerComponent } from './presentational/time-picker/time-picker.co
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SlideComponent } from './presentational/slide/slide.component';
 import { ConfirmationPopupComponent } from './presentational/confirmation-popup/confirmation-popup.component';
+import { NumberInputComponent } from './presentational/number-input/number-input.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { ConfirmationPopupComponent } from './presentational/confirmation-popup/
     TextareaComponent,
     SelectBoxComponent,
     InputComponent,
+    NumberInputComponent,
     FileUploadComponent,
     PaymentCardComponent,
     ButtonComponent,
@@ -109,6 +111,7 @@ import { ConfirmationPopupComponent } from './presentational/confirmation-popup/
     TimePickerComponent,
     SlideComponent,
     ConfirmationPopupComponent,
+    NumberInputComponent,
   ],
 })
 export class WebUserSharedModule {}

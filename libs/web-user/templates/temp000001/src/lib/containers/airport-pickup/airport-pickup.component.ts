@@ -47,9 +47,17 @@ export class AirportPickupComponent implements OnInit {
     this.airportForm = this._fb.group({
       airportName: ['', [Validators.required]],
       terminal: ['', [Validators.required]],
-      flightNumber: ['', [Validators.required]],
+      flightNumber: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.ALPHANUMERIC_REGEX,
+          msg: 'Please enter valid Flight number',
+        })]],
       pickupTime: [''],
-      personCount: ['', [Validators.required]]
+      personCount: ['', [Validators.required,
+        customPatternValid({
+          pattern: Regex.NUMBER_REGEX,
+          msg: 'Please enter valid Person count',
+        }),]]
     });
   }
 

@@ -16,17 +16,6 @@ export class BreakfastService extends ApiService {
       placeholder: 'No.of Persons'
     });
 
-    // breakfastFormFieldSchema['foodPackage'] = new FieldSchema().deserialize({
-    //   label: 'Select Package',
-    //   disable: false,
-    //   placeholder: 'Select Package',
-    //   options: [
-    //     { key: 'Breakfast', value: 'Breakfast' },
-    //     { key: 'Lunch', value: 'Lunch' },
-    //     { key: 'Dinner', value: 'Dinner' },
-    //   ],
-    // });
-
     breakfastFormFieldSchema['removeButton'] = new FieldSchema().deserialize({
       label: 'Remove',
       disable: false,

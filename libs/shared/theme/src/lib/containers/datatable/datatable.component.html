@@ -1,4 +1,12 @@
 <p-table [columns]="cols" [value]="cars">
+  <ng-template pTemplate="caption">
+    No data available
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    No data available
+  </ng-template>
+
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns">
@@ -6,6 +14,7 @@
       </th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-car let-columns="columns">
     <tr>
       <td *ngFor="let col of columns">

@@ -34,8 +34,7 @@
     justify-content: flex-end;
   }
   &--container {
-    max-height: calc(100vh - 50px);
-    overflow-y: scroll;
+    max-height: calc(100vh - 13vh);
     overflow-x: hidden;
   }
 }

@@ -10,6 +10,7 @@
   margin: 3% 0px;
   .slick-track {
     height: 54vh;
+    min-width: 1300px;
     display: inline-block;
     div:focus {
       border: none;
@@ -181,5 +182,25 @@
 :host ::ng-deep .slick-dotted.slick-slider{
   @media only screen and (max-width: $M) {
     margin-bottom: 0px;
+  }
+}
+
+:host ::ng-deep .activated{
+  border: 2px solid $icon-color !important;
+  .slider__text {
+    background-color: $icon-color !important;
+    color: white !important;
+  }
+}
+
+:host ::ng-deep .tick{
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  height: 60px;
+  width: 60px;
+  img{
+    height: 100%;
+    width: 100%;
   }
 }

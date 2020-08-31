@@ -9,22 +9,53 @@ import { SettingsComponent } from 'libs/shared/theme/src/lib/containers/settings
 import { LoginComponent } from './core/container/login/login.component';
 import { AuthGuard } from './core/guards/auth-guard';
 import { MainComponent } from './core/container/main/main.component';
+import { AuthComponent } from './core/auth/components/auth/auth.component';
+import { RegisterComponent } from './core/auth/components/register/register.component';
+import { RequestPasswordComponent } from './core/auth/components/request-password/request-password.component';
+import { LogoutComponent } from './core/auth/components/logout/logout.component';
+import { ResetPasswordComponent } from './core/auth/components/reset-password/reset-password.component';
 
 const appRoutes: Route[] = [
   {
     path: 'auth',
-    component: LoginComponent,
-  },
-  {
-    path: '',
-    canActivate: [AuthGuard],
-    component: MainComponent,
+    component: AuthComponent,
     children: [
-      { path: '', component: ProfileComponentComponent },
-      { path: 'components/price-table', component: PriceTableComponent },
-      { path: 'settings', component: SettingsComponent },
+      {
+        path: '',
+        component: LoginComponent,
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+      },
+      {
+        path: 'logout',
+        component: LogoutComponent,
+      },
+      {
+        path: 'request-password',
+        component: RequestPasswordComponent,
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+      },
     ],
   },
+  // {
+  //   path: '',
+  //   canActivate: [AuthGuard],
+  //   component: MainComponent,
+  //   children: [
+  //     { path: '', component: ProfileComponentComponent },
+  //     { path: 'components/price-table', component: PriceTableComponent },
+  //     { path: 'settings', component: SettingsComponent },
+  //   ],
+  // },
 ];
 
 /**

@@ -1,13 +1,19 @@
-<p-table [columns]="cols" [value]="cars">
+<p-table
+  [styleClass]="tableConfig.styleClass"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="cars"
+>
   <ng-template pTemplate="caption">
-    No data available
+    Header caption
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    No data available
+    No data found
   </ng-template>
 
   <ng-template pTemplate="header" let-columns>
+    {{ value | json }}
     <tr>
       <th *ngFor="let col of columns">
         {{ col.header }}
@@ -15,12 +21,16 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-car let-columns="columns">
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
       <td *ngFor="let col of columns">
-        {{ car[col.field] }}
+        {{ rowData[col.field] }}
       </td>
     </tr>
+  </ng-template>
+
+  <ng-template pTemplate="summary">
+    This is summary
   </ng-template>
 </p-table>
 

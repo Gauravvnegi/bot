@@ -12,6 +12,8 @@ import { ROUTES } from './configs/sidebar-routes.config';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 import { LoginComponent } from './container/login/login.component';
 import { MainComponent } from './container/main/main.component';
+import { AuthModule } from './auth/auth.module';
+import { SharedMaterialModule } from 'libs/shared/material/src';
 
 const customConfig = {
   ROUTES: ROUTES,
@@ -31,6 +33,8 @@ const customConfig = {
   ],
   imports: [
     CommonModule,
+    SharedMaterialModule,
+    AuthModule,
     RouterModule,
     SharedThemeModule.forRoot(customConfig),
   ],

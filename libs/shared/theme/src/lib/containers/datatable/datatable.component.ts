@@ -13,7 +13,27 @@ export class DatatableComponent implements OnInit {
     { field: 'color', header: 'Color' },
   ];
 
-  cars = [];
+  @Input() tableConfig = {
+    styleClass: 'p-datatable-lg p-datatable-gridlines p-datatable-striped',
+    striped: true,
+    gridLines: true,
+    size: 'lg',
+    paginator: true,
+  };
+
+  @Input() loading = false;
+
+  cars = [
+    {
+      vin: 1,
+      year: 2020,
+      brand: 'tata',
+      color: 'red',
+    },
+    { vin: 2, year: 2021, brand: 'maruti', color: 'blue' },
+    { vin: 3, year: 2022, brand: 'ford', color: 'green' },
+    { vin: 4, year: 2023, brand: 'mg', color: 'yellow' },
+  ];
 
   // only field property is used by table rest are dummy
   constructor() {}

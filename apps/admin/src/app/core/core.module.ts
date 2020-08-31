@@ -10,7 +10,6 @@ import { ROUTES } from './configs/sidebar-routes.config';
 //   LogResponseInterceptor
 // } from '../../../../../libs/shared/interceptors/src';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
-import { LoginComponent } from './container/login/login.component';
 import { MainComponent } from './container/main/main.component';
 import { AuthModule } from './auth/auth.module';
 import { SharedMaterialModule } from 'libs/shared/material/src';
@@ -25,12 +24,7 @@ const customConfig = {
 };
 
 @NgModule({
-  declarations: [
-    ProfileComponentComponent,
-    PriceTableComponent,
-    LoginComponent,
-    MainComponent,
-  ],
+  declarations: [ProfileComponentComponent, PriceTableComponent, MainComponent],
   imports: [
     CommonModule,
     SharedMaterialModule,

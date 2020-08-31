@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -12,7 +13,7 @@ export const adminDashboardRoutes: Route[] = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, AdminSharedModule, RouterModule],
   declarations: [DashboardComponent],
   exports: [DashboardComponent],
 })

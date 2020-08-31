@@ -6,39 +6,22 @@ import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.c
 import { SettingsComponent } from './containers/settings/settings.component';
 import { DaterangeComponent } from './containers/daterange/daterange.component';
 import { Daterangepicker } from 'ng2-daterangepicker';
-import { DatatableComponent } from './containers/datatable/datatable.component';
-import { TableModule } from 'primeng/table';
 import { SharedMaterialModule } from 'libs/shared/material/src';
-
-export interface CustomConfig {
-  sidenav: {
-    list_item_colour: string;
-    background_colour: string;
-    background_image: string;
-  };
-}
+import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    SharedMaterialModule,
-    Daterangepicker,
-    TableModule,
-  ],
+  imports: [CommonModule, SharedMaterialModule, Daterangepicker, RouterModule],
   declarations: [
     SidenavComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
-    DatatableComponent,
   ],
   exports: [
     SidenavComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
-    DatatableComponent,
   ],
 })
 export class ThemeModule {}

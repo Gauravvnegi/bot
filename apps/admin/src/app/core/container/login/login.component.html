@@ -1,43 +1,47 @@
-<p>login works!</p>
-
-<div class="background"></div>
-<div class="container">
-  <div class="container">
-    <div class="row">
-      <!-- Here header will come -->
-    </div>
-    <div class="row">
-      <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-        <div class="card">
-          <div class="card-header">
-            <h4>Login</h4>
-            <div class="social-btns">
-              <!-- <button mat-icon-button>
+<div class="login_container">
+  <div class="row">
+    <!-- Here header will come -->
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h4>LOGIN</h4>
+      <div class="social-btns">
+        <!-- <button mat-icon-button>
                 <i class="fa fa-facebook-square"></i>
               </button>
               <button mat-icon-button><i class="fa fa-twitter"></i></button>
               <button mat-icon-button><i class="fa fa-google-plus"></i></button> -->
-            </div>
-          </div>
-          <div class="card-form">
-            <div class="form-row">
-              <i class="material-icons">email</i>
-              <mat-form-field>
-                <input type="text" matInput placeholder="Email address" />
-              </mat-form-field>
-            </div>
-            <div class="form-row">
-              <i class="material-icons">lock_outline</i>
-              <mat-form-field>
-                <input type="password" matInput placeholder="Password" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="card-footer">
-            <button mat-button>LET'S GO</button>
-          </div>
-        </div>
       </div>
     </div>
+    <div class="card-form">
+      <div class="form-row">
+        <!-- <i class="material-icons">email</i> -->
+        <mat-icon class="material-icons" matSuffix>email</mat-icon>
+        <mat-form-field>
+          <input type="text" matInput placeholder="Email address" />
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <!-- <i class="material-icons">lock_outline</i> -->
+        <mat-icon class="material-icons" matSuffix>lock_outline</mat-icon>
+        <mat-form-field>
+          <input type="password" matInput placeholder="Password" />
+          <mat-icon class="" matSuffix>visibility </mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="forgot__block">
+      <a class="forgot--password" href="#">Forgot Password?</a>
+    </div>
+    <div class="card-footer">
+      <button class="login" mat-button>LOGIN</button>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="links">
+      <a href="#">About Us</a>
+      <a href="#">Privacy</a>
+    </div>
+    <p>&copy;&nbsp;2020,Botshot. All Rights Reserved</p>
   </div>
 </div>

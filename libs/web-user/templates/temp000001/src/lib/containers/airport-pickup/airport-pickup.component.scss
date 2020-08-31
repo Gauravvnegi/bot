@@ -1,13 +1,55 @@
 @import 'temp000001';
+
 .save-button {
-    @include flex-justify-center();
-    margin-top: 15px;
+  @include flex-justify-center();
+  margin-top: 15px;
+}
+
+:host ::ng-deep .back-button {
+  color: black;
+  width: 150px;
+  font-weight: 700;
+  background-color: white;
+  margin-right: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    width: 100px;
+  }
+}
+
+:host ::ng-deep .next-button {
+  background-image: var(--stepper-dynamic-background-image, blue);
+  width: 150px;
+  font-weight: 700;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    width: 100px;
+    height: auto;
+  }
+}
+
+.heading {
+  margin-bottom: 15px;
+}
+
+.wrapper {
+  &__item {
+    width: 45%;
+    margin: 5px 0;
+    @media only screen and (max-width: $M) {
+      width: auto;
+    }
   }
 
-  :host ::ng-deep .back-button {
-    @include footer-back();
+  @include flex-space-between();
+  @include display-block-on-breakpoint($M);
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: inherit;
   }
-
-  .heading{
-    margin-bottom: 15px;
-  }
+}

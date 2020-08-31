@@ -2,13 +2,8 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { environment } from '../environments/environment';
 import { PreloadModulesStrategy } from './core/strategies/preload-modules.strategy';
-import { ProfileComponentComponent } from './core/container/profile-component/profile-component.component';
-import { PriceTableComponent } from './core/container/price-table/price-table.component';
-import { LayoutOneComponent } from 'libs/shared/theme/src/lib/containers/layouts/layout-one/layout-one.component';
-import { SettingsComponent } from 'libs/shared/theme/src/lib/containers/settings/settings.component';
 import { LoginComponent } from './core/auth/components/login/login.component';
 import { AuthGuard } from './core/guards/auth-guard';
-import { MainComponent } from './core/container/main/main.component';
 import { AuthComponent } from './core/auth/components/auth/auth.component';
 import { RegisterComponent } from './core/auth/components/register/register.component';
 import { RequestPasswordComponent } from './core/auth/components/request-password/request-password.component';
@@ -46,16 +41,11 @@ const appRoutes: Route[] = [
       },
     ],
   },
-  // {
-  //   path: '',
-  //   canActivate: [AuthGuard],
-  //   component: MainComponent,
-  //   children: [
-  //     { path: '', component: ProfileComponentComponent },
-  //     { path: 'components/price-table', component: PriceTableComponent },
-  //     { path: 'settings', component: SettingsComponent },
-  //   ],
-  // },
+  {
+    path: 'pages',
+    loadChildren: () =>
+      import('./core/pages/pages.module').then((m) => m.PagesModule),
+  },
 ];
 
 /**

@@ -38,7 +38,18 @@
       "@hospitality-bot/web-user/templates/temp-covid000001": [
         "libs/web-user/templates/temp-covid000001/src/index.ts"
       ],
-      "@hospitality-bot/shared/theme": ["libs/shared/theme/src/index.ts"]
+      "@hospitality-bot/shared/theme": ["libs/shared/theme/src/index.ts"],
+      "@hospitality-bot/admin/dashboard": ["libs/admin/dashboard/src/index.ts"],
+      "@hospitality-bot/admin/reservation": [
+        "libs/admin/reservation/src/index.ts"
+      ],
+      "@hospitality-bot/admin/notification": [
+        "libs/admin/notification/src/index.ts"
+      ],
+      "@hospitality-bot/admin/special-amenities": [
+        "libs/admin/special-amenities/src/index.ts"
+      ],
+      "@hospitality-bot/admin/covid": ["libs/admin/covid/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

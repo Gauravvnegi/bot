@@ -59,6 +59,21 @@
     },
     "shared-theme": {
       "tags": []
+    },
+    "admin-dashboard": {
+      "tags": []
+    },
+    "admin-reservation": {
+      "tags": []
+    },
+    "admin-notification": {
+      "tags": []
+    },
+    "admin-special-amenities": {
+      "tags": []
+    },
+    "admin-covid": {
+      "tags": []
     }
   }
 }

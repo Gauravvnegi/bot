@@ -1,12 +1,51 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { PagesComponent } from './containers/pages/pages.component';
+import { DashboardComponent } from '../../../../../../libs/admin/dashboard/src/lib/components/dashboard/dashboard.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
     component: PagesComponent,
-    children: [],
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'reservation',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/reservation').then(
+            (m) => m.AdminReservationModule
+          ),
+      },
+      {
+        path: 'notification',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/notification').then(
+            (m) => m.AdminNotificationModule
+          ),
+      },
+      {
+        path: 'amenities',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/special-amenities').then(
+            (m) => m.AdminSpecialAmenitiesModule
+          ),
+      },
+      {
+        path: 'covid',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/covid').then(
+            (m) => m.AdminCovidModule
+          ),
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+    ],
   },
 ];
 

@@ -46,6 +46,11 @@ const appRoutes: Route[] = [
     loadChildren: () =>
       import('./core/pages/pages.module').then((m) => m.PagesModule),
   },
+  {
+    path: '',
+    redirectTo: 'pages',
+    pathMatch: 'full',
+  },
 ];
 
 /**

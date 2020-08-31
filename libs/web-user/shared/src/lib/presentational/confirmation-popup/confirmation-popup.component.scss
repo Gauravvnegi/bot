@@ -1,59 +1,75 @@
 @import 'temp000001';
 
 .popup__wrapper {
-    position: relative;
-    .cross {
-      position: absolute;
-      right: 5px;
-      top: -20px;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    &--heading {
-      text-align: center;
-      margin: 20px 0px;
-      font-weight: 700;
-    }
-  }
-  
-  :host ::ng-deep .mat-form-field {
-    width: 100%;
-  }
-  
-  :host ::ng-deep .mat-form-field-infix > textarea::placeholder {
-    font-size: 10px;
-  }
-  
-  :host ::ng-deep .mat-form-field-infix > textarea {
-    min-height: 60px;
-  }
-  
-  :host ::ng-deep .mat-form-field-infix {
-    border-top: 0.2em solid transparent;
-  }
-  
-  :host ::ng-deep mat-label {
-    font-size: 16px;
-    font-weight: 600;
-  }
-  
-  .user-button {
-    display: flex;
-    justify-content: center;
-  }
-
-  :host ::ng-deep .back-button {
-    @include footer-back();
-  }
-  
-  :host ::ng-deep .mat-raised-button {
-    background-image: var(--stepper-dynamic-background-image, blue);
-    width: 150px;
-    font-weight: 700;
-    color: white;
+  position: relative;
+  .cross {
+    position: absolute;
+    right: -10px;
+    top: -35px;
     &:hover {
       cursor: pointer;
     }
+    @media only screen and (max-width: $M) {
+      right: 0px;
+      top: -25px;
+    }
   }
-  
+  &--heading {
+    text-align: center;
+    margin: 20px 0px;
+    font-weight: 700;
+  }
+}
+
+:host ::ng-deep .mat-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-form-field-infix > textarea::placeholder {
+  font-size: 10px;
+}
+
+:host ::ng-deep .mat-form-field-infix > textarea {
+  min-height: 60px;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  border-top: 0.2em solid transparent;
+}
+
+:host ::ng-deep mat-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.button__wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .back-button {
+  color: black;
+  width: 150px;
+  font-weight: 700;
+  background-color: white;
+  margin-right: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    width: 100px;
+  }
+}
+
+:host ::ng-deep .next-button {
+  background-image: var(--stepper-dynamic-background-image, blue);
+  width: 150px;
+  font-weight: 700;
+  color: white;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    width: 100px;
+  }
+}

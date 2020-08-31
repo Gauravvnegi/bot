@@ -31,6 +31,8 @@ import { SignatureCaptureWrapperComponent } from './presentational/signature-cap
 import { SignaturePadScribbleComponent } from './presentational/signature-pad-scribble/signature-pad-scribble.component';
 import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
+import { PaymentMethodComponent } from './presentational/payment-method/payment-method.component';
+import { PromocodeComponent } from './presentational/promocode/promocode.component';
 
 @NgModule({
   imports: [
@@ -70,6 +72,8 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
+    PaymentMethodComponent,
+    PromocodeComponent,
   ],
   declarations: [
     StepperComponent,
@@ -98,6 +102,8 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
+    PaymentMethodComponent,
+    PromocodeComponent,
   ],
 })
 export class WebUserSharedModule {}

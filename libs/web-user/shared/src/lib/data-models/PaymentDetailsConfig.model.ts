@@ -86,6 +86,7 @@ export class PaymentDetail implements Deserializable {
     onlinePayment: boolean;
     paymentConfigurations: PaymentConfig[];
     payableAmount?: any;
+    paymentHeaders?: any;
   }
 
   export class PaymentConfig {

@@ -1,17 +1,38 @@
 <div *ngIf="isRendered">
   <div class="container">
-    <div class="payment-wrapper">
-      <hospitality-bot-payment-summary
-        *ngIf="hotelPaymentConfig"
-        [parentForm]="parentForm"
-        [reservationData]="reservationData"
-      ></hospitality-bot-payment-summary>
-      <hospitality-bot-payment-details
-        *ngIf="hotelPaymentConfig"
-        [parentForm]="parentForm"
-        [cardType]="cardType"
-      ></hospitality-bot-payment-details>
-    </div>
+    <mat-tab-group #matTab dynamicHeight>
+      <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
+        <ng-template mat-tab-label>
+          <div class="custom-tab">
+            <div><img [src]="header.imageUrl" style="height: 53px" /></div>
+            <div class="inner-label">
+              <div class="type-label">
+                <div><span>{{ header.type }}</span></div>
+                <div><span>{{ reservationData.roomRates.total.currencyCode }} {{ reservationData.roomRates.total.value }}</span></div>
+              </div>
+              <div class="info-label">
+                {{ header.description }}
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <div class="payment-wrapper">
+          <div class="payment__wrapper--header" *ngIf="header.type !== 'Pay At Desk'">
+            Payment Methods
+          </div>
+          <web-user-payment-method
+            *ngIf="hotelPaymentConfig && header.type !== 'Pay At Desk'"
+            [settings]="{ paymentConfigurations: hotelPaymentConfig.paymentConfigurations }"
+            (paymentMethod)="setPaymentMethodData($event)"
+          ></web-user-payment-method>
+          <hospitality-bot-payment-summary
+            *ngIf="hotelPaymentConfig"
+            [parentForm]="parentForm"
+            [reservationData]="reservationData"
+          ></hospitality-bot-payment-summary>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 
   <div class="main-template-button">

@@ -24,6 +24,9 @@ import { FooterComponent } from './containers/footer/footer.component';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -33,6 +36,9 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     Temp000001RoutingModule,
     SignaturePadModule,
     PdfViewerModule,
+    MatTabsModule,
+    MatIconModule,
+    HttpClientModule
   ],
   declarations: [
     Temp000001RoutingModule.components,

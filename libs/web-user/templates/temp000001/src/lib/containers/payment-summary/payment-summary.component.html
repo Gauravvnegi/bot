@@ -1,13 +1,4 @@
 <div class="payment__wrapper">
-  <!-- <mat-accordion>
-  <mat-expansion-panel #panel [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title class="panel_title">
-        <span class="container__title">Payment Summary</span>
-        <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
-        <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
-      </mat-panel-title>
-    </mat-expansion-panel-header> -->
   <div class="payment__wrapper--header">
     Payment Summary
   </div>
@@ -31,13 +22,14 @@
       </tr>
       <tr class="total__amount">
         <td colspan="5">
+          <web-user-promocode (promocodeData)="applyPromocode($event)"></web-user-promocode>
+        </td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="5">
           Total Amount:&nbsp;&nbsp;<b>{{ currency }} {{ totalAmount }}</b>
         </td>
       </tr>
     </table>
   </div>
-
-  <!-- <web-user-file-upload></web-user-file-upload> -->
-  <!-- </mat-expansion-panel>
-</mat-accordion> -->
 </div>

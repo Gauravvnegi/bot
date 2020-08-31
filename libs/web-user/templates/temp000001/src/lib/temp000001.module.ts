@@ -28,16 +28,11 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
-import { ComplimentaryServiceComponent } from './containers/complimentary-service/complimentary-service.component';
-import { PaidServiceComponent } from './containers/paid-service/paid-service.component';
-import { AirportPickupComponent } from './containers/airport-pickup/airport-pickup.component';
-import { BreakfastComponent } from './containers/breakfast/breakfast.component';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { BreakfastService } from 'libs/web-user/shared/src/lib/services/breakfast.service';
-import { SpaComponent } from './containers/spa/spa.component';
 import { SpaService } from 'libs/web-user/shared/src/lib/services/spa.service';
 import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
-import { CakeComponent } from './containers/cake/cake.component';
+import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
 
 @NgModule({
   imports: [
@@ -54,12 +49,6 @@ import { CakeComponent } from './containers/cake/cake.component';
     StepperContentRendererDirective,
     ButtonDirective,
     FooterComponent,
-    ComplimentaryServiceComponent,
-    PaidServiceComponent,
-    AirportPickupComponent,
-    BreakfastComponent,
-    SpaComponent,
-    CakeComponent,
   ],
   providers: [
     HotelService,
@@ -84,7 +73,8 @@ import { CakeComponent } from './containers/cake/cake.component';
     AirportService,
     BreakfastService,
     SpaService,
-    CakeService
+    CakeService,
+    DefaultAmenityService
   ],
 })
 export class Temp000001Module {}

@@ -102,8 +102,7 @@ export class AirportPickupComponent implements OnInit {
   removeAirportData(event){
      event.preventDefault();
      if(this.airportForm.valid){
-      this.removeEvent.emit(this.uniqueData.id);
+      this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
      }
-    
   }
 }

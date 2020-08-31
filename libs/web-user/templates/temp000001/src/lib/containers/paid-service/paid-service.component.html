@@ -17,7 +17,7 @@
         }"
       >
         <div class="slider__image">
-          <img src="{{ slide.imgUrl }}" />
+          <img loading="'lazy'" src="{{ slide.imgUrl }}" />
           <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
           <div
             [ngStyle]="

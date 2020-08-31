@@ -1,17 +1,11 @@
 <div>
-    <form [formGroup]="breakfastForm" (ngSubmit)="submit()">
-        <h3>No. of Persons:</h3>
-        <web-user-input
-            [parentForm]="breakfastForm"
-            [name]="'personCount'"
-            [settings]="breakfastConfig.personCount"
-        ></web-user-input>
+    <form>
         <div class="save-button">
             <web-user-button
-            [settings]="breakfastConfig.removeButton"
+            [settings]="defaultAmenityConfig.removeButton"
             [buttonClass]="'back-button'"
             class="user-button"
-            (click)="removeBreakfastData($event)"
+            (click)="removeDefaultAmenityData($event)"
             ></web-user-button>
             <web-user-button
             #saveButton

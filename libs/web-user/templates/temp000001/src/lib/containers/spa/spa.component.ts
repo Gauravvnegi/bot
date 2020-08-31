@@ -92,8 +92,8 @@ export class SpaComponent implements OnInit {
 
   removeSpaData(event){
     event.preventDefault();
-    if(this.spaForm.valid){
-     this.removeEvent.emit(this.uniqueData.id);
+    if(this.spaForm.valid && this.paidAmenitiesForm.get('isSelected').value == true){
+     this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
     }
  }
 }

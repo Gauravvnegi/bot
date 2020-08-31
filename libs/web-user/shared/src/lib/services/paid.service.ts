@@ -35,11 +35,7 @@ export class PaidService extends ApiService{
     let data = new Amenity();
     data.id = id;
     data.metaData = new Metadata();
-    data.metaData.airportName = amenityData.airportName;
-    data.metaData.flightNumber = amenityData.flightNumber;
-    data.metaData.personCount = amenityData.personCount;
-    data.metaData.pickupTime = amenityData.pickupTime;
-    data.metaData.terminal = amenityData.terminal;
+    data.metaData = amenityData;
     return data;
   }
 

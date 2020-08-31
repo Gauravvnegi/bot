@@ -88,8 +88,8 @@ export class CakeComponent implements OnInit {
 
   removeCakeData(event){
     event.preventDefault();
-    if(this.cakeForm.valid){
-     this.removeEvent.emit(this.uniqueData.id);
+    if(this.cakeForm.valid && this.paidAmenitiesForm.get('isSelected').value == true){
+     this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
     }
  }
 }

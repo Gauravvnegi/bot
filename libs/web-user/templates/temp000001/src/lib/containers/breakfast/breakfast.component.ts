@@ -93,8 +93,8 @@ export class BreakfastComponent implements OnInit {
 
   removeBreakfastData(event){
     event.preventDefault();
-    if(this.breakfastForm.valid){
-     this.removeEvent.emit(this.uniqueData.id);
+    if(this.breakfastForm.valid && this.paidAmenitiesForm.get('isSelected').value == true){
+     this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
     }
  }
 

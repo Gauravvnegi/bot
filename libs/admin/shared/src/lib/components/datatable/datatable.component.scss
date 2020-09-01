@@ -1,0 +1,15 @@
+:host ::ng-deep .p-paginator-first > .pi-angle-double-left:before {
+  // display: none;
+  content: 'FIRST';
+  font-size: 15px;
+  color: black;
+  font-weight: 700;
+}
+
+:host ::ng-deep .p-paginator-prev > .pi-angle-left:before {
+  // display: none;
+  content: 'PREVIOUS';
+  font-size: 15px;
+  color: black;
+  font-weight: 700;
+}

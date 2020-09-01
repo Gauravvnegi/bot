@@ -1,8 +1,41 @@
+<!-- <div class="p-mb-3">
+  <p-button
+    type="button"
+    icon="pi pi-chevron-left"
+    (click)="prev()"
+    [disabled]="isFirstPage()"
+    styleClass="p-button-text"
+  ></p-button>
+  <p-button
+    type="button"
+    icon="pi pi-refresh"
+    (click)="reset()"
+    styleClass="p-button-text"
+  ></p-button>
+  <p-button
+    type="button"
+    icon="pi pi-chevron-right"
+    (click)="next()"
+    [disabled]="isLastPage()"
+    styleClass="p-button-text"
+  ></p-button>
+</div> -->
 <p-table
+  #dt
   [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="true"
   [loading]="loading"
   [columns]="cols"
-  [value]="cars"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
 >
   <ng-template pTemplate="caption">
     Header caption
@@ -13,16 +46,69 @@
   </ng-template>
 
   <ng-template pTemplate="header" let-columns>
-    {{ value | json }}
     <tr>
-      <th *ngFor="let col of columns">
-        {{ col.header }}
+      <th style="width: 5%;" pResizableColumn>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
+      <th
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
+        {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+    </tr>
+
+    <tr>
+      <th></th>
+      <th>
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event, 'vin')"
+          placeholder="Search by Name"
+          class="p-column-filter"
+        />
+      </th>
+      <!-- <th>
+          <input pInputText type="text" (input)="dt.filter($event.target.value, 'country.name', 'contains')" placeholder="Search by Country" class="p-column-filter">
+      </th>
+      <th>
+          <p-multiSelect [options]="representatives" placeholder="All" (onChange)="onRepresentativeChange($event)" styleClass="p-column-filter" optionLabel="name">
+              <ng-template let-option pTemplate="item">
+                  <div class="p-multiselect-representative-option">
+                      <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.value.image}}" width="32" style="vertical-align: middle" />
+                      <span class="p-ml-1">{{option.label}}</span>
+                  </div>
+              </ng-template>
+          </p-multiSelect>
+      </th>
+      <th>
+          <p-calendar (onSelect)="onDateSelect($event)" (onClearClick)="dt.filter('', 'date', 'equals')" [showButtonBar]="true" styleClass="p-column-filter" placeholder="Registration Date" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+      </th>
+      <th>
+          <p-dropdown [options]="statuses" (onChange)="dt.filter($event.value, 'status', 'equals')" styleClass="p-column-filter" placeholder="Select a Status" [showClear]="true">
+              <ng-template let-option pTemplate="item">
+                  <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+              </ng-template>
+          </p-dropdown>
+      </th>
+      <th>
+          <input pInputText type="text" (input)="onActivityChange($event)" placeholder="Minimum" class="p-column-filter" >
+      </th> -->
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-rowData let-columns="columns">
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
     <tr>
+      <td>
+        <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
+      </td>
       <td *ngFor="let col of columns">
         {{ rowData[col.field] }}
       </td>
@@ -30,25 +116,11 @@
   </ng-template>
 
   <ng-template pTemplate="summary">
-    This is summary
+    <p-paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
   </ng-template>
 </p-table>
-
-<!-- <p-table [value]="products">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Code</th>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Quantity</th>
-    </tr>
-  </ng-template>    
-  <ng-template pTemplate="body" let-product>
-    <tr>
-      <td>{{ product.code }}</td>
-      <td>{{ product.name }}</td>
-      <td>{{ product.category }}</td>
-      <td>{{ product.quantity }}</td>
-    </tr>
-  </ng-template>
-</p-table> -->

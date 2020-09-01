@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
@@ -20,14 +22,16 @@ import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-d
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { FooterComponent } from './containers/footer/footer.component';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
+import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     WebUserSharedModule,
     RouterModule,
     Temp000001RoutingModule,
@@ -38,9 +42,14 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     Temp000001RoutingModule.components,
     StepperContentRendererDirective,
     ButtonDirective,
-    FooterComponent,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenRetievalInterceptor,
+      multi: true,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     HotelService,
     ReservationService,
     ParentFormService,
@@ -57,6 +66,7 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     RegCardService,
     SummaryService,
     SignatureService,
+    AccessTokenService,
   ],
 })
 export class Temp000001Module {}

@@ -64,5 +64,6 @@ export class Temp000001RoutingModule {
     SummaryComponent,
     ApplicationStatusComponent,
     HeaderSummaryComponent,
+    FooterComponent,
   ];
 }

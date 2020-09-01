@@ -6,15 +6,15 @@ import {
   HttpEvent,
   HttpEventType,
   HttpResponse,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { NGXLogger, NGXLogInterface } from 'ngx-logger';
+//import { NGXLogger, NGXLogInterface } from 'ngx-logger';
 
 @Injectable()
 export class SharedLogResponseInterceptor implements HttpInterceptor {
-  constructor(private _logger: NGXLogger) {}
+  constructor() {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -22,7 +22,7 @@ export class SharedLogResponseInterceptor implements HttpInterceptor {
     const started = Date.now();
 
     return next.handle(req).pipe(
-      tap(event => {
+      tap((event) => {
         const elapsed = Date.now() - started;
 
         console.log(`${req.method} "${req.urlWithParams}" took ${elapsed} ms.`);
@@ -32,7 +32,7 @@ export class SharedLogResponseInterceptor implements HttpInterceptor {
         }
       }),
       catchError((err: HttpErrorResponse) => {
-        this._logger.error(err.message);
+        //this._logger.error(err.message);
         return throwError(err);
       })
     );

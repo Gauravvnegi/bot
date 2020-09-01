@@ -1,0 +1,58 @@
+@import 'temp000001';
+
+.service__wrapper{
+  &--heading{
+    font-size: $font-medium;
+  }
+  &--images{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 4% 0px;
+  }
+}
+
+
+.hotel-services-images {
+    width: 80px;
+  
+    @media only screen and (max-width: 900px) {
+      width: 50px;
+    }
+  }
+
+  .img-with-text {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: $font-medium;
+    font-weight: $bold;
+    margin-bottom: $margin-large;
+    @media only screen and (max-width: 900px) {
+      width: 50%;
+    }
+  }
+
+  .img-with-text {
+    .image {
+      border-radius: 50%;
+      background-color: #f3f3f3;
+      padding: $padding-large;
+      &:hover {
+        cursor: pointer;
+        // background-color: $icon-color;
+        // .hotel-services-images {
+        //   filter: invert(1);
+        // }
+        // removed due to issue in services tapping
+      }
+    }
+    p {
+      margin-top: $margin-large;
+      @media only screen and (max-width: 900px) {
+        font-size: 14px;
+        margin: 10px auto;
+      }
+    }
+  }

@@ -55,11 +55,13 @@
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "ng2-pdf-viewer": "^6.3.2",
+    "ngx-material-timepicker": "^5.5.3",
     "ngx-page-scroll": "^7.0.2",
     "ngx-slick-carousel": "^0.5.1",
     "ngx-take-until-destroy": "^5.4.0",
     "rxjs": "^6.5.5",
     "slick-carousel": "^1.8.1",
+    "text-mask-addons": "^3.8.0",
     "zone.js": "^0.10.2"
   },
   "devDependencies": {

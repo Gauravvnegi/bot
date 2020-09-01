@@ -1,0 +1,13 @@
+@import 'temp000001';
+.save-button {
+    @include flex-justify-center();
+    margin-top: 15px;
+  }
+
+  :host ::ng-deep .back-button {
+    @include footer-back();
+  }
+
+  .heading{
+    margin-bottom: 15px;
+  }

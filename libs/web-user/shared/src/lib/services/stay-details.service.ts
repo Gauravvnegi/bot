@@ -29,6 +29,10 @@ export class StayDetailsService extends ApiService {
       label: 'Departure Date',
       disable: true,
     });
+    stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
+      label: 'Expected Arrival Time',
+      disable: false,
+    });
 
     stayDetailsFieldSchema[
       'travellingWithLabel'

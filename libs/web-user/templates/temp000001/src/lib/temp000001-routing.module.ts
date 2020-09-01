@@ -26,6 +26,14 @@ import { StayDetailsComponent } from './containers/stay-details/stay-details.com
 import { SummaryWrapperComponent } from './containers/summary-wrapper/summary-wrapper.component';
 import { SummaryComponent } from './containers/summary/summary.component';
 import { Temp000001Component } from './containers/temp000001/temp000001.component';
+import { AmenitiesComponent } from './containers/amenities/amenities.component';
+import { ComplimentaryServiceComponent } from './containers/complimentary-service/complimentary-service.component';
+import { PaidServiceComponent } from './containers/paid-service/paid-service.component';
+import { AirportPickupComponent } from './containers/airport-pickup/airport-pickup.component';
+import { BreakfastComponent } from './containers/breakfast/breakfast.component';
+import { SpaComponent } from './containers/spa/spa.component';
+import { CakeComponent } from './containers/cake/cake.component';
+import { DefaultAmenityComponent } from './containers/default-amenity/default-amenity.component';
 
 export const sharedAuthRoutes: Route[] = [
   { path: '', component: Temp000001Component },
@@ -65,5 +73,13 @@ export class Temp000001RoutingModule {
     ApplicationStatusComponent,
     HeaderSummaryComponent,
     FooterComponent,
+    AmenitiesComponent,
+    ComplimentaryServiceComponent,
+    PaidServiceComponent,
+    AirportPickupComponent,
+    BreakfastComponent,
+    SpaComponent,
+    CakeComponent,
+    DefaultAmenityComponent,
   ];
 }

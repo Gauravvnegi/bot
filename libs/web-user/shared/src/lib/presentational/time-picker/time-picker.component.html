@@ -1,0 +1,27 @@
+<div
+  [formGroup]="parentForm"
+  [ngClass]="defaultClasses.fieldMainWrapperClasses"
+  [style]="settings.style"
+>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+    settings.master_label
+  }}</mat-label>
+
+  <div [ngClass]="defaultClasses.fieldParentWrapperClasses">
+    <div [ngClass]="defaultClasses.fieldContainerWrapperClasses">
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
+        settings.label
+      }}</mat-label>
+      <div>
+        <ngx-timepicker-field #timePickerRef
+        [formControlName]="name"
+        [defaultTime]="defaultTime" 
+        [controlOnly]="true"
+        ></ngx-timepicker-field>
+      </div>
+      <mat-error [ngClass]="defaultClasses.fieldErrorClasses">{{
+        errorMsg
+      }}</mat-error>
+    </div>
+  </div>
+</div>

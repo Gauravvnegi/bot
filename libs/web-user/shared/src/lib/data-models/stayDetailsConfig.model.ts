@@ -59,6 +59,7 @@ export interface StayDetailsConfigI {
   roomType: FieldSchema;
   adultGuest: FieldSchema;
   kidsGuest: FieldSchema;
+  expectedTime: FieldSchema;
   travellingWithLabel: FieldSchema;
 }
 

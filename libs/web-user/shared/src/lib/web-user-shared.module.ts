@@ -31,6 +31,11 @@ import { SignatureCaptureWrapperComponent } from './presentational/signature-cap
 import { SignaturePadScribbleComponent } from './presentational/signature-pad-scribble/signature-pad-scribble.component';
 import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
+import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { SlideComponent } from './presentational/slide/slide.component';
+import { ConfirmationPopupComponent } from './presentational/confirmation-popup/confirmation-popup.component';
+import { NumberInputComponent } from './presentational/number-input/number-input.component';
 
 @NgModule({
   imports: [
@@ -41,20 +46,24 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     TextMaskModule,
     SignaturePadModule,
     MatTabsModule,
+    NgxMaterialTimepickerModule
   ],
   exports: [
     SharedMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxMaterialTimepickerModule,
     StepperComponent,
     RadioComponent,
     TextareaComponent,
     SelectBoxComponent,
     InputComponent,
+    NumberInputComponent,
     FileUploadComponent,
     PaymentCardComponent,
     ButtonComponent,
     DatePickerComponent,
+    TimePickerComponent,
     TextMaskModule,
     LabelComponent,
     FieldsetComponent,
@@ -70,6 +79,7 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
+    SlideComponent
   ],
   declarations: [
     StepperComponent,
@@ -98,6 +108,10 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
+    TimePickerComponent,
+    SlideComponent,
+    ConfirmationPopupComponent,
+    NumberInputComponent,
   ],
 })
 export class WebUserSharedModule {}

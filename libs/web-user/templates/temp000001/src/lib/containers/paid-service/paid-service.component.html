@@ -1,0 +1,42 @@
+<div>
+  <h3>What would you like to book for special amenities ?</h3>
+
+  <ngx-slick-carousel
+    class="carousel"
+    #slickModal="slick-carousel"
+    [config]="slideConfig"
+    responsive="breakpoints"
+  >
+    <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+      <div
+        class="paid__service__data"
+        (click)="servicePackage(slide)"
+        [ngClass]="{
+          active: selectedService === slide.packageCode,
+          activated: slide.isSelected
+        }"
+      >
+        <div class="slider__image">
+          <img loading="'lazy'" src="{{ slide.imgUrl }}" />
+          <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
+          <div
+            [ngStyle]="
+              slide.isSelected ? { display: 'block' } : { display: 'none' }
+            "
+            class="tick"
+          >
+            <img src="assets/tick.png" />
+          </div>
+          <input type="hidden" />
+        </div>
+        <div class="slider__text">
+          <p class="label">{{ slide.label }}</p>
+          <p class="description">
+            {{ slide.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+  <ng-container #serviceMetadata> </ng-container>
+</div>

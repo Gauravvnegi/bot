@@ -23,10 +23,19 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ButtonDirective } from './directives/button-renderer.directive';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
+import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
+import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
+import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
+import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
+import { BreakfastService } from 'libs/web-user/shared/src/lib/services/breakfast.service';
+import { SpaService } from 'libs/web-user/shared/src/lib/services/spa.service';
+import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
+import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
 
 @NgModule({
   imports: [
@@ -37,6 +46,7 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     Temp000001RoutingModule,
     SignaturePadModule,
     PdfViewerModule,
+    SlickCarouselModule,
   ],
   declarations: [
     Temp000001RoutingModule.components,
@@ -67,6 +77,14 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
     SummaryService,
     SignatureService,
     AccessTokenService,
+    AmenitiesService,
+    ComplimentaryService,
+    PaidService,
+    AirportService,
+    BreakfastService,
+    SpaService,
+    CakeService,
+    DefaultAmenityService,
   ],
 })
 export class Temp000001Module {}

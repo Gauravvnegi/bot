@@ -19,9 +19,18 @@ export const defaultErrors = {
 };
 
 export const customPatternValid = (config: any): ValidatorFn => {
+  
   return (control: FormControl) => {
     let urlRegEx: RegExp = config.pattern;
-    if (control.value && !control.value.match(urlRegEx)) {
+    // need to remove toString
+    let value;
+    if(control.value){
+      value = control.value.toString();
+    }else{
+      value = control.value;
+    }
+  
+    if (value && !value.match(urlRegEx)) {
       return config;
     } else {
       return null;

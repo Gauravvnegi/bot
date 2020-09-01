@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { Subject } from 'rxjs/internal/Subject';
-import { Amenity, Metadata, PaidServiceDetailDS } from '../data-models/paidServiceConfig.model';
+import {
+  Amenity,
+  Metadata,
+  PaidServiceDetailDS,
+} from '../data-models/paidServiceConfig.model';
+import { Subject } from 'rxjs';
 
 @Injectable()
-export class PaidService extends ApiService{
-
+export class PaidService extends ApiService {
   isComponentRendered$ = new Subject();
   _amenityForm: FormGroup;
   _uniqueData;
@@ -14,24 +17,34 @@ export class PaidService extends ApiService{
 
   private _paidServiceDetailDS: PaidServiceDetailDS;
 
-  initPaidAmenitiesDetailDS( amenities, selectedAmenities ) {
-    this._paidServiceDetailDS = new PaidServiceDetailDS().deserialize(amenities, selectedAmenities);
-  } 
-
-  updateAmenitiesDS(selectedAmenities){ 
-    this._paidServiceDetailDS.paidService = 
-    new PaidServiceDetailDS().updateAminities(this.paidAmenities.paidService, selectedAmenities);
+  initPaidAmenitiesDetailDS(amenities, selectedAmenities) {
+    this._paidServiceDetailDS = new PaidServiceDetailDS().deserialize(
+      amenities,
+      selectedAmenities
+    );
   }
 
-  removeAmenity(reservationId, aminityId){
-    return this.delete(`/api/v1/reservation/${reservationId}/special-amenity/${aminityId}`);
+  updateAmenitiesDS(selectedAmenities) {
+    this._paidServiceDetailDS.paidService = new PaidServiceDetailDS().updateAminities(
+      this.paidAmenities.paidService,
+      selectedAmenities
+    );
   }
 
-  addAmenity(reservationId, data){
-    return this.put(`/api/v1/reservation/${reservationId}/special-amenity`, data);
+  removeAmenity(reservationId, aminityId) {
+    return this.delete(
+      `/api/v1/reservation/${reservationId}/special-amenity/${aminityId}`
+    );
   }
 
-  mapDataForAminity(amenityData,id){
+  addAmenity(reservationId, data) {
+    return this.put(
+      `/api/v1/reservation/${reservationId}/special-amenity`,
+      data
+    );
+  }
+
+  mapDataForAminity(amenityData, id) {
     let data = new Amenity();
     data.id = id;
     data.metaData = new Metadata();
@@ -39,31 +52,31 @@ export class PaidService extends ApiService{
     return data;
   }
 
-  set amenityForm(form){
+  set amenityForm(form) {
     this._amenityForm = form;
   }
 
-  set amenityData(data){
+  set amenityData(data) {
     this._amenitiesData = data;
   }
 
-  set uniqueData(uniqueData){
+  set uniqueData(uniqueData) {
     this._uniqueData = uniqueData;
   }
 
-  get amenityForm(){
+  get amenityForm() {
     return this._amenityForm;
   }
 
-  get amenityData(){
+  get amenityData() {
     return this._amenitiesData;
   }
 
-  get uniqueData(){
+  get uniqueData() {
     return this._uniqueData;
   }
 
-  get paidAmenities(){
+  get paidAmenities() {
     return this._paidServiceDetailDS;
   }
 }

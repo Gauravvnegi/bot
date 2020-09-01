@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
-import { Subject } from 'rxjs/internal/Subject';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   RaiseRequestConfigI,
   RaiseRequestDetailDetailDS,
 } from '../data-models/raiseRequestConfig.model';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class RaiseRequestService extends ApiService {

@@ -7,7 +7,9 @@ import { RequestPasswordComponent } from './components/request-password/request-
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { RouterModule } from '@angular/router';
-import { SharedMaterialModule } from 'libs/shared/material/src';
+import { SharedMaterialModule, SnackBarService } from 'libs/shared/material/src';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,12 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
     ResetPasswordComponent,
     LogoutComponent,
   ],
-  imports: [CommonModule, SharedMaterialModule, RouterModule.forRoot([])],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    ReactiveFormsModule,
+    SharedMaterialModule, 
+    RouterModule.forRoot([])],
   exports: [
     AuthComponent,
     LoginComponent,
@@ -27,5 +34,9 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
     ResetPasswordComponent,
     LogoutComponent,
   ],
+  providers: [
+    AuthService,
+    SnackBarService
+  ]
 })
 export class AuthModule {}

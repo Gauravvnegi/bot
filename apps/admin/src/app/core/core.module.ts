@@ -5,10 +5,16 @@ import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 import { AuthModule } from './auth/auth.module';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, AuthModule, RouterModule],
+  imports: [
+    BrowserModule,
+    CommonModule, 
+    AuthModule, 
+    RouterModule,
+  ],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

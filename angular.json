@@ -223,8 +223,21 @@
             "tsConfig": "apps/admin/tsconfig.app.json",
             "aot": true,
             "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
-            "styles": ["apps/admin/src/styles.scss"],
-            "scripts": []
+            "styles": [
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "node_modules/slick-carousel/slick/slick.scss",
+              "node_modules/slick-carousel/slick/slick-theme.scss",
+              "node_modules/primeng/resources/themes/md-light-deeppurple/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
+              "apps/admin/src/styles.scss",
+              "node_modules/ng2-daterangepicker/assets/daterangepicker.css",
+              "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/slick-carousel/slick/slick.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -319,38 +332,6 @@
             "tsConfig": ["apps/admin-e2e/tsconfig.e2e.json"],
             "exclude": ["**/node_modules/**", "!apps/admin-e2e/**/*"]
           }
-        }
-      }
-    },
-    "admin-shared": {
-      "projectType": "library",
-      "root": "libs/admin/shared",
-      "sourceRoot": "libs/admin/shared/src",
-      "prefix": "admin",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/admin/shared/tsconfig.lib.json",
-              "libs/admin/shared/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/admin/shared/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/admin/shared/jest.config.js",
-            "tsConfig": "libs/admin/shared/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/admin/shared/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
         }
       }
     },
@@ -581,6 +562,233 @@
             "tsConfig": "libs/web-user/templates/temp-covid000001/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/web-user/templates/temp-covid000001/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-theme": {
+      "projectType": "library",
+      "root": "libs/shared/theme",
+      "sourceRoot": "libs/shared/theme/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/theme/tsconfig.lib.json",
+              "libs/shared/theme/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/theme/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/theme/jest.config.js",
+            "tsConfig": "libs/shared/theme/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/theme/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-dashboard": {
+      "projectType": "library",
+      "root": "libs/admin/dashboard",
+      "sourceRoot": "libs/admin/dashboard/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/dashboard/tsconfig.lib.json",
+              "libs/admin/dashboard/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/dashboard/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/dashboard/jest.config.js",
+            "tsConfig": "libs/admin/dashboard/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/dashboard/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-reservation": {
+      "projectType": "library",
+      "root": "libs/admin/reservation",
+      "sourceRoot": "libs/admin/reservation/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/reservation/tsconfig.lib.json",
+              "libs/admin/reservation/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/reservation/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/reservation/jest.config.js",
+            "tsConfig": "libs/admin/reservation/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/reservation/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-notification": {
+      "projectType": "library",
+      "root": "libs/admin/notification",
+      "sourceRoot": "libs/admin/notification/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/notification/tsconfig.lib.json",
+              "libs/admin/notification/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/notification/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/notification/jest.config.js",
+            "tsConfig": "libs/admin/notification/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/notification/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-special-amenities": {
+      "projectType": "library",
+      "root": "libs/admin/special-amenities",
+      "sourceRoot": "libs/admin/special-amenities/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/special-amenities/tsconfig.lib.json",
+              "libs/admin/special-amenities/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/special-amenities/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/special-amenities/jest.config.js",
+            "tsConfig": "libs/admin/special-amenities/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/special-amenities/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-covid": {
+      "projectType": "library",
+      "root": "libs/admin/covid",
+      "sourceRoot": "libs/admin/covid/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/covid/tsconfig.lib.json",
+              "libs/admin/covid/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/covid/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/covid/jest.config.js",
+            "tsConfig": "libs/admin/covid/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/covid/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-shared": {
+      "projectType": "library",
+      "root": "libs/admin/shared",
+      "sourceRoot": "libs/admin/shared/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/shared/tsconfig.lib.json",
+              "libs/admin/shared/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/shared/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/shared/jest.config.js",
+            "tsConfig": "libs/admin/shared/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/shared/src/test-setup.ts"
           }
         }
       },

@@ -56,6 +56,24 @@
     },
     "web-user-templates-temp-covid000001": {
       "tags": []
+    },
+    "shared-theme": {
+      "tags": []
+    },
+    "admin-dashboard": {
+      "tags": []
+    },
+    "admin-reservation": {
+      "tags": []
+    },
+    "admin-notification": {
+      "tags": []
+    },
+    "admin-special-amenities": {
+      "tags": []
+    },
+    "admin-covid": {
+      "tags": []
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingsService } from '../../services/settings.service';
+import { ADMIN_ROUTES } from './sidenav-admin.routes';
+// import { SUPER_ADMIN_ROUTES } from './sidenav-admin.routes';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -7,50 +8,31 @@ import { SettingsService } from '../../services/settings.service';
   styleUrls: ['./sidenav.component.scss'],
 })
 export class SidenavComponent implements OnInit {
-  public color: string;
+  public list_item_colour: string;
   public menuItems: object;
   public activeFontColor: string;
   public normalFontColor: string;
   public dividerBgColor: string;
-  isExpanded = true;
+  isExpanded: boolean = true;
   status: boolean = false;
-  constructor(public settingsService: SettingsService) {
-    this.menuItems = [];
-    //this.color = this._themeService.themeConfig.sidenav.list_item_colour;
+
+  constructor() {}
+
+  ngOnInit() {
+    this.initSideNavConfigs();
+  }
+
+  private initSideNavConfigs() {
     this.activeFontColor = 'rgba(0,0,0,.6)';
     this.normalFontColor = 'rgba(255,255,255,.8)';
     this.dividerBgColor = 'rgba(255, 255, 255, 0.5)';
-  }
-
-  ngOnInit() {
-    this.color = this.color || this.settingsService.getSidebarFilter();
-    this.settingsService.sidebarFilterUpdate.subscribe((filter: string) => {
-      this.color = filter;
-      if (filter === '#fff') {
-        this.activeFontColor = 'rgba(0,0,0,.6)';
-      } else {
-        this.activeFontColor = 'rgba(255,255,255,.8)';
-      }
-    });
-    this.settingsService.sidebarColorUpdate.subscribe((color: string) => {
-      if (color === '#fff') {
-        this.normalFontColor = 'rgba(0,0,0,.6)';
-        this.dividerBgColor = 'rgba(0,0,0,.1)';
-      } else {
-        this.normalFontColor = 'rgba(255,255,255,.8)';
-        this.dividerBgColor = 'rgba(255, 255, 255, 0.5)';
-      }
-    });
-  }
-  ngOnDestroy() {
-    this.settingsService.sidebarFilterUpdate.unsubscribe();
-    this.settingsService.sidebarColorUpdate.unsubscribe();
+    this.list_item_colour = '#fff';
+    //check if admin or super admin by using command pattern
+    this.menuItems = ADMIN_ROUTES;
   }
 
   toggleMenuButton() {
     this.status = !this.status;
     this.isExpanded = !this.isExpanded;
   }
-
-  ngAfterViewInit() {}
 }

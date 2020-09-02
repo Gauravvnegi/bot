@@ -9,12 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [],
-  imports: [
-    BrowserModule,
-    CommonModule, 
-    AuthModule, 
-    RouterModule,
-  ],
+  imports: [BrowserModule, CommonModule, AuthModule, RouterModule],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

@@ -4,6 +4,32 @@
   font-size: 15px;
   color: black;
   font-weight: 700;
+  margin-right: 20px;
+}
+
+:host ::ng-deep .p-paginator-last > .pi-angle-double-right:before {
+  // display: none;
+  content: 'LAST';
+  font-size: 15px;
+  color: darkgray;
+  font-weight: 700;
+}
+
+:host ::ng-deep .table-data-head{
+  background-color: #2187d5 !important;
+}
+
+:host ::ng-deep .p-paginator-next > .pi-angle-right:before {
+  // display: none;
+  content: 'NEXT';
+  font-size: 15px;
+  color: darkgray;
+  font-weight: 700;
+  margin-right: 20px;
+}
+
+:host ::ng-deep .p-paginator{
+  justify-content: flex-start;
 }
 
 :host ::ng-deep .p-paginator-prev > .pi-angle-left:before {

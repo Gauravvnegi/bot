@@ -47,10 +47,11 @@
 
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 5%;" pResizableColumn>
+      <th class="table-data-head" style="width: 5%;" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
+        class="table-data-head"
         pResizableColumn
         [pSortableColumn]="col.field"
         *ngFor="let col of columns"

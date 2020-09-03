@@ -34,12 +34,18 @@
   min-width: 50%;
   height: 75px;
   background-color: white;
+  svg path {
+    fill: #000000;  
+  }
 }
 
 :host ::ng-deep .mat-tab-label-active {
   color: white;
   background-color: #2187d5;
   border: 1px solid white;
+  svg path {
+    fill: #ffffff !important;  
+  }
 }
 
 :host ::ng-deep .mat-tab-label-content {
@@ -79,10 +85,10 @@
   }
 }
 
-:host ::ng-deep .mat-tab-label svg path {
-  fill: #000000;  
-}
+// :host ::ng-deep .mat-tab-label svg path {
+//   fill: #000000;  
+// }
 
-:host ::ng-deep .mat-tab-label-active svg path {
-  fill: #ffffff;  
-}
+// :host ::ng-deep .mat-tab-label-active svg path {
+//   fill: #ffffff;  
+// }

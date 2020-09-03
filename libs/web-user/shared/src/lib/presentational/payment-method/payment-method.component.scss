@@ -36,12 +36,13 @@
 .method {
   border: 1px solid gainsboro;
   border-radius: 5px;
-  height: 175px;
+  min-height: 175px;
   width: 275px;
 }
 
 .methods-container {
   display: flex;
+  flex-wrap: wrap;
   margin: 25px;
   justify-content: space-between;
 }
@@ -117,6 +118,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  margin-bottom: 10px;
 }
 
 .method-image-container {

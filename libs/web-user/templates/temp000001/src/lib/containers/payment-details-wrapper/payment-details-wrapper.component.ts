@@ -72,7 +72,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       .getPaymentConfiguration(res_data.hotel.id, journey.name)
       .subscribe((response) => {
         this.hotelPaymentConfig = response;
-        console.log(this.hotelPaymentConfig);
         this.initPaymentDetailsDS(this.hotelPaymentConfig);
       });
   }
@@ -181,7 +180,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   setPaymentMethodData(event) {
     this.paymentMethodData = event.methodData;
-    console.log(this.paymentMethodData);
   }
 
   mapPaymentData() {

@@ -121,4 +121,8 @@
 
 .method-image-container {
   display: flex;
+  width: 80%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 10px;
 }

@@ -78,3 +78,11 @@
     padding: $padding-small;
   }
 }
+
+:host ::ng-deep .mat-tab-label svg path {
+  fill: #000000;  
+}
+
+:host ::ng-deep .mat-tab-label-active svg path {
+  fill: #ffffff;  
+}

@@ -4,7 +4,10 @@
       <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
         <ng-template mat-tab-label>
           <div class="custom-tab">
-            <div><img [src]="header.imageUrl" style="height: 53px" /></div>
+            <div>
+              <!-- <img [src]="header.imageUrl" style="height: 53px" /> -->
+              <svg-icon [src]="header.imageUrl" [svgStyle]="{ 'width.px':48, 'height.px': 48 }"></svg-icon>
+            </div>
             <div class="inner-label">
               <div class="type-label">
                 <div><span>{{ header.type }}</span></div>

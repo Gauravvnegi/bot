@@ -27,6 +27,7 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
     PdfViewerModule,
     MatTabsModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularSvgIconModule.forRoot(),
   ],
   declarations: [
     Temp000001RoutingModule.components,

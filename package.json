@@ -46,6 +46,7 @@
     "@nrwl/angular": "9.4.5",
     "@nrwl/nx": "^7.8.7",
     "@nrwl/schematics": "^8.12.11",
+    "angular-svg-icon": "^10.0.0",
     "angular2-signaturepad": "^2.11.0",
     "angular2-text-mask": "^9.0.0",
     "crypto-js": "^4.0.0",

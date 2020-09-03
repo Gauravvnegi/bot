@@ -3,6 +3,12 @@ import { delay } from 'rxjs/operators';
 import { pipe, of } from 'rxjs';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Table } from 'primeng/table';
+import { MenuItem } from 'primeng/api';
+
+interface Import {
+  name: string;
+  code: string;
+}
 
 @Component({
   selector: 'hospitality-bot-datatable',
@@ -29,11 +35,19 @@ export class DatatableComponent implements OnInit {
 
   values = [];
 
+  TabItems: MenuItem[];
+
+  buttons = [];
+
   isPaginaton: boolean = false;
   rowsPerPage = 5;
   showCurrentPageReport: boolean = true;
   rowsPerPageOptions = [5, 10, 25, 50];
   first = 0; //index of the first page to show
+
+  selectedExport1: Import;
+
+  selectedExport2: Import;
 
   dataSource = [
     {
@@ -64,10 +78,33 @@ export class DatatableComponent implements OnInit {
 
   constructor() {}
 
+  export = [
+    { label: 'Export', value: null },
+    { label: 'New York', value: { id: 1, name: 'New York', code: 'NY' } },
+  ];
+
+  csv = [
+    { label: 'CSV', value: null },
+    { label: 'New York', value: { id: 1, name: 'New York', code: 'NY' } },
+  ];
+
   ngOnInit(): void {
     this.loadInitialData();
+    this.TabItems = [
+      { label: 'Inhouse(3)', icon: '' },
+      { label: 'Arrival(3)', icon: '' },
+      { label: 'Departure(3)', icon: '' },
+    ];
+
+    this.buttons = [
+      { label: 'Check-In Pending (3)', icon: '' },
+      { label: 'Check-In Completed (3)', icon: '' },
+      { label: 'Express Check-In (10)', icon: '' },
+    ];
     //this.values = [...this.dataSource];
   }
+
+  //SelectItem API with label-value pairs this.cities1 = [ {label:'Select City', value:null}, {label:'New York', value:{id:1, name: 'New York', code: 'NY'}}, {label:'Rome', value:{id:2, name: 'Rome', code: 'RM'}}, {label:'London', value:{id:3, name: 'London', code: 'LDN'}}, {label:'Istanbul', value:{id:4, name: 'Istanbul', code: 'IST'}}, {label:'Paris', value:{id:5, name: 'Paris', code: 'PRS'}} ]; //An array of cities this.cities2 = [ {name: 'New York', code: 'NY'}, {name: 'Rome', code: 'RM'}, {name: 'London', code: 'LDN'}, {name: 'Istanbul', code: 'IST'}, {name: 'Paris', code: 'PRS'} ]; } }
 
   loadInitialData() {
     this.loading = true;

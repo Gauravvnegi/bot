@@ -13,11 +13,45 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- Header goes in here -->
+      <div style="display: flex; align-items: center; width: 53%;">
+        <span class="p-input-icon-right">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            placeholder="Search by Name, Number,Conf no..."
+          />
+        </span>
+        <button class="header--button">Go</button>
+        <button class="header--button">
+          Filter
+          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+        </button>
+      </div>
+
       <hospitality-bot-daterange></hospitality-bot-daterange>
+      <!-- <p-dropdown [options]="Profile">
+        <ng-template let-item pTemplate="selectedItem">
+          <mat-icon class="material-icons" matSuffix></mat-icon>
+          <span style="vertical-align: middle; margin-left: 0.5em;"
+            >G.Murray</span
+          >
+        </ng-template>
+      </p-dropdown> -->
     </div>
 
     <div class="main-panel--container">
-      <router-outlet></router-outlet>
+      <div class="refresh__wrapper">
+        <div class="refresh__wrapper--icon">
+          <p>Refresh</p>
+          <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
+        </div>
+        <div class="seperator"></div>
+        <p class="status">Dashboard last updated at 10:43 AM</p>
+      </div>
+      <div class="main">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
 </div>

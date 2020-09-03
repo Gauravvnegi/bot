@@ -68,7 +68,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   getPaymentConfiguration() {
     const res_data = this._reservationService.reservationData;
     const journey = this._hotelService.getCurrentJourneyConfig();
-    console.log(journey)
     this._paymentDetailsService
       .getPaymentConfiguration(res_data.hotel.id, journey.name)
       .subscribe((response) => {
@@ -85,21 +84,35 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     // this.cardType = CardType.GetCardType(cardNumber);
     //TODO: Need to call different api for pay with creditcard
     // this.updatePaymentStatus();
-    if (this.paymentMethodData.gatewayType === 'CCAVENUE') {
-      const data = this.mapPaymentInitiationData();
-      this._paymentDetailsService
-        .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
-        .subscribe(
-          (response) => {
-            window.location.href = response.billingUrl;
-          }, (error) => {
-            this._snackBarService.openSnackBarAsText('Payment could not be initiated!');
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['submitButton']
-            );
-          }
+    const data = this.mapPaymentInitiationData();
+    const TAB_INDEX = this.matTab['_selectedIndex'];
+    const TAB_LABEL = this.matTab['_tabs']['_results'][TAB_INDEX]['textLabel'];
+    if (TAB_LABEL === 'Pay Now') {
+      if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
+        this._paymentDetailsService
+          .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
+          .subscribe(
+            (response) => {
+              window.location.href = response.billingUrl;
+            }, (error) => {
+              this._snackBarService.openSnackBarAsText('Payment could not be initiated!');
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['submitButton']
+              );
+            }
+          );
+      } else if(this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
+        this._buttonService.buttonLoading$.next(
+          this.buttonRefs['submitButton']
         );
+      } else {
+        this._snackBarService.openSnackBarAsText('Please select a payment method!');
+        this._buttonService.buttonLoading$.next(
+          this.buttonRefs['submitButton']
+        );
+      }
     } else {
+      this.updatePaymentStatus();
       this._buttonService.buttonLoading$.next(
         this.buttonRefs['submitButton']
       );
@@ -107,25 +120,38 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onCheckinSubmit() {
-    if (this.paymentMethodData.gatewayType === 'CCAVENUE') {
-      const data = this.mapPaymentInitiationData();
-      this._paymentDetailsService
-        .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
-        .subscribe(
-          (response) => {
-            window.location.href = response.billingUrl;
-          }, (error) => {
-            this._snackBarService.openSnackBarAsText('Payment could not be initiated!');
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['submitButton']
-            );
-          }
+    const data = this.mapPaymentInitiationData();
+    const TAB_INDEX = this.matTab['_selectedIndex'];
+    const TAB_LABEL = this.matTab['_tabs']['_results'][TAB_INDEX]['textLabel'];
+    if (TAB_LABEL === 'Pay Now') {
+      if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
+        this._paymentDetailsService
+          .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
+          .subscribe(
+            (response) => {
+              window.location.href = response.billingUrl;
+            }, (error) => {
+              this._snackBarService.openSnackBarAsText('Payment could not be initiated!');
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['submitButton']
+              );
+            }
+          );
+      } else if(this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
+        this._buttonService.buttonLoading$.next(
+          this.buttonRefs['submitButton']
         );
+      } else {
+        this._snackBarService.openSnackBarAsText('Please select a payment method!');
+        this._buttonService.buttonLoading$.next(
+          this.buttonRefs['submitButton']
+        );
+      }
     } else {
+      this.updatePaymentStatus();
       this._buttonService.buttonLoading$.next(
         this.buttonRefs['submitButton']
       );
-      this._stepperService.setIndex('next');
     }
     // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
   }
@@ -167,17 +193,29 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   mapPaymentInitiationData() {
-    const data = {
-      "merchantId":this.paymentMethodData.merchantId,
-      "language":"en",
-      "gatewayType": this.paymentMethodData.gatewayType,
-      "accessCode": this.paymentMethodData.accessCode,
-      "secretKey": this.paymentMethodData.secretKey,
-      "subAccountId": this.paymentMethodData.subAccountId,
-      "preAuth": this.paymentMethodData.preAuth,
-      "externalRedirect": this.paymentMethodData.exernalRedirect,
-    };
-    return data;
+    if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
+      return {
+        "merchantId": this.paymentMethodData.merchantId,
+        "language":"en",
+        "gatewayType": this.paymentMethodData.gatewayType,
+        "accessCode": this.paymentMethodData.accessCode,
+        "secretKey": this.paymentMethodData.secretKey,
+        "subAccountId": this.paymentMethodData.subAccountId,
+        "preAuth": this.paymentMethodData.preAuth,
+        "externalRedirect": this.paymentMethodData.exernalRedirect,
+      };
+    } else if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
+      return {
+        "stripeToken": this.paymentMethodData.stripeToken,
+        "gatewayType": this.paymentMethodData.gatewayType,
+        "secretKey": this.paymentMethodData.secretKey,
+        "merchantId": this.paymentMethodData.merchantId,
+        "preAuth": this.paymentMethodData.preAuth,
+        "externalRedirect": this.paymentMethodData.exernalRedirect,
+      };
+    } else {
+      return null;
+    }
   }
 
   goBack() {

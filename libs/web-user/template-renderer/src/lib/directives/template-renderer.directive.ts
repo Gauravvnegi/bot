@@ -41,6 +41,7 @@ export class TemplateRendererDirective implements OnChanges, OnInit {
   @Input() templateId: string;
   @Input() templateData;
   @Input() config;
+  @Input() paymentStatus;
   private _templateObj: ComponentRef<any>;
 
   constructor(
@@ -92,6 +93,9 @@ export class TemplateRendererDirective implements OnChanges, OnInit {
   private passTemplateprops() {
     this._templateObj.instance.templateData = this.templateData;
     this._templateObj.instance.config = this.config;
+    // if (this.paymentStatus) {
+      this._templateObj.instance.paymentStatus = this.paymentStatus;
+    // }
   }
 
   private async loadModuleFactory(t: any) {

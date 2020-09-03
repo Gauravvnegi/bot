@@ -12,6 +12,7 @@ export class TemplateRendererComponent implements OnInit {
   templateId: string;
   templateLoaderId: string;
   templateData;
+  paymentStatus;
   config;
 
   constructor(
@@ -27,6 +28,16 @@ export class TemplateRendererComponent implements OnInit {
 
   private checkForToken() {
     return this.route.snapshot.queryParamMap.get('token');
+  }
+
+  private checkForPaymentStatus(journey?) {
+    if (this.route.snapshot.queryParamMap.get('status')) {
+      this.paymentStatus = {
+        status: this.route.snapshot.queryParamMap.get('status'),
+        redirectUrl: window.location.href.substring(0, window.location.href.lastIndexOf('&')),
+        journey
+      };
+    }
   }
 
   private decryptToken(token: string) {
@@ -46,6 +57,7 @@ export class TemplateRendererComponent implements OnInit {
   }
 
   private getTemplateData(templateId, journey?) {
+    this.checkForPaymentStatus(journey);
     this.templateService
       .getTemplateData(templateId, journey)
       .subscribe((response) => {

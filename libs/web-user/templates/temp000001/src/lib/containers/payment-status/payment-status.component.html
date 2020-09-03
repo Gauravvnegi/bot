@@ -1,0 +1,51 @@
+<div class="parent_block" *ngIf="isReservationData">
+  <hospitality-bot-header></hospitality-bot-header>
+  <div class="status-container">
+    <div class="header">
+      <h3>Payment Status</h3>
+    </div>
+    <div>
+      <table>
+        <tr>
+          <th>Transaction Id :</th>
+          <td>{{ paymentStatusData.data.transactionId }}</td>
+        </tr>
+        <tr>
+          <th>Order Id :</th>
+          <td>{{ paymentStatusData.data.orderId }}</td>
+        </tr>
+        <tr>
+          <th>Gateway :</th>
+          <td>{{ paymentStatusData.data.gateway }}</td>
+        </tr>
+        <tr>
+          <th>Amount :</th>
+          <td>{{ paymentStatusData.data.currency }} {{ paymentStatusData.data.amount }}</td>
+        </tr>
+        <tr *ngIf="paymentStatusData.data.status !== 'FAILURE'">
+          <th>Bank Reference Number :</th>
+          <td>{{ paymentStatusData.data.bankReferenceNumber }}</td>
+        </tr>
+        <tr>
+          <th>Status :</th>
+          <td>{{ paymentStatusData.data.status }}</td>
+        </tr>
+        <tr *ngIf="paymentStatusData.data.status === 'FAILURE'">
+          <th>Failure Message :</th>
+          <td>{{ paymentStatusData.data.failureMessage }}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="main-template-button">
+      <web-user-button
+        #saveButton
+        buttonTemplateSwitch
+        (click)="redirect()"
+        [settings]="{ label: 'Return To Home' }"
+        [buttonClass]="'next-button'"
+        class="user-button"
+      ></web-user-button>
+    </div>
+  </div>
+</div>
+<hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

@@ -17,14 +17,16 @@
           </div>
         </ng-template>
         <div class="payment-wrapper">
-          <div class="payment__wrapper--header" *ngIf="header.type !== 'Pay At Desk'">
-            Payment Methods
+          <div>
+            <div class="payment__wrapper--header" *ngIf="header.type !== 'Pay At Desk'">
+              Payment Methods
+            </div>
+            <web-user-payment-method
+              *ngIf="hotelPaymentConfig && header.type !== 'Pay At Desk'"
+              [settings]="{ paymentConfigurations: hotelPaymentConfig.paymentConfigurations }"
+              (paymentMethod)="setPaymentMethodData($event)"
+            ></web-user-payment-method>
           </div>
-          <web-user-payment-method
-            *ngIf="hotelPaymentConfig && header.type !== 'Pay At Desk'"
-            [settings]="{ paymentConfigurations: hotelPaymentConfig.paymentConfigurations }"
-            (paymentMethod)="setPaymentMethodData($event)"
-          ></web-user-payment-method>
           <hospitality-bot-payment-summary
             *ngIf="hotelPaymentConfig"
             [parentForm]="parentForm"

@@ -1,4 +1,5 @@
 <div [style]="visibilityHidden ? { visibility: 'hidden' } : {}">
   <div class="background__wrapper"></div>
-  <hospitality-bot-main #mainComponent></hospitality-bot-main>
+  <hospitality-bot-main #mainComponent *ngIf="!paymentStatus"></hospitality-bot-main>
+  <hospitality-bot-payment-status *ngIf="paymentStatus" [paymentStatusData]="paymentStatusData"></hospitality-bot-payment-status>
 </div>

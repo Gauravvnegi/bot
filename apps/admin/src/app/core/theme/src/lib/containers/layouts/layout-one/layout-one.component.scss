@@ -21,21 +21,100 @@
   transition: all 500ms;
 }
 
+:host ::ng-deep .p-dropdown{
+  margin-left: 4%;
+}
+
 .main-panel {
   width: 100%;
   flex: 1;
   // padding-left: 260px;
   &--header {
-    // height: 50px;
-    // padding: 20px;
     padding: 10px;
-    box-shadow: 0px 0px 4px 0px lightgray;
+    padding-bottom: 0px;
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+
+    .p-input-icon-right {
+      width: 66%;
+      input {
+        border: none;
+        padding: 5px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        width: 100%;
+        font-size: 14px;
+        height: 33px;
+        &::placeholder{
+          font-style: italic;
+          font-size: 14px;
+        }
+        &:focus{
+          border: 2px solid #5391d4;
+          box-shadow: none;
+        }
+      }
+    }
+    .header--button {
+      padding: 0px 15px;
+      height: 33px;
+      margin-left: 15px;
+      border: 2px solid #5391d4;
+      font-size: 12px;
+      color: #5391d4;
+      display: flex;
+      align-items: center;
+      background-color: white;
+      border-radius: 5px;
+      &:hover {
+        cursor: pointer;
+        background-color: #5391d4;
+        color: white;
+      }
+      .material-icons {
+        margin-left: 15px;
+      }
+    }
   }
   &--container {
-    // max-height: calc(100vh - 13vh);
-    // overflow-x: hidden;
+    .refresh__wrapper {
+      padding: 5px 20px;
+      display: flex;
+      align-items: center;
+
+      &--icon {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #5391d4;
+        font-weight: 600;
+        &:hover {
+          cursor: pointer;
+        }
+        p {
+          margin: 0;
+        }
+        .material-icons {
+          margin-left: 10px;
+        }
+      }
+      .seperator {
+        margin: 0px 3%;
+        height: 15px;
+        border: 0.5px solid #7e7e7e;
+      }
+      .status {
+        color: #7e7e7e;
+        font-weight: 600;
+        font-size: 14px;
+        margin: 0;
+      }
+    }
+    .main {
+      max-height: calc(100vh - 19vh);
+      padding: 0px 3rem;
+      overflow-x: hidden;
+    }
   }
 }
 

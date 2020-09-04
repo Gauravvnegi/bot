@@ -13,9 +13,13 @@ export class LayoutOneComponent implements OnInit {
 
   ngOnInit() {
     this.initLayoutConfigs();
+    // this.Profile = [
+    //   { label: 'Profile', icon: 'person' },
+    //   { label: 'Logout', icon: 'person_remove' },
+    // ];
   }
 
   initLayoutConfigs() {
-    this.backgroundColor = 'blue';
+    this.backgroundColor = '#0483f4';
   }
 }

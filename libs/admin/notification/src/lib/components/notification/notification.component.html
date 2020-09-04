@@ -1,17 +1,18 @@
 <div>
-  <div>
-    Channel:
-    <mat-checkbox>
+  <form [formGroup]="notificationForm">
+    <div>
+      Channel:
+      <!-- <mat-checkbox> -->
       <mat-form-field>
-        <mat-select [formControl]="channel" multiple>
+        <mat-select formControlName="social_channels" multiple>
           <mat-select-trigger>
-            {{ channel.value ? channel.value[0] : '' }}
+            {{ social_channels.value ? social_channels.value[0] : '' }}
             <span
-              *ngIf="channel.value?.length > 1"
+              *ngIf="social_channels.value?.length > 1"
               class="additional-selection"
             >
-              (+{{ channel.value.length - 1 }}
-              {{ channel.value?.length === 2 ? 'other' : 'others' }})
+              (+{{ social_channels.value.length - 1 }}
+              {{ social_channels.value?.length === 2 ? 'other' : 'others' }})
             </span>
           </mat-select-trigger>
           <mat-option
@@ -21,35 +22,58 @@
           >
         </mat-select>
       </mat-form-field>
-    </mat-checkbox>
+      <!-- </mat-checkbox> -->
 
-    <mat-checkbox>
-      Email
-    </mat-checkbox>
+      <mat-checkbox formControlName="is_email_channel">
+        Email
+      </mat-checkbox>
 
-    <mat-checkbox>
-      SMS
-    </mat-checkbox>
-  </div>
-  <div>
-    Message Type
-    <mat-form-field>
-      <mat-select [formControl]="messageType">
-        <mat-option
-          *ngFor="let messageType of messageTypeList"
-          [value]="messageType.name"
-          >{{ messageType.label }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
+      <mat-checkbox formControlName="is_sms_channel">
+        SMS
+      </mat-checkbox>
+    </div>
 
-    Attachment (If any)
-    <ckeditor [editor]="Editor"></ckeditor>
-  </div>
-  <div>
-    Input Message :
-  </div>
-  <div>
-    Room no Email Id
-  </div>
+    <div>
+      Message Type
+      <mat-form-field>
+        <mat-select formControlName="message_type">
+          <mat-option
+            *ngFor="let messageType of messageTypeList"
+            [value]="messageType.name"
+            >{{ messageType.label }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      Attachment (If any)
+      <ckeditor [editor]="Editor"></ckeditor>
+    </div>
+    <div>
+      Input Message :
+    </div>
+    <div>
+      Room no Email
+      <mat-form-field class="chip-list" appearance="outline">
+        <mat-chip-list #chipList aria-label="Email selection">
+          <mat-chip
+            *ngFor="let email of emailIdsList"
+            selectable="true"
+            removable="true"
+            (removed)="removeEmail(email)"
+          >
+            {{ email }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="Email"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            matChipInputAddOnBlur="true"
+            (matChipInputTokenEnd)="addEmail($event)"
+          />
+        </mat-chip-list>
+      </mat-form-field>
+      {{ notificationForm.getRawValue() | json }}
+    </div>
+  </form>
 </div>

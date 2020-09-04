@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { SettingsService } from '../../../services/settings.service';
+import { Component, OnInit, ComponentRef } from '@angular/core';
 
 @Component({
   selector: 'admin-layout-one',
@@ -10,7 +9,7 @@ export class LayoutOneComponent implements OnInit {
   public backgroundColor: string;
   public background_image: string;
 
-  constructor(public settingService: SettingsService) {}
+  constructor() {}
 
   ngOnInit() {
     this.initLayoutConfigs();

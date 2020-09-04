@@ -26,6 +26,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SnackBarService } from './services/snackbar.service';
 import { ModalService } from './services/modal.service';
 import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
     MatSnackBarModule,
     CdkStepperModule,
     MatDialogModule,
+    MatChipsModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -79,6 +81,7 @@ import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
     MatSnackBarModule,
     CdkStepperModule,
     MatDialogModule,
+    MatChipsModule,
   ],
   providers: [SnackBarService, ModalService],
 })

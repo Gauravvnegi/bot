@@ -1,5 +1,6 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'admin-layout-one',
@@ -10,15 +11,16 @@ export class LayoutOneComponent implements OnInit {
   public backgroundColor: string;
   public background_image: string;
   dashBoardComp: ComponentRef<any>;
+  profile: MenuItem[];
 
   constructor(private _router: Router) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
-    // this.Profile = [
-    //   { label: 'Profile', icon: 'person' },
-    //   { label: 'Logout', icon: 'person_remove' },
-    // ];
+    this.profile = [
+      { label: 'Profile', icon: 'person' },
+      { label: 'Logout', icon: 'person_remove' },
+    ];
   }
 
   initLayoutConfigs() {

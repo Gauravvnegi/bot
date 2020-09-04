@@ -74,6 +74,9 @@
     },
     "admin-covid": {
       "tags": []
+    },
+    "admin-roles-and-permissions": {
+      "tags": []
     }
   }
 }

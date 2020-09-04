@@ -797,6 +797,41 @@
           "style": "scss"
         }
       }
+    },
+    "admin-roles-and-permissions": {
+      "projectType": "library",
+      "root": "libs/admin/roles-and-permissions",
+      "sourceRoot": "libs/admin/roles-and-permissions/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/roles-and-permissions/tsconfig.lib.json",
+              "libs/admin/roles-and-permissions/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/roles-and-permissions/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/roles-and-permissions/jest.config.js",
+            "tsConfig": "libs/admin/roles-and-permissions/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/roles-and-permissions/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

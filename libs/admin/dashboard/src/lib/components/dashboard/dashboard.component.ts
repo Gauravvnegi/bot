@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentRef } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-dashboard',

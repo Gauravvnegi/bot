@@ -1,4 +1,5 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
+import { RouterOutlet, Router } from '@angular/router';
 
 @Component({
   selector: 'admin-layout-one',
@@ -8,8 +9,9 @@ import { Component, OnInit, ComponentRef } from '@angular/core';
 export class LayoutOneComponent implements OnInit {
   public backgroundColor: string;
   public background_image: string;
+  dashBoardComp: ComponentRef<any>;
 
-  constructor() {}
+  constructor(private _router: Router) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
@@ -21,5 +23,16 @@ export class LayoutOneComponent implements OnInit {
 
   initLayoutConfigs() {
     this.backgroundColor = '#0483f4';
+  }
+
+  onRouteChanged(event: ComponentRef<any>) {
+    this.dashBoardComp = event;
+  }
+
+  refreshDashboard() {
+    debugger;
+    this.dashBoardComp.destroy();
+    // this.dashBoardComp;
+    // this._router.navigate(['/pages/dashboard']);
   }
 }

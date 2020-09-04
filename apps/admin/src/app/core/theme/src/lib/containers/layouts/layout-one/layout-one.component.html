@@ -42,7 +42,7 @@
 
     <div class="main-panel--container">
       <div class="refresh__wrapper">
-        <div class="refresh__wrapper--icon">
+        <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
           <p>Refresh</p>
           <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
         </div>
@@ -50,7 +50,7 @@
         <p class="status">Dashboard last updated at 10:43 AM</p>
       </div>
       <div class="main">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="onRouteChanged($event)"></router-outlet>
       </div>
     </div>
   </div>

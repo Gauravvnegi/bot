@@ -9,6 +9,8 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import {
   HotelPaymentConfig,
   PaymentStatus,
+  PaymentCCAvenue,
+  PaymentStripe,
 } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -192,25 +194,25 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   mapPaymentInitiationData() {
     if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
-      return {
-        "merchantId": this.paymentMethodData.merchantId,
-        "language":"en",
-        "gatewayType": this.paymentMethodData.gatewayType,
-        "accessCode": this.paymentMethodData.accessCode,
-        "secretKey": this.paymentMethodData.secretKey,
-        "subAccountId": this.paymentMethodData.subAccountId,
-        "preAuth": this.paymentMethodData.preAuth,
-        "externalRedirect": this.paymentMethodData.exernalRedirect,
-      };
+      const paymentCCAvenue = new PaymentCCAvenue();
+      paymentCCAvenue.merchantId = this.paymentMethodData.merchantId;
+      paymentCCAvenue.language = "en";
+      paymentCCAvenue.gatewayType = this.paymentMethodData.gatewayType;
+      paymentCCAvenue.accessCode = this.paymentMethodData.accessCode;
+      paymentCCAvenue.secretKey = this.paymentMethodData.secretKey;
+      paymentCCAvenue.subAccountId = this.paymentMethodData.subAccountId;
+      paymentCCAvenue.preAuth = this.paymentMethodData.preAuth;
+      paymentCCAvenue.externalRedirect = this.paymentMethodData.exernalRedirect;
+      return paymentCCAvenue;
     } else if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
-      return {
-        "stripeToken": this.paymentMethodData.stripeToken,
-        "gatewayType": this.paymentMethodData.gatewayType,
-        "secretKey": this.paymentMethodData.secretKey,
-        "merchantId": this.paymentMethodData.merchantId,
-        "preAuth": this.paymentMethodData.preAuth,
-        "externalRedirect": this.paymentMethodData.exernalRedirect,
-      };
+      const paymentStripe = new PaymentStripe();
+      paymentStripe.stripeToken = this.paymentMethodData.stripeToken;
+      paymentStripe.gatewayType = this.paymentMethodData.gatewayType;
+      paymentStripe.secretKey = this.paymentMethodData.secretKey;
+      paymentStripe.merchantId = this.paymentMethodData.merchantId;
+      paymentStripe.preAuth = this.paymentMethodData.preAuth;
+      paymentStripe.externalRedirect = this.paymentMethodData.exernalRedirect;
+      return paymentStripe;
     } else {
       return null;
     }

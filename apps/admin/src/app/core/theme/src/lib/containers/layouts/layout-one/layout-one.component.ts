@@ -1,4 +1,5 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'admin-layout-one',
@@ -9,14 +10,17 @@ export class LayoutOneComponent implements OnInit {
   public backgroundColor: string;
   public background_image: string;
 
+  profile: MenuItem[];
+
+
   constructor() {}
 
   ngOnInit() {
     this.initLayoutConfigs();
-    // this.Profile = [
-    //   { label: 'Profile', icon: 'person' },
-    //   { label: 'Logout', icon: 'person_remove' },
-    // ];
+    this.profile = [
+      { label: 'Profile', icon: 'person' },
+      { label: 'Logout', icon: 'person_remove' },
+    ];
   }
 
   initLayoutConfigs() {

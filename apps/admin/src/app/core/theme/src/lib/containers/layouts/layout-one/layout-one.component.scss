@@ -149,9 +149,11 @@
       }
     }
     .main {
-      max-height: calc(100vh - 19vh);
-      padding: 0px 3rem;
+      max-height: calc(100vh - 15vh);
       overflow-x: hidden;
+      .router__wrapper {
+        padding: 0px 3rem;
+      }
     }
   }
 }
@@ -173,4 +175,25 @@
   -ms-transition: all 500ms;
   -o-transition: all 500ms;
   transition: all 500ms;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 3rem;
+  border-top: 2px solid #d4d4d4;
+  margin-top: 20px;
+  p {
+    margin: 0;
+  }
+  .links {
+    display: flex;
+    align-items: center;
+    a {
+      color: black;
+      margin-right: 20px;
+      text-decoration: none;
+    }
+  }
 }

@@ -13,8 +13,6 @@ import {
   PaymentStripe,
 } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material/icon';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
@@ -41,19 +39,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     public _stepperService: StepperService,
     private _buttonService: ButtonService,
     private _hotelService: HotelService,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
   ) {
     super();
     this.self = this;
-    this.matIconRegistry.addSvgIcon(
-      "payAtDesk",
-      this.domSanitizer.bypassSecurityTrustResourceUrl("../../assets/payAtDesk.svg")
-    );
-    this.matIconRegistry.addSvgIcon(
-      "payNow",
-      this.domSanitizer.bypassSecurityTrustResourceUrl("../../assets/payNow.svg")
-    );
   }
 
   ngOnInit(): void {

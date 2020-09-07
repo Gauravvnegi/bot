@@ -27,6 +27,7 @@ import { SnackBarService } from './services/snackbar.service';
 import { ModalService } from './services/modal.service';
 import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { MatChipsModule } from '@angular/material/chips';
     CdkStepperModule,
     MatDialogModule,
     MatChipsModule,
+    MatSlideToggleModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -82,6 +84,7 @@ import { MatChipsModule } from '@angular/material/chips';
     CdkStepperModule,
     MatDialogModule,
     MatChipsModule,
+    MatSlideToggleModule,
   ],
   providers: [SnackBarService, ModalService],
 })

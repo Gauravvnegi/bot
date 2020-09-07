@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Regex } from '../../../../../../../../libs/shared/constants/regex';
-import { of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'admin-login',
@@ -20,6 +19,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
+    private _authService: AuthService,
     private _snackbarService:SnackBarService
   ) {
     this.initLoginForm();
@@ -42,18 +42,19 @@ export class LoginComponent implements OnInit {
   }
 
   Login(){
-    console.log(this.loginForm.getRawValue());
-    of(this.dataSource)
-    .pipe(delay(2000))
-    .subscribe(()=>{
+    if(!this.loginForm.valid){
+      return;
+    }
+    const data = this.loginForm.getRawValue();
+    this._authService.login(data).subscribe(response =>{
       this._router.navigate(['/pages']);
     },
     (error)=>{
-      this._snackbarService.openSnackBarAsText('some error occured');
+      this._snackbarService.openSnackBarAsText(error.error.message);
     })
   }
 
-  navigateToForgotPassword(){
-    this._router.navigate(['/auth/reset-password']);
+  navigateToRequestPassword(){
+    this._router.navigate(['/auth/request-password']);
   }
 }

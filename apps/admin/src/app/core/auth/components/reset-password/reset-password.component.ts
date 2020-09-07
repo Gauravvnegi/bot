@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
@@ -15,11 +13,13 @@ export class ResetPasswordComponent implements OnInit {
 
   resetPasswordForm: FormGroup;
   isPasswordVisible:boolean = false;
+  changePasswordToken: string;
   dataSource = {id:'1234', token:'token_xyz'};
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _snackbarService:SnackBarService,
     private _authService: AuthService
   ) { 
@@ -27,12 +27,15 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getChangePasswordToken();
   }
 
   initResetForm(){
     this.resetPasswordForm = this._fb.group({
       password: ['', [
-        Validators.required]],
+        Validators.required,
+        Validators.minLength(6),
+        Validators.maxLength(10),]],
       resetPassword: ['', [
         Validators.required]],
     },{
@@ -40,20 +43,25 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
+  getChangePasswordToken(){
+    this._activatedRoute.queryParams.subscribe(params =>{
+      this.changePasswordToken = params['token'];
+    })
+  }
+
   ResetPassword(){
-    console.log(this.resetPasswordForm.getRawValue());
-    of(this.dataSource)
-    .pipe(delay(2000))
-    .subscribe(()=>{
-      this._snackbarService.openSnackBarAsText(
-        'Reset password successful',
-        '',
+    if(!this.resetPasswordForm.valid){
+      return;
+    }
+    const password = this.resetPasswordForm.get('password').value;
+    this._authService.changePassword(this.changePasswordToken, password).subscribe(()=>{
+      this._snackbarService.openSnackBarAsText('Reset password successful','',
         { panelClass: 'success' }
       );
       this.navigateToLogin();
     },
     (error)=>{
-      this._snackbarService.openSnackBarAsText('some error occured');
+      this._snackbarService.openSnackBarAsText(error.error.message);
     })
   }
 

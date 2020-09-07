@@ -83,7 +83,7 @@
   .icons {
     display: flex;
     align-items: center;
-    margin-left: 17%;
+    margin-left: 16%;
     .material-icons {
       color: #7e7e7e;
       padding: 3px;
@@ -208,6 +208,10 @@
 
 :host ::ng-deep .p-paginator-last:hover{
    border-radius: 50%;
+}
+
+:host ::ng-deep .p-paginator-first:hover{
+  border-radius: 50%;
 }
 
 :host ::ng-deep .p-paginator-next > .pi-angle-right:before {

@@ -7,6 +7,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedMaterialModule } from 'libs/shared/material/src';
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
     TabMenuModule,
     DropdownModule,
   ],
-  declarations: [DatatableComponent],
-  exports: [DatatableComponent],
+  declarations: [DatatableComponent, UploadFileComponent],
+  exports: [DatatableComponent, UploadFileComponent],
 })
 export class AdminSharedModule {}

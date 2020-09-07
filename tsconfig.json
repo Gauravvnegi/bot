@@ -49,7 +49,10 @@
         "libs/admin/special-amenities/src/index.ts"
       ],
       "@hospitality-bot/admin/covid": ["libs/admin/covid/src/index.ts"],
-      "@hospitality-bot/admin/shared": ["libs/admin/shared/src/index.ts"]
+      "@hospitality-bot/admin/shared": ["libs/admin/shared/src/index.ts"],
+      "@hospitality-bot/admin/roles-and-permissions": [
+        "libs/admin/roles-and-permissions/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

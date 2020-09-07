@@ -13,7 +13,7 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- Header goes in here -->
-      <div style="display: flex; align-items: center; width: 53%;">
+      <div style="display: flex; align-items: center; width: 57%;">
         <span class="p-input-icon-right">
           <i class="pi pi-search"></i>
           <input
@@ -30,24 +30,29 @@
       </div>
 
       <hospitality-bot-daterange></hospitality-bot-daterange>
-      <!-- <p-dropdown [options]="Profile">
+      <p-dropdown class="profile__dropdown" [options]="profile">
         <ng-template let-item pTemplate="selectedItem">
-          <mat-icon class="material-icons" matSuffix></mat-icon>
-          <span style="vertical-align: middle; margin-left: 0.5em;"
+          <div class="profile__dropdown__image">
+            <img src="assets/bg.png" />
+          </div>
+          <span style="vertical-align: middle; margin-left: 1em;"
             >G.Murray</span
           >
         </ng-template>
-      </p-dropdown> -->
+      </p-dropdown>
     </div>
 
     <div class="main-panel--container">
       <div class="refresh__wrapper">
-        <div class="refresh__wrapper--icon">
+        <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
           <p>Refresh</p>
           <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
         </div>
         <div class="seperator"></div>
-        <p class="status">Dashboard last updated at 10:43 AM</p>
+        <p class="status">
+          Dashboard last updated at
+          {{ lastUpdatedAt }}
+        </p>
       </div>
       <div class="main">
         <router-outlet></router-outlet>

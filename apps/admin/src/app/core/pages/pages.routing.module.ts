@@ -41,6 +41,13 @@ const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'roles-permissions',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/roles-and-permissions').then(
+            (m) => m.AdminRolesAndPermissionsModule
+          ),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

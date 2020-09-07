@@ -1,6 +1,7 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -10,10 +11,9 @@ import { MenuItem } from 'primeng/api';
 export class LayoutOneComponent implements OnInit {
   public backgroundColor: string;
   public background_image: string;
-  dashBoardComp: ComponentRef<any>;
   profile: MenuItem[];
-
-  constructor(private _router: Router) {}
+  lastUpdatedAt: string;
+  constructor(private _router: Router, public dateService: DateService) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
@@ -25,16 +25,34 @@ export class LayoutOneComponent implements OnInit {
 
   initLayoutConfigs() {
     this.backgroundColor = '#0483f4';
-  }
-
-  onRouteChanged(event: ComponentRef<any>) {
-    this.dashBoardComp = event;
+    this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
   }
 
   refreshDashboard() {
-    debugger;
-    this.dashBoardComp.destroy();
+    let currentUrl = this._router.url;
+
+    this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+    this._router.onSameUrlNavigation = 'reload';
+
+    // this._router.navigate([currentUrl], {
+    //   queryParams: { refresh: 1 },
+    //   skipLocationChange: true,
+    // });
+
+    this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this._router.navigate([currentUrl]);
+      this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
+    });
+
+    this._router.onSameUrlNavigation = 'ignore';
+
+    //this.dashBoardComp.destroy();
     // this.dashBoardComp;
-    // this._router.navigate(['/pages/dashboard']);
+    // this._router.navigate(['/pages/dashboard'],{ queryParams: { 'refresh': 1 } });
+    //let currentUrl = this._router.url;
+    // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //   this._router.navigate([currentUrl]);
+    // });
   }
 }

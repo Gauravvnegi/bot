@@ -49,10 +49,13 @@
           <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
         </div>
         <div class="seperator"></div>
-        <p class="status">Dashboard last updated at 10:43 AM</p>
+        <p class="status">
+          Dashboard last updated at
+          {{ lastUpdatedAt }}
+        </p>
       </div>
       <div class="main">
-        <router-outlet (activate)="onRouteChanged($event)"></router-outlet>
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>

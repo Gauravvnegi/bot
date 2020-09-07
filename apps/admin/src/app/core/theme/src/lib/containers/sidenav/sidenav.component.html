@@ -20,7 +20,7 @@
         [ngClass]="
           rla.isActive ? (menuItem.children === null ? 'active' : '') : ''
         "
-        [routerLinkActiveOptions]="{ exact: true }"
+        [routerLinkActiveOptions]="{ exact: false }"
       >
         <a
           [style.display]="menuItem.children === null ? 'flex' : 'none'"

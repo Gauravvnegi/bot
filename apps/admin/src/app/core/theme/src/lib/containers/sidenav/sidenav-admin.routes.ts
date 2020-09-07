@@ -14,4 +14,10 @@ export const ADMIN_ROUTES = [
   },
   { path: 'package', title: 'Packages', icon: 'description', children: null },
   { path: 'covid', title: 'Covid-19', icon: 'wash', children: null },
+  {
+    path: 'roles-permissions',
+    title: 'Roles & Permissions',
+    icon: 'wash',
+    children: null,
+  },
 ];

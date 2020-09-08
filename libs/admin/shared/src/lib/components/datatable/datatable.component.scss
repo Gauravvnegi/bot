@@ -49,18 +49,18 @@
   }
 }
 
-:host ::ng-deep .pi-sort-alt {
+:host ::ng-deep .p-sortable-column-icon {
   color: white !important;
   font-size: 18px;
 }
 
-:host ::ng-deep .p-tabmenu .p-tabmenu-nav{
+:host ::ng-deep .p-tabmenu .p-tabmenu-nav {
   display: flex;
   align-items: center;
   width: 100%;
   justify-content: space-between;
 
-  li{
+  li {
     width: 31%;
   }
 }
@@ -69,21 +69,25 @@
   display: flex;
   align-items: center;
   padding: 15px 0px;
-  .heading {
-    font-size: 20px;
-    margin: 0;
-  }
-  .selected {
-    font-size: 20px;
-    color: #7e7e7e;
-    font-style: italic;
-    margin-bottom: 0;
-    margin-left: 3%;
+  &--text {
+    display: flex;
+    align-items: center;
+    width: 47%;
+    .heading {
+      font-size: 20px;
+      margin: 0;
+    }
+    .selected {
+      font-size: 20px;
+      color: #7e7e7e;
+      font-style: italic;
+      margin-bottom: 0;
+      margin-left: 3%;
+    }
   }
   .icons {
     display: flex;
     align-items: center;
-    margin-left: 16%;
     .material-icons {
       color: #7e7e7e;
       padding: 3px;
@@ -92,7 +96,7 @@
       &:hover {
         cursor: pointer;
         border-radius: 50%;
-        border: 1px solid lightgray;
+        // border: 1px solid lightgray;
       }
     }
   }
@@ -121,7 +125,6 @@
     font-weight: 700;
   }
 }
-
 
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background-color: #2187d5;
@@ -206,11 +209,11 @@
   }
 }
 
-:host ::ng-deep .p-paginator-last:hover{
-   border-radius: 50%;
+:host ::ng-deep .p-paginator-last:hover {
+  border-radius: 50%;
 }
 
-:host ::ng-deep .p-paginator-first:hover{
+:host ::ng-deep .p-paginator-first:hover {
   border-radius: 50%;
 }
 

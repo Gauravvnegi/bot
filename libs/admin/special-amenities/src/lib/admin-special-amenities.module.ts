@@ -5,8 +5,11 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminSpecialAmenitiesRoutingModule } from './admin-special-amenities.routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedMaterialModule } from 'libs/shared/material/src';
-import { SpecialAmenitiesComponent } from './components/special-amenities/special-amenities.component';
+import { EditSpecialAmenitiesComponent } from './components/special-amenities/edit-special-amenities.component';
 import { SpecialAmenitiesService } from './services/special-amenities.service';
+import { PackageDatatableComponent } from './components/package-datatable/package-datatable.component';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   imports: [
@@ -15,10 +18,12 @@ import { SpecialAmenitiesService } from './services/special-amenities.service';
     ReactiveFormsModule,
     AdminSharedModule, 
     RouterModule,
+    TableModule,
     SharedMaterialModule,
+    DropdownModule,
     AdminSpecialAmenitiesRoutingModule
   ],
-  declarations: [SpecialAmenitiesComponent],
+  declarations: [EditSpecialAmenitiesComponent, PackageDatatableComponent],
   providers: [
     SpecialAmenitiesService
   ]

@@ -9,6 +9,7 @@ export class UploadFileComponent implements OnInit {
 
   @Input() url: string;
   @Input() maxFileSize;
+  @Input() uploadStatus: boolean;
   @Input() fileType: string[];
   
   @Output()

@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { SpecialAmenitiesComponent } from './components/special-amenities/special-amenities.component';
+import { EditSpecialAmenitiesComponent } from './components/special-amenities/edit-special-amenities.component';
+import { PackageDatatableComponent } from './components/package-datatable/package-datatable.component';
 
 export const adminSpecialAmenitiesRoutes: Route[] = [
     {
       path: '',
-      component: SpecialAmenitiesComponent,
+      component: PackageDatatableComponent,
       children: [],
+    },
+    {
+      path: 'amenity',
+      component: EditSpecialAmenitiesComponent,
     }
 ];
 

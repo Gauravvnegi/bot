@@ -1,32 +1,19 @@
 <p>special-amenities works!</p>
 <div>
-    <form [formGroup]="amenityForm" (ngSubmit)="addAmenity()">
+    <form [formGroup]="amenityForm" (ngSubmit)="updateAmenity()">
       <div>
         <mat-label>Package Name:</mat-label>
           <mat-form-field>
-              <input matInput placeholder="Package Name" formControlName="packageName">
+              <input matInput placeholder="Package Name">
           </mat-form-field>
           <mat-error *ngIf="amenityForm.get('packageName').touched && amenityForm.get('packageName').hasError('required')">
             Package Name is required
-          </mat-error>
-        <mat-label>Package Code:</mat-label>
-          <mat-form-field>
-            <mat-label></mat-label>
-              <select matNativeControl formControlName="packageCode">
-                <option value="BF">BF</option>
-                <option value="MAP">MAP</option>
-                <option value="DNI">DNI</option>
-                <option value="EBED">EBED</option>
-              </select>
-          </mat-form-field>
-          <mat-error *ngIf="amenityForm.get('packageCode').touched && amenityForm.get('packageCode').hasError('required')">
-            Package Code is required
           </mat-error>
       </div>
       <div>
         <mat-label>Description:</mat-label>
         <mat-form-field>
-          <input matInput placeholder="Description" formControlName="description">
+          <input matInput placeholder="Description">
         </mat-form-field>
         <mat-error *ngIf="amenityForm.get('description').touched && amenityForm.get('description').hasError('required')">
           Description is required
@@ -35,7 +22,7 @@
       <div>
         <mat-label>Select Type:</mat-label>
         <mat-form-field>
-              <select matNativeControl formControlName="type">
+              <select matNativeControl>
                 <option value="Paid">Paid</option>
                 <option value="Complimentary">Complimentary</option>
               </select>
@@ -47,7 +34,7 @@
         <mat-label>Amount:</mat-label>
         <mat-form-field>
           <mat-label></mat-label>
-          <input matInput placeholder="" formControlName="amount">
+          <input matInput placeholder="">
           <span matPrefix>$&nbsp;</span>
         </mat-form-field>
         <mat-error *ngIf="amenityForm.get('amount').touched && amenityForm.get('amount').hasError('required')">
@@ -56,17 +43,6 @@
         <mat-error *ngIf="amenityForm.get('amount').touched && amenityForm.get('amount').hasError('pattern')">
           Please enter valid Amount
         </mat-error>
-        <mat-label>Quantity:</mat-label>
-        <mat-form-field>
-             
-              <select matNativeControl formControlName="quantity">
-                <option value="1">1</option>
-                <option value="2">2</option>
-              </select>
-        </mat-form-field>
-        <mat-error *ngIf="amenityForm.get('quantity').touched && amenityForm.get('quantity').hasError('required')">
-          Quantity is required
-        </mat-error>
       </div>
       <div>
         <mat-label>Upload Image:</mat-label>
@@ -74,13 +50,14 @@
         <hospitality-bot-upload-file
         [maxFileSize]="fileSize"
         [fileType]="fileType"
+        [uploadStatus]="uploadStatus"
         (fileData)="uploadFile($event)">
       </hospitality-bot-upload-file>
       </div>
       <div>
         <mat-slide-toggle formControlName="status"></mat-slide-toggle>
       </div>
-      <button  mat-button >ADD</button>
+      <button  mat-button >Save</button>
     </form>
     
   </div>

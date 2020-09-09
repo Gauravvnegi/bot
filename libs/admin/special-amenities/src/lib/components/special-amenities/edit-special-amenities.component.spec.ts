@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpecialAmenitiesComponent } from './special-amenities.component';
+import { EditSpecialAmenitiesComponent } from './edit-special-amenities.component';
 
 describe('SpecialAmenitiesComponent', () => {
-  let component: SpecialAmenitiesComponent;
-  let fixture: ComponentFixture<SpecialAmenitiesComponent>;
+  let component: EditSpecialAmenitiesComponent;
+  let fixture: ComponentFixture<EditSpecialAmenitiesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SpecialAmenitiesComponent ]
+      declarations: [ EditSpecialAmenitiesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpecialAmenitiesComponent);
+    fixture = TestBed.createComponent(EditSpecialAmenitiesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -50,6 +50,7 @@
     "@nrwl/schematics": "^8.12.11",
     "angular2-signaturepad": "^2.11.0",
     "angular2-text-mask": "^9.0.0",
+    "chart.js": "^2.9.3",
     "crypto-js": "^4.0.0",
     "jquery": "^3.5.1",
     "jszip": "^3.5.0",

@@ -29,25 +29,7 @@
   padding: 0.5em 0;
 }
 
-:host ::ng-deep .profile__dropdown .p-dropdown {
-  border: 2px solid lightgray;
-  margin-left: 20px;
-  height: 37px;
-  border-radius: 25px;
-  &:hover {
-    border-color: #2187d5;
-  }
-}
 
-:host ::ng-deep .profile__dropdown__image {
-  height: 33px;
-  width: 33px;
-  img {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-  }
-}
 
 :host ::ng-deep .p-dropdown .p-inputtext {
   padding: 5px;
@@ -158,23 +140,4 @@
   transition: all 500ms;
 }
 
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 3rem;
-  border-top: 2px solid #d4d4d4;
-  margin-top: 20px;
-  p {
-    margin: 0;
-  }
-  .links {
-    display: flex;
-    align-items: center;
-    a {
-      color: black;
-      margin-right: 20px;
-      text-decoration: none;
-    }
-  }
-}
+

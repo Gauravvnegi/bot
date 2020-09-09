@@ -9,8 +9,10 @@ import { Daterangepicker } from 'ng2-daterangepicker';
 // import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { InputComponent } from './containers/input/input.component';
 import { SharedMaterialModule } from 'libs/shared/material/src';
+import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-dropdown.component';
+import { FooterComponent } from './containers/footer/footer.component';
+import { SearchBarComponent } from './containers/search-bar/search-bar.component';
 
 @NgModule({
   imports: [
@@ -26,14 +28,18 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
-    InputComponent,
+    ProfileDropdownComponent,
+    FooterComponent,
+    SearchBarComponent,
   ],
   exports: [
     SidenavComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
-    InputComponent,
+    ProfileDropdownComponent,
+    FooterComponent,
+    SearchBarComponent,
   ],
 })
 export class ThemeModule {}

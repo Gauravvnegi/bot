@@ -1,13 +1,27 @@
 .logo {
-  padding: 25px 0 20px 0;
   color: #fff;
   font-size: 18px;
   text-align: center;
   position: relative;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: center;
 }
 
 .change .bar1 {
   transform: rotate(-45deg) translate(-8px, 7px);
+}
+
+.sidenav-logo{
+  height: 50px;
+  width: 70px;
+  &:hover{
+    cursor: pointer;
+  }
+  img{
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .change .bar2 {
@@ -36,12 +50,6 @@
   cursor: pointer;
 }
 
-.logo img {
-  width: 42px;
-  position: absolute;
-  top: 16px;
-  left: 13px;
-}
 
 .divider {
   content: '';

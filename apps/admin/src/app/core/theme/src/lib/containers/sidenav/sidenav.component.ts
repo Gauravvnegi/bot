@@ -20,6 +20,7 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit() {
     this.initSideNavConfigs();
+    console.log('========sidenav');
   }
 
   private initSideNavConfigs() {

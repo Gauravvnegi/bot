@@ -43,9 +43,11 @@ export class LayoutOneComponent implements OnInit {
     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this._router.navigate([currentUrl]);
       this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
+      // this._router.routeReuseStrategy.shouldReuseRoute = () => true;
+      // this._router.onSameUrlNavigation = 'reload';
     });
 
-    this._router.onSameUrlNavigation = 'ignore';
+    // this._router.onSameUrlNavigation = 'ignore';
 
     //this.dashBoardComp.destroy();
     // this.dashBoardComp;

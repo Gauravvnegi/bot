@@ -195,7 +195,7 @@
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <tr>
+      <tr (click)="onRowSelect(rowData)">
         <td>
           <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
         </td>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/datatable.component';
 import { SpecialAmenitiesService } from '../../services/special-amenities.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -24,7 +25,8 @@ export class PackageDatatableComponent extends DatatableComponent {
 
   constructor(
     private _amenitiesService: SpecialAmenitiesService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _router: Router
   ) {
     super();
   }
@@ -54,6 +56,11 @@ export class PackageDatatableComponent extends DatatableComponent {
     },(error)=>{
       this._snackbarService.openSnackBarAsText('some error occured');
     })
+  }
+
+  
+  onRowSelect(event){
+    this._router.navigate(['/pages/package/amenity',event.id]);
   }
 
 }

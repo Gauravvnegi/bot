@@ -1,54 +1,42 @@
-<p>special-amenities works!</p>
 <div>
     <form [formGroup]="amenityForm" (ngSubmit)="updateAmenity()">
       <div>
+        <mat-label>Package Code:</mat-label>
+          <mat-form-field>
+              <input matInput formControlName="packageCode">
+          </mat-form-field>
+      </div>
+      <div>
         <mat-label>Package Name:</mat-label>
           <mat-form-field>
-              <input matInput placeholder="Package Name">
+              <input matInput formControlName="name">
           </mat-form-field>
-          <mat-error *ngIf="amenityForm.get('packageName').touched && amenityForm.get('packageName').hasError('required')">
-            Package Name is required
-          </mat-error>
       </div>
       <div>
         <mat-label>Description:</mat-label>
         <mat-form-field>
-          <input matInput placeholder="Description">
+          <input matInput formControlName="description">
         </mat-form-field>
-        <mat-error *ngIf="amenityForm.get('description').touched && amenityForm.get('description').hasError('required')">
-          Description is required
-        </mat-error>
       </div>
       <div>
-        <mat-label>Select Type:</mat-label>
+        <mat-label>Type:</mat-label>
         <mat-form-field>
-              <select matNativeControl>
-                <option value="Paid">Paid</option>
-                <option value="Complimentary">Complimentary</option>
-              </select>
+          <input matInput formControlName="type">   
         </mat-form-field>
-        <mat-error *ngIf="amenityForm.get('type').touched && amenityForm.get('type').hasError('required')">
-          Type is required
-        </mat-error>
         
         <mat-label>Amount:</mat-label>
         <mat-form-field>
           <mat-label></mat-label>
-          <input matInput placeholder="">
-          <span matPrefix>$&nbsp;</span>
+          <input matInput formControlName="rate" >
+          <span matPrefix *ngIf="hotelPackage">{{this.hotelPackage.amenityPackage.currencyCode}}&nbsp;</span>
         </mat-form-field>
-        <mat-error *ngIf="amenityForm.get('amount').touched && amenityForm.get('amount').hasError('required')">
-          Amount is required
-        </mat-error>
-        <mat-error *ngIf="amenityForm.get('amount').touched && amenityForm.get('amount').hasError('pattern')">
-          Please enter valid Amount
-        </mat-error>
       </div>
       <div>
         <mat-label>Upload Image:</mat-label>
        
         <hospitality-bot-upload-file
         [maxFileSize]="fileSize"
+        [url]="amenityImageUrl"
         [fileType]="fileType"
         [uploadStatus]="uploadStatus"
         (fileData)="uploadFile($event)">
@@ -59,6 +47,5 @@
       </div>
       <button  mat-button >Save</button>
     </form>
-    
   </div>
   

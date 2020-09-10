@@ -10,7 +10,7 @@ export const adminSpecialAmenitiesRoutes: Route[] = [
       children: [],
     },
     {
-      path: 'amenity',
+      path: 'amenity/:id',
       component: EditSpecialAmenitiesComponent,
     }
 ];

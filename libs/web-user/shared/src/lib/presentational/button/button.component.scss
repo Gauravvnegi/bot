@@ -12,18 +12,18 @@
   button {
     font-weight: $bold;
     font-size: $font-medium;
-    color: #939393;
+    color: $button-grey;
     border: none;
   }
   .arrow {
     width: 10px;
     i::before {
       font-size: $font-large;
-      color: #939393;
+      color: $button-grey;
     }
   }
   &:hover {
-    background-color: $icon-color;
+    background-color: $primary-blue;
     cursor: pointer;
     button {
       color: $white;
@@ -37,5 +37,5 @@
 }
 
 .fa-spin{
-  color: white;
+  color: $white;
 }

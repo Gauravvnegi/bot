@@ -19,7 +19,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+}
+
+@mixin flex-all-center(){
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @mixin full-width-on-breakpoint($breakpoint) {

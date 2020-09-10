@@ -118,7 +118,7 @@ mat-icon {
 }
 
 .checkbox_container input:checked ~ .checkmark {
-  background-color: $icon-color;
+  background-color: $primary-blue;
 }
 
 .checkmark:after {
@@ -140,6 +140,7 @@ mat-icon {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   @media only screen and (max-width: $M) {
+    
   }
 }
 
@@ -175,7 +176,7 @@ mat-icon {
 .example-button-row {
   @include flex-justify-center();
   padding-top: 20px;
-  background-color: $icon-color;
+  background-color: $primary-blue;
 }
 
 @media only screen and (max-width: $M) {

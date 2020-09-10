@@ -2,13 +2,13 @@
 
 .save-button {
   @include flex-justify-center();
-  margin-top: 15px;
+  margin-top: $margin-medium;
 }
 
 :host ::ng-deep .back-button {
   color: black;
   width: 150px;
-  font-weight: 700;
+  font-weight: $bolder;
   background-color: white;
   margin-right: 30px;
   &:hover {
@@ -22,7 +22,7 @@
 :host ::ng-deep .next-button {
   background-image: var(--stepper-dynamic-background-image, blue);
   width: 150px;
-  font-weight: 700;
+  font-weight: $bolder;
   color: white;
   &:hover {
     cursor: pointer;
@@ -34,7 +34,7 @@
 }
 
 .heading {
-  margin-bottom: 15px;
+  margin-bottom: $margin-medium;
 }
 
 .wrapper {

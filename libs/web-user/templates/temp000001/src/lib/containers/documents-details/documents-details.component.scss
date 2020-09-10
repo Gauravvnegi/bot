@@ -39,7 +39,7 @@ mat-icon {
       margin-left: $margin-small;
     }
     @include MQ(M){
-      font-size: 10px;
+      font-size: $font-responsive-smaller;
     }
   }
 }

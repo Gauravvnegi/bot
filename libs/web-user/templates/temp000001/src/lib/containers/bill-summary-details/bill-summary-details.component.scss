@@ -12,7 +12,7 @@
   padding: $padding-large;
   border-radius: $border-radius-small;
   &--title {
-    color: $icon-color;
+    color: $primary-blue;
     font-weight: $bolder;
     font-size: 25px;
   }
@@ -95,11 +95,11 @@
         min-width: 35%;
       }
       .final__label {
-        color: $icon-color;
+        color: $primary-blue;
         font-size: 25px;
       }
       .final__amount {
-        color: $icon-color;
+        color: $primary-blue;
         font-size: 27px;
       }
     }
@@ -161,7 +161,7 @@
    @include flex-between-center();
   }
   .header {
-    background-color: $icon-color;
+    background-color: $primary-blue;
     font-size: $font-medium;
     font-weight: $bold;
     color: white;
@@ -190,7 +190,7 @@
   .total-amount {
     td {
       font-size: 16px;
-      color: $icon-color;
+      color: $primary-blue;
       text-align: right;
       font-weight: $bold;
       padding: $padding-large;

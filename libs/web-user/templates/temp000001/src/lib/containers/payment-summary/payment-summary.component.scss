@@ -34,30 +34,30 @@
 .table__wrapper{
   padding: 0px 25px;
   @media only screen and (max-width: $tab-size) {
-    padding: 0px 15px;
+    padding: 0px $padding-medium;
   }
 }
 
 .description-table {
-  width: 100%;
+  width: $full-width;
   border: 2px solid #eee;
-  border-radius: 10px;
+  border-radius: $border-radius-small;
   .header {
-    background-color: $icon-color;
-    font-size: 18px;
-    font-weight: 600;
+    background-color: $primary-blue;
+    font-size: $font-medium;
+    font-weight: $bold;
     color: white;
     td {
-      padding: 15px;
+      padding: $padding-small;
       text-align: center;
     }
   }
 
   .order__details {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: $font-medium;
+    font-weight: $bold;
     td {
-      padding: 15px;
+      padding: $padding-medium;
       text-align: center;
       b{
         color: lightgray;
@@ -66,15 +66,15 @@
   }
   .total__amount {
     td {
-      font-size: 16px;
-      color: $icon-color;
+      font-size: $font16;
+      color: $primary-blue;
       text-align: right;
-      font-weight: 600;
-      padding: 20px;
+      font-weight: $bold;
+      padding: $padding-large;
       b {
         color: black;
-        font-weight: 700;
-        font-size: 20px;
+        font-weight: $bolder;
+        font-size: $font-large;
       }
     }
   }

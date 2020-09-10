@@ -36,29 +36,24 @@
 
   .img-with-text {
     .image {
-      border-radius: 50%;
+      border-radius: $half-width;
       background-color: #f3f3f3;
       padding: $padding-large;
       &:hover {
         cursor: pointer;
-        // background-color: $icon-color;
-        // .hotel-services-images {
-        //   filter: invert(1);
-        // }
-        // removed due to issue in services tapping
       }
     }
     p {
       margin-top: $margin-large;
       @media only screen and (max-width: 900px) {
-        font-size: 14px;
-        margin: 10px auto;
+        font-size: $font-small;
+        margin: $margin-small auto;
       }
     }
   }
 
   :host ::ng-deep .mat-expansion-panel-body{
     @media only screen and (max-width: $M) {
-      padding: 20px 5px !important;
+      padding: $padding-large 5px !important;
     }
   }

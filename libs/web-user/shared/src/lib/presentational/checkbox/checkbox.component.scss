@@ -1,10 +1,12 @@
+@import 'main';
+
+
 .checkbox-section {
-    display: flex;
     align-content: center;
-    align-items: center;
+    @include flex-item-center();
     height: 60px;
   }
   
 .checkbox-margin {
-    margin: 0 10px;
+    margin: 0 $margin-small;
   }

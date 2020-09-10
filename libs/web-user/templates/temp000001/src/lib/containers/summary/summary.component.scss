@@ -2,29 +2,29 @@
 
 .summary-wrapper {
   background-color: white;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: $border-radius-small;
+  padding: $padding-large;
   p{
-    font-size: 20px;
-    font-weight: 700;
+    font-size: $font-large;
+    font-weight: $bolder;
     text-align: center;
   }
   label{
     font-size: 22px;
-    font-weight: 700;
-    color: $icon-color;
+    font-weight: $bolder;
+    color: $primary-blue;
     b{
       color: green;
     }
   }
   @media only screen and (max-width: $M) {
-    padding: 10px;
+    padding: $padding-small;
     p{
-      font-size: 16px;
-      margin-bottom: 10px;
+      font-size: $font16;
+      margin-bottom: $margin-small;
     }
     label{
-      font-size: 18px;
+      font-size: $font-medium;
     }
   }
 }

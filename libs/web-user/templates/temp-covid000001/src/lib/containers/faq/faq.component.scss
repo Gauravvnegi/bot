@@ -13,7 +13,7 @@
     .tagline {
       font-size: $font-large;
       letter-spacing: $large-spacing;
-      color: $icon-color;
+      color: $primary-blue;
       font-weight: $bold;
     }
     .heading {
@@ -45,7 +45,7 @@
           position: absolute;
           width: 180px;
           border: 1px solid lightgray;
-          background-color: $icon-color;
+          background-color: $primary-blue;
           z-index: 22;
           .button{
             padding: $padding-small;
@@ -57,7 +57,7 @@
           color: $white;
           font-weight: $bold;
           // &:hover {
-          //   color: $icon-color;
+          //   color: $primary-blue;
           // }
         }
       }
@@ -88,7 +88,7 @@
           }
         }
         &:hover {
-          background-color: $icon-color;
+          background-color: $primary-blue;
           cursor: pointer;
           .text {
             color: white;
@@ -101,7 +101,7 @@
         }
       }
       .active {
-        background-color: $icon-color;
+        background-color: $primary-blue;
         cursor: pointer;
         .text {
           color: white;
@@ -155,7 +155,7 @@
               transition: transform 0.3s;
             }
             .question__text {
-              color: $icon-color;
+              color: $primary-blue;
             }
           }
           .answer {

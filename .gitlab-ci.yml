@@ -1,0 +1,82 @@
+# This file is a template, and might need editing before it works on your project.
+# This is a simple gitlab continuous integration template (compatible with the shared runner provided on gitlab.com)
+# using the official mono docker image to build a visual studio project.
+#
+# MyProject.sln
+#   MyProject\
+#     MyProject\
+#        MyProject.csproj (console application)
+#     MyProject.Test\
+#        MyProject.Test.csproj (test library using nuget packages "NUnit" and "NUnit.ConsoleRunner")
+#
+# Please find the full example project here:
+# https://gitlab.com/tobiaskoch/gitlab-ci-example-mono
+
+# see https://hub.docker.com/_/mono/
+#image: mono:latest
+
+
+
+stages:
+  - deploy
+
+before_script:
+  - cp deploy/* .
+  - chmod +x *.sh
+  - mvn clean install
+  - ls -l
+
+release:
+  stage: deploy
+  environment:
+    name: development
+  
+  when: manual
+#  artifacts:
+#    paths:
+#      - build/
+  script:
+    - scp -P$ssh_port *.sh "$ssh_user"@"$server_ip":"$work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; rm -f $jar_name"
+    - scp -P$ssh_port "$runner_path""$jar_name" "$ssh_user"@"$server_ip":"$work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; sh -x restart.sh $service_port $jar_name $work_dir $log_filename"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 60; ls && netstat -tnlp"
+    
+  only:
+    - development
+    
+    
+backend_build:
+  stage: build
+  when: manual
+  only:
+    changes:
+      - "backend/**/*"
+  script:
+    - docker login -u $DOCKER_USER -p $ACCESS_TOKEN $CI_REGISTRY
+    - cd backend
+    - docker build -f Dockerfile --tag latest .
+    - docker push latest
+    
+    
+stages: 
+    - trigger-child-pipelines
+when: manual
+web-client:
+    stage: trigger-child-pipeline
+    trigger:
+        include: web-client/.gitlab-ci.yml
+        strategy: depend
+    only:
+        changes:
+            - web-client/**/*
+            
+.backend-setup:
+    before_script:
+        - cd backend
+
+test: 
+    extends: .backend-setup
+    stage: test
+    script:
+        - mvn test

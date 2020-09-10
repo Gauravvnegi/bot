@@ -25,12 +25,18 @@
               "apps/web-user/src/favicon.ico",
               "apps/web-user/src/assets"
             ],
+            "extractCss": true,
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/slick-carousel/slick/slick.scss",
               "node_modules/slick-carousel/slick/slick-theme.scss",
               "apps/web-user/src/styles.scss",
-              "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
+              "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              {
+                "input": "apps/web-user/src/assets/clients/taj.styles.css",
+                "bundleName": "taj.styles",
+                "inject": false
+              }
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

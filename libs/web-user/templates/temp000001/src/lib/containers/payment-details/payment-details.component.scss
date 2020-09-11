@@ -38,35 +38,27 @@ mat-icon {
   }
 }
 
-.footer_button {
-  @include flex-justify-center();
-  .footer_back {
-    color: black;
-    background-color: white;
-    width: 150px;
-    margin-right: 30px;
-    border-radius: $border-radius-smaller;
-    border: none;
-    font-weight: $bolder;
-    &:hover {
-      cursor: pointer;
-    }
-  }
+// .footer_button {
+//   @include flex-justify-center();
+  // .footer_back {
+  //   @include secondary-button();
+  //   border-radius: $border-radius-smaller;
+  //   border: none;
+  //   &:hover {
+  //     cursor: pointer;
+  //   }
+  // }
 
-  .payment_submit {
-    border-radius: $border-radius-smaller;
-    padding: 7px 0px;
-    font-size: $font-small;
-    width: 150px;
-    font-weight: $bolder;
-    border: none;
-    background-image: var(--stepper-dynamic-background-image, blue);
-    color: white;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-}
+  // .payment_submit {
+  //   @include primary-button();
+  //   border-radius: $border-radius-smaller;
+  //   padding: 7px 0px;
+  //   border: none;
+  //   &:hover {
+  //     cursor: pointer;
+  //   }
+  // }
+// }
 
 .payment__type {
   .checkbox_container {
@@ -118,7 +110,7 @@ mat-icon {
 }
 
 .checkbox_container input:checked ~ .checkmark {
-  background-color: $primary-blue;
+  background: var(--checkbox-background-color,$checkbox-background-color);
 }
 
 .checkmark:after {
@@ -136,7 +128,7 @@ mat-icon {
   top: 3px;
   width: 5px;
   height: 10px;
-  border: solid white;
+  border: solid var(--checkbox-icon-color,$checkbox-icon-color);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   @media only screen and (max-width: $M) {
@@ -173,24 +165,24 @@ mat-icon {
   }
 }
 
-.example-button-row {
-  @include flex-justify-center();
-  padding-top: 20px;
-  background-color: $primary-blue;
-}
+// .example-button-row {
+//   @include flex-justify-center();
+//   padding-top: 20px;
+//   background-color: $primary-blue;
+// }
 
-@media only screen and (max-width: $M) {
-  .user-button {
-    width: $half-width;
-  }
-}
+// @media only screen and (max-width: $M) {
+//   .user-button {
+//     width: $half-width;
+//   }
+// }
 
-:host ::ng-deep .back-button {
-  @include footer-back();
-}
-:host ::ng-deep .next-button {
-  @include footer-next();
-}
+// :host ::ng-deep .back-button {
+//   @include footer-back();
+// }
+// :host ::ng-deep .next-button {
+//   @include footer-next();
+// }
 
 :host ::ng-deep .mat-expansion-panel-body {
   border: none;

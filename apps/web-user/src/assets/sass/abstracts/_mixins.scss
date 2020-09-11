@@ -21,7 +21,7 @@
   justify-content: space-between;
 }
 
-@mixin flex-all-center(){
+@mixin flex-all-center() {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,24 +39,53 @@
   }
 }
 
+@mixin primary-button() {
+  background: var(--primary-button-background-color,$primary-button-background-color);
+  width: 150px;
+  font-weight: $bolder;
+  color: var(--primary-button-font-color, $primary-button-font-color);
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@mixin secondary-button() {
+  color: var(--secondary-button-font-color, $secondary-button-font-color);
+  width: 150px;
+  font-weight: $bolder;
+  background: var(
+    --secondary-button-background-color,
+    $secondary-button-background-color
+  );
+  margin-right: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 //breakpoints
 
-$S:     480px;   
-$M:     768px;     
-$L:     1170px;  
-$XL:    1500px;
+$S: 480px;
+$M: 768px;
+$L: 1170px;
+$XL: 1500px;
 
 @mixin MQ($canvas) {
-  @if $canvas == S {
-   @media only screen and (min-width: $S) { @content; } 
-  }
-  @else if $canvas == M {
-   @media only screen and (min-width: $M) { @content; } 
-  }
-  @else if $canvas == L {
-   @media only screen and (min-width: $L) { @content; } 
-  }
-  @else if $canvas == XL {
-   @media only screen and (min-width: $XL) { @content; } 
+  @if $canvas == $S {
+    @media only screen and (min-width: $S) {
+      @content;
+    }
+  } @else if $canvas == $M {
+    @media only screen and (min-width: $M) {
+      @content;
+    }
+  } @else if $canvas == $L {
+    @media only screen and (min-width: $L) {
+      @content;
+    }
+  } @else if $canvas == $XL {
+    @media only screen and (min-width: $XL) {
+      @content;
+    }
   }
 }

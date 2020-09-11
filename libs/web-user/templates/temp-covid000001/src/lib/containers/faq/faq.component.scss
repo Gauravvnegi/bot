@@ -1,6 +1,46 @@
 @import 'temp-covid000001';
 @import 'main';
 
+:host ::ng-deep .button {
+  @include flex-space-between();
+  align-items: center;
+  border-radius: $border-radius-smaller;
+  background: var(--faq-button-background-color,$faq-button-background-color);
+  padding: $padding-medium $padding30;
+  box-shadow: 0px 0px 4px 0px lightgrey;
+  margin-bottom: $margin-medium;
+
+  button {
+    font-weight: $bold;
+    font-size: $font-medium;
+    color: var(--faq-button-font-color,$faq-button-font-color);
+    border: none;
+  }
+  .arrow {
+    width: 10px;
+    i::before {
+      font-size: $font-large;
+      color: var(--faq-button-font-color,$faq-button-font-color);
+    }
+  }
+  &:hover {
+    background: var(--faq-button-hover-background-color,$faq-button-hover-background-color);
+    cursor: pointer;
+    button {
+      color: $white;
+    }
+    .arrow {
+      i::before {
+        color: $white;
+      }
+    }
+  }
+}
+
+// :host ::ng-deep .fa-spin{
+//   color: $white;
+// }
+
 .faq--container {
   background: url('../../../../../../../../apps/web-user/src/assets/bgimages2.png');
   background-repeat: no-repeat;
@@ -211,3 +251,5 @@
     }
   }
 }
+
+

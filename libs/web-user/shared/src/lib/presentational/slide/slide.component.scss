@@ -35,11 +35,11 @@
     box-shadow: 0px 0px 1px 0px lightgray;
     .slider__image {
       height: 200px;
-      width: 100%;
+      width: $full-width;
       position: relative;
       img {
-        height: 100%;
-        width: 100%;
+        height: $full-width;
+        width: $full-width;
       }
       .amount {
         position: absolute;

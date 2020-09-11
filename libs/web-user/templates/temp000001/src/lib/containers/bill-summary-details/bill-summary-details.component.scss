@@ -8,7 +8,7 @@
 }
 
 .summary-details-wrapper {
-  background-color: white;
+  background: var(--accordian-background-color, $accordian-background-color);
   padding: $padding-large;
   border-radius: $border-radius-small;
   &--title {

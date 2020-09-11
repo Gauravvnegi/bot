@@ -20,7 +20,7 @@
 }
 
 .payment-wrapper{
-  background-color: $white; 
+  background: var(--accordian-background-color, $accordian-background-color); 
   border-radius: $border-radius-small;
   padding-bottom: $padding-large;
 }

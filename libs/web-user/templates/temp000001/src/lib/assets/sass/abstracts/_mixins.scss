@@ -12,46 +12,33 @@
   transform: translateY(-50%);
 }
 
-
 @mixin payment-body() {
   content: '';
   width: 15px;
   height: 20px;
   position: absolute;
-  background-color: #fff;
+  background-color: $white;
   border: 2px solid #e6e6e6;
   top: 50%;
   box-sizing: border-box;
   transform: translateY(-50%);
 }
 
+
+
 @mixin footer-next() {
-  background-image: var(--stepper-dynamic-background-image, blue);
-  width: 150px;
-  font-weight: 700;
-  color: white;
-  &:hover {
-    cursor: pointer;
-  }
+  @include primary-button();
   @media only screen and (max-width: $M) {
-    width: 100%;
-    
+    width: $full-width;
     border-radius: 0px;
     height: 45px;
   }
 }
 
 @mixin footer-back() {
-  color: black;
-  width: 150px;
-  font-weight: 700;
-  background-color: white;
-  margin-right: 30px;
-  &:hover {
-    cursor: pointer;
-  }
+  @include secondary-button();
   @media only screen and (max-width: $M) {
-    width: 100%;
+    width: $full-width;
     margin-right: 0px;
     border-radius: 0px;
     height: 45px;
@@ -59,10 +46,10 @@
 }
 
 @mixin mat-icon() {
-  margin-right: 10px;
+  margin-right: $margin-small;
   width: 20px;
   height: 20px;
-  font-size: 18px;
+  font-size: $font-medium;
 }
 
 @mixin template-footer-button() {
@@ -71,7 +58,7 @@
   @media only screen and (max-width: 780px) {
     position: fixed;
     bottom: 0px;
-    width: 100%;
+    width: $full-width;
     z-index: 222;
   }
 }

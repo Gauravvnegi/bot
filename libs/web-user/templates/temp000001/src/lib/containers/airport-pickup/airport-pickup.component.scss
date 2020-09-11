@@ -6,27 +6,14 @@
 }
 
 :host ::ng-deep .back-button {
-  color: black;
-  width: 150px;
-  font-weight: $bolder;
-  background-color: white;
-  margin-right: 30px;
-  &:hover {
-    cursor: pointer;
-  }
+  @include secondary-button();
   @media only screen and (max-width: $M) {
     width: 100px;
   }
 }
 
 :host ::ng-deep .next-button {
-  background-image: var(--stepper-dynamic-background-image, blue);
-  width: 150px;
-  font-weight: $bolder;
-  color: white;
-  &:hover {
-    cursor: pointer;
-  }
+  @include primary-button();
   @media only screen and (max-width: $M) {
     width: 100px;
     height: auto;

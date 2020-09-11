@@ -99,7 +99,7 @@ export class EditSpecialAmenitiesComponent implements OnInit {
   }
 
   get amenityImageUrl(){
-    return this.amenityForm.get('imageUrl').value
+    return this.amenityForm.get('imageUrl').value;
   }
 
 }

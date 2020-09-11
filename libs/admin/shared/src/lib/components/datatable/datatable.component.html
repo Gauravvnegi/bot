@@ -109,7 +109,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event, 'vin')"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
           placeholder="Search by Name"
           class="p-column-filter"
         />

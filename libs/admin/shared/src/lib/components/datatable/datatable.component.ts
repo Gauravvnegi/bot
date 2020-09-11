@@ -136,7 +136,8 @@ export class DatatableComponent implements OnInit {
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
-    let value = event.target.value && event.target.value.trim();
+  
+    let value = event && event.trim();
     this.table.filter(value, field, matchMode);
   }
 

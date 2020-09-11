@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/datatable.component';
 import { SpecialAmenitiesService } from '../../services/special-amenities.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Router } from '@angular/router';
+import { PackageDetail } from '../../data-models/packageCnfig.model';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -12,7 +13,8 @@ import { Router } from '@angular/router';
 export class PackageDatatableComponent extends DatatableComponent {
 
   type: any[];
-  cities: any[];
+  statuses: any[];
+  packages: PackageDetail[];
   amenityCols = [
     { field: 'imgUrl', header: 'Package Image' },
     { field: 'amenityName', header: 'Package Name' },
@@ -35,16 +37,13 @@ export class PackageDatatableComponent extends DatatableComponent {
     super.ngOnInit();
     this.cols = this.amenityCols;
     this.type = [
-      {label: 'Paid', value: 0},
-      {label: 'Complimentary', value: 1},
+      {label: 'Complimentary', value: '0'},
+      {label: 'Paid', value: '1'},
     ];
-    this.cities = [
-      {name: 'New York', code: 'NY'},
-      {name: 'Rome', code: 'RM'},
-      {name: 'London', code: 'LDN'},
-      {name: 'Istanbul', code: 'IST'},
-      {name: 'Paris', code: 'PRS'}
-  ];
+    this.statuses = [
+      {label: 'Active', value: 'true'},
+      {label: 'InActive', value: 'false'}
+    ];
   }
 
   loadInitialData(){
@@ -53,11 +52,19 @@ export class PackageDatatableComponent extends DatatableComponent {
       this.values = response;
       this.dataSource = response;
       this.totalRecords = this.dataSource.length;
+      this.mapPackageDetails(response);
     },(error)=>{
       this._snackbarService.openSnackBarAsText('some error occured');
     })
   }
 
+  mapPackageDetails(packages){
+    this.packages = new Array<PackageDetail>();
+    packages.forEach(amenityPackage =>{
+      this.packages.push(new PackageDetail().deserialize(amenityPackage))
+    })
+    console.log('dfjhsgf',this.packages);
+  }
   
   onRowSelect(event){
     this._router.navigate(['/pages/package/amenity',event.id]);

@@ -1,0 +1,57 @@
+// Mixins
+
+@mixin flex-space-between() {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin flex-item-center() {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-justify-center() {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin flex-between-center() {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+@mixin full-width-on-breakpoint($breakpoint) {
+  @media only screen and (max-width: $breakpoint) {
+    width: 100%;
+  }
+}
+
+@mixin display-block-on-breakpoint($breakpoint) {
+  @media only screen and (max-width: $breakpoint) {
+    width: 100%;
+  }
+}
+
+//breakpoints
+
+$S:     480px;   
+$M:     768px;     
+$L:     1170px;  
+$XL:    1500px;
+
+@mixin MQ($canvas) {
+  @if $canvas == S {
+   @media only screen and (min-width: $S) { @content; } 
+  }
+  @else if $canvas == M {
+   @media only screen and (min-width: $M) { @content; } 
+  }
+  @else if $canvas == L {
+   @media only screen and (min-width: $L) { @content; } 
+  }
+  @else if $canvas == XL {
+   @media only screen and (min-width: $XL) { @content; } 
+  }
+}

@@ -2,9 +2,48 @@
 
 $white: #fff;
 $border-color: #e6e6e6;
-$icon-color: #2187d5;
-$snack-bar-red:#ee5955;
-$snack-bar-green: #7ab243;
+
+// Whole project primary-color
+
+$primary-blue: #2187d5;
+
+// Snack-bar
+//re-test
+$snack-bar-red: #ee5955; //--snack-bar-red
+$snack-bar-green: #7ab243; //--snack-bar-green
+
+// Radio
+
+$radio-button-color: #2187d5; //--radio-button-color
+
+// Button
+
+$primary-button-background-color: linear-gradient(
+  to left,
+  #ffc837,
+  #ff8008
+); //--primary-button-background-color
+$primary-button-font-color: white; //--primary-button-font-color
+$secondary-button-background-color: white; //--secondary-button-background-color
+$secondary-button-font-color: black; //--secondary-button-font-color
+
+// Stepper
+
+$stepper-background-color: linear-gradient(
+  to left,
+  #ffc837,
+  #ff8008
+); //--stepper-background-color
+$stepper-icon-font-color: white; //--stepper-icon-font-color
+$stepper-icon-selected-font-color: green; //--stepper-icon-selected-font-color
+$stepper-font-color: white; //--stepper-font-color
+$stepper-border-color: #ffc837; //--stepper-border-color
+
+// Faq--button-color
+
+$faq-button-background-color: white; // --faq-button-background-color
+$faq-button-font-color: #939393; // --faq-button-font-color
+$faq-button-hover-background-color: #2187d5; // --faq-button-hover-background-color
 
 //padding
 

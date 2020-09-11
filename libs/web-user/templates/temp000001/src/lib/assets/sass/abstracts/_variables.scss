@@ -3,3 +3,31 @@
 $document-icon-color: #ab3333;
 $paragraph-color: #8a8a8a;
 $expiry-text: #757575;
+
+// HEADER
+
+$header-background-color: white; //--header-background-color
+$header-font-color: black; //--header-font-color
+$header-status-font-color: lightgray; //--header-status-font-color
+
+// FOOTER
+
+$footer-background-color: white; //--footer-background-color
+$footer-font-color: #979797; //--footer-font-color
+$footer-icon-color: #979797; //--footer-icon-color
+
+// ACCORDIAN
+
+$accordian-background-color: white; //--accordian-background-color
+$accordian-font-color: black; //--accordian-font-color
+$accordian-icon-color: #2187d5; //--accordian-icon-color
+
+// DROPDOWN
+//re-test
+$dropdown-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+  0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12) !important; //--dropdown-shadow
+
+// CHECKBOX
+//@to-do -- payment - redo checkbox component
+$checkbox-background-color: #2187d5;
+$checkbox-icon-color: white;

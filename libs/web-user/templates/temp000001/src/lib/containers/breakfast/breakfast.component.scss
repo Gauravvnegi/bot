@@ -5,7 +5,18 @@
   }
 
   :host ::ng-deep .back-button {
-    @include footer-back();
+    @include secondary-button();
+    @media only screen and (max-width: $M) {
+      width: 100px;
+    }
+  }
+  
+  :host ::ng-deep .next-button {
+    @include primary-button();
+    @media only screen and (max-width: $M) {
+      width: 100px;
+      height: auto;
+    }
   }
 
   .heading{

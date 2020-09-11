@@ -16,7 +16,7 @@
   @include template-footer-button();
   @media only screen and (max-width: $M) {
     web-user-button {
-      width: 100%;
+      width: $full-width;
     }
   }
 }
@@ -29,12 +29,13 @@
   &__title {
     font-size: $font-medium;
     font-weight: $bold;
+    color: var(--accordian-font-color, $accordian-font-color);
   }
   @media only screen and (max-width: $M) {
-    margin: 10px 10px;
+    margin: $margin-small;
     overflow: scroll;
     overflow-x: hidden;
-    border-radius: 5px;
+    border-radius: $border-radius-smaller;
     height: calc(100vh - 235px);
   }
 }
@@ -50,6 +51,9 @@
     font-size: $font16;
     color: $white;
   }
+  &-select-panel {
+    box-shadow: var(--dropdown-shadow, $dropdown-shadow);
+  }
   &-step-header .mat-step-label.mat-step-label-active {
     color: $white;
   }
@@ -58,7 +62,7 @@
     width: 20px;
     height: 20px;
     font-size: $font-medium;
-    color: $icon-color;
+    color: var(--accordian-icon-color, $accordian-icon-color) !important;
   }
   &-expansion-indicator::after {
     display: none !important;
@@ -70,6 +74,7 @@
   &-expansion-panel {
     border-radius: $border-radius-small !important;
     margin-bottom: $margin-large !important;
+    background: var(--accordian-background-color, $accordian-background-color);
   }
 
   &-expansion-panel-header {

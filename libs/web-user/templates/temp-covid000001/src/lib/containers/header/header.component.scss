@@ -17,7 +17,7 @@
     left: 0;
     display: none;
     border-radius: 5px;
-    background-color: $icon-color;
+    background-color: $primary-blue;
     a{
       text-decoration: none;
       font-size: $font-responsive-small;
@@ -51,7 +51,7 @@
       .bar3 {
         width: 35px;
         height: 5px;
-        background-color: $icon-color;
+        background-color: $primary-blue;
         border-radius: $border-radius-smaller;
         margin: 6px 0;
         transition: 0.4s;
@@ -89,7 +89,7 @@
       font-weight: $bold;
       &:hover {
         cursor: pointer;
-        color: $icon-color;
+        color: $primary-blue;
       }
     }
     @media only screen and (max-width: $M) {
@@ -103,7 +103,7 @@
     letter-spacing: 1px;
     font-size: $font-responsive-small;
     font-weight: $bold;
-    background-color: $icon-color;
+    background-color: $primary-blue;
     color: $white;
     opacity: 0.85;
     &:hover {

@@ -7,6 +7,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedMaterialModule } from 'libs/shared/material/src';
+import { TabGroupComponent } from './components/tab-group/tab-group.component';
 
 @NgModule({
   imports: [
@@ -18,7 +19,7 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
     TabMenuModule,
     DropdownModule,
   ],
-  declarations: [DatatableComponent],
-  exports: [DatatableComponent],
+  declarations: [DatatableComponent, TabGroupComponent],
+  exports: [DatatableComponent , TabGroupComponent],
 })
 export class AdminSharedModule {}

@@ -36,11 +36,11 @@
   width: 96%;
   text-align: center;
   .title{
-    margin-bottom: 10px;
+    margin-bottom: $margin-small;
   }
   p {
     text-align: center;
-    font-weight: 700;
+    font-weight: $bolder;
   }
   span {
     text-align: center;
@@ -49,7 +49,7 @@
     padding: 5px;
   }
   @media only screen and (max-width: $M) {
-    font-size: 12px;
+    font-size: $font-responsive-small;
   }
 }
 

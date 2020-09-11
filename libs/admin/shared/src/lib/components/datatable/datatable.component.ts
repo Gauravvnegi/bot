@@ -33,6 +33,12 @@ export class DatatableComponent implements OnInit {
 
   @Input() loading: boolean = false;
 
+  tabList=[
+    { label: 'Inhouse(3)', content: ''},
+    { label: 'Arrival(3)', content: '' },
+    { label: 'Departure(3)', content: '' },
+  ]
+
   values = [];
 
   TabItems: MenuItem[];

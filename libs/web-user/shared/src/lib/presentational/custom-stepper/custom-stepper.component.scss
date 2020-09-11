@@ -13,8 +13,6 @@
     left: 14px;
     text-align: center;
     display: none;
-    justify-content: center;
-    align-items: center;
     font-size: $font-responsive-smaller;
     overflow-wrap: break-word;
     color: white;
@@ -60,11 +58,17 @@
 }
 
 .circular-chart .circle {
-  stroke: #ff9f00;
+  stroke: var(
+    --stepper-background-color,
+    $stepper-background-color
+  );
 }
 
 .percentage {
-  fill: white;
+  fill: var(
+    --stepper-icon-font-color,
+    $stepper-icon-font-color
+  );;
   font-family: sans-serif;
   font-weight: $bolder;
   font-size: 6px;

@@ -1,25 +1,24 @@
-@import 'temp000001';
+@import 'main';
 
 // todo remove whole ng-deep from code and use host with the perfect solution
 
 
 .example-button-row {
   @include flex-justify-center();
-  // padding-top: $padding-large;
 }
 
-@media only screen and (max-width: $tab-size) {
-  .user-button {
-    width: $half-width;
-  }
-}
+// @media only screen and (max-width: $tab-size) {
+//   .user-button {
+//     width: $half-width;
+//   }
+// }
 
-:host ::ng-deep .back-button {
-  @include footer-back();
-}
-:host ::ng-deep .next-button {
-  @include footer-next();
-}
+// :host ::ng-deep .back-button {
+//   @include footer-back();
+// }
+// :host ::ng-deep .next-button {
+//   @include footer-next();
+// }
 
 .payment-wrapper {
   background-color: $white;
@@ -28,9 +27,7 @@
 
 .example-small-box,
 .example-large-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center();
   margin: 16px;
   padding: 16px;
   border-radius: 8px;
@@ -38,9 +35,8 @@
 
 .modal-header {
   padding: 2px 8px;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 20px;
+  @include flex-space-between();
+  padding-bottom: $padding-large;
 }
 
 .modal-title {
@@ -49,12 +45,12 @@
 }
 
 .modal-body {
-  margin-bottom: 20px;
+  margin-bottom: $margin-large;
 }
 
 .modal-footer {
   padding: 2px 16px;
-  padding-top: 10px;
+  padding-top: $padding-small;
 }
 
 .close {
@@ -64,21 +60,19 @@
 }
 
 .signContainer {
-  margin: 15px 15px 0 15px;
-  padding: 15px 60px 15px 60px;
+  margin: $margin-medium $margin-medium 0 $margin-medium;
+  padding: $padding-medium 60px $padding-medium 60px;
   background-color: rgb(243, 241, 241);
-  border-radius: 10px;
+  border-radius: $border-radius-small;
 }
 
 .signature-image-container {
-  padding: 20px;
-  padding-top: 10px;
+  padding: $padding-large;
+  padding-top: $padding-small;
   background-color: rgb(243, 241, 241);
-  border-radius: 10px;
+  border-radius: $border-radius-small;
   min-height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center();
   &:hover {
     cursor: pointer;
   }
@@ -88,14 +82,13 @@
 }
 
 .text-container {
-  margin: 15px 15px 0 15px;
-  padding: 20px;
+  margin: $margin-medium $margin-medium 0 $margin-medium;
+  padding: $padding-large;
   background-color: rgb(243, 241, 241);
-  border-radius: 10px;
+  border-radius: $border-radius-small;
   height: 305px;
-  display: flex;
+  @include flex-space-between();
   flex-direction: column;
-  justify-content: space-between;
   @media only screen and (max-width: 780px) {
     padding: 5px;
     margin: 5px;
@@ -110,19 +103,17 @@
 
 .signature-capture-style {
   height: 50px;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
+  font-size: $font-medium;
+  @include flex-item-center();
   @media only screen and (max-width: $tab-size) {
-    font-size: 14px;
+    font-size: $font-small;
   }
 }
 
 .text-signature {
   height: 202px;
-  display: flex;
+  @include flex-space-between();
   flex-direction: column;
-  justify-content: space-between;
   font-size: larger;
   font-weight: bold;
 }
@@ -153,7 +144,7 @@
     text-align: center;
     font-size: 45px;
   @media only screen and (max-width: $M) {
-    font-size: 20px;
+    font-size: $font-large;
   }
   }
 }
@@ -186,11 +177,14 @@
   color: #bbb;
 }
 
-::ng-deep .next-button {
-  background-image: var(--stepper-dynamic-background-image, blue);
+::ng-deep .signature-button {
+  background: var(
+    --primary-button-background-color,
+    $primary-button-background-color
+  ) !important;
   width: 150px;
-  font-weight: 700;
-  color: white;
+  font-weight: $bolder;
+  color: var(--primary-button-font-color, $primary-button-font-color);
   &:hover {
     cursor: pointer;
   }
@@ -200,6 +194,6 @@
 }
 
 ::ng-deep .mat-tab-label-content {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: $bolder;
+  font-size: $font16;
 }

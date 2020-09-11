@@ -54,7 +54,7 @@ mat-icon {
   z-index: 22;
 }
 
-:host ::ng-deep .mat-icon {
+:host ::ng-deep .material-icons{
   color: rgba(0, 0, 0, 0.38);
-  font-size: 18px;
+  font-size: $font-medium;
 }

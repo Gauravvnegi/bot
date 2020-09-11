@@ -17,16 +17,14 @@
   <div class="footer__wrapper--contact-details">
     <a href="tel:{{ footerConfig.contactDetails.contactNo }}">
       <div style="margin-bottom: 10px;" class="text">
-        <img loading="'lazy'" src="assets/call.png" />{{
-          footerConfig.contactDetails.contactNo
-        }}
+        <mat-icon class="material-icon" matSuffix>call</mat-icon
+        >{{ footerConfig.contactDetails.contactNo }}
       </div>
     </a>
     <a href="mailto:{{ footerConfig.contactDetails.email }}">
       <div class="text">
-        <img loading="'lazy'" src="assets/email.png" />{{
-          footerConfig.contactDetails.email
-        }}
+        <mat-icon class="material-icon" matSuffix>email</mat-icon
+        >{{ footerConfig.contactDetails.email }}
       </div>
     </a>
   </div>

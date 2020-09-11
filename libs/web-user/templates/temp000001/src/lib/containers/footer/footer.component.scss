@@ -2,7 +2,7 @@
 
 .footer__wrapper {
   @include flex-space-between();
-  background-color: $white;
+  background-color: var(--footer-background-color, $footer-background-color);
   padding: $padding-medium;
   align-items: center;
 
@@ -21,12 +21,11 @@
     font-size: $font-responsive-small;
     font-weight: $bold;
     @include flex-justify-center();
-    color: #979797;
     flex-direction: column;
     margin: 0px $margin-small;
     a {
       text-decoration: none;
-      color: #979797;
+      color: var(--footer-font-color, $footer-font-color);
     }
     .social_icons {
       @include flex-justify-center();
@@ -67,20 +66,18 @@
     .text {
       font-size: $font-responsive-small;
       display: flex;
-      color: #979797;
+      color: var(--footer-font-color, $footer-font-color);
     }
-    img {
-      margin-right: $margin-medium;
+    .material-icons{
+      height: 23px;
       width: 22px;
+      font-size: $font-medium;
+      color: var(--footer-icon-color, $footer-icon-color);
     }
     @media only screen and (max-width: $M) {
       justify-content: initial;
       .text {
         font-size: $font-responsive-smaller;
-      }
-      img {
-        margin-right: 0px;
-        width: auto;
       }
       div {
         font-size: $font-responsive-smaller;

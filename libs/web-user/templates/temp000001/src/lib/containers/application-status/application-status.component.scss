@@ -4,10 +4,10 @@
   margin: 80px auto 0;
   text-align: center;
   font-size: 25px;
-  font-weight: 700;
-  color: $icon-color;
+  font-weight: $bolder;
+  color: $primary-blue;
   @media only screen and (max-width: $M) {
-    font-size: 14px;
+    font-size: $font-small;
     width: 150px;
   }
 }
@@ -19,7 +19,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $icon-color;
+  background-color: $primary-blue;
 
   border-radius: 100%;
   display: inline-block;

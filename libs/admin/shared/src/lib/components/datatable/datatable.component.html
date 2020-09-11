@@ -22,8 +22,10 @@
 </div> -->
 
 <div class="header">
+  <div class="header--text">
   <p class="heading">Reservations</p>
   <p class="selected">2 record(s) are selected</p>
+</div>
   <div class="icons">
     <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
     <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
@@ -68,7 +70,7 @@
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
       <div class="caption__wrapper--tabmenu">
-        <p-tabMenu [model]="TabItems" [activeItem]="TabItems[1]"></p-tabMenu>
+        <hospitality-bot-tab-group [list]="tabList"></hospitality-bot-tab-group>
       </div>
       <div class="caption__wrapper--buttons">
         <button class="filter">

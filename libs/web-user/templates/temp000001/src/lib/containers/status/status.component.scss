@@ -1,4 +1,4 @@
-@import 'main';
+@import 'temp000001';
 
 .modal__conatiner {
   position: relative;
@@ -6,8 +6,8 @@
     text-align: center;
     p {
       margin-bottom: $margin-small;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: $font16;
+      font-weight: $bold;
     }
     .last-updated {
       color: lightgray;
@@ -20,13 +20,13 @@
     height: 20px;
     width: 20px;
     img {
-      height: 100%;
+      height: $full-width;
     }
   }
   .status {
     p {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: $font-large;
+      font-weight: $bolder;
       color: lightblue;
       b {
         color: red;
@@ -35,42 +35,41 @@
   }
   .modal__data__conatiner {
     .modal__data__conatiner--title {
-      padding: 10px;
+      padding: $padding-small;
       background-color: blue;
-      font-weight: 600;
+      font-weight: $bold;
       color: white;
-      border-radius: 10px;
+      border-radius: $border-radius-small;
       margin: $margin-small 0px;
     }
 
     .modal__data__conatiner--text {
-      padding: 0px 10px;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
+      padding: 0px $padding-small;
+      @include flex-space-between();
+      width: $full-width;
       p {
-        font-weight: 500;
+        font-weight: $medium;
         font-size: 13px;
       }
       .success__and__text {
         display: flex;
         svg {
-          margin-right: 10px;
+          margin-right: $margin-small;
         }
       }
       .user__info {
         label {
           color: lightgrey;
-          font-size: 12px;
-          font-weight: 500;
+          font-size: $font-responsive-small;
+          font-weight: $medium;
           b {
             color: black;
           }
         }
         p {
-          font-weight: 600;
+          font-weight: $bold;
           margin-top: $margin-small;
-          font-size: 12px;
+          font-size: $font-responsive-small;
         }
       }
     }

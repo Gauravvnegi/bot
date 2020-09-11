@@ -13,15 +13,8 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- Header goes in here -->
-      <div style="display: flex; align-items: center; width: 57%;">
-        <span class="p-input-icon-right">
-          <i class="pi pi-search"></i>
-          <input
-            type="text"
-            pInputText
-            placeholder="Search by Name, Number,Conf no..."
-          />
-        </span>
+      <div style="display: flex; align-items: center; width: 59%;">
+        <admin-search-bar style="width: 70%;"></admin-search-bar>
         <button class="header--button">Go</button>
         <button class="header--button">
           Filter
@@ -30,16 +23,7 @@
       </div>
 
       <hospitality-bot-daterange></hospitality-bot-daterange>
-      <p-dropdown class="profile__dropdown" [options]="profile">
-        <ng-template let-item pTemplate="selectedItem">
-          <div class="profile__dropdown__image">
-            <img src="assets/bg.png" />
-          </div>
-          <span style="vertical-align: middle; margin-left: 1em;"
-            >G.Murray</span
-          >
-        </ng-template>
-      </p-dropdown>
+      <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
     </div>
 
     <div class="main-panel--container">
@@ -55,7 +39,10 @@
         </p>
       </div>
       <div class="main">
-        <router-outlet></router-outlet>
+        <div class="router__wrapper">
+          <router-outlet></router-outlet>
+        </div>
+        <admin-footer></admin-footer>
       </div>
     </div>
   </div>

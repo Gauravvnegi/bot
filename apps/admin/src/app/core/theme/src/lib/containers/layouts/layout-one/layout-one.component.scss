@@ -29,25 +29,7 @@
   padding: 0.5em 0;
 }
 
-:host ::ng-deep .profile__dropdown .p-dropdown {
-  border: 2px solid lightgray;
-  margin-left: 40%;
-  height: 37px;
-  border-radius: 25px;
-  &:hover {
-    border-color: #2187d5;
-  }
-}
 
-:host ::ng-deep .profile__dropdown__image {
-  height: 33px;
-  width: 33px;
-  img {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-  }
-}
 
 :host ::ng-deep .p-dropdown .p-inputtext {
   padding: 5px;
@@ -73,26 +55,7 @@
     display: flex;
     align-items: center;
 
-    .p-input-icon-right {
-      width: 62%;
-      input {
-        border: none;
-        padding: 5px;
-        border: 1px solid lightgray;
-        border-radius: 5px;
-        width: 100%;
-        font-size: 14px;
-        height: 33px;
-        &::placeholder {
-          font-style: italic;
-          font-size: 14px;
-        }
-        &:focus {
-          border: 2px solid #5391d4;
-          box-shadow: none;
-        }
-      }
-    }
+    
     .header--button {
       padding: 0px 15px;
       height: 33px;
@@ -149,9 +112,11 @@
       }
     }
     .main {
-      max-height: calc(100vh - 19vh);
-      padding: 0px 3rem;
+      max-height: calc(100vh - 15vh);
       overflow-x: hidden;
+      .router__wrapper {
+        padding: 0px 3rem;
+      }
     }
   }
 }
@@ -174,3 +139,5 @@
   -o-transition: all 500ms;
   transition: all 500ms;
 }
+
+

@@ -23,7 +23,7 @@
 .flex-wrapper {
   @include flex-item-center();
   .text {
-    color: $white;
+    color: var(--stepper-font-color, $stepper-font-color);
     font-weight: $bold;
   }
 }
@@ -58,17 +58,11 @@
 }
 
 .circular-chart .circle {
-  stroke: var(
-    --stepper-background-color,
-    $stepper-background-color
-  );
+  stroke: var(--stepper-background-color, $stepper-background-color);
 }
 
 .percentage {
-  fill: var(
-    --stepper-icon-font-color,
-    $stepper-icon-font-color
-  );;
+  fill: var(--stepper-font-color, $stepper-font-color);
   font-family: sans-serif;
   font-weight: $bolder;
   font-size: 6px;

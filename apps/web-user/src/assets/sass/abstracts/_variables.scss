@@ -8,7 +8,7 @@ $border-color: #e6e6e6;
 $primary-blue: #2187d5;
 
 // Snack-bar
-//re-test
+
 $snack-bar-red: #ee5955; //--snack-bar-red
 $snack-bar-green: #7ab243; //--snack-bar-green
 
@@ -34,10 +34,11 @@ $stepper-background-color: linear-gradient(
   #ffc837,
   #ff8008
 ); //--stepper-background-color
-$stepper-icon-font-color: white; //--stepper-icon-font-color
+$stepper-icon-number-font-color: white; //--stepper-icon-font-color
 $stepper-icon-selected-font-color: green; //--stepper-icon-selected-font-color
 $stepper-font-color: white; //--stepper-font-color
 $stepper-border-color: #ffc837; //--stepper-border-color
+$stepper-icon-done-font-color: white; // --stepper-icon-done-font-color
 
 // Faq--button-color
 

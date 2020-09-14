@@ -56,17 +56,25 @@ export class PaymentDetailsService extends ApiService {
 
     return paymentDetailsFieldSchema as PaymentDetailsConfigI;
   }
-
-  getPaymentConfiguration(hotelId): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/payment-configuration`);
+  
+  getPaymentConfiguration(hotelId, journeyName): Observable<any> {
+    return this.get(`/api/v1/hotel/${hotelId}/payment-configuration?journeyName=${journeyName}`);
   }
 
   initiatePayment(reservationId) {
     return this.get(`/api/v1/reservation/${reservationId}/payment/webhook?`);
   }
 
+  initiatePaymentCCAvenue(reservationId, data) {
+    return this.put(`/api/v1/reservation/${reservationId}/payment/webhook?`, data);
+  }
+
   updatePaymentStatus(reservationId, data) {
     return this.put(`/api/v1/reservation/${reservationId}/payment`, data);
+  }
+
+  getPaymentStatus(reservationId) {
+    return this.get(`/api/v1/reservation/${reservationId}/payment/status?`);
   }
 
   set payAtDesk(paymentOption) {

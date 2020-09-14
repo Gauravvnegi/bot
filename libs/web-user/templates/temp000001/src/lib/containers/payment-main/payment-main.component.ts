@@ -7,6 +7,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { forkJoin, of } from 'rxjs';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 
 @Component({
   selector: 'hospitality-bot-payment-main',
@@ -15,7 +16,7 @@ import { forkJoin, of } from 'rxjs';
 })
 export class PaymentMainComponent implements OnInit {
 
-  @Input() paymentStatusData;
+  paymentStatusData;
   isReservationData = false;
   parentForm = new FormArray([]);
   reservationData: ReservationDetails;
@@ -24,10 +25,13 @@ export class PaymentMainComponent implements OnInit {
     private _parentFormService: ParentFormService,
     private _hotelService: HotelService,
     private _snackBarService: SnackBarService,
-    private _templateLoadingService: TemplateLoaderService
-  ) { }
-
+    private _templateLoadingService: TemplateLoaderService,
+    private _paymentDetailService: PaymentDetailsService
+  ) { 
+  }
+  
   ngOnInit(): void {
+    this.setPaymentStatus();
     this.getReservationDetails();
     this.registerListeners();
   }
@@ -44,14 +48,24 @@ export class PaymentMainComponent implements OnInit {
       this._templateLoadingService.isTemplateLoading$.next(false);
       this.reservationData = reservationData;
       this._reservationService.reservationData = reservationData;
-      if (this.paymentStatusData.journey === 'PRECHECKIN') {
-        this._snackBarService.openSnackBarAsText(
-          'Pre-Checkin Sucessfull.',
-          '',
-          { panelClass: 'success' }
-        );
-      }
     });
+  }
+
+  private setPaymentStatus() {
+    this._paymentDetailService.getPaymentStatus(this._reservationService.reservationId)
+      .subscribe((response) => {
+        this.paymentStatusData = {
+          data: response,
+          redirectUrl: window.location.href.substring(0, window.location.href.lastIndexOf('&')),
+        }
+        if (this.paymentStatusData.journey === 'PRECHECKIN') {
+          this._snackBarService.openSnackBarAsText(
+            'Pre-Checkin Sucessfull.',
+            '',
+            { panelClass: 'success' }
+          );
+        }
+      });
   }
 
   private registerListeners() {

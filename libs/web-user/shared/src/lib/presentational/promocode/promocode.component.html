@@ -1,0 +1,14 @@
+<div class="promocode-container">
+	<web-user-input
+    [parentForm]="promocodeForm"
+    class="promocode-input"
+    [name]="'promocode'"
+    [settings]="settings.textControl"
+  ></web-user-input>
+	<web-user-button
+		(click)="applyPromocode()"
+    [settings]="{ label: 'Apply Coupon' }"
+    [buttonClass]="'next-button'"
+    class="user-button"
+  ></web-user-button>
+</div>

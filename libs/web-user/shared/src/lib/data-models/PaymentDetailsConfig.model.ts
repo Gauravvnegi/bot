@@ -86,6 +86,7 @@ export class PaymentDetail implements Deserializable {
     onlinePayment: boolean;
     paymentConfigurations: PaymentConfig[];
     payableAmount?: any;
+    paymentHeaders?: any;
   }
 
   export class PaymentConfig {
@@ -100,5 +101,23 @@ export class PaymentDetail implements Deserializable {
     payOnDesk:boolean;
     transactionId:string;
     status:string;
+  }
+  export class PaymentCCAvenue {
+    merchantId: string;
+    language: string;
+    gatewayType: string;
+    accessCode: string;
+    secretKey: string;
+    subAccountId: string;
+    preAuth: string;
+    externalRedirect: string;
+  }
+  export class PaymentStripe {
+    stripeToken: string;
+    merchantId: string;
+    gatewayType: string;
+    secretKey: string;
+    preAuth: string;
+    externalRedirect: string;
   }
 

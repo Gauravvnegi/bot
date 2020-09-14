@@ -35,6 +35,9 @@ import { BreakfastService } from 'libs/web-user/shared/src/lib/services/breakfas
 import { SpaService } from 'libs/web-user/shared/src/lib/services/spa.service';
 import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
 import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @NgModule({
   imports: [
@@ -45,6 +48,9 @@ import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/def
     SignaturePadModule,
     PdfViewerModule,
     SlickCarouselModule,
+    MatTabsModule,
+    MatIconModule,
+    AngularSvgIconModule.forRoot(),
   ],
   declarations: [
     Temp000001RoutingModule.components,

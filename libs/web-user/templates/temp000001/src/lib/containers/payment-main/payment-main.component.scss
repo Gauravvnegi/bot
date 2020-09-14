@@ -1,0 +1,36 @@
+@import 'temp000001';
+
+.parent_block{
+    min-height: 86.3vh;
+    @media only screen and (max-width: 990px) {
+        min-height: 90.5vh;
+    }
+}
+
+.status-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 72vh;
+}
+
+th, tr {
+    text-align: left;
+    padding: 5px 10px 5px 10px;
+}
+
+@media only screen and (max-width: $tab-size) {
+    .user-button {
+      width: $half-width;
+    }
+}
+
+.header {
+    margin-bottom: 20px;
+    text-decoration: underline;
+}
+
+.main-template-button {
+    margin-top: 30px;
+}

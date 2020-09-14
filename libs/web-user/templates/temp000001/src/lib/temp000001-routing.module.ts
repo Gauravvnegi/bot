@@ -16,7 +16,6 @@ import { HealthDeclarationWrapperComponent } from './containers/health-declarati
 import { HealthDeclarationComponent } from './containers/health-declaration/health-declaration.component';
 import { MainComponent } from './containers/main/main.component';
 import { PaymentDetailsWrapperComponent } from './containers/payment-details-wrapper/payment-details-wrapper.component';
-import { PaymentDetailsComponent } from './containers/payment-details/payment-details.component';
 import { PaymentSummaryComponent } from './containers/payment-summary/payment-summary.component';
 import { RegistrationCardComponent } from './containers/registration-card/registration-card.component';
 import { SpecialCommentsComponent } from './containers/special-comments/special-comments.component';
@@ -76,7 +75,6 @@ export class Temp000001RoutingModule {
     GuestDetailsWrapperComponent,
     HealthDeclarationComponent,
     HealthDeclarationWrapperComponent,
-    PaymentDetailsComponent,
     PaymentSummaryComponent,
     PaymentDetailsWrapperComponent,
     DocumentsDetailsComponent,

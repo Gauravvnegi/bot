@@ -33,6 +33,10 @@ export class PaymentSummaryComponent implements OnInit {
     })
   }
 
+  applyPromocode(event) {
+    console.log(event);
+  }
+
   get bookingSummary(){
     return this._paymentDetailsService.paymentSummaryDetails.paymentDetail;
   }

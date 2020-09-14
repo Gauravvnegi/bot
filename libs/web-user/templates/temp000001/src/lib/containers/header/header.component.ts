@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { StatusComponent } from '../status/status.component';
 import { SummaryComponent } from '../summary/summary.component';
@@ -11,10 +11,11 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  headerName = 'Pre Check-In';
+  @Input() headerName;
   headerLogo = 'assets/logo.png';
   status = 'Status:';
   headerData = {};
+  isCustomHeader: boolean = false;
   constructor(
     private _matDialog: MatDialog,
     private _hotelService: HotelService
@@ -28,7 +29,8 @@ export class HeaderComponent implements OnInit {
     let { title } = this._hotelService.getCurrentJourneyConfig();
     let { logo } = this._hotelService.hotelConfig;
     this.headerLogo = logo;
-    this.headerName = title;
+    this.isCustomHeader = !!this.headerName;
+    this.headerName = this.headerName || title;
   }
 
   openModal() {

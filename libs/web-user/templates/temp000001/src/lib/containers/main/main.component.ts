@@ -87,7 +87,7 @@ export class MainComponent implements OnInit {
     //           name: 'next',
     //           buttonClass: 'next-button',
     //           click: {
-    //             fn_name: 'saveStayDetails',
+    //             fn_name: ' ',
     //           },
     //         },
     //       ],

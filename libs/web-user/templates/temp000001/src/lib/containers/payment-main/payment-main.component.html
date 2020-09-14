@@ -1,5 +1,5 @@
 <div class="parent_block" *ngIf="isReservationData">
-  <hospitality-bot-header></hospitality-bot-header>
+  <hospitality-bot-header [headerName]="'Payment'"></hospitality-bot-header>
   <div class="status-container">
     <div class="header">
       <h3>Payment Status</h3>
@@ -20,7 +20,10 @@
         </tr>
         <tr>
           <th>Amount :</th>
-          <td>{{ paymentStatusData.data.currency }} {{ paymentStatusData.data.amount }}</td>
+          <td>
+            {{ paymentStatusData.data.currency }}
+            {{ paymentStatusData.data.amount }}
+          </td>
         </tr>
         <tr *ngIf="paymentStatusData.data.status !== 'FAILURE'">
           <th>Bank Reference Number :</th>

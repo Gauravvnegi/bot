@@ -38,7 +38,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _reservationService: ReservationService,
     public _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private _hotelService: HotelService,
+    private _hotelService: HotelService
   ) {
     super();
     this.self = this;
@@ -78,34 +78,43 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     const TAB_INDEX = this.matTab['_selectedIndex'];
     const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
     if (TAB_LABEL === 'Pay Now') {
-      if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
+      if (
+        this.paymentMethodData &&
+        this.paymentMethodData.gatewayType === 'CCAVENUE'
+      ) {
         this._paymentDetailsService
           .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
           .subscribe(
             (response) => {
               window.location.href = response.billingUrl;
-            }, (error) => {
-              this._snackBarService.openSnackBarAsText('Payment could not be initiated!');
+            },
+            (error) => {
+              this._snackBarService.openSnackBarAsText(
+                'Payment could not be initiated!'
+              );
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['submitButton']
               );
             }
           );
-      } else if(this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
+      } else if (
+        this.paymentMethodData &&
+        this.paymentMethodData.gatewayType === 'STRIPE'
+      ) {
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
       } else {
-        this._snackBarService.openSnackBarAsText('Please select a payment method!');
+        this._snackBarService.openSnackBarAsText(
+          'Please select a payment method!'
+        );
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
       }
     } else {
       this.updatePaymentStatus();
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['submitButton']
-      );
+      this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
     }
   }
 
@@ -114,34 +123,39 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     const TAB_INDEX = this.matTab['_selectedIndex'];
     const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
     if (TAB_LABEL === 'Pay Now') {
-      if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
+      if (
+        this.paymentMethodData &&
+        this.paymentMethodData.gatewayType === 'CCAVENUE'
+      ) {
         this._paymentDetailsService
           .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
           .subscribe(
             (response) => {
               window.location.href = response.billingUrl;
-            }, (error) => {
-              this._snackBarService.openSnackBarAsText('Payment could not be initiated!');
+            },
+            (error) => {
+              this._snackBarService.openSnackBarAsText(
+                'Payment could not be initiated!'
+              );
               this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
+                this.buttonRefs['nextButton']
               );
             }
           );
-      } else if(this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
-        this._buttonService.buttonLoading$.next(
-          this.buttonRefs['submitButton']
-        );
+      } else if (
+        this.paymentMethodData &&
+        this.paymentMethodData.gatewayType === 'STRIPE'
+      ) {
+        this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       } else {
-        this._snackBarService.openSnackBarAsText('Please select a payment method!');
-        this._buttonService.buttonLoading$.next(
-          this.buttonRefs['submitButton']
+        this._snackBarService.openSnackBarAsText(
+          'Please select a payment method!'
         );
+        this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       }
     } else {
       this.updatePaymentStatus();
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['submitButton']
-      );
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
     }
     // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
   }
@@ -182,10 +196,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   mapPaymentInitiationData() {
-    if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
+    if (
+      this.paymentMethodData &&
+      this.paymentMethodData.gatewayType === 'CCAVENUE'
+    ) {
       const paymentCCAvenue = new PaymentCCAvenue();
       paymentCCAvenue.merchantId = this.paymentMethodData.merchantId;
-      paymentCCAvenue.language = "en";
+      paymentCCAvenue.language = 'en';
       paymentCCAvenue.gatewayType = this.paymentMethodData.gatewayType;
       paymentCCAvenue.accessCode = this.paymentMethodData.accessCode;
       paymentCCAvenue.secretKey = this.paymentMethodData.secretKey;
@@ -193,7 +210,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       paymentCCAvenue.preAuth = this.paymentMethodData.preAuth;
       paymentCCAvenue.externalRedirect = this.paymentMethodData.exernalRedirect;
       return paymentCCAvenue;
-    } else if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'STRIPE') {
+    } else if (
+      this.paymentMethodData &&
+      this.paymentMethodData.gatewayType === 'STRIPE'
+    ) {
       const paymentStripe = new PaymentStripe();
       paymentStripe.stripeToken = this.paymentMethodData.stripeToken;
       paymentStripe.gatewayType = this.paymentMethodData.gatewayType;

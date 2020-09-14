@@ -1,53 +1,35 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  AfterViewInit,
-  Inject,
-} from '@angular/core';
-import { MainComponent } from '../main/main.component';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
-  styleUrls: [
-    './temp000001.component.scss',
-    // '../../../../../../../../apps/web-user/src/sass/main.scss',
-  ],
+  styleUrls: ['./temp000001.component.scss'],
 })
-export class Temp000001Component implements OnInit, AfterViewInit {
-  @Input() templateData;
-  @Input() visibilityHidden = true;
-  @Input() config;
-
-  @ViewChild('mainComponent') mainComponent: MainComponent;
+export class Temp000001Component implements OnInit {
+  isLoaderVisible = true;
 
   constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
+    public _templateLoadingService: TemplateLoaderService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
   ngOnInit(): void {
     this.initConfig();
+    this.registerListeners();
   }
 
   private initConfig() {
-    this._reservationService.reservationId = this.config['reservationId'];
-    this._hotelService.currentJourney = this.config['journey'];
-    this.loadStyle('taj.styles.css');
+    // this.loadStyle('taj.styles.css');
   }
 
-  ngAfterViewInit() {
-    this.setTemplateConfig();
-  }
-
-  private setTemplateConfig() {
-    this.mainComponent.stepperData = this.templateData;
+  private registerListeners() {
+    this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
+      if (isLoading === false) {
+        this.isLoaderVisible = false;
+      }
+    });
   }
 
   loadStyle(styleName: string) {

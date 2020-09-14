@@ -1,5 +1,5 @@
 .background__wrapper {
-  background: url('../../../../../../../apps/web-user/src/assets/bg.png');
+  background: url('../../../../../../../../apps/web-user/src/assets/bg.png');
   position: fixed;
   top: 0;
   left: 0;
@@ -47,7 +47,7 @@
 
 .shimmer_container {
   padding: 35px 70px;
-  .responsive-stepper{
+  .responsive-stepper {
     display: none;
   }
   .stepper {
@@ -130,7 +130,7 @@
           }
         }
       }
-      .detail_data-responsive{
+      .detail_data-responsive {
         display: none;
         .data {
           width: 48%;
@@ -159,18 +159,18 @@
 
   @media only screen and (max-width: 990px) {
     padding: 15px 10px;
-    .responsive-stepper{
+    .responsive-stepper {
       display: flex;
       align-items: center;
       margin: 20px auto;
-      .circle{
+      .circle {
         height: 80px;
         width: 80px;
         border-radius: 50%;
       }
-      .text_box{
+      .text_box {
         width: 200px;
-        height:25px;
+        height: 25px;
         margin-left: 20px;
       }
     }
@@ -185,22 +185,22 @@
         height: 20px;
         margin-left: 0px;
       }
-      .detail_wrapper{
+      .detail_wrapper {
         margin: 0px;
         padding: 15px;
         padding-top: 25px;
-        .detail_data{
+        .detail_data {
           display: none;
         }
-        .detail_data-responsive{
+        .detail_data-responsive {
           display: block;
-          .data{
+          .data {
             width: auto;
             margin-bottom: 20px;
-            .title{
+            .title {
               height: 20px;
             }
-            .feild{
+            .feild {
               height: 20px;
             }
           }

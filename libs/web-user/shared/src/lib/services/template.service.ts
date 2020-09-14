@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TemplateService extends ApiService {
+  templateData;
   getTemplateData(templateId, journey?): Observable<any> {
     return journey
       ? this.get(`/api/v1/cms/template/${templateId}?journey=${journey}`)

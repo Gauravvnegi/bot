@@ -34,9 +34,30 @@ import { BreakfastComponent } from './containers/breakfast/breakfast.component';
 import { SpaComponent } from './containers/spa/spa.component';
 import { CakeComponent } from './containers/cake/cake.component';
 import { DefaultAmenityComponent } from './containers/default-amenity/default-amenity.component';
+import { PaymentMainComponent } from './containers/payment-main/payment-main.component';
+import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
 
 export const sharedAuthRoutes: Route[] = [
-  { path: '', component: Temp000001Component },
+  {
+    path: '',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: MainComponent,
+      },
+    ],
+  },
+  {
+    path: 'payment',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: PaymentMainComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
@@ -81,5 +102,7 @@ export class Temp000001RoutingModule {
     SpaComponent,
     CakeComponent,
     DefaultAmenityComponent,
+    PaymentMainComponent,
+    FeedbackMainComponent,
   ];
 }

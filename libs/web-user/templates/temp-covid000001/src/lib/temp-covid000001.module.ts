@@ -24,7 +24,6 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
     TempCovid000001Component,
   ],
   providers: [
-    HotelService,
     FaqService,
     SafeMeasuresService,
     RaiseRequestService,

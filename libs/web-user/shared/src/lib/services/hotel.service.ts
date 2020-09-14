@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class HotelService extends ApiService {
   private _hotelConfig;
   private _currentJourney;

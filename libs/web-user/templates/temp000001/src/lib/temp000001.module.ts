@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
@@ -12,7 +11,6 @@ import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/do
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
@@ -25,6 +23,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
+import { TemplateLoaderDirective } from './directives/template-loader.directive';
 import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
@@ -42,7 +41,6 @@ import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/def
     CommonModule,
     HttpClientModule,
     WebUserSharedModule,
-    RouterModule,
     Temp000001RoutingModule,
     SignaturePadModule,
     PdfViewerModule,
@@ -51,6 +49,7 @@ import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/def
   declarations: [
     Temp000001RoutingModule.components,
     StepperContentRendererDirective,
+    TemplateLoaderDirective,
     ButtonDirective,
   ],
   providers: [
@@ -60,8 +59,6 @@ import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/def
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    HotelService,
-    ReservationService,
     ParentFormService,
     StepperService,
     StayDetailsService,

@@ -1,4 +1,6 @@
-<div [style]="visibilityHidden ? { visibility: 'hidden' } : {}">
+<ng-container template-loader [templateId]="'temp000001'"></ng-container>
+
+<div [style]="isLoaderVisible ? { visibility: 'hidden' } : {}">
   <div class="background__wrapper"></div>
-  <hospitality-bot-main #mainComponent></hospitality-bot-main>
+  <router-outlet></router-outlet>
 </div>

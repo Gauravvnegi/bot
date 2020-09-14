@@ -6,6 +6,7 @@ import { ReservationService } from '../../../../../../shared/src/lib/services/bo
 import { ReservationDetails } from './../../../../../../shared/src/lib/data-models/reservationDetails';
 import { ParentFormService } from '../../../../../../shared/src/lib/services/parentForm.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -24,7 +25,8 @@ export class MainComponent implements OnInit {
     private fb: FormBuilder,
     private _reservationService: ReservationService,
     private _parentFormService: ParentFormService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +43,7 @@ export class MainComponent implements OnInit {
     ).subscribe(([reservationData, val]) => {
       this._hotelService.hotelConfig = reservationData['hotel'];
       this.isReservationData = true;
+      this.stepperData = this._templateService.templateData;
       this.getStepperData();
       this.reservationData = reservationData;
       this._reservationService.reservationData = reservationData;

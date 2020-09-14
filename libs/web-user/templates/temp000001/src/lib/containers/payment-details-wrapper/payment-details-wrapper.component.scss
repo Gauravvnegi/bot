@@ -20,8 +20,75 @@
 }
 
 .payment-wrapper{
-  background: var(--accordian-background-color, $accordian-background-color); 
-  border-radius: $border-radius-small;
-  padding-bottom: $padding-large;
+  background-color: $white; 
+  border-radius: 0 0 $border-radius-small $border-radius-small;
+  padding-bottom: 20px;
 }
 
+:host ::ng-deep .mat-tab-header {
+  border-radius: $border-radius-small $border-radius-small 0 0;
+}
+
+:host ::ng-deep .mat-tab-label {
+  justify-content: space-between;
+  min-width: 50%;
+  height: 75px;
+  background-color: white;
+  svg path {
+    fill: #000000;  
+  }
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: white;
+  background-color: #2187d5;
+  border: 1px solid white;
+  svg path {
+    fill: #ffffff !important;  
+  }
+}
+
+:host ::ng-deep .mat-tab-label-content {
+  width: 100%;
+}
+
+.custom-tab {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.inner-label {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.type-label {
+  display: flex;
+  padding-bottom: 15px;
+  justify-content: space-between;
+}
+
+.info-label {
+  display: flex;
+}
+
+.payment__wrapper--header{
+  padding: $padding-medium;
+  font-size: $font-large;
+  font-weight: $bolder;
+  @media only screen and (max-width: $tab-size) {
+    font-size: $font-small;
+    padding: $padding-small;
+  }
+}
+
+// :host ::ng-deep .mat-tab-label svg path {
+//   fill: #000000;  
+// }
+
+// :host ::ng-deep .mat-tab-label-active svg path {
+//   fill: #ffffff;  
+// }

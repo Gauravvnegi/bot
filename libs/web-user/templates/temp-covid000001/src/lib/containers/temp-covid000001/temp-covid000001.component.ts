@@ -14,7 +14,6 @@ export class TempCovid000001Component implements OnInit {
   constructor(private _hotelService: HotelService) {}
 
   ngOnInit(): void {
-    this._hotelService.hotelId = this.config['hotelId'];
     this.getHotelConfig();
   }
 

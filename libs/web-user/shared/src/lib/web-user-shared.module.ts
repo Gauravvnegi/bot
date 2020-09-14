@@ -36,6 +36,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { SlideComponent } from './presentational/slide/slide.component';
 import { ConfirmationPopupComponent } from './presentational/confirmation-popup/confirmation-popup.component';
 import { NumberInputComponent } from './presentational/number-input/number-input.component';
+import { PaymentMethodComponent } from './presentational/payment-method/payment-method.component';
+import { PromocodeComponent } from './presentational/promocode/promocode.component';
 
 @NgModule({
   imports: [
@@ -79,7 +81,9 @@ import { NumberInputComponent } from './presentational/number-input/number-input
     SafeHtmlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
-    SlideComponent
+    SlideComponent,
+    PaymentMethodComponent,
+    PromocodeComponent,
   ],
   declarations: [
     StepperComponent,
@@ -112,6 +116,8 @@ import { NumberInputComponent } from './presentational/number-input/number-input
     SlideComponent,
     ConfirmationPopupComponent,
     NumberInputComponent,
+    PaymentMethodComponent,
+    PromocodeComponent,
   ],
 })
 export class WebUserSharedModule {}

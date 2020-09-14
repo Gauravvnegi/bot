@@ -1,0 +1,24 @@
+<div class="methods-container">
+  <label class="labl" *ngFor="let option of settings.paymentConfigurations">
+    <input
+      name='method'
+      type="radio"
+      [value]="option.gatewayType"
+      (click)="setOption(option)"
+    />
+    <div>
+      <div class="method-content">
+        <h3>
+          {{ option.gatewayType }}
+        </h3>
+        <!-- <h6 *ngFor="let method of option.paymentMethods">{{ method.type }}</h6> -->
+        <div class="method-image-container">
+          <div *ngFor="let method of option.paymentMethods">
+            <img [src]="method.imageUrl" style="padding: 3px;max-width: 185px;" />
+          </div>
+        </div>
+      </div>
+      <span class="circle"><div class="tick"></div></span>
+    </div>
+  </label>
+</div>

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TemplateService } from '../../../../../shared/src/lib/services/template.service';
 import { CryptoService } from '../../../../../shared/src/lib/services/crypto.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
   selector: 'hospitality-bot-template-renderer',
@@ -10,14 +12,15 @@ import { CryptoService } from '../../../../../shared/src/lib/services/crypto.ser
 })
 export class TemplateRendererComponent implements OnInit {
   templateId: string;
-  templateLoaderId: string;
-  templateData;
   config;
 
   constructor(
     private route: ActivatedRoute,
     private templateService: TemplateService,
-    private _cryptoService: CryptoService
+    private _cryptoService: CryptoService,
+    private _reservationService: ReservationService,
+    private _hotelService: HotelService,
+    private _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
@@ -38,10 +41,13 @@ export class TemplateRendererComponent implements OnInit {
         reservationId,
         hotelId,
       } = this._cryptoService.extractTokenInfo(token);
-
-      this.templateLoaderId = templateId;
+      //can set a general loader
+      //set values in services
       this.getTemplateData(templateId, journey);
       this.config = { reservationId, journey, hotelId };
+      this._reservationService.reservationId = reservationId;
+      this._hotelService.currentJourney = journey;
+      this._hotelService.hotelId = hotelId;
     });
   }
 
@@ -49,8 +55,8 @@ export class TemplateRendererComponent implements OnInit {
     this.templateService
       .getTemplateData(templateId, journey)
       .subscribe((response) => {
-        this.templateData = response;
         this.templateId = response.template_id;
+        this._templateService.templateData = response;
       });
   }
 }

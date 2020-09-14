@@ -43,7 +43,7 @@
       }
     }
     @media only screen and (max-width: $M) {
-      width: 40%;
+      width: 36%;
       font-size: 9px;
       text-align: center;
       .social_icons {
@@ -66,6 +66,7 @@
     .text {
       font-size: $font-responsive-small;
       display: flex;
+      align-items: center;
       color: var(--footer-font-color, $footer-font-color);
     }
     .material-icons{
@@ -76,6 +77,7 @@
     }
     @media only screen and (max-width: $M) {
       justify-content: initial;
+      width: 29%;
       .text {
         font-size: $font-responsive-smaller;
       }

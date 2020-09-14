@@ -7,8 +7,8 @@ import {
   OnInit,
   ViewContainerRef,
 } from '@angular/core';
-import { TemplateLoaderService } from '../../../../shared/src/lib/services/template-loader.service';
-import { TempLoader000001Component } from '../template-loaders/temp-loader000001/temp-loader000001.component';
+import { TempLoader000001Component } from '../containers/temp-loader000001/temp-loader000001.component';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 
 const componentMapping = {
   temp000001: TempLoader000001Component,

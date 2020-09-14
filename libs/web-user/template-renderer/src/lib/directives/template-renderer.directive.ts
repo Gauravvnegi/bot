@@ -10,6 +10,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 const templates = {
   temp000001: {
@@ -37,68 +38,43 @@ const templates = {
 };
 
 @Directive({ selector: '[template-renderer]' })
-export class TemplateRendererDirective implements OnChanges, OnInit {
+export class TemplateRendererDirective implements OnChanges {
   @Input() templateId: string;
-  @Input() templateData;
-  @Input() config;
-  private _templateObj: ComponentRef<any>;
 
   constructor(
-    private _compiler: Compiler,
-    private _injector: Injector,
     protected _container: ViewContainerRef,
-    private _templateLoadingService: TemplateLoaderService
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnChanges() {
     if (this.templateId) {
-      this.asyncLoadComponent();
+      this.asyncLoadModule();
     }
   }
 
-  ngOnInit() {
-    this.registerListeners();
-  }
-
-  private registerListeners() {
-    this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
-      if (isLoading === false) {
-        this._templateObj.instance.visibilityHidden = false;
-      }
-    });
-  }
-
-  private async asyncLoadComponent() {
+  private async asyncLoadModule() {
     const module = await templates[this.templateId].modulePath();
+    const entity = this.route.snapshot.queryParamMap.get('entity');
+    const id = this.route.snapshot.queryParamMap.get('id');
 
-    const component = await templates[this.templateId].componentPath();
+    const config = [
+      {
+        path: '',
+        loadChildren: () => {
+          return module[templates[this.templateId].module];
+        },
+      },
+    ];
 
-    const moduleFactory = await this.loadModuleFactory(
-      module[templates[this.templateId].module]
-    );
-    const moduleRef = moduleFactory.create(this._injector);
+    this.router.resetConfig(config);
 
-    const factory = moduleRef.componentFactoryResolver.resolveComponentFactory(
-      component[templates[this.templateId].component]
-    );
-
-    this._templateObj = this._container.createComponent(
-      factory
-    ) as ComponentRef<any>;
-
-    this.passTemplateprops();
-  }
-
-  private passTemplateprops() {
-    this._templateObj.instance.templateData = this.templateData;
-    this._templateObj.instance.config = this.config;
-  }
-
-  private async loadModuleFactory(t: any) {
-    if (t instanceof NgModuleFactory) {
-      return t;
+    if (entity && id) {
+      this.router.navigate([`${entity}/${id}`], { preserveQueryParams: true });
+    } else if (entity) {
+      this.router.navigate([`${entity}`], { preserveQueryParams: true });
     } else {
-      return await this._compiler.compileModuleAsync(t);
+      this.router.navigate([''], { preserveQueryParams: true });
     }
   }
 }

@@ -112,7 +112,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   onCheckinSubmit() {
     const data = this.mapPaymentInitiationData();
     const TAB_INDEX = this.matTab['_selectedIndex'];
-    const TAB_LABEL = this.matTab['_tabs']['_results'][TAB_INDEX]['textLabel'];
+    const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
     if (TAB_LABEL === 'Pay Now') {
       if (this.paymentMethodData && this.paymentMethodData.gatewayType === 'CCAVENUE') {
         this._paymentDetailsService

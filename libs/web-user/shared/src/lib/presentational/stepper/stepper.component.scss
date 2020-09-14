@@ -11,11 +11,25 @@
   border-top-width: 3px;
 }
 
-:host ::ng-deep .mat-step-icon-selected {
+:host ::ng-deep .mat-step-optional{
+  color: var(--stepper-font-color,$stepper-font-color);
+}
+
+
+
+:host ::ng-deep .mat-step-icon-selected > div > mat-icon {
   color: var(
     --stepper-icon-selected-font-color,
     $stepper-icon-selected-font-color
-  ); // your styles
+  );
+}
+
+:host ::ng-deep.mat-step-icon-state-number > div > span {
+  color: var(--stepper-icon-number-font-color, $stepper-icon-number-font-color);
+}
+
+:host ::ng-deep.mat-step-icon-state-done > div > mat-icon {
+  color: var(--stepper-icon-done-font-color, $stepper-icon-done-font-color);
 }
 
 :host::ng-deep .mat-step-header .mat-step-icon {

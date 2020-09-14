@@ -3,7 +3,7 @@
 // Global CSS for Template
 
 .background__wrapper {
-  background: url('../../../../../../../../apps/web-user/src/assets/bg.png');
+  background-image: url($background-image);
   position: fixed;
   top: 0;
   left: 0;
@@ -52,10 +52,10 @@
     color: $white;
   }
   &-select-panel {
-    box-shadow: var(--dropdown-shadow, $dropdown-shadow);
+    box-shadow: var(--dropdown-shadow, $dropdown-shadow) !important;
   }
   &-step-header .mat-step-label.mat-step-label-active {
-    color: $white;
+    color: var(--stepper-font-color,$stepper-font-color);
   }
   &-icon.expand-icon {
     margin-right: -16px;

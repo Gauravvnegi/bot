@@ -35,11 +35,11 @@ body {
 
 // Global class to change snackbar background
 .danger {
-  background-color: $snack-bar-red !important;
+  background-color: var(--snack-bar-red,$snack-bar-red) !important;
 }
 
 .success {
-  background-color: $snack-bar-green !important;
+  background-color: var(--snack-bar-green,$snack-bar-green) !important;
 }
 
 // TODO = need to find the another approach to acheive below styling

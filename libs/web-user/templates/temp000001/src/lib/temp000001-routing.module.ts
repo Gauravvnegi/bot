@@ -57,6 +57,16 @@ export const sharedAuthRoutes: Route[] = [
       },
     ],
   },
+  {
+    path: 'feedback',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: FeedbackMainComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({

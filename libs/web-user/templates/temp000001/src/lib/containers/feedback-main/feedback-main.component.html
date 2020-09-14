@@ -1,15 +1,16 @@
 <div class="parent_block" *ngIf="isReservationData">
   <hospitality-bot-header [headerName]="'Feedback'"></hospitality-bot-header>
-	<hospitality-bot-feedback-details
+  <hospitality-bot-feedback-details
     *ngIf="feedBackConfig"
     [parentForm]="parentForm"
     [reservationData]="reservationDetails"
     (addFGEvent)="addFGEvent($event)"
-	></hospitality-bot-feedback-details>
-	<div class="main-template-button">
+  ></hospitality-bot-feedback-details>
+  <div class="main-template-button">
     <web-user-button
       #saveButton
       buttonTemplateSwitch
+      [buttonClass]="'next-button'"
       (click)="saveFeedbackDetails()"
       [settings]="{ label: 'Save' }"
       class="user-button"

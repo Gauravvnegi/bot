@@ -29,7 +29,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   @Input() buttonConfig;
 
   hotelPaymentConfig: HotelPaymentConfig;
-  cardType;
+  isConfigLoaded: boolean = false;
   paymentMethodData;
 
   constructor(
@@ -62,6 +62,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       .getPaymentConfiguration(res_data.hotel.id, journey.name)
       .subscribe((response) => {
         this.hotelPaymentConfig = response;
+        this.isConfigLoaded = true;
         this.initPaymentDetailsDS(this.hotelPaymentConfig);
       });
   }

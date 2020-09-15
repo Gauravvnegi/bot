@@ -47,6 +47,7 @@ export class RequestPasswordComponent implements OnInit {
         response.message,'',
         { panelClass: 'success' }
       );
+      this._router.navigate(['/auth/resend-password']);
     },
     (error) =>{
       this._snackbarService.openSnackBarAsText(error.error.message);

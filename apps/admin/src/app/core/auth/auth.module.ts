@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { SharedMaterialModule, SnackBarService } from 'libs/shared/material/src';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
+import { ResendPasswordComponent } from './components/resend-password/resend-password.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { AuthService } from './services/auth.service';
     RequestPasswordComponent,
     ResetPasswordComponent,
     LogoutComponent,
+    ResendPasswordComponent,
   ],
   imports: [
     CommonModule, 

@@ -9,6 +9,7 @@ import { RegisterComponent } from './core/auth/components/register/register.comp
 import { RequestPasswordComponent } from './core/auth/components/request-password/request-password.component';
 import { LogoutComponent } from './core/auth/components/logout/logout.component';
 import { ResetPasswordComponent } from './core/auth/components/reset-password/reset-password.component';
+import { ResendPasswordComponent } from './core/auth/components/resend-password/resend-password.component';
 
 const appRoutes: Route[] = [
   {
@@ -34,6 +35,10 @@ const appRoutes: Route[] = [
       {
         path: 'request-password',
         component: RequestPasswordComponent,
+      },
+      {
+        path: 'resend-password',
+        component: ResendPasswordComponent,
       },
       {
         path: 'reset-password',

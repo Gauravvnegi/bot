@@ -185,12 +185,6 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     this.dialogRef.componentInstance.onSubmitEvent.subscribe(() =>{
       this.removeAmenity(aminityId, packageCode);
     })
-
-    this.dialogRef.afterClosed().subscribe(result => {
-      if(result){
-        this._buttonService.buttonLoading$.next(this.componentRef.instance.removeButton);
-      }
-    });
   }
 
   listenForServiceRemoval(){

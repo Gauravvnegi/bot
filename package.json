@@ -52,7 +52,10 @@
     "angular2-signaturepad": "^2.11.0",
     "angular2-text-mask": "^9.0.0",
     "crypto-js": "^4.0.0",
+    "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
+    "jspdf": "^2.1.1",
+    "jspdf-autotable": "^3.5.12",
     "jszip": "^3.5.0",
     "jszip-utils": "^0.1.0",
     "lodash": "^4.17.19",
@@ -68,6 +71,7 @@
     "rxjs": "^6.5.5",
     "slick-carousel": "^1.8.1",
     "text-mask-addons": "^3.8.0",
+    "xlsx": "^0.16.7",
     "zone.js": "^0.10.2"
   },
   "devDependencies": {

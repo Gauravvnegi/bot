@@ -23,9 +23,9 @@
 
 <div class="header">
   <div class="header--text">
-  <p class="heading">Reservations</p>
-  <p class="selected">2 record(s) are selected</p>
-</div>
+    <p class="heading">Reservations</p>
+    <p class="selected">2 record(s) are selected</p>
+  </div>
   <div class="icons">
     <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
     <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
@@ -46,7 +46,7 @@
       <span style="vertical-align: middle; margin-left: 0.5em;">CSV</span>
     </ng-template>
   </p-dropdown>
-  <button class="go">GO</button>
+  <button class="go" (click)="exportExcel()">GO</button>
   <div class="seperator"></div>
   <a href="#" class="reset-link">Reset Filter</a>
 </div>

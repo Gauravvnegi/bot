@@ -8,6 +8,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { TabGroupComponent } from './components/tab-group/tab-group.component';
     TabMenuModule,
     DropdownModule,
   ],
-  declarations: [DatatableComponent, TabGroupComponent],
-  exports: [DatatableComponent , TabGroupComponent],
+  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent],
+  exports: [DatatableComponent, TabGroupComponent, UploadFileComponent],
 })
 export class AdminSharedModule {}

@@ -1,0 +1,51 @@
+<div>
+    <form [formGroup]="amenityForm" (ngSubmit)="updateAmenity()">
+      <div>
+        <mat-label>Package Code:</mat-label>
+          <mat-form-field>
+              <input matInput formControlName="packageCode">
+          </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Package Name:</mat-label>
+          <mat-form-field>
+              <input matInput formControlName="name">
+          </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Description:</mat-label>
+        <mat-form-field>
+          <input matInput formControlName="description">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Type:</mat-label>
+        <mat-form-field>
+          <input matInput formControlName="type">   
+        </mat-form-field>
+        
+        <mat-label>Amount:</mat-label>
+        <mat-form-field>
+          <mat-label></mat-label>
+          <input matInput formControlName="rate" >
+          <span matPrefix *ngIf="hotelPackage">{{this.hotelPackage.amenityPackage.currencyCode}}&nbsp;</span>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Upload Image:</mat-label>
+       
+        <hospitality-bot-upload-file
+        [maxFileSize]="fileSize"
+        [url]="amenityImageUrl"
+        [fileType]="fileType"
+        [uploadStatus]="uploadStatus"
+        (fileData)="uploadFile($event)">
+      </hospitality-bot-upload-file>
+      </div>
+      <div>
+        <mat-slide-toggle formControlName="status"></mat-slide-toggle>
+      </div>
+      <button  mat-button >Save</button>
+    </form>
+  </div>
+  

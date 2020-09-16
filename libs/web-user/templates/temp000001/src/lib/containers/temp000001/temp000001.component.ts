@@ -21,7 +21,7 @@ export class Temp000001Component implements OnInit {
   }
 
   private initConfig() {
-    // this.loadStyle('taj.styles.css');
+    //this.loadStyle('taj.styles.css');
   }
 
   private registerListeners() {

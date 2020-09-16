@@ -38,6 +38,12 @@ export class StayDetailsService extends ApiService {
       'travellingWithLabel'
     ] = new FieldSchema().deserialize({
       master_label: 'Travelling with',
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#737373',
+        },
+      },
     });
 
     stayDetailsFieldSchema['adultGuest'] = new FieldSchema().deserialize({

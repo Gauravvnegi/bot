@@ -16,7 +16,16 @@ export class FieldSchema implements Deserializable {
   required?: boolean;
   type: string;
   contentType?: string;
-  style?: { fieldSetWrapperStyles: '' };
+  style?: {
+    fieldSetWrapperStyles: '';
+    labelWrapperStyles: '';
+    detailLabelStyles: '';
+    childLabelStyles: '';
+    detailValueStyles: '';
+    detailWrapperStyles: '';
+    detailPrefixIconStyles: '';
+    detailMatIconStyles: '';
+  };
   mediaQuery?;
   icon?: string;
   url?: string;
@@ -41,7 +50,8 @@ export class FieldSchema implements Deserializable {
       _.set({}, 'maskPattern', _.get(input, ['maskPattern'], false)),
       _.set({}, 'options', _.get(input, ['options'])),
       _.set({}, 'placeholder', _.get(input, ['placeholder'])),
-      _.set({}, 'isUploading', _.get(input, ['isUploading']))
+      _.set({}, 'isUploading', _.get(input, ['isUploading'])),
+      _.set({}, 'style', _.get(input, ['style']))
     );
     return this;
   }

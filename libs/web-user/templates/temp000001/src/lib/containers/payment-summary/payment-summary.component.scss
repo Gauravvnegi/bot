@@ -21,8 +21,8 @@
   }
 }
 
-.payment__wrapper--header{
-  padding: $padding-large;
+.payment__wrapper--header {
+  padding: $padding-medium;
   font-size: $font-large;
   font-weight: $bolder;
   @media only screen and (max-width: $tab-size) {
@@ -31,75 +31,126 @@
   }
 }
 
-.table__wrapper{
+.table__wrapper {
   padding: 0px 25px;
   @media only screen and (max-width: $tab-size) {
-    padding: 0px 15px;
+    padding: 0px $padding-medium;
   }
 }
 
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  display: none;
+}
+
+:host ::ng-deep .mat-form-field-suffix {
+  display: none;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  border-top-width: 5px;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
+
+:host ::ng-deep input {
+  height: 33px;
+  border: 2px solid lightgray;
+  width: 27vw;
+  padding: 0 20px;
+}
+
+:host ::ng-deep .input_feild {
+  width: 30vw;
+}
+
+:host ::ng-deep .mat__field--wrapper {
+  margin-bottom: 0px;
+}
+
 .description-table {
-  width: 100%;
-  border: 2px solid #eee;
-  border-radius: 10px;
+  width: $full-width;
   .header {
-    background-color: $icon-color;
-    font-size: 18px;
-    font-weight: 600;
+    background-color: $primary-blue;
+    font-size: $font-medium;
+    font-weight: $bold;
     color: white;
     td {
-      padding: 15px;
+      padding: $padding-small;
       text-align: center;
     }
   }
 
   .order__details {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: $font-medium;
+    font-weight: $bold;
     td {
-      padding: 15px;
+      padding: $padding-medium;
       text-align: center;
-      b{
+      border-bottom: 2px solid lightgray;
+      .roomType {
         color: lightgray;
       }
     }
   }
   .total__amount {
     td {
-      font-size: 16px;
-      color: $icon-color;
+      font-size: $font16;
       text-align: right;
-      font-weight: 600;
-      padding: 20px;
-      b {
-        color: black;
+      font-weight: $bold;
+      padding: $padding-medium;
+      .enteries {
+        display: flex;
+        justify-content: flex-end;
         font-weight: 700;
         font-size: 20px;
+        .label {
+          width: 28%;
+          text-align: left;
+        }
+        .value{
+          width: 12%;
+          text-align: right;
+        }
+      }
+      b {
+        color: black;
+        font-weight: $bolder;
+        font-size: $font-large;
       }
     }
   }
   @media only screen and (max-width: $M) {
     border-width: 1px;
-    .header{
+    .header {
       font-size: $font-responsive-small;
-      td{
+      td {
         padding: 5px;
       }
     }
-    .order__details{
+    .order__details {
       font-size: $font-responsive-smaller;
-      td{
+      td {
         padding: 5px;
       }
     }
-    .total__amount{
-      td{
+    .total__amount {
+      td {
         font-size: $font-responsive-small;
         padding: 5px;
-       b{
-         font-size: 15px;
-       }
+        b {
+          font-size: 15px;
+        }
       }
     }
   }
+}
+
+.paid__amount{
+  color: #159855;
+}
+
+.due__amount{
+  color: $primary-blue;
 }

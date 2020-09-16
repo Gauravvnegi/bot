@@ -13,12 +13,12 @@
   &:hover {
     cursor: pointer;
     i::before {
-      color: $icon-color;
+      color: $primary-blue;
     }
   }
 }
 
-@mixin slider-buttons-responsive {
+@mixin slider-buttons-responsive() {
   padding: 2px 8px;
   top: 38px;
   i::before {

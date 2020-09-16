@@ -1,3 +1,5 @@
+@import 'main';
+
 .flex__column {
   display: flex;
   flex-direction: column;
@@ -9,8 +11,8 @@ mat-label {
 }
 
 :host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-start {
-  border-color: #288ad6;
+  border-color: $primary-blue;
 }
 :host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-end {
-  border-color: #288ad6;
+  border-color: $primary-blue;
 }

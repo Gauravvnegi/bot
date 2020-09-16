@@ -1,3 +1,6 @@
+@import 'main';
+
+
 body {
     margin: 0;
     padding: 0;
@@ -20,7 +23,7 @@ body {
 }
 
 .payment-title {
-    width: 100%;
+    width: $full-width;
     text-align: center;
 }
 
@@ -56,7 +59,7 @@ body {
     grid-template-rows: 90px 90px 90px;
     grid-template-areas: "name name""number number""expiration security";
     max-width: 400px;
-    padding: 20px;
+    padding: $padding-large;
     color: #707070;
 }
 
@@ -67,9 +70,9 @@ label {
 
 input {
     margin-top: 3px;
-    padding: 15px;
-    font-size: 16px;
-    width: 100%;
+    padding: $padding-medium;
+    font-size: $font16;
+    width: $full-width;
     border-radius: 3px;
     border: 1px solid #dcdcdc;
 }
@@ -91,11 +94,11 @@ input {
 }
 
 .container {
-    width: 100%;
+    width: $full-width;
     max-width: 400px;
     max-height: 251px;
     height: 54vw;
-    padding: 20px;
+    padding: $padding-large;
 }
 
 #ccsingle {
@@ -111,7 +114,7 @@ input {
 
 .creditcard svg#cardfront,
 .creditcard svg#cardback {
-    width: 100%;
+    width: $full-width;
     -webkit-box-shadow: 1px 5px 6px 0px black;
     box-shadow: 1px 5px 6px 0px black;
     border-radius: 22px;

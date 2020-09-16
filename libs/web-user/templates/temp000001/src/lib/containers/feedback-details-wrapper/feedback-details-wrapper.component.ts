@@ -51,6 +51,17 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   saveFeedbackDetails() {
+
+    const status = this._feedbackDetailsService.validateFeedbackDetailForm(
+      this.parentForm
+    ) as Array<any>;
+
+    if (status.length) {
+      this.performActionIfNotValid(status);
+      this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
+      return;
+    }
+
     let value = this.parentForm.getRawValue();
     let data = this._feedbackDetailsService.mapFeedbackData(
       value && value.feedbackDetail
@@ -75,6 +86,11 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
           );
         }
       );
+  }
+
+  private performActionIfNotValid(status: any[]) {
+    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    return;
   }
 
   goBack() {

@@ -83,37 +83,25 @@ export class StepperComponent extends BaseComponent {
   }
 
   ngAfterViewInit() {
-    this.initStepperLayout();
+    // this.initStepperLayout();
     this.isComponentRendered.next(true);
   }
 
   initStepperLayout() {
-    this.initStepperVariables();
+    //this.initStepperVariables();
   }
 
-  initStepperVariables() {
-    let cssText = '';
-    for (let stepperLayoutVariable in this.stepperConfig.layout_variables) {
-      // this.renderer.setStyle(
-      //   this.stepperWrapper.nativeElement,
-      //   'cssText',
-      // stepperLayoutVariable +
-      //   ':' +
-      //   this.stepperConfig.layout_variables[stepperLayoutVariable]
-      // );
-
-      cssText +=
-        stepperLayoutVariable +
-        ':' +
-        this.stepperConfig.layout_variables[stepperLayoutVariable] +
-        ';';
-      console.log(
-        'StepperComponent -> initStepperVariables -> cssText',
-        cssText
-      );
-    }
-    this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
-  }
+  // initStepperVariables() {
+  //   let cssText = '';
+  //   for (let stepperLayoutVariable in this.stepperConfig.layout_variables) {
+  //     cssText +=
+  //       stepperLayoutVariable +
+  //       ':' +
+  //       this.stepperConfig.layout_variables[stepperLayoutVariable] +
+  //       ';';
+  //   }
+  //   this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
+  // }
 
   onStepChange(event: any): void {
     this.stepperService.setSelectedIndex(event.selectedIndex);

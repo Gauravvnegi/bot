@@ -1,8 +1,7 @@
-import { Injectable, InjectionToken, Inject } from '@angular/core';
-
-import { untilDestroyed } from 'ngx-take-until-destroy';
-import { Subject, combineLatest, of, merge } from 'rxjs';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { merge, of, Subject } from 'rxjs';
 
 export const defaultErrors = {
   required: (error, label, msg?) => `${label} is required`,
@@ -20,9 +19,18 @@ export const defaultErrors = {
 };
 
 export const customPatternValid = (config: any): ValidatorFn => {
+  
   return (control: FormControl) => {
     let urlRegEx: RegExp = config.pattern;
-    if (control.value && !control.value.match(urlRegEx)) {
+    // need to remove toString
+    let value;
+    if(control.value){
+      value = control.value.toString();
+    }else{
+      value = control.value;
+    }
+  
+    if (value && !value.match(urlRegEx)) {
       return config;
     } else {
       return null;
@@ -35,9 +43,7 @@ export const FORM_ERRORS = new InjectionToken('FORM_ERRORS', {
   factory: () => defaultErrors,
 });
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ValidatorService {
   errorMessageEvent = new Subject();
   constructor(@Inject(FORM_ERRORS) private errors) {}

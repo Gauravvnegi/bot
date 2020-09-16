@@ -1,16 +1,16 @@
 import {
   Directive,
-  Renderer2,
+  ElementRef,
   Input,
   OnChanges,
-  ElementRef,
+  Renderer2,
 } from '@angular/core';
-
 import { isEmpty } from 'lodash';
 
 @Directive({ selector: '[file-upload-css]' })
 export class FileUploadCssDirective implements OnChanges {
   @Input() url;
+
   constructor(private _renderer: Renderer2, private elementRef: ElementRef) {}
 
   ngOnChanges() {

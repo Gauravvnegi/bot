@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
-import { ReservationService } from './booking.service';
+import { FormArray, FormGroup } from '@angular/forms';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import {
+  ContactDetails,
+  Guest,
+  GuestDetails,
+  ReservationDetails,
+} from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { Observable, Subject } from 'rxjs';
+import { CountryCodes } from '../../../../shared/src/lib/data-models/countryCode';
+import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   GuestDetailDS,
   GuestDetailsConfigI,
 } from '../data-models/guestDetailsConfig.model';
-import { CountryCodes } from '../../../../shared/src/lib/data-models/countryCode';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-import {
-  ContactDetails,
-  GuestDetails,
-  Guest,
-  ReservationDetails,
-} from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-
-import { Subject, Observable } from 'rxjs';
-import { FormGroup, FormArray } from '@angular/forms';
 
 @Injectable()
-export class GuestDetailsService extends ReservationService {
+export class GuestDetailsService extends ApiService {
   private _guestDetailDS: GuestDetailDS;
   guestDetailDS$ = new Subject();
   guestDetailForm;
@@ -131,10 +130,7 @@ export class GuestDetailsService extends ReservationService {
   }
 
   updateGuestDetails(reservationId, data): Observable<ReservationDetails> {
-    return this.apiService.put(
-      `/api/v1/reservation/${reservationId}/guests`,
-      data
-    );
+    return this.put(`/api/v1/reservation/${reservationId}/guests`, data);
   }
 
   mapGuestDetailValues(data, value) {

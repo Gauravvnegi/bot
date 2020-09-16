@@ -13,15 +13,100 @@
 
 :host ::ng-deep .back-button {
   @include footer-back();
-  
 }
 :host ::ng-deep .next-button {
   @include footer-next();
 }
 
-.payment-wrapper{
-  background-color: $white; 
-  border-radius: $border-radius-small;
+.payment-wrapper {
+  background-color: $white;
+  border-radius: 0 0 $border-radius-small $border-radius-small;
   padding-bottom: 20px;
 }
 
+:host ::ng-deep .mat-tab-header {
+  border-radius: $border-radius-small $border-radius-small 0 0;
+  border-bottom: none;
+  background-color: white;
+}
+
+:host ::ng-deep .mat-tab-label {
+  justify-content: space-between;
+  min-width: 50%;
+  height: 75px;
+  background-color: white;
+  box-shadow: 0px 2px 7px 2px rgb(245, 244, 244);
+  margin-right: 10px;
+  opacity: 1;
+  color: #737373;
+  svg path {
+    fill: #737373 !important;
+  }
+}
+
+:host ::ng-deep .amount{
+  font-size: 23px;
+}
+
+:host ::ng-deep .mat-tab-labels {
+  padding-bottom: 10px;
+}
+
+:host ::ng-deep .mat-ink-bar {
+  background-color: white !important;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: white;
+  background-color: #2187d5;
+  border-radius: 10px 0px 0px 0px;
+  border: 1px solid white;
+  svg path {
+    fill: #ffffff !important;
+  }
+}
+
+:host ::ng-deep .mat-tab-label-content {
+  width: 100%;
+}
+
+.custom-tab {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.inner-label {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.type-label {
+  display: flex;
+  padding-bottom: 15px;
+  justify-content: space-between;
+}
+
+.info-label {
+  display: flex;
+}
+
+.payment__wrapper--header {
+  padding: $padding-medium;
+  font-size: $font-large;
+  font-weight: $bolder;
+  @media only screen and (max-width: $tab-size) {
+    font-size: $font-small;
+    padding: $padding-small;
+  }
+}
+
+// :host ::ng-deep .mat-tab-label svg path {
+//   fill: #000000;
+// }
+
+// :host ::ng-deep .mat-tab-label-active svg path {
+//   fill: #ffffff;
+// }

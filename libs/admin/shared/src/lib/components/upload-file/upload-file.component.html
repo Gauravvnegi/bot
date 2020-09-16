@@ -1,0 +1,33 @@
+<div>
+    <!-- <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
+      settings.master_label
+    }}</mat-label> -->
+    <div class="upload__box">
+      <img
+        file-upload-css
+        loading="'lazy'"
+        [src]="url"
+        class="upload__box__child"
+      />
+      <!-- <img
+        loading="'lazy'"
+        class="upload__box-file_icon"
+        [src]="fileConfig.fileIcon"
+      /> -->
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        [attr.disabled]=""
+        (click)="fileInput.value = null"
+        (change)="onSelectFile($event)"
+      />
+      <input type="hidden"/>
+      <!-- <span *ngIf="!isValidDocument">{{ error }}</span> -->
+      <mat-label></mat-label>
+    </div>
+    <ng-container *ngIf="uploadStatus">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-container>
+  </div>
+  

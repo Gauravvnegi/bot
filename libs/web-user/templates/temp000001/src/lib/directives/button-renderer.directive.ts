@@ -1,10 +1,10 @@
 import {
-  Directive,
-  ViewContainerRef,
   ComponentFactoryResolver,
-  Input,
   ComponentRef,
+  Directive,
+  Input,
   Renderer2,
+  ViewContainerRef,
 } from '@angular/core';
 import { ButtonComponent } from 'libs/web-user/shared/src/lib/presentational/button/button.component';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -17,7 +17,7 @@ export class ButtonDirective {
   constructor(
     private _resolver: ComponentFactoryResolver,
     private _container: ViewContainerRef,
-    private renderer: Renderer2,
+    private _renderer: Renderer2,
     private _buttonService: ButtonService
   ) {}
 
@@ -56,7 +56,7 @@ export class ButtonDirective {
   ) {
     config.settings &&
       config.settings.isClickedTemplateSwitch &&
-      this.renderer.listen(
+      this._renderer.listen(
         buttonComponentObj.location.nativeElement,
         'click',
         () => {
@@ -75,7 +75,7 @@ export class ButtonDirective {
       if (typeof this.context[config.click.fn_name] != 'function') {
         console.error('No function exists in context');
       } else {
-        this.renderer.listen(
+        this._renderer.listen(
           buttonComponentObj.location.nativeElement,
           'click',
           () => {

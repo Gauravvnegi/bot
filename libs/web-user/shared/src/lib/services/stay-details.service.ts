@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { Observable, Subject } from 'rxjs';
+import { FieldSchema } from '../data-models/fieldSchema.model';
+import { ReservationDetails } from '../data-models/reservationDetails';
 import {
+  SpecialCommentsConfigI,
   StayDetailDS,
   StayDetailsConfigI,
-  SpecialCommentsConfigI,
 } from '../data-models/stayDetailsConfig.model';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-
-import { ReservationDetails } from '../data-models/reservationDetails';
-import { Observable, Subject } from 'rxjs';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 
 @Injectable()
 export class StayDetailsService extends ApiService {
@@ -30,11 +29,21 @@ export class StayDetailsService extends ApiService {
       label: 'Departure Date',
       disable: true,
     });
+    stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
+      label: 'Expected Arrival Time',
+      disable: false,
+    });
 
     stayDetailsFieldSchema[
       'travellingWithLabel'
     ] = new FieldSchema().deserialize({
       master_label: 'Travelling with',
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#737373',
+        },
+      },
     });
 
     stayDetailsFieldSchema['adultGuest'] = new FieldSchema().deserialize({
@@ -48,7 +57,7 @@ export class StayDetailsService extends ApiService {
       master_label: 'Kids',
     });
     stayDetailsFieldSchema['roomType'] = new FieldSchema().deserialize({
-      label: 'RoomType',
+      label: 'Room Type',
       disable: true,
       options: [
         { key: 'DELUXE', value: 'DELUXE' },

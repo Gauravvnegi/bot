@@ -32,7 +32,8 @@ export class FeedbackDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.ratingScale = this.ratingScaleRange;
     this.ratingScaleConfig = this.ratingConfig;
-    this.feedbackDetailsConfig = this.setFieldConfiguration();
+    this._feedbackDetailsService.selectedServices = this.suggestionArray;
+    
     this.setfeedbackDetails();
   }
 
@@ -42,12 +43,12 @@ export class FeedbackDetailsComponent implements OnInit {
   initFeedBackDetailForm() {
     this.feedbackDetailsForm = this._fb.group({
       feedback: [''],
-      rating: [''],
+      rating: ['', [Validators.required]],
     });
   }
 
-  setFieldConfiguration() {
-    return this._feedbackDetailsService.setFieldConfigForFeedbackDetails();
+  setFieldConfiguration(feedbackText) {
+    return this._feedbackDetailsService.setFieldConfigForFeedbackDetails(feedbackText);
   }
 
   SetHotelServices(event) {
@@ -62,13 +63,17 @@ export class FeedbackDetailsComponent implements OnInit {
 
   setRating(event) {
     this.rating.patchValue(event);
+    let feedbackText;
     if(event <= this.ratingScale.length/2){
       this.title = this._feedbackDetailsService.feedbackConfigDS &&
                     this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.negativeTitle;
+      feedbackText = 'Tell us what went wrong';
     }else{
       this.title = this._feedbackDetailsService.feedbackConfigDS &&
                     this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.positiveTitle;
+      feedbackText = 'Tell us what did you like';
     }
+    this.feedbackDetailsConfig = this.setFieldConfiguration(feedbackText);
   }
 
   setfeedbackDetails() {

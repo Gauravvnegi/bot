@@ -1,29 +1,26 @@
 import {
-  Directive,
-  Input,
-  ComponentFactoryResolver,
-  OnChanges,
-  ViewContainerRef,
-  ComponentRef,
-} from '@angular/core';
-import {
   BreakpointObserver,
   Breakpoints,
   BreakpointState,
 } from '@angular/cdk/layout';
-
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-
+import {
+  ComponentFactoryResolver,
+  ComponentRef,
+  Directive,
+  Input,
+  OnChanges,
+  ViewContainerRef,
+} from '@angular/core';
 import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
-import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
-import { GuestDetailsWrapperComponent } from '../containers/guest-details-wrapper/guest-details-wrapper.component';
-import { HealthDeclarationComponent } from '../containers/health-declaration/health-declaration.component';
-import { DocumentsDetailsWrapperComponent } from '../containers/documents-details-wrapper/documents-details-wrapper.component';
-import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
-import { FeedbackDetailsWrapperComponent } from '../containers/feedback-details-wrapper/feedback-details-wrapper.component';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { BillSummaryDetailsWrapperComponent } from '../containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
+import { DocumentsDetailsWrapperComponent } from '../containers/documents-details-wrapper/documents-details-wrapper.component';
+import { FeedbackDetailsWrapperComponent } from '../containers/feedback-details-wrapper/feedback-details-wrapper.component';
+import { GuestDetailsWrapperComponent } from '../containers/guest-details-wrapper/guest-details-wrapper.component';
 import { HealthDeclarationWrapperComponent } from '../containers/health-declaration-wrapper/health-declaration-wrapper.component';
+import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
+import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
 
 const componentMapping = {
@@ -44,7 +41,7 @@ export class StepperContentRendererDirective implements OnChanges {
   @Input() dataToPopulate;
 
   private _stepperComponentObj: ComponentRef<StepperComponent>;
-  private isStepperRendered: boolean = false;
+  private _isStepperRendered: boolean = false;
 
   constructor(
     private _resolver: ComponentFactoryResolver,
@@ -83,7 +80,7 @@ export class StepperContentRendererDirective implements OnChanges {
     this._breakpointObserver
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
-        if (this.isStepperRendered) {
+        if (this._isStepperRendered) {
           this._stepperComponentObj.destroy();
           this.createStepperFactory();
         }
@@ -119,7 +116,7 @@ export class StepperContentRendererDirective implements OnChanges {
     this._stepperComponentObj.instance.isComponentRendered.subscribe(
       (isRendered: boolean) => {
         if (isRendered && this.dataToPopulate) {
-          this.isStepperRendered = true;
+          this._isStepperRendered = true;
           this.createStepperContentComponents();
         }
       }
@@ -145,7 +142,6 @@ export class StepperContentRendererDirective implements OnChanges {
           );
 
           const componentObj = item.createComponent(factoryComponent);
-
           const props = {
             formGroup: this.parentForm.at(index),
             reservationData: this.dataToPopulate,

@@ -2,7 +2,7 @@
 
 .footer__wrapper {
   @include flex-space-between();
-  background-color: $white;
+  background-color: var(--footer-background-color, $footer-background-color);
   padding: $padding-medium;
   align-items: center;
 
@@ -14,19 +14,18 @@
     }
     @media only screen and (max-width: $M) {
       height: 15px;
-      width: 40%;
+      width: 30%;
     }
   }
   &--text {
     font-size: $font-responsive-small;
     font-weight: $bold;
     @include flex-justify-center();
-    color: #979797;
     flex-direction: column;
     margin: 0px $margin-small;
     a {
       text-decoration: none;
-      color: #979797;
+      color: var(--footer-font-color, $footer-font-color);
     }
     .social_icons {
       @include flex-justify-center();
@@ -44,13 +43,14 @@
       }
     }
     @media only screen and (max-width: $M) {
-      font-size: $font-responsive-smaller;
+      width: 36%;
+      font-size: 9px;
       text-align: center;
-      width: 30%;
       .social_icons {
+        margin-bottom: 5px;
         .icon {
-          height: 15px;
-          width: 15px;
+          height:25px;
+          width: 25px;
           margin: 0px 2px;
         }
       }
@@ -66,20 +66,20 @@
     .text {
       font-size: $font-responsive-small;
       display: flex;
-      color: #979797;
+      align-items: center;
+      color: var(--footer-font-color, $footer-font-color);
     }
-    img {
-      margin-right: $margin-medium;
+    .material-icons{
+      height: 23px;
       width: 22px;
+      font-size: $font-medium;
+      color: var(--footer-icon-color, $footer-icon-color);
     }
     @media only screen and (max-width: $M) {
       justify-content: initial;
+      width: 29%;
       .text {
         font-size: $font-responsive-smaller;
-      }
-      img {
-        margin-right: 0px;
-        width: auto;
       }
       div {
         font-size: $font-responsive-smaller;

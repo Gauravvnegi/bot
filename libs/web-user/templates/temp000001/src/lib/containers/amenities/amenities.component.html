@@ -1,0 +1,27 @@
+<div class="">
+    <form>
+        <mat-accordion>
+          <mat-expansion-panel #panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="container__title">Special Amenities</span>
+                <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+                <mat-icon class="expand-icon" *ngIf="panel.expanded"
+                  >remove</mat-icon
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            
+              <hospitality-bot-complimentary-service>
+              </hospitality-bot-complimentary-service>
+
+              <hospitality-bot-paid-service
+              [parentForm]="parentForm">
+              </hospitality-bot-paid-service>
+
+            
+          </mat-expansion-panel>
+        </mat-accordion>
+      </form>
+</div>
+

@@ -18,7 +18,7 @@
     <input
       #fileInput
       type="file"
-      [accept]="fileConfig.accept"
+      accept="image/*"
       [attr.disabled]="settings && settings.disable ? '' : null"
       (click)="fileInput.value = null"
       (change)="onSelectFile($event)"
@@ -27,4 +27,7 @@
     <span *ngIf="!isValidDocument">{{ error }}</span>
     <mat-label>{{ documentType }}{{ settings && settings.label }}</mat-label>
   </div>
+  <ng-container *ngIf="isUploading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-container>
 </div>

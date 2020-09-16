@@ -1,41 +1,79 @@
 <div class="payment__wrapper">
-  <!-- <mat-accordion>
-  <mat-expansion-panel #panel [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title class="panel_title">
-        <span class="container__title">Payment Summary</span>
-        <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
-        <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
-      </mat-panel-title>
-    </mat-expansion-panel-header> -->
-    <div class="payment__wrapper--header">
-      Payment Summary
-    </div>
-    <div class="table__wrapper">
-  <table class="description-table" cellspacing="0" cellpadding="0">
-    <tr class="header">
-      <td style="text-align: left;">Discription</td>
-      <td>Unit</td>
-      <td>Amount</td>
-      <td>Discount</td>
-      <td>Total</td>
-    </tr>
-    <tr class="order__details" *ngFor="let summary of paymentSummary">
-      <td style="text-align: left;">Room Rental<b>({{ summary.roomType }})</b></td>
-      <td>{{ summary.unit }}</td>
-      <td>{{ summary.unit }} x {{ currency }} {{ summary.baseRate }}</td>
-      <td>-{{ currency }} 0</td>
-      <td>{{ currency }} {{ summary.totalRate }}</td>
-    </tr>
-    <tr class="total__amount">
-      <td colspan="5">
-        Total Amount:&nbsp;&nbsp;<b>{{ currency }} {{ totalAmount }}</b>
-      </td>
-    </tr>
-  </table>
-</div>
-
-  <!-- <web-user-file-upload></web-user-file-upload> -->
-  <!-- </mat-expansion-panel>
-</mat-accordion> -->
+  <div class="payment__wrapper--header">
+    Payment Summary
+  </div>
+  <div class="table__wrapper">
+    <table class="description-table" cellspacing="0" cellpadding="0">
+      <tr class="header">
+        <td style="text-align: left;">Description</td>
+        <td>Unit</td>
+        <td>Unit Price</td>
+        <td>Amount</td>
+        <td>CGST</td>
+        <td>SGST</td>
+        <td>Discount</td>
+        <td>Total Amount</td>
+      </tr>
+      <tr class="order__details" *ngFor="let summary of paymentSummary">
+        <td style="text-align: left;">
+          <p>Room Rental</p>
+          <p class="roomType">{{ summary.roomType }}</p>
+        </td>
+        <td>{{ summary.unit }}</td>
+        <td>INR 1000</td>
+        <td>{{ currency }} {{ summary.baseRate }}</td>
+        <td>6%</td>
+        <td>6%</td>
+        <td>{{ currency }} 0</td>
+        <td>{{ currency }} {{ summary.totalRate }}</td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="8">
+          <div class="enteries">
+            <p class="label">Total Amount:</p>
+            <p class="value">INR 3500</p>
+          </div>
+        </td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="8">
+          <div class="enteries">
+            <p class="label">Total Saving:</p>
+            <p class="value">INR 20</p>
+          </div>
+        </td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="8">
+          <div class="enteries paid__amount">
+            <p class="label">Paid Amount:</p>
+            <p class="value">-INR 3400</p>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="8">
+          <web-user-promocode
+            (promocodeData)="applyPromocode($event)"
+          ></web-user-promocode>
+        </td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="8">
+          <div class="enteries">
+            <p class="label">Coupon Discount:</p>
+            <p class="value">-INR 0</p>
+          </div>
+        </td>
+      </tr>
+      <tr class="total__amount">
+        <td colspan="8">
+          <div class="enteries due__amount">
+            <p class="label">Due Amount:</p>
+            <p class="value">INR 197</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

@@ -35,11 +35,17 @@ export class BaseComponent
       fieldSetWrapperStyles: '',
       labelWrapperStyles: '',
       detailLabelStyles: '',
+      childLabelStyles: '',
+      detailValueStyles: '',
+      detailWrapperStyles: '',
+      detailPrefixIconStyles: '',
+      detailMatIconStyles: '',
     },
     mediaQuery: '',
     icon: '',
     appearance: '',
     maskPattern: false,
+    floatLabel: 'auto',
   };
   _settings;
   @Input('settings') set settings(value: {
@@ -54,9 +60,11 @@ export class BaseComponent
     required?: boolean;
     type: string;
     contentType?: string;
+    floatLabel?: string;
     style?: {
       fieldSetWrapperStyles: '';
       labelWrapperStyles: '';
+      childLabelStyles: '';
       detailLabelStyles: '';
       detailValueStyles: '';
       detailWrapperStyles: '';
@@ -95,6 +103,8 @@ export class BaseComponent
     };
     transforms: Function[];
     valueType: string;
+    repeater?: boolean;
+    arrayPropPath?: string;
   }) {
     this._settings = { ...this._defaultValue, ...value };
   }

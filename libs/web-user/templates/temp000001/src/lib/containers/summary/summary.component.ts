@@ -279,6 +279,8 @@ export class SummaryComponent implements OnInit {
                   pathType: 'array',
                   type: 'detail',
                   appearance: '',
+                  arrayPropPath: 'guestDetail.secondaryGuest.$',
+                  repeater: true,
                 },
               },
               {
@@ -309,6 +311,8 @@ export class SummaryComponent implements OnInit {
                   pathType: 'array',
                   type: 'detail',
                   appearance: '',
+                  arrayPropPath: 'guestDetail.secondaryGuest.$',
+                  repeater: true,
                 },
               },
               {
@@ -338,6 +342,8 @@ export class SummaryComponent implements OnInit {
                   pathType: 'array',
                   type: 'detail',
                   appearance: '',
+                  arrayPropPath: 'guestDetail.secondaryGuest.$',
+                  repeater: true,
                 },
               },
             ],

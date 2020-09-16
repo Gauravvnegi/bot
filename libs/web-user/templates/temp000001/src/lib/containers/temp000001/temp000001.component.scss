@@ -3,7 +3,7 @@
 // Global CSS for Template
 
 .background__wrapper {
-  background: url('../../../../../../../../apps/web-user/src/assets/bg.png');
+  background-image: url($background-image);
   position: fixed;
   top: 0;
   left: 0;
@@ -12,11 +12,11 @@
   min-height: $full-width;
 }
 
-:host ::ng-deep .main-template-button{
+:host ::ng-deep .main-template-button {
   @include template-footer-button();
   @media only screen and (max-width: $M) {
-    web-user-button{
-      width: 100%;
+    web-user-button {
+      width: $full-width;
     }
   }
 }
@@ -29,12 +29,13 @@
   &__title {
     font-size: $font-medium;
     font-weight: $bold;
+    color: var(--accordian-font-color, $accordian-font-color);
   }
   @media only screen and (max-width: $M) {
-    margin: 10px 10px;
+    margin: $margin-small;
     overflow: scroll;
     overflow-x: hidden;
-    border-radius: 5px;
+    border-radius: $border-radius-smaller;
     height: calc(100vh - 235px);
   }
 }
@@ -50,15 +51,18 @@
     font-size: $font16;
     color: $white;
   }
+  &-select-panel {
+    box-shadow: var(--dropdown-shadow, $dropdown-shadow) !important;
+  }
   &-step-header .mat-step-label.mat-step-label-active {
-    color: $white;
+    color: var(--stepper-font-color,$stepper-font-color);
   }
   &-icon.expand-icon {
     margin-right: -16px;
     width: 20px;
     height: 20px;
     font-size: $font-medium;
-    color: $icon-color;
+    color: var(--accordian-icon-color, $accordian-icon-color) !important;
   }
   &-expansion-indicator::after {
     display: none !important;
@@ -70,6 +74,11 @@
   &-expansion-panel {
     border-radius: $border-radius-small !important;
     margin-bottom: $margin-large !important;
+    background: var(--accordian-background-color, $accordian-background-color);
+  }
+
+  &-expansion-panel-header {
+    height: 50px !important;
   }
   &-expansion-panel-body {
     margin: 0 24px 16px;
@@ -95,4 +104,3 @@
     }
   }
 }
-

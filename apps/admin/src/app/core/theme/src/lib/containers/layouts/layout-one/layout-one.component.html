@@ -1,0 +1,49 @@
+<div class="wrapper">
+  <div
+    class="sidebar-panel"
+    id="sidebar"
+    [style.background-color]="backgroundColor"
+  >
+    <!-- <div
+      class="sidebar-background"
+      [style.background-image]="'url(' + background_image + ')'"
+    ></div> -->
+    <hospitality-bot-sidenav></hospitality-bot-sidenav>
+  </div>
+  <div class="main-panel" id="main-panel">
+    <div class="main-panel--header">
+      <!-- Header goes in here -->
+      <div style="display: flex; align-items: center; width: 59%;">
+        <admin-search-bar style="width: 70%;"></admin-search-bar>
+        <button class="header--button">Go</button>
+        <button class="header--button">
+          Filter
+          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+        </button>
+      </div>
+
+      <hospitality-bot-daterange></hospitality-bot-daterange>
+      <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
+    </div>
+
+    <div class="main-panel--container">
+      <div class="refresh__wrapper">
+        <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
+          <p>Refresh</p>
+          <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
+        </div>
+        <div class="seperator"></div>
+        <p class="status">
+          Dashboard last updated at
+          {{ lastUpdatedAt }}
+        </p>
+      </div>
+      <div class="main">
+        <div class="router__wrapper">
+          <router-outlet></router-outlet>
+        </div>
+        <admin-footer></admin-footer>
+      </div>
+    </div>
+  </div>
+</div>

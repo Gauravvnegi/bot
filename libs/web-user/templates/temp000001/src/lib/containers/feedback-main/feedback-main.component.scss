@@ -1,0 +1,20 @@
+@import 'temp000001';
+
+:host ::ng-deep .next-button {
+  @include footer-next();
+}
+
+@media only screen and (max-width: $M) {
+  .user-button {
+    width: $full-width;
+  }
+}
+
+.wrapper {
+  min-height: 63.8vh;
+  padding: 20px;
+  padding-top: 40px;
+  @media only screen and (max-width: 990px) {
+    min-height: 90.5vh;
+  }
+}

@@ -1,48 +1,84 @@
+import { DOCUMENT } from '@angular/common';
 import {
   Component,
+  Inject,
   OnInit,
-  Input,
-  ViewChild,
+  ElementRef,
   AfterViewInit,
 } from '@angular/core';
-import { MainComponent } from '../main/main.component';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
-  styleUrls: [
-    './temp000001.component.scss',
-    // '../../../../../../../../apps/web-user/src/sass/main.scss',
-  ],
+  styleUrls: ['./temp000001.component.scss'],
 })
 export class Temp000001Component implements OnInit, AfterViewInit {
-  @Input() templateData;
-  @Input() visibilityHidden = true;
-  @Input() config;
-
-  @ViewChild('mainComponent') mainComponent: MainComponent;
+  isLoaderVisible = true;
 
   constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService
+    public _templateLoadingService: TemplateLoaderService,
+    @Inject(DOCUMENT) private document: Document,
+    private elementRef: ElementRef,
+    private _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
     this.initConfig();
+    this.registerListeners();
   }
 
   private initConfig() {
-    this._reservationService.reservationId = this.config['reservationId'];
-    this._hotelService.currentJourney = this.config['journey'];
+    //this.loadStyle('taj.styles.css');
+  }
+
+  private registerListeners() {
+    this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
+      if (isLoading === false) {
+        this.isLoaderVisible = false;
+      }
+    });
   }
 
   ngAfterViewInit() {
-    this.setTemplateConfig();
+    this.initCssVariables();
   }
 
-  private setTemplateConfig() {
-    this.mainComponent.stepperData = this.templateData;
+  initCssVariables() {
+    let cssText = '';
+    // this._templateService.templateData.layout_variables = {
+    //   '--stepper-background-color': 'blue',
+    //   '--header-background-color': 'red',
+    //   '--primary-button-background-color': 'red',
+    // };
+    for (let stepperLayoutVariable in this._templateService.templateData
+      .layout_variables) {
+      cssText +=
+        stepperLayoutVariable +
+        ':' +
+        this._templateService.templateData.layout_variables[
+          stepperLayoutVariable
+        ] +
+        ';';
+    }
+    this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
+  }
+
+  loadStyle(styleName: string) {
+    const head = this.document.getElementsByTagName('head')[0];
+    let themeLink = this.document.getElementById(
+      'client-theme'
+    ) as HTMLLinkElement;
+    if (themeLink) {
+      themeLink.href = styleName;
+    } else {
+      const style = this.document.createElement('link');
+      style.id = 'client-theme';
+      style.rel = 'stylesheet';
+      style.href = `${styleName}`;
+
+      head.appendChild(style);
+    }
   }
 }

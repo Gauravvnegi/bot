@@ -1,23 +1,29 @@
+@import 'main';
+
+
 .popup__wrapper {
   position: relative;
   .cross {
     position: absolute;
     right: 5px;
     top: -20px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   &--heading {
     text-align: center;
-    margin: 20px 0px;
-    font-weight: 700;
+    margin: $margin-large 0px;
+    font-weight: $bolder;
   }
 }
 
 :host ::ng-deep .mat-form-field {
-  width: 100%;
+  width: $full-width;
 }
 
 :host ::ng-deep .mat-form-field-infix > textarea::placeholder {
-  font-size: 10px;
+  font-size: $font-responsive-smaller;
 }
 
 :host ::ng-deep .mat-form-field-infix > textarea {
@@ -29,21 +35,14 @@
 }
 
 :host ::ng-deep mat-label {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: $font16;
+  font-weight: $bold;
 }
 
 .user-button {
-  display: flex;
-  justify-content: center;
+  @include flex-justify-center();
 }
 
-:host ::ng-deep .mat-raised-button{
-    background-image: var(--stepper-dynamic-background-image, blue);
-    width: 150px;
-    font-weight: 700;
-    color: white;
-    &:hover {
-      cursor: pointer;
-    }
+:host ::ng-deep .mat-raised-button {
+  @include primary-button();
 }

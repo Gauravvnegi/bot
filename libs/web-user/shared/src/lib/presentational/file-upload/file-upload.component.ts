@@ -16,6 +16,7 @@ import { BaseComponent } from '../base.component';
 export class FileUploadComponent extends BaseComponent {
   @Input() url: string;
   @Input() fileSize;
+  @Input() isUploading: boolean;
   @Input() fileType: string[];
   @Input() documentType: string;
 

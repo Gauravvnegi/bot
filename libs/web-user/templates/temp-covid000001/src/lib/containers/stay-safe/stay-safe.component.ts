@@ -41,7 +41,7 @@ export class StaySafeComponent implements OnInit {
 
   getSafeMeasures() {
     this._safeMeasures
-      .getSafeMeasures(this._hotelService.covidHotelId)
+      .getSafeMeasures(this._hotelService.hotelId)
       .subscribe((measuresResponse) => {
         this.safeMeasures = measuresResponse;
       });

@@ -89,6 +89,20 @@
                         documentFGIndex
                       ].documentFileFront
                     "
+                    [isUploading]="
+                      guestDetailsConfig &&
+                      guestDetailsConfig[guestGroup.get('id').value]
+                        .documents &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ] &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileFront &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileFront.isUploading
+                    "
                     (documentData)="
                       saveDocument($event, {
                         guestId: guestGroup.get('id').value,
@@ -124,6 +138,20 @@
                         documentFGIndex
                       ].documentFileBack
                     "
+                    [isUploading]="
+                      guestDetailsConfig &&
+                      guestDetailsConfig[guestGroup.get('id').value]
+                        .documents &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ] &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileBack &&
+                      guestDetailsConfig[guestGroup.get('id').value].documents[
+                        documentFGIndex
+                      ].documentFileBack.isUploading
+                    "
                     (documentData)="
                       saveDocument($event, {
                         guestId: guestGroup.get('id').value,
@@ -144,6 +172,7 @@
             fxLayoutAlign="center"
           >
             <div
+              class="hide_on_mobile"
               *ngIf="
                 guestGroup.get('documents')['controls'] &&
                 guestGroup.get('documents')['controls'].length
@@ -155,10 +184,11 @@
               </p>
               <p>
                 <mat-icon matSuffix>error_outline</mat-icon>
-                <span>Clearity Visible</span>
+                <span>Clearly Visible</span>
               </p>
             </div>
             <div
+              class="hide_on_mobile"
               *ngIf="
                 guestGroup.get('documents')['controls'] &&
                 guestGroup.get('documents')['controls'].length
@@ -170,7 +200,31 @@
               </p>
               <p>
                 <mat-icon matSuffix>error_outline</mat-icon>
-                <span>No larger than 3 mb in size</span>
+                <span>No larger than 3 MB in size</span>
+              </p>
+            </div>
+            <div
+              class="show_on_mobile"
+              *ngIf="
+                guestGroup.get('documents')['controls'] &&
+                guestGroup.get('documents')['controls'].length
+              "
+            >
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>Upload Complete</span>
+              </p>
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>Clearly Visible</span>
+              </p>
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>Document in Valid Period</span>
+              </p>
+              <p>
+                <mat-icon matSuffix>error_outline</mat-icon>
+                <span>No larger than 3 MB in size</span>
               </p>
             </div>
           </div>

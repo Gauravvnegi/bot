@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
-import { FieldSchema } from '../data-models/fieldSchema.model';
 import { SummaryDetailsConfigI } from '../data-models/billSummaryConfig.model';
+import { FieldSchema } from '../data-models/fieldSchema.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SummaryService {
-
   setFieldConfigForGuestDetails() {
     let summaryDetailsFieldSchema = {};
 
@@ -16,7 +12,8 @@ export class SummaryService {
       disable: false,
       appearance: 'outline',
       type: 'textarea',
-      placeholder: 'Request us for anything like Airport Dropoff, Pickup at Airport, Go for sightseeing, etc.'
+      placeholder:
+        'Request us for anything like Airport Dropoff, Pickup at Airport, Go for sightseeing, etc.',
     });
 
     return summaryDetailsFieldSchema as SummaryDetailsConfigI;

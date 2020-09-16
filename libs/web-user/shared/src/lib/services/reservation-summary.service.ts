@@ -1,8 +1,8 @@
-import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { FormArray } from '@angular/forms';
+import { get, toLower, find } from 'lodash';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ReservationSummaryService {
   private convertPathToArray(searchPath: string): string[] {
     return searchPath.split('.');
@@ -13,7 +13,7 @@ export class ReservationSummaryService {
   }
 
   private getNestedProp(obj, arrayPropName) {
-    const nestedProp = _.get(obj, arrayPropName);
+    const nestedProp = get(obj, arrayPropName);
     return nestedProp ? nestedProp : '';
   }
 
@@ -54,9 +54,9 @@ export class ReservationSummaryService {
     if (component.pathType == 'object') {
       value = '';
 
-      _.find(formValues, (formValue) => {
+      find(formValues, (formValue) => {
         for (const path of searchPaths) {
-          const tempValue = _.get(formValue, path);
+          const tempValue = get(formValue, path);
           //to be removed and replaced with transformation
           if (tempValue) {
             value = value.concat(tempValue).concat(' ');
@@ -68,23 +68,24 @@ export class ReservationSummaryService {
     if (component.pathType == 'array') {
       value = '';
 
-      for (const path of searchPaths) {
-        const arrayPropPath: string = this.getArrayFieldName(path);
-        const pathArray: string[] = this.convertPathToArray(path);
+      for (const formValue of formValues) {
+        const arrayPropPath: string = this.getArrayFieldName(
+          component.arrayPropPath
+        );
+        const nestedArrayField = this.getNestedProp(formValue, arrayPropPath);
 
-        for (const formValue of formValues) {
-          const nestedArrayField = this.getNestedProp(formValue, arrayPropPath);
+        /* for (const val of nestedArrayField) {
+          for (const path of searchPaths) {
+            const pathArray: string[] = this.convertPathToArray(path);
+            const tempVal = _.get(val, pathArray[pathArray.length - 1]);
 
-          if (nestedArrayField) {
-            for (const val of nestedArrayField) {
-              const tempVal = _.get(val, pathArray[pathArray.length - 1]);
-
-              if (tempVal) {
-                value = value.concat(tempVal).concat(' ');
-              }
+            if (tempVal) {
+              value = value.concat(tempVal).concat(' ');
             }
           }
-        }
+        } */
+
+        if (nestedArrayField) return nestedArrayField;
       }
     }
 
@@ -96,7 +97,7 @@ export class ReservationSummaryService {
 
     parentForm.controls.forEach((control) => {
       if (control.get(controlName)) {
-        controlStatus = _.toLower(control.get(controlName).status);
+        controlStatus = toLower(control.get(controlName).status);
       }
     });
 

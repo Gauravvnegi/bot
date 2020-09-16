@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
@@ -12,20 +11,17 @@ export class TempCovid000001Component implements OnInit {
   @Input() visibilityHidden = true;
   @Input() config;
 
-  hotelConfig;
-
-  constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService
-  ) {}
+  constructor(private _hotelService: HotelService) {}
 
   ngOnInit(): void {
-    this._hotelService.covidHotelId = this.config['hotelId'];
+    this.getHotelConfig();
+  }
+
+  private getHotelConfig() {
     this._hotelService
-      .getHotelConfigById(this._hotelService.covidHotelId)
+      .getHotelConfigById(this._hotelService.hotelId)
       .subscribe((hotel) => {
         this._hotelService.hotelConfig = hotel;
-        this.hotelConfig = hotel;
       });
   }
 }

@@ -1,0 +1,8 @@
+.promocode-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+:host ::ng-deep .next-button{
+    margin-top: 11px;
+}

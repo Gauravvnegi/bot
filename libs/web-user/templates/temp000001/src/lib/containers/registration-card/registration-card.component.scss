@@ -20,9 +20,7 @@
 
 .example-small-box,
 .example-large-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center();
   margin: 16px;
   padding: 16px;
   border-radius: 8px;
@@ -46,8 +44,8 @@
 }
 
 .modal-body {
-  margin-bottom: 10px;
-	width: 100%;
+  margin-bottom: $margin-small;
+	width: $full-width;
 	height: 70vh;
 }
 
@@ -69,7 +67,7 @@
 }
 
 .signature-container {
-  padding-top: 20px;
+  padding-top: $padding-large;
 }
 
 .container {
@@ -91,10 +89,10 @@ pdf-viewer {
 }
 
 .text-container {
-  margin: 15px 15px 0 15px;
-  padding: 15px 60px 15px 60px;
+  margin: $margin-medium $margin-medium 0 $margin-medium;
+  padding: $padding-medium 60px $padding-medium 60px;
   background-color: rgb(243, 241, 241);
-  border-radius: 10px;
+  border-radius: $border-radius-small;
   height: 305px;
   display: flex;
   flex-direction: column;
@@ -103,20 +101,19 @@ pdf-viewer {
 
 .signature-capture-style {
   height: 50px;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
+  font-size: $font-medium;
+  @include flex-item-center();
   @media only screen and (max-width: $tab-size) {
-    font-size: 14px;
+    font-size: $font-small;
   }
 }
 
 .reg-card-container {
-	margin-top: 10px;
+	margin-top: $margin-small;
 	// min-height: calc(65vh - 50px);
 	// max-height: calc(65vh - 51px);
 }
 
 :host ::ng-deep .signature-image-container{
-  margin-top: 20px;
+  margin-top: $margin-large;
 }

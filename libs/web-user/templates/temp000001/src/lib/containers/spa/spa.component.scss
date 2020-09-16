@@ -1,0 +1,24 @@
+@import 'temp000001';
+.save-button {
+    @include flex-justify-center();
+    margin-top: $margin-small;
+  }
+
+  :host ::ng-deep .back-button {
+    @include secondary-button();
+    @media only screen and (max-width: $M) {
+      width: 100px;
+    }
+  }
+  
+  :host ::ng-deep .next-button {
+    @include primary-button();
+    @media only screen and (max-width: $M) {
+      width: 100px;
+      height: auto;
+    }
+  }
+
+  .heading{
+    margin-bottom: $margin-small;
+  }

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class HotelService extends ApiService {
   private _hotelConfig;
   private _currentJourney;
-  private _covidHotelId;
+  private _hotelId;
 
   getCurrentJourneyConfig() {
     return this.hotelConfig && this.hotelConfig.journeys[this.currentJourney];
@@ -33,18 +33,14 @@ export class HotelService extends ApiService {
   }
 
   get hotelId() {
-    return this.hotelConfig && this._hotelConfig.id;
+    return this._hotelId || (this.hotelConfig && this._hotelConfig.id);
+  }
+
+  set hotelId(hotelId) {
+    this._hotelId = hotelId;
   }
 
   get healthFormId() {
     return this._hotelConfig.healthFormId;
-  }
-
-  get covidHotelId() {
-    return this._covidHotelId;
-  }
-
-  set covidHotelId(hotelId) {
-    this._covidHotelId = hotelId;
   }
 }

@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-import { SummaryDetailsConfigI, BillSummaryDetailDS } from '../data-models/billSummaryConfig.model';
-import { ReservationService } from './booking.service';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
+import {
+  BillSummaryDetailDS,
+  SummaryDetailsConfigI,
+} from '../data-models/billSummaryConfig.model';
+import { FieldSchema } from '../data-models/fieldSchema.model';
 
 @Injectable()
-export class BillSummaryService extends ReservationService {
-
+export class BillSummaryService extends ApiService {
   private _billSummaryDetailDS: BillSummaryDetailDS;
 
-  initBillSummaryDetailDS( summaryDetails, paymentData ) {
+  initBillSummaryDetailDS(summaryDetails, paymentData) {
     this._billSummaryDetailDS = new BillSummaryDetailDS().deserialize(
-      summaryDetails, paymentData
+      summaryDetails,
+      paymentData
     );
   }
 
@@ -24,14 +26,15 @@ export class BillSummaryService extends ReservationService {
       disable: false,
       appearance: 'outline',
       type: 'textarea',
-      placeholder: 'Request us for anything like Airport Dropoff, Pickup at Airport, Go for sightseeing, etc.'
+      placeholder:
+        'Request us for anything like Airport Dropoff, Pickup at Airport, Go for sightseeing, etc.',
     });
 
     return summaryDetailsFieldSchema as SummaryDetailsConfigI;
   }
 
-  getBillingSummary(reservationId): Observable<any>{
-    return this.apiService.get(`/api/v1/reservation/${reservationId}/bill-summary`);
+  getBillingSummary(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}/bill-summary`);
   }
 
   get billSummaryDetails() {

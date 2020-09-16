@@ -56,7 +56,7 @@ export class RaiseRequestComponent implements OnInit {
   onSubmit() {
     const data = this.raiseRequestForm.getRawValue();
     this._raiseRequestService
-      .saveRaiseRequest(this._hotelService.covidHotelId, data)
+      .saveRaiseRequest(this._hotelService.hotelId, data)
       .subscribe((response) => {
         this.close();
       });

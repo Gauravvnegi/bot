@@ -1,12 +1,10 @@
 import {
   Directive,
-  HostListener,
-  Renderer2,
-  HostBinding,
   ElementRef,
+  HostListener,
   Input,
+  Renderer2,
 } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 @Directive({ selector: '[imageClass]' })
 export class ImageClassDirective {

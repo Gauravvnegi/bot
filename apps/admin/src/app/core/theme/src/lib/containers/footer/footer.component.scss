@@ -1,0 +1,20 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 3rem;
+    border-top: 2px solid #d4d4d4;
+    margin-top: 20px;
+    p {
+      margin: 0;
+    }
+    .links {
+      display: flex;
+      align-items: center;
+      a {
+        color: black;
+        margin-right: 20px;
+        text-decoration: none;
+      }
+    }
+  }

@@ -1,0 +1,159 @@
+.logo {
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  position: relative;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.change .bar1 {
+  transform: rotate(-45deg) translate(-8px, 7px);
+}
+
+.sidenav-logo{
+  height: 50px;
+  width: 70px;
+  &:hover{
+    cursor: pointer;
+  }
+  img{
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.change .bar2 {
+  opacity: 0;
+}
+
+.change .bar3 {
+  transform: rotate(45deg) translate(-8px, -8px);
+}
+.menu_button {
+  margin-left: 10px;
+}
+
+.menu_button .bar1,
+.bar2,
+.bar3 {
+  width: 35px;
+  height: 5px;
+  background-color: darkgray;
+  border-radius: 5px;
+  margin: 6px 0;
+  transition: 0.4s;
+}
+
+.menu_button:hover {
+  cursor: pointer;
+}
+
+
+.divider {
+  content: '';
+  position: relative;
+  height: 1px;
+  left: 15px;
+  width: calc(100% - 30px);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.sidebar-wrapper {
+  overflow-y: auto;
+  /* padding-bottom: 30px; */
+  /* width: 260px; */
+  position: relative;
+  /* height: 100%; */
+}
+
+.nav-container {
+  position: relative;
+}
+
+.nav {
+  padding-top: 15px;
+}
+
+ul {
+  list-style-type: none;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+}
+
+.nav li {
+  margin-bottom: 9px;
+}
+
+.nav li a {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 15px;
+  border-radius: 3px;
+  -webkit-transition: all 400ms;
+  -moz-transition: all 400ms;
+  -ms-transition: all 400ms;
+  -o-transition: all 400ms;
+  transition: all 400ms;
+  height: 50px;
+  text-decoration: none;
+}
+
+.nav li a:hover,
+.parent-active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav li a span {
+  margin-left: 20px;
+}
+
+.active a,
+.active a:hover {
+  /*color: rgba(0,0,0,.6) !important;*/
+  /*background-color: #fff !important;*/
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
+    0 7px 10px -5px rgba(60, 72, 88, 0.4);
+  -webkit-transition: all 400ms;
+  -moz-transition: all 400ms;
+  -ms-transition: all 400ms;
+  -o-transition: all 400ms;
+  transition: all 400ms;
+}
+
+.collapse-a {
+  position: relative;
+}
+
+.collapse-a .caret {
+  position: absolute;
+  right: 0px;
+  top: 24px;
+  color: #fff;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  -webkit-transition: all 200ms;
+  -moz-transition: all 200ms;
+  -ms-transition: all 200ms;
+  -o-transition: all 200ms;
+  transition: all 200ms;
+}
+
+.collapsed .caret {
+  position: absolute;
+  right: 0px;
+  top: 24px;
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}

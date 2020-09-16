@@ -1,32 +1,19 @@
-import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
 import { Injectable } from '@angular/core';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import {
-  ReservationDetails,
-  FileDetails,
-} from '../data-models/reservationDetails';
+import { ReservationDetails } from '../data-models/reservationDetails';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ReservationService {
+@Injectable({ providedIn: 'root' })
+export class ReservationService extends ApiService {
   private _reservationId: string;
   private _reservationData;
 
-  constructor(protected apiService: ApiService) {
-    this.apiService.baseUrl = 'https://api.botshot.in:8443';
-  }
-
   getReservationDetails(reservationId): Observable<ReservationDetails> {
-    return this.apiService.get(`/api/v1/reservation/${reservationId}?raw=true`);
+    return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
   checkIn(reservationId, data): Observable<any> {
-    return this.apiService.post(
-      `/api/v1/reservation/${reservationId}/checkin`,
-      data
-    );
+    return this.post(`/api/v1/reservation/${reservationId}/checkin`, data);
   }
 
   get reservationId() {

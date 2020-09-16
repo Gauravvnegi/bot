@@ -24,7 +24,7 @@ body {
 .hide_on_mobile {
   display: block !important;
 }
-@media only screen and (max-width: 990px) {
+@media only screen and (max-width: $M) {
   .show_on_mobile {
     display: block !important;
   }
@@ -35,26 +35,28 @@ body {
 
 // Global class to change snackbar background
 .danger {
-  background-color: #ee5955 !important;
+  background-color: var(--snack-bar-red,$snack-bar-red) !important;
 }
 
 .success {
-  background-color: #7ab243 !important;
+  background-color: var(--snack-bar-green,$snack-bar-green) !important;
 }
 
+// TODO = need to find the another approach to acheive below styling
+
 .mat-snack-bar-handset {
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: $M) {
     width: 80% !important;
   }
 }
 .mat-dialog-container {
-  @media only screen and (max-width: 480px) {
-    padding: 10px !important;
+  @media only screen and (max-width: $M) {
+    padding: $padding-small !important;
   }
 }
 
 .cdk-overlay-pane {
-  @media only screen and (max-width: 480px) {
+  @media only screen and (max-width: $M) {
     width: 80vw !important;
   }
 }

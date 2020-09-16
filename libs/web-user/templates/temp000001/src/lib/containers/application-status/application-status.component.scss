@@ -1,22 +1,25 @@
 @import 'temp000001';
 
-.spinner {
+.loading{
   margin: 80px auto 0;
   text-align: center;
-  width: 254px;
   font-size: 25px;
-  font-weight: 700;
-  color: $icon-color;
+  font-weight: $bolder;
+  color: $primary-blue;
   @media only screen and (max-width: $M) {
-    font-size: 14px;
-    width: 190px;
+    font-size: $font-small;
+    width: 150px;
   }
+}
+
+.spinner {
+  text-align: center;
 }
 
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $icon-color;
+  background-color: $primary-blue;
 
   border-radius: 100%;
   display: inline-block;

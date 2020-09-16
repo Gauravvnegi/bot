@@ -1,0 +1,172 @@
+<!-- <div class="p-mb-3">
+  <p-button
+    type="button"
+    icon="pi pi-chevron-left"
+    (click)="prev()"
+    [disabled]="isFirstPage()"
+    styleClass="p-button-text"
+  ></p-button>
+  <p-button
+    type="button"
+    icon="pi pi-refresh"
+    (click)="reset()"
+    styleClass="p-button-text"
+  ></p-button>
+  <p-button
+    type="button"
+    icon="pi pi-chevron-right"
+    (click)="next()"
+    [disabled]="isLastPage()"
+    styleClass="p-button-text"
+  ></p-button>
+</div> -->
+
+<div class="header">
+  <div class="header--text">
+    <p class="heading">Reservations</p>
+    <p class="selected">2 record(s) are selected</p>
+  </div>
+  <div class="icons">
+    <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
+    <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
+    <mat-icon class="material-icons" matSuffix>description</mat-icon>
+    <mat-icon class="material-icons" matSuffix>more_vert</mat-icon>
+  </div>
+  <div class="seperator"></div>
+  <p-dropdown [options]="export" [(ngModel)]="selectedExport1">
+    <ng-template let-item pTemplate="selectedItem">
+      <mat-icon class="material-icons" matSuffix
+        >vertical_align_bottom</mat-icon
+      >
+      <span style="vertical-align: middle; margin-left: 0.5em;">Export</span>
+    </ng-template>
+  </p-dropdown>
+  <p-dropdown [options]="csv" [(ngModel)]="selectedExport2">
+    <ng-template let-item pTemplate="selectedItem">
+      <span style="vertical-align: middle; margin-left: 0.5em;">CSV</span>
+    </ng-template>
+  </p-dropdown>
+  <button class="go" (click)="exportExcel()">GO</button>
+  <div class="seperator"></div>
+  <a href="#" class="reset-link">Reset Filter</a>
+</div>
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="true"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <div class="caption__wrapper--tabmenu">
+        <hospitality-bot-tab-group [list]="tabList"></hospitality-bot-tab-group>
+      </div>
+      <div class="caption__wrapper--buttons">
+        <button class="filter">
+          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+        </button>
+        <div class="button__wrapper" *ngFor="let data of buttons">
+          <button pButton type="button" [label]="data.label"></button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    No data found
+  </ng-template>
+
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th style="width: 5%; background-color: #2187d5;" pResizableColumn>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
+        <div>
+          <p>{{ col.header }}</p>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+
+    <tr>
+      <th class="table-search-head"></th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          placeholder="Search by Name"
+          class="p-column-filter"
+        />
+      </th>
+      <!-- <th>
+          <input pInputText type="text" (input)="dt.filter($event.target.value, 'country.name', 'contains')" placeholder="Search by Country" class="p-column-filter">
+      </th>
+      <th>
+          <p-multiSelect [options]="representatives" placeholder="All" (onChange)="onRepresentativeChange($event)" styleClass="p-column-filter" optionLabel="name">
+              <ng-template let-option pTemplate="item">
+                  <div class="p-multiselect-representative-option">
+                      <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.value.image}}" width="32" style="vertical-align: middle" />
+                      <span class="p-ml-1">{{option.label}}</span>
+                  </div>
+              </ng-template>
+          </p-multiSelect>
+      </th>
+      <th>
+          <p-calendar (onSelect)="onDateSelect($event)" (onClearClick)="dt.filter('', 'date', 'equals')" [showButtonBar]="true" styleClass="p-column-filter" placeholder="Registration Date" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+      </th>
+      <th>
+          <p-dropdown [options]="statuses" (onChange)="dt.filter($event.value, 'status', 'equals')" styleClass="p-column-filter" placeholder="Select a Status" [showClear]="true">
+              <ng-template let-option pTemplate="item">
+                  <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+              </ng-template>
+          </p-dropdown>
+      </th>
+      <th>
+          <input pInputText type="text" (input)="onActivityChange($event)" placeholder="Minimum" class="p-column-filter" >
+      </th> -->
+    </tr>
+  </ng-template>
+
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
+      </td>
+      <td *ngFor="let col of columns">
+        {{ rowData[col.field] }}
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="summary">
+    <p-paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
+</p-table>

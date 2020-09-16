@@ -1,33 +1,29 @@
 import { Injectable } from '@angular/core';
-import { ReservationService } from './booking.service';
-import { FieldSchema } from '../data-models/fieldSchema.model';
-import { FaqConfigI, FaqDetailDS } from '../data-models/faqConfig.model';
-import * as _ from 'lodash';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
+import { FaqConfigI, FaqDetailDS } from '../data-models/faqConfig.model';
+import { FieldSchema } from '../data-models/fieldSchema.model';
 
 @Injectable()
-export class FaqService extends ReservationService{
-
+export class FaqService extends ApiService {
   private _faqDetailDS: FaqDetailDS;
 
-  initFaqDetailDS( faqDetails ) {
+  initFaqDetailDS(faqDetails: any) {
     this._faqDetailDS = new FaqDetailDS().deserialize(faqDetails);
   }
 
-  setFieldConfigForFaq(label:string) {
+  setFieldConfigForFaq(label: string) {
     let feedbackDetailsFieldSchema = {};
 
-    feedbackDetailsFieldSchema[
-      'button'
-    ] = new FieldSchema().deserialize({
+    feedbackDetailsFieldSchema['button'] = new FieldSchema().deserialize({
       label: label,
     });
 
     return feedbackDetailsFieldSchema as FaqConfigI;
   }
 
-  getFaqs(hotelId): Observable<any> {
-    return this.apiService.get(`/api/v1/hotel/${hotelId}/covid-faqs`);
+  getFaqs(hotelId: any): Observable<any> {
+    return this.get(`/api/v1/hotel/${hotelId}/covid-faqs`);
   }
 
   get faqDetails() {

@@ -23,13 +23,20 @@
     justify-content: center;
     button {
       border: none;
-      background-color: $icon-color;
+      background-color: $primary-blue;
       opacity: 0.8;
       color: white;
       &:hover {
         cursor: pointer;
         opacity: 1;
       }
+    }
+  }
+  @media only screen and (max-width: $M) {
+    width: auto;
+    .cross{
+      top: -4px;
+      right: 5px;
     }
   }
 }
@@ -46,7 +53,7 @@
   .hr {
     height: 2px;
     width: 100px;
-    background-color: $icon-color;
+    background-color: $primary-blue;
     margin-top: $margin-medium;
   }
 }
@@ -61,7 +68,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-start {
-  border-color: $icon-color;
+  border-color: $primary-blue;
 }
 
 
@@ -71,5 +78,5 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-end {
-  border-color: $icon-color;
+  border-color: $primary-blue;
 }

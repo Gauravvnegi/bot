@@ -1,0 +1,76 @@
+<div class="parent_block" *ngIf="isReservationData">
+  <hospitality-bot-header [headerName]="'Payment'"></hospitality-bot-header>
+  <div class="status-container">
+    <div class="wrapper">
+      <div class="image">
+        <img [src]="paymentImage" />
+      </div>
+      <div class="text">
+        <p class="label">{{ paymentLabel }}</p>
+        <p
+          class="note"
+          [ngStyle]="
+            paymentStatusData.data.status === 'SUCCESS'
+              ? { 'display': 'block' }
+              : { 'display': 'none' }
+          "
+        >
+          {{ paymentNote }}<b>johndeo@gmail.com</b>
+        </p>
+        <p
+        class="note"
+        [ngStyle]="
+          paymentStatusData.data.status === 'FAILED'
+            ? { 'display': 'block' }
+            : { 'display': 'none' }
+        "
+      >
+        {{ paymentNote }}
+      </p>
+      <p
+        class="error_code"
+        [ngStyle]="
+          paymentStatusData.data.status === 'FAILED'
+            ? { 'display': 'block' }
+            : { 'display': 'none' }
+        "
+      >
+        Error code : 309
+      </p>
+      </div>
+      <div class="detail-box-wrapper">
+        <div class="detail-box">
+          <div class="detail">
+            <p class="label">Confirmation No.</p>
+            <p class="value">{{ paymentStatusData.data.orderId }}</p>
+          </div>
+          <div class="seperator"></div>
+          <div class="detail">
+            <p class="label">Payment Mode</p>
+            <p class="value">{{ paymentStatusData.data.orderId }}</p>
+          </div>
+          <div class="seperator"></div>
+
+          <div class="detail">
+            <p class="label">Total Payment</p>
+            <p class="value">
+              {{ paymentStatusData.data.currency }}
+              {{ paymentStatusData.data.amount }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="main-template-button">
+        <web-user-button
+          #saveButton
+          buttonTemplateSwitch
+          (click)="redirect()"
+          [settings]="{ label: buttonLabel }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+        ></web-user-button>
+      </div>
+    </div>
+  </div>
+</div>
+<hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

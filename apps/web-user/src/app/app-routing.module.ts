@@ -1,11 +1,8 @@
-import { environment } from '../environments/environment';
-
 import { NgModule } from '@angular/core';
-import { RouterModule, Route } from '@angular/router';
-
-import { PreloadModulesStrategy } from './core/strategies/preload-modules.strategy';
-import { HomeComponent } from './core/container/home/home.component';
+import { Route, RouterModule } from '@angular/router';
 import { sharedAuthRoutes } from '@hospitality-bot/web-user/template-renderer';
+import { environment } from '../environments/environment';
+import { PreloadModulesStrategy } from './core/strategies/preload-modules.strategy';
 
 const appRoutes: Route[] = [{ path: '', children: sharedAuthRoutes }];
 

@@ -1,5 +1,7 @@
+@import 'main';
+
 :host ::ng-deep .mat-step-header .mat-step-icon {
-  background-image: var(--stepper-dynamic-background-image, blue);
+  background: var(--stepper-background-color, $stepper-background-color);
 }
 
 :host
@@ -9,12 +11,29 @@
   border-top-width: 3px;
 }
 
-:host ::ng-deep .mat-step-icon-selected {
-  color: green; // your styles
+:host ::ng-deep .mat-step-optional{
+  color: var(--stepper-font-color,$stepper-font-color);
+}
+
+
+
+:host ::ng-deep .mat-step-icon-selected > div > mat-icon {
+  color: var(
+    --stepper-icon-selected-font-color,
+    $stepper-icon-selected-font-color
+  );
+}
+
+:host ::ng-deep.mat-step-icon-state-number > div > span {
+  color: var(--stepper-icon-number-font-color, $stepper-icon-number-font-color);
+}
+
+:host ::ng-deep.mat-step-icon-state-done > div > mat-icon {
+  color: var(--stepper-icon-done-font-color, $stepper-icon-done-font-color);
 }
 
 :host::ng-deep .mat-step-header .mat-step-icon {
-  background-image: var(--stepper-dynamic-background-image, blue);
+  background: var(--stepper-background-color, $stepper-background-color);
 }
 
 :host ::ng-deep .mat-stepper-horizontal,
@@ -29,8 +48,8 @@
   height: 0;
   // margin: 0 -16px;
   min-width: 32px;
-  background-image: var(--stepper-dynamic-background-image, blue);
-  border-color: #ffc837;
+  background: var(--stepper-background-color, $stepper-background-color);
+  border-color: var(--stepper-border-color, $stepper-border-color);
 }
 
 :host
@@ -47,8 +66,8 @@
   height: 0;
   // margin: 0 -16px;
   min-width: 32px;
-  border-color: #ffc837;
-  background-image: var(--stepper-dynamic-background-image, blue);
+  border-color: var(--stepper-border-color, $stepper-border-color);
+  background: var(--stepper-background-color, $stepper-background-color);
 }
 
 :host
@@ -65,8 +84,8 @@
   height: 0;
   // margin: 0 -16px;
   min-width: 32px;
-  border-color: #ffc837;
-  background-image: var(--stepper-dynamic-background-image, blue);
+  border-color: var(--stepper-border-color, $stepper-border-color);
+  background: var(--stepper-background-color, $stepper-background-color);
 }
 // only for vertical stepper
 :host ::ng-deep .mat-vertical-stepper-header {
@@ -74,7 +93,7 @@
 }
 :host ::ng-deep .mat-stepper-vertical-line::before {
   left: -16px;
-  border-color: #ffc837;
+  border-color: var(--stepper-border-color, $stepper-border-color);
 }
 :host ::ng-deep .mat-vertical-content {
   padding: 0 5px 24px 0px;
@@ -83,6 +102,6 @@
 @media only screen and (max-width: 500px) {
   :host ::ng-deep .mat-expansion-panel-body {
     margin: 0px 5px 16px;
-    padding: 20px 15px !important;
+    padding: $padding-large $padding-medium !important;
   }
 }

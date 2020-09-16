@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Dancing+Script&display=swap');
+* {
+  font-family: 'Dancing Script', cursive;
+}
+/* font-family , logo , font-size , font-color , backgorund-image ,  */
+
+/* For custom stepper svg image */
+/* .percentage {
+  font-family: 'Dancing Script', cursive !important;
+} */
+
+/* .background__wrapper {
+  background-image: url('https://image.shutterstock.com/image-photo/close-chocolate-bar-isolated-on-260nw-524456035.jpg') !important;
+} */

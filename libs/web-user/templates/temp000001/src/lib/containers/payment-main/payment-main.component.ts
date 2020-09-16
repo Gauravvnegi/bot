@@ -12,11 +12,14 @@ import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/pay
 @Component({
   selector: 'hospitality-bot-payment-main',
   templateUrl: './payment-main.component.html',
-  styleUrls: ['./payment-main.component.scss']
+  styleUrls: ['./payment-main.component.scss'],
 })
 export class PaymentMainComponent implements OnInit {
-
   paymentStatusData;
+  paymentLabel;
+  paymentNote;
+  paymentImage;
+  buttonLabel;
   isReservationData = false;
   parentForm = new FormArray([]);
   reservationData: ReservationDetails;
@@ -27,9 +30,8 @@ export class PaymentMainComponent implements OnInit {
     private _snackBarService: SnackBarService,
     private _templateLoadingService: TemplateLoaderService,
     private _paymentDetailService: PaymentDetailsService
-  ) { 
-  }
-  
+  ) {}
+
   ngOnInit(): void {
     this.setPaymentStatus();
     this.getReservationDetails();
@@ -52,12 +54,34 @@ export class PaymentMainComponent implements OnInit {
   }
 
   private setPaymentStatus() {
-    this._paymentDetailService.getPaymentStatus(this._reservationService.reservationId)
+    this._paymentDetailService
+      .getPaymentStatus(this._reservationService.reservationId)
       .subscribe((response) => {
+        this.paymentLabel =
+          response.status === 'SUCCESS'
+            ? 'Your Payment is completed successfully'
+            : 'Your Payment is Failed';
+
+        this.paymentImage =
+          response.status === 'SUCCESS'
+            ? 'assets/payment_success.png'
+            : 'assets/payment_fail.png';
+
+        this.paymentNote =
+          response.status === 'SUCCESS'
+            ? 'A confirmation email has been sent to '
+            : 'An Error ocurred while processing your payment';
+
+        this.buttonLabel =
+          response.status === 'SUCCESS' ? 'View Reciept' : 'Retry Payment';
+
         this.paymentStatusData = {
           data: response,
-          redirectUrl: window.location.href.substring(0, window.location.href.lastIndexOf('&')),
-        }
+          redirectUrl: window.location.href.substring(
+            0,
+            window.location.href.lastIndexOf('&')
+          ),
+        };
         if (this.paymentStatusData.journey === 'PRECHECKIN') {
           this._snackBarService.openSnackBarAsText(
             'Pre-Checkin Sucessfull.',
@@ -79,5 +103,4 @@ export class PaymentMainComponent implements OnInit {
   redirect() {
     window.location.href = this.paymentStatusData.redirectUrl;
   }
-
 }

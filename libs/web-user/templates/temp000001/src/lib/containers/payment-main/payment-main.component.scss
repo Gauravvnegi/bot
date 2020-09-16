@@ -1,36 +1,74 @@
 @import 'temp000001';
 
-.parent_block{
-    min-height: 86.3vh;
-    @media only screen and (max-width: 990px) {
-        min-height: 90.5vh;
-    }
+:host ::ng-deep .next-button {
+  @include footer-next();
 }
 
 .status-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    min-height: 72vh;
-}
-
-th, tr {
-    text-align: left;
-    padding: 5px 10px 5px 10px;
+  min-height: 60.6vh;
+  .wrapper {
+    background-color: $white;
+    margin: 40px;
+    border-radius: $border-radius-medium;
+    padding: 25px;
+    .image {
+      @include flex-justify-center();
+    }
+    .text {
+      text-align: center;
+      margin: $margin-large 0px;
+      margin-bottom: 5%;
+      .label {
+        font-size: 40px;
+        font-weight: $bold;
+      }
+      .note {
+        margin-top: $margin-small;
+        font-size: $font-large;
+        color: #949494;
+        b {
+          color: $black;
+        }
+      }
+      .error_code {
+        color: #212121;
+        font-size: $font-large;
+        margin-top: $margin-small;
+        font-weight: $medium;
+      }
+    }
+    .detail-box-wrapper {
+      @include flex-justify-center();
+      .detail-box {
+        border: 2px dashed lightgray;
+        padding: $padding-medium 40px;
+        width: 75%;
+        @include flex-between-center();
+        .detail {
+          font-weight: $bolder;
+          font-size: $font-medium;
+          .label {
+            color: #949494;
+          }
+          .value {
+            margin-top: 2rem;
+          }
+        }
+        .seperator {
+          height: $full-width;
+          border-right: 2px dashed $light-gray;
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: $tab-size) {
-    .user-button {
-      width: $half-width;
-    }
-}
-
-.header {
-    margin-bottom: 20px;
-    text-decoration: underline;
+  .user-button {
+    width: $half-width;
+  }
 }
 
 .main-template-button {
-    margin-top: 30px;
+  margin-top: 5%;
 }

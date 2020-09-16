@@ -13,6 +13,7 @@ export class SidenavComponent implements OnInit {
   public activeFontColor: string;
   public normalFontColor: string;
   public dividerBgColor: string;
+  public headerBgColor: string;
   isExpanded: boolean = true;
   status: boolean = false;
 
@@ -24,10 +25,11 @@ export class SidenavComponent implements OnInit {
   }
 
   private initSideNavConfigs() {
-    this.activeFontColor = 'rgba(0,0,0,.6)';
-    this.normalFontColor = 'rgba(255,255,255,.8)';
-    this.dividerBgColor = 'rgba(255, 255, 255, 0.5)';
-    this.list_item_colour = '#fff';
+    this.activeFontColor = '#0483f4';
+    this.normalFontColor = '#C5C5C5';
+    this.dividerBgColor = 'white';
+    this.list_item_colour = '#E8EEF5';
+    this.headerBgColor='#052E57';
     //check if admin or super admin by using command pattern
     this.menuItems = ADMIN_ROUTES;
   }

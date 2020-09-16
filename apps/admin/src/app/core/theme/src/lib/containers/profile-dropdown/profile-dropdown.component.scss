@@ -1,11 +1,9 @@
 :host ::ng-deep .profile__dropdown .p-dropdown {
-    border: 2px solid lightgray;
-    margin-left: 20px;
     height: 37px;
-    border-radius: 25px;
-    &:hover {
-      border-color: #2187d5;
-    }
+    border: none;
+    // &:hover {
+    //   border-color: #2187d5;
+    // }
   }
   
   :host ::ng-deep .profile__dropdown__image {

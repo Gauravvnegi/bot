@@ -24,7 +24,7 @@ export class LayoutOneComponent implements OnInit {
   }
 
   initLayoutConfigs() {
-    this.backgroundColor = '#0483f4';
+    this.backgroundColor = 'white';
     this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
   }
 

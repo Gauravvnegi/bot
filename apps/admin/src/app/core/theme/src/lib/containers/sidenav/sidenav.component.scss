@@ -3,7 +3,6 @@
   font-size: 18px;
   text-align: center;
   position: relative;
-  padding: 10px 0px;
   display: flex;
   justify-content: center;
 }
@@ -12,15 +11,19 @@
   transform: rotate(-45deg) translate(-8px, 7px);
 }
 
-.sidenav-logo{
-  height: 50px;
-  width: 70px;
-  &:hover{
-    cursor: pointer;
-  }
-  img{
-    height: 100%;
-    width: 100%;
+.sidenav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  .logo {
+    height: 50px;
+    width: 70px;
+    img {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 
@@ -31,7 +34,7 @@
 .change .bar3 {
   transform: rotate(45deg) translate(-8px, -8px);
 }
-.menu_button {
+.change {
   margin-left: 10px;
 }
 
@@ -40,7 +43,7 @@
 .bar3 {
   width: 35px;
   height: 5px;
-  background-color: darkgray;
+  background-color: white;
   border-radius: 5px;
   margin: 6px 0;
   transition: 0.4s;
@@ -49,7 +52,6 @@
 .menu_button:hover {
   cursor: pointer;
 }
-
 
 .divider {
   content: '';
@@ -117,13 +119,15 @@ ul {
 .active a:hover {
   /*color: rgba(0,0,0,.6) !important;*/
   /*background-color: #fff !important;*/
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
-    0 7px 10px -5px rgba(60, 72, 88, 0.4);
-  -webkit-transition: all 400ms;
-  -moz-transition: all 400ms;
-  -ms-transition: all 400ms;
-  -o-transition: all 400ms;
-  transition: all 400ms;
+  // box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
+  //   0 7px 10px -5px rgba(60, 72, 88, 0.4);
+  // -webkit-transition: all 400ms;
+  // -moz-transition: all 400ms;
+  // -ms-transition: all 400ms;
+  // -o-transition: all 400ms;
+  // transition: all 400ms;
+  border: 1px solid;
+  box-shadow: none;
 }
 
 .collapse-a {

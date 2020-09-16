@@ -4,6 +4,7 @@ import { RouterModule, Route } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 
+
 export const adminDashboardRoutes: Route[] = [
   {
     path: '',

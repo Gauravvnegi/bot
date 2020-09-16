@@ -1,18 +1,27 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
   styleUrls: ['./temp000001.component.scss'],
 })
-export class Temp000001Component implements OnInit {
+export class Temp000001Component implements OnInit, AfterViewInit {
   isLoaderVisible = true;
 
   constructor(
     public _templateLoadingService: TemplateLoaderService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private elementRef: ElementRef,
+    private _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
@@ -21,7 +30,7 @@ export class Temp000001Component implements OnInit {
   }
 
   private initConfig() {
-    //this.loadStyle('taj.styles.css');
+    this.loadStyle('taj.styles.css');
   }
 
   private registerListeners() {
@@ -30,6 +39,30 @@ export class Temp000001Component implements OnInit {
         this.isLoaderVisible = false;
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.initCssVariables();
+  }
+
+  initCssVariables() {
+    let cssText = '';
+    // this._templateService.templateData.layout_variables = {
+    //   '--stepper-background-color': 'blue',
+    //   '--header-background-color': 'red',
+    //   '--primary-button-background-color': 'red',
+    // };
+    for (let stepperLayoutVariable in this._templateService.templateData
+      .layout_variables) {
+      cssText +=
+        stepperLayoutVariable +
+        ':' +
+        this._templateService.templateData.layout_variables[
+          stepperLayoutVariable
+        ] +
+        ';';
+    }
+    this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
   }
 
   loadStyle(styleName: string) {

@@ -40,6 +40,7 @@ export class BaseComponent
     icon: '',
     appearance: '',
     maskPattern: false,
+    floatLabel: 'auto',
   };
   _settings;
   @Input('settings') set settings(value: {
@@ -54,10 +55,11 @@ export class BaseComponent
     required?: boolean;
     type: string;
     contentType?: string;
+    floatLabel?: string;
     style?: {
       fieldSetWrapperStyles: '';
       labelWrapperStyles: '';
-      childLabelStyles:'';
+      childLabelStyles: '';
       detailLabelStyles: '';
       detailValueStyles: '';
       detailWrapperStyles: '';

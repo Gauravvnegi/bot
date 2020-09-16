@@ -5,10 +5,9 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 @Component({
   selector: 'web-user-promocode',
   templateUrl: './promocode.component.html',
-  styleUrls: ['./promocode.component.scss']
+  styleUrls: ['./promocode.component.scss'],
 })
 export class PromocodeComponent {
-
   promocodeForm: FormGroup;
   private _settings;
   private _defaultValue = {
@@ -22,6 +21,8 @@ export class PromocodeComponent {
       placeholder: 'Have a Promocode? Enter Here',
       type: 'input',
       icon: '',
+      label: '',
+      floatLabel: 'always',
     },
   };
   @Input('settings') set settings(value) {
@@ -35,15 +36,15 @@ export class PromocodeComponent {
   }
   constructor(
     private _fb: FormBuilder,
-    private _snackBarService: SnackBarService,
-  ) { 
+    private _snackBarService: SnackBarService
+  ) {
     this.initFormGroup();
   }
 
   initFormGroup() {
     this.promocodeForm = this._fb.group({
       promocode: new FormControl(''),
-    })
+    });
   }
 
   applyPromocode() {
@@ -57,13 +58,12 @@ export class PromocodeComponent {
 
   setPromocode(text: string) {
     const data = {
-      promocode: text
-    }
+      promocode: text,
+    };
     this.promocodeData.emit(data);
   }
 
   get textPromocode() {
     return this.promocodeForm.get('promocode').value;
   }
-
 }

@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="title-container">
+		<div class="icon"></div>
+		<div style="margin: 6px 0;"><span class="stat-title">Inhouse</span></div>
+	</div>
+	<div class="stat-val-container">
+		<div class="semi-donut margin" 
+     [style]="percentStyle">
+  		<div class="progress-detail-container">
+				<div class="stat-value">5</div>
+				<div class="stat-val-title"> Room Occupied </div>
+			</div>
+		</div>
+	</div>
+	<div class="progress-info-labels-container">
+		<div>
+			<div class="adult_icon"></div>
+			<div class="progress-info-labels"><span style="letter-spacing: 0.72px;color: #6D7580;">Adult</span> {{ adultCount }}</div>
+		</div>
+		<div>
+			<div class="child_icon"></div>
+			<div class="progress-info-labels"><span style="letter-spacing: 0.72px;color: #6D7580;">Kid</span> {{ kidsCount }}</div>
+		</div>
+	</div>
+</div>

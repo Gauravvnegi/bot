@@ -1,0 +1,60 @@
+.one-third-width {
+	width: 33.33%;
+}
+
+.mx-1 {
+	margin: 0 15px;
+}
+
+.my-1 {
+	margin: 15px 0;
+}
+
+.ml-1 {
+	margin-left: 15px;
+}
+
+.mr-1 {
+	margin-right: 15px;
+}
+
+.my-1 {
+	margin: 15px 0;
+}
+
+.mt-1 {
+	margin-top: 15px;
+}
+
+.mb-1 {
+	margin-bottom: 15px;
+}
+
+.two-third-width {
+  width: 66.66%;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.col {
+	display: flex;
+	flex-direction: column;
+}
+
+.normal-stat {
+	height: 254px;
+}
+
+.group-stat {
+	height: 185.5px;
+}

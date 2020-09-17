@@ -1,10 +1,5 @@
 @import 'temp000001';
 
-// .example-button-row {
-//   @include template-footer-button();
-//   // padding-top: $padding-large;
-// }
-
 @media only screen and (max-width: $M) {
   .user-button {
     width: $half-width;
@@ -42,10 +37,17 @@
   svg path {
     fill: #737373 !important;
   }
+  @media only screen and (max-width: $M) {
+    min-width: auto;
+    padding: 0 15px;
+  }
 }
 
 :host ::ng-deep .amount{
   font-size: 23px;
+  @media only screen and (max-width: $M) {
+    font-size: 16px;
+  }
 }
 
 :host ::ng-deep .mat-tab-labels {
@@ -91,6 +93,9 @@
 
 .info-label {
   display: flex;
+  @media only screen and (max-width: $M) {
+    font-size: 12px;
+  }
 }
 
 .payment__wrapper--header {
@@ -98,15 +103,7 @@
   font-size: $font-large;
   font-weight: $bolder;
   @media only screen and (max-width: $tab-size) {
-    font-size: $font-small;
+    font-size: $font-medium;
     padding: $padding-small;
   }
 }
-
-// :host ::ng-deep .mat-tab-label svg path {
-//   fill: #000000;
-// }
-
-// :host ::ng-deep .mat-tab-label-active svg path {
-//   fill: #ffffff;
-// }

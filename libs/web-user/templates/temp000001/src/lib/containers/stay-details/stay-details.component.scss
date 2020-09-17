@@ -94,10 +94,6 @@
 :host ::ng-deep .mat__field--heading {
   margin-right: 3rem;
   margin-bottom: 13px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: #afafaf;
   @media only screen and (max-width: $M) {
     margin-right: $margin-small;
     margin-bottom: $margin-medium;

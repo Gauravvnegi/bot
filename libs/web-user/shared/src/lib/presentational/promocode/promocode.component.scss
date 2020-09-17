@@ -1,6 +1,12 @@
+@import 'main';
+
+
 .promocode-container {
     display: flex;
     justify-content: flex-end;
+  @media only screen and (max-width: $M) {
+      justify-content: space-between;
+  }
 }
 
 :host ::ng-deep .next-button{

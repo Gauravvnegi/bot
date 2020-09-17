@@ -44,7 +44,6 @@
   display: flex;
   flex-wrap: wrap;
   margin: 25px;
-  justify-content: space-between;
 }
 
 .method-style {
@@ -66,8 +65,8 @@
 
 
 .labl {
-    display : block;
     width: 275px;
+    margin: 0 10px;
 }
 .labl > input { /* HIDE RADIO */
     visibility: hidden; /* Makes input not-clickable */

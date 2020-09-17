@@ -32,6 +32,13 @@ export class StayDetailsService extends ApiService {
     stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
       label: 'Expected Arrival Time',
       disable: false,
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '12px',
+        },
+      },
     });
 
     stayDetailsFieldSchema[
@@ -41,7 +48,8 @@ export class StayDetailsService extends ApiService {
       style: {
         childLabelStyles: {
           'font-weight': 700,
-          color: '#737373',
+          color: '#888888',
+          'font-size': '12px',
         },
       },
     });

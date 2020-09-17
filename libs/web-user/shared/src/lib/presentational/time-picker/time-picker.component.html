@@ -9,14 +9,17 @@
 
   <div [ngClass]="defaultClasses.fieldParentWrapperClasses">
     <div [ngClass]="defaultClasses.fieldContainerWrapperClasses">
-      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
-        settings.label
-      }}</mat-label>
+      <mat-label
+        [ngClass]="defaultClasses.fieldLabelContainerClasses"
+        [ngStyle]="settings.style.childLabelStyles"
+        >{{ settings.label }}</mat-label
+      >
       <div>
-        <ngx-timepicker-field #timePickerRef
-        [formControlName]="name"
-        [defaultTime]="defaultTime" 
-        [controlOnly]="true"
+        <ngx-timepicker-field
+          #timePickerRef
+          [formControlName]="name"
+          [defaultTime]="defaultTime"
+          [controlOnly]="true"
         ></ngx-timepicker-field>
       </div>
       <mat-error [ngClass]="defaultClasses.fieldErrorClasses">{{

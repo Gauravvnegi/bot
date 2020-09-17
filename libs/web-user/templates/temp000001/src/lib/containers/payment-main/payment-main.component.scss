@@ -111,5 +111,8 @@
 }
 
 .payment-button{
+  @media only screen and (max-width: $M) {
+
   left: 0;
+  }
 }

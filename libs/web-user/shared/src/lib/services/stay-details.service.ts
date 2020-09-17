@@ -36,7 +36,7 @@ export class StayDetailsService extends ApiService {
         childLabelStyles: {
           'font-weight': 700,
           color: '#888888',
-          'font-size': '10px',
+          'font-size': '13px',
         },
       },
     });
@@ -49,7 +49,7 @@ export class StayDetailsService extends ApiService {
         childLabelStyles: {
           'font-weight': 700,
           color: '#888888',
-          'font-size': '10px',
+          'font-size': '13px',
         },
       },
     });

@@ -26,6 +26,7 @@ before_script:
 #  - mvn clean install
   - rm -rf deploy
   - ls -l
+  - ls | wc -l
 
 deploy to web-user:
   stage: deploy

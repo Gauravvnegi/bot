@@ -22,61 +22,63 @@ stages:
 
 before_script:
   - cp deploy/* .
-  - chmod +x *.sh
-  - mvn clean install
+#  - chmod +x *.sh
+#  - mvn clean install
   - ls -l
 
-release:
+deploy to web-user:
   stage: deploy
   environment:
     name: development
-  
   when: manual
+
 #  artifacts:
 #    paths:
 #      - build/
   script:
-    - scp -P$ssh_port *.sh "$ssh_user"@"$server_ip":"$work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; rm -f $jar_name"
-    - scp -P$ssh_port "$runner_path""$jar_name" "$ssh_user"@"$server_ip":"$work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; sh -x restart.sh $service_port $jar_name $work_dir $log_filename"
+#    - scp -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
+#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir && git pull origin $branch_name"
+#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir "
+    
+#    - scp -P$ssh_port "$runner_path""$jar_name" "$ssh_user"@"$server_ip":"$work_dir"
+#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; sh -x restart.sh $service_port $jar_name $work_dir $log_filename"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 60; ls && netstat -tnlp"
     
   only:
     - development
     
     
-backend_build:
-  stage: build
-  when: manual
-  only:
-    changes:
-      - "backend/**/*"
-  script:
-    - docker login -u $DOCKER_USER -p $ACCESS_TOKEN $CI_REGISTRY
-    - cd backend
-    - docker build -f Dockerfile --tag latest .
-    - docker push latest
+#backend_build:
+#  stage: build
+#  when: manual
+#  only:
+#    changes:
+#      - "backend/**/*"
+#  script:
+#    - docker login -u $DOCKER_USER -p $ACCESS_TOKEN $CI_REGISTRY
+#    - cd backend
+#    - docker build -f Dockerfile --tag latest .
+#    - docker push latest
     
     
-stages: 
-    - trigger-child-pipelines
-when: manual
-web-client:
-    stage: trigger-child-pipeline
-    trigger:
-        include: web-client/.gitlab-ci.yml
-        strategy: depend
-    only:
-        changes:
-            - web-client/**/*
+#stages: 
+#    - trigger-child-pipelines
+#when: manual
+#web-client:
+#    stage: trigger-child-pipeline
+#    trigger:
+#        include: web-client/.gitlab-ci.yml
+#        strategy: depend
+#    only:
+#        changes:
+#            - web-client/**/*
             
-.backend-setup:
-    before_script:
-        - cd backend
+#.backend-setup:
+#    before_script:
+#        - cd backend
 
-test: 
-    extends: .backend-setup
-    stage: test
-    script:
-        - mvn test
+#test: 
+#    extends: .backend-setup
+#    stage: test
+#    script:
+#        - mvn test

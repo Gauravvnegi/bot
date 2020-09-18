@@ -21,7 +21,7 @@ stages:
   - deploy
 
 before_script:
-  - mv deploy/* .
+  - cp deploy/* .
 #  - chmod +x *.sh
 #  - mvn clean install
   - rm -rf deploy

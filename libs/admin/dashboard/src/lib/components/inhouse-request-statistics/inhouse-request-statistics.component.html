@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="title-container">
+		<div class="icon"></div>
+		<div style="margin: 6px 0;"><span class="stat-title">Inhouse Request</span></div>
+	</div>
+	<div class="stat-val-container">
+		<!-- <canvas baseChart
+      [data]="doughnutChartData"
+      [labels]="doughnutChartLabels"
+      [chartType]="doughnutChartType">
+		</canvas> -->
+		<div class="progress-info-labels-container">
+			<div>
+				<div class="approved-count">146</div>
+				<div class="subtitle-label">Request Approved</div>
+			</div>
+			<div>
+				<div class="pending-count">255</div>
+				<div class="subtitle-label">Request Pending</div>
+			</div>
+		</div>
+		<div class="progress--container">
+			<circle-progress
+				[percent]="65"
+				[backgroundPadding]="7"
+				[radius]="52"
+				[space]= "-16"
+				[outerStrokeWidth]= "16"
+				[outerStrokeColor]= "'#f6b155'"
+				[outerStrokeLinecap]= "'inherit'"
+				[innerStrokeColor]= "'#2f1dce'"
+				[innerStrokeWidth]= "16"
+				[title]= "'401'"
+				[subtitle]="'Total Request'"
+				[titleFontSize]= '20'
+				[subtitleFontSize]= '12'
+				[animation]= 'false'
+				[animateTitle]= 'false'
+				[showUnits]='false'
+				[clockwise]= 'false'
+				[responsive]= 'false'
+			></circle-progress>
+		</div>
+	</div>
+</div>

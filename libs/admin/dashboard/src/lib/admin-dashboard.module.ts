@@ -9,7 +9,10 @@ import { CheckinStatisticsComponent } from './components/checkin-statistics/chec
 import { CheckoutStatisticsComponent } from './components/checkout-statistics/checkout-statistics.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SharedMaterialModule } from 'libs/shared/material/src';
-
+import { InhouseRequestStatisticsComponent } from './components/inhouse-request-statistics/inhouse-request-statistics.component';
+import { CustomerStatisticsComponent } from './components/customer-statistics/customer-statistics.component';
+import { ChartsModule } from 'ng2-charts';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -25,6 +28,8 @@ export const adminDashboardRoutes: Route[] = [
     AdminSharedModule,
     RouterModule,
     SharedMaterialModule,
+    ChartsModule,
+    NgCircleProgressModule.forRoot(),
   ],
   declarations: [
     DashboardComponent,
@@ -33,6 +38,8 @@ export const adminDashboardRoutes: Route[] = [
     CheckinStatisticsComponent,
     CheckoutStatisticsComponent,
     StatisticsComponent,
+    InhouseRequestStatisticsComponent,
+    CustomerStatisticsComponent,
   ],
   exports: [DashboardComponent],
 })

@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="title-container">
+		<div class="icon"></div>
+		<div style="margin: 6px 0;"><span class="stat-title">Customers</span></div>
+	</div>
+	<div class="stat-val-container">
+		<div class="stat-labels-container">
+			<div class="stat-label"><span class="stat-label-title">Total</span><span class="stat-label-content">1500</span></div>
+			<div class="stat-label"><span class="stat-label-title">BOT</span><span class="stat-label-content-red">1075</span></div>
+			<div class="stat-label"><span class="stat-label-title">VIP</span><span class="stat-label-content-VIP">425</span></div>
+		</div>
+		<div class="line-chart">
+			<canvas baseChart 
+        [datasets]="lineChartData" 
+        [labels]="lineChartLabels" 
+        [options]="lineChartOptions"
+        [colors]="lineChartColors" 
+        [legend]="lineChartLegend" 
+        [chartType]="lineChartType" 
+        [plugins]="lineChartPlugins">
+    	</canvas>
+		</div>
+	</div>
+</div>

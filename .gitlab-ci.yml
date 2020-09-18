@@ -4,12 +4,28 @@ stages:
 before_script:
   - cp deploy/* .
   - chmod +x *.sh
-#  - mvn clean install
   - rm -rf deploy
   - ls -l
   - ls | wc -l
 
 deploy to web-user:
+  stage: deploy
+  environment:
+    name: staging
+  when: manual
+
+#  artifacts:
+#    paths:
+#      - build/
+  script:
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x restart.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
+    
+  only:
+    - development
+    
+deploy to admin:
   stage: deploy
   environment:
     name: development
@@ -20,14 +36,8 @@ deploy to web-user:
 #      - build/
   script:
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
-#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir && git pull origin $branch_name"
-#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir "
-    
-#    - scp -P$ssh_port "$runner_path""$jar_name" "$ssh_user"@"$server_ip":"$work_dir"
-#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; sh -x restart.sh $service_port $jar_name $work_dir $log_filename"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x restart.sh"
-#    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 60; ls && netstat -tnlp"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 1; ls $work_dir && netstat -tnlp"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
     
   only:
     - development

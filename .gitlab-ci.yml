@@ -24,7 +24,7 @@ before_script:
   - mv deploy/* .
 #  - chmod +x *.sh
 #  - mvn clean install
-  - rmdir deploy
+  - rm -rf deploy
   - ls -l
 
 deploy to web-user:

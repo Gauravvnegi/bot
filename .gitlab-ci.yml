@@ -19,7 +19,7 @@ deploy to web-user:
 #    paths:
 #      - build/
   script:
-    - scp -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
 #    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir && git pull origin $branch_name"
 #    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir "
     

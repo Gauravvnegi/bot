@@ -21,9 +21,10 @@ stages:
   - deploy
 
 before_script:
-  - cp deploy/* .
+#  - mv deploy/* .
 #  - chmod +x *.sh
 #  - mvn clean install
+  - rmdir deploy
   - ls -l
 
 deploy to web-user:

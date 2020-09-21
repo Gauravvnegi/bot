@@ -32,3 +32,8 @@ export class ManagePermissionComponent implements OnInit {
 
   ngOnInit(): void {}
 }
+
+//auth -- x-authorization
+//x-acess--token   x-access-token
+//refresh-token x-refresh-authorization
+//x-acess-refresh  x-access-refresh-token

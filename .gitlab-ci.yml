@@ -19,7 +19,7 @@ deploy to Development-web-user:
 #      - build/
   script:
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x restart.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
   only:
     - development

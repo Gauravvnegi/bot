@@ -8,7 +8,7 @@ before_script:
   - ls -l
   - ls | wc -l
 
-deploy to staging-web-user:
+deploy to Development-web-user:
   stage: deploy
   environment:
     name: development-web-user
@@ -21,11 +21,10 @@ deploy to staging-web-user:
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x restart.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
-    
   only:
     - development
     
-deploy to Dev-admin:
+deploy to Development-admin:
   stage: deploy
   environment:
     name: development-admin
@@ -38,7 +37,6 @@ deploy to Dev-admin:
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x restart.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
-    
   only:
     - development
     

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ExpressCheckOut } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-checkout-statistics',
@@ -7,10 +8,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CheckoutStatisticsComponent implements OnInit {
 
-  @Input() expectedCheckout: number = 8;
+  @Input() expectedCheckout: ExpressCheckOut;
   constructor() { }
 
   ngOnInit(): void {
+    debugger;
+    console.log(this.expectedCheckout);
   }
 
 }

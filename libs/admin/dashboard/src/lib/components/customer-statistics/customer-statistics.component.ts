@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Customer } from '../../data-models/statistics';
+import { Customer } from '../../data-models/statistics.model';
 
 
 @Component({

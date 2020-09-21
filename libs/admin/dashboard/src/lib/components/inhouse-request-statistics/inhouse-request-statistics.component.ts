@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { InhouseRequest } from '../../data-models/statistics';
+import { InhouseRequest } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-statistics',
@@ -8,10 +8,7 @@ import { InhouseRequest } from '../../data-models/statistics';
 })
 export class InhouseRequestStatisticsComponent implements OnInit {
 
-  @Input() inhouseRequest: InhouseRequest = {
-    requestApproved: 146,
-    requestPending: 255,
-  }
+  @Input() inhouseRequest: InhouseRequest;
   totalRequest: number;
   requestPendingPercent: number;
 

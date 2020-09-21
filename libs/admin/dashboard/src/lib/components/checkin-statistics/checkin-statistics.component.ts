@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ExpressCheckIn } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-checkin-statistics',
@@ -7,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CheckinStatisticsComponent implements OnInit {
 
-  @Input() expectedCheckIn:number = 12;
+  @Input() expectedCheckIn: ExpressCheckIn;
   constructor() { }
 
   ngOnInit(): void {

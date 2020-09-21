@@ -13,6 +13,7 @@ import { InhouseRequestStatisticsComponent } from './components/inhouse-request-
 import { CustomerStatisticsComponent } from './components/customer-statistics/customer-statistics.component';
 import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { StatisticsService } from './services/statistics.service';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -42,5 +43,6 @@ export const adminDashboardRoutes: Route[] = [
     CustomerStatisticsComponent,
   ],
   exports: [DashboardComponent],
+  providers: [StatisticsService]
 })
 export class AdminDashboardModule {}

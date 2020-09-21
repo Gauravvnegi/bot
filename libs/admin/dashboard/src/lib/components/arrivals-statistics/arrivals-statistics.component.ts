@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Arrivals } from '../../data-models/statistics';
 
 @Component({
   selector: 'hospitality-bot-arrivals-statistics',
@@ -7,8 +8,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ArrivalsStatisticsComponent implements OnInit {
 
-  @Input() arrived: number = 140;
-  @Input() expected: number = 231;
+  @Input() arrivals: Arrivals = {
+    currentlyArrived: 140,
+    currentlyExpected: 91,
+    maxExpected: 231
+  }
+
   progress: number = 0;
   constructor() { }
 
@@ -17,7 +22,7 @@ export class ArrivalsStatisticsComponent implements OnInit {
   }
 
   setProgress() {
-    this.progress = (this.arrived / this.expected) * 100;
+    this.progress = Math.abs((this.arrivals.currentlyArrived / this.arrivals.maxExpected) * 100);
   }
 
 }

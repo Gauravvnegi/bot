@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
+import { Component, OnInit, Input } from '@angular/core';
+import { Customer } from '../../data-models/statistics';
+
 
 @Component({
   selector: 'hospitality-bot-customer-statistics',
@@ -9,50 +9,48 @@ import { Color, Label } from 'ng2-charts';
 })
 export class CustomerStatisticsComponent implements OnInit {
 
+  @Input() customer: Customer = {
+    total: 1500,
+    bot: 1075,
+    vip: 425,
+    chartData: [
+      { data: [72, 75, 75, 81, 78], label: 'VIP', fill: false },
+      { data: [72, 81, 78, 85, 74], label: 'BOT', fill: false },
+    ],
+    chartLabels: ['4 Jul', '11 Jul', '18 Jul', '25 Jul', '31 Jul'],
+    chartOptions: {
+      responsive: true,
+      scales: {
+        xAxes: [{
+           gridLines: {
+              display: true
+           }
+        }],
+        yAxes: [{
+           gridLines: {
+              display: false
+           },
+           ticks: {
+            display: false
+          }
+        }]
+      }
+    },
+    chartColors: [
+      {
+        borderColor: '#218AF3',
+      },
+      {
+        borderColor: '#F2509B',
+      }
+    ],  
+    chartLegend: false,
+    chartType: 'line',
+  }
+
   constructor() { }
 
   ngOnInit(): void {
   }
-
-  myColors = ['#218AF3', '#F2509B']
-
-  lineChartData: ChartDataSets[] = [
-    { data: [72, 78, 75, 77, 75], label: 'VIP', fill: false },
-    { data: [85, 89, 83, 87, 84], label: 'BOT', fill: false },
-  ];
-
-  lineChartLabels: Label[] = ['4 Jul', '11 Jul', '18 Jul', '25 Jul', '31 Jul'];
-
-  lineChartOptions = {
-    responsive: true,
-    scales: {
-      xAxes: [{
-         gridLines: {
-            display: true
-         }
-      }],
-      yAxes: [{
-         gridLines: {
-            display: false
-         },
-         ticks: {
-          display: false
-        }
-      }]
-    }
-  };
-
-  lineChartColors: Color[] = [
-    {
-      borderColor: '#218AF3',
-    },
-    {
-      borderColor: '#F2509B',
-    }
-  ];
-
-  lineChartLegend = false;
-  lineChartPlugins = [];
-  lineChartType = 'line';
 
 }

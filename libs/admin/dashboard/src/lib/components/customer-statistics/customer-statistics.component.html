@@ -5,20 +5,19 @@
 	</div>
 	<div class="stat-val-container">
 		<div class="stat-labels-container">
-			<div class="stat-label"><span class="stat-label-title">Total</span><span class="stat-label-content">1500</span></div>
-			<div class="stat-label"><span class="stat-label-title">BOT</span><span class="stat-label-content-red">1075</span></div>
-			<div class="stat-label"><span class="stat-label-title">VIP</span><span class="stat-label-content-VIP">425</span></div>
+			<div class="stat-label"><span class="stat-label-title">Total</span><span class="stat-label-content">{{ customer.total }}</span></div>
+			<div class="stat-label"><span class="stat-label-title">BOT</span><span class="stat-label-content-red">{{ customer.bot }}</span></div>
+			<div class="stat-label"><span class="stat-label-title">VIP</span><span class="stat-label-content-VIP">{{ customer.vip }}</span></div>
 		</div>
 		<div class="line-chart">
 			<canvas baseChart 
-        [datasets]="lineChartData" 
-        [labels]="lineChartLabels" 
-        [options]="lineChartOptions"
-        [colors]="lineChartColors" 
-        [legend]="lineChartLegend" 
-        [chartType]="lineChartType" 
-        [plugins]="lineChartPlugins">
-    	</canvas>
+				[datasets]="customer.chartData" 
+				[labels]="customer.chartLabels" 
+				[options]="customer.chartOptions"
+				[colors]="customer.chartColors" 
+				[legend]="customer.chartLegend" 
+				[chartType]="customer.chartType">
+    		</canvas>
 		</div>
 	</div>
 </div>

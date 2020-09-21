@@ -4,7 +4,7 @@
 		<div style="margin: 6px 0;"><span class="stat-title">Arrivals</span></div>
 	</div>
 	<div class="stat-val-container">
-		<div class="stat-value">91</div>
+		<div class="stat-value">{{ arrivals.currentlyExpected }}</div>
 		<div class="stat-val-title"> Currently Expected</div>
 	</div>
 	<div>
@@ -12,8 +12,8 @@
 			<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="100" class="progress-bar progress-color" role="progressbar" [style.width]="progress+'%'"></div>
 		</div>
 		<div class="progress-info">
-			<div class="progress-info-labels"><span style="letter-spacing: 0.72px;color: #6D7580;">Arrived</span> {{ arrived }}</div>
-			<div class="progress-info-labels"><span style="letter-spacing: 0.72px;color: #6D7580;">Max Expected</span> {{ expected }}</div>
+			<div class="progress-info-labels"><span style="letter-spacing: 0.72px;color: #6D7580;">Arrived</span> {{ arrivals.currentlyArrived }}</div>
+			<div class="progress-info-labels"><span style="letter-spacing: 0.72px;color: #6D7580;">Max Expected</span> {{ arrivals.maxExpected }}</div>
 		</div>
 	</div>
 </div>

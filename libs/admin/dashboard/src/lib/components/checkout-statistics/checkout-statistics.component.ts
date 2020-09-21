@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CheckoutStatisticsComponent implements OnInit {
 
-  @Input() expected: number = 8;
+  @Input() expectedCheckout: number = 8;
   constructor() { }
 
   ngOnInit(): void {

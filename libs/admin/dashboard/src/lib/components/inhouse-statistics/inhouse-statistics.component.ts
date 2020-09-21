@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Inhouse } from '../../data-models/statistics';
 
 @Component({
   selector: 'hospitality-bot-inhouse-statistics',
@@ -7,9 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class InhouseStatisticsComponent implements OnInit {
 
-  @Input() adultCount: number = 5;
-  @Input() kidsCount:number = 0;
-  @Input() roomOccupied: number = 30;
+  @Input() inhouse: Inhouse = {
+    adultCount: 5,
+    kidsCount: 0,
+    totalRoom: 15,
+    roomOccupied: 5,
+  };
+
   percentStyle: string = "--percentage : 80; --fill: hsla(266, 90%, 54%, 1) ;";
   constructor() { }
 
@@ -18,7 +23,8 @@ export class InhouseStatisticsComponent implements OnInit {
   }
 
   setPercentageStyle() {
-    this.percentStyle = `--percentage : ${this.roomOccupied}; --fill: hsla(266, 90%, 54%, 1) ;`;
+    let percentage = Math.abs((this.inhouse.roomOccupied / this.inhouse.totalRoom) * 100);
+    this.percentStyle = `--percentage : ${percentage}; --fill: hsla(266, 90%, 54%, 1) ;`;
   }
 
 }

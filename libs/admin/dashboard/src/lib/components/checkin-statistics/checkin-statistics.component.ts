@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CheckinStatisticsComponent implements OnInit {
 
-  @Input() expected:number = 12;
+  @Input() expectedCheckIn:number = 12;
   constructor() { }
 
   ngOnInit(): void {

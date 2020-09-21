@@ -89,9 +89,10 @@ svg text.label {
 
 .progress--container {
     border-radius: 50%;
-    background-color: #F5F5F5;
+    border: 20px solid #F5F5F5;
     height: 150px;
     width: 150px;
+    position: relative;
 }
 
 .approved-count {
@@ -119,4 +120,8 @@ font: normal normal normal 12px/16px Roboto;
 letter-spacing: 0.72px;
 color: #6D7580;
 opacity: 1;
+}
+
+.circle-progress {
+    position: absolute;margin-left: -20px; margin-top: -20px;
 }

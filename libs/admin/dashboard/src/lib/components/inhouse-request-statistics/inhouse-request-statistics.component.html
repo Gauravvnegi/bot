@@ -11,17 +11,18 @@
 		</canvas> -->
 		<div class="progress-info-labels-container">
 			<div>
-				<div class="approved-count">146</div>
+				<div class="approved-count">{{ inhouseRequest.requestApproved }}</div>
 				<div class="subtitle-label">Request Approved</div>
 			</div>
 			<div>
-				<div class="pending-count">255</div>
+				<div class="pending-count">{{ inhouseRequest.requestPending }}</div>
 				<div class="subtitle-label">Request Pending</div>
 			</div>
 		</div>
 		<div class="progress--container">
 			<circle-progress
-				[percent]="65"
+				class="circle-progress"
+				[percent]="requestPendingPercent"
 				[backgroundPadding]="7"
 				[radius]="52"
 				[space]= "-16"
@@ -30,11 +31,13 @@
 				[outerStrokeLinecap]= "'inherit'"
 				[innerStrokeColor]= "'#2f1dce'"
 				[innerStrokeWidth]= "16"
-				[title]= "'401'"
+				[title]= "totalRequest"
 				[subtitle]="'Total Request'"
 				[titleFontSize]= '20'
-				[subtitleFontSize]= '12'
+				[titleFontWeight]='200'
+				[subtitleFontSize]= '11'
 				[animation]= 'false'
+				[animationDuration]='0'
 				[animateTitle]= 'false'
 				[showUnits]='false'
 				[clockwise]= 'false'

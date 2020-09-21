@@ -8,10 +8,10 @@ before_script:
   - ls -l
   - ls | wc -l
 
-deploy to web-user:
+deploy to staging-web-user:
   stage: deploy
   environment:
-    name: staging
+    name: development-web-user
   when: manual
 
 #  artifacts:
@@ -25,10 +25,10 @@ deploy to web-user:
   only:
     - development
     
-deploy to admin:
+deploy to Dev-admin:
   stage: deploy
   environment:
-    name: development
+    name: development-admin
   when: manual
 
 #  artifacts:

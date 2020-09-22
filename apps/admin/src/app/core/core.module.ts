@@ -8,6 +8,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [],
@@ -18,6 +19,7 @@ import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interce
       useClass: TokenRetievalInterceptor,
       multi: true,
     },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {

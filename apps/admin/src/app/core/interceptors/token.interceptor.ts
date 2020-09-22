@@ -20,9 +20,19 @@ export class TokenInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (this._authService.isAuthenticated() && !req.url.includes('refresh')) {
-      //add token
-      return next.handle(req);
+      console.log('authenticated user so adding token');
+      const modifiedRequest = req.clone({
+        setHeaders: {
+          'x-authorization': this._authService.getTokenByName(
+            'x-authorization'
+          ),
+          'x-access-token': this._authService.getTokenByName('x-access-token'),
+        },
+      });
+      return next.handle(modifiedRequest);
     } else {
+      console.log('not authenticated user so no token or a route for refresh');
+
       return next.handle(req);
     }
   }

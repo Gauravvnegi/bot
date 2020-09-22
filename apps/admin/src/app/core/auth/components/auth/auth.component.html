@@ -1,1 +1,27 @@
-<router-outlet></router-outlet>
+<div class="wrapper">
+  <div class="wrapper--left">
+    <div class="wrapper--left-logo">
+      <img src="assets/hilltop-logo.png" />
+    </div>
+    <div class="wrapper--left-auth-panel">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <div class="wrapper--right">
+    <header class="wrapper--right-header">
+      <a href="#">About Us</a>
+      <a href="#">Privacy Policy</a>
+    </header>
+    <div class="wrapper--right-managing-hotel">
+      <p class="heading">Managing Hotel is Now Easy</p>
+      <div class="wrapper--right-managing-hotel-option-box">
+        <div *ngFor="let option of managingOptions" class="option">
+          <mat-icon class="material-icons" matSuffix>{{
+            option.icon
+          }}</mat-icon>
+          <p class="option-label">{{ option.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

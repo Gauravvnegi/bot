@@ -21,35 +21,7 @@
   ></p-button>
 </div> -->
 
-<div class="header">
-  <div class="header--text">
-    <p class="heading">Reservations</p>
-    <p class="selected">2 record(s) are selected</p>
-  </div>
-  <div class="icons">
-    <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
-    <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
-    <mat-icon class="material-icons" matSuffix>description</mat-icon>
-    <mat-icon class="material-icons" matSuffix>more_vert</mat-icon>
-  </div>
-  <div class="seperator"></div>
-  <p-dropdown [options]="export" [(ngModel)]="selectedExport1">
-    <ng-template let-item pTemplate="selectedItem">
-      <mat-icon class="material-icons" matSuffix
-        >vertical_align_bottom</mat-icon
-      >
-      <span style="vertical-align: middle; margin-left: 0.5em;">Export</span>
-    </ng-template>
-  </p-dropdown>
-  <p-dropdown [options]="csv" [(ngModel)]="selectedExport2">
-    <ng-template let-item pTemplate="selectedItem">
-      <span style="vertical-align: middle; margin-left: 0.5em;">CSV</span>
-    </ng-template>
-  </p-dropdown>
-  <button class="go" (click)="exportExcel()">GO</button>
-  <div class="seperator"></div>
-  <a href="#" class="reset-link">Reset Filter</a>
-</div>
+
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -70,11 +42,41 @@
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
       <div class="caption__wrapper--tabmenu">
+        <div class="header">
+          <div class="header--text">
+            <p class="heading">Reservations</p>
+            <!-- <p class="selected">2 record(s) are selected</p> -->
+          </div>
+          <!-- <div class="icons">
+            <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
+            <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
+            <mat-icon class="material-icons" matSuffix>description</mat-icon>
+            <mat-icon class="material-icons" matSuffix>more_vert</mat-icon>
+          </div> -->
+          <!-- <div class="seperator"></div>
+          <p-dropdown [options]="export" [(ngModel)]="selectedExport1">
+            <ng-template let-item pTemplate="selectedItem">
+              <mat-icon class="material-icons" matSuffix
+                >vertical_align_bottom</mat-icon
+              >
+              <span style="vertical-align: middle; margin-left: 0.5em;">Export</span>
+            </ng-template>
+          </p-dropdown>
+          <p-dropdown [options]="csv" [(ngModel)]="selectedExport2">
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align: middle; margin-left: 0.5em;">CSV</span>
+            </ng-template>
+          </p-dropdown>
+          <button class="go" (click)="exportExcel()">GO</button>
+          <div class="seperator"></div>
+          <a href="#" class="reset-link">Reset Filter</a> -->
+        </div>
         <hospitality-bot-tab-group [list]="tabList"></hospitality-bot-tab-group>
       </div>
       <div class="caption__wrapper--buttons">
         <button class="filter">
-          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+          All
+          <!-- <mat-icon class="material-icons" matSuffix>filter_list</mat-icon> -->
         </button>
         <div class="button__wrapper" *ngFor="let data of buttons">
           <button pButton type="button" [label]="data.label"></button>

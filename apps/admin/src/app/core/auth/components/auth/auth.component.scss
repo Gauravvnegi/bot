@@ -1,0 +1,70 @@
+@import 'main';
+
+.wrapper {
+  display: flex;
+  &--left {
+    width: 35%;
+    padding: 1%;
+    height: 100vh;
+    &-logo {
+      height: 80px;
+      width: 100px;
+      img {
+        height: $full;
+        width: $full;
+      }
+    }
+    &-auth-panel{
+        padding: $padding30;
+    }
+  }
+  &--right {
+    width: 65%;
+    padding: 1%;
+    height: 100vh;
+    background-image: url('../../../../../assets/sidebar-4.jpg');
+    background-repeat: no-repeat;
+    background-size: $full $full;
+    &-header {
+      padding: $padding15 0px;
+      @include flex-item-center();
+      justify-content: flex-end;
+      a {
+        text-decoration: none;
+        font-size: $font12;
+        font-weight: $bolder;
+        margin: 0px $margin10;
+        color: white;
+      }
+    }
+    &-managing-hotel {
+      margin: 0px 8%;
+      margin-top: 15%;
+      color: white;
+      .heading {
+        font-size: 40px;
+        margin: $margin20 0px;
+      }
+      &-option-box {
+        @include flex-space-between();
+        flex-wrap: wrap;
+        .option {
+          width: $half;
+          margin-bottom: $margin20;
+          @include flex-item-center();
+          padding: $padding10;
+          &:hover {
+            cursor: pointer;
+            background-color: rgb(141, 138, 138, 0.6);
+          }
+          .material-icons {
+            margin-right: $margin10;
+          }
+          .option-label {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}

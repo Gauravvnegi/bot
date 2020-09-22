@@ -37,6 +37,11 @@
   }
 }
 
+:host ::ng-deep .mat-ink-bar {
+  background-color: #2187d5;
+  height: 1px;
+}
+
 :host ::ng-deep .table-search-head {
   background-color: #f4f9fd !important;
   input {
@@ -72,7 +77,8 @@
   &--text {
     display: flex;
     align-items: center;
-    width: 47%;
+    // width: 47%;
+    padding: 0 17px;
     .heading {
       font-size: 20px;
       margin: 0;
@@ -135,19 +141,20 @@
   &--buttons {
     display: flex;
     align-items: center;
-    background-color: #f7f7f7;
+    background-color: white;
     padding: 10px 20px;
 
     .filter {
       padding: 4px 15px;
-      border: 1px solid darkgray;
-      background-color: white;
-      border-radius: 5px;
+      border: 1px solid white;
+      background-color: #f7f7f7;
+      border-radius: 20px;
       outline: none;
+      font-size: 14px;
       color: #7e7e7e;
       &:hover {
         cursor: pointer;
-        background-color: #2187d5;
+        background-color: #7e7e7e;
         color: white;
       }
     }
@@ -155,15 +162,15 @@
       display: flex;
       align-items: center;
       .p-button {
-        background-color: white;
+        background-color: #f7f7f7;
         padding: 6px 15px;
         margin-left: 15px;
         font-size: 14px;
         color: #7e7e7e;
-        border: 1px solid #7e7e7e;
+        border: 1px solid white;
         border-radius: 20px;
         &:hover {
-          background-color: #2187d5;
+          background-color: #7e7e7e;
           color: white;
         }
       }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Arrivals } from '../../data-models/statistics';
+import { Arrivals } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-arrivals-statistics',
@@ -8,11 +8,7 @@ import { Arrivals } from '../../data-models/statistics';
 })
 export class ArrivalsStatisticsComponent implements OnInit {
 
-  @Input() arrivals: Arrivals = {
-    currentlyArrived: 140,
-    currentlyExpected: 91,
-    maxExpected: 231
-  }
+  @Input() arrivals: Arrivals;
 
   progress: number = 0;
   constructor() { }

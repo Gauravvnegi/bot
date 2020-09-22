@@ -8,7 +8,6 @@ import { BaseComponent } from '../base.component';
 })
 export class DetailComponent extends BaseComponent {
   repeater(value) {
-    debugger;
     console.log(value);
   }
 }

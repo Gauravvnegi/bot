@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Inhouse } from '../../data-models/statistics';
+import { Inhouse } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-inhouse-statistics',
@@ -8,12 +8,7 @@ import { Inhouse } from '../../data-models/statistics';
 })
 export class InhouseStatisticsComponent implements OnInit {
 
-  @Input() inhouse: Inhouse = {
-    adultCount: 5,
-    kidsCount: 0,
-    totalRoom: 15,
-    roomOccupied: 5,
-  };
+  @Input() inhouse: Inhouse;
 
   percentStyle: string = "--percentage : 80; --fill: hsla(266, 90%, 54%, 1) ;";
   constructor() { }

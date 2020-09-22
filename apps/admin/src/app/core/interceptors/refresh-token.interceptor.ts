@@ -13,7 +13,7 @@ import { AuthService } from '../auth/services/auth.service';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class RefreshTokenInterceptor implements HttpInterceptor {
   constructor(private _authService: AuthService) {}
   intercept(
     req: HttpRequest<any>,

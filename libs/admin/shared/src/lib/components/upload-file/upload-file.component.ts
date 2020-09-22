@@ -7,11 +7,23 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class UploadFileComponent implements OnInit {
 
+  private defaultValue = {
+    maxFileSize: 3145728,
+    fileType: ['png', 'jpg'],
+  };
+  _fileUploadData;
+
   @Input() url: string;
-  @Input() maxFileSize;
   @Input() uploadStatus: boolean;
-  @Input() fileType: string[];
-  
+  @Input('fileUploadData') set fileUploadData(value: {
+  }) {
+    this._fileUploadData = { ...this.defaultValue, ...value };
+  }
+
+  get uploadFileData() {
+    return { ...this.defaultValue, ...this. _fileUploadData };
+  }
+
   @Output()
   fileData = new EventEmitter();
   
@@ -31,7 +43,7 @@ export class UploadFileComponent implements OnInit {
       const extension = file.name.split('.')[1];
       if (
         this.checkFileType(extension)&&
-        fileSize <= +this.maxFileSize
+        fileSize <= +this.uploadFileData.maxFileSize
       ) {
         reader.onload = (_event) => {
           const result: string = reader.result as string;
@@ -48,6 +60,6 @@ export class UploadFileComponent implements OnInit {
   }
 
   checkFileType(extension: string) {
-    return this.fileType.includes(extension);
+    return this.uploadFileData.fileType.includes(extension);
   }
 }

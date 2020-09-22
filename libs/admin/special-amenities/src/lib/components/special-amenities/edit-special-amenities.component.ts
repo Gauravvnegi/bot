@@ -14,8 +14,11 @@ export class EditSpecialAmenitiesComponent implements OnInit {
 
   file: File;
   amenityForm: FormGroup;
-  fileSize: number = 3145728;
-  fileType = ['png', 'jpg'];
+  fileUploadData = {
+    fileSize : 3145728,
+    fileType : ['png', 'jpg']
+  }
+  
   hotelPackage:PackageDetail;
   hotelId: string = 'ca60640a-9620-4f60-9195-70cc18304edd';
   amenityId: string;

@@ -14,6 +14,7 @@ import { CustomerStatisticsComponent } from './components/customer-statistics/cu
 import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { StatisticsService } from './services/statistics.service';
+import { DepartureStatisticsComponent } from './components/departure-statistics/departure-statistics.component';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -41,6 +42,7 @@ export const adminDashboardRoutes: Route[] = [
     StatisticsComponent,
     InhouseRequestStatisticsComponent,
     CustomerStatisticsComponent,
+    DepartureStatisticsComponent,
   ],
   exports: [DashboardComponent],
   providers: [StatisticsService]

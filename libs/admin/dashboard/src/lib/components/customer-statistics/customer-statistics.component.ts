@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Customer } from '../../data-models/statistics.model';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 
 @Component({
@@ -8,18 +9,18 @@ import { Customer } from '../../data-models/statistics.model';
   styleUrls: ['./customer-statistics.component.scss']
 })
 export class CustomerStatisticsComponent implements OnInit {
-
-  @Input() customer: Customer = {
-    total: 1500,
-    bot: 1075,
-    vip: 425,
+  @Input() customerData: Customer;
+  chart = {
+    total: 0,
+    vip: 0,
+    bot: 0,
     chartData: [
-      { data: [72, 75, 75, 81, 78], label: 'VIP', fill: false },
-      { data: [72, 81, 78, 85, 74], label: 'BOT', fill: false },
+      { data: [], label: 'VIP', fill: false },
+      { data: [], label: 'BOT', fill: false },
     ],
-    chartLabels: ['4 Jul', '11 Jul', '18 Jul', '25 Jul', '31 Jul'],
+    chartLabels: [],
     chartOptions: {
-      responsive: true,
+      responsive: false,
       scales: {
         xAxes: [{
            gridLines: {
@@ -34,7 +35,7 @@ export class CustomerStatisticsComponent implements OnInit {
             display: false
           }
         }]
-      }
+      },
     },
     chartColors: [
       {
@@ -48,9 +49,22 @@ export class CustomerStatisticsComponent implements OnInit {
     chartType: 'line',
   }
 
-  constructor() { }
+  constructor(private _dateService: DateService) { }
 
   ngOnInit(): void {
+    this.initGraphData();
+  }
+
+  private initGraphData() {
+    const botKeys = Object.keys(this.customerData.botUser.chart);
+    botKeys.forEach((d) => {
+      this.chart.chartLabels.push(this._dateService.convertTimestampToDate(d, 'D MMM'));
+      this.chart.chartData[0].data.push(this.customerData.botUser.chart[d]);
+      this.chart.chartData[1].data.push(this.customerData.vipUser.chart[d]);
+    });
+    this.chart['total'] = this.customerData.totalCount;
+    this.chart['bot'] = this.customerData.botUser.totalCount;
+    this.chart['vip'] = this.customerData.vipUser.totalCount;
   }
 
 }

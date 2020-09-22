@@ -5,18 +5,18 @@
 	</div>
 	<div class="stat-val-container">
 		<div class="stat-labels-container">
-			<div class="stat-label"><span class="stat-label-title">Total</span><span class="stat-label-content">{{ customer.total }}</span></div>
-			<div class="stat-label"><span class="stat-label-title">BOT</span><span class="stat-label-content-red">{{ customer.bot }}</span></div>
-			<div class="stat-label"><span class="stat-label-title">VIP</span><span class="stat-label-content-VIP">{{ customer.vip }}</span></div>
+			<div class="stat-label"><span class="stat-label-title">Total</span><span class="stat-label-content">{{ chart.total }}</span></div>
+			<div class="stat-label"><span class="stat-label-title">BOT</span><span class="stat-label-content-red">{{ chart.bot }}</span></div>
+			<div class="stat-label"><span class="stat-label-title">VIP</span><span class="stat-label-content-VIP">{{ chart.vip }}</span></div>
 		</div>
 		<div class="line-chart">
-			<canvas baseChart 
-				[datasets]="customer.chartData" 
-				[labels]="customer.chartLabels" 
-				[options]="customer.chartOptions"
-				[colors]="customer.chartColors" 
-				[legend]="customer.chartLegend" 
-				[chartType]="customer.chartType">
+			<canvas baseChart style="max-width: 100%;"
+				[datasets]="chart.chartData" 
+				[labels]="chart.chartLabels" 
+				[options]="chart.chartOptions"
+				[colors]="chart.chartColors" 
+				[legend]="chart.chartLegend" 
+				[chartType]="chart.chartType">
     		</canvas>
 		</div>
 	</div>

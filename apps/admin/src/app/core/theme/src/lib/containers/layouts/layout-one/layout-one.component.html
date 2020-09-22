@@ -19,23 +19,19 @@
         </p>
         <div class="seperator"></div>
         <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
-          <p>Refresh</p>
           <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
         </div>
       </div>
-      <div class="search-bar-wrapper">
-        <admin-search-bar style="width: 35%;"></admin-search-bar>
-        <button class="header--button">
-          Hotel Hilltop
-          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
-        </button>
-        <hospitality-bot-daterange></hospitality-bot-daterange>
-      </div>
+      <admin-search-bar style="width: 23%;"></admin-search-bar>
+      <button class="header--button">
+        Hotel Hilltop
+        <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+      </button>
+      <hospitality-bot-daterange></hospitality-bot-daterange>
       <div class="dropdown-wrapper">
         <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
       </div>
     </div>
-
     <div class="main-panel--container">
       <div class="main">
         <div class="router__wrapper">

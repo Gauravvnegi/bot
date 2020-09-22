@@ -1,28 +1,33 @@
 // Constant Variables
 
-$border-radius-smaller: 5px;
-$border-radius-small: 10px;
-$border-radius-medium: 15px;
-$border-radius-large: 20px;
-$margin-small: 10px;
-$margin-medium: 15px;
-$margin-large: 20px;
-$full-width: 100%;
-$half-width: 50%;
-$quarter-width: 25%;
-$padding-small: 10px;
-$padding-medium: 15px;
-$padding-large: 20px;
+$border5: 5px;
+$border10: 10px;
+$border15: 15px;
+$border20: 20px;
+$margin10: 10px;
+$margin15: 15px;
+$margin20: 20px;
+$full: 100%;
+$half: 50%;
+$quarter: 25%;
+$padding10: 10px;
+$padding15: 15px;
+$padding20: 20px;
+$padding30: 30px;
+
 
 
 // Breakpoint variables
 
-$tab-size: 990px;
+$S:     480px;   
+$M:     768px;     
+$L:     1170px;  
+$XL:    1500px;
 
 // letter-spacing
 
-$very-small-spacing: 1px;
-$small-spacing: 2px;
-$medium-spacing: 4px;
-$large-spacing: 6px;
+$spacing1: 1px;
+$spacing2: 2px;
+$spacing4: 4px;
+$spacing6: 6px;
 

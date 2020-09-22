@@ -1,9 +1,18 @@
 :host ::ng-deep .profile__dropdown .p-dropdown {
     height: 37px;
     border: none;
+    &:focus{
+      outline: none;
+    }
     // &:hover {
     //   border-color: #2187d5;
     // }
+  }
+
+  :host ::ng-deep .profile__dropdown{
+    &:focus{
+      outline: none;
+    }
   }
   
   :host ::ng-deep .profile__dropdown__image {
@@ -14,4 +23,8 @@
       width: 100%;
       border-radius: 50%;
     }
+  }
+
+  :host ::ng-deep .p-hidden-accessible:focus {
+    outline: none;
   }

@@ -9,7 +9,10 @@ export class DateService {
     return moment(inputDate).unix();
   }
 
-  convertTimestampToDate(inputTimeStamp) {
+  convertTimestampToDate(inputTimeStamp, format?) {
+    if (format) {
+      return moment.unix(inputTimeStamp / 1000).format(format);
+    }
     return moment.unix(inputTimeStamp / 1000).format('DD-MM-YYYY');
   }
 

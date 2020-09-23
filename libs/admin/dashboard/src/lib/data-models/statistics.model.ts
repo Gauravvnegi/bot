@@ -1,5 +1,3 @@
-import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color, Label } from 'ng2-charts';
 import { get, set } from 'lodash';
 
 export class Statistics {
@@ -8,6 +6,8 @@ export class Statistics {
   inhouseRequest: InhouseRequest;
   expressCheckIn: ExpressCheckIn;
   expressCheckOut: ExpressCheckOut;
+  departures: Departures;
+  customer: Customer;
 
   deserialize(statistics: any) {
     this.arrivals = new Arrivals().deserialize(statistics.arrivals);
@@ -15,6 +15,8 @@ export class Statistics {
     this.inhouseRequest = new InhouseRequest().deserialize(statistics.inhouse);
     this.expressCheckIn = new ExpressCheckIn().deserialize(statistics.arrivals.expressCheckIn);
     this.expressCheckOut = new ExpressCheckOut().deserialize(statistics.departure.expressCheckout);
+    this.departures = new Departures().deserialize(statistics.departure);
+    this.customer = new Customer().deserialize(statistics.customer);
     return this;
   }
 }
@@ -32,18 +34,6 @@ export class Arrivals {
     );
     return this;
   }
-}
-
-export class Customer {
-	total: number;
-  bot: number;
-  vip: number;
-  chartData: ChartDataSets[];
-  chartLabels: Label[];
-  chartOptions: ChartOptions;
-  chartColors: Color[];
-  chartLegend: boolean;
-  chartType: string;
 }
 
 export class InhouseRequest {
@@ -97,6 +87,69 @@ export class ExpressCheckOut {
     Object.assign(
       this,
       set({}, 'expected', get(statistics.expected, ['totalCount'])),
+    );
+    return this;
+  }
+}
+
+export class Departures {
+  expected: RoomData;
+  actual: RoomData;
+
+  deserialize(statistics: any) {
+    this.expected = new RoomData().deserialize(statistics.expected);
+    this.actual = new RoomData().deserialize(statistics.actual);
+    return this;
+  }
+}
+
+export class RoomData {
+  totalCount: number;
+  kids: number;
+  adults: number;
+  rooms: number;
+
+  deserialize(statistics: any) {
+    Object.assign(
+      this,
+      set({}, 'totalCount', get(statistics, ['totalCount'])),
+      set({}, 'kids', get(statistics, ['kids'])),
+      set({}, 'adults', get(statistics, ['adults'])),
+      set({}, 'rooms', get(statistics, ['rooms'])),
+    );
+    return this;
+  }
+}
+
+export class Customer {
+  totalCount: number;
+  botUser: UserData;
+  vipUser: UserData;
+
+  deserialize(statistics: any) {
+    Object.assign(
+      this,
+      set({}, 'totalCount', get(statistics, ['totalCount'])),
+    );
+    this.botUser = new UserData().deserialize(statistics.botUser);
+    this.vipUser = new UserData().deserialize(statistics.vipUser);
+    return this;
+  }
+}
+
+export class UserData {
+  totalCount: number;
+  arriving: number;
+  departing: number;
+  chart: any;
+
+  deserialize(statistics: any) {
+    Object.assign(
+      this,
+      set({}, 'totalCount', get(statistics, ['totalCount'])),
+      set({}, 'arriving', get(statistics, ['arriving'])),
+      set({}, 'departing', get(statistics, ['departing'])),
+      set({}, 'chart', get(statistics, ['chart'])),
     );
     return this;
   }

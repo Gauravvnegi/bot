@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="title-container">
+		<div class="icon"></div>
+		<div style="margin: 6px 0;"><span class="stat-title">Departures</span></div>
+	</div>
+	<div class="stat-val-container">
+		<div class="stat-row">
+			<div class="stat-val-title">Expected Check Out</div>
+			<div class="stat-val">Room {{ departures.expected.rooms }}</div>
+		</div>
+		<div class="stat-row">
+			<div class="stat-val-title">Adult</div>
+			<div class="stat-val">{{ departures.expected.adults }}</div>
+		</div>
+		<div class="stat-row">
+			<div class="stat-val-title">Chidren</div>
+			<div class="stat-val">{{ departures.expected.kids }}</div>
+		</div>
+		<div class="division"><hr style="margin: 10px 0;"/></div>
+		<div class="stat-row">
+			<div class="stat-val-title">Already Checked Out</div>
+			<div class="stat-val">Room {{ departures.actual.rooms }}</div>
+		</div>
+		<div class="stat-row">
+			<div class="stat-val-title">Adult</div>
+			<div class="stat-val">{{ departures.actual.adults }}</div>
+		</div>
+		<div class="stat-row">
+			<div class="stat-val-title">Chidren</div>
+			<div class="stat-val">{{ departures.actual.kids }}</div>
+		</div>
+	</div>
+</div>

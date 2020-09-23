@@ -21,7 +21,6 @@
   ></p-button>
 </div> -->
 
-
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -43,16 +42,58 @@
     <div class="caption__wrapper">
       <div class="caption__wrapper--tabmenu">
         <div class="header">
-          <div class="header--text">
-            <p class="heading">Reservations</p>
-            <!-- <p class="selected">2 record(s) are selected</p> -->
+          <!-- <div class="header--text"> -->
+          <p class="heading">Reservations</p>
+          <!-- <p class="selected">2 record(s) are selected</p> -->
+          <div class="options">
+            <div class="icons">
+              <img src="assets/svg/Download.svg" class="svg" />
+              <img src="assets/svg/google-docs.svg" class="svg" />
+              <img src="assets/svg/card.svg" class="svg" />
+              <!-- <mat-icon class="material-icons" matSuffix
+                >vertical_align_bottom</mat-icon
+              >
+              <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
+              <mat-icon class="material-icons" matSuffix>description</mat-icon> -->
+              <!-- <mat-icon class="material-icons" matSuffix>more_vert</mat-icon> -->
+            </div>
+            <div class="seperator"></div>
+            <div class="dropdown--wrapper">
+              <p-dropdown [options]="export" [(ngModel)]="selectedExport1">
+                <ng-template let-item pTemplate="selectedItem">
+                  <mat-icon class="material-icons" matSuffix
+                    >vertical_align_bottom</mat-icon
+                  >
+                  <span
+                    style="
+                      vertical-align: middle;
+                      margin-left: 0.5em;
+                      font-weight: 700;
+                    "
+                    >Export</span
+                  >
+                </ng-template>
+              </p-dropdown>
+              <div class="divider"></div>
+              <p-dropdown [options]="csv" [(ngModel)]="selectedExport2">
+                <ng-template let-item pTemplate="selectedItem">
+                  <span
+                    style="
+                      vertical-align: middle;
+                      margin-left: 0.5em;
+                      font-weight: 700;
+                    "
+                    >CSV</span
+                  >
+                </ng-template>
+              </p-dropdown>
+              <button class="go" (click)="exportExcel()">
+                <mat-icon class="material-icons" matSuffix>arrow_right_alt</mat-icon>
+              </button>
+            </div>
           </div>
-          <!-- <div class="icons">
-            <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
-            <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
-            <mat-icon class="material-icons" matSuffix>description</mat-icon>
-            <mat-icon class="material-icons" matSuffix>more_vert</mat-icon>
-          </div> -->
+          <!-- </div> -->
+
           <!-- <div class="seperator"></div>
           <p-dropdown [options]="export" [(ngModel)]="selectedExport1">
             <ng-template let-item pTemplate="selectedItem">

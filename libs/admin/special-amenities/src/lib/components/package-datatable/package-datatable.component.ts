@@ -3,7 +3,7 @@ import { DatatableComponent } from 'libs/admin/shared/src/lib/components/datatab
 import { SpecialAmenitiesService } from '../../services/special-amenities.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Router } from '@angular/router';
-import { PackageDetail } from '../../data-models/packageCnfig.model';
+import { PackageDetail } from '../../data-models/packageConfig.model';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',

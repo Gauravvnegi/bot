@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../../../../shared/utils/src/lib/api.service'
-import { Amenity } from '../data-models/packageCnfig.model';
+import { Amenity } from '../data-models/packageConfig.model';
 
 @Injectable()
 export class SpecialAmenitiesService extends ApiService{

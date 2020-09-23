@@ -28,7 +28,7 @@ import { ModalService } from './services/modal.service';
 import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 @NgModule({

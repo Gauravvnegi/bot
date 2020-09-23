@@ -1,0 +1,37 @@
+<!-- <hospitality-bot-tab-group [list]="tabList"></hospitality-bot-tab-group> -->
+  
+<mat-tab-group>
+    <mat-tab label="Guest Details">
+      <form>
+        <mat-label>Guest Info</mat-label>
+        <ng-container *ngFor="let guestFormGroup of guests.controls; let i = index">
+            <div>
+                <mat-label>Full Name</mat-label>
+                <mat-form-field>
+                  <input matInput>
+                  <input matInput>
+                  <input matInput>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-label>Phone No.</mat-label>
+                <mat-form-field>
+                  <input matInput>
+                  <input matInput>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-label>Email</mat-label>
+                <mat-form-field>
+                  <input matInput>
+                </mat-form-field>
+            </div>
+        </ng-container>
+        
+      </form>
+    </mat-tab>
+    <mat-tab label="Second"> Content 2 </mat-tab>
+    <mat-tab label="Third"> Content 3 </mat-tab>
+</mat-tab-group>
+
+

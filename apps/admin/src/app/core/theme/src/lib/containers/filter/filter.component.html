@@ -1,0 +1,85 @@
+<form [formGroup]="filterForm">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+        Property
+      </ng-template>
+      <div formGroupName="property">
+        <div>
+          Choose Hotel or Particular Branch
+        </div>
+        <div>
+          <div>
+            <mat-form-field>
+              <mat-label>Hotel Name</mat-label>
+              <mat-select formControlName="hotelName" multiple>
+                <mat-select-trigger>
+                  {{ hotelNameFC.value ? hotelNameFC.value[0] : '' }}
+                  <span
+                    *ngIf="hotelNameFC.value?.length > 1"
+                    class="additional-selection"
+                  >
+                    (+{{ hotelNameFC.value.length - 1 }}
+                    {{ hotelNameFC.value?.length === 2 ? 'other' : 'others' }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let hotel of hotelList"
+                  [value]="hotel.name"
+                  >{{ hotel.label }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Branch</mat-label>
+              <mat-select formControlName="branchName" multiple>
+                <mat-select-trigger>
+                  {{ branchNameFC.value ? branchNameFC.value[0] : '' }}
+                  <span
+                    *ngIf="branchNameFC.value?.length > 1"
+                    class="additional-selection"
+                  >
+                    (+{{ branchNameFC.value.length - 1 }}
+                    {{ branchNameFC.value?.length === 2 ? 'other' : 'others' }})
+                  </span>
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let branch of branchList"
+                  [value]="branch.name"
+                  >{{ branch.label }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+        Guest Type
+      </ng-template>
+      <div formGroupName="guest">
+        <div formGroupName="guestCategory">
+          Select Guest Category
+          <mat-checkbox formControlName="isRepeatedGuest"
+            >Repeat Guest</mat-checkbox
+          >
+          <mat-checkbox formControlName="isNewGuest">New Guest</mat-checkbox>
+        </div>
+        <div formGroupName="guestType">
+          Select Guest Type
+          <mat-checkbox formControlName="isVip">VIP</mat-checkbox>
+          <mat-checkbox formControlName="isMembership">Membership</mat-checkbox>
+          <mat-checkbox formControlName="isGeneral">General</mat-checkbox>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</form>
+
+<!-- {{ filterForm.value | json }} -->

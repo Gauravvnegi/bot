@@ -2,7 +2,6 @@ import { Component, OnInit, ComponentRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
@@ -13,6 +12,7 @@ export class LayoutOneComponent implements OnInit {
   public background_image: string;
   profile: MenuItem[];
   lastUpdatedAt: string;
+  isGlobalFilterVisible: boolean = false;
   constructor(private _router: Router, public dateService: DateService) {}
 
   ngOnInit() {
@@ -56,5 +56,9 @@ export class LayoutOneComponent implements OnInit {
     // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
     //   this._router.navigate([currentUrl]);
     // });
+  }
+
+  toggleGlobalFilter() {
+    this.isGlobalFilterVisible = !this.isGlobalFilterVisible;
   }
 }

@@ -1,0 +1,131 @@
+@import 'main';
+
+.filter--header {
+  padding: 15px 10px;
+  @include flex-between-center();
+  border-bottom: 1px solid #9eaeb8;
+  .close--wrapper {
+    display: flex;
+    align-items: center;
+    .material-icon {
+      color: #9eaeb8;
+      font-size: $font20;
+      margin-right: $margin15;
+      height: auto;
+      width: auto;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .filter {
+      font-weight: $bolder;
+      margin: 0;
+      font-size: $font16;
+    }
+  }
+  .reset-wrapper{
+    display: flex;
+    align-items: center;
+    color: #9eaeb8;
+    .material-icon {
+        font-size: $font20;
+        height: auto;
+        width: auto;
+        margin-left: $margin10;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .filter {
+        font-weight: $bolder;
+        margin: 0;
+        font-size: $font16;
+      }
+  }
+  &:hover{
+      cursor: pointer;
+  }
+}
+
+:host ::ng-deep .mat-tab-group {
+  flex-direction: initial;
+}
+
+:host ::ng-deep .mat-tab-label {
+  text-align: initial;
+  display: block;
+  padding: $padding15;
+  opacity: 1;
+  height: auto;
+  color: #9eaeb8;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  background-color: #e8eef5;
+  color: #4b56c0;
+}
+
+:host ::ng-deep .mat-checkbox-frame {
+  border: 1.5px solid #e8eef5;
+}
+
+:host ::ng-deep .mat-tab-labels {
+  display: block;
+}
+
+:host ::ng-deep .mat-ink-bar {
+  display: none;
+}
+
+
+:host ::ng-deep .mat-tab-header {
+  border-bottom: none;
+  border-right: 1px solid #9eaeb8;
+  min-height: 50vh;
+}
+
+:host ::ng-deep .mat-tab-body-content {
+  padding: $padding15;
+}
+
+:host ::ng-deep .hotel-branch {
+  color: #9eaeb8;
+  margin-bottom: $margin20;
+}
+
+:host ::ng-deep .mat-tab-body-wrapper {
+  width: $full;
+}
+
+:host ::ng-deep .mat-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-checkbox {
+  display: block;
+  margin: 10px 0px;
+}
+
+:host ::ng-deep .guest-title {
+  color: #9eaeb8;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #4b56c0;
+}
+
+:host
+  ::ng-deep
+  .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
+  .mat-ripple-element {
+  background: #4b56c0;
+}
+
+:host ::ng-deep .checkbox--wrapper {
+  margin: 20px 0;
+}
+
+:host ::ng-deep .mat-tab-label .mat-tab-label-content {
+  display: flex;
+  justify-content: space-between;
+}

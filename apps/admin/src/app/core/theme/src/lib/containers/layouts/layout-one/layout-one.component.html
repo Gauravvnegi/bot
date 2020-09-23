@@ -27,8 +27,8 @@
         Hotel Hilltop
         <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
       </button>
-      <div *ngIf="isGlobalFilterVisible">
-        <admin-filter></admin-filter>
+      <div class="filter-wrapper" *ngIf="isGlobalFilterVisible">
+        <admin-filter (close)="toggleGlobalFilter()"></admin-filter>
       </div>
       <hospitality-bot-daterange></hospitality-bot-daterange>
       <div class="dropdown-wrapper">

@@ -13,7 +13,7 @@
         </h3>
         <!-- <h6 *ngFor="let method of option.paymentMethods">{{ method.type }}</h6> -->
         <div class="method-image-container">
-          <div *ngFor="let method of option.paymentMethods">
+          <div class="image" *ngFor="let method of option.paymentMethods">
             <img [src]="method.imageUrl" style="padding: 3px;max-width: 185px;" />
           </div>
         </div>

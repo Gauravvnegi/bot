@@ -25,11 +25,11 @@ export class SidenavComponent implements OnInit {
   }
 
   private initSideNavConfigs() {
-    this.activeFontColor = '#0483f4';
+    this.activeFontColor = '#4B56C0';
     this.normalFontColor = '#C5C5C5';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
-    this.headerBgColor='#052E57';
+    this.headerBgColor='#4B56C0';
     //check if admin or super admin by using command pattern
     this.menuItems = ADMIN_ROUTES;
   }

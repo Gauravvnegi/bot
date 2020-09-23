@@ -73,56 +73,75 @@
 .header {
   display: flex;
   align-items: center;
-  padding: 15px 0px;
-  &--text {
-    display: flex;
-    align-items: center;
-    // width: 47%;
-    padding: 0 17px;
-    .heading {
-      font-size: 20px;
-      margin: 0;
-    }
-    .selected {
-      font-size: 20px;
-      color: #7e7e7e;
-      font-style: italic;
-      margin-bottom: 0;
-      margin-left: 3%;
-    }
+  justify-content: space-between;
+  padding: 10px;
+  .heading {
+    font-size: 20px;
+    margin: 0;
   }
-  .icons {
+  .selected {
+    font-size: 20px;
+    color: #7e7e7e;
+    font-style: italic;
+    margin-bottom: 0;
+    margin-left: 3%;
+  }
+  .options {
     display: flex;
     align-items: center;
-    .material-icons {
-      color: #7e7e7e;
-      padding: 3px;
-      height: auto;
-      width: auto;
-      &:hover {
-        cursor: pointer;
-        border-radius: 50%;
-        // border: 1px solid lightgray;
+    padding: 0 17px;
+
+    .icons {
+      display: flex;
+      align-items: center;
+      .svg {
+        padding: 0 12px;
+        height: auto;
+        width: auto;
+        path {
+          fill: #959ea7;
+        }
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }
   .seperator {
-    height: 40px;
-    border: 0.5px solid lightgray;
+    height: 35px;
+    border: 1px solid lightgray;
     margin: 0px 15px;
+  }
+
+  .dropdown--wrapper {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    .divider {
+      height: 20px;
+      border: 1px solid lightgray;
+      margin: 0px 15px;
+    }
   }
   .go {
     outline: none;
-    border: 1px solid #2187d5;
-    color: #2187d5;
-    background: none;
+    color: #4b56c0;
+    background: lightblue;
+    border: none;
     font-size: 10px;
-    padding: 7px 15px;
-    border-radius: 5px;
+    padding: 5px;
+    display: flex;
     margin-left: 10px;
     &:hover {
-      background-color: #2187d5;
+      background-color: #4b56c0;
       color: white;
+    }
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
     }
   }
   .reset-link {
@@ -196,8 +215,8 @@
 }
 
 :host ::ng-deep .p-dropdown {
-  border: 1px solid lightgray;
-  margin-right: 5px;
+  border: none;
+  // margin-right: 5px;
   &:hover {
     border-color: #2187d5;
   }

@@ -2,32 +2,61 @@
   
 <mat-tab-group>
     <mat-tab label="Guest Details">
-      <form>
+      <form [formGroup]="guestDetailsForm"  >
         <mat-label>Guest Info</mat-label>
-        <ng-container *ngFor="let guestFormGroup of guests.controls; let i = index">
+        <ng-container formArrayName="guests" *ngFor="let guestFormGroup of guestDetailsForm.controls.guests?.value; let i = index">
+            <div [formGroupName]="i">
+                <div>
+                    <mat-label>Full Name</mat-label>
+                    <mat-form-field>
+                      <input matInput formControlName="title">
+                      <input matInput formControlName="firstName">
+                      <input matInput formControlName="lastName">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-label>Phone No.</mat-label>
+                    <mat-form-field>
+                      <input matInput formControlName="countryCode">
+                      <input matInput formControlName="phoneNumber">
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-label>Email</mat-label>
+                    <mat-form-field>
+                      <input matInput formControlName="email">
+                    </mat-form-field>
+                </div>
+            </div>
+        </ng-container>
+
+        <mat-label>Stay Details</mat-label>
+        <ng-container>
             <div>
-                <mat-label>Full Name</mat-label>
+                <mat-label>Arrival Date</mat-label>
                 <mat-form-field>
-                  <input matInput>
-                  <input matInput>
-                  <input matInput>
+                    <input matInput formControlName="arrivalTime">
                 </mat-form-field>
             </div>
             <div>
-                <mat-label>Phone No.</mat-label>
+                <mat-label>Departure Date</mat-label>
                 <mat-form-field>
-                  <input matInput>
-                  <input matInput>
+                    <input matInput formControlName="departureTime">
                 </mat-form-field>
             </div>
             <div>
-                <mat-label>Email</mat-label>
+                <mat-label>Expected Arrival Time</mat-label>
                 <mat-form-field>
-                  <input matInput>
+                    <input matInput formControlName="expectedArrivalTime">
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-label>Room Type</mat-label>
+                <mat-form-field>
+                    <input matInput formControlName="roomType">
                 </mat-form-field>
             </div>
         </ng-container>
-        
       </form>
     </mat-tab>
     <mat-tab label="Second"> Content 2 </mat-tab>

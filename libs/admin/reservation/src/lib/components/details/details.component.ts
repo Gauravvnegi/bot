@@ -34,6 +34,12 @@ export class DetailsComponent implements OnInit {
 
   initGuestDetailForm() {
     this.guestDetailsForm = this._fb.group({
+      arrivalTime: ['', [Validators.required]],
+      departureTime: ['', [Validators.required]],
+      expectedArrivalTime: ['', [Validators.required]],
+      roomType: ['', [Validators.required]],
+      kidsCount: ['', [Validators.required]],
+      adultsCount: ['', [Validators.required]],
     });
   }
 
@@ -45,7 +51,10 @@ export class DetailsComponent implements OnInit {
       ) as FormArray;
       controlFA.push(this.getGuestFG());
     });
-    this.guestDetailsForm.get('guests').patchValue(this.guestDetails.guestDetails);
+
+   this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
+   this.guestDetailsForm.get('guests').patchValue(this.guestDetails.guestDetails);
+   console.log(this.guestDetailsForm);
   }
 
   getGuestFG(): FormGroup {
@@ -57,9 +66,5 @@ export class DetailsComponent implements OnInit {
       phoneNumber: ['',[Validators.required]],
       email: ['',[Validators.required]],
     });
-  }
-
-  get guests(): FormArray {
-    return this.guestDetailsForm.get('guests') as FormArray;
   }
 }

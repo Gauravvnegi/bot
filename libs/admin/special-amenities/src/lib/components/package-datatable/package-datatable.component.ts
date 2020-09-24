@@ -3,7 +3,7 @@ import { DatatableComponent } from 'libs/admin/shared/src/lib/components/datatab
 import { SpecialAmenitiesService } from '../../services/special-amenities.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Router } from '@angular/router';
-import { PackageDetail } from '../../data-models/packageCnfig.model';
+//import { PackageDetail } from '../../data-models/packageCnfig.model';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
@@ -14,7 +14,7 @@ import { FormBuilder } from '@angular/forms';
 export class PackageDatatableComponent {
   type: any[];
   statuses: any[];
-  packages: PackageDetail[];
+  // packages: PackageDetail[];
   amenityCols = [
     { field: 'imgUrl', header: 'Package Image' },
     { field: 'amenityName', header: 'Package Name' },

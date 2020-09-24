@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
   styleUrls: ['./filter.component.scss'],
 })
 export class FilterComponent implements OnInit {
+  @Output() close = new EventEmitter();
   filterTypes = [
     {
       name: 'property',
@@ -28,6 +29,10 @@ export class FilterComponent implements OnInit {
 
   constructor(private _fb: FormBuilder) {
     this.initFilterForm();
+  }
+
+  closePopup(){
+    this.close.emit();
   }
 
   initFilterForm() {

@@ -49,6 +49,11 @@
   transition: 0.4s;
 }
 
+:host ::ng-deep .material-icons{
+  height: auto;
+  width: auto;
+}
+
 .menu_button:hover {
   cursor: pointer;
 }

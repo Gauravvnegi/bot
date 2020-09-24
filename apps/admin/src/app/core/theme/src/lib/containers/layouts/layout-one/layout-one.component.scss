@@ -50,7 +50,7 @@
   &--header {
     padding: 13px $padding10;
     @include flex-between-center();
-
+    position: relative;
     .search-bar-wrapper {
      @include flex-item-center();
     }
@@ -70,9 +70,22 @@
         background-color: #5391d4;
         color: white;
       }
+      &:focus{
+        outline: none;
+      }
       .material-icons {
         margin-left: 15px;
       }
+    }
+    .filter-wrapper{
+      position: absolute;
+      top: 90%;
+      right: 3%;
+      box-shadow: 0px 0px 5px 0px darkgray;
+      width: 55%;
+      background-color: white;
+      border-radius: $border5;
+      z-index: 22;
     }
   }
   &--container {

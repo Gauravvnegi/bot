@@ -34,12 +34,12 @@ export class DetailsComponent implements OnInit {
 
   initGuestDetailForm() {
     this.guestDetailsForm = this._fb.group({
-      arrivalTime: ['', [Validators.required]],
-      departureTime: ['', [Validators.required]],
-      expectedArrivalTime: ['', [Validators.required]],
-      roomType: ['', [Validators.required]],
-      kidsCount: ['', [Validators.required]],
-      adultsCount: ['', [Validators.required]],
+      arrivalTime: [''],
+      departureTime: [''],
+      expectedArrivalTime: [''],
+      roomType: [''],
+      kidsCount: [''],
+      adultsCount: [''],
     });
   }
 
@@ -67,4 +67,8 @@ export class DetailsComponent implements OnInit {
       email: ['',[Validators.required]],
     });
   }
+
+  get guests(): FormArray {
+    return this.guestDetailsForm.get('guests') as FormArray;
+  } 
 }

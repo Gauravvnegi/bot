@@ -3,12 +3,12 @@
 .filter--header {
   padding: 15px 10px;
   @include flex-between-center();
-  border-bottom: 1px solid #9eaeb8;
+  border-bottom: 1px solid #c5c5c5;
   .close--wrapper {
     display: flex;
     align-items: center;
     .material-icon {
-      color: #9eaeb8;
+      color: #c5c5c5;
       font-size: $font20;
       margin-right: $margin15;
       height: auto;
@@ -23,27 +23,27 @@
       font-size: $font16;
     }
   }
-  .reset-wrapper{
+  .reset-wrapper {
     display: flex;
     align-items: center;
-    color: #9eaeb8;
+    color: #c5c5c5;
     .material-icon {
-        font-size: $font20;
-        height: auto;
-        width: auto;
-        margin-left: $margin10;
-        &:hover {
-          cursor: pointer;
-        }
+      font-size: $font20;
+      height: auto;
+      width: auto;
+      margin-left: $margin10;
+      &:hover {
+        cursor: pointer;
       }
-      .filter {
-        font-weight: $bolder;
-        margin: 0;
-        font-size: $font16;
-      }
+    }
+    .filter {
+      font-weight: 400;
+      margin: 0;
+      font-size: $font16;
+    }
   }
-  &:hover{
-      cursor: pointer;
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -57,12 +57,15 @@
   padding: $padding15;
   opacity: 1;
   height: auto;
-  color: #9eaeb8;
+  color: #c5c5c5;
 }
 
 :host ::ng-deep .mat-tab-label-active {
   background-color: #e8eef5;
   color: #4b56c0;
+  .svg path{
+    fill: #4b56c0;
+  }
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -77,10 +80,55 @@
   display: none;
 }
 
+.apply-button {
+  background-color: #4b56c0;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: $font14;
+  font-weight: $medium;
+  border-radius: 25px;
+  padding: 12px 0px;
+  width: 15vw;
+  opacity: 0.85;
+  box-shadow: 0px 0px 5px 0px #4b56c0;
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+
+:host ::ng-deep .svg {
+  height: 20px;
+  width: 20px;
+  path {
+    fill: #c5c5c5;
+  }
+}
+
+// :host ::ng-deep .svg {
+//   height: 20px;
+// }
+
+// :host ::ng-deep .svg path {
+//   fill: #c5c5c5;
+// }
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: #c5c5c5;
+}
+
+:host ::ng-deep .mat-select-arrow {
+  color: #c5c5c5;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+  color: #c5c5c5;
+}
 
 :host ::ng-deep .mat-tab-header {
   border-bottom: none;
-  border-right: 1px solid #9eaeb8;
+  border-right: 1px solid #c5c5c5;
   min-height: 50vh;
 }
 
@@ -89,7 +137,7 @@
 }
 
 :host ::ng-deep .hotel-branch {
-  color: #9eaeb8;
+  color: #c5c5c5;
   margin-bottom: $margin20;
 }
 
@@ -107,7 +155,7 @@
 }
 
 :host ::ng-deep .guest-title {
-  color: #9eaeb8;
+  color: #c5c5c5;
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {

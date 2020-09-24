@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -11,6 +11,8 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 export class DetailsComponent implements OnInit {
 
   guestDetailsForm: FormGroup;
+  reservationDetailsForm: FormGroup;
+  primaryGuest;
   guestDetails;
 
   constructor(
@@ -18,6 +20,7 @@ export class DetailsComponent implements OnInit {
     private _reservationService : ReservationService
   ) {
     this.initGuestDetailForm();
+    this.initReservationForm();
    }
 
   ngOnInit(): void {
@@ -29,6 +32,13 @@ export class DetailsComponent implements OnInit {
     .subscribe(response =>{
       this.guestDetails = new Details().deserialize(response);
       this.addGuests(this.guestDetails);
+    })
+  }
+
+  initReservationForm(){
+    this.reservationDetailsForm = this._fb.group({
+      bookingId: [''],
+      roomNumber: ['']
     })
   }
 
@@ -54,17 +64,27 @@ export class DetailsComponent implements OnInit {
 
    this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
    this.guestDetailsForm.get('guests').patchValue(this.guestDetails.guestDetails);
-   console.log(this.guestDetailsForm);
+   this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
+   this.extractPrimaryDetails();
+  }
+
+  extractPrimaryDetails(){
+    this.guests.controls.forEach(guestFG => {
+      if(guestFG.get('isPrimary').value === true){
+        this.primaryGuest = guestFG;
+      }
+    });
   }
 
   getGuestFG(): FormGroup {
     return this._fb.group({
-      title: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      countryCode: ['',[Validators.required]],
-      phoneNumber: ['',[Validators.required]],
-      email: ['',[Validators.required]],
+      title: [''],
+      firstName: [''],
+      lastName: [''],
+      countryCode: [''],
+      phoneNumber: [''],
+      email: [''],
+      isPrimary: [''],
     });
   }
 

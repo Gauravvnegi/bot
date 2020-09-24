@@ -1,3 +1,72 @@
-div{
-    text-align:center;
+@import 'main';
+
+:host ::ng-deep .mat-tab-label {
+  color: #b5b5c3;
+  font-size: $font14;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: #4b56c0;
+  font-size: $font16;
+}
+
+:host ::ng-deep .mat-ink-bar {
+  background-color: #4b56c0;
+}
+
+.details-wrapper {
+  background-color: white;
+}
+
+.form-wrapper {
+  padding: 20px;
+}
+
+:host ::ng-deep .mat-head {
+  font-size: $font16;
+  font-weight: $bolder;
+  color: #002046;
+  letter-spacing: 0.96px;
+}
+
+.data-seperator {
+  border: 2px solid #218af3;
+  margin: $margin20 0px;
+  opacity: 0.1;
+}
+
+.feilds-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0px;
+  padding: 0px 30px;
+  .feild {
+    .label {
+      letter-spacing: 0.72px;
+      font-size: $font12;
+      color: #9eaeb8;
+    }
+    .value {
+      letter-spacing: 0.84px;
+      font-size: $font14;
+      color: #484848;
+      margin-top: $margin10;
+    }
+  }
+}
+
+.form-wrapper {
+  padding: $padding20;
+}
+
+.health-status {
+  letter-spacing: 0.84px;
+  color: #484848;
+  font-size: $font14;
+  font-weight: $bolder;
+  margin: $margin20 30px;
+  b {
+    color: #53b33e;
+  }
 }

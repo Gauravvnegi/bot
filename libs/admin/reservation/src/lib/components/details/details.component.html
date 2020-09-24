@@ -1,99 +1,193 @@
 <div class="details-wrapper">
-  <div *ngIf="primaryGuest">
-    <span
-      >{{ primaryGuest.get('title').value
-      }}{{ primaryGuest.get('firstName').value
-      }}{{ primaryGuest.get('lastName').value }}</span
-    >
-    <span
-      >{{ guestDetailsForm.get('adultsCount').value
-      }}{{ guestDetailsForm.get('kidsCount').value }}</span
-    >
-  </div>
-  <div *ngIf="primaryGuest">
-    <span
-      >{{ primaryGuest.get('countryCode').value
-      }}{{ primaryGuest.get('phoneNumber').value }}</span
-    >
-    <span>{{ primaryGuest.get('email').value }}</span>
-  </div>
-  <div>
-    {{ reservationDetailsForm.get('bookingId').value }}
-    {{ reservationDetailsForm.get('roomNumber').value }}
-    {{ guestDetailsForm.get('roomType').value }}
+  <div class="header">
+    <div class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+    <div class="name-details" *ngIf="primaryGuest">
+      <div class="name">
+        <span
+          >{{ primaryGuest.get('title').value
+          }}{{ primaryGuest.get('firstName').value
+          }}{{ primaryGuest.get('lastName').value }}</span
+        >
+        <div class="svg-wrapper">
+          <svg
+            class="svg"
+            id="Capa_1"
+            enable-background="new 0 0 515.556 515.556"
+            height="512"
+            viewBox="0 0 515.556 515.556"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m348.918 37.751c50.334 50.334 50.334 131.942 0 182.276s-131.942 50.334-182.276 0-50.334-131.942 0-182.276c50.334-50.335 131.942-50.335 182.276 0"
+            />
+            <path
+              d="m455.486 350.669c-117.498-79.391-277.917-79.391-395.415 0-17.433 11.769-27.848 31.656-27.848 53.211v111.676h451.111v-111.676c0-21.555-10.416-41.442-27.848-53.211z"
+            />
+          </svg>
+          <span>{{ guestDetailsForm.get('adultsCount').value }}</span>
+        </div>
+        <div class="svg-wrapper">
+          <svg
+            class="svg"
+            id="Capa_1"
+            enable-background="new 0 0 515.556 515.556"
+            height="512"
+            viewBox="0 0 515.556 515.556"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m348.918 37.751c50.334 50.334 50.334 131.942 0 182.276s-131.942 50.334-182.276 0-50.334-131.942 0-182.276c50.334-50.335 131.942-50.335 182.276 0"
+            />
+            <path
+              d="m455.486 350.669c-117.498-79.391-277.917-79.391-395.415 0-17.433 11.769-27.848 31.656-27.848 53.211v111.676h451.111v-111.676c0-21.555-10.416-41.442-27.848-53.211z"
+            />
+          </svg>
+          <span>{{ guestDetailsForm.get('kidsCount').value }}</span>
+        </div>
+      </div>
+      <div class="header-seperator"></div>
+      <div class="booking-id">
+        {{ reservationDetailsForm.get('bookingId').value }}
+      </div>
+      <div class="header-seperator"></div>
+
+      <div class="room-details">
+        {{ reservationDetailsForm.get('roomNumber').value }}-
+        {{ guestDetailsForm.get('roomType').value }}
+      </div>
+    </div>
+    <div class="contact-details" *ngIf="primaryGuest">
+      <div class="call">
+        <mat-icon class="material-icons" matSuffix>call</mat-icon
+        >{{ primaryGuest.get('countryCode').value
+        }}{{ primaryGuest.get('phoneNumber').value }}
+      </div>
+
+      <div class="email">
+        <mat-icon class="material-icons" matSuffix>email</mat-icon
+        >{{ primaryGuest.get('email').value }}
+      </div>
+    </div>
+    <div class="options-wrapper">
+      <button class="check-button">
+        <mat-icon class="material-icons" matSuffix>check_circle</mat-icon>
+        <p class="text">Reg card</p>
+      </button>
+      <button class="check-button">
+        <mat-icon class="material-icons" matSuffix>check_circle</mat-icon>
+        <p class="text">Health Declaration</p>
+      </button>
+      <p-dropdown [options]="items">
+        <ng-template let-item pTemplate="selectedItem">
+          <!-- <div class="profile__dropdown__image">
+            <img src="assets/bg.png" />
+          </div> -->
+          <span style="vertical-align: middle; margin-left: 5px;"
+            >Current Booking</span
+          >
+        </ng-template>
+      </p-dropdown>
+    </div>
   </div>
   <mat-tab-group>
     <mat-tab label="Guest Details">
       <form class="form-wrapper" [formGroup]="guestDetailsForm">
-        <mat-label class="mat-head">Guest Info</mat-label>
-        <ng-container
-          formArrayName="guests"
-          *ngFor="
-            let guestFormGroup of guestDetailsForm.controls.guests?.value;
-            let i = index
-          "
-        >
-          <div class="feilds-wrapper" [formGroupName]="i">
-            <div class="feild width-added">
-              <mat-label class="label">Full Name</mat-label>
-              <div class="value">
-                {{ guestFormGroup.title }}
-                {{ guestFormGroup.firstName }}
-                {{ guestFormGroup.lastName }}
+        <div class="left">
+          <mat-label class="mat-head">Guest Info</mat-label>
+          <ng-container
+            formArrayName="guests"
+            *ngFor="
+              let guestFormGroup of guestDetailsForm.controls.guests?.value;
+              let i = index
+            "
+          >
+            <div class="feilds-wrapper" [formGroupName]="i">
+              <div class="feild width-added">
+                <mat-label class="label">Full Name</mat-label>
+                <div class="value">
+                  {{ guestFormGroup.title }}
+                  {{ guestFormGroup.firstName }}
+                  {{ guestFormGroup.lastName }}
+                </div>
+              </div>
+              <div class="feild width-added">
+                <mat-label class="label">Phone No.</mat-label>
+                <div class="value">
+                  {{ guestFormGroup.countryCode }}
+                  {{ guestFormGroup.phoneNumber }}
+                </div>
+              </div>
+              <div class="feild width-added">
+                <mat-label class="label">Email</mat-label>
+                <div class="value">
+                  {{ guestFormGroup.email }}
+                </div>
               </div>
             </div>
-            <div class="feild width-added">
-              <mat-label class="label">Phone No.</mat-label>
-              <div class="value">
-                {{ guestFormGroup.countryCode }}
-                {{ guestFormGroup.phoneNumber }}
+          </ng-container>
+          <hr class="data-seperator" />
+          <mat-label class="mat-head">Stay Details</mat-label>
+          <ng-container>
+            <div class="feilds-wrapper">
+              <div class="feild width-quarter">
+                <mat-label class="label">Arrival Date</mat-label>
+                <div class="value">
+                  {{ guestDetailsForm.get('arrivalTime').value }}
+                </div>
+              </div>
+              <div class="feild width-quarter">
+                <mat-label class="label">Departure Date</mat-label>
+                <div class="value">
+                  {{ guestDetailsForm.get('departureTime').value }}
+                </div>
+              </div>
+              <div class="feild width-quarter">
+                <mat-label class="label">Expected Arrival Time</mat-label>
+                <div class="value">
+                  {{ guestDetailsForm.get('expectedArrivalTime').value }}
+                </div>
+              </div>
+              <div class="feild width-quarter">
+                <mat-label class="label">Room Type</mat-label>
+                <div class="value">
+                  {{ guestDetailsForm.get('roomType').value }}
+                </div>
               </div>
             </div>
-            <div class="feild width-added">
-              <mat-label class="label">Email</mat-label>
-              <div class="value">
-                {{ guestFormGroup.email }}
-              </div>
+          </ng-container>
+          <hr class="data-seperator" />
+          <mat-label class="mat-head">Health Declaration</mat-label>
+          <ng-container>
+            <p class="health-status">
+              Health Declaration Status :&nbsp;<b>Accepted</b>
+            </p>
+          </ng-container>
+        </div>
+
+        <div class="right">
+          <div class="button-wrapper">
+            <button class="button">Confirm Details</button>
+            <button class="button gap">View Docs</button>
+          </div>
+          <div class="right-bottom-icons">
+            <div class="social-icons">
+              <i class="fas fa-paper-plane icon"></i>
+            </div>
+            <div class="social-icons">
+              <i class="fas fa-paper-plane icon"></i>
+            </div>
+            <div class="social-icons">
+              <i class="fas fa-paper-plane icon"></i>
+            </div>
+            <div class="social-icons">
+              <i class="fas fa-paper-plane icon"></i>
             </div>
           </div>
-        </ng-container>
-        <hr class="data-seperator" />
-        <mat-label class="mat-head">Stay Details</mat-label>
-        <ng-container>
-          <div class="feilds-wrapper">
-            <div class="feild width-quarter">
-              <mat-label class="label">Arrival Date</mat-label>
-              <div class="value">
-                {{ guestDetailsForm.get('arrivalTime').value }}
-              </div>
-            </div>
-            <div class="feild width-quarter">
-              <mat-label class="label">Departure Date</mat-label>
-              <div class="value">
-                {{ guestDetailsForm.get('departureTime').value }}
-              </div>
-            </div>
-            <div class="feild width-quarter">
-              <mat-label class="label">Expected Arrival Time</mat-label>
-              <div class="value">
-                {{ guestDetailsForm.get('expectedArrivalTime').value }}
-              </div>
-            </div>
-            <div class="feild width-quarter">
-              <mat-label class="label">Room Type</mat-label>
-              <div class="value">
-                {{ guestDetailsForm.get('roomType').value }}
-              </div>
-            </div>
-          </div>
-        </ng-container>
-        <hr class="data-seperator" />
-        <mat-label class="mat-head">Health Declaration</mat-label>
-        <ng-container>
-        <p class="health-status">
-          Health Declaration Status :&nbsp;<b>Accepted</b>
-        </p>
-      </ng-container>
+        </div>
       </form>
     </mat-tab>
     <mat-tab label="Documents"> Content 2 </mat-tab>

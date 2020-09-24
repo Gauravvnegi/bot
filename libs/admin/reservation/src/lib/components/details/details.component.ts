@@ -6,40 +6,45 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 @Component({
   selector: 'hospitality-bot-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss']
+  styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-
   guestDetailsForm: FormGroup;
   reservationDetailsForm: FormGroup;
   primaryGuest;
   guestDetails;
+  items;
 
   constructor(
     private _fb: FormBuilder,
-    private _reservationService : ReservationService
+    private _reservationService: ReservationService
   ) {
     this.initGuestDetailForm();
     this.initReservationForm();
-   }
+  }
 
   ngOnInit(): void {
     this.getReservationDetails();
+    this.items = [
+      { label: 'Advance Booking', icon: '' },
+      { label: 'Current Booking', icon: '' },
+    ];
   }
 
-  getReservationDetails(){
-    this._reservationService.getReservationDetails('e5997cce-49bd-4a92-a013-dec264c47e68')
-    .subscribe(response =>{
-      this.guestDetails = new Details().deserialize(response);
-      this.addGuests(this.guestDetails);
-    })
+  getReservationDetails() {
+    this._reservationService
+      .getReservationDetails('e5997cce-49bd-4a92-a013-dec264c47e68')
+      .subscribe((response) => {
+        this.guestDetails = new Details().deserialize(response);
+        this.addGuests(this.guestDetails);
+      });
   }
 
-  initReservationForm(){
+  initReservationForm() {
     this.reservationDetailsForm = this._fb.group({
       bookingId: [''],
-      roomNumber: ['']
-    })
+      roomNumber: [''],
+    });
   }
 
   initGuestDetailForm() {
@@ -53,24 +58,26 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  addGuests(guest){
+  addGuests(guest) {
     this.guestDetailsForm.addControl('guests', new FormArray([]));
-    guest.guestDetails.forEach(guest => {
-      let controlFA = this.guestDetailsForm.get(
-        'guests'
-      ) as FormArray;
+    guest.guestDetails.forEach((guest) => {
+      let controlFA = this.guestDetailsForm.get('guests') as FormArray;
       controlFA.push(this.getGuestFG());
     });
 
-   this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
-   this.guestDetailsForm.get('guests').patchValue(this.guestDetails.guestDetails);
-   this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
-   this.extractPrimaryDetails();
+    this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
+    this.guestDetailsForm
+      .get('guests')
+      .patchValue(this.guestDetails.guestDetails);
+    this.reservationDetailsForm.patchValue(
+      this.guestDetails.reservationDetails
+    );
+    this.extractPrimaryDetails();
   }
 
-  extractPrimaryDetails(){
-    this.guests.controls.forEach(guestFG => {
-      if(guestFG.get('isPrimary').value === true){
+  extractPrimaryDetails() {
+    this.guests.controls.forEach((guestFG) => {
+      if (guestFG.get('isPrimary').value === true) {
         this.primaryGuest = guestFG;
       }
     });
@@ -90,5 +97,5 @@ export class DetailsComponent implements OnInit {
 
   get guests(): FormArray {
     return this.guestDetailsForm.get('guests') as FormArray;
-  } 
+  }
 }

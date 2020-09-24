@@ -5,6 +5,7 @@ import { AdminReservationRoutingModule } from './admin-reservation.routing.modul
 import { ReservationService } from './services/reservation.service';
 import { DetailsComponent } from './components/details/details.component';
 import { SharedMaterialModule } from 'libs/shared/material/src';
+import { DropdownModule } from 'primeng/dropdown';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -18,7 +19,8 @@ export const adminReservationRoutes: Route[] = [];
     SharedMaterialModule,
     AdminSharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DropdownModule,
   ],
   providers: [
     ReservationService

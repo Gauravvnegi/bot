@@ -1,4 +1,12 @@
 <div>
+    <div *ngIf="primaryGuest">
+        <span>{{primaryGuest.get('title').value}}{{primaryGuest.get('firstName').value}}{{primaryGuest.get('lastName').value}}</span>
+        <span>{{guestDetailsForm.get('adultsCount').value}}{{guestDetailsForm.get('kidsCount').value}}</span>
+    </div>
+    <div *ngIf="primaryGuest">
+        <span>{{primaryGuest.get('countryCode').value}}{{primaryGuest.get('phoneNumber').value}}</span>
+        <span>{{primaryGuest.get('email').value}}</span>
+    </div>
     <mat-tab-group>
         <mat-tab label="Guest Details">
             <form [formGroup]="guestDetailsForm">

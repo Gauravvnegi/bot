@@ -1,10 +1,11 @@
-import { get, set, merge, concat } from 'lodash';
+import { get, set } from 'lodash';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
 export class Details implements Deserializable{
+  reservationId:string;
   guestDetails: GuestDetailsConfig[];
   stayDetails: StayDetailsConfig;
   regCardDetails: RegCardConfig;
@@ -31,7 +32,9 @@ export class Details implements Deserializable{
       );
     });
 
+    this.reservationId = input.id;
     this.stayDetails = new StayDetailsConfig().deserialize(input.stayDetails);
+    this.regCardDetails = new RegCardConfig().deserialize(input.guestDetails.primaryGuest)
 
     return this;
   }
@@ -50,7 +53,6 @@ export class GuestDetailsConfig implements Deserializable{
   countryCode: string;
   phoneNumber: string;
   email: string;
-  //contactDetails: ContactDetailsConfig;
   documentDetails: DocumentDetailsConfig;
 
   deserialize(input: any, hotelNationality) {
@@ -62,9 +64,7 @@ export class GuestDetailsConfig implements Deserializable{
       set({}, 'title', get(input, ['nameTitle'])),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
-      //set({}, 'fullName', input.nameTitle + input.firstName + input.lastName),
-      //set({}, 'phoneNumber', input.contactDetails.cc + input.contactDetails.contactNumber),
-      set({}, 'countryCode', get(contactDetails, ['countryCode'])),
+      set({}, 'countryCode', get(contactDetails, ['cc'])),
       set({}, 'phoneNumber', get(contactDetails, ['contactNumber'])),
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
@@ -154,6 +154,16 @@ export class HealthDeclarationConfig {
   isAccepted = false;
 }
 
-export class RegCardConfig {
-  isAccepted = false;
+export class RegCardConfig implements Deserializable{
+  isRegUrl = false;
+  isSignUrl = false;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'isRegUrl', get(input, ['regcardUrl'])),
+      set({}, 'isSignUrl', get(input, ['signUrl'])),
+    )
+    return this;
+  }
 }

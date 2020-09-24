@@ -4,6 +4,7 @@ import { pipe, of } from 'rxjs';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 interface Import {
   name: string;
@@ -31,7 +32,7 @@ export class BaseDatatableComponent implements OnInit {
 
   @Input() loading: boolean = false;
 
-  tabList = [
+  tabFilterItems = [
     { label: 'Inhouse(3)', content: '' },
     { label: 'Arrival(3)', content: '' },
     { label: 'Departure(3)', content: '' },
@@ -81,11 +82,39 @@ export class BaseDatatableComponent implements OnInit {
   selectionMode = 'multiple';
   selectedRows = [];
 
-  constructor() {}
+  documentActionTypes = [{ label: 'Export', value: 'export' }];
 
-  export = [{ label: 'Export', value: 'export' }];
+  documentTypes = [
+    { label: 'CSV', value: 'csv' },
+    { label: 'EXCEL', value: 'excel' },
+    { label: 'PDF', value: 'pdf' },
+  ];
 
-  csv = [{ label: 'CSV', value: 'csv' }];
+  tableFG: FormGroup;
+  isActionButtons: boolean = false;
+  isQuickFilters: boolean = false;
+  isTabFilters = true;
+
+  quickReplyTypes = [
+    { label: 'All', icon: '', isSelected: true },
+    { label: 'Check-In Pending (3)', icon: '', isSelected: false },
+    { label: 'Check-In Completed (3)', icon: '', isSelected: false },
+    { label: 'Express Check-In (10)', icon: '', isSelected: false },
+  ];
+
+  constructor(private _fb: FormBuilder) {
+    this.initTableFG();
+  }
+
+  initTableFG() {
+    this.tableFG = this._fb.group({
+      documentActions: this._fb.group({
+        documentActionType: ['export'],
+        documentType: ['csv'],
+      }),
+      quickReplyActionFilters: [[]],
+    });
+  }
 
   ngOnInit(): void {
     this.loadInitialData();
@@ -95,11 +124,6 @@ export class BaseDatatableComponent implements OnInit {
       { label: 'Departure(3)', icon: '' },
     ];
 
-    this.buttons = [
-      { label: 'Check-In Pending (3)', icon: '' },
-      { label: 'Check-In Completed (3)', icon: '' },
-      { label: 'Express Check-In (10)', icon: '' },
-    ];
     //this.values = [...this.dataSource];
   }
 
@@ -143,9 +167,10 @@ export class BaseDatatableComponent implements OnInit {
     this.table.filter(value, field, matchMode);
   }
 
-  exportCSV() {
+  onDocumentActions() {
     //check for selected. if true pass an option
-    this.table.exportCSV();
+    this.tableFG.value;
+    //this.table.exportCSV();
   }
 
   exportPdf() {
@@ -206,4 +231,12 @@ export class BaseDatatableComponent implements OnInit {
   isFirstPage(): boolean {
     return this.values ? this.first === 0 : true;
   }
+
+  isQuickReplyFilterSelected(quickReplyFilter) {
+    // const index = this.quickReplyTypes.indexOf(offer);
+    // return index >= 0;
+    return true;
+  }
+
+  toggleQuickReplyFilter(quickReplyFilter) {}
 }

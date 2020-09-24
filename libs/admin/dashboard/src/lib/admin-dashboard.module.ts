@@ -15,6 +15,8 @@ import { ChartsModule } from 'ng2-charts';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { StatisticsService } from './services/statistics.service';
 import { DepartureStatisticsComponent } from './components/departure-statistics/departure-statistics.component';
+import { ReservationDatatableComponent } from './components/reservation-datatable/reservation-datatable.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -27,6 +29,8 @@ export const adminDashboardRoutes: Route[] = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     AdminSharedModule,
     RouterModule,
     SharedMaterialModule,
@@ -43,8 +47,9 @@ export const adminDashboardRoutes: Route[] = [
     InhouseRequestStatisticsComponent,
     CustomerStatisticsComponent,
     DepartureStatisticsComponent,
+    ReservationDatatableComponent,
   ],
   exports: [DashboardComponent],
-  providers: [StatisticsService]
+  providers: [StatisticsService],
 })
 export class AdminDashboardModule {}

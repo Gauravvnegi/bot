@@ -9,11 +9,14 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedMaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
     TableModule,
     ButtonModule,
     PaginatorModule,
@@ -21,6 +24,16 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     DropdownModule,
   ],
   declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent],
-  exports: [DatatableComponent, TabGroupComponent, UploadFileComponent],
+  exports: [
+    DatatableComponent,
+    TabGroupComponent,
+    UploadFileComponent,
+    SharedMaterialModule,
+    TableModule,
+    ButtonModule,
+    PaginatorModule,
+    TabMenuModule,
+    DropdownModule,
+  ],
 })
 export class AdminSharedModule {}

@@ -231,7 +231,6 @@
             "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/chart.js/src/chart.js",
               "node_modules/slick-carousel/slick/slick.scss",
               "node_modules/slick-carousel/slick/slick-theme.scss",
               "node_modules/primeng/resources/themes/md-light-deeppurple/theme.css",

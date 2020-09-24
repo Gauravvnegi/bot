@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SpecialAmenitiesService } from '../../services/special-amenities.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PackageDetail } from '../../data-models/packageCnfig.model'
+import { PackageDetail } from '../../data-models/packageConfig.model'
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({

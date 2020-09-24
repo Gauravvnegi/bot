@@ -5,7 +5,7 @@ export interface Deserializable {
 }
 
 export class Details implements Deserializable{
-  reservationId:string;
+  reservationDetails: ReservationDetailsConfig;
   guestDetails: GuestDetailsConfig[];
   stayDetails: StayDetailsConfig;
   regCardDetails: RegCardConfig;
@@ -32,7 +32,7 @@ export class Details implements Deserializable{
       );
     });
 
-    this.reservationId = input.id;
+    this.reservationDetails = new ReservationDetailsConfig().deserialize(input);
     this.stayDetails = new StayDetailsConfig().deserialize(input.stayDetails);
     this.regCardDetails = new RegCardConfig().deserialize(input.guestDetails.primaryGuest)
 
@@ -152,6 +152,20 @@ export class ContactDetailsConfig implements Deserializable {
 
 export class HealthDeclarationConfig {
   isAccepted = false;
+}
+
+export class ReservationDetailsConfig implements Deserializable{
+  bookingId: string;
+  roomNumber: string;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'bookingId', get(input, ['id'])),
+      set({}, 'roomNumber', get(input, ['roomNumber'])),
+    )
+    return this;
+  }
 }
 
 export class RegCardConfig implements Deserializable{

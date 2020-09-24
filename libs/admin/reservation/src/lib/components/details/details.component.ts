@@ -20,6 +20,7 @@ export class DetailsComponent implements OnInit {
     private _reservationService : ReservationService
   ) {
     this.initGuestDetailForm();
+    this.initReservationForm();
    }
 
   ngOnInit(): void {
@@ -31,12 +32,14 @@ export class DetailsComponent implements OnInit {
     .subscribe(response =>{
       this.guestDetails = new Details().deserialize(response);
       this.addGuests(this.guestDetails);
-      console.log(this.guestDetails);
     })
   }
 
   initReservationForm(){
-
+    this.reservationDetailsForm = this._fb.group({
+      bookingId: [''],
+      roomNumber: ['']
+    })
   }
 
   initGuestDetailForm() {
@@ -61,8 +64,8 @@ export class DetailsComponent implements OnInit {
 
    this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
    this.guestDetailsForm.get('guests').patchValue(this.guestDetails.guestDetails);
+   this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
    this.extractPrimaryDetails();
-   console.log(this.guestDetailsForm);
   }
 
   extractPrimaryDetails(){

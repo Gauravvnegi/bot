@@ -37,7 +37,7 @@
           [style.padding]="'0px 10px'"
         >
           <mat-icon>{{ menuItem.icon }}</mat-icon>
-          <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
+          <img [src]="menuItem.url" class="svg-icon" />
           <span *ngIf="isExpanded">{{ menuItem.title }}</span>
         </a>
         <div [hidden]="menuItem.children === null" class="collapse-container">

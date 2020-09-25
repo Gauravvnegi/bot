@@ -27,6 +27,8 @@
   }
 }
 
+
+
 .change .bar2 {
   opacity: 0;
 }
@@ -122,17 +124,12 @@ ul {
 
 .active a,
 .active a:hover {
-  /*color: rgba(0,0,0,.6) !important;*/
-  /*background-color: #fff !important;*/
-  // box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
-  //   0 7px 10px -5px rgba(60, 72, 88, 0.4);
-  // -webkit-transition: all 400ms;
-  // -moz-transition: all 400ms;
-  // -ms-transition: all 400ms;
-  // -o-transition: all 400ms;
-  // transition: all 400ms;
   border: 1px solid;
   box-shadow: none;
+}
+
+.active a .svg-icon{
+  filter: invert(34%) sepia(23%) saturate(3170%) hue-rotate(209deg) brightness(90%) contrast(89%);
 }
 
 .collapse-a {

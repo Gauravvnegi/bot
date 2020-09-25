@@ -4,30 +4,32 @@ import { MenuItem } from 'primeng/api';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { FilterService } from '../../../services/filter.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
+import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
   styleUrls: ['./layout-one.component.scss'],
 })
 export class LayoutOneComponent implements OnInit {
-  public backgroundColor: string;
-  public background_image: string;
-  profile: MenuItem[];
+  backgroundColor: string;
+  background_image: string;
+  profile: MenuItem[] = [
+    { label: 'Profile', icon: 'person' },
+    { label: 'Logout', icon: 'person_remove' },
+  ];
   lastUpdatedAt: string;
   isGlobalFilterVisible: boolean = false;
+
   constructor(
     private _router: Router,
     public dateService: DateService,
     public filterService: FilterService,
-    public dateRangeFilterService: DateRangeFilterService
+    public dateRangeFilterService: DateRangeFilterService,
+    public progressSpinnerService: ProgressSpinnerService
   ) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
-    this.profile = [
-      { label: 'Profile', icon: 'person' },
-      { label: 'Logout', icon: 'person_remove' },
-    ];
   }
 
   initLayoutConfigs() {

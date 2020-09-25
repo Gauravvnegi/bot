@@ -51,6 +51,11 @@
     <div class="main-panel--container">
       <div class="main">
         <div class="router__wrapper">
+          <mat-progress-bar
+            *ngIf="progressSpinnerService.isProgressSpinnerVisible"
+            mode="query"
+          ></mat-progress-bar>
+
           <router-outlet></router-outlet>
         </div>
         <admin-footer></admin-footer>

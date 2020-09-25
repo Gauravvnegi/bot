@@ -9,6 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { ProgressSpinnerInterceptor } from './theme/src/lib/interceptor/progress-spinner.interceptor';
 
 @NgModule({
   declarations: [],
@@ -20,6 +21,11 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ProgressSpinnerInterceptor,
+      multi: true,
+    },
   ],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {

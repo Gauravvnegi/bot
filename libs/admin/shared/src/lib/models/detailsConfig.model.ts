@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { DateService } from '../../../../../shared/utils/src/lib/date.service';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -84,6 +85,10 @@ export class StayDetailsConfig implements Deserializable{
   kidsCount: number;
   adultsCount: number;
 
+  // constructor(private dateService: DateService){
+    
+  // }
+
   deserialize(input: any) {
     Object.assign(
       this,
@@ -99,7 +104,6 @@ export class StayDetailsConfig implements Deserializable{
 }
 
 export class DocumentDetailsConfig implements Deserializable {
-  verificationStatus = false;
   docFile: FileDetailsConfig[];
 
   deserialize(input: any){
@@ -117,10 +121,12 @@ export class DocumentDetailsConfig implements Deserializable {
 }
 
 export class FileDetailsConfig implements Deserializable {
+  verificationStatus = false;
   id: string;
   documentType: string;
   frontUrl: string;
   backUrl: string;
+  remark: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -129,6 +135,8 @@ export class FileDetailsConfig implements Deserializable {
       set({}, 'documentType', get(input, ['documentType'])),
       set({}, 'frontUrl', get(input, ['frontUrl'])),
       set({}, 'backUrl', get(input, ['backUrl'])),
+      set({}, 'verificationStatus', false),
+      set({}, 'remark', ''),
     )
     return this;
   }

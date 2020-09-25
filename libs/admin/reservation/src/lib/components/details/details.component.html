@@ -96,76 +96,39 @@
       </ng-container>
       </form>
     </mat-tab>
-    <mat-tab label="Documents"> Content 2 </mat-tab>
+    <mat-tab label="Documents">
+        <div *ngIf="guestDetails">
+                <div>
+                    <mat-form-field>
+                        <mat-select [(value)]="selectedGuest" (selectionChange)="onGuestChange($event.value)">
+                          <mat-option *ngFor="let guest of guestDetails.guestDetails" [value]="guest.id">
+                            {{guest.firstName}}{{guest.lastName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+                <ng-container *ngFor="let document of selectedDocument.controls; let i=index">
+                    <div>
+                        Verification Status: Fail<mat-slide-toggle [(ngModel)]="document.get('verificationStatus').value"></mat-slide-toggle> Pass
+                    </div>
+                    <div>
+                        <img [src]="document.get('frontUrl').value">
+                        <span>
+                            {{document.get('documentType').value}} FIRST PAGE
+                        </span>
+                    </div>
+                    <div *ngIf="document.get('documentType').value != 'VISA'">
+                        <img [src]="document.get('backUrl').value">
+                        <span>
+                            {{document.get('documentType').value}} BACK PAGE
+                        </span>
+                    </div>
+                    <mat-form-field>
+                        <input matInput>
+                    </mat-form-field>
+                </ng-container>
+        </div>
+    </mat-tab>
     <mat-tab label="Package"> Content 3 </mat-tab>
   </mat-tab-group>
-  <!-- <div>
-    <div *ngIf="primaryGuest">
-        <span>{{primaryGuest.get('title').value}}{{primaryGuest.get('firstName').value}}{{primaryGuest.get('lastName').value}}</span>
-        <span>{{guestDetailsForm.get('adultsCount').value}}{{guestDetailsForm.get('kidsCount').value}}</span>
-    </div>
-    <div *ngIf="primaryGuest">
-        <span>{{primaryGuest.get('countryCode').value}}{{primaryGuest.get('phoneNumber').value}}</span>
-        <span>{{primaryGuest.get('email').value}}</span>
-    </div>
-    <div>
-        {{reservationDetailsForm.get('bookingId').value}}
-        {{reservationDetailsForm.get('roomNumber').value}}
-        {{guestDetailsForm.get('roomType').value}}
-    </div>
-    <mat-tab-group>
-        <mat-tab label="Guest Details">
-            <form [formGroup]="guestDetailsForm">
-                <mat-label>Guest Info</mat-label>
-                <ng-container formArrayName="guests"
-                    *ngFor="let guestFormGroup of guestDetailsForm.controls.guests?.value; let i = index">
-                    <div [formGroupName]="i">
-                        <div>
-                            <mat-label>Full Name</mat-label>
-                            <span>{{guestFormGroup.title}}</span>
-                            <span>{{guestFormGroup.firstName}}</span>
-                            <span>{{guestFormGroup.lastName}}</span>
-                        </div>
-                        <div>
-                            <mat-label>Phone No.</mat-label>
-                            <span>{{guestFormGroup.countryCode}}</span>
-                            <span>{{guestFormGroup.phoneNumber}}</span>
-                        </div>
-                        <div>
-                            <mat-label>Email</mat-label>
-                            <span>{{guestFormGroup.email}}</span>
-                        </div>
-                    </div>
-                </ng-container>
-    
-                <mat-label>Stay Details</mat-label>
-                <ng-container>
-                    <div>
-                        <mat-label>Arrival Date</mat-label>
-                        <span>{{guestDetailsForm.get('arrivalTime').value}}</span>
-                    </div>
-                    <div>
-                        <mat-label>Departure Date</mat-label>
-                        <span>{{guestDetailsForm.get('departureTime').value}}</span>
-                    </div>
-                    <div>
-                        <mat-label>Expected Arrival Time</mat-label>
-                        <span>{{guestDetailsForm.get('expectedArrivalTime').value}}</span>
-                    </div>
-                    <div>
-                        <mat-label>Room Type</mat-label>
-                        <span>{{guestDetailsForm.get('roomType').value}}</span>
-                    </div>
-                </ng-container>
-
-                <mat-label>Health Declaration</mat-label>
-                <ng-container>
-                    <mat-label>Health Declaration Status:</mat-label>
-                </ng-container>
-            </form>
-        </mat-tab>
-        <mat-tab label="Documents"> Content 2 </mat-tab>
-        <mat-tab label="Package"> Content 3 </mat-tab>
-    </mat-tab-group>
-</div> -->
 </div>

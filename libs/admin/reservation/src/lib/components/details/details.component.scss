@@ -60,6 +60,12 @@
   padding: $padding20;
 }
 
+img {
+  border-radius: 8px;
+  height: 100px;
+  width: 100px;
+}
+
 .health-status {
   letter-spacing: 0.84px;
   color: #484848;

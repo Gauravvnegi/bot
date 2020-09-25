@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-daterange',
@@ -6,6 +6,8 @@ import * as moment from 'moment';
   styleUrls: ['./daterange.component.scss'],
 })
 export class DaterangeComponent implements OnInit {
+  @Output() onDateRangeFilter = new EventEmitter();
+
   ranges: any = {
     Today: [moment().startOf('day'), moment().endOf('day')],
     Yesterday: [
@@ -35,7 +37,7 @@ export class DaterangeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  selectedDate(date, range) {
-    console.log(date), range;
+  selectedDate(date) {
+    this.onDateRangeFilter.next(date);
   }
 }

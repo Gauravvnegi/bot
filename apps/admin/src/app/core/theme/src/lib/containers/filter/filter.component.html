@@ -5,7 +5,7 @@
     >
     <p class="filter">Filter</p>
   </div>
-  <div class="reset-wrapper">
+  <div (click)="resetFilter()" class="reset-wrapper">
     <p class="filter">Reset All</p>
     <mat-icon class="material-icon" matSuffix>undo</mat-icon>
   </div>
@@ -39,8 +39,8 @@
             <div>
               <mat-form-field>
                 <mat-label>Hotel Name</mat-label>
-                <mat-select formControlName="hotelName" multiple>
-                  <mat-select-trigger>
+                <mat-select formControlName="hotelName">
+                  <!-- <mat-select-trigger>
                     {{ hotelNameFC.value ? hotelNameFC.value[0] : '' }}
                     <span
                       *ngIf="hotelNameFC.value?.length > 1"
@@ -51,7 +51,7 @@
                         hotelNameFC.value?.length === 2 ? 'other' : 'others'
                       }})
                     </span>
-                  </mat-select-trigger>
+                  </mat-select-trigger> -->
                   <mat-option
                     *ngFor="let hotel of hotelList"
                     [value]="hotel.name"
@@ -63,8 +63,8 @@
             <div>
               <mat-form-field>
                 <mat-label>Branch</mat-label>
-                <mat-select formControlName="branchName" multiple>
-                  <mat-select-trigger>
+                <mat-select formControlName="branchName">
+                  <!-- <mat-select-trigger>
                     {{ branchNameFC.value ? branchNameFC.value[0] : '' }}
                     <span
                       *ngIf="branchNameFC.value?.length > 1"
@@ -75,7 +75,7 @@
                         branchNameFC.value?.length === 2 ? 'other' : 'others'
                       }})
                     </span>
-                  </mat-select-trigger>
+                  </mat-select-trigger> -->
                   <mat-option
                     *ngFor="let branch of branchList"
                     [value]="branch.name"
@@ -137,7 +137,7 @@
           </div>
         </div>
         <div style="display: flex; justify-content: center; margin-top: 15%;">
-          <button class="apply-button">Apply</button>
+          <button (click)="applyFilter()" class="apply-button">Apply</button>
         </div>
       </mat-tab>
     </mat-tab-group>

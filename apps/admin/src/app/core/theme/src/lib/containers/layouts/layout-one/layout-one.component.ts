@@ -2,6 +2,8 @@ import { Component, OnInit, ComponentRef } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { FilterService } from '../../../services/filter.service';
+import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
@@ -13,7 +15,12 @@ export class LayoutOneComponent implements OnInit {
   profile: MenuItem[];
   lastUpdatedAt: string;
   isGlobalFilterVisible: boolean = false;
-  constructor(private _router: Router, public dateService: DateService) {}
+  constructor(
+    private _router: Router,
+    public dateService: DateService,
+    public filterService: FilterService,
+    public dateRangeFilterService: DateRangeFilterService
+  ) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
@@ -60,5 +67,19 @@ export class LayoutOneComponent implements OnInit {
 
   toggleGlobalFilter() {
     this.isGlobalFilterVisible = !this.isGlobalFilterVisible;
+  }
+
+  applyFilter(event) {
+    this.filterService.emitFilterValue$.next(event);
+    this.toggleGlobalFilter();
+  }
+
+  resetFilter(event) {
+    this.filterService.emitFilterValue$.next(event);
+    this.toggleGlobalFilter();
+  }
+
+  applyDateRangeFilter(event) {
+    this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
   }
 }

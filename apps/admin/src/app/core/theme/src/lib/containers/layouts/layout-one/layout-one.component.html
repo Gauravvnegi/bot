@@ -27,10 +27,23 @@
         Hotel Hilltop
         <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
       </button>
-      <div class="filter-wrapper" *ngIf="isGlobalFilterVisible">
-        <admin-filter (close)="toggleGlobalFilter()"></admin-filter>
+      <div
+        class="filter-wrapper"
+        *ngIf="
+          isGlobalFilterVisible &&
+          (filterService.emitFilterValue$ | async) as initialFilterValue
+        "
+      >
+        <admin-filter
+          [initialFilterValue]="initialFilterValue"
+          (onCloseFilter)="toggleGlobalFilter()"
+          (onApplyFilter)="applyFilter($event)"
+          (onResetFilter)="resetFilter($event)"
+        ></admin-filter>
       </div>
-      <hospitality-bot-daterange></hospitality-bot-daterange>
+      <hospitality-bot-daterange
+        (onDateRangeFilter)="applyDateRangeFilter($event)"
+      ></hospitality-bot-daterange>
       <div class="dropdown-wrapper">
         <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
       </div>

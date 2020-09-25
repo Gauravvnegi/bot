@@ -1,13 +1,24 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FilterService } from '../../services/filter.service';
 
 @Component({
   selector: 'admin-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
 })
-export class FilterComponent implements OnInit {
-  @Output() close = new EventEmitter();
+export class FilterComponent implements OnChanges, OnInit {
+  @Input() initialFilterValue;
+  @Output() onCloseFilter = new EventEmitter();
+  @Output() onApplyFilter = new EventEmitter();
+  @Output() onResetFilter = new EventEmitter();
   filterTypes = [
     {
       name: 'property',
@@ -31,8 +42,8 @@ export class FilterComponent implements OnInit {
     this.initFilterForm();
   }
 
-  closePopup(){
-    this.close.emit();
+  closePopup() {
+    this.onCloseFilter.emit();
   }
 
   initFilterForm() {
@@ -55,7 +66,24 @@ export class FilterComponent implements OnInit {
     });
   }
 
+  ngOnChanges() {
+    this.initialFilterValue && this.setInitialFilterValue();
+  }
+
+  setInitialFilterValue() {
+    this.filterForm.patchValue(this.initialFilterValue);
+  }
+
   ngOnInit(): void {}
+
+  applyFilter() {
+    this.onApplyFilter.next(this.filterForm.getRawValue());
+  }
+
+  resetFilter() {
+    this.filterForm.reset();
+    this.onResetFilter.next(this.filterForm.getRawValue());
+  }
 
   get propertyFG() {
     return this.filterForm.get('property') as FormGroup;

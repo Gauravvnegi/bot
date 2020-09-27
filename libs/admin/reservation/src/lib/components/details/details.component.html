@@ -72,6 +72,9 @@
           </svg>
           <span>{{ guestDetailsForm.get('kidsCount').value }}</span>
         </div>
+        <div class="vip-image">
+          <img src="assets/VIP.png" />
+        </div>
       </div>
       <div class="header-seperator"></div>
       <div class="booking-id">
@@ -244,11 +247,17 @@
             Pass
           </div>
           <div>
-            <img [src]="document.get('frontUrl').value" />
+            <img
+              style="height: 100px; width: 100px;"
+              [src]="document.get('frontUrl').value"
+            />
             <span> {{ document.get('documentType').value }} FIRST PAGE </span>
           </div>
           <div *ngIf="document.get('documentType').value != 'VISA'">
-            <img [src]="document.get('backUrl').value" />
+            <img
+              style="height: 100px; width: 100px;"
+              [src]="document.get('backUrl').value"
+            />
             <span> {{ document.get('documentType').value }} BACK PAGE </span>
           </div>
           <mat-form-field>

@@ -6,6 +6,7 @@
     width: 35%;
     padding: 1%;
     height: 100vh;
+    position: relative;
     &-logo {
       height: 80px;
       width: 100px;
@@ -14,8 +15,43 @@
         width: $full;
       }
     }
-    &-auth-panel{
-        padding: $padding30;
+    &-auth-panel {
+      padding: $padding30;
+    }
+    &-footer {
+      font-size: 14px;
+      width: 97%;
+      font-weight: $bold;
+      text-align: center;
+      position: absolute;
+      bottom: 15px;
+      color: #6d7580;
+      a {
+        text-decoration: none;
+        color: #4b56c0;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    &-svg-icons {
+      position: absolute;
+    }
+    .first {
+      top: 14px;
+      right: 45%;
+    }
+    .second {
+      top: 83px;
+      right: 10px;
+    }
+    .third {
+      top: 80%;
+      right: 35px;
+    }
+    .fourth {
+      bottom: 0px;
+      left: 10px;
     }
   }
   &--right {
@@ -25,6 +61,7 @@
     background-image: url('../../../../../assets/sidebar-4.jpg');
     background-repeat: no-repeat;
     background-size: $full $full;
+    position: relative;
     &-header {
       padding: $padding15 0px;
       @include flex-item-center();
@@ -63,6 +100,24 @@
           .option-label {
             margin: 0;
           }
+        }
+      }
+    }
+    &-footer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 96%;
+      bottom: 0px;
+      font-size: 14px;
+      color: white;
+      .image {
+        height: 85px;
+        width: 100px;
+        img {
+          height: 100%;
+          width: 100%;
         }
       }
     }

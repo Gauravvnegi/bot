@@ -38,6 +38,9 @@
     i {
       color: white;
     }
+    &:hover{
+      cursor: pointer;
+    }
   }
   .header-seperator {
     height: 30px;
@@ -133,6 +136,11 @@
       fill: white;
     }
   }
+}
+
+
+.vip-image{
+  margin-left: 15px;
 }
 
 :host ::ng-deep .mat-head {
@@ -239,11 +247,11 @@
   margin-top: $margin15;
 }
 
-img {
-  border-radius: 8px;
-  height: 100px;
-  width: 100px;
-}
+// img {
+//   border-radius: 8px;
+//   height: 100px;
+//   width: 100px;
+// }
 
 .health-status {
   letter-spacing: 0.84px;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { delay } from 'rxjs/operators';
-import { pipe, of } from 'rxjs';
+import { pipe, of, Observable } from 'rxjs';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
@@ -15,12 +15,30 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  @ViewChild('dt') table: Table; //reference to data-table
+  tableName = 'Datatable'; //table name
+
   @Input() cols = [
     { field: 'vin', header: 'Vin' },
     { field: 'year', header: 'Year' },
     { field: 'brand', header: 'Brand' },
     { field: 'color', header: 'Color' },
-  ];
+  ]; // table columns in header
+
+  /**
+   * Action Buttons & filters visibility
+   */
+  isActionButtons: boolean = false;
+  isQuickFilters: boolean = false;
+  isTabFilters = true;
+
+  tableFG: FormGroup;
+
+  isPaginaton: boolean = false;
+  rowsPerPage = 5;
+  showCurrentPageReport: boolean = true;
+  rowsPerPageOptions = [5, 10, 25, 50];
+  first = 0; //index of the first page to show
 
   @Input() tableConfig = {
     styleClass: 'p-datatable-lg p-datatable-gridlines p-datatable-striped',
@@ -28,7 +46,7 @@ export class BaseDatatableComponent implements OnInit {
     gridLines: true,
     size: 'lg',
     paginator: true,
-  };
+  }; // table-config
 
   @Input() loading: boolean = false;
 
@@ -43,12 +61,6 @@ export class BaseDatatableComponent implements OnInit {
   TabItems: MenuItem[];
 
   buttons = [];
-
-  isPaginaton: boolean = false;
-  rowsPerPage = 5;
-  showCurrentPageReport: boolean = true;
-  rowsPerPageOptions = [5, 10, 25, 50];
-  first = 0; //index of the first page to show
 
   selectedExport1: Import;
 
@@ -71,29 +83,19 @@ export class BaseDatatableComponent implements OnInit {
     { vin: 9, year: 2023, brand: 'mg', color: 'yellow' },
     { vin: 10, year: 2023, brand: 'mg', color: 'yellow' },
     { vin: 11, year: 2023, brand: 'mg', color: 'yellow' },
-  ];
-
-  // only field property is used by table rest are dummy
+  ]; // testing data-source
 
   totalRecords = 20;
-  @ViewChild('dt') table: Table;
-  tableName = 'Datatable';
 
   selectionMode = 'multiple';
   selectedRows = [];
 
   documentActionTypes = [{ label: 'Export', value: 'export' }];
-
   documentTypes = [
     { label: 'CSV', value: 'csv' },
     { label: 'EXCEL', value: 'excel' },
     { label: 'PDF', value: 'pdf' },
   ];
-
-  tableFG: FormGroup;
-  isActionButtons: boolean = false;
-  isQuickFilters: boolean = false;
-  isTabFilters = true;
 
   quickReplyTypes = [
     { label: 'All', icon: '', isSelected: true },
@@ -131,15 +133,12 @@ export class BaseDatatableComponent implements OnInit {
 
   loadInitialData() {
     this.loading = true;
-    of(this.dataSource.slice(0, this.rowsPerPage))
-      .pipe(delay(2000))
-      .subscribe((data) => {
-        this.values = data;
-        this.loading = false;
-
-        //setting pagination
-        this.totalRecords = this.dataSource.length;
-      });
+    this.fetchDataFrom().subscribe((data) => {
+      this.values = data;
+      this.loading = false;
+      //setting pagination
+      this.totalRecords = this.dataSource.length;
+    });
   }
 
   private paginate(event) {
@@ -152,14 +151,22 @@ export class BaseDatatableComponent implements OnInit {
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
-    of(this.dataSource.slice(event.first, event.first + event.rows))
-      .pipe(delay(2000))
-      .subscribe((data) => {
+    this.fetchDataFrom({ first: event.first, rows: event.rows }).subscribe(
+      (data) => {
         this.values = data;
         this.loading = false;
         //setting pagination
         this.totalRecords = this.dataSource.length;
-      });
+      }
+    );
+  }
+
+  fetchDataFrom(
+    config = { first: 0, rows: this.rowsPerPage }
+  ): Observable<any> {
+    return of(
+      this.dataSource.slice(config.first, config.first + config.rows)
+    ).pipe(delay(2000));
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {

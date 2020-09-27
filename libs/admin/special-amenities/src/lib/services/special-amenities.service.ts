@@ -1,27 +1,31 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '../../../../../shared/utils/src/lib/api.service'
+import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
 import { Amenity } from '../data-models/packageConfig.model';
 
-@Injectable()
-export class SpecialAmenitiesService extends ApiService{
-
-  uploadAmenityImage(hotelId, packageCode, data){
-    return this.put(`/api/v1/hotel/${hotelId}/package/${packageCode}/upload`, data);
+@Injectable({ providedIn: 'root' })
+export class SpecialAmenitiesService extends ApiService {
+  uploadAmenityImage(hotelId, packageCode, data) {
+    return this.put(
+      `/api/v1/hotel/${hotelId}/package/${packageCode}/upload`,
+      data
+    );
   }
 
-  getAmenityPackages(hotelId, offset, limit){
-    return this.get(`/api/v1/hotel/${hotelId}/package?offset=${offset}&limit=${limit}`);
+  getAmenityPackages(hotelId, offset, limit) {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/package?offset=${offset}&limit=${limit}`
+    );
   }
 
-  getPackageDetails(hotelId, packageId){
+  getPackageDetails(hotelId, packageId) {
     return this.get(`/api/v1/hotel/${hotelId}/package/${packageId}`);
   }
 
-  updateAmenity(hotelId, data){
+  updateAmenity(hotelId, data) {
     return this.put(`/api/v1/hotel/${hotelId}/package`, data);
   }
 
-  mapAmenityData(formValue, hotelId, id){
+  mapAmenityData(formValue, hotelId, id) {
     const amenityData = new Amenity();
     amenityData.active = formValue.status;
     amenityData.hotelId = hotelId;

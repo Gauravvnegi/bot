@@ -1,10 +1,19 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import {
+  RouterOutlet,
+  Router,
+  NavigationStart,
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+} from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { FilterService } from '../../../services/filter.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',

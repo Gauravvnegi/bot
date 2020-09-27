@@ -49,6 +49,7 @@
 
 :host ::ng-deep .mat-tab-group {
   flex-direction: initial;
+  position: relative;
 }
 
 :host ::ng-deep .mat-tab-label {
@@ -90,6 +91,9 @@
   border-radius: 25px;
   padding: 12px 0px;
   width: 15vw;
+  position: absolute;
+  bottom: 10px;
+  right: 21%;
   opacity: 0.85;
   box-shadow: 0px 0px 5px 0px #4b56c0;
   &:hover {
@@ -134,6 +138,7 @@
 
 :host ::ng-deep .mat-tab-body-content {
   padding: $padding15;
+  padding-bottom: 4rem;
 }
 
 :host ::ng-deep .hotel-branch {

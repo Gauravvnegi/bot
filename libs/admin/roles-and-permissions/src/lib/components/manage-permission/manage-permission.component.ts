@@ -28,6 +28,16 @@ export class ManagePermissionComponent implements OnInit {
       ],
     },
   ];
+
+  hotelNames: [
+    { key: 'Hilltop.', value: 'Hilltop' },
+    { key: 'Taj.', value: 'Taj' },
+  ]
+
+  branchNames:[
+    { key: 'Shimla.', value: 'Shimla' },
+    { key: 'Delhi.', value: 'Delhi' },
+  ]
   constructor() {}
 
   ngOnInit(): void {}

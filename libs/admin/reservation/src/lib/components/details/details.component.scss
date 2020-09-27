@@ -129,8 +129,6 @@
 .svg-wrapper {
   padding-left: 5px;
   .svg {
-    height: 20px;
-    width: 20px;
     path {
       fill: white;
     }
@@ -153,7 +151,7 @@
 .feilds-wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
   margin: 30px 0px;
   padding: 0px 30px;
   .feild {
@@ -205,23 +203,32 @@
       }
     }
     &-bottom-icons {
-      display: flex;
-      align-items: center;
-      height: 7%;
-      .social-icons {
-        width: 25%;
-        .icon {
-          padding: 5px;
-          background-color: #f3fafe;
-          font-size: 10px;
-          color: #88bac2;
-          border-radius: 50%;
-          &:hover {
-            cursor: pointer;
-            color: white;
-            font-size: 12px;
-            padding: 7px;
-            background-color: #4b56c0;
+      .label {
+        font-size: 10px;
+        color: #9eaeb8;
+        text-align: center;
+        margin-bottom: 5px;
+      }
+      .social-icon-wrapper {
+        display: flex;
+        align-items: center;
+        height: 20px;
+
+        .social-icons {
+          width: 25%;
+          .icon {
+            padding: 5px;
+            background-color: #f3fafe;
+            font-size: 10px;
+            color: #88bac2;
+            border-radius: 50%;
+            &:hover {
+              cursor: pointer;
+              color: white;
+              font-size: 12px;
+              padding: 7px;
+              background-color: #4b56c0;
+            }
           }
         }
       }
@@ -247,4 +254,8 @@ img {
   b {
     color: #53b33e;
   }
+}
+
+.width-added {
+  width: 25%;
 }

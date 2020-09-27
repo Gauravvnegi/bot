@@ -1,6 +1,129 @@
-<div *ngFor="let permissionConfig of permissionConfigs">
+<!-- <div *ngFor="let permissionConfig of permissionConfigs">
   {{ permissionConfig.label }}
   <div *ngFor="let permission of permissionConfig.permissions">
     {{ permission.label }}
+  </div>
+</div> -->
+<div class="wrapper">
+  <header class="wrapper-header">
+    <p class="text">Add User</p>
+    <div class="manage-box">
+      <p>Manage By : Avyukt Sharma, Admin</p>
+    </div>
+  </header>
+  <div class="wrapper-form">
+    <div class="feilds">
+      <div class="feild width-half">
+        <mat-label class="mat-label">First Name :</mat-label>
+        <input class="input-feild" type="text" placeholder="" matInput />
+      </div>
+      <div class="feild width-half">
+        <mat-label class="mat-label">Last Name :</mat-label>
+        <input class="input-feild" type="text" placeholder="" matInput />
+      </div>
+    </div>
+    <div class="feilds">
+      <div class="feild width-trio">
+        <mat-label class="mat-label">Job Title :</mat-label>
+        <input class="input-feild" type="text" placeholder="" matInput />
+      </div>
+      <div class="feild width-trio">
+        <mat-label class="mat-label">Hotel Name :</mat-label>
+        <mat-select>
+          <!-- <option value="" selected>None</option> -->
+          <mat-option *ngFor="let option of hotelNames" [value]="option.key">{{
+            option.value
+          }}</mat-option>
+        </mat-select>
+      </div>
+      <div class="feild width-trio">
+        <mat-label class="mat-label">Branch :</mat-label>
+        <mat-select>
+          <!-- <option value="" selected>None</option> -->
+          <mat-option *ngFor="let option of branchNames" [value]="option.key">{{
+            option.value
+          }}</mat-option>
+        </mat-select>
+      </div>
+    </div>
+    <div class="feilds">
+      <div style="width: 38%;" class="feild">
+        <mat-label class="mat-label">Phone No. :</mat-label>
+        <mat-select style="width: 30%; margin-right: 10px;" class="phone-no">
+          <!-- <option value="" selected>None</option> -->
+          <mat-option *ngFor="let option of branchNames" [value]="option.key">{{
+            option.value
+          }}</mat-option>
+        </mat-select>
+        <input class="input-feild" type="text" placeholder="" matInput />
+      </div>
+      <div class="feild width-half">
+        <mat-label class="mat-label">Email :</mat-label>
+        <input class="input-feild" type="text" placeholder="" matInput />
+      </div>
+    </div>
+    <div class="feilds image-wrapper">
+      <div class="image">
+        <img src="assets/dummy.png" />
+      </div>
+      <img class="material-icons" src="assets/svg/edit.svg" />
+      <img class="material-icons" src="assets/svg/delete.svg" />
+    </div>
+    <div class="feilds margin-adjust">
+      <div class="image-button">
+        <mat-label class="text">Image :</mat-label>
+        <button class="button">Choose File</button>
+        <p class="image-name">John.jpg</p>
+      </div>
+    </div>
+    <div class="feilds margin-adjust">
+      <div class="note">
+        Recommended dimension (in px) : 60*60
+      </div>
+    </div>
+  </div>
+  <div class="wrapper-manage-permission">
+    <p class="header">
+      Manage Permissions
+    </p>
+    <div class="permission-table-header">
+      <div class="left-table">
+        <div class="image">
+          <img src="assets/svg/roles.svg" />
+        </div>
+        <p class="left-table-header">Entity</p>
+        <p class="left-table-entity">Packages (Pre-arrival Request)</p>
+        <p class="left-table-entity color-added">
+          Arrival(Pre-checkin/ Checkin)
+        </p>
+      </div>
+      <div class="right-table">
+        <div class="box-wrapper">
+          <div class="box">
+            <p class="label">View</p>
+            <p class="paragraph">View General & Sensitive Info</p>
+            <div class="float-box">
+              <img src="assets/svg/edit.svg" />
+            </div>
+          </div>
+          <div class="box">
+            <p class="label">Manage</p>
+            <p class="paragraph">Create/Delete/Edit Source of Data</p>
+            <div class="float-box">
+              <img src="assets/svg/edit.svg" />
+            </div>
+          </div>
+          <div class="box">
+            <p class="label">Actions(User Submission)</p>
+            <p class="paragraph">
+              Approve/Reject (By Default includes sensitive info)o
+            </p>
+            <div class="float-box">
+              <img src="assets/svg/edit.svg" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -64,7 +64,7 @@
 :host ::ng-deep .mat-tab-label-active {
   background-color: #e8eef5;
   color: #4b56c0;
-  .svg path{
+  .svg path {
     fill: #4b56c0;
   }
 }
@@ -95,6 +95,7 @@
   bottom: 10px;
   right: 21%;
   opacity: 0.85;
+  z-index: 222;
   box-shadow: 0px 0px 5px 0px #4b56c0;
   &:hover {
     cursor: pointer;

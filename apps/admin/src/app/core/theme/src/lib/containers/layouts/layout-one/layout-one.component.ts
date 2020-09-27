@@ -87,7 +87,6 @@ export class LayoutOneComponent implements OnInit {
 
   resetFilter(event) {
     this.filterService.emitFilterValue$.next(event);
-    this.toggleGlobalFilter();
   }
 
   applyDateRangeFilter(event) {

@@ -117,16 +117,15 @@
           color: #484848;
           letter-spacing: 0.84px;
         }
-        .color-added{
-            background-color: #f8f8f8;
-        }
+        
       }
       .right-table {
         width: 75%;
-        padding-left: 2%;
         .box-wrapper {
           display: flex;
           align-items: center;
+          margin-bottom: 38px;
+          padding-left: 2%;
           .box {
             width: 32%;
             height: 118px;
@@ -163,6 +162,12 @@
             }
           }
         }
+        .checkbox-wrapper {
+          padding: 15px;
+          padding-left: 2%;
+          display: flex;
+          justify-content: space-around;
+        }
       }
     }
   }
@@ -172,6 +177,29 @@
   font-size: $font14;
   color: #9eaeb8;
   width: 50%;
+}
+
+:host ::ng-deep .mat-checkbox-frame {
+  border-radius: 50%;
+}
+
+:host ::ng-deep .mat-checkbox-inner-container {
+  height: 34px;
+  width: 34px;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #53b33e;
+}
+
+:host ::ng-deep .mat-checkbox-background {
+  border-radius: 50%;
+}
+
+:host ::ng-deep .mat-checkbox-disabled {
+  .mat-checkbox-background {
+    background-color: #c2c2c2;
+  }
 }
 
 .width-half {
@@ -185,4 +213,8 @@
 :host ::ng-deep .input-feild,
 .mat-select {
   border-bottom: 1px solid #9eaeb8;
+}
+
+.color-added {
+  background-color: #f8f8f8;
 }

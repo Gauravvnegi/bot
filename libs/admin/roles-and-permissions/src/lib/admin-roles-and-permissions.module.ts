@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ManagePermissionComponent } from './components/manage-permission/manage-permission.component';
 import { SharedMaterialModule } from 'libs/shared/material/src';
+import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 
 import { AdminRolesAndPermissionsRoutingModule } from './admin-roles-and-permissions.routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { AddUserPermissionComponent } from './components/add-user-permission/add
     FormsModule,
     ReactiveFormsModule,
     AdminRolesAndPermissionsRoutingModule,
+    AdminSharedModule,
     SharedMaterialModule,
   ],
   declarations: [

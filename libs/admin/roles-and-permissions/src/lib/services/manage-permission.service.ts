@@ -40,10 +40,46 @@ export class ManagePermissionService extends ApiService {
     };
   }
 
+  modifyPermissionDetailsForEdit(value) {
+    // to be changed when multiple hotels
+    // temp function
+    return {
+      id: value.id,
+      email: value.email,
+      firstName: value.firstName,
+      lastName: value.lastName,
+      title: value.jobTitle,
+      cc: value.cc,
+      phoneNumber: value.phoneNumber,
+      profileUrl: value.profileUrl,
+      permissions: value.permissionConfigs,
+      hotelAccess: {
+        chains: [
+          {
+            id: value.brandName,
+            hotels: [
+              {
+                id: value.branchName,
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
+
   addUser(config): Observable<any> {
     return this.post(
       `/api/v1/user/${config.parentUserId}/add-user`,
       config.data
     );
+  }
+
+  updateUserDetailsById(config): Observable<any> {
+    return this.put(`/api/v1/user/${config.parentUserId}`, config.data);
+  }
+
+  getUserDetailsById(userId): Observable<any> {
+    return this.get(`/api/v1/user/${userId}`);
   }
 }

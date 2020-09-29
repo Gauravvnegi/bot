@@ -185,12 +185,6 @@
   margin-top: $margin15;
 }
 
-img {
-  border-radius: 8px;
-  height: 100px;
-  width: 100px;
-}
-
 .document-header {
   display: flex;
   margin-bottom: $margin20;
@@ -198,6 +192,7 @@ img {
   .heading {
     font-size: $font16;
     margin-right: $margin20;
+    font-weight: $bolder;
   }
   .fa {
     color: #c2c2c2;
@@ -228,8 +223,11 @@ img {
   font-size: $font14;
   font-weight: $bolder;
   margin: $margin20 30px;
-  b {
+  .accepted {
     color: #53b33e;
+  }
+  .pending {
+    color: #9eaeb8;
   }
 }
 
@@ -241,6 +239,17 @@ img {
     text-align: center;
     font-size: $font12;
     margin: 1%;
+    border: 1px dashed #d9d9d9;
+    border-radius: 8px;
+    img {
+      border-radius: 8px;
+      height: 150px;
+      width: 100%;
+    }
+    .text {
+      margin: $margin15 0;
+      font-size: $font14;
+    }
   }
 }
 
@@ -250,13 +259,33 @@ img {
   margin-right: 0;
   min-height: 60vh;
   border-right: 3px solid rgb(108, 108, 243, 0.1);
-  .wrapper {
-    padding-left: 30px;
-  }
+  // .wrapper {
+  //   margin-bottom: 25px;
+  // }
 }
 
 :host ::ng-deep .mat-group {
   position: relative;
+}
+
+.pending-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .decision-button-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: $margin10;
+    button {
+      margin: 0 $margin10;
+      border: none;
+      outline: none;
+      background: transparent;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .tab-buttons {
@@ -265,7 +294,7 @@ img {
   position: absolute;
   top: 55px;
   right: 0;
-  height: 90%;
+  height: 88%;
   z-index: 22;
   background-color: white;
   .button-wrapper {
@@ -299,15 +328,27 @@ img {
       .icon {
         padding: 5px;
         background-color: #f3fafe;
-        font-size: 10px;
-        color: #88bac2;
         border-radius: 50%;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          filter: invert(96%) sepia(59%) saturate(2493%) hue-rotate(167deg)
+            brightness(83%) contrast(80%);
+          height: 10px;
+        }
         &:hover {
           cursor: pointer;
-          color: white;
-          font-size: 12px;
           padding: 7px;
           background-color: #4b56c0;
+          height: 30px;
+          width: 30px;
+          img {
+            filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(191deg)
+              brightness(108%) contrast(102%);
+          }
         }
       }
     }

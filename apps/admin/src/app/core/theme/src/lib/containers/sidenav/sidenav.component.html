@@ -36,7 +36,7 @@
           [style.color]="rla.isActive ? activeFontColor : normalFontColor"
           [style.padding]="'0px 10px'"
         >
-          <mat-icon>{{ menuItem.icon }}</mat-icon>
+          <!-- <mat-icon>{{ menuItem.icon }}</mat-icon> -->
           <img [src]="menuItem.url" class="svg-icon" />
           <span *ngIf="isExpanded">{{ menuItem.title }}</span>
         </a>

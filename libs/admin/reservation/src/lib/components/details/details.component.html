@@ -160,9 +160,21 @@
             <hr class="data-seperator" />
             <mat-label class="mat-head">Health Declaration</mat-label>
             <ng-container>
-              <p class="health-status">
-                Health Declaration Status :&nbsp;<b>Accepted</b>
-              </p>
+              <div class="pending-button-wrapper">
+                <p class="health-status">
+                  Health Declaration Status :&nbsp;<b class="accepted"
+                    >Accepted</b
+                  >
+                </p>
+                <div class="decision-button-wrapper">
+                  <button class="right">
+                    <img src="assets/svg/tick.svg" />
+                  </button>
+                  <button class="right">
+                    <img src="assets/svg/cross.svg" />
+                  </button>
+                </div>
+              </div>
             </ng-container>
           </div>
         </form>
@@ -212,14 +224,18 @@
                   </div> -->
                   <div class="upload-image">
                     <img [src]="document.get('frontUrl').value" />
-                    <p>{{ document.get('documentType').value }} FIRST PAGE</p>
+                    <p class="text">
+                      {{ document.get('documentType').value }} FIRST PAGE
+                    </p>
                   </div>
                   <div
                     class="upload-image"
                     *ngIf="document.get('documentType').value != 'VISA'"
                   >
                     <img [src]="document.get('backUrl').value" />
-                    <p>{{ document.get('documentType').value }} BACK PAGE</p>
+                    <p class="text">
+                      {{ document.get('documentType').value }} BACK PAGE
+                    </p>
                   </div>
                   <!-- <mat-form-field>
                     <mat-label>Add Remark:</mat-label>
@@ -229,6 +245,23 @@
               </ng-container>
             </form>
           </div>
+          <hr class="data-seperator" />
+          <mat-label class="mat-head">Documents</mat-label>
+          <!-- <ng-container> -->
+          <div class="pending-button-wrapper">
+            <p class="health-status" style="margin-left: 0;">
+              Document Verification Status :&nbsp;<b class="pending">Pending</b>
+            </p>
+            <div class="decision-button-wrapper">
+              <button class="right">
+                <img src="assets/svg/tick.svg" />
+              </button>
+              <button class="right">
+                <img src="assets/svg/cross.svg" />
+              </button>
+            </div>
+          </div>
+          <!-- </ng-container> -->
         </div>
       </mat-tab>
       <mat-tab label="Package">
@@ -363,16 +396,28 @@
       </div>
       <div class="right-bottom-icons">
         <div class="social-icons">
-          <i class="fas fa-paper-plane icon"></i>
+          <!-- <i class="fas fa-paper-plane icon"></i> -->
+          <div class="icon">
+            <img src="assets/svg/telegram.svg" />
+          </div>
         </div>
         <div class="social-icons">
-          <i class="fas fa-paper-plane icon"></i>
+          <!-- <i class="fas fa-paper-plane icon"></i> -->
+          <div class="icon">
+            <img src="assets/svg/whatsapp.svg" />
+          </div>
         </div>
         <div class="social-icons">
-          <i class="fas fa-paper-plane icon"></i>
+          <!-- <i class="fas fa-paper-plane icon"></i> -->
+          <div class="icon">
+            <img src="assets/svg/messenger.svg" />
+          </div>
         </div>
         <div class="social-icons">
-          <i class="fas fa-paper-plane icon"></i>
+          <!-- <i class="fas fa-paper-plane icon"></i> -->
+          <div class="icon">
+            <img src="assets/svg/share.svg" />
+          </div>
         </div>
       </div>
     </div>

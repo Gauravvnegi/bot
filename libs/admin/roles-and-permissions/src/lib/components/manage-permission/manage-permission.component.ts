@@ -9,6 +9,10 @@ import {
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { CountryCode } from '../../../../../../shared/models/country-code.model';
+import { Regex } from '../../../../../../shared/constants/regex';
+import { ManagePermissionService } from '../../services/manage-permission.service';
+import { SnackBarService } from 'libs/shared/material/src';
+
 @Component({
   selector: 'hospitality-bot-manage-permission',
   templateUrl: './manage-permission.component.html',
@@ -18,15 +22,21 @@ export class ManagePermissionComponent implements OnInit {
   brandNames: [];
   branchNames: [];
   countries = new CountryCode().getByLabelAndValue();
-
   userPermissions;
   userForm: FormGroup;
+  managedBy: {
+    firstName: string;
+    lastName: string;
+    title: string;
+  };
 
   value;
   constructor(
     private _fb: FormBuilder,
     private _userDetailService: UserDetailService,
-    private _hotelDetailService: HotelDetailService
+    private _hotelDetailService: HotelDetailService,
+    private _managePermissionService: ManagePermissionService,
+    private _snackbarService: SnackBarService
   ) {
     this.initUserForm();
   }
@@ -40,7 +50,7 @@ export class ManagePermissionComponent implements OnInit {
       branchName: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
     });
@@ -49,16 +59,29 @@ export class ManagePermissionComponent implements OnInit {
   ngOnInit(): void {
     this.initLOV();
     this.initUserPermissions();
+    this.initManager();
     this.registerListeners();
+  }
+
+  initManager() {
+    const { firstName, lastName, title } = this._userDetailService.userDetails;
+    this.managedBy = {
+      firstName,
+      lastName,
+      title,
+    };
   }
 
   registerListeners() {
     this.userForm.get('branchName').disable();
+    this.listenForBrandChanges();
+  }
+
+  listenForBrandChanges() {
     this.userForm.get('brandName').valueChanges.subscribe((brandId) => {
       const { branches } = this.brandNames.find(
         (brand) => brand['id'] == brandId
       );
-
       this.branchNames = branches;
       this.userForm.get('branchName').enable();
     });
@@ -66,17 +89,14 @@ export class ManagePermissionComponent implements OnInit {
 
   initLOV() {
     this.setBrandLOV();
-    this.setBranchLOV();
   }
 
   setBrandLOV() {
     this.brandNames = this._hotelDetailService.hotelDetails.brands;
   }
 
-  setBranchLOV() {}
-
   initUserPermissions() {
-    const { permissionConfigs } = this._userDetailService.userPermissions;
+    const { permissionConfigs } = this._userDetailService.userDetails;
     this.userPermissions = permissionConfigs;
 
     permissionConfigs.forEach((config, index) => {
@@ -110,9 +130,9 @@ export class ManagePermissionComponent implements OnInit {
   }
 
   savePermission() {
-    let values = this.userForm.getRawValue();
+    let formValue = this.userForm.getRawValue();
 
-    values.permissionConfigs.forEach((config, configIndex) => {
+    formValue.permissionConfigs.forEach((config, configIndex) => {
       const permissionFA = this.permissionConfigsFA
         .at(configIndex)
         .get('permissions') as FormGroup;
@@ -130,7 +150,29 @@ export class ManagePermissionComponent implements OnInit {
       });
     });
 
-    this.value = { ...values };
+    this.value = { ...formValue };
+
+    let data = this._managePermissionService.modifyPermissionDetails(
+      this.value
+    );
+
+    this._managePermissionService
+      .addUser({
+        data,
+        parentUserId: this._userDetailService.getLoggedInUserid(),
+      })
+      .subscribe(
+        (res) => {
+          this._snackbarService.openSnackBarAsText(
+            'User Added sucessfull.',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        (error) => {
+          this._snackbarService.openSnackBarAsText(error.error.message);
+        }
+      );
   }
 
   get permissionConfigsFA() {

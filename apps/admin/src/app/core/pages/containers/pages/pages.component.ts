@@ -18,7 +18,7 @@ export class PagesComponent implements OnInit {
 
   ngOnInit(): void {
     const userDetails = this._route.snapshot.data['userDetails'];
-    this._userDetailService.userDetails = userDetails;
+    // this._userDetailService.userDetails = userDetails;
     this._userDetailService.initUserDetails(userDetails);
     this._hotelDetailService.initHotelDetails(userDetails);
   }

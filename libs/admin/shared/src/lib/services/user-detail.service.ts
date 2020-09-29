@@ -5,10 +5,9 @@ import { UserConfig } from '../../../../shared/src/lib/models/userConfig.model';
 @Injectable({ providedIn: 'root' })
 export class UserDetailService extends ApiService {
   userDetails;
-  userPermissions;
 
   initUserDetails(data) {
-    this.userPermissions = new UserConfig().deserialize(data);
+    this.userDetails = new UserConfig().deserialize(data);
   }
 
   setLoggedInUserId(userId) {

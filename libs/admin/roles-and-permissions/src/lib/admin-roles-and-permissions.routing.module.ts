@@ -7,6 +7,10 @@ const appRoutes: Route[] = [
     path: '',
     component: ManagePermissionComponent,
   },
+  {
+    path: ':id',
+    component: ManagePermissionComponent,
+  },
 ];
 
 @NgModule({

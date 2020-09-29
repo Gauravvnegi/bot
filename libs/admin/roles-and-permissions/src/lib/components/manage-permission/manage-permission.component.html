@@ -2,7 +2,10 @@
   <header class="wrapper-header">
     <p class="text">Add User</p>
     <div class="manage-box">
-      <p>Manage By : Avyukt Sharma, Admin</p>
+      <p>
+        Manage By : {{ managedBy.firstName }} {{ managedBy.lastName }},
+        {{ managedBy.title }}
+      </p>
     </div>
   </header>
   <form [formGroup]="userForm">
@@ -150,6 +153,14 @@
               "
             >
               Email is required
+            </mat-error>
+            <mat-error
+              *ngIf="
+                userForm.get('email').touched &&
+                userForm.get('email').hasError('pattern')
+              "
+            >
+              Please enter the valid Email
             </mat-error>
           </mat-form-field>
         </div>

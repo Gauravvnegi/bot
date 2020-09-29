@@ -1,8 +1,14 @@
 <div class="wrapper">
   <header class="wrapper-header">
-    <p class="text">Add User</p>
-    <div class="manage-box">
-      <p>Manage By : Avyukt Sharma, Admin</p>
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <p class="label">Add User</p>
+    </div>
+    <div class="edit-wrapper">
+      <div class="manage-box">
+        <p>Manage By : Avyukt Sharma, Admin</p>
+      </div>
+      <!-- <p class="text">Edit user</p> -->
     </div>
   </header>
   <form [formGroup]="userForm">
@@ -41,7 +47,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="feilds">
+      <div class="feilds" style="justify-content: space-between;">
         <div class="feild width-trio">
           <mat-label class="mat-label">Job Title :</mat-label>
           <mat-form-field>
@@ -107,14 +113,10 @@
         </div>
       </div>
       <div class="feilds">
-        <div style="width: 38%;" class="feild">
+        <div style="width: 38%; margin-right: 5%;" class="feild">
           <mat-label class="mat-label">Phone No. :</mat-label>
-          <mat-form-field>
-            <mat-select
-              formControlName="cc"
-              style="width: 30%; margin-right: 10px;"
-              class="phone-no"
-            >
+          <mat-form-field class="phone-no">
+            <mat-select formControlName="cc">
               <!-- <option value="" selected>None</option> -->
               <mat-option
                 *ngFor="let country of countries"
@@ -175,10 +177,9 @@
       </div>
     </div>
     <pre>
-    {{ userForm.getRawValue() | json }}
+    <!-- {{ userForm.getRawValue() | json }} -->
 
-  </pre
-    >
+  </pre>
 
     <!-- ****************Permission Wrapper**************** -->
     <div class="wrapper-manage-permission">
@@ -211,14 +212,14 @@
               <p class="label">View</p>
               <p class="paragraph">View General & Sensitive Info</p>
               <div class="float-box">
-                <img src="assets/svg/edit.svg" />
+                <img src="assets/svg/View.svg" />
               </div>
             </div>
             <div class="box">
               <p class="label">Manage</p>
               <p class="paragraph">Create/Delete/Edit Source of Data</p>
               <div class="float-box">
-                <img src="assets/svg/edit.svg" />
+                <img src="assets/svg/Manage.svg" />
               </div>
             </div>
             <div class="box">
@@ -227,7 +228,7 @@
                 Approve/Reject (By Default includes sensitive info)o
               </p>
               <div class="float-box">
-                <img src="assets/svg/edit.svg" />
+                <img src="assets/svg/Action.svg" />
               </div>
             </div>
           </div>
@@ -238,11 +239,10 @@
                 let oddIdx = odd;
                 let userPermissionIdx = index
               "
-              class="checkbox-wrapper"
               [ngClass]="oddIdx ? 'color-added' : ''"
             >
               <div formGroupName="{{ userPermissionIdx }}">
-                <div formGroupName="permissions">
+                <div formGroupName="permissions" class="checkbox-wrapper">
                   <mat-checkbox
                     formControlName="view"
                     [checked]="
@@ -280,11 +280,13 @@
         </div> -->
         </div>
       </div>
+      <div class="permission-button-wrapper">
+        <button (click)="savePermission()">Save</button>
+      </div>
     </div>
   </form>
 </div>
 
-<button (click)="savePermission()">Save</button>
 <!-- <pre>
   {{ value | json }}
 

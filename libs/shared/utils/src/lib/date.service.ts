@@ -16,8 +16,8 @@ export class DateService {
     return moment.unix(inputTimeStamp / 1000).format('DD-MM-YYYY');
   }
 
-  currentDate() {
-    return this.convertTimestampToDate(moment.now());
+  currentDate(format?) {
+    return this.convertTimestampToDate(moment.now(),format);
   }
 
   getCurrentDateWithFormat(format: string = 'DD-MM-YYYY') {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -9,11 +9,11 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-  guestDetailsForm: FormGroup;
-  documentsdetailsForm: FormGroup;
-  reservationDetailsForm: FormGroup;
-  selectedGuest;
-  selectedDocument;
+  
+  detailsForm: FormGroup;
+  dataSource;
+  selectedGuestGroup;
+  selectedGuestId;
   primaryGuest;
   guestDetails;
   items = [
@@ -21,36 +21,55 @@ export class DetailsComponent implements OnInit {
     { label: 'Current Booking', icon: '' },
   ];
 
+  PaymentData = [
+    {description: 'Room Rental', unit: '1', unitPrice: 1000, amount: 3000, CGST:'5%', SGST:'9%', discount:'', totalAmount:''},
+    {description: 'Breakfast', unit: '2', unitPrice: 1500, amount: 3000, CGST:'5%', SGST:'9%', discount:'', totalAmount:''},
+    {description: 'Spa', unit: '1', unitPrice: 1000, amount: 1000, CGST:'5%', SGST:'9%', discount:'', totalAmount:''}
+  ];
+
+  displayedColumns: string[] = ['description', 'unit', 'unitPrice', 'amount', 'CGST', 'SGST', 'discount', 'totalAmount'];
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService
   ) {
-    this.initGuestDetailForm();
-    this.initReservationForm();
+   this.initDetailsForm()
   }
 
   ngOnInit(): void {
+    this.dataSource = this.PaymentData;
     this.getReservationDetails();
   }
 
   getReservationDetails() {
     this._reservationService
-      .getReservationDetails('e5997cce-49bd-4a92-a013-dec264c47e68')
+      .getReservationDetails('c4cd8e80-d21b-4496-ac56-85edf9a4ca0d')
       .subscribe((response) => {
         this.guestDetails = new Details().deserialize(response);
+        console.log(this.guestDetails);
         this.addGuests(this.guestDetails);
+        // this.addPackages();
       });
   }
 
+  initDetailsForm(){
+    this.detailsForm = this._fb.group({
+      reservationForm : this.initReservationForm(),
+      stayDetails : this.initStayDetailsForm(),
+      guestDetails: this.initGuestDetailForm(),
+      packageDetailsForm : this.initPackageDetailsForm(),
+      paymentdetailsForm : this.initPaymentDetailsForm()
+    })
+  }
+
   initReservationForm() {
-    this.reservationDetailsForm = this._fb.group({
+    return this._fb.group({
       bookingId: [''],
       roomNumber: [''],
     });
   }
 
-  initGuestDetailForm() {
-    this.guestDetailsForm = this._fb.group({
+  initStayDetailsForm() {
+    return this._fb.group({
       arrivalTime: [''],
       departureTime: [''],
       expectedArrivalTime: [''],
@@ -60,6 +79,36 @@ export class DetailsComponent implements OnInit {
     });
   }
 
+  initGuestDetailForm() {
+    return this._fb.group({
+    });
+  }
+
+  initPackageDetailsForm(){
+    return this._fb.group({
+    })
+  }
+
+  initPaymentDetailsForm(){
+    return this._fb.group({
+      bookingId: [''],
+      arrivalTime: [''],
+      departureTime: [''],
+      currentDate: [''],
+      expectedArrivalTime: [''],
+      roomType: [''],
+      roomNumber: [''],
+      kidsCount: [''],
+      adultsCount: [''],
+      roomsCount:[''],
+      title: [''],
+      firstName: [''],
+      lastName: [''],
+      countryCode: [''],
+      phoneNumber: [''],
+    })
+  }
+
   getDocumentFG(): FormGroup {
     return this._fb.group({
       id: [''],
@@ -67,7 +116,36 @@ export class DetailsComponent implements OnInit {
       frontUrl: [''],
       backUrl: [''],
       verificationStatus: [''],
+      remark:['']
     });
+  }
+
+  getGuestFG(): FormGroup {
+    return this._fb.group({
+      id: [''],
+      title: [''],
+      firstName: [''],
+      lastName: [''],
+      countryCode: [''],
+      phoneNumber: [''],
+      email: [''],
+      isPrimary: ['']
+    });
+  }
+
+  getPackageFG(): FormGroup {
+    return this._fb.group({
+      id: [''],
+      quantity: [''],
+      rate: [''],
+      imgUrl: [''],
+      amenityName: [''],
+      packageCode: [''],
+      amenityDescription: [''],
+      type: [''],
+      active: [''],
+      metadata: ['']
+    })
   }
 
   addGuests(guestDetail) {
@@ -87,7 +165,7 @@ export class DetailsComponent implements OnInit {
     this.guests.controls.forEach((element: FormGroup, index) => {
       element.addControl('documents', new FormArray([]));
       let controlFA = element.get('documents') as FormArray;
-      this.guestDetails.guestDetails[index].documentDetails.docFile.forEach(
+      this.guestDetails.guestDetails[index].documents.forEach(
         (doc) => {
           controlFA.push(this.getDocumentFG());
         }
@@ -95,36 +173,47 @@ export class DetailsComponent implements OnInit {
     });
   }
 
+  addPackages(){
+    this.packageDetailsForm.addControl('complementaryPackage',new FormArray([]));
+    this.packageDetailsForm.addControl('paidPackage',new FormArray([]));
+    let complementaryControlFA = this.packageDetailsForm.get('complementaryPackage') as FormArray;
+    let paidControlFA = this.packageDetailsForm.get('paidPackage') as FormArray;
+
+    this.guestDetails.amenitiesDetails.complementaryPackage.forEach(() => {
+      complementaryControlFA.push(this.getPackageFG());
+    });
+
+    this.guestDetails.amenitiesDetails.paidPackage.forEach(() => {
+      paidControlFA.push(this.getPackageFG());
+    });
+
+    // this.packageDetailsForm.patchValue(this.guestDetails.amenitiesDetails);
+  }
+
   setDefaultGuestForDocument() {
     this.guestDetails.guestDetails.forEach((guest) => {
       if (guest.isPrimary === true) {
-        this.selectedGuest = guest.id;
+        this.selectedGuestId = guest.id;
       }
       this.onGuestChange(guest.id);
     });
   }
 
   mapValuesInForm() {
-    this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
-    this.guestDetailsForm
-      .get('guests')
-      .patchValue(this.guestDetails.guestDetails);
-    this.guests.controls.forEach((guest, index) => {
-      guest
-        .get('documents')
-        .patchValue(
-          this.guestDetails.guestDetails[index].documentDetails.docFile
-        );
-    });
-    this.reservationDetailsForm.patchValue(
-      this.guestDetails.reservationDetails
-    );
+
+    // will use patchValue only once , needs to be modified
+    this.guests.patchValue(this.guestDetails.guestDetails);
+    this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
+    this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
+    this.paymentDetailsForm.patchValue(this.guestDetails.paymentDetails);
+    console.log('tripti', this.detailsForm);
   }
 
   onGuestChange(value) {
     this.guests.controls.forEach((guest) => {
       if (guest.get('id').value === value) {
-        this.selectedDocument = guest.get('documents');
+        this.selectedGuestId = value;
+        this.selectedGuestGroup = guest;
       }
     });
   }
@@ -137,21 +226,27 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  getGuestFG(): FormGroup {
-    return this._fb.group({
-      id: [''],
-      title: [''],
-      firstName: [''],
-      lastName: [''],
-      countryCode: [''],
-      phoneNumber: [''],
-      email: [''],
-      isPrimary: [''],
-      remark: [''],
-    });
-  }
-
   get guests(): FormArray {
     return this.guestDetailsForm.get('guests') as FormArray;
+  }
+
+  get reservationDetailsForm(){
+    return this.detailsForm.get('reservationForm')as FormGroup;
+  } 
+
+  get stayDetailsForm(){
+    return this.detailsForm.get('stayDetails')as FormGroup;
+  }
+
+  get guestDetailsForm(){
+    return this.detailsForm.get('guestDetails')as FormGroup;
+  }
+
+  get packageDetailsForm(){
+    return this.detailsForm.get('packageDetailsForm') as FormGroup;
+  }
+
+  get paymentDetailsForm(){
+    return this.detailsForm.get('paymentdetailsForm') as FormGroup;
   }
 }

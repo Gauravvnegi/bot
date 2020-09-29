@@ -174,58 +174,10 @@
 .form-wrapper {
   display: flex;
   .left {
-    width: 85%;
+    width: 80%;
     margin: $margin20;
     margin-right: 0;
     border-right: 3px solid rgb(108, 108, 243, 0.1);
-  }
-  .right {
-    width: 15%;
-    margin: $margin20;
-    .button-wrapper {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      height: 93%;
-      .button {
-        border: 1px solid #4b56c0;
-        font-size: $font12;
-        outline: none;
-        padding: 10px 0px;
-        background-color: transparent;
-        width: 100%;
-        color: #4b56c0;
-        border-radius: 25px;
-        &:hover {
-          cursor: pointer;
-          background-color: #4b56c0;
-          color: white;
-        }
-      }
-    }
-    &-bottom-icons {
-      display: flex;
-      align-items: center;
-      height: 7%;
-      .social-icons {
-        width: 25%;
-        .icon {
-          padding: 5px;
-          background-color: #f3fafe;
-          font-size: 10px;
-          color: #88bac2;
-          border-radius: 50%;
-          &:hover {
-            cursor: pointer;
-            color: white;
-            font-size: 12px;
-            padding: 7px;
-            background-color: #4b56c0;
-          }
-        }
-      }
-    }
   }
 }
 .gap {
@@ -246,5 +198,68 @@ img {
   margin: $margin20 30px;
   b {
     color: #53b33e;
+  }
+}
+
+.material-body {
+  width: 80%;
+}
+
+:host ::ng-deep .mat-group {
+  position: relative;
+}
+
+.tab-buttons {
+  width: 18%;
+  padding: $padding20;
+  position: absolute;
+  top: 11%;
+  right: 0;
+  height: 90%;
+  z-index: 22;
+  background-color: white;
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 93%;
+    .button {
+      border: 1px solid #4b56c0;
+      font-size: $font12;
+      outline: none;
+      padding: 10px 0px;
+      background-color: transparent;
+      width: 100%;
+      color: #4b56c0;
+      border-radius: 25px;
+      &:hover {
+        cursor: pointer;
+        background-color: #4b56c0;
+        color: white;
+      }
+    }
+  }
+  .right-bottom-icons {
+    display: flex;
+    align-items: center;
+    height: 7%;
+    .social-icons {
+      width: 25%;
+      .icon {
+        padding: 5px;
+        background-color: #f3fafe;
+        font-size: 10px;
+        color: #88bac2;
+        border-radius: 50%;
+        &:hover {
+          cursor: pointer;
+          color: white;
+          font-size: 12px;
+          padding: 7px;
+          background-color: #4b56c0;
+        }
+      }
+    }
   }
 }

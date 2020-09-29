@@ -81,7 +81,7 @@
         <mat-icon class="material-icons" matSuffix>check_circle</mat-icon>
         <p class="text">Health Declaration</p>
       </button>
-      <p-dropdown [options]="items">
+      <p-dropdown [options]="bookingList">
         <ng-template let-item pTemplate="selectedItem">
           <span style="vertical-align: middle; margin-left: 5px;"
             >Current Booking</span
@@ -94,7 +94,7 @@
     <mat-tab-group>
       <mat-tab label="Guest Details">
         <form class="form-wrapper" [formGroup]="guestDetailsForm">
-          <div class="left">
+          <div class="material-body">
             <mat-label class="mat-head">Guest Info</mat-label>
             <ng-container
               formArrayName="guests"
@@ -169,7 +169,11 @@
       </mat-tab>
       <mat-tab label="Documents">
         <div class="material-body" *ngIf="guestDetails">
-          <div>
+          <div class="document-header">
+            <p class="heading">Guest Documents</p>
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </div>
+          <div class="wrapper">
             <mat-form-field>
               <mat-select
                 [(value)]="selectedGuestId"
@@ -183,8 +187,13 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
-          <div>
+            <!-- <p-dropdown [options]="bookingList">
+              <ng-template let-item pTemplate="selectedItem">
+                <span style="vertical-align: middle; margin-left: 5px;"
+                  >{{ guest.firstName }}{{ guest.lastName }}</span
+                >
+              </ng-template>
+            </p-dropdown> -->
             <form [formGroup]="selectedGuestGroup">
               <ng-container
                 formArrayName="documents"
@@ -193,30 +202,29 @@
                   let i = index
                 "
               >
-                <div [formGroupName]="i">
-                  {{ document.getRawValue() | json }}
-                  <div>
+                <div class="upload-image-wrapper" [formGroupName]="i">
+                  <!-- {{ document.getRawValue() | json }} -->
+                  <!-- <div>
                     Verification Status: Fail<mat-slide-toggle
                       formControlName="verificationStatus"
                     ></mat-slide-toggle>
                     Pass
-                  </div>
-                  <div>
+                  </div> -->
+                  <div class="upload-image">
                     <img [src]="document.get('frontUrl').value" />
-                    <span>
-                      {{ document.get('documentType').value }} FIRST PAGE
-                    </span>
+                    <p>{{ document.get('documentType').value }} FIRST PAGE</p>
                   </div>
-                  <div *ngIf="document.get('documentType').value != 'VISA'">
+                  <div
+                    class="upload-image"
+                    *ngIf="document.get('documentType').value != 'VISA'"
+                  >
                     <img [src]="document.get('backUrl').value" />
-                    <span>
-                      {{ document.get('documentType').value }} BACK PAGE
-                    </span>
+                    <p>{{ document.get('documentType').value }} BACK PAGE</p>
                   </div>
-                  <mat-form-field>
+                  <!-- <mat-form-field>
                     <mat-label>Add Remark:</mat-label>
                     <input matInput formControlName="remark" />
-                  </mat-form-field>
+                  </mat-form-field> -->
                 </div>
               </ng-container>
             </form>
@@ -224,10 +232,10 @@
         </div>
       </mat-tab>
       <mat-tab label="Package">
-        <!-- <div class="material-body">
-        <mat-label>Complementary</mat-label>
-        <mat-label>Paid</mat-label>
-      </div> -->
+        <div class="material-body">
+          <!-- <mat-label>Complementary</mat-label>
+        <mat-label>Paid</mat-label> -->
+        </div>
       </mat-tab>
 
       <mat-tab label="Payment">

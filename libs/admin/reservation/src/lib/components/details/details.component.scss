@@ -173,12 +173,13 @@
 
 .form-wrapper {
   display: flex;
-  .left {
-    width: 80%;
-    margin: $margin20;
-    margin-right: 0;
-    border-right: 3px solid rgb(108, 108, 243, 0.1);
-  }
+  // .left {
+  //   width: 80%;
+  //   margin: $margin20;
+  //   margin-right: 0;
+  //   min-height: 60vh;
+  //   border-right: 3px solid rgb(108, 108, 243, 0.1);
+  // }
 }
 .gap {
   margin-top: $margin15;
@@ -188,6 +189,37 @@ img {
   border-radius: 8px;
   height: 100px;
   width: 100px;
+}
+
+.document-header {
+  display: flex;
+  margin-bottom: $margin20;
+  align-items: center;
+  .heading {
+    font-size: $font16;
+    margin-right: $margin20;
+  }
+  .fa {
+    color: #c2c2c2;
+  }
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  border-top: none;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  display: none;
+}
+
+:host ::ng-deep .mat-select-value-text {
+  font-size: 14px;
+}
+
+:host ::ng-deep .mat-form-field-flex {
+  padding: 5px $padding10;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
 }
 
 .health-status {
@@ -201,8 +233,26 @@ img {
   }
 }
 
+.upload-image-wrapper {
+  display: flex;
+  align-items: center;
+  .upload-image {
+    width: 31%;
+    text-align: center;
+    font-size: $font12;
+    margin: 1%;
+  }
+}
+
 .material-body {
   width: 80%;
+  margin: $margin20;
+  margin-right: 0;
+  min-height: 60vh;
+  border-right: 3px solid rgb(108, 108, 243, 0.1);
+  .wrapper {
+    padding-left: 30px;
+  }
 }
 
 :host ::ng-deep .mat-group {
@@ -213,7 +263,7 @@ img {
   width: 18%;
   padding: $padding20;
   position: absolute;
-  top: 11%;
+  top: 55px;
   right: 0;
   height: 90%;
   z-index: 22;

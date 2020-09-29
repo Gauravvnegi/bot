@@ -16,7 +16,7 @@ export class DetailsComponent implements OnInit {
   selectedGuestId;
   primaryGuest;
   guestDetails;
-  items = [
+  bookingList = [
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];

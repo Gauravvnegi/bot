@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Regex } from '../../../../../../../../libs/shared/constants/regex';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { AuthService } from '../../services/auth.service';
+import { UserDetailService } from '../../../../../../../../libs/admin/shared/src/lib/services/user-detail.service';
 
 @Component({
   selector: 'admin-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
     private _fb: FormBuilder,
     private _router: Router,
     private _authService: AuthService,
+    private _userDetailService: UserDetailService,
     private _snackbarService: SnackBarService
   ) {
     this.initLoginForm();
@@ -40,13 +42,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  Login() {
+  login() {
     if (!this.loginForm.valid) {
       return;
     }
     const data = this.loginForm.getRawValue();
     this._authService.login(data).subscribe(
       (response) => {
+        this._userDetailService.setLoggedInUserId(response.id);
         this._router.navigate(['/pages']);
       },
       (error) => {

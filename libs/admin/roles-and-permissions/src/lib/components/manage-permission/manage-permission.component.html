@@ -1,9 +1,3 @@
-<!-- <div *ngFor="let permissionConfig of permissionConfigs">
-  {{ permissionConfig.label }}
-  <div *ngFor="let permission of permissionConfig.permissions">
-    {{ permission.label }}
-  </div>
-</div> -->
 <div class="wrapper">
   <header class="wrapper-header">
     <p class="text">Add User</p>
@@ -11,129 +5,287 @@
       <p>Manage By : Avyukt Sharma, Admin</p>
     </div>
   </header>
-  <div class="wrapper-form">
-    <div class="feilds">
-      <div class="feild width-half">
-        <mat-label class="mat-label">First Name :</mat-label>
-        <input class="input-feild" type="text" placeholder="" matInput />
+  <form [formGroup]="userForm">
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="feild width-half">
+          <mat-label class="mat-label">First Name :</mat-label>
+          <mat-form-field>
+            <input
+              class="input-feild"
+              formControlName="firstName"
+              type="text"
+              placeholder=""
+              matInput
+            />
+            <mat-error
+              *ngIf="
+                userForm.get('firstName').touched &&
+                userForm.get('firstName').hasError('required')
+              "
+            >
+              First name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild width-half">
+          <mat-label class="mat-label">Last Name :</mat-label>
+          <mat-form-field>
+            <input
+              class="input-feild"
+              formControlName="lastName"
+              type="text"
+              placeholder=""
+              matInput
+            />
+          </mat-form-field>
+        </div>
       </div>
-      <div class="feild width-half">
-        <mat-label class="mat-label">Last Name :</mat-label>
-        <input class="input-feild" type="text" placeholder="" matInput />
+      <div class="feilds">
+        <div class="feild width-trio">
+          <mat-label class="mat-label">Job Title :</mat-label>
+          <mat-form-field>
+            <input
+              class="input-feild"
+              formControlName="jobTitle"
+              type="text"
+              placeholder=""
+              matInput
+            />
+            <mat-error
+              *ngIf="
+                userForm.get('jobTitle').touched &&
+                userForm.get('jobTitle').hasError('required')
+              "
+            >
+              Job title is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild width-trio">
+          <mat-label class="mat-label">Brand Name :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="brandName">
+              <!-- <option value="" selected>None</option> -->
+
+              <mat-option
+                *ngFor="let brandName of brandNames"
+                [value]="brandName.value"
+                >{{ brandName.label }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('brandName').touched &&
+                userForm.get('brandName').hasError('required')
+              "
+            >
+              Brand name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild width-trio">
+          <mat-label class="mat-label">Branch :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="branchName">
+              <!-- <option value="" selected>None</option> -->
+              <mat-option
+                *ngFor="let branch of branchNames"
+                [value]="branch.value"
+                >{{ branch.label }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('branchName').touched &&
+                userForm.get('branchName').hasError('required')
+              "
+            >
+              Branch is required
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-    <div class="feilds">
-      <div class="feild width-trio">
-        <mat-label class="mat-label">Job Title :</mat-label>
-        <input class="input-feild" type="text" placeholder="" matInput />
+      <div class="feilds">
+        <div style="width: 38%;" class="feild">
+          <mat-label class="mat-label">Phone No. :</mat-label>
+          <mat-form-field>
+            <mat-select
+              formControlName="cc"
+              style="width: 30%; margin-right: 10px;"
+              class="phone-no"
+            >
+              <!-- <option value="" selected>None</option> -->
+              <mat-option
+                *ngFor="let country of countries"
+                [value]="country.value"
+                >{{ country.label }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              formControlName="phoneNumber"
+              class="input-feild"
+              type="text"
+              placeholder=""
+              matInput
+            />
+          </mat-form-field>
+        </div>
+        <div class="feild width-half">
+          <mat-label class="mat-label">Email :</mat-label>
+          <mat-form-field>
+            <input
+              formControlName="email"
+              class="input-feild"
+              type="text"
+              placeholder=""
+              matInput
+            />
+            <mat-error
+              *ngIf="
+                userForm.get('email').touched &&
+                userForm.get('email').hasError('required')
+              "
+            >
+              Email is required
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="feild width-trio">
-        <mat-label class="mat-label">Hotel Name :</mat-label>
-        <mat-select>
-          <!-- <option value="" selected>None</option> -->
-          <mat-option *ngFor="let option of hotelNames" [value]="option.key">{{
-            option.value
-          }}</mat-option>
-        </mat-select>
-      </div>
-      <div class="feild width-trio">
-        <mat-label class="mat-label">Branch :</mat-label>
-        <mat-select>
-          <!-- <option value="" selected>None</option> -->
-          <mat-option *ngFor="let option of branchNames" [value]="option.key">{{
-            option.value
-          }}</mat-option>
-        </mat-select>
-      </div>
-    </div>
-    <div class="feilds">
-      <div style="width: 38%;" class="feild">
-        <mat-label class="mat-label">Phone No. :</mat-label>
-        <mat-select style="width: 30%; margin-right: 10px;" class="phone-no">
-          <!-- <option value="" selected>None</option> -->
-          <mat-option *ngFor="let option of branchNames" [value]="option.key">{{
-            option.value
-          }}</mat-option>
-        </mat-select>
-        <input class="input-feild" type="text" placeholder="" matInput />
-      </div>
-      <div class="feild width-half">
-        <mat-label class="mat-label">Email :</mat-label>
-        <input class="input-feild" type="text" placeholder="" matInput />
-      </div>
-    </div>
-    <div class="feilds image-wrapper">
-      <div class="image">
-        <img src="assets/dummy.png" />
-      </div>
-      <img class="material-icons" src="assets/svg/edit.svg" />
-      <img class="material-icons" src="assets/svg/delete.svg" />
-    </div>
-    <div class="feilds margin-adjust">
-      <div class="image-button">
-        <mat-label class="text">Image :</mat-label>
-        <button class="button">Choose File</button>
-        <p class="image-name">John.jpg</p>
-      </div>
-    </div>
-    <div class="feilds margin-adjust">
-      <div class="note">
-        Recommended dimension (in px) : 60*60
-      </div>
-    </div>
-  </div>
-  <div class="wrapper-manage-permission">
-    <p class="header">
-      Manage Permissions
-    </p>
-    <div class="permission-table-header">
-      <div class="left-table">
+      <div class="feilds image-wrapper">
         <div class="image">
-          <img src="assets/svg/roles.svg" />
+          <img src="assets/dummy.png" />
         </div>
-        <p class="left-table-header">Entity</p>
-        <p class="left-table-entity">Packages (Pre-arrival Request)</p>
-        <p class="left-table-entity color-added">
-          Arrival(Pre-checkin/ Checkin)
-        </p>
+        <img class="material-icons" src="assets/svg/edit.svg" />
+        <img class="material-icons" src="assets/svg/delete.svg" />
       </div>
-      <div class="right-table">
-        <div class="box-wrapper">
-          <div class="box">
-            <p class="label">View</p>
-            <p class="paragraph">View General & Sensitive Info</p>
-            <div class="float-box">
-              <img src="assets/svg/edit.svg" />
-            </div>
-          </div>
-          <div class="box">
-            <p class="label">Manage</p>
-            <p class="paragraph">Create/Delete/Edit Source of Data</p>
-            <div class="float-box">
-              <img src="assets/svg/edit.svg" />
-            </div>
-          </div>
-          <div class="box">
-            <p class="label">Actions(User Submission)</p>
-            <p class="paragraph">
-              Approve/Reject (By Default includes sensitive info)o
-            </p>
-            <div class="float-box">
-              <img src="assets/svg/edit.svg" />
-            </div>
-          </div>
+      <div class="feilds margin-adjust">
+        <div class="image-button">
+          <mat-label class="text">Image :</mat-label>
+          <button class="button">Choose File</button>
+          <p class="image-name">John.jpg</p>
         </div>
-        <div class="checkbox-wrapper">
-          <mat-checkbox [checked]="true"></mat-checkbox>
-          <mat-checkbox [disabled]="true"></mat-checkbox>
-          <mat-checkbox></mat-checkbox>
-        </div>
-        <div class="checkbox-wrapper color-added">
-          <mat-checkbox></mat-checkbox>
-          <mat-checkbox [disabled]="true"></mat-checkbox>
-          <mat-checkbox></mat-checkbox>
+      </div>
+      <div class="feilds margin-adjust">
+        <div class="note">
+          Recommended dimension (in px) : 60*60
         </div>
       </div>
     </div>
-  </div>
+    <pre>
+    {{ userForm.getRawValue() | json }}
+
+  </pre
+    >
+
+    <!-- ****************Permission Wrapper**************** -->
+    <div class="wrapper-manage-permission">
+      <p class="header">
+        Manage Permissions
+      </p>
+      <div class="permission-table-header">
+        <div class="left-table">
+          <div class="image">
+            <img src="assets/svg/roles.svg" />
+          </div>
+          <p class="left-table-header">Entity</p>
+          <p
+            *ngFor="
+              let userPermissionFG of permissionConfigsFA['controls'];
+              let oddIdx = odd
+            "
+            class="left-table-entity"
+            [ngClass]="oddIdx ? 'color-added' : ''"
+          >
+            {{ userPermissionFG.get('label').value }}
+          </p>
+          <!-- <p class="left-table-entity color-added">
+          Arrival(Pre-checkin/ Checkin)
+        </p> -->
+        </div>
+        <div class="right-table">
+          <div class="box-wrapper">
+            <div class="box">
+              <p class="label">View</p>
+              <p class="paragraph">View General & Sensitive Info</p>
+              <div class="float-box">
+                <img src="assets/svg/edit.svg" />
+              </div>
+            </div>
+            <div class="box">
+              <p class="label">Manage</p>
+              <p class="paragraph">Create/Delete/Edit Source of Data</p>
+              <div class="float-box">
+                <img src="assets/svg/edit.svg" />
+              </div>
+            </div>
+            <div class="box">
+              <p class="label">Actions(User Submission)</p>
+              <p class="paragraph">
+                Approve/Reject (By Default includes sensitive info)o
+              </p>
+              <div class="float-box">
+                <img src="assets/svg/edit.svg" />
+              </div>
+            </div>
+          </div>
+          <div formArrayName="permissionConfigs">
+            <div
+              *ngFor="
+                let userPermissionFG of permissionConfigsFA['controls'];
+                let oddIdx = odd;
+                let userPermissionIdx = index
+              "
+              class="checkbox-wrapper"
+              [ngClass]="oddIdx ? 'color-added' : ''"
+            >
+              <div formGroupName="{{ userPermissionIdx }}">
+                <div formGroupName="permissions">
+                  <mat-checkbox
+                    formControlName="view"
+                    [checked]="
+                      userPermissionFG.get('permissions').get('view').value == 1
+                        ? true
+                        : false
+                    "
+                  ></mat-checkbox>
+                  <mat-checkbox
+                    formControlName="manage"
+                    [checked]="
+                      userPermissionFG.get('permissions').get('manage').value ==
+                      1
+                        ? true
+                        : false
+                    "
+                  ></mat-checkbox>
+                  <mat-checkbox
+                    formControlName="action"
+                    [checked]="
+                      userPermissionFG.get('permissions').get('action').value ==
+                      1
+                        ? true
+                        : false
+                    "
+                  ></mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="checkbox-wrapper color-added">
+          <mat-checkbox></mat-checkbox>
+          <mat-checkbox [disabled]="true"></mat-checkbox>
+          <mat-checkbox></mat-checkbox>
+        </div> -->
+        </div>
+      </div>
+    </div>
+  </form>
 </div>
+
+<button (click)="savePermission()">Save</button>
+<!-- <pre>
+  {{ value | json }}
+
+</pre> -->

@@ -2,11 +2,15 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '../../../../../../libs/admin/dashboard/src/lib/components/dashboard/dashboard.component';
+import { UserDetailResolver } from './resolvers/user-detail.resolver';
 
 const appRoutes: Route[] = [
   {
     path: '',
     component: PagesComponent,
+    resolve: {
+      userDetails: UserDetailResolver,
+    },
     children: [
       {
         path: 'dashboard',

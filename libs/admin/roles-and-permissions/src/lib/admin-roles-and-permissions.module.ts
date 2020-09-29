@@ -4,8 +4,15 @@ import { ManagePermissionComponent } from './components/manage-permission/manage
 import { SharedMaterialModule } from 'libs/shared/material/src';
 
 import { AdminRolesAndPermissionsRoutingModule } from './admin-roles-and-permissions.routing.module';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 @NgModule({
-  imports: [CommonModule, AdminRolesAndPermissionsRoutingModule , SharedMaterialModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AdminRolesAndPermissionsRoutingModule,
+    SharedMaterialModule,
+  ],
   declarations: [ManagePermissionComponent],
 })
 export class AdminRolesAndPermissionsModule {}

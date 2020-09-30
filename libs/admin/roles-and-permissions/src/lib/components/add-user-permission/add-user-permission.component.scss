@@ -128,6 +128,7 @@
         border-right: 2px solid rgb(61, 187, 230, 0.1);
         .image {
           padding: 0 $padding15;
+          margin: 5px 0;
         }
         &-header {
           font-size: $font16;
@@ -150,12 +151,12 @@
         .box-wrapper {
           display: flex;
           align-items: center;
-          margin-bottom: 5.25%;
+          margin-bottom: 48px;
           padding-left: 2%;
           .box {
             width: 32%;
             height: 118px;
-            margin: 1%;
+            margin: 5px;
             background-color: #f1f5f8;
             border-radius: 5px;
             position: relative;
@@ -171,7 +172,7 @@
               color: #787e81;
               font-size: 13px;
               letter-spacing: 0.9px;
-              margin-top: 15px;
+              margin-top: 10px;
             }
             .float-box {
               height: 60px;
@@ -216,7 +217,11 @@
 :host ::ng-deep .mat-label {
   font-size: $font14;
   color: #9eaeb8;
-  width: 50%;
+  width: 95px;
+}
+
+:host ::ng-deep .mat-select-arrow{
+  border-top-color: #9eaeb8;
 }
 
 :host ::ng-deep .phone-no > .mat-form-field-wrapper {
@@ -279,11 +284,6 @@
 .width-trio {
   width: 30%;
 }
-
-// :host ::ng-deep .input-feild,
-// .mat-select {
-//   border-bottom: 1px solid #9eaeb8;
-// }
 
 .color-added {
   background-color: #f8f8f8;

@@ -1,0 +1,11 @@
+.add-user {
+  background: transparent;
+  border: none;
+  outline: none;
+  margin-right: 20px;
+  color: #9eaeb8;
+  font-size: 14px;
+  &:hover {
+    cursor: pointer;
+  }
+}

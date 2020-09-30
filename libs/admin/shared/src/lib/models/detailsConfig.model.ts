@@ -40,6 +40,7 @@ export class Details implements Deserializable{
     this.regCardDetails = new RegCardConfig().deserialize(input.guestDetails.primaryGuest)
     this.amenitiesDetails = new PackageDetailsConfig().mapPackage(input.specialAmenities);
     this.paymentDetails = new PaymentDetailsConfig().deserialize(input);
+    this.healDeclarationDetails = new HealthDeclarationConfig().deserialize(input);
 
     return this;
   }
@@ -146,8 +147,16 @@ export class ContactDetailsConfig implements Deserializable {
   }
 }
 
-export class HealthDeclarationConfig {
-  isAccepted = false;
+export class HealthDeclarationConfig implements Deserializable{
+  isAccepted;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'isAccepted', 'Pending'),
+    )
+    return this;
+  }
 }
 
 export class ReservationDetailsConfig implements Deserializable{

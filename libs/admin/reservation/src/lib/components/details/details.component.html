@@ -161,7 +161,9 @@
             <mat-label class="mat-head">Health Declaration</mat-label>
             <ng-container>
               <p class="health-status">
-                Health Declaration Status :&nbsp;<b>Accepted</b>
+                Health Declaration Status :&nbsp;<b>{{healDeclarationForm.get('isAccepted').value}}</b>
+                <button (click)="setHealthDeclaration(true)">Right</button>
+                <button (click)="setHealthDeclaration(false)">Wrong</button>
               </p>
             </ng-container>
           </div>
@@ -196,10 +198,11 @@
                 <div [formGroupName]="i">
                   {{ document.getRawValue() | json }}
                   <div>
-                    Verification Status: Fail<mat-slide-toggle
+                    Verification Status: 
+                    <span>Pending</span>
+                    <!-- <mat-slide-toggle
                       formControlName="verificationStatus"
-                    ></mat-slide-toggle>
-                    Pass
+                    ></mat-slide-toggle> -->
                   </div>
                   <div>
                     <img [src]="document.get('frontUrl').value" />
@@ -224,10 +227,10 @@
         </div>
       </mat-tab>
       <mat-tab label="Package">
-        <!-- <div class="material-body">
+        <div class="material-body">
         <mat-label>Complementary</mat-label>
         <mat-label>Paid</mat-label>
-      </div> -->
+      </div>
       </mat-tab>
 
       <mat-tab label="Payment">
@@ -342,16 +345,54 @@
                     *matRowDef="let row; columns: displayedColumns"
                   ></tr>
                 </table>
+                <div>
+                  <mat-label>Total Amount:</mat-label>
+                  <span>INR 3842</span>
+                  <mat-label>Total Savings:</mat-label>
+                  <span>INR 40</span>
+                  <mat-label>Paid Amount:</mat-label>
+                  <span>xxx</span>
+                  <mat-label>Due Amount:</mat-label>
+                  <span>xxxx</span>
+                </div>
               </mat-expansion-panel>
             </mat-accordion>
+
+            <div>
+              <span>Guest Signature</span>
+              <img src="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/c4cd8e80-d21b-4496-ac56-85edf9a4ca0d/aadhaar/tv.png">
+            </div>
+            <span>Payment Details</span>
+            <div>
+              <mat-label>Payment Method:</mat-label>
+              <span>Credit Card</span>
+              <mat-label>Card Holder Name:</mat-label>
+              <span>John Wick</span>
+            </div>
+            <div>
+              <mat-label>Card Number:</mat-label>
+              <span>xxxx xxxx xxxx xxxx</span>
+              <mat-label>Expiry Date:</mat-label>
+              <span>01/34</span>
+            </div>
+            <span>Transaction Details</span>
+            <div>
+              <mat-label>Receipt No.</mat-label>
+              <span>xxxxxxxxxxxxxxxxx</span>
+              <mat-label>Payment Amount:</mat-label>
+              <span>INR 3284</span>
+              <mat-label>Status:</mat-label>
+              <span>Approved</span>
+            </div>
           </div>
         </div>
       </mat-tab>
     </mat-tab-group>
     <div class="tab-buttons">
       <div class="button-wrapper">
-        <button class="button">Confirm Details</button>
-        <button class="button gap">View Docs</button>
+        <button class="button" (click)="confirmHealthDocs()">Confirm All Health Declaration</button>
+        <button class="button gap">Confirm All Docs</button>
+        <button class="button gap">Confirm & Notify Checkin</button>
       </div>
       <div class="right-bottom-icons">
         <div class="social-icons">

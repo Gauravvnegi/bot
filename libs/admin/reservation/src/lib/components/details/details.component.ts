@@ -57,7 +57,8 @@ export class DetailsComponent implements OnInit {
       stayDetails : this.initStayDetailsForm(),
       guestDetails: this.initGuestDetailForm(),
       packageDetailsForm : this.initPackageDetailsForm(),
-      paymentdetailsForm : this.initPaymentDetailsForm()
+      paymentdetailsForm : this.initPaymentDetailsForm(),
+      healthDeclareForm : this.initHealthDeclareForm()
     })
   }
 
@@ -106,6 +107,12 @@ export class DetailsComponent implements OnInit {
       lastName: [''],
       countryCode: [''],
       phoneNumber: [''],
+    })
+  }
+
+  initHealthDeclareForm(){
+    return this._fb.group({
+      isAccepted:['']
     })
   }
 
@@ -200,13 +207,23 @@ export class DetailsComponent implements OnInit {
   }
 
   mapValuesInForm() {
-
     // will use patchValue only once , needs to be modified
     this.guests.patchValue(this.guestDetails.guestDetails);
     this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
     this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
     this.paymentDetailsForm.patchValue(this.guestDetails.paymentDetails);
-    console.log('tripti', this.detailsForm);
+    this.healDeclarationForm.patchValue(this.guestDetails.healDeclarationDetails);
+    console.log(this.detailsForm);
+  }
+
+  setHealthDeclaration(status){
+    // call Api to set status of the health form
+    // On success , change the form value
+    this.healDeclarationForm.get('isAccepted').setValue(status);
+  }
+
+  confirmHealthDocs(){
+    //call Api to confirm
   }
 
   onGuestChange(value) {
@@ -248,5 +265,9 @@ export class DetailsComponent implements OnInit {
 
   get paymentDetailsForm(){
     return this.detailsForm.get('paymentdetailsForm') as FormGroup;
+  }
+
+  get healDeclarationForm(){
+    return this.detailsForm.get('healthDeclareForm') as FormGroup;
   }
 }

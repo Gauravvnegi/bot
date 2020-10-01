@@ -3,12 +3,12 @@
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-    <div class="name-details" *ngIf="primaryGuest">
+    <div class="name-details" *ngIf="primaryDetails">
       <div class="name">
         <span
-          >{{ primaryGuest.get('title').value
-          }}{{ primaryGuest.get('firstName').value
-          }}{{ primaryGuest.get('lastName').value }}</span
+          >{{ primaryDetails.get('title').value
+          }}{{ primaryDetails.get('firstName').value
+          }}{{ primaryDetails.get('lastName').value }}</span
         >
         <div class="svg-wrapper">
           <svg
@@ -62,14 +62,14 @@
     </div>
     <div class="contact-details" *ngIf="primaryGuest">
       <div class="call">
-        <mat-icon class="material-icons" matSuffix>call</mat-icon
-        >{{ primaryGuest.get('countryCode').value
-        }}{{ primaryGuest.get('phoneNumber').value }}
+        <mat-icon class="material-icons" matSuffix>call</mat-icon>
+        {{ primaryDetails.get('countryCode').value
+        }}{{ primaryDetails.get('phoneNumber').value }}
       </div>
 
       <div class="email">
-        <mat-icon class="material-icons" matSuffix>email</mat-icon
-        >{{ primaryGuest.get('email').value }}
+        <mat-icon class="material-icons" matSuffix>email</mat-icon>
+        {{ primaryDetails.get('email').value }}
       </div>
     </div>
     <div class="options-wrapper">
@@ -93,337 +93,37 @@
   <div class="mat-group">
     <mat-tab-group>
       <mat-tab label="Guest Details">
-        <form class="form-wrapper" [formGroup]="guestDetailsForm">
-          <div class="material-body">
-            <mat-label class="mat-head">Guest Info</mat-label>
-            <ng-container
-              formArrayName="guests"
-              *ngFor="
-                let guestFormGroup of guestDetailsForm.controls.guests?.value;
-                let i = index
-              "
-            >
-              <div class="feilds-wrapper" [formGroupName]="i">
-                <div class="feild width-added">
-                  <mat-label class="label">Full Name</mat-label>
-                  <div class="value">
-                    {{ guestFormGroup.title }}
-                    {{ guestFormGroup.firstName }}
-                    {{ guestFormGroup.lastName }}
-                  </div>
-                </div>
-                <div class="feild width-added">
-                  <mat-label class="label">Phone No.</mat-label>
-                  <div class="value">
-                    {{ guestFormGroup.countryCode }}
-                    {{ guestFormGroup.phoneNumber }}
-                  </div>
-                </div>
-                <div class="feild width-added">
-                  <mat-label class="label">Email</mat-label>
-                  <div class="value">
-                    {{ guestFormGroup.email }}
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-            <hr class="data-seperator" />
-            <mat-label class="mat-head">Stay Details</mat-label>
-            <ng-container>
-              <div class="feilds-wrapper">
-                <div class="feild width-quarter">
-                  <mat-label class="label">Arrival Date</mat-label>
-                  <div class="value">
-                    {{ stayDetailsForm.get('arrivalTime').value }}
-                  </div>
-                </div>
-                <div class="feild width-quarter">
-                  <mat-label class="label">Departure Date</mat-label>
-                  <div class="value">
-                    {{ stayDetailsForm.get('departureTime').value }}
-                  </div>
-                </div>
-                <div class="feild width-quarter">
-                  <mat-label class="label">Expected Arrival Time</mat-label>
-                  <div class="value">
-                    {{ stayDetailsForm.get('expectedArrivalTime').value }}
-                  </div>
-                </div>
-                <div class="feild width-quarter">
-                  <mat-label class="label">Room Type</mat-label>
-                  <div class="value">
-                    {{ stayDetailsForm.get('roomType').value }}
-                  </div>
-                </div>
-              </div>
-            </ng-container>
-            <hr class="data-seperator" />
-            <mat-label class="mat-head">Health Declaration</mat-label>
-            <ng-container>
-              <div class="pending-button-wrapper">
-                <p class="health-status">
-                  Health Declaration Status :&nbsp;<b class="accepted"
-                    >{{healDeclarationForm.get('isAccepted').value}}</b
-                  >
-                </p>
-                <div class="decision-button-wrapper">
-                  <button class="right" (click)="setHealthDeclaration(true)">
-                    <img src="assets/svg/tick.svg" />
-                  </button>
-                  <button class="right" (click)="setHealthDeclaration(false)">
-                    <img src="assets/svg/cross.svg" />
-                  </button>
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </form>
+        <ng-container *ngIf="guestDetails">
+          <hospitality-bot-admin-guest-details
+          [parentForm]= detailsForm
+          [guestDetails]= guestDetails
+          ></hospitality-bot-admin-guest-details>
+        </ng-container>
       </mat-tab>
       <mat-tab label="Documents">
-        <div class="material-body" *ngIf="guestDetails">
-          <div class="document-header">
-            <p class="heading">Guest Documents</p>
-            <i class="fa fa-question-circle" aria-hidden="true"></i>
-          </div>
-          <div class="wrapper">
-            <mat-form-field>
-              <mat-select
-                [(value)]="selectedGuestId"
-                (selectionChange)="onGuestChange($event.value)"
-              >
-                <mat-option
-                  *ngFor="let guest of guestDetails.guestDetails"
-                  [value]="guest.id"
-                >
-                  {{ guest.firstName }}{{ guest.lastName }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <!-- <p-dropdown [options]="bookingList">
-              <ng-template let-item pTemplate="selectedItem">
-                <span style="vertical-align: middle; margin-left: 5px;"
-                  >{{ guest.firstName }}{{ guest.lastName }}</span
-                >
-              </ng-template>
-            </p-dropdown> -->
-            <form [formGroup]="selectedGuestGroup">
-              <ng-container
-                formArrayName="documents"
-                *ngFor="
-                  let document of selectedGuestGroup.get('documents').controls;
-                  let i = index
-                "
-              >
-                <div class="upload-image-wrapper" [formGroupName]="i">
-                  <!-- {{ document.getRawValue() | json }} -->
-                  <!-- <div>
-                    Verification Status: Fail<mat-slide-toggle
-                      formControlName="verificationStatus"
-                    ></mat-slide-toggle>
-                    Pass
-                  </div> -->
-                  <div class="upload-image">
-                    <img [src]="document.get('frontUrl').value" />
-                    <p class="text">
-                      {{ document.get('documentType').value }} FIRST PAGE
-                    </p>
-                  </div>
-                  <div
-                    class="upload-image"
-                    *ngIf="document.get('documentType').value != 'VISA'"
-                  >
-                    <img [src]="document.get('backUrl').value" />
-                    <p class="text">
-                      {{ document.get('documentType').value }} BACK PAGE
-                    </p>
-                  </div>
-                  <!-- <mat-form-field>
-                    <mat-label>Add Remark:</mat-label>
-                    <input matInput formControlName="remark" />
-                  </mat-form-field> -->
-                </div>
-              </ng-container>
-            </form>
-          </div>
-          <hr class="data-seperator" />
-          <mat-label class="mat-head">Documents</mat-label>
-          <!-- <ng-container> -->
-          <div class="pending-button-wrapper">
-            <p class="health-status" style="margin-left: 0;">
-              Document Verification Status :&nbsp;<b class="pending">Pending</b>
-            </p>
-            <div class="decision-button-wrapper">
-              <button class="right">
-                <img src="assets/svg/tick.svg" />
-              </button>
-              <button class="right">
-                <img src="assets/svg/cross.svg" />
-              </button>
-            </div>
-          </div>
-          <!-- </ng-container> -->
-        </div>
+        <ng-container *ngIf="guests && guests.controls.length > 0">
+          <hospitality-bot-admin-documents-details
+          [parentForm]= detailsForm
+          [guestDetails]= guestDetails
+          ></hospitality-bot-admin-documents-details>
+        </ng-container>
       </mat-tab>
       <mat-tab label="Package">
-        <div class="material-body">
-        <mat-label>Complementary</mat-label>
-        <mat-label>Paid</mat-label>
-      </div>
+        <ng-container>
+          <hospitality-bot-admin-package-details
+          [parentForm]= detailsForm
+          [guestDetails]= guestDetails
+          ></hospitality-bot-admin-package-details>
+        </ng-container>
       </mat-tab>
 
       <mat-tab label="Payment">
-        <div class="material-body">
-          <div>
-            <mat-label>Payment Summary</mat-label>
-            <div>
-              <mat-label>Billed to:</mat-label>
-              <span>
-                {{ paymentDetailsForm.get('title').value }}
-                {{ paymentDetailsForm.get('firstName').value }}
-                {{ paymentDetailsForm.get('lastName').value }}
-              </span>
-              <mat-label>Arrival Date:</mat-label>
-              <span>
-                {{ paymentDetailsForm.get('arrivalTime').value }}
-              </span>
-              <mat-label>Current Date:</mat-label>
-              <span>
-                {{ paymentDetailsForm.get('currentDate').value }}
-              </span>
-            </div>
-            <div>
-              <mat-label>Room No.</mat-label>
-              <span>{{ paymentDetailsForm.get('roomNumber').value }}</span>
-              <mat-label>Departure Date:</mat-label>
-              <span>{{ paymentDetailsForm.get('departureTime').value }}</span>
-              <mat-label>Booking No.:</mat-label>
-              <span>{{ paymentDetailsForm.get('bookingId').value }}</span>
-            </div>
-            <div>
-              <mat-label>Room Type:</mat-label>
-              <span>{{ paymentDetailsForm.get('roomType').value }}</span>
-              <mat-label>No. of Adults:</mat-label>
-              <span>{{ paymentDetailsForm.get('adultsCount').value }}</span>
-            </div>
-            <div>
-              <mat-label>No. of Rooms:</mat-label>
-              <span>{{ paymentDetailsForm.get('roomsCount').value }}</span>
-              <mat-label>No. of Children:</mat-label>
-              <span>{{ paymentDetailsForm.get('kidsCount').value }}</span>
-            </div>
-          </div>
-          <div>
-            <mat-accordion>
-              <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    Payment Detail
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <table mat-table [dataSource]="dataSource">
-                  <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef>Description</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.description }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="unit">
-                    <th mat-header-cell *matHeaderCellDef>Unit</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.unit }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="unitPrice">
-                    <th mat-header-cell *matHeaderCellDef>Unit Price</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.unitPrice }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="amount">
-                    <th mat-header-cell *matHeaderCellDef>Amount</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.amount }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="CGST">
-                    <th mat-header-cell *matHeaderCellDef>CGST</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.CGST }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="SGST">
-                    <th mat-header-cell *matHeaderCellDef>SGST</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.SGST }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="discount">
-                    <th mat-header-cell *matHeaderCellDef>Discount</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.discount }}
-                    </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="totalAmount">
-                    <th mat-header-cell *matHeaderCellDef>Total Amount</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{ element.totalAmount }}
-                    </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumns"
-                  ></tr>
-                </table>
-                <div>
-                  <mat-label>Total Amount:</mat-label>
-                  <span>INR 3842</span>
-                  <mat-label>Total Savings:</mat-label>
-                  <span>INR 40</span>
-                  <mat-label>Paid Amount:</mat-label>
-                  <span>xxx</span>
-                  <mat-label>Due Amount:</mat-label>
-                  <span>xxxx</span>
-                </div>
-              </mat-expansion-panel>
-            </mat-accordion>
-
-            <div>
-              <span>Guest Signature</span>
-              <img src="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/c4cd8e80-d21b-4496-ac56-85edf9a4ca0d/aadhaar/tv.png">
-            </div>
-            <span>Payment Details</span>
-            <div>
-              <mat-label>Payment Method:</mat-label>
-              <span>Credit Card</span>
-              <mat-label>Card Holder Name:</mat-label>
-              <span>John Wick</span>
-            </div>
-            <div>
-              <mat-label>Card Number:</mat-label>
-              <span>xxxx xxxx xxxx xxxx</span>
-              <mat-label>Expiry Date:</mat-label>
-              <span>01/34</span>
-            </div>
-            <span>Transaction Details</span>
-            <div>
-              <mat-label>Receipt No.</mat-label>
-              <span>xxxxxxxxxxxxxxxxx</span>
-              <mat-label>Payment Amount:</mat-label>
-              <span>INR 3284</span>
-              <mat-label>Status:</mat-label>
-              <span>Approved</span>
-            </div>
-          </div>
-        </div>
+        <ng-container *ngIf="guests && guests.controls.length > 0">
+          <hospitality-bot-admin-payment-details
+          [parentForm]= detailsForm
+          [guestDetails]= guestDetails
+          ></hospitality-bot-admin-payment-details>
+        </ng-container>
       </mat-tab>
     </mat-tab-group>
     <div class="tab-buttons">
@@ -434,7 +134,6 @@
       </div>
       <div class="right-bottom-icons">
         <div class="social-icons">
-          <!-- <i class="fas fa-paper-plane icon"></i> -->
           <div class="icon">
             <img src="assets/svg/telegram.svg" />
           </div>

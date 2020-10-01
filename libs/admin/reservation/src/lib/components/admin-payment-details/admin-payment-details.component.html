@@ -1,0 +1,150 @@
+<div class="material-body">
+    <div>
+        <mat-label>Payment Summary</mat-label>
+        <div>
+            <mat-label>Billed to:</mat-label>
+            <span>
+                {{ paymentDetailsForm.get('title').value }}
+                {{ paymentDetailsForm.get('firstName').value }}
+                {{ paymentDetailsForm.get('lastName').value }}
+            </span>
+            <mat-label>Arrival Date:</mat-label>
+            <span>
+                {{ paymentDetailsForm.get('arrivalTime').value }}
+            </span>
+            <mat-label>Current Date:</mat-label>
+            <span>
+                {{ paymentDetailsForm.get('currentDate').value }}
+            </span>
+        </div>
+        <div>
+            <mat-label>Room No.</mat-label>
+            <span>{{ paymentDetailsForm.get('roomNumber').value }}</span>
+            <mat-label>Departure Date:</mat-label>
+            <span>{{ paymentDetailsForm.get('departureTime').value }}</span>
+            <mat-label>Booking No.:</mat-label>
+            <span>{{ paymentDetailsForm.get('bookingId').value }}</span>
+        </div>
+        <div>
+            <mat-label>Room Type:</mat-label>
+            <span>{{ paymentDetailsForm.get('roomType').value }}</span>
+            <mat-label>No. of Adults:</mat-label>
+            <span>{{ paymentDetailsForm.get('adultsCount').value }}</span>
+        </div>
+        <div>
+            <mat-label>No. of Rooms:</mat-label>
+            <span>{{ paymentDetailsForm.get('roomsCount').value }}</span>
+            <mat-label>No. of Children:</mat-label>
+            <span>{{ paymentDetailsForm.get('kidsCount').value }}</span>
+        </div>
+    </div>
+    <div>
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Payment Detail
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <table mat-table [dataSource]="dataSource">
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef>Description</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.description }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="unit">
+                        <th mat-header-cell *matHeaderCellDef>Unit</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.unit }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="unitPrice">
+                        <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.unitPrice }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.amount }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="CGST">
+                        <th mat-header-cell *matHeaderCellDef>CGST</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.CGST }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SGST">
+                        <th mat-header-cell *matHeaderCellDef>SGST</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.SGST }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="discount">
+                        <th mat-header-cell *matHeaderCellDef>Discount</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.discount }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="totalAmount">
+                        <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.totalAmount }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <div>
+                    <mat-label>Total Amount:</mat-label>
+                    <span>INR 3842</span>
+                    <mat-label>Total Savings:</mat-label>
+                    <span>INR 40</span>
+                    <mat-label>Paid Amount:</mat-label>
+                    <span>xxx</span>
+                    <mat-label>Due Amount:</mat-label>
+                    <span>xxxx</span>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <div>
+            <span>Guest Signature</span>
+            <img
+                src="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/c4cd8e80-d21b-4496-ac56-85edf9a4ca0d/aadhaar/tv.png">
+        </div>
+        <span>Payment Details</span>
+        <div>
+            <mat-label>Payment Method:</mat-label>
+            <span>Credit Card</span>
+            <mat-label>Card Holder Name:</mat-label>
+            <span>John Wick</span>
+        </div>
+        <div>
+            <mat-label>Card Number:</mat-label>
+            <span>xxxx xxxx xxxx xxxx</span>
+            <mat-label>Expiry Date:</mat-label>
+            <span>01/34</span>
+        </div>
+        <span>Transaction Details</span>
+        <div>
+            <mat-label>Receipt No.</mat-label>
+            <span>xxxxxxxxxxxxxxxxx</span>
+            <mat-label>Payment Amount:</mat-label>
+            <span>INR 3284</span>
+            <mat-label>Status:</mat-label>
+            <span>Approved</span>
+        </div>
+    </div>
+</div>

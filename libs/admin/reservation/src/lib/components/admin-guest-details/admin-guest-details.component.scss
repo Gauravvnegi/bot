@@ -1,0 +1,356 @@
+@import 'main';
+
+:host ::ng-deep .mat-tab-label {
+  color: #b5b5c3;
+  font-size: $font14;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: #4b56c0;
+  font-size: $font16;
+}
+
+:host ::ng-deep .mat-ink-bar {
+  background-color: #4b56c0;
+}
+
+.details-wrapper {
+  background-color: white;
+}
+
+:host ::ng-deep .header {
+  background: transparent
+    linear-gradient(
+      180deg,
+      #4a9ef5 0%,
+      #366efd 0%,
+      #6cbeee 0%,
+      #0a45d5f2 100%,
+      #6fb1fc 100%
+    )
+    0% 0% no-repeat padding-box;
+  padding: $padding20;
+  position: relative;
+  .close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    i {
+      color: white;
+    }
+  }
+  .header-seperator {
+    height: 30px;
+    border: 1px solid #ffffff;
+  }
+  .name-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: $font16;
+    padding: 0 25px;
+    .name {
+      display: flex;
+      align-items: baseline;
+    }
+  }
+  .contact-details {
+    color: white;
+    font-size: $font10;
+    display: flex;
+    align-items: center;
+    margin-top: $margin10;
+    padding: 0 25px;
+    .call,
+    .email {
+      display: flex;
+      align-items: center;
+      .material-icons {
+        font-size: $font12;
+        height: auto;
+        width: auto;
+        margin-right: 5px;
+      }
+    }
+    .email {
+      margin-left: 20px;
+    }
+  }
+  .options-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 25px;
+
+    .check-button {
+      outline: none;
+      border: 1px solid #ffffff;
+      background: #41b5e89c 0% 0% no-repeat padding-box;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+      padding: 6px $padding20;
+      color: white;
+      .material-icons {
+        margin-right: $margin15;
+      }
+      .text {
+        text-decoration: underline;
+        font-size: $font14;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .p-dropdown {
+  margin-left: 0;
+  background: transparent;
+  outline: none;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 6px $padding20;
+  .p-inputtext {
+    color: white;
+  }
+  &:hover {
+    border-color: #ffffff;
+  }
+}
+
+:host ::ng-deep .pi {
+  color: white;
+}
+
+.svg-wrapper {
+  padding-left: 5px;
+  .svg {
+    height: 20px;
+    width: 20px;
+    path {
+      fill: white;
+    }
+  }
+}
+
+:host ::ng-deep .mat-head {
+  font-size: $font16;
+  font-weight: $bolder;
+  color: #002046;
+  letter-spacing: 0.96px;
+}
+
+.data-seperator {
+  border: 2px solid #218af3;
+  margin: $margin20 0px;
+  opacity: 0.1;
+}
+
+.feilds-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0px;
+  padding: 0px 30px;
+  .feild {
+    .label {
+      letter-spacing: 0.72px;
+      font-size: $font12;
+      color: #9eaeb8;
+    }
+    .value {
+      letter-spacing: 0.84px;
+      font-size: $font14;
+      color: #484848;
+      margin-top: $margin10;
+    }
+  }
+}
+
+.form-wrapper {
+  display: flex;
+  // .left {
+  //   width: 80%;
+  //   margin: $margin20;
+  //   margin-right: 0;
+  //   min-height: 60vh;
+  //   border-right: 3px solid rgb(108, 108, 243, 0.1);
+  // }
+}
+.gap {
+  margin-top: $margin15;
+}
+
+.document-header {
+  display: flex;
+  margin-bottom: $margin20;
+  align-items: center;
+  .heading {
+    font-size: $font16;
+    margin-right: $margin20;
+    font-weight: $bolder;
+  }
+  .fa {
+    color: #c2c2c2;
+  }
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  border-top: none;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  display: none;
+}
+
+:host ::ng-deep .mat-select-value-text {
+  font-size: 14px;
+}
+
+:host ::ng-deep .mat-form-field-flex {
+  padding: 5px $padding10;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+}
+
+.health-status {
+  letter-spacing: 0.84px;
+  color: #484848;
+  font-size: $font14;
+  font-weight: $bolder;
+  margin: $margin20 30px;
+  .accepted {
+    color: #53b33e;
+  }
+  .pending {
+    color: #9eaeb8;
+  }
+}
+
+.upload-image-wrapper {
+  display: flex;
+  align-items: center;
+  .upload-image {
+    width: 31%;
+    text-align: center;
+    font-size: $font12;
+    margin: 1%;
+    border: 1px dashed #d9d9d9;
+    border-radius: 8px;
+    img {
+      border-radius: 8px;
+      height: 150px;
+      width: 100%;
+    }
+    .text {
+      margin: $margin15 0;
+      font-size: $font14;
+    }
+  }
+}
+
+.material-body {
+  width: 80%;
+  margin: $margin20;
+  margin-right: 0;
+  min-height: 60vh;
+  border-right: 3px solid rgb(108, 108, 243, 0.1);
+  // .wrapper {
+  //   margin-bottom: 25px;
+  // }
+}
+
+:host ::ng-deep .mat-group {
+  position: relative;
+}
+
+.pending-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .decision-button-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: $margin10;
+    button {
+      margin: 0 $margin10;
+      border: none;
+      outline: none;
+      background: transparent;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.tab-buttons {
+  width: 18%;
+  padding: $padding20;
+  position: absolute;
+  top: 55px;
+  right: 0;
+  height: 88%;
+  z-index: 22;
+  background-color: white;
+  .button-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 93%;
+    .button {
+      border: 1px solid #4b56c0;
+      font-size: $font12;
+      outline: none;
+      padding: 10px 0px;
+      background-color: transparent;
+      width: 100%;
+      color: #4b56c0;
+      border-radius: 25px;
+      &:hover {
+        cursor: pointer;
+        background-color: #4b56c0;
+        color: white;
+      }
+    }
+  }
+  .right-bottom-icons {
+    display: flex;
+    align-items: center;
+    height: 7%;
+    .social-icons {
+      width: 25%;
+      .icon {
+        padding: 5px;
+        background-color: #f3fafe;
+        border-radius: 50%;
+        height: 20px;
+        width: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          filter: invert(96%) sepia(59%) saturate(2493%) hue-rotate(167deg)
+            brightness(83%) contrast(80%);
+          height: 10px;
+        }
+        &:hover {
+          cursor: pointer;
+          padding: 7px;
+          background-color: #4b56c0;
+          height: 30px;
+          width: 30px;
+          img {
+            filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(191deg)
+              brightness(108%) contrast(102%);
+          }
+        }
+      }
+    }
+  }
+}

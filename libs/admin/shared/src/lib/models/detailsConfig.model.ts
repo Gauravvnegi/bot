@@ -274,3 +274,10 @@ export class Package implements Deserializable{
     return this;
   }
 }
+
+export class AdminDetailStatus {
+  isHealthDeclarationAccepted: boolean;
+  isHealthDeclarationInitiatd: boolean;
+  isDocumentsAccepted: boolean;
+  isDocumentsInitiated: boolean;
+}

@@ -1,0 +1,88 @@
+<div>
+    <form class="form-wrapper" [formGroup]="guestDetailsForm">
+        <div class="material-body">
+          <mat-label class="mat-head">Guest Info</mat-label>
+          <ng-container
+            formArrayName="guests"
+            *ngFor="
+              let guestFormGroup of guestDetailsForm.controls.guests?.value;
+              let i = index
+            "
+          >
+            <div class="feilds-wrapper" [formGroupName]="i">
+              <div class="feild width-added">
+                <mat-label class="label">Full Name</mat-label>
+                <div class="value">
+                  {{ guestFormGroup.title }}
+                  {{ guestFormGroup.firstName }}
+                  {{ guestFormGroup.lastName }}
+                </div>
+              </div>
+              <div class="feild width-added">
+                <mat-label class="label">Phone No.</mat-label>
+                <div class="value">
+                  {{ guestFormGroup.countryCode }}
+                  {{ guestFormGroup.phoneNumber }}
+                </div>
+              </div>
+              <div class="feild width-added">
+                <mat-label class="label">Email</mat-label>
+                <div class="value">
+                  {{ guestFormGroup.email }}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <hr class="data-seperator" />
+          <mat-label class="mat-head">Stay Details</mat-label>
+          <ng-container>
+            <div class="feilds-wrapper">
+              <div class="feild width-quarter">
+                <mat-label class="label">Arrival Date</mat-label>
+                <div class="value">
+                  {{ stayDetailsForm.get('arrivalTime').value }}
+                </div>
+              </div>
+              <div class="feild width-quarter">
+                <mat-label class="label">Departure Date</mat-label>
+                <div class="value">
+                  {{ stayDetailsForm.get('departureTime').value }}
+                </div>
+              </div>
+              <div class="feild width-quarter">
+                <mat-label class="label">Expected Arrival Time</mat-label>
+                <div class="value">
+                  {{ stayDetailsForm.get('expectedArrivalTime').value }}
+                </div>
+              </div>
+              <div class="feild width-quarter">
+                <mat-label class="label">Room Type</mat-label>
+                <div class="value">
+                  {{ stayDetailsForm.get('roomType').value }}
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <hr class="data-seperator" />
+          <mat-label class="mat-head">Health Declaration</mat-label>
+          <ng-container>
+            <div class="pending-button-wrapper">
+              <p class="health-status">
+                Health Declaration Status :&nbsp;<b class="accepted"
+                  >{{healDeclarationForm.get('isAccepted').value}}</b
+                >
+              </p>
+              <div class="decision-button-wrapper">
+                <button class="right" (click)="setHealthDeclaration(true)">
+                  <img src="assets/svg/tick.svg" />
+                </button>
+                <button class="right" (click)="setHealthDeclaration(false)">
+                  <img src="assets/svg/cross.svg" />
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </form>
+</div>
+    

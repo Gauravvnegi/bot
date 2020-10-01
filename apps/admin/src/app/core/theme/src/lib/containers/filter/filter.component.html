@@ -54,7 +54,7 @@
                   </mat-select-trigger> -->
                   <mat-option
                     *ngFor="let hotel of hotelList"
-                    [value]="hotel.name"
+                    [value]="hotel.value"
                     >{{ hotel.label }}</mat-option
                   >
                 </mat-select>
@@ -78,7 +78,7 @@
                   </mat-select-trigger> -->
                   <mat-option
                     *ngFor="let branch of branchList"
-                    [value]="branch.name"
+                    [value]="branch.value"
                     >{{ branch.label }}</mat-option
                   >
                 </mat-select>

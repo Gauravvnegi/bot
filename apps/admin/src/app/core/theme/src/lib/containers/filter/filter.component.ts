@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { FilterService } from '../../services/filter.service';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 
 @Component({
   selector: 'admin-filter',
@@ -32,13 +33,16 @@ export class FilterComponent implements OnChanges, OnInit {
     },
   ];
 
-  hotelList = [{ label: 'Hotel Hilltop', name: 'hilltop' }];
+  hotelList = [];
 
-  branchList = [{ label: 'Manali,Sharma', name: 'manali-sharma' }];
+  branchList = [];
 
   filterForm: FormGroup;
 
-  constructor(private _fb: FormBuilder) {
+  constructor(
+    private _fb: FormBuilder,
+    private _hotelDetailService: HotelDetailService
+  ) {
     this.initFilterForm();
   }
 
@@ -49,7 +53,7 @@ export class FilterComponent implements OnChanges, OnInit {
   initFilterForm() {
     this.filterForm = this._fb.group({
       property: this._fb.group({
-        hotelName: [''],
+        hotelName: [],
         branchName: [''],
       }),
       guest: this._fb.group({
@@ -74,7 +78,45 @@ export class FilterComponent implements OnChanges, OnInit {
     this.filterForm.patchValue(this.initialFilterValue);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initLOV();
+    this.registerListeners();
+    this.initialFilterValue = {
+      property: {
+        hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
+      },
+    };
+    this.setInitialFilterValue();
+  }
+
+  registerListeners() {
+    this.listenForBrandChanges();
+  }
+
+  listenForBrandChanges() {
+    this.filterForm
+      .get('property')
+      .get('hotelName')
+      .valueChanges.subscribe((brandId) => {
+        const { branches } = this.hotelList.find(
+          (brand) => brand['value'] == brandId
+        );
+
+        this.branchList = branches;
+        this.filterForm
+          .get('property')
+          .get('branchName')
+          .patchValue(this.branchList[0].id);
+      });
+  }
+
+  initLOV() {
+    this.setBrandLOV();
+  }
+
+  setBrandLOV() {
+    this.hotelList = this._hotelDetailService.hotelDetails.brands;
+  }
 
   applyFilter() {
     this.onApplyFilter.next(this.filterForm.getRawValue());

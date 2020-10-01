@@ -14,6 +14,8 @@ import { DateRangeFilterService } from '../../../services/daterange-filter.servi
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',

@@ -10,3 +10,45 @@
   margin: 0;
   font-family: roboto;
 }
+
+// Four color state
+
+// images-color
+
+.status-image-pending {
+  filter: invert(99%) sepia(0%) saturate(6492%) hue-rotate(177deg)
+    brightness(118%) contrast(52%);
+}
+
+.status-image-initiated {
+  filter: invert(56%) sepia(92%) saturate(448%) hue-rotate(185deg)
+    brightness(101%) contrast(95%);
+}
+
+.status-image-reject {
+  filter: invert(18%) sepia(89%) saturate(7441%) hue-rotate(348deg)
+    brightness(95%) contrast(97%);
+}
+
+.status-image-success {
+  filter: invert(58%) sepia(10%) saturate(2479%) hue-rotate(63deg)
+    brightness(99%) contrast(100%);
+}
+
+// text-color
+
+.status-text-pending {
+  color: #c2c2c2;
+}
+
+.status-text-initiated {
+  color: #6bacf8;
+}
+
+.status-text-reject {
+  color: #f00d2a;
+}
+
+.status-text-success {
+  color: #53b33e;
+}

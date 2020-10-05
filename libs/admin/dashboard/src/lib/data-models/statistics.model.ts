@@ -11,8 +11,10 @@ export class Statistics {
 
   deserialize(statistics: any) {
     this.arrivals = new Arrivals().deserialize(statistics.ARRIVALS);
-    //   this.inhouse = new Inhouse().deserialize(statistics.inhouse.actual);
-    // this.inhouseRequest = new InhouseRequest().deserialize(statistics.inhouse);
+    this.inhouse = new Inhouse().deserialize(statistics.INHOUSE);
+    this.inhouseRequest = new InhouseRequest().deserialize(
+      statistics.INHOUSEREQUEST
+    );
     //this.expressCheckIn = new ExpressCheckIn().deserialize(statistics.arrivals.expressCheckIn);
     //this.expressCheckOut = new ExpressCheckOut().deserialize(statistics.departure.expressCheckout);
     this.departures = new Departures().deserialize(statistics.DEPARTURE);
@@ -39,12 +41,14 @@ export class Arrivals {
 export class InhouseRequest {
   requestApproved: number;
   requestPending: number;
+  totalRequest;
 
   deserialize(statistics: any) {
     Object.assign(
       this,
-      set({}, 'requestApproved', get(statistics, ['acceptedRequest'])),
-      set({}, 'requestPending', get(statistics, ['pendingRequest']))
+      set({}, 'requestApproved', get(statistics, ['approved'])),
+      set({}, 'requestPending', get(statistics, ['pending'])),
+      set({}, 'totalRequest', get(statistics, ['total']))
     );
     return this;
   }
@@ -61,8 +65,8 @@ export class Inhouse {
       this,
       set({}, 'adultCount', get(statistics, ['adults'])),
       set({}, 'kidsCount', get(statistics, ['kids'])),
-      set({}, 'totalRoom', get(statistics, ['totalCount'])),
-      set({}, 'roomOccupied', get(statistics, ['rooms']))
+      set({}, 'totalRoom', get(statistics, ['totalCount'], 10)),
+      set({}, 'roomOccupied', get(statistics, ['roomOccupied']))
     );
     return this;
   }

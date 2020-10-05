@@ -12,8 +12,12 @@ export class ArrivalsStatisticsComponent implements OnInit {
   progress: number = 0;
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnChanges() {
     this.setProgress();
+  }
+
+  ngOnInit(): void {
+    //  this.setProgress();
   }
 
   setProgress() {

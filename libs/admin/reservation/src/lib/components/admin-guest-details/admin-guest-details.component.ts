@@ -42,7 +42,11 @@ export class AdminGuestDetailsComponent implements OnInit {
       countryCode: [''],
       phoneNumber: [''],
       email: [''],
-      isPrimary: ['']
+      isPrimary: [''],
+      nationality:[''],
+      selectedDocumentType:[''],
+      verificationStatus: [''],
+      remark:['']
     });
   }
 

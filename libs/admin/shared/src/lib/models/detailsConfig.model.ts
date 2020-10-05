@@ -13,6 +13,7 @@ export class Details implements Deserializable{
   paymentDetails: PaymentDetailsConfig;
   regCardDetails: RegCardConfig;
   healDeclarationDetails: HealthDeclarationConfig;
+  documentStatus: DocumentsStatusConfig;
 
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
@@ -40,7 +41,8 @@ export class Details implements Deserializable{
     this.regCardDetails = new RegCardConfig().deserialize(input.guestDetails.primaryGuest)
     this.amenitiesDetails = new PackageDetailsConfig().mapPackage(input.specialAmenities);
     this.paymentDetails = new PaymentDetailsConfig().deserialize(input);
-    this.healDeclarationDetails = new HealthDeclarationConfig().deserialize(input);
+    this.healDeclarationDetails = new HealthDeclarationConfig().deserialize(input.stepsStatus);
+    this.documentStatus = new DocumentsStatusConfig().deserialize(input.stepsStatus);
 
     return this;
   }
@@ -59,8 +61,11 @@ export class GuestDetailsConfig implements Deserializable{
   countryCode: string;
   phoneNumber: string;
   email: string;
+  selectedDocumentType: string;
+  verificationStatus;
+  remark: string;
   documents: DocumentDetailsConfig;
-
+  
   deserialize(input: any, hotelNationality) {
     const contactDetails = new ContactDetailsConfig().deserialize(input.contactDetails);
     let documents = new Array<DocumentDetailsConfig>();
@@ -78,8 +83,14 @@ export class GuestDetailsConfig implements Deserializable{
       set({}, 'phoneNumber', get(contactDetails, ['contactNumber'])),
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
-      set({}, 'nationality', get(input, ['nationality'])),
+      set({}, 'nationality', get(input, ['nationality'])||hotelNationality),
+      set({}, 'verificationStatus', 'PENDING'),
       set({}, 'isInternational', get(input, ['nationality']) === hotelNationality? false: true),
+      set({}, 'selectedDocumentType',  input.nationality === hotelNationality
+      ? input.documents && input.documents[0]
+        ? input.documents[0].documentType
+        : null
+      : null),
       set({}, 'documents', documents),
     )
     return this;
@@ -110,12 +121,10 @@ export class StayDetailsConfig implements Deserializable{
 }
 
 export class DocumentDetailsConfig implements Deserializable {
-  verificationStatus = false;
   id: string;
   documentType: string;
   frontUrl: string;
   backUrl: string;
-  remark: string;
 
   deserialize(input: any){
     Object.assign(
@@ -123,9 +132,7 @@ export class DocumentDetailsConfig implements Deserializable {
       set({}, 'id', get(input, ['id'])),
       set({}, 'documentType', get(input, ['documentType'])),
       set({}, 'frontUrl', get(input, ['frontUrl'])),
-      set({}, 'backUrl', get(input, ['backUrl'])),
-      set({}, 'verificationStatus', false),
-      set({}, 'remark', ''),
+      set({}, 'backUrl', get(input, ['backUrl']))
     );
    return this;
   }
@@ -149,11 +156,10 @@ export class ContactDetailsConfig implements Deserializable {
 
 export class HealthDeclarationConfig implements Deserializable{
   isAccepted;
-
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'isAccepted', 'Pending'),
+      set({}, 'isAccepted', get(input, ['HEALTHDECLARATION'])),
     )
     return this;
   }
@@ -162,26 +168,36 @@ export class HealthDeclarationConfig implements Deserializable{
 export class ReservationDetailsConfig implements Deserializable{
   bookingId: string;
   roomNumber: string;
+  hotelId: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'bookingId', get(input, ['id'])),
+      set({}, 'bookingId', get(input, ['number'])),
       set({}, 'roomNumber', get(input, ['roomNumber'])),
+      set({}, 'hotelId', get(input.hotel, ['id'])),
     )
     return this;
   }
 }
 
 export class RegCardConfig implements Deserializable{
-  isRegUrl = false;
-  isSignUrl = false;
-
+  status;
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'isRegUrl', get(input, ['regcardUrl'])),
-      set({}, 'isSignUrl', get(input, ['signUrl'])),
+      set({}, 'status', (get(input, ['regcardUrl'])?'ACCEPT':'PENDING')),
+    )
+    return this;
+  }
+}
+
+export class DocumentsStatusConfig implements Deserializable{
+  status
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'status', get(input, ['DOCUMENTS'])),
     )
     return this;
   }

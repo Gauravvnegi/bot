@@ -15,6 +15,8 @@ export class UploadFileComponent implements OnInit {
 
   @Input() url: string;
   @Input() uploadStatus: boolean;
+  @Input() pageType: string;
+  @Input() documentType: string;
   @Input('fileUploadData') set fileUploadData(value: {
   }) {
     this._fileUploadData = { ...this.defaultValue, ...value };
@@ -51,6 +53,8 @@ export class UploadFileComponent implements OnInit {
           const data = {
             file: file,
             imageUrl: this.url,
+            pageType: this.pageType,
+            documentType: this.documentType
           };
           this.fileData.emit(data);
         };

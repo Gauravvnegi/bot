@@ -1,41 +1,73 @@
 <div class="material-body" *ngIf="guestDetails">
     <div class="document-header">
         <p class="heading">Guest Documents</p>
-        <i class="fa fa-question-circle" aria-hidden="true"></i>
+        <i *ngIf="documentStatus.get('status').value === 'PENDING'" class="fa fa-question-circle" aria-hidden="true"></i>
+        <i *ngIf="documentStatus.get('status').value === 'ACCEPT'" class="fa fa-check-circle" aria-hidden="true"></i>
+        <i *ngIf="documentStatus.get('status').value === 'REJECT'" class="fa fa-window-close" aria-hidden="true"></i>
     </div>
     <div class="wrapper">
-        <mat-form-field>
-            <mat-select [(value)]="selectedGuestId" (selectionChange)="onGuestChange($event.value)">
-                <mat-option *ngFor="let guest of guestDetails.guestDetails" [value]="guest.id">
-                    {{ guest.firstName }}{{ guest.lastName }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
         <form [formGroup]="selectedGuestGroup">
-            <ng-container formArrayName="documents" *ngFor="
-                  let document of selectedGuestGroup.get('documents').controls;
-                  let i = index
-                ">
-                <div class="upload-image-wrapper" [formGroupName]="i">
-                    <!-- {{ document.getRawValue() | json }} -->
-                    <div class="upload-image">
-                        <img [src]="document.get('frontUrl').value" />
-                        <p class="text">
-                            {{ document.get('documentType').value }} FIRST PAGE
-                        </p>
+            <mat-form-field>
+                <mat-select [(value)]="selectedGuestId" (selectionChange)="onGuestChange($event.value)">
+                    <mat-option *ngFor="let guest of guestDetails.guestDetails" [value]="guest.id">
+                        {{ guest.firstName }}{{ guest.lastName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="selectedGuestGroup">
+                <mat-select [(value)]="selectedGuestGroup.get('nationality').value" (selectionChange)="onNationalityChange($event.value)">
+                    <mat-option *ngFor="let country of countries" [value]="country.key">
+                        {{ country.value }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Document Type</mat-label>
+                <mat-select [(value)]="selectedGuestGroup.get('selectedDocumentType').value" [disabled]="disableDocumentType" (selectionChange)="onSelectedDocumentTypeChange($event.value)">
+                    <mat-option *ngFor="let document of documentsList" [value]="document">
+                        {{ document }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div>
+                <ng-container formArrayName="documents" *ngFor="
+                      let document of selectedGuestGroup.get('documents').controls;
+                      let i = index
+                    ">
+                    <div class="upload-image-wrapper" [formGroupName]="i">
+                        <div class="upload-image">
+                            <!-- <img [src]="document.get('frontUrl').value" /> -->
+                            <hospitality-bot-upload-file
+                            [fileUploadData]="fileUploadData"
+                            [url]="document.get('frontUrl').value"
+                            [pageType]="'front'"
+                            [documentType]="document.get('documentType').value"
+                            (fileData)="uploadFile($event)">
+                            </hospitality-bot-upload-file>
+                            <p class="text">
+                                {{ document.get('documentType').value }} FIRST PAGE
+                            </p>
+                        </div>
+                        <div class="upload-image" *ngIf="document.get('documentType').value != 'VISA'">
+                            <!-- <img [src]="document.get('backUrl').value" /> -->
+                            <hospitality-bot-upload-file
+                            [fileUploadData]="fileUploadData"
+                            [url]="document.get('backUrl').value"
+                            [pageType]="'back'"
+                            [documentType]="document.get('documentType').value"
+                            (fileData)="uploadFile($event)">
+                            </hospitality-bot-upload-file>
+                            <p class="text">
+                                {{ document.get('documentType').value }} BACK PAGE
+                            </p>
+                        </div>
+                        <!-- <mat-form-field>
+                            <mat-label>Add Remark:</mat-label>
+                            <input matInput formControlName="remark" />
+                        </mat-form-field> -->
                     </div>
-                    <div class="upload-image" *ngIf="document.get('documentType').value != 'VISA'">
-                        <img [src]="document.get('backUrl').value" />
-                        <p class="text">
-                            {{ document.get('documentType').value }} BACK PAGE
-                        </p>
-                    </div>
-                    <!-- <mat-form-field>
-                        <mat-label>Add Remark:</mat-label>
-                        <input matInput formControlName="remark" />
-                    </mat-form-field> -->
-                </div>
-            </ng-container>
+                </ng-container>
+            </div>
         </form>
     </div>
     <hr class="data-seperator" />

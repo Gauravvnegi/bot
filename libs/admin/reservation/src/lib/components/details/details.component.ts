@@ -31,10 +31,9 @@ export class DetailsComponent implements OnInit {
 
   getReservationDetails() {
     this._reservationService
-      .getReservationDetails('c4cd8e80-d21b-4496-ac56-85edf9a4ca0d')
+      .getReservationDetails('17b322c3-fa52-4e3d-9883-34132f6954cd')
       .subscribe((response) => {
         this.guestDetails = new Details().deserialize(response);
-        console.log(this.guestDetails);
         this.mapValuesInForm();
       });
   }
@@ -43,7 +42,8 @@ export class DetailsComponent implements OnInit {
     this.detailsForm = this._fb.group({
       reservationForm : this.initReservationForm(),
       stayDetails : this.initStayDetailsForm(),
-      healthDeclareForm : this.initHealthDeclareForm()
+      healthDeclareForm : this.initHealthDeclareForm(),
+      regCardForm : this.initRegCardForm()
     })
   }
 
@@ -73,6 +73,12 @@ export class DetailsComponent implements OnInit {
   initHealthDeclareForm(){
     return this._fb.group({
       isAccepted:['']
+    })
+  }
+
+  initRegCardForm(){
+    return this._fb.group({
+      status:['']
     })
   }
 
@@ -123,7 +129,7 @@ export class DetailsComponent implements OnInit {
     this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
     this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
     this.healDeclarationForm.patchValue(this.guestDetails.healDeclarationDetails);
-    console.log(this.detailsForm);
+    this.regCardForm.patchValue(this.guestDetails.regCardDetails);
   }
 
   confirmHealthDocs(){
@@ -159,5 +165,9 @@ export class DetailsComponent implements OnInit {
 
   get healDeclarationForm(){
     return this.detailsForm.get('healthDeclareForm') as FormGroup;
+  }
+
+  get regCardForm(){
+    return this.detailsForm.get('regCardForm') as FormGroup;
   }
 }

@@ -74,11 +74,14 @@
     </div>
     <div class="options-wrapper">
       <button class="check-button">
-        <mat-icon class="material-icons" matSuffix>check_circle</mat-icon>
+        <mat-icon *ngIf="regCardForm.get('status').value === 'PENDING'" class="material-icons" matSuffix>help</mat-icon>
+        <mat-icon *ngIf="regCardForm.get('status').value === 'ACCEPT'" class="material-icons" matSuffix>check_circle</mat-icon>
         <p class="text">Reg card</p>
       </button>
       <button class="check-button">
-        <mat-icon class="material-icons" matSuffix>check_circle</mat-icon>
+        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'ACCEPT'" class="material-icons" matSuffix>check_circle</mat-icon>
+        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'PENDING'" class="material-icons" matSuffix>help</mat-icon>
+        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'REJECT'" class="material-icons" matSuffix>disabled_by_default</mat-icon>
         <p class="text">Health Declaration</p>
       </button>
       <p-dropdown [options]="bookingList">

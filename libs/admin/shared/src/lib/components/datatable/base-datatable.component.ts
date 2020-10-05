@@ -42,7 +42,7 @@ export class BaseDatatableComponent implements OnInit {
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {
-    styleClass: 'p-datatable-sm p-datatable-gridlines p-datatable-striped',
+    styleClass: 'p-datatable-sm p-datatable-gridlines',
     striped: true,
     gridLines: true,
     size: 'lg',

@@ -127,7 +127,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    No data found
+    <p class="no-data-found">No data found</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -254,6 +254,8 @@
       <!-- status-image-initiated -->
       <td>
         <div class="icon-wrapper">
+          <div class="line first"></div>
+          <div class="line second"></div>
           <div class="icon">
             <img
               class="table-body-journey-icon"
@@ -350,7 +352,7 @@
           <div class="icon">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/google-docs.svg"
+              src="assets/svg/precheckin.svg"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.preCheckin == 'INITIATED',

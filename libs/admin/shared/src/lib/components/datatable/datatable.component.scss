@@ -23,6 +23,10 @@
   padding: 0;
 }
 
+:host ::ng-deep .p-datatable-footer{
+  padding: 0;
+}
+
 :host ::ng-deep .table-data-head {
   background-color: #2187d5 !important;
   color: white !important;
@@ -154,6 +158,8 @@
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background-color: #2187d5;
   color: white;
+  height: 2rem;
+  min-width: 2rem;
 }
 
 :host ::ng-deep .caption__wrapper {
@@ -256,6 +262,7 @@
 
 :host ::ng-deep .p-paginator {
   justify-content: flex-start;
+  padding: 7px;
 }
 
 :host ::ng-deep .p-paginator-prev > .pi-angle-left:before {

@@ -19,15 +19,56 @@ export class Reservation implements Deserializable {
   guests;
   booking;
   payment;
+  status;
   deserialize(input: any) {
     this.booking = new Booking().deserialize(input);
-    this.rooms = input.rooms.map((room) => new Room().deserialize(room));
+    //this.rooms = input.rooms.map((room) => new Room().deserialize(room));
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
+    this.status = new Status().deserialize(input);
     return this;
   }
 }
 
+export class Status implements Deserializable {
+  journeyStatus;
+  stepsStatus;
+  deserialize(input: any) {
+    this.journeyStatus = new JourneyStatus().deserialize(input.journeysStatus);
+    this.stepsStatus = new StepsStatus().deserialize(input.stepsStatus);
+    return this;
+  }
+}
+
+export class JourneyStatus implements Deserializable {
+  preCheckin;
+  checkin;
+  checkout;
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'preCheckin', get(input, ['PRECHECKIN'])),
+      set({}, 'checkin', get(input, ['CHECKOUT'])),
+      set({}, 'checkout', get(input, ['CHECKIN']))
+    );
+    return this;
+  }
+}
+
+export class StepsStatus implements Deserializable {
+  documents;
+  payment;
+  feedback;
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'documents', get(input, ['DOCUMENTS'])),
+      set({}, 'payment', get(input, ['PAYMENT'])),
+      set({}, 'feedback', get(input, ['FEEDBACK']))
+    );
+    return this;
+  }
+}
 export class Payment implements Deserializable {
   totalAmount;
   taxAmount;

@@ -1,8 +1,13 @@
 <mat-tab-group
-  [selectedIndex]="0"
+  [selectedIndex]="selectedIndex"
+  (selectedTabChange)="onSelectedTabChange($event)"
   mat-stretch-tabs
   class="example-stretched-tabs mat-elevation-z4"
 >
-  <mat-tab *ngFor="let tab of listItems; let index = index" [label]="tab.label">
+  <mat-tab
+    *ngFor="let tab of listItems; let index = index"
+    [label]="tab.total > 0 ? tab.label.concat(' (', tab.total, ')') : tab.label"
+    [disabled]="tab.disabled"
+  >
   </mat-tab>
 </mat-tab-group>

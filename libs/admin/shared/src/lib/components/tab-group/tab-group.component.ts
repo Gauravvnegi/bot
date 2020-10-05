@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-tab-group',
@@ -7,8 +7,13 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TabGroupComponent implements OnInit {
   @Input() listItems = [];
-
+  @Input() selectedIndex = 0;
+  @Output() selectedTabChange = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}
+
+  onSelectedTabChange(event) {
+    this.selectedTabChange.next(event);
+  }
 }

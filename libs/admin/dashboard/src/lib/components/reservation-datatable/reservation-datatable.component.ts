@@ -37,6 +37,50 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     { field: 'stageAndourney', header: 'Stage/Journey' },
   ];
 
+  tabFilterItems = [
+    {
+      label: 'Inhouse',
+      content: '',
+      value: 'INHOUSE',
+      disabled: false,
+      total: 0,
+      chips: [],
+    },
+    {
+      label: 'Arrival',
+      content: '',
+      value: 'ARRIVAL',
+      disabled: false,
+      total: 0,
+      chips: [
+        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+        {
+          label: 'Check-In Pending ',
+          icon: '',
+          value: 'CHECKINPENDING',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'Check-In Completed ',
+          icon: '',
+          value: 'CHECKINCOMPLETE',
+          total: 0,
+          isSelected: false,
+        },
+      ],
+    },
+    {
+      label: 'Departure',
+      content: '',
+      value: 'DEPARTURE',
+      disabled: false,
+      total: 0,
+      chips: [],
+    },
+  ];
+  tabFilterIdx: number = 1;
+
   triggerInitialData = false;
   globalQueries = [];
   constructor(
@@ -67,7 +111,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
       this.loadInitialData([
         ...this.globalQueries,
-        { order: 'DESC', entityType: 'ARRIVAL', entityState: 'ALL' },
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityState: 'ALL',
+        },
       ]);
     });
   }
@@ -80,7 +128,12 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       //setting pagination
       this.totalRecords = data.total;
       this.loading = false;
+      this.updateTabFilterCount(this.totalRecords);
     });
+  }
+
+  updateTabFilterCount(count) {
+    this.tabFilterItems[this.tabFilterIdx].total = count;
   }
 
   fetchDataFrom(
@@ -101,7 +154,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.fetchDataFrom(
       [
         ...this.globalQueries,
-        { order: 'DESC', entityType: 'ARRIVAL', entityState: 'ALL' },
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityState: 'ALL',
+        },
       ],
       { offset: event.first, limit: event.rows }
     ).subscribe((data) => {
@@ -128,5 +185,17 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
       return event.order * result;
     });
+  }
+
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+    this.loadInitialData([
+      ...this.globalQueries,
+      {
+        order: 'DESC',
+        entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        entityState: 'ALL',
+      },
+    ]);
   }
 }

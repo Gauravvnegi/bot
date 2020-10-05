@@ -54,9 +54,9 @@ export class BaseDatatableComponent implements OnInit {
   @Input() loading: boolean = false;
 
   tabFilterItems = [
-    { label: 'Inhouse(3)', content: '' },
-    { label: 'Arrival(3)', content: '' },
-    { label: 'Departure(3)', content: '' },
+    { label: 'Inhouse', content: '', value: 'INHOUSE' },
+    { label: 'Arrival', content: '', value: 'ARRIVAL' },
+    { label: 'Departure', content: '', value: 'DEPARTURE' },
   ];
 
   values = [];
@@ -123,12 +123,6 @@ export class BaseDatatableComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInitialData();
-    this.TabItems = [
-      { label: 'Inhouse(3)', icon: '' },
-      { label: 'Arrival(3)', icon: '' },
-      { label: 'Departure(3)', icon: '' },
-    ];
-
     //this.values = [...this.dataSource];
   }
 
@@ -173,6 +167,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
+    debugger;
     let value = event.target.value && event.target.value.trim();
     this.table.filter(value, field, matchMode);
   }

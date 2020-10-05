@@ -1,26 +1,3 @@
-<!-- <div class="p-mb-3">
-  <p-button
-    type="button"
-    icon="pi pi-chevron-left"
-    (click)="prev()"
-    [disabled]="isFirstPage()"
-    styleClass="p-button-text"
-  ></p-button>
-  <p-button
-    type="button"
-    icon="pi pi-refresh"
-    (click)="reset()"
-    styleClass="p-button-text"
-  ></p-button>
-  <p-button
-    type="button"
-    icon="pi pi-chevron-right"
-    (click)="next()"
-    [disabled]="isLastPage()"
-    styleClass="p-button-text"
-  ></p-button>
-</div> -->
-
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -102,10 +79,15 @@
           <div *ngIf="isTabFilters">
             <hospitality-bot-tab-group
               [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
             ></hospitality-bot-tab-group>
           </div>
         </div>
-        <div *ngIf="isQuickFilters" class="caption__wrapper--buttons">
+        <div
+          *ngIf="tabFilterItems[tabFilterIdx].chips.length"
+          class="caption__wrapper--buttons"
+        >
           <!-- <button class="filter">
             All
           </button> -->
@@ -117,7 +99,9 @@
               formControlName="quickReplyActionFilters"
             >
               <mat-chip
-                *ngFor="let quickReplyType of quickReplyTypes"
+                *ngFor="
+                  let quickReplyType of tabFilterItems[tabFilterIdx].chips
+                "
                 selectable="true"
                 [selected]="isQuickReplyFilterSelected(quickReplyType)"
                 (click)="toggleQuickReplyFilter(quickReplyType)"
@@ -171,36 +155,63 @@
           pInputText
           type="text"
           (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-          placeholder="Search by Name"
+          disabled="true"
           class="p-column-filter"
         />
       </th>
-      <!-- <th>
-          <input pInputText type="text" (input)="dt.filter($event.target.value, 'country.name', 'contains')" placeholder="Search by Country" class="p-column-filter">
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'bookingId')"
+          class="p-column-filter"
+        />
       </th>
-      <th>
-          <p-multiSelect [options]="representatives" placeholder="All" (onChange)="onRepresentativeChange($event)" styleClass="p-column-filter" optionLabel="name">
-              <ng-template let-option pTemplate="item">
-                  <div class="p-multiselect-representative-option">
-                      <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.value.image}}" width="32" style="vertical-align: middle" />
-                      <span class="p-ml-1">{{option.label}}</span>
-                  </div>
-              </ng-template>
-          </p-multiSelect>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
-      <th>
-          <p-calendar (onSelect)="onDateSelect($event)" (onClearClick)="dt.filter('', 'date', 'equals')" [showButtonBar]="true" styleClass="p-column-filter" placeholder="Registration Date" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
-      <th>
-          <p-dropdown [options]="statuses" (onChange)="dt.filter($event.value, 'status', 'equals')" styleClass="p-column-filter" placeholder="Select a Status" [showClear]="true">
-              <ng-template let-option pTemplate="item">
-                  <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-              </ng-template>
-          </p-dropdown>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
-      <th>
-          <input pInputText type="text" (input)="onActivityChange($event)" placeholder="Minimum" class="p-column-filter" >
-      </th> -->
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
     </tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
@@ -214,7 +225,8 @@
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
-      <td>{{ rowData.rooms[0].roomNumber }}-{{ rowData.rooms[0].type }}</td>
+      <!-- <td>{{ rowData.rooms[0].roomNumber }}-{{ rowData.rooms[0].type }}</td> -->
+      <td></td>
       <td>{{ rowData.booking.bookingNumber }}</td>
       <td>
         {{ rowData.guests.primaryGuest.getFullName() }}
@@ -232,43 +244,195 @@
       </td>
       <td>{{ rowData.payment.dueAmount }}/{{ rowData.payment.totalAmount }}</td>
       <td></td>
+
+      <!-- status-image-initiated -->
       <td>
         <div class="icon-wrapper">
           <div class="icon">
             <img
-              class="table-body-journey-icon status-image-initiated"
+              class="table-body-journey-icon"
               src="assets/svg/google-docs.svg"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.stepsStatus.documents == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.stepsStatus.documents == 'PENDING',
+                'status-image-reject':
+                  rowData.status.stepsStatus.documents == 'FAILED',
+                'status-image-success':
+                  rowData.status.stepsStatus.documents == 'COMPLETE'
+              }"
             />
-            <p class="label">Document</p>
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.stepsStatus.documents == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.stepsStatus.documents == 'PENDING',
+                'status-text-reject':
+                  rowData.status.stepsStatus.documents == 'FAILED',
+                'status-text-success':
+                  rowData.status.stepsStatus.documents == 'COMPLETE'
+              }"
+            >
+              Document
+            </p>
           </div>
           <div class="icon">
-            <img class="table-body-journey-icon" src="assets/svg/Payment.svg" />
-            <p class="label">Payment</p>
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/Payment.svg"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.stepsStatus.payment == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.stepsStatus.payment == 'PENDING',
+                'status-image-reject':
+                  rowData.status.stepsStatus.payment == 'FAILED',
+                'status-image-success':
+                  rowData.status.stepsStatus.payment == 'COMPLETE'
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.stepsStatus.payment == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.stepsStatus.payment == 'PENDING',
+                'status-text-reject':
+                  rowData.status.stepsStatus.payment == 'FAILED',
+                'status-text-success':
+                  rowData.status.stepsStatus.payment == 'COMPLETE'
+              }"
+            >
+              Payment
+            </p>
           </div>
           <div class="icon">
             <img
               class="table-body-journey-icon"
               src="assets/svg/Feedback.svg"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.stepsStatus.feedback == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.stepsStatus.feedback == 'PENDING',
+                'status-image-reject':
+                  rowData.status.stepsStatus.feedback == 'FAILED',
+                'status-image-success':
+                  rowData.status.stepsStatus.feedback == 'COMPLETE'
+              }"
             />
-            <p class="label">Feedback</p>
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.stepsStatus.feedback == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.stepsStatus.feedback == 'PENDING',
+                'status-text-reject':
+                  rowData.status.stepsStatus.feedback == 'FAILED',
+                'status-text-success':
+                  rowData.status.stepsStatus.feedback == 'COMPLETE'
+              }"
+            >
+              Feedback
+            </p>
           </div>
           <div class="icon">
             <img
               class="table-body-journey-icon"
               src="assets/svg/google-docs.svg"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.preCheckin == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.preCheckin == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.preCheckin == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.preCheckin == 'COMPLETE'
+              }"
             />
-            <p class="label">PreCheck-in</p>
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.preCheckin == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.preCheckin == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.preCheckin == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.preCheckin == 'COMPLETE'
+              }"
+            >
+              PreCheck-in
+            </p>
           </div>
           <div class="icon">
-            <img class="table-body-journey-icon" src="assets/svg/checkin.svg" />
-            <p class="label">Check-In</p>
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/checkin.svg"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.checkin == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.checkin == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.checkin == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.checkin == 'COMPLETE'
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.checkin == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.checkin == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.checkin == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.checkin == 'COMPLETE'
+              }"
+            >
+              Check-In
+            </p>
           </div>
           <div class="icon">
             <img
               class="table-body-journey-icon"
               src="assets/svg/checkout.svg"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.checkout == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.checkout == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.checkout == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.checkout == 'COMPLETE'
+              }"
             />
-            <p class="label">Check-Out</p>
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.checkout == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.checkout == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.checkout == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.checkout == 'COMPLETE'
+              }"
+            >
+              Check-Out
+            </p>
           </div>
         </div>
       </td>

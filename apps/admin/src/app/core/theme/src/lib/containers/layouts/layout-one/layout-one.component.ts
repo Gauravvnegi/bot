@@ -31,7 +31,14 @@ export class LayoutOneComponent implements OnInit {
   ];
   lastUpdatedAt: string;
   isGlobalFilterVisible: boolean = false;
-
+  filterConfig = {
+    brandName: '',
+    branchName: '',
+    totalFilters: 0,
+    totalFilterContent: function () {
+      return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
+    },
+  };
   constructor(
     private _router: Router,
     public dateService: DateService,
@@ -54,6 +61,8 @@ export class LayoutOneComponent implements OnInit {
   }
 
   setInitialFilterValue() {
+    this.filterConfig.brandName = this._hotelDetailService.hotelDetails.brands[0].label;
+    this.filterConfig.branchName = this._hotelDetailService.hotelDetails.brands[0].branches[0].label;
     this.filterService.emitFilterValue$.next({
       property: {
         hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
@@ -99,11 +108,42 @@ export class LayoutOneComponent implements OnInit {
 
   applyFilter(event) {
     this.filterService.emitFilterValue$.next(event);
+    this.resetFilterCount();
+    this.getFilterCount({ ...event });
     this.toggleGlobalFilter();
+  }
+
+  resetFilterCount() {
+    this.filterConfig.totalFilters = 0;
+  }
+
+  getFilterCount(event) {
+    if (!event) {
+      return;
+    }
+    if (event.property) {
+      delete event.property;
+    }
+    let filterObj = event;
+    for (let key in filterObj) {
+      if (
+        !Array.isArray(filterObj[key]) &&
+        filterObj[key] &&
+        filterObj[key].constructor.name != 'Object'
+      ) {
+        if (filterObj[key]) {
+          this.filterConfig.totalFilters += 1;
+        }
+      } else {
+        this.getFilterCount(filterObj[key]);
+      }
+    }
   }
 
   resetFilter(event) {
     this.filterService.emitFilterValue$.next(event);
+    this.resetFilterCount();
+    this.getFilterCount({ ...event });
   }
 
   applyDateRangeFilter(event) {

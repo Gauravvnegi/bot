@@ -15,7 +15,11 @@
       <div class="options">
         <admin-search-bar style="width: 23%;"></admin-search-bar>
         <button (click)="toggleGlobalFilter()" class="header--button">
-          <p class="filter-button--text">Hotel Hilltop&nbsp;<b style="font-weight: 400;">(+2 others)</b></p>
+          <p class="filter-button--text">
+            {{ filterConfig.branchName }}&nbsp;<b style="font-weight: 400;"
+              >{{ filterConfig.totalFilterContent() }}
+            </b>
+          </p>
           <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
         </button>
         <div
@@ -32,7 +36,8 @@
             (onResetFilter)="resetFilter($event)"
           ></admin-filter>
         </div>
-        <hospitality-bot-daterange style="width: 23%;"
+        <hospitality-bot-daterange
+          style="width: 23%;"
           (onDateRangeFilter)="applyDateRangeFilter($event)"
         ></hospitality-bot-daterange>
         <div class="dropdown-wrapper">

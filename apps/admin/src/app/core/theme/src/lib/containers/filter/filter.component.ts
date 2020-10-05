@@ -112,7 +112,8 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   resetFilter() {
-    this.filterForm.reset();
+    const propertyValue = this.filterForm.get('property').value;
+    this.filterForm.reset({ property: propertyValue });
     this.onResetFilter.next(this.filterForm.getRawValue());
   }
 

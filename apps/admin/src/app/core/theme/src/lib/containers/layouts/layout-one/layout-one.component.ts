@@ -15,6 +15,7 @@ import { ProgressSpinnerService } from '../../../services/progress-spinner.servi
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { GlobalFilterService } from '../../../services/global-filters.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -36,16 +37,30 @@ export class LayoutOneComponent implements OnInit {
     public dateService: DateService,
     public filterService: FilterService,
     public dateRangeFilterService: DateRangeFilterService,
-    public progressSpinnerService: ProgressSpinnerService
+    public progressSpinnerService: ProgressSpinnerService,
+    public globalFilterService: GlobalFilterService,
+    private _hotelDetailService: HotelDetailService
   ) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
+    this.globalFilterService.listenForGlobalFilterChange();
+    this.setInitialFilterValue();
   }
 
   initLayoutConfigs() {
     this.backgroundColor = 'white';
     this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
+  }
+
+  setInitialFilterValue() {
+    this.filterService.emitFilterValue$.next({
+      property: {
+        hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
+        branchName: this._hotelDetailService.hotelDetails.brands[0].branches[0]
+          .id,
+      },
+    });
   }
 
   refreshDashboard() {

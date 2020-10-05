@@ -24,7 +24,8 @@
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="true"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
   [loading]="loading"
   [columns]="cols"
   [value]="values"
@@ -37,6 +38,8 @@
   [totalRecords]="totalRecords"
   [filterDelay]="0"
   [(selection)]="selectedRows"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
@@ -135,7 +138,7 @@
           </div> -->
         </div>
       </form>
-      {{ tableFG.value | json }}
+      <!-- {{ tableFG.value | json }} -->
     </div>
   </ng-template>
 
@@ -211,9 +214,25 @@
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
-      <td *ngFor="let col of columns">
-        {{ rowData[col.field] }}
+      <td>{{ rowData.rooms[0].roomNumber }}-{{ rowData.rooms[0].type }}</td>
+      <td>{{ rowData.booking.bookingNumber }}</td>
+      <td>
+        {{ rowData.guests.primaryGuest.getFullName() }}
+        {{ rowData.guests.getSecGuestDisplayConfig().countString }}
       </td>
+      <td>
+        {{ rowData.booking.getArrivalDate() }}-{{
+          rowData.booking.getDepartureDate()
+        }}
+
+        <hr />
+        {{ rowData.booking.getArrivalTime() }}-{{
+          rowData.booking.getDepartureTime()
+        }}
+      </td>
+      <td>{{ rowData.payment.dueAmount }}/{{ rowData.payment.totalAmount }}</td>
+      <td></td>
+      <td></td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->

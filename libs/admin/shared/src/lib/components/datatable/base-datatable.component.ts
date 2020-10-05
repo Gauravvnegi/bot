@@ -31,6 +31,7 @@ export class BaseDatatableComponent implements OnInit {
   isActionButtons: boolean = false;
   isQuickFilters: boolean = false;
   isTabFilters = true;
+  isCustomSort = true;
 
   tableFG: FormGroup;
 
@@ -41,13 +42,15 @@ export class BaseDatatableComponent implements OnInit {
   first = 0; //index of the first page to show
 
   @Input() tableConfig = {
-    styleClass: 'p-datatable-lg p-datatable-gridlines p-datatable-striped',
+    styleClass: 'p-datatable-sm p-datatable-gridlines p-datatable-striped',
     striped: true,
     gridLines: true,
     size: 'lg',
     paginator: true,
   }; // table-config
 
+  isResizableColumns = true;
+  isAutoLayout = false;
   @Input() loading: boolean = false;
 
   tabFilterItems = [

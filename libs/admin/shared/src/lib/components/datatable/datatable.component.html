@@ -24,7 +24,8 @@
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="true"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
   [loading]="loading"
   [columns]="cols"
   [value]="values"
@@ -135,6 +136,7 @@
           </div> -->
         </div>
       </form>
+      {{ tableFG.value | json }}
     </div>
   </ng-template>
 

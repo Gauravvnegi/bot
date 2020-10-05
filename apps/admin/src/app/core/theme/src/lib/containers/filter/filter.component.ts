@@ -20,21 +20,8 @@ export class FilterComponent implements OnChanges, OnInit {
   @Output() onCloseFilter = new EventEmitter();
   @Output() onApplyFilter = new EventEmitter();
   @Output() onResetFilter = new EventEmitter();
-  filterTypes = [
-    {
-      name: 'property',
-      label: 'Property',
-      disabled: false,
-    },
-    {
-      name: 'guestType',
-      label: 'Guest Type',
-      disabled: false,
-    },
-  ];
 
   hotelList = [];
-
   branchList = [];
 
   filterForm: FormGroup;
@@ -71,7 +58,7 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    this.initialFilterValue && this.setInitialFilterValue();
+    this.setInitialFilterValue();
   }
 
   setInitialFilterValue() {
@@ -81,11 +68,13 @@ export class FilterComponent implements OnChanges, OnInit {
   ngOnInit(): void {
     this.initLOV();
     this.registerListeners();
-    this.initialFilterValue = {
-      property: {
-        hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
-      },
-    };
+    // this.initialFilterValue = {
+    //   property: {
+    //     hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
+    //     branchName: this._hotelDetailService.hotelDetails.brands[0].branches[0]
+    //       .id,
+    //   },
+    // };
     this.setInitialFilterValue();
   }
 
@@ -103,10 +92,10 @@ export class FilterComponent implements OnChanges, OnInit {
         );
 
         this.branchList = branches;
-        this.filterForm
-          .get('property')
-          .get('branchName')
-          .patchValue(this.branchList[0].id);
+        // this.filterForm
+        //   .get('property')
+        //   .get('branchName')
+        //   .patchValue(this.branchList[0].id);
       });
   }
 

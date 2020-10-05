@@ -10,48 +10,48 @@ export class Statistics {
   customer: Customer;
 
   deserialize(statistics: any) {
-    this.arrivals = new Arrivals().deserialize(statistics.arrivals);
-    this.inhouse = new Inhouse().deserialize(statistics.inhouse.actual);
-    this.inhouseRequest = new InhouseRequest().deserialize(statistics.inhouse);
-    this.expressCheckIn = new ExpressCheckIn().deserialize(statistics.arrivals.expressCheckIn);
-    this.expressCheckOut = new ExpressCheckOut().deserialize(statistics.departure.expressCheckout);
-    this.departures = new Departures().deserialize(statistics.departure);
-    this.customer = new Customer().deserialize(statistics.customer);
+    this.arrivals = new Arrivals().deserialize(statistics.ARRIVALS);
+    //   this.inhouse = new Inhouse().deserialize(statistics.inhouse.actual);
+    // this.inhouseRequest = new InhouseRequest().deserialize(statistics.inhouse);
+    //this.expressCheckIn = new ExpressCheckIn().deserialize(statistics.arrivals.expressCheckIn);
+    //this.expressCheckOut = new ExpressCheckOut().deserialize(statistics.departure.expressCheckout);
+    this.departures = new Departures().deserialize(statistics.DEPARTURE);
+    //  this.customer = new Customer().deserialize(statistics.customer);
     return this;
   }
 }
 export class Arrivals {
-	currentlyArrived: number;
-	currentlyExpected: number;
+  currentlyArrived: number;
+  currentlyExpected: number;
   maxExpected: number;
-  
+
   deserialize(statistics: any) {
     Object.assign(
       this,
-      set({}, 'currentlyArrived', get(statistics.actual, ['totalCount'])),
-      set({}, 'currentlyExpected', 140),
-      set({}, 'maxExpected', get(statistics.expected, ['totalCount'])),
+      set({}, 'currentlyArrived', get(statistics, ['completed'])),
+      set({}, 'currentlyExpected', get(statistics, ['pending'])),
+      set({}, 'maxExpected', get(statistics, ['total']))
     );
     return this;
   }
 }
 
 export class InhouseRequest {
-	requestApproved: number;
+  requestApproved: number;
   requestPending: number;
 
   deserialize(statistics: any) {
     Object.assign(
       this,
       set({}, 'requestApproved', get(statistics, ['acceptedRequest'])),
-      set({}, 'requestPending', get(statistics, ['pendingRequest'])),
+      set({}, 'requestPending', get(statistics, ['pendingRequest']))
     );
     return this;
   }
 }
 
 export class Inhouse {
-	adultCount: number;
+  adultCount: number;
   kidsCount: number;
   totalRoom: number;
   roomOccupied: number;
@@ -62,7 +62,7 @@ export class Inhouse {
       set({}, 'adultCount', get(statistics, ['adults'])),
       set({}, 'kidsCount', get(statistics, ['kids'])),
       set({}, 'totalRoom', get(statistics, ['totalCount'])),
-      set({}, 'roomOccupied', get(statistics, ['rooms'])),
+      set({}, 'roomOccupied', get(statistics, ['rooms']))
     );
     return this;
   }
@@ -74,7 +74,7 @@ export class ExpressCheckIn {
   deserialize(statistics) {
     Object.assign(
       this,
-      set({}, 'expected', get(statistics.expected, ['totalCount'])),
+      set({}, 'expected', get(statistics.expected, ['totalCount']))
     );
     return this;
   }
@@ -86,7 +86,7 @@ export class ExpressCheckOut {
   deserialize(statistics) {
     Object.assign(
       this,
-      set({}, 'expected', get(statistics.expected, ['totalCount'])),
+      set({}, 'expected', get(statistics.expected, ['totalCount']))
     );
     return this;
   }
@@ -98,7 +98,7 @@ export class Departures {
 
   deserialize(statistics: any) {
     this.expected = new RoomData().deserialize(statistics.expected);
-    this.actual = new RoomData().deserialize(statistics.actual);
+    this.actual = new RoomData().deserialize(statistics.completed);
     return this;
   }
 }
@@ -107,15 +107,13 @@ export class RoomData {
   totalCount: number;
   kids: number;
   adults: number;
-  rooms: number;
 
   deserialize(statistics: any) {
     Object.assign(
       this,
-      set({}, 'totalCount', get(statistics, ['totalCount'])),
+      set({}, 'totalCount', get(statistics, ['total'])),
       set({}, 'kids', get(statistics, ['kids'])),
-      set({}, 'adults', get(statistics, ['adults'])),
-      set({}, 'rooms', get(statistics, ['rooms'])),
+      set({}, 'adults', get(statistics, ['adults']))
     );
     return this;
   }
@@ -127,10 +125,7 @@ export class Customer {
   vipUser: UserData;
 
   deserialize(statistics: any) {
-    Object.assign(
-      this,
-      set({}, 'totalCount', get(statistics, ['totalCount'])),
-    );
+    Object.assign(this, set({}, 'totalCount', get(statistics, ['totalCount'])));
     this.botUser = new UserData().deserialize(statistics.botUser);
     this.vipUser = new UserData().deserialize(statistics.vipUser);
     return this;
@@ -149,7 +144,7 @@ export class UserData {
       set({}, 'totalCount', get(statistics, ['totalCount'])),
       set({}, 'arriving', get(statistics, ['arriving'])),
       set({}, 'departing', get(statistics, ['departing'])),
-      set({}, 'chart', get(statistics, ['chart'])),
+      set({}, 'chart', get(statistics, ['chart']))
     );
     return this;
   }

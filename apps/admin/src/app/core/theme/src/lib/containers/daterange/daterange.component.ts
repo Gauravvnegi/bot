@@ -1,4 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import * as moment from 'moment';
 @Component({
   selector: 'hospitality-bot-daterange',
@@ -35,7 +41,13 @@ export class DaterangeComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onDateRangeFilter.next({
+      end: moment().endOf('day'),
+      label: 'Today',
+      start: moment().startOf('day'),
+    });
+  }
 
   selectedDate(date) {
     this.onDateRangeFilter.next(date);

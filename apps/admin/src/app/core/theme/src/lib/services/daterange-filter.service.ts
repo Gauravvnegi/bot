@@ -3,5 +3,5 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DateRangeFilterService {
-  emitDateRangeFilterValue$ = new Subject();
+  emitDateRangeFilterValue$ = new BehaviorSubject({});
 }

@@ -29,8 +29,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   cols = [
     { field: 'rooms', header: 'Rooms' },
-    { field: 'bookingId', header: 'Booking No.' },
-    { field: 'guestOrCompany', header: 'Guest/company' },
+    { field: 'booking.bookingNumber', header: 'Booking No.' },
+    { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
     { field: 'arrivalAndDepartureDate', header: 'Arrival Date-Departure Date' },
     { field: 'amountDueAndTotal', header: 'Amount Due/Total(INR)' },
     { field: 'package', header: 'Package' },
@@ -197,5 +197,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         entityState: 'ALL',
       },
     ]);
+  }
+
+  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    value = value && value.trim();
+    this.table.filter(value, field, matchMode);
   }
 }

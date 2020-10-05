@@ -163,7 +163,9 @@
         <input
           pInputText
           type="text"
-          (input)="onBookingSearch($event.target.value, 'bookingId')"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'booking.bookingNumber')
+          "
           class="p-column-filter"
         />
       </th>
@@ -171,9 +173,13 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="
+            onFilterTypeTextChange(
+              $event.target.value,
+              'guests.primaryGuest.firstName'
+            )
+          "
           class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">

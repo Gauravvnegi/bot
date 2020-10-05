@@ -12,6 +12,33 @@
   </div>
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
+      <div class="options">
+        <admin-search-bar style="width: 23%;"></admin-search-bar>
+        <button (click)="toggleGlobalFilter()" class="header--button">
+          <p class="filter-button--text">Hotel Hilltop&nbsp;<b style="font-weight: 400;">(+2 others)</b></p>
+          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+        </button>
+        <div
+          class="filter-wrapper"
+          *ngIf="
+            isGlobalFilterVisible &&
+            (filterService.emitFilterValue$ | async) as initialFilterValue
+          "
+        >
+          <admin-filter
+            [initialFilterValue]="initialFilterValue"
+            (onCloseFilter)="toggleGlobalFilter()"
+            (onApplyFilter)="applyFilter($event)"
+            (onResetFilter)="resetFilter($event)"
+          ></admin-filter>
+        </div>
+        <hospitality-bot-daterange style="width: 23%;"
+          (onDateRangeFilter)="applyDateRangeFilter($event)"
+        ></hospitality-bot-daterange>
+        <div class="dropdown-wrapper">
+          <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
+        </div>
+      </div>
       <div class="refresh__wrapper">
         <p class="status">
           Last updated at
@@ -21,31 +48,6 @@
         <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
           <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
         </div>
-      </div>
-      <admin-search-bar style="width: 23%;"></admin-search-bar>
-      <button (click)="toggleGlobalFilter()" class="header--button">
-        Hotel Hilltop
-        <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
-      </button>
-      <div
-        class="filter-wrapper"
-        *ngIf="
-          isGlobalFilterVisible &&
-          (filterService.emitFilterValue$ | async) as initialFilterValue
-        "
-      >
-        <admin-filter
-          [initialFilterValue]="initialFilterValue"
-          (onCloseFilter)="toggleGlobalFilter()"
-          (onApplyFilter)="applyFilter($event)"
-          (onResetFilter)="resetFilter($event)"
-        ></admin-filter>
-      </div>
-      <hospitality-bot-daterange
-        (onDateRangeFilter)="applyDateRangeFilter($event)"
-      ></hospitality-bot-daterange>
-      <div class="dropdown-wrapper">
-        <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
       </div>
     </div>
     <div class="main-panel--container">

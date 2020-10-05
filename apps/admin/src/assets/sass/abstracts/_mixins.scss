@@ -25,12 +25,19 @@
   font-weight: $bolder;
   font-size: 35px;
   color: $auth-color;
+  margin-bottom: 15px;
+  @media only screen and (max-width: 1300px) {
+    font-size: 25px;
+  }
 }
 
 @mixin auth-quote() {
   font-weight: $medium;
-  font-size: $font18;
+  font-size: $font16;
   color: $auth-quote-color;
   letter-spacing: 0.54px;
   line-height: 25px;
+  @media only screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 }

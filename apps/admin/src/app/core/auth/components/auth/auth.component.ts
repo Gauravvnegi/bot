@@ -12,15 +12,14 @@ export class AuthComponent implements OnInit {
 
   ngOnInit(): void {
     this.managingOptions = [
-      { label: 'Live Dashboard', icon: 'dashboard', url: '' },
-      { label: 'Filters as per Journeys', icon: 'filter', url: '' },
-      { label: 'Analytics', icon: '', url: 'assets/svg/analytics.svg' },
+      { label: 'Live Dashboard', url: 'assets/svg/dashboard-white.svg' },
+      { label: 'Filters as per Journeys', url: 'assets/svg/Filter.svg' },
+      { label: 'Analytics', url: 'assets/svg/analytics.svg' },
       {
         label: 'Live Request Handling',
-        icon: '',
         url: 'assets/svg/live-help.svg',
       },
-      { label: 'Universal Search', icon: '', url: 'assets/svg/search.svg' },
+      { label: 'Universal Search', url: 'assets/svg/search.svg' },
     ];
   }
 }

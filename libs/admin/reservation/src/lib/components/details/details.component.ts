@@ -1,4 +1,4 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -9,14 +9,11 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-  guestDetailsForm: FormGroup;
-  documentsdetailsForm: FormGroup;
-  reservationDetailsForm: FormGroup;
-  selectedGuest;
-  selectedDocument;
+  
+  detailsForm: FormGroup;
   primaryGuest;
   guestDetails;
-  items = [
+  bookingList = [
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
@@ -25,8 +22,7 @@ export class DetailsComponent implements OnInit {
     private _fb: FormBuilder,
     private _reservationService: ReservationService
   ) {
-    this.initGuestDetailForm();
-    this.initReservationForm();
+   this.initDetailsForm()
   }
 
   ngOnInit(): void {
@@ -35,22 +31,31 @@ export class DetailsComponent implements OnInit {
 
   getReservationDetails() {
     this._reservationService
-      .getReservationDetails('e5997cce-49bd-4a92-a013-dec264c47e68')
+      .getReservationDetails('17b322c3-fa52-4e3d-9883-34132f6954cd')
       .subscribe((response) => {
         this.guestDetails = new Details().deserialize(response);
-        this.addGuests(this.guestDetails);
+        this.mapValuesInForm();
       });
   }
 
+  initDetailsForm(){
+    this.detailsForm = this._fb.group({
+      reservationForm : this.initReservationForm(),
+      stayDetails : this.initStayDetailsForm(),
+      healthDeclareForm : this.initHealthDeclareForm(),
+      regCardForm : this.initRegCardForm()
+    })
+  }
+
   initReservationForm() {
-    this.reservationDetailsForm = this._fb.group({
+    return this._fb.group({
       bookingId: [''],
       roomNumber: [''],
     });
   }
 
-  initGuestDetailForm() {
-    this.guestDetailsForm = this._fb.group({
+  initStayDetailsForm() {
+    return this._fb.group({
       arrivalTime: [''],
       departureTime: [''],
       expectedArrivalTime: [''],
@@ -60,98 +65,109 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  getDocumentFG(): FormGroup {
+  initGuestDetailForm() {
+    return this._fb.group({
+    });
+  }
+
+  initHealthDeclareForm(){
+    return this._fb.group({
+      isAccepted:['']
+    })
+  }
+
+  initRegCardForm(){
+    return this._fb.group({
+      status:['']
+    })
+  }
+
+  getPackageFG(): FormGroup {
     return this._fb.group({
       id: [''],
-      documentType: [''],
-      frontUrl: [''],
-      backUrl: [''],
-      verificationStatus: [''],
-    });
+      quantity: [''],
+      rate: [''],
+      imgUrl: [''],
+      amenityName: [''],
+      packageCode: [''],
+      amenityDescription: [''],
+      type: [''],
+      active: [''],
+      metadata: ['']
+    })
   }
 
-  addGuests(guestDetail) {
-    this.guestDetailsForm.addControl('guests', new FormArray([]));
-    guestDetail.guestDetails.forEach((guest) => {
-      let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-      controlFA.push(this.getGuestFG());
-    });
+  // addGuests(guestDetail) {
+  //   this.guestDetailsForm.addControl('guests', new FormArray([]));
+  //   guestDetail.guestDetails.forEach((guest) => {
+  //     let controlFA = this.guestDetailsForm.get('guests') as FormArray;
+  //     controlFA.push(this.getGuestFG());
+  //   });
 
-    this.addDocuments();
-    this.mapValuesInForm();
-    this.extractPrimaryDetails();
-    this.setDefaultGuestForDocument();
-  }
+  //   this.addDocuments();
+  //   this.mapValuesInForm();
+  //   this.extractPrimaryDetails();
+  //   this.setDefaultGuestForDocument();
+  // }
 
-  addDocuments() {
-    this.guests.controls.forEach((element: FormGroup, index) => {
-      element.addControl('documents', new FormArray([]));
-      let controlFA = element.get('documents') as FormArray;
-      this.guestDetails.guestDetails[index].documentDetails.docFile.forEach(
-        (doc) => {
-          controlFA.push(this.getDocumentFG());
-        }
-      );
-    });
-  }
+  // addPackages(){
+  //   this.packageDetailsForm.addControl('complementaryPackage',new FormArray([]));
+  //   this.packageDetailsForm.addControl('paidPackage',new FormArray([]));
+  //   let complementaryControlFA = this.packageDetailsForm.get('complementaryPackage') as FormArray;
+  //   let paidControlFA = this.packageDetailsForm.get('paidPackage') as FormArray;
 
-  setDefaultGuestForDocument() {
-    this.guestDetails.guestDetails.forEach((guest) => {
-      if (guest.isPrimary === true) {
-        this.selectedGuest = guest.id;
-      }
-      this.onGuestChange(guest.id);
-    });
-  }
+  //   this.guestDetails.amenitiesDetails.complementaryPackage.forEach(() => {
+  //     complementaryControlFA.push(this.getPackageFG());
+  //   });
+
+  //   this.guestDetails.amenitiesDetails.paidPackage.forEach(() => {
+  //     paidControlFA.push(this.getPackageFG());
+  //   });
+  // }
 
   mapValuesInForm() {
-    this.guestDetailsForm.patchValue(this.guestDetails.stayDetails);
-    this.guestDetailsForm
-      .get('guests')
-      .patchValue(this.guestDetails.guestDetails);
-    this.guests.controls.forEach((guest, index) => {
-      guest
-        .get('documents')
-        .patchValue(
-          this.guestDetails.guestDetails[index].documentDetails.docFile
-        );
-    });
-    this.reservationDetailsForm.patchValue(
-      this.guestDetails.reservationDetails
-    );
+    this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
+    this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
+    this.healDeclarationForm.patchValue(this.guestDetails.healDeclarationDetails);
+    this.regCardForm.patchValue(this.guestDetails.regCardDetails);
   }
 
-  onGuestChange(value) {
-    this.guests.controls.forEach((guest) => {
-      if (guest.get('id').value === value) {
-        this.selectedDocument = guest.get('documents');
-      }
-    });
+  confirmHealthDocs(){
+    //call Api to confirm
   }
 
-  extractPrimaryDetails() {
+  get primaryDetails() {
+    this.guests &&
     this.guests.controls.forEach((guestFG) => {
       if (guestFG.get('isPrimary').value === true) {
         this.primaryGuest = guestFG;
       }
     });
-  }
-
-  getGuestFG(): FormGroup {
-    return this._fb.group({
-      id: [''],
-      title: [''],
-      firstName: [''],
-      lastName: [''],
-      countryCode: [''],
-      phoneNumber: [''],
-      email: [''],
-      isPrimary: [''],
-      remark: [''],
-    });
+    return this.primaryGuest;
   }
 
   get guests(): FormArray {
-    return this.guestDetailsForm.get('guests') as FormArray;
+    return this.guestDetailsForm && 
+    this.guestDetailsForm.get('guests') as FormArray;
+  }
+
+  get reservationDetailsForm(){
+    return this.detailsForm.get('reservationForm')as FormGroup;
+  } 
+
+  get stayDetailsForm(){
+    return this.detailsForm.get('stayDetails')as FormGroup;
+  }
+
+  get guestDetailsForm(){
+    return this.detailsForm.get('guestDetails')as FormGroup;
+  }
+
+  get healDeclarationForm(){
+    return this.detailsForm.get('healthDeclareForm') as FormGroup;
+  }
+
+  get regCardForm(){
+    return this.detailsForm.get('regCardForm') as FormGroup;
   }
 }

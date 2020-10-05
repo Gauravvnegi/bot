@@ -8,6 +8,11 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { DropdownModule } from 'primeng/dropdown';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminGuestDetailsComponent } from './components/admin-guest-details/admin-guest-details.component';
+import { AdminPackageDetailsComponent } from './components/admin-package-details/admin-package-details.component';
+import { AdminDocumentsDetailsComponent } from './components/admin-documents-details/admin-documents-details.component';
+import { AdminPaymentDetailsComponent } from './components/admin-payment-details/admin-payment-details.component';
+import { AdminDetailsService } from './services/admin-details.service';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -23,8 +28,14 @@ export const adminReservationRoutes: Route[] = [];
     DropdownModule,
   ],
   providers: [
-    ReservationService
+    ReservationService,
+    AdminDetailsService
   ],
-  declarations: [DetailsComponent],
+  declarations: [
+    DetailsComponent,
+    AdminGuestDetailsComponent,
+    AdminDocumentsDetailsComponent,
+    AdminPackageDetailsComponent,
+    AdminPaymentDetailsComponent],
 })
 export class AdminReservationModule {}

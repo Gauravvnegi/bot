@@ -1,6 +1,5 @@
 @import 'main';
 
-
 .wrapper {
   position: relative;
   height: 100vh;
@@ -19,7 +18,7 @@
   transition: all 500ms;
 }
 
-.dropdown-wrapper:focus{
+.dropdown-wrapper:focus {
   outline: none;
 }
 
@@ -48,54 +47,69 @@
   width: $full;
   flex: 1;
   &--header {
-    padding: 13px $padding10;
-    @include flex-between-center();
+    padding: 6px $padding10;
     position: relative;
-    .search-bar-wrapper {
-     @include flex-item-center();
-    }
-    .header--button {
-      padding: 0px $padding10;
-      height: 33px;
-      margin: 0 15px;
-      border: 2px solid #5391d4;
-      font-size: 12px;
-      color: #5391d4;
-      display: flex;
-      align-items: center;
-      background-color: white;
-      border-radius: 5px;
-      &:hover {
-        cursor: pointer;
-        background-color: #5391d4;
-        color: white;
+
+    .options {
+      @include flex-between-center();
+      .search-bar-wrapper {
+        @include flex-item-center();
       }
-      &:focus{
-        outline: none;
+      .header--button {
+        padding: 0px $padding10;
+        height: 33px;
+        width: 23%;
+        border: 2px solid #5391d4;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #5391d4;
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-radius: 5px;
+        &:hover {
+          cursor: pointer;
+          background-color: #5391d4;
+          color: white;
+        }
+        &:focus {
+          outline: none;
+        }
+        .filter-button--text{
+          @media only screen and (max-width: 1200px) {
+            font-size: $font10;
+          }
+        }
+        .material-icons {
+          margin-left: 15px;
+        }
       }
-      .material-icons {
-        margin-left: 15px;
+      .filter-wrapper {
+        position: absolute;
+        top: 90%;
+        right: 3%;
+        box-shadow: 0px 0px 5px 0px darkgray;
+        width: 55%;
+        background-color: white;
+        border-radius: $border5;
+        z-index: 22;
       }
-    }
-    .filter-wrapper{
-      position: absolute;
-      top: 90%;
-      right: 3%;
-      box-shadow: 0px 0px 5px 0px darkgray;
-      width: 55%;
-      background-color: white;
-      border-radius: $border5;
-      z-index: 22;
     }
   }
   &--container {
     .main {
-      max-height: calc(100vh - 13vh);
+      max-height: calc(100vh - 14vh);
       overflow-x: hidden;
       background-color: #f4f5f6;
       .router__wrapper {
         min-height: calc(100vh - 24vh);
         padding: 0px 3rem;
+        @media only screen and (max-width: 1300px) {
+          padding: 0px 1rem;
+        }
+      }
+      @media only screen and (max-width: 1070px) {
+        max-height: calc(100vh - 6vh);
       }
     }
   }
@@ -104,7 +118,7 @@
 .refresh__wrapper {
   display: flex;
   align-items: center;
-
+  padding: 0 13px;
   &--icon {
     display: flex;
     align-items: center;

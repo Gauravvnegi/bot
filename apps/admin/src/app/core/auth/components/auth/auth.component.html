@@ -31,9 +31,6 @@
       <p class="heading">Managing Hotel is Now Easy</p>
       <div class="wrapper--right-managing-hotel-option-box">
         <div *ngFor="let option of managingOptions" class="option">
-          <mat-icon *ngIf="option.icon" class="material-icons" matSuffix>{{
-            option.icon
-          }}</mat-icon>
           <img class="material-icons" [src]="option.url" />
           <p class="option-label">{{ option.label }}</p>
         </div>
@@ -41,7 +38,7 @@
     </div>
     <div class="wrapper--right-footer">
       <div class="image">
-        <img src="assets/hilltop-logo.png" />
+        <img src="assets/botshotlogo.png" />
       </div>
       © 2020, Botshot. All Right Reserved
     </div>

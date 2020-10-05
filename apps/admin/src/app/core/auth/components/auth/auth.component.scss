@@ -17,6 +17,9 @@
     }
     &-auth-panel {
       padding: $padding30;
+      @media only screen and (max-width: 1300px) {
+        padding: $padding20;
+      }
     }
     &-footer {
       font-size: 14px;
@@ -32,6 +35,10 @@
         &:hover {
           cursor: pointer;
         }
+      }
+      @media only screen and (max-width: 800px) {
+        font-size: 13px;
+        bottom: 25px;
       }
     }
     &-svg-icons {
@@ -58,7 +65,7 @@
     width: 65%;
     padding: 1%;
     height: 100vh;
-    background-image: url('../../../../../assets/sidebar-4.jpg');
+    background-image: url('../../../../../assets/auth-banner.png');
     background-repeat: no-repeat;
     background-size: $full $full;
     position: relative;
@@ -81,6 +88,9 @@
       .heading {
         font-size: 40px;
         margin: $margin20 0px;
+        @media only screen and (max-width: 1300px) {
+          font-size: 30px;
+        }
       }
       &-option-box {
         @include flex-space-between();
@@ -90,15 +100,15 @@
           margin-bottom: $margin20;
           @include flex-item-center();
           padding: $padding10;
-          &:hover {
-            cursor: pointer;
-            background-color: rgb(141, 138, 138, 0.6);
-          }
+
           .material-icons {
             margin-right: $margin10;
           }
           .option-label {
             margin: 0;
+            @media only screen and (max-width: 800px) {
+              font-size: $font14;
+            }
           }
         }
       }
@@ -109,17 +119,9 @@
       align-items: center;
       justify-content: space-between;
       width: 96%;
-      bottom: 0px;
+      bottom: 10px;
       font-size: 14px;
       color: white;
-      .image {
-        height: 85px;
-        width: 100px;
-        img {
-          height: 100%;
-          width: 100%;
-        }
-      }
     }
   }
 }

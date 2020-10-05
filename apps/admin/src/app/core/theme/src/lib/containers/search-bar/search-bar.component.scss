@@ -11,6 +11,12 @@
       &::placeholder {
         font-style: italic;
         font-size: 12px;
+        @media only screen and (max-width: 1250px) {
+          font-size: 10px;
+        }
+        @media only screen and (max-width: 1100px) {
+          font-size: 8px;
+        }
       }
       &:focus {
         border: 2px solid #5391d4;

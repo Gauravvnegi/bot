@@ -50,7 +50,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="feilds" style="justify-content: space-between;">
+      <div class="feilds">
         <div class="feild width-trio">
           <mat-label class="mat-label">Job Title :</mat-label>
           <mat-form-field>
@@ -93,7 +93,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild width-trio">
+        <div style="justify-content: flex-end;" class="feild width-trio">
           <mat-label class="mat-label">Branch :</mat-label>
           <mat-form-field>
             <mat-select formControlName="branchName">
@@ -116,9 +116,9 @@
         </div>
       </div>
       <div class="feilds">
-        <div style="width: 38%; margin-right: 5%;" class="feild">
+        <div style="width: 40%;" class="feild">
           <mat-label class="mat-label">Phone No. :</mat-label>
-          <mat-form-field class="phone-no">
+          <mat-form-field class="phone-no-dropdown">
             <mat-select formControlName="cc">
               <!-- <option value="" selected>None</option> -->
               <mat-option
@@ -128,7 +128,7 @@
               >
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field class="phone-no-feild">
             <input
               formControlName="phoneNumber"
               class="input-feild"

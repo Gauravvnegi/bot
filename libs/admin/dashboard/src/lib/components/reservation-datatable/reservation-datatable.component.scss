@@ -3,6 +3,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   .icon {
     width: 25%;
     margin: 6% 1%;
@@ -10,15 +11,39 @@
     flex-direction: column;
     align-items: center;
     .table-body-journey-icon {
-        height: 10px;
-        width: 12px;
-        &:hover{
-            cursor: pointer;
-        }
+      height: 14px;
+      width: 14px;
+      &:hover {
+        cursor: pointer;
+      }
     }
     .label {
       font-size: 7px;
       margin-top: 3px;
     }
   }
+  .line {
+    position: absolute;
+    height: 2px;
+    width: 72%;
+    background-color: #edf1f5;
+    right: 17px;
+  }
+  .first {
+    top: 15%;
+  }
+  .second {
+    top: 65%;
+  }
+}
+
+:host ::ng-deep .no-data-found {
+  display: flex;
+  justify-content: center;
+  width: 72vw;
+  padding: 10px 0;
+}
+
+:host ::ng-deep input[disabled='true'] {
+  background-color: lightgray;
 }

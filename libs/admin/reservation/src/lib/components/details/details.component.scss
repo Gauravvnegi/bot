@@ -258,7 +258,7 @@
   }
 }
 
-.material-body {
+:host ::ng-deep .material-body {
   width: 80%;
   margin: $margin20;
   margin-right: 0;
@@ -360,6 +360,4 @@
   }
 }
 
-.width-added {
-  width: 25%;
-}
+

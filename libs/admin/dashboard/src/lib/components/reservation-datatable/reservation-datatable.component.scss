@@ -1,15 +1,16 @@
+@import 'main';
+
 .icon-wrapper {
-  display: flex;
+  @include flex-between-center();
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+
   position: relative;
   .icon {
-    width: 25%;
-    margin: 6% 1%;
-    display: flex;
+    width: 32%;
+    margin: 6% 0.5%;
+    @include flex-item-center();
     flex-direction: column;
-    align-items: center;
+
     .table-body-journey-icon {
       height: 14px;
       width: 14px;
@@ -37,11 +38,75 @@
   }
 }
 
-:host ::ng-deep .no-data-found {
+:host ::ng-deep .arrival-time {
+  font-size: $font12;
+  color: #b2b7bc;
+  margin-top: 2px;
+}
+
+:host ::ng-deep .arrival-date {
+  font-size: $font12;
+  color: #727272;
+}
+
+:host ::ng-deep .table-header-text {
+  font-size: 13px;
+}
+
+:host ::ng-deep .status-image {
+  padding: 5px !important;
+}
+
+:host ::ng-deep .table-search-head {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+:host ::ng-deep td,
+th {
+  white-space: break-spaces !important;
+}
+
+:host ::ng-deep .booking-number {
+  color: #727272;
+  font-size: $font12;
+}
+
+:host ::ng-deep .guest {
+  color: #727272;
+  font-size: $font12;
+}
+
+:host ::ng-deep .booking-feedback {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  justify-content: space-around;
+  padding: 7px;
+  margin: 0 10px;
+  margin-top: 7px;
+  border-radius: 25px;
+  &:hover {
+    cursor: pointer;
+  }
+  .feedback-icon {
+    height: 14px;
+  }
+  .number {
+    padding: 3px;
+    color: white;
+    text-align: center;
+    width: 20px;
+    border-radius: 50%;
+    font-size: $font12;
+    background-color: #52b33f;
+  }
+}
+
+:host ::ng-deep .no-data-found {
+  @include flex-justify-center();
   width: 72vw;
-  padding: 10px 0;
+  padding: $padding10 0;
 }
 
 :host ::ng-deep input[disabled='true'] {

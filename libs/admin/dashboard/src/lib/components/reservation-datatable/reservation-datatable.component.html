@@ -132,7 +132,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 5%; background-color: #2187d5;" pResizableColumn>
+      <th style="width: 5%; background-color: #eaf0f6;" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -142,13 +142,13 @@
         *ngFor="let col of columns"
       >
         <div>
-          <p>{{ col.header }}</p>
+          <p class="table-header-text">{{ col.header }}</p>
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </div>
       </th>
     </tr>
 
-    <tr>
+    <tr class="table-search-head">
       <th class="table-search-head"></th>
       <th class="table-search-head">
         <input
@@ -233,26 +233,39 @@
       </td>
       <!-- <td>{{ rowData.rooms[0].roomNumber }}-{{ rowData.rooms[0].type }}</td> -->
       <td></td>
-      <td>{{ rowData.booking.bookingNumber }}</td>
       <td>
+        <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
+        <div class="booking-feedback">
+          <p class="number">7</p>
+          <img class="feedback-icon status-image-success" src="assets/svg/precheckin.svg" />
+          <img class="feedback-icon status-image-success" src="assets/svg/precheckin.svg" />
+        </div>
+      </td>
+      <td class="guest">
         {{ rowData.guests.primaryGuest.getFullName() }}
         {{ rowData.guests.getSecGuestDisplayConfig().countString }}
       </td>
       <td>
-        {{ rowData.booking.getArrivalDate() }}-{{
-          rowData.booking.getDepartureDate()
-        }}
+        <p class="arrival-date">
+          {{ rowData.booking.getArrivalDate() }}-{{
+            rowData.booking.getDepartureDate()
+          }}
+        </p>
 
-        <hr />
-        {{ rowData.booking.getArrivalTime() }}-{{
-          rowData.booking.getDepartureTime()
-        }}
+        <p class="arrival-time">
+          {{ rowData.booking.getArrivalTime() }}-{{
+            rowData.booking.getDepartureTime()
+          }}
+        </p>
       </td>
-      <td>{{ rowData.payment.dueAmount }}/{{ rowData.payment.totalAmount }}</td>
+      <td style="font-size: 12px;">
+        <span style="color: #f00d2a;">{{ rowData.payment.dueAmount }}</span
+        >/{{ rowData.payment.totalAmount }}
+      </td>
       <td></td>
 
       <!-- status-image-initiated -->
-      <td>
+      <td class="status-image">
         <div class="icon-wrapper">
           <div class="line first"></div>
           <div class="line second"></div>

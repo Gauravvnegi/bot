@@ -28,9 +28,10 @@
 }
 
 :host ::ng-deep .table-data-head {
-  background-color: #2187d5 !important;
-  color: white !important;
+  background-color: #eaf0f6 !important;
+  color: black !important;
   font-size: 14px;
+  border-bottom: 0 !important;
   div {
     display: flex;
     justify-content: space-between;
@@ -47,7 +48,7 @@
 }
 
 :host ::ng-deep .table-search-head {
-  background-color: #f4f9fd !important;
+  background-color: #eaf0f6 !important;
   input {
     padding: 8px;
     border-radius: 5px;
@@ -59,8 +60,8 @@
 }
 
 :host ::ng-deep .p-sortable-column-icon {
-  color: white !important;
-  font-size: 18px;
+  color: #B7B7B7 !important;
+  font-size: 13px;
 }
 
 :host ::ng-deep .p-tabmenu .p-tabmenu-nav {

@@ -18,6 +18,10 @@
   background-color: white;
 }
 
+.width-added {
+  width: 25%;
+}
+
 :host ::ng-deep .header {
   background: transparent
     linear-gradient(
@@ -153,7 +157,7 @@
 .feilds-wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
   margin: 30px 0px;
   padding: 0px 30px;
   .feild {

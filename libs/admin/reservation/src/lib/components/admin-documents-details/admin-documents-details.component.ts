@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
+import { AdminDetailsService } from '../../services/admin-details.service';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -9,9 +10,10 @@ import { ReservationService } from '../../services/reservation.service';
 })
 export class AdminDocumentsDetailsComponent implements OnInit {
 
-  selectedGuestId;
-  selectedGuestGroup;
   disableDocumentType = false;
+  selectedGuestGroup;
+  selectedGuestId;
+  //isSelectedGuestInternational:boolean;
   documentsList;
   countries;
   fileUploadData = {
@@ -24,10 +26,12 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _reservationService: ReservationService
+    private _reservationService: ReservationService,
+    private _adminDetailsService: AdminDetailsService
   ) { }
 
   ngOnInit(): void {
+    this.listenForGuestNationalityChange();
     this.getCountriesList();
     this.addDocumentStatusForm();
     this.setDefaultGuestForDocument();
@@ -55,22 +59,33 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           nationality: country.nationality,
         };
       });
-      this.guests.patchValue(this.guestDetails.guestDetails);
     });
+    console.log(this.parentForm);
+      console.log(this.guestDetails);
   }
 
   onNationalityChange(nationality){
+    this.documentsList =[];
+    this.selectedGuestGroup.get('selectedDocumentType').setValue('');
+    this.getDocumentsByCountry(nationality);
+  }
+
+  listenForGuestNationalityChange(){
+    this._adminDetailsService.guestNationality.subscribe(response =>{
+        if(response){
+         this.setDocumentsIfInternational(this.documentsList);
+        }else{
+         this.setDocumentsIfNotInternational();
+        }
+    });
+  }
+
+  getDocumentsByCountry(nationality){
     this._reservationService.getDocumentsByNationality(this.guestDetails.reservationDetails.hotelId, nationality)
     .subscribe(response =>{
       this.documentsList = response.documentList;
-      if(this.selectedGuestGroup.get('documents').controls.length < 1){
-        if(response.verifyAllDocuments){
-          this.setDocumentsIfInternational(this.documentsList);
-        }else{
-          this.setDocumentsIfNotInternational();
-        }
-      }
-    });
+      this._adminDetailsService.guestNationality = response.verifyAllDocuments;
+    })
   }
 
   setDefaultGuestForDocument() {
@@ -90,11 +105,23 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       documentFA.push(this.getDocumentFG());
       documentFA.at(index).get('documentType').patchValue(documentType);
     });
+    let documentDetails = this.getGuestDocumentsValue(this.selectedGuestId);
+    if(documentDetails){
+      documentFA.patchValue(documentDetails && documentDetails);
+    }
   }
 
   setDocumentsIfNotInternational(){
     this.selectedGuestGroup.get('documents').controls = [];
     this.disableDocumentType = false;
+    if(this.selectedGuestGroup.get('selectedDocumentType').value){
+      let documentFA = this.selectedGuestGroup.get('documents') as FormArray;
+      documentFA.push(this.getDocumentFG());
+      let documentDetails = this.getGuestDocumentsValue(this.selectedGuestId);
+      if(documentDetails){
+        documentFA.patchValue(documentDetails && documentDetails);
+      }
+    }
   }
 
   onSelectedDocumentTypeChange(documentType){
@@ -108,13 +135,14 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     if(this.guests.controls.length > 0){
       this.guests.controls.forEach((element: FormGroup, index) => {
         element.addControl('documents', new FormArray([]));
-        let controlFA = element.get('documents') as FormArray;
-        this.guestDetails.guestDetails[index].documents.forEach(
-          (doc) => {
-            controlFA.push(this.getDocumentFG());
-          }
-        );
       });
+    }
+  }
+
+  getGuestDocumentsValue(guestId){
+    let guest = this.guestDetails.guestDetails.find(guest => guest.id === guestId);
+    if(guest.nationality === this.selectedGuestGroup.get('nationality').value && guest.selectedDocumentType === this.selectedGuestGroup.get('selectedDocumentType').value){
+      return guest.documents;
     }
   }
 
@@ -136,7 +164,11 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       if (guest.get('id').value === value) {
         this.selectedGuestId = value;
         this.selectedGuestGroup = guest;
-        this.onNationalityChange(this.selectedGuestGroup.get('nationality').value);
+        this.documentsList = [];
+        // let nationality = (this.guestDetails.guestDetails.find(guest => this.selectedGuestId === guest.id)).nationality;
+        // this.selectedGuestGroup.get('nationality').patchValue(nationality);
+        // this.getDocumentsByCountry(nationality);
+        this.getDocumentsByCountry(this.selectedGuestGroup.get('nationality').value);
       }
     });
   }

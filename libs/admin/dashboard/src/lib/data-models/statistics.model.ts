@@ -18,7 +18,7 @@ export class Statistics {
     //this.expressCheckIn = new ExpressCheckIn().deserialize(statistics.arrivals.expressCheckIn);
     //this.expressCheckOut = new ExpressCheckOut().deserialize(statistics.departure.expressCheckout);
     this.departures = new Departures().deserialize(statistics.DEPARTURE);
-    //  this.customer = new Customer().deserialize(statistics.customer);
+    this.customer = new Customer().deserialize(statistics.CUSTOMERS);
     return this;
   }
 }
@@ -124,31 +124,18 @@ export class RoomData {
 }
 
 export class Customer {
-  totalCount: number;
-  botUser: UserData;
-  vipUser: UserData;
-
-  deserialize(statistics: any) {
-    Object.assign(this, set({}, 'totalCount', get(statistics, ['totalCount'])));
-    this.botUser = new UserData().deserialize(statistics.botUser);
-    this.vipUser = new UserData().deserialize(statistics.vipUser);
-    return this;
-  }
-}
-
-export class UserData {
-  totalCount: number;
-  arriving: number;
-  departing: number;
-  chart: any;
+  checkIn: any;
+  expressCheckIn: any;
+  checkout: any;
+  expressCheckout: any;
 
   deserialize(statistics: any) {
     Object.assign(
       this,
-      set({}, 'totalCount', get(statistics, ['totalCount'])),
-      set({}, 'arriving', get(statistics, ['arriving'])),
-      set({}, 'departing', get(statistics, ['departing'])),
-      set({}, 'chart', get(statistics, ['chart']))
+      set({}, 'checkIn', get(statistics, ['checkinStats'])),
+      set({}, 'expressCheckIn', get(statistics, ['expressCheckinStats'])),
+      set({}, 'checkout', get(statistics, ['checkoutStats'])),
+      set({}, 'expressCheckout', get(statistics, ['expressCheckoutStats']))
     );
     return this;
   }

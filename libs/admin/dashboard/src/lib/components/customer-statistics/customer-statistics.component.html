@@ -1,18 +1,21 @@
 <div class="container">
-  <div class="title-container">
-	<div class="icon">
+  <div class="stat-header">
+	<div class="title-container">
+		<div class="icon">
 		<img src="assets/svg/customers.svg" />
 	  </div>
 		<div style="margin: 6px 0;"><span class="stat-title">Customers</span></div>
 	</div>
+	<div class="stat-labels-container">
+		<div class="stat-label"><span class="checkIn-border"></span><span class="stat-label-title">Check-In</span></div>
+		<div class="stat-label"><span class="checkIn-border dashed"></span><span class="stat-label-title">Express Check-In</span></div>
+		<div class="stat-label"><span class="checkout-border"></span><span class="stat-label-title">Checkout</span></div>
+		<div class="stat-label"><span class="checkout-border dashed"></span><span class="stat-label-title">Express Checkout</span></div>
+	</div>
+	</div>
 	<div class="stat-val-container">
-		<div class="stat-labels-container">
-			<div class="stat-label"><span class="stat-label-title">Total</span><span class="stat-label-content">{{ chart.total }}</span></div>
-			<div class="stat-label"><span class="stat-label-title">BOT</span><span class="stat-label-content-red">{{ chart.bot }}</span></div>
-			<div class="stat-label"><span class="stat-label-title">VIP</span><span class="stat-label-content-VIP">{{ chart.vip }}</span></div>
-		</div>
 		<div class="line-chart">
-			<canvas baseChart style="max-width: 100%;"
+			<canvas baseChart style="max-width: 100%; max-height: 160px;"
 				[datasets]="chart.chartData" 
 				[labels]="chart.chartLabels" 
 				[options]="chart.chartOptions"

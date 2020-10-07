@@ -9,13 +9,13 @@
   flex-direction: column;
   justify-content: space-between;
   .title-container {
-	display: flex;
-	align-items: center;
-	.icon{
-		height: 30px;
-		width: 35px;
-		margin-right: 10px;
-	}
+	  display: flex;
+	  align-items: center;
+	  .icon{
+		  height: 30px;
+		  width: 35px;
+		  margin-right: 10px;
+	  }
   }
 }
 
@@ -30,5 +30,8 @@
   }
   .change-height {
     height: 200px;
+  }
+  .change-width {
+    width: 64%;
   }
 }

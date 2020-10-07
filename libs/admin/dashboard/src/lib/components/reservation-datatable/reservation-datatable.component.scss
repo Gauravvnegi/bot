@@ -75,12 +75,12 @@ th {
 :host ::ng-deep .guest {
   color: #727272;
   font-size: $font12;
-  &:hover{
-    .demo{
+  &:hover {
+    .demo {
       display: block;
     }
   }
-  .demo{
+  .demo {
     display: none;
   }
 }
@@ -96,6 +96,14 @@ th {
   border-radius: 25px;
   &:hover {
     cursor: pointer;
+  }
+  &:hover {
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    display: none;
   }
   .feedback-icon {
     height: 14px;
@@ -119,4 +127,8 @@ th {
 
 :host ::ng-deep input[disabled='true'] {
   background-color: lightgray;
+}
+
+.chipSelected {
+  background-color: red;
 }

@@ -25,9 +25,9 @@ export class ApiService {
   /**
    * GET request
    */
-  get(uri: string): any {
+  get(uri: string, config = {}): any {
     return this.httpClient
-      .get(this.getBaseUrl() + uri)
+      .get(this.getBaseUrl() + uri, config)
       .pipe(catchError(this.handleError));
   }
 

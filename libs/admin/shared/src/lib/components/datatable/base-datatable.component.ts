@@ -5,7 +5,7 @@ import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { FormGroup, FormBuilder } from '@angular/forms';
-
+import * as FileSaver from 'file-saver';
 interface Import {
   name: string;
   code: string;
@@ -93,11 +93,24 @@ export class BaseDatatableComponent implements OnInit {
   selectionMode = 'multiple';
   selectedRows = [];
 
-  documentActionTypes = [{ label: 'Export', value: 'export' }];
+  documentActionTypes = [
+    {
+      label: 'Export All',
+      value: 'exportAll',
+      type: '',
+      defaultLabel: 'Export All',
+    },
+    {
+      label: `Export`,
+      value: 'export',
+      type: 'countType',
+      defaultLabel: 'Export',
+    },
+  ];
   documentTypes = [
     { label: 'CSV', value: 'csv' },
-    { label: 'EXCEL', value: 'excel' },
-    { label: 'PDF', value: 'pdf' },
+    // { label: 'EXCEL', value: 'excel' },
+    // { label: 'PDF', value: 'pdf' },
   ];
 
   quickReplyTypes = [
@@ -114,7 +127,7 @@ export class BaseDatatableComponent implements OnInit {
   initTableFG() {
     this.tableFG = this._fb.group({
       documentActions: this._fb.group({
-        documentActionType: ['export'],
+        documentActionType: ['exportAll'],
         documentType: ['csv'],
       }),
       quickReplyActionFilters: [[]],
@@ -175,7 +188,17 @@ export class BaseDatatableComponent implements OnInit {
     //check for selected. if true pass an option
     this.tableFG.value;
     //this.table.exportCSV();
+
+    switch (this.tableFG.get('documentActions').get('documentType').value) {
+      case 'csv':
+        this.exportCSV();
+        break;
+      default:
+        break;
+    }
   }
+
+  exportCSV() {}
 
   exportPdf() {
     import('jspdf').then((jsPDF) => {
@@ -242,5 +265,24 @@ export class BaseDatatableComponent implements OnInit {
     return true;
   }
 
-  toggleQuickReplyFilter(quickReplyFilter) {}
+  // toggleQuickReplyFilter(quickReplyFilter) {}
+
+  onRowSelect(event) {
+    this.documentActionTypes.forEach((item) => {
+      if (item.type == 'countType') {
+        item.label = `Export (${this.selectedRows.length})`;
+      }
+    });
+  }
+
+  onRowUnselect(event) {
+    this.documentActionTypes.forEach((item) => {
+      if (item.type == 'countType') {
+        item.label =
+          this.selectedRows.length > 0
+            ? `Export (${this.selectedRows.length})`
+            : 'Export';
+      }
+    });
+  }
 }

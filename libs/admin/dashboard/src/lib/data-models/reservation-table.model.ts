@@ -20,12 +20,27 @@ export class Reservation implements Deserializable {
   booking;
   payment;
   status;
+  feedback;
   deserialize(input: any) {
     this.booking = new Booking().deserialize(input);
     this.rooms = input.rooms.map((room) => new Room().deserialize(room));
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);
+    this.feedback = new Feedback().deserialize(input.feedback);
+    return this;
+  }
+}
+
+export class Feedback implements Deserializable {
+  rating;
+  comments: string;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'rating', get(input, ['rating'])),
+      set({}, 'comments', get(input, ['comments']))
+    );
     return this;
   }
 }
@@ -141,7 +156,7 @@ export class GuestType implements Deserializable {
       count: this.secondaryGuest.length,
       countString:
         this.secondaryGuest.length > 0
-          ? `(${this.secondaryGuest.length})`
+          ? `(+${this.secondaryGuest.length})`
           : null,
     };
   }

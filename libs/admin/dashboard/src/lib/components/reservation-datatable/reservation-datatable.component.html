@@ -15,6 +15,8 @@
   [totalRecords]="totalRecords"
   [filterDelay]="0"
   [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
 >
@@ -100,16 +102,22 @@
             >
               <mat-chip
                 *ngFor="
-                  let quickReplyType of tabFilterItems[tabFilterIdx].chips
+                  let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+                  let quickReplyTypeIdx = index
                 "
                 selectable="true"
+                [ngClass]="{ chipSelected: quickReplyType.isSelected }"
                 [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="toggleQuickReplyFilter(quickReplyType)"
+                (click)="
+                  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
+                "
               >
                 {{ quickReplyType.label }}
               </mat-chip>
             </mat-chip-list>
           </div>
+
+          <!-- {{ selectedQuickReplyFilters | json }} -->
           <!-- <div
             class="button__wrapper"
             *ngFor="let quickReplyType of quickReplyTypes"
@@ -235,16 +243,40 @@
       <td>
         <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
         <div class="booking-feedback">
-          <p class="number">7</p>
-          <img class="feedback-icon status-image-success" src="assets/svg/facilities.svg" />
-          <img class="feedback-icon status-image-success" src="assets/svg/food.svg" />
+          <p class="number">{{ rowData.feedback.rating }}</p>
+          <img
+            class="feedback-icon status-image-success"
+            src="assets/svg/facilities.svg"
+          />
+          <img
+            class="feedback-icon status-image-success"
+            src="assets/svg/food.svg"
+          />
+          <div
+            *ngIf="rowData.feedback.comments"
+            [ngClass]="{
+              'feedback-msg': rowData.feedback.comments.length > 0
+            }"
+          >
+            {{ rowData.feedback.comments }}
+          </div>
         </div>
       </td>
       <td class="guest">
         {{ rowData.guests.primaryGuest.getFullName() }}
         {{ rowData.guests.getSecGuestDisplayConfig().countString }}
-        <div class="demo">
-          hello
+        <div
+          *ngIf="rowData.guests.secondaryGuest.length > 0"
+          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        >
+          <div
+            *ngFor="
+              let secondaryGuest of rowData.guests.secondaryGuest;
+              let guestIdx = index
+            "
+          >
+            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+          </div>
         </div>
       </td>
       <td>

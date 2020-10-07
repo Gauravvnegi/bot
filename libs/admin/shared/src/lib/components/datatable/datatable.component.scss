@@ -42,6 +42,11 @@
   }
 }
 
+:host ::ng-deep .p-highlight{
+  border-color: #6bacf8 !important;
+  background: #6bacf8 !important;
+}
+
 :host ::ng-deep .mat-ink-bar {
   background-color: #2187d5;
   height: 1px;

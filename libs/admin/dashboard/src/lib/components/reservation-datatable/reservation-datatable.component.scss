@@ -65,6 +65,7 @@
 :host ::ng-deep td,
 th {
   white-space: break-spaces !important;
+  overflow: inherit !important;
 }
 
 :host ::ng-deep .booking-number {
@@ -75,14 +76,33 @@ th {
 :host ::ng-deep .guest {
   color: #727272;
   font-size: $font12;
+  position: relative;
   &:hover {
+    cursor: pointer;
     .demo {
       display: block;
     }
   }
   .demo {
+    position: absolute;
+    width: 90%;
+    top: 50%;
+    font-size: 12px;
+    background-color: white;
+    left: 5%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px lightgray;
+    border-radius: 5px;
     display: none;
   }
+}
+
+:host ::ng-deep .tabel-room-no {
+  padding: 7px;
+  font-size: 12px;
+  background-color: rgb(72, 192, 72, 0.2);
+  border-radius: 25px;
+  text-align: center;
 }
 
 :host ::ng-deep .booking-feedback {
@@ -94,15 +114,24 @@ th {
   margin: 0 10px;
   margin-top: 7px;
   border-radius: 25px;
+  position: relative;
   &:hover {
     cursor: pointer;
-  }
-  &:hover {
     .feedback-msg {
       display: block;
     }
   }
   .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: #727272;
+    background-color: white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px lightgray;
+    border-radius: 5px;
     display: none;
   }
   .feedback-icon {
@@ -130,5 +159,6 @@ th {
 }
 
 .chipSelected {
-  background-color: red;
+  background-color: #959ea7;
+  color: white;
 }

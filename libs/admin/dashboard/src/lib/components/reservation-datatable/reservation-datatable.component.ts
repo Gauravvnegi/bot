@@ -8,6 +8,7 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable } from 'rxjs';
 import { ReservationTable } from '../../data-models/reservation-table.model';
 import { ReservationService } from '../../services/reservation.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -26,6 +27,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
+  triggerInitialData = false;
 
   cols = [
     { field: 'rooms', header: 'Rooms' },
@@ -55,16 +57,58 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       chips: [
         { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
         {
-          label: 'Check-In Pending ',
+          label: 'Precheckin_Pending ',
+          icon: '',
+          value: 'PRECHECKINPENDING',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'Precheckin_Initiated ',
+          icon: '',
+          value: 'PRECHECKININITIATED',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'Precheckin_Complete ',
+          icon: '',
+          value: 'PRECHECKINCOMPLETE',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'Precheckin_Failed',
+          icon: '',
+          value: 'PRECHECKINFAILED',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'CheckIn_Pending',
           icon: '',
           value: 'CHECKINPENDING',
           total: 0,
           isSelected: false,
         },
         {
-          label: 'Check-In Completed ',
+          label: 'CheckIn_Initiated',
+          icon: '',
+          value: 'CHECKININITIATED',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'CheckIn_Complete',
           icon: '',
           value: 'CHECKINCOMPLETE',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'CheckIn_Failed',
+          icon: '',
+          value: 'CHECKINFAILED',
           total: 0,
           isSelected: false,
         },
@@ -76,19 +120,49 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       value: 'DEPARTURE',
       disabled: false,
       total: 0,
-      chips: [],
+      chips: [
+        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+        {
+          label: 'Checkout_Pending',
+          icon: '',
+          value: 'CHECKOUTPENDING',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'Checkout_Initiated',
+          icon: '',
+          value: 'CHECKOUTINITIATED',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'CheckOut_Completed',
+          icon: '',
+          value: 'CHECKOUTCOMPLETED',
+          total: 0,
+          isSelected: false,
+        },
+        {
+          label: 'Checkout_Failed',
+          icon: '',
+          value: 'CHECKOUTFAILED',
+          total: 0,
+          isSelected: false,
+        },
+      ],
     },
   ];
   tabFilterIdx: number = 1;
 
-  triggerInitialData = false;
   globalQueries = [];
   selectedQuickReplyFilters = [];
   constructor(
     public fb: FormBuilder,
     private _reservationService: ReservationService,
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
   ) {
     super(fb);
   }
@@ -133,14 +207,20 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   loadInitialData(queries = []) {
     this.loading = true;
-    this.fetchDataFrom(queries).subscribe((data) => {
-      this.values = new ReservationTable().deserialize(data).records;
-      //   this.values = data.records;
-      //setting pagination
-      this.totalRecords = data.total;
-      this.loading = false;
-      this.updateTabFilterCount(this.totalRecords);
-    });
+    this.fetchDataFrom(queries).subscribe(
+      (data) => {
+        this.values = new ReservationTable().deserialize(data).records;
+        //   this.values = data.records;
+        //setting pagination
+        this.totalRecords = data.total;
+        this.loading = false;
+        this.updateTabFilterCount(this.totalRecords);
+      },
+      (error) => {
+        this.loading = false;
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 
   updateTabFilterCount(count) {

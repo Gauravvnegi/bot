@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { AdminDetailStatus } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
 
 @Injectable()
 export class AdminDetailsService {

@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
+import { AdminDetailsService } from '../../services/admin-details.service';
+import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -10,6 +13,9 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 })
 export class DetailsComponent implements OnInit {
   
+  @ViewChild(AdminGuestDetailsComponent) guestDetailComponent: AdminGuestDetailsComponent;
+  @ViewChild(AdminDocumentsDetailsComponent) documentDetailComponent: AdminDocumentsDetailsComponent;
+
   detailsForm: FormGroup;
   primaryGuest;
   guestDetails;
@@ -20,7 +26,8 @@ export class DetailsComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _reservationService: ReservationService
+    private _reservationService: ReservationService,
+    private _adminDetailsService: AdminDetailsService
   ) {
    this.initDetailsForm()
   }
@@ -103,10 +110,15 @@ export class DetailsComponent implements OnInit {
     this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
     this.healDeclarationForm.patchValue(this.guestDetails.healDeclarationDetails);
     this.regCardForm.patchValue(this.guestDetails.regCardDetails);
+    this.setStepsStatus();
   }
 
-  confirmHealthDocs(){
-    //call Api to confirm
+  setStepsStatus(){
+    this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get('isAccepted').value;
+  }
+
+  confirmHealthDocs(status){
+    this.guestDetailComponent.updateHealthDeclarationStatus(status);
   }
 
   primaryDetails() {
@@ -136,6 +148,10 @@ export class DetailsComponent implements OnInit {
 
   get healDeclarationForm(){
     return this.detailsForm.get('healthDeclareForm') as FormGroup;
+  }
+
+  get healthDeclarationStatus(){
+    return this._adminDetailsService.healthDeclarationStatus;
   }
 
   get regCardForm(){

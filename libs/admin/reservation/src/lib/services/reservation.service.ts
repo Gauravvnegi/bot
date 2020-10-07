@@ -20,6 +20,10 @@ export class ReservationService extends ApiService {
     );
   }
 
+  updateStepStatus(reservationId, data){
+    return this.put(`/api/v1/reservation/${reservationId}/verify-steps`, data);
+  }
+
   uploadDocumentFile(reservationId, guestId, formData): Observable<any> {
     return this.uploadDocument(
       `/api/v1/reservation/${reservationId}/guest/${guestId}/documents/upload`,

@@ -84,7 +84,8 @@ export class GuestDetailsConfig implements Deserializable{
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
       set({}, 'nationality', get(input, ['nationality'])||hotelNationality),
-      set({}, 'verificationStatus', 'PENDING'),
+      set({}, 'verificationStatus', get(input.statusMessage, ['status'])),
+      set({}, 'remark', get(input.statusMessage, ['remarks'])),
       set({}, 'isInternational', get(input, ['nationality']) === hotelNationality? false: true),
       set({}, 'selectedDocumentType',  input.nationality === hotelNationality
       ? input.documents && input.documents[0]
@@ -175,7 +176,7 @@ export class ReservationDetailsConfig implements Deserializable{
     Object.assign(
       this,
       set({}, 'bookingId', get(input, ['number'])),
-      set({}, 'roomNumber', get(input, ['roomNumber'])),
+      set({}, 'roomNumber', get(input, ['roomNumber'])||'--'),
       set({}, 'hotelId', get(input.hotel, ['id'])),
     )
     return this;
@@ -247,7 +248,7 @@ export class PaymentDetailsConfig implements Deserializable{
       set({}, 'currentDate', new DateService().currentDate('DD/MM/YYYY')),
       set({}, 'expectedArrivalTime', '---'),
       set({}, 'roomType', get(input.stayDetails, ['roomType'])),
-      set({}, 'roomNumber', ''),
+      set({}, 'roomNumber', '--'),
       set({}, 'kidsCount', get(input.stayDetails, ['kidsCount'])),
       set({}, 'adultsCount', get(input.stayDetails, ['adultsCount'])),
       set({}, 'roomsCount', ''),

@@ -73,14 +73,23 @@
                 >
               </p>
               <div class="decision-button-wrapper">
-                <button class="right" (click)="setHealthDeclaration('ACCEPT')">
-                  <img src="assets/svg/tick.svg" />
+                <button *ngIf="!isActionEdit" class="right" (click)="editHealthStatus()">
+                  Edit
                 </button>
-                <button class="right" (click)="setHealthDeclaration('REJECT')">
-                  <img src="assets/svg/cross.svg" />
-                </button>
+                <ng-container *ngIf="isActionEdit">
+                  <button class="right" (click)="updateHealthDeclarationStatus('ACCEPT')">
+                    <img src="assets/svg/tick.svg" />
+                  </button>
+                  <button class="right" (click)="updateHealthDeclarationStatus('REJECT')">
+                    <img src="assets/svg/cross.svg" />
+                  </button>
+                </ng-container>
               </div>
             </div>
+            <mat-form-field *ngIf="isActionEdit">
+              <mat-label>Add Remark:</mat-label>
+                <input matInput formControlName="remark" />
+              </mat-form-field>
           </ng-container>
         </div>
       </form>

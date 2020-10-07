@@ -2,8 +2,8 @@
     <div class="document-header">
         <p class="heading">Guest Documents</p>
         <i *ngIf="documentStatus.get('status').value === 'PENDING'" class="fa fa-question-circle" aria-hidden="true"></i>
-        <i *ngIf="documentStatus.get('status').value === 'ACCEPT'" class="fa fa-check-circle" aria-hidden="true"></i>
-        <i *ngIf="documentStatus.get('status').value === 'REJECT'" class="fa fa-window-close" aria-hidden="true"></i>
+        <i *ngIf="documentStatus.get('status').value === 'COMPLETED'" class="fa fa-check-circle" aria-hidden="true"></i>
+        <i *ngIf="documentStatus.get('status').value === 'FAILED'" class="fa fa-window-close" aria-hidden="true"></i>
     </div>
     <div class="wrapper">
         <form [formGroup]="selectedGuestGroup">

@@ -1,0 +1,15 @@
+:host ::ng-deep .input-upload{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    opacity: 0;
+}
+
+:host ::ng-deep .upload__box{
+    position: relative;
+}

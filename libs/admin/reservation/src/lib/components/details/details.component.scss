@@ -297,11 +297,17 @@
   width: 18%;
   padding: $padding20;
   position: absolute;
-  top: 55px;
+  top: 53px;
   right: 0;
   height: 88%;
   z-index: 22;
   background-color: white;
+  .contact {
+    font-size: 11px;
+    color: #9eaeb8;
+    text-align: center;
+    margin-bottom: 7px;
+  }
   .button-wrapper {
     display: flex;
     justify-content: center;
@@ -359,5 +365,3 @@
     }
   }
 }
-
-

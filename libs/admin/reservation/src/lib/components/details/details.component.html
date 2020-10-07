@@ -3,12 +3,12 @@
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-    <div class="name-details" *ngIf="primaryDetails">
+    <div class="name-details" *ngIf="primaryGuest">
       <div class="name">
         <span
-          >{{ primaryDetails.get('title').value
-          }}{{ primaryDetails.get('firstName').value
-          }}{{ primaryDetails.get('lastName').value }}</span
+          >{{ primaryGuest.title
+          }}{{ primaryGuest.firstName
+          }}{{ primaryGuest.lastName }}</span
         >
         <div class="svg-wrapper">
           <svg
@@ -90,13 +90,13 @@
     <div class="contact-details" *ngIf="primaryGuest">
       <div class="call">
         <mat-icon class="material-icons" matSuffix>call</mat-icon>
-        {{ primaryDetails.get('countryCode').value
-        }}{{ primaryDetails.get('phoneNumber').value }}
+        {{ primaryGuest.countryCode
+        }}{{ primaryGuest.phoneNumber }}
       </div>
 
       <div class="email">
         <mat-icon class="material-icons" matSuffix>email</mat-icon>
-        {{ primaryDetails.get('email').value }}
+        {{ primaryGuest.email }}
       </div>
     </div>
     <div class="options-wrapper">

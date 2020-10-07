@@ -35,6 +35,7 @@ export class DetailsComponent implements OnInit {
       .subscribe((response) => {
         this.guestDetails = new Details().deserialize(response);
         this.mapValuesInForm();
+        this.primaryDetails();
       });
   }
 
@@ -97,34 +98,6 @@ export class DetailsComponent implements OnInit {
     })
   }
 
-  // addGuests(guestDetail) {
-  //   this.guestDetailsForm.addControl('guests', new FormArray([]));
-  //   guestDetail.guestDetails.forEach((guest) => {
-  //     let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-  //     controlFA.push(this.getGuestFG());
-  //   });
-
-  //   this.addDocuments();
-  //   this.mapValuesInForm();
-  //   this.extractPrimaryDetails();
-  //   this.setDefaultGuestForDocument();
-  // }
-
-  // addPackages(){
-  //   this.packageDetailsForm.addControl('complementaryPackage',new FormArray([]));
-  //   this.packageDetailsForm.addControl('paidPackage',new FormArray([]));
-  //   let complementaryControlFA = this.packageDetailsForm.get('complementaryPackage') as FormArray;
-  //   let paidControlFA = this.packageDetailsForm.get('paidPackage') as FormArray;
-
-  //   this.guestDetails.amenitiesDetails.complementaryPackage.forEach(() => {
-  //     complementaryControlFA.push(this.getPackageFG());
-  //   });
-
-  //   this.guestDetails.amenitiesDetails.paidPackage.forEach(() => {
-  //     paidControlFA.push(this.getPackageFG());
-  //   });
-  // }
-
   mapValuesInForm() {
     this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
     this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
@@ -136,14 +109,12 @@ export class DetailsComponent implements OnInit {
     //call Api to confirm
   }
 
-  get primaryDetails() {
-    this.guests &&
-    this.guests.controls.forEach((guestFG) => {
-      if (guestFG.get('isPrimary').value === true) {
-        this.primaryGuest = guestFG;
+  primaryDetails() {
+    this.guestDetails.guestDetails.forEach((guest) => {
+      if (guest.isPrimary === true) {
+        this.primaryGuest = guest;
       }
     });
-    return this.primaryGuest;
   }
 
   get guests(): FormArray {

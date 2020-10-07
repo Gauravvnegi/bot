@@ -11,8 +11,6 @@ export class AdminGuestDetailsComponent implements OnInit {
   @Input() guestDetails;
   @Input() parentForm;
 
-  @Output() guest = new EventEmitter();
-
   primaryGuest;
 
   constructor(
@@ -72,7 +70,6 @@ export class AdminGuestDetailsComponent implements OnInit {
         this.primaryGuest = guestFG;
       }
     });
-    this.guest.emit(this.primaryGuest);
   }
 
   setHealthDeclaration(status){

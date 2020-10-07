@@ -30,7 +30,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
 
   cols = [
-    { field: 'rooms', header: 'Rooms' },
+    { field: 'rooms[0].roomNumber', header: 'Rooms' },
     { field: 'booking.bookingNumber', header: 'Booking No.' },
     { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
     { field: 'arrivalAndDepartureDate', header: 'Arrival Date-Departure Date' },
@@ -156,7 +156,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   tabFilterIdx: number = 1;
 
   globalQueries = [];
-  selectedQuickReplyFilters = [];
   constructor(
     public fb: FormBuilder,
     private _reservationService: ReservationService,
@@ -177,32 +176,21 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   listenForGlobalFilters() {
     this._globalFilterService.globalFilter$.subscribe((data) => {
-      const queries = [
+      //set-global query everytime global filter changes
+      this.globalQueries = [
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-
-      this.globalQueries = [...queries];
-      this.selectedQuickReplyFilters = this.getSelectedQuickReplyFilters();
+      //fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
         {
           order: 'DESC',
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.selectedQuickReplyFilters,
+        ...this.getSelectedQuickReplyFilters(),
       ]);
     });
-  }
-
-  getSelectedQuickReplyFilters() {
-    return [
-      ...this.tabFilterItems[this.tabFilterIdx].chips
-        .filter((item) => item.isSelected == true)
-        .map((item) => ({
-          entityState: item.value,
-        })),
-    ];
   }
 
   loadInitialData(queries = []) {
@@ -210,17 +198,24 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.fetchDataFrom(queries).subscribe(
       (data) => {
         this.values = new ReservationTable().deserialize(data).records;
-        //   this.values = data.records;
-        //setting pagination
+        //set pagination
         this.totalRecords = data.total;
-        this.loading = false;
         this.updateTabFilterCount(this.totalRecords);
+        this.loading = false;
       },
       (error) => {
         this.loading = false;
         this._snackbarService.openSnackBarAsText(error.message);
       }
     );
+  }
+
+  getSelectedQuickReplyFilters() {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityState: item.value,
+      }));
   }
 
   updateTabFilterCount(count) {
@@ -249,16 +244,22 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.selectedQuickReplyFilters,
+        ...this.getSelectedQuickReplyFilters(),
       ],
       { offset: event.first, limit: event.rows }
-    ).subscribe((data) => {
-      this.values = new ReservationTable().deserialize(data).records;
+    ).subscribe(
+      (data) => {
+        this.values = new ReservationTable().deserialize(data).records;
 
-      //setting pagination
-      this.totalRecords = data.total;
-      this.loading = false;
-    });
+        //set pagination
+        this.totalRecords = data.total;
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 
   customSort(event: SortEvent) {
@@ -285,8 +286,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       {
         order: 'DESC',
         entityType: this.tabFilterItems[this.tabFilterIdx].value,
-        entityState: 'ALL',
       },
+      ...this.getSelectedQuickReplyFilters(),
     ]);
   }
 
@@ -296,32 +297,39 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   exportCSV() {
+    this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           order: 'DESC',
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
-          entityState: 'ALL',
         },
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
-    this._reservationService.exportCSV(config).subscribe((res) => {
-      FileSaver.saveAs(
-        res,
-        'reservation' + '_export_' + new Date().getTime() + '.csv'
-      );
-    });
+    this._reservationService.exportCSV(config).subscribe(
+      (res) => {
+        FileSaver.saveAs(
+          res,
+          'reservation' + '_export_' + new Date().getTime() + '.csv'
+        );
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+    //toggle isSelected
     this.tabFilterItems[this.tabFilterIdx].chips[
       quickReplyTypeIdx
     ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
       quickReplyTypeIdx
     ].isSelected;
-
-    this.selectedQuickReplyFilters = this.getSelectedQuickReplyFilters();
 
     this.loadInitialData([
       ...this.globalQueries,
@@ -329,7 +337,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         order: 'DESC',
         entityType: this.tabFilterItems[this.tabFilterIdx].value,
       },
-      ...this.selectedQuickReplyFilters,
+      ...this.getSelectedQuickReplyFilters(),
     ]);
   }
 }

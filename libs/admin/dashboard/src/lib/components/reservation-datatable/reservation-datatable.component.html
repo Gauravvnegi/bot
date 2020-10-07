@@ -117,7 +117,7 @@
             </mat-chip-list>
           </div>
 
-          <!-- {{ selectedQuickReplyFilters | json }} -->
+          {{ selectedQuickReplyFilters | json }}
           <!-- <div
             class="button__wrapper"
             *ngFor="let quickReplyType of quickReplyTypes"
@@ -162,7 +162,9 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'rooms[0].roomNumber')
+          "
           disabled="true"
           class="p-column-filter"
         />
@@ -239,7 +241,13 @@
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
-      <td><p class="tabel-room-no status-text-success">{{ rowData.rooms[0].roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms[0].type }}</p></td>
+      <td>
+        <p class="tabel-room-no status-text-success">
+          {{ rowData.rooms[0].roomNumber }}&nbsp;-&nbsp;{{
+            rowData.rooms[0].type
+          }}
+        </p>
+      </td>
       <td>
         <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
         <div class="booking-feedback">

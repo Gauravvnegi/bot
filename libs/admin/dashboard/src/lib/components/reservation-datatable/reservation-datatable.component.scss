@@ -75,6 +75,14 @@ th {
 :host ::ng-deep .guest {
   color: #727272;
   font-size: $font12;
+  &:hover{
+    .demo{
+      display: block;
+    }
+  }
+  .demo{
+    display: none;
+  }
 }
 
 :host ::ng-deep .booking-feedback {

@@ -237,13 +237,16 @@
         <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
         <div class="booking-feedback">
           <p class="number">7</p>
-          <img class="feedback-icon status-image-success" src="assets/svg/precheckin.svg" />
-          <img class="feedback-icon status-image-success" src="assets/svg/precheckin.svg" />
+          <img class="feedback-icon status-image-success" src="assets/svg/facilities.svg" />
+          <img class="feedback-icon status-image-success" src="assets/svg/food.svg" />
         </div>
       </td>
       <td class="guest">
         {{ rowData.guests.primaryGuest.getFullName() }}
         {{ rowData.guests.getSecGuestDisplayConfig().countString }}
+        <div class="demo">
+          hello
+        </div>
       </td>
       <td>
         <p class="arrival-date">

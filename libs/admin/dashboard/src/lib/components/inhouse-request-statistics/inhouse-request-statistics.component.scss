@@ -61,9 +61,6 @@ svg text.label {
   text-anchor: middle;
 }
 
-.progress--container {
-}
-
 .approved-count {
   height: 33px;
   text-align: left;
@@ -85,20 +82,31 @@ svg text.label {
 .subtitle-label {
   font-size: 14px;
   color: #6d7580;
+  @media only screen and (max-width: 1150px) {
+    font-size: 11px;
+  }
 }
 
 .circle-progress {
   position: absolute;
-  right: 0%;
-  bottom: 10px;
+  right: 10px;
+  bottom: 15px;
   border-radius: 50%;
   background-color: #f5f5f5;
+  @media only screen and (max-width: 1150px) {
+    height: 45%;
+    width: 50%;
+    bottom: 26px;
+  }
 }
 
-.circle-progress > svg > circle:not(:first-child) {
+:host ::ng-deep svg {
+  @media only screen and (max-width: 1150px) {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+:host ::ng-deep circle[fill='none'] {
   fill: white;
-}
-
-:host ::ng-deep circle:not(:first-child){
-    fill: white;
 }

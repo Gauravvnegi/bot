@@ -44,6 +44,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       email: [''],
       isPrimary: [''],
       nationality:[''],
+      isInternational:[''],
       selectedDocumentType:[''],
       verificationStatus: [''],
       remark:['']

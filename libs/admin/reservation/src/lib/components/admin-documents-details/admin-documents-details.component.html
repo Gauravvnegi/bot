@@ -15,7 +15,7 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field *ngIf="selectedGuestGroup">
-                <mat-select [(value)]="selectedGuestGroup.get('nationality').value" (selectionChange)="onNationalityChange($event.value)">
+                <mat-select [(value)]="selectedGuestGroup.get('nationality').value" formControlName="nationality" (selectionChange)="onNationalityChange($event.value)">
                     <mat-option *ngFor="let country of countries" [value]="country.key">
                         {{ country.value }}
                     </mat-option>
@@ -23,7 +23,7 @@
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Document Type</mat-label>
-                <mat-select [(value)]="selectedGuestGroup.get('selectedDocumentType').value" [disabled]="disableDocumentType" (selectionChange)="onSelectedDocumentTypeChange($event.value)">
+                <mat-select [(value)]="selectedGuestGroup.get('selectedDocumentType').value" formControlName="selectedDocumentType" [disabled]="disableDocumentType" (selectionChange)="onSelectedDocumentTypeChange($event.value)">
                     <mat-option *ngFor="let document of documentsList" [value]="document">
                         {{ document }}
                     </mat-option>

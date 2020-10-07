@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
+import { AdminDetailsService } from '../../services/admin-details.service';
+import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -10,6 +13,9 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 })
 export class DetailsComponent implements OnInit {
   
+  @ViewChild(AdminGuestDetailsComponent) guestDetailComponent: AdminGuestDetailsComponent;
+  @ViewChild(AdminDocumentsDetailsComponent) documentDetailComponent: AdminDocumentsDetailsComponent;
+
   detailsForm: FormGroup;
   primaryGuest;
   guestDetails;
@@ -20,7 +26,8 @@ export class DetailsComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _reservationService: ReservationService
+    private _reservationService: ReservationService,
+    private _adminDetailsService: AdminDetailsService
   ) {
    this.initDetailsForm()
   }
@@ -35,6 +42,7 @@ export class DetailsComponent implements OnInit {
       .subscribe((response) => {
         this.guestDetails = new Details().deserialize(response);
         this.mapValuesInForm();
+        this.primaryDetails();
       });
   }
 
@@ -97,53 +105,28 @@ export class DetailsComponent implements OnInit {
     })
   }
 
-  // addGuests(guestDetail) {
-  //   this.guestDetailsForm.addControl('guests', new FormArray([]));
-  //   guestDetail.guestDetails.forEach((guest) => {
-  //     let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-  //     controlFA.push(this.getGuestFG());
-  //   });
-
-  //   this.addDocuments();
-  //   this.mapValuesInForm();
-  //   this.extractPrimaryDetails();
-  //   this.setDefaultGuestForDocument();
-  // }
-
-  // addPackages(){
-  //   this.packageDetailsForm.addControl('complementaryPackage',new FormArray([]));
-  //   this.packageDetailsForm.addControl('paidPackage',new FormArray([]));
-  //   let complementaryControlFA = this.packageDetailsForm.get('complementaryPackage') as FormArray;
-  //   let paidControlFA = this.packageDetailsForm.get('paidPackage') as FormArray;
-
-  //   this.guestDetails.amenitiesDetails.complementaryPackage.forEach(() => {
-  //     complementaryControlFA.push(this.getPackageFG());
-  //   });
-
-  //   this.guestDetails.amenitiesDetails.paidPackage.forEach(() => {
-  //     paidControlFA.push(this.getPackageFG());
-  //   });
-  // }
-
   mapValuesInForm() {
     this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
     this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
     this.healDeclarationForm.patchValue(this.guestDetails.healDeclarationDetails);
     this.regCardForm.patchValue(this.guestDetails.regCardDetails);
+    this.setStepsStatus();
   }
 
-  confirmHealthDocs(){
-    //call Api to confirm
+  setStepsStatus(){
+    this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get('isAccepted').value;
   }
 
-  get primaryDetails() {
-    this.guests &&
-    this.guests.controls.forEach((guestFG) => {
-      if (guestFG.get('isPrimary').value === true) {
-        this.primaryGuest = guestFG;
+  confirmHealthDocs(status){
+    this.guestDetailComponent.updateHealthDeclarationStatus(status);
+  }
+
+  primaryDetails() {
+    this.guestDetails.guestDetails.forEach((guest) => {
+      if (guest.isPrimary === true) {
+        this.primaryGuest = guest;
       }
     });
-    return this.primaryGuest;
   }
 
   get guests(): FormArray {
@@ -165,6 +148,10 @@ export class DetailsComponent implements OnInit {
 
   get healDeclarationForm(){
     return this.detailsForm.get('healthDeclareForm') as FormGroup;
+  }
+
+  get healthDeclarationStatus(){
+    return this._adminDetailsService.healthDeclarationStatus;
   }
 
   get regCardForm(){

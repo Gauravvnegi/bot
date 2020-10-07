@@ -13,7 +13,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   disableDocumentType = false;
   selectedGuestGroup;
   selectedGuestId;
-  //isSelectedGuestInternational:boolean;
   documentsList;
   countries;
   fileUploadData = {
@@ -60,8 +59,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         };
       });
     });
-    console.log(this.parentForm);
-      console.log(this.guestDetails);
   }
 
   onNationalityChange(nationality){
@@ -165,9 +162,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         this.selectedGuestId = value;
         this.selectedGuestGroup = guest;
         this.documentsList = [];
-        // let nationality = (this.guestDetails.guestDetails.find(guest => this.selectedGuestId === guest.id)).nationality;
-        // this.selectedGuestGroup.get('nationality').patchValue(nationality);
-        // this.getDocumentsByCountry(nationality);
         this.getDocumentsByCountry(this.selectedGuestGroup.get('nationality').value);
       }
     });
@@ -178,7 +172,6 @@ export class AdminDocumentsDetailsComponent implements OnInit {
      formData.append('file', fileData.file);
      formData.append('doc_type', fileData.documentType);
      formData.append('doc_page', fileData.pageType);
-
      this._reservationService.uploadDocumentFile('17b322c3-fa52-4e3d-9883-34132f6954cd',this.selectedGuestGroup.get('id').value, formData)
      .subscribe(response =>{
      })

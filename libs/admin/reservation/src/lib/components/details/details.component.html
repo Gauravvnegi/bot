@@ -3,12 +3,12 @@
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-    <div class="name-details" *ngIf="primaryDetails">
+    <div class="name-details" *ngIf="primaryGuest">
       <div class="name">
         <span
-          >{{ primaryDetails.get('title').value
-          }}{{ primaryDetails.get('firstName').value
-          }}{{ primaryDetails.get('lastName').value }}</span
+          >{{ primaryGuest.title
+          }}{{ primaryGuest.firstName
+          }}{{ primaryGuest.lastName }}</span
         >
         <div class="svg-wrapper">
           <svg
@@ -90,13 +90,13 @@
     <div class="contact-details" *ngIf="primaryGuest">
       <div class="call">
         <mat-icon class="material-icons" matSuffix>call</mat-icon>
-        {{ primaryDetails.get('countryCode').value
-        }}{{ primaryDetails.get('phoneNumber').value }}
+        {{ primaryGuest.countryCode
+        }}{{ primaryGuest.phoneNumber }}
       </div>
 
       <div class="email">
         <mat-icon class="material-icons" matSuffix>email</mat-icon>
-        {{ primaryDetails.get('email').value }}
+        {{ primaryGuest.email }}
       </div>
     </div>
     <div class="options-wrapper">
@@ -106,12 +106,12 @@
         <p class="text">Reg card</p>
       </button>
       <button class="check-button">
-        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'ACCEPT'" class="material-icons" matSuffix>check_circle</mat-icon>
+        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'COMPLETED'" class="material-icons" matSuffix>check_circle</mat-icon>
         <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'PENDING'" class="material-icons" matSuffix>help</mat-icon>
-        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'REJECT'" class="material-icons" matSuffix>disabled_by_default</mat-icon>
+        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'FAILED'" class="material-icons" matSuffix>disabled_by_default</mat-icon>
         <p class="text">Health Declaration</p>
       </button>
-      <p-dropdown [options]="bookingList">
+      <p-dropdown [options]="bookingList" [disabled]="true">
         <ng-template let-item pTemplate="selectedItem">
           <span style="vertical-align: middle; margin-left: 5px;"
             >Current Booking</span
@@ -158,7 +158,7 @@
     </mat-tab-group>
     <div class="tab-buttons">
       <div class="button-wrapper">
-        <button class="button" (click)="confirmHealthDocs()">Confirm All Health Declaration</button>
+        <button *ngIf="healDeclarationForm.get('isAccepted').value !== 'COMPLETED'" class="button" (click)="confirmHealthDocs('ACCEPT')">Confirm All Health Declaration</button>
         <button class="button gap">Confirm All Docs</button>
         <button class="button gap">Confirm & Notify Checkin</button>
       </div>

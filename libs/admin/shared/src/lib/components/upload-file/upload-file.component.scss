@@ -1,0 +1,89 @@
+:host ::ng-deep .input-upload {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  z-index: 3;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+:host ::ng-deep .upload__box {
+  position: relative;
+  height: 160px;
+  border-bottom: 1px dashed #d9d9d9;
+}
+
+.upload__box__child {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
+.hidden-hover {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  transition: 0.8s;
+
+  // opacity: 0.1;
+  .image-wrapper {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    img {
+      margin: 0 5px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.8s;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  &:hover {
+    background-color: rgb(250, 242, 242, 0.5);
+    .image-wrapper {
+      display: flex;
+    }
+  }
+}
+
+.before-upload {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .upload-label {
+    font-size: 10px;
+    color: #9eaeb8;
+    margin-top: 5px;
+  }
+  img {
+    height: 40px;
+    width: 40px;
+  }
+}

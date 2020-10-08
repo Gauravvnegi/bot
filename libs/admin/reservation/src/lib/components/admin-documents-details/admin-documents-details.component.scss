@@ -14,6 +14,12 @@
   background-color: #4b56c0;
 }
 
+.document-name-nationality {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
 .details-wrapper {
   background-color: white;
 }
@@ -211,10 +217,25 @@
   font-size: 14px;
 }
 
-:host ::ng-deep .mat-form-field-flex {
+
+
+.nationality-wrapper {
+  display: flex;
+  align-items: baseline;
+  .text {
+    color: #9eaeb8;
+    margin-right: 7px;
+  }
+}
+
+:host ::ng-deep .nationality > .mat-form-field-wrapper > .mat-form-field-flex {
   padding: 5px $padding10;
   border-radius: 5px;
   border: 1px solid #d9d9d9;
+}
+
+.border-none {
+  border: none;
 }
 
 .health-status {
@@ -247,7 +268,7 @@
       width: 100%;
     }
     .text {
-      margin: $margin15 0;
+      margin: $margin10 0;
       font-size: $font14;
     }
   }
@@ -288,69 +309,4 @@
   }
 }
 
-.tab-buttons {
-  width: 18%;
-  padding: $padding20;
-  position: absolute;
-  top: 55px;
-  right: 0;
-  height: 88%;
-  z-index: 22;
-  background-color: white;
-  .button-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    height: 93%;
-    .button {
-      border: 1px solid #4b56c0;
-      font-size: $font12;
-      outline: none;
-      padding: 10px 0px;
-      background-color: transparent;
-      width: 100%;
-      color: #4b56c0;
-      border-radius: 25px;
-      &:hover {
-        cursor: pointer;
-        background-color: #4b56c0;
-        color: white;
-      }
-    }
-  }
-  .right-bottom-icons {
-    display: flex;
-    align-items: center;
-    height: 7%;
-    .social-icons {
-      width: 25%;
-      .icon {
-        padding: 5px;
-        background-color: #f3fafe;
-        border-radius: 50%;
-        height: 20px;
-        width: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        img {
-          filter: invert(96%) sepia(59%) saturate(2493%) hue-rotate(167deg)
-            brightness(83%) contrast(80%);
-          height: 10px;
-        }
-        &:hover {
-          cursor: pointer;
-          padding: 7px;
-          background-color: #4b56c0;
-          height: 30px;
-          width: 30px;
-          img {
-            filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(191deg)
-              brightness(108%) contrast(102%);
-          }
-        }
-      }
-    }
-  }
-}
+

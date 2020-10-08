@@ -12,9 +12,10 @@ import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-  
-  @ViewChild(AdminGuestDetailsComponent) guestDetailComponent: AdminGuestDetailsComponent;
-  @ViewChild(AdminDocumentsDetailsComponent) documentDetailComponent: AdminDocumentsDetailsComponent;
+  @ViewChild(AdminGuestDetailsComponent)
+  guestDetailComponent: AdminGuestDetailsComponent;
+  @ViewChild(AdminDocumentsDetailsComponent)
+  documentDetailComponent: AdminDocumentsDetailsComponent;
 
   detailsForm: FormGroup;
   primaryGuest;
@@ -24,12 +25,14 @@ export class DetailsComponent implements OnInit {
     { label: 'Current Booking', icon: '' },
   ];
 
+  isReservationDetail: boolean = false;
+
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private _adminDetailsService: AdminDetailsService
   ) {
-   this.initDetailsForm()
+    this.initDetailsForm();
   }
 
   ngOnInit(): void {
@@ -43,16 +46,17 @@ export class DetailsComponent implements OnInit {
         this.guestDetails = new Details().deserialize(response);
         this.mapValuesInForm();
         this.primaryDetails();
+        this.isReservationDetail = true;
       });
   }
 
-  initDetailsForm(){
+  initDetailsForm() {
     this.detailsForm = this._fb.group({
-      reservationForm : this.initReservationForm(),
-      stayDetails : this.initStayDetailsForm(),
-      healthDeclareForm : this.initHealthDeclareForm(),
-      regCardForm : this.initRegCardForm()
-    })
+      reservationForm: this.initReservationForm(),
+      stayDetails: this.initStayDetailsForm(),
+      healthDeclareForm: this.initHealthDeclareForm(),
+      regCardForm: this.initRegCardForm(),
+    });
   }
 
   initReservationForm() {
@@ -74,20 +78,19 @@ export class DetailsComponent implements OnInit {
   }
 
   initGuestDetailForm() {
+    return this._fb.group({});
+  }
+
+  initHealthDeclareForm() {
     return this._fb.group({
+      isAccepted: [''],
     });
   }
 
-  initHealthDeclareForm(){
+  initRegCardForm() {
     return this._fb.group({
-      isAccepted:['']
-    })
-  }
-
-  initRegCardForm(){
-    return this._fb.group({
-      status:['']
-    })
+      status: [''],
+    });
   }
 
   getPackageFG(): FormGroup {
@@ -101,23 +104,29 @@ export class DetailsComponent implements OnInit {
       amenityDescription: [''],
       type: [''],
       active: [''],
-      metadata: ['']
-    })
+      metadata: [''],
+    });
   }
 
   mapValuesInForm() {
     this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
-    this.reservationDetailsForm.patchValue(this.guestDetails.reservationDetails);
-    this.healDeclarationForm.patchValue(this.guestDetails.healDeclarationDetails);
+    this.reservationDetailsForm.patchValue(
+      this.guestDetails.reservationDetails
+    );
+    this.healDeclarationForm.patchValue(
+      this.guestDetails.healDeclarationDetails
+    );
     this.regCardForm.patchValue(this.guestDetails.regCardDetails);
     this.setStepsStatus();
   }
 
-  setStepsStatus(){
-    this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get('isAccepted').value;
+  setStepsStatus() {
+    this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get(
+      'isAccepted'
+    ).value;
   }
 
-  confirmHealthDocs(status){
+  confirmHealthDocs(status) {
     this.guestDetailComponent.updateHealthDeclarationStatus(status);
   }
 
@@ -130,31 +139,33 @@ export class DetailsComponent implements OnInit {
   }
 
   get guests(): FormArray {
-    return this.guestDetailsForm && 
-    this.guestDetailsForm.get('guests') as FormArray;
+    return (
+      this.guestDetailsForm &&
+      (this.guestDetailsForm.get('guests') as FormArray)
+    );
   }
 
-  get reservationDetailsForm(){
-    return this.detailsForm.get('reservationForm')as FormGroup;
-  } 
-
-  get stayDetailsForm(){
-    return this.detailsForm.get('stayDetails')as FormGroup;
+  get reservationDetailsForm() {
+    return this.detailsForm.get('reservationForm') as FormGroup;
   }
 
-  get guestDetailsForm(){
-    return this.detailsForm.get('guestDetails')as FormGroup;
+  get stayDetailsForm() {
+    return this.detailsForm.get('stayDetails') as FormGroup;
   }
 
-  get healDeclarationForm(){
+  get guestDetailsForm() {
+    return this.detailsForm.get('guestDetails') as FormGroup;
+  }
+
+  get healDeclarationForm() {
     return this.detailsForm.get('healthDeclareForm') as FormGroup;
   }
 
-  get healthDeclarationStatus(){
+  get healthDeclarationStatus() {
     return this._adminDetailsService.healthDeclarationStatus;
   }
 
-  get regCardForm(){
+  get regCardForm() {
     return this.detailsForm.get('regCardForm') as FormGroup;
   }
 }

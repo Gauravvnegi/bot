@@ -180,7 +180,7 @@
         </ng-container>
       </mat-tab>
     </mat-tab-group>
-    <div class="tab-buttons">
+    <div *ngIf="isReservationDetail" class="tab-buttons">
       <div class="button-wrapper">
         <button
           *ngIf="healDeclarationForm.get('isAccepted').value !== 'COMPLETED'"

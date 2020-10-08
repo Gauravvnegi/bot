@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Customer } from '../../data-models/statistics.model';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -11,6 +11,14 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 })
 export class CustomerStatisticsComponent implements OnInit {
   @Input() customerData: Customer;
+  intervals = [
+    {name: 'D', value: 'day'},
+    {name: 'M', value: 'month'},
+    {name: 'Y', value: 'year'},
+  ];
+
+  selectedInterval: string = 'day';
+  @Output() interval = new EventEmitter();
   chart;
   timeShow = false;
 
@@ -31,8 +39,12 @@ export class CustomerStatisticsComponent implements OnInit {
     this._globalFilterService.globalFilter$.subscribe((data) => {
       // let hotelInfo = { hotelId: 'ca60640a-9620-4f60-9195-70cc18304edd' };
       const dates = data['dateRange'].queryValue;
-      const dayDiff = this._dateService.getDateDifference(dates[0].toDate, dates[1].fromDate);
-      this.timeShow = dayDiff === 0;
+      if (this.selectedInterval === 'day') {
+        const dayDiff = this._dateService.getDateDifference(dates[0].toDate, dates[1].fromDate);
+        this.timeShow = dayDiff === 0;
+      } else {
+        this.timeShow = false;
+      }
       this.initGraphData();
     });
   }
@@ -84,12 +96,24 @@ export class CustomerStatisticsComponent implements OnInit {
     };
     const botKeys = Object.keys(this.customerData.checkIn);
     botKeys.forEach((d) => {
-      this.chart.chartLabels.push(this._dateService.convertTimestampToDate(d, this.timeShow ? 'h mm a' : 'D MMM'));
+      this.chart.chartLabels.push(this._dateService.convertTimestampToDate(d, this.timeShow
+        ? 'h mm a' 
+        : this.selectedInterval === 'day'
+          ?'D MMM'
+          : this.selectedInterval === 'month'
+            ? 'MMM YYYY'
+            : 'YYYY'));
       this.chart.chartData[0].data.push(this.customerData.checkIn[d]);
       this.chart.chartData[1].data.push(this.customerData.expressCheckIn[d]);
       this.chart.chartData[2].data.push(this.customerData.checkout[d]);
       this.chart.chartData[3].data.push(this.customerData.expressCheckout[d]);
     });
+  }
+
+  setSelectedOption(option) {
+    this.selectedInterval = option.value;
+    this.interval.emit({ interval: option.value });
+    this.listenForGlobalFilters();
   }
 
 }

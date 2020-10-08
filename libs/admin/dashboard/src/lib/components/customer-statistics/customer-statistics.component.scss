@@ -96,7 +96,7 @@ opacity: 1;
 }
 
 .line-chart {
-    height: 160px;
+    height: 150px;
     width: 100%;
     padding: 5px 10px;
     // max-width: 100%;
@@ -106,4 +106,52 @@ opacity: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.labl {
+    margin: 0 1%;
+}
+.labl > input { /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+
+.labl > div {
+    width: 25px;
+    height: 25px;
+    padding-top: 2px;
+    text-align: center;
+}
+.labl > input + div{ /* DIV STYLES */
+  position: relative;
+  cursor:pointer;
+  border: 1px solid gainsboro;
+  border-radius: 50%;
+}
+.labl > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+  border: 2px solid #288ad6;
+}
+
+// .labl > div > .circle {
+//   display: none;
+//   position: absolute;
+//   top: -9px;
+//   right: -9px;
+//   width: 17px;
+//   height: 17px;
+//   -webkit-border-radius: 25px;
+//   -moz-border-radius: 25px;
+//   border-radius: 25px;
+//   background: #4bda82;
+// }
+
+// .labl > input:checked + div > .circle {
+//   display: unset;
+// }
+
+.pull-right {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    margin-top: 5px;
 }

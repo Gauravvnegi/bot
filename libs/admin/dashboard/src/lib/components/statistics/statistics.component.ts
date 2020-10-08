@@ -11,6 +11,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 })
 export class StatisticsComponent implements OnInit {
   statistics: Statistics;
+  interval: string = 'day';
   constructor(
     private _statisticService: StatisticsService,
     private _adminUtilityService: AdminUtilityService,
@@ -56,5 +57,9 @@ export class StatisticsComponent implements OnInit {
     this._statisticService.getStatistics(config).subscribe(({ stats }) => {
       this.statistics = new Statistics().deserialize(stats);
     });
+  }
+
+  setInterval(event) {
+    this.interval = event.interval;
   }
 }

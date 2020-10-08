@@ -30,7 +30,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
 
   cols = [
-    { field: 'rooms[0].roomNumber', header: 'Rooms' },
+    { field: 'primaryRoom.roomNumber', header: 'Rooms' },
     { field: 'booking.bookingNumber', header: 'Booking No.' },
     { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
     { field: 'arrivalAndDepartureDate', header: 'Arrival Date-Departure Date' },

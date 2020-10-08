@@ -12,6 +12,7 @@ import { CountryCode } from '../../../../../../shared/models/country-code.model'
 import { Regex } from '../../../../../../shared/constants/regex';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { Location } from '@angular/common';
 @Component({
   selector: 'hospitality-bot-add-user-permission',
   templateUrl: './add-user-permission.component.html',
@@ -35,7 +36,8 @@ export class AddUserPermissionComponent implements OnInit {
     private _userDetailService: UserDetailService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _location: Location
   ) {
     this.initUserForm();
   }
@@ -176,5 +178,9 @@ export class AddUserPermissionComponent implements OnInit {
 
   get permissionConfigsFA() {
     return this.userForm.get('permissionConfigs') as FormArray;
+  }
+
+  goback() {
+    this._location.back();
   }
 }

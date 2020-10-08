@@ -62,12 +62,6 @@
   border-bottom: 0 !important;
 }
 
-:host ::ng-deep td,
-th {
-  white-space: break-spaces !important;
-  overflow: inherit !important;
-}
-
 :host ::ng-deep .booking-number {
   color: #727272;
   font-size: $font12;
@@ -144,7 +138,6 @@ th {
     width: 20px;
     border-radius: 50%;
     font-size: $font12;
-    background-color: #52b33f;
   }
 }
 

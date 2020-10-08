@@ -36,11 +36,11 @@ deploy to Development-admin:
 #    paths:
 #      - build/
   script:
-    - ssh "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd"
     # - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
-    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $admin_work_dir && netstat -tnlp"
+   # - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
+    #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
+    #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $admin_work_dir && netstat -tnlp"
   only:
     - development
     

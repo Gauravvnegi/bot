@@ -33,4 +33,8 @@ export class UserConfig implements Deserializable {
     this.branchName = input.hotelAccess.chains[0].hotels[0].id;
     return this;
   }
+
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }

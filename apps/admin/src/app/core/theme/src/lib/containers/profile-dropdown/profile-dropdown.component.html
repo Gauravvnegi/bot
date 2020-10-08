@@ -3,6 +3,8 @@
     <div class="profile__dropdown__image">
       <img src="assets/bg.png" />
     </div>
-    <span style="vertical-align: middle; margin-left: 5px;">G.Murray</span>
+    <span style="vertical-align: middle; margin-left: 5px;">{{
+      userDetailService.userDetails.getFullName()
+    }}</span>
   </ng-template>
 </p-dropdown>

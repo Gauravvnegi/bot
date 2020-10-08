@@ -23,4 +23,8 @@ export class DateService {
   getCurrentDateWithFormat(format: string = 'DD-MM-YYYY') {
     return moment().format(format);
   }
+
+  getDateDifference(date1, date2) {
+    return moment(date1).diff(moment(date2), 'days')
+  }
 }

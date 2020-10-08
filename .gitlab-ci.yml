@@ -5,6 +5,7 @@ before_script:
   - cp deploy/* .
   - chmod +x *.sh
   - rm -rf deploy
+  - rm -rf README*
   - ls -l
   - ls | wc -l
 

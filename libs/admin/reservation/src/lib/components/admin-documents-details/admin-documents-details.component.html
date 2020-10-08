@@ -20,7 +20,7 @@
   <div class="wrapper">
     <form [formGroup]="selectedGuestGroup">
       <div class="document-name-nationality">
-        <mat-form-field>
+        <mat-form-field class="nationality">
           <mat-select
             [(value)]="selectedGuestId"
             (selectionChange)="onGuestChange($event.value)"
@@ -35,7 +35,7 @@
         </mat-form-field>
         <div class="nationality-wrapper">
           <span class="text">Nationality :</span>
-          <mat-form-field class="nationality" *ngIf="selectedGuestGroup">
+          <mat-form-field  *ngIf="selectedGuestGroup">
             <mat-select
               [(value)]="selectedGuestGroup.get('nationality').value"
               formControlName="nationality"
@@ -54,7 +54,7 @@
       <div class="nationality-wrapper">
         <span class="text">Select Document Type :</span>
 
-        <mat-form-field class="nationality">
+        <mat-form-field>
           <mat-label>Document Type</mat-label>
           <mat-select
             [(value)]="selectedGuestGroup.get('selectedDocumentType').value"

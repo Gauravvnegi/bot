@@ -216,11 +216,11 @@
   font-size: 14px;
 }
 
-:host ::ng-deep .mat-form-field-flex {
-  padding: 5px $padding10;
-  border-radius: 5px;
-  border: 1px solid #d9d9d9;
-}
+// :host ::ng-deep .mat-form-field-flex {
+//   padding: 5px $padding10;
+//   border-radius: 5px;
+//   border: 1px solid #d9d9d9;
+// }
 
 .health-status {
   letter-spacing: 0.84px;
@@ -299,7 +299,7 @@
   position: absolute;
   top: 53px;
   right: 0;
-  height: 88%;
+  height: 86%;
   z-index: 22;
   background-color: white;
   .contact {

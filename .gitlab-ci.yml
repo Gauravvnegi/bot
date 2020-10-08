@@ -6,6 +6,7 @@ before_script:
   - chmod +x *.sh
   - rm -rf deploy
   - rm -rf README*
+  - rm -rf admin.sh
   - ls -l
   - ls | wc -l
 

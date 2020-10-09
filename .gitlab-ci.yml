@@ -11,7 +11,8 @@ before_script:
 deploy to Development-web-user:
   stage: deploy
   environment:
-    name: development-web-user
+    name: development
+    type: web-user
   when: manual
 
 #  artifacts:
@@ -28,7 +29,8 @@ deploy to Development-web-user:
 deploy to Development-admin:
   stage: deploy
   environment:
-    name: development-admin
+    name: development
+    type: admin
   when: manual
 
 #  artifacts:

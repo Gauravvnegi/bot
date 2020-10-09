@@ -7,14 +7,30 @@
 		<div style="margin: 6px 0;"><span class="stat-title">Customers</span></div>
 	</div>
 	<div class="stat-labels-container">
-		<div class="stat-label"><span class="checkIn-border"></span><span class="stat-label-title">Check-In</span></div>
-		<div class="stat-label"><span class="checkIn-border dashed"></span><span class="stat-label-title">Express Check-In</span></div>
-		<div class="stat-label"><span class="checkout-border"></span><span class="stat-label-title">Checkout</span></div>
-		<div class="stat-label"><span class="checkout-border dashed"></span><span class="stat-label-title">Express Checkout</span></div>
+		<div class="stat-label" (click)="legendOnClick(0)">
+			<input type="checkbox" />
+			<span class="checkIn-border"></span>
+			<p class="stat-label-title">Check-In</p>
+		</div>
+		<div class="stat-label" (click)="legendOnClick(1)">
+			<input type="checkbox" />
+			<span class="checkIn-border dashed"></span>
+			<p class="stat-label-title">Express Check-In</p>
+		</div>
+		<div class="stat-label" (click)="legendOnClick(2)">
+			<input type="checkbox" />
+			<span class="checkout-border"></span>
+			<p class="stat-label-title">Checkout</p>
+		</div>
+		<div class="stat-label" (click)="legendOnClick(3)">
+			<input type="checkbox" />
+			<span class="checkout-border dashed"></span>
+			<p class="stat-label-title">Express Checkout</p>
+		</div>
 	</div>
 	</div>
 	<div class="stat-val-container">
-		<div class="pull-right">
+		<div class="pull-right">span
 			<label class="labl" *ngFor="let option of intervals">
 				<input
 				  name='method'

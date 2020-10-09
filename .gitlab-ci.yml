@@ -12,7 +12,7 @@ deploy to Development-web-user:
   stage: deploy
   environment:
     name: development-web-user
-    environment:
+  environment:
     name: development
   when: manual
 

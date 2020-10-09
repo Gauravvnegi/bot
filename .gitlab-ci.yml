@@ -12,6 +12,8 @@ deploy to Development-web-user:
   stage: deploy
   environment:
     name: development-web-user
+    environment:
+    name: development
   when: manual
 
 #  artifacts:
@@ -29,6 +31,8 @@ deploy to Development-admin:
   stage: deploy
   environment:
     name: development-admin
+  environment:
+    name: development
   when: manual
 
 #  artifacts:

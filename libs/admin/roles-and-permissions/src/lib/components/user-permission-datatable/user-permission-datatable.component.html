@@ -224,6 +224,14 @@
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
+      <td>
+        {{ rowData.getFullName() }} {{ rowData.getContactDetails() }}
+        {{ rowData.email }}
+      </td>
+      <td>{{ rowData.getBrandAndBranchName() }} {{ rowData.jobTitle }}</td>
+      <td>{{ rowData.getSecGuestDisplayConfig().displayString }}</td>
+      <td>{{ userDetailService.userDetails.getFullName() }} Admin</td>
+      <td>{{ rowData.status }}</td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->

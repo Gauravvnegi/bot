@@ -8,7 +8,6 @@ import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detai
 })
 export class ProfileDropdownComponent implements OnInit {
   @Input() items = [];
-
   constructor(public userDetailService: UserDetailService) {}
 
   ngOnInit(): void {}

@@ -25,9 +25,9 @@ import { GlobalFilterService } from '../../../services/global-filters.service';
 export class LayoutOneComponent implements OnInit {
   backgroundColor: string;
   background_image: string;
-  profile: MenuItem[] = [
-    { label: 'Profile', icon: 'person' },
-    { label: 'Logout', icon: 'person_remove' },
+  profile = [
+    { label: 'Profile', value: 'profile' },
+    { label: 'Logout', value: 'logout' },
   ];
   lastUpdatedAt: string;
   isGlobalFilterVisible: boolean = false;

@@ -10,6 +10,9 @@ before_script:
 
 deploy to Development-web-user:
   stage: deploy
+#  variables:
+#    ENVIRONMENT_NAME: development
+#    TYPE: web-user
   environment:
     name: development-web-user
   when: manual
@@ -18,9 +21,10 @@ deploy to Development-web-user:
 #    paths:
 #      - build/
   script:
-    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x web-user_dev.sh"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$web_user_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $web_user_work_dir && netstat -tnlp"
   only:
     - development
     
@@ -34,9 +38,10 @@ deploy to Development-admin:
 #    paths:
 #      - build/
   script:
-    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $work_dir; free -h; sh -x restart.sh"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $work_dir && netstat -tnlp"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
+    #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; ls $admin_work_dir && netstat -tnlp"
   only:
     - development
     

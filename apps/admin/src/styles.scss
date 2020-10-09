@@ -15,10 +15,10 @@
 
 // images-color
 
-.status-image-pending {
-  filter: invert(99%) sepia(0%) saturate(6492%) hue-rotate(177deg)
-    brightness(118%) contrast(52%);
-}
+// .status-image-pending {
+//   filter: invert(95%) sepia(19%) saturate(0%) hue-rotate(193deg) brightness(77%)
+//     contrast(101%);
+// }
 
 .status-image-initiated {
   filter: invert(56%) sepia(92%) saturate(448%) hue-rotate(185deg)
@@ -51,6 +51,22 @@
 
 .status-text-success {
   color: #53b33e;
+}
+
+.status-opacity-pending {
+  background-color: rgb(187, 186, 186, 0.2);
+}
+
+.status-opacity-initiated {
+  background-color: rgb(16, 16, 250, 0.2);
+}
+
+.status-opacity-reject {
+  background-color: rgb(250, 8, 8, 0.2);
+}
+
+.status-opacity-success {
+  background-color: rgb(72, 192, 72, 0.2);
 }
 
 .status-background-pending {

@@ -6,8 +6,7 @@
     <div class="name-details" *ngIf="primaryGuest">
       <div class="name">
         <span
-          >{{ primaryGuest.title
-          }}{{ primaryGuest.firstName
+          >{{ primaryGuest.title }}{{ primaryGuest.firstName
           }}{{ primaryGuest.lastName }}</span
         >
         <div class="svg-wrapper">
@@ -83,15 +82,15 @@
       <div class="header-seperator"></div>
 
       <div class="room-details">
-        {{ reservationDetailsForm.get('roomNumber').value }}-
+        {{ reservationDetailsForm.get('roomNumber').value }}
+        <p *ngIf="reservationDetailsForm.get('roomNumber').value">-</p>
         {{ stayDetailsForm.get('roomType').value }}
       </div>
     </div>
     <div class="contact-details" *ngIf="primaryGuest">
       <div class="call">
         <mat-icon class="material-icons" matSuffix>call</mat-icon>
-        {{ primaryGuest.countryCode
-        }}{{ primaryGuest.phoneNumber }}
+        {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
       </div>
 
       <div class="email">
@@ -101,14 +100,39 @@
     </div>
     <div class="options-wrapper">
       <button class="check-button">
-        <mat-icon *ngIf="regCardForm.get('status').value === 'PENDING'" class="material-icons" matSuffix>help</mat-icon>
-        <mat-icon *ngIf="regCardForm.get('status').value === 'ACCEPT'" class="material-icons" matSuffix>check_circle</mat-icon>
+        <mat-icon
+          *ngIf="regCardForm.get('status').value === 'PENDING'"
+          class="material-icons"
+          matSuffix
+          >help</mat-icon
+        >
+        <mat-icon
+          *ngIf="regCardForm.get('status').value === 'ACCEPT'"
+          class="material-icons"
+          matSuffix
+          >check_circle</mat-icon
+        >
         <p class="text">Reg card</p>
       </button>
       <button class="check-button">
-        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'COMPLETED'" class="material-icons" matSuffix>check_circle</mat-icon>
-        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'PENDING'" class="material-icons" matSuffix>help</mat-icon>
-        <mat-icon *ngIf="healDeclarationForm.get('isAccepted').value === 'FAILED'" class="material-icons" matSuffix>disabled_by_default</mat-icon>
+        <mat-icon
+          *ngIf="healDeclarationForm.get('isAccepted').value === 'COMPLETED'"
+          class="material-icons"
+          matSuffix
+          >check_circle</mat-icon
+        >
+        <mat-icon
+          *ngIf="healDeclarationForm.get('isAccepted').value === 'PENDING'"
+          class="material-icons"
+          matSuffix
+          >help</mat-icon
+        >
+        <mat-icon
+          *ngIf="healDeclarationForm.get('isAccepted').value === 'FAILED'"
+          class="material-icons"
+          matSuffix
+          >disabled_by_default</mat-icon
+        >
         <p class="text">Health Declaration</p>
       </button>
       <p-dropdown [options]="bookingList" [disabled]="true">
@@ -125,24 +149,24 @@
       <mat-tab label="Guest Details">
         <ng-container *ngIf="guestDetails">
           <hospitality-bot-admin-guest-details
-          [parentForm]= detailsForm
-          [guestDetails]= guestDetails
+            [parentForm]="detailsForm"
+            [guestDetails]="guestDetails"
           ></hospitality-bot-admin-guest-details>
         </ng-container>
       </mat-tab>
       <mat-tab label="Documents">
         <ng-container *ngIf="guests && guests.controls.length > 0">
           <hospitality-bot-admin-documents-details
-          [parentForm]= detailsForm
-          [guestDetails]= guestDetails
+            [parentForm]="detailsForm"
+            [guestDetails]="guestDetails"
           ></hospitality-bot-admin-documents-details>
         </ng-container>
       </mat-tab>
       <mat-tab label="Package">
         <ng-container>
           <hospitality-bot-admin-package-details
-          [parentForm]= detailsForm
-          [guestDetails]= guestDetails
+            [parentForm]="detailsForm"
+            [guestDetails]="guestDetails"
           ></hospitality-bot-admin-package-details>
         </ng-container>
       </mat-tab>
@@ -150,15 +174,21 @@
       <mat-tab label="Payment">
         <ng-container *ngIf="guests && guests.controls.length > 0">
           <hospitality-bot-admin-payment-details
-          [parentForm]= detailsForm
-          [guestDetails]= guestDetails
+            [parentForm]="detailsForm"
+            [guestDetails]="guestDetails"
           ></hospitality-bot-admin-payment-details>
         </ng-container>
       </mat-tab>
     </mat-tab-group>
-    <div class="tab-buttons">
+    <div *ngIf="isReservationDetail" class="tab-buttons">
       <div class="button-wrapper">
-        <button *ngIf="healDeclarationForm.get('isAccepted').value !== 'COMPLETED'" class="button" (click)="confirmHealthDocs('ACCEPT')">Confirm All Health Declaration</button>
+        <button
+          *ngIf="healDeclarationForm.get('isAccepted').value !== 'COMPLETED'"
+          class="button"
+          (click)="confirmHealthDocs('ACCEPT')"
+        >
+          Confirm All Health Declaration
+        </button>
         <button class="button gap">Confirm All Docs</button>
         <button class="button gap">Confirm & Notify Checkin</button>
       </div>

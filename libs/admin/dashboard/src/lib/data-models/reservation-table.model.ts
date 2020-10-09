@@ -24,8 +24,8 @@ export class Reservation implements Deserializable {
   feedback;
   deserialize(input: any) {
     this.booking = new Booking().deserialize(input);
-    this.rooms = input.rooms.map((room) => new Room().deserialize(room));
-    this.primaryRoom = this.rooms[0];
+    // this.rooms = input.rooms.map((room) => new Room().deserialize(room));
+    // this.primaryRoom = this.rooms[0];
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);

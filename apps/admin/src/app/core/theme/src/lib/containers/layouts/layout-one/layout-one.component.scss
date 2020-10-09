@@ -26,9 +26,7 @@
   margin-left: 4%;
 }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
-  padding: 0.5em 0;
-}
+
 
 :host ::ng-deep .p-dropdown .p-inputtext {
   padding: 5px;
@@ -57,20 +55,21 @@
       }
       .header--button {
         padding: 0px $padding10;
-        height: 33px;
+        height: 42px;
         width: 23%;
-        border: 2px solid #5391d4;
+        border: 2px solid #D9D9D9;
         justify-content: space-between;
-        font-size: 12px;
-        color: #5391d4;
+        font-size: 14px;
+        color: $primary-purple;
         display: flex;
         align-items: center;
         background-color: white;
         border-radius: 5px;
         &:hover {
           cursor: pointer;
-          background-color: #5391d4;
+          background-color: $primary-purple;
           color: white;
+          border: 2px solid $primary-purple;
         }
         &:focus {
           outline: none;
@@ -123,7 +122,7 @@
     display: flex;
     align-items: center;
     font-size: 13px;
-    color: #5391d4;
+    color: $primary-purple;
     font-weight: 600;
     &:hover {
       cursor: pointer;

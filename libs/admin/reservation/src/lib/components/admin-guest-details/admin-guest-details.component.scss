@@ -207,19 +207,28 @@
   border-top: none;
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  display: none;
-}
+// :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+//   display: none;
+// }
 
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;
 }
 
-:host ::ng-deep .mat-form-field-flex {
-  padding: 5px $padding10;
-  border-radius: 5px;
-  border: 1px solid #d9d9d9;
+.nationality-wrapper {
+  display: flex;
+  align-items: baseline;
+  .text {
+    color: #9eaeb8;
+    margin-right: 7px;
+  }
 }
+
+// :host ::ng-deep .mat-form-field-flex {
+//   padding: 5px $padding10;
+//   border-radius: 5px;
+//   border: 1px solid #d9d9d9;
+// }
 
 .health-status {
   letter-spacing: 0.84px;

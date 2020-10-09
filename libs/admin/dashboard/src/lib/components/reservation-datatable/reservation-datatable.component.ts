@@ -31,7 +31,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   cols = [
     { field: 'primaryRoom.roomNumber', header: 'Rooms' },
-    { field: 'booking.bookingNumber', header: 'Booking No.' },
+    { field: 'booking.bookingNumber', header: 'Booking No./Feedback' },
     { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
     { field: 'arrivalAndDepartureDate', header: 'Arrival Date-Departure Date' },
     { field: 'amountDueAndTotal', header: 'Amount Due/Total(INR)' },

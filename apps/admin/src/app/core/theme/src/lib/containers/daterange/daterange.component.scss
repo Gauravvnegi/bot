@@ -1,7 +1,23 @@
+@import 'main';
+
 :host ::ng-deep .ranges {
   width: 180px;
   ul {
     width: auto;
+  }
+}
+
+.calendar-image {
+  margin-left: 5px;
+}
+
+:host ::ng-deep .date-range-input{
+  font-size: 14px;
+  @media only screen and (max-width: 1200px) {
+    font-size: 12px;
+  }
+  @media only screen and (max-width: 1000px) {
+    font-size: 10px;
   }
 }
 
@@ -17,7 +33,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-start {
-  border-color: #2187d5;
+  border-color: $primary-purple;
 }
 
 :host
@@ -26,7 +42,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-end {
-  border-color: #2187d5;
+  border-color: $primary-purple;
 }
 
 :host
@@ -35,7 +51,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-gap {
-  border-color: #2187d5;
+  border-color: $primary-purple;
   border-top-color: transparent;
 }
 
@@ -43,15 +59,23 @@
   padding-bottom: 0px;
 }
 
-:host ::ng-deep .mat-form-field {
-  @media only screen and (max-width: 1250px) {
-    width: 100%;
-  }
-}
-
 :host ::ng-deep .mat-input-element {
   @media only screen and (max-width: 1250px) {
     font-size: 12px;
     margin-bottom: 3px;
   }
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex{
+  padding: 0 10px;
+}
+
+:host ::ng-deep .mat-form-field{
+  width: 100%;
 }

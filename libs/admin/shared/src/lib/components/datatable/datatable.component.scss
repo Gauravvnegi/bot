@@ -42,10 +42,10 @@
   }
 }
 
-:host ::ng-deep .p-highlight {
-  border-color: #6bacf8 !important;
-  background: #6bacf8 !important;
-}
+// :host ::ng-deep .p-highlight {
+//   border-color: #6bacf8 !important;
+//   background: #6bacf8 !important;
+// }
 
 :host ::ng-deep .mat-ink-bar {
   background-color: #2187d5;
@@ -145,8 +145,9 @@
     display: flex;
     margin-left: 10px;
     &:hover {
-      background-color: #4b56c0;
+      background-color: #218af3;
       color: white;
+      cursor: pointer;
     }
     .material-icons {
       font-size: 16px;
@@ -203,6 +204,7 @@
         &:hover {
           background-color: #7e7e7e;
           color: white;
+          cursor: pointer;
         }
       }
     }

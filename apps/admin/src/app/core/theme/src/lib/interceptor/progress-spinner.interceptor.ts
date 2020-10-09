@@ -5,9 +5,10 @@ import {
   HttpHandler,
   HttpRequest,
   HttpResponse,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { ProgressSpinnerService } from '../services/progress-spinner.service';
 
@@ -25,6 +26,10 @@ export class ProgressSpinnerInterceptor implements HttpInterceptor {
           this._progressSpinnerService.isProgressSpinnerVisible = false;
         }
         return event;
+      }),
+      catchError((err) => {
+        this._progressSpinnerService.isProgressSpinnerVisible = false;
+        return throwError(err);
       })
     );
   }

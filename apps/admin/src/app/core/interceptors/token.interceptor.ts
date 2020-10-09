@@ -33,7 +33,6 @@ export class TokenInterceptor implements HttpInterceptor {
       return next.handle(modifiedRequest);
     } else {
       console.log('not authenticated user so no token or a route for refresh');
-      this._router.navigate(['/auth']);
       return next.handle(req);
     }
   }

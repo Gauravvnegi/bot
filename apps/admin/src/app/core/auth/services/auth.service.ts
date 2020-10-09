@@ -9,7 +9,7 @@ export class AuthService extends ApiService {
   }
 
   forgotPassword(email) {
-    return this.put(`/api/v1/user/forgot-password?email=${email}`, '');
+    return this.put(`/api/v1/user/forgot-password`, { email });
   }
 
   changePassword(changeToken, password) {

@@ -10,9 +10,12 @@ before_script:
 
 deploy to Development-web-user:
   stage: deploy
-  environment:
-    name: development
-    type: web-user
+  variables:
+    ENVIRONMENT_NAME: development
+    TYPE: web-user
+#  environment:
+#    name: development
+#    type: web-user
   when: manual
 
 #  artifacts:
@@ -28,9 +31,9 @@ deploy to Development-web-user:
     
 deploy to Development-admin:
   stage: deploy
-  environment:
-    name: development
-    type: admin
+  variables:
+    ENVIRONMENT_NAME: development
+    TYPE: web-user
   when: manual
 
 #  artifacts:

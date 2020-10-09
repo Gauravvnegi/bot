@@ -1,10 +1,16 @@
-<p-dropdown class="profile__dropdown" [options]="items">
-  <ng-template let-item pTemplate="selectedItem">
-    <div class="profile__dropdown__image">
-      <img src="assets/bg.png" />
-    </div>
-    <span style="vertical-align: middle; margin-left: 5px;">{{
-      userDetailService.userDetails.getFullName()
-    }}</span>
-  </ng-template>
-</p-dropdown>
+<div class="profile__dropdown">
+  <div class="profile__dropdown__image">
+    <img src="assets/bg.png" />
+  </div>
+  <span
+    style="vertical-align: middle; margin-left: 5px;"
+    class="dropdown-text"
+    >{{ userDetailService.userDetails.getFullName() }}</span
+  >
+  <mat-icon class="material-icons" matPrefix>keyboard_arrow_down</mat-icon>
+  <div class="dropdown-list">
+    <p class="list-item" *ngFor="let item of items">
+      {{ item.label }}
+    </p>
+  </div>
+</div>

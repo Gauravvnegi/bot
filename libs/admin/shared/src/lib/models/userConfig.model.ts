@@ -37,4 +37,8 @@ export class UserConfig implements Deserializable {
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  getProfileNickName() {
+    return `${this.firstName.slice(0, 1)}${this.lastName.slice(0, 1)}`;
+  }
 }

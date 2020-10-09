@@ -55,4 +55,8 @@ export class AuthService extends ApiService {
   setTokenByName(tokenName: string, value: string) {
     localStorage.setItem(tokenName, value);
   }
+
+  clearToken() {
+    localStorage.clear();
+  }
 }

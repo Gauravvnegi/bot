@@ -27,7 +27,7 @@ export class AddUserPermissionComponent implements OnInit {
   managedBy: {
     firstName: string;
     lastName: string;
-    title: string;
+    jobTitle: string;
   };
 
   value;
@@ -65,11 +65,15 @@ export class AddUserPermissionComponent implements OnInit {
   }
 
   initManager() {
-    const { firstName, lastName, title } = this._userDetailService.userDetails;
+    const {
+      firstName,
+      lastName,
+      jobTitle,
+    } = this._userDetailService.userDetails;
     this.managedBy = {
       firstName,
       lastName,
-      title,
+      jobTitle,
     };
   }
 

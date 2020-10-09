@@ -1,14 +1,16 @@
 <div class="wrapper">
   <header class="wrapper-header">
     <div class="back">
-      <mat-icon (click)="goback()"class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <mat-icon (click)="goback()" class="material-icons" matSuffix
+        >keyboard_backspace</mat-icon
+      >
       <p class="label">Add User</p>
     </div>
     <div class="edit-wrapper">
       <div class="manage-box">
         <p>
-          Manage By : {{ managedBy.firstName }} {{ managedBy.lastName }},
-          {{ managedBy.title }}
+          Manage By : {{ managedBy.firstName }} {{ managedBy.lastName }}
+          {{ managedBy.jobTitle }}
         </p>
       </div>
       <!-- <p class="text">Edit user</p> -->
@@ -72,7 +74,7 @@
           </mat-form-field>
         </div>
         <div class="feild width-trio">
-          <mat-label class="mat-label">Brand Name :</mat-label>
+          <mat-label class="mat-label">Brand :</mat-label>
           <mat-form-field>
             <mat-select formControlName="brandName">
               <!-- <option value="" selected>None</option> -->
@@ -94,7 +96,7 @@
           </mat-form-field>
         </div>
         <div style="justify-content: flex-end;" class="feild width-trio">
-          <mat-label class="mat-label">Branch :</mat-label>
+          <mat-label class="mat-label">Hotel :</mat-label>
           <mat-form-field>
             <mat-select formControlName="branchName">
               <!-- <option value="" selected>None</option> -->
@@ -110,7 +112,7 @@
                 userForm.get('branchName').hasError('required')
               "
             >
-              Branch is required
+              Hotel name is required
             </mat-error>
           </mat-form-field>
         </div>

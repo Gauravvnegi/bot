@@ -11,10 +11,11 @@ import { Observable } from 'rxjs';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../auth/services/auth.service';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private _authService: AuthService) {}
+  constructor(private _authService: AuthService, private _router: Router) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -32,7 +33,7 @@ export class TokenInterceptor implements HttpInterceptor {
       return next.handle(modifiedRequest);
     } else {
       console.log('not authenticated user so no token or a route for refresh');
-
+      this._router.navigate(['/auth']);
       return next.handle(req);
     }
   }

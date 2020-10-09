@@ -16,7 +16,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
-
+import { AuthService } from '../../../../../../auth/services/auth.service';
+import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
@@ -46,7 +47,9 @@ export class LayoutOneComponent implements OnInit {
     public dateRangeFilterService: DateRangeFilterService,
     public progressSpinnerService: ProgressSpinnerService,
     public globalFilterService: GlobalFilterService,
-    private _hotelDetailService: HotelDetailService
+    private _hotelDetailService: HotelDetailService,
+    private _authService: AuthService,
+    private _userDetailService: UserDetailService
   ) {}
 
   ngOnInit() {
@@ -148,5 +151,31 @@ export class LayoutOneComponent implements OnInit {
 
   applyDateRangeFilter(event) {
     this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
+  }
+
+  profileAction(event) {
+    const itemType = event;
+
+    switch (itemType) {
+      case 'profile':
+        this.displayProfile();
+        break;
+      case 'logout':
+        this.logoutUser();
+        break;
+      default:
+        return;
+    }
+  }
+
+  displayProfile() {
+    this._router.navigate([
+      `/pages/roles-permissions/${this._userDetailService.getLoggedInUserid()}`,
+    ]);
+  }
+
+  logoutUser() {
+    this._authService.clearToken();
+    this._router.navigate(['/auth']);
   }
 }

@@ -1,6 +1,8 @@
 <div class="profile__dropdown">
   <div class="profile__dropdown__image">
-    <p class="profile-initial">VS</p>
+    <p class="profile-initial">
+      {{ userDetailService.userDetails.getProfileNickName() }}
+    </p>
   </div>
   <span
     style="vertical-align: middle; margin-left: 5px;"
@@ -9,7 +11,11 @@
   >
   <mat-icon class="material-icons" matPrefix>keyboard_arrow_down</mat-icon>
   <div class="dropdown-list">
-    <p class="list-item" *ngFor="let item of items">
+    <p
+      (click)="profileAction(item.value)"
+      class="list-item"
+      *ngFor="let item of items"
+    >
       {{ item.label }}
     </p>
   </div>

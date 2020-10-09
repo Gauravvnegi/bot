@@ -41,7 +41,10 @@
           (onDateRangeFilter)="applyDateRangeFilter($event)"
         ></hospitality-bot-daterange>
         <div class="dropdown-wrapper">
-          <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
+          <admin-profile-dropdown
+            [items]="profile"
+            (onProfileAction)="profileAction($event)"
+          ></admin-profile-dropdown>
         </div>
       </div>
       <div class="refresh__wrapper">

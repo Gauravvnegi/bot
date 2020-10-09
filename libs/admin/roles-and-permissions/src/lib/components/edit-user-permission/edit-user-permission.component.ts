@@ -14,11 +14,15 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { SnackBarService } from 'libs/shared/material/src';
 import { ActivatedRoute } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
   templateUrl: './edit-user-permission.component.html',
-  styleUrls: ['./edit-user-permission.component.scss'],
+  styleUrls: [
+    '../add-user-permission/add-user-permission.component.scss',
+    './edit-user-permission.component.scss',
+  ],
 })
 export class EditUserPermissionComponent implements OnInit {
   brandNames: [];
@@ -29,7 +33,7 @@ export class EditUserPermissionComponent implements OnInit {
   managedBy: {
     firstName: string;
     lastName: string;
-    title: string;
+    jobTitle: string;
   };
 
   value;
@@ -41,7 +45,8 @@ export class EditUserPermissionComponent implements OnInit {
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
     private _snackbarService: SnackBarService,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _location: Location
   ) {
     this.initUserForm();
   }
@@ -76,11 +81,15 @@ export class EditUserPermissionComponent implements OnInit {
   }
 
   initManager() {
-    const { firstName, lastName, title } = this._userDetailService.userDetails;
+    const {
+      firstName,
+      lastName,
+      jobTitle,
+    } = this._userDetailService.userDetails;
     this.managedBy = {
       firstName,
       lastName,
-      title,
+      jobTitle,
     };
   }
 
@@ -189,5 +198,9 @@ export class EditUserPermissionComponent implements OnInit {
 
   get permissionConfigsFA() {
     return this.userForm.get('permissionConfigs') as FormArray;
+  }
+
+  goback() {
+    this._location.back();
   }
 }

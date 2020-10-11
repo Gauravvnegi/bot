@@ -10,7 +10,7 @@
     margin: 6% 0.5%;
     @include flex-item-center();
     flex-direction: column;
-
+    z-index: 2;
     .table-body-journey-icon {
       height: 14px;
       width: 14px;
@@ -65,12 +65,14 @@
 :host ::ng-deep .booking-number {
   color: #727272;
   font-size: $font12;
+  text-align: center;
 }
 
 :host ::ng-deep .guest {
   color: #727272;
   font-size: $font12;
   position: relative;
+  text-align: center;
   &:hover {
     cursor: pointer;
     .demo {
@@ -88,6 +90,11 @@
     box-shadow: 0px 0px 5px 0px lightgray;
     border-radius: 5px;
     display: none;
+    div{
+      &:hover{
+        color: #218af3;
+      }
+    }
   }
 }
 
@@ -151,7 +158,4 @@
   background-color: lightgray;
 }
 
-.chipSelected {
-  background-color: #959ea7;
-  color: white;
-}
+

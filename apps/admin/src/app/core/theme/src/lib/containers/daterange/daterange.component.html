@@ -1,7 +1,7 @@
 <div class="wrapper">
   <mat-form-field appearance="outline">
     <mat-label>Choose a date</mat-label>
-    <mat-icon class="material-icons" matPrefix>calendar_today</mat-icon>
+    <!-- <mat-icon class="material-icons" matPrefix>calendar_today</mat-icon> -->
     <input
       matInput
       type="text"
@@ -9,7 +9,8 @@
       daterangepicker
       [options]="config"
       (selected)="selectedDate($event)"
+      class="date-range-input"
     />
-    <mat-icon class="material-icons" matSuffix>arrow_drop_down</mat-icon>
+    <img src="assets/svg/calendar.svg" class="calendar-image">
   </mat-form-field>
 </div>

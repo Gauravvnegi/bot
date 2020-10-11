@@ -208,7 +208,7 @@
   border-top: none;
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+:host ::ng-deep .nationality > .mat-form-field-wrapper > .mat-form-field-underline {
   display: none;
 }
 

@@ -219,14 +219,33 @@
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
-      <td>
-        {{ rowData.getFullName() }} {{ rowData.getContactDetails() }}
-        {{ rowData.email }}
+      <td class="name">
+        <!-- <div class="profile">
+          <img src="assets/bg.png" />
+        </div> -->
+        <div class="data">
+          {{ rowData.getFullName() }}
+          <p>{{ rowData.getContactDetails() }}</p>
+          <p>{{ rowData.email }}</p>
+        </div>
       </td>
-      <td>{{ rowData.getBrandAndBranchName() }} {{ rowData.jobTitle }}</td>
-      <td>{{ rowData.getSecGuestDisplayConfig().displayString }}</td>
-      <td>{{ userDetailService.userDetails.getFullName() }} Admin</td>
-      <td>{{ rowData.status }}</td>
+      <td class="brand-name">
+        {{ rowData.getBrandAndBranchName() }}
+        <p>{{ rowData.jobTitle }}</p>
+      </td>
+      <td class="guest-details">
+        {{ rowData.getSecGuestDisplayConfig().displayString }}
+      </td>
+      <td class="service-details">
+        {{ userDetailService.userDetails.getFullName() }}
+        <p>Admin</p>
+      </td>
+      <td class="">
+        <label class="switch">
+          <input type="checkbox" [checked]="rowData.status" />
+          <span class="slider round"></span>
+        </label>
+      </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->

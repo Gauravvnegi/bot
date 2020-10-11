@@ -259,11 +259,19 @@
             {{ rowData.feedback.rating }}
           </p>
           <img
-            class="feedback-icon status-image-success"
+            class="feedback-icon"
+            [ngClass]="{
+              'status-image-reject': rowData.feedback.rating < 5,
+              'status-image-success': rowData.feedback.rating >= 5
+            }"
             src="assets/svg/facilities.svg"
           />
           <img
-            class="feedback-icon status-image-success"
+            class="feedback-icon"
+            [ngClass]="{
+              'status-image-reject': rowData.feedback.rating < 5,
+              'status-image-success': rowData.feedback.rating >= 5
+            }"
             src="assets/svg/food.svg"
           />
           <div
@@ -311,7 +319,14 @@
         </p>
       </td>
       <td style="font-size: 12px;">
-        <span style="color: #f00d2a;">{{ rowData.payment.dueAmount }}</span
+        <span
+          [ngClass]="{
+            'status-text-reject':
+              rowData.payment.dueAmount > rowData.payment.totalAmount,
+            'status-text-success':
+              rowData.payment.dueAmount == rowData.payment.totalAmount
+          }"
+          >{{ rowData.payment.dueAmount }}</span
         >/{{ rowData.payment.totalAmount }}
       </td>
       <td></td>
@@ -329,7 +344,7 @@
                 'status-image-initiated':
                   rowData.status.stepsStatus.documents == 'INITIATED',
                 'status-image-pending':
-                  rowData.status.stepsStatus.documents == 'PENDING',
+                  rowData.status.stepsStatus.feedback == 'PENDING',
                 'status-image-reject':
                   rowData.status.stepsStatus.documents == 'FAILED',
                 'status-image-success':
@@ -360,7 +375,7 @@
                 'status-image-initiated':
                   rowData.status.stepsStatus.payment == 'INITIATED',
                 'status-image-pending':
-                  rowData.status.stepsStatus.payment == 'PENDING',
+                  rowData.status.stepsStatus.feedback == 'PENDING',
                 'status-image-reject':
                   rowData.status.stepsStatus.payment == 'FAILED',
                 'status-image-success':

@@ -209,9 +209,9 @@
   border-top: none;
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  display: none;
-}
+// :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+//   display: none;
+// }
 
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;

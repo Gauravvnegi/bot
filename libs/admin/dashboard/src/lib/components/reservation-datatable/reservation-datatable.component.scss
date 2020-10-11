@@ -10,7 +10,7 @@
     margin: 6% 0.5%;
     @include flex-item-center();
     flex-direction: column;
-
+    z-index: 2;
     .table-body-journey-icon {
       height: 14px;
       width: 14px;
@@ -158,7 +158,4 @@
   background-color: lightgray;
 }
 
-.chipSelected {
-  background-color: #959ea7;
-  color: white;
-}
+

@@ -3,7 +3,7 @@
     <div class="icon">
       <img src="assets/svg/arrivals_icon.svg" />
     </div>
-    <div style="margin: 6px 0;"><span class="stat-title">Arrivals</span></div>
+    <div class="stat-title">Arrivals</div>
   </div>
   <div class="stat-val-container">
     <div class="stat-value">{{ arrivals.maxExpected }}</div>
@@ -22,10 +22,10 @@
     </div>
     <div class="progress-info">
       <div class="progress-info-labels">
-        <span class="label">Arrived&nbsp;{{ arrivals.currentlyArrived }}</span>
+        <span class="label">Arrived&nbsp;<b>{{ arrivals.currentlyArrived }}</b></span>
       </div>
       <div class="progress-info-labels">
-        <span class="label">Remaining&nbsp;{{ arrivals.maxExpected }}</span>
+        <span class="label">Remaining&nbsp;<b>{{ arrivals.maxExpected }}</b></span>
       </div>
     </div>
   </div>

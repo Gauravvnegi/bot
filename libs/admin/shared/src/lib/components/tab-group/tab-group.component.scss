@@ -1,13 +1,16 @@
+@import 'main';
+
 .example-stretched-tabs {
   max-width: 100%;
 }
 
 :host ::ng-deep .mat-tab-label .mat-tab-label-content {
-  font-size: 14px;
+  font-size: $font14;
 }
 
 :host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
-  color: #2187d5;
+  color: $primary-purple;
+  font-size: $font18;
 }
 
 :host ::ng-deep .mat-tab-label {

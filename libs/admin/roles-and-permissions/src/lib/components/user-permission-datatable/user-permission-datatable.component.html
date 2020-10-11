@@ -161,12 +161,7 @@
         <input
           pInputText
           type="text"
-          (input)="
-            onFilterTypeTextChange(
-              $event.target.value,
-              'primaryRoom.roomNumber'
-            )
-          "
+          (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
           class="p-column-filter"
         />
       </th>

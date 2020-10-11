@@ -14,6 +14,7 @@
   [(first)]="first"
   [totalRecords]="totalRecords"
   [filterDelay]="0"
+  [selectionMode]="selectionMode"
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
@@ -130,7 +131,6 @@
           </div> -->
         </div>
       </form>
-      <!-- {{ tableFG.value | json }} -->
     </div>
   </ng-template>
 
@@ -163,10 +163,7 @@
           pInputText
           type="text"
           (input)="
-            onFilterTypeTextChange(
-              $event.target.value,
-              'primaryRoom.roomNumber'
-            )
+            onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
           "
           class="p-column-filter"
         />
@@ -239,15 +236,14 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
+    <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
     <tr>
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
       <td>
         <p class="tabel-room-no status-text-success">
-          {{ rowData.rooms[0].roomNumber }}&nbsp;-&nbsp;{{
-            rowData.rooms[0].type
-          }}
+          {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
         </p>
       </td>
       <td>
@@ -308,6 +304,10 @@
           {{ rowData.booking.getArrivalTime() }}-{{
             rowData.booking.getDepartureTime()
           }}
+        </p>
+        <p>
+          {{ rowData.booking.getDaysAndNights().nights }}N |
+          {{ rowData.booking.getDaysAndNights().days }}D
         </p>
       </td>
       <td style="font-size: 12px;">

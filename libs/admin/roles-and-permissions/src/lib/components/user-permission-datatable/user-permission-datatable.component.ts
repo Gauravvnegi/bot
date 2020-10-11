@@ -8,6 +8,7 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
+import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -27,7 +28,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   isTabFilters = false;
 
   cols = [
-    { field: 'primaryRoom.roomNumber', header: 'Name/Mobile & Email' },
+    { field: 'firstName', header: 'Name/Mobile & Email' },
     { field: 'booking.bookingNumber', header: 'Hotel Name & Branch/Job title' },
     { field: 'guests.primaryGuest.firstName', header: 'Permissions' },
     { field: 'arrivalAndDepartureDate', header: 'Manages By' },
@@ -79,7 +80,57 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     return this._managePermissionService.getManagedUsers(config);
   }
 
+  loadData(event: LazyLoadEvent) {
+    this.loading = true;
+
+    this.fetchDataFrom([], {
+      offset: event.first,
+      limit: event.rows,
+    }).subscribe(
+      (data) => {
+        this.values = new UserPermissionTable().deserialize(data).records;
+
+        //set pagination
+        this.totalRecords = data.total;
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
+  }
+
+  exportCSV() {
+    this.loading = true;
+
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.selectedRows.map((item) => ({ userId: item.userId })),
+      ]),
+    };
+
+    // this._reservationService.exportCSV(config).subscribe(
+    //   (res) => {
+    //     FileSaver.saveAs(
+    //       res,
+    //       'reservation' + '_export_' + new Date().getTime() + '.csv'
+    //     );
+    //     this.loading = false;
+    //   },
+    //   (error) => {
+    //     this.loading = false;
+    //     this._snackbarService.openSnackBarAsText(error.message);
+    //   }
+    // );
+  }
+
   addUser() {
     this._router.navigate(['add-user'], { relativeTo: this._route });
+  }
+
+  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    value = value && value.trim();
+    this.table.filter(value, field, matchMode);
   }
 }

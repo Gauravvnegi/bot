@@ -24,8 +24,7 @@ export class Reservation implements Deserializable {
   feedback;
   deserialize(input: any) {
     this.booking = new Booking().deserialize(input);
-    this.rooms = input.rooms.map((room) => new Room().deserialize(room));
-    this.primaryRoom = this.rooms[0];
+    this.rooms = new Room().deserialize(input.stayDetails);
     this.guests = new GuestType().deserialize(input.guestDetails);
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);
@@ -140,6 +139,17 @@ export class Booking implements Deserializable {
   getDepartureTime() {
     return moment(this.departureTimeStamp).format('H:mm');
   }
+
+  getDaysAndNights() {
+    const diffInDays = moment(this.departureTimeStamp).diff(
+      moment(this.arrivalTimeStamp),
+      'days'
+    );
+    return {
+      days: diffInDays,
+      nights: diffInDays,
+    };
+  }
 }
 
 export class GuestType implements Deserializable {
@@ -198,7 +208,7 @@ export class Room implements Deserializable {
     Object.assign(
       this,
       set({}, 'roomNumber', get(input, ['roomNumber'])),
-      set({}, 'type', get(input, ['type'])),
+      set({}, 'type', get(input, ['roomType'])),
       set({}, 'unit', get(input, ['unit'])),
       set({}, 'chargeCode', get(input, ['chargeCode'])),
       set({}, 'status', get(input, ['status'])),

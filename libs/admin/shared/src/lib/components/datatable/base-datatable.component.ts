@@ -188,7 +188,6 @@ export class BaseDatatableComponent implements OnInit {
     //check for selected. if true pass an option
     this.tableFG.value;
     //this.table.exportCSV();
-
     switch (this.tableFG.get('documentActions').get('documentType').value) {
       case 'csv':
         this.exportCSV();

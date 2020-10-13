@@ -6,14 +6,13 @@
         <p><span>Last Updated: {{ date }}</span></p>
       </div>
       <div class="close_wrapper">
-        <span aria-hidden="true" class="close" mat-dialog-close>&times;</span>
+        <span aria-hidden="true" class="close" (click)="closeModal()">&times;</span>
       </div>
     </div>
     <div class="modal-body">
       <hospitality-bot-application-status
         [config]="this.config"
         [context]="this.context"
-        [showAppStatusForm]="this.showAppStatusForm"
       >
       </hospitality-bot-application-status>
     </div>

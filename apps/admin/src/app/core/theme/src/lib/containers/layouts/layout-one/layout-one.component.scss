@@ -26,8 +26,6 @@
   margin-left: 4%;
 }
 
-
-
 :host ::ng-deep .p-dropdown .p-inputtext {
   padding: 5px;
   @include flex-item-center();
@@ -53,11 +51,17 @@
       .search-bar-wrapper {
         @include flex-item-center();
       }
+      .search-bar {
+        width: 23%;
+        @media screen and (max-width: 800px) {
+          width: 31%;
+        }
+      }
       .header--button {
         padding: 0px $padding10;
         height: 42px;
         width: 23%;
-        border: 2px solid #D9D9D9;
+        border: 2px solid #d9d9d9;
         justify-content: space-between;
         font-size: 14px;
         color: $primary-purple;
@@ -70,17 +74,28 @@
           background-color: $primary-purple;
           color: white;
           border: 2px solid $primary-purple;
+          .filter-icon {
+            filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
+              brightness(126%) contrast(101%);
+          }
+          .filter-button--text {
+            color: white;
+          }
         }
         &:focus {
           outline: none;
         }
-        .filter-button--text{
+        .filter-button--text {
+          color: #00162b;
           @media only screen and (max-width: 1200px) {
             font-size: $font10;
           }
         }
         .material-icons {
           margin-left: 15px;
+        }
+        @media screen and (max-width: 800px) {
+          width: 20%;
         }
       }
       .filter-wrapper {
@@ -92,6 +107,12 @@
         background-color: white;
         border-radius: $border5;
         z-index: 22;
+      }
+      .date-range {
+        width: 23%;
+        @media screen and (max-width: 800px) {
+          width: 20%;
+        }
       }
     }
   }

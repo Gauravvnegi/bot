@@ -17,10 +17,17 @@
       &:hover {
         cursor: pointer;
       }
+      @media screen and (max-width: 800px) {
+        height: 10px;
+        width: 10px;
+      }
     }
     .label {
-      font-size: 7px;
+      font-size: 6px;
       margin-top: 3px;
+      @media screen and (max-width: 800px) {
+        font-size: 3px;
+      }
     }
   }
   .line {
@@ -29,6 +36,10 @@
     width: 72%;
     background-color: #edf1f5;
     right: 17px;
+    @media screen and (max-width: 800px) {
+      width: 62%;
+     
+    }
   }
   .first {
     top: 15%;
@@ -42,16 +53,22 @@
   font-size: $font12;
   color: #b2b7bc;
   margin-top: 2px;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
 }
 
 :host ::ng-deep .arrival-date {
   font-size: $font12;
   color: #727272;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
 }
 
-:host ::ng-deep .table-header-text {
-  font-size: 13px;
-}
+// :host ::ng-deep .table-header-text {
+//   font-size: 13px;
+// }
 
 :host ::ng-deep .status-image {
   padding: 5px !important;
@@ -66,13 +83,16 @@
   color: #727272;
   font-size: $font12;
   text-align: center;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
 }
 
 :host ::ng-deep .guest {
   color: #727272;
   font-size: $font12;
   position: relative;
-  text-align: center;
+  text-align: center !important;
   &:hover {
     cursor: pointer;
     .demo {
@@ -90,11 +110,21 @@
     box-shadow: 0px 0px 5px 0px lightgray;
     border-radius: 5px;
     display: none;
-    div{
-      &:hover{
+    div {
+      &:hover {
         color: #218af3;
       }
     }
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+}
+
+:host ::ng-deep .amount{
+  font-size: 12px;
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
   }
 }
 
@@ -104,6 +134,10 @@
   background-color: rgb(72, 192, 72, 0.2);
   border-radius: 25px;
   text-align: center;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+    padding: 5px;
+  }
 }
 
 :host ::ng-deep .booking-feedback {
@@ -146,6 +180,18 @@
     border-radius: 50%;
     font-size: $font12;
   }
+  @media screen and (max-width: 800px) {
+    margin: 0;
+    margin-top: 7px;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px;
+      width: 15px;
+    }
+  }
 }
 
 :host ::ng-deep .no-data-found {
@@ -157,5 +203,3 @@
 :host ::ng-deep input[disabled='true'] {
   background-color: lightgray;
 }
-
-

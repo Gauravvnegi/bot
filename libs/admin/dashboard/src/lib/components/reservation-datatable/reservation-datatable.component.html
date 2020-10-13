@@ -42,12 +42,10 @@
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <mat-icon class="material-icons" matSuffix
-                      >vertical_align_bottom</mat-icon
-                    >
+                    <img src="assets/svg/Export.svg" />
                     <span
                       style="
-                        vertical-align: middle;
+                        
                         margin-left: 0.5em;
                         font-weight: 700;
                       "
@@ -61,9 +59,10 @@
                   formControlName="documentType"
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
+                    <img src="assets/svg/CSV.svg" />
                     <span
                       style="
-                        vertical-align: middle;
+                        
                         margin-left: 0.5em;
                         font-weight: 700;
                       "
@@ -313,12 +312,12 @@
             rowData.booking.getDepartureTime()
           }}
         </p>
-        <p>
+        <p class="arrival-time">
           {{ rowData.booking.getDaysAndNights().nights }}N |
           {{ rowData.booking.getDaysAndNights().days }}D
         </p>
       </td>
-      <td style="font-size: 12px;">
+      <td class="amount">
         <span
           [ngClass]="{
             'status-text-reject':
@@ -339,7 +338,7 @@
           <div class="icon">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/google-docs.svg"
+              src="assets/svg/Document.svg"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.documents == 'INITIATED',

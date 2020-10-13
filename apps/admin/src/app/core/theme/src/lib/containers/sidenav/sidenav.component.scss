@@ -96,6 +96,9 @@ ul {
 
 .nav li {
   margin-bottom: 9px;
+  &:hover{
+    background-color: rgb(236, 234, 234 , 0.25);
+  }
 }
 
 .nav li a {
@@ -112,9 +115,7 @@ ul {
   transition: all 400ms;
   height: 50px;
   text-decoration: none;
-  &:hover{
-    background-color: rgb(236, 234, 234 , 0.25) !important;
-  }
+  
 }
 
 
@@ -136,6 +137,18 @@ ul {
 
 .active a .svg-icon{
   filter: invert(34%) sepia(23%) saturate(3170%) hue-rotate(209deg) brightness(90%) contrast(89%);
+}
+
+.svg-icon{
+  @media screen and (max-width: 800px) {
+    height: 13px;
+  }
+}
+
+:host ::ng-deep .icon-label{
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 }
 
 .collapse-a {

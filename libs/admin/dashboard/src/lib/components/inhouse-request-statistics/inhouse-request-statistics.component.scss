@@ -91,6 +91,11 @@ svg text.label {
     width: 50%;
     bottom: 26px;
   }
+  @media screen and (max-width: 800px) {
+    height: 40%;
+    width: 41%;
+    bottom: 10px;
+  }
 }
 
 :host ::ng-deep svg {

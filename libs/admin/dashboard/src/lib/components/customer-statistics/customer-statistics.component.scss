@@ -52,6 +52,7 @@
     margin: 0 5px;
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
 .stat-label-title {
@@ -115,6 +116,11 @@ opacity: 1;
 .labl > input { /* HIDE RADIO */
     visibility: hidden; /* Makes input not-clickable */
     position: absolute; /* Remove input from document flow */
+    
+}
+
+.legends:checked ~ p{
+    text-decoration: line-through;
 }
 
 .labl > div {
@@ -158,8 +164,16 @@ opacity: 1;
 }
 
 .stat-label > input {
-    visibility: hidden; /* Makes input not-clickable */
+    opacity: 0;
     position: absolute; /* Remove input from document flow */
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 // .stat-label > input + span{ /* DIV STYLES */

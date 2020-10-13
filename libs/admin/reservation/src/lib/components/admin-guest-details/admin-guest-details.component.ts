@@ -1,20 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { SnackBarService } from 'libs/shared/material/src';
-
+import { isEmpty } from 'lodash';
 @Component({
   selector: 'hospitality-bot-admin-guest-details',
   templateUrl: './admin-guest-details.component.html',
-  styleUrls: ['./admin-guest-details.component.scss']
+  styleUrls: ['./admin-guest-details.component.scss'],
 })
 export class AdminGuestDetailsComponent implements OnInit {
+  @Input('data') detailsData;
+  @Input() parentForm: FormGroup;
+  @Output()
+  addFGEvent = new EventEmitter();
+  @Output() isGuestInfoPatched = new EventEmitter();
 
-  @Input() guestDetails;
-  @Input() parentForm;
-
-  primaryGuest;
-  isActionEdit:boolean;
+  stayDetailsForm: FormGroup;
+  healthCardDetailsForm: FormGroup;
+  guestDetailsForm: FormGroup;
 
   constructor(
     private _fb: FormBuilder,
@@ -24,16 +27,69 @@ export class AdminGuestDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.addFormsControls();
+    this.pushDataToForm();
   }
 
-  addFormsControls(){
-    this.parentForm.addControl('guestDetails', this.initGuestDetailForm());
-    this.addGuests(this.guestDetails);
+  addFormsControls() {
+    this.healthCardDetailsForm = this.initHealthCardDetailsForm();
+    this.stayDetailsForm = this.initStayDetailsForm();
+    (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
+      this.initGuestDetailsForm();
+
+    // this.parentForm.addControl('guestDetails', this.initGuestDetailForm());
+    // this.addGuests(this.guestDetails);
   }
 
-  initGuestDetailForm() {
+  pushDataToForm() {
+    this.healthCardDetailsForm.patchValue(
+      this.detailsData.healDeclarationDetails
+    );
+    this.addFGEvent.next({
+      name: 'healthCardDetails',
+      value: this.healthCardDetailsForm,
+    });
+
+    this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
+    this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
+
+    this.guestDetailsForm
+      .get('guests')
+      .patchValue(this.detailsData.guestDetails);
+    this.addFGEvent.next({
+      name: 'guestInfoDetails',
+      value: this.guestDetailsForm,
+    });
+
+    this.isGuestInfoPatched.next(true);
+  }
+
+  initGuestDetailsForm() {
+    const guestFA = this.guestDetailsForm.get('guests') as FormArray;
+    this.detailsData.guestDetails.forEach((guest) => {
+      guestFA.push(this.getGuestFG());
+    });
+
+    //this.mapValuesInForm();
+    // this.extractPrimaryDetails();
+  }
+
+  initHealthCardDetailsForm() {
     return this._fb.group({
-      remark:[''],
+      status: [''],
+      remarks: [''],
+      url: [''],
+    });
+  }
+
+  initStayDetailsForm() {
+    return this._fb.group({
+      arrivalTime: [''],
+      departureTime: [''],
+      expectedArrivalTime: [''],
+      roomType: [''],
+      kidsCount: [''],
+      adultsCount: [''],
+      roomNumber: [''],
     });
   }
 
@@ -47,76 +103,86 @@ export class AdminGuestDetailsComponent implements OnInit {
       phoneNumber: [''],
       email: [''],
       isPrimary: [''],
-      nationality:[''],
-      isInternational:[''],
-      selectedDocumentType:[''],
+      nationality: [''],
+      isInternational: [''],
+      selectedDocumentType: [''],
       verificationStatus: [''],
-      remark:['']
+      remark: [''],
     });
   }
 
-  addGuests(guestDetail) {
-    this.guestDetailsForm.addControl('guests', new FormArray([]));
-    guestDetail.guestDetails.forEach((guest) => {
-      let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-      controlFA.push(this.getGuestFG());
-    });
+  // addGuests(guestDetail) {
+  //   this.guestDetailsForm.addControl('guests', new FormArray([]));
+  //   guestDetail.guestDetails.forEach((guest) => {
+  //     let controlFA = this.guestDetailsForm.get('guests') as FormArray;
+  //     controlFA.push(this.getGuestFG());
+  //   });
 
-    this.mapValuesInForm();
-    this.extractPrimaryDetails();
-  }
+  //   this.mapValuesInForm();
+  //   this.extractPrimaryDetails();
+  // }
 
-  mapValuesInForm() {
-    this.guests.patchValue(this.guestDetails.guestDetails);
-  }
+  // mapValuesInForm() {
+  //   this.guests.patchValue(this.guestDetails.guestDetails);
+  // }
 
-  extractPrimaryDetails() {
-    this.guests.controls.forEach((guestFG) => {
-      if (guestFG.get('isPrimary').value === true) {
-        this.primaryGuest = guestFG;
-      }
-    });
-  }
+  // extractPrimaryDetails() {
+  //   this.guests.controls.forEach((guestFG) => {
+  //     if (guestFG.get('isPrimary').value === true) {
+  //       this.primaryGuest = guestFG;
+  //     }
+  //   });
+  // }
 
-  editHealthStatus(){
-    this.isActionEdit = true;
-  }
+  // editHealthStatus() {
+  //   this.isActionEdit = true;
+  // }
 
-  updateHealthDeclarationStatus(status){
+  updateHealthCardStatus(status) {
     let data = {
-      stepName : "HEALTHDECLARATION",
+      stepName: 'HEALTHDECLARATION',
       state: status,
-      remarks: this.guestDetailsForm.get('remark').value
+      remarks: this.healthCardDetailsForm.get('remarks').value,
     };
-    this._reservationService.updateStepStatus('17b322c3-fa52-4e3d-9883-34132f6954cd',data)
-    .subscribe(response =>{
-      this.healDeclarationForm.get('isAccepted').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
-      this.isActionEdit = false;
+
+    if (status == 'REJECT' && isEmpty(data.remarks)) {
       this._snackBarService.openSnackBarAsText(
-        'Status updated sucessfully.',
-        '',
-        { panelClass: 'success' }
+        'Please provide a relevant remark'
       );
-    },
-    (error)=>{
-      this._snackBarService.openSnackBarAsText(error.error.message);
-    })
+      // add remakrks validator as required
+      return;
+    }
+
+    // remove remarks required validators
+
+    this._reservationService
+      .updateStepStatus('fd90295a-7789-46a2-9b59-8a193009baf6', data)
+      .subscribe(
+        (response) => {
+          this.healthCardDetailsForm
+            .get('status')
+            .patchValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
+          this._snackBarService.openSnackBarAsText(
+            'Status updated sucessfully.',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        (error) => {
+          this._snackBarService.openSnackBarAsText(error.error.message);
+        }
+      );
   }
 
-  get guests(): FormArray {
-    return this.guestDetailsForm.get('guests') as FormArray;
-  }
+  // get guests(): FormArray {
+  //   return this.guestDetailsForm.get('guests') as FormArray;
+  // }
 
-  get guestDetailsForm(){
-    return this.parentForm.get('guestDetails')as FormGroup;
-  }
+  // get guestDetailsForm() {
+  //   return this.parentForm.get('guestDetails') as FormGroup;
+  // }
 
-  get stayDetailsForm(){
-    return this.parentForm.get('stayDetails')as FormGroup;
-  }
-
-  get healDeclarationForm(){
-    return this.parentForm.get('healthDeclareForm') as FormGroup;
-  }
-
+  // get healDeclarationForm() {
+  //   return this.parentForm.get('healthDeclareForm') as FormGroup;
+  // }
 }

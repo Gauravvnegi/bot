@@ -1,5 +1,5 @@
-<div class="material-body" *ngIf="guestDetails">
-  <div class="document-header">
+<div class="material-body">
+  <!-- <div class="document-header">
     <p class="heading">Guest Documents</p>
     <i
       *ngIf="documentStatus.get('status').value === 'PENDING'"
@@ -16,11 +16,11 @@
       class="fa fa-window-close"
       aria-hidden="true"
     ></i>
-  </div>
+  </div> -->
   <div class="wrapper">
     <form [formGroup]="selectedGuestGroup">
       <div class="document-name-nationality">
-        <mat-form-field class="nationality">
+        <!-- <mat-form-field class="nationality">
           <mat-select
             [(value)]="selectedGuestId"
             (selectionChange)="onGuestChange($event.value)"
@@ -32,8 +32,8 @@
               {{ guest.firstName }}{{ guest.lastName }}
             </mat-option>
           </mat-select>
-        </mat-form-field>
-        <div class="nationality-wrapper">
+        </mat-form-field> -->
+        <!-- <div class="nationality-wrapper">
           <span class="text">Nationality :</span>
           <mat-form-field *ngIf="selectedGuestGroup">
             <mat-select
@@ -42,20 +42,19 @@
               (selectionChange)="onNationalityChange($event.value)"
             >
               <mat-option
-                *ngFor="let country of countries"
+                *ngFor="let country of countriesLOV"
                 [value]="country.key"
               >
                 {{ country.value }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
       </div>
-      <div class="nationality-wrapper">
+      <!-- <div class="nationality-wrapper">
         <span class="text">Select Document Type :</span>
 
         <mat-form-field>
-          <!-- <mat-label>Document Type</mat-label> -->
           <mat-select
             [(value)]="selectedGuestGroup.get('selectedDocumentType').value"
             formControlName="selectedDocumentType"
@@ -70,9 +69,9 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+      </div> -->
       <div>
-        <ng-container
+        <!-- <ng-container
           formArrayName="documents"
           *ngFor="
             let document of selectedGuestGroup.get('documents').controls;
@@ -81,7 +80,6 @@
         >
           <div class="upload-image-wrapper" [formGroupName]="i">
             <div class="upload-image">
-              <!-- <img [src]="document.get('frontUrl').value" /> -->
               <hospitality-bot-upload-file
                 [fileUploadData]="fileUploadData"
                 [url]="document.get('frontUrl').value"
@@ -98,7 +96,6 @@
               class="upload-image"
               *ngIf="document.get('documentType').value != 'VISA'"
             >
-              <!-- <img [src]="document.get('backUrl').value" /> -->
               <hospitality-bot-upload-file
                 [fileUploadData]="fileUploadData"
                 [url]="document.get('backUrl').value"
@@ -111,12 +108,8 @@
                 {{ document.get('documentType').value }} BACK PAGE
               </p>
             </div>
-            <!-- <mat-form-field>
-                            <mat-label>Add Remark:</mat-label>
-                            <input matInput formControlName="remark" />
-                        </mat-form-field> -->
           </div>
-        </ng-container>
+        </ng-container> -->
       </div>
     </form>
   </div>

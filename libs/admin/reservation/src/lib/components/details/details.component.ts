@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
 import { AdminDetailsService } from '../../services/admin-details.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -12,25 +13,27 @@ import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-  @ViewChild(AdminGuestDetailsComponent)
-  guestDetailComponent: AdminGuestDetailsComponent;
-  @ViewChild(AdminDocumentsDetailsComponent)
-  documentDetailComponent: AdminDocumentsDetailsComponent;
+  // @ViewChild(AdminGuestDetailsComponent)
+  // guestDetailComponent: AdminGuestDetailsComponent;
+  // @ViewChild(AdminDocumentsDetailsComponent)
+  // documentDetailComponent: AdminDocumentsDetailsComponent;
 
   detailsForm: FormGroup;
+  details;
+  isGuestInfoPatched: boolean = false;
   primaryGuest;
-  guestDetails;
+  isReservationDetailFetched: boolean = false;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
 
-  isReservationDetail: boolean = false;
-
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private _adminDetailsService: AdminDetailsService
+    private _adminDetailsService: AdminDetailsService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _snackBarService: SnackBarService
   ) {
     this.initDetailsForm();
   }
@@ -41,131 +44,118 @@ export class DetailsComponent implements OnInit {
 
   getReservationDetails() {
     this._reservationService
-      .getReservationDetails('17b322c3-fa52-4e3d-9883-34132f6954cd')
+      .getReservationDetails('fd90295a-7789-46a2-9b59-8a193009baf6')
       .subscribe((response) => {
-        this.guestDetails = new Details().deserialize(response);
+        this.details = new Details().deserialize(response);
         this.mapValuesInForm();
-        this.primaryDetails();
-        this.isReservationDetail = true;
+        this.isReservationDetailFetched = true;
       });
   }
 
   initDetailsForm() {
     this.detailsForm = this._fb.group({
-      reservationForm: this.initReservationForm(),
-      stayDetails: this.initStayDetailsForm(),
-      healthDeclareForm: this.initHealthDeclareForm(),
-      regCardForm: this.initRegCardForm(),
+      stayDetails: this._fb.group({}),
+      guestInfoDetails: this._fb.group({}),
+      documentDetails: this._fb.group({}),
+      packageDetails: this._fb.group({}),
+      paymentDetails: this._fb.group({}),
+      activityDetails: this._fb.group({}),
+      regCardDetails: this._fb.group({
+        status: [''],
+        url: [''],
+      }),
+      healthCardDetails: this._fb.group({}),
+      reservationDetails: this._fb.group({
+        bookingNumber: [''],
+        bookingId: [''],
+      }),
     });
   }
 
-  initReservationForm() {
-    return this._fb.group({
-      bookingId: [''],
-      roomNumber: [''],
-    });
+  addFGEvent(data) {
+    this.detailsForm.setControl(data.name, data.value);
   }
 
-  initStayDetailsForm() {
-    return this._fb.group({
-      arrivalTime: [''],
-      departureTime: [''],
-      expectedArrivalTime: [''],
-      roomType: [''],
-      kidsCount: [''],
-      adultsCount: [''],
-    });
+  guestInfoPatched(data: boolean) {
+    if (data) {
+      const guestFA = this.detailsForm
+        .get('guestInfoDetails')
+        .get('guests') as FormArray;
+      guestFA.controls.forEach((guestFG) => {
+        if (guestFG.get('isPrimary').value === true) {
+          this.primaryGuest = guestFG.value;
+        }
+      });
+      this.isGuestInfoPatched = true;
+      this._changeDetectorRef.detectChanges();
+    }
   }
 
-  initGuestDetailForm() {
-    return this._fb.group({});
-  }
+  // confirmAllHealthDocs() {
+  //   if (this.healthCardDetailsFG.get('status').value == 'INITIATED') {
+  //     this._snackBarService.openSnackBarAsText(
+  //       'Please verify health declaration first'
+  //     );
+  //   }
+  // }
 
-  initHealthDeclareForm() {
-    return this._fb.group({
-      isAccepted: [''],
-    });
-  }
-
-  initRegCardForm() {
-    return this._fb.group({
-      status: [''],
-    });
-  }
-
-  getPackageFG(): FormGroup {
-    return this._fb.group({
-      id: [''],
-      quantity: [''],
-      rate: [''],
-      imgUrl: [''],
-      amenityName: [''],
-      packageCode: [''],
-      amenityDescription: [''],
-      type: [''],
-      active: [''],
-      metadata: [''],
-    });
-  }
+  // getPackageFG(): FormGroup {
+  //   return this._fb.group({
+  //     id: [''],
+  //     quantity: [''],
+  //     rate: [''],
+  //     imgUrl: [''],
+  //     amenityName: [''],
+  //     packageCode: [''],
+  //     amenityDescription: [''],
+  //     type: [''],
+  //     active: [''],
+  //     metadata: [''],
+  //   });
+  // }
 
   mapValuesInForm() {
-    this.stayDetailsForm.patchValue(this.guestDetails.stayDetails);
-    this.reservationDetailsForm.patchValue(
-      this.guestDetails.reservationDetails
-    );
-    this.healDeclarationForm.patchValue(
-      this.guestDetails.healDeclarationDetails
-    );
-    this.regCardForm.patchValue(this.guestDetails.regCardDetails);
-    this.setStepsStatus();
+    this.reservationDetailsFG.patchValue(this.details.reservationDetails);
+    this.regCardDetailsFG.patchValue(this.details.regCardDetails);
+    //  this.setStepsStatus();
   }
 
-  setStepsStatus() {
-    this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get(
-      'isAccepted'
-    ).value;
-  }
+  // setStepsStatus() {
+  //   this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get(
+  //     'isAccepted'
+  //   ).value;
+  // }
 
-  confirmHealthDocs(status) {
-    this.guestDetailComponent.updateHealthDeclarationStatus(status);
-  }
+  // confirmHealthDocs(status) {
+  //   this.guestDetailComponent.updateHealthDeclarationStatus(status);
+  // }
 
-  primaryDetails() {
-    this.guestDetails.guestDetails.forEach((guest) => {
+  getPrimaryGuestDetails() {
+    this.details.guestDetails.forEach((guest) => {
       if (guest.isPrimary === true) {
         this.primaryGuest = guest;
+        return;
       }
     });
   }
 
-  get guests(): FormArray {
-    return (
-      this.guestDetailsForm &&
-      (this.guestDetailsForm.get('guests') as FormArray)
-    );
+  get reservationDetailsFG() {
+    return this.detailsForm.get('reservationDetails') as FormGroup;
   }
 
-  get reservationDetailsForm() {
-    return this.detailsForm.get('reservationForm') as FormGroup;
-  }
-
-  get stayDetailsForm() {
+  get stayDetailsFG() {
     return this.detailsForm.get('stayDetails') as FormGroup;
   }
 
-  get guestDetailsForm() {
-    return this.detailsForm.get('guestDetails') as FormGroup;
+  get guestInfoDetailsFG() {
+    return this.detailsForm.get('guestInfoDetails') as FormGroup;
   }
 
-  get healDeclarationForm() {
-    return this.detailsForm.get('healthDeclareForm') as FormGroup;
+  get healthCardDetailsFG() {
+    return this.detailsForm.get('healthCardDetails') as FormGroup;
   }
 
-  get healthDeclarationStatus() {
-    return this._adminDetailsService.healthDeclarationStatus;
-  }
-
-  get regCardForm() {
-    return this.detailsForm.get('regCardForm') as FormGroup;
+  get regCardDetailsFG() {
+    return this.detailsForm.get('regCardDetails') as FormGroup;
   }
 }

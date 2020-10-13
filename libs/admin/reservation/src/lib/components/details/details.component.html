@@ -1,13 +1,16 @@
+<pre>
+  {{ detailsForm.getRawValue() | json }}
+</pre>
 <div class="details-wrapper">
   <div class="header">
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-    <div class="name-details" *ngIf="primaryGuest">
+    <div class="name-details" *ngIf="isGuestInfoPatched">
       <div class="name">
         <span
-          >{{ primaryGuest.title }}{{ primaryGuest.firstName
-          }}{{ primaryGuest.lastName }}</span
+          >{{ primaryGuest.title }} {{ primaryGuest.firstName }}
+          {{ primaryGuest.lastName }}</span
         >
         <div class="svg-wrapper">
           <svg
@@ -42,7 +45,9 @@
               </g>
             </g>
           </svg>
-          <span>{{ stayDetailsForm.get('adultsCount').value }}</span>
+          <span *ngIf="stayDetailsFG.get('adultsCount')">{{
+            stayDetailsFG.get('adultsCount').value
+          }}</span>
         </div>
         <div class="svg-wrapper">
           <svg
@@ -69,7 +74,9 @@
               />
             </g>
           </svg>
-          <span>{{ stayDetailsForm.get('kidsCount').value }}</span>
+          <span *ngIf="stayDetailsFG.get('kidsCount')">{{
+            stayDetailsFG.get('kidsCount').value
+          }}</span>
         </div>
         <div class="vip-image">
           <img src="assets/VIP.png" />
@@ -77,64 +84,63 @@
       </div>
       <div class="header-seperator"></div>
       <div class="booking-id">
-        {{ reservationDetailsForm.get('bookingId').value }}
+        {{ reservationDetailsFG.get('bookingNumber').value }}
       </div>
       <div class="header-seperator"></div>
 
       <div class="room-details">
-        {{ reservationDetailsForm.get('roomNumber').value }}
-        <p *ngIf="reservationDetailsForm.get('roomNumber').value">-</p>
-        {{ stayDetailsForm.get('roomType').value }}
+        {{ stayDetailsFG.get('roomNumber').value }}
+        <p *ngIf="stayDetailsFG.get('roomNumber').value">-</p>
+        {{ stayDetailsFG.get('roomType').value }}
       </div>
     </div>
-    <div class="contact-details" *ngIf="primaryGuest">
-      <div class="call">
+    <div class="contact-details" *ngIf="isGuestInfoPatched">
+      <div *ngIf="primaryGuest.phoneNumber" class="call">
         <mat-icon class="material-icons" matSuffix>call</mat-icon>
         {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
       </div>
 
-      <div class="email">
+      <div *ngIf="primaryGuest.email" class="email">
         <mat-icon class="material-icons" matSuffix>email</mat-icon>
         {{ primaryGuest.email }}
       </div>
     </div>
-    <div class="options-wrapper">
+    <div class="options-wrapper" *ngIf="isGuestInfoPatched">
       <button class="check-button">
-        <mat-icon
-          *ngIf="regCardForm.get('status').value === 'PENDING'"
-          class="material-icons"
-          matSuffix
-          >help</mat-icon
-        >
-        <mat-icon
-          *ngIf="regCardForm.get('status').value === 'ACCEPT'"
-          class="material-icons"
-          matSuffix
-          >check_circle</mat-icon
-        >
+        <ng-container [ngSwitch]="regCardDetailsFG.get('status').value">
+          <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix
+            >check_circle</mat-icon
+          >
+          <mat-icon *ngSwitchDefault class="material-icons" matSuffix
+            >help</mat-icon
+          >
+        </ng-container>
         <p class="text">Reg card</p>
       </button>
       <button class="check-button">
-        <mat-icon
-          *ngIf="healDeclarationForm.get('isAccepted').value === 'COMPLETED'"
-          class="material-icons"
-          matSuffix
-          >check_circle</mat-icon
-        >
-        <mat-icon
-          *ngIf="healDeclarationForm.get('isAccepted').value === 'PENDING'"
-          class="material-icons"
-          matSuffix
-          >help</mat-icon
-        >
-        <mat-icon
-          *ngIf="healDeclarationForm.get('isAccepted').value === 'FAILED'"
-          class="material-icons"
-          matSuffix
-          >disabled_by_default</mat-icon
-        >
+        <ng-container [ngSwitch]="healthCardDetailsFG.get('status').value">
+          <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix
+            >check_circle</mat-icon
+          >
+
+          <mat-icon *ngSwitchCase="'FAILED'" class="material-icons" matSuffix
+            >disabled_by_default</mat-icon
+          >
+
+          <mat-icon *ngSwitchCase="'PENDING'" class="material-icons" matSuffix
+            >help</mat-icon
+          >
+
+          <mat-icon *ngSwitchCase="'INITIATED'" class="material-icons" matSuffix
+            >help</mat-icon
+          >
+
+          <!-- add default case icon -->
+        </ng-container>
+
         <p class="text">Health Declaration</p>
       </button>
+      <!-- bind it to detailsForm -->
       <p-dropdown [options]="bookingList" [disabled]="true">
         <ng-template let-item pTemplate="selectedItem">
           <span style="vertical-align: middle; margin-left: 5px;"
@@ -147,22 +153,24 @@
   <div class="mat-group">
     <mat-tab-group>
       <mat-tab label="Guest Details">
-        <ng-container *ngIf="guestDetails">
+        <ng-container *ngIf="isReservationDetailFetched">
           <hospitality-bot-admin-guest-details
             [parentForm]="detailsForm"
-            [guestDetails]="guestDetails"
+            [data]="details"
+            (addFGEvent)="addFGEvent($event)"
+            (isGuestInfoPatched)="guestInfoPatched($event)"
           ></hospitality-bot-admin-guest-details>
         </ng-container>
       </mat-tab>
       <mat-tab label="Documents">
-        <ng-container *ngIf="guests && guests.controls.length > 0">
+        <ng-container *ngIf="isReservationDetailFetched">
           <hospitality-bot-admin-documents-details
             [parentForm]="detailsForm"
-            [guestDetails]="guestDetails"
+            [data]="details"
           ></hospitality-bot-admin-documents-details>
         </ng-container>
       </mat-tab>
-      <mat-tab label="Package">
+      <!-- <mat-tab label="Package">
         <ng-container>
           <hospitality-bot-admin-package-details
             [parentForm]="detailsForm"
@@ -178,19 +186,94 @@
             [guestDetails]="guestDetails"
           ></hospitality-bot-admin-payment-details>
         </ng-container>
-      </mat-tab>
+      </mat-tab> -->
     </mat-tab-group>
-    <div *ngIf="isReservationDetail" class="tab-buttons">
+
+    <div *ngIf="isReservationDetailFetched" class="tab-buttons">
       <div class="button-wrapper">
-        <button
-          *ngIf="healDeclarationForm.get('isAccepted').value !== 'COMPLETED'"
+        <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
+          <ng-container *ngSwitchCase="'PRECHECKIN'">
+            <ng-container *ngTemplateOutlet="PRECHECKIN"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'CHECKIN'">
+            <ng-container *ngTemplateOutlet="CHECKIN"></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchCase="'CHECKOUT'">
+            <ng-container *ngTemplateOutlet="CHECKOUT"></ng-container>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #PRECHECKIN>
+          <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+            <ng-container *ngSwitchCase="'PENDING'">
+              <button class="button">Generate CheckIn Link</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <button class="button">Generate CheckIn Link</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <button class="button">Generate CheckIn Link</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <button class="button">Generate CheckIn Link</button>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+
+        <ng-template #CHECKIN>
+          <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+            <ng-container *ngSwitchCase="'PENDING'">
+              <button class="button">Generate CheckIn Link</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <button class="button">Generate CheckIn Link</button>
+              <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
+                Confirm All Health Declaration
+              </button> -->
+              <button class="button">Confirm All Docs</button>
+              <button class="button">Confirm And Notify Checkin</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <!-- initiate force checkout -->
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <button class="button">Generate CheckIn Link</button>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+
+        <ng-template #CHECKOUT
+          ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
+            <ng-container *ngSwitchCase="'PENDING'">
+              <!-- forced checouout PENDING -->
+              <button class="button">Prepare Invoice</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <!-- iniated only from bot   -->
+              <button class="button">Prepare Invoice</button>
+              <button class="button">Generate Checkout Link</button>
+              <button class="button">Confirm Payment</button>
+              <button class="button">Download Invoice/Folio</button>
+              <button class="button">Checkout</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <button class="button">Download Invoice/Folio</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <!-- Flow to-be-decided -->
+            </ng-container>
+          </ng-container>
+        </ng-template>
+
+        <!-- <button
+          *ngIf="healthDeclarationForm.get('status').value !== 'COMPLETED'"
           class="button"
           (click)="confirmHealthDocs('ACCEPT')"
         >
           Confirm All Health Declaration
         </button>
         <button class="button gap">Confirm All Docs</button>
-        <button class="button gap">Confirm & Notify Checkin</button>
+        <button class="button gap">Confirm & Notify Checkin</button> -->
       </div>
       <p class="contact">Contact Guest</p>
       <div class="right-bottom-icons">
@@ -200,19 +283,16 @@
           </div>
         </div>
         <div class="social-icons">
-          <!-- <i class="fas fa-paper-plane icon"></i> -->
           <div class="icon">
             <img src="assets/svg/whatsapp.svg" />
           </div>
         </div>
         <div class="social-icons">
-          <!-- <i class="fas fa-paper-plane icon"></i> -->
           <div class="icon">
             <img src="assets/svg/messenger.svg" />
           </div>
         </div>
         <div class="social-icons">
-          <!-- <i class="fas fa-paper-plane icon"></i> -->
           <div class="icon">
             <img src="assets/svg/share.svg" />
           </div>
@@ -221,3 +301,6 @@
     </div>
   </div>
 </div>
+<pre>
+  {{ details | json }}
+</pre>

@@ -6,14 +6,15 @@ export interface Deserializable {
 }
 
 export class Details implements Deserializable {
-  reservationDetails: ReservationDetailsConfig;
+  reservationDetails: ReservationDetailsConfig; // bookingDetails
   guestDetails: GuestDetailsConfig[];
   stayDetails: StayDetailsConfig;
   amenitiesDetails: PackageDetailsConfig;
   paymentDetails: PaymentDetailsConfig;
   regCardDetails: RegCardConfig;
   healDeclarationDetails: HealthDeclarationConfig;
-  documentStatus: DocumentsStatusConfig;
+  currentJourneyDetails: CurrentJourneyDetails;
+  stepStatusDetails: StepStatusDetails;
 
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
@@ -29,7 +30,6 @@ export class Details implements Deserializable {
     ];
 
     this.guestDetails = new Array<GuestDetailsConfig>();
-
     guestData.forEach((guest) => {
       this.guestDetails.push(
         new GuestDetailsConfig().deserialize(guest, hotelNationality)
@@ -41,17 +41,52 @@ export class Details implements Deserializable {
     this.regCardDetails = new RegCardConfig().deserialize(
       input.guestDetails.primaryGuest
     );
-    this.amenitiesDetails = new PackageDetailsConfig().mapPackage(
-      input.specialAmenities
-    );
-    this.paymentDetails = new PaymentDetailsConfig().deserialize(input);
+    this.currentJourneyDetails = new CurrentJourneyDetails().deserialize(input);
+    // this.amenitiesDetails = new PackageDetailsConfig().mapPackage(
+    //   input.specialAmenities
+    // );
+    // this.paymentDetails = new PaymentDetailsConfig().deserialize(input);
     this.healDeclarationDetails = new HealthDeclarationConfig().deserialize(
-      input.stepsStatus
+      input.healthDeclaration
     );
-    this.documentStatus = new DocumentsStatusConfig().deserialize(
+    this.stepStatusDetails = new StepStatusDetails().deserialize(
       input.stepsStatus
     );
 
+    return this;
+  }
+}
+
+export class StepStatusDetails implements Deserializable {
+  documents;
+  guestDetails;
+  stayDetails;
+  payment;
+  healthDeclaration;
+  feedback;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'documents', get(input, ['DOCUMENTS'])),
+      set({}, 'feedback', get(input, ['FEEDBACK'])),
+      set({}, 'healthDeclaration', get(input, ['HEALTHDECLARATION'])),
+      set({}, 'payment', get(input, ['PAYMENT'])),
+      set({}, 'stayDetails', get(input, ['STAYDETAILS'])),
+      set({}, 'guestDetails', get(input, ['GUESTDETAILS']))
+    );
+    return this;
+  }
+}
+
+export class CurrentJourneyDetails implements Deserializable {
+  status;
+  journey;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'status', get(input, ['currentJoureyStatus'])),
+      set({}, 'journey', get(input, ['currentJourney']))
+    );
     return this;
   }
 }
@@ -71,7 +106,7 @@ export class GuestDetailsConfig implements Deserializable {
   email: string;
   selectedDocumentType: string;
   verificationStatus;
-  remark: string;
+  remarks: string;
   documents: DocumentDetailsConfig;
 
   deserialize(input: any, hotelNationality) {
@@ -95,7 +130,7 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'isPrimary', get(input, ['isPrimary'])),
       set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
       set({}, 'verificationStatus', get(input.statusMessage, ['status'])),
-      set({}, 'remark', get(input.statusMessage, ['remarks'])),
+      set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set(
         {},
         'isInternational',
@@ -114,6 +149,10 @@ export class GuestDetailsConfig implements Deserializable {
     );
     return this;
   }
+
+  getGuestFullNameWithTitle() {
+    return `${this.title} ${this.firstName} ${this.lastName}`;
+  }
 }
 
 export class StayDetailsConfig implements Deserializable {
@@ -123,6 +162,7 @@ export class StayDetailsConfig implements Deserializable {
   roomType: string;
   kidsCount: number;
   adultsCount: number;
+  roomNumber: string;
 
   deserialize(input: any) {
     let service = new DateService();
@@ -148,7 +188,8 @@ export class StayDetailsConfig implements Deserializable {
       set({}, 'expectedArrivalTime', '---'),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
-      set({}, 'adultsCount', get(input, ['adultsCount']))
+      set({}, 'adultsCount', get(input, ['adultsCount'])),
+      set({}, 'roomNumber', get(input, ['roomNumber']))
     );
     return this;
   }
@@ -189,27 +230,29 @@ export class ContactDetailsConfig implements Deserializable {
 }
 
 export class HealthDeclarationConfig implements Deserializable {
-  isAccepted;
+  status;
+  remarks;
+  url;
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'isAccepted', get(input, ['HEALTHDECLARATION']))
+      set({}, 'status', get(input, ['statusMessage', 'status'])),
+      set({}, 'remarks', get(input, ['statusMessage', 'remarks'])),
+      set({}, 'url', get(input, ['url']))
     );
     return this;
   }
 }
 
 export class ReservationDetailsConfig implements Deserializable {
+  bookingNumber: string;
   bookingId: string;
-  roomNumber: string;
-  hotelId: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'bookingId', get(input, ['number'])),
-      set({}, 'roomNumber', get(input, ['roomNumber'])),
-      set({}, 'hotelId', get(input.hotel, ['id']))
+      set({}, 'bookingNumber', get(input, ['number'])),
+      set({}, 'bookingId', get(input, ['id']))
     );
     return this;
   }
@@ -217,19 +260,13 @@ export class ReservationDetailsConfig implements Deserializable {
 
 export class RegCardConfig implements Deserializable {
   status;
+  url;
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'status', get(input, ['regcardUrl']) ? 'ACCEPT' : 'PENDING')
+      set({}, 'status', get(input, ['regcardUrl']) ? 'COMPLETED' : 'PENDING'),
+      set({}, 'url', get(input, ['regcardUrl']))
     );
-    return this;
-  }
-}
-
-export class DocumentsStatusConfig implements Deserializable {
-  status;
-  deserialize(input: any) {
-    Object.assign(this, set({}, 'status', get(input, ['DOCUMENTS'])));
     return this;
   }
 }

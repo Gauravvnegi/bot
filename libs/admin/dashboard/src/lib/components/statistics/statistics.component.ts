@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { StatisticsService } from '../../services/statistics.service';
 import { Statistics } from '../../data-models/statistics.model';
 import { GlobalFilterService } from '../../../../../../../apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { DateRangeFilterService } from '../../../../../../../apps/admin/src/app/core/theme/src/lib/services/daterange-filter.service';
-import { forkJoin, of } from 'rxjs';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 
 @Component({
@@ -13,6 +11,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 })
 export class StatisticsComponent implements OnInit {
   statistics: Statistics;
+  interval: string = 'day';
   constructor(
     private _statisticService: StatisticsService,
     private _adminUtilityService: AdminUtilityService,
@@ -58,5 +57,9 @@ export class StatisticsComponent implements OnInit {
     this._statisticService.getStatistics(config).subscribe(({ stats }) => {
       this.statistics = new Statistics().deserialize(stats);
     });
+  }
+
+  setInterval(event) {
+    this.interval = event.interval;
   }
 }

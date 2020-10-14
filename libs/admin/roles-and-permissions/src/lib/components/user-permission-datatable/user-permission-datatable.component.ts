@@ -8,7 +8,6 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -80,7 +79,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     return this._managePermissionService.getManagedUsers(config);
   }
 
-  loadData(event: LazyLoadEvent) {
+  loadData(event) {
     this.loading = true;
 
     this.fetchDataFrom([], {

@@ -105,7 +105,7 @@ export class GuestDetailsConfig implements Deserializable {
   phoneNumber: string;
   email: string;
   selectedDocumentType: string;
-  verificationStatus;
+  status;
   remarks: string;
   documents: DocumentDetailsConfig;
 
@@ -129,7 +129,7 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
       set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
-      set({}, 'verificationStatus', get(input.statusMessage, ['status'])),
+      set({}, 'status', get(input.statusMessage, ['status'])),
       set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set(
         {},
@@ -247,12 +247,14 @@ export class HealthDeclarationConfig implements Deserializable {
 export class ReservationDetailsConfig implements Deserializable {
   bookingNumber: string;
   bookingId: string;
+  hotelId: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
-      set({}, 'bookingId', get(input, ['id']))
+      set({}, 'bookingId', get(input, ['id'])),
+      set({}, 'hotelId', get(input.hotel, ['id']))
     );
     return this;
   }

@@ -17,115 +17,130 @@
       aria-hidden="true"
     ></i>
   </div> -->
-  <div class="wrapper">
+  <ng-container *ngIf="selectedGuestGroup">
     <form [formGroup]="selectedGuestGroup">
-      <div class="document-name-nationality">
-        <!-- <mat-form-field class="nationality">
-          <mat-select
-            [(value)]="selectedGuestId"
-            (selectionChange)="onGuestChange($event.value)"
-          >
-            <mat-option
-              *ngFor="let guest of guestDetails.guestDetails"
-              [value]="guest.id"
-            >
-              {{ guest.firstName }}{{ guest.lastName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
-        <!-- <div class="nationality-wrapper">
-          <span class="text">Nationality :</span>
-          <mat-form-field *ngIf="selectedGuestGroup">
-            <mat-select
-              [(value)]="selectedGuestGroup.get('nationality').value"
-              formControlName="nationality"
-              (selectionChange)="onNationalityChange($event.value)"
-            >
-              <mat-option
-                *ngFor="let country of countriesLOV"
-                [value]="country.key"
+      <div class="wrapper">
+          <div class="document-name-nationality">
+            <mat-form-field class="nationality">
+              <mat-select
+                [(value)]="selectedGuestId"
+                (selectionChange)="onGuestChange($event.value)"
               >
-                {{ country.value }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div> -->
-      </div>
-      <!-- <div class="nationality-wrapper">
-        <span class="text">Select Document Type :</span>
-
-        <mat-form-field>
-          <mat-select
-            [(value)]="selectedGuestGroup.get('selectedDocumentType').value"
-            formControlName="selectedDocumentType"
-            [disabled]="disableDocumentType"
-            (selectionChange)="onSelectedDocumentTypeChange($event.value)"
-          >
-            <mat-option
-              *ngFor="let document of documentsList"
-              [value]="document"
-            >
-              {{ document }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div> -->
-      <div>
-        <!-- <ng-container
-          formArrayName="documents"
-          *ngFor="
-            let document of selectedGuestGroup.get('documents').controls;
-            let i = index
-          "
-        >
-          <div class="upload-image-wrapper" [formGroupName]="i">
-            <div class="upload-image">
-              <hospitality-bot-upload-file
-                [fileUploadData]="fileUploadData"
-                [url]="document.get('frontUrl').value"
-                [pageType]="'front'"
-                [documentType]="document.get('documentType').value"
-                (fileData)="uploadFile($event)"
-              >
-              </hospitality-bot-upload-file>
-              <p class="text">
-                {{ document.get('documentType').value }} FIRST PAGE
-              </p>
-            </div>
-            <div
-              class="upload-image"
-              *ngIf="document.get('documentType').value != 'VISA'"
-            >
-              <hospitality-bot-upload-file
-                [fileUploadData]="fileUploadData"
-                [url]="document.get('backUrl').value"
-                [pageType]="'back'"
-                [documentType]="document.get('documentType').value"
-                (fileData)="uploadFile($event)"
-              >
-              </hospitality-bot-upload-file>
-              <p class="text">
-                {{ document.get('documentType').value }} BACK PAGE
-              </p>
+                <mat-option
+                  *ngFor="let guest of detailsData.guestDetails"
+                  [value]="guest.id"
+                >
+                  {{ guest.firstName }}{{ guest.lastName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="nationality-wrapper">
+              <span class="text">Nationality :</span>
+              <mat-form-field *ngIf="selectedGuestGroup">
+                <mat-select
+                  [(value)]="selectedGuestGroup.get('nationality').value"
+                  formControlName="nationality"
+                  [disabled]="true"
+                  (selectionChange)="onNationalityChange($event.value)"
+                >
+                  <mat-option
+                    *ngFor="let country of countriesLOV"
+                    [value]="country.value"
+                  >
+                    {{ country.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
           </div>
-        </ng-container> -->
+          <div class="nationality-wrapper">
+            <!-- <span class="text">Select Document Type :</span>
+    
+            <mat-form-field>
+              <mat-select
+                [(value)]="selectedGuestGroup.get('selectedDocumentType').value"
+                formControlName="selectedDocumentType"
+                [disabled]="disableDocumentType"
+                (selectionChange)="onSelectedDocumentTypeChange($event.value)"
+              >
+                <mat-option
+                  *ngFor="let document of documentsList"
+                  [value]="document"
+                >
+                  {{ document }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+          </div>
+          <div *ngIf="selectedGuestGroup.get('nationality').value">
+            <ng-container
+              formArrayName="documents"
+              *ngFor="
+                let document of selectedGuestGroup.get('documents').controls;
+                let i = index
+              "
+            >
+              <div class="upload-image-wrapper" [formGroupName]="i">
+                <div class="upload-image">
+                  <hospitality-bot-upload-file
+                    [fileUploadData]="fileUploadData"
+                    [url]="document.get('frontUrl').value"
+                    [pageType]="'front'"
+                    [documentType]="document.get('documentType').value"
+                  >
+                  </hospitality-bot-upload-file>
+                  <p class="text">
+                    {{ document.get('documentType').value }} FIRST PAGE
+                  </p>
+                </div>
+                <div
+                  class="upload-image"
+                  *ngIf="document.get('documentType').value != 'VISA'"
+                >
+                  <hospitality-bot-upload-file
+                    [fileUploadData]="fileUploadData"
+                    [url]="document.get('backUrl').value"
+                    [pageType]="'back'"
+                    [documentType]="document.get('documentType').value"
+                  >
+                  </hospitality-bot-upload-file>
+                  <p class="text">
+                    {{ document.get('documentType').value }} BACK PAGE
+                  </p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        
+      </div>
+      <hr class="data-seperator" />
+      <mat-label class="mat-head">Documents</mat-label>
+      <div class="pending-button-wrapper" *ngIf="selectedGuestGroup.get('status').value != 'PENDING'">
+        <p class="health-status" style="margin-left: 0;">
+          Document Verification Status :&nbsp;<b class="pending">{{selectedGuestGroup.get('status').value}}</b>
+        </p>
+        <div class="decision-button-wrapper">
+          <ng-container *ngIf="
+          ['INITIATED', 'FAILED'].includes(
+            selectedGuestGroup.get('status').value
+          )
+        ">
+            <button class="right">
+              <img src="assets/svg/tick.svg" />
+            </button>
+            <button class="right">
+              <img src="assets/svg/cross.svg" />
+            </button>
+          </ng-container>
+        </div>
+        <ng-container>
+          <span class="text">Remark :</span>
+          <mat-form-field>
+            <input matInput formControlName="remarks"/>
+          </mat-form-field>
+        </ng-container>
       </div>
     </form>
-  </div>
-  <hr class="data-seperator" />
-  <mat-label class="mat-head">Documents</mat-label>
-  <div class="pending-button-wrapper">
-    <p class="health-status" style="margin-left: 0;">
-      Document Verification Status :&nbsp;<b class="pending">Pending</b>
-    </p>
-    <div class="decision-button-wrapper">
-      <button class="right">
-        <img src="assets/svg/tick.svg" />
-      </button>
-      <button class="right">
-        <img src="assets/svg/cross.svg" />
-      </button>
-    </div>
-  </div>
+  </ng-container>
+  
 </div>

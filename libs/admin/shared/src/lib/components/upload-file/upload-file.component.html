@@ -24,17 +24,17 @@
       #fileInput
       type="file"
       accept="image/*"
-      [attr.disabled]=""
+      [attr.disabled]="true"
       (click)="fileInput.value = null"
       (change)="onSelectFile($event)"
       class="input-upload"
     />
-    <div class="hidden-hover" [style.display]="url ? 'flex' : 'none'">
+    <!-- <div class="hidden-hover" [style.display]="url ? 'flex' : 'none'">
       <div class="image-wrapper">
         <img src="assets/svg/mat-cross.svg" />
         <img src="assets/svg/mat-edit.svg" />
       </div>
-    </div>
+    </div> -->
     <input type="hidden" />
     <!-- <span *ngIf="!isValidDocument">{{ error }}</span> -->
     <mat-label></mat-label>

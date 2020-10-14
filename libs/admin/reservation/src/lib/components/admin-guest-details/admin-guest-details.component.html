@@ -1,7 +1,7 @@
 <div>
-  <form class="form-wrapper" [formGroup]="guestDetailsForm">
-    <div class="material-body">
-      <mat-label class="mat-head">Guest Info</mat-label>
+  <div class="material-body">
+    <mat-label class="mat-head">Guest Info</mat-label>
+    <form [formGroup]="guestDetailsForm">
       <ng-container
         formArrayName="guests"
         *ngFor="
@@ -33,78 +33,82 @@
           </div>
         </div>
       </ng-container>
-      <hr class="data-seperator" />
-      <mat-label class="mat-head">Stay Details</mat-label>
-      <ng-container>
-        <div class="feilds-wrapper">
-          <div class="feild width-quarter">
-            <mat-label class="label">Arrival Date</mat-label>
-            <div class="value">
-              {{ stayDetailsForm.get('arrivalTime').value }}
-            </div>
-          </div>
-          <div class="feild width-quarter">
-            <mat-label class="label">Departure Date</mat-label>
-            <div class="value">
-              {{ stayDetailsForm.get('departureTime').value }}
-            </div>
-          </div>
-          <div class="feild width-quarter">
-            <mat-label class="label">Expected Arrival Time</mat-label>
-            <div class="value">
-              {{ stayDetailsForm.get('expectedArrivalTime').value }}
-            </div>
-          </div>
-          <div class="feild width-quarter">
-            <mat-label class="label">Room Type</mat-label>
-            <div class="value">
-              {{ stayDetailsForm.get('roomType').value }}
-            </div>
+    </form>
+    <hr class="data-seperator" />
+    <mat-label class="mat-head">Stay Details</mat-label>
+    <ng-container>
+      <div class="feilds-wrapper">
+        <div class="feild width-quarter">
+          <mat-label class="label">Arrival Date</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('arrivalDate').value }}
           </div>
         </div>
-      </ng-container>
-      <hr class="data-seperator" />
-      <mat-label class="mat-head">Health Declaration</mat-label>
-      <ng-container>
-        <div class="pending-button-wrapper">
-          <p class="health-status">
-            Health Declaration Status :&nbsp;<b class="accepted">{{
-              healDeclarationForm.get('isAccepted').value
-            }}</b>
-          </p>
+        <div class="feild width-quarter">
+          <mat-label class="label">Departure Date</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('departureDate').value }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Expected Arrival Time</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('expectedArrivalTime').value }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Room Type</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('roomType').value }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <hr class="data-seperator" />
+    <mat-label class="mat-head">Health Declaration</mat-label>
+    <ng-container>
+      <div class="pending-button-wrapper">
+        <p class="health-status">
+          Health Declaration Status :&nbsp;<b class="accepted">{{
+            healthCardDetailsForm.get('status').value
+          }}</b>
+        </p>
+        <div *ngIf="healthCardDetailsForm.get('status').value != 'PENDING'">
           <div class="decision-button-wrapper">
-            <button
-              *ngIf="!isActionEdit"
-              class="right"
-              (click)="editHealthStatus()"
+            <ng-container
+              *ngIf="
+                ['INITIATED', 'FAILED'].includes(
+                  healthCardDetailsForm.get('status').value
+                )
+              "
             >
-              Edit
-            </button>
-            <ng-container *ngIf="isActionEdit">
-              <button
-                class="right"
-                (click)="updateHealthDeclarationStatus('ACCEPT')"
-              >
+              <button class="right" (click)="updateHealthCardStatus('ACCEPT')">
                 <img src="assets/svg/tick.svg" />
               </button>
-              <button
-                class="right"
-                (click)="updateHealthDeclarationStatus('REJECT')"
-              >
+              <button class="right" (click)="updateHealthCardStatus('REJECT')">
                 <img src="assets/svg/cross.svg" />
               </button>
             </ng-container>
           </div>
-        </div>
 
-        <div class="nationality-wrapper" *ngIf="isActionEdit">
-          <span class="text">Add Remark :</span>
-          <mat-form-field>
-            <!-- <mat-label>Add Remark:</mat-label> -->
-            <input matInput formControlName="remark" />
-          </mat-form-field>
+          <div
+            *ngIf="
+              !(
+                ['COMPLETED'].includes(
+                  healthCardDetailsForm.get('status').value
+                ) && !healthCardDetailsForm.get('remarks').value
+              )
+            "
+          >
+            <form [formGroup]="healthCardDetailsForm">
+              <span class="text">Remark :</span>
+              <mat-form-field>
+                <input matInput formControlName="remarks" />
+              </mat-form-field>
+            </form>
+          </div>
         </div>
-      </ng-container>
-    </div>
-  </form>
+      </div>
+    </ng-container>
+  </div>
 </div>

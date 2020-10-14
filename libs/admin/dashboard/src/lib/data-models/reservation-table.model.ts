@@ -16,7 +16,6 @@ export class ReservationTable implements Deserializable {
 
 export class Reservation implements Deserializable {
   rooms;
-  primaryRoom;
   guests;
   booking;
   payment;

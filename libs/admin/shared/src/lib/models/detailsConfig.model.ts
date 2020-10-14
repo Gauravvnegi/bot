@@ -6,14 +6,16 @@ export interface Deserializable {
 }
 
 export class Details implements Deserializable {
-  reservationDetails: ReservationDetailsConfig;
+  reservationDetails: ReservationDetailsConfig; // bookingDetails
   guestDetails: GuestDetailsConfig[];
   stayDetails: StayDetailsConfig;
   amenitiesDetails: PackageDetailsConfig;
   paymentDetails: PaymentDetailsConfig;
   regCardDetails: RegCardConfig;
   healDeclarationDetails: HealthDeclarationConfig;
-  documentStatus: DocumentsStatusConfig;
+  currentJourneyDetails: CurrentJourneyDetails;
+  stepStatusDetails: StepStatusDetails;
+  roomsDetails;
 
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
@@ -29,7 +31,6 @@ export class Details implements Deserializable {
     ];
 
     this.guestDetails = new Array<GuestDetailsConfig>();
-
     guestData.forEach((guest) => {
       this.guestDetails.push(
         new GuestDetailsConfig().deserialize(guest, hotelNationality)
@@ -41,17 +42,64 @@ export class Details implements Deserializable {
     this.regCardDetails = new RegCardConfig().deserialize(
       input.guestDetails.primaryGuest
     );
-    this.amenitiesDetails = new PackageDetailsConfig().mapPackage(
-      input.specialAmenities
+    this.currentJourneyDetails = new CurrentJourneyDetails().deserialize(input);
+    // this.amenitiesDetails = new PackageDetailsConfig().mapPackage(
+    //   input.specialAmenities
+    // );
+    this.paymentDetails = new PaymentDetailsConfig().deserialize(
+      input.paymentSummary
     );
-    this.paymentDetails = new PaymentDetailsConfig().deserialize(input);
     this.healDeclarationDetails = new HealthDeclarationConfig().deserialize(
-      input.stepsStatus
+      input.healthDeclaration
     );
-    this.documentStatus = new DocumentsStatusConfig().deserialize(
+    this.stepStatusDetails = new StepStatusDetails().deserialize(
       input.stepsStatus
     );
 
+    this.roomsDetails = new RoomsDetails().deserialize(input);
+
+    return this;
+  }
+}
+
+export class RoomsDetails implements Deserializable {
+  rooms;
+  totalRooms;
+  deserialize(input: any) {
+    this.totalRooms = input.rooms.length;
+    return this;
+  }
+}
+export class StepStatusDetails implements Deserializable {
+  documents;
+  guestDetails;
+  stayDetails;
+  payment;
+  healthDeclaration;
+  feedback;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'documents', get(input, ['DOCUMENTS'])),
+      set({}, 'feedback', get(input, ['FEEDBACK'])),
+      set({}, 'healthDeclaration', get(input, ['HEALTHDECLARATION'])),
+      set({}, 'payment', get(input, ['PAYMENT'])),
+      set({}, 'stayDetails', get(input, ['STAYDETAILS'])),
+      set({}, 'guestDetails', get(input, ['GUESTDETAILS']))
+    );
+    return this;
+  }
+}
+
+export class CurrentJourneyDetails implements Deserializable {
+  status;
+  journey;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'status', get(input, ['currentJoureyStatus'])),
+      set({}, 'journey', get(input, ['currentJourney']))
+    );
     return this;
   }
 }
@@ -70,8 +118,8 @@ export class GuestDetailsConfig implements Deserializable {
   phoneNumber: string;
   email: string;
   selectedDocumentType: string;
-  verificationStatus;
-  remark: string;
+  status;
+  remarks: string;
   documents: DocumentDetailsConfig;
 
   deserialize(input: any, hotelNationality) {
@@ -94,8 +142,8 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
       set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
-      set({}, 'verificationStatus', get(input.statusMessage, ['status'])),
-      set({}, 'remark', get(input.statusMessage, ['remarks'])),
+      set({}, 'status', get(input.statusMessage, ['status'])),
+      set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set(
         {},
         'isInternational',
@@ -114,15 +162,21 @@ export class GuestDetailsConfig implements Deserializable {
     );
     return this;
   }
+
+  getGuestFullNameWithTitle() {
+    return `${this.title} ${this.firstName} ${this.lastName}`;
+  }
 }
 
 export class StayDetailsConfig implements Deserializable {
   code: string;
-  arrivalTime: string;
-  departureTime: string;
+  arrivalDate: string;
+  departureDate: string;
   roomType: string;
   kidsCount: number;
   adultsCount: number;
+  roomNumber: string;
+  expectedArrivalTime;
 
   deserialize(input: any) {
     let service = new DateService();
@@ -131,7 +185,7 @@ export class StayDetailsConfig implements Deserializable {
       set({}, 'code', get(input, ['code'])),
       set(
         {},
-        'arrivalTime',
+        'arrivalDate',
         new DateService().convertTimestampToDate(
           get(input, ['arrivalTime']),
           'DD/MM/YYYY'
@@ -139,7 +193,7 @@ export class StayDetailsConfig implements Deserializable {
       ),
       set(
         {},
-        'departureTime',
+        'departureDate',
         new DateService().convertTimestampToDate(
           get(input, ['departureTime']),
           'DD/MM/YYYY'
@@ -148,7 +202,8 @@ export class StayDetailsConfig implements Deserializable {
       set({}, 'expectedArrivalTime', '---'),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
-      set({}, 'adultsCount', get(input, ['adultsCount']))
+      set({}, 'adultsCount', get(input, ['adultsCount'])),
+      set({}, 'roomNumber', get(input, ['roomNumber']))
     );
     return this;
   }
@@ -189,26 +244,30 @@ export class ContactDetailsConfig implements Deserializable {
 }
 
 export class HealthDeclarationConfig implements Deserializable {
-  isAccepted;
+  status;
+  remarks;
+  url;
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'isAccepted', get(input, ['HEALTHDECLARATION']))
+      set({}, 'status', get(input, ['statusMessage', 'status'])),
+      set({}, 'remarks', get(input, ['statusMessage', 'remarks'])),
+      set({}, 'url', get(input, ['url']))
     );
     return this;
   }
 }
 
 export class ReservationDetailsConfig implements Deserializable {
+  bookingNumber: string;
   bookingId: string;
-  roomNumber: string;
   hotelId: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'bookingId', get(input, ['number'])),
-      set({}, 'roomNumber', get(input, ['roomNumber'])),
+      set({}, 'bookingNumber', get(input, ['number'])),
+      set({}, 'bookingId', get(input, ['id'])),
       set({}, 'hotelId', get(input.hotel, ['id']))
     );
     return this;
@@ -217,19 +276,13 @@ export class ReservationDetailsConfig implements Deserializable {
 
 export class RegCardConfig implements Deserializable {
   status;
+  url;
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'status', get(input, ['regcardUrl']) ? 'ACCEPT' : 'PENDING')
+      set({}, 'status', get(input, ['regcardUrl']) ? 'COMPLETED' : 'PENDING'),
+      set({}, 'url', get(input, ['regcardUrl']))
     );
-    return this;
-  }
-}
-
-export class DocumentsStatusConfig implements Deserializable {
-  status;
-  deserialize(input: any) {
-    Object.assign(this, set({}, 'status', get(input, ['DOCUMENTS'])));
     return this;
   }
 }
@@ -251,61 +304,51 @@ export class PackageDetailsConfig {
 }
 
 export class PaymentDetailsConfig implements Deserializable {
-  guestId: string;
-  arrivalTime: string;
-  departureTime: string;
-  expectedArrivalTime: string;
-  roomType: number;
-  kidsCount: number;
-  adultsCount: number;
-  title: string;
-  firstName: string;
-  lastName: string;
-  countryCode: string;
-  phoneNumber: string;
-  email: string;
-  isPrimary: boolean;
+  currency;
+  dueAmount;
+  paidAmount;
+  subtotal;
+  taxAmount;
+  totalAmount;
+  totalDiscount;
+  roomRates;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'currency', get(input, ['currency'])),
+      set({}, 'dueAmount', get(input, ['dueAmount'])),
+      set({}, 'paidAmount', get(input, ['paidAmount'])),
+      set({}, 'subtotal', get(input, ['subtotal'])),
+      set({}, 'taxAmount', get(input, ['taxAmount'])),
+      set({}, 'totalAmount', get(input, ['totalAmount'])),
+      set({}, 'totalDiscount', get(input, ['totalDiscount']))
+    );
+    this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
+    return this;
+  }
+}
+
+export class RoomRateConfig implements Deserializable {
+  amount;
+  base;
+  description;
+  discount;
+  totalAmount;
+  unit;
+  label;
+  taxAndFees;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'bookingId', get(input, ['id'])),
-      set(
-        {},
-        'arrivalTime',
-        new DateService().convertTimestampToDate(
-          get(input.stayDetails, ['arrivalTime']),
-          'DD/MM/YYYY'
-        )
-      ),
-      set(
-        {},
-        'departureTime',
-        new DateService().convertTimestampToDate(
-          get(input.stayDetails, ['departureTime']),
-          'DD/MM/YYYY'
-        )
-      ),
-      set({}, 'currentDate', new DateService().currentDate('DD/MM/YYYY')),
-      set({}, 'expectedArrivalTime', '---'),
-      set({}, 'roomType', get(input.stayDetails, ['roomType'])),
-      set({}, 'roomNumber', '--'),
-      set({}, 'kidsCount', get(input.stayDetails, ['kidsCount'])),
-      set({}, 'adultsCount', get(input.stayDetails, ['adultsCount'])),
-      set({}, 'roomsCount', ''),
-      set({}, 'title', get(input.guestDetails.primaryGuest, ['nameTitle'])),
-      set({}, 'firstName', get(input.guestDetails.primaryGuest, ['firstName'])),
-      set({}, 'lastName', get(input.guestDetails.primaryGuest, ['lastName'])),
-      set(
-        {},
-        'countryCode',
-        get(input.guestDetails.primaryGuest.contactDetails, ['cc'])
-      ),
-      set(
-        {},
-        'phoneNumber',
-        get(input.guestDetails.primaryGuest.contactDetails, ['contactNumber'])
-      )
+      set({}, 'amount', get(input, ['amount'])),
+      set({}, 'base', get(input, ['base'])),
+      set({}, 'description', get(input, ['description'])),
+      set({}, 'discount', get(input, ['discount'])),
+      set({}, 'totalAmount', get(input, ['totalAmount'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'taxAndFees', get(input, ['taxAndFees'])),
+      set({}, 'unit', get(input, ['unit']))
     );
     return this;
   }

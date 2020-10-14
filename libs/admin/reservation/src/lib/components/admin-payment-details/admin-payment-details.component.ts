@@ -1,61 +1,128 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-admin-payment-details',
   templateUrl: './admin-payment-details.component.html',
-  styleUrls: ['./admin-payment-details.component.scss']
+  styleUrls: ['./admin-payment-details.component.scss'],
 })
 export class AdminPaymentDetailsComponent implements OnInit {
-
-  @Input() guestDetails;
+  @Input('data') detailsData;
   @Input() parentForm;
+  primaryGuestFG: FormGroup;
 
-  dataSource;
+  dataSource = [];
 
-  PaymentData = [
-    {description: 'Room Rental', unit: '1', unitPrice: 1000, amount: 3000, CGST:'5%', SGST:'9%', discount:'', totalAmount:''},
-    {description: 'Breakfast', unit: '2', unitPrice: 1500, amount: 3000, CGST:'5%', SGST:'9%', discount:'', totalAmount:''},
-    {description: 'Spa', unit: '1', unitPrice: 1000, amount: 1000, CGST:'5%', SGST:'9%', discount:'', totalAmount:''}
+  // PaymentData = [
+  //   {
+  //     description: 'Room Rental',
+  //     unit: '1',
+  //     unitPrice: 1000,
+  //     amount: 3000,
+  //     CGST: '5%',
+  //     SGST: '9%',
+  //     discount: '',
+  //     totalAmount: '',
+  //   },
+  //   {
+  //     description: 'Breakfast',
+  //     unit: '2',
+  //     unitPrice: 1500,
+  //     amount: 3000,
+  //     CGST: '5%',
+  //     SGST: '9%',
+  //     discount: '',
+  //     totalAmount: '',
+  //   },
+  //   {
+  //     description: 'Spa',
+  //     unit: '1',
+  //     unitPrice: 1000,
+  //     amount: 1000,
+  //     CGST: '5%',
+  //     SGST: '9%',
+  //     discount: '',
+  //     totalAmount: '',
+  //   },
+  // ];
+
+  displayedColumns: string[] = [
+    'label',
+    'unit',
+    'unitPrice',
+    'amount',
+    'CGST',
+    'SGST',
+    'discount',
+    'totalAmount',
   ];
 
-  displayedColumns: string[] = ['description', 'unit', 'unitPrice', 'amount', 'CGST', 'SGST', 'discount', 'totalAmount'];
-  
-  constructor(
-    private _fb: FormBuilder
-  ) { }
+  constructor(private _fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.dataSource = this.PaymentData;
-    this.addFormsControl();
+    this.getPrimaryGuest();
+    // this.dataSource = this.PaymentData;
+    this.getModifiedPaymentSummary();
   }
 
-  initPaymentDetailsForm(){
-    return this._fb.group({
-      bookingId: [''],
-      arrivalTime: [''],
-      departureTime: [''],
-      currentDate: [''],
-      expectedArrivalTime: [''],
-      roomType: [''],
-      roomNumber: [''],
-      kidsCount: [''],
-      adultsCount: [''],
-      roomsCount:[''],
-      title: [''],
-      firstName: [''],
-      lastName: [''],
-      countryCode: [''],
-      phoneNumber: [''],
-    })
+  getModifiedPaymentSummary() {
+    const paymentSummary = this.detailsData.paymentDetails;
+    let {
+      label,
+      description,
+      unit,
+      unitPrice,
+      amount,
+      discount,
+      totalAmount,
+      taxAndFees,
+    } = paymentSummary.roomRates;
+
+    this.dataSource.push({
+      label,
+      description,
+      unit,
+      unitPrice,
+      amount,
+      discount,
+      totalAmount,
+      currency: paymentSummary.currency,
+      ...Object.assign(
+        {},
+        ...taxAndFees.map((taxType) => ({
+          [taxType.type]: taxType.value,
+        }))
+      ),
+    });
   }
 
-  addFormsControl(){
-    this.parentForm.addControl('paymentdetailsForm', this.initPaymentDetailsForm());
-    this.paymentDetailsForm.patchValue(this.guestDetails.paymentDetails);
+  getPrimaryGuest() {
+    const guestFA = this.guestInfoDetailsFG.get('guests') as FormArray;
+
+    guestFA.controls.forEach((guestControl: FormGroup) => {
+      if (guestControl.get('isPrimary')) {
+        this.primaryGuestFG = guestControl;
+      }
+    });
   }
 
-  get paymentDetailsForm(){
-    return this.parentForm.get('paymentdetailsForm') as FormGroup;
+  get reservationDetailsFG() {
+    return this.parentForm.get('reservationDetails') as FormGroup;
+  }
+
+  get stayDetailsFG() {
+    return this.parentForm.get('stayDetails') as FormGroup;
+  }
+
+  get guestInfoDetailsFG() {
+    return this.parentForm.get('guestInfoDetails') as FormGroup;
+  }
+
+  get healthCardDetailsFG() {
+    return this.parentForm.get('healthCardDetails') as FormGroup;
+  }
+
+  get regCardDetailsFG() {
+    return this.parentForm.get('regCardDetails') as FormGroup;
   }
 }

@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDetailsService } from '../../services/admin-details.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -9,7 +10,7 @@ import { AdminDetailsService } from '../../services/admin-details.service';
   styleUrls: ['./admin-documents-details.component.scss'],
 })
 export class AdminDocumentsDetailsComponent implements OnInit {
-  disableDocumentType = false;
+  //disableDocumentType = false;
   selectedGuestGroup;
   selectedGuestId;
   documentsList;
@@ -21,35 +22,35 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   @Input() parentForm;
   @Input('data') detailsData;
+  @Output() addFGEvent = new EventEmitter();
 
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private _adminDetailsService: AdminDetailsService
+    private _adminDetailsService: AdminDetailsService,
+    private _snackBarService: SnackBarService,
   ) {}
 
   ngOnInit(): void {
     //this.listenForGuestNationalityChange();
     this.getLOV();
-    // this.addDocumentStatusForm();
-    // this.setDefaultGuestForDocument();
-    // this.addDocuments();
+    this.addDocumentStatusForm();
   }
 
   getLOV() {
     this.getCountriesList();
   }
 
-  // addDocumentStatusForm() {
-  //   this.parentForm.addControl('documentStatus', this.initDocumentStatus());
-  //   this.documentStatus.patchValue(this.guestDetails.documentStatus);
-  // }
+  addDocumentStatusForm() {
+    this.addFGEvent.next({name: 'documentStatus', value: this.initDocumentStatus()})
+    this.documentStatus.get('status').patchValue(this.detailsData.stepStatusDetails.documents);
+  }
 
-  // initDocumentStatus() {
-  //   return this._fb.group({
-  //     status: [''],
-  //   });
-  // }
+  initDocumentStatus() {
+    return this._fb.group({
+      status: [''],
+    });
+  }
 
   getCountriesList() {
     this._reservationService.getCountryList().subscribe((countriesList) => {
@@ -61,16 +62,14 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           nationality: country.nationality,
         };
       });
+      this.addDocuments();
+      this.setDefaultGuestForDocument();
     });
   }
 
-  //   addDocuments() {
-  //   if (this.guests.controls.length > 0) {
-  //     this.guests.controls.forEach((element: FormGroup, index) => {
-  //       element.addControl('documents', new FormArray([]));
-  //     });
-  //   }
-  // }
+  patchGuestData(){
+    this.guestsFA.patchValue(this.detailsData.guestDetails);
+  }
 
   // onNationalityChange(nationality) {
   //   this.documentsList = [];
@@ -88,26 +87,26 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     // });
   }
 
-  // getDocumentsByCountry(nationality) {
-  //   this._reservationService
-  //     .getDocumentsByNationality(
-  //       this.guestDetails.reservationDetails.hotelId,
-  //       nationality
-  //     )
-  //     .subscribe((response) => {
-  //       this.documentsList = response.documentList;
-  //       // this._adminDetailsService.guestNationality = response.verifyAllDocuments;
-  //     });
-  // }
+  getDocumentsByCountry(nationality) {
+    this._reservationService
+      .getDocumentsByNationality(
+        this.detailsData.reservationDetails.hotelId,
+        nationality
+      )
+      .subscribe((response) => {
+        this.documentsList = response.documentList;
+        // this._adminDetailsService.guestNationality = response.verifyAllDocuments;
+      });
+  }
 
-  // setDefaultGuestForDocument() {
-  //   this.guestDetails.guestDetails.forEach((guest) => {
-  //     if (guest.isPrimary === true) {
-  //       this.selectedGuestId = guest.id;
-  //     }
-  //     this.onGuestChange(guest.id);
-  //   });
-  // }
+  setDefaultGuestForDocument() {
+    this.detailsData.guestDetails.forEach((guest) => {
+      if (guest.isPrimary === true) {
+        this.selectedGuestId = guest.id;
+      }
+      this.onGuestChange(guest.id);
+    });
+  }
 
   // setDocumentsIfInternational(documentList) {
   //   this.selectedGuestGroup.get('documents').controls = [];
@@ -143,16 +142,23 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   //   documentFA.at(0).get('documentType').patchValue(documentType);
   // }
 
-  // addDocuments() {
-  //   if (this.guests.controls.length > 0) {
-  //     this.guests.controls.forEach((element: FormGroup, index) => {
-  //       element.addControl('documents', new FormArray([]));
-  //     });
-  //   }
-  // }
+  addDocuments() {
+    if (this.guestsFA.controls.length > 0) {
+      this.guestsFA.controls.forEach((element: FormGroup, index) => {
+        element.addControl('documents', new FormArray([]));
+        let controlFA = element.get('documents') as FormArray;
+        this.detailsData.guestDetails[index].documents.forEach(
+        (doc) => {
+          controlFA.push(this.getDocumentFG());
+        }
+      );
+    });
+    this.patchGuestData();
+    }
+  }
 
   // getGuestDocumentsValue(guestId) {
-  //   let guest = this.guestDetails.guestDetails.find(
+  //   let guest = this.detailsData.guestDetails.find(
   //     (guest) => guest.id === guestId
   //   );
   //   if (
@@ -164,29 +170,88 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   //   }
   // }
 
-  // getDocumentFG(): FormGroup {
-  //   return this._fb.group({
-  //     id: [''],
-  //     documentType: [''],
-  //     frontUrl: [''],
-  //     backUrl: [''],
-  //   });
-  // }
+  getDocumentFG(): FormGroup {
+    return this._fb.group({
+      id: [''],
+      documentType: [''],
+      frontUrl: [''],
+      backUrl: [''],
+    });
+  }
 
-  // changeVerificationStatus(status) {}
+  updateDocumentVerificationStatus(status, isConfirmALL = false){
 
-  // onGuestChange(value) {
-  //   this.guests.controls.forEach((guest) => {
-  //     if (guest.get('id').value === value) {
-  //       this.selectedGuestId = value;
-  //       this.selectedGuestGroup = guest;
-  //       this.documentsList = [];
-  //       this.getDocumentsByCountry(
-  //         this.selectedGuestGroup.get('nationality').value
-  //       );
-  //     }
-  //   });
-  // }
+    if(status !== 'ACCEPT' && !this.selectedGuestGroup.get('remarks').value){
+      this._snackBarService.openSnackBarAsText('Please enter remarks');
+      return;
+    }
+    let data = this.mapDocumentVerificationData(status, isConfirmALL);
+    this._reservationService.updateStepStatus('12aa3dbc-a684-4381-9c6e-d6e8b8719de7',data)
+    .subscribe(response =>{
+      this.selectedGuestGroup.get('status').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
+      this._snackBarService.openSnackBarAsText(
+        'Status updated sucessfully.',
+        '',
+        { panelClass: 'success' }
+      );
+      isConfirmALL? this.updateAllDocumentsStatus(): this.checkIfAllDocumentsVerified();
+    },
+    (error)=>{
+      this._snackBarService.openSnackBarAsText(error.error.message);
+      // this.selectedGuestGroup.get('status').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
+      // isConfirmALL? this.updateAllDocumentsStatus(): this.checkIfAllDocumentsVerified();
+    })
+  }
+
+  checkIfAllDocumentsVerified(){
+    this.guestsFA.controls.forEach(guest =>{
+      if(guest.get('status').value !== 'COMPLETED'){
+        if(guest.get('status').value === 'FAILED'){
+          this.documentStatus.get('status').patchValue('FAILED');
+        }else{
+          this.documentStatus.get('status').patchValue('INITIATED');
+        }
+      }else{
+        this.documentStatus.get('status').setValue('COMPLETED');
+      }
+    })
+  }
+
+  mapDocumentVerificationData(status,isConfirmALL){
+    if(isConfirmALL){
+      return {
+      stepName : "DOCUMENTS",
+      state: status,
+      remarks: this.selectedGuestGroup.get('remarks').value,
+      } 
+     }else{
+      return {
+        stepName : "DOCUMENTS",
+        state: status,
+        remarks: this.selectedGuestGroup.get('remarks').value,
+        guestId: this.selectedGuestGroup.get('id').value
+      }
+    }
+  }
+
+  updateAllDocumentsStatus(){
+    this.guestsFA.controls.forEach(guest =>{
+      guest.get('status').patchValue('COMPLETED');
+    })
+  }
+
+
+  onGuestChange(value) {
+    this.guestsFA.controls.forEach((guest) => {
+      if (guest.get('id').value === value) {
+        this.selectedGuestId = value;
+        this.selectedGuestGroup = guest;
+        this.getDocumentsByCountry(
+          this.selectedGuestGroup.get('nationality').value
+        );
+      }
+    });
+  }
 
   // uploadFile(fileData) {
   //   let formData = new FormData();
@@ -206,11 +271,11 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     return this.parentForm.get('guestInfoDetails').get('guests') as FormArray;
   }
 
-  // get guestDetailsForm() {
-  //   return this.parentForm.get('guestDetails') as FormGroup;
-  // }
+  get guestDetailsForm() {
+    return this.parentForm.get('guestDetails') as FormGroup;
+  }
 
-  // get documentStatus() {
-  //   return this.parentForm.get('documentStatus') as FormGroup;
-  // }
+  get documentStatus() {
+    return this.parentForm.get('documentStatus') as FormGroup;
+  }
 }

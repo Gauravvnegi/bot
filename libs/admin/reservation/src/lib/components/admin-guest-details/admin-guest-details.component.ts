@@ -106,8 +106,8 @@ export class AdminGuestDetailsComponent implements OnInit {
       nationality: [''],
       isInternational: [''],
       selectedDocumentType: [''],
-      verificationStatus: [''],
-      remark: [''],
+      status: [''],
+      remarks: [''],
     });
   }
 

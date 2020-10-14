@@ -3,14 +3,14 @@ import { Route, RouterModule } from '@angular/router';
 import { DetailsComponent } from './components/details/details.component';
 
 const appRoutes: Route[] = [
-    {
-      path: '',
-      component: DetailsComponent,
-    },
-  ];
+  {
+    path: '',
+    component: DetailsComponent,
+  },
+];
 
-  @NgModule({
-    imports: [RouterModule.forChild(appRoutes)],
-    exports: [RouterModule],
-  })
+@NgModule({
+  imports: [RouterModule.forChild(appRoutes)],
+  exports: [RouterModule],
+})
 export class AdminReservationRoutingModule {}

@@ -19,7 +19,6 @@ export const adminReservationRoutes: Route[] = [];
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
     AdminReservationRoutingModule,
     SharedMaterialModule,
     AdminSharedModule,

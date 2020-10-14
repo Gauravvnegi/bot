@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     this._authService.login(data).subscribe(
       (response) => {
         this._userDetailService.setLoggedInUserId(response.id);
-        this._router.navigate(['/pages']);
+        this._router.navigate(['/pages/dashboard']);
       },
       (error) => {
         this._snackbarService.openSnackBarAsText(error.error.message);

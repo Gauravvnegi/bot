@@ -190,7 +190,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     }
     let data = this.mapDocumentVerificationData(status, isConfirmALL);
     this._reservationService
-      .updateStepStatus('12aa3dbc-a684-4381-9c6e-d6e8b8719de7', data)
+      .updateStepStatus('fd90295a-7789-46a2-9b59-8a193009baf6', data)
       .subscribe(
         (response) => {
           this.selectedGuestGroup

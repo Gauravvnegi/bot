@@ -7,85 +7,120 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
     <div class="name-details" *ngIf="isGuestInfoPatched">
-      <div class="name">
-        <span
-          >{{ primaryGuest.title }} {{ primaryGuest.firstName }}
-          {{ primaryGuest.lastName }}</span
-        >
-        <div class="svg-wrapper">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="37.862"
-            viewBox="0 0 16 37.862"
-            class="svg"
+      <div class="name-details-wrapper">
+        <div class="name">
+          <span
+            >{{ primaryGuest.title }} {{ primaryGuest.firstName }}
+            {{ primaryGuest.lastName }}</span
           >
-            <g id="standing-up-man-" transform="translate(-15.459)">
-              <g
-                id="Group_4959"
-                data-name="Group 4959"
-                transform="translate(15.459 0)"
-              >
-                <circle
-                  id="Ellipse_721"
-                  data-name="Ellipse 721"
-                  cx="3.187"
-                  cy="3.187"
-                  r="3.187"
-                  transform="translate(4.752)"
+          <div class="svg-wrapper">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="37.862"
+              viewBox="0 0 16 37.862"
+              class="svg"
+            >
+              <g id="standing-up-man-" transform="translate(-15.459)">
+                <g
+                  id="Group_4959"
+                  data-name="Group 4959"
+                  transform="translate(15.459 0)"
+                >
+                  <circle
+                    id="Ellipse_721"
+                    data-name="Ellipse 721"
+                    cx="3.187"
+                    cy="3.187"
+                    r="3.187"
+                    transform="translate(4.752)"
+                    fill="#fff"
+                  />
+                  <path
+                    id="Path_2154"
+                    data-name="Path 2154"
+                    d="M24.508,11.115a5.8,5.8,0,0,0-2.437.03c-5.3.621-7.019,6.754-6.533,11.43.211,2.022,3.4,2.043,3.185,0a12.138,12.138,0,0,1,.8-6.1v6.664c0,.078.008.152.011.228,0,.036-.011.066-.011.1,0,5.288-.009,10.575-.228,15.859-.1,2.349,3.545,2.34,3.642,0,.171-4.142.214-8.285.224-12.429a4.214,4.214,0,0,0,.518,0c.011,4.144.052,8.288.222,12.428.1,2.34,3.739,2.349,3.642,0-.218-5.284-.226-10.571-.226-15.859a2,2,0,0,0-.055-.457c0-2.3-.093-4.594-.066-6.889,1.085,1.836,1.184,4.637,1,6.452-.214,2.041,2.974,2.021,3.185,0C31.877,17.8,30.074,11.509,24.508,11.115Z"
+                    transform="translate(-15.459 -3.222)"
+                    fill="#fff"
+                  />
+                </g>
+              </g>
+            </svg>
+            <span *ngIf="stayDetailsFG.get('adultsCount')">{{
+              stayDetailsFG.get('adultsCount').value
+            }}</span>
+          </div>
+          <div class="svg-wrapper">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12.96"
+              height="23.764"
+              viewBox="0 0 12.96 23.764"
+              class="svg"
+            >
+              <g id="children" transform="translate(-148.54 -15.636)">
+                <path
+                  id="Path_2151"
+                  data-name="Path 2151"
+                  d="M161.047,41.995a1.023,1.023,0,0,0-1.42.279l-2.816,4.194a2.29,2.29,0,0,0-1.027-.242h-1.535a2.292,2.292,0,0,0-1.022.239l-2.815-4.191a1.023,1.023,0,1,0-1.7,1.141l3.25,4.84c-.024.2-.014,13.639-.014,13.639a1.279,1.279,0,0,0,2.558,0V56.138h1.023v5.756a1.279,1.279,0,0,0,2.558,0c0-4.943.006-13.412-.019-13.632l3.255-4.847A1.023,1.023,0,0,0,161.047,41.995Z"
+                  transform="translate(0 -23.773)"
                   fill="#fff"
                 />
                 <path
-                  id="Path_2154"
-                  data-name="Path 2154"
-                  d="M24.508,11.115a5.8,5.8,0,0,0-2.437.03c-5.3.621-7.019,6.754-6.533,11.43.211,2.022,3.4,2.043,3.185,0a12.138,12.138,0,0,1,.8-6.1v6.664c0,.078.008.152.011.228,0,.036-.011.066-.011.1,0,5.288-.009,10.575-.228,15.859-.1,2.349,3.545,2.34,3.642,0,.171-4.142.214-8.285.224-12.429a4.214,4.214,0,0,0,.518,0c.011,4.144.052,8.288.222,12.428.1,2.34,3.739,2.349,3.642,0-.218-5.284-.226-10.571-.226-15.859a2,2,0,0,0-.055-.457c0-2.3-.093-4.594-.066-6.889,1.085,1.836,1.184,4.637,1,6.452-.214,2.041,2.974,2.021,3.185,0C31.877,17.8,30.074,11.509,24.508,11.115Z"
-                  transform="translate(-15.459 -3.222)"
+                  id="Path_2152"
+                  data-name="Path 2152"
+                  d="M194.71,21.738a2.451,2.451,0,0,0,1.336-4.507,2.56,2.56,0,0,1,.46-.242.232.232,0,0,0,.02-.42,2.025,2.025,0,0,0-1.306-.12,2.548,2.548,0,0,1,.293-.433.232.232,0,0,0-.181-.38,2.9,2.9,0,0,0-2.046,1.462,1.57,1.57,0,0,0-.14.3,2.451,2.451,0,0,0,1.563,4.34Z"
+                  transform="translate(-39.69)"
                   fill="#fff"
                 />
               </g>
-            </g>
-          </svg>
-          <span *ngIf="stayDetailsFG.get('adultsCount')">{{
-            stayDetailsFG.get('adultsCount').value
-          }}</span>
+            </svg>
+            <span *ngIf="stayDetailsFG.get('kidsCount')">{{
+              stayDetailsFG.get('kidsCount').value
+            }}</span>
+          </div>
+          <div class="vip-image">
+            <img src="assets/VIP.png" />
+          </div>
         </div>
-        <div class="svg-wrapper">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12.96"
-            height="23.764"
-            viewBox="0 0 12.96 23.764"
-            class="svg"
-          >
-            <g id="children" transform="translate(-148.54 -15.636)">
-              <path
-                id="Path_2151"
-                data-name="Path 2151"
-                d="M161.047,41.995a1.023,1.023,0,0,0-1.42.279l-2.816,4.194a2.29,2.29,0,0,0-1.027-.242h-1.535a2.292,2.292,0,0,0-1.022.239l-2.815-4.191a1.023,1.023,0,1,0-1.7,1.141l3.25,4.84c-.024.2-.014,13.639-.014,13.639a1.279,1.279,0,0,0,2.558,0V56.138h1.023v5.756a1.279,1.279,0,0,0,2.558,0c0-4.943.006-13.412-.019-13.632l3.255-4.847A1.023,1.023,0,0,0,161.047,41.995Z"
-                transform="translate(0 -23.773)"
-                fill="#fff"
-              />
-              <path
-                id="Path_2152"
-                data-name="Path 2152"
-                d="M194.71,21.738a2.451,2.451,0,0,0,1.336-4.507,2.56,2.56,0,0,1,.46-.242.232.232,0,0,0,.02-.42,2.025,2.025,0,0,0-1.306-.12,2.548,2.548,0,0,1,.293-.433.232.232,0,0,0-.181-.38,2.9,2.9,0,0,0-2.046,1.462,1.57,1.57,0,0,0-.14.3,2.451,2.451,0,0,0,1.563,4.34Z"
-                transform="translate(-39.69)"
-                fill="#fff"
-              />
-            </g>
-          </svg>
-          <span *ngIf="stayDetailsFG.get('kidsCount')">{{
-            stayDetailsFG.get('kidsCount').value
-          }}</span>
-        </div>
-        <div class="vip-image">
-          <img src="assets/VIP.png" />
+        <div class="contact-details" *ngIf="isGuestInfoPatched">
+          <div *ngIf="primaryGuest.phoneNumber" class="call">
+            <mat-icon class="material-icons" matSuffix>call</mat-icon>
+            {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
+          </div>
+    
+          <div *ngIf="primaryGuest.email" class="email">
+            <mat-icon class="material-icons" matSuffix>email</mat-icon>
+            {{ primaryGuest.email }}
+          </div>
         </div>
       </div>
       <div class="header-seperator"></div>
-      <div class="booking-id">
-        {{ reservationDetailsFG.get('bookingNumber').value }}
+      <div class="booking-id-wrapper">
+        <div class="booking-id">
+          {{ reservationDetailsFG.get('bookingNumber').value }}
+        </div>
+        <div class="feedback">
+          <p class="label">Feedback :</p>
+          <div class="booking-feedback">
+            <p class="number status-background-success">
+              8
+            </p>
+            <img
+              class="feedback-icon status-image-success"
+              src="assets/svg/facilities.svg"
+            />
+            <img
+              class="feedback-icon status-image-success"
+              src="assets/svg/food.svg"
+            />
+            <div class="feedback-msg">
+              Good
+            </div>
+          </div>
+        </div>
       </div>
+      <!-- </div> -->
       <div class="header-seperator"></div>
 
       <div class="room-details">
@@ -94,17 +129,7 @@
         {{ stayDetailsFG.get('roomType').value }}
       </div>
     </div>
-    <div class="contact-details" *ngIf="isGuestInfoPatched">
-      <div *ngIf="primaryGuest.phoneNumber" class="call">
-        <mat-icon class="material-icons" matSuffix>call</mat-icon>
-        {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
-      </div>
 
-      <div *ngIf="primaryGuest.email" class="email">
-        <mat-icon class="material-icons" matSuffix>email</mat-icon>
-        {{ primaryGuest.email }}
-      </div>
-    </div>
     <div class="options-wrapper" *ngIf="isGuestInfoPatched">
       <button class="check-button">
         <ng-container [ngSwitch]="regCardDetailsFG.get('status').value">

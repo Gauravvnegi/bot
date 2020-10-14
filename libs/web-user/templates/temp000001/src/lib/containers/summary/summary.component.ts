@@ -9,6 +9,7 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-summary',
@@ -26,7 +27,9 @@ export class SummaryComponent implements OnInit {
   constructor(
     private _stepperService: StepperService,
     private _modal: ModalService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private route:ActivatedRoute,
+    private router: Router
   ) {
     this.context = this;
   }
@@ -37,6 +40,10 @@ export class SummaryComponent implements OnInit {
   }
 
   ngAfterViewInit() {}
+
+  openFeedback() {
+    this.router.navigateByUrl(`/feedback?token=${this.route.snapshot.queryParamMap.get('token')}&entity=feedback`);
+  }
 
   private getSettings() {
     let data = [

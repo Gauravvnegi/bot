@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SummaryDetailsConfigI } from '../data-models/billSummaryConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
+import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 
 @Injectable()
-export class SummaryService {
+export class SummaryService extends ApiService {
   setFieldConfigForGuestDetails() {
     let summaryDetailsFieldSchema = {};
 
@@ -17,5 +18,9 @@ export class SummaryService {
     });
 
     return summaryDetailsFieldSchema as SummaryDetailsConfigI;
+  }
+
+  getSummaryStatus(reservationId) {
+    return this.get(`/api/v1/reservation/${reservationId}/summary`);
   }
 }

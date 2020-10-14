@@ -3,32 +3,18 @@ import {
   OnInit,
   Input,
   ViewContainerRef,
-  QueryList,
-  ViewChildren,
   ViewChild,
   ElementRef,
-  ComponentFactoryResolver,
-  Renderer2,
-  AfterViewInit,
-  OnChanges,
-  Output,
-  EventEmitter,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
-import { ReservationSummaryService } from 'libs/web-user/shared/src/lib/services/reservation-summary.service';
 import { FormArray, FormGroup } from '@angular/forms';
-import { LabelComponent } from 'libs/web-user/shared/src/lib/presentational/label/label.component';
-import { FieldsetComponent } from 'libs/web-user/shared/src/lib/presentational/fieldset/fieldset.component';
-import { DetailComponent } from 'libs/web-user/shared/src/lib/presentational/detail/detail.component';
-import { skipWhile, debounceTime, debounce } from 'rxjs/operators';
-import { Subscription, timer } from 'rxjs';
-
-const components = {
-  label: LabelComponent,
-  fieldset: FieldsetComponent,
-  detail: DetailComponent,
-};
+import { skipWhile, debounce } from 'rxjs/operators';
+import { Subscription, timer, forkJoin, of } from 'rxjs';
+import { RegistrationCardComponent } from '../registration-card/registration-card.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -37,6 +23,7 @@ const components = {
 })
 export class ApplicationStatusComponent implements OnInit {
   private _formValues: any;
+  stepsStatus;
 
   @Input()
   settings = [];
@@ -45,12 +32,15 @@ export class ApplicationStatusComponent implements OnInit {
   context: any;
 
   @ViewChild('healthDiv', { static: false }) healthDiv: ElementRef;
+  @ViewChild('content', { static: false }) content: ElementRef;
 
   @Input()
   parentForm: FormArray;
 
   @Input()
   config: any;
+
+  @Input() headerSummary: boolean;
 
   currentParentContainer: ViewContainerRef;
 
@@ -59,15 +49,20 @@ export class ApplicationStatusComponent implements OnInit {
 
   constructor(
     private _parentFormService: ParentFormService,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _modal: ModalService,
+    private _reservationService: ReservationService,
+    private _summaryService: SummaryService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    console.log(this.headerSummary);
   }
 
   registerListeners() {
     this.listenForParentFormValues();
+    this.getStepsStatus();
   }
 
   listenForParentFormValues() {
@@ -102,12 +97,45 @@ export class ApplicationStatusComponent implements OnInit {
     );
   }
 
+  private getStepsStatus() {
+    forkJoin(
+      this._summaryService.getSummaryStatus(
+        this._reservationService.reservationId
+      ),
+      of(true)
+    ).subscribe(([res, val]) => {
+      this.stepsStatus = res;
+    });
+  }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
 
   closeModal() {
     this._matDialog.closeAll();
+  }
+
+  openRegCard() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    
+  
+    dialogConfig.id = 'modal-component';
+    dialogConfig.width = '70vw';
+    this._modal.openDialog(RegistrationCardComponent, dialogConfig);
+  }
+
+  printSummary() { }
+
+  downloadSummary() { }
+
+  get stayDetail() {
+    return this._formValues[0].stayDetail;
+  }
+
+  get guestDetail() {
+    return this._formValues[1].guestDetail;
   }
 
 }

@@ -1,8 +1,17 @@
 <div class="container">
   <div class="summary-wrapper">
-    <p>Checkin Summary</p>
-    <!-- <label>Status: </label>
-    <label>Active</label> -->
+    <div class="summary-wrapper-header">
+      <div class="summary-wrapper-header-equi-width"></div>
+      <div class="summary-wrapper-header-title">Check-In Summary</div>
+      <div style="width: 33%;">
+        <div class="summary-wrapper-header-feedback" (click)="openFeedback()">
+          <div style="margin-right: 10px;"><img src="assets/feedback.svg" height="35px" width="35px" /></div>
+          <div>Your Feedback Matters</div>
+        </div>
+      </div>
+    </div>
+    <!-- <p>Checkin Summary <label>Your Feedback Matters</label></p> -->
+    <!-- <label>Status: </label> -->
     <hospitality-bot-application-status [config]="config" [context]="context">
     </hospitality-bot-application-status>
   </div>

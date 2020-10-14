@@ -204,11 +204,12 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   checkIfAllDocumentsVerified(){
-    let allDocumentsStatus = this.documentStatus.get('status').value;
     this.guestsFA.controls.forEach(guest =>{
       if(guest.get('status').value !== 'COMPLETED'){
         if(guest.get('status').value === 'FAILED'){
           this.documentStatus.get('status').patchValue('FAILED');
+        }else{
+          this.documentStatus.get('status').patchValue('INITIATED');
         }
       }else{
         this.documentStatus.get('status').setValue('COMPLETED');

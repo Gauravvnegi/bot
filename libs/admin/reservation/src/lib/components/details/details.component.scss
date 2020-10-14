@@ -7,7 +7,8 @@
 
 :host ::ng-deep .mat-tab-label-active {
   color: #4b56c0;
-  font-size: $font16;
+  font-size: $font20;
+  font-weight: $bolder;
 }
 
 :host ::ng-deep .mat-ink-bar {
@@ -19,16 +20,8 @@
 }
 
 :host ::ng-deep .header {
-  background: transparent
-    linear-gradient(
-      180deg,
-      #4a9ef5 0%,
-      #366efd 0%,
-      #6cbeee 0%,
-      #0a45d5f2 100%,
-      #6fb1fc 100%
-    )
-    0% 0% no-repeat padding-box;
+  background: transparent linear-gradient(180deg, #a09fe5d9 0%, #4b56c0 100%) 0%
+    0% no-repeat padding-box;
   padding: $padding20;
   position: relative;
   .close {
@@ -53,33 +46,105 @@
     color: white;
     font-size: $font16;
     padding: 0 25px;
-    .name {
-      display: flex;
-      align-items: baseline;
-    }
-  }
-  .contact-details {
-    color: white;
-    font-size: $font10;
-    display: flex;
-    align-items: center;
-    margin-top: $margin10;
-    padding: 0 25px;
-    .call,
-    .email {
-      display: flex;
-      align-items: center;
-      .material-icons {
-        font-size: $font12;
-        height: auto;
-        width: auto;
-        margin-right: 5px;
+    margin-bottom: 3rem;
+    .name-details-wrapper {
+      .name {
+        display: flex;
+        align-items: baseline;
+      }
+      .contact-details {
+        color: white;
+        font-size: $font10;
+        display: flex;
+        align-items: center;
+        margin-top: $margin10;
+        // padding: 0 25px;
+        .call,
+        .email {
+          display: flex;
+          align-items: center;
+          .material-icons {
+            font-size: $font12;
+            height: auto;
+            width: auto;
+            margin-right: 5px;
+          }
+        }
+        .email {
+          margin-left: 20px;
+        }
       }
     }
-    .email {
-      margin-left: 20px;
+    .booking-id-wrapper{
+      margin-top: 20px;
+      .booking-id{
+        text-align: center;
+      }
+      .feedback{
+        color: white;
+        font-size: $font10;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        .booking-feedback {
+          display: flex;
+          align-items: center;
+          background-color: #f5f5f5;
+          justify-content: space-around;
+          padding: 2px;
+          margin: 0 10px;
+          // margin-top: 7px;
+          border-radius: 25px;
+          position: relative;
+          &:hover {
+            cursor: pointer;
+            .feedback-msg {
+              display: block;
+            }
+          }
+          .feedback-msg {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            font-size: 12px;
+            color: #727272;
+            background-color: white;
+            left: 0%;
+            padding: 7px;
+            box-shadow: 0px 0px 5px 0px lightgray;
+            border-radius: 5px;
+            display: none;
+          }
+          .feedback-icon {
+            height: 10px;
+            margin:  0 2px;
+          }
+          .number {
+            padding: 1px;
+            color: white;
+            text-align: center;
+            width: 15px;
+            border-radius: 50%;
+            font-size: 9px;
+            margin: 0 2px;
+          }
+          @media screen and (max-width: 800px) {
+            margin: 0;
+            margin-top: 7px;
+            .feedback-icon {
+              height: 12px;
+            }
+            .number {
+              font-size: 10px;
+              padding: 2px;
+              width: 15px;
+            }
+          }
+        }
+      }
     }
   }
+
   .options-wrapper {
     display: flex;
     align-items: center;
@@ -208,7 +273,11 @@
   border-top: none;
 }
 
-:host ::ng-deep .nationality > .mat-form-field-wrapper > .mat-form-field-underline {
+:host
+  ::ng-deep
+  .nationality
+  > .mat-form-field-wrapper
+  > .mat-form-field-underline {
   display: none;
 }
 

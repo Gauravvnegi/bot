@@ -1,6 +1,22 @@
 <div>
   <div class="material-body">
-    <mat-label class="mat-head">Guest Info</mat-label>
+    <div class="label-wrapper">
+      <mat-label class="mat-head">Guest Info</mat-label>
+      <ng-container class="status-icon" [ngSwitch]="'COMPLETED'">
+        <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
+
+        <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+
+        <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+
+        <img
+          *ngSwitchCase="'INITIATED'"
+          src="assets/svg/status/initiated.svg"
+        />
+
+        <!-- add default case icon -->
+      </ng-container>
+    </div>
     <form [formGroup]="guestDetailsForm">
       <ng-container
         formArrayName="guests"
@@ -56,6 +72,14 @@
             {{ stayDetailsForm.get('expectedArrivalTime').value }}
           </div>
         </div>
+      </div>
+      <div class="feilds-wrapper">
+        <div class="feild width-quarter">
+          <mat-label class="label">Duration</mat-label>
+          <div class="value">
+            1M | 2D
+          </div>
+        </div>
         <div class="feild width-quarter">
           <mat-label class="label">Room Type</mat-label>
           <div class="value">
@@ -69,9 +93,26 @@
     <ng-container>
       <div class="pending-button-wrapper">
         <p class="health-status">
-          Health Declaration Status :&nbsp;<b class="accepted">{{
-            healthCardDetailsForm.get('status').value
-          }}</b>
+          Health Declaration Status :&nbsp;
+          <ng-container
+            class="status-icon"
+            [ngSwitch]="healthCardDetailsForm.get('status').value"
+          >
+            <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+            <b *ngSwitchCase="'FAILED'" class="status-text-reject">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+            <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+            <b *ngSwitchCase="'PENDING'" class="status-text-pending">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+
+            <!-- add default case icon -->
+          </ng-container>
         </p>
         <div *ngIf="healthCardDetailsForm.get('status').value != 'PENDING'">
           <div class="decision-button-wrapper">
@@ -90,24 +131,23 @@
               </button>
             </ng-container>
           </div>
-
-          <div
-            *ngIf="
-              !(
-                ['COMPLETED'].includes(
-                  healthCardDetailsForm.get('status').value
-                ) && !healthCardDetailsForm.get('remarks').value
-              )
-            "
-          >
-            <form [formGroup]="healthCardDetailsForm">
-              <span class="text">Remark :</span>
-              <mat-form-field>
-                <input matInput formControlName="remarks" />
-              </mat-form-field>
-            </form>
-          </div>
         </div>
+      </div>
+      <div
+        class="remark-wrapper"
+        *ngIf="
+          !(
+            ['COMPLETED'].includes(healthCardDetailsForm.get('status').value) &&
+            !healthCardDetailsForm.get('remarks').value
+          )
+        "
+      >
+        <form [formGroup]="healthCardDetailsForm">
+          <span class="text">Remark :</span>
+          <mat-form-field class="remark">
+            <input matInput formControlName="remarks" />
+          </mat-form-field>
+        </form>
       </div>
     </ng-container>
   </div>

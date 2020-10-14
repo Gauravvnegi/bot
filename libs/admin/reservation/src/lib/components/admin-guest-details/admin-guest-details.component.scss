@@ -19,7 +19,11 @@
 }
 
 .width-added {
-  width: 25%;
+  width: 33%;
+}
+
+.width-quarter {
+  width: 33%;
 }
 
 :host ::ng-deep .header {
@@ -141,6 +145,14 @@
   }
 }
 
+.label-wrapper{
+  display: flex;
+  align-items: center;
+  img{
+    margin-left: 10px;
+  }
+}
+
 :host ::ng-deep .mat-head {
   font-size: $font16;
   font-weight: $bolder;
@@ -156,10 +168,9 @@
 
 .feilds-wrapper {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   // align-items: center;
   margin: 30px 0px;
-  padding: 0px 30px;
   .feild {
     .label {
       letter-spacing: 0.72px;
@@ -169,8 +180,8 @@
     .value {
       letter-spacing: 0.84px;
       font-size: $font14;
-      color: #484848;
       margin-top: $margin10;
+      font-weight: $medium;
     }
   }
 }
@@ -232,16 +243,43 @@
 
 .health-status {
   letter-spacing: 0.84px;
-  color: #484848;
+  color: #9eaeb8;
   font-size: $font14;
   font-weight: $bolder;
-  margin: $margin20 30px;
+  margin: $margin20 0;
   .accepted {
     color: #53b33e;
   }
   .pending {
     color: #9eaeb8;
   }
+}
+
+.remark-wrapper {
+  .text {
+    letter-spacing: 0.84px;
+    color: #9eaeb8;
+    font-size: $font14;
+    font-weight: $bolder;
+    margin-right: 10px;
+  }
+}
+
+:host ::ng-deep .remark > .mat-form-field-wrapper > .mat-form-field-underline {
+  display: none;
+}
+
+:host
+  ::ng-deep
+  .remark
+  > .mat-form-field-wrapper
+  > .mat-form-field-flex
+  > .mat-form-field-infix
+  > input {
+    letter-spacing: 0.84px;
+    font-size: $font14;
+    margin-top: $margin10;
+    font-weight: $medium;
 }
 
 .upload-image-wrapper {
@@ -272,6 +310,7 @@
   margin-right: 0;
   min-height: 60vh;
   border-right: 3px solid rgb(108, 108, 243, 0.1);
+  padding-right: 15px;
   // .wrapper {
   //   margin-bottom: 25px;
   // }

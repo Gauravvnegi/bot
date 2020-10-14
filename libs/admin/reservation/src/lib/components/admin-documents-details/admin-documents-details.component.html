@@ -2,23 +2,28 @@
   <div class="document-header">
     <p class="heading">Guest Documents</p>
     <ng-container [ngSwitch]="documentStatus.get('status').value">
-      <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix>check_circle</mat-icon>
+      <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
 
-      <mat-icon *ngSwitchCase="'FAILED'" class="material-icons" matSuffix>disabled_by_default</mat-icon>
+      <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
 
-      <mat-icon *ngSwitchCase="'PENDING'" class="material-icons" matSuffix>help</mat-icon>
+      <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
 
-      <mat-icon *ngSwitchCase="'INITIATED'" class="material-icons" matSuffix>help</mat-icon>
+      <img *ngSwitchCase="'INITIATED'" src="assets/svg/status/initiated.svg" />
     </ng-container>
-
   </div>
   <ng-container *ngIf="selectedGuestGroup">
     <form [formGroup]="selectedGuestGroup">
       <div class="wrapper">
         <div class="document-name-nationality">
           <mat-form-field class="nationality">
-            <mat-select [(value)]="selectedGuestId" (selectionChange)="onGuestChange($event.value)">
-              <mat-option *ngFor="let guest of detailsData.guestDetails" [value]="guest.id">
+            <mat-select
+              [(value)]="selectedGuestId"
+              (selectionChange)="onGuestChange($event.value)"
+            >
+              <mat-option
+                *ngFor="let guest of detailsData.guestDetails"
+                [value]="guest.id"
+              >
                 {{ guest.title }}{{ guest.firstName }}{{ guest.lastName }}
               </mat-option>
             </mat-select>
@@ -26,9 +31,16 @@
           <div class="nationality-wrapper">
             <span class="text">Nationality :</span>
             <mat-form-field *ngIf="selectedGuestGroup">
-              <mat-select [(value)]="selectedGuestGroup.get('nationality').value" formControlName="nationality"
-                [disabled]="true" (selectionChange)="onNationalityChange($event.value)">
-                <mat-option *ngFor="let country of countriesLOV" [value]="country.value">
+              <mat-select
+                [(value)]="selectedGuestGroup.get('nationality').value"
+                formControlName="nationality"
+                [disabled]="true"
+                (selectionChange)="onNationalityChange($event.value)"
+              >
+                <mat-option
+                  *ngFor="let country of countriesLOV"
+                  [value]="country.value"
+                >
                   {{ country.label }}
                 </mat-option>
               </mat-select>
@@ -55,22 +67,36 @@
             </mat-form-field> -->
         </div>
         <div *ngIf="selectedGuestGroup.get('nationality').value">
-          <ng-container formArrayName="documents" *ngFor="
-                let document of selectedGuestGroup.get('documents').controls;
-                let i = index
-              ">
+          <ng-container
+            formArrayName="documents"
+            *ngFor="
+              let document of selectedGuestGroup.get('documents').controls;
+              let i = index
+            "
+          >
             <div class="upload-image-wrapper" [formGroupName]="i">
               <div class="upload-image">
-                <hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="document.get('frontUrl').value"
-                  [pageType]="'front'" [documentType]="document.get('documentType').value">
+                <hospitality-bot-upload-file
+                  [fileUploadData]="fileUploadData"
+                  [url]="document.get('frontUrl').value"
+                  [pageType]="'front'"
+                  [documentType]="document.get('documentType').value"
+                >
                 </hospitality-bot-upload-file>
                 <p class="text">
                   {{ document.get('documentType').value }} FIRST PAGE
                 </p>
               </div>
-              <div class="upload-image" *ngIf="document.get('documentType').value != 'VISA'">
-                <hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="document.get('backUrl').value"
-                  [pageType]="'back'" [documentType]="document.get('documentType').value">
+              <div
+                class="upload-image"
+                *ngIf="document.get('documentType').value != 'VISA'"
+              >
+                <hospitality-bot-upload-file
+                  [fileUploadData]="fileUploadData"
+                  [url]="document.get('backUrl').value"
+                  [pageType]="'back'"
+                  [documentType]="document.get('documentType').value"
+                >
                 </hospitality-bot-upload-file>
                 <p class="text">
                   {{ document.get('documentType').value }} BACK PAGE
@@ -79,24 +105,36 @@
             </div>
           </ng-container>
         </div>
-
       </div>
       <hr class="data-seperator" />
       <mat-label class="mat-head">Documents</mat-label>
-      <div class="pending-button-wrapper" *ngIf="selectedGuestGroup.get('status').value != 'PENDING'">
+      <div
+        class="pending-button-wrapper"
+        *ngIf="selectedGuestGroup.get('status').value != 'PENDING'"
+      >
         <p class="health-status" style="margin-left: 0;">
-          Document Verification Status :&nbsp;<b class="pending">{{selectedGuestGroup.get('status').value}}</b>
+          Document Verification Status :&nbsp;<b class="pending">{{
+            selectedGuestGroup.get('status').value
+          }}</b>
         </p>
         <div class="decision-button-wrapper">
-          <ng-container *ngIf="
-          ['INITIATED', 'FAILED'].includes(
-            selectedGuestGroup.get('status').value
-          )
-        ">
-            <button class="right" (click)="updateDocumentVerificationStatus('ACCEPT')">
+          <ng-container
+            *ngIf="
+              ['INITIATED', 'FAILED'].includes(
+                selectedGuestGroup.get('status').value
+              )
+            "
+          >
+            <button
+              class="right"
+              (click)="updateDocumentVerificationStatus('ACCEPT')"
+            >
               <img src="assets/svg/tick.svg" />
             </button>
-            <button class="right" (click)="updateDocumentVerificationStatus('REJECT')">
+            <button
+              class="right"
+              (click)="updateDocumentVerificationStatus('REJECT')"
+            >
               <img src="assets/svg/cross.svg" />
             </button>
           </ng-container>
@@ -110,5 +148,4 @@
       </div>
     </form>
   </ng-container>
-
 </div>

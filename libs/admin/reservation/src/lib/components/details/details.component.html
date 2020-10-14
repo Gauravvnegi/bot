@@ -164,9 +164,10 @@
       </mat-tab>
       <mat-tab label="Documents">
         <ng-container *ngIf="isReservationDetailFetched">
-          <hospitality-bot-admin-documents-details
+          <hospitality-bot-admin-documents-details #adminDocumentsDetailsComponent
             [parentForm]="detailsForm"
             [data]="details"
+            (addFGEvent)="addFGEvent($event)"
           ></hospitality-bot-admin-documents-details>
         </ng-container>
       </mat-tab>
@@ -230,7 +231,9 @@
               <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
                 Confirm All Health Declaration
               </button> -->
-              <button class="button">Confirm All Docs</button>
+              <button class="button" *ngIf=" ['INITIATED'].includes(
+                documentStatusFG.get('status').value
+              )" (click)="verifyAllDocuments('ACCEPT')">Confirm All Docs</button>
               <button class="button">Confirm And Notify Checkin</button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">

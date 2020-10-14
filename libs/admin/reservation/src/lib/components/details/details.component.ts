@@ -15,8 +15,8 @@ import { SnackBarService } from 'libs/shared/material/src';
 export class DetailsComponent implements OnInit {
   // @ViewChild(AdminGuestDetailsComponent)
   // guestDetailComponent: AdminGuestDetailsComponent;
-  // @ViewChild(AdminDocumentsDetailsComponent)
-  // documentDetailComponent: AdminDocumentsDetailsComponent;
+  @ViewChild('adminDocumentsDetailsComponent')
+  documentDetailComponent: AdminDocumentsDetailsComponent;
 
   detailsForm: FormGroup;
   details;
@@ -130,6 +130,10 @@ export class DetailsComponent implements OnInit {
   //   this.guestDetailComponent.updateHealthDeclarationStatus(status);
   // }
 
+  verifyAllDocuments(status){
+    this.documentDetailComponent.updateDocumentVerificationStatus(status,true);
+  }
+
   getPrimaryGuestDetails() {
     this.details.guestDetails.forEach((guest) => {
       if (guest.isPrimary === true) {
@@ -157,5 +161,9 @@ export class DetailsComponent implements OnInit {
 
   get regCardDetailsFG() {
     return this.detailsForm.get('regCardDetails') as FormGroup;
+  }
+
+  get documentStatusFG() {
+    return this.detailsForm.get('documentStatus') as FormGroup;
   }
 }

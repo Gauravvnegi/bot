@@ -13,14 +13,14 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <div class="options">
-        <admin-search-bar style="width: 23%;"></admin-search-bar>
+        <admin-search-bar class="search-bar"></admin-search-bar>
         <button (click)="toggleGlobalFilter()" class="header--button">
           <p class="filter-button--text">
-            {{ filterConfig.branchName }}&nbsp;<b style="font-weight: 400;"
+            {{ filterConfig.branchName }}&nbsp;<b style="font-weight: 400; color: #d9d9d9;"
               >{{ filterConfig.totalFilterContent() }}
             </b>
           </p>
-          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
+          <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
         </button>
         <div
           class="filter-wrapper"
@@ -37,7 +37,7 @@
           ></admin-filter>
         </div>
         <hospitality-bot-daterange
-          style="width: 23%;"
+          class="date-range"
           (onDateRangeFilter)="applyDateRangeFilter($event)"
         ></hospitality-bot-daterange>
         <div class="dropdown-wrapper">
@@ -57,15 +57,14 @@
           <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
         </div>
       </div>
+      <mat-progress-bar
+        *ngIf="progressSpinnerService.isProgressSpinnerVisible"
+        mode="query"
+      ></mat-progress-bar>
     </div>
     <div class="main-panel--container">
       <div class="main">
         <div class="router__wrapper">
-          <mat-progress-bar
-            *ngIf="progressSpinnerService.isProgressSpinnerVisible"
-            mode="query"
-          ></mat-progress-bar>
-
           <router-outlet></router-outlet>
         </div>
         <admin-footer></admin-footer>

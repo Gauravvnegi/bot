@@ -64,8 +64,8 @@ export class JourneyStatus implements Deserializable {
     Object.assign(
       this,
       set({}, 'preCheckin', get(input, ['PRECHECKIN'])),
-      set({}, 'checkin', get(input, ['CHECKOUT'])),
-      set({}, 'checkout', get(input, ['CHECKIN']))
+      set({}, 'checkin', get(input, ['CHECKIN'])),
+      set({}, 'checkout', get(input, ['CHECKOUT']))
     );
     return this;
   }

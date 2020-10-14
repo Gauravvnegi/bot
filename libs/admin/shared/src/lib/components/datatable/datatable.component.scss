@@ -40,6 +40,10 @@
     align-items: center;
     p {
       margin: 0;
+      font-size: 13px;
+      @media screen and (max-width: 800px) {
+        font-size: 10px;
+      }
     }
   }
 }
@@ -129,11 +133,11 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    border: 1px solid lightgray;
+    border: 2px solid #D9D9D9;
     border-radius: 5px;
     .divider {
       height: 20px;
-      border: 1px solid lightgray;
+      border: 2px solid #D9D9D9;
       margin: 0px 15px;
     }
   }
@@ -147,7 +151,7 @@
     display: flex;
     margin-left: 10px;
     &:hover {
-      background-color: #218af3;
+      background-color:#4b56c0;
       color: white;
       cursor: pointer;
     }
@@ -297,7 +301,8 @@
 :host ::ng-deep td,
 th {
   white-space: break-spaces !important;
-  overflow: inherit !important;
+  // overflow: inherit !important;
+  padding: 0 5px !important;
 }
 
 :host ::ng-deep .mat-chip {

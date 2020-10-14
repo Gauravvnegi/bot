@@ -15,7 +15,15 @@
     align-items: baseline;
     .icon {
       margin-right: 10px;
+      img{
+        @media screen and (max-width: 800px) {
+          height: 20px;
+        }
+      }
     }
+  }
+  @media screen and (max-width: 800px) {
+    padding: $padding10;
   }
 }
 
@@ -23,6 +31,9 @@
   letter-spacing: 0.96px;
   color: #4b56c0;
   font-weight: 700;
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 }
 
 .stats--wrapper {
@@ -36,6 +47,9 @@
     &:hover {
       cursor: pointer;
       box-shadow: 0px 0px 22px 0px lightgray;
+    }
+    @media screen and (max-width: 800px) {
+      height: 185px;
     }
   }
   .change-height {

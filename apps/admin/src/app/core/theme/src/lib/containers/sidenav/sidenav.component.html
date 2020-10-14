@@ -38,7 +38,7 @@
         >
           <!-- <mat-icon>{{ menuItem.icon }}</mat-icon> -->
           <img [src]="menuItem.url" class="svg-icon" />
-          <span *ngIf="isExpanded">{{ menuItem.title }}</span>
+          <span class="icon-label" *ngIf="isExpanded">{{ menuItem.title }}</span>
         </a>
         <div [hidden]="menuItem.children === null" class="collapse-container">
           <a

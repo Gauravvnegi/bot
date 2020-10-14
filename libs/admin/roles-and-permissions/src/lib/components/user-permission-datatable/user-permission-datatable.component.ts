@@ -129,6 +129,10 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this._router.navigate(['add-user'], { relativeTo: this._route });
   }
 
+  openUserDetails(rowData) {
+    this._router.navigate([`${rowData.userId}`], { relativeTo: this._route });
+  }
+
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
     value = value && value.trim();
     this.table.filter(value, field, matchMode);

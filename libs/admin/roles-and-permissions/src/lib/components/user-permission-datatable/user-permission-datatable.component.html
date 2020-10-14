@@ -215,7 +215,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr>
+    <tr (click)="openUserDetails(rowData)">
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>

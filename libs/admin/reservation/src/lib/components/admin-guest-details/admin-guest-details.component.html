@@ -41,13 +41,13 @@
         <div class="feild width-quarter">
           <mat-label class="label">Arrival Date</mat-label>
           <div class="value">
-            {{ stayDetailsForm.get('arrivalTime').value }}
+            {{ stayDetailsForm.get('arrivalDate').value }}
           </div>
         </div>
         <div class="feild width-quarter">
           <mat-label class="label">Departure Date</mat-label>
           <div class="value">
-            {{ stayDetailsForm.get('departureTime').value }}
+            {{ stayDetailsForm.get('departureDate').value }}
           </div>
         </div>
         <div class="feild width-quarter">
@@ -91,7 +91,15 @@
             </ng-container>
           </div>
 
-          <div *ngIf="healthCardDetailsForm.get('remarks').value">
+          <div
+            *ngIf="
+              !(
+                ['COMPLETED'].includes(
+                  healthCardDetailsForm.get('status').value
+                ) && !healthCardDetailsForm.get('remarks').value
+              )
+            "
+          >
             <form [formGroup]="healthCardDetailsForm">
               <span class="text">Remark :</span>
               <mat-form-field>

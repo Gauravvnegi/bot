@@ -83,8 +83,8 @@ export class AdminGuestDetailsComponent implements OnInit {
 
   initStayDetailsForm() {
     return this._fb.group({
-      arrivalTime: [''],
-      departureTime: [''],
+      arrivalDate: [''],
+      departureDate: [''],
       expectedArrivalTime: [''],
       roomType: [''],
       kidsCount: [''],

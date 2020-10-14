@@ -15,6 +15,7 @@ export class Details implements Deserializable {
   healDeclarationDetails: HealthDeclarationConfig;
   currentJourneyDetails: CurrentJourneyDetails;
   stepStatusDetails: StepStatusDetails;
+  roomsDetails;
 
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
@@ -45,7 +46,9 @@ export class Details implements Deserializable {
     // this.amenitiesDetails = new PackageDetailsConfig().mapPackage(
     //   input.specialAmenities
     // );
-    // this.paymentDetails = new PaymentDetailsConfig().deserialize(input);
+    this.paymentDetails = new PaymentDetailsConfig().deserialize(
+      input.paymentSummary
+    );
     this.healDeclarationDetails = new HealthDeclarationConfig().deserialize(
       input.healthDeclaration
     );
@@ -53,10 +56,20 @@ export class Details implements Deserializable {
       input.stepsStatus
     );
 
+    this.roomsDetails = new RoomsDetails().deserialize(input);
+
     return this;
   }
 }
 
+export class RoomsDetails implements Deserializable {
+  rooms;
+  totalRooms;
+  deserialize(input: any) {
+    this.totalRooms = input.rooms.length;
+    return this;
+  }
+}
 export class StepStatusDetails implements Deserializable {
   documents;
   guestDetails;
@@ -157,12 +170,13 @@ export class GuestDetailsConfig implements Deserializable {
 
 export class StayDetailsConfig implements Deserializable {
   code: string;
-  arrivalTime: string;
-  departureTime: string;
+  arrivalDate: string;
+  departureDate: string;
   roomType: string;
   kidsCount: number;
   adultsCount: number;
   roomNumber: string;
+  expectedArrivalTime;
 
   deserialize(input: any) {
     let service = new DateService();
@@ -171,7 +185,7 @@ export class StayDetailsConfig implements Deserializable {
       set({}, 'code', get(input, ['code'])),
       set(
         {},
-        'arrivalTime',
+        'arrivalDate',
         new DateService().convertTimestampToDate(
           get(input, ['arrivalTime']),
           'DD/MM/YYYY'
@@ -179,7 +193,7 @@ export class StayDetailsConfig implements Deserializable {
       ),
       set(
         {},
-        'departureTime',
+        'departureDate',
         new DateService().convertTimestampToDate(
           get(input, ['departureTime']),
           'DD/MM/YYYY'
@@ -288,61 +302,51 @@ export class PackageDetailsConfig {
 }
 
 export class PaymentDetailsConfig implements Deserializable {
-  guestId: string;
-  arrivalTime: string;
-  departureTime: string;
-  expectedArrivalTime: string;
-  roomType: number;
-  kidsCount: number;
-  adultsCount: number;
-  title: string;
-  firstName: string;
-  lastName: string;
-  countryCode: string;
-  phoneNumber: string;
-  email: string;
-  isPrimary: boolean;
+  currency;
+  dueAmount;
+  paidAmount;
+  subtotal;
+  taxAmount;
+  totalAmount;
+  totalDiscount;
+  roomRates;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'currency', get(input, ['currency'])),
+      set({}, 'dueAmount', get(input, ['dueAmount'])),
+      set({}, 'paidAmount', get(input, ['paidAmount'])),
+      set({}, 'subtotal', get(input, ['subtotal'])),
+      set({}, 'taxAmount', get(input, ['taxAmount'])),
+      set({}, 'totalAmount', get(input, ['totalAmount'])),
+      set({}, 'totalDiscount', get(input, ['totalDiscount']))
+    );
+    this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
+    return this;
+  }
+}
+
+export class RoomRateConfig implements Deserializable {
+  amount;
+  base;
+  description;
+  discount;
+  totalAmount;
+  unit;
+  label;
+  taxAndFees;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'bookingId', get(input, ['id'])),
-      set(
-        {},
-        'arrivalTime',
-        new DateService().convertTimestampToDate(
-          get(input.stayDetails, ['arrivalTime']),
-          'DD/MM/YYYY'
-        )
-      ),
-      set(
-        {},
-        'departureTime',
-        new DateService().convertTimestampToDate(
-          get(input.stayDetails, ['departureTime']),
-          'DD/MM/YYYY'
-        )
-      ),
-      set({}, 'currentDate', new DateService().currentDate('DD/MM/YYYY')),
-      set({}, 'expectedArrivalTime', '---'),
-      set({}, 'roomType', get(input.stayDetails, ['roomType'])),
-      set({}, 'roomNumber', '--'),
-      set({}, 'kidsCount', get(input.stayDetails, ['kidsCount'])),
-      set({}, 'adultsCount', get(input.stayDetails, ['adultsCount'])),
-      set({}, 'roomsCount', ''),
-      set({}, 'title', get(input.guestDetails.primaryGuest, ['nameTitle'])),
-      set({}, 'firstName', get(input.guestDetails.primaryGuest, ['firstName'])),
-      set({}, 'lastName', get(input.guestDetails.primaryGuest, ['lastName'])),
-      set(
-        {},
-        'countryCode',
-        get(input.guestDetails.primaryGuest.contactDetails, ['cc'])
-      ),
-      set(
-        {},
-        'phoneNumber',
-        get(input.guestDetails.primaryGuest.contactDetails, ['contactNumber'])
-      )
+      set({}, 'amount', get(input, ['amount'])),
+      set({}, 'base', get(input, ['base'])),
+      set({}, 'description', get(input, ['description'])),
+      set({}, 'discount', get(input, ['discount'])),
+      set({}, 'totalAmount', get(input, ['totalAmount'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'taxAndFees', get(input, ['taxAndFees'])),
+      set({}, 'unit', get(input, ['unit']))
     );
     return this;
   }

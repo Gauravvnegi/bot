@@ -177,16 +177,16 @@
             [guestDetails]="guestDetails"
           ></hospitality-bot-admin-package-details>
         </ng-container>
-      </mat-tab>
+      </mat-tab> -->
 
       <mat-tab label="Payment">
-        <ng-container *ngIf="guests && guests.controls.length > 0">
+        <ng-container *ngIf="isReservationDetailFetched">
           <hospitality-bot-admin-payment-details
             [parentForm]="detailsForm"
-            [guestDetails]="guestDetails"
+            [data]="details"
           ></hospitality-bot-admin-payment-details>
         </ng-container>
-      </mat-tab> -->
+      </mat-tab>
     </mat-tab-group>
 
     <div *ngIf="isReservationDetailFetched" class="tab-buttons">

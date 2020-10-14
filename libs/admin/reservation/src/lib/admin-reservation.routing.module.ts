@@ -4,7 +4,7 @@ import { DetailsComponent } from './components/details/details.component';
 
 const appRoutes: Route[] = [
   {
-    path: '',
+    path: 'test',
     component: DetailsComponent,
   },
 ];

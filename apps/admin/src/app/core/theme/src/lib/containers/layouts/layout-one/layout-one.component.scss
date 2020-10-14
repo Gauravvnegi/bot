@@ -27,10 +27,10 @@
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
-  padding: 5px;
-  @include flex-item-center();
-  font-size: $font14;
-  padding-left: 0px;
+  // padding: 5px;
+  // @include flex-item-center();
+  // font-size: $font14;
+  // padding-left: 0px;
 
   .material-icons {
     font-size: $font16;

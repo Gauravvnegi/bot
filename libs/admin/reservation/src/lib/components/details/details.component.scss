@@ -19,6 +19,14 @@
   background-color: white;
 }
 
+:host ::ng-deep .p-dropdown .p-inputtext {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  padding-left: 0px;
+}
+
 :host ::ng-deep .header {
   background: transparent linear-gradient(180deg, #a09fe5d9 0%, #4b56c0 100%) 0%
     0% no-repeat padding-box;
@@ -75,12 +83,12 @@
         }
       }
     }
-    .booking-id-wrapper{
+    .booking-id-wrapper {
       margin-top: 20px;
-      .booking-id{
+      .booking-id {
         text-align: center;
       }
-      .feedback{
+      .feedback {
         color: white;
         font-size: $font10;
         display: flex;
@@ -117,7 +125,7 @@
           }
           .feedback-icon {
             height: 10px;
-            margin:  0 2px;
+            margin: 0 2px;
           }
           .number {
             padding: 1px;
@@ -388,6 +396,7 @@
       font-size: $font12;
       outline: none;
       padding: 10px 0px;
+      margin: 8px 0;
       background-color: transparent;
       width: 100%;
       color: #4b56c0;
@@ -405,6 +414,8 @@
     height: 7%;
     .social-icons {
       width: 25%;
+      display: flex;
+      justify-content: center;
       .icon {
         padding: 5px;
         background-color: #f3fafe;

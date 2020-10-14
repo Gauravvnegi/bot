@@ -20,6 +20,15 @@
 //     contrast(101%);
 // }
 
+
+// popup modal box
+
+.mat-dialog-container{
+  overflow: scroll !important;
+  overflow-x: hidden !important;
+  max-height: 100vh !important;
+}
+
 .status-image-initiated {
   filter: invert(56%) sepia(92%) saturate(448%) hue-rotate(185deg)
     brightness(101%) contrast(95%);

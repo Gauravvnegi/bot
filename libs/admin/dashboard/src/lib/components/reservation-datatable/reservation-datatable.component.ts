@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
 import { ReservationTable } from '../../data-models/reservation-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { SnackBarService } from 'libs/shared/material/src';
-
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
   templateUrl: './reservation-datatable.component.html',
@@ -161,7 +163,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     private _reservationService: ReservationService,
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _modal: ModalService
   ) {
     super(fb);
   }
@@ -200,7 +203,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         this.values = new ReservationTable().deserialize(data).records;
         //set pagination
         this.totalRecords = data.total;
-        this.updateTabFilterCount(this.totalRecords);
+        this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+        this.updateQuickReplyFilterCount(data.entityStateCounts);
+
         this.loading = false;
       },
       (error) => {
@@ -218,8 +223,35 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       }));
   }
 
-  updateTabFilterCount(count) {
-    this.tabFilterItems[this.tabFilterIdx].total = count;
+  updateTabFilterCount(countObj, currentTabCount) {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => {
+        tab.total = countObj[tab.value];
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
+    }
+  }
+
+  updateQuickReplyFilterCount(countObj) {
+    if (countObj) {
+      // this.tabFilterItems = this.tabFilterItems.map((tab) => {
+      //   return {
+      //     ...tab,
+      //     chips: tab.chips.map((chip) => {
+      //       return {
+      //         ...chip,
+      //         total: countObj[chip.value],
+      //       };
+      //     }),
+      //   };
+      // });
+      this.tabFilterItems.forEach((tab) => {
+        tab.chips.forEach((chip) => {
+          chip.total = countObj[chip.value];
+        });
+      });
+    }
   }
 
   fetchDataFrom(
@@ -253,6 +285,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
         //set pagination
         this.totalRecords = data.total;
+        //check for update tabs and quick reply filters
         this.loading = false;
       },
       (error) => {
@@ -298,6 +331,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   exportCSV() {
     this.loading = true;
+
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -306,6 +340,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
+        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
     this._reservationService.exportCSV(config).subscribe(
@@ -339,5 +374,21 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       },
       ...this.getSelectedQuickReplyFilters(),
     ]);
+  }
+
+  openDetailPage(rowData) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
+
+    detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+      res && detailCompRef.close();
+    });
   }
 }

@@ -1,4 +1,13 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  Input,
+  OnChanges,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -12,7 +21,7 @@ import { SnackBarService } from 'libs/shared/material/src';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnChanges {
   // @ViewChild(AdminGuestDetailsComponent)
   // guestDetailComponent: AdminGuestDetailsComponent;
   @ViewChild('adminDocumentsDetailsComponent')
@@ -27,6 +36,8 @@ export class DetailsComponent implements OnInit {
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
+  @Input() bookingId;
+  @Output() onDetailsClose = new EventEmitter();
 
   constructor(
     private _fb: FormBuilder,
@@ -42,14 +53,23 @@ export class DetailsComponent implements OnInit {
     this.getReservationDetails();
   }
 
+  ngOnChanges() {}
+
   getReservationDetails() {
     this._reservationService
-      .getReservationDetails('fd90295a-7789-46a2-9b59-8a193009baf6')
-      .subscribe((response) => {
-        this.details = new Details().deserialize(response);
-        this.mapValuesInForm();
-        this.isReservationDetailFetched = true;
-      });
+      .getReservationDetails(
+        this.bookingId || 'fd90295a-7789-46a2-9b59-8a193009baf6'
+      )
+      .subscribe(
+        (response) => {
+          this.details = new Details().deserialize(response);
+          this.mapValuesInForm();
+          this.isReservationDetailFetched = true;
+        },
+        (error) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   initDetailsForm() {
@@ -130,8 +150,8 @@ export class DetailsComponent implements OnInit {
   //   this.guestDetailComponent.updateHealthDeclarationStatus(status);
   // }
 
-  verifyAllDocuments(status){
-    this.documentDetailComponent.updateDocumentVerificationStatus(status,true);
+  verifyAllDocuments(status) {
+    this.documentDetailComponent.updateDocumentVerificationStatus(status, true);
   }
 
   getPrimaryGuestDetails() {
@@ -141,6 +161,10 @@ export class DetailsComponent implements OnInit {
         return;
       }
     });
+  }
+
+  closeDetails() {
+    this.onDetailsClose.next(true);
   }
 
   get reservationDetailsFG() {

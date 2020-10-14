@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
 import { ArrivalsStatisticsComponent } from './components/arrivals-statistics/arrivals-statistics.component';
 import { InhouseStatisticsComponent } from './components/inhouse-statistics/inhouse-statistics.component';
 import { CheckinStatisticsComponent } from './components/checkin-statistics/checkin-statistics.component';
@@ -34,6 +35,7 @@ export const adminDashboardRoutes: Route[] = [
     AdminSharedModule,
     RouterModule,
     SharedMaterialModule,
+    AdminReservationModule,
     ChartsModule,
     NgCircleProgressModule.forRoot(),
   ],

@@ -27,15 +27,20 @@ export const adminReservationRoutes: Route[] = [];
     ReactiveFormsModule,
     DropdownModule,
   ],
-  providers: [
-    ReservationService,
-    AdminDetailsService
-  ],
+  providers: [ReservationService, AdminDetailsService],
   declarations: [
     DetailsComponent,
     AdminGuestDetailsComponent,
     AdminDocumentsDetailsComponent,
     AdminPackageDetailsComponent,
-    AdminPaymentDetailsComponent],
+    AdminPaymentDetailsComponent,
+  ],
+  exports: [
+    DetailsComponent,
+    AdminGuestDetailsComponent,
+    AdminDocumentsDetailsComponent,
+    AdminPackageDetailsComponent,
+    AdminPaymentDetailsComponent,
+  ],
 })
 export class AdminReservationModule {}

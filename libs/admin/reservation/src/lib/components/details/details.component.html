@@ -3,7 +3,7 @@
 </pre> -->
 <div class="details-wrapper">
   <div class="header">
-    <div class="close">
+    <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
     <div class="name-details" *ngIf="isGuestInfoPatched">
@@ -164,7 +164,8 @@
       </mat-tab>
       <mat-tab label="Documents">
         <ng-container *ngIf="isReservationDetailFetched">
-          <hospitality-bot-admin-documents-details #adminDocumentsDetailsComponent
+          <hospitality-bot-admin-documents-details
+            #adminDocumentsDetailsComponent
             [parentForm]="detailsForm"
             [data]="details"
             (addFGEvent)="addFGEvent($event)"
@@ -231,9 +232,15 @@
               <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
                 Confirm All Health Declaration
               </button> -->
-              <button class="button" *ngIf=" ['INITIATED'].includes(
-                documentStatusFG.get('status').value
-              )" (click)="verifyAllDocuments('ACCEPT')">Confirm All Docs</button>
+              <button
+                class="button"
+                *ngIf="
+                  ['INITIATED'].includes(documentStatusFG.get('status').value)
+                "
+                (click)="verifyAllDocuments('ACCEPT')"
+              >
+                Confirm All Docs
+              </button>
               <button class="button">Confirm And Notify Checkin</button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
@@ -264,6 +271,8 @@
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <!-- Flow to-be-decided -->
+              <button class="button">Generate Checkout Link</button>
+              <button class="button">Download Invoice/Folio</button>
             </ng-container>
           </ng-container>
         </ng-template>

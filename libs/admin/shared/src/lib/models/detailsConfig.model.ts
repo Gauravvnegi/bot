@@ -43,9 +43,9 @@ export class Details implements Deserializable {
       input.guestDetails.primaryGuest
     );
     this.currentJourneyDetails = new CurrentJourneyDetails().deserialize(input);
-    // this.amenitiesDetails = new PackageDetailsConfig().mapPackage(
-    //   input.specialAmenities
-    // );
+    this.amenitiesDetails = new PackageDetailsConfig().deserialize(
+      input.packages
+    );
     this.paymentDetails = new PaymentDetailsConfig().deserialize(
       input.paymentSummary
     );
@@ -287,17 +287,17 @@ export class RegCardConfig implements Deserializable {
   }
 }
 
-export class PackageDetailsConfig {
-  complementaryPackage = new Array<Package>();
-  paidPackage = new Array<Package>();
+export class PackageDetailsConfig implements Deserializable {
+  complimentryPackages = new Array<Package>();
+  paidPackages = new Array<Package>();
 
-  mapPackage(input: any) {
-    input.complementryAmenities.forEach((element) => {
-      this.complementaryPackage.push(new Package().deserialize(element));
+  deserialize(input: any) {
+    input.complimentryPackages.forEach((packageObj) => {
+      this.complimentryPackages.push(new Package().deserialize(packageObj));
     });
 
-    input.paidAmenities.forEach((element) => {
-      this.paidPackage.push(new Package().deserialize(element));
+    input.paidPackages.forEach((packageObj) => {
+      this.paidPackages.push(new Package().deserialize(packageObj));
     });
     return this;
   }
@@ -356,8 +356,8 @@ export class RoomRateConfig implements Deserializable {
 
 export class Package implements Deserializable {
   active: boolean;
-  amenityDescription: string;
-  amenityName: string;
+  description: string;
+  name: string;
   id: string;
   imgUrl: string;
   metaData: any;
@@ -365,20 +365,24 @@ export class Package implements Deserializable {
   quantity: number;
   rate: number;
   type: number;
+  status;
+  remarks;
 
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'active', get(input, ['active'])),
-      set({}, 'amenityDescription', get(input, ['amenityDescription'])),
-      set({}, 'amenityName', get(input, ['amenityName'])),
+      set({}, 'description', get(input, ['description'])),
+      set({}, 'name', get(input, ['name'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'imgUrl', get(input, ['imgUrl'])),
       set({}, 'metaData', get(input, ['metaData'])),
       set({}, 'quantity', get(input, ['quantity'])),
       set({}, 'rate', get(input, ['rate'])),
       set({}, 'type', get(input, ['type'])),
-      set({}, 'packageCode', get(input, ['packageCode']))
+      set({}, 'packageCode', get(input, ['packageCode'])),
+      set({}, 'status', get(input, ['statusMessage', 'status'])),
+      set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );
     return this;
   }

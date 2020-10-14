@@ -108,6 +108,7 @@ export class Payment implements Deserializable {
 }
 
 export class Booking implements Deserializable {
+  bookingId;
   bookingNumber;
   arrivalTimeStamp;
   departureTimeStamp;
@@ -115,6 +116,7 @@ export class Booking implements Deserializable {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
+      set({}, 'bookingId', get(input, ['id'])),
       set({}, 'arrivalTimeStamp', get(input, ['arrivalTime'])),
       set({}, 'departureTimeStamp', get(input, ['departureTime']))
     );

@@ -28,7 +28,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private _adminDetailsService: AdminDetailsService,
-    private _snackBarService: SnackBarService,
+    private _snackBarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -42,8 +42,13 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   addDocumentStatusForm() {
-    this.addFGEvent.next({name: 'documentStatus', value: this.initDocumentStatus()})
-    this.documentStatus.get('status').patchValue(this.detailsData.stepStatusDetails.documents);
+    this.addFGEvent.next({
+      name: 'documentStatus',
+      value: this.initDocumentStatus(),
+    });
+    this.documentStatus
+      .get('status')
+      .patchValue(this.detailsData.stepStatusDetails.documents);
   }
 
   initDocumentStatus() {
@@ -67,7 +72,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
   }
 
-  patchGuestData(){
+  patchGuestData() {
     this.guestsFA.patchValue(this.detailsData.guestDetails);
   }
 
@@ -144,16 +149,15 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   addDocuments() {
     if (this.guestsFA.controls.length > 0) {
-      this.guestsFA.controls.forEach((element: FormGroup, index) => {
-        element.addControl('documents', new FormArray([]));
-        let controlFA = element.get('documents') as FormArray;
-        this.detailsData.guestDetails[index].documents.forEach(
-        (doc) => {
+      this.guestsFA.controls.forEach((guestFG: FormGroup, index) => {
+        guestFG.addControl('documents', new FormArray([]));
+        let controlFA = guestFG.get('documents') as FormArray;
+        //improper check ? what if i manipulate the guest index
+        this.detailsData.guestDetails[index].documents.forEach((doc) => {
           controlFA.push(this.getDocumentFG());
-        }
-      );
-    });
-    this.patchGuestData();
+        });
+      });
+      this.patchGuestData();
     }
   }
 
@@ -179,67 +183,72 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
   }
 
-  updateDocumentVerificationStatus(status, isConfirmALL = false){
-
-    if(status !== 'ACCEPT' && !this.selectedGuestGroup.get('remarks').value){
+  updateDocumentVerificationStatus(status, isConfirmALL = false) {
+    if (status !== 'ACCEPT' && !this.selectedGuestGroup.get('remarks').value) {
       this._snackBarService.openSnackBarAsText('Please enter remarks');
       return;
     }
     let data = this.mapDocumentVerificationData(status, isConfirmALL);
-    this._reservationService.updateStepStatus('12aa3dbc-a684-4381-9c6e-d6e8b8719de7',data)
-    .subscribe(response =>{
-      this.selectedGuestGroup.get('status').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
-      this._snackBarService.openSnackBarAsText(
-        'Status updated sucessfully.',
-        '',
-        { panelClass: 'success' }
+    this._reservationService
+      .updateStepStatus('12aa3dbc-a684-4381-9c6e-d6e8b8719de7', data)
+      .subscribe(
+        (response) => {
+          this.selectedGuestGroup
+            .get('status')
+            .setValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
+          this._snackBarService.openSnackBarAsText(
+            'Status updated sucessfully.',
+            '',
+            { panelClass: 'success' }
+          );
+          isConfirmALL
+            ? this.updateAllDocumentsStatus()
+            : this.checkIfAllDocumentsVerified();
+        },
+        (error) => {
+          this._snackBarService.openSnackBarAsText(error.error.message);
+          // this.selectedGuestGroup.get('status').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
+          // isConfirmALL? this.updateAllDocumentsStatus(): this.checkIfAllDocumentsVerified();
+        }
       );
-      isConfirmALL? this.updateAllDocumentsStatus(): this.checkIfAllDocumentsVerified();
-    },
-    (error)=>{
-      this._snackBarService.openSnackBarAsText(error.error.message);
-      // this.selectedGuestGroup.get('status').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
-      // isConfirmALL? this.updateAllDocumentsStatus(): this.checkIfAllDocumentsVerified();
-    })
   }
 
-  checkIfAllDocumentsVerified(){
-    this.guestsFA.controls.forEach(guest =>{
-      if(guest.get('status').value !== 'COMPLETED'){
-        if(guest.get('status').value === 'FAILED'){
+  checkIfAllDocumentsVerified() {
+    this.guestsFA.controls.forEach((guest) => {
+      if (guest.get('status').value !== 'COMPLETED') {
+        if (guest.get('status').value === 'FAILED') {
           this.documentStatus.get('status').patchValue('FAILED');
-        }else{
+        } else {
           this.documentStatus.get('status').patchValue('INITIATED');
         }
-      }else{
+      } else {
         this.documentStatus.get('status').setValue('COMPLETED');
       }
-    })
+    });
   }
 
-  mapDocumentVerificationData(status,isConfirmALL){
-    if(isConfirmALL){
+  mapDocumentVerificationData(status, isConfirmALL) {
+    if (isConfirmALL) {
       return {
-      stepName : "DOCUMENTS",
-      state: status,
-      remarks: this.selectedGuestGroup.get('remarks').value,
-      } 
-     }else{
-      return {
-        stepName : "DOCUMENTS",
+        stepName: 'DOCUMENTS',
         state: status,
         remarks: this.selectedGuestGroup.get('remarks').value,
-        guestId: this.selectedGuestGroup.get('id').value
-      }
+      };
+    } else {
+      return {
+        stepName: 'DOCUMENTS',
+        state: status,
+        remarks: this.selectedGuestGroup.get('remarks').value,
+        guestId: this.selectedGuestGroup.get('id').value,
+      };
     }
   }
 
-  updateAllDocumentsStatus(){
-    this.guestsFA.controls.forEach(guest =>{
+  updateAllDocumentsStatus() {
+    this.guestsFA.controls.forEach((guest) => {
       guest.get('status').patchValue('COMPLETED');
-    })
+    });
   }
-
 
   onGuestChange(value) {
     this.guestsFA.controls.forEach((guest) => {

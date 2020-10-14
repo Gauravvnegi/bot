@@ -43,14 +43,9 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span
-                      style="
-                        
-                        margin-left: 0.5em;
-                        font-weight: 700;
-                      "
-                      >{{ documentActionItem.label }}</span
-                    >
+                    <span style="margin-left: 0.5em; font-weight: 700;">{{
+                      documentActionItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
@@ -60,14 +55,9 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span
-                      style="
-                        
-                        margin-left: 0.5em;
-                        font-weight: 700;
-                      "
-                      >{{ documentTypeItem.label }}</span
-                    >
+                    <span style="margin-left: 0.5em; font-weight: 700;">{{
+                      documentTypeItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -113,11 +103,13 @@
                 "
               >
                 {{ quickReplyType.label }}
+                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                >{{ quickReplyType.total
+                }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
           </div>
 
-          {{ selectedQuickReplyFilters | json }}
           <!-- <div
             class="button__wrapper"
             *ngFor="let quickReplyType of quickReplyTypes"
@@ -236,7 +228,7 @@
     let-rowIndex="rowIndex"
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-    <tr>
+    <tr (click)="openDetailPage(rowData)">
       <td>
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
@@ -487,7 +479,7 @@
                   rowData.status.journeyStatus.checkin == 'COMPLETED'
               }"
             >
-              Check-In 
+              Check-In
             </p>
           </div>
           <div class="icon">

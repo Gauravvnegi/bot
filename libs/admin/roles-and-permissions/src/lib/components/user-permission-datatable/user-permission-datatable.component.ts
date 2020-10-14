@@ -106,7 +106,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
-        ...this.selectedRows.map((item) => ({ userId: item.userId })),
+        ...this.selectedRows.map((item) => ({ ids: item.userId })),
       ]),
     };
 

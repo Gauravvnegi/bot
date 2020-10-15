@@ -46,6 +46,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   ngOnInit(): void {
     this.getPaymentConfiguration();
+    this.parentForm.addControl('paynow', true);
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {

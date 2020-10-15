@@ -47,7 +47,7 @@
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;
-      color: #9eaeb8;
+      color: $primary-gray;
     }
     .value {
       letter-spacing: 0.84px;
@@ -89,7 +89,7 @@
 
 .health-status {
   letter-spacing: 0.84px;
-  color: #9eaeb8;
+  color: $primary-gray;
   font-size: $font14;
   font-weight: $bolder;
   margin: $margin20 0;
@@ -98,7 +98,7 @@
 .remark-wrapper {
   .text {
     letter-spacing: 0.84px;
-    color: #9eaeb8;
+    color: $primary-gray;
     font-size: $font14;
     font-weight: $bolder;
     margin-right: 10px;

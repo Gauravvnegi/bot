@@ -190,6 +190,36 @@
       </div>
     </div>
     <hr class="data-seperator" />
+    <div>
+      <p class="heading">Payment Details</p>
+    <div class="status-wrapper">
+      <p class="status">
+        Status :&nbsp;
+        <ng-container [ngSwitch]="'PENDING'">
+          <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
+            COMPLETED
+          </b>
+          <b *ngSwitchCase="'FAILED'" class="status-text-reject">
+            FAILED
+          </b>
+          <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
+            INITIATED
+          </b>
+          <b *ngSwitchCase="'PENDING'" class="status-text-pending">
+            PENDING
+          </b>
+        </ng-container>
+      </p>
+      <div class="images">
+        <button class="right">
+          <img src="assets/svg/tick.svg" />
+        </button>
+        <button class="right">
+          <img src="assets/svg/cross.svg" />
+        </button>
+      </div>
+    </div>
+  </div>
     <!-- <div>
             <span>Guest Signature</span>
             <img

@@ -25,7 +25,7 @@
     .label {
       width: 44%;
       font-size: 12px;
-      color: #9eaeb8;
+      color: $primary-gray;
       letter-spacing: 0.84px;
       font-weight: 600;
     }
@@ -54,6 +54,33 @@
 
 :host ::ng-deep .mat-table {
   width: 100%;
+}
+
+.heading{
+  font-size: $font16;
+  margin-right: $margin20;
+  font-weight: $bolder;
+}
+
+.special-request-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+
+  .images {
+    display: flex;
+    align-items: center;
+    button {
+      margin: 0 $margin10;
+      border: none;
+      outline: none;
+      background: transparent;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 :host ::ng-deep th,
@@ -141,6 +168,32 @@ td {
   border: 2px solid #218af3;
   margin: $margin20 0px;
   opacity: 0.1;
+}
+
+.status-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+  .status {
+    letter-spacing: 0.84px;
+    color: $primary-gray;
+    font-weight: $bold;
+    font-size: 11px;
+  }
+  .images {
+    display: flex;
+    align-items: center;
+    button {
+      margin: 0 $margin10;
+      border: none;
+      outline: none;
+      background: transparent;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 

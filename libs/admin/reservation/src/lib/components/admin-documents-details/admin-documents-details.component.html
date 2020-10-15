@@ -1,9 +1,9 @@
 <div class="material-body">
   <div
-    *ngif="
-      detailsData.stepStatusDetails.documents != 'PENDING';
-      else documentsPending
-    "
+  *ngif="
+  detailsData.stepStatusDetails.documents != 'PENDING';
+  else documentsPending
+"
   >
     <div class="document-header">
       <p class="heading">Guest Documents</p>
@@ -148,23 +148,31 @@
               </button>
             </ng-container>
           </div>
-          <ng-container>
+          <!-- <ng-container>
             <span class="text">Remark :</span>
             <mat-form-field>
               <input matInput formControlName="remarks" />
             </mat-form-field>
-          </ng-container>
+          </ng-container> -->
+        </div>
+        <div class="remark-wrapper">
+          <form [formGroup]="healthCardDetailsForm">
+            <span class="text">Remark :</span>
+            <mat-form-field class="remark">
+              <input matInput formControlName="remarks" />
+            </mat-form-field>
+          </form>
         </div>
       </form>
     </ng-container>
   </div>
-  <ng-container #documentsPending>
+  <!-- <ng-container #documentsPending>
     <div class="empty-view">
       <div class="wrapper">
-        <img src="assets/dummy.png" />
+        <img src="assets/Documents.png" />
         <p class="label">Documents Pending!</p>
         <p class="note">Seems like guest has not initiated Precheckin.</p>
       </div>
     </div>
-  </ng-container>
+  </ng-container> -->
 </div>

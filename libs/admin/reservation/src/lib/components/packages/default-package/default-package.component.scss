@@ -39,7 +39,7 @@
 }
 
 :host ::ng-deep .expand-icon {
-  color: #4b56c0;
+  color: $primary-purple;
 }
 
 :host ::ng-deep .mat-expansion-indicator {
@@ -57,7 +57,7 @@
   margin: 15px 0;
   .status {
     letter-spacing: 0.84px;
-    color: #9eaeb8;
+    color: $primary-gray;
     font-weight: $bold;
     font-size: 11px;
   }

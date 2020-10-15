@@ -27,22 +27,20 @@
             Full Name (Primary)
           </div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.nameTitle
-            }}{{ guestDetail.primaryGuest.firstName }}
+            {{ guestDetail.primaryGuest.nameTitle }} {{ guestDetail.primaryGuest.firstName }}
             {{ guestDetail.primaryGuest.lastName }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
-            +{{ guestDetail.primaryGuest.nationality }}
-            {{ guestDetail.primaryGuest.mobileNumber }}
+            {{ guestDetail.primaryGuest.mobileNumber ? '+'+guestDetail.primaryGuest.nationality + ' ' +guestDetail.primaryGuest.mobileNumber : '-' }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Email ID</div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.email }}
+            {{ guestDetail.primaryGuest.email || '-' }}
           </div>
         </div>
       </div>
@@ -235,7 +233,7 @@
           </ng-container>
         </div>
         <div class="section--content--label">
-          Amount to pay:&nbsp;<span>$3000</span>
+          Amount to pay:&nbsp;<span>{{ currencyCode }} {{ stepsStatus.paymentSummary.dueAmount }}</span>
         </div>
       </div>
       <div

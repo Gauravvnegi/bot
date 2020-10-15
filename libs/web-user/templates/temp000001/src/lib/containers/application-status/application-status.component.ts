@@ -15,6 +15,7 @@ import { RegistrationCardComponent } from '../registration-card/registration-car
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -50,6 +51,7 @@ export class ApplicationStatusComponent implements OnInit {
     private _matDialog: MatDialog,
     private _modal: ModalService,
     private _reservationService: ReservationService,
+    private _paymentDetailsService: PaymentDetailsService,
     private _summaryService: SummaryService
   ) {}
 
@@ -135,4 +137,11 @@ export class ApplicationStatusComponent implements OnInit {
     return this._formValues[1].guestDetail;
   }
 
+  get paymentDetail() {
+    return ;
+  }
+
+  get currencyCode() {
+    return this._paymentDetailsService.paymentSummaryDetails.currencyCode;
+  }
 }

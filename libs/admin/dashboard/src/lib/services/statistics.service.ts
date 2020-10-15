@@ -6,4 +6,8 @@ export class StatisticsService extends ApiService {
   getStatistics(config) {
     return this.get(`/api/v1/dashboard-stats/${config.queryObj}`);
   }
+
+  getCustomerStatistics(config) {
+    return this.get(`/api/v1/dashboard-stats/customer/${config.queryObj}`);
+  }
 }

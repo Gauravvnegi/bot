@@ -35,9 +35,9 @@
         <input
           name="method"
           type="radio"
-          [checked]="selectedInterval === option.value"
+          [checked]="selectedInterval.value === option.value"
           [value]="option.value"
-          (click)="setSelectedOption(option)"
+          (click)="getCustomerStatistics(option)"
         />
         <div>{{ option.name }}</div>
       </label>

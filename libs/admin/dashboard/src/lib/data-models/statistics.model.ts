@@ -18,7 +18,7 @@ export class Statistics {
     //this.expressCheckIn = new ExpressCheckIn().deserialize(statistics.arrivals.expressCheckIn);
     //this.expressCheckOut = new ExpressCheckOut().deserialize(statistics.departure.expressCheckout);
     this.departures = new Departures().deserialize(statistics.DEPARTURE);
-    this.customer = new Customer().deserialize(statistics.CUSTOMERS);
+    this.customer = new Customer();
     return this;
   }
 }

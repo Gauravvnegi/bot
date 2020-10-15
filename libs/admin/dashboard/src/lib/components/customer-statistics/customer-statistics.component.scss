@@ -112,23 +112,23 @@ opacity: 1;
     
 }
 
-.legends:checked ~ p{
+.legends:checked ~ p {
     text-decoration: line-through;
 }
 
 .labl > div {
     width: 25px;
     height: 25px;
-    padding-top: 2px;
+    padding: 3px;
     text-align: center;
 }
-.labl > input + div{ /* DIV STYLES */
+.labl > input + div { /* DIV STYLES */
   position: relative;
   cursor:pointer;
   border: 1px solid gainsboro;
   border-radius: 50%;
 }
-.labl > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+.labl > input:checked + div { /* (RADIO CHECKED) DIV STYLES */
   border: 2px solid #288ad6;
 }
 
@@ -164,7 +164,7 @@ opacity: 1;
     top: 0;
     left: 0;
     z-index: 5;
-    &:hover{
+    &:hover {
         cursor: pointer;
     }
 }

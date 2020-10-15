@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StatisticsService } from '../../services/statistics.service';
-import { Statistics } from '../../data-models/statistics.model';
+import { Statistics, Customer } from '../../data-models/statistics.model';
 import { GlobalFilterService } from '../../../../../../../apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 
@@ -11,6 +11,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 })
 export class StatisticsComponent implements OnInit {
   statistics: Statistics;
+  customerData: Customer;
   interval: string = 'day';
   constructor(
     private _statisticService: StatisticsService,
@@ -57,9 +58,5 @@ export class StatisticsComponent implements OnInit {
     this._statisticService.getStatistics(config).subscribe(({ stats }) => {
       this.statistics = new Statistics().deserialize(stats);
     });
-  }
-
-  setInterval(event) {
-    this.interval = event.interval;
   }
 }

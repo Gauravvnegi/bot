@@ -244,4 +244,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   goBack() {
     this._stepperService.setIndex('back');
   }
+
+  get currencyCode(){
+    return this._paymentDetailsService.paymentSummaryDetails.currencyCode;
+  }
 }

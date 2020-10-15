@@ -43,11 +43,27 @@ export class MainComponent implements OnInit {
     ).subscribe(([reservationData, val]) => {
       this._hotelService.hotelConfig = reservationData['hotel'];
       this.isReservationData = true;
-      this.stepperData = this._templateService.templateData;
+      // this.stepperData = this._templateService.templateData;
+      // TO_DO: Remove function call
+      this.stepperData = this.modifyStepperData(this._templateService.templateData);
       this.getStepperData();
       this.reservationData = reservationData;
       this._reservationService.reservationData = reservationData;
     });
+  }
+
+  // TO-DO: Remove this function
+  private modifyStepperData(data) {
+    return {
+      ...data,
+      stepConfigs: data.stepConfigs.map((element) => {
+        if (element.stepperName !== 'Payment') {
+          return element;
+        }
+      }).filter(function( element ) {
+        return element !== undefined;
+      })
+    }
   }
 
   private registerListeners() {

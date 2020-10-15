@@ -27,6 +27,11 @@
   justify-content: center;
 }
 
+@mixin flex-wrap() {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 @mixin full-width-on-breakpoint($breakpoint) {
   @media only screen and (max-width: $breakpoint) {
     width: 100%;

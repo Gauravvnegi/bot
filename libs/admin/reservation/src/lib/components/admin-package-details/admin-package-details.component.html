@@ -1,4 +1,30 @@
 <div class="material-body">
-  <mat-label>Complementary</mat-label>
-  <mat-label>Paid</mat-label>
+  <div
+    *ngIf="detailsData.amenitiesDetails.complimentryPackages.length > 0"
+    class="service__wrapper"
+  >
+    <h3 class="service__wrapper--heading">Complimentary</h3>
+    <div class="service__wrapper--images">
+      <div
+        *ngFor="
+          let compPackage of detailsData.amenitiesDetails.complimentryPackages
+        "
+        class="img-with-text"
+      >
+        <div class="image" imageClass>
+          <img [src]="compPackage.imgUrl" class="hotel-services-images" />
+        </div>
+        <p>{{ compPackage.name }}</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <mat-label>Paid</mat-label>
+    <ng-container #paidPackage></ng-container>
+  </div>
+
+  <div *ngIf="stayDetailsFG.get('special_comments').value">
+    <div>Special Request</div>
+    {{ stayDetailsFG.get('special_comments').value }}
+  </div>
 </div>

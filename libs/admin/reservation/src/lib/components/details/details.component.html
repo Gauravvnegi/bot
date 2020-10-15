@@ -1,6 +1,6 @@
-<!-- <pre>
+<pre>
   {{ detailsForm.getRawValue() | json }}
-</pre> -->
+</pre>
 <div class="details-wrapper">
   <div class="header">
     <div (click)="closeDetails()" class="close">
@@ -88,7 +88,7 @@
             <mat-icon class="material-icons" matSuffix>call</mat-icon>
             {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
           </div>
-    
+
           <div *ngIf="primaryGuest.email" class="email">
             <mat-icon class="material-icons" matSuffix>email</mat-icon>
             {{ primaryGuest.email }}
@@ -197,14 +197,14 @@
           ></hospitality-bot-admin-documents-details>
         </ng-container>
       </mat-tab>
-      <!-- <mat-tab label="Package">
-        <ng-container>
+      <mat-tab label="Package">
+        <ng-container *ngIf="isReservationDetailFetched">
           <hospitality-bot-admin-package-details
             [parentForm]="detailsForm"
-            [guestDetails]="guestDetails"
+            [data]="details"
           ></hospitality-bot-admin-package-details>
         </ng-container>
-      </mat-tab> -->
+      </mat-tab>
 
       <mat-tab label="Payment">
         <ng-container *ngIf="isReservationDetailFetched">
@@ -338,6 +338,6 @@
     </div>
   </div>
 </div>
-<!-- <pre>
+<pre>
   {{ details | json }}
-</pre> -->
+</pre>

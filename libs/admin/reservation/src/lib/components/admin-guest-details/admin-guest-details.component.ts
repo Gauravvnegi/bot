@@ -90,6 +90,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       kidsCount: [''],
       adultsCount: [''],
       roomNumber: [''],
+      special_comments: [''],
     });
   }
 

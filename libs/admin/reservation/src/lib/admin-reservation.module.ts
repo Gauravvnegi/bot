@@ -13,6 +13,7 @@ import { AdminPackageDetailsComponent } from './components/admin-package-details
 import { AdminDocumentsDetailsComponent } from './components/admin-documents-details/admin-documents-details.component';
 import { AdminPaymentDetailsComponent } from './components/admin-payment-details/admin-payment-details.component';
 import { AdminDetailsService } from './services/admin-details.service';
+import { DefaultPackageComponent } from './components/packages/default-package/default-package.component';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -33,6 +34,7 @@ export const adminReservationRoutes: Route[] = [];
     AdminDocumentsDetailsComponent,
     AdminPackageDetailsComponent,
     AdminPaymentDetailsComponent,
+    DefaultPackageComponent,
   ],
   exports: [
     DetailsComponent,
@@ -40,6 +42,7 @@ export const adminReservationRoutes: Route[] = [];
     AdminDocumentsDetailsComponent,
     AdminPackageDetailsComponent,
     AdminPaymentDetailsComponent,
+    DefaultPackageComponent,
   ],
 })
 export class AdminReservationModule {}

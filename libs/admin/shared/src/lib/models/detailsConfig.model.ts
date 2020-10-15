@@ -138,8 +138,12 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'countryCode', get(contactDetails, ['cc'])),
-      set({}, 'phoneNumber','151515' || get(contactDetails, ['contactNumber'])),
-      set({}, 'email','abc' || get(contactDetails, ['email'])),
+      set(
+        {},
+        'phoneNumber',
+        '151515' || get(contactDetails, ['contactNumber'])
+      ),
+      set({}, 'email', 'abc' || get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
       set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
       set({}, 'status', get(input.statusMessage, ['status'])),
@@ -177,6 +181,7 @@ export class StayDetailsConfig implements Deserializable {
   adultsCount: number;
   roomNumber: string;
   expectedArrivalTime;
+  special_comments: string;
 
   deserialize(input: any) {
     let service = new DateService();
@@ -203,7 +208,8 @@ export class StayDetailsConfig implements Deserializable {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount'])),
-      set({}, 'roomNumber', get(input, ['roomNumber']))
+      set({}, 'roomNumber', get(input, ['roomNumber'])),
+      set({}, 'special_comments', get(input, ['comments']))
     );
     return this;
   }
@@ -375,7 +381,7 @@ export class Package implements Deserializable {
       set({}, 'description', get(input, ['description'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'imgUrl', get(input, ['imgUrl'])),
+      set({}, 'imgUrl', get(input, ['imageUrl'])),
       set({}, 'metaData', get(input, ['metaData'])),
       set({}, 'quantity', get(input, ['quantity'])),
       set({}, 'rate', get(input, ['rate'])),

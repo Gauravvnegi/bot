@@ -119,21 +119,6 @@ export class DetailsComponent implements OnInit, OnChanges {
   //   }
   // }
 
-  // getPackageFG(): FormGroup {
-  //   return this._fb.group({
-  //     id: [''],
-  //     quantity: [''],
-  //     rate: [''],
-  //     imgUrl: [''],
-  //     amenityName: [''],
-  //     packageCode: [''],
-  //     amenityDescription: [''],
-  //     type: [''],
-  //     active: [''],
-  //     metadata: [''],
-  //   });
-  // }
-
   mapValuesInForm() {
     this.reservationDetailsFG.patchValue(this.details.reservationDetails);
     this.regCardDetailsFG.patchValue(this.details.regCardDetails);

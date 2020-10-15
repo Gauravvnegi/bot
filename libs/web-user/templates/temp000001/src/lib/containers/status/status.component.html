@@ -1,117 +1,160 @@
-<!-- <div class="modal__conatiner">
-  <div class="modal--header">
-    <p>Reservation Summary</p>
-    <p class="last-updated">Last Updated: 27-05-2020</p>
-  </div>
-  <div (click)="closeModal()" class="cross_icon">
-    <img src="assets/cross.png" />
-  </div>
-  <div class="status">
-    <p>Status :&nbsp;<b>Error</b></p>
-  </div>
-  <div class="modal__data__conatiner">
-    <div class="modal__data__conatiner--title">
-      Personal Details
-    </div>
-    <div class="modal__data__conatiner--text">
-      <div class="user__info">
-        <label> Full name :&nbsp;<b>(Primary)</b></label>
-        <p>Mr. Jhon Wick</p>
-      </div>
-      <div class="user__info">
-        <label>Phone No.</label>
-        <p>+91 8546971235</p>
-      </div>
-      <div class="user__info">
-        <label>Email ID.</label>
-        <p>wick12@gmail.com</p>
-      </div>
+<ng-template #loader>
+  <div>
+    <p class="loading">Loading Summary</p>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
     </div>
   </div>
-  <div class="modal__data__conatiner">
-    <div class="modal__data__conatiner--title">
-      Stay Details
-    </div>
-    <div class="modal__data__conatiner--text">
-      <div class="user__info">
-        <label>Arrived Date</label>
-        <p>12-05-2020</p>
-      </div>
-      <div class="user__info">
-        <label>Depatured Date</label>
-        <p>15-05-2020</p>
-      </div>
-      <div class="user__info">
-        <label>Room Type</label>
-        <p>Luxury</p>
-      </div>
-      <div class="user__info">
-        <label>Travelling With</label>
-        <p>Adults: 1 Kids: 0</p>
-      </div>
+</ng-template>
+<ng-container *ngIf="!isLoaderVisible; else loader">
+  <div class="status--heading">
+    <div>Status: Active</div>
+    <div></div>
+    <div class="print_download">
+      <mat-icon (click)="printSummary()">{{ 'cloud_download_outline' }}</mat-icon>
     </div>
   </div>
-  <div class="modal__data__conatiner">
-    <div class="modal__data__conatiner--title">
-      Special Comments
-    </div>
-    <div class="modal__data__conatiner--text">
-      <p>Lorem Ipsum is dummy test used in laying.</p>
-    </div>
-  </div>
-  <div class="modal__data__conatiner">
-    <div class="modal__data__conatiner--title">
-      Documents
-    </div>
-    <div class="modal__data__conatiner--text">
-      <div class="success__and__text">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="red"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-.001 5.75c.69 0 1.251.56 1.251 1.25s-.561 1.25-1.251 1.25-1.249-.56-1.249-1.25.559-1.25 1.249-1.25zm2.001 12.25h-4v-1c.484-.179 1-.201 1-.735v-4.467c0-.534-.516-.618-1-.797v-1h3v6.265c0 .535.517.558 1 .735v.999z"
-          />
-        </svg>
-        <p>Your&nbsp;<a href="#">Document</a>&nbsp;verification has failed.</p>
-      </div>
-    </div>
-    <div class="modal__data__conatiner">
-      <div class="modal__data__conatiner--title">
-        Health Declaration form
-      </div>
-      <div class="modal__data__conatiner--text">
-        <div class="success__and__text">
-          <svg
-            width="24"
-            height="24"
-            fill="green"
-            xmlns="http://www.w3.org/2000/svg"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-          >
-            <path
-              d="M12 0c6.623 0 12 5.377 12 12s-5.377 12-12 12-12-5.377-12-12 5.377-12 12-12zm0 1c6.071 0 11 4.929 11 11s-4.929 11-11 11-11-4.929-11-11 4.929-11 11-11zm7 7.457l-9.005 9.565-4.995-5.865.761-.649 4.271 5.016 8.24-8.752.728.685z"
-            />
-          </svg>
-          <p><a href="#">Health Declaration Form</a>&nbsp; has been signed.</p>
+  <div #content>
+    <div>
+      <div class="section--heading">Guest Details</div>
+      <div class="section--content">
+        <div class="section--content--container">
+          <div class="section--content--container--title">Full Name (Primary)</div>
+          <div class="section--content--container--value">
+            {{ guestDetail.primaryGuest.nameTitle }}{{ guestDetail.primaryGuest.firstName }} {{ guestDetail.primaryGuest.lastName }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Phone No.</div>
+          <div class="section--content--container--value">
+            +{{ guestDetail.primaryGuest.nationality }} {{ guestDetail.primaryGuest.mobileNumber }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Email ID</div>
+          <div class="section--content--container--value">
+            {{ guestDetail.primaryGuest.email }}
+          </div>
         </div>
       </div>
     </div>
-    <div class="modal__data__conatiner">
-      <div class="modal__data__conatiner--title">
-        Disclaimer
+    <div>
+      <div class="section--heading">Stay Details</div>
+      <div class="section--content">
+        <div class="section--content--container">
+          <div class="section--content--container--title">Arrival Date</div>
+          <div class="section--content--container--value">
+            {{ stayDetail.arrivalTime | date: 'dd - MM - yyyy' }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Departure Date</div>
+          <div class="section--content--container--value">
+            {{ stayDetail.departureTime | date: 'dd - MM - yyyy' }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Room Type</div>
+          <div class="section--content--container--value">
+            {{ stayDetail.roomType }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Travelling With</div>
+          <div class="section--content--container--value--container">
+            <div>Adults: {{ stayDetail.adultsCount }}</div>
+            <div>Kids: {{ stayDetail.kidsCount }}</div>
+          </div>
+        </div>
       </div>
-      <div class="modal__data__conatiner--text">
-        <p>Please&nbsp;<a href="#">click here</a>&nbsp;to edit information.</p>
+    </div>
+    <div *ngIf="stepsStatus.guestDetails.primaryGuest.statusMessage.status !== 'PENDING'">
+      <div class="section--heading">Documents</div>
+      <div class="section--content">
+        <div class="section--content--label">
+          <ng-container [ngSwitch]="stepsStatus.guestDetails.primaryGuest.statusMessage.status">
+            <ng-container *ngSwitchCase="'PENDING'">
+              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Your documents are pending.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <div><mat-icon class="warning">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Your documents verification is initiated.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'SUCCESS'">
+              <div><mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Your documents are verified successfully.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Your documents verification failed.</div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <div class="section--content" *ngIf="stepsStatus.guestDetails.primaryGuest.statusMessage.status === 'FAILED'">
+        {{ stepsStatus.guestDetails.primaryGuest.statusMessage.remarks }}
+      </div>
+    </div>
+    <div *ngIf="stepsStatus.healthDeclaration.statusMessage.status !== 'PENDING'">
+      <div class="section--heading">Health Declaration Form</div>
+      <div class="section--content--health">
+        <div class="section--content--health--message">
+          <ng-container [ngSwitch]="stepsStatus.healthDeclaration.statusMessage.status">
+            <ng-container *ngSwitchCase="'PENDING'">
+              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Health Decalaration form Pending.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <div><mat-icon class="warning">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Health Decalaration form Initiated.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'SUCCESS'">
+              <div><mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Health Decalaration form has been signed.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Health Decalaration form verification failed.</div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="section--content" *ngIf="stepsStatus.healthDeclaration.statusMessage.status === 'FAILED'">
+          {{ stepsStatus.healthDeclaration.statusMessage.remarks }}
+        </div>
+        <div class="section--content--health--disclaimer">Disclaimer: Health Declaration Form will be validated at Front Desk the time of Check-in. To ensure safety of all customers, Hotel holds the right to take appropriate action as per the outcome.</div>
+      </div>
+    </div>
+    <div *ngIf="stepsStatus.paymentSummary.statusMessage.status !== 'PENDING'">
+      <div class="section--heading">Payment Info</div>
+      <div class="section--content">
+        <div class="section--content--label">
+          <ng-container [ngSwitch]="stepsStatus.paymentSummary.statusMessage.status">
+            <ng-container *ngSwitchCase="'PENDING'">
+              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Payment Pending.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <div><mat-icon class="warning">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Payment Initiated.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'SUCCESS'">
+              <div><mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Payment Success.</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
+              <div class="section--content--health--message-detail">Payment Failed.</div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="section--content--label">Amount to pay:&nbsp;<span>$3000</span></div>
+      </div>
+      <div class="section--content" *ngIf="stepsStatus.paymentSummary.statusMessage.status === 'FAILED'">
+        {{ stepsStatus.paymentSummary.statusMessage.remarks }}
       </div>
     </div>
   </div>
-</div> -->
-
-<ng-container #parentPanelContent> </ng-container>
-
-<!-- {{ healthDeclarationForm.getRawValue() | json }} -->
+</ng-container>

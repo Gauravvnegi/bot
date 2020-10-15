@@ -1,77 +1,180 @@
 @import 'temp000001';
 
-.modal__conatiner {
-  position: relative;
-  .modal--header {
-    text-align: center;
-    p {
-      margin-bottom: $margin-small;
-      font-size: $font16;
-      font-weight: $bold;
-    }
-    .last-updated {
-      color: lightgray;
-    }
+.loading{
+  margin: 80px auto 0;
+  text-align: center;
+  font-size: 25px;
+  font-weight: $bolder;
+  color: $primary-blue;
+  @media only screen and (max-width: $M) {
+    font-size: $font-small;
+    width: 150px;
   }
-  .cross_icon {
-    position: absolute;
-    right: -15px;
-    top: -15px;
-    height: 20px;
-    width: 20px;
-    img {
-      height: $full-width;
-    }
-  }
-  .status {
-    p {
-      font-size: $font-large;
-      font-weight: $bolder;
-      color: lightblue;
-      b {
-        color: red;
-      }
-    }
-  }
-  .modal__data__conatiner {
-    .modal__data__conatiner--title {
-      padding: $padding-small;
-      background-color: blue;
-      font-weight: $bold;
-      color: white;
-      border-radius: $border-radius-small;
-      margin: $margin-small 0px;
-    }
+}
 
-    .modal__data__conatiner--text {
-      padding: 0px $padding-small;
-      @include flex-space-between();
-      width: $full-width;
-      p {
-        font-weight: $medium;
-        font-size: 13px;
-      }
-      .success__and__text {
-        display: flex;
-        svg {
-          margin-right: $margin-small;
-        }
-      }
-      .user__info {
-        label {
-          color: lightgrey;
-          font-size: $font-responsive-small;
-          font-weight: $medium;
-          b {
-            color: black;
-          }
-        }
-        p {
-          font-weight: $bold;
-          margin-top: $margin-small;
-          font-size: $font-responsive-small;
-        }
+.spinner {
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: $primary-blue;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  @media only screen and (max-width: $M) {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.status--heading {
+  @include flex-space-between();
+  align-items: center;
+  padding: 5px;
+  font-weight: $bolder;
+  font-size: 20px;
+  margin: $margin-large 0;
+}
+
+.section--heading {
+  padding: $padding-small;
+  background-color: #2187d5;
+  color: white;
+  border-radius: $border-radius-small;
+  font-weight: $bolder;
+  font-size: 20px;
+  margin: $margin-large 0;
+}
+
+.section--content {
+  @include flex-space-between();
+  margin: 0 $margin-medium;
+  &--health {
+    flex-direction: column;
+    margin: $margin-small $margin-medium;
+    &--message {
+      height: 35px;
+      font-size: larger;
+      font-weight: 600;
+      align-items: center;
+      display: flex;
+      &-detail {
+        margin-left: 5px;
       }
     }
+    &--disclaimer {
+      margin-top: $margin-medium;
+      color: gray;
+    }
   }
+  &--label {
+    height: 35px;
+    align-items: center;
+    display: flex;
+    font-size: larger;
+    font-weight: 600;
+    span {
+      color: #2187d5;
+    }
+  }
+  &--container {
+    display: flex;
+    flex-direction: column;
+    &--title {
+      font-size: 15px;
+      color: gray;
+      margin-bottom: $margin-medium;
+    }
+    &--value {
+      font-size: 20px;
+      font-weight: $bolder;
+      margin-bottom: $margin-small;
+    }
+    &--value--container {
+      font-size: 20px;
+      font-weight: $bolder;
+      margin-bottom: $margin-small;
+      @include flex-space-between();
+      width: 190px;
+    }
+  }
+}
+
+label {
+  font-size: larger;
+  font-weight: 600;
+}
+
+.link {
+  color: #2187d5;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    color: #1e70af;
+  }
+}
+
+.danger {
+  color: red;
+  background-color: white !important;
+}
+
+.warning {
+  color: orange;
+  background-color: white !important;
+}
+
+mat-icon {
+  font-size: 35px;
+  height: 35px;
+  width: 35px;
+}
+
+.success {
+  color: green;
+  background-color: white !important;
+}
+
+.print_download {
+  @include flex-space-between();
+  // width: 85px;
+  cursor: pointer;
 }

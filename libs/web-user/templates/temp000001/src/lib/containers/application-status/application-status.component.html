@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="!headerSummary || (headerSummary && stepsStatus.guestDetails.primaryGuest.statusMessage.status !== 'PENDING')">
+    <div>
       <div class="section--heading">Documents</div>
       <div class="section--content">
         <div class="section--content--label">
@@ -98,7 +98,7 @@
         {{ stepsStatus.guestDetails.primaryGuest.statusMessage.remarks }}
       </div>
     </div>
-    <div *ngIf="!headerSummary || (headerSummary && stepsStatus.healthDeclaration.statusMessage.status !== 'PENDING')">
+    <div>
       <div class="section--heading">Health Declaration Form</div>
       <div class="section--content--health">
         <div class="section--content--health--message">
@@ -127,7 +127,7 @@
         <div class="section--content--health--disclaimer">Disclaimer: Health Declaration Form will be validated at Front Desk the time of Check-in. To ensure safety of all customers, Hotel holds the right to take appropriate action as per the outcome.</div>
       </div>
     </div>
-    <div *ngIf="!headerSummary || (headerSummary && stepsStatus.paymentSummary.statusMessage.status !== 'PENDING')">
+    <div>
       <div class="section--heading">Payment Info</div>
       <div class="section--content">
         <div class="section--content--label">
@@ -156,7 +156,7 @@
         {{ stepsStatus.paymentSummary.statusMessage.remarks }}
       </div>
     </div>
-    <div *ngIf="!headerSummary">
+    <div>
       <div class="section--heading">Registration Card</div>
       <div class="section--content">
         <div class="section--content--label">

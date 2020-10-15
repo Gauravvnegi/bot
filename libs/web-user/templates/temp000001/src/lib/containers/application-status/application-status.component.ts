@@ -40,8 +40,6 @@ export class ApplicationStatusComponent implements OnInit {
   @Input()
   config: any;
 
-  @Input() headerSummary: boolean;
-
   currentParentContainer: ViewContainerRef;
 
   $subscription = new Subscription();
@@ -57,7 +55,6 @@ export class ApplicationStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
-    console.log(this.headerSummary);
   }
 
   registerListeners() {

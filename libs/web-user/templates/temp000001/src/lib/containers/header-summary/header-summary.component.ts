@@ -17,7 +17,6 @@ export class HeaderSummaryComponent implements OnInit {
   config: any;
   showAppStatusForm: boolean = false;
   date: string;
-  headerSummary = true;
   @Input() stepperIndex;
   context: any;
 

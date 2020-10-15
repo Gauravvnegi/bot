@@ -7,8 +7,8 @@
           <div class="user__info--details">
             <label>Billed To :&nbsp;</label>
             <p>
-              {{ staySummaryDetails.billedGuestFirstname }}
-              {{ staySummaryDetails.billedGuestLastname }}
+              {{ staySummaryDetails.firstname }}
+              {{ staySummaryDetails.lastname }}
             </p>
           </div>
           <div class="user__info--details">
@@ -17,7 +17,7 @@
           </div>
           <div class="user__info--details">
             <label>CurrentDate :&nbsp;</label>
-            <p>{{ staySummaryDetails.kidsCount }}</p>
+            <p>{{ staySummaryDetails.currentDate }}</p>
           </div>
         </div>
 
@@ -60,69 +60,73 @@
       </div>
     </div>
     <div class="description-table-wrapper">
-      <table class="description-table" cellspacing="0" cellpadding="0">
-        <tr class="header">
-          <td style="text-align: left;">Description</td>
-          <td>Unit</td>
-          <td>Unit Price</td>
-          <td>Amount</td>
-          <td>Discount</td>
-          <td>Total Amount</td>
-        </tr>
-        <tr class="order-details">
-          <td style="text-align: left;">
-            Room Rental
-            <p>Luxury</p>
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="label">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.label }}
+            {{ element.description }}
           </td>
-          <td>{{ billSummaryDetails.unit }}</td>
-          <td>
-            {{ billSummaryDetails.currencyCode }}&nbsp;{{
-              billSummaryDetails.baseRate
-            }}
+        </ng-container>
+
+        <ng-container matColumnDef="unit">
+          <th mat-header-cell *matHeaderCellDef>Unit</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.unit }}
           </td>
-          <td>
-            {{ billSummaryDetails.unit }} x
-            {{ billSummaryDetails.currencyCode }}
-            {{ billSummaryDetails.baseRate }}
+        </ng-container>
+
+        <ng-container matColumnDef="unitPrice">
+          <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.currency }}
+            {{ element.unitPrice }}
           </td>
-          <td>-{{ billSummaryDetails.currencyCode }} 0</td>
-          <td>
-            {{ billSummaryDetails.currencyCode }}
-            {{ billSummaryDetails.totalRate }}
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.currency }}
+
+            {{ element.amount }}
           </td>
-        </tr>
-        <!-- <tr class="total-amount">
-          <td colspan="6">
-            Subtotal:&nbsp;&nbsp;<b
-              >{{ billSummaryDetails.currencyCode }}
-              {{ billSummaryDetails.totalRate }}</b
-            >
+        </ng-container>
+
+        <ng-container matColumnDef="CGST">
+          <th mat-header-cell *matHeaderCellDef>CGST</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CGST }}
           </td>
-        </tr>
-        <tr class="total-amount">
-          <td colspan="6">
-            Paid Amount:&nbsp;&nbsp;<b
-              >{{ billSummaryDetails.currencyCode }}
-              {{ billSummaryDetails.paidAmount }}</b
-            >
+        </ng-container>
+
+        <ng-container matColumnDef="SGST">
+          <th mat-header-cell *matHeaderCellDef>SGST</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.SGST }}
           </td>
-        </tr>
-        <tr class="total-amount">
-          <td colspan="6">
-            Tax:&nbsp;&nbsp;<b
-              >{{ billSummaryDetails.currencyCode }}
-              {{ billSummaryDetails.tax }}</b
-            >
+        </ng-container>
+
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef>Discount</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.currency }}
+
+            {{ element.discount }}
           </td>
-        </tr>
-        <tr class="total-amount">
-          <td colspan="6">
-            Total Amount:&nbsp;&nbsp;<b
-              >{{ billSummaryDetails.currencyCode }}
-              {{ billSummaryDetails.totalAmount }}</b
-            >
+        </ng-container>
+
+        <ng-container matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.currency }}
+
+            {{ element.totalAmount }}
           </td>
-        </tr> -->
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
     <div class="total__details">
@@ -134,39 +138,24 @@
         <div class="total__details--amounts--wrapper">
           <p class="label">Total Amount</p>
           <b class="amount"
-            >{{ billSummaryDetails.currencyCode }}
+            >{{ billSummaryDetails.currency }}
             {{ billSummaryDetails.totalAmount }}</b
           >
         </div>
         <div class="total__details--amounts--wrapper">
           <p class="label">Total Savings</p>
-          <b class="amount">{{ billSummaryDetails.currencyCode }} 20%</b>
+          <b class="amount">{{ billSummaryDetails.currency }} 20%</b>
         </div>
         <div class="total__details--amounts--wrapper">
           <p class="label">Paid Amount</p>
           <b class="amount"
-            >{{ billSummaryDetails.currencyCode }}
+            >-{{ billSummaryDetails.currency }}
             {{ billSummaryDetails.paidAmount }}</b
           >
         </div>
         <div class="total__details--amounts--wrapper">
-          <p class="label">Tax</p>
-          <b class="amount"
-            >{{ billSummaryDetails.currencyCode }}
-            {{ billSummaryDetails.tax }}</b
-          >
-        </div>
-        <div class="total__details--amounts--wrapper">
-          <p class="label">CGST</p>
-          <b class="amount">{{ billSummaryDetails.currencyCode }} 18%</b>
-        </div>
-        <div class="total__details--amounts--wrapper">
-          <p class="label">SGST</p>
-          <b class="amount">{{ billSummaryDetails.currencyCode }} 18%</b>
-        </div>
-        <div class="total__details--amounts--wrapper">
-          <p class="final__label">Amount to Pay</p>
-          <b class="final__amount">{{ billSummaryDetails.currencyCode }} 612</b>
+          <p class="final__label">Due Amount</p>
+          <b class="final__amount">{{ billSummaryDetails.currency }} {{ billSummaryDetails.dueAmount }}</b>
         </div>
       </div>
     </div>

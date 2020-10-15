@@ -1,41 +1,76 @@
 <div class="material-body">
-  <div>
-    <mat-label>Payment Summary</mat-label>
-    <div>
-      <mat-label>Billed to:</mat-label>
-      <span>
+  <div class="payment-header">
+    <mat-label class="heading">Payment Summary</mat-label>
+    <ng-container [ngSwitch]="'COMPLETED'">
+      <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
+
+      <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+
+      <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+
+      <img
+        *ngSwitchCase="'INITIATED'"
+        src="assets/svg/status/initiated.svg"
+      />
+    </ng-container>
+  </div>
+
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">Billed to:</mat-label>
+      <span class="value">
         {{ primaryGuestFG.get('title').value }}
         {{ primaryGuestFG.get('firstName').value }}
         {{ primaryGuestFG.get('lastName').value }}
       </span>
-      <mat-label>Arrival Date:</mat-label>
-      <span>
+    </div>
+    <div class="feild ">
+      <mat-label class="label">Arrival Date:</mat-label>
+      <span class="value">
         {{ stayDetailsFG.get('arrivalDate').value }}
       </span>
-      <mat-label>Current Date:</mat-label>
-      <span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">Current Date:</mat-label>
+      <span class="value">
         <!-- {{ stayDetailsFG.get('currentDate').value }} -->
       </span>
     </div>
-    <div>
-      <mat-label>Room No.</mat-label>
-      <span>{{ stayDetailsFG.get('roomNumber').value }}</span>
-      <mat-label>Departure Date:</mat-label>
-      <span>{{ stayDetailsFG.get('departureDate').value }}</span>
-      <mat-label>Booking No.:</mat-label>
-      <span>{{ reservationDetailsFG.get('bookingNumber').value }}</span>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">Room No.</mat-label>
+      <span class="value">{{ stayDetailsFG.get('roomNumber').value }}</span>
     </div>
-    <div>
-      <mat-label>Room Type:</mat-label>
-      <span>{{ stayDetailsFG.get('roomType').value }}</span>
-      <mat-label>No. of Adults:</mat-label>
-      <span>{{ stayDetailsFG.get('adultsCount').value }}</span>
+    <div class="feild">
+      <mat-label class="label">Departure Date:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('departureDate').value }}</span>
     </div>
-    <div>
-      <mat-label>No. of Rooms:</mat-label>
-      <span>{{ detailsData.roomsDetails.totalRooms }}</span>
-      <mat-label>No. of Children:</mat-label>
-      <span>{{ stayDetailsFG.get('kidsCount').value }}</span>
+    <div class="feild">
+      <mat-label class="label">Booking No.:</mat-label>
+      <span class="value">{{
+        reservationDetailsFG.get('bookingNumber').value
+      }}</span>
+    </div>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">Room Type:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('roomType').value }}</span>
+    </div>
+    <div class="feild ">
+      <mat-label class="label">No. of Adults:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('adultsCount').value }}</span>
+    </div>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">No. of Rooms:</mat-label>
+      <span class="value">{{ detailsData.roomsDetails.totalRooms }}</span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">No. of Children:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('kidsCount').value }}</span>
     </div>
   </div>
   <div>
@@ -51,7 +86,9 @@
             <th mat-header-cell *matHeaderCellDef>Description</th>
             <td mat-cell *matCellDef="let element">
               {{ element.label }}
-              {{ element.description }}
+              <p style="color: #9eaeb8; font-size: 13px;">
+                {{ element.description }}
+              </p>
             </td>
           </ng-container>
 
@@ -114,31 +151,44 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-        <div>
-          <mat-label>Total Amount:</mat-label>
-          <span
-            >{{ detailsData.paymentDetails.currency }}
-            {{ detailsData.paymentDetails.totalAmount }}</span
-          >
-          <mat-label>Total Savings:</mat-label>
-          <span
-            >{{ detailsData.paymentDetails.currency }}
-            {{ detailsData.paymentDetails.totalDiscount }}</span
-          >
-          <mat-label>Paid Amount:</mat-label>
-          <span
-            >{{ detailsData.paymentDetails.currency }}
-            {{ detailsData.paymentDetails.paidAmount }}</span
-          >
-          <mat-label>Due Amount:</mat-label>
-          <span
-            >{{ detailsData.paymentDetails.currency }}
-            {{ detailsData.paymentDetails.dueAmount }}</span
-          >
-        </div>
       </mat-expansion-panel>
     </mat-accordion>
-
+    <div class="total-detail-wrapper">
+      <div class="total">
+        <mat-label class="label">Total Amount:</mat-label>
+        <span class="value"
+          >{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.totalAmount }}</span
+        >
+      </div>
+      <div class="total">
+        <mat-label class="label">Total Savings:</mat-label>
+        <span class="value"
+          >-{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.totalDiscount }}</span
+        >
+      </div>
+      <div class="green total">
+        <mat-label class="label">Paid Amount:</mat-label>
+        <span class="value"
+          >-{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.paidAmount }}</span
+        >
+      </div>
+      <div class="red total">
+        <mat-label class="label">Due Amount:</mat-label>
+        <span class="value"
+          >{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.dueAmount }}</span
+        >
+      </div>
+    </div>
+    <div class="signature-wrapper">
+      <mat-label class="heading">Guest Signature</mat-label>
+      <div class="image-wrapper">
+        <img src="assets/signature.png" />
+      </div>
+    </div>
     <!-- <div>
             <span>Guest Signature</span>
             <img

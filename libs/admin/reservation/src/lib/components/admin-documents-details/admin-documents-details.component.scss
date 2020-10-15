@@ -20,98 +20,98 @@
   margin-bottom: 20px;
 }
 
-.details-wrapper {
-  background-color: white;
-}
+// .details-wrapper {
+//   background-color: white;
+// }
 
-:host ::ng-deep .header {
-  background: transparent
-    linear-gradient(
-      180deg,
-      #4a9ef5 0%,
-      #366efd 0%,
-      #6cbeee 0%,
-      #0a45d5f2 100%,
-      #6fb1fc 100%
-    )
-    0% 0% no-repeat padding-box;
-  padding: $padding20;
-  position: relative;
-  .close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    i {
-      color: white;
-    }
-  }
-  .header-seperator {
-    height: 30px;
-    border: 1px solid #ffffff;
-  }
-  .name-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    font-size: $font16;
-    padding: 0 25px;
-    .name {
-      display: flex;
-      align-items: baseline;
-    }
-  }
-  .contact-details {
-    color: white;
-    font-size: $font10;
-    display: flex;
-    align-items: center;
-    margin-top: $margin10;
-    padding: 0 25px;
-    .call,
-    .email {
-      display: flex;
-      align-items: center;
-      .material-icons {
-        font-size: $font12;
-        height: auto;
-        width: auto;
-        margin-right: 5px;
-      }
-    }
-    .email {
-      margin-left: 20px;
-    }
-  }
-  .options-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
-    padding: 0 25px;
+// :host ::ng-deep .header {
+//   background: transparent
+//     linear-gradient(
+//       180deg,
+//       #4a9ef5 0%,
+//       #366efd 0%,
+//       #6cbeee 0%,
+//       #0a45d5f2 100%,
+//       #6fb1fc 100%
+//     )
+//     0% 0% no-repeat padding-box;
+//   padding: $padding20;
+//   position: relative;
+//   .close {
+//     position: absolute;
+//     top: 5px;
+//     right: 10px;
+//     i {
+//       color: white;
+//     }
+//   }
+//   .header-seperator {
+//     height: 30px;
+//     border: 1px solid #ffffff;
+//   }
+//   .name-details {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     color: white;
+//     font-size: $font16;
+//     padding: 0 25px;
+//     .name {
+//       display: flex;
+//       align-items: baseline;
+//     }
+//   }
+//   .contact-details {
+//     color: white;
+//     font-size: $font10;
+//     display: flex;
+//     align-items: center;
+//     margin-top: $margin10;
+//     padding: 0 25px;
+//     .call,
+//     .email {
+//       display: flex;
+//       align-items: center;
+//       .material-icons {
+//         font-size: $font12;
+//         height: auto;
+//         width: auto;
+//         margin-right: 5px;
+//       }
+//     }
+//     .email {
+//       margin-left: 20px;
+//     }
+//   }
+//   .options-wrapper {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     margin-top: 20px;
+//     padding: 0 25px;
 
-    .check-button {
-      outline: none;
-      border: 1px solid #ffffff;
-      background: #41b5e89c 0% 0% no-repeat padding-box;
-      display: flex;
-      align-items: center;
-      border-radius: 5px;
-      padding: 6px $padding20;
-      color: white;
-      .material-icons {
-        margin-right: $margin15;
-      }
-      .text {
-        text-decoration: underline;
-        font-size: $font14;
-      }
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-}
+//     .check-button {
+//       outline: none;
+//       border: 1px solid #ffffff;
+//       background: #41b5e89c 0% 0% no-repeat padding-box;
+//       display: flex;
+//       align-items: center;
+//       border-radius: 5px;
+//       padding: 6px $padding20;
+//       color: white;
+//       .material-icons {
+//         margin-right: $margin15;
+//       }
+//       .text {
+//         text-decoration: underline;
+//         font-size: $font14;
+//       }
+//       &:hover {
+//         cursor: pointer;
+//       }
+//     }
+//   }
+// }
 
 :host ::ng-deep .p-dropdown {
   margin-left: 0;
@@ -128,9 +128,9 @@
   }
 }
 
-:host ::ng-deep .pi {
-  color: white;
-}
+// :host ::ng-deep .pi {
+//   color: white;
+// }
 
 .svg-wrapper {
   padding-left: 5px;
@@ -143,12 +143,12 @@
   }
 }
 
-:host ::ng-deep .mat-head {
-  font-size: $font16;
-  font-weight: $bolder;
-  color: #002046;
-  letter-spacing: 0.96px;
-}
+// :host ::ng-deep .mat-head {
+//   font-size: $font16;
+//   font-weight: $bolder;
+//   color: #002046;
+//   letter-spacing: 0.96px;
+// }
 
 .data-seperator {
   border: 2px solid #218af3;
@@ -156,40 +156,33 @@
   opacity: 0.1;
 }
 
-.feilds-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 30px 0px;
-  padding: 0px 30px;
-  .feild {
-    .label {
-      letter-spacing: 0.72px;
-      font-size: $font12;
-      color: #9eaeb8;
-    }
-    .value {
-      letter-spacing: 0.84px;
-      font-size: $font14;
-      color: #484848;
-      margin-top: $margin10;
-    }
-  }
-}
+// .feilds-wrapper {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   margin: 30px 0px;
+//   padding: 0px 30px;
+//   .feild {
+//     .label {
+//       letter-spacing: 0.72px;
+//       font-size: $font12;
+//       color: #9eaeb8;
+//     }
+//     .value {
+//       letter-spacing: 0.84px;
+//       font-size: $font14;
+//       color: #484848;
+//       margin-top: $margin10;
+//     }
+//   }
+// }
 
-.form-wrapper {
-  display: flex;
-  // .left {
-  //   width: 80%;
-  //   margin: $margin20;
-  //   margin-right: 0;
-  //   min-height: 60vh;
-  //   border-right: 3px solid rgb(108, 108, 243, 0.1);
-  // }
-}
-.gap {
-  margin-top: $margin15;
-}
+// .form-wrapper {
+//   display: flex;
+// }
+// .gap {
+//   margin-top: $margin15;
+// }
 
 .document-header {
   display: flex;
@@ -200,9 +193,7 @@
     margin-right: $margin20;
     font-weight: $bolder;
   }
-  .fa {
-    color: #c2c2c2;
-  }
+  
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -274,19 +265,30 @@
   }
 }
 
-.material-body {
-  width: 80%;
-  margin: $margin20;
-  margin-right: 0;
-  min-height: 60vh;
-  border-right: 3px solid rgb(108, 108, 243, 0.1);
-  // .wrapper {
-  //   margin-bottom: 25px;
-  // }
-}
-
-:host ::ng-deep .mat-group {
-  position: relative;
+.empty-view {
+  padding: 12%;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    img {
+      height: 80px;
+    }
+    .label {
+      color: #484848;
+      font-weight: 500;
+      letter-spacing: 0.84px;
+      font-size: 10px;
+      margin-top: 12px;
+    }
+    .note {
+      color: #9eaeb8;
+      font-weight: 500;
+      letter-spacing: 0.84px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+  }
 }
 
 .pending-button-wrapper {

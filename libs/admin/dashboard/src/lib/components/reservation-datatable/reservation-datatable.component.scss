@@ -38,7 +38,6 @@
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
-     
     }
   }
   .first {
@@ -88,6 +87,22 @@
   }
 }
 
+:host ::ng-deep .package {
+  color: #727272;
+  font-size: $font12;
+  position: relative;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+}
+
+:host ::ng-deep .emptyCell {
+  text-align: center !important;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+}
+
 :host ::ng-deep .guest {
   color: #727272;
   font-size: $font12;
@@ -121,7 +136,7 @@
   }
 }
 
-:host ::ng-deep .amount{
+:host ::ng-deep .amount {
   font-size: 12px;
   @media screen and (max-width: 800px) {
     font-size: 8px;

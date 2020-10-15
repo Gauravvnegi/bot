@@ -322,8 +322,15 @@
           >{{ rowData.payment.dueAmount }}</span
         >/{{ rowData.payment.totalAmount }}
       </td>
-      <td>
-        <!-- {{ rowData.packages.paidPackages | json }} -->
+      <td class="package">
+        <span
+          *ngIf="
+            rowData.packages.getPaidPackagesLabels().length;
+            else emptyCell
+          "
+        >
+          {{ rowData.packages.getPaidPackagesLabels() }}
+        </span>
       </td>
 
       <!-- status-image-initiated -->
@@ -531,3 +538,7 @@
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyCell>
+  <span class="emptyCell">-</span>
+</ng-template>

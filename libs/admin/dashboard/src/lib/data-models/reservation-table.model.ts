@@ -43,6 +43,10 @@ export class Package implements Deserializable {
     });
     return this;
   }
+
+  getPaidPackagesLabels() {
+    return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
+  }
 }
 
 export class PackageDetail implements Deserializable {

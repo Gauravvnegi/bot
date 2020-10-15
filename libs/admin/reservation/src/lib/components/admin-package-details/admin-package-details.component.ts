@@ -6,11 +6,15 @@ import {
   ViewContainerRef,
   ComponentFactoryResolver,
   AfterViewInit,
+  ComponentRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { DefaultPackageComponent } from '../packages/default-package/default-package.component';
+import { AirportPickupComponent } from '../packages/airport-pickup/airport-pickup.component';
 
-const componentPackageMapping = {};
+const componentPackageMapping = {
+  'AIRPORT P/UP': AirportPickupComponent,
+};
 
 @Component({
   selector: 'hospitality-bot-admin-package-details',
@@ -49,31 +53,48 @@ export class AdminPackageDetailsComponent implements OnInit, AfterViewInit {
   }
 
   generatePackages() {
-    this.paidAmenityFA.controls.forEach((paidAmenity: FormGroup) => {
+    this.paidAmenityFA.controls.forEach((paidAmenity: FormGroup, index) => {
       const paidPackage = this.detailsData.amenitiesDetails.paidPackages.find(
         (paidPackage) => paidPackage.id == paidAmenity.get('id').value
       );
       if (componentPackageMapping[paidPackage.type]) {
         //create a specifi package
+        this.createComponent(
+          componentPackageMapping[paidPackage.type],
+          paidPackage,
+          index
+        );
       } else {
-        this.createComponent(DefaultPackageComponent, paidPackage);
+        this.createComponent(DefaultPackageComponent, paidPackage, index);
       }
     });
   }
 
-  createComponent(component, config) {
+  createComponent(component, config, index) {
     const factory = this._resolver.resolveComponentFactory(component);
     const componentRef = this.paidPackageRef.createComponent(factory);
-    this.addPropsToComponentInstance(componentRef, config);
+    this.addPropsToComponentInstance(componentRef, config, index);
   }
 
-  addPropsToComponentInstance(componentRef, config) {}
+  addPropsToComponentInstance(componentRef: ComponentRef<any>, config, index) {
+    componentRef.instance.parentForm = this.parentForm;
+    componentRef.instance.paidAmenityFG = this.paidAmenityFA.at(index);
+
+    componentRef.instance.config = config;
+    componentRef.instance.index = index;
+  }
 
   getPaidAmenitiesFG() {
     return this._fb.group({
       id: [''],
       status: [''],
       type: [''],
+      name: [''],
+      description: [''],
+      unit: [''],
+      currency: [''],
+      rate: [''],
+      imgUrl: [''],
     });
   }
 

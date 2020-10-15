@@ -373,6 +373,8 @@ export class Package implements Deserializable {
   type: number;
   status;
   remarks;
+  unit;
+  currency;
 
   deserialize(input: any) {
     Object.assign(
@@ -387,6 +389,8 @@ export class Package implements Deserializable {
       set({}, 'rate', get(input, ['rate'])),
       set({}, 'type', get(input, ['type'])),
       set({}, 'packageCode', get(input, ['packageCode'])),
+      set({}, 'unit', get(input, ['unit'])),
+      set({}, 'currency', get(input, ['currency'])),
       set({}, 'status', get(input, ['statusMessage', 'status'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks']))
     );

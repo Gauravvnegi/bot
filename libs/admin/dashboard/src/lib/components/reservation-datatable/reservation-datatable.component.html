@@ -230,7 +230,11 @@
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
     <tr (click)="openDetailPage(rowData)">
       <td>
-        <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
       </td>
       <td>
         <p class="tabel-room-no status-text-success">

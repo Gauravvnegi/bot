@@ -217,7 +217,11 @@
   >
     <tr (click)="openUserDetails(rowData)">
       <td>
-        <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
       </td>
       <td class="name">
         <!-- <div class="profile">

@@ -21,6 +21,7 @@ export class Reservation implements Deserializable {
   payment;
   status;
   feedback;
+  packages;
   deserialize(input: any) {
     this.booking = new Booking().deserialize(input);
     this.rooms = new Room().deserialize(input.stayDetails);
@@ -28,6 +29,31 @@ export class Reservation implements Deserializable {
     this.payment = new Payment().deserialize(input.paymentSummary);
     this.status = new Status().deserialize(input);
     this.feedback = new Feedback().deserialize(input.feedback);
+    this.packages = new Package().deserialize(input.packages);
+
+    return this;
+  }
+}
+
+export class Package implements Deserializable {
+  paidPackages;
+  deserialize(input: any) {
+    this.paidPackages = input.paidPackages.map((packageDetail) => {
+      return new PackageDetail().deserialize(packageDetail);
+    });
+    return this;
+  }
+}
+
+export class PackageDetail implements Deserializable {
+  id;
+  label;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'id', get(input, ['id'])),
+      set({}, 'label', get(input, ['name']))
+    );
     return this;
   }
 }

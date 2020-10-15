@@ -208,7 +208,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
         this.loading = false;
       },
-      (error) => {
+      ({ error }) => {
         this.loading = false;
         this._snackbarService.openSnackBarAsText(error.message);
       }
@@ -288,7 +288,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         //check for update tabs and quick reply filters
         this.loading = false;
       },
-      (error) => {
+      ({ error }) => {
         this.loading = false;
         this._snackbarService.openSnackBarAsText(error.message);
       }
@@ -351,7 +351,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         );
         this.loading = false;
       },
-      (error) => {
+      ({ error }) => {
         this.loading = false;
         this._snackbarService.openSnackBarAsText(error.message);
       }

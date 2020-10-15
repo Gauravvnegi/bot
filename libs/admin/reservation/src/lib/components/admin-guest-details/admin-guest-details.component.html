@@ -2,7 +2,7 @@
   <div class="material-body">
     <div class="label-wrapper">
       <mat-label class="mat-head">Guest Info</mat-label>
-      <ng-container class="status-icon" [ngSwitch]="'COMPLETED'">
+      <ng-container [ngSwitch]="'COMPLETED'">
         <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
 
         <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />

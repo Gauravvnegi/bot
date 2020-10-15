@@ -67,7 +67,6 @@ export class HealthDeclarationComponent implements OnInit {
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
     private _snackBarService: SnackBarService
-
   ) {}
 
   ngOnInit(): void {

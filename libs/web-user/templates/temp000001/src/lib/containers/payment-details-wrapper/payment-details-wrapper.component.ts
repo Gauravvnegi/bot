@@ -14,6 +14,7 @@ import {
 } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -46,6 +47,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   ngOnInit(): void {
     this.getPaymentConfiguration();
+    this.parentForm.addControl('paynow', new FormControl(true));
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {
@@ -155,34 +157,44 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       }
     } else {
       this.updatePaymentStatus('checkin');
-      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+      // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
     }
     // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
   }
 
-  updatePaymentStatus(step) {
+  updatePaymentStatus(state) {
     const data = this.mapPaymentData();
     this._paymentDetailsService
       .updatePaymentStatus(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          this._snackBarService.openSnackBarAsText(
-            'Sucessfull.',
-            '',
-            { panelClass: 'success' }
-          );
-          this._buttonService.buttonLoading$.next(
-            step === 'preCheckin'
-            ? this.buttonRefs['submitButton']
-            : this.buttonRefs['nextButton']
-          );
+          if (state === 'checkin') {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          } else {
+            this._snackBarService.openSnackBarAsText(
+              'Pre-Checkin Sucessfull.',
+              '',
+              { panelClass: 'success' }
+            );
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['submitButton']
+            );
+          }
         },
         (error) => {
-          this._buttonService.buttonLoading$.next(
-            step === 'preCheckin'
-            ? this.buttonRefs['submitButton']
-            : this.buttonRefs['nextButton']
-          );
+          this._snackBarService.openSnackBarAsText(error);
+          if (state === 'checkin') {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          } else {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['submitButton']
+            );
+          }
         }
       );
   }
@@ -233,5 +245,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  get currencyCode() {
+    return this._paymentDetailsService.paymentSummaryDetails.currencyCode;
   }
 }

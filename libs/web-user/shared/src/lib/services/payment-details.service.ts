@@ -16,7 +16,7 @@ export class PaymentDetailsService extends ApiService {
   initPaymentDetailDS(paymentData, hotelPaymentConfig) {
     this._paymentDetailDS = new PaymentDetailDS().deserialize(
       paymentData.rooms,
-      paymentData.roomRates,
+      paymentData.paymentSummary,
       hotelPaymentConfig
     );
   }

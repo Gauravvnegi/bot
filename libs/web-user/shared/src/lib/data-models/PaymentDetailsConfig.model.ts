@@ -11,7 +11,7 @@ export class PaymentDetailDS implements Deserializable {
     currencyCode;
 
     deserialize(rooms: any, rate:any, config: any) {
-      this.currencyCode = rate.base.currencyCode;
+      this.currencyCode = rate.currency;
       this.paymentDetail = new Array<PaymentDetail>();
       rooms.forEach((room) => {
         this.paymentDetail.push(new PaymentDetail().deserialize(room, rate));
@@ -35,8 +35,8 @@ export class PaymentDetail implements Deserializable {
         set({}, 'roomNumber', get(room, ['roomNumber'])),
         set({}, 'unit', get(room, ['unit'])),
         set({}, 'roomType', get(room, ['type'])),
-        set({}, 'baseRate', get(rate.base, ['value'])),
-        set({}, 'totalRate', get(rate.total, ['value']))
+        set({}, 'baseRate', get(rate.roomRates, ['base'])),
+        set({}, 'totalRate', get(rate.roomRates, ['totalAmount']))
       );
       return this;
     }

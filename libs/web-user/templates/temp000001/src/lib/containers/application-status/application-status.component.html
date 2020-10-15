@@ -13,7 +13,9 @@
     <div>Status: Active</div>
     <div></div>
     <div class="print_download">
-      <mat-icon (click)="printSummary()">{{ 'cloud_download_outline' }}</mat-icon>
+      <mat-icon (click)="printSummary()">{{
+        'cloud_download_outline'
+      }}</mat-icon>
     </div>
   </div>
   <div #content>
@@ -21,15 +23,20 @@
       <div class="section--heading">Guest Details</div>
       <div class="section--content">
         <div class="section--content--container">
-          <div class="section--content--container--title">Full Name (Primary)</div>
+          <div class="section--content--container--title">
+            Full Name (Primary)
+          </div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.nameTitle }}{{ guestDetail.primaryGuest.firstName }} {{ guestDetail.primaryGuest.lastName }}
+            {{ guestDetail.primaryGuest.nameTitle
+            }}{{ guestDetail.primaryGuest.firstName }}
+            {{ guestDetail.primaryGuest.lastName }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
-            +{{ guestDetail.primaryGuest.nationality }} {{ guestDetail.primaryGuest.mobileNumber }}
+            +{{ guestDetail.primaryGuest.nationality }}
+            {{ guestDetail.primaryGuest.mobileNumber }}
           </div>
         </div>
         <div class="section--content--container">
@@ -74,27 +81,55 @@
       <div class="section--heading">Documents</div>
       <div class="section--content">
         <div class="section--content--label">
-          <ng-container [ngSwitch]="stepsStatus.guestDetails.primaryGuest.statusMessage.status">
+          <ng-container
+            [ngSwitch]="
+              stepsStatus.guestDetails.primaryGuest.statusMessage.status
+            "
+          >
             <ng-container *ngSwitchCase="'PENDING'">
-              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Your documents are pending.</div>
+              <div>
+                <mat-icon class="danger">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Your documents are pending.
+              </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <div><mat-icon class="warning">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Your documents verification is initiated.</div>
+              <div>
+                <mat-icon class="warning">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Your documents verification is initiated.
+              </div>
             </ng-container>
-            <ng-container *ngSwitchCase="'SUCCESS'">
-              <div><mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Your documents are verified successfully.</div>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <div>
+                <mat-icon class="success">{{
+                  'check_circle_outline'
+                }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Your documents are verified successfully.
+              </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Your documents verification failed.</div>
+              <div>
+                <mat-icon class="danger">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Your documents verification failed.
+              </div>
             </ng-container>
           </ng-container>
         </div>
       </div>
-      <div class="section--content" *ngIf="stepsStatus.guestDetails.primaryGuest.statusMessage.status === 'FAILED'">
+      <div
+        class="section--content"
+        *ngIf="
+          stepsStatus.guestDetails.primaryGuest.statusMessage.status ===
+          'FAILED'
+        "
+      >
         {{ stepsStatus.guestDetails.primaryGuest.statusMessage.remarks }}
       </div>
     </div>
@@ -102,57 +137,111 @@
       <div class="section--heading">Health Declaration Form</div>
       <div class="section--content--health">
         <div class="section--content--health--message">
-          <ng-container [ngSwitch]="stepsStatus.healthDeclaration.statusMessage.status">
+          <ng-container
+            [ngSwitch]="stepsStatus.healthDeclaration.statusMessage.status"
+          >
             <ng-container *ngSwitchCase="'PENDING'">
-              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Health Decalaration form Pending.</div>
+              <div>
+                <mat-icon class="danger">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Health Decalaration form Pending.
+              </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <div><mat-icon class="warning">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Health Decalaration form Initiated.</div>
+              <div>
+                <mat-icon class="warning">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Health Decalaration form Initiated.
+              </div>
             </ng-container>
-            <ng-container *ngSwitchCase="'SUCCESS'">
-              <div><mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Health Decalaration form has been signed.</div>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <div>
+                <mat-icon class="success">{{
+                  'check_circle_outline'
+                }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Health Decalaration form has been signed.
+              </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Health Decalaration form verification failed.</div>
+              <div>
+                <mat-icon class="danger">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Health Decalaration form verification failed.
+              </div>
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content" *ngIf="stepsStatus.healthDeclaration.statusMessage.status === 'FAILED'">
+        <div
+          class="section--content"
+          *ngIf="
+            stepsStatus.healthDeclaration.statusMessage.status === 'FAILED'
+          "
+        >
           {{ stepsStatus.healthDeclaration.statusMessage.remarks }}
         </div>
-        <div class="section--content--health--disclaimer">Disclaimer: Health Declaration Form will be validated at Front Desk the time of Check-in. To ensure safety of all customers, Hotel holds the right to take appropriate action as per the outcome.</div>
+        <div class="section--content--health--disclaimer">
+          Disclaimer: Health Declaration Form will be validated at Front Desk
+          the time of Check-in. To ensure safety of all customers, Hotel holds
+          the right to take appropriate action as per the outcome.
+        </div>
       </div>
     </div>
     <div>
       <div class="section--heading">Payment Info</div>
       <div class="section--content">
         <div class="section--content--label">
-          <ng-container [ngSwitch]="stepsStatus.paymentSummary.statusMessage.status">
+          <ng-container
+            [ngSwitch]="stepsStatus.paymentSummary.statusMessage.status"
+          >
             <ng-container *ngSwitchCase="'PENDING'">
-              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Payment Pending.</div>
+              <div>
+                <mat-icon class="danger">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Payment Pending.
+              </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <div><mat-icon class="warning">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Payment Initiated.</div>
+              <div>
+                <mat-icon class="warning">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Payment Initiated.
+              </div>
             </ng-container>
-            <ng-container *ngSwitchCase="'SUCCESS'">
-              <div><mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Payment Success.</div>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <div>
+                <mat-icon class="success">{{
+                  'check_circle_outline'
+                }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Payment Success.
+              </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <div><mat-icon class="danger">{{ 'error_outline' }}</mat-icon></div>
-              <div class="section--content--health--message-detail">Payment Failed.</div>
+              <div>
+                <mat-icon class="danger">{{ 'error_outline' }}</mat-icon>
+              </div>
+              <div class="section--content--health--message-detail">
+                Payment Failed.
+              </div>
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content--label">Amount to pay:&nbsp;<span>$3000</span></div>
+        <div class="section--content--label">
+          Amount to pay:&nbsp;<span>$3000</span>
+        </div>
       </div>
-      <div class="section--content" *ngIf="stepsStatus.paymentSummary.statusMessage.status === 'FAILED'">
+      <div
+        class="section--content"
+        *ngIf="stepsStatus.paymentSummary.statusMessage.status === 'FAILED'"
+      >
         {{ stepsStatus.paymentSummary.statusMessage.remarks }}
       </div>
     </div>
@@ -160,11 +249,29 @@
       <div class="section--heading">Registration Card</div>
       <div class="section--content">
         <div class="section--content--label">
-          <div><mat-icon [ngClass]="stepsStatus.guestDetails.primaryGuest.signatureUrl !== undefined
-            ? 'success' : 'danger'">
-            {{ stepsStatus.guestDetails.primaryGuest.signatureUrl !== undefined 
-            ? 'check_circle_outline' : 'error_outline' }}</mat-icon></div>
-          <div><label> Verify <span class="link" (click)="openRegCard()">Registration Card</span></label></div>
+          <div>
+            <mat-icon
+              [ngClass]="
+                stepsStatus.guestDetails.primaryGuest.signatureUrl !== undefined
+                  ? 'success'
+                  : 'danger'
+              "
+            >
+              {{
+                stepsStatus.guestDetails.primaryGuest.signatureUrl !== undefined
+                  ? 'check_circle_outline'
+                  : 'error_outline'
+              }}</mat-icon
+            >
+          </div>
+          <div>
+            <label>
+              Verify
+              <span class="link" (click)="openRegCard()"
+                >Registration Card</span
+              ></label
+            >
+          </div>
         </div>
       </div>
     </div>

@@ -1,1 +1,69 @@
-<p>default-package works!</p>
+<mat-accordion>
+  <mat-expansion-panel #panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="container__title">
+        <div class="title-with-image">
+          <p class="number">1.</p>
+          <div class="image">
+            <img class="profile" src="assets/auth-banner.png" />
+            <ng-container [ngSwitch]="'COMPLETED'">
+              <img
+                class="progress"
+                *ngSwitchCase="'COMPLETED'"
+                src="assets/svg/status/success.svg"
+              />
+
+              <img
+                class="progress"
+                *ngSwitchCase="'FAILED'"
+                src="assets/svg/status/fail.svg"
+              />
+
+              <img
+                class="progress"
+                *ngSwitchCase="'PENDING'"
+                src="assets/svg/status/pending.svg"
+              />
+
+              <img
+                class="progress"
+                *ngSwitchCase="'INITIATED'"
+                src="assets/svg/status/initiated.svg"
+              />
+            </ng-container>
+          </div>
+          <p>Airport Dropoff ($10 /Trip)</p>
+        </div>
+        <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+        <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="status-wrapper">
+      <p class="status">
+        Status :&nbsp;
+        <ng-container [ngSwitch]="'PENDING'">
+          <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
+            COMPLETED
+          </b>
+          <b *ngSwitchCase="'FAILED'" class="status-text-reject">
+            FAILED
+          </b>
+          <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
+            INITIATED
+          </b>
+          <b *ngSwitchCase="'PENDING'" class="status-text-pending">
+            PENDING
+          </b>
+        </ng-container>
+      </p>
+      <div class="images">
+        <button class="right">
+          <img src="assets/svg/tick.svg" />
+        </button>
+        <button class="right">
+          <img src="assets/svg/cross.svg" />
+        </button>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

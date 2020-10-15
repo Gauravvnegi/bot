@@ -1,0 +1,77 @@
+@import 'main';
+
+:host ::ng-deep .mat-expansion-panel {
+  margin-top: 20px !important;
+  box-shadow: 0px 0px 5px 0px #d9d9d9;
+}
+
+:host ::ng-deep .mat-expansion-panel-header {
+  background-color: #e8eef5 !important;
+  padding: 0 20px !important;
+}
+
+:host ::ng-deep .container__title {
+  justify-content: space-between;
+  margin-right: 0;
+  align-items: center;
+  .title-with-image {
+    display: flex;
+    align-items: center;
+    color: #484848;
+    font-weight: 500;
+    letter-spacing: 0.84px;
+    .image {
+      position: relative;
+      .profile {
+        border-radius: 50%;
+        margin: 0 20px;
+        height: 40px;
+        width: 40px;
+      }
+      .progress {
+        position: absolute;
+        bottom: 2px;
+        right: 8px;
+        z-index: 22;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .expand-icon {
+  color: #4b56c0;
+}
+
+:host ::ng-deep .mat-expansion-indicator {
+  display: none !important;
+}
+
+:host ::ng-deep .mat-expansion-panel-body {
+  padding: 0 10px 0px;
+}
+
+.status-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0;
+  .status {
+    letter-spacing: 0.84px;
+    color: #9eaeb8;
+    font-weight: $bold;
+    font-size: 11px;
+  }
+  .images {
+    display: flex;
+    align-items: center;
+    button {
+      margin: 0 $margin10;
+      border: none;
+      outline: none;
+      background: transparent;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -3,28 +3,55 @@
     *ngIf="detailsData.amenitiesDetails.complimentryPackages.length > 0"
     class="service__wrapper"
   >
-    <h3 class="service__wrapper--heading">Complimentary</h3>
-    <div class="service__wrapper--images">
-      <div
-        *ngFor="
-          let compPackage of detailsData.amenitiesDetails.complimentryPackages
-        "
-        class="img-with-text"
-      >
+    <div class="heading">
+      <mat-label class="package-label">Complimentary</mat-label>
+      <!-- <p class="go-to-package">Go to Packages</p> -->
+    </div>
+    <div class="service__wrapper--images-wrapper">
+      <div class="img-with-text">
         <div class="image" imageClass>
-          <img [src]="compPackage.imgUrl" class="hotel-services-images" />
+          <img src="assets/svg/food.svg" class="hotel-services-images" />
         </div>
-        <p>{{ compPackage.name }}</p>
+        <p>food</p>
+      </div>
+      <div class="img-with-text">
+        <div class="image" imageClass>
+          <img src="assets/svg/food.svg" class="hotel-services-images" />
+        </div>
+        <p>food</p>
+      </div>
+      <div class="img-with-text">
+        <div class="image" imageClass>
+          <img src="assets/svg/food.svg" class="hotel-services-images" />
+        </div>
+        <p>food</p>
+      </div>
+      <div class="img-with-text">
+        <div class="image" imageClass>
+          <img src="assets/svg/food.svg" class="hotel-services-images" />
+        </div>
+        <p>food</p>
       </div>
     </div>
   </div>
-  <div>
-    <mat-label>Paid</mat-label>
-    <ng-container #paidPackage> </ng-container>
+  <hr class="data-seperator" />
+  <div class="paid-wrapper">
+    <mat-label class="package-label">Paid</mat-label>
+    <ng-container #paidPackage></ng-container>
   </div>
-
+  <hr class="data-seperator" />
   <div *ngIf="stayDetailsFG.get('special_comments').value">
-    <div>Special Request</div>
-    {{ stayDetailsFG.get('special_comments').value }}
+    <mat-label class="package-label">Special Request</mat-label>
+    <div class="special-request-wrapper">
+      <p class="text">{{ stayDetailsFG.get('special_comments').value }}</p>
+      <div class="images">
+        <button class="right">
+          <img src="assets/svg/tick.svg" />
+        </button>
+        <button class="right">
+          <img src="assets/svg/cross.svg" />
+        </button>
+      </div>
+    </div>
   </div>
 </div>

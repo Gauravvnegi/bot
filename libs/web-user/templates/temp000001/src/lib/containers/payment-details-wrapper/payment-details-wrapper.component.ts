@@ -113,7 +113,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         );
       }
     } else {
-      this.updatePaymentStatus();
+      this.updatePaymentStatus('preCheckin');
       this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
     }
   }
@@ -154,31 +154,45 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       }
     } else {
-      this.updatePaymentStatus();
-      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+      this.updatePaymentStatus('checkin');
+      // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
     }
     // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
   }
 
-  updatePaymentStatus() {
+  updatePaymentStatus(state) {
     const data = this.mapPaymentData();
     this._paymentDetailsService
       .updatePaymentStatus(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          this._snackBarService.openSnackBarAsText(
-            'Pre-Checkin Sucessfull.',
-            '',
-            { panelClass: 'success' }
-          );
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
-          );
+          if (state === 'checkin') {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          } else {
+            this._snackBarService.openSnackBarAsText(
+              'Pre-Checkin Sucessfull.',
+              '',
+              { panelClass: 'success' }
+            );
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['submitButton']
+            );
+          }
         },
         (error) => {
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
-          );
+          this._snackBarService.openSnackBarAsText(error);
+          if (state === 'checkin') {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          } else {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['submitButton']
+            );
+          }
         }
       );
   }
@@ -189,7 +203,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   mapPaymentData() {
     const paymentStatusData = new PaymentStatus();
-    paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk;
+    paymentStatusData.payOnDesk = true;
     paymentStatusData.status = 'SUCCESS';
     paymentStatusData.transactionId = '12345678';
     return paymentStatusData;

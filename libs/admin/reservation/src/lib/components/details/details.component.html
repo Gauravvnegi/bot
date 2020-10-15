@@ -1,6 +1,6 @@
-<pre>
+<!-- <pre>
   {{ detailsForm.getRawValue() | json }}
-</pre>
+</pre> -->
 <div class="details-wrapper">
   <div class="header">
     <div (click)="closeDetails()" class="close">
@@ -178,49 +178,48 @@
   <div class="mat-group">
     <mat-tab-group>
       <mat-tab label="Guest Details">
-        <ng-container *ngIf="isReservationDetailFetched">
-          <hospitality-bot-admin-guest-details
-            [parentForm]="detailsForm"
-            [data]="details"
-            (addFGEvent)="addFGEvent($event)"
-            (isGuestInfoPatched)="guestInfoPatched($event)"
-          ></hospitality-bot-admin-guest-details>
-          <!-- <div>
-            <p class="loading">Loading Details</p>
-            <div class="spinner">
-              <div class="bounce1"></div>
-              <div class="bounce2"></div>
-              <div class="bounce3"></div>
-            </div>
-          </div> -->
-         
+        <hospitality-bot-admin-guest-details
+          *ngIf="isReservationDetailFetched"
+          [parentForm]="detailsForm"
+          [data]="details"
+          (addFGEvent)="addFGEvent($event)"
+          (isGuestInfoPatched)="guestInfoPatched($event)"
+        ></hospitality-bot-admin-guest-details>
+        <ng-container *ngIf="!isReservationDetailFetched">
+          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
         </ng-container>
       </mat-tab>
       <mat-tab label="Documents">
-        <ng-container *ngIf="isReservationDetailFetched">
-          <hospitality-bot-admin-documents-details
-            #adminDocumentsDetailsComponent
-            [parentForm]="detailsForm"
-            [data]="details"
-            (addFGEvent)="addFGEvent($event)"
-          ></hospitality-bot-admin-documents-details>
+        <hospitality-bot-admin-documents-details
+          *ngIf="isReservationDetailFetched"
+          #adminDocumentsDetailsComponent
+          [parentForm]="detailsForm"
+          [data]="details"
+          (addFGEvent)="addFGEvent($event)"
+        ></hospitality-bot-admin-documents-details>
+        <ng-container *ngIf="!isReservationDetailFetched">
+          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
         </ng-container>
       </mat-tab>
       <mat-tab label="Package">
-        <ng-container *ngIf="isReservationDetailFetched">
-          <hospitality-bot-admin-package-details
-            [parentForm]="detailsForm"
-            [data]="details"
-          ></hospitality-bot-admin-package-details>
+        <hospitality-bot-admin-package-details
+          *ngIf="isReservationDetailFetched"
+          [parentForm]="detailsForm"
+          [data]="details"
+        ></hospitality-bot-admin-package-details>
+        <ng-container *ngIf="!isReservationDetailFetched">
+          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
         </ng-container>
       </mat-tab>
 
       <mat-tab label="Payment">
-        <ng-container *ngIf="isReservationDetailFetched">
-          <hospitality-bot-admin-payment-details
-            [parentForm]="detailsForm"
-            [data]="details"
-          ></hospitality-bot-admin-payment-details>
+        <hospitality-bot-admin-payment-details
+          *ngIf="isReservationDetailFetched"
+          [parentForm]="detailsForm"
+          [data]="details"
+        ></hospitality-bot-admin-payment-details>
+        <ng-container *ngIf="!isReservationDetailFetched">
+          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
         </ng-container>
       </mat-tab>
     </mat-tab-group>
@@ -346,8 +345,18 @@
       </div>
     </div>
   </div>
-  
 </div>
 <pre>
   {{ details | json }}
 </pre>
+
+<ng-template #detailsLoader>
+  <div>
+    <p class="loading">Loading Details</p>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+  </div>
+</ng-template>

@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-registration-card',
@@ -63,6 +64,7 @@ export class RegistrationCardComponent {
     private _docService: DocumentDetailsService,
     private _snackbar: SnackBarService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
+    private _utilityService: UtilityService
   ) {}
 
   ngOnInit() {
@@ -107,9 +109,10 @@ export class RegistrationCardComponent {
         formData
       )
       .subscribe((res) => {
-
+        this._utilityService.$signatureUploaded.next(true);
       }, (err) => {
         this._snackbar.openSnackBarAsText(err.message);
+        this._utilityService.$signatureUploaded.next(false);
       });
   }
 

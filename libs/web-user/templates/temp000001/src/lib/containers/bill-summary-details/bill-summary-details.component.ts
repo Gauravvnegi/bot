@@ -9,6 +9,7 @@ import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -35,7 +36,8 @@ export class BillSummaryDetailsComponent implements OnInit {
     private _dateService: DateService,
     private _stepperService: StepperService,
     private _docService: DocumentDetailsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _utilityService: UtilityService
   ) {
     this.initRequestForm();
   }
@@ -111,7 +113,9 @@ export class BillSummaryDetailsComponent implements OnInit {
         this.reservationData.guestDetails.primaryGuest.id,
         formData
       )
-      .subscribe((res) => {});
+      .subscribe((res) => {
+        this._utilityService.$signatureUploaded.next(true);
+      }, (err) => this._utilityService.$signatureUploaded.next(false));
   }
 
   get staySummary() {

@@ -15,6 +15,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { SignatureService } from '../../services/signature.service';
 import * as JSZipUtils from 'jszip-utils';
 import { Subscription } from 'rxjs';
+import { ButtonService } from '../../services/button.service';
+import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-signature-capture-wrapper',
@@ -116,9 +118,26 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
     private _fb: FormBuilder,
     private _modal: ModalService,
     private _snackBarService: SnackBarService,
-    private _signatureService: SignatureService
+    private _signatureService: SignatureService,
+    private _buttonService: ButtonService,
+    private _utilityService: UtilityService,
   ) {
     this.initFormGroup();
+    this.registerListeners();
+  }
+
+  registerListeners() {
+    this.listenForSignatureUpload();
+  }
+
+  listenForSignatureUpload() {
+    this._utilityService.$signatureUploaded
+      .subscribe((res) => {
+        if (res) {
+          this.onClose();
+        }
+        this._buttonService.buttonLoading$.next(this.saveButton);
+      });
   }
 
   ngOnChanges() {
@@ -156,6 +175,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
         this._snackBarService.openSnackBarAsText(
           'Please enter signature on the signature pad!'
         );
+        this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
       this.signature.signatureText = '';
@@ -163,7 +183,6 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
         this.signatuePadScribbleComponent.signaturePad.toDataURL()
       );
       this.setSignatureData(image);
-      this.onClose();
     } else if (TAB_LABEL === 'Type') {
       const text = this.textSignature;
       if (text === '') {
@@ -183,7 +202,6 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       image = this.signature['signatureFile'];
       this.uploadType = '';
       this.setSignatureData(image);
-      this.onClose();
     }
   }
 
@@ -234,7 +252,6 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
         }
       );
       this.setSignatureData(file);
-      this.onClose();
     });
   }
 

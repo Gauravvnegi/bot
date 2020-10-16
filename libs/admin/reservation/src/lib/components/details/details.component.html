@@ -1,6 +1,6 @@
-<!-- <pre>
+<pre>
   {{ detailsForm.getRawValue() | json }}
-</pre> -->
+</pre>
 <div class="details-wrapper">
   <div class="header">
     <div (click)="closeDetails()" class="close">
@@ -104,7 +104,7 @@
           <p class="label">Feedback :</p>
           <div class="booking-feedback">
             <p class="number status-background-success">
-              8
+              {{ details.feedbackDetails.rating }}
             </p>
             <img
               class="feedback-icon status-image-success"
@@ -241,16 +241,24 @@
         <ng-template #PRECHECKIN>
           <ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
             </ng-container>
           </ng-container>
         </ng-template>
@@ -258,23 +266,79 @@
         <ng-template #CHECKIN>
           <ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
+
               <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
                 Confirm All Health Declaration
               </button> -->
               <button
                 class="button"
-                *ngIf="
-                  ['INITIATED'].includes(documentStatusFG.get('status').value)
-                "
-                (click)="verifyAllDocuments('ACCEPT')"
+                button-dependency
+                [id]="'confirmAllDocs'"
+                [context]="self"
+                [parentForm]="detailsForm"
+                [data]="details"
+                [handler]="{
+                  fn_name: 'verifyAllDocuments',
+                  args: ['ACCEPT']
+                }"
               >
                 Confirm All Docs
               </button>
-              <button class="button">Confirm And Notify Checkin</button>
+
+              <!-- Payment buttons -->
+              <!-- Until my all docs and health is verified-- dont show payment buttons -->
+              <button
+                class="button"
+                button-dependency
+                [id]="'acceptPayment'"
+                [context]="self"
+                [parentForm]="detailsForm"
+                [data]="details"
+                [handler]="{
+                  fn_name: 'acceptPayment',
+                  args: ['ACCEPT']
+                }"
+              >
+                Accept Payment
+              </button>
+              <button
+                button-dependency
+                [id]="'downloadInvoice'"
+                [context]="self"
+                [parentForm]="detailsForm"
+                [data]="details"
+                [handler]="{
+                  fn_name: 'downloadInvoice',
+                  args: ['ACCEPT']
+                }"
+                class="button"
+              >
+                Download Invoice/Folio
+              </button>
+              <!-- ---------------------------------------------------------------------------------------------- -->
+              <button
+                button-dependency
+                [id]="'confirmAndNotifyCheckin'"
+                [context]="self"
+                [parentForm]="detailsForm"
+                [data]="details"
+                [handler]="{
+                  fn_name: 'confirmAndNotifyCheckin',
+                  args: ['ACCEPT']
+                }"
+                class="button"
+              >
+                Confirm And Notify Checkin
+              </button>
+              <!-- Last button to show -->
             </ng-container>
             <!-- <button class="button">Confirm Payment</button>
             <button class="button">Download Invoice/Folio</button> -->
@@ -282,7 +346,9 @@
               <!-- initiate force checkout -->
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <button class="button">Generate CheckIn Link</button>
+              <button (click)="generateCheckinLink()" class="button">
+                Generate CheckIn Link
+              </button>
             </ng-container>
           </ng-container>
         </ng-template>
@@ -348,9 +414,9 @@
     </div>
   </div>
 </div>
-<!-- <pre>
+<pre>
   {{ details | json }}
-</pre> -->
+</pre>
 
 <ng-template #detailsLoader>
   <div>
@@ -362,3 +428,6 @@
     </div>
   </div>
 </ng-template>
+
+<!-- Confirm all Docs -- button -- [docs- confirm]
+notify - [health,docs,payment,] == true =enable -->

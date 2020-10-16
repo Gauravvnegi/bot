@@ -2,7 +2,7 @@
   <div class="material-body">
     <div class="label-wrapper">
       <mat-label class="mat-head">Guest Info</mat-label>
-      <ng-container [ngSwitch]="'COMPLETED'">
+      <ng-container [ngSwitch]="healthCardDetailsForm.get('status').value">
         <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
 
         <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
@@ -114,7 +114,11 @@
             <!-- add default case icon -->
           </ng-container>
         </p>
-        <div *ngIf="healthCardDetailsForm.get('status').value != 'PENDING'">
+        <div
+          *ngIf="
+            ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey)
+          "
+        >
           <div class="decision-button-wrapper">
             <ng-container
               *ngIf="
@@ -136,9 +140,11 @@
       <div
         class="remark-wrapper"
         *ngIf="
-          !(
-            ['COMPLETED'].includes(healthCardDetailsForm.get('status').value) &&
-            !healthCardDetailsForm.get('remarks').value
+          ['CHECKIN', 'CHECKOUT'].includes(
+            detailsData.currentJourneyDetails.journey
+          ) &&
+          ['INITIATED', 'COMPLETED', 'FAILED'].includes(
+            healthCardDetailsForm.get('status').value
           )
         "
       >
@@ -152,3 +158,8 @@
     </ng-container>
   </div>
 </div>
+
+<!-- !(
+  ['COMPLETED'].includes(healthCardDetailsForm.get('status').value) &&
+  !healthCardDetailsForm.get('remarks').value
+) -->

@@ -88,6 +88,7 @@ export class AdminPackageDetailsComponent implements OnInit, AfterViewInit {
     return this._fb.group({
       id: [''],
       status: [''],
+      remarks: [''],
       type: [''],
       name: [''],
       description: [''],

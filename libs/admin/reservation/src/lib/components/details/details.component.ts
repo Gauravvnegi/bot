@@ -26,7 +26,7 @@ export class DetailsComponent implements OnInit, OnChanges {
   // guestDetailComponent: AdminGuestDetailsComponent;
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
-
+  self;
   detailsForm: FormGroup;
   details;
   isGuestInfoPatched: boolean = false;
@@ -46,6 +46,7 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _changeDetectorRef: ChangeDetectorRef,
     private _snackBarService: SnackBarService
   ) {
+    this.self = this;
     this.initDetailsForm();
   }
 
@@ -58,7 +59,7 @@ export class DetailsComponent implements OnInit, OnChanges {
   getReservationDetails() {
     this._reservationService
       .getReservationDetails(
-        this.bookingId || 'fd90295a-7789-46a2-9b59-8a193009baf6'
+        '1801e0d2-2de4-41a6-8cb4-6a4dae92ad36' || this.bookingId
       )
       .subscribe(
         (response) => {
@@ -138,6 +139,14 @@ export class DetailsComponent implements OnInit, OnChanges {
   verifyAllDocuments(status) {
     this.documentDetailComponent.updateDocumentVerificationStatus(status, true);
   }
+
+  generateCheckinLink() {}
+
+  acceptPayment() {}
+
+  downloadInvoice() {}
+
+  confirmAndNotifyCheckin() {}
 
   getPrimaryGuestDetails() {
     this.details.guestDetails.forEach((guest) => {

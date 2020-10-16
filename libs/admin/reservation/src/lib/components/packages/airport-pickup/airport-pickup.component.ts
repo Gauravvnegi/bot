@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DefaultPackageComponent } from '../default-package/default-package.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { ReservationService } from '../../../services/reservation.service';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -9,13 +12,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     './airport-pickup.component.scss',
   ],
 })
-export class AirportPickupComponent implements OnInit {
-  @Input() parentForm;
-  @Input() paidAmenityFG: FormGroup;
-  @Input() config;
-  @Input() index;
-
-  constructor(private _fb: FormBuilder) {}
+export class AirportPickupComponent extends DefaultPackageComponent
+  implements OnInit {
+  constructor(
+    private _fb: FormBuilder,
+    protected snackBarService: SnackBarService,
+    protected reservationService: ReservationService
+  ) {
+    super(snackBarService, reservationService);
+  }
 
   ngOnInit(): void {
     this.addMetaData();

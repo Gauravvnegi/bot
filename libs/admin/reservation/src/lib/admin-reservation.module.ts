@@ -15,6 +15,7 @@ import { AdminPaymentDetailsComponent } from './components/admin-payment-details
 import { AdminDetailsService } from './services/admin-details.service';
 import { DefaultPackageComponent } from './components/packages/default-package/default-package.component';
 import { AirportPickupComponent } from './components/packages/airport-pickup/airport-pickup.component';
+import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -37,6 +38,7 @@ export const adminReservationRoutes: Route[] = [];
     AdminPaymentDetailsComponent,
     DefaultPackageComponent,
     AirportPickupComponent,
+    ButtonDependencyDirective,
   ],
   exports: [
     DetailsComponent,
@@ -46,6 +48,7 @@ export const adminReservationRoutes: Route[] = [];
     AdminPaymentDetailsComponent,
     DefaultPackageComponent,
     AirportPickupComponent,
+    ButtonDependencyDirective,
   ],
 })
 export class AdminReservationModule {}

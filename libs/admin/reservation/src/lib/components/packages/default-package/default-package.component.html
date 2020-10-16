@@ -84,14 +84,12 @@
           </b>
         </ng-container>
       </p>
-      <div
-        *ngIf="!['COMPLETED'].includes(paidAmenityFG.get('status').value)"
-        class="images"
-      >
-        <button class="right">
+      <div class="images">
+        <!-- Flow to be decided by business team -->
+        <button (click)="updatePackageStatus('ACCEPT')" class="right">
           <img src="assets/svg/tick.svg" />
         </button>
-        <button class="right">
+        <button (click)="updatePackageStatus('REJECT')" class="right">
           <img src="assets/svg/cross.svg" />
         </button>
       </div>

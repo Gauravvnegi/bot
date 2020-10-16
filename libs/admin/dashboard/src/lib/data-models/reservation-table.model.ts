@@ -65,11 +65,13 @@ export class PackageDetail implements Deserializable {
 export class Feedback implements Deserializable {
   rating;
   comments: string;
+  status: string;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'rating', get(input, ['rating'])),
-      set({}, 'comments', get(input, ['comments']))
+      set({}, 'comments', get(input, ['comments'])),
+      set({}, 'status', get(input, ['statusMessage', 'status']))
     );
     return this;
   }
@@ -162,13 +164,13 @@ export class Booking implements Deserializable {
   }
 
   getArrivalTime() {
-    return moment(this.arrivalTimeStamp).format('H:mm');
+    return moment(this.arrivalTimeStamp).format('HH:mm');
 
     //return moment.utc(this.arrivalTimeStamp).format('H:mm');
   }
 
   getDepartureTime() {
-    return moment(this.departureTimeStamp).format('H:mm');
+    return moment(this.departureTimeStamp).format('HH:mm');
   }
 
   getDaysAndNights() {
@@ -177,7 +179,7 @@ export class Booking implements Deserializable {
       'days'
     );
     return {
-      days: diffInDays,
+      days: diffInDays + 1,
       nights: diffInDays,
     };
   }

@@ -157,7 +157,10 @@ export class AdminGuestDetailsComponent implements OnInit {
     // remove remarks required validators
 
     this._reservationService
-      .updateStepStatus('fd90295a-7789-46a2-9b59-8a193009baf6', data)
+      .updateStepStatus(
+        this.parentForm.get('reservationDetails').get('bookingId').value,
+        data
+      )
       .subscribe(
         (response) => {
           this.healthCardDetailsForm

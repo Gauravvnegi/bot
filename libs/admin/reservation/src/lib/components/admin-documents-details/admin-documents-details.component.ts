@@ -184,13 +184,18 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
-    if (status !== 'ACCEPT' && !this.selectedGuestGroup.get('remarks').value) {
+    if (status == 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
       this._snackBarService.openSnackBarAsText('Please enter remarks');
       return;
     }
+
     let data = this.mapDocumentVerificationData(status, isConfirmALL);
+
     this._reservationService
-      .updateStepStatus('fd90295a-7789-46a2-9b59-8a193009baf6', data)
+      .updateStepStatus(
+        this.parentForm.get('reservationDetails').get('bookingId').value,
+        data
+      )
       .subscribe(
         (response) => {
           this.selectedGuestGroup

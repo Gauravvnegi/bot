@@ -243,7 +243,10 @@
       </td>
       <td>
         <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
-        <div class="booking-feedback">
+        <div
+          *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
+          class="booking-feedback"
+        >
           <p
             class="number"
             [ngClass]="{
@@ -253,7 +256,7 @@
           >
             {{ rowData.feedback.rating }}
           </p>
-          <img
+          <!-- <img
             class="feedback-icon"
             [ngClass]="{
               'status-image-reject': rowData.feedback.rating < 5,
@@ -268,7 +271,7 @@
               'status-image-success': rowData.feedback.rating >= 5
             }"
             src="assets/svg/food.svg"
-          />
+          /> -->
           <div
             *ngIf="rowData.feedback.comments"
             [ngClass]="{

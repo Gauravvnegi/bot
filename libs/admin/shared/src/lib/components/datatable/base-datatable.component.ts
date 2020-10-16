@@ -270,6 +270,10 @@ export class BaseDatatableComponent implements OnInit {
     this.documentActionTypes.forEach((item) => {
       if (item.type == 'countType') {
         item.label = `Export (${this.selectedRows.length})`;
+        this.tableFG
+          .get('documentActions')
+          .get('documentActionType')
+          .patchValue('export');
       }
     });
   }
@@ -281,6 +285,13 @@ export class BaseDatatableComponent implements OnInit {
           this.selectedRows.length > 0
             ? `Export (${this.selectedRows.length})`
             : 'Export';
+
+        if (!this.selectedRows.length) {
+          this.tableFG
+            .get('documentActions')
+            .get('documentActionType')
+            .patchValue('exportAll');
+        }
       }
     });
   }

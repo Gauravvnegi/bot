@@ -16,6 +16,7 @@ export class Details implements Deserializable {
   currentJourneyDetails: CurrentJourneyDetails;
   stepStatusDetails: StepStatusDetails;
   roomsDetails;
+  feedbackDetails;
 
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
@@ -57,7 +58,21 @@ export class Details implements Deserializable {
     );
 
     this.roomsDetails = new RoomsDetails().deserialize(input);
+    this.feedbackDetails = new FeedbackDetails().deserialize(input.feedback);
 
+    return this;
+  }
+}
+
+export class FeedbackDetails implements Deserializable {
+  rating;
+  comments: string;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'rating', get(input, ['rating'])),
+      set({}, 'comments', get(input, ['comments']))
+    );
     return this;
   }
 }

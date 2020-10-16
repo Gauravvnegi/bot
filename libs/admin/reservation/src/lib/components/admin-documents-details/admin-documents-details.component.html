@@ -1,10 +1,11 @@
 <div class="material-body">
   <div
-  *ngif="
-  detailsData.stepStatusDetails.documents != 'PENDING';
-  else documentsPending
-"
+    *ngIf="
+      detailsData.stepStatusDetails.documents != 'PENDING';
+      else documentsPending
+    "
   >
+    <!-- Check if documents pending in any case ; then show pending template. If documents are initiated, completed or failed i can view docs-->
     <div class="document-header">
       <p class="heading">Guest Documents</p>
       <ng-container [ngSwitch]="documentStatus.get('status').value">
@@ -117,56 +118,67 @@
         </div>
         <hr class="data-seperator" />
         <mat-label class="mat-head">Documents</mat-label>
-        <div
-          class="pending-button-wrapper"
-          *ngIf="selectedGuestGroup.get('status').value != 'PENDING'"
-        >
+        <div class="pending-button-wrapper">
           <p class="health-status" style="margin-left: 0;">
             Document Verification Status :&nbsp;<b class="pending">{{
               selectedGuestGroup.get('status').value
             }}</b>
           </p>
-          <div class="decision-button-wrapper">
-            <ng-container
-              *ngIf="
-                ['INITIATED', 'FAILED'].includes(
-                  selectedGuestGroup.get('status').value
-                )
-              "
-            >
-              <button
-                class="right"
-                (click)="updateDocumentVerificationStatus('ACCEPT')"
+          <div
+            *ngIf="
+              ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey)
+            "
+          >
+            <!-- He can only take action and write remarks if its a checkin day only.-->
+            <div class="decision-button-wrapper">
+              <ng-container
+                *ngIf="
+                  ['INITIATED', 'FAILED'].includes(
+                    selectedGuestGroup.get('status').value
+                  )
+                "
               >
-                <img src="assets/svg/tick.svg" />
-              </button>
-              <button
-                class="right"
-                (click)="updateDocumentVerificationStatus('REJECT')"
-              >
-                <img src="assets/svg/cross.svg" />
-              </button>
-            </ng-container>
+                <!-- No action button in case of pending and completed stage -->
+                <button
+                  class="right"
+                  (click)="updateDocumentVerificationStatus('ACCEPT')"
+                >
+                  <img src="assets/svg/tick.svg" />
+                </button>
+                <button
+                  class="right"
+                  (click)="updateDocumentVerificationStatus('REJECT')"
+                >
+                  <img src="assets/svg/cross.svg" />
+                </button>
+              </ng-container>
+            </div>
           </div>
-          <!-- <ng-container>
-            <span class="text">Remark :</span>
-            <mat-form-field>
-              <input matInput formControlName="remarks" />
-            </mat-form-field>
-          </ng-container> -->
-        </div>
-        <div class="remark-wrapper">
-          <form [formGroup]="healthCardDetailsForm">
-            <span class="text">Remark :</span>
-            <mat-form-field class="remark">
-              <input matInput formControlName="remarks" />
-            </mat-form-field>
-          </form>
+
+          <div
+            *ngIf="
+              ['CHECKIN', 'CHECKOUT'].includes(
+                detailsData.currentJourneyDetails.journey
+              ) &&
+              ['INITIATED', 'COMPLETED', 'FAILED'].includes(
+                selectedGuestGroup.get('status').value
+              )
+            "
+            class="remark-wrapper"
+          >
+            <!-- Add flow not to show  remarks when its empty and status is completed -->
+            <form [formGroup]="selectedGuestGroup">
+              <span class="text">Remark :</span>
+              <mat-form-field class="remark">
+                <input matInput formControlName="remarks" />
+              </mat-form-field>
+            </form>
+          </div>
         </div>
       </form>
     </ng-container>
   </div>
-  <!-- <ng-container #documentsPending>
+  <ng-template #documentsPending>
     <div class="empty-view">
       <div class="wrapper">
         <img src="assets/Documents.png" />
@@ -174,5 +186,5 @@
         <p class="note">Seems like guest has not initiated Precheckin.</p>
       </div>
     </div>
-  </ng-container> -->
+  </ng-template>
 </div>

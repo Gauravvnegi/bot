@@ -1,0 +1,21 @@
+@import 'main';
+
+.data-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: $margin20 3px;
+    .feild{
+        width: 20%;
+        font-weight: 500;
+        .label{
+          font-size: $font12;
+          color: $primary-gray;
+        }
+        .value{
+          margin-top: $margin10;
+          color: #484848;
+        }
+    }
+  }

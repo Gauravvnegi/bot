@@ -38,7 +38,7 @@
       .text {
         margin-left: 15px;
         font-size: $font14;
-        color: #9eaeb8;
+        color: $primary-gray;
         &:hover {
           cursor: pointer;
         }
@@ -54,7 +54,7 @@
       // justify-content: space-between;
       margin-top: 5%;
       .note {
-        color: #9eaeb8;
+        color: $primary-gray;
         font-size: $font14;
         padding-left: 7%;
         margin-bottom: 20px;
@@ -89,7 +89,7 @@
       align-items: center;
       .text {
         font-size: $font14;
-        color: #9eaeb8;
+        color: $primary-gray;
       }
       .button {
         border-radius: 20px;
@@ -226,7 +226,7 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: #9eaeb8;
+  background-color: $primary-gray;
 }
 
 :host ::ng-deep .mat-form-field-disabled .mat-form-field-underline {
@@ -235,7 +235,7 @@
 
 :host ::ng-deep .mat-label {
   font-size: $font12;
-  color: #9eaeb8;
+  color: $primary-gray;
   margin-right: 10px;
   @media only screen and (max-width: 1250px) {
     font-size: 9px;
@@ -243,7 +243,7 @@
 }
 
 :host ::ng-deep .mat-select-arrow {
-  border-top-color: #9eaeb8;
+  border-top-color: $primary-gray;
 }
 
 :host ::ng-deep .phone-no-dropdown {
@@ -270,7 +270,7 @@
   margin: 15px 0;
   margin-top: 50px;
   button {
-    background-color: #4b56c0;
+    background-color: $primary-purple;
     border: none;
     outline: none;
     color: white;
@@ -280,7 +280,7 @@
     padding: 12px 0px;
     width: 10vw;
     opacity: 0.85;
-    box-shadow: 0px 0px 5px 0px #4b56c0;
+    box-shadow: 0px 0px 5px 0px $primary-purple;
     &:hover {
       cursor: pointer;
       opacity: 1;

@@ -6,13 +6,13 @@
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  color: #4b56c0;
+  color: $primary-purple;
   font-size: $font20;
   font-weight: $bolder;
 }
 
 :host ::ng-deep .mat-ink-bar {
-  background-color: #4b56c0;
+  background-color: $primary-purple;
 }
 
 .details-wrapper {
@@ -28,7 +28,7 @@
 }
 
 :host ::ng-deep .header {
-  background: transparent linear-gradient(180deg, #a09fe5d9 0%, #4b56c0 100%) 0%
+  background: transparent linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0%
     0% no-repeat padding-box;
   padding: $padding20;
   position: relative;
@@ -238,7 +238,7 @@
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;
-      color: #9eaeb8;
+      color: $primary-gray;
     }
     .value {
       letter-spacing: 0.84px;
@@ -309,7 +309,7 @@
     color: #53b33e;
   }
   .pending {
-    color: #9eaeb8;
+    color: $primary-gray;
   }
 }
 
@@ -379,7 +379,7 @@
   background-color: white;
   .contact {
     font-size: 11px;
-    color: #9eaeb8;
+    color: $primary-gray;
     text-align: center;
     margin-bottom: 7px;
   }
@@ -390,18 +390,18 @@
     align-items: center;
     height: 93%;
     .button {
-      border: 1px solid #4b56c0;
+      border: 1px solid $primary-purple;
       font-size: $font12;
       outline: none;
       padding: 10px 0px;
       margin: 8px 0;
       background-color: transparent;
       width: 100%;
-      color: #4b56c0;
+      color: $primary-purple;
       border-radius: 25px;
       &:hover {
         cursor: pointer;
-        background-color: #4b56c0;
+        background-color: $primary-purple;
         color: white;
       }
     }
@@ -431,7 +431,7 @@
         &:hover {
           cursor: pointer;
           padding: 7px;
-          background-color: #4b56c0;
+          background-color: $primary-purple;
           height: 30px;
           width: 30px;
           img {
@@ -450,7 +450,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: #4B56C0;
+  color: $primary-purple;
 }
 
 .spinner {
@@ -460,7 +460,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: #4B56C0;
+  background-color: $primary-purple;
 
   border-radius: 100%;
   display: inline-block;

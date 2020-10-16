@@ -6,12 +6,12 @@
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  color: #4b56c0;
+  color: $primary-purple;
   font-size: $font16;
 }
 
 :host ::ng-deep .mat-ink-bar {
-  background-color: #4b56c0;
+  background-color: $primary-purple;
 }
 
 .document-name-nationality {
@@ -166,7 +166,7 @@
 //     .label {
 //       letter-spacing: 0.72px;
 //       font-size: $font12;
-//       color: #9eaeb8;
+//       color: $primary-gray;
 //     }
 //     .value {
 //       letter-spacing: 0.84px;
@@ -214,7 +214,7 @@
   display: flex;
   align-items: baseline;
   .text {
-    color: #9eaeb8;
+    color: $primary-gray;
     margin-right: 7px;
   }
 }
@@ -239,7 +239,7 @@
     color: #53b33e;
   }
   .pending {
-    color: #9eaeb8;
+    color: $primary-gray;
   }
 }
 
@@ -282,7 +282,7 @@
       margin-top: 12px;
     }
     .note {
-      color: #9eaeb8;
+      color: $primary-gray;
       font-weight: 500;
       letter-spacing: 0.84px;
       margin-top: 10px;
@@ -309,6 +309,20 @@
       }
     }
   }
+}
+
+.remark-wrapper {
+  .text {
+    letter-spacing: 0.84px;
+    color: $primary-gray;
+    font-size: $font14;
+    font-weight: $bolder;
+    margin-right: 3rem;
+  }
+}
+
+:host ::ng-deep .remark{
+  width: 70%;
 }
 
 

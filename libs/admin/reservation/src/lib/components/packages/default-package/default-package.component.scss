@@ -39,7 +39,7 @@
 }
 
 :host ::ng-deep .expand-icon {
-  color: #4b56c0;
+  color: $primary-purple;
 }
 
 :host ::ng-deep .mat-expansion-indicator {
@@ -57,7 +57,7 @@
   margin: 15px 0;
   .status {
     letter-spacing: 0.84px;
-    color: #9eaeb8;
+    color: $primary-gray;
     font-weight: $bold;
     font-size: 11px;
   }
@@ -73,5 +73,25 @@
         cursor: pointer;
       }
     }
+  }
+}
+
+.data-wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: $margin20 3px;
+  .feild{
+      width: 20%;
+      font-weight: 500;
+      .label{
+        font-size: $font12;
+        color: $primary-gray;
+      }
+      .value{
+        margin-top: $margin10;
+        color: #484848;
+      }
   }
 }

@@ -8,7 +8,7 @@
     margin: 15px 0;
     .go-to-package {
       font-weight: 500;
-      color: #9eaeb8;
+      color: $primary-gray;
     }
   }
   &--images-wrapper {
@@ -31,17 +31,20 @@
         border-radius: 50%;
         background-color: #f3f3f3;
         padding: $padding15;
+        padding-bottom: 10px;
         img {
           height: 51px;
+          width: 51px;
+          border-radius: 50%;
         }
-        &:hover {
-          cursor: pointer;
-          background-color: #4b56c0;
-          .hotel-services-images {
-            filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
-              brightness(126%) contrast(101%);
-          }
-        }
+        // &:hover {
+        //   cursor: pointer;
+        //   background-color: $primary-purple;
+        //   .hotel-services-images {
+        //     filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
+        //       brightness(126%) contrast(101%);
+        //   }
+        // }
       }
       p {
         margin-top: $margin20;

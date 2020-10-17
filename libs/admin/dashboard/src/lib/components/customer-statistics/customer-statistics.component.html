@@ -7,26 +7,52 @@
       <div class="stat-title">Customers</div>
     </div>
     <div class="stat-labels-container">
-      <div class="stat-label" [ngClass]="chart.chartType === 'bar' ? 'checkIn-Background' : ''" (click)="legendOnClick(0)">
-        <input class="legends" type="checkbox" />
-        <span class="checkIn-border"></span>
-        <p class="stat-label-title">Check-In</p>
-      </div>
-      <div class="stat-label" [ngClass]="chart.chartType === 'bar' ? 'express-checkIn-Background' : ''" (click)="legendOnClick(1)">
-        <input class="legends" type="checkbox" />
-        <span class="checkIn-border dashed"></span>
-        <p class="stat-label-title">Express Check-In</p>
-      </div>
-      <div class="stat-label" [ngClass]="chart.chartType === 'bar' ? 'checkOut-Background' : ''" (click)="legendOnClick(2)">
-        <input class="legends" type="checkbox" />
-        <span class="checkout-border"></span>
-        <p class="stat-label-title">Checkout</p>
-      </div>
-      <div class="stat-label" [ngClass]="chart.chartType === 'bar' ? 'express-checkOut-Background' : ''" (click)="legendOnClick(3)">
-        <input class="legends" type="checkbox" />
-        <span class="checkout-border dashed"></span>
-        <p class="stat-label-title">Express Checkout</p>
-      </div>
+      <ng-container [ngSwitch]="chart.chartType">
+        <ng-container *ngSwitchCase="'line'">
+          <div class="stat-label" (click)="legendOnClick(0)">
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border"></span>
+            <p class="stat-label-title">Check-In</p>
+          </div>
+          <div class="stat-label" (click)="legendOnClick(1)">
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border dashed"></span>
+            <p class="stat-label-title">Express Check-In</p>
+          </div>
+          <div class="stat-label" (click)="legendOnClick(2)">
+            <input class="legends" type="checkbox" />
+            <span class="checkout-border"></span>
+            <p class="stat-label-title">Checkout</p>
+          </div>
+          <div class="stat-label" (click)="legendOnClick(3)">
+            <input class="legends" type="checkbox" />
+            <span class="checkout-border dashed"></span>
+            <p class="stat-label-title">Express Checkout</p>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'bar'">
+          <div class="stat-label" [ngClass]="'checkIn-Background'" (click)="legendOnClick(0)">
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border"></span>
+            <p class="stat-label-title">Check-In</p>
+          </div>
+          <div class="stat-label" [ngClass]="'express-checkIn-Background'" (click)="legendOnClick(1)">
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border dashed"></span>
+            <p class="stat-label-title">Express Check-In</p>
+          </div>
+          <div class="stat-label" [ngClass]="'checkOut-Background'" (click)="legendOnClick(2)">
+            <input class="legends" type="checkbox" />
+            <span class="checkout-border"></span>
+            <p class="stat-label-title">Checkout</p>
+          </div>
+          <div class="stat-label" [ngClass]="'express-checkOut-Background'" (click)="legendOnClick(3)">
+            <input class="legends" type="checkbox" />
+            <span class="checkout-border dashed"></span>
+            <p class="stat-label-title">Express Checkout</p>
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
   </div>
   <div class="stat-val-container">

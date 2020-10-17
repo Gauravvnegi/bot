@@ -27,4 +27,12 @@ export class DateService {
   getDateDifference(date1, date2) {
     return moment(date1).diff(moment(date2), 'days')
   }
+
+  getMonthFromDate(timestamp) {
+    return moment.unix(timestamp / 1000).month();
+  }
+
+  getYearFromDate(timestamp) {
+    return moment.unix(timestamp / 1000).year();
+  }
 }

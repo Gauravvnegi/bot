@@ -117,7 +117,7 @@ opacity: 1;
 }
 
 .labl > div {
-    width: 25px;
+    // width: 25px;
     height: 25px;
     padding: 3px;
     text-align: center;
@@ -126,7 +126,8 @@ opacity: 1;
   position: relative;
   cursor:pointer;
   border: 1px solid gainsboro;
-  border-radius: 50%;
+  border-radius: 15px;
+  font: normal normal normal 10px/16px Roboto;
 }
 .labl > input:checked + div { /* (RADIO CHECKED) DIV STYLES */
   border: 2px solid #288ad6;
@@ -177,4 +178,43 @@ opacity: 1;
 .stat-label > input:checked + p {
     text-decoration: line-through;
 }
- 
+
+.checkIn-Background {
+    background-color: #0239CF;
+    .stat-label-title {
+        color: white;
+    }
+    .checkIn-border {
+        display: none;
+    }
+}
+
+.express-checkIn-Background {
+    background-color: #288ad6;
+    .stat-label-title {
+        color: white;
+    }
+    .checkIn-border {
+        display: none;
+    }
+}
+
+.checkOut-Background {
+    background-color: #F2509B;
+    .stat-label-title {
+        color: white;
+    }
+    .checkout-border {
+        display: none;
+    }
+}
+
+.express-checkOut-Background {
+    background-color: #F2809B;
+    .stat-label-title {
+        color: white;
+    }
+    .checkout-border {
+        display: none;
+    }
+}

@@ -26,7 +26,7 @@ export class BillSummaryDetailsComponent implements OnInit {
 
   requestForm: FormGroup;
   summaryConfig: SummaryDetailsConfigI;
-  signature;
+  signature="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/12aa3dbc-a684-4381-9c6e-d6e8b8719de7/Signature/signature.png";
   summaryDetails;
   staySummaryDetails;
   billSummaryDetails;

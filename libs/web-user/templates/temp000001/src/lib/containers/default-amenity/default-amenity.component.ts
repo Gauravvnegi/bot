@@ -59,12 +59,14 @@ export class DefaultAmenityComponent implements OnInit {
 
   submit(){
     this._paidService.amenityData = {};
+    this.paidAmenitiesForm.get('isSelected').patchValue(true);
     this.addEvent.emit(this.uniqueData.code);
   }
 
   removeDefaultAmenityData(event){
     event.preventDefault();
     if(this.paidAmenitiesForm.get('isSelected').value == true){
+      this.paidAmenitiesForm.get('isSelected').patchValue(false);
       this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
     }
  }

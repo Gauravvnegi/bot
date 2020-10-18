@@ -10,7 +10,7 @@ export class BreakfastService extends ApiService {
   setFieldConfigForBreakfastDetails() {
     let breakfastFormFieldSchema = {};
 
-    breakfastFormFieldSchema['personCount'] = new FieldSchema().deserialize({
+    breakfastFormFieldSchema['quantity'] = new FieldSchema().deserialize({
       label: ' ',
       disable: false,
       placeholder: 'No.of Persons'

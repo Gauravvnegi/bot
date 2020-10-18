@@ -5,7 +5,7 @@ export interface AirportConfigI {
     terminal: FieldSchema;
     flightNumber: FieldSchema;
     pickupTime: FieldSchema;
-    personCount: FieldSchema;
+    quantity: FieldSchema;
     removeButton: FieldSchema;
   }
   

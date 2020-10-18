@@ -22,14 +22,21 @@ export class AirportService extends ApiService{
     });
     airportFormFieldSchema['pickupTime'] = new FieldSchema().deserialize({
       label: 'Pickup Time',
-      disable: false
+      disable: false,
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '13px',
+        },
+      },
     });
     airportFormFieldSchema['flightNumber'] = new FieldSchema().deserialize({
       label: 'Flight No',
       disable: false,
       placeholder: 'Enter Flight No.'
     });
-    airportFormFieldSchema['personCount'] = new FieldSchema().deserialize({
+    airportFormFieldSchema['quantity'] = new FieldSchema().deserialize({
       label: 'Person Count',
       disable: false,
       placeholder: 'No. of Persons'

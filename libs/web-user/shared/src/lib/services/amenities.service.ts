@@ -5,6 +5,6 @@ import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 export class AmenitiesService extends ApiService {
 
   getHotelAmenities(reservationId){
-    return this.get(`/api/v1/hotel/${reservationId}/special-amenities`);
+    return this.get(`/api/v1/hotel/${reservationId}/packages`);
   }
 }

@@ -39,6 +39,7 @@ export class PaidServiceDetail implements Deserializable {
     imgUrl: string;
     label: string;
     hotelId: string;
+    quantity: string;
     isSelected: boolean;
     metaData: any;
     description: string;
@@ -48,12 +49,13 @@ export class PaidServiceDetail implements Deserializable {
         this,
         set({}, 'id',get(input, ['id'])),
         set({}, 'rate',get(input, ['rate'])),
-        set({}, 'currencyCode', get(input, ['currencyCode'])),
+        set({}, 'currencyCode', get(input, ['currency'])),
         set({}, 'packageCode', get(input, ['packageCode'])),
-        set({}, 'label', get(input, ['amenityName'])),
-        set({}, 'imgUrl', get(input, ['imgUrl'])),
+        set({}, 'label', get(input, ['name'])),
+        set({}, 'quantity', get(input, ['quantity'])),
+        set({}, 'imgUrl', get(input, ['imageUrl'])),
         set({}, 'hotelId', get(input, ['hotelId'])),
-        set({}, 'description', get(input, ['amenityDescription'])),
+        set({}, 'description', get(input, ['description'])),
         set({}, 'metaData',get(input, ['metaData'])),
         set({}, 'isSelected', false)
       );
@@ -78,14 +80,15 @@ export class PaidServiceDetail implements Deserializable {
   }
 
   export class Amenity{
-    id: string;
+    packageId: string;
+    quantity:number;
+    rate: number;
     metaData: Metadata;
   }
 
   export class Metadata{
     airportName: string;
     flightNumber: string;
-    personCount: number;
     pickupTime: string;
     terminal: string;
   }

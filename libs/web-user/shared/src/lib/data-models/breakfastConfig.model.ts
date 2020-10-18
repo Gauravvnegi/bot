@@ -1,6 +1,6 @@
 import { FieldSchema } from './fieldSchema.model';
 
 export interface BreakfastConfigI {
-    personCount: FieldSchema;
+    quantity: FieldSchema;
     removeButton: FieldSchema;
   }

@@ -22,7 +22,7 @@ export class StayDetail implements Deserializable {
   roomType: string;
   kidsCount: number;
   adultsCount: number;
-
+  expectedTime:string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -38,7 +38,9 @@ export class StayDetail implements Deserializable {
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
-      set({}, 'adultsCount', get(input, ['adultsCount']))
+      set({}, 'adultsCount', get(input, ['adultsCount'])),
+      set({}, 'expectedTime', '9:00 am'),
+      
     );
     return this;
   }

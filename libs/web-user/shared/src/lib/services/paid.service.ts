@@ -33,20 +33,22 @@ export class PaidService extends ApiService {
 
   removeAmenity(reservationId, aminityId) {
     return this.delete(
-      `/api/v1/reservation/${reservationId}/special-amenity/${aminityId}`
+      `/api/v1/reservation/${reservationId}/packages/${aminityId}`
     );
   }
 
   addAmenity(reservationId, data) {
     return this.put(
-      `/api/v1/reservation/${reservationId}/special-amenity`,
+      `/api/v1/reservation/${reservationId}/packages`,
       data
     );
   }
 
   mapDataForAminity(amenityData, id) {
     let data = new Amenity();
-    data.id = id;
+    data.packageId = id;
+    data.quantity = amenityData.quantity;
+    data.rate = 1000;
     data.metaData = new Metadata();
     data.metaData = amenityData;
     return data;

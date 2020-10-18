@@ -90,14 +90,19 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   addAmenityToForm(){
     this.slides.forEach(slide => {
       this.paidAmenitiesForm.addControl(slide.packageCode, this.getAmenitiesFG());
-      this.getAminityForm(slide.packageCode).get('id').patchValue(slide.id);
-      this.getAminityForm(slide.packageCode).get('isSelected').patchValue(slide.isSelected);
+      this.getAminityForm(slide.packageCode).patchValue(slide);
     });
   }
 
   getAmenitiesFG(){
     return this._fb.group({
       id: [''],
+      rate:[''],
+      currencyCode:[''],
+      packageCode:[''],
+      imgUrl: [''],
+      label: [''],
+      quantity: [''],
       isSelected: [''],
     })
   }
@@ -124,6 +129,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     this.componentRef.instance.paidAmenitiesForm = this.paidAmenityForm.get(slideData.packageCode) as FormGroup;
     this.componentRef.instance.uniqueData = {code:slideData.packageCode, id:slideData.id};
     this.componentRef.instance.amenityData = this.getAminityData(slideData.packageCode);
+    this.componentRef.instance.quantity = slideData.quantity;
   }
 
   getAminityData(packageCode){

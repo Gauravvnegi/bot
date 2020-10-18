@@ -53,7 +53,7 @@ export class AirportPickupComponent implements OnInit {
           msg: 'Please enter valid Flight number',
         })]],
       pickupTime: [''],
-      personCount: ['', [Validators.required,
+      quantity: ['', [Validators.required,
         customPatternValid({
           pattern: Regex.NUMBER_REGEX,
           msg: 'Please enter valid Person count',

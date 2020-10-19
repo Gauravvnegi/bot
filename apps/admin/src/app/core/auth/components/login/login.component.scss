@@ -1,6 +1,5 @@
 @import 'main';
 
-
 .material-icons {
   margin-right: $margin15;
   color: darkgray;
@@ -11,7 +10,7 @@
     @include auth-heading();
   }
   &--quote {
-    @include auth-quote()
+    @include auth-quote();
   }
 }
 
@@ -90,8 +89,8 @@
     text-decoration: none;
     color: $auth-color;
     font-size: $font14;
-    font-weight: $bolder;
-    &:hover{
+    font-weight: $medium;
+    &:hover {
       cursor: pointer;
     }
   }
@@ -153,12 +152,11 @@
   font-size: $font14;
   font-weight: $medium;
   background-color: $auth-color;
-  box-shadow: 0px 0px 5px 0px $auth-color;
   width: 10vw;
   border-radius: 25px;
-  opacity: 0.85;
+  opacity: 1;
   &:hover {
     cursor: pointer;
-    opacity: 1;
+    box-shadow: 0px 0px 5px 0px $auth-color;
   }
 }

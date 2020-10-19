@@ -71,22 +71,23 @@
         border-radius: 5px;
         &:hover {
           cursor: pointer;
-          background-color: $primary-purple;
+          background-color: rgb(236, 234, 234 , 0.25);
           color: white;
           border: 2px solid $primary-purple;
-          .filter-icon {
-            filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
-              brightness(126%) contrast(101%);
-          }
-          .filter-button--text {
-            color: white;
-          }
+          // .filter-icon {
+          //   filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
+          //     brightness(126%) contrast(101%);
+          // }
+          // .filter-button--text {
+          //   color: white;
+          // }
         }
         &:focus {
           outline: none;
         }
         .filter-button--text {
           color: #00162b;
+          font-weight: 600;
           @media only screen and (max-width: 1200px) {
             font-size: $font10;
           }
@@ -123,9 +124,9 @@
       background-color: #f4f5f6;
       .router__wrapper {
         min-height: calc(100vh - 24vh);
-        padding: 0px 3rem;
+        padding: 0px 1rem;
         @media only screen and (max-width: 1300px) {
-          padding: 0px 1rem;
+          padding: 0px 10px;
         }
       }
       @media only screen and (max-width: 1070px) {

@@ -25,5 +25,8 @@
         border: 2px solid $primary-purple;
         box-shadow: none;
       }
+      &:hover{
+        border-color: $primary-purple;
+      }
     }
   }

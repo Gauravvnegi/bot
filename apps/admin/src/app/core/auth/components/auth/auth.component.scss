@@ -24,7 +24,7 @@
     &-footer {
       font-size: 14px;
       width: 97%;
-      font-weight: $bold;
+      font-weight: $medium;
       text-align: center;
       position: absolute;
       bottom: 15px;
@@ -39,6 +39,11 @@
       @media only screen and (max-width: 800px) {
         font-size: 13px;
         bottom: 25px;
+      }
+      &:hover{
+        a{
+          text-decoration: underline;
+        }
       }
     }
     &-svg-icons {

@@ -106,7 +106,7 @@ ul {
   align-items: center;
   color: rgba(255, 255, 255, 0.8);
   // margin: 0 15px;
-  border-radius: 3px;
+  // border-radius: 3px;
   border: none;
   -webkit-transition: all 400ms;
   -moz-transition: all 400ms;
@@ -127,6 +127,7 @@ ul {
 
 .nav li a span {
   margin-left: 20px;
+  font-weight: 500;
 }
 
 .active a,

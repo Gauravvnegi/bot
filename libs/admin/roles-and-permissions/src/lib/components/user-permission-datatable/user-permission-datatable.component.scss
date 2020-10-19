@@ -120,3 +120,7 @@
 .slider.round:before {
   border-radius: 50%;
 }
+
+:host ::ng-deep input[disabled='true'] {
+  opacity: 0.5;
+}

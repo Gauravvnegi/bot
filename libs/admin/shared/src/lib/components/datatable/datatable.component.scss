@@ -29,6 +29,8 @@
   padding: 0;
 }
 
+
+
 :host ::ng-deep .table-data-head {
   background-color: #eaf0f6 !important;
   color: black !important;
@@ -60,12 +62,14 @@
 
 :host ::ng-deep .table-search-head {
   background-color: #eaf0f6 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
   input {
     padding: 8px;
     border-radius: 5px;
     outline: none;
-    border: 1px solid lightgray;
-    background-color: white;
+    border: none;
+    background-color: #FCFCFC;
     width: 100%;
   }
 }
@@ -92,7 +96,7 @@
   justify-content: space-between;
   padding: 10px;
   .heading {
-    font-size: 20px;
+    font-size: 16px;
     margin: 0;
   }
   .selected {
@@ -135,16 +139,17 @@
     padding: 5px;
     border: 2px solid #d9d9d9;
     border-radius: 5px;
+    
     .divider {
       height: 20px;
-      border: 2px solid #d9d9d9;
+      border: 1px solid #d9d9d9;
       margin: 0px 15px;
     }
   }
   .go {
     outline: none;
     color: $primary-purple;
-    background: lightblue;
+    background: #7c21f333;
     border: none;
     font-size: 10px;
     padding: 5px;
@@ -168,11 +173,34 @@
   }
 }
 
+:host ::ng-deep .export{
+  .p-dropdown .p-inputtext {
+    padding: 5px;
+    align-items: baseline;
+    display: flex;
+    font-size: 14px;
+
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
+    }
+  }
+}
+
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-  background-color: #2187d5;
+  background-color: $primary-purple;
   color: white;
   height: 2rem;
   min-width: 2rem;
+}
+
+:host ::ng-deep .pi-chevron-down:before {
+  color: $primary-gray;
+}
+
+:host ::ng-deep .table--checkbox{
+  text-align: center !important;
 }
 
 :host ::ng-deep .caption__wrapper {
@@ -180,7 +208,7 @@
     display: flex;
     align-items: center;
     background-color: white;
-    padding: 10px 20px;
+    padding: 10px;
 
     .filter {
       padding: 4px 15px;
@@ -199,6 +227,8 @@
     .button__wrapper {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      width: 100%;
       .p-button {
         background-color: #f7f7f7;
         padding: 6px 15px;
@@ -213,8 +243,30 @@
           cursor: pointer;
         }
       }
+      img:hover {
+        cursor: pointer;
+      }
     }
   }
+}
+
+:host ::ng-deep .mat-chip-list-wrapper {
+  overflow: auto;
+  white-space: nowrap;
+  overflow-x: scroll;
+  width: 68vw;
+  display: block;
+  padding: 10px;
+  // &::-webkit-scrollbar {
+  //   width: 0px;
+  //   background: transparent;
+  // }
+}
+
+:host ::ng-deep .mat-chip {
+  display: inline-block;
+  color: white;
+  text-align: center;
 }
 
 :host ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
@@ -239,19 +291,6 @@
   // margin-right: 5px;
   &:hover {
     border-color: #2187d5;
-  }
-}
-
-:host ::ng-deep .p-dropdown .p-inputtext {
-  padding: 5px;
-  align-items: center;
-  display: flex;
-  font-size: 14px;
-
-  .material-icons {
-    font-size: 16px;
-    height: auto;
-    width: auto;
   }
 }
 
@@ -322,7 +361,6 @@ th {
   font-weight: 400;
 }
 
-
 // @media screen and (max-width: 50rem) {
 //   :host ::ng-deep {
 //       .p-datatable {
@@ -356,4 +394,3 @@ th {
 //       }
 //   }
 // }
-

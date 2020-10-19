@@ -37,18 +37,17 @@
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
                 <p-dropdown
+                  class="export"
                   [options]="documentActionTypes"
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <mat-icon class="material-icons" matSuffix
-                      >vertical_align_bottom</mat-icon
-                    >
+                    <img src="assets/svg/Export.svg" />
                     <span
                       style="
                         vertical-align: middle;
                         margin-left: 0.5em;
-                        font-weight: 700;
+                        font-weight: 500;
                       "
                       >{{ documentActionItem.label }}</span
                     >
@@ -56,24 +55,24 @@
                 </p-dropdown>
                 <div class="divider"></div>
                 <p-dropdown
+                  class="export"
                   [options]="documentTypes"
                   formControlName="documentType"
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
+                    <img src="assets/svg/CSV.svg" />
                     <span
                       style="
                         vertical-align: middle;
                         margin-left: 0.5em;
-                        font-weight: 700;
+                        font-weight: 500;
                       "
                       >{{ documentTypeItem.label }}</span
                     >
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix
-                    >arrow_right_alt</mat-icon
-                  >
+                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
                 </button>
               </div>
             </div>
@@ -139,7 +138,16 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 5%; background-color: #eaf0f6;" pResizableColumn>
+      <th
+        style="
+          width: 5%;
+          background-color: #eaf0f6;
+          border-top: 0 !important;
+          border-bottom: 0 !important;
+          text-align: center;
+        "
+        pResizableColumn
+      >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -216,7 +224,7 @@
     let-rowIndex="rowIndex"
   >
     <tr (click)="openUserDetails(rowData)">
-      <td>
+      <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
           [index]="rowIndex"

@@ -1,6 +1,6 @@
 
 
-
+@import 'main';
 
 .stat-val-container {
     height: 176px;
@@ -119,8 +119,9 @@ opacity: 1;
 .labl > div {
     width: 25px;
     height: 25px;
-    padding-top: 2px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .labl > input + div{ /* DIV STYLES */
   position: relative;
@@ -128,8 +129,10 @@ opacity: 1;
   border: 1px solid gainsboro;
   border-radius: 50%;
 }
-.labl > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
-  border: 2px solid #288ad6;
+.labl > input:checked + div{ 
+  border: 2px solid $primary-purple;
+  background-color: $primary-purple;
+  color: white;
 }
 
 // .labl > div > .circle {

@@ -37,33 +37,31 @@
               </div>
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
+                <p-dropdown class="export"
                   [options]="documentActionTypes"
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 700;">{{
+                    <span style="margin-left: 0.5em; font-weight: 500;">{{
                       documentActionItem.label
                     }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
-                <p-dropdown
+                <p-dropdown class="export"
                   [options]="documentTypes"
                   formControlName="documentType"
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 700;">{{
+                    <span style="margin-left: 0.5em; font-weight: 500;">{{
                       documentTypeItem.label
                     }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix
-                    >arrow_right_alt</mat-icon
-                  >
+                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
                 </button>
               </div>
             </div>
@@ -108,6 +106,7 @@
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
+            <img src="assets/svg/Filter-Icon.svg" />
           </div>
 
           <!-- <div
@@ -131,7 +130,16 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 5%; background-color: #eaf0f6;" pResizableColumn>
+      <th
+        style="
+          width: 5%;
+          background-color: #eaf0f6;
+          border-top: 0 !important;
+          border-bottom: 0 !important;
+          text-align: center;
+        "
+        pResizableColumn
+      >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -229,7 +237,7 @@
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
     <tr (click)="openDetailPage(rowData)">
-      <td>
+      <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
           [index]="rowIndex"
@@ -243,7 +251,10 @@
       </td>
       <td>
         <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
-        <div class="booking-feedback">
+        <div class="booking-feedback" [ngClass]="{
+          'status-opacity-reject': rowData.feedback.rating < 5,
+          'status-opacity-success': rowData.feedback.rating >= 5
+        }">
           <p
             class="number"
             [ngClass]="{

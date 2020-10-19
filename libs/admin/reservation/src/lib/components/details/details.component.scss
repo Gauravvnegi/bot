@@ -28,8 +28,9 @@
 }
 
 :host ::ng-deep .header {
-  background: transparent linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0%
-    0% no-repeat padding-box;
+  background: transparent
+    linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
+    padding-box;
   padding: $padding20;
   position: relative;
   .close {
@@ -71,11 +72,15 @@
         .email {
           display: flex;
           align-items: center;
+          text-decoration: none;
+          color: white;
+
           .material-icons {
             font-size: $font12;
             height: auto;
             width: auto;
             margin-right: 5px;
+            text-decoration: none;
           }
         }
         .email {
@@ -128,7 +133,7 @@
             margin: 0 2px;
           }
           .number {
-            padding: 1px;
+            padding: 2px;
             color: white;
             text-align: center;
             width: 15px;
@@ -444,8 +449,7 @@
   }
 }
 
-
-.loading{
+.loading {
   margin: 80px auto 0;
   text-align: center;
   font-size: 25px;

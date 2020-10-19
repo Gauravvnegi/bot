@@ -84,15 +84,24 @@
           </div>
         </div>
         <div class="contact-details" *ngIf="isGuestInfoPatched">
-          <div *ngIf="primaryGuest.phoneNumber" class="call">
+          <a
+            href="tel:{{ primaryGuest.countryCode }}{{
+              primaryGuest.phoneNumber
+            }}"
+            *ngIf="primaryGuest.phoneNumber"
+            class="call"
+          >
             <mat-icon class="material-icons" matSuffix>call</mat-icon>
             {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
-          </div>
-
-          <div *ngIf="primaryGuest.email" class="email">
+          </a>
+          <a
+            href="mailto:{{ primaryGuest.email }}"
+            *ngIf="primaryGuest.email"
+            class="email"
+          >
             <mat-icon class="material-icons" matSuffix>email</mat-icon>
             {{ primaryGuest.email }}
-          </div>
+          </a>
         </div>
       </div>
       <div class="header-seperator"></div>
@@ -102,22 +111,46 @@
         </div>
         <div class="feedback">
           <p class="label">Feedback :</p>
-          <div class="booking-feedback">
-            <p class="number status-background-success">
-              8
-            </p>
-            <img
-              class="feedback-icon status-image-success"
-              src="assets/svg/facilities.svg"
-            />
-            <img
-              class="feedback-icon status-image-success"
-              src="assets/svg/food.svg"
-            />
-            <div class="feedback-msg">
-              Good
+          <ng-container [ngSwitch]="'FAILED'">
+            <div
+              *ngSwitchCase="'COMPLETED'"
+              class="booking-feedback"
+            >
+              <p class="number status-background-success">
+                8
+              </p>
+              <img
+                class="feedback-icon status-image-success"
+                src="assets/svg/facilities.svg"
+              />
+              <img
+                class="feedback-icon status-image-success"
+                src="assets/svg/food.svg"
+              />
+              <div class="feedback-msg">
+                Good
+              </div>
             </div>
-          </div>
+            <div
+              *ngSwitchCase="'FAILED'"
+              class="booking-feedback"
+            >
+              <p class="number status-background-reject">
+                0
+              </p>
+              <img
+                class="feedback-icon status-image-reject"
+                src="assets/svg/facilities.svg"
+              />
+              <img
+                class="feedback-icon status-image-reject"
+                src="assets/svg/food.svg"
+              />
+              <div class="feedback-msg">
+                Bad
+              </div>
+            </div>
+          </ng-container>
         </div>
       </div>
       <!-- </div> -->

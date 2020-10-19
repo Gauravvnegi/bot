@@ -40,7 +40,7 @@
   position: absolute;
   width: 90%;
   left: 10px;
-  top: 90%;
+  top: 95%;
   display: none;
   background-color: white;
   z-index: 999;
@@ -52,16 +52,18 @@
     font-size: 14px;
     width: 100%;
     color: #002046;
+    font-weight: 600;
     &:hover {
-      background-color: #4B56C04d;
-      color: $primary-purple;
+      background-color: #E8EEF5E6;
+      // color: $primary-purple;
     }
   }
 }
 
 .dropdown-text {
   font-size: 14px;
-  margin: 0 10px;
+  margin: 0 15px;
+  font-weight: 600;
   @media only screen and (max-width: 1200px) {
     font-size: 12px;
   }

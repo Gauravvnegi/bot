@@ -15,7 +15,7 @@
     align-items: baseline;
     .icon {
       margin-right: 10px;
-      img{
+      img {
         @media screen and (max-width: 800px) {
           height: 20px;
         }
@@ -42,11 +42,13 @@
   justify-content: center;
   .stats {
     height: 254px;
-    width: 31%;
-    margin: 1%;
+    width: 32%;
+    margin: 0.5%;
     &:hover {
       cursor: pointer;
-      box-shadow: 0px 0px 22px 0px lightgray;
+      box-shadow: 0px 3px 20px #0368ff42;
+      border: 1px solid $primary-purple;
+      border-radius: 5px;
     }
     @media screen and (max-width: 800px) {
       height: 185px;

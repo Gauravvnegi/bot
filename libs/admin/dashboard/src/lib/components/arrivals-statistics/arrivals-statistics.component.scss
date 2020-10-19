@@ -1,3 +1,5 @@
+@import 'main';
+
 .stat-val-container {
   //   height: 120px;
   display: flex;
@@ -7,12 +9,13 @@
 }
 
 .stat-value {
-  height: 46px;
+  // height: 46px;
   text-align: center;
-  font: normal normal bold 35px/46px Roboto;
+  // font: normal normal bold 35px/46px Roboto;
   letter-spacing: 2.1px;
-  color: #218af3;
-  opacity: 1;
+  font-size: 35px;
+  color: $primary-purple;
+  // opacity: 1;
 }
 
 .stat-val-title {

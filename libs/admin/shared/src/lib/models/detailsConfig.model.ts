@@ -1,5 +1,6 @@
 import { get, set } from 'lodash';
 import { DateService } from '../../../../../shared/utils/src/lib/date.service';
+import * as moment from 'moment';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -153,12 +154,8 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'countryCode', get(contactDetails, ['cc'])),
-      set(
-        {},
-        'phoneNumber',
-        '151515' || get(contactDetails, ['contactNumber'])
-      ),
-      set({}, 'email', 'abc' || get(contactDetails, ['email'])),
+      set({}, 'phoneNumber', get(contactDetails, ['contactNumber'])),
+      set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
       set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
       set({}, 'status', get(input.statusMessage, ['status'])),
@@ -197,12 +194,16 @@ export class StayDetailsConfig implements Deserializable {
   roomNumber: string;
   expectedArrivalTime;
   special_comments: string;
+  arrivalTimeStamp;
+  departureTimeStamp;
 
   deserialize(input: any) {
     let service = new DateService();
     Object.assign(
       this,
       set({}, 'code', get(input, ['code'])),
+      set({}, 'arrivalTimeStamp', get(input, ['arrivalTime'])),
+      set({}, 'departureTimeStamp', get(input, ['departureTime'])),
       set(
         {},
         'arrivalDate',
@@ -219,14 +220,35 @@ export class StayDetailsConfig implements Deserializable {
           'DD/MM/YYYY'
         )
       ),
-      set({}, 'expectedArrivalTime', '---'),
+      set(
+        {},
+        'expectedArrivalTime',
+        get(input, ['expectedArrivalTime']) == 0
+          ? ''
+          : get(input, ['expectedArrivalTime'])
+      ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount'])),
-      set({}, 'roomNumber', get(input, ['roomNumber'])),
+      set(
+        {},
+        'roomNumber',
+        get(input, ['roomNumber']) == 0 ? '' : get(input, ['roomNumber'])
+      ),
       set({}, 'special_comments', get(input, ['comments']))
     );
     return this;
+  }
+
+  getDaysAndNights() {
+    const diffInDays = moment(this.departureTimeStamp).diff(
+      moment(this.arrivalTimeStamp),
+      'days'
+    );
+    return {
+      days: diffInDays + 1,
+      nights: diffInDays,
+    };
   }
 }
 

@@ -136,17 +136,81 @@ export class DetailsComponent implements OnInit, OnChanges {
   //   this.guestDetailComponent.updateHealthDeclarationStatus(status);
   // }
 
-  verifyAllDocuments(status) {
-    this.documentDetailComponent.updateDocumentVerificationStatus(status, true);
+  verifyAllDocuments() {
+    if (
+      this.detailsForm.get('documentStatus').get('status').value == 'COMPLETED'
+    ) {
+      this._snackBarService.openSnackBarAsText(
+        'Documents are already verified.',
+        '',
+        { panelClass: 'success' }
+      );
+      return;
+    }
+
+    this.documentDetailComponent.updateDocumentVerificationStatus(
+      'ACCEPT',
+      true
+    );
   }
 
   generateCheckinLink() {}
 
-  acceptPayment() {}
+  acceptPayment(status = 'Accept') {
+    let data = {
+      stepName: 'PAYMENT',
+      state: status,
+      remarks: '',
+    };
 
-  downloadInvoice() {}
+    this._reservationService
+      .updateStepStatus(this.reservationDetailsFG.get('bookingId').value, data)
+      .subscribe(
+        (res) => {
+          this._snackBarService.openSnackBarAsText('Payment accepted', '', {
+            panelClass: 'success',
+          });
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
 
-  confirmAndNotifyCheckin() {}
+  downloadInvoice() {
+    this._reservationService
+      .downloadInvoice(this.reservationDetailsFG.get('bookingId').value)
+      .subscribe(
+        (data) => {},
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
+
+  confirmAndNotifyCheckin() {
+    let data = {
+      journey: 'CHECKIN',
+      state: status,
+      remarks: '',
+    };
+
+    this._reservationService
+      .updateJourneyStatus(
+        this.reservationDetailsFG.get('bookingId').value,
+        data
+      )
+      .subscribe(
+        (res) => {
+          this._snackBarService.openSnackBarAsText('Checkin completed', '', {
+            panelClass: 'success',
+          });
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
 
   getPrimaryGuestDetails() {
     this.details.guestDetails.forEach((guest) => {
@@ -185,3 +249,27 @@ export class DetailsComponent implements OnInit, OnChanges {
     return this.detailsForm.get('documentStatus') as FormGroup;
   }
 }
+
+// CLIENT
+// Activate & Generate Checkin Link
+
+// HEALTH - documentStatus (Checkin )
+// checkin -- if within a window -- time -- before -- popup for early checkin - params(remarks -- admin user-id), 2 api calls for early checkin
+// checkin -- if within a window -- time -- after -- popup for late checkin -- api call with admin user id
+
+// checkout
+// Prepare invoice - when i have to do checkout , (and chnage it to send-invoice)
+
+// Activate & Generate Checkout Link
+// dependency -- checkin complete & (start end end in betweeen) and prepare invoice done
+// if (checkout -- pending)
+// checkout -- if within a window -- time -- before -- popup for early checkout - params(remarks -- admin user-id), 2 api calls for early checkout
+// checkout -- if within a window -- time -- after -- popup for late checkout -- api call with admin user id
+
+// Manual (Precheckin- Inactive)
+// Add deposit rule
+// send Ativate and Generate pre- checkinn link -- enable when precheckin window or when add deposit rule is done
+
+// states-
+// Precheckin
+// Activate and Generate

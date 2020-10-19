@@ -36,14 +36,17 @@
           </div>
           <div class="feild width-added">
             <mat-label class="label">Phone No.</mat-label>
-            <div class="value">
+            <div
+              *ngIf="guestFormGroup.phoneNumber; else emptyCell"
+              class="value"
+            >
               {{ guestFormGroup.countryCode }}
               {{ guestFormGroup.phoneNumber }}
             </div>
           </div>
           <div class="feild width-added">
             <mat-label class="label">Email</mat-label>
-            <div class="value">
+            <div *ngIf="guestFormGroup.email; else emptyCell" class="value">
               {{ guestFormGroup.email }}
             </div>
           </div>
@@ -68,7 +71,13 @@
         </div>
         <div class="feild width-quarter">
           <mat-label class="label">Expected Arrival Time</mat-label>
-          <div class="value">
+          <div
+            *ngIf="
+              stayDetailsForm.get('expectedArrivalTime').value;
+              else emptyCell
+            "
+            class="value"
+          >
             {{ stayDetailsForm.get('expectedArrivalTime').value }}
           </div>
         </div>
@@ -77,7 +86,8 @@
         <div class="feild width-quarter">
           <mat-label class="label">Duration</mat-label>
           <div class="value">
-            1M | 2D
+            {{ detailsData.stayDetails.getDaysAndNights().nights }}N |
+            {{ detailsData.stayDetails.getDaysAndNights().days }}D
           </div>
         </div>
         <div class="feild width-quarter">
@@ -158,6 +168,10 @@
     </ng-container>
   </div>
 </div>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">--</div>
+</ng-template>
 
 <!-- !(
   ['COMPLETED'].includes(healthCardDetailsForm.get('status').value) &&

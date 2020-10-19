@@ -238,6 +238,7 @@
           </ng-container>
         </ng-container>
 
+
         <ng-template #PRECHECKIN>
           <ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
@@ -249,6 +250,7 @@
               <button (click)="generateCheckinLink()" class="button">
                 Generate CheckIn Link
               </button>
+              <!-- payment / download -invoice folio -->
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
               <button (click)="generateCheckinLink()" class="button">
@@ -263,12 +265,14 @@
           </ng-container>
         </ng-template>
 
+
         <ng-template #CHECKIN>
           <ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
               <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+                Activate Generate CheckIn Link
               </button>
+                  <!-- accept payment / download invoice folio / generate checkinlink -->
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
               <button (click)="generateCheckinLink()" class="button">
@@ -287,7 +291,7 @@
                 [data]="details"
                 [handler]="{
                   fn_name: 'verifyAllDocuments',
-                  args: ['ACCEPT']
+                  args:[]
                 }"
               >
                 Confirm All Docs
@@ -295,7 +299,7 @@
 
               <!-- Payment buttons -->
               <!-- Until my all docs and health is verified-- dont show payment buttons -->
-              <button
+              <!-- <button
                 class="button"
                 button-dependency
                 [id]="'acceptPayment'"
@@ -304,11 +308,11 @@
                 [data]="details"
                 [handler]="{
                   fn_name: 'acceptPayment',
-                  args: ['ACCEPT']
+                  args: []
                 }"
               >
                 Accept Payment
-              </button>
+              </button> -->
               <button
                 button-dependency
                 [id]="'downloadInvoice'"
@@ -317,7 +321,7 @@
                 [data]="details"
                 [handler]="{
                   fn_name: 'downloadInvoice',
-                  args: ['ACCEPT']
+                  args: []
                 }"
                 class="button"
               >
@@ -332,7 +336,7 @@
                 [data]="details"
                 [handler]="{
                   fn_name: 'confirmAndNotifyCheckin',
-                  args: ['ACCEPT']
+                  args: []
                 }"
                 class="button"
               >
@@ -349,6 +353,8 @@
               <button (click)="generateCheckinLink()" class="button">
                 Generate CheckIn Link
               </button>
+
+              <!-- accept payment / download invoice folio / generate checkinlink -->
             </ng-container>
           </ng-container>
         </ng-template>
@@ -356,23 +362,29 @@
         <ng-template #CHECKOUT
           ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
-              <!-- forced checouout PENDING -->
-              <button class="button">Prepare Invoice</button>
+              <!-- <button class="button">Activate & Generate Checkout Link</button> -- api - to get checkout link -->
+              <!-- <button class="button">Prepare Invoice</button>
+              else
+              <button class="button">Send Invoice</button> -->   
+              <!-- all journey -->
+
+              <button class="button">Download Invoice/Folio</button>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
               <!-- iniated only from bot   -->
-              <button class="button">Prepare Invoice</button>
               <button class="button">Generate Checkout Link</button>
-              <button class="button">Confirm Payment</button>
+              <button class="button">Prepare Invoice</button>
               <button class="button">Download Invoice/Folio</button>
-              <button class="button">Checkout</button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <button class="button">Download Invoice/Folio</button>
+                <button class="button">Generate Checkout Link</button>
+                <button class="button">Prepare Invoice</button>
+                <button class="button">Download Invoice/Folio</button>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <!-- Flow to-be-decided -->
               <button class="button">Generate Checkout Link</button>
+              <button class="button">Prepare Invoice</button>
               <button class="button">Download Invoice/Folio</button>
             </ng-container>
           </ng-container>

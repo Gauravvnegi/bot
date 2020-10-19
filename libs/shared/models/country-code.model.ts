@@ -7,6 +7,8 @@ export class CountryCode {
   getByLabelAndValue() {
     return countryLists;
   }
+
+  // country code + phone no.  eg -- +93(AF)
 }
 
 export const countryLists: Array<Country> = [

@@ -58,6 +58,21 @@
     brightness(99%) contrast(100%);
 }
 
+// dialouge - box
+
+.mat-dialog-container{
+  padding: 0 !important;
+}
+
+// to-do change classes for multiple pop-up
+
+.cdk-overlay-pane{
+  height: 85vh;
+  @media screen and (max-width: 1100px) {
+    height: 53vh;
+  }
+}
+
 // text-color
 
 .status-text-pending {

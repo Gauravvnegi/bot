@@ -52,9 +52,9 @@
     font-size: 14px;
     width: 100%;
     color: #002046;
-    font-weight: 600;
+    font-weight: 500;
     &:hover {
-      background-color: #E8EEF5E6;
+      background-color: rgba(232, 238, 245, 0.25);;
       // color: $primary-purple;
     }
   }
@@ -63,7 +63,7 @@
 .dropdown-text {
   font-size: 14px;
   margin: 0 15px;
-  font-weight: 600;
+  font-weight: 500;
   @media only screen and (max-width: 1200px) {
     font-size: 12px;
   }

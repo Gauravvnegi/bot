@@ -149,7 +149,7 @@
   .go {
     outline: none;
     color: $primary-purple;
-    background: #7c21f333;
+    background: #4B56C033;
     border: none;
     font-size: 10px;
     padding: 5px;
@@ -258,7 +258,24 @@
   display: block;
   padding: 10px;
   &::-webkit-scrollbar {
-    display: none;
+    height: 6px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+   
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &:hover{
+    &::-webkit-scrollbar-thumb {
+      background: darkgray;
+      border-radius: 10px;
+    }
   }
 }
 
@@ -300,7 +317,7 @@
 :host ::ng-deep .data-table-row{
   &:hover{
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.04)
+    background: rgba(232, 238, 245, 0.25);
   }
 }
 

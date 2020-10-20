@@ -270,22 +270,18 @@
           >
             {{ rowData.feedback.rating }}
           </p>
-          <!-- <img
-            class="feedback-icon"
-            [ngClass]="{
-              'status-image-reject': rowData.feedback.rating < 5,
-              'status-image-success': rowData.feedback.rating >= 5
-            }"
-            src="assets/svg/facilities.svg"
-          />
-          <img
-            class="feedback-icon"
-            [ngClass]="{
-              'status-image-reject': rowData.feedback.rating < 5,
-              'status-image-success': rowData.feedback.rating >= 5
-            }"
-            src="assets/svg/food.svg"
-          /> -->
+          <span
+            *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
+          >
+            <img
+              class="feedback-icon"
+              [ngClass]="{
+                'status-image-reject': rowData.feedback.rating < 5,
+                'status-image-success': rowData.feedback.rating >= 5
+              }"
+              [src]="feedbackService.getServiceUrl(suggestion.id)"
+            />
+          </span>
           <div
             *ngIf="rowData.feedback.comments"
             [ngClass]="{

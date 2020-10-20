@@ -68,12 +68,28 @@ export class Details implements Deserializable {
 export class FeedbackDetails implements Deserializable {
   rating;
   comments: string;
+  suggestions;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'rating', get(input, ['rating'])),
       set({}, 'comments', get(input, ['comments']))
     );
+    this.suggestions =
+      input.services &&
+      input.services.map((service) => {
+        return new FeedbackSuggestion().deserialize(service);
+      });
+    return this;
+  }
+}
+
+export class FeedbackSuggestion implements Deserializable {
+  id;
+  label;
+  url;
+  deserialize(input) {
+    this.id = input.serviceId;
     return this;
   }
 }

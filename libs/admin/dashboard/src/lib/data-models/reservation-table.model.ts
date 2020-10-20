@@ -66,6 +66,7 @@ export class Feedback implements Deserializable {
   rating;
   comments: string;
   status: string;
+  suggestions;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -73,6 +74,22 @@ export class Feedback implements Deserializable {
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'status', get(input, ['statusMessage', 'status']))
     );
+
+    this.suggestions =
+      input.services &&
+      input.services.map((service) => {
+        return new FeedbackSuggestion().deserialize(service);
+      });
+    return this;
+  }
+}
+
+export class FeedbackSuggestion implements Deserializable {
+  id;
+  label;
+  url;
+  deserialize(input) {
+    this.id = input.serviceId;
     return this;
   }
 }

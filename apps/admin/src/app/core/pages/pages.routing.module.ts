@@ -3,6 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '../../../../../../libs/admin/dashboard/src/lib/components/dashboard/dashboard.component';
 import { UserDetailResolver } from './resolvers/user-detail.resolver';
+import { FeedbackConfigResolver } from './resolvers/feedback-config.resolver';
 
 const appRoutes: Route[] = [
   {
@@ -10,6 +11,7 @@ const appRoutes: Route[] = [
     component: PagesComponent,
     resolve: {
       userDetails: UserDetailResolver,
+      feedbackConfig: FeedbackConfigResolver,
     },
     children: [
       {

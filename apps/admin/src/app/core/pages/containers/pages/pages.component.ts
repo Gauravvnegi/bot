@@ -3,6 +3,7 @@ import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detai
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 
 import { ActivatedRoute } from '@angular/router';
+import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 
 @Component({
   selector: 'admin-pages',
@@ -13,6 +14,7 @@ export class PagesComponent implements OnInit {
   constructor(
     private _userDetailService: UserDetailService,
     private _hotelDetailService: HotelDetailService,
+    private _feedbackService: FeedbackService,
     private _route: ActivatedRoute
   ) {}
 
@@ -21,5 +23,8 @@ export class PagesComponent implements OnInit {
     // this._userDetailService.userDetails = userDetails;
     this._userDetailService.initUserDetails(userDetails);
     this._hotelDetailService.initHotelDetails(userDetails);
+    this._feedbackService.initFeedbackConfig(
+      this._route.snapshot.data['feedbackConfig']
+    );
   }
 }

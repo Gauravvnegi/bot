@@ -22,7 +22,7 @@
 }
 
 @mixin auth-heading() {
-  font-weight: $bolder;
+  font-weight: $medium;
   font-size: 35px;
   color: $auth-color;
   margin-bottom: 15px;
@@ -32,7 +32,7 @@
 }
 
 @mixin auth-quote() {
-  font-weight: $medium;
+  font-weight: 400;
   font-size: $font16;
   color: $auth-quote-color;
   letter-spacing: 0.54px;

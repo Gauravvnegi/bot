@@ -150,13 +150,13 @@
 .card-footer button {
   color: white;
   font-size: $font14;
-  font-weight: $medium;
+  font-weight: 400;
   background-color: $auth-color;
   width: 10vw;
   border-radius: 25px;
   opacity: 1;
   &:hover {
     cursor: pointer;
-    box-shadow: 0px 0px 5px 0px $auth-color;
+    box-shadow: 0px 4px 4px #4B56C04D;
   }
 }

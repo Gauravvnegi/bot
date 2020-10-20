@@ -127,7 +127,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data found</p>
+    <p class="no-data-found">No data available in table</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -294,7 +294,9 @@
       </td>
       <td class="guest">
         {{ rowData.guests.primaryGuest.getFullName() }}
-        <b style="color: #4B56C0;">{{ rowData.guests.getSecGuestDisplayConfig().countString }}</b>
+        <b style="color: #4b56c0;">{{
+          rowData.guests.getSecGuestDisplayConfig().countString
+        }}</b>
         <div
           *ngIf="rowData.guests.secondaryGuest.length > 0"
           [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
@@ -345,8 +347,7 @@
             rowData.packages.getPaidPackagesLabels().length;
             else emptyCell
           "
-        >
-          {{ rowData.packages.getPaidPackagesLabels() }}
+          >{{ rowData.packages.getPaidPackagesLabels() }}
         </span>
       </td>
 

@@ -21,10 +21,6 @@ export class ButtonDependencyDirective {
       dependencies: [],
       msgs: [],
     },
-    acceptPayment: {
-      dependencies: [],
-      msgs: [],
-    },
     downloadInvoice: {
       dependencies: [],
       msgs: [],
@@ -78,49 +74,26 @@ export class ButtonDependencyDirective {
   constructor(private _snackBarService: SnackBarService) {}
 
   ngOnChanges() {
-    this.setDependecyDS();
+    this.setDependencyDS();
   }
 
-  setDependecyDS() {
+  setDependencyDS() {
     this.parentForm.valueChanges.subscribe((data) => {
-      this.dependencyDS = {
-        generateCheckinLink: {
-          dependencies: [],
-          msgs: [],
-        },
-        confirmAllDocs: {
-          dependencies: [
-            this.parentForm.get('healthCardDetails').get('status').value ==
-              'COMPLETED',
-          ],
-          msgs: ['Please verify health card first'],
-        },
-        acceptPayment: {
+      let dependencystatus = {
+        confirmAndNotifyCheckin: {
           dependencies: [
             this.parentForm.get('healthCardDetails').get('status').value ==
               'COMPLETED',
             this.parentForm.get('documentStatus').get('status').value ==
               'COMPLETED',
           ],
-          msgs: [
-            'Please verify health card first',
-            'Please verify guests documents',
-          ],
-        },
-        downloadInvoice: {
-          dependencies: [...this.dependencyDS['acceptPayment'].dependencies],
-          msgs: [
-            ...this.dependencyDS['acceptPayment'].msgs,
-            'Please accept payment first to download invoice',
-          ],
-        },
-        confirmAndNotifyCheckin: {
-          dependencies: [...this.dependencyDS['acceptPayment'].dependencies],
-          msgs: [...this.dependencyDS['acceptPayment'].msgs],
+          msgs: ['Please verify health card', 'Please verify document details'],
         },
         // downloadInvoiceFolio:['after my accpet payment'],
         // confirmAndNtifyCheckin:[accpetpayment]
       };
+
+      this.dependencyDS = { ...this.dependencyDS, ...dependencystatus };
     });
   }
 }

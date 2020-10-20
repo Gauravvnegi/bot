@@ -322,37 +322,10 @@
               <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
                 Confirm All Health Declaration
               </button> -->
-              <button
-                class="button"
-                button-dependency
-                [id]="'confirmAllDocs'"
-                [context]="self"
-                [parentForm]="detailsForm"
-                [data]="details"
-                [handler]="{
-                  fn_name: 'verifyAllDocuments',
-                  args: []
-                }"
-              >
+              <button class="button" (click)="verifyAllDocuments()">
                 Confirm All Docs
               </button>
 
-              <!-- Payment buttons -->
-              <!-- Until my all docs and health is verified-- dont show payment buttons -->
-              <!-- <button
-                class="button"
-                button-dependency
-                [id]="'acceptPayment'"
-                [context]="self"
-                [parentForm]="detailsForm"
-                [data]="details"
-                [handler]="{
-                  fn_name: 'acceptPayment',
-                  args: []
-                }"
-              >
-                Accept Payment
-              </button> -->
               <button
                 button-dependency
                 [id]="'downloadInvoice'"
@@ -382,10 +355,7 @@
               >
                 Confirm And Notify Checkin
               </button>
-              <!-- Last button to show -->
             </ng-container>
-            <!-- <button class="button">Confirm Payment</button>
-            <button class="button">Download Invoice/Folio</button> -->
             <ng-container *ngSwitchCase="'COMPLETED'">
               <!-- initiate force checkout -->
             </ng-container>
@@ -397,7 +367,20 @@
                 Activate & Generate CheckIn Link
               </button>
 
-              <!-- accept payment / download invoice folio / generate checkinlink -->
+              <button
+                button-dependency
+                [id]="'downloadInvoice'"
+                [context]="self"
+                [parentForm]="detailsForm"
+                [data]="details"
+                [handler]="{
+                  fn_name: 'downloadInvoice',
+                  args: []
+                }"
+                class="button"
+              >
+                Download Invoice/Folio
+              </button>
             </ng-container>
           </ng-container>
         </ng-template>
@@ -405,7 +388,12 @@
         <ng-template #CHECKOUT
           ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
-              <!-- <button class="button">Activate & Generate Checkout Link</button> -- api - to get checkout link -->
+              <button
+                (click)="activateAndgenerateJourney('CHECKOUT')"
+                class="button"
+              >
+                Activate & Generate Checkout Link
+              </button>
               <!-- <button class="button">Prepare Invoice</button>
               else
               <button class="button">Send Invoice</button> -->
@@ -415,18 +403,33 @@
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
               <!-- iniated only from bot   -->
-              <button class="button">Generate Checkout Link</button>
+              <button
+                (click)="activateAndgenerateJourney('CHECKOUT')"
+                class="button"
+              >
+                Activate & Generate Checkout Link
+              </button>
               <button class="button">Prepare Invoice</button>
               <button class="button">Download Invoice/Folio</button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <button class="button">Generate Checkout Link</button>
+              <button
+                (click)="activateAndgenerateJourney('CHECKOUT')"
+                class="button"
+              >
+                Activate & Generate Checkout Link
+              </button>
               <button class="button">Prepare Invoice</button>
               <button class="button">Download Invoice/Folio</button>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <!-- Flow to-be-decided -->
-              <button class="button">Generate Checkout Link</button>
+              <button
+                (click)="activateAndgenerateJourney('CHECKOUT')"
+                class="button"
+              >
+                Activate & Generate Checkout Link
+              </button>
               <button class="button">Prepare Invoice</button>
               <button class="button">Download Invoice/Folio</button>
             </ng-container>

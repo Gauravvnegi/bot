@@ -133,7 +133,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data found</p>
+    <p class="no-data-found">No data available in table</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -223,7 +223,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row">
+    <tr class="data-table-row" (click)="openUserDetails(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -253,7 +253,7 @@
         <p>Admin</p>
       </td>
       <td class="">
-        <label class="switch">
+        <label (click)="onCheckboxClicked($event)" class="switch">
           <input type="checkbox" [checked]="rowData.status" />
           <span class="slider round"></span>
         </label>

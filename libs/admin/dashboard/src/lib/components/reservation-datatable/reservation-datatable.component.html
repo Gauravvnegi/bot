@@ -238,7 +238,7 @@
     let-rowIndex="rowIndex"
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-    <tr (click)="openDetailPage(rowData)">
+    <tr class="data-table-row" (click)="openDetailPage(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -294,7 +294,7 @@
       </td>
       <td class="guest">
         {{ rowData.guests.primaryGuest.getFullName() }}
-        {{ rowData.guests.getSecGuestDisplayConfig().countString }}
+        <b style="color: #4B56C0;">{{ rowData.guests.getSecGuestDisplayConfig().countString }}</b>
         <div
           *ngIf="rowData.guests.secondaryGuest.length > 0"
           [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"

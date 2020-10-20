@@ -257,10 +257,9 @@
   width: 68vw;
   display: block;
   padding: 10px;
-  // &::-webkit-scrollbar {
-  //   width: 0px;
-  //   background: transparent;
-  // }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 :host ::ng-deep .mat-chip {
@@ -291,6 +290,29 @@
   // margin-right: 5px;
   &:hover {
     border-color: #2187d5;
+  }
+  &:focus{
+    outline: none;
+    border: none;
+  }
+}
+
+:host ::ng-deep .data-table-row{
+  &:hover{
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.04)
+  }
+}
+
+:host ::ng-deep  p-dropdown.ng-invalid.ng-touched.ui-inputwrapper-focus:not(form) > div {
+  outline: none;
+    border: none;
+}
+
+:host ::ng-deep p-dropdown{
+  &:focus{
+    -webkit-appearance: none;  
+  -moz-appearance: none; 
   }
 }
 

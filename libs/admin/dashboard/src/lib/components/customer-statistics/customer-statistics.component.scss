@@ -116,9 +116,11 @@
 
 .labl > div {
   // width: 25px;
-  height: 25px;
+  // height: 25px;
   padding: 3px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .labl > input + div {
   /* DIV STYLES */
@@ -130,7 +132,9 @@
 }
 .labl > input:checked + div {
   /* (RADIO CHECKED) DIV STYLES */
-  border: 2px solid #288ad6;
+  border: 2px solid $primary-purple;
+  background-color: $primary-purple;
+  color: white;
 }
 
 // .labl > div > .circle {

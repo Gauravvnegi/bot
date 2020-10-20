@@ -39,4 +39,10 @@ export class ReservationService extends ApiService {
       formData
     );
   }
+
+  generateJourneyLink(reservationId, journeyName): Observable<any> {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/generate-link?journey=${journeyName}`
+    );
+  }
 }

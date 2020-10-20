@@ -1,7 +1,10 @@
 <pre>
   {{ detailsForm.getRawValue() | json }}
 </pre>
-<div class="details-wrapper">
+<div
+  *ngIf="isReservationDetailFetched; else detailsLoader"
+  class="details-wrapper"
+>
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -109,48 +112,48 @@
         <div class="booking-id">
           {{ reservationDetailsFG.get('bookingNumber').value }}
         </div>
-        <div class="feedback">
+        <div
+          *ngIf="['COMPLETED'].includes(details.feedbackDetails.status)"
+          class="feedback"
+        >
           <p class="label">Feedback :</p>
-          <ng-container [ngSwitch]="'FAILED'">
-            <div
-              *ngSwitchCase="'COMPLETED'"
-              class="booking-feedback"
+          <div class="booking-feedback">
+            <p
+              class="number"
+              [ngClass]="{
+                'status-background-reject': details.feedbackDetails.rating < 5,
+                'status-background-success': details.feedbackDetails.rating >= 5
+              }"
             >
-              <p class="number status-background-success">
-                {{ details.feedbackDetails.rating }}
-              </p>
-              <img
-                class="feedback-icon status-image-success"
-                src="assets/svg/facilities.svg"
-              />
-              <img
-                class="feedback-icon status-image-success"
-                src="assets/svg/food.svg"
-              />
-              <div class="feedback-msg">
-                Good
-              </div>
-            </div>
-            <div
-              *ngSwitchCase="'FAILED'"
-              class="booking-feedback"
+              {{ details.feedbackDetails.rating }}
+            </p>
+            <span
+              *ngFor="
+                let suggestion of details.feedbackDetails.suggestions.slice(
+                  0,
+                  2
+                )
+              "
             >
-              <p class="number status-background-reject">
-                0
-              </p>
               <img
-                class="feedback-icon status-image-reject"
-                src="assets/svg/facilities.svg"
+                class="feedback-icon"
+                [ngClass]="{
+                  'status-image-reject': details.feedbackDetails.rating < 5,
+                  'status-image-success': details.feedbackDetails.rating >= 5
+                }"
+                [src]="feedbackService.getServiceUrl(suggestion.id)"
               />
-              <img
-                class="feedback-icon status-image-reject"
-                src="assets/svg/food.svg"
-              />
-              <div class="feedback-msg">
-                Bad
-              </div>
+            </span>
+
+            <div
+              *ngIf="details.feedbackDetails.comments"
+              [ngClass]="{
+                'feedback-msg': details.feedbackDetails.comments.length > 0
+              }"
+            >
+              {{ details.feedbackDetails.comments }}
             </div>
-          </ng-container>
+          </div>
         </div>
       </div>
       <!-- </div> -->
@@ -218,9 +221,6 @@
           (addFGEvent)="addFGEvent($event)"
           (isGuestInfoPatched)="guestInfoPatched($event)"
         ></hospitality-bot-admin-guest-details>
-        <ng-container *ngIf="!isReservationDetailFetched">
-          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
-        </ng-container>
       </mat-tab>
       <mat-tab label="Documents">
         <hospitality-bot-admin-documents-details
@@ -230,9 +230,6 @@
           [data]="details"
           (addFGEvent)="addFGEvent($event)"
         ></hospitality-bot-admin-documents-details>
-        <ng-container *ngIf="!isReservationDetailFetched">
-          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
-        </ng-container>
       </mat-tab>
       <mat-tab label="Package">
         <hospitality-bot-admin-package-details
@@ -240,9 +237,6 @@
           [parentForm]="detailsForm"
           [data]="details"
         ></hospitality-bot-admin-package-details>
-        <ng-container *ngIf="!isReservationDetailFetched">
-          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
-        </ng-container>
       </mat-tab>
 
       <mat-tab label="Payment">
@@ -251,9 +245,6 @@
           [parentForm]="detailsForm"
           [data]="details"
         ></hospitality-bot-admin-payment-details>
-        <ng-container *ngIf="!isReservationDetailFetched">
-          <ng-container *ngTemplateOutlet="detailsLoader"></ng-container>
-        </ng-container>
       </mat-tab>
     </mat-tab-group>
 
@@ -271,45 +262,61 @@
           </ng-container>
         </ng-container>
 
-
         <ng-template #PRECHECKIN>
           <ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
-              <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('PRECHECKIN')"
+                class="button"
+              >
+                Activate & Generate PreCheckIn Link
               </button>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('PRECHECKIN')"
+                class="button"
+              >
+                Activate & Generate PreCheckIn Link
               </button>
               <!-- payment / download -invoice folio -->
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('PRECHECKIN')"
+                class="button"
+              >
+                Activate & Generate PreCheckIn Link
               </button>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('PRECHECKIN')"
+                class="button"
+              >
+                Activate & Generate PreCheckIn Link
               </button>
             </ng-container>
           </ng-container>
         </ng-template>
 
-
         <ng-template #CHECKIN>
           <ng-container [ngSwitch]="details.currentJourneyDetails.status">
             <ng-container *ngSwitchCase="'PENDING'">
-              <button (click)="generateCheckinLink()" class="button">
-                Activate Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('CHECKIN')"
+                class="button"
+              >
+                Activate & Generate CheckIn Link
               </button>
-                  <!-- accept payment / download invoice folio / generate checkinlink -->
+              <!-- accept payment / download invoice folio / generate checkinlink -->
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('CHECKIN')"
+                class="button"
+              >
+                Activate & Generate CheckIn Link
               </button>
 
               <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
@@ -324,7 +331,7 @@
                 [data]="details"
                 [handler]="{
                   fn_name: 'verifyAllDocuments',
-                  args:[]
+                  args: []
                 }"
               >
                 Confirm All Docs
@@ -383,8 +390,11 @@
               <!-- initiate force checkout -->
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <button (click)="generateCheckinLink()" class="button">
-                Generate CheckIn Link
+              <button
+                (click)="activateAndgenerateJourney('CHECKIN')"
+                class="button"
+              >
+                Activate & Generate CheckIn Link
               </button>
 
               <!-- accept payment / download invoice folio / generate checkinlink -->
@@ -398,7 +408,7 @@
               <!-- <button class="button">Activate & Generate Checkout Link</button> -- api - to get checkout link -->
               <!-- <button class="button">Prepare Invoice</button>
               else
-              <button class="button">Send Invoice</button> -->   
+              <button class="button">Send Invoice</button> -->
               <!-- all journey -->
 
               <button class="button">Download Invoice/Folio</button>
@@ -410,9 +420,9 @@
               <button class="button">Download Invoice/Folio</button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-                <button class="button">Generate Checkout Link</button>
-                <button class="button">Prepare Invoice</button>
-                <button class="button">Download Invoice/Folio</button>
+              <button class="button">Generate Checkout Link</button>
+              <button class="button">Prepare Invoice</button>
+              <button class="button">Download Invoice/Folio</button>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <!-- Flow to-be-decided -->

@@ -29,7 +29,7 @@ import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
-
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 @NgModule({
   imports: [
@@ -60,6 +60,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatChipsModule,
     MatSlideToggleModule,
     MatTabsModule,
+    ClipboardModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -89,6 +90,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatChipsModule,
     MatSlideToggleModule,
     MatTabsModule,
+    ClipboardModule,
   ],
   providers: [SnackBarService, ModalService],
 })

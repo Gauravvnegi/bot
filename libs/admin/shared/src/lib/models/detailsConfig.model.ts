@@ -68,12 +68,14 @@ export class Details implements Deserializable {
 export class FeedbackDetails implements Deserializable {
   rating;
   comments: string;
+  status: string;
   suggestions;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'rating', get(input, ['rating'])),
-      set({}, 'comments', get(input, ['comments']))
+      set({}, 'comments', get(input, ['comments'])),
+      set({}, 'status', get(input, ['statusMessage', 'status']))
     );
     this.suggestions =
       input.services &&
@@ -382,7 +384,8 @@ export class PaymentDetailsConfig implements Deserializable {
       set({}, 'totalAmount', get(input, ['totalAmount'])),
       set({}, 'totalDiscount', get(input, ['totalDiscount']))
     );
-    this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
+    //to-do
+    //  this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
     return this;
   }
 }

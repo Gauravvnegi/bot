@@ -15,6 +15,8 @@ import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-d
 import { AdminDetailsService } from '../../services/admin-details.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { SnackBarService } from 'libs/shared/material/src';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -44,7 +46,9 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _reservationService: ReservationService,
     private _adminDetailsService: AdminDetailsService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _snackBarService: SnackBarService
+    private _snackBarService: SnackBarService,
+    private _clipboard: Clipboard,
+    public feedbackService: FeedbackService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -152,6 +156,34 @@ export class DetailsComponent implements OnInit, OnChanges {
       'ACCEPT',
       true
     );
+  }
+
+  activateAndgenerateJourney(journeyName) {
+    if (!journeyName) {
+      console.error('Please provide journey');
+      return;
+    }
+
+    this._reservationService
+      .generateJourneyLink(
+        this.reservationDetailsFG.get('bookingId').value,
+        journeyName
+      )
+      .subscribe(
+        (res) => {
+          this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+          this._snackBarService.openSnackBarAsText(
+            'Link copied successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   generateCheckinLink() {}

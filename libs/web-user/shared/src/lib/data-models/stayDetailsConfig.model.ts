@@ -1,5 +1,7 @@
 import { get, set } from 'lodash';
 import { FieldSchema } from './fieldSchema.model';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import * as moment from 'moment';
 
 export interface Deserializable {
   deserialize(input: any): this;
@@ -24,6 +26,8 @@ export class StayDetail implements Deserializable {
   adultsCount: number;
   expectedTime:string;
   deserialize(input: any) {
+    //input.expectedArrivalTime = 1604201400;
+    let expectedTime = new DateService().convertTimestampToDate(get(input,['expectedArrivalTime'])*1000,'DD-MM-YYYY hh:mm a');
     Object.assign(
       this,
       set(
@@ -39,7 +43,7 @@ export class StayDetail implements Deserializable {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount'])),
-      set({}, 'expectedTime', '9:00 am'),
+      set({}, 'expectedTime', moment(expectedTime.split(' ')[1]+expectedTime.split(' ')[2], 'h:mm a').format('h:mm a')||'7:00 am'),
       
     );
     return this;

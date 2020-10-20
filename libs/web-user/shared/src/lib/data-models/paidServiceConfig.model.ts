@@ -2,17 +2,19 @@ import { FieldSchema } from './fieldSchema.model';
 import { get, set } from 'lodash';
 
 export interface Deserializable {
-    deserialize(reservation: any, selectedAmenities: any): this;
+    deserialize(reservation: any, selectedAmenities: any, arrivalTime:any): this;
 }
 
 export class PaidServiceDetailDS implements Deserializable {
     paidService: PaidServiceDetail[];
     selectedService: PaidServiceDetail[];
+    arrivalTime: string;
 
-    deserialize(input: any, selectedAmenities: any) {
+    deserialize(input: any, selectedAmenities: any, arrivalTime:string) {
       this.paidService = new Array<PaidServiceDetail>();
       this.selectedService = new Array<PaidServiceDetail>();
-
+      this.arrivalTime = arrivalTime;
+      
       input.forEach(service => {
         this.paidService.push(new PaidServiceDetail().deserialize(service));
       });

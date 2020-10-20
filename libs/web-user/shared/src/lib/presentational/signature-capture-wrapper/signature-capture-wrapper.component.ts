@@ -123,7 +123,6 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
 
   ngOnChanges() {
     this.signature.signatureImg = this.imgUrl !== undefined ? this.imgUrl : '';
-    console.log(this.imgUrl);
   }
 
   initFormGroup() {

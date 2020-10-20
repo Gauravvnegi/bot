@@ -13,8 +13,10 @@ export interface Deserializable {
     deserialize(input: any, paymentData:any) {
       //Rooms index is hardcoded as we are not sure about the api response , it should either be not an array or the whole api response should be changed
       // It is submitted as query as this data comes from PMS . once api response is confirmed , structure would be changed
-      this.staySummary = new StaySummaryDetail().deserialize(input, input.rooms[0], input.stayDetails, input.guestDetails.primaryGuest);
+      if(input.rooms && paymentData){
+        this.staySummary = new StaySummaryDetail().deserialize(input, input.rooms[0], input.stayDetails, input.guestDetails.primaryGuest);
       this.billSummary =  new PaymentSummaryDetail().deserialize(paymentData);
+      }
       return this;
     }
   }

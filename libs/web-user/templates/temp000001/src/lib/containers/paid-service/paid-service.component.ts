@@ -156,9 +156,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     this.componentRef && 
     this.componentRef.instance.addEvent &&
     this.componentRef.instance.addEvent.subscribe(packageCode => {
-      if(this.paidAmenitiesForm.get(packageCode).get('metaData')){
-        this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
-      }
+      // if(this.paidAmenitiesForm.get(packageCode).get('metaData')){
+      //   this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
+      // }
       this.addAmenity(packageCode);
     })
   }

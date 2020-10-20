@@ -2,7 +2,7 @@
   <div class="summary-details-wrapper">
     <div class="payment-summary-wrapper">
       <span class="summary-details-wrapper--title">Payment Summary</span>
-      <div class="user__info--wrapper">
+      <div class="user__info--wrapper" *ngIf="this.staySummaryDetails">
         <div class="user__info">
           <div class="user__info--details">
             <label>Billed To :&nbsp;</label>
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div class="description-table-wrapper">
+    <div class="description-table-wrapper" *ngIf="this.staySummaryDetails">
       <table mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="label">
           <th mat-header-cell *matHeaderCellDef>Description</th>
@@ -129,7 +129,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </div>
-    <div class="total__details">
+    <div class="total__details" *ngIf="this.staySummaryDetails">
       <div class="total__details--manager">
         <p class="total__details--manager--text">Manager Name</p>
         <p class="total__details--manager--name">G. Murry</p>

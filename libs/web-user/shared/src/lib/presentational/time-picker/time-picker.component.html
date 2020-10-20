@@ -20,9 +20,9 @@
           [formControlName]="name"
           [defaultTime]="defaultTime"
           [controlOnly]="true"
+          [disabled]="settings.disable"
         ></ngx-timepicker-field>
       </div>
-      <pre>{{name}}{{defaultTime}}</pre>
       <mat-error [ngClass]="defaultClasses.fieldErrorClasses">{{
         errorMsg
       }}</mat-error>

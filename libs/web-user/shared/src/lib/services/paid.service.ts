@@ -17,10 +17,11 @@ export class PaidService extends ApiService {
 
   private _paidServiceDetailDS: PaidServiceDetailDS;
 
-  initPaidAmenitiesDetailDS(amenities, selectedAmenities) {
+  initPaidAmenitiesDetailDS(amenities, selectedAmenities, arrivalTime) {
     this._paidServiceDetailDS = new PaidServiceDetailDS().deserialize(
       amenities,
-      selectedAmenities
+      selectedAmenities,
+      arrivalTime
     );
   }
 
@@ -80,5 +81,9 @@ export class PaidService extends ApiService {
 
   get paidAmenities() {
     return this._paidServiceDetailDS;
+  }
+
+  get arrivalTime() {
+    return this._paidServiceDetailDS.arrivalTime;
   }
 }

@@ -59,9 +59,7 @@ export class BillSummaryDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.setFieldConfiguration();
     this.setDialogData();
-    this.staySummaryDetails = this.staySummary;
-    this.billSummaryDetails = this.billSummary;
-    this.getModifiedPaymentSummary();
+    this.getSummaryDetails();
   }
 
   setFieldConfiguration() {
@@ -85,6 +83,14 @@ export class BillSummaryDetailsComponent implements OnInit {
     this.requestForm = this._fb.group({
       request: [''],
     });
+  }
+
+  getSummaryDetails(){
+    this.staySummaryDetails = this.staySummary;
+    this.billSummaryDetails = this.billSummary;
+    if(this.staySummaryDetails && this.billSummaryDetails){
+      this.getModifiedPaymentSummary();
+    }
   }
 
   getModifiedPaymentSummary() {
@@ -209,6 +215,5 @@ export class BillSummaryDetailsComponent implements OnInit {
   }
 
   submit(result) {
-    console.log(result);
   }
 }

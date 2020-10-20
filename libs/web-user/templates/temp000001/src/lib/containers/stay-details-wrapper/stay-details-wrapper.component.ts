@@ -59,7 +59,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     .subscribe(response =>{
       this.amenities = response;
       this._complimentaryService.initComplimentaryAmenitiesDetailDS(this.amenities && this.amenities.complimentryPackages);
-      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidPackages, this.reservationData.packages.paidPackages);
+      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidPackages, this.reservationData.packages.paidPackages,this._stayDetailService.stayDetails.stayDetail.arrivalTime);
     })
   }
 

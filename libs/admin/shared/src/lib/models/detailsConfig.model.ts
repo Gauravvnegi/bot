@@ -385,7 +385,7 @@ export class PaymentDetailsConfig implements Deserializable {
       set({}, 'totalDiscount', get(input, ['totalDiscount']))
     );
     //to-do
-    //  this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
+    this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
     return this;
   }
 }

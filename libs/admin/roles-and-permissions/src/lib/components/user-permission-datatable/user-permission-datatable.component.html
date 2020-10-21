@@ -245,8 +245,21 @@
         {{ rowData.getBrandAndBranchName() }}
         <p>{{ rowData.jobTitle }}</p>
       </td>
-      <td class="guest-details">
+      <td class="guest">
         {{ rowData.getSecGuestDisplayConfig().displayString }}
+        <!-- <div
+          *ngIf="rowData.guests.secondaryGuest.length > 0"
+          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        >
+          <div
+            *ngFor="
+              let secondaryGuest of rowData.guests.secondaryGuest;
+              let guestIdx = index
+            "
+          >
+            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+          </div>
+        </div> -->
       </td>
       <td class="service-details">
         {{ userDetailService.userDetails.getFullName() }}

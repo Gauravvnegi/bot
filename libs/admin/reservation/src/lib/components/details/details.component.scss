@@ -83,8 +83,8 @@
             text-decoration: none;
           }
         }
-        .email {
-          margin-left: 20px;
+        .call {
+          margin-right: 20px;
         }
       }
     }
@@ -222,9 +222,9 @@
 
 :host ::ng-deep .mat-head {
   font-size: $font16;
+  margin-right: $margin20;
   font-weight: $bolder;
   color: #002046;
-  letter-spacing: 0.96px;
 }
 
 .data-seperator {
@@ -456,8 +456,12 @@
   }
 }
 
+.loader{
+  margin: 20px auto;
+}
+
 .loading {
-  margin: 80px auto 0;
+  // margin: 20px auto;
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;

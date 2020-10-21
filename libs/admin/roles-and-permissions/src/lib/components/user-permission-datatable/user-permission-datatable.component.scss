@@ -52,10 +52,13 @@
     margin-top: 5px;
   }
 }
-:host ::ng-deep .guest-details {
-  font-size: 12px;
-  color: #484848;
-}
+// :host ::ng-deep .guest-details {
+//   font-size: 12px;
+//   color: #484848;
+//   b{
+//     color: $primary-purple;
+//   }
+// }
 
 :host ::ng-deep .service-details {
   font-size: 12px;

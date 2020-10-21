@@ -22,9 +22,9 @@
 .label-wrapper {
   display: flex;
   align-items: center;
-  img {
-    margin-left: 10px;
-  }
+  // img {
+  //   margin-left: 10px;
+  // }
 }
 
 :host ::ng-deep .mat-head {
@@ -103,6 +103,14 @@
     font-weight: $bolder;
     margin-right: 10px;
   }
+}
+
+:host ::ng-deep .remark{
+  width: 70%;
+}
+
+.emptyCell{
+  text-align: center;
 }
 
 :host ::ng-deep .remark > .mat-form-field-wrapper > .mat-form-field-underline {

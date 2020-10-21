@@ -250,6 +250,40 @@
   }
 }
 
+:host ::ng-deep .guest {
+  color: #484848;
+  font-size: $font12;
+  position: relative;
+  &:hover {
+    cursor: pointer;
+    .demo {
+      display: block;
+    }
+  }
+  .demo {
+    position: absolute;
+    width: 90%;
+    top: 65%;
+    font-size: 12px;
+    background-color: white;
+    left: 5%;
+    // padding: 7px;
+    box-shadow: 0px 0px 5px 0px lightgray;
+    border-radius: 5px;
+    display: none;
+    div {
+      padding: 5px;
+      // text-align: center;
+      &:hover {
+        color: $primary-purple;
+      }
+    }
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+}
+
 :host ::ng-deep .mat-chip-list-wrapper {
   overflow: auto;
   white-space: nowrap;

@@ -94,7 +94,10 @@
                   >
                   </hospitality-bot-upload-file>
                   <p class="text">
-                    {{ document.get('documentType').value }} FIRST PAGE
+                    {{ document.get('documentType').value }} FIRST PAGE<b
+                    style="color: #f00d2a;"
+                    >*</b
+                  >
                   </p>
                 </div>
                 <div
@@ -109,7 +112,10 @@
                   >
                   </hospitality-bot-upload-file>
                   <p class="text">
-                    {{ document.get('documentType').value }} BACK PAGE
+                    {{ document.get('documentType').value }} BACK PAGE<b
+                      style="color: #f00d2a;"
+                      >*</b
+                    >
                   </p>
                 </div>
               </div>
@@ -117,7 +123,7 @@
           </div>
         </div>
         <hr class="data-seperator" />
-        <mat-label class="mat-head">Documents</mat-label>
+        <mat-label class="mat-head">Documents Status</mat-label>
         <div class="pending-button-wrapper">
           <p class="health-status" style="margin-left: 0;">
             Document Verification Status :&nbsp;<b class="pending">{{

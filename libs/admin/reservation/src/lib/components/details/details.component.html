@@ -1,7 +1,10 @@
 <!-- <pre>
   {{ detailsForm.getRawValue() | json }}
 </pre> -->
-<div *ngIf="isReservationDetailFetched; else detailsLoader" class="details-wrapper">
+<div
+  *ngIf="isReservationDetailFetched; else detailsLoader"
+  class="details-wrapper"
+>
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -474,7 +477,7 @@
 </pre> -->
 
 <ng-template #detailsLoader>
-  <div>
+  <div class="loader">
     <p class="loading">Loading</p>
     <div class="spinner">
       <div class="bounce1"></div>

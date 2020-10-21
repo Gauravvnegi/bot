@@ -10,6 +10,7 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise-request.service';
 import { HyperlinkElementService } from '../../../../shared/src/lib/services/hyperlink-element.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { FooterService } from 'libs/web-user/shared/src/lib/services/footer.service';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
     FaqService,
     SafeMeasuresService,
     RaiseRequestService,
+    FooterService,
     HyperlinkElementService,
   ],
 })

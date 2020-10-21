@@ -51,7 +51,6 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   saveFeedbackDetails() {
-
     const status = this._feedbackDetailsService.validateFeedbackDetailForm(
       this.parentForm
     ) as Array<any>;
@@ -64,7 +63,7 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
 
     let value = this.parentForm.getRawValue();
     let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail
+      value && value.feedbackDetail,this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
 
     this._feedbackDetailsService

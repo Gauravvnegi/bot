@@ -7,6 +7,7 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -26,13 +27,15 @@ export class AirportPickupComponent implements OnInit {
   
   airportForm: FormGroup;
   airportConfig: AirportConfigI;
+  minDate;
 
   constructor(
     private _fb: FormBuilder,
     private _airportService: AirportService,
     private _snackBarService: SnackBarService,
     private _paidService: PaidService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _dateService: DateService
   ) {
     this.initAirportForm();
    }
@@ -52,8 +55,9 @@ export class AirportPickupComponent implements OnInit {
           pattern: Regex.ALPHANUMERIC_REGEX,
           msg: 'Please enter valid Flight number',
         })]],
+      pickupDate:[''],
       pickupTime: [''],
-      personCount: ['', [Validators.required,
+      quantity: ['', [Validators.required,
         customPatternValid({
           pattern: Regex.NUMBER_REGEX,
           msg: 'Please enter valid Person count',
@@ -71,7 +75,8 @@ export class AirportPickupComponent implements OnInit {
     if(this.amenityData === ""){
       this.airportConfig.removeButton.disable = true;
     }
-    this.airportForm.patchValue(this.amenityData);
+    this._airportService.initAirportDetailDS(this.amenityData);
+    this.airportForm.patchValue(this._airportService.airportDetails.airportDetail);
   }
 
   setFieldConfiguration() {
@@ -90,7 +95,9 @@ export class AirportPickupComponent implements OnInit {
     }
 
     this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    this._paidService.amenityData = this.airportForm.getRawValue();
+    const formValue = this.airportForm.getRawValue();
+    const data = this._airportService.mapAirportData(formValue);
+    this._paidService.amenityData = data;
     this.addEvent.emit(this.uniqueData.code);
   }
 

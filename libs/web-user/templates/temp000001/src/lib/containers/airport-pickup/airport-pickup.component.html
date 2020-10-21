@@ -25,6 +25,11 @@
           [settings]="airportConfig.flightNumber"
         ></web-user-input>
       </div>
+        <web-user-date-picker
+          [parentForm]="airportForm"
+          [name]="'pickupDate'"
+          [settings]="airportConfig.pickupDate"
+        ></web-user-date-picker>
       <div class="wrapper__item">
         <web-user-time-picker
           [parentForm]="airportForm"
@@ -37,8 +42,8 @@
       <div class="wrapper__item">
         <web-user-input
           [parentForm]="airportForm"
-          [name]="'personCount'"
-          [settings]="airportConfig.personCount"
+          [name]="'quantity'"
+          [settings]="airportConfig.quantity"
         ></web-user-input>
       </div>
     </div>

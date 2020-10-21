@@ -43,11 +43,11 @@ export class FeedbackDetailsService extends ApiService {
     return this.post(`/api/v1/reservation/${reservationId}/feedback`, data);
   }
 
-  mapFeedbackData(feedbackValues) {
+  mapFeedbackData(feedbackValues,guestId) {
     const selectedServices = this.selectedServices;
     let feedbackData = new FeedbackData();
     feedbackData.services = new Array<Service>();
-    feedbackData.guestId = '661ab93f-01c8-46e1-a0a1-af9eb597e574';
+    feedbackData.guestId = guestId;
     feedbackData.services = selectedServices;
     feedbackData.comments = feedbackValues.feedback;
     feedbackData.rating = feedbackValues.rating;

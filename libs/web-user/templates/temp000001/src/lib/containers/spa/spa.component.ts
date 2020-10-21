@@ -43,12 +43,13 @@ export class SpaComponent implements OnInit {
 
   initSpaForm() {
     this.spaForm = this._fb.group({
-      personCount: ['', [Validators.required,
+      quantity: ['', [Validators.required,
         customPatternValid({
           pattern: Regex.NUMBER_REGEX,
           msg: 'Please enter valid count',
         })]],
       usageTime: [''],
+      spaDate:['']
     });
   }
 
@@ -62,7 +63,8 @@ export class SpaComponent implements OnInit {
     if(this.amenityData === ""){
       this.spaConfig.removeButton.disable = true;
     }
-    this.spaForm.patchValue(this.amenityData);
+    this._spaService.initSpaDetailDS(this.amenityData);
+    this.spaForm.patchValue(this._spaService.spaDetails.spaDetail);
   }
 
   setFieldConfiguration() {
@@ -81,7 +83,9 @@ export class SpaComponent implements OnInit {
     }
 
     this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    this._paidService.amenityData = this.spaForm.getRawValue();
+    const formValue = this.spaForm.getRawValue();
+    const data = this._spaService.mapSpaData(formValue);
+    this._paidService.amenityData = data;
     this.addEvent.emit(this.uniqueData.code);
   }
 

@@ -10,6 +10,8 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -25,19 +27,33 @@ export class BillSummaryDetailsComponent implements OnInit {
 
   requestForm: FormGroup;
   summaryConfig: SummaryDetailsConfigI;
-  signature;
+  signature =
+    'https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/12aa3dbc-a684-4381-9c6e-d6e8b8719de7/Signature/signature.png';
   summaryDetails;
   staySummaryDetails;
   billSummaryDetails;
 
+  dataSource = [];
+
+  displayedColumns: string[] = [
+    'label',
+    'unit',
+    'unitPrice',
+    'amount',
+    'CGST',
+    'SGST',
+    'discount',
+    'totalAmount',
+  ];
+
   constructor(
     private _fb: FormBuilder,
     private _summaryService: BillSummaryService,
-    private _dateService: DateService,
     private _stepperService: StepperService,
-    private _docService: DocumentDetailsService,
-    public dialog: MatDialog,
-    private _utilityService: UtilityService
+    private _healthDetailsService: HealthDetailsService,
+    private _reservationService: ReservationService,
+    private _snackBarService: SnackBarService,
+    public dialog: MatDialog
   ) {
     this.initRequestForm();
   }
@@ -45,9 +61,7 @@ export class BillSummaryDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.setFieldConfiguration();
     this.setDialogData();
-    this.staySummaryDetails = this.staySummary;
-    this.billSummaryDetails = this.billSummary;
-    this.modifyData();
+    this.getSummaryDetails();
   }
 
   setFieldConfiguration() {
@@ -73,17 +87,73 @@ export class BillSummaryDetailsComponent implements OnInit {
     });
   }
 
-  modifyData() {
-    this.staySummaryDetails.arrivalDate = this.convertTimestampToDate(
-      this.staySummaryDetails.arrivalDate
-    );
-    this.staySummaryDetails.departureDate = this.convertTimestampToDate(
-      this.staySummaryDetails.departureDate
-    );
+  getSummaryDetails() {
+    this.staySummaryDetails = this.staySummary;
+    this.billSummaryDetails = this.billSummary;
+    if (this.staySummaryDetails && this.billSummaryDetails) {
+      this.getModifiedPaymentSummary();
+    }
   }
 
-  convertTimestampToDate(input) {
-    return this._dateService.convertTimestampToDate(input);
+  getModifiedPaymentSummary() {
+    const paymentSummary = this.billSummaryDetails;
+    let {
+      label,
+      description,
+      unit,
+      unitPrice,
+      amount,
+      discount,
+      totalAmount,
+      taxAndFees,
+    } = paymentSummary.roomRates;
+
+    this.dataSource.push({
+      label,
+      description,
+      unit,
+      unitPrice,
+      amount,
+      discount,
+      totalAmount,
+      currency: paymentSummary.currency,
+      ...Object.assign(
+        {},
+        ...taxAndFees.map((taxType) => ({
+          [taxType.type]: taxType.value,
+        }))
+      ),
+    });
+
+    this.billSummaryDetails.packages.forEach((amenity) => {
+      let {
+        label,
+        description,
+        unit,
+        unitPrice,
+        amount,
+        discount,
+        totalAmount,
+        taxAndFees,
+      } = amenity;
+
+      this.dataSource.push({
+        label,
+        description,
+        unit,
+        unitPrice,
+        amount,
+        discount,
+        totalAmount,
+        currency: paymentSummary.currency,
+        ...Object.assign(
+          {},
+          ...taxAndFees.map((taxType) => ({
+            [taxType.type]: taxType.value,
+          }))
+        ),
+      });
+    });
   }
 
   openDialog() {
@@ -102,20 +172,40 @@ export class BillSummaryDetailsComponent implements OnInit {
     // });
   }
 
+  // signatureUploadFile(event) {
+  //   const formData = new FormData();
+  //   formData.append('doc_type', 'signature');
+  //   formData.append('doc_page', 'front');
+  //   formData.append('file', event.file);
+  //   this._docService
+  //     .uploadDocumentFile(
+  //       this.reservationData.id,
+  //       this.reservationData.guestDetails.primaryGuest.id,
+  //       formData
+  //     )
+  //     .subscribe((res) => {});
+  // }
+
   signatureUploadFile(event) {
-    const formData = new FormData();
-    formData.append('doc_type', 'signature');
-    formData.append('doc_page', 'front');
-    formData.append('file', event.file);
-    this._docService
-      .uploadDocumentFile(
-        this.reservationData.id,
-        this.reservationData.guestDetails.primaryGuest.id,
-        formData
-      )
-      .subscribe((res) => {
-        this._utilityService.$signatureUploaded.next(true);
-      }, (err) => this._utilityService.$signatureUploaded.next(false));
+    if (event.file) {
+      let formData = new FormData();
+      formData.append('file', event.file);
+
+      this._healthDetailsService
+        .uploadSignature(
+          this._reservationService.reservationId,
+          this._reservationService.reservationData.guestDetails.primaryGuest.id,
+          formData
+        )
+        .subscribe((response) => {
+          this.signature = response.fileDownloadUrl;
+          this._snackBarService.openSnackBarAsText(
+            'Signature upload successful',
+            '',
+            { panelClass: 'success' }
+          );
+        });
+    }
   }
 
   get staySummary() {
@@ -126,7 +216,5 @@ export class BillSummaryDetailsComponent implements OnInit {
     return this._summaryService.billSummaryDetails.billSummary;
   }
 
-  submit(result) {
-    console.log(result);
-  }
+  submit(result) {}
 }

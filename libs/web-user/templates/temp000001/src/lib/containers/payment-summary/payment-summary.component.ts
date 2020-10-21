@@ -13,9 +13,19 @@ export class PaymentSummaryComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() reservationData;
 
-  paymentSummary: PaymentDetail[];
-  totalAmount = 0;
-  currency: string;
+  paymentSummary: PaymentDetail;
+
+  displayedColumns: string[] = [
+    'label',
+    'unit',
+    'base',
+    'amount',
+    'CGST',
+    'SGST',
+    'discount',
+    'totalAmount',
+  ];
+  dataSource: any[] = [];
   
   constructor(
     private _paymentDetailsService : PaymentDetailsService
@@ -23,18 +33,70 @@ export class PaymentSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.paymentSummary = this.bookingSummary;
-    this.currency = this.currencyCode;
-    this.calculateTotalAmount();
-  }
-
-  calculateTotalAmount(){
-    this.paymentSummary.forEach((payment) => {
-      this.totalAmount += payment.totalRate;
-    })
+    this.getModifiedPaymentSummary();
   }
 
   applyPromocode(event) {
     console.log(event);
+  }
+
+  getModifiedPaymentSummary() {
+    let {
+      label,
+      description,
+      unit,
+      base,
+      amount,
+      discount,
+      totalAmount,
+      taxAndFees,
+    } = this.paymentSummary.roomRates;
+
+    this.dataSource.push({
+      label,
+      description,
+      unit,
+      base,
+      amount,
+      discount,
+      totalAmount,
+      currency: this.paymentSummary.currencyCode,
+      ...Object.assign(
+        {},
+        ...taxAndFees.map((taxType) => ({
+          [taxType.type]: taxType.value,
+        }))
+      ),
+    });
+    this.paymentSummary.packages.forEach((amenity) => {
+      let {
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        discount,
+        totalAmount,
+        taxAndFees,
+      } = amenity;
+
+      this.dataSource.push({
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        discount,
+        totalAmount,
+        currency: this.paymentSummary.currencyCode,
+        ...Object.assign(
+          {},
+          ...taxAndFees.map((taxType) => ({
+            [taxType.type]: taxType.value,
+          }))
+        ),
+      });
+    });
   }
 
   get bookingSummary(){
@@ -42,7 +104,7 @@ export class PaymentSummaryComponent implements OnInit {
   }
 
   get currencyCode(){
-    return this._paymentDetailsService.paymentSummaryDetails.currencyCode;
+    return this._paymentDetailsService.currencyCode;
   }
 
 }

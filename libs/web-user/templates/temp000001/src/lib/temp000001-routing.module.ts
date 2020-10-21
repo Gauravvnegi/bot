@@ -35,6 +35,7 @@ import { CakeComponent } from './containers/cake/cake.component';
 import { DefaultAmenityComponent } from './containers/default-amenity/default-amenity.component';
 import { PaymentMainComponent } from './containers/payment-main/payment-main.component';
 import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
+import { SummaryMainComponent } from './containers/summary-main/summary-main.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -64,6 +65,16 @@ export const sharedAuthRoutes: Route[] = [
       {
         path: '',
         component: FeedbackMainComponent,
+      },
+    ],
+  },
+  {
+    path: 'summary',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: SummaryMainComponent,
       },
     ],
   },
@@ -112,5 +123,6 @@ export class Temp000001RoutingModule {
     DefaultAmenityComponent,
     PaymentMainComponent,
     FeedbackMainComponent,
+    SummaryMainComponent,
   ];
 }

@@ -107,12 +107,21 @@
 }
 
 .main-template-button {
-  margin-top: 5%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
 }
 
 .payment-button{
   @media only screen and (max-width: $M) {
 
   left: 0;
+  }
+}
+
+:host ::ng-deep .back-button {
+  @include secondary-button();
+  @media only screen and (max-width: $M) {
+    width: 100px;
   }
 }

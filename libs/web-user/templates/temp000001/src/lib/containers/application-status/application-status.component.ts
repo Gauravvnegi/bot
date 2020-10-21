@@ -16,6 +16,7 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -25,6 +26,7 @@ import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/pay
 export class ApplicationStatusComponent implements OnInit {
   private _formValues: any;
   stepsStatus;
+  @Input() reservationData: ReservationDetails;
 
   @Input()
   settings = [];
@@ -37,9 +39,6 @@ export class ApplicationStatusComponent implements OnInit {
 
   @Input()
   parentForm: FormArray;
-
-  @Input()
-  config: any;
 
   currentParentContainer: ViewContainerRef;
 
@@ -60,7 +59,7 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   registerListeners() {
-    this.listenForParentFormValues();
+    // this.listenForParentFormValues();
     this.getStepsStatus();
   }
 
@@ -104,6 +103,7 @@ export class ApplicationStatusComponent implements OnInit {
       of(true)
     ).subscribe(([res, val]) => {
       this.stepsStatus = res;
+      this.isLoaderVisible = false;
     });
   }
 
@@ -130,18 +130,18 @@ export class ApplicationStatusComponent implements OnInit {
   downloadSummary() { }
 
   get stayDetail() {
-    return this._formValues[0].stayDetail;
+    return this.reservationData['stayDetails'];
   }
 
   get guestDetail() {
-    return this._formValues[1].guestDetail;
-  }
-
-  get paymentDetail() {
-    return ;
+    return this.reservationData['guestDetails'];
   }
 
   get currencyCode() {
-    return this._paymentDetailsService.paymentSummaryDetails.currencyCode;
+    return this._paymentDetailsService.currencyCode;
+  }
+
+  get paymentDetails() {
+    return this._paymentDetailsService.paymentSummaryDetails.paymentDetail;
   }
 }

@@ -8,6 +8,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { forkJoin, of } from 'rxjs';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-payment-main',
@@ -19,7 +20,11 @@ export class PaymentMainComponent implements OnInit {
   paymentLabel;
   paymentNote;
   paymentImage;
-  buttonLabel;
+  back: string;
+  next: string;
+  showBackButton: boolean;
+  showSummaryButton: boolean;
+  showButton: boolean = true;
   isReservationData = false;
   parentForm = new FormArray([]);
   reservationData: ReservationDetails;
@@ -29,7 +34,9 @@ export class PaymentMainComponent implements OnInit {
     private _hotelService: HotelService,
     private _snackBarService: SnackBarService,
     private _templateLoadingService: TemplateLoaderService,
-    private _paymentDetailService: PaymentDetailsService
+    private _paymentDetailService: PaymentDetailsService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -72,16 +79,26 @@ export class PaymentMainComponent implements OnInit {
             ? 'A confirmation email has been sent to '
             : 'An Error ocurred while processing your payment';
         let { title } = this._hotelService.getCurrentJourneyConfig();
-
-        this.buttonLabel = response.status === 'SUCCESS' ? title === 'CheckIn' ? 'View Summary' : `Return To ${title}` : `Return To ${title}`;
-
+        this.showSummaryButton = true;
+        this.showBackButton = true;
+        this.back = `Back To ${title}`;
+        // this.buttonLabel = response.status === 'SUCCESS' ? title === 'CheckIn' ? 'View Summary' : this.button.showSummaryButton = false : `Return To ${title}`;
+        
+        let redirectUrl = window.location.href.substring(
+          0,
+          window.location.href.lastIndexOf('&')
+        );
         this.paymentStatusData = {
           data: response,
-          redirectUrl: window.location.href.substring(
-            0,
-            window.location.href.lastIndexOf('&')
-          ),
+          backRedirectUrl: redirectUrl + '&index=1',
+          nextRedirectUrl: redirectUrl,
         };
+        if (response.status === "SUCCESS") {
+          this.next = 'View Summary';
+          this.showBackButton = false;
+        } else {
+          this.next = 'Retry Payment';
+        }
         if (title === 'Pre CheckIn' && response.status === 'SUCCESS') {
           this._snackBarService.openSnackBarAsText(
             'Pre-Checkin Sucessfull.',
@@ -100,7 +117,11 @@ export class PaymentMainComponent implements OnInit {
     });
   }
 
-  redirect() {
-    window.location.href = this.paymentStatusData.redirectUrl;
+  redirect(redirectUrl?) {
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+    } else {
+      this.router.navigateByUrl(`/summary?token=${this.route.snapshot.queryParamMap.get('token')}&entity=summary`);
+    }
   }
 }

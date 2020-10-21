@@ -80,6 +80,7 @@
 }
 
 .description-table {
+  padding-top: $padding-small;
   width: $full-width;
   .header {
     background-color: $primary-blue;
@@ -169,4 +170,29 @@
   color: $primary-blue;
 }
 
+:host ::ng-deep .mat-table {
+  width: 100%;
+  .mat-header-row {
+    background-color: $primary-blue !important;
+    th.mat-header-cell {
+      font-size: $font-medium !important;
+      font-weight: $bold !important;
+      color: white !important;
+    }
+  }
+  .mat-row {
+    border-bottom: 2px solid grey !important;
+    td.mat-cell {
+      font-size: $font-medium;
+      font-weight: $bold;
+      padding: $padding-medium;
+      .roomType {
+        color: lightgray;
+      }
+    }
+  }
+}
 
+.text-center {
+  text-align: center;
+}

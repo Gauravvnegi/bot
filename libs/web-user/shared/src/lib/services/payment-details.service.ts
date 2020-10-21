@@ -94,6 +94,6 @@ export class PaymentDetailsService extends ApiService {
   }
 
   get currencyCode() {
-    return this.paymentSummaryDetails.currencyCode;
+    return this.paymentSummaryDetails.paymentDetail.currencyCode;
   }
 }

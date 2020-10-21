@@ -115,7 +115,7 @@ export interface Deserializable {
       input.packages.forEach(amenity => {
         this.packages.push(new PackageDetails().deserialize(amenity));
       });
-      
+
       return this;
     }
   }

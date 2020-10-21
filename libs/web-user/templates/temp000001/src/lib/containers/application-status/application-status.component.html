@@ -19,7 +19,7 @@
     </div>
   </div>
   <div #content>
-    <div>
+    <div *ngIf="guestDetail">
       <div class="section--heading">Guest Details</div>
       <div class="section--content">
         <div class="section--content--container">
@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div *ngIf="stayDetail">
       <div class="section--heading">Stay Details</div>
       <div class="section--content">
         <div class="section--content--container">
@@ -233,7 +233,7 @@
           </ng-container>
         </div>
         <div class="section--content--label">
-          Amount to pay:&nbsp;<span>{{ currencyCode }} {{ paymentDetails.dueAmount }}</span>
+          Amount to pay:&nbsp;<span>{{ currencyCode }} {{ paymentDetails ? paymentDetails.dueAmount : 0 }}</span>
         </div>
       </div>
       <div

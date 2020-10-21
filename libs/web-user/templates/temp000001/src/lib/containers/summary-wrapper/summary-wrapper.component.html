@@ -2,6 +2,7 @@
   <hospitality-bot-summary
     [stepperIndex]="stepperIndex"
     (addFGEvent)="addFGEvent($event)"
+    *ngIf="reservationData"
   ></hospitality-bot-summary>
 
   <div class="main-template-button">

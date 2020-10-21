@@ -7,7 +7,11 @@ export class ReservationDetails {
   stateMessage: object;
   stayDetails: StayDetails;
   guestDetails: GuestDetails;
-  paymentDetails: object;
+  paymentSummary: object;
+  redirectionParameter: any;
+  healthDeclaration: Object;
+  currentJourney: string;
+  hotel: Hotel;
 }
 
 export class StayDetails {
@@ -49,6 +53,11 @@ export class DocumentDetails {
   documentType: string;
   frontUrl: string;
   backUrl: string;
+}
+
+export class Hotel {
+  id: string;
+  name: string;
 }
 
 export class FileDetails {

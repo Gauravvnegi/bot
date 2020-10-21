@@ -63,38 +63,6 @@ export class ApplicationStatusComponent implements OnInit {
     this.getStepsStatus();
   }
 
-  listenForParentFormValues() {
-    this.$subscription.add(
-      this._parentFormService.parentFormValueAndValidity$
-        .pipe(
-          debounce(() => {
-            this.isLoaderVisible = true;
-            return timer(2000);
-          }),
-          skipWhile((data) => {
-            let controlMap = {};
-            let counter = 0;
-            data['parentForm'].controls.forEach((fg: FormGroup) => {
-              if (
-                Object.keys(fg.controls).length &&
-                !controlMap[Object.keys(fg.controls)[0]]
-              ) {
-                controlMap[Object.keys(fg.controls)[0]] = true;
-                ++counter;
-              }
-            });
-
-            return counter == data['parentForm'].controls.length ? false : true;
-          })
-        )
-        .subscribe((data) => {
-          this.parentForm = data['parentForm'];
-          this._formValues = this.parentForm.getRawValue();
-          this.isLoaderVisible = false;
-        })
-    );
-  }
-
   private getStepsStatus() {
     forkJoin(
       this._summaryService.getSummaryStatus(
@@ -142,6 +110,9 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   get paymentDetails() {
-    return this._paymentDetailsService.paymentSummaryDetails.paymentDetail;
+    if (this._paymentDetailsService.paymentSummaryDetails) {
+      return this._paymentDetailsService.paymentSummaryDetails.paymentDetail;
+    }
+    return null;
   }
 }

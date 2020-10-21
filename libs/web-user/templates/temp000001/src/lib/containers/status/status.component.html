@@ -17,13 +17,16 @@
     </div>
   </div>
   <div #content>
-    <div>
+    <div *ngIf="guestDetail">
       <div class="section--heading">Guest Details</div>
       <div class="section--content">
         <div class="section--content--container">
-          <div class="section--content--container--title">Full Name (Primary)</div>
+          <div class="section--content--container--title">
+            Full Name (Primary)
+          </div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.nameTitle }} {{ guestDetail.primaryGuest.firstName }} {{ guestDetail.primaryGuest.lastName }}
+            {{ guestDetail.primaryGuest.nameTitle }} {{ guestDetail.primaryGuest.firstName }}
+            {{ guestDetail.primaryGuest.lastName }}
           </div>
         </div>
         <div class="section--content--container">
@@ -40,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div *ngIf="stayDetail">
       <div class="section--heading">Stay Details</div>
       <div class="section--content">
         <div class="section--content--container">
@@ -150,7 +153,7 @@
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content--label">Amount to pay:&nbsp;<span>{{ currencyCode }} {{ stepsStatus.paymentSummary.dueAmount }}</span></div>
+        <div class="section--content--label">Amount to pay:&nbsp;<span>{{ currencyCode }} {{ paymentDetails.dueAmount }}</span></div>
       </div>
       <div class="section--content" *ngIf="stepsStatus.paymentSummary.statusMessage.status === 'FAILED'">
         {{ stepsStatus.paymentSummary.statusMessage.remarks }}

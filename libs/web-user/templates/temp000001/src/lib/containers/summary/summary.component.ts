@@ -10,6 +10,11 @@ import { RegistrationCardComponent } from '../registration-card/registration-car
 import { MatDialogConfig } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { forkJoin, of } from 'rxjs';
+import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 
 @Component({
   selector: 'hospitality-bot-summary',
@@ -20,6 +25,7 @@ export class SummaryComponent implements OnInit {
   config: any;
   showAppStatusForm: boolean = false;
   @Input() stepperIndex;
+  reservationData: ReservationDetails = new ReservationDetails();
   context: any;
   @Output()
   addFGEvent = new EventEmitter();
@@ -29,16 +35,46 @@ export class SummaryComponent implements OnInit {
     private _modal: ModalService,
     private _fb: FormBuilder,
     private route:ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _reservationService: ReservationService,
+    private _hotelService: HotelService,
+    private _paymentDetailsService: PaymentDetailsService,
   ) {
     this.context = this;
   }
 
   ngOnInit(): void {
-    this.getSettings();
+    // this.getSettings();
     this.addFGEvent.next({ name: 'checkinSummary', value: this._fb.group({}) });
+    this.getReservationDetails();
   }
 
+  private initPaymentDS() {
+    const journey = this._hotelService.getCurrentJourneyConfig();
+    this._paymentDetailsService
+      .getPaymentConfiguration(this.reservationData.hotel.id, journey.name)
+      .subscribe((response) => {
+        this._paymentDetailsService.initPaymentDetailDS(
+          this.reservationData,
+          response
+        );
+      });
+  }
+
+  private getReservationDetails() {
+    forkJoin(
+      this._reservationService.getReservationDetails(
+        this._reservationService.reservationId
+      ),
+      of(true)
+    ).subscribe(([reservationData, val]) => {
+      this._hotelService.hotelConfig = reservationData['hotel'];
+      this.reservationData = reservationData;
+      this._reservationService.reservationData = reservationData;
+      this.initPaymentDS();
+      // this.setPaymentStatus();
+    });
+  }
   ngAfterViewInit() {}
 
   openFeedback() {

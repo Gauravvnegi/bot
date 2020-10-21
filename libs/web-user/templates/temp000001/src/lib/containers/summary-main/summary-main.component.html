@@ -1,18 +1,8 @@
 <div class="parent_block" *ngIf="isReservationData">
     <hospitality-bot-header [headerName]="'Summary'"></hospitality-bot-header>
-    <div class="summary-wrapper">
-        <!-- <div class="summary-wrapper-header">
-            <div class="summary-wrapper-header-equi-width"></div>
-            <div class="summary-wrapper-header-title">Summary</div>
-            <div style="width: 33%;">
-              <div class="summary-wrapper-header-feedback" (click)="openFeedback()">
-                <div style="margin-right: 10px;"><img src="assets/feedback.svg" height="35px" width="35px" /></div>
-                <div>Your Feedback Matters</div>
-              </div>
-            </div>
-          </div> -->
-        <hospitality-bot-application-status [reservationData]="reservationData">
-        </hospitality-bot-application-status>
+    <div class="summary-wrapper" *ngIf="reservationData">
+      <hospitality-bot-application-status [reservationData]="reservationData">
+      </hospitality-bot-application-status>
     </div>
 </div>
 <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

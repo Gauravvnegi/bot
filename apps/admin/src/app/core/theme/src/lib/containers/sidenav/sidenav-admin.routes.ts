@@ -11,12 +11,12 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/Roles_&_Permission.svg',
   },
-  {
-    path: 'reservation',
-    title: 'Reservations',
-    children: null,
-    url: 'assets/svg/chair.svg',
-  },
+  // {
+  //   path: 'reservation',
+  //   title: 'Reservations',
+  //   children: null,
+  //   url: 'assets/svg/chair.svg',
+  // },
   {
     path: 'notification',
     title: 'Notifications',
@@ -35,5 +35,4 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/virus.svg',
   },
-  
 ];

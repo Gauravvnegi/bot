@@ -217,6 +217,10 @@ export class DetailsComponent implements OnInit, OnChanges {
       );
   }
 
+  prepareInvoice() {}
+
+  sendInvoice() {}
+
   confirmAndNotifyCheckin() {
     let data = {
       journey: 'CHECKIN',

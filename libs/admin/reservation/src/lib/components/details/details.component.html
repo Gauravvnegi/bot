@@ -279,7 +279,6 @@
               >
                 Activate & Generate PreCheckIn Link
               </button>
-              <!-- payment / download -invoice folio -->
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
               <button
@@ -309,7 +308,6 @@
               >
                 Activate & Generate CheckIn Link
               </button>
-              <!-- accept payment / download invoice folio / generate checkinlink -->
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
               <button
@@ -319,25 +317,11 @@
                 Activate & Generate CheckIn Link
               </button>
 
-              <!-- <button *ngIf="['INITIATED','FAILED'].includes(healthCardDetailsFG.get('status').value)" (click)="confirmAllHealthDocs()" class="button">
-                Confirm All Health Declaration
-              </button> -->
               <button class="button" (click)="verifyAllDocuments()">
                 Confirm All Docs
               </button>
 
-              <button
-                button-dependency
-                [id]="'downloadInvoice'"
-                [context]="self"
-                [parentForm]="detailsForm"
-                [data]="details"
-                [handler]="{
-                  fn_name: 'downloadInvoice',
-                  args: []
-                }"
-                class="button"
-              >
+              <button (click)="downloadInvoice()" class="button">
                 Download Invoice/Folio
               </button>
               <!-- ---------------------------------------------------------------------------------------------- -->
@@ -367,18 +351,7 @@
                 Activate & Generate CheckIn Link
               </button>
 
-              <button
-                button-dependency
-                [id]="'downloadInvoice'"
-                [context]="self"
-                [parentForm]="detailsForm"
-                [data]="details"
-                [handler]="{
-                  fn_name: 'downloadInvoice',
-                  args: []
-                }"
-                class="button"
-              >
+              <button (click)="downloadInvoice()" class="button">
                 Download Invoice/Folio
               </button>
             </ng-container>
@@ -393,6 +366,13 @@
                 class="button"
               >
                 Activate & Generate Checkout Link
+              </button>
+              <button class="button" (click)="prepareInvoice()">
+                Prepare Invoice
+              </button>
+              <button class="button" (click)="sendInvoice()">Send Invoice</button>
+              <button (click)="downloadInvoice()" class="button">
+                Download Invoice/Folio
               </button>
               <!-- <button class="button">Prepare Invoice</button>
               else
@@ -409,8 +389,12 @@
               >
                 Activate & Generate Checkout Link
               </button>
-              <button class="button">Prepare Invoice</button>
-              <button class="button">Download Invoice/Folio</button>
+              <button class="button" (click)="prepareInvoice()">
+                Prepare Invoice
+              </button>
+              <button (click)="downloadInvoice()" class="button">
+                Download Invoice/Folio
+              </button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
               <button
@@ -419,8 +403,12 @@
               >
                 Activate & Generate Checkout Link
               </button>
-              <button class="button">Prepare Invoice</button>
-              <button class="button">Download Invoice/Folio</button>
+              <button class="button" (click)="prepareInvoice()">
+                Prepare Invoice
+              </button>
+              <button (click)="downloadInvoice()" class="button">
+                Download Invoice/Folio
+              </button>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <!-- Flow to-be-decided -->
@@ -430,8 +418,12 @@
               >
                 Activate & Generate Checkout Link
               </button>
-              <button class="button">Prepare Invoice</button>
-              <button class="button">Download Invoice/Folio</button>
+              <button class="button" (click)="prepareInvoice()">
+                Prepare Invoice
+              </button>
+              <button (click)="downloadInvoice()" class="button">
+                Download Invoice/Folio
+              </button>
             </ng-container>
           </ng-container>
         </ng-template>

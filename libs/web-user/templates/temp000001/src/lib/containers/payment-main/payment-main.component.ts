@@ -27,6 +27,11 @@ export class PaymentMainComponent implements OnInit {
   showButton: boolean = true;
   isReservationData = false;
   parentForm = new FormArray([]);
+  titles: any = {
+    PRECHECKIN:'Pre Check-In',
+    CHECKIN: 'Check-In',
+    CHECKOUT: 'Check-Out'
+  }
   reservationData: ReservationDetails;
   constructor(
     private _reservationService: ReservationService,
@@ -78,12 +83,10 @@ export class PaymentMainComponent implements OnInit {
           response.status === 'SUCCESS'
             ? 'A confirmation email has been sent to '
             : 'An Error ocurred while processing your payment';
-        let { title } = this._hotelService.getCurrentJourneyConfig();
+        // let { title } = this._hotelService.getCurrentJourneyConfig();
         this.showSummaryButton = true;
         this.showBackButton = true;
-        this.back = `Back To ${title}`;
-        // this.buttonLabel = response.status === 'SUCCESS' ? title === 'CheckIn' ? 'View Summary' : this.button.showSummaryButton = false : `Return To ${title}`;
-        
+        this.back = `Back To ${this.titles[this.reservationData['currentJourney']]}`;
         let redirectUrl = window.location.href.substring(
           0,
           window.location.href.lastIndexOf('&')
@@ -99,7 +102,7 @@ export class PaymentMainComponent implements OnInit {
         } else {
           this.next = 'Retry Payment';
         }
-        if (title === 'Pre CheckIn' && response.status === 'SUCCESS') {
+        if (this.reservationData['currentJourney'] === 'PRECHECKIN' && response.status === 'SUCCESS') {
           this._snackBarService.openSnackBarAsText(
             'Pre-Checkin Sucessfull.',
             '',
@@ -121,7 +124,11 @@ export class PaymentMainComponent implements OnInit {
     if (redirectUrl) {
       window.location.href = redirectUrl;
     } else {
-      this.router.navigateByUrl(`/summary?token=${this.route.snapshot.queryParamMap.get('token')}&entity=summary`);
+      if (this.reservationData['currentJourney'] === 'PRECHECKIN') {
+        this.router.navigateByUrl(`/summary?token=${this.route.snapshot.queryParamMap.get('token')}&entity=summary`);
+      } else {
+        this.router.navigateByUrl(`/?token=${this.reservationData['redirectionParameter'].journey.token}`);
+      }
     }
   }
 }

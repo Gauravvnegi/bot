@@ -22,11 +22,6 @@ export class AdminUtilityService {
       return { ...acc };
     }, {});
 
-    // if (callingMethod === 'customer') {
-    //   debugger;
-    //   queryObj;
-    // }
-
     let queryStr = '';
 
     queryStr = Object.keys(queryObj)

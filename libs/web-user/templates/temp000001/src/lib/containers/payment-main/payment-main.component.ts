@@ -33,7 +33,6 @@ export class PaymentMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.setPaymentStatus();
     this.getReservationDetails();
     this.registerListeners();
   }
@@ -50,6 +49,7 @@ export class PaymentMainComponent implements OnInit {
       this._templateLoadingService.isTemplateLoading$.next(false);
       this.reservationData = reservationData;
       this._reservationService.reservationData = reservationData;
+      this.setPaymentStatus();
     });
   }
 
@@ -71,9 +71,9 @@ export class PaymentMainComponent implements OnInit {
           response.status === 'SUCCESS'
             ? 'A confirmation email has been sent to '
             : 'An Error ocurred while processing your payment';
+        let { title } = this._hotelService.getCurrentJourneyConfig();
 
-        this.buttonLabel =
-          response.status === 'SUCCESS' ? 'View Reciept' : 'Retry Payment';
+        this.buttonLabel = response.status === 'SUCCESS' ? title === 'CheckIn' ? 'View Summary' : `Return To ${title}` : `Return To ${title}`;
 
         this.paymentStatusData = {
           data: response,
@@ -82,14 +82,14 @@ export class PaymentMainComponent implements OnInit {
             window.location.href.lastIndexOf('&')
           ),
         };
-        if (this.paymentStatusData.journey === 'PRECHECKIN') {
+        if (title === 'Pre CheckIn' && response.status === 'SUCCESS') {
           this._snackBarService.openSnackBarAsText(
             'Pre-Checkin Sucessfull.',
             '',
             { panelClass: 'success' }
           );
         }
-      });
+      }, (err) => this._snackBarService.openSnackBarAsText(err));
   }
 
   private registerListeners() {

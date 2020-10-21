@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-// import { CardType } from './../../../../../../shared/src/lib/data-models/card';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
@@ -10,7 +9,7 @@ import {
   HotelPaymentConfig,
   PaymentStatus,
   PaymentCCAvenue,
-  PaymentStripe,
+  SelectedPaymentOption,
 } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -31,7 +30,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   hotelPaymentConfig: HotelPaymentConfig;
   isConfigLoaded: boolean = false;
-  paymentMethodData;
+  selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
@@ -70,19 +69,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onPrecheckinSubmit() {
-    // let paymentForm = this.parentForm.getRawValue().paymentDetails;
-    // let cardNumber = paymentForm.cardNumber;
-    // cardNumber = cardNumber.replace(/\s/g, '');
-    // this.cardType = CardType.GetCardType(cardNumber);
-    //TODO: Need to call different api for pay with creditcard
-    // this.updatePaymentStatus();
     const data = this.mapPaymentInitiationData();
     const TAB_INDEX = this.matTab['_selectedIndex'];
     const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
     if (TAB_LABEL === 'Pay Now') {
       if (
-        this.paymentMethodData &&
-        this.paymentMethodData.gatewayType === 'CCAVENUE'
+        this.selectedPaymentOption.config &&
+        this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
       ) {
         this._paymentDetailsService
           .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
@@ -99,13 +92,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               );
             }
           );
-      } else if (
-        this.paymentMethodData &&
-        this.paymentMethodData.gatewayType === 'STRIPE'
-      ) {
-        this._buttonService.buttonLoading$.next(
-          this.buttonRefs['submitButton']
-        );
       } else {
         this._snackBarService.openSnackBarAsText(
           'Please select a payment method!'
@@ -126,8 +112,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
     if (TAB_LABEL === 'Pay Now') {
       if (
-        this.paymentMethodData &&
-        this.paymentMethodData.gatewayType === 'CCAVENUE'
+        this.selectedPaymentOption.config &&
+        this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
       ) {
         this._paymentDetailsService
           .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
@@ -144,11 +130,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               );
             }
           );
-      } else if (
-        this.paymentMethodData &&
-        this.paymentMethodData.gatewayType === 'STRIPE'
-      ) {
-        this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       } else {
         this._snackBarService.openSnackBarAsText(
           'Please select a payment method!'
@@ -157,9 +138,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       }
     } else {
       this.updatePaymentStatus('checkin');
-      // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
     }
-    // this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
   }
 
   updatePaymentStatus(state) {
@@ -200,12 +179,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   setPaymentMethodData(event) {
-    this.paymentMethodData = event.methodData;
+    this.selectedPaymentOption.config = event.methodData;
+    this.selectedPaymentOption.type = event.methodType;
   }
 
   mapPaymentData() {
     const paymentStatusData = new PaymentStatus();
-    paymentStatusData.payOnDesk = true;
+    paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk;
     paymentStatusData.status = 'SUCCESS';
     paymentStatusData.transactionId = '12345678';
     return paymentStatusData;
@@ -213,31 +193,14 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   mapPaymentInitiationData() {
     if (
-      this.paymentMethodData &&
-      this.paymentMethodData.gatewayType === 'CCAVENUE'
+      this.selectedPaymentOption.config &&
+        this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
     ) {
-      const paymentCCAvenue = new PaymentCCAvenue();
-      paymentCCAvenue.merchantId = this.paymentMethodData.merchantId;
-      paymentCCAvenue.language = 'en';
-      paymentCCAvenue.gatewayType = this.paymentMethodData.gatewayType;
-      paymentCCAvenue.accessCode = this.paymentMethodData.accessCode;
-      paymentCCAvenue.secretKey = this.paymentMethodData.secretKey;
-      paymentCCAvenue.subAccountId = this.paymentMethodData.subAccountId;
-      paymentCCAvenue.preAuth = this.paymentMethodData.preAuth;
-      paymentCCAvenue.externalRedirect = this.paymentMethodData.exernalRedirect;
-      return paymentCCAvenue;
-    } else if (
-      this.paymentMethodData &&
-      this.paymentMethodData.gatewayType === 'STRIPE'
-    ) {
-      const paymentStripe = new PaymentStripe();
-      paymentStripe.stripeToken = this.paymentMethodData.stripeToken;
-      paymentStripe.gatewayType = this.paymentMethodData.gatewayType;
-      paymentStripe.secretKey = this.paymentMethodData.secretKey;
-      paymentStripe.merchantId = this.paymentMethodData.merchantId;
-      paymentStripe.preAuth = this.paymentMethodData.preAuth;
-      paymentStripe.externalRedirect = this.paymentMethodData.exernalRedirect;
-      return paymentStripe;
+      return new PaymentCCAvenue().deserialize(
+        this.selectedPaymentOption.config,
+        this.reservationData.paymentSummary.depositRules,
+        this.selectedPaymentOption.type
+      );
     } else {
       return null;
     }
@@ -248,6 +211,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   get currencyCode() {
-    return this._paymentDetailsService.paymentSummaryDetails.currencyCode;
+    return this._paymentDetailsService.currencyCode;
+  }
+
+  get paymentConfiguration() {
+    return this._paymentDetailsService.paymentConfiguration;
   }
 }

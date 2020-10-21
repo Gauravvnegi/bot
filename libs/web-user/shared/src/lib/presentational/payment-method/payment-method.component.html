@@ -1,19 +1,19 @@
 <div class="methods-container">
-  <label class="labl" *ngFor="let option of settings.paymentConfigurations">
+  <label class="labl" *ngFor="let method of settings.paymentConfigurations.paymentMethods">
     <input
       name='method'
       type="radio"
-      [value]="option.gatewayType"
-      (click)="setOption(option)"
+      [value]="settings.paymentConfigurations.gatewayType"
+      (click)="setOption(settings.paymentConfigurations, method)"
     />
     <div>
       <div class="method-content">
         <h3>
-          {{ option.gatewayType }}
+          {{ method.type }}
         </h3>
         <!-- <h6 *ngFor="let method of option.paymentMethods">{{ method.type }}</h6> -->
         <div class="method-image-container">
-          <div class="image" *ngFor="let method of option.paymentMethods">
+          <div class="image">
             <img [src]="method.imageUrl" style="padding: 3px;max-width: 185px;" />
           </div>
         </div>

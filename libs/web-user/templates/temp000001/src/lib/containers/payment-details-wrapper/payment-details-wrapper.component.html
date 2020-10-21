@@ -26,7 +26,7 @@
             </div>
             <web-user-payment-method
               *ngIf="hotelPaymentConfig && header.type !== 'Pay At Desk'"
-              [settings]="{ paymentConfigurations: hotelPaymentConfig.paymentConfigurations }"
+              [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
             ></web-user-payment-method>
           </div>

@@ -88,4 +88,12 @@ export class PaymentDetailsService extends ApiService {
   get paymentSummaryDetails() {
     return this._paymentDetailDS;
   }
+
+  get paymentConfiguration() {
+    return this.paymentSummaryDetails['hotelConfigDetail'].hotelPaymentConfig.paymentConfigurations;
+  }
+
+  get currencyCode() {
+    return this.paymentSummaryDetails.currencyCode;
+  }
 }

@@ -18,25 +18,21 @@
           {{ paymentNote }}<b>johndeo@gmail.com</b>
         </p>
         <p
-        class="note"
-        [ngStyle]="
-          paymentStatusData.data.status === 'FAILED'
+          class="note"
+          [ngStyle]="paymentStatusData.data.status === 'FAILED'
             ? { 'display': 'block' }
-            : { 'display': 'none' }
-        "
-      >
-        {{ paymentNote }}
-      </p>
-      <p
-        class="error_code"
-        [ngStyle]="
-          paymentStatusData.data.status === 'FAILED'
+            : { 'display': 'none' }"
+        >
+          {{ paymentNote }}
+        </p>
+        <p
+          class="error_code"
+          [ngStyle]="paymentStatusData.data.status === 'FAILED'
             ? { 'display': 'block' }
-            : { 'display': 'none' }
-        "
-      >
-        Error code : 309
-      </p>
+            : { 'display': 'none' }"
+        >
+          Error code : 309
+        </p>
       </div>
       <div class="detail-box-wrapper">
         <div class="detail-box">

@@ -1,18 +1,26 @@
-<h1 mat-dialog-title>{{ config.title }}</h1>
-<div mat-dialog-content>
-  <p>{{ config.description }}</p>
-  <p>{{ config.question }}</p>
+<div class="popup-wrapper">
+  <div class="header">
+    <div class="title-container">
+      <mat-icon class="warning">report_problem</mat-icon>
+      <h1 class="heading">{{ config.title }}</h1>
+    </div>
+    <mat-icon class="clear">clear</mat-icon>
+  </div>
+  <div class="content">
+    <p>{{ config.description }}</p>
+    <p>{{ config.question }}</p>
 
-  <!-- <mat-form-field>
+    <!-- <mat-form-field>
     <mat-label>Favorite Animal</mat-label>
     <input matInput [(ngModel)]="data.animal">
   </mat-form-field> -->
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">
-    {{ config.buttons.cancel.label }}
-  </button>
-  <button mat-button cdkFocusInitial disabled="true" (click)="onAccept()">
-    {{ config.buttons.accept.label }}
-  </button>
+    <div class="button-wrapper">
+      <button class="cancel" mat-button (click)="onCancel()">
+        {{ config.buttons.cancel.label }}
+      </button>
+      <button class="accept" mat-button cdkFocusInitial (click)="onAccept()">
+        {{ config.buttons.accept.label }}
+      </button>
+    </div>
+  </div>
 </div>

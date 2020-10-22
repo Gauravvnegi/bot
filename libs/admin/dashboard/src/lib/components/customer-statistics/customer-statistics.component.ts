@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import { Customer } from '../../data-models/statistics.model';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
@@ -10,15 +17,15 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 @Component({
   selector: 'hospitality-bot-customer-statistics',
   templateUrl: './customer-statistics.component.html',
-  styleUrls: ['./customer-statistics.component.scss']
+  styleUrls: ['./customer-statistics.component.scss'],
 })
 export class CustomerStatisticsComponent implements OnInit {
   @Input() customerData: Customer;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   legendData;
   chartTypes = [
-    {name: 'Line', value: 'line'},
-    {name: 'Bar', value: 'bar'},
+    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
+    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
   ];
 
   selectedInterval: any;
@@ -28,7 +35,7 @@ export class CustomerStatisticsComponent implements OnInit {
       return chart.legend.legendItems;
     }
 
-    return function(chart: Chart): any {
+    return function (chart: Chart): any {
       return handle(chart);
     };
   })(this);
@@ -36,30 +43,34 @@ export class CustomerStatisticsComponent implements OnInit {
   chart: any = {
     chartData: [
       { data: [], label: 'Check-In', fill: false },
-      { data: [], label: 'Express Check-In', fill: false, borderDash: [10,5] },
+      { data: [], label: 'Express Check-In', fill: false, borderDash: [10, 5] },
       { data: [], label: 'Checkout', fill: false },
-      { data: [], label: 'Express Checkout', fill: false, borderDash: [10,5] },
+      { data: [], label: 'Express Checkout', fill: false, borderDash: [10, 5] },
     ],
     chartLabels: [],
     chartOptions: {
       responsive: true,
       scales: {
-        xAxes: [{
-           gridLines: {
-              display: true
-           }
-        }],
-        yAxes: [{
-           gridLines: {
-              display: false
-           },
-           ticks: {
-            min: 0,
-            stepSize: 1,
-          }
-        }]
+        xAxes: [
+          {
+            gridLines: {
+              display: true,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              min: 0,
+              stepSize: 1,
+            },
+          },
+        ],
       },
-      legendCallback: this.getLegendCallback
+      legendCallback: this.getLegendCallback,
     },
     chartColors: [
       {
@@ -74,7 +85,7 @@ export class CustomerStatisticsComponent implements OnInit {
       {
         borderColor: '#F2509B',
       },
-    ],  
+    ],
     chartLegend: false,
     chartType: 'line',
   };
@@ -85,10 +96,9 @@ export class CustomerStatisticsComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService
-  ) {
-  }
+  ) {}
 
-  setChartType (option) {
+  setChartType(option) {
     this.chart.chartType = option.value;
     this.setChartColors();
   }
@@ -123,7 +133,9 @@ export class CustomerStatisticsComponent implements OnInit {
     });
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
-      this.chart.chartLabels.push(this.convertTimestampToLabels(this.selectedInterval, d));
+      this.chart.chartLabels.push(
+        this.convertTimestampToLabels(this.selectedInterval, d)
+      );
       this.chart.chartData[0].data.push(this.customerData.checkIn[d]);
       this.chart.chartData[1].data.push(this.customerData.expressCheckIn[d]);
       this.chart.chartData[2].data.push(this.customerData.checkout[d]);
@@ -141,14 +153,19 @@ export class CustomerStatisticsComponent implements OnInit {
     } else if (type === 'date') {
       returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
     } else {
-      returnTime = `${data > 12 ? data - 12 : data}:00 ${data > 11 ? 'PM' : 'AM'}`
+      returnTime = `${data > 12 ? data - 12 : data}:00 ${
+        data > 11 ? 'PM' : 'AM'
+      }`;
     }
     return returnTime;
   }
 
   legendOnClick = (index) => {
     let ci = this.baseChart.chart;
-    let alreadyHidden = (ci.getDatasetMeta(index).hidden === null) ? false : ci.getDatasetMeta(index).hidden;
+    let alreadyHidden =
+      ci.getDatasetMeta(index).hidden === null
+        ? false
+        : ci.getDatasetMeta(index).hidden;
 
     ci.data.datasets.forEach((e, i) => {
       let meta = ci.getDatasetMeta(i);
@@ -163,12 +180,15 @@ export class CustomerStatisticsComponent implements OnInit {
     });
 
     ci.update();
-  }
+  };
 
   getCustomerStatistics() {
     this._globalFilterService.globalFilter$.subscribe((data) => {
       let calenderType = {
-        calenderType: this._adminUtilityService.getCalendarType(data['dateRange'].queryValue[0].toDate, data['dateRange'].queryValue[1].fromDate)
+        calenderType: this._adminUtilityService.getCalendarType(
+          data['dateRange'].queryValue[0].toDate,
+          data['dateRange'].queryValue[1].fromDate
+        ),
       };
       this.selectedInterval = calenderType.calenderType;
       const queries = [
@@ -176,17 +196,15 @@ export class CustomerStatisticsComponent implements OnInit {
         ...data['dateRange'].queryValue,
         calenderType,
       ];
-      
+
       const config = {
         queryObj: this._adminUtilityService.makeQueryParams(queries),
       };
 
-      this._statisticService.getCustomerStatistics(config)
-        .subscribe(res => {
-          this.customerData = new Customer().deserialize(res);
-          this.initGraphData();
-        })
+      this._statisticService.getCustomerStatistics(config).subscribe((res) => {
+        this.customerData = new Customer().deserialize(res);
+        this.initGraphData();
+      });
     });
   }
-
 }

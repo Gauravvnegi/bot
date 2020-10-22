@@ -114,7 +114,7 @@
   text-decoration: line-through;
 }
 
-.labl > div {
+.labl > img {
   // width: 25px;
   // height: 25px;
   padding: 3px;
@@ -122,19 +122,20 @@
   justify-content: center;
   align-items: center;
 }
-.labl > input + div {
+.labl > input + img {
   /* DIV STYLES */
   position: relative;
   cursor: pointer;
   border: 1px solid gainsboro;
   border-radius: 15px;
-  font: normal normal normal 10px/16px Roboto;
+//   font: normal normal normal 10px/16px Roboto;
 }
-.labl > input:checked + div {
+.labl > input:checked + img {
   /* (RADIO CHECKED) DIV STYLES */
   border: 2px solid $primary-purple;
   background-color: $primary-purple;
-  color: white;
+  // color: white;
+  filter: invert(1);
 }
 
 // .labl > div > .circle {

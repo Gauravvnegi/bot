@@ -31,7 +31,7 @@
       .manage-box {
         padding: $padding10 $padding15;
         font-size: $font12;
-        color: #727272;
+        color: $dark-grey;
         background-color: #f5f5f5;
         border-radius: 25px;
       }
@@ -147,7 +147,7 @@
           font-size: $font14;
           display: flex;
           align-items: center;
-          color: #484848;
+          color: $primary-black;
           letter-spacing: 0.84px;
           height: 65px;
           @media only screen and (max-width: 1200px) {
@@ -316,6 +316,6 @@
   }
 }
 
-.color-added {
-  background-color: #f8f8f8;
-}
+// .color-added {
+//   background-color: #f8f8f8;
+// }

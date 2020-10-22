@@ -15,35 +15,50 @@
       <div class="options">
         <!-- <admin-search-bar class="search-bar"></admin-search-bar> -->
         <div class="filter-range-wrapper">
-          <button (click)="toggleGlobalFilter()" class="header--button temp-width">
-            <p class="filter-button--text">
-              {{ filterConfig.branchName }}&nbsp;<b
-                style="color: #d9d9d9; font-size: 12px;"
-                >{{ filterConfig.totalFilterContent() }}
-              </b>
-            </p>
-            <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
-          </button>
-
+          <div style="position: relative;" class="temp-width">
+            <button (click)="toggleGlobalFilter()" class="header--button">
+              <p class="filter-button--text">
+                {{ filterConfig.branchName }}&nbsp;<b
+                  style="color: #d9d9d9; font-size: 12px;"
+                  >{{ filterConfig.totalFilterContent() }}
+                </b>
+              </p>
+              <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
+            </button>
+            <div
+              class="filter-wrapper"
+              *ngIf="
+                isGlobalFilterVisible &&
+                (filterService.emitFilterValue$ | async) as initialFilterValue
+              "
+            >
+              <admin-filter
+                [initialFilterValue]="initialFilterValue"
+                (onCloseFilter)="toggleGlobalFilter()"
+                (onApplyFilter)="applyFilter($event)"
+                (onResetFilter)="resetFilter($event)"
+              ></admin-filter>
+            </div>
+          </div>
           <hospitality-bot-daterange
             class="date-range temp-width"
             (onDateRangeFilter)="applyDateRangeFilter($event)"
           ></hospitality-bot-daterange>
         </div>
-        <div
-          class="filter-wrapper"
-          *ngIf="
-            isGlobalFilterVisible &&
-            (filterService.emitFilterValue$ | async) as initialFilterValue
-          "
-        >
-          <admin-filter
-            [initialFilterValue]="initialFilterValue"
-            (onCloseFilter)="toggleGlobalFilter()"
-            (onApplyFilter)="applyFilter($event)"
-            (onResetFilter)="resetFilter($event)"
-          ></admin-filter>
-        </div>
+        <!-- <div
+        class="filter-wrapper"
+        *ngIf="
+          isGlobalFilterVisible &&
+          (filterService.emitFilterValue$ | async) as initialFilterValue
+        "
+      >
+        <admin-filter
+          [initialFilterValue]="initialFilterValue"
+          (onCloseFilter)="toggleGlobalFilter()"
+          (onApplyFilter)="applyFilter($event)"
+          (onResetFilter)="resetFilter($event)"
+        ></admin-filter>
+      </div> -->
         <div class="dropdown-wrapper">
           <admin-profile-dropdown
             [items]="profile"

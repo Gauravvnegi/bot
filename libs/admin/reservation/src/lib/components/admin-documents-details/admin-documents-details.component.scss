@@ -78,7 +78,7 @@
 //     .value {
 //       letter-spacing: 0.84px;
 //       font-size: $font14;
-//       color: #484848;
+//       color: $primary-black;
 //       margin-top: $margin10;
 //     }
 //   }
@@ -172,31 +172,7 @@
   }
 }
 
-.empty-view {
-  padding: 12%;
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    img {
-      height: 80px;
-    }
-    .label {
-      color: #484848;
-      font-weight: 500;
-      letter-spacing: 0.84px;
-      font-size: 10px;
-      margin-top: 12px;
-    }
-    .note {
-      color: $primary-gray;
-      font-weight: 500;
-      letter-spacing: 0.84px;
-      margin-top: 10px;
-      font-size: 12px;
-    }
-  }
-}
+
 
 .pending-button-wrapper {
   display: flex;

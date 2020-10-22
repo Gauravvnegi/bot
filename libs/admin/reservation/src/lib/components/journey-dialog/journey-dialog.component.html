@@ -12,7 +12,7 @@
   <button mat-button (click)="onCancel()">
     {{ config.buttons.cancel.label }}
   </button>
-  <button mat-button cdkFocusInitial (click)="onAccept()">
+  <button mat-button cdkFocusInitial disabled="true" (click)="onAccept()">
     {{ config.buttons.accept.label }}
   </button>
 </div>

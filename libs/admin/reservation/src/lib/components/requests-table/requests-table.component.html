@@ -1,6 +1,7 @@
 <!-- <p>requests-table works!</p> -->
 
 <p-table
+  *ngIf="!showEmptyView; else emptyView"
   #dt
   [styleClass]="tableConfig.styleClass"
   [resizableColumns]="isResizableColumns"
@@ -49,22 +50,26 @@
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
     <tr class="data-table-row">
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>{{ rowData.getRequestDate() }} {{ rowData.getRequestTime() }}</td>
+      <td>{{ rowData.remarks }}</td>
+      <td>{{ rowData.journey }} {{ rowData.getElapsedTime() }}</td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
-  <ng-template pTemplate="summary">
+  <!-- <ng-template pTemplate="summary">
     <p-paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
     ></p-paginator>
-  </ng-template>
+  </ng-template> -->
 </p-table>
 
 <ng-template #emptyCell>
   <div class="emptyCell">--</div>
+</ng-template>
+
+<ng-template #emptyView>
+  No Activities & Notes
 </ng-template>

@@ -5,6 +5,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from '../../services/reservation.service';
 import { Observable } from 'rxjs';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { RequestTable } from '../../models/request-table.model';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -33,6 +34,8 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     { field: 'guests.primaryGuest.firstName', header: 'Category/Type' },
   ];
 
+  showEmptyView: boolean = false;
+
   constructor(
     public fb: FormBuilder,
     private _reservationService: ReservationService,
@@ -50,10 +53,13 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     this.loading = true;
     this.fetchDataFrom(queries).subscribe(
       (data) => {
-        // debugger;
-        // this.values = new ReservationTable().deserialize(data).records;
+        if (!data) {
+          this.showEmptyView = true;
+          return;
+        }
+        this.values = new RequestTable().deserialize({ records: data }).records;
         //set pagination
-        // this.totalRecords = data.total;
+        this.totalRecords = data.total;
         this.loading = false;
       },
       ({ error }) => {

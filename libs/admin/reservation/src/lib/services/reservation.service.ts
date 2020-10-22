@@ -51,8 +51,6 @@ export class ReservationService extends ApiService {
   }
 
   getRequestsByReservationId(reservationId, config): Observable<any> {
-    return this.get(
-      `/api/v1/reservation/${reservationId}/live-request/${config.queryObj}`
-    );
+    return this.get(`/api/v1/reservation/${reservationId}/live-request`);
   }
 }

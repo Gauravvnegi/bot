@@ -38,7 +38,6 @@ export class Request implements Deserializable {
 
   getElapsedTime() {
     const diffInMins = moment().diff(moment(this.requestTimeStamp), 'minutes');
-    debugger;
     if (diffInMins > 24 * 60 * 30 * 12) {
       return `${moment().diff(moment(this.requestTimeStamp), 'years')} year`;
     } else if (diffInMins > 24 * 60 * 30) {

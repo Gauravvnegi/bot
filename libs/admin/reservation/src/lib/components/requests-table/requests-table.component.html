@@ -1,62 +1,115 @@
 <!-- <p>requests-table works!</p> -->
+<div class="material-body">
+  <div class="activity-wrapper">
+    <div class="activity-wrapper--header">
+      <p class="heading">Activities</p>
+      <ng-container [ngSwitch]="'INITIATED'">
+        <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
 
-<p-table
-  *ngIf="!showEmptyView; else emptyView"
-  #dt
-  [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="isResizableColumns"
-  [autoLayout]="isAutoLayout"
-  [loading]="loading"
-  [columns]="cols"
-  [value]="values"
-  [paginator]="isPaginaton"
-  [rows]="rowsPerPage"
-  [showCurrentPageReport]="showCurrentPageReport"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  [(first)]="first"
-  [totalRecords]="totalRecords"
-  [filterDelay]="0"
-  [selectionMode]="selectionMode"
-  [(selection)]="selectedRows"
-  (onRowSelect)="onRowSelect($event)"
-  (onRowUnselect)="onRowUnselect($event)"
->
-  <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data available in table</p>
-  </ng-template>
-  <!-- *******************************HEADER WITH SEARCH******************************* -->
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns"
-      >
-        <div>
-          <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-  </ng-template>
-  <!-- **************************************BODY********************************* -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-    let-rowIndex="rowIndex"
+        <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+
+        <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+
+        <img
+          *ngSwitchCase="'INITIATED'"
+          src="assets/svg/status/initiated.svg"
+        />
+      </ng-container>
+    </div>
+    <p class="go-to">Go to Requests</p>
+  </div>
+  <p-table
+    *ngIf="!showEmptyView; else emptyView"
+    #dt
+    [styleClass]="tableConfig.styleClass"
+    [resizableColumns]="isResizableColumns"
+    [autoLayout]="isAutoLayout"
+    [loading]="loading"
+    [columns]="cols"
+    [value]="values"
+    [paginator]="isPaginaton"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [(first)]="first"
+    [totalRecords]="totalRecords"
+    [filterDelay]="0"
+    [selectionMode]="selectionMode"
+    [(selection)]="selectedRows"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)"
   >
-    <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-    <tr class="data-table-row">
-      <td>{{ rowData.getRequestDate() }} {{ rowData.getRequestTime() }}</td>
-      <td>{{ rowData.remarks }}</td>
-      <td>{{ rowData.journey }} {{ rowData.getElapsedTime() }}</td>
-    </tr>
-  </ng-template>
-  <!-- *********************************FOOTER******************************* -->
-  <!-- <ng-template pTemplate="summary">
+    <ng-template pTemplate="emptymessage">
+      <p class="no-data-found">No data available in table</p>
+    </ng-template>
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th
+          class="table-data-head"
+          pResizableColumn
+          [pSortableColumn]="col.field"
+          *ngFor="let col of columns"
+        >
+          <div>
+            <p class="table-header-text">{{ col.header }}</p>
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
+      <tr class="data-table-row">
+        <td class="date-time">
+          <p class="date">{{ rowData.getRequestDate() }}</p>
+          <p class="time">{{ rowData.getRequestTime() }}</p>
+        </td>
+        <td class="message">{{ rowData.remarks }}</td>
+        <td class="category">
+          <div>
+            <p
+              class="journey"
+              [ngClass]="{
+                'status-opacity-initiated status-text-initiated':
+                  status == 'INITIATED',
+                'status-opacity-pending status-text-pending':
+                  status == 'PENDING',
+                'status-opacity-reject status-text-reject': status == 'FAILED',
+                'status-opacity-success status-text-success':
+                  status == 'COMPLETED'
+              }"
+            >
+              {{ rowData.journey }}
+              <b
+                *ngIf="rowData.getElapsedTime()"
+                [ngClass]="{
+                  'status-opacity-initiated status-text-initiated':
+                    status == 'INITIATED',
+                  'status-opacity-pending status-text-pending':
+                    status == 'PENDING',
+                  'status-opacity-reject status-text-reject':
+                    status == 'FAILED',
+                  'status-opacity-success status-text-success':
+                    status == 'COMPLETED'
+                }"
+              >
+                {{ rowData.getElapsedTime() }}
+              </b>
+            </p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <!-- *********************************FOOTER******************************* -->
+    <!-- <ng-template pTemplate="summary">
     <p-paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
@@ -64,12 +117,19 @@
       (onPageChange)="paginate($event)"
     ></p-paginator>
   </ng-template> -->
-</p-table>
+  </p-table>
+</div>
 
 <ng-template #emptyCell>
   <div class="emptyCell">--</div>
 </ng-template>
 
 <ng-template #emptyView>
-  No Activities & Notes
+  <div class="empty-view">
+    <div class="wrapper">
+      <img src="assets/notes.png" />
+      <p class="label">No Activities & Notes!</p>
+      <p class="note">Stay tuned! Guest requests will show up here.</p>
+    </div>
+  </div>
 </ng-template>

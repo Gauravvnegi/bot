@@ -251,7 +251,7 @@
 }
 
 :host ::ng-deep .guest {
-  color: #484848;
+  color: $primary-black;
   font-size: $font12;
   position: relative;
   &:hover {
@@ -422,7 +422,7 @@ th {
 :host ::ng-deep .mat-chip {
   background-color: #f5f5f5;
   font-weight: 400;
-  color: #727272;
+  color: $dark-grey;
   &:hover {
     cursor: pointer;
   }

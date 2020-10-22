@@ -59,7 +59,7 @@
 
 :host ::ng-deep .arrival-date {
   font-size: $font12;
-  color: #727272;
+  color: $dark-grey;
   @media screen and (max-width: 800px) {
     font-size: 8px;
   }
@@ -76,7 +76,7 @@
 
 
 :host ::ng-deep .booking-number {
-  color: #727272;
+  color: $dark-grey;
   font-size: $font12;
   text-align: center;
   @media screen and (max-width: 800px) {
@@ -85,7 +85,7 @@
 }
 
 :host ::ng-deep .package {
-  color: #727272;
+  color: $dark-grey;
   font-size: $font12;
   position: relative;
   @media screen and (max-width: 800px) {
@@ -145,7 +145,7 @@
     width: 100%;
     top: 50%;
     font-size: 12px;
-    color: #727272;
+    color: $dark-grey;
     background-color: white;
     left: 0%;
     padding: 7px;

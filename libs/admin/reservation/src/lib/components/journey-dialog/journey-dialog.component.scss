@@ -14,7 +14,7 @@
     }
     .heading {
       font-size: $font14;
-      color: #484848;
+      color: $primary-black;
       font-weight: $medium;
     }
     .warning {
@@ -22,7 +22,7 @@
       margin-right: 20px;
     }
     .clear {
-      color: #484848;
+      color: $primary-black;
       &:hover {
         cursor: pointer;
       }
@@ -34,7 +34,7 @@
     flex-direction: column;
     padding: 20px 0px;
     p {
-      color: #484848;
+      color: $primary-black;
       font-size: $font14;
       margin: 3px 0;
       font-weight: $medium;

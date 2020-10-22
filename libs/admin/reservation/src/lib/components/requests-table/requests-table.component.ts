@@ -27,6 +27,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   isCustomSort = true;
   triggerInitialData = false;
   isPaginaton = false;
+  status='INITIATED';
 
   cols = [
     { field: 'rooms.roomNumber', header: 'Date/Time' },

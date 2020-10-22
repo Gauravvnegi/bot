@@ -22,7 +22,6 @@ import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/res
   styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit {
-  config: any;
   showAppStatusForm: boolean = false;
   @Input() stepperIndex;
   reservationData: ReservationDetails = new ReservationDetails();

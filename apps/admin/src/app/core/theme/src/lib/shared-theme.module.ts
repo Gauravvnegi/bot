@@ -16,6 +16,7 @@ import { SearchBarComponent } from './containers/search-bar/search-bar.component
 import { FilterComponent } from './containers/filter/filter.component';
 import { TabViewModule } from 'primeng/tabview';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,6 +38,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FooterComponent,
     SearchBarComponent,
     FilterComponent,
+    OrientationPopupComponent,
   ],
   exports: [
     SidenavComponent,

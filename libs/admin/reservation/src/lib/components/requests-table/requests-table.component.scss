@@ -1,0 +1,14 @@
+@import 'main';
+
+.date-time{
+    font-size: 12px;
+    color: #727272;
+    .time{
+        color: $primary-gray;
+        margin-top: 5px;
+    }
+}
+
+.message{
+    color: #727272;
+}

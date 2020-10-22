@@ -6,39 +6,75 @@ export interface Deserializable {
 }
 
 export class PaymentDetailDS implements Deserializable {
-  paymentDetail: PaymentDetail[];
+  paymentDetail: PaymentDetail;
   hotelConfigDetail: HotelPaymentDetail;
-  currencyCode: string;
 
   deserialize(rooms: any, paymentSummary:any, config: any) {
-    this.currencyCode = config.currency;
-    this.paymentDetail = new Array<PaymentDetail>();
-    rooms.forEach((room) => {
-      this.paymentDetail.push(new PaymentDetail().deserialize(room, paymentSummary));
-    });
+    this.paymentDetail = (new PaymentDetail().deserialize(paymentSummary));
     this.hotelConfigDetail = new HotelPaymentDetail().deserialize(config, paymentSummary);
     return this;
   }
 }
 
 export class PaymentDetail implements Deserializable {
-  roomNumber: number;
-  unit: number;
-  roomType: string;
-  baseRate: number;
-  totalRate: number;
+  totalAmount: number;
+  taxAmount: number;
+  totalDiscount: number;
+  subtotal: number;
+  paidAmount: number;
+  dueAmount: number;
+  currencyCode: string;
+  roomRates: Rates;
+  packages: Rates[];
   
-  deserialize(room: any, paymentSummary: any) {
+  deserialize(paymentSummary: any) {
     Object.assign(
       this,
-      set({}, 'roomNumber', get(room, ['roomNumber'])),
-      set({}, 'unit', get(room, ['unit'])),
-      set({}, 'roomType', get(room, ['type'])),
-      set({}, 'baseRate', get(paymentSummary.roomRates, ['base'])),
-      set({}, 'totalRate', get(paymentSummary.roomRates, ['totalAmount'])),
+      set({}, 'currencyCode', get(paymentSummary, ['currency'])),
+      set({}, 'totalAmount', get(paymentSummary, ['totalAmount'])),
+      set({}, 'taxAmount', get(paymentSummary, ['taxAmount'])),
+      set({}, 'totalDiscount', get(paymentSummary, ['totalDiscount'])),
+      set({}, 'subtotal', get(paymentSummary, ['subtotal'])),
+      set({}, 'paidAmount', get(paymentSummary, ['paidAmount'])),
+      set({}, 'dueAmount', get(paymentSummary, ['dueAmount'])),
     );
+    this.roomRates = new Rates().deserialize(paymentSummary.roomRates);
+    this.packages  = new Array<Rates>();
+    paymentSummary.packages.forEach((element) => this.packages.push(new Rates().deserialize(element)));
+    return this;
+  };
+}
+
+export class Rates {
+  base: number;
+  totalAmount: number;
+  amount: number;
+  label: string;
+  description: string;
+  unit: number;
+  taxAndFees: TaxAndFee[];
+  discount: number;
+
+  deserialize(rates) {
+    Object.assign(
+      this,
+      set({}, 'base', get(rates, ['base'])),
+      set({}, 'totalAmount', get(rates, ['totalAmount'])),
+      set({}, 'amount', get(rates, ['amount'])),
+      set({}, 'label', get(rates, ['label'])),
+      set({}, 'description', get(rates, ['description'])),
+      set({}, 'unit', get(rates, ['unit'])),
+      set({}, 'discount', get(rates, ['discount'])),
+      set({}, 'taxAndFees', get(rates, ['taxAndFees'])),
+    )
     return this;
   }
+}
+
+export class TaxAndFee {
+  amount: number;
+  type: string;
+  value: string;
 }
 
 export class HotelPaymentDetail implements Deserializable {

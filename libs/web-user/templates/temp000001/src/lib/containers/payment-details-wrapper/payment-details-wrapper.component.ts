@@ -141,6 +141,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     }
   }
 
+  onCheckoutSubmit() {
+    this.onCheckinSubmit();
+  }
+
   updatePaymentStatus(state) {
     const data = this.mapPaymentData();
     this._paymentDetailsService

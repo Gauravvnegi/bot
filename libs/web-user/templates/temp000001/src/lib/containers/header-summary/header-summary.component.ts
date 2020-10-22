@@ -7,6 +7,11 @@ import {
 import { MatDialogRef } from '@angular/material/dialog';
 import { relativeTimeThreshold, Moment } from 'moment';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { forkJoin, of } from 'rxjs';
+import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 
 @Component({
   selector: 'hospitality-bot-header-summary',
@@ -16,6 +21,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 export class HeaderSummaryComponent implements OnInit {
   config: any;
   showAppStatusForm: boolean = false;
+  reservationData: ReservationDetails = new ReservationDetails();
   date: string;
   @Input() stepperIndex;
   context: any;
@@ -26,7 +32,10 @@ export class HeaderSummaryComponent implements OnInit {
   constructor(
     private _stepperService: StepperService,
     private _date: DateService,
-    public dialogRef: MatDialogRef<HeaderSummaryComponent>
+    public dialogRef: MatDialogRef<HeaderSummaryComponent>,
+    private _reservationService: ReservationService,
+    private _hotelService: HotelService,
+    private _paymentDetailsService: PaymentDetailsService,
   ) {
     this.context = this;
   }
@@ -34,6 +43,33 @@ export class HeaderSummaryComponent implements OnInit {
   ngOnInit(): void {
     this.getSettings();
     this.setCurrentDate();
+    this.getReservationDetails();
+  }
+
+  private initPaymentDS() {
+    const journey = this._hotelService.getCurrentJourneyConfig();
+    this._paymentDetailsService
+      .getPaymentConfiguration(this.reservationData.hotel.id, journey.name)
+      .subscribe((response) => {
+        this._paymentDetailsService.initPaymentDetailDS(
+          this.reservationData,
+          response
+        );
+      });
+  }
+
+  private getReservationDetails() {
+    forkJoin(
+      this._reservationService.getReservationDetails(
+        this._reservationService.reservationId
+      ),
+      of(true)
+    ).subscribe(([reservationData, val]) => {
+      this._hotelService.hotelConfig = reservationData['hotel'];
+      this.reservationData = reservationData;
+      this._reservationService.reservationData = reservationData;
+      this.initPaymentDS();
+    });
   }
 
   ngAfterViewInit() {

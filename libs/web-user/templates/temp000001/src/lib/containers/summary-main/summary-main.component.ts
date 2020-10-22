@@ -53,11 +53,6 @@ export class SummaryMainComponent implements OnInit {
       this.reservationData = reservationData;
       this._reservationService.reservationData = reservationData;
       this.initPaymentDS();
-      // this.setPaymentStatus();
     });
-  }
-
-  openFeedback() {
-    this.router.navigateByUrl(`/feedback?token=${this.route.snapshot.queryParamMap.get('token')}&entity=feedback`);
   }
 }

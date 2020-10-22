@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{ config.title }}</h1>
+<div mat-dialog-content>
+  <p>{{ config.description }}</p>
+  <p>{{ config.question }}</p>
+
+  <!-- <mat-form-field>
+    <mat-label>Favorite Animal</mat-label>
+    <input matInput [(ngModel)]="data.animal">
+  </mat-form-field> -->
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">
+    {{ config.buttons.cancel.label }}
+  </button>
+  <button mat-button cdkFocusInitial (click)="onAccept()">
+    {{ config.buttons.accept.label }}
+  </button>
+</div>

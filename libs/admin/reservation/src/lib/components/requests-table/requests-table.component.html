@@ -1,0 +1,70 @@
+<!-- <p>requests-table works!</p> -->
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+>
+  <ng-template pTemplate="emptymessage">
+    <p class="no-data-found">No data available in table</p>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
+    <tr class="data-table-row">
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">--</div>
+</ng-template>

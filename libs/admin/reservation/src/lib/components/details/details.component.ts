@@ -17,6 +17,10 @@ import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin
 import { SnackBarService } from 'libs/shared/material/src';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -48,7 +52,8 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _changeDetectorRef: ChangeDetectorRef,
     private _snackBarService: SnackBarService,
     private _clipboard: Clipboard,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    private _modal: ModalService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -222,8 +227,128 @@ export class DetailsComponent implements OnInit, OnChanges {
   sendInvoice() {}
 
   confirmAndNotifyCheckin() {
+    this._reservationService
+      .checkCurrentWindow(this.reservationDetailsFG.get('bookingId').value)
+      .subscribe(
+        (res) => {
+          const journeyName = res.journey;
+          switch (journeyName) {
+            case 'EARLYCHECKIN':
+              this.openJourneyDialog({
+                title: 'Early Check-In Request',
+                description:
+                  'Guest checkin request is before scheduled arrival time.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKIN', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
+              break;
+            case 'CHECKIN':
+              this.openJourneyDialog({
+                title: 'Check-In Request',
+                description: 'Guest is about to checkin.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKIN', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
+              break;
+            case 'LATECHECKIN ':
+              this.openJourneyDialog({
+                title: 'Early Check-In Request',
+                description:
+                  'Guest checkin request is after checkin request window.',
+                buttons: {
+                  cancel: {
+                    label: 'Cancel',
+                    context: '',
+                  },
+                  accept: {
+                    label: 'Accept',
+                    context: this,
+                    handler: {
+                      fn_name: 'verifyJourney',
+                      args: ['CHECKIN', 'ACCEPT'],
+                    },
+                  },
+                },
+              });
+              break;
+            case 'EARLYCHECKOUT':
+              break;
+            case 'CHECKOUT':
+              break;
+            case 'LATECHECKOUT':
+              break;
+          }
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
+    // let data = {
+    //   journey: 'CHECKIN',
+    //   state: status,
+    //   remarks: '',
+    // };
+
+    // this._reservationService
+    //   .updateJourneyStatus(
+    //     this.reservationDetailsFG.get('bookingId').value,
+    //     data
+    //   )
+    //   .subscribe(
+    //     (res) => {
+    //       this._snackBarService.openSnackBarAsText('Checkin completed', '', {
+    //         panelClass: 'success',
+    //       });
+    //     },
+    //     ({ error }) => {
+    //       this._snackBarService.openSnackBarAsText(error.message);
+    //     }
+    //   );
+  }
+
+  openJourneyDialog(config) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '450px';
+    const journeyDialogCompRef = this._modal.openDialog(
+      JourneyDialogComponent,
+      dialogConfig
+    );
+
+    journeyDialogCompRef.componentInstance.config = config;
+
+    journeyDialogCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+      res && journeyDialogCompRef.close();
+    });
+  }
+
+  verifyJourney(journeyName, status) {
     let data = {
-      journey: 'CHECKIN',
+      journey: journeyName,
       state: status,
       remarks: '',
     };
@@ -235,9 +360,17 @@ export class DetailsComponent implements OnInit, OnChanges {
       )
       .subscribe(
         (res) => {
-          this._snackBarService.openSnackBarAsText('Checkin completed', '', {
-            panelClass: 'success',
-          });
+          this._snackBarService.openSnackBarAsText(
+            `${journeyName[0]
+              .toUpperCase()
+              .concat(
+                journeyName.slice(1, journeyName.length).toLowerCase()
+              )} completed`,
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
         },
         ({ error }) => {
           this._snackBarService.openSnackBarAsText(error.message);

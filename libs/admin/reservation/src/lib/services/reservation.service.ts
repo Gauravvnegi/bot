@@ -45,4 +45,14 @@ export class ReservationService extends ApiService {
       `/api/v1/reservation/${reservationId}/generate-link?journey=${journeyName}`
     );
   }
+
+  checkCurrentWindow(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}/journey-window`);
+  }
+
+  getRequestsByReservationId(reservationId, config): Observable<any> {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/live-request/${config.queryObj}`
+    );
+  }
 }

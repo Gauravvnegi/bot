@@ -246,6 +246,14 @@
           [data]="details"
         ></hospitality-bot-admin-payment-details>
       </mat-tab>
+
+      <mat-tab label="Activities & Notes">
+        <hospitality-bot-requests-table
+          *ngIf="isReservationDetailFetched"
+          [parentForm]="detailsForm"
+          [data]="details"
+        ></hospitality-bot-requests-table>
+      </mat-tab>
     </mat-tab-group>
 
     <div *ngIf="isReservationDetailFetched" class="tab-buttons">
@@ -342,6 +350,7 @@
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
               <!-- initiate force checkout -->
+              <!-- download invoice -->
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <button
@@ -370,7 +379,9 @@
               <button class="button" (click)="prepareInvoice()">
                 Prepare Invoice
               </button>
-              <button class="button" (click)="sendInvoice()">Send Invoice</button>
+              <button class="button" (click)="sendInvoice()">
+                Send Invoice
+              </button>
               <button (click)="downloadInvoice()" class="button">
                 Download Invoice/Folio
               </button>
@@ -397,7 +408,7 @@
               </button>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <button
+              <!-- <button
                 (click)="activateAndgenerateJourney('CHECKOUT')"
                 class="button"
               >
@@ -408,7 +419,7 @@
               </button>
               <button (click)="downloadInvoice()" class="button">
                 Download Invoice/Folio
-              </button>
+              </button> -->
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <!-- Flow to-be-decided -->
@@ -427,16 +438,6 @@
             </ng-container>
           </ng-container>
         </ng-template>
-
-        <!-- <button
-          *ngIf="healthDeclarationForm.get('status').value !== 'COMPLETED'"
-          class="button"
-          (click)="confirmHealthDocs('ACCEPT')"
-        >
-          Confirm All Health Declaration
-        </button>
-        <button class="button gap">Confirm All Docs</button>
-        <button class="button gap">Confirm & Notify Checkin</button> -->
       </div>
       <p class="contact">Contact Guest</p>
       <div class="right-bottom-icons">

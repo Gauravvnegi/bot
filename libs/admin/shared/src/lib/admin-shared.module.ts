@@ -10,6 +10,7 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     TabMenuModule,
     DropdownModule,
   ],
-  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent],
+  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent, ComingSoonComponent],
   exports: [
     DatatableComponent,
     TabGroupComponent,

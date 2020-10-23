@@ -152,7 +152,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       .subscribe(
         (response) => {
           if (state === 'checkin') {
-            this.refreshSummaryData();
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
@@ -213,20 +212,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
-  }
-
-  refreshSummaryData() {
-    this.$subscription.add(
-      forkJoin(
-        this._summaryService.getSummaryStatus(
-          this._reservationService.reservationId
-        ),
-        of(true)
-      ).subscribe(([res, val]) => {
-        this._summaryService.initSummaryDS(res);
-        this._summaryService.$summaryDetailRefreshed.next(true);
-      })
-    );
   }
 
   get currencyCode() {

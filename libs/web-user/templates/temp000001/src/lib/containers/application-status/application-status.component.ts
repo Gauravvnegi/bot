@@ -11,6 +11,8 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -31,12 +33,14 @@ export class ApplicationStatusComponent implements OnInit {
     private _modal: ModalService,
     private _reservationService: ReservationService,
     private _paymentDetailsService: PaymentDetailsService,
-    private _summaryService: SummaryService
+    private _summaryService: SummaryService,
+    private _stepperService: StepperService,
+    private _templateService: TemplateService,
   ) {}
 
   ngOnInit(): void {
+    this.getSummaryDetails();
     this.registerListeners();
-    this.getStepsStatus();
   }
 
   registerListeners() {
@@ -44,22 +48,23 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   listenForSummaryDetails() {
-    this._summaryService.$summaryDetailRefreshed
-      .subscribe(res => {
-        if (res) {
-          this.summaryDetails = this._summaryService.SummaryDetails;
-          this._summaryService.$summaryDetailRefreshed.next(false);
-        }
-      })
+    this._stepperService.stepperSelectedIndex$.subscribe((index) => {
+      if (this._templateService.templateData) {
+        this._templateService.templateData.stepConfigs.find((item, ix) => {
+          if (item.stepperName === 'Summary' && index === ix) {
+            this.getSummaryDetails();
+          }
+        });
+      }
+    });
   }
 
-  getStepsStatus() {
+  getSummaryDetails() {
     this.$subscription.add(
-        this._summaryService.getSummaryStatus(
-          this._reservationService.reservationId
+      this._summaryService.getSummaryStatus(
+        this._reservationService.reservationId
       ).subscribe((res) => {
-        this._summaryService.initSummaryDS(res);
-        this._summaryService.$summaryDetailRefreshed.next(true);
+        this.summaryDetails = new SummaryDetails().deserialize(res);
         this.isLoaderVisible = false;
       })
     );

@@ -9,9 +9,12 @@ export class PaymentDetailDS implements Deserializable {
   paymentDetail: PaymentDetail;
   hotelConfigDetail: HotelPaymentDetail;
 
-  deserialize(rooms: any, paymentSummary:any, config: any) {
-    this.paymentDetail = (new PaymentDetail().deserialize(paymentSummary));
-    this.hotelConfigDetail = new HotelPaymentDetail().deserialize(config, paymentSummary);
+  deserialize(rooms: any, paymentSummary: any, config: any) {
+    this.paymentDetail = new PaymentDetail().deserialize(paymentSummary);
+    this.hotelConfigDetail = new HotelPaymentDetail().deserialize(
+      config,
+      paymentSummary
+    );
     return this;
   }
 }
@@ -26,7 +29,7 @@ export class PaymentDetail implements Deserializable {
   currencyCode: string;
   roomRates: Rates;
   packages: Rates[];
-  
+
   deserialize(paymentSummary: any) {
     Object.assign(
       this,
@@ -36,13 +39,15 @@ export class PaymentDetail implements Deserializable {
       set({}, 'totalDiscount', get(paymentSummary, ['totalDiscount'])),
       set({}, 'subtotal', get(paymentSummary, ['subtotal'])),
       set({}, 'paidAmount', get(paymentSummary, ['paidAmount'])),
-      set({}, 'dueAmount', get(paymentSummary, ['dueAmount'])),
+      set({}, 'dueAmount', get(paymentSummary, ['dueAmount']))
     );
     this.roomRates = new Rates().deserialize(paymentSummary.roomRates);
-    this.packages  = new Array<Rates>();
-    paymentSummary.packages.forEach((element) => this.packages.push(new Rates().deserialize(element)));
+    this.packages = new Array<Rates>();
+    paymentSummary.packages.forEach((element) =>
+      this.packages.push(new Rates().deserialize(element))
+    );
     return this;
-  };
+  }
 }
 
 export class Rates {
@@ -65,8 +70,8 @@ export class Rates {
       set({}, 'description', get(rates, ['description'])),
       set({}, 'unit', get(rates, ['unit'])),
       set({}, 'discount', get(rates, ['discount'])),
-      set({}, 'taxAndFees', get(rates, ['taxAndFees'])),
-    )
+      set({}, 'taxAndFees', get(rates, ['taxAndFees']))
+    );
     return this;
   }
 }
@@ -81,15 +86,15 @@ export class HotelPaymentDetail implements Deserializable {
   hotelPaymentConfig: HotelPaymentConfig;
 
   deserialize(input: any, paymentSummary: any) {
-    this. hotelPaymentConfig = new HotelPaymentConfig();
-      
+    this.hotelPaymentConfig = new HotelPaymentConfig();
+
     Object.assign(
       this.hotelPaymentConfig,
-      set({}, 'payAtDesk', get(paymentSummary.depositRules, ['payAtDesk'])),
+      set({}, 'payAtDesk', get(paymentSummary, ['depositRules', 'payAtDesk'])),
       set({}, 'onlinePayment', get(input, ['onlinePayment'])),
       set({}, 'payableAmount', get(input, ['payableAmount'])),
       set({}, 'depositRules', get(paymentSummary, ['depositRules']))
-    )
+    );
     const paymentConfig = new PaymentConfig();
     Object.assign(
       paymentConfig,
@@ -99,9 +104,12 @@ export class HotelPaymentDetail implements Deserializable {
       set({}, 'gatewayType', get(input, ['gatewayType'])),
       set({}, 'subAccountId', get(input, ['subAccountId'])),
       set({}, 'secretKey', get(input, ['secretKey'])),
-      set({}, 'externalRedirect', get(input, ['exernalRedirect'])),
-      set({}, 'paymentMethods', input.paymentMethods[paymentSummary.depositRules.guaranteeType])
+      set({}, 'externalRedirect', get(input, ['exernalRedirect']))
     );
+    if (input.paymentMethods.length && paymentSummary.depositRules) {
+      paymentConfig.paymentMethods =
+        input.paymentMethods[paymentSummary.depositRules.guaranteeType];
+    }
     this.hotelPaymentConfig.paymentConfigurations = paymentConfig;
     return this;
   }
@@ -148,9 +156,9 @@ export class PaymentConfig {
 }
 
 export class PaymentStatus {
-  payOnDesk:boolean;
-  transactionId:string;
-  status:string;
+  payOnDesk: boolean;
+  transactionId: string;
+  status: string;
 }
 export class PaymentCCAvenue {
   merchantId: string;
@@ -163,7 +171,11 @@ export class PaymentCCAvenue {
   methodType?: any;
   guaranteeType: string;
 
-  deserialize(config: PaymentConfig, depositRules: DepositRules, type: PaymentMethod) {
+  deserialize(
+    config: PaymentConfig,
+    depositRules: DepositRules,
+    type: PaymentMethod
+  ) {
     Object.assign(
       this,
       set({}, 'merchantId', get(config, ['merchantId'])),
@@ -173,8 +185,8 @@ export class PaymentCCAvenue {
       set({}, 'subAccountId', get(config, ['subAccountId'])),
       set({}, 'externalRedirect', get(config, ['externalRedirect'])),
       set({}, 'guaranteeType', get(depositRules, ['guaranteeType'])),
-      set({}, 'language', 'en'),
-    )
+      set({}, 'language', 'en')
+    );
     if (depositRules.guaranteeType === 'PREPAYMENT') {
       this.methodType = type;
     }

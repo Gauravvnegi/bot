@@ -18,19 +18,21 @@
       </div>
     </div>
     <div class="wrapper">
-      <div class="wrapper__item">
+      <div class="wrapper__item width-added">
         <web-user-input
           [parentForm]="airportForm"
           [name]="'flightNumber'"
           [settings]="airportConfig.flightNumber"
         ></web-user-input>
       </div>
+      <div class="wrapper__item width-added">
         <web-user-date-picker
           [parentForm]="airportForm"
           [name]="'pickupDate'"
           [settings]="airportConfig.pickupDate"
         ></web-user-date-picker>
-      <div class="wrapper__item">
+      </div>
+      <div class="wrapper__item width-added">
         <web-user-time-picker
           [parentForm]="airportForm"
           [name]="'pickupTime'"

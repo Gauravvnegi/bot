@@ -40,3 +40,10 @@
     justify-content: inherit;
   }
 }
+
+.width-added {
+  width: 31%;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
+}

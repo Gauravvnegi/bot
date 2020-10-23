@@ -39,7 +39,9 @@ export class ApplicationStatusComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.getSummaryDetails();
+    // if (this._stepperService._selectedIndex) {
+    this.getSummaryDetails();
+    // }
   }
   
   ngOnChanges(): void {

@@ -143,7 +143,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   clearContainer() {
-    this.serviceContainer.clear();
+    if (this.serviceContainer) {
+      this.serviceContainer.clear();
+    }
   }
 
   listenForComponentRender(){
@@ -222,7 +224,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
   }
 
   get hotelComplimentaryAmenities() {

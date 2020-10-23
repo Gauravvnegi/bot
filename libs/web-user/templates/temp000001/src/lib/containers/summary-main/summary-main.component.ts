@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { forkJoin, of } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 
 @Component({
@@ -20,8 +18,6 @@ export class SummaryMainComponent implements OnInit {
     private _hotelService: HotelService,
     private _templateLoadingService: TemplateLoaderService,
     private _paymentDetailsService: PaymentDetailsService,
-    private router: Router,
-    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -41,12 +37,9 @@ export class SummaryMainComponent implements OnInit {
   }
 
   private getReservationDetails() {
-    forkJoin(
-      this._reservationService.getReservationDetails(
-        this._reservationService.reservationId
-      ),
-      of(true)
-    ).subscribe(([reservationData, val]) => {
+    this._reservationService.getReservationDetails(
+      this._reservationService.reservationId
+    ).subscribe((reservationData) => {
       this._hotelService.hotelConfig = reservationData['hotel'];
       this.isReservationData = true;
       this._templateLoadingService.isTemplateLoading$.next(false);

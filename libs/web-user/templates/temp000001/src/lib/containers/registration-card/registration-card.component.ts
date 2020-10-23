@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Inject } from '@angular/core';
 
 import * as JSZipUtils from 'jszip-utils';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -7,7 +7,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { Subscription } from 'rxjs';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
@@ -47,6 +47,8 @@ export class RegistrationCardComponent {
       },
     },
     signatureUploadAPI: '',
+    regcardUrl: '',
+    signatureImageUrl: ''
   };
 
   @Input('settings') set settings(value) {
@@ -64,25 +66,32 @@ export class RegistrationCardComponent {
     private _docService: DocumentDetailsService,
     private _snackbar: SnackBarService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
-    private _utilityService: UtilityService
-  ) {}
+    @Inject(MAT_DIALOG_DATA) data,
+    private _utilityService: UtilityService,
+  ) {
+    this.settings = data;
+  }
 
   ngOnInit() {
     this.setRegCardSRC();
   }
 
   setRegCardSRC() {
-    //TO-DO: Uncomment once data gets corrected at back-end (API giving bad request as the data from PMS isn't correct)
-    this._subscription.add(
-      this._regCardService.getRegCard(this._reservation.reservationId).subscribe((res) => {
-        this.regCard.URL = res.file_download_url;
-      }, (err) => {
-        throw(err);
-      })
-    );
-    if (this.regCard.URL === '') {
-      this.regCard.URL =
-        'https://nyc3.digitaloceanspaces.com/craterzone-backup/MINDLABZ-37238/regcard/MINDLABZ-37238_regcard.pdf';
+    if (this.settings.regcardUrl) {
+      this.regCard.URL = this.settings.regcardUrl;
+    } else {
+      //TO-DO: Uncomment once data gets corrected at back-end (API giving bad request as the data from PMS isn't correct)
+      this._subscription.add(
+        this._regCardService.getRegCard(this._reservation.reservationId).subscribe((res) => {
+          this.regCard.URL = res.file_download_url;
+        }, (err) => {
+          throw(err);
+        })
+      );
+      if (this.regCard.URL === '') {
+        this.regCard.URL =
+          'https://nyc3.digitaloceanspaces.com/craterzone-backup/MINDLABZ-37238/regcard/MINDLABZ-37238_regcard.pdf';
+      }
     }
     const url = this.regCard.URL;
     this.regCard.fileName = url.substring(url.lastIndexOf('/') + 1, url.length);

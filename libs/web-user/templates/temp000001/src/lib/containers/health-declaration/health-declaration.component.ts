@@ -98,12 +98,8 @@ export class HealthDeclarationComponent implements OnInit {
             { panelClass: 'success' }
           );
           this._utilityService.$signatureUploaded.next(true);
-        }, (err) => {
-          this._snackBarService.openSnackBarAsText(
-            'Signature upload failed',
-            '',
-            { panelClass: 'danger' }
-          );
+        }, ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
           this._utilityService.$signatureUploaded.next(false);
         });
     }

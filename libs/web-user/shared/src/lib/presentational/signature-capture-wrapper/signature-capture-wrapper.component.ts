@@ -5,6 +5,7 @@ import {
   OnChanges,
   Output,
   EventEmitter,
+  ElementRef,
 } from '@angular/core';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -112,7 +113,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
     }
   }
 
-  @ViewChild('saveButton') saveButton;
+  @ViewChild('saveButton') saveButton: ElementRef<any>;
 
   constructor(
     private _fb: FormBuilder,
@@ -123,6 +124,9 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
     private _utilityService: UtilityService,
   ) {
     this.initFormGroup();
+  }
+
+  ngAfterViewInit() {
     this.registerListeners();
   }
 
@@ -162,7 +166,9 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       textSignature: '',
       imageSignature: '',
     });
-    this._dialogRef.close();
+    if (this._dialogRef) {
+      this._dialogRef.close();
+    }
   }
 
   onUploadSignature() {
@@ -226,7 +232,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       this._signatureService.convertTextToImage(data).subscribe((res) => {
         this.signature.signatureImg = res['file_download_url'];
         this.urlToFile(res.file_download_url, res.file_type);
-      })
+      }, ({ error }) => this._snackBarService.openSnackBarAsText(error.message))
     );
   }
 

@@ -34,13 +34,13 @@
         <div class="section--content--container">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.mobileNumber ? '+'+guestDetail.primaryGuest.nationality + ' ' +guestDetail.primaryGuest.mobileNumber : '-' }}
+            {{ contactDetails.mobileNumber ? +contactDetails.cc + ' ' +contactDetails.mobileNumber : '-' }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Email ID</div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.email || '-' }}
+            {{ contactDetails.email || '-' }}
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@
         <div class="section--content--label">
           <ng-container
             [ngSwitch]="
-              stepsStatus.guestDetails.primaryGuest.statusMessage.status
+              summaryDetails.guestDetails.primaryGuest.statusMessage.status
             "
           >
             <ng-container *ngSwitchCase="'PENDING'">
@@ -124,11 +124,11 @@
       <div
         class="section--content"
         *ngIf="
-          stepsStatus.guestDetails.primaryGuest.statusMessage.status ===
+          summaryDetails.guestDetails.primaryGuest.statusMessage.status ===
           'FAILED'
         "
       >
-        {{ stepsStatus.guestDetails.primaryGuest.statusMessage.remarks }}
+        {{ summaryDetails.guestDetails.primaryGuest.statusMessage.remarks }}
       </div>
     </div>
     <div>
@@ -136,7 +136,7 @@
       <div class="section--content--health">
         <div class="section--content--health--message">
           <ng-container
-            [ngSwitch]="stepsStatus.healthDeclaration.statusMessage.status"
+            [ngSwitch]="summaryDetails.healthDeclaration.statusMessage.status"
           >
             <ng-container *ngSwitchCase="'PENDING'">
               <div>
@@ -177,10 +177,10 @@
         <div
           class="section--content"
           *ngIf="
-            stepsStatus.healthDeclaration.statusMessage.status === 'FAILED'
+            summaryDetails.healthDeclaration.statusMessage.status === 'FAILED'
           "
         >
-          {{ stepsStatus.healthDeclaration.statusMessage.remarks }}
+          {{ summaryDetails.healthDeclaration.statusMessage.remarks }}
         </div>
         <div class="section--content--health--disclaimer">
           Disclaimer: Health Declaration Form will be validated at Front Desk
@@ -194,7 +194,7 @@
       <div class="section--content">
         <div class="section--content--label">
           <ng-container
-            [ngSwitch]="stepsStatus.paymentSummary.statusMessage.status"
+            [ngSwitch]="summaryDetails.paymentSummary.statusMessage.status"
           >
             <ng-container *ngSwitchCase="'PENDING'">
               <div>
@@ -238,9 +238,9 @@
       </div>
       <div
         class="section--content"
-        *ngIf="stepsStatus.paymentSummary.statusMessage.status === 'FAILED'"
+        *ngIf="summaryDetails.paymentSummary.statusMessage.status === 'FAILED'"
       >
-        {{ stepsStatus.paymentSummary.statusMessage.remarks }}
+        {{ summaryDetails.paymentSummary.statusMessage.remarks }}
       </div>
     </div>
     <div>
@@ -250,13 +250,13 @@
           <div>
             <mat-icon
               [ngClass]="
-                stepsStatus.guestDetails.primaryGuest.signatureUrl !== undefined
+                summaryDetails.guestDetails.primaryGuest.signatureUrl !== undefined
                   ? 'success'
                   : 'danger'
               "
             >
               {{
-                stepsStatus.guestDetails.primaryGuest.signatureUrl !== undefined
+                summaryDetails.guestDetails.primaryGuest.signatureUrl !== undefined
                   ? 'check_circle_outline'
                   : 'error_outline'
               }}</mat-icon

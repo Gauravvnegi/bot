@@ -28,6 +28,7 @@
       </div>
       <div [ngClass]="settings.styles.signatureContainer">
         <hospitality-bot-signature-capture-wrapper
+          [imgUrl]="settings.signatureImageUrl"
           [settings]="{ uploadAPI: settings.signatureUploadAPI }"
           (signatureData)="signatureUploadFile($event)"
         >

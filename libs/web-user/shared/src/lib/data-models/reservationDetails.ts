@@ -35,6 +35,8 @@ export class Guest {
   document: DocumentDetails[];
   healthDeclarationFormId: object;
   pmsGuestId: object;
+  regcardUrl: string;
+  signatureUrl: string;
 }
 
 export class GuestDetails {

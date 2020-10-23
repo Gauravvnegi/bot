@@ -54,7 +54,7 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
           this._stepperService.setIndex('next');
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.cause);
+          this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

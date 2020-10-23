@@ -11,4 +11,7 @@ import { ApplicationStatusComponent } from '../application-status/application-st
 })
 export class StatusComponent extends ApplicationStatusComponent implements OnInit {
 
+  ngOnInit(): void {
+    this.getSummaryDetails();
+  }
 }

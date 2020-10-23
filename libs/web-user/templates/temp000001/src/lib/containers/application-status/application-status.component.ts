@@ -39,7 +39,10 @@ export class ApplicationStatusComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getSummaryDetails();
+    // this.getSummaryDetails();
+  }
+  
+  ngOnChanges(): void {
     this.registerListeners();
   }
 
@@ -50,11 +53,15 @@ export class ApplicationStatusComponent implements OnInit {
   listenForSummaryDetails() {
     this._stepperService.stepperSelectedIndex$.subscribe((index) => {
       if (this._templateService.templateData) {
+        let data;
         this._templateService.templateData.stepConfigs.find((item, ix) => {
-          if (item.stepperName === 'Summary' && index === ix) {
-            this.getSummaryDetails();
+          if (item.stepperName === 'Summary') {
+            data = ix;
           }
         });
+        if (data === index) {
+          this.getSummaryDetails();
+        }
       }
     });
   }

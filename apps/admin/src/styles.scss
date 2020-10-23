@@ -73,19 +73,19 @@
 // text-color
 
 .status-text-pending {
-  color: #c2c2c2;
+  color: $pending;
 }
 
 .status-text-initiated {
-  color: #6bacf8;
+  color: $initiated;
 }
 
 .status-text-reject {
-  color: #f00d2a;
+  color: $reject;
 }
 
 .status-text-success {
-  color: #53b33e;
+  color: $completed;
 }
 
 .status-opacity-pending {
@@ -105,27 +105,27 @@
 }
 
 .status-background-pending {
-  background-color: #c2c2c2;
+  background-color: $pending;
 }
 
 .status-background-initiated {
-  background-color: #6bacf8;
+  background-color: $initiated;
 }
 
 .status-background-reject {
-  background-color: #f00d2a;
+  background-color: $reject;
 }
 
 .status-background-success {
-  background-color: #53b33e;
+  background-color: $completed;
 }
 
 
 .danger {
-  background-color: #f00d2a !important;
+  background-color: $reject !important;
 }
 
 .success {
-  background-color: #53B33E !important;
+  background-color: $completed !important;
   color: white !important;
 }

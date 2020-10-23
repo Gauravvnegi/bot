@@ -47,7 +47,7 @@
         color: white;
         font-size: $font12;
         font-weight: 400;
-        width: 10vw;
+        width: $popup-button-width;
         border-radius: 25px;
         &:hover {
           cursor: pointer;

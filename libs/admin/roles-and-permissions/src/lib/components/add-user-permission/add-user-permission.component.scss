@@ -278,7 +278,7 @@
     font-weight: $medium;
     border-radius: 25px;
     padding: 12px 0px;
-    width: 10vw;
+    width: $normal-button-width;
     opacity: 0.85;
     box-shadow: 0px 0px 5px 0px $primary-purple;
     &:hover {
@@ -289,7 +289,7 @@
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: #53b33e;
+  background-color: $completed;
 }
 
 :host ::ng-deep .mat-checkbox-background {
@@ -298,7 +298,7 @@
 
 :host ::ng-deep .mat-checkbox-disabled {
   .mat-checkbox-background {
-    background-color: #c2c2c2;
+    background-color: $pending;
   }
 }
 

@@ -1,0 +1,10 @@
+@import 'main';
+
+.coming{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45vh;
+    font-size: 45px;
+    color: $primary-purple;
+}

@@ -143,7 +143,7 @@
   font-weight: $bolder;
   margin: $margin20 30px;
   .accepted {
-    color: #53b33e;
+    color: $completed;
   }
   .pending {
     color: $primary-gray;

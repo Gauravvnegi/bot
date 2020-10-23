@@ -1,7 +1,7 @@
 @import 'main';
 
 .filter--header {
-  padding: 15px 10px;
+  padding: $padding15 $padding10;
   @include flex-between-center();
   border-bottom: 1px solid #c5c5c5;
   .close--wrapper {
@@ -90,7 +90,7 @@
   font-weight: $medium;
   border-radius: 25px;
   padding: 12px 0px;
-  width: 15vw;
+  width: $normal-button-width;
   position: absolute;
   bottom: 10px;
   right: 21%;

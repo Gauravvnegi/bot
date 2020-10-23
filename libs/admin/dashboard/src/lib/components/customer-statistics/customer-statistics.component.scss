@@ -101,8 +101,18 @@
   align-items: center;
 }
 
-.labl {
+.labl{
   margin: 0 1%;
+}
+
+.labl > .image {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid $primary-purple;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -114,28 +124,16 @@
   text-decoration: line-through;
 }
 
-.labl > img {
-  // width: 25px;
-  // height: 25px;
-  padding: 3px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.labl > input + img {
-  /* DIV STYLES */
+.labl > input + .image {
   position: relative;
   cursor: pointer;
-  border: 1px solid gainsboro;
-  border-radius: 15px;
-//   font: normal normal normal 10px/16px Roboto;
 }
-.labl > input:checked + img {
-  /* (RADIO CHECKED) DIV STYLES */
-  border: 2px solid $primary-purple;
+
+.labl > input:checked + .image {
   background-color: $primary-purple;
-  // color: white;
-  filter: invert(1);
+  img {
+    filter: invert(1);
+  }
 }
 
 // .labl > div > .circle {

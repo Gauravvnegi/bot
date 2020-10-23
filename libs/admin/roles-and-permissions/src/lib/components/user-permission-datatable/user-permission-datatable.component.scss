@@ -80,10 +80,10 @@
     width: 0;
     height: 0;
     &:checked + .slider {
-      background-color: #53b33e;
+      background-color: $completed;
     }
     &:focus + .slider {
-      box-shadow: 0 0 1px #53b33e;
+      box-shadow: 0 0 1px $completed;
     }
     &:checked + .slider:before {
       -webkit-transform: translateX(40px);

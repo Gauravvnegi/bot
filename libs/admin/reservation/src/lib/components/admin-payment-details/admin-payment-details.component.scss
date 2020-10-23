@@ -135,10 +135,10 @@ td {
 }
 
 .green {
-  color: #53b33e !important;
+  color: $completed !important;
 }
 .red {
-  color: #f00d2a !important;
+  color: $reject !important;
 }
 
 .signature-wrapper {

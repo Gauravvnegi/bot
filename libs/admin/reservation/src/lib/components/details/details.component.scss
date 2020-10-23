@@ -278,7 +278,7 @@
     font-weight: $bolder;
   }
   .fa {
-    color: #c2c2c2;
+    color: $pending;
   }
 }
 
@@ -311,7 +311,7 @@
   font-weight: $bolder;
   margin: $margin20 30px;
   .accepted {
-    color: #53b33e;
+    color: $completed;
   }
   .pending {
     color: $primary-gray;

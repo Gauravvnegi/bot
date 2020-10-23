@@ -14,10 +14,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px;
+  padding: 20px 15px;
   &--header {
     display: flex;
-    margin-bottom: $margin20;
     align-items: center;
     .heading {
       font-size: $font16;

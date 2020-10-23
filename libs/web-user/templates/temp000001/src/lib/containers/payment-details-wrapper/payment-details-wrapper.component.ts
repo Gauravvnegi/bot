@@ -189,7 +189,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   mapPaymentData() {
     const paymentStatusData = new PaymentStatus();
-    paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk;
+    paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk || true;
     paymentStatusData.status = 'SUCCESS';
     paymentStatusData.transactionId = '12345678';
     return paymentStatusData;

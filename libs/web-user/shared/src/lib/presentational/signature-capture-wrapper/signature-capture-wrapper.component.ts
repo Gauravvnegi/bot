@@ -135,8 +135,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       .subscribe((res) => {
         if (res) {
           this.onClose();
+          this._buttonService.buttonLoading$.next(this.saveButton);
         }
-        this._buttonService.buttonLoading$.next(this.saveButton);
       });
   }
 

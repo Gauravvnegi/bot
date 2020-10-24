@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
@@ -35,18 +31,17 @@ export class ApplicationStatusComponent implements OnInit {
     private _paymentDetailsService: PaymentDetailsService,
     private _summaryService: SummaryService,
     private _stepperService: StepperService,
-    private _templateService: TemplateService,
+    private _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
+    this.registerListeners();
     // if (this._stepperService._selectedIndex) {
     this.getSummaryDetails();
     // }
   }
-  
-  ngOnChanges(): void {
-    this.registerListeners();
-  }
+
+  ngOnChanges(): void {}
 
   registerListeners() {
     this.listenForSummaryDetails();
@@ -70,12 +65,12 @@ export class ApplicationStatusComponent implements OnInit {
 
   getSummaryDetails() {
     this.$subscription.add(
-      this._summaryService.getSummaryStatus(
-        this._reservationService.reservationId
-      ).subscribe((res) => {
-        this.summaryDetails = new SummaryDetails().deserialize(res);
-        this.isLoaderVisible = false;
-      })
+      this._summaryService
+        .getSummaryStatus(this._reservationService.reservationId)
+        .subscribe((res) => {
+          this.summaryDetails = new SummaryDetails().deserialize(res);
+          this.isLoaderVisible = false;
+        })
     );
   }
 
@@ -95,15 +90,20 @@ export class ApplicationStatusComponent implements OnInit {
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '70vw';
     dialogConfig.data = {
-      regcardUrl: this.summaryDetails.guestDetails.primaryGuest.regcardUrl || '',
-      signatureImageUrl: this.summaryDetails.guestDetails.primaryGuest.signatureUrl || ''
+      regcardUrl:
+        this.summaryDetails.guestDetails.primaryGuest.regcardUrl || '',
+      signatureImageUrl:
+        this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
     };
-    this._dialogRef = this._modal.openDialog(RegistrationCardComponent, dialogConfig);
+    this._dialogRef = this._modal.openDialog(
+      RegistrationCardComponent,
+      dialogConfig
+    );
   }
 
-  printSummary() { }
+  printSummary() {}
 
-  downloadSummary() { }
+  downloadSummary() {}
 
   get stayDetail() {
     return this.summaryDetails.stayDetails;

@@ -161,13 +161,26 @@ export class Booking implements Deserializable {
   bookingNumber;
   arrivalTimeStamp;
   departureTimeStamp;
+  expectedArrivalTimeStamp;
+  expectedDepartureTimeStamp;
+
   deserialize(input) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
       set({}, 'arrivalTimeStamp', get(input, ['arrivalTime'])),
-      set({}, 'departureTimeStamp', get(input, ['departureTime']))
+      set({}, 'departureTimeStamp', get(input, ['departureTime'])),
+      set(
+        {},
+        'expectedArrivalTimeStamp',
+        get(input, ['stayDetails', 'expectedArrivalTime'])
+      ),
+      set(
+        {},
+        'expectedDepartureTimeStamp',
+        get(input, ['stayDetails', 'expectedDepartureTime'])
+      )
     );
     return this;
   }
@@ -181,13 +194,22 @@ export class Booking implements Deserializable {
   }
 
   getArrivalTime() {
-    return moment(this.arrivalTimeStamp).format('HH:mm');
+    if (this.expectedArrivalTimeStamp == 0) {
+      return moment(this.arrivalTimeStamp).format('HH:mm');
+    } else {
+      return moment(this.expectedArrivalTimeStamp).format('HH:mm');
+    }
 
     //return moment.utc(this.arrivalTimeStamp).format('H:mm');
   }
 
   getDepartureTime() {
-    return moment(this.departureTimeStamp).format('HH:mm');
+    if (this.expectedArrivalTimeStamp == 0) {
+      return moment(this.departureTimeStamp).format('HH:mm');
+    } else {
+      return moment(this.expectedDepartureTimeStamp).format('HH:mm');
+    }
+    //return moment(this.departureTimeStamp).format('HH:mm');
   }
 
   getDaysAndNights() {

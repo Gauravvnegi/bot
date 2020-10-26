@@ -60,12 +60,19 @@
       </div>
     </div>
     <div class="description-table-wrapper" *ngIf="this.staySummaryDetails">
-      <table mat-table [dataSource]="dataSource">
+      <table
+        cellspacing="0"
+        class="summary-table"
+        mat-table
+        [dataSource]="dataSource"
+      >
         <ng-container matColumnDef="label">
-          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <th style="text-align: left;" mat-header-cell *matHeaderCellDef>Description</th>
           <td mat-cell *matCellDef="let element">
-            {{ element.label }}
-            {{ element.description }}
+            <div class="room-data">
+              <p class="room">{{ element.label }}</p>
+              <p class="room-type">{{ element.description }}</p>
+            </div>
           </td>
         </ng-container>
 
@@ -118,7 +125,7 @@
 
         <ng-container matColumnDef="totalAmount">
           <th mat-header-cell *matHeaderCellDef>Total Amount</th>
-          <td mat-cell *matCellDef="let element">
+          <td tex mat-cell *matCellDef="let element">
             {{ element.currency }}
 
             {{ element.totalAmount }}
@@ -155,7 +162,10 @@
         </div>
         <div class="total__details--amounts--wrapper">
           <p class="final__label">Due Amount</p>
-          <b class="final__amount">{{ billSummaryDetails.currency }} {{ billSummaryDetails.dueAmount }}</b>
+          <b class="final__amount"
+            >{{ billSummaryDetails.currency }}
+            {{ billSummaryDetails.dueAmount }}</b
+          >
         </div>
       </div>
     </div>

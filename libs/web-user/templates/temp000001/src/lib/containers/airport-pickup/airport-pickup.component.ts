@@ -41,6 +41,8 @@ export class AirportPickupComponent implements OnInit {
    }
 
   ngOnInit(): void {
+   
+    this.minDate = new Date(this._dateService.getCurrentDateString());
     this.airportConfig = this.setFieldConfiguration();
      this.addForm();
      this.populateFormData();

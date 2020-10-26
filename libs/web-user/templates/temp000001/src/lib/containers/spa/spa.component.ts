@@ -7,6 +7,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-spa',
@@ -26,18 +27,21 @@ export class SpaComponent implements OnInit {
   
   spaForm: FormGroup;
   spaConfig: SpaConfigI;
+  minDate;
 
   constructor(
     private _fb: FormBuilder,
     private _spaService: SpaService,
     private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
-    private _paidService: PaidService
+    private _paidService: PaidService,
+    private _dateService: DateService
   ) {
     this.initSpaForm();
    }
 
   ngOnInit(): void {
+    this.minDate = new Date(this._dateService.getCurrentDateString());
     this.spaConfig = this.setFieldConfiguration();
   }
 

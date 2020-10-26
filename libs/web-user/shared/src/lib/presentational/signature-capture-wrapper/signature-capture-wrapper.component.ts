@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   ElementRef,
+  AfterViewInit,
 } from '@angular/core';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -24,7 +25,7 @@ import { UtilityService } from '../../services/utility.service';
   templateUrl: './signature-capture-wrapper.component.html',
   styleUrls: ['./signature-capture-wrapper.component.scss'],
 })
-export class SignatureCaptureWrapperComponent implements OnChanges {
+export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewInit {
   private _dialogRef: MatDialogRef<any>;
   private _settings;
   private _subscription: Subscription = new Subscription();
@@ -166,7 +167,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       textSignature: '',
       imageSignature: '',
     });
-    if (this._dialogRef) {
+    if(this._dialogRef){
       this._dialogRef.close();
     }
   }

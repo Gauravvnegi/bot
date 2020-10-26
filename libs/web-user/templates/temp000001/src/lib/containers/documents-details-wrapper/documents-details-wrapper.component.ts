@@ -48,6 +48,10 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     this.parentForm.addControl(data.name, data.value);
   }
 
+  /**
+   * Function to save/update the documents for all the guests on next click
+   */
+
   private saveDocumentDetails() {
     const status = this._documentDetailService.validateDocumentationForm(
       this.parentForm,
@@ -76,7 +80,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
           this._stepperService.setIndex('next');
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.cause);
+          this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

@@ -35,6 +35,9 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     this.parentForm.addControl(data.name, data.value);
   }
 
+  /**
+   * Function to save/update the health details for the guest on next click
+   */
   saveHealthDeclarationDetails() {
     const dataToBeSaved = this.healthComponent.extractDataFromHealthForm();
     this._healthDetailsService

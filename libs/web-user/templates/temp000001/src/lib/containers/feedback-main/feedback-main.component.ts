@@ -7,6 +7,7 @@ import { forkJoin, of } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -30,6 +31,7 @@ export class FeedbackMainComponent implements OnInit {
     private fb: FormBuilder,
     private _feedbackDetailsService: FeedbackDetailsService,
     private _snackBarService: SnackBarService,
+    private _buttonService: ButtonService
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +68,38 @@ export class FeedbackMainComponent implements OnInit {
       this.feedBackConfig = response;
       this.initFeedbackConfigDS();
     });
+  }
+
+  saveFeedbackDetails() {
+    const status = this._feedbackDetailsService.validateFeedbackDetailForm(
+      this.parentForm
+    ) as Array<any>;
+
+    if (status.length) {
+      this.performActionIfNotValid(status);
+      this._buttonService.buttonLoading$.next(this.saveButton);
+      return;
+    }
+
+    let value = this.parentForm.getRawValue();
+    let data = this._feedbackDetailsService.mapFeedbackData(
+      value && value.feedbackDetail,this._reservationService.reservationData.guestDetails.primaryGuest.id
+    );
+
+    this._feedbackDetailsService
+      .addFeedback(this._reservationService.reservationId, data)
+      .subscribe(
+        (response) => {
+          this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
+            panelClass: 'success',
+          });
+          this._buttonService.buttonLoading$.next(this.saveButton);
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+          this._buttonService.buttonLoading$.next(this.saveButton);
+        }
+      );
   }
 
   private performActionIfNotValid(status: any[]) {

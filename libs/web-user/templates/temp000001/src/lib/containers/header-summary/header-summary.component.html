@@ -1,12 +1,17 @@
 <ng-container #modal>
   <div class="container">
     <div class="modal-header">
+      <div class="temp-div"></div>
       <div class="modal-title">
         <p class="title">Reservation-summary</p>
         <p><span>Last Updated: {{ date }}</span></p>
       </div>
       <div class="close_wrapper">
         <span aria-hidden="true" class="close" (click)="closeModal()">&times;</span>
+      </div>
+      <div class="feedback">
+        <img class="feedback-icon" src="assets/svg/feedback.svg" />
+        <div class="feedback-label">Your Feedback Matters</div>
       </div>
     </div>
     <div class="modal-body">

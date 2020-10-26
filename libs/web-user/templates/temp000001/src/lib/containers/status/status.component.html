@@ -10,10 +10,10 @@
 </ng-template>
 <ng-container *ngIf="!isLoaderVisible; else loader">
   <div class="status--heading">
-    <div>Status: Active</div>
-    <div></div>
-    <div class="print_download">
-      <mat-icon (click)="printSummary()">{{ 'cloud_download_outline' }}</mat-icon>
+    <div class="heading">Status:&nbsp;<b class="status">Active</b></div>
+    <div class="icon-wrapper">
+      <img src="assets/svg/Download.svg" />
+      <img (click)="printSummary()" src="assets/svg/print.svg" />
     </div>
   </div>
   <div #content>
@@ -67,7 +67,7 @@
         <div class="section--content--container">
           <div class="section--content--container--title">Travelling With</div>
           <div class="section--content--container--value--container">
-            <div>Adults: {{ stayDetail.adultsCount }}</div>
+            <div class="element">Adults: {{ stayDetail.adultsCount }}</div>
             <div>Kids: {{ stayDetail.kidsCount }}</div>
           </div>
         </div>

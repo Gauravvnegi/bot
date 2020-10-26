@@ -4,11 +4,10 @@
   @include flex-justify-center();
 }
 
-// @media only screen and (max-width: $tab-size) {
-//   .user-button {
-//     width: $half-width;
-//   }
+// .reg-card-wrapper{
+//   height: 70vh;
 // }
+
 :host ::ng-deep .next-button {
   @include footer-next();
 }
@@ -46,13 +45,13 @@
 .modal-body {
   margin-bottom: $margin-small;
 	width: $full-width;
-	height: 70vh;
+	height: 65vh;
 }
 
-.modal-footer {
-  // padding: 2px;
-  margin-top: 80px;
-}
+// .modal-footer {
+//   // padding: 2px;
+//   margin-top: 80px;
+// }
 
 .close {
   cursor: pointer;
@@ -82,7 +81,7 @@
 
 pdf-viewer {
 	display: block;
-  height: calc(62vh - 80px);
+  height: calc(51vh - 80px);
 	border: 1px solid rgb(243, 241, 241);
 	border-radius: 4px;
 	padding-bottom: 2px;

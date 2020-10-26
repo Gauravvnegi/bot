@@ -51,7 +51,7 @@
   @media only screen and (max-width: $M) {
     margin-top: 5px;
     &--details {
-      font-size: 8px;
+      font-size: 5px;
       p {
         min-width: 32%;
       }
@@ -72,7 +72,9 @@
   &--manager {
     width: 30%;
     font-weight: $bolder;
-    padding-top: 21%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     &--text {
       color: #a1a1a1;
     }
@@ -111,7 +113,6 @@
     &--manager {
       width: 41%;
       font-size: $font-responsive-small;
-      padding-top: 61%;
     }
     &--amounts {
       width: $half-width;
@@ -144,20 +145,30 @@
   td {
     padding: 10px;
     font-size: $font16;
-      font-weight: $bold;
+    font-weight: $bold;
+    @media screen and (max-width: 600px) {
+      padding: 4px;
+      font-size: 7px;
+    }
   }
   .room-data {
     text-align: left;
     padding-left: 14px;
+    font-size: $font16;
     .room {
-      font-size: $font16;
       font-weight: $bold;
     }
     .room-type {
-      font-size: $font16;
       font-weight: $bold;
       color: #929292;
       margin-top: 8px;
+    }
+    @media screen and (max-width: 600px) {
+      font-size: 7px;
+      padding-left: 0;
+      .room-type {
+        margin-top: 3px;
+      }
     }
   }
 }
@@ -168,11 +179,15 @@
   font-size: $font-large;
   font-weight: $bolder;
   padding: 0px $padding-large;
+  margin: $margin-large 0px;
 
   .add__gst {
     text-decoration: underline;
     color: #a1a1a1;
     font-weight: $medium;
+    &:hover{
+      cursor: pointer;
+    }
   }
   @media only screen and (max-width: $M) {
     font-size: $font-small;
@@ -181,6 +196,20 @@
       font-size: $font-responsive-small;
     }
   }
+}
+
+:host ::ng-deep .mat-header-row {
+  @media screen and (max-width: 600px) {
+    height: 24px;
+    th {
+      padding: 5px !important;
+      font-size: 7px !important;
+    }
+  }
+}
+
+.change-color{
+  color: #09a053;
 }
 
 .description-table-wrapper {

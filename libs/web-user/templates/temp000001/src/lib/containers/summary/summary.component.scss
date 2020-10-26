@@ -15,42 +15,35 @@
       font-weight: $bolder;
       text-align: center;
       width: 33%;
+      @media screen and (max-width:700px) {
+        font-size: $font-small;
+      }
     }
     &-feedback {
-      text-align: right;
-      color: #2187d5;
+      color: $primary-blue;
       text-decoration: underline;
-      text-decoration-style: dotted;
-      text-decoration-color: #2187d5;
-      cursor: pointer;
-      // width: 33%;
+      text-decoration-color: $primary-blue;
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      width: 33%;
+      &:hover {
+        cursor: pointer;
+      }
+      .feedback-icon {
+        height: 25px;
+        filter: invert(40%) sepia(11%) saturate(443%) hue-rotate(196deg)
+          brightness(99%) contrast(89%);
+        margin-right: $margin-small;
+      }
+      .feedback-label{
+        @media screen and (max-width:700px) {
+          display: none;
+        }
+      }
     }
   }
-  p{
-    font-size: $font-large;
-    font-weight: $bolder;
-    text-align: center;
-  }
-  label{
-    font-size: 22px;
-    font-weight: $bolder;
-    color: $primary-blue;
-    cursor: pointer;
-    b{
-      color: green;
-    }
-  }
-  @media only screen and (max-width: $M) {
+  @media screen and (max-width:700px) {
     padding: $padding-small;
-    p{
-      font-size: $font16;
-      margin-bottom: $margin-small;
-    }
-    label{
-      font-size: $font-medium;
-    }
   }
 }

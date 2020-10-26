@@ -3,12 +3,10 @@
     <div class="summary-wrapper-header">
       <div class="summary-wrapper-header-equi-width"></div>
       <div class="summary-wrapper-header-title">Check-In Summary</div>
-      <div style="width: 33%;">
         <div class="summary-wrapper-header-feedback" (click)="openFeedback()">
-          <div style="margin-right: 10px;"><img src="assets/feedback.svg" height="35px" width="35px" /></div>
-          <div>Your Feedback Matters</div>
+          <img class="feedback-icon" src="assets/svg/feedback.svg" />
+          <div class="feedback-label">Your Feedback Matters</div>
         </div>
-      </div>
     </div>
     <hospitality-bot-application-status [context]="context">
     </hospitality-bot-application-status>

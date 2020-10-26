@@ -63,6 +63,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     })
   }
 
+  /**
+   * Funtion to save/update all the details for guest stay on Next button click
+   */
   saveStayDetails() {
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(formValue);
@@ -77,8 +80,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
           );
           this._stepperService.setIndex('next');
         },
-        (error) => {
-          this._snackBarService.openSnackBarAsText('Some error occured');
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

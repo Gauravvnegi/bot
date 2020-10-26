@@ -416,7 +416,7 @@ export class DocumentsDetailsComponent implements OnInit {
         ({ error }) => {
           this.updateDocumentFG(guestId, doc_type, doc_page, '');
           this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, false);
-          this._snackBarService.openSnackBarAsText(error.cause);
+          this._snackBarService.openSnackBarAsText(error.message);
         }
       );
   }

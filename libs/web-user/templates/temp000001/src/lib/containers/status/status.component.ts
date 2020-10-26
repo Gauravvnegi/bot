@@ -1,8 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
-  ViewContainerRef,
 } from '@angular/core';
 import { ApplicationStatusComponent } from '../application-status/application-status.component';
 
@@ -12,5 +10,8 @@ import { ApplicationStatusComponent } from '../application-status/application-st
   styleUrls: ['./status.component.scss'],
 })
 export class StatusComponent extends ApplicationStatusComponent implements OnInit {
-  
+
+  ngOnInit(): void {
+    this.getSummaryDetails();
+  }
 }

@@ -333,10 +333,9 @@
           [ngClass]="{
             'status-text-reject':
               rowData.payment.dueAmount > 0 &&
-              rowData.payment.dueAmount < rowData.payment.totalAmount,
+              rowData.payment.dueAmount <= rowData.payment.totalAmount,
             'status-text-success':
-              rowData.payment.dueAmount == 0 ||
-              rowData.payment.dueAmount == rowData.payment.totalAmount
+              rowData.payment.dueAmount == 0 
           }"
           >{{ rowData.payment.dueAmount }}</span
         >/{{ rowData.payment.totalAmount }}

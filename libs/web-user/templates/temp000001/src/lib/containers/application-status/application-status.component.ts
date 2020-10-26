@@ -1,22 +1,14 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewContainerRef,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
-import { FormArray, FormGroup } from '@angular/forms';
-import { skipWhile, debounce } from 'rxjs/operators';
-import { Subscription, timer, forkJoin, of } from 'rxjs';
+import { Component, OnInit, Input } from '@angular/core';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -24,55 +16,62 @@ import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/res
   styleUrls: ['./application-status.component.scss'],
 })
 export class ApplicationStatusComponent implements OnInit {
-  private _formValues: any;
-  stepsStatus;
-  @Input() reservationData: ReservationDetails;
-
-  @Input()
-  settings = [];
+  private _dialogRef: MatDialogRef<any>;
+  summaryDetails: SummaryDetails = new SummaryDetails();
 
   @Input()
   context: any;
-
-  @ViewChild('healthDiv', { static: false }) healthDiv: ElementRef;
-  @ViewChild('content', { static: false }) content: ElementRef;
-
-  @Input()
-  parentForm: FormArray;
-
-  currentParentContainer: ViewContainerRef;
 
   $subscription = new Subscription();
   isLoaderVisible = true;
 
   constructor(
-    private _parentFormService: ParentFormService,
-    private _matDialog: MatDialog,
     private _modal: ModalService,
     private _reservationService: ReservationService,
     private _paymentDetailsService: PaymentDetailsService,
-    private _summaryService: SummaryService
+    private _summaryService: SummaryService,
+    private _stepperService: StepperService,
+    private _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    // if (this._stepperService._selectedIndex) {
+    this.getSummaryDetails();
+    // }
   }
+
+  ngOnChanges(): void {}
 
   registerListeners() {
-    // this.listenForParentFormValues();
-    this.getStepsStatus();
+    this.listenForSummaryDetails();
   }
 
-  private getStepsStatus() {
-    forkJoin(
-      this._summaryService.getSummaryStatus(
-        this._reservationService.reservationId
-      ),
-      of(true)
-    ).subscribe(([res, val]) => {
-      this.stepsStatus = res;
-      this.isLoaderVisible = false;
+  listenForSummaryDetails() {
+    this._stepperService.stepperSelectedIndex$.subscribe((index) => {
+      if (this._templateService.templateData) {
+        let data;
+        this._templateService.templateData.stepConfigs.find((item, ix) => {
+          if (item.stepperName === 'Summary') {
+            data = ix;
+          }
+        });
+        if (data === index) {
+          this.getSummaryDetails();
+        }
+      }
     });
+  }
+
+  getSummaryDetails() {
+    this.$subscription.add(
+      this._summaryService
+        .getSummaryStatus(this._reservationService.reservationId)
+        .subscribe((res) => {
+          this.summaryDetails = new SummaryDetails().deserialize(res);
+          this.isLoaderVisible = false;
+        })
+    );
   }
 
   ngOnDestroy() {
@@ -80,29 +79,42 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   closeModal() {
-    this._matDialog.closeAll();
+    if (this._dialogRef) {
+      this._dialogRef.close();
+    }
   }
 
   openRegCard() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    
-  
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '70vw';
-    this._modal.openDialog(RegistrationCardComponent, dialogConfig);
+    dialogConfig.data = {
+      regcardUrl:
+        this.summaryDetails.guestDetails.primaryGuest.regcardUrl || '',
+      signatureImageUrl:
+        this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
+    };
+    this._dialogRef = this._modal.openDialog(
+      RegistrationCardComponent,
+      dialogConfig
+    );
   }
 
-  printSummary() { }
+  printSummary() {}
 
-  downloadSummary() { }
+  downloadSummary() {}
 
   get stayDetail() {
-    return this.reservationData['stayDetails'];
+    return this.summaryDetails.stayDetails;
   }
 
   get guestDetail() {
-    return this.reservationData['guestDetails'];
+    return this.summaryDetails['guestDetails'];
+  }
+
+  get contactDetails() {
+    return this.summaryDetails.guestDetails.primaryGuest.contactDetails;
   }
 
   get currencyCode() {
@@ -110,9 +122,6 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   get paymentDetails() {
-    if (this._paymentDetailsService.paymentSummaryDetails) {
-      return this._paymentDetailsService.paymentSummaryDetails.paymentDetail;
-    }
-    return null;
+    return this.summaryDetails.paymentSummary;
   }
 }

@@ -1,15 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 
 import { BillSummaryService } from '../../../../../../shared/src/lib/services/bill-summary.service';
-import { InputPopupComponent } from '../../../../../../shared/src/lib/presentational/input-popup/input-popup.component';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
@@ -157,34 +153,8 @@ export class BillSummaryDetailsComponent implements OnInit {
   }
 
   openDialog() {
-    // const dialogRef = this.dialog.open(InputPopupComponent,{
-    //   disableClose: true,
-    //   autoFocus: true,
-    //   height: '300px',
-    //   width: '550px',
-    //   data: { pageValue: this.summaryDetails }
-    // });
-
     this._stepperService.setIndex('next');
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   this.submit(result);
-    // });
   }
-
-  // signatureUploadFile(event) {
-  //   const formData = new FormData();
-  //   formData.append('doc_type', 'signature');
-  //   formData.append('doc_page', 'front');
-  //   formData.append('file', event.file);
-  //   this._docService
-  //     .uploadDocumentFile(
-  //       this.reservationData.id,
-  //       this.reservationData.guestDetails.primaryGuest.id,
-  //       formData
-  //     )
-  //     .subscribe((res) => {});
-  // }
 
   signatureUploadFile(event) {
     if (event.file) {
@@ -204,7 +174,7 @@ export class BillSummaryDetailsComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-        });
+        }, ({ error }) => this._snackBarService.openSnackBarAsText(error.message));
     }
   }
 

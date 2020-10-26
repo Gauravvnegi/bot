@@ -49,6 +49,10 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     this.parentForm.addControl(data.name, data.value);
   }
 
+  /**
+   * Funtion to save/update all the guests personal details for on Next button click
+   */
+
   saveGuestDetails() {
     const status = this._guestDetailService.validateGuestDetailForm(
       this.parentForm
@@ -73,8 +77,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
           );
           this._stepperService.setIndex('next');
         },
-        (error) => {
-          this._snackBarService.openSnackBarAsText('Some error occured');
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

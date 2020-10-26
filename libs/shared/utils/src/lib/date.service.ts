@@ -20,6 +20,10 @@ export class DateService {
     return this.convertTimestampToDate(moment.now(),format);
   }
 
+  getCurrentDateString(){
+    return moment().format();
+  }
+
   getCurrentDateWithFormat(format: string = 'DD-MM-YYYY') {
     return moment().format(format);
   }

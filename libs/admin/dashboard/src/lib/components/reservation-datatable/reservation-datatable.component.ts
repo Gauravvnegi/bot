@@ -66,6 +66,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'PRECHECKINPENDING',
           total: 0,
           isSelected: false,
+          type: 'pending',
         },
         {
           label: 'Precheckin_Initiated ',
@@ -73,6 +74,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'PRECHECKININITIATED',
           total: 0,
           isSelected: false,
+          type: 'initiated',
         },
         {
           label: 'Precheckin_Complete ',
@@ -80,6 +82,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'PRECHECKINCOMPLETE',
           total: 0,
           isSelected: false,
+          type: 'completed',
         },
         {
           label: 'Precheckin_Failed',
@@ -87,6 +90,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'PRECHECKINFAILED',
           total: 0,
           isSelected: false,
+          type: 'failed',
         },
         {
           label: 'CheckIn_Pending',
@@ -94,6 +98,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKINPENDING',
           total: 0,
           isSelected: false,
+          type: 'pending',
         },
         {
           label: 'CheckIn_Initiated',
@@ -101,6 +106,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKININITIATED',
           total: 0,
           isSelected: false,
+          type: 'initiated',
         },
         {
           label: 'CheckIn_Complete',
@@ -108,6 +114,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKINCOMPLETE',
           total: 0,
           isSelected: false,
+          type: 'completed',
         },
         {
           label: 'CheckIn_Failed',
@@ -115,6 +122,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKINFAILED',
           total: 0,
           isSelected: false,
+          type: 'failed',
         },
       ],
     },
@@ -132,6 +140,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKOUTPENDING',
           total: 0,
           isSelected: false,
+          type: 'pending',
         },
         {
           label: 'Checkout_Initiated',
@@ -139,6 +148,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKOUTINITIATED',
           total: 0,
           isSelected: false,
+          type: 'initiated',
         },
         {
           label: 'CheckOut_Completed',
@@ -146,6 +156,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKOUTCOMPLETED',
           total: 0,
           isSelected: false,
+          type: 'completed',
         },
         {
           label: 'Checkout_Failed',
@@ -153,6 +164,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           value: 'CHECKOUTFAILED',
           total: 0,
           isSelected: false,
+          type: 'failed',
         },
       ],
     },
@@ -391,7 +403,15 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
 
     detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-      res && detailCompRef.close();
+      this.loadInitialData([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+      detailCompRef.close();
     });
   }
 }

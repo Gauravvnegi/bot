@@ -5,6 +5,8 @@ import {
   OnChanges,
   Output,
   EventEmitter,
+  ElementRef,
+  AfterViewInit,
 } from '@angular/core';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -23,7 +25,7 @@ import { UtilityService } from '../../services/utility.service';
   templateUrl: './signature-capture-wrapper.component.html',
   styleUrls: ['./signature-capture-wrapper.component.scss'],
 })
-export class SignatureCaptureWrapperComponent implements OnChanges {
+export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewInit {
   private _dialogRef: MatDialogRef<any>;
   private _settings;
   private _subscription: Subscription = new Subscription();
@@ -112,7 +114,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
     }
   }
 
-  @ViewChild('saveButton') saveButton;
+  @ViewChild('saveButton') saveButton: ElementRef<any>;
 
   constructor(
     private _fb: FormBuilder,
@@ -123,6 +125,9 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
     private _utilityService: UtilityService,
   ) {
     this.initFormGroup();
+  }
+
+  ngAfterViewInit() {
     this.registerListeners();
   }
 
@@ -135,8 +140,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       .subscribe((res) => {
         if (res) {
           this.onClose();
+          this._buttonService.buttonLoading$.next(this.saveButton);
         }
-        this._buttonService.buttonLoading$.next(this.saveButton);
       });
   }
 
@@ -162,7 +167,9 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       textSignature: '',
       imageSignature: '',
     });
-    this._dialogRef.close();
+    if(this._dialogRef){
+      this._dialogRef.close();
+    }
   }
 
   onUploadSignature() {
@@ -226,7 +233,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges {
       this._signatureService.convertTextToImage(data).subscribe((res) => {
         this.signature.signatureImg = res['file_download_url'];
         this.urlToFile(res.file_download_url, res.file_type);
-      })
+      }, ({ error }) => this._snackBarService.openSnackBarAsText(error.message))
     );
   }
 

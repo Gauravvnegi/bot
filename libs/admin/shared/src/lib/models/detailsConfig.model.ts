@@ -242,8 +242,8 @@ export class StayDetailsConfig implements Deserializable {
         {},
         'expectedArrivalTime',
         get(input, ['expectedArrivalTime']) == 0
-          ? ''
-          : get(input, ['expectedArrivalTime'])
+          ? moment(get(input, ['arrivalTime'])).format('HH:mm')
+          : moment(get(input, ['expectedArrivalTime'])).format('HH:mm')
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),

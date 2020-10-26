@@ -106,7 +106,7 @@ export class HotelPaymentDetail implements Deserializable {
       set({}, 'secretKey', get(input, ['secretKey'])),
       set({}, 'externalRedirect', get(input, ['exernalRedirect']))
     );
-    if (input.paymentMethods.length && paymentSummary.depositRules) {
+    if (input.paymentMethods && paymentSummary.depositRules) {
       paymentConfig.paymentMethods =
         input.paymentMethods[paymentSummary.depositRules.guaranteeType];
     }
@@ -210,4 +210,19 @@ export class PaymentMethod {
 export class SelectedPaymentOption {
   config: PaymentConfig;
   type: PaymentMethod;
+}
+
+export class PaymentMainStatus {
+  data: {
+    data: any;
+    backRedirectUrl: string;
+    nextRedirectUrl: string;
+  };
+  label: string;
+  note: string;
+  image: string;
+  back: string;
+  next: string;
+  showBackButton: boolean;
+  showSummaryButton: boolean;
 }

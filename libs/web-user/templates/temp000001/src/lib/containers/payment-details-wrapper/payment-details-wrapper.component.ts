@@ -14,6 +14,8 @@ import {
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { FormControl } from '@angular/forms';
+import { forkJoin, of, Subscription } from 'rxjs';
+import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -31,6 +33,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   hotelPaymentConfig: HotelPaymentConfig;
   isConfigLoaded: boolean = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
+  private $subscription = new Subscription();
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
@@ -38,7 +41,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _reservationService: ReservationService,
     public _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _summaryService: SummaryService,
   ) {
     super();
     this.self = this;
@@ -83,10 +87,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             (response) => {
               window.location.href = response.billingUrl;
             },
-            (error) => {
-              this._snackBarService.openSnackBarAsText(
-                'Payment could not be initiated!'
-              );
+            ({error}) => {
+              this._snackBarService.openSnackBarAsText(error.message);
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['submitButton']
               );
@@ -121,10 +123,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             (response) => {
               window.location.href = response.billingUrl;
             },
-            (error) => {
-              this._snackBarService.openSnackBarAsText(
-                'Payment could not be initiated!'
-              );
+            ({error}) => {
+              this._snackBarService.openSnackBarAsText(error.message);
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['nextButton']
               );
@@ -167,8 +167,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             );
           }
         },
-        (error) => {
-          this._snackBarService.openSnackBarAsText(error);
+        ({error}) => {
+          this._snackBarService.openSnackBarAsText(error.message);
           if (state === 'checkin') {
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
@@ -189,7 +189,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   mapPaymentData() {
     const paymentStatusData = new PaymentStatus();
-    paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk;
+    paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk || true;
     paymentStatusData.status = 'SUCCESS';
     paymentStatusData.transactionId = '12345678';
     return paymentStatusData;

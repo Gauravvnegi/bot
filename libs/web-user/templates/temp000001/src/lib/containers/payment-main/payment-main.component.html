@@ -1,16 +1,16 @@
 <div class="parent_block" *ngIf="isReservationData && paymentStatusData">
   <hospitality-bot-header [headerName]="'Payment'"></hospitality-bot-header>
-  <div class="status-container">
+  <div class="status-container" *ngIf="ispaymentStatusLoaded">
     <div class="wrapper">
       <div class="image">
-        <img [src]="paymentImage" />
+        <img [src]="paymentStatusData.image" />
       </div>
       <div class="text">
-        <p class="label">{{ paymentLabel }}</p>
+        <p class="label">{{ paymentStatusData.label }}</p>
         <p
           class="note"
           [ngStyle]="
-            paymentStatusData.data.status === 'SUCCESS'
+            status === 'SUCCESS'
               ? { 'display': 'block' }
               : { 'display': 'none' }
           "
@@ -19,7 +19,7 @@
         </p>
         <p
           class="note"
-          [ngStyle]="paymentStatusData.data.status === 'FAILED'
+          [ngStyle]="status === 'FAILED'
             ? { 'display': 'block' }
             : { 'display': 'none' }"
         >
@@ -27,7 +27,7 @@
         </p>
         <p
           class="error_code"
-          [ngStyle]="paymentStatusData.data.status === 'FAILED'
+          [ngStyle]="status === 'FAILED'
             ? { 'display': 'block' }
             : { 'display': 'none' }"
         >
@@ -38,38 +38,38 @@
         <div class="detail-box">
           <div class="detail">
             <p class="label">Confirmation No.</p>
-            <p class="value">{{ paymentStatusData.data.orderId }}</p>
+            <p class="value">{{ data.orderId }}</p>
           </div>
           <div class="seperator"></div>
           <div class="detail">
             <p class="label">Payment Mode</p>
-            <p class="value">{{ paymentStatusData.data.orderId }}</p>
+            <p class="value">{{ data.gateway }}</p>
           </div>
           <div class="seperator"></div>
 
           <div class="detail">
             <p class="label">Total Payment</p>
             <p class="value">
-              {{ paymentStatusData.data.currency }}
-              {{ paymentStatusData.data.amount }}
+              {{ data.currency }}
+              {{ data.amount }}
             </p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="main-template-button payment-button">
+  <div class="main-template-button payment-button" *ngIf="ispaymentStatusLoaded">
     <web-user-button
-      *ngIf="showBackButton"
-      (click)="redirect(paymentStatusData.backRedirectUrl)"
-      [settings]="{ label: back }"
+      *ngIf="paymentStatusData.showBackButton"
+      (click)="redirect(paymentStatusData.data.backRedirectUrl)"
+      [settings]="{ label: paymentStatusData.back }"
       [buttonClass]="'back-button'"
       class="user-button"
       style="margin-right: 20px;"
     ></web-user-button>
     <web-user-button
-      (click)="redirect(paymentStatusData.status === 'SUCCESS' ? paymentStatusData.nextRedirectUrl : '')"
-      [settings]="{ label: next }"
+      (click)="redirect(status === 'SUCCESS' ? paymentStatusData.data.nextRedirectUrl : '')"
+      [settings]="{ label: paymentStatusData.next }"
       [buttonClass]="'next-button'"
       class="user-button"
     ></web-user-button>

@@ -34,13 +34,13 @@
         <div class="section--content--container">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
-            {{ contactDetails.mobileNumber ? +contactDetails.cc + ' ' +contactDetails.mobileNumber : '-' }}
+            {{ contactDetails.mobileNumber ? contactDetails.cc + ' ' +contactDetails.mobileNumber : '-' }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Email ID</div>
           <div class="section--content--container--value">
-            {{ contactDetails.email || '-' }}
+            {{ contactDetails.emailId || '-' }}
           </div>
         </div>
       </div>

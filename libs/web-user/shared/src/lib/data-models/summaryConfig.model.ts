@@ -9,10 +9,10 @@ export class SummaryDetails implements Deserializable {
 	arrivalTime: number;
 	departureTime: number;
 	stateCompletedSteps: number;
-  stayDetails: StayDetails;
-  guestDetails: GuestDetails;
-  paymentSummary: PaymentSummary;
-  healthDeclaration: Health;
+  	stayDetails: StayDetails;
+  	guestDetails: GuestDetails;
+  	paymentSummary: PaymentSummary;
+  	healthDeclaration: Health;
 
 	deserialize(summary) {
 		Object.assign(
@@ -46,11 +46,11 @@ export class Health {
 
 export class StayDetails {
 	statusMessage: Status;
-  arrivalTime: number;
-  departureTime: number;
-  roomType: string;
-  adultsCount: number;
-  kidsCount: number;
+  	arrivalTime: number;
+  	departureTime: number;
+  	roomType: string;
+  	adultsCount: number;
+  	kidsCount: number;
 	comments: string;
 	expectedArrivalTime: number;
 	expectedDepartureTime: number;
@@ -75,17 +75,17 @@ export class StayDetails {
 }
 
 export class Guest {
-  id: string;
-  nameTitle: string;
-  firstName: string;
+  	id: string;
+  	nameTitle: string;
+  	firstName: string;
 	lastName: string;
 	contactDetails: ContactDetails;
-  type: object;
-  nationality: object;
-  document: DocumentDetails[];
-  healthDeclarationFormId: object;
-  pmsGuestId: object;
-  regcardUrl: string;
+  	type: object;
+  	nationality: object;
+  	document: DocumentDetails[];
+  	healthDeclarationFormId: object;
+  	pmsGuestId: object;
+  	regcardUrl: string;
 	signatureUrl: string;
 	statusMessage: Status;
 
@@ -140,15 +140,15 @@ export class GuestDetails {
 }
 
 export class ContactDetails {
-  cc: string;
-  mobileNumber: string;
+  	cc: string;
+  	mobileNumber: string;
 	emailId: string;
 	
 	deserialize(summary) {
 		Object.assign(
 			this,
 			set({}, 'cc', get(summary, ['cc'])),
-			set({}, 'mobileNumber', get(summary, ['mobileNumber'])),
+			set({}, 'mobileNumber', get(summary, ['contactNumber'])),
 			set({}, 'emailId', get(summary, ['emailId'])),
 		)
 		return this;
@@ -156,10 +156,10 @@ export class ContactDetails {
 }
 
 export class DocumentDetails {
-  id: string;
-  documentType: string;
-  frontUrl: string;
-  backUrl: string;
+  	id: string;
+  	documentType: string;
+  	frontUrl: string;
+  	backUrl: string;
 }
 
 export class Status {

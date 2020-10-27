@@ -9,7 +9,7 @@ export const ADMIN_ROUTES = [
     path: 'request',
     title: 'Requests',
     children: null,
-    url: 'assets/svg/Roles_&_Permission.svg',
+    url: 'assets/svg/request.svg',
   },
   {
     path: 'roles-permissions',

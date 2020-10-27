@@ -43,6 +43,11 @@ export class TokenRetievalInterceptor implements HttpInterceptor {
               'x-access-refresh-token',
               event.headers.get('x-access-refresh-token')
             );
+
+            this._authService.setTokenByName(
+              'x-userId',
+              event.headers.get('x-userId')
+            );
           }
           return event;
         })

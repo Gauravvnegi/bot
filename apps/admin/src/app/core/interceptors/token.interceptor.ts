@@ -28,6 +28,7 @@ export class TokenInterceptor implements HttpInterceptor {
             'x-authorization'
           ),
           'x-access-token': this._authService.getTokenByName('x-access-token'),
+          'x-userId': this._authService.getTokenByName('x-userId'),
         },
       });
       return next.handle(modifiedRequest);

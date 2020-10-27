@@ -44,8 +44,9 @@ export class AuthService extends ApiService {
     // get the token
     const xAuthToken = this.getTokenByName('x-authorization');
     const xAccessToken = this.getTokenByName('x-access-token');
+    const xUserIdToken = this.getTokenByName('x-userId');
 
-    return !!xAuthToken && !!xAccessToken;
+    return !!xAuthToken && !!xAccessToken && !!xUserIdToken;
 
     // return a boolean reflecting
     // whether or not the token is expired

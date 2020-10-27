@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-header-summary',
@@ -21,6 +22,8 @@ export class HeaderSummaryComponent implements OnInit {
     private _stepperService: StepperService,
     private _date: DateService,
     public dialogRef: MatDialogRef<HeaderSummaryComponent>,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.context = this;
   }
@@ -44,5 +47,10 @@ export class HeaderSummaryComponent implements OnInit {
 
   closeModal() {
     this.dialogRef.close();
+  }
+
+  openFeedback() {
+    this.closeModal();
+    this.router.navigateByUrl(`/feedback?token=${this.route.snapshot.queryParamMap.get('token')}&entity=feedback`);
   }
 }

@@ -7,7 +7,11 @@
       <router-outlet></router-outlet>
     </div>
     <footer class="wrapper--left-footer">
-      I hereby agree to&nbsp;<a href="https://www.botshot.in/terms-of-uses/">Terms and Conditions</a>
+      I hereby agree to&nbsp;<a
+        href="https://www.botshot.in/terms-of-uses/"
+        target="_blank"
+        >Terms and Conditions</a
+      >
     </footer>
     <div class="wrapper--left-svg-icons first">
       <img src="assets/svg/bell.svg" />
@@ -24,8 +28,10 @@
   </div>
   <div class="wrapper--right">
     <header class="wrapper--right-header">
-      <a href="https://www.botshot.in/about-us/">About Us</a>
-      <a href="https://www.botshot.in/privacy-policy/">Privacy Policy</a>
+      <a href="https://www.botshot.in/about-us/" target="_blank">About Us</a>
+      <a href="https://www.botshot.in/privacy-policy/" target="_blank"
+        >Privacy Policy</a
+      >
     </header>
     <div class="wrapper--right-managing-hotel">
       <p class="heading">Managing Hotel is Now Easy</p>
@@ -40,7 +46,8 @@
       <div class="image">
         <img src="assets/botshotlogo.png" />
       </div>
-      ©&nbsp;2020, Botshot. All Right Reserved
+      ©&nbsp;{{ dateService.getCurrentDateWithFormat('YYYY') }}, Botshot. All
+      Right Reserved
     </div>
   </div>
 </div>

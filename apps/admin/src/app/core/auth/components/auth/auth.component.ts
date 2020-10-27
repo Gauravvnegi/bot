@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'admin-auth',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class AuthComponent implements OnInit {
   managingOptions;
 
-  constructor() {}
+  constructor(public dateService: DateService) {}
 
   ngOnInit(): void {
     this.managingOptions = [

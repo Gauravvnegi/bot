@@ -206,11 +206,15 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       this.selectedPaymentOption.config &&
         this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
     ) {
-      return new PaymentCCAvenue().deserialize(
+      const paymentInitiationData = new PaymentCCAvenue().deserialize(
         this.selectedPaymentOption.config,
         this.reservationData.paymentSummary.depositRules,
         this.selectedPaymentOption.type
       );
+      if (this.billSummary && this.billSummary.signatureUrl) {
+        paymentInitiationData.signatureUrl = this.billSummary.signatureUrl;
+      }
+      return paymentInitiationData;
     } else {
       return null;
     }

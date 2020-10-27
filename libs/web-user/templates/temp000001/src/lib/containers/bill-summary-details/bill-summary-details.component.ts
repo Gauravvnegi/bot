@@ -6,8 +6,9 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { BillSummaryService } from '../../../../../../shared/src/lib/services/bill-summary.service';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -46,9 +47,10 @@ export class BillSummaryDetailsComponent implements OnInit {
     private _fb: FormBuilder,
     private _summaryService: BillSummaryService,
     private _stepperService: StepperService,
-    private _healthDetailsService: HealthDetailsService,
+    private _hotelService: HotelService,
     private _reservationService: ReservationService,
     private _snackBarService: SnackBarService,
+    private _utilityService: UtilityService,
     public dialog: MatDialog
   ) {
     this.initRequestForm();
@@ -159,22 +161,27 @@ export class BillSummaryDetailsComponent implements OnInit {
   signatureUploadFile(event) {
     if (event.file) {
       let formData = new FormData();
-      formData.append('file', event.file);
+      formData.append('files', event.file);
 
-      this._healthDetailsService
+      this._summaryService
         .uploadSignature(
           this._reservationService.reservationId,
+          this._hotelService.hotelId,
           this._reservationService.reservationData.guestDetails.primaryGuest.id,
           formData
         )
         .subscribe((response) => {
           this.signature = response.fileDownloadUrl;
+          this._utilityService.$signatureUploaded.next(true);
           this._snackBarService.openSnackBarAsText(
             'Signature upload successful',
             '',
             { panelClass: 'success' }
           );
-        }, ({ error }) => this._snackBarService.openSnackBarAsText(error.message));
+        }, ({ error }) => {
+          this._utilityService.$signatureUploaded.next(true);
+          this._snackBarService.openSnackBarAsText(error.message)
+        });
     }
   }
 

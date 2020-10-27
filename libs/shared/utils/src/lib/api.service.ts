@@ -87,6 +87,13 @@ export class ApiService {
       .pipe(catchError((err) => this.handleError(err)));
   }
 
+  uploadDocumentPost(uri: string, data: any): Observable<any> {
+    // this.httpOptions.headers.append('Content-Type', 'multipart/form-data;');
+    return this.httpClient
+      .post(this.getBaseUrl() + uri, data, this.httpOptions)
+      .pipe(catchError((err) => this.handleError(err)));
+  }
+
   /**
    * Handle general errors from the API
    *

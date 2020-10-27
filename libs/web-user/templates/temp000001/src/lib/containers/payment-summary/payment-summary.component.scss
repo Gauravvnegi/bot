@@ -34,7 +34,7 @@
 .table__wrapper {
   padding: 0px 25px;
   @media only screen and (max-width: $tab-size) {
-    padding: 0px $padding-medium;
+    padding: 0px 5px;
   }
 }
 
@@ -79,29 +79,57 @@
   margin-bottom: 0px;
 }
 
+:host ::ng-deep .mat-header-row {
+  @media screen and (max-width: 600px) {
+    height: 24px;
+    th {
+      padding: 5px !important;
+      font-size: 7px !important;
+    }
+  }
+}
+
 .description-table {
   padding-top: $padding-small;
   width: $full-width;
-  .header {
+  border: none;
+  td,
+  th {
+    text-align: center;
+  }
+  th {
     background-color: $primary-blue;
     font-size: $font-medium;
     font-weight: $bold;
     color: white;
-    td {
-      padding: $padding-small;
-      text-align: center;
+  }
+  td {
+    padding: 10px;
+    font-size: $font16;
+    font-weight: $bold;
+    @media screen and (max-width: 600px) {
+      padding: 4px;
+      font-size: 7px;
     }
   }
 
-  .order__details {
-    font-size: $font-medium;
-    font-weight: $bold;
-    td {
-      padding: $padding-medium;
-      text-align: center;
-      border-bottom: 2px solid lightgray;
-      .roomType {
-        color: lightgray;
+  .room-data {
+    text-align: left;
+    padding-left: 14px;
+    font-size: $font16;
+    .room {
+      font-weight: $bold;
+    }
+    .room-type {
+      font-weight: $bold;
+      color: #929292;
+      margin-top: 8px;
+    }
+    @media screen and (max-width: 600px) {
+      font-size: 7px;
+      padding-left: 0;
+      .room-type {
+        margin-top: 3px;
       }
     }
   }
@@ -170,28 +198,28 @@
   color: $primary-blue;
 }
 
-:host ::ng-deep .mat-table {
-  width: 100%;
-  .mat-header-row {
-    background-color: $primary-blue !important;
-    th.mat-header-cell {
-      font-size: $font-medium !important;
-      font-weight: $bold !important;
-      color: white !important;
-    }
-  }
-  .mat-row {
-    border-bottom: 2px solid grey !important;
-    td.mat-cell {
-      font-size: $font-medium;
-      font-weight: $bold;
-      padding: $padding-medium;
-      .roomType {
-        color: lightgray;
-      }
-    }
-  }
-}
+// :host ::ng-deep .mat-table {
+//   width: 100%;
+//   .mat-header-row {
+//     background-color: $primary-blue !important;
+//     th.mat-header-cell {
+//       font-size: $font-medium !important;
+//       font-weight: $bold !important;
+//       color: white !important;
+//     }
+//   }
+//   .mat-row {
+//     border-bottom: 2px solid grey !important;
+//     td.mat-cell {
+//       font-size: $font-medium;
+//       font-weight: $bold;
+//       padding: $padding-medium;
+//       .roomType {
+//         color: lightgray;
+//       }
+//     }
+//   }
+// }
 
 .text-center {
   text-align: center;

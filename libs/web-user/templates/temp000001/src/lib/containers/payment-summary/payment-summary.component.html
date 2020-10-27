@@ -4,24 +4,35 @@
   </div>
   <div class="table__wrapper">
     <div class="description-table-wrapper">
-      <table mat-table [dataSource]="dataSource">
+      <table
+        class="description-table"
+        cellspacing="0"
+        mat-table
+        [dataSource]="dataSource"
+      >
         <ng-container matColumnDef="label">
-          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <th style="text-align: left;" mat-header-cell *matHeaderCellDef>Description</th>
           <td mat-cell *matCellDef="let element">
-            <p>{{ element.label }}</p>
-            <p class="roomType">{{ element.description }}</p>
+            <div class="room-data">
+              <p class="room">{{ element.label }}</p>
+              <p class="room-type">{{ element.description }}</p>
+            </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="unit">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">Unit</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            Unit
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.unit }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="base">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">Unit Price</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            Unit Price
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.currency }}
             {{ element.base }}
@@ -29,7 +40,9 @@
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">Amount</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            Amount
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.currency }}
 
@@ -38,21 +51,27 @@
         </ng-container>
 
         <ng-container matColumnDef="CGST">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">CGST</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            CGST
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.CGST }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="SGST">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">SGST</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            SGST
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.SGST }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="discount">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">Discount</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            Discount
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.currency }}
 
@@ -61,7 +80,9 @@
         </ng-container>
 
         <ng-container matColumnDef="totalAmount">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">Total Amount</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
+            Total Amount
+          </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.currency }}
 
@@ -78,7 +99,9 @@
         <td colspan="8">
           <div class="enteries">
             <p class="label">Total Amount:</p>
-            <p class="value">{{ currencyCode }} {{ paymentSummary.totalAmount }}</p>
+            <p class="value">
+              {{ currencyCode }} {{ paymentSummary.totalAmount }}
+            </p>
           </div>
         </td>
       </tr>
@@ -86,7 +109,9 @@
         <td colspan="8">
           <div class="enteries">
             <p class="label">Total Saving:</p>
-            <p class="value">{{ currencyCode }} {{ paymentSummary.totalDiscount }}</p>
+            <p class="value">
+              {{ currencyCode }} {{ paymentSummary.totalDiscount }}
+            </p>
           </div>
         </td>
       </tr>
@@ -94,7 +119,9 @@
         <td colspan="8">
           <div class="enteries paid__amount">
             <p class="label">Paid Amount:</p>
-            <p class="value">-{{ currencyCode }} {{ paymentSummary.paidAmount }}</p>
+            <p class="value">
+              -{{ currencyCode }} {{ paymentSummary.paidAmount }}
+            </p>
           </div>
         </td>
       </tr>
@@ -117,7 +144,9 @@
         <td colspan="8">
           <div class="enteries due__amount">
             <p class="label">Due Amount:</p>
-            <p class="value">{{ currencyCode }} {{ paymentSummary.dueAmount }}</p>
+            <p class="value">
+              {{ currencyCode }} {{ paymentSummary.dueAmount }}
+            </p>
           </div>
         </td>
       </tr>

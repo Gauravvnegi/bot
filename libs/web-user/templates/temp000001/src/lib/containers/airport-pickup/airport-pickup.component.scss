@@ -33,10 +33,17 @@
     }
   }
 
-  @include flex-space-between();
+  @include flex-between-center();
   @include display-block-on-breakpoint($M);
   @media only screen and (max-width: $M) {
     flex-direction: column;
     justify-content: inherit;
+  }
+}
+
+.width-added {
+  width: 31%;
+  @media screen and (max-width: 780px) {
+    width: 100%;
   }
 }

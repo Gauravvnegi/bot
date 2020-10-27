@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
 import { Customer } from '../../data-models/statistics.model';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
@@ -13,15 +14,18 @@ import { StatisticsService } from '../../services/statistics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import * as moment from 'moment';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-customer-statistics',
   templateUrl: './customer-statistics.component.html',
   styleUrls: ['./customer-statistics.component.scss'],
 })
-export class CustomerStatisticsComponent implements OnInit {
+export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   @Input() customerData: Customer;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
+  $subscription = new Subscription();
+
   legendData;
   chartTypes = [
     { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
@@ -183,28 +187,37 @@ export class CustomerStatisticsComponent implements OnInit {
   };
 
   getCustomerStatistics() {
-    this._globalFilterService.globalFilter$.subscribe((data) => {
-      let calenderType = {
-        calenderType: this._adminUtilityService.getCalendarType(
-          data['dateRange'].queryValue[0].toDate,
-          data['dateRange'].queryValue[1].fromDate
-        ),
-      };
-      this.selectedInterval = calenderType.calenderType;
-      const queries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-        calenderType,
-      ];
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this._adminUtilityService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        const queries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
 
-      const config = {
-        queryObj: this._adminUtilityService.makeQueryParams(queries),
-      };
+        const config = {
+          queryObj: this._adminUtilityService.makeQueryParams(queries),
+        };
+        this.$subscription.add(
+          this._statisticService
+            .getCustomerStatistics(config)
+            .subscribe((res) => {
+              this.customerData = new Customer().deserialize(res);
+              this.initGraphData();
+            })
+        );
+      })
+    );
+  }
 
-      this._statisticService.getCustomerStatistics(config).subscribe((res) => {
-        this.customerData = new Customer().deserialize(res);
-        this.initGraphData();
-      });
-    });
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

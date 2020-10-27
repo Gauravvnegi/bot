@@ -15,6 +15,9 @@ export class FeedbackService extends ApiService {
   }
 
   getServiceUrl(serviceId) {
-    return this.feedbackConfig.suggestionsObj[serviceId].url;
+    return (
+      this.feedbackConfig.suggestionsObj[serviceId] &&
+      this.feedbackConfig.suggestionsObj[serviceId].url
+    );
   }
 }

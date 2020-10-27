@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { StatisticsService } from '../../services/statistics.service';
 import { Statistics, Customer } from '../../data-models/statistics.model';
 import { GlobalFilterService } from '../../../../../../../apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.scss'],
 })
-export class StatisticsComponent implements OnInit {
+export class StatisticsComponent implements OnInit, OnDestroy {
   statistics: Statistics;
   customerData: Customer;
   interval: string = 'day';
+  $subscription = new Subscription();
+
   constructor(
     private _statisticService: StatisticsService,
     private _adminUtilityService: AdminUtilityService,
@@ -30,33 +33,24 @@ export class StatisticsComponent implements OnInit {
   }
 
   listenForGlobalFilters() {
-    this._globalFilterService.globalFilter$.subscribe((data) => {
-      // let hotelInfo = { hotelId: 'ca60640a-9620-4f60-9195-70cc18304edd' };
-      const queries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      const config = {
-        queryObj: this._adminUtilityService.makeQueryParams(queries),
-      };
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        const queries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        const config = {
+          queryObj: this._adminUtilityService.makeQueryParams(queries),
+        };
 
-      this._statisticService.getStatistics(config).subscribe(({ stats }) => {
-        this.statistics = new Statistics().deserialize(stats);
-      });
-    });
+        this._statisticService.getStatistics(config).subscribe(({ stats }) => {
+          this.statistics = new Statistics().deserialize(stats);
+        });
+      })
+    );
   }
 
-  getStatistics() {
-    //to-do
-
-    let hotelInfo = { hotelId: 'ca60640a-9620-4f60-9195-70cc18304edd' };
-    const queries = [hotelInfo];
-    const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(queries),
-    };
-
-    this._statisticService.getStatistics(config).subscribe(({ stats }) => {
-      this.statistics = new Statistics().deserialize(stats);
-    });
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -31,7 +31,7 @@ export class Request implements Deserializable {
       set({}, 'status', get(input, ['status'])),
       set({}, 'journey', get(input, ['journey']))
     );
-    //  this.rooms = new Room().deserialize(input.rooms);
+    this.rooms = new Room().deserialize(input.stayDetails);
     this.booking = new Booking().deserialize(input);
     this.guests = new GuestType().deserialize(input.guestDetails);
 

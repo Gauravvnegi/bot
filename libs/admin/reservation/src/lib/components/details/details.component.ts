@@ -45,6 +45,11 @@ export class DetailsComponent implements OnInit, OnChanges {
   @Input() bookingId;
   @Output() onDetailsClose = new EventEmitter();
 
+  // tabConfig={
+
+  // }
+  tabIndex = 0;
+
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,

@@ -18,11 +18,13 @@ export class Request implements Deserializable {
   requestTimeStamp;
   remarks;
   journey;
+  status;
   deserialize(input) {
     Object.assign(
       this,
       set({}, 'requestTimeStamp', get(input, ['requestTime'])),
       set({}, 'remarks', get(input, ['remarks'])),
+      set({}, 'status', get(input, ['status'])),
       set({}, 'journey', get(input, ['journey']))
     );
     return this;

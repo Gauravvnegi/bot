@@ -52,7 +52,8 @@
       "@hospitality-bot/admin/shared": ["libs/admin/shared/src/index.ts"],
       "@hospitality-bot/admin/roles-and-permissions": [
         "libs/admin/roles-and-permissions/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/request": ["libs/admin/request/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

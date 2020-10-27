@@ -212,7 +212,7 @@
     </div>
   </div>
   <div class="mat-group">
-    <mat-tab-group>
+    <mat-tab-group [selectedIndex]="tabIndex">
       <mat-tab label="Guest Details">
         <hospitality-bot-admin-guest-details
           *ngIf="isReservationDetailFetched"

@@ -19,12 +19,19 @@ const appRoutes: Route[] = [
         component: DashboardComponent,
       },
       {
-        path: 'reservation',
+        path: 'request',
         loadChildren: () =>
-          import('@hospitality-bot/admin/reservation').then(
-            (m) => m.AdminReservationModule
+          import('@hospitality-bot/admin/request').then(
+            (m) => m.AdminRequestModule
           ),
       },
+      // {
+      //   path: 'reservation',
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/reservation').then(
+      //       (m) => m.AdminReservationModule
+      //     ),
+      // },
       {
         path: 'notification',
         loadChildren: () =>

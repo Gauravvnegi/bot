@@ -79,12 +79,13 @@
               class="journey"
               [ngClass]="{
                 'status-opacity-initiated status-text-initiated':
-                  status == 'INITIATED',
+                  rowData.status == 'INITIATED',
                 'status-opacity-pending status-text-pending':
-                  status == 'PENDING',
-                'status-opacity-reject status-text-reject': status == 'FAILED',
+                  rowData.status == 'PENDING',
+                'status-opacity-reject status-text-reject':
+                  rowData.status == 'FAILED',
                 'status-opacity-success status-text-success':
-                  status == 'COMPLETED'
+                  rowData.status == 'COMPLETED'
               }"
             >
               {{ rowData.journey }}
@@ -92,13 +93,13 @@
                 *ngIf="rowData.getElapsedTime()"
                 [ngClass]="{
                   'status-opacity-initiated status-text-initiated':
-                    status == 'INITIATED',
+                    rowData.status == 'INITIATED',
                   'status-opacity-pending status-text-pending':
-                    status == 'PENDING',
+                    rowData.status == 'PENDING',
                   'status-opacity-reject status-text-reject':
-                    status == 'FAILED',
+                    rowData.status == 'FAILED',
                   'status-opacity-success status-text-success':
-                    status == 'COMPLETED'
+                    rowData.status == 'COMPLETED'
                 }"
               >
                 {{ rowData.getElapsedTime() }}

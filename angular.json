@@ -248,7 +248,6 @@
               "includePaths": ["apps/admin/src/assets/sass"]
             }
           },
-
           "configurations": {
             "production": {
               "fileReplacements": [
@@ -834,6 +833,38 @@
             "tsConfig": "libs/admin/roles-and-permissions/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/roles-and-permissions/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-request": {
+      "projectType": "library",
+      "root": "libs/admin/request",
+      "sourceRoot": "libs/admin/request/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/request/tsconfig.lib.json",
+              "libs/admin/request/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/request/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/request/jest.config.js",
+            "tsConfig": "libs/admin/request/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/request/src/test-setup.ts"
           }
         }
       },

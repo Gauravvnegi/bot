@@ -96,4 +96,16 @@
 .modal-body {
   max-height: calc(70vh - 100px);
   overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 10px;
+  }
 }

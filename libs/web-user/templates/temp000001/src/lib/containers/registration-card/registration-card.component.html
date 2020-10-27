@@ -7,7 +7,9 @@
       <div [ngClass]="settings.modal.style.title">
         <h3>{{ settings.modal.title }}</h3>
       </div>
-      <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+      <div class="close_wrapper">
+        <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+      </div>
     </div>
     <div [ngClass]="settings.modal.style.body">
       <div [ngClass]="settings.modal.style.pdfHeader">

@@ -9,7 +9,13 @@
 // }
 
 :host ::ng-deep .next-button {
-  @include footer-next();
+  @include primary-button();
+}
+
+.close_wrapper {
+  position: absolute;
+  right: 14px;
+  top: -13px;
 }
 
 .payment-wrapper {
@@ -34,7 +40,8 @@
   @include flex-space-between();
 
 	padding-bottom: $padding-small;
-	width: $full-width;
+  width: $full-width;
+  position: relative;
 }
 
 .modal-title {

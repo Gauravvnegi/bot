@@ -196,18 +196,18 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="onFilterTypeTextChange($event.target.value, 'journey')"
           class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'remarks', 'contains')
+          "
           class="p-column-filter"
-          disabled="true"
         />
       </th>
     </tr>

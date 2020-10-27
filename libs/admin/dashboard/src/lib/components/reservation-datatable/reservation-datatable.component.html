@@ -238,7 +238,7 @@
     let-rowIndex="rowIndex"
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-    <tr class="data-table-row" (click)="openDetailPage(rowData)">
+    <tr class="data-table-row" (click)="openDetailPage($event, rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -334,8 +334,7 @@
             'status-text-reject':
               rowData.payment.dueAmount > 0 &&
               rowData.payment.dueAmount <= rowData.payment.totalAmount,
-            'status-text-success':
-              rowData.payment.dueAmount == 0 
+            'status-text-success': rowData.payment.dueAmount == 0
           }"
           >{{ rowData.payment.dueAmount }}</span
         >/{{ rowData.payment.totalAmount }}
@@ -355,7 +354,10 @@
         <div class="icon-wrapper">
           <div class="line first"></div>
           <div class="line second"></div>
-          <div class="icon">
+          <div
+            (click)="openDetailPage($event, rowData, 'document_details')"
+            class="icon"
+          >
             <img
               class="table-body-journey-icon"
               src="assets/svg/Document.svg"
@@ -386,7 +388,10 @@
               Document
             </p>
           </div>
-          <div class="icon">
+          <div
+            (click)="openDetailPage($event, rowData, 'payment_details')"
+            class="icon"
+          >
             <img
               class="table-body-journey-icon"
               src="assets/svg/Payment.svg"

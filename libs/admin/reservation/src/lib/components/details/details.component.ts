@@ -49,7 +49,30 @@ export class DetailsComponent implements OnInit, OnChanges {
   // tabConfig={
 
   // }
-  tabIndex = 0;
+  @Input() tabKey = 'guest_details';
+
+  detailsConfig = [
+    {
+      key: 'guest_details',
+      index: 0,
+    },
+    {
+      key: 'document_details',
+      index: 1,
+    },
+    {
+      key: 'package_details',
+      index: 2,
+    },
+    {
+      key: 'payment_details',
+      index: 3,
+    },
+    {
+      key: 'request_details',
+      index: 4,
+    },
+  ];
 
   constructor(
     private _fb: FormBuilder,
@@ -446,6 +469,13 @@ export class DetailsComponent implements OnInit, OnChanges {
 
   get documentStatusFG() {
     return this.detailsForm.get('documentStatus') as FormGroup;
+  }
+
+  get tabIndex() {
+    let { index } = this.detailsConfig.find(
+      (tabConfig) => tabConfig.key == this.tabKey
+    );
+    return index ? index : 0;
   }
 }
 

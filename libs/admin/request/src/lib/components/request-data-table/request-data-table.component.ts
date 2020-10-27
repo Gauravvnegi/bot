@@ -36,8 +36,8 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     { field: 'rooms.roomNumber', header: 'Rooms' },
     { field: 'booking.bookingNumber', header: 'Booking No.' },
     { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
-    { field: 'arrivalAndDepartureDate', header: 'Category/Type' },
-    { field: 'package', header: 'Message' },
+    { field: 'journey', header: 'Category/Type' },
+    { field: 'remarks', header: 'Message' },
   ];
 
   tabFilterItems = [
@@ -394,7 +394,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     );
 
     detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-    detailCompRef.componentInstance.tabIndex = 4;
+    detailCompRef.componentInstance.tabKey = 'request_details';
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         this.loadInitialData([

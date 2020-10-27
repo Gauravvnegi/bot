@@ -99,6 +99,7 @@ export interface Deserializable {
     totalAmount;
     totalDiscount;
     roomRates;
+    signatureUrl;
     packages = new Array<PackageDetails>();
     deserialize(input: any) {
       Object.assign(
@@ -109,7 +110,8 @@ export interface Deserializable {
         set({}, 'subtotal', get(input, ['subtotal'])),
         set({}, 'taxAmount', get(input, ['taxAmount'])),
         set({}, 'totalAmount', get(input, ['totalAmount'])),
-        set({}, 'totalDiscount', get(input, ['totalDiscount']))
+        set({}, 'totalDiscount', get(input, ['totalDiscount'])),
+        set({}, 'signatureUrl', get(input, ['signatureUrl'])),
       );
       this.roomRates = new RoomRateDetails().deserialize(input.roomRates);
       input.packages.forEach(amenity => {

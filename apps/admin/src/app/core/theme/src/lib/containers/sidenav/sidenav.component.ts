@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ADMIN_ROUTES } from './sidenav-admin.routes';
 // import { SUPER_ADMIN_ROUTES } from './sidenav-admin.routes';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
+import { GlobalFilterService } from '../../services/global-filters.service';
+import { Subscription } from 'rxjs';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnInit, OnDestroy {
   public list_item_colour: string;
   public menuItems: object;
   public activeFontColor: string;
@@ -20,10 +23,13 @@ export class SidenavComponent implements OnInit {
   public headerBgColor: string;
   isExpanded: boolean = true;
   status: boolean = false;
-
+  $subscription = new Subscription();
+  branchConfig;
   constructor(
     private _breakpointObserver: BreakpointObserver,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private _globalFilterService: GlobalFilterService,
+    private _hotelDetailService: HotelDetailService
   ) {}
 
   ngOnInit() {
@@ -32,28 +38,50 @@ export class SidenavComponent implements OnInit {
   }
 
   registerListeners() {
+    this.listenForGlobalFilters();
     this.toggleSidenavForTablet();
     this.listenForTabPortrait();
   }
 
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        const { hotelName: brandId, branchName: branchId } = data[
+          'filter'
+        ].value.property;
+
+        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+          (brand) => brand.id == brandId
+        );
+        this.branchConfig = brandConfig.branches.find(
+          (branch) => branch.id == branchId
+        );
+      })
+    );
+  }
+
   toggleSidenavForTablet() {
-    this._breakpointObserver.observe([Breakpoints.Web]).subscribe((res) => {
-      if (!res.matches) {
-        this.toggleMenuButton();
-      } else if (!this.isExpanded) {
-        this.toggleMenuButton();
-      }
-    });
+    this.$subscription.add(
+      this._breakpointObserver.observe([Breakpoints.Web]).subscribe((res) => {
+        if (!res.matches) {
+          this.toggleMenuButton();
+        } else if (!this.isExpanded) {
+          this.toggleMenuButton();
+        }
+      })
+    );
   }
 
   listenForTabPortrait() {
-    this._breakpointObserver
-      .observe([Breakpoints.TabletPortrait])
-      .subscribe((res) => {
-        if (res.matches) {
-          this.openOrientationPopup();
-        }
-      });
+    this.$subscription.add(
+      this._breakpointObserver
+        .observe([Breakpoints.TabletPortrait])
+        .subscribe((res) => {
+          if (res.matches) {
+            this.openOrientationPopup();
+          }
+        })
+    );
   }
 
   openOrientationPopup() {
@@ -76,5 +104,9 @@ export class SidenavComponent implements OnInit {
   toggleMenuButton() {
     this.status = !this.status;
     this.isExpanded = !this.isExpanded;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

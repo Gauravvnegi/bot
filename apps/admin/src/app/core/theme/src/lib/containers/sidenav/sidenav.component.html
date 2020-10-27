@@ -5,7 +5,10 @@
 >
   <div class="sidenav-header">
     <div [style.display]="status ? 'none' : ''" class="logo">
-      <img src="assets/hotelhilltop.png" />
+      <img
+        [src]="branchConfig.logoUrl"
+        onerror="this.src='assets/hotelhilltop.png';"
+      />
     </div>
     <div class="menu_button" (click)="toggleMenuButton()">
       <div class="bar1"></div>
@@ -38,7 +41,9 @@
         >
           <!-- <mat-icon>{{ menuItem.icon }}</mat-icon> -->
           <img [src]="menuItem.url" class="svg-icon" />
-          <span class="icon-label" *ngIf="isExpanded">{{ menuItem.title }}</span>
+          <span class="icon-label" *ngIf="isExpanded">{{
+            menuItem.title
+          }}</span>
         </a>
         <div [hidden]="menuItem.children === null" class="collapse-container">
           <a

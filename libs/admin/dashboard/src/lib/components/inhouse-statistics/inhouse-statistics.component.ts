@@ -24,7 +24,6 @@ export class InhouseStatisticsComponent implements OnInit {
     let percentage = Math.abs(
       (this.inhouse.roomOccupied / this.inhouse.totalRoom) * 100
     );
-
     this.percentStyle = `--percentage : ${percentage}; --fill: hsla(266, 90%, 54%, 1) ;`;
   }
 }

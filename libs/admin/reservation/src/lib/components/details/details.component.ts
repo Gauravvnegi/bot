@@ -21,6 +21,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { Subject } from 'rxjs';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -220,14 +221,41 @@ export class DetailsComponent implements OnInit, OnChanges {
     this._reservationService
       .downloadInvoice(this.reservationDetailsFG.get('bookingId').value)
       .subscribe(
-        (data) => {},
+        (res) => {
+          if (res && res.file_download_url) {
+            FileSaver.saveAs(
+              res.file_download_url,
+              'invoice_' +
+                this.reservationDetailsFG.get('bookingNumber').value +
+                new Date().getTime() +
+                '.pdf'
+            );
+          }
+        },
         ({ error }) => {
           this._snackBarService.openSnackBarAsText(error.message);
         }
       );
   }
 
-  prepareInvoice() {}
+  prepareInvoice() {
+    this._reservationService
+      .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
+      .subscribe(
+        (res) => {
+          this._snackBarService.openSnackBarAsText(
+            'Ticket raised for invoice',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
 
   sendInvoice() {}
 

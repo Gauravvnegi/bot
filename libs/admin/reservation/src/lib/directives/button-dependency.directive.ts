@@ -84,8 +84,8 @@ export class ButtonDependencyDirective {
           dependencies: [
             this.parentForm.get('healthCardDetails').get('status').value ==
               'COMPLETED',
-            // this.parentForm.get('documentStatus').get('status').value ==
-            //   'COMPLETED',
+            this.parentForm.get('documentStatus').get('status').value ==
+              'COMPLETED',
           ],
           msgs: ['Please verify health card', 'Please verify document details'],
         },

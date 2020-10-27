@@ -369,7 +369,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         (res) => {
           FileSaver.saveAs(
             res,
-            'reservation' + '_export_' + new Date().getTime() + '.csv'
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
           );
           this.loading = false;
         },

@@ -8,6 +8,7 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -112,21 +113,27 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
       ]),
+      loggedInUserId: this.userDetailService.getLoggedInUserid(),
     };
 
-    // this._reservationService.exportCSV(config).subscribe(
-    //   (res) => {
-    //     FileSaver.saveAs(
-    //       res,
-    //       'reservation' + '_export_' + new Date().getTime() + '.csv'
-    //     );
-    //     this.loading = false;
-    //   },
-    //   (error) => {
-    //     this.loading = false;
-    //     this._snackbarService.openSnackBarAsText(error.message);
-    //   }
-    // );
+    this.$subscription.add(
+      this._managePermissionService.exportCSV(config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
+          );
+          this.loading = false;
+        },
+        (error) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   addUser() {

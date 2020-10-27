@@ -65,7 +65,7 @@ export class Inhouse {
       this,
       set({}, 'adultCount', get(statistics, ['adults'])),
       set({}, 'kidsCount', get(statistics, ['kids'])),
-      set({}, 'totalRoom', get(statistics, ['totalCount'], 10)),
+      set({}, 'totalRoom', get(statistics, ['totalRooms'])),
       set({}, 'roomOccupied', get(statistics, ['roomOccupied']))
     );
     return this;

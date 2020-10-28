@@ -11,6 +11,7 @@ import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interce
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ProgressSpinnerInterceptor } from './theme/src/lib/interceptor/progress-spinner.interceptor';
 import { environment } from '@hospitality-bot/admin/environment';
+import { RefreshTokenInterceptor } from './interceptors/refresh-token.interceptor';
 
 @NgModule({
   declarations: [],
@@ -26,6 +27,11 @@ import { environment } from '@hospitality-bot/admin/environment';
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RefreshTokenInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ProgressSpinnerInterceptor,

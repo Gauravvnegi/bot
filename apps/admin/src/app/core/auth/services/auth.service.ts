@@ -19,6 +19,10 @@ export class AuthService extends ApiService {
     );
   }
 
+  refreshAccessToken(config) {
+    return this.post(`/api/v1/user/tokens/refresh`, config);
+  }
+
   matchPasswords(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];

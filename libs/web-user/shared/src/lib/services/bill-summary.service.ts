@@ -6,6 +6,7 @@ import {
   SummaryDetailsConfigI,
 } from '../data-models/billSummaryConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
+import { FileDetails } from '../data-models/reservationDetails';
 
 @Injectable()
 export class BillSummaryService extends ApiService {
@@ -35,6 +36,13 @@ export class BillSummaryService extends ApiService {
 
   getBillingSummary(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/bill-summary`);
+  }
+
+  uploadSignature(reservationId, hotelId, guestId, formData): Observable<FileDetails> {
+    return this.uploadDocumentPost(
+      `/api/v1/uploads?folder_name=hotel/${hotelId}/reservation/${reservationId}/guest/${guestId}/payment`,
+      formData
+    );
   }
 
   get billSummaryDetails() {

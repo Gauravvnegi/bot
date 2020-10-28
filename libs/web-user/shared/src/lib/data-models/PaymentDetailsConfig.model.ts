@@ -159,6 +159,7 @@ export class PaymentStatus {
   payOnDesk: boolean;
   transactionId: string;
   status: string;
+  signatureUrl?: string;
 }
 export class PaymentCCAvenue {
   merchantId: string;
@@ -170,6 +171,7 @@ export class PaymentCCAvenue {
   externalRedirect: boolean;
   methodType?: any;
   guaranteeType: string;
+  signatureUrl?: string;
 
   deserialize(
     config: PaymentConfig,

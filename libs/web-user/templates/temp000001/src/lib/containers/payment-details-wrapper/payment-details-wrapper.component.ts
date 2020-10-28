@@ -14,8 +14,9 @@ import {
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { FormControl } from '@angular/forms';
-import { forkJoin, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
+import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -43,6 +44,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _buttonService: ButtonService,
     private _hotelService: HotelService,
     private _summaryService: SummaryService,
+    private _billSummaryService: BillSummaryService,
   ) {
     super();
     this.self = this;
@@ -192,6 +194,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk || true;
     paymentStatusData.status = 'SUCCESS';
     paymentStatusData.transactionId = '12345678';
+    if (this.billSummary && this.billSummary.signatureUrl) {
+      paymentStatusData.signatureUrl = this.billSummary.signatureUrl;
+    }
+    console.log(this.reservationData)
     return paymentStatusData;
   }
 
@@ -200,11 +206,15 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       this.selectedPaymentOption.config &&
         this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
     ) {
-      return new PaymentCCAvenue().deserialize(
+      const paymentInitiationData = new PaymentCCAvenue().deserialize(
         this.selectedPaymentOption.config,
         this.reservationData.paymentSummary.depositRules,
         this.selectedPaymentOption.type
       );
+      if (this.billSummary && this.billSummary.signatureUrl) {
+        paymentInitiationData.signatureUrl = this.billSummary.signatureUrl;
+      }
+      return paymentInitiationData;
     } else {
       return null;
     }
@@ -220,5 +230,12 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   get paymentConfiguration() {
     return this._paymentDetailsService.paymentConfiguration;
+  }
+
+  get billSummary() {
+    if (this._billSummaryService.billSummaryDetails) {
+      return this._billSummaryService.billSummaryDetails.billSummary;
+    }
+    return null;
   }
 }

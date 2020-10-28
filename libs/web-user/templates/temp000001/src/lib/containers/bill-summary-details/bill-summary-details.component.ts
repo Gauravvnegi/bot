@@ -171,7 +171,8 @@ export class BillSummaryDetailsComponent implements OnInit {
           formData
         )
         .subscribe((response) => {
-          this.signature = response.fileDownloadUrl;
+          this._summaryService.$signatureUrl.next(response['fileDownloadUri']);
+          this.signature = response['fileDownloadUri'];
           this._utilityService.$signatureUploaded.next(true);
           this._snackBarService.openSnackBarAsText(
             'Signature upload successful',
@@ -192,6 +193,4 @@ export class BillSummaryDetailsComponent implements OnInit {
   get billSummary() {
     return this._summaryService.billSummaryDetails.billSummary;
   }
-
-  submit(result) {}
 }

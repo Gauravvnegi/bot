@@ -214,8 +214,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  loadInitialData(queries = []) {
-    this.loading = true;
+  loadInitialData(queries = [], loading = true) {
+    this.loading = loading && true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
@@ -417,14 +417,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        this.loadInitialData([
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
-          },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
+        // remove loader for detail close
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
+            {
+              order: 'DESC',
+              entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            },
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false
+        );
         detailCompRef.close();
       })
     );

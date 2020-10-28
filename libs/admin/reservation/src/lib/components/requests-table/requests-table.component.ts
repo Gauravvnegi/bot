@@ -6,6 +6,7 @@ import { ReservationService } from '../../services/reservation.service';
 import { Observable } from 'rxjs';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { RequestTable } from '../../models/request-table.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -40,7 +41,9 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     public fb: FormBuilder,
     private _reservationService: ReservationService,
     private _adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _router: Router,
+    private _route: ActivatedRoute
   ) {
     super(fb);
   }
@@ -82,5 +85,10 @@ export class RequestsTableComponent extends BaseDatatableComponent {
       this.parentForm.get('reservationDetails').get('bookingId').value,
       config
     );
+  }
+
+  goToRequestTable() {
+    this._router.navigate(['pages', 'request']);
+    //this._router.navigate(['add-user'], { relativeTo: this._route });
   }
 }

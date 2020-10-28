@@ -2,6 +2,7 @@ import { environment as defaultEnvironment } from './environment.default';
 
 export const environment = {
   ...defaultEnvironment,
-  name: 'prod',
-  production: true,
+  production: false,
+  name: 'dev',
+  base_url: 'https://api.botshot.in:8443',
 };

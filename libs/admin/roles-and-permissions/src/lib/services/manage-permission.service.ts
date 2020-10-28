@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { HttpClient } from '@angular/common/http';
@@ -8,9 +8,10 @@ import { Observable } from 'rxjs';
 export class ManagePermissionService extends ApiService {
   constructor(
     private _hotelDetailService: HotelDetailService,
-    public httpClient: HttpClient
+    public httpClient: HttpClient,
+    @Inject('BASE_URL') public baseUrl
   ) {
-    super(httpClient);
+    super(httpClient, baseUrl);
   }
 
   modifyPermissionDetails(value) {

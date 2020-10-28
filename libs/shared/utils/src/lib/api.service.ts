@@ -1,14 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { environment } from '@hospitality-bot/web-user/environment';
 import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  baseUrl = environment.base_url;
+  // baseUrl = environment.base_url;
 
-  constructor(protected httpClient: HttpClient) {}
+  constructor(
+    protected httpClient: HttpClient,
+    @Inject('BASE_URL') public baseUrl
+  ) {}
 
   httpOptions = {
     headers: new HttpHeaders({}),

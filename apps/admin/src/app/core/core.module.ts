@@ -10,11 +10,16 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ProgressSpinnerInterceptor } from './theme/src/lib/interceptor/progress-spinner.interceptor';
+import { environment } from '@hospitality-bot/admin/environment';
 
 @NgModule({
   declarations: [],
   imports: [BrowserModule, CommonModule, AuthModule, RouterModule],
   providers: [
+    {
+      provide: 'BASE_URL',
+      useValue: environment.base_url,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenRetievalInterceptor,

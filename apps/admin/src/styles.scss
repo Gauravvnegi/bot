@@ -20,7 +20,6 @@
 //     contrast(101%);
 // }
 
-
 // @media screen and (max-width: 1100px) and (orientation: landscape) {
 //   html {
 //     transform: rotate(90deg);
@@ -34,10 +33,9 @@
 //   }
 // }
 
-
 // popup modal box
 
-.mat-dialog-container{
+.mat-dialog-container {
   overflow: auto !important;
   overflow-x: hidden !important;
   // max-height: 100vh !important;
@@ -63,7 +61,7 @@
 
 // to-do change classes for multiple pop-up
 
-.cdk-overlay-pane{
+.cdk-overlay-pane {
   max-height: 85vh;
   @media screen and (max-width: 1100px) {
     max-height: 53vh;
@@ -89,19 +87,19 @@
 }
 
 .status-opacity-pending {
-  background-color: #c2c2c226;
+  background-color: #c2c2c226 !important;
 }
 
 .status-opacity-initiated {
-  background-color: #6bacf826;
+  background-color: #6bacf826 !important;
 }
 
 .status-opacity-reject {
-  background-color: #f00d2a26;
+  background-color: #f00d2a26 !important;
 }
 
 .status-opacity-success {
-  background-color: #53b33e26;
+  background-color: #53b33e26 !important;
 }
 
 .status-background-pending {
@@ -119,7 +117,6 @@
 .status-background-success {
   background-color: $completed;
 }
-
 
 .danger {
   background-color: $reject !important;

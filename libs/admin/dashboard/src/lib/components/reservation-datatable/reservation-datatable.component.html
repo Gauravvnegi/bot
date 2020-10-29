@@ -96,7 +96,25 @@
                   let quickReplyTypeIdx = index
                 "
                 selectable="true"
-                [ngClass]="{ chipSelected: quickReplyType.isSelected }"
+                [ngClass]="{
+                  chipSelected: quickReplyType.isSelected,
+                  'status-opacity-pending': quickReplyType.type == 'pending',
+                  'status-opacity-initiated':
+                    quickReplyType.type == 'initiated',
+                  'status-opacity-success': quickReplyType.type == 'completed',
+                  'status-opacity-reject': quickReplyType.type == 'failed',
+                  'status-selected-pending':
+                    quickReplyType.type == 'pending' &&
+                    quickReplyType.isSelected,
+                  'status-selected-initiated':
+                    quickReplyType.type == 'initiated' &&
+                    quickReplyType.isSelected,
+                  'status-selected-completed':
+                    quickReplyType.type == 'completed' &&
+                    quickReplyType.isSelected,
+                  'status-selected-reject':
+                    quickReplyType.type == 'failed' && quickReplyType.isSelected
+                }"
                 [selected]="isQuickReplyFilterSelected(quickReplyType)"
                 (click)="
                   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)

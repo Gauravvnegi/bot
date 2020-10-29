@@ -509,3 +509,17 @@ th {
 //       }
 //   }
 // }
+
+.status-selected-pending {
+  background-color: $pending !important;
+}
+.status-selected-initiated {
+  background-color: $initiated !important;
+}
+.status-selected-completed {
+  background-color: $completed !important;
+}
+
+.status-selected-reject {
+  background-color: $reject !important;
+}

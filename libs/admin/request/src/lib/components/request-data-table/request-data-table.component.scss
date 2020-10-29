@@ -14,3 +14,7 @@
   font-size: $font12;
   text-align: center;
 }
+
+:host ::ng-deep .p-datatable{
+    margin-top: 1.5rem;
+}

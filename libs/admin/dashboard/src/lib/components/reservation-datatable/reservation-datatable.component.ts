@@ -209,6 +209,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
+          // { offset: this.first, limit: this.rowsPerPage },
         ]);
       })
     );
@@ -222,8 +223,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           this.values = new ReservationTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          this.updateQuickReplyFilterCount(data.entityStateCounts);
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
 
           this.loading = false;
         },
@@ -276,7 +279,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   fetchDataFrom(
     queries,
-    defaultProps = { offset: 0, limit: this.rowsPerPage }
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
   ): Observable<any> {
     queries.push(defaultProps);
     const config = {
@@ -288,6 +291,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
+    this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [
@@ -298,7 +302,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
-        { offset: event.first, limit: event.rows }
+        { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
@@ -314,6 +318,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         }
       )
     );
+  }
+
+  updatePaginations(event) {
+    this.first = event.first;
+    this.rowsPerPage = event.rows;
   }
 
   customSort(event: SortEvent) {

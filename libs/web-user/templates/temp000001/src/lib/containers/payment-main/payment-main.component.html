@@ -10,26 +10,24 @@
         <p
           class="note"
           [ngStyle]="
-            status === 'SUCCESS'
-              ? { 'display': 'block' }
-              : { 'display': 'none' }
+            status === 'SUCCESS' ? { display: 'block' } : { display: 'none' }
           "
         >
-          {{ paymentNote }}<b>johndeo@gmail.com</b>
+          {{ paymentNote }}
         </p>
         <p
           class="note"
-          [ngStyle]="status === 'FAILED'
-            ? { 'display': 'block' }
-            : { 'display': 'none' }"
+          [ngStyle]="
+            status === 'FAILED' ? { display: 'block' } : { display: 'none' }
+          "
         >
           {{ paymentNote }}
         </p>
         <p
           class="error_code"
-          [ngStyle]="status === 'FAILED'
-            ? { 'display': 'block' }
-            : { 'display': 'none' }"
+          [ngStyle]="
+            status === 'FAILED' ? { display: 'block' } : { display: 'none' }
+          "
         >
           Error code : 309
         </p>
@@ -38,7 +36,7 @@
         <div class="detail-box">
           <div class="detail">
             <p class="label">Confirmation No.</p>
-            <p class="value">{{ data.orderId }}</p>
+            <p class="value">{{ data.confirmationNumber }}</p>
           </div>
           <div class="seperator"></div>
           <div class="detail">
@@ -58,7 +56,10 @@
       </div>
     </div>
   </div>
-  <div class="main-template-button payment-button" *ngIf="ispaymentStatusLoaded">
+  <div
+    class="main-template-button payment-button"
+    *ngIf="ispaymentStatusLoaded"
+  >
     <web-user-button
       *ngIf="paymentStatusData.showBackButton"
       (click)="redirect(paymentStatusData.data.backRedirectUrl)"
@@ -68,7 +69,11 @@
       style="margin-right: 20px;"
     ></web-user-button>
     <web-user-button
-      (click)="redirect(status === 'SUCCESS' ? paymentStatusData.data.nextRedirectUrl : '')"
+      (click)="
+        redirect(
+          status === 'SUCCESS' ? paymentStatusData.data.nextRedirectUrl : ''
+        )
+      "
       [settings]="{ label: paymentStatusData.next }"
       [buttonClass]="'next-button'"
       class="user-button"

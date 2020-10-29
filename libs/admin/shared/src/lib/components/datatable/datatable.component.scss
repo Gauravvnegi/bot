@@ -29,8 +29,6 @@
   padding: 0;
 }
 
-
-
 :host ::ng-deep .table-data-head {
   background-color: #eaf0f6 !important;
   color: black !important;
@@ -69,7 +67,7 @@
     border-radius: 5px;
     outline: none;
     border: none;
-    background-color: #FCFCFC;
+    background-color: #fcfcfc;
     width: 100%;
   }
 }
@@ -139,7 +137,7 @@
     padding: 5px;
     border: 2px solid #d9d9d9;
     border-radius: 5px;
-    
+
     .divider {
       height: 20px;
       border: 1px solid #d9d9d9;
@@ -149,7 +147,7 @@
   .go {
     outline: none;
     color: $primary-purple;
-    background: #4B56C033;
+    background: #4b56c033;
     border: none;
     font-size: 10px;
     padding: 5px;
@@ -173,7 +171,7 @@
   }
 }
 
-:host ::ng-deep .export{
+:host ::ng-deep .export {
   .p-dropdown .p-inputtext {
     padding: 5px;
     align-items: baseline;
@@ -199,7 +197,7 @@
   color: $primary-gray;
 }
 
-:host ::ng-deep .table--checkbox{
+:host ::ng-deep .table--checkbox {
   text-align: center !important;
 }
 
@@ -299,19 +297,19 @@
   padding: 10px;
   &::-webkit-scrollbar {
     height: 6px;
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
   }
-  
+
   &::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent;
   }
-   
+
   &::-webkit-scrollbar-thumb {
     background: transparent;
   }
-  &:hover{
+  &:hover {
     &::-webkit-scrollbar-thumb {
       background: darkgray;
       border-radius: 10px;
@@ -348,35 +346,37 @@
   &:hover {
     border-color: #2187d5;
   }
-  &:focus{
+  &:focus {
     outline: none;
     border: none;
   }
 }
 
-:host ::ng-deep .data-table-row{
-  &:hover{
+:host ::ng-deep .data-table-row {
+  &:hover {
     cursor: pointer;
     background: rgba(232, 238, 245, 0.25);
   }
 }
 
-:host ::ng-deep  p-dropdown.ng-invalid.ng-touched.ui-inputwrapper-focus:not(form) > div {
+:host
+  ::ng-deep
+  p-dropdown.ng-invalid.ng-touched.ui-inputwrapper-focus:not(form)
+  > div {
   outline: none;
-    border: none;
+  border: none;
 }
 
-:host ::ng-deep p-dropdown{
-  &:focus{
-    -webkit-appearance: none;  
-  -moz-appearance: none; 
+:host ::ng-deep p-dropdown {
+  &:focus {
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 }
 
 :host ::ng-deep .p-paginator-last:hover {
   border-radius: 50%;
 }
-
 
 :host ::ng-deep .no-data-found {
   @include flex-justify-center();
@@ -467,6 +467,13 @@ th {
   background-color: #959ea7;
   color: white;
   font-weight: 400;
+}
+
+:host ::ng-deep .emptyCell {
+  text-align: center !important;
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
 }
 
 // @media screen and (max-width: 50rem) {

@@ -72,7 +72,9 @@
           <p class="date">{{ rowData.getRequestDate() }}</p>
           <p class="time">{{ rowData.getRequestTime() }}</p>
         </td>
-        <td class="message">{{ rowData.remarks }}</td>
+        <td class="message">
+          <p *ngIf="rowData.remarks; else emptyCell">{{ rowData.remarks }}</p>
+        </td>
         <td class="category">
           <div>
             <p

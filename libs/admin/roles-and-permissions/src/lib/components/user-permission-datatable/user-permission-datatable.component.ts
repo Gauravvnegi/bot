@@ -73,7 +73,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   fetchDataFrom(
     queries,
-    defaultProps = { offset: 0, limit: this.rowsPerPage }
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
   ): Observable<any> {
     queries.push(defaultProps);
     const config = {
@@ -86,10 +86,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   loadData(event) {
     this.loading = true;
+    this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom([], {
-        offset: event.first,
-        limit: event.rows,
+        offset: this.first,
+        limit: this.rowsPerPage,
       }).subscribe(
         (data) => {
           this.values = new UserPermissionTable().deserialize(data).records;
@@ -104,6 +105,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         }
       )
     );
+  }
+
+  updatePaginations(event) {
+    this.first = event.first;
+    this.rowsPerPage = event.rows;
   }
 
   exportCSV() {

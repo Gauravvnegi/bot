@@ -253,6 +253,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this.guestsFA.controls.forEach((guest) => {
       guest.get('status').patchValue('COMPLETED');
     });
+
+    this.documentStatus.get('status').patchValue('COMPLETED');
   }
 
   onGuestChange(value) {

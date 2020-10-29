@@ -258,7 +258,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
 
   fetchDataFrom(
     queries,
-    defaultProps = { offset: 0, limit: this.rowsPerPage }
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
   ): Observable<any> {
     queries.push(defaultProps);
     const config = {
@@ -270,6 +270,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
+    this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [
@@ -280,7 +281,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
-        { offset: event.first, limit: event.rows }
+        { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
           this.values = new RequestTable().deserialize(data).records;
@@ -296,6 +297,11 @@ export class RequestDataTableComponent extends BaseDatatableComponent
         }
       )
     );
+  }
+
+  updatePaginations(event) {
+    this.first = event.first;
+    this.rowsPerPage = event.rows;
   }
 
   customSort(event: SortEvent) {

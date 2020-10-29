@@ -250,6 +250,12 @@
   }
 }
 
+:host ::ng-deep .message {
+  font-size: 12px;
+  color: $dark-grey;
+  font-weight: 500;
+}
+
 :host ::ng-deep .guest {
   color: $primary-black;
   font-size: $font12;
@@ -369,6 +375,35 @@
 
 :host ::ng-deep .p-paginator-last:hover {
   border-radius: 50%;
+}
+
+
+:host ::ng-deep .no-data-found {
+  @include flex-justify-center();
+  width: 72vw;
+  padding: $padding10 0;
+}
+
+:host ::ng-deep .category {
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 25px !important;
+  padding-bottom: 25px !important;
+  .journey {
+    border-radius: 25px;
+    padding: 10px;
+    width: fit-content;
+    position: relative;
+    b {
+      position: absolute;
+      right: -6%;
+      bottom: -42%;
+      border-radius: 25px;
+      padding: 5px;
+      z-index: 2;
+    }
+  }
 }
 
 :host ::ng-deep .p-paginator-first:hover {

@@ -178,12 +178,6 @@
   }
 }
 
-:host ::ng-deep .no-data-found {
-  @include flex-justify-center();
-  width: 72vw;
-  padding: $padding10 0;
-}
-
 :host ::ng-deep input[disabled='true'] {
   opacity: 0.5;
 }

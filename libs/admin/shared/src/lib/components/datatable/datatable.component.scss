@@ -317,12 +317,6 @@
   }
 }
 
-:host ::ng-deep .mat-chip {
-  display: inline-block;
-  color: white;
-  text-align: center;
-}
-
 :host ::ng-deep .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
   font-size: 30px;
   width: 100%;
@@ -455,17 +449,21 @@ th {
 }
 
 :host ::ng-deep .mat-chip {
-  background-color: #f5f5f5;
+  display: inline-block;
+  text-align: center;
   font-weight: 400;
-  color: $dark-grey;
   &:hover {
     cursor: pointer;
   }
 }
 
+:host ::ng-deep .status-default {
+  background-color: #f5f5f5;
+  color: $dark-grey;
+}
+
 :host ::ng-deep .chipSelected {
-  background-color: #959ea7;
-  color: white;
+  color: white !important;
   font-weight: 400;
 }
 
@@ -510,16 +508,20 @@ th {
 //   }
 // }
 
-.status-selected-pending {
+:host ::ng-deep .status-selected-pending {
   background-color: $pending !important;
 }
-.status-selected-initiated {
+:host ::ng-deep .status-selected-initiated {
   background-color: $initiated !important;
 }
-.status-selected-completed {
+:host ::ng-deep .status-selected-completed {
   background-color: $completed !important;
 }
 
-.status-selected-reject {
+:host ::ng-deep .status-selected-reject {
   background-color: $reject !important;
+}
+
+:host ::ng-deep .status-selected-default {
+  background-color: $default;
 }

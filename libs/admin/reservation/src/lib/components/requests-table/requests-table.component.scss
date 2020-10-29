@@ -31,3 +31,8 @@
     font-weight: $bolder;
   }
 }
+
+:host ::ng-deep td{
+  border-bottom: none !important;
+  border-right: none !important;
+}

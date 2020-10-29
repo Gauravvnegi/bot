@@ -160,9 +160,11 @@
       <div class="header-seperator"></div>
 
       <div class="room-details">
-        {{ stayDetailsFG.get('roomNumber').value }}
-        <p *ngIf="stayDetailsFG.get('roomNumber').value">-</p>
-        {{ stayDetailsFG.get('roomType').value }}
+        <p>
+          {{ stayDetailsFG.get('roomNumber').value }}
+          <b *ngIf="stayDetailsFG.get('roomNumber').value">-</b>
+          {{ stayDetailsFG.get('roomType').value }}
+        </p>
       </div>
     </div>
 
@@ -314,7 +316,7 @@
                 (click)="activateAndgenerateJourney('CHECKIN')"
                 class="button"
               >
-                 Generate CheckIn Link
+                Generate CheckIn Link
               </button>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
@@ -322,7 +324,7 @@
                 (click)="activateAndgenerateJourney('CHECKIN')"
                 class="button"
               >
-                 Generate CheckIn Link
+                Generate CheckIn Link
               </button>
 
               <button class="button" (click)="verifyAllDocuments()">
@@ -357,7 +359,7 @@
                 (click)="activateAndgenerateJourney('CHECKIN')"
                 class="button"
               >
-                 Generate CheckIn Link
+                Generate CheckIn Link
               </button>
 
               <button (click)="downloadInvoice()" class="button">

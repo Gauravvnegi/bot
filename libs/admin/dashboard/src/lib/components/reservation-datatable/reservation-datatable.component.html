@@ -97,12 +97,17 @@
                 "
                 selectable="true"
                 [ngClass]="{
-                  chipSelected: quickReplyType.isSelected,
-                  'status-opacity-pending': quickReplyType.type == 'pending',
-                  'status-opacity-initiated':
+                  'chipSelected status-selected-default':
+                    quickReplyType.isSelected,
+                  'status-opacity-pending status-text-pending':
+                    quickReplyType.type == 'pending',
+                  'status-opacity-initiated status-text-initiated':
                     quickReplyType.type == 'initiated',
-                  'status-opacity-success': quickReplyType.type == 'completed',
-                  'status-opacity-reject': quickReplyType.type == 'failed',
+                  'status-opacity-success status-text-success':
+                    quickReplyType.type == 'completed',
+                  'status-opacity-reject status-text-reject':
+                    quickReplyType.type == 'failed',
+                  'status-default': quickReplyType.type == '',
                   'status-selected-pending':
                     quickReplyType.type == 'pending' &&
                     quickReplyType.isSelected,

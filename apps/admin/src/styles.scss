@@ -71,19 +71,19 @@
 // text-color
 
 .status-text-pending {
-  color: $pending;
+  color: $pending !important;
 }
 
 .status-text-initiated {
-  color: $initiated;
+  color: $initiated !important;
 }
 
 .status-text-reject {
-  color: $reject;
+  color: $reject !important;
 }
 
 .status-text-success {
-  color: $completed;
+  color: $completed !important;
 }
 
 .status-opacity-pending {

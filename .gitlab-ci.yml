@@ -8,9 +8,9 @@ before_script:
   - ls -l
   - ls | wc -l
 
-deploy to Development-web-user:
+deploy to Stage-web-user:
   stage: deploy
-  environment: stage
+  environment: stage-web-user
   when: manual
 
   script:
@@ -21,9 +21,9 @@ deploy to Development-web-user:
   only:
     - stage
     
-deploy to Development-admin:
+deploy to Stage-admin:
   stage: deploy
-  environment: stage
+  environment: stage-admin
   when: manual
 
   script:

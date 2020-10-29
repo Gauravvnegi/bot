@@ -280,6 +280,18 @@ export class DetailsComponent implements OnInit, OnChanges {
       );
   }
 
+  downloadRegcard(regcardUrl) {
+    if (regcardUrl) {
+      FileSaver.saveAs(
+        regcardUrl,
+        'regcard' +
+          this.reservationDetailsFG.get('bookingNumber').value +
+          new Date().getTime() +
+          '.pdf'
+      );
+    }
+  }
+
   sendInvoice() {}
 
   confirmAndNotifyCheckin() {

@@ -155,6 +155,8 @@ export class GuestDetailsConfig implements Deserializable {
   status;
   remarks: string;
   documents: DocumentDetailsConfig;
+  regcardUrl;
+  regcardStatus;
 
   deserialize(input: any, hotelNationality) {
     const contactDetails = new ContactDetailsConfig().deserialize(
@@ -192,7 +194,13 @@ export class GuestDetailsConfig implements Deserializable {
             : null
           : null
       ),
-      set({}, 'documents', documents)
+      set({}, 'documents', documents),
+      set(
+        {},
+        'regcardStatus',
+        get(input, ['regcardUrl']) ? 'COMPLETED' : 'FAILED'
+      ),
+      set({}, 'regcardUrl', get(input, ['regcardUrl']))
     );
     return this;
   }

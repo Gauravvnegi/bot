@@ -77,7 +77,7 @@
     .status {
       color: #53b33e;
     }
-    @media screen and (max-width:700px) {
+    @media screen and (max-width: 700px) {
       font-size: $font-small;
     }
   }
@@ -101,7 +101,7 @@
   font-weight: $bolder;
   font-size: $font-large;
   margin: 25px 0;
-  @media screen and (max-width:700px) {
+  @media screen and (max-width: 700px) {
     font-size: $font16;
     margin: 15px 0;
   }
@@ -122,20 +122,20 @@
       &-detail {
         margin-left: 10px;
       }
-      mat-icon{
+      mat-icon {
         font-size: 35px;
-      height: auto;
-      width: auto;
+        height: auto;
+        width: auto;
       }
     }
     &--disclaimer {
       margin-top: $margin-medium;
       color: #8d8d8d;
-      @media screen and (max-width:700px) {
+      @media screen and (max-width: 700px) {
         font-size: 12px;
       }
     }
-    @media screen and (max-width:700px) {
+    @media screen and (max-width: 700px) {
       font-size: 14px;
     }
   }
@@ -147,22 +147,25 @@
     span {
       color: $primary-blue;
     }
-    mat-icon{
+    mat-icon {
       font-size: 35px;
       height: auto;
       width: auto;
     }
-    @media screen and (max-width:700px) {
+    @media screen and (max-width: 700px) {
       font-size: 14px;
     }
   }
   &--container {
     font-weight: $bold;
+    @media screen and (max-width: 700px) {
+      width: 44%;
+    }
     &--title {
       font-size: $font16;
       color: #8d8d8d;
       margin-bottom: $margin-medium;
-      b{
+      b {
         color: black;
       }
     }
@@ -175,25 +178,31 @@
       font-weight: $bolder;
       margin-bottom: $margin-small;
       @include flex-item-center();
-     .element{
-       margin-right: 35px;
-     }
+      .element {
+        margin-right: 35px;
+        @media screen and (max-width: 700px) {
+          margin-right: 0;
+        }
+      }
+      @media screen and (max-width: 700px) {
+        justify-content: space-between;
+      }
     }
-    @media screen and (max-width:700px) {
+    @media screen and (max-width: 700px) {
       margin: 10px 0;
-      &--title{
+      &--title {
+        font-size: 10px;
+      }
+      &--value {
         font-size: 12px;
       }
-      &--value{
-        font-size: 14px;
-      }
-      &--value--container{
-        font-size: 14px;
+      &--value--container {
+        font-size: 12px;
       }
     }
   }
-  @media screen and (max-width:700px) {
-    flex-direction: column;
+  @media screen and (max-width: 700px) {
+    flex-wrap: wrap;
   }
 }
 
@@ -206,6 +215,13 @@
   }
 }
 
+.margin-added {
+  @media screen and (max-width: 700px) {
+    margin-left: 15%;
+    margin-top: 3%;
+  }
+}
+
 .alert {
   color: red;
 }
@@ -214,7 +230,7 @@
   color: orange;
 }
 
-.success {
+.completed {
   color: green;
 }
 

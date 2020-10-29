@@ -100,7 +100,7 @@
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon>
+              <mat-icon class="completed">{{ 'check_circle_outline' }}</mat-icon>
               <div class="section--content--health--message-detail">
                 Your documents are verified successfully.
               </div>
@@ -144,7 +144,7 @@
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon>
+              <mat-icon class="completed">{{ 'check_circle_outline' }}</mat-icon>
               <div class="section--content--health--message-detail">
                 Health Decalaration form has been signed.
               </div>
@@ -192,7 +192,7 @@
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <mat-icon class="success">{{ 'check_circle_outline' }}</mat-icon>
+              <mat-icon class="completed">{{ 'check_circle_outline' }}</mat-icon>
               <div class="section--content--health--message-detail">
                 Payment Success.
               </div>
@@ -205,7 +205,7 @@
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content--label">
+        <div class="section--content--label margin-added">
           Amount to pay :&nbsp;<span
             >{{ currencyCode }}
             {{ paymentDetails ? paymentDetails.dueAmount : 0 }}</span
@@ -228,7 +228,7 @@
               [ngClass]="
                 summaryDetails.guestDetails.primaryGuest.signatureUrl !==
                 undefined
-                  ? 'success'
+                  ? 'completed'
                   : 'alert'
               "
             >

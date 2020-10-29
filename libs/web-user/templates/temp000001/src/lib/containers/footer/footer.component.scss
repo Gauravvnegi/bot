@@ -6,17 +6,17 @@
   padding: $padding-medium;
   align-items: center;
 
-  &--logo {
-    height: 30px;
-    img {
-      height: $full-width;
-      width: $full-width;
-    }
-    @media only screen and (max-width: $M) {
-      height: 15px;
-      width: 30%;
-    }
-  }
+  // &--logo {
+  //   height: 30px;
+  //   img {
+  //     height: $full-width;
+  //     width: $full-width;
+  //   }
+  //   @media only screen and (max-width: $M) {
+  //     height: 15px;
+  //     width: 30%;
+  //   }
+  // }
   &--text {
     font-size: $font-responsive-small;
     font-weight: $bold;

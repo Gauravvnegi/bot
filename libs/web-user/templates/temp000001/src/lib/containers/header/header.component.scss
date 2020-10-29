@@ -22,15 +22,15 @@
   }
 }
 
-.template__header--logo {
-  height: 40px;
-  img {
-    height: $full-width;
-  }
-  @media only screen and (max-width: $M) {
-    height: 25px;
-  }
-}
+// .template__header--logo {
+//   height: 40px;
+//   img {
+//     height: $full-width;
+//   }
+//   @media only screen and (max-width: $M) {
+//     height: 25px;
+//   }
+// }
 .template__header--status {
   @include flex-justify-center();
   flex-direction: column;

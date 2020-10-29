@@ -34,7 +34,10 @@ export class ReservationService extends ApiService {
   }
 
   prepareInvoice(reservationId, data = {}): Observable<any> {
-    return this.put(`/api/v1/reservation/${reservationId}/invoice`, data);
+    return this.put(
+      `/api/v1/reservation/${reservationId}/prepare-invoice`,
+      data
+    );
   }
 
   uploadDocumentFile(reservationId, guestId, formData): Observable<any> {

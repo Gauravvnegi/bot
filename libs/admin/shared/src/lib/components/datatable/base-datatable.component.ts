@@ -278,7 +278,7 @@ export class BaseDatatableComponent implements OnInit {
     });
   }
 
-  onRowUnselect(event) {
+  onRowUnselect(event?) {
     this.documentActionTypes.forEach((item) => {
       if (item.type == 'countType') {
         item.label =
@@ -294,6 +294,11 @@ export class BaseDatatableComponent implements OnInit {
         }
       }
     });
+  }
+
+  resetRowSelection() {
+    this.selectedRows = [];
+    this.onRowUnselect();
   }
 
   onCheckboxClicked(event) {

@@ -75,6 +75,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
   ): Observable<any> {
+    this.resetRowSelection();
     queries.push(defaultProps);
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),

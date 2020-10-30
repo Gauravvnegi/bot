@@ -140,7 +140,6 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
       .subscribe((res) => {
         if (res) {
           this.onClose();
-          this._buttonService.buttonLoading$.next(this.saveButton);
         }
       });
   }
@@ -168,6 +167,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
       imageSignature: '',
     });
     if(this._dialogRef){
+      this._buttonService.buttonLoading$.next(this.saveButton);
       this._dialogRef.close();
     }
   }

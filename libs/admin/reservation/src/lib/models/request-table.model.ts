@@ -41,15 +41,21 @@ export class Request implements Deserializable {
   getElapsedTime() {
     const diffInMins = moment().diff(moment(this.requestTimeStamp), 'minutes');
     if (diffInMins > 24 * 60 * 30 * 12) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'years')} year`;
+      return `${moment().diff(moment(this.requestTimeStamp), 'years')} year(s)`;
     } else if (diffInMins > 24 * 60 * 30) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'months')} month`;
+      return `${moment().diff(
+        moment(this.requestTimeStamp),
+        'months'
+      )} month(s)`;
     } else if (diffInMins > 24 * 60) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'days')} day`;
+      return `${moment().diff(moment(this.requestTimeStamp), 'days')} day(s)`;
     } else if (diffInMins > 60) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'hours')} hour`;
+      return `${moment().diff(moment(this.requestTimeStamp), 'hours')} hour(s)`;
     } else if (diffInMins > 0) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'minutes')} min`;
+      return `${moment().diff(
+        moment(this.requestTimeStamp),
+        'minutes'
+      )} min(s)`;
     } else {
       return;
     }

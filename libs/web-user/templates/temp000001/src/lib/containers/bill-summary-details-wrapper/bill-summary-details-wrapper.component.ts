@@ -3,6 +3,7 @@ import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-s
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
@@ -14,13 +15,15 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
   @Input() reservationData;
   @Input() stepperIndex;
   @Input() buttonConfig;
+  signature: string;
 
   paymentSummary;
 
   constructor(
     private _billSummaryService: BillSummaryService,
     private _reservationService: ReservationService,
-    private _stepperService: StepperService
+    private _stepperService: StepperService,
+    private _snackBarService: SnackBarService,
   ) {
     super();
     this.self = this;
@@ -28,7 +31,21 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.registerListeners();
     this.getAmountSummary();
+  }
+
+  registerListeners() {
+    this.listenForSignatureUrl();
+  }
+
+  listenForSignatureUrl() {
+    this._billSummaryService.$signatureUrl.subscribe((res) => {
+      debugger;
+      if (res) {
+        this.signature = res;
+      }
+    })
   }
 
   initBillSummaryDetailsDS(paymentSummary) {
@@ -42,79 +59,25 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     this._billSummaryService.getBillingSummary(this._reservationService.reservationId)
     .subscribe(summary =>{
       this.paymentSummary = summary;
+      this._billSummaryService.$signatureUrl.next(this.paymentSummary.signatureUrl);
       this.initBillSummaryDetailsDS(this.paymentSummary);
     })
-    // const paymentData = {
-    //   grossTotal: {
-    //     value: 35400.0,
-    //     currencyCode: 'INR',
-    //   },
-    //   totalTax: {
-    //     value: 5400.0,
-    //     currencyCode: 'INR',
-    //   },
-    //   paidAmount: {
-    //     value: 900,
-    //     currencyCode: 'INR',
-    //   },
-    //   packageTotal: 0,
-    //   addOnPackageTotal: 0,
-    //   dailyBreakdown: [
-    //     {
-    //       grossDailyTotal: {
-    //         value: 11800.0,
-    //         currencyCode: 'INR',
-    //       },
-    //       grossDailyTax: {
-    //         value: 1800.0,
-    //         currencyCode: 'INR',
-    //       },
-    //       grossDailyAddOnPackage: 0,
-    //       grossDailyPackage: 0,
-    //       postingDate: '2020-07-30',
-    //       roomRatesAndPackage: [
-    //         {
-    //           amount: {
-    //             value: 10000.0,
-    //             currencyCode: 'INR',
-    //           },
-    //           isAddon: false,
-    //           description: 'BASE RATE',
-    //           code: 'BASE',
-    //         },
-    //       ],
-    //       taxesAndFees: [
-    //         {
-    //           amount: {
-    //             value: 35400.0,
-    //             currencyCode: 'INR',
-    //           },
-    //           description: '5006 SGST - Room 9%',
-    //           code: '1000',
-    //           codeType: 'R',
-    //         },
-    //         {
-    //           amount: {
-    //             value: 900.0,
-    //             currencyCode: 'INR',
-    //           },
-    //           discount: {
-    //             value: 900,
-    //             currencyCode: 'INR',
-    //             percentage: 10,
-    //           },
-    //           description: '5005 CGST - Room 9%',
-    //           code: '1000',
-    //           codeType: 'R',
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // };
-    // return paymentData;
   }
 
   onSubmit() {
-    this._stepperService.setIndex('next');
+    if (!this.signature) {
+      this._snackBarService.openSnackBarAsText('Please upload signature');
+      return;
+    }
+    let formData = {
+      'billingSignatureUrl': this.signature
+    };
+    this._billSummaryService.bindSignatureWithSummary(
+      this._reservationService.reservationId,
+      formData
+    )
+    .subscribe((res) => {
+      this._stepperService.setIndex('next');
+    }, ({ error }) => this._snackBarService.openSnackBarAsText(error.message));
   }
 }

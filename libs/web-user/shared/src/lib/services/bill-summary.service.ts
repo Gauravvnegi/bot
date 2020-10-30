@@ -7,10 +7,12 @@ import {
 } from '../data-models/billSummaryConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import { FileDetails } from '../data-models/reservationDetails';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class BillSummaryService extends ApiService {
   private _billSummaryDetailDS: BillSummaryDetailDS;
+  $signatureUrl = new BehaviorSubject('');
 
   initBillSummaryDetailDS(summaryDetails, paymentData) {
     this._billSummaryDetailDS = new BillSummaryDetailDS().deserialize(
@@ -43,6 +45,10 @@ export class BillSummaryService extends ApiService {
       `/api/v1/uploads?folder_name=hotel/${hotelId}/reservation/${reservationId}/guest/${guestId}/payment`,
       formData
     );
+  }
+
+  bindSignatureWithSummary(reservationId, data) {
+    return this.patch(`/api/v1/reservation/${reservationId}`, data);
   }
 
   get billSummaryDetails() {

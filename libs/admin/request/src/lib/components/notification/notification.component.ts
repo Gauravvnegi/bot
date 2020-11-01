@@ -4,6 +4,7 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-notification',
@@ -36,7 +37,10 @@ export class NotificationComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   fruits = [{ name: 'Lemon' }, { name: 'Lime' }, { name: 'Apple' }];
 
-  constructor(private _fb: FormBuilder) {
+  constructor(
+    private _fb: FormBuilder,
+    private _location: Location
+  ) {
     this.initNotificationForm();
   }
 
@@ -76,6 +80,10 @@ export class NotificationComponent implements OnInit {
       .filter((email) => email != emailToRemove)
       .join(',');
     this.email_ids.patchValue(allEmails);
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   get social_channels() {

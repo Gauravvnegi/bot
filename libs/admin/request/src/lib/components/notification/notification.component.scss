@@ -1,0 +1,53 @@
+@import 'main';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 10px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
+  .back-icon {
+    cursor: pointer;
+  }
+}
+
+.request-body {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &-title {
+      width: 20%;
+      color: rgb(199, 196, 196);
+      font-size: 14px;
+    }
+    &-body {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      align-items: center;
+    }
+  }
+}
+
+.base-align {
+  align-self: baseline;
+}
+
+.request-header {
+  display: flex;
+  align-items: center;
+}
+
+.additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+
+.chip-list {
+  width: 100%;
+}

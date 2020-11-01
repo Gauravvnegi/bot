@@ -23,12 +23,12 @@ export const ADMIN_ROUTES = [
   //   children: null,
   //   url: 'assets/svg/chair.svg',
   // },
-  {
-    path: 'notification',
-    title: 'Notifications',
-    children: null,
-    url: 'assets/svg/notification.svg',
-  },
+  // {
+  //   path: 'notification',
+  //   title: 'Notifications',
+  //   children: null,
+  //   url: 'assets/svg/notification.svg',
+  // },
   {
     path: 'package',
     title: 'Packages',

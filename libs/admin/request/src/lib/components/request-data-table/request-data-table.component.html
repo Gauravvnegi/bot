@@ -27,46 +27,51 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <!-- <div class="header--text"> -->
-            <p class="heading">{{ tableName }}</p>
-            <!-- <p class="selected">2 record(s) are selected</p> -->
-            <div class="options">
-              <div *ngIf="isActionButtons" class="icons">
-                <img src="assets/svg/Download.svg" class="svg" />
-                <img src="assets/svg/google-docs.svg" class="svg" />
-                <img src="assets/svg/card.svg" class="svg" />
-              </div>
-              <div *ngIf="isActionButtons" class="seperator"></div>
-              <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
-                  class="export"
-                  [options]="documentActionTypes"
-                  formControlName="documentActionType"
-                >
-                  <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img src="assets/svg/Export.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 500;">{{
-                      documentActionItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <div class="divider"></div>
-                <p-dropdown
-                  class="export"
-                  [options]="documentTypes"
-                  formControlName="documentType"
-                >
-                  <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img src="assets/svg/CSV.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 500;">{{
-                      documentTypeItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                </button>
+            <div>
+              <p class="heading">{{ tableName }}</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <p class="link" (click)="openAddRequest()">+Send Message</p>
+              <div class="options">
+                <div *ngIf="isActionButtons" class="icons">
+                  <img src="assets/svg/Download.svg" class="svg" />
+                  <img src="assets/svg/google-docs.svg" class="svg" />
+                  <img src="assets/svg/card.svg" class="svg" />
+                </div>
+                <div *ngIf="isActionButtons" class="seperator"></div>
+                <div formGroupName="documentActions" class="dropdown--wrapper">
+                  <p-dropdown
+                    class="export"
+                    [options]="documentActionTypes"
+                    formControlName="documentActionType"
+                  >
+                    <ng-template let-documentActionItem pTemplate="selectedItem">
+                      <img src="assets/svg/Export.svg" />
+                      <span style="margin-left: 0.5em; font-weight: 500;">{{
+                        documentActionItem.label
+                      }}</span>
+                    </ng-template>
+                  </p-dropdown>
+                  <div class="divider"></div>
+                  <p-dropdown
+                    class="export"
+                    [options]="documentTypes"
+                    formControlName="documentType"
+                  >
+                    <ng-template let-documentTypeItem pTemplate="selectedItem">
+                      <img src="assets/svg/CSV.svg" />
+                      <span style="margin-left: 0.5em; font-weight: 500;">{{
+                        documentTypeItem.label
+                      }}</span>
+                    </ng-template>
+                  </p-dropdown>
+                  <button class="go" (click)="onDocumentActions()">
+                    <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
+            <!-- <p class="selected">2 record(s) are selected</p> -->
           </div>
           <div *ngIf="isTabFilters">
             <hospitality-bot-tab-group

@@ -11,6 +11,9 @@ import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
+import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -23,8 +26,10 @@ import { ComingSoonComponent } from './components/coming-soon/coming-soon.compon
     PaginatorModule,
     TabMenuModule,
     DropdownModule,
+    MatChipsModule,
+    MatAutocompleteModule
   ],
-  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent, ComingSoonComponent],
+  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent, ComingSoonComponent, MultipleDropdownComponent],
   exports: [
     DatatableComponent,
     TabGroupComponent,
@@ -35,6 +40,7 @@ import { ComingSoonComponent } from './components/coming-soon/coming-soon.compon
     PaginatorModule,
     TabMenuModule,
     DropdownModule,
+    MultipleDropdownComponent,
   ],
 })
 export class AdminSharedModule {}

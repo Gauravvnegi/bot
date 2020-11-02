@@ -10,9 +10,10 @@
       <div class="row">
         <div class="row-title">Channel:</div>
         <div class="row-body">
-          <div>
-            <mat-form-field>
-              <mat-select formControlName="social_channels" multiple>
+          <div style="display: flex; align-items: center;">
+            <mat-checkbox formControlName="is_social_channel"></mat-checkbox>
+            <mat-form-field style="margin-left: 10px;">
+              <mat-select formControlName="social_channels" multiple [disabled]="!isSocialChannel">
                 <mat-select-trigger>
                   {{ social_channels.value ? social_channels.value[0] : '' }}
                   <span
@@ -30,18 +31,9 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div>
-            <mat-checkbox formControlName="is_email_channel">
-              Email
-            </mat-checkbox>
-          </div>
-          <div>
-            <mat-checkbox formControlName="is_sms_channel">
-              SMS
-            </mat-checkbox>
-          </div>
+          <div><mat-checkbox formControlName="is_email_channel"> Email </mat-checkbox></div>
+          <div><mat-checkbox formControlName="is_sms_channel"> SMS </mat-checkbox></div>
         </div>
-        <!-- </mat-checkbox> -->
       </div>
   
       <div class="row">
@@ -71,7 +63,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="row-title">Room# :</div>
+        <div class="row-title base-align">Email :</div>
         <div class="row-body">
           <mat-form-field class="chip-list" appearance="outline">
             <mat-chip-list #chipList aria-label="Email selection">
@@ -80,9 +72,7 @@
                 selectable="true"
                 removable="true"
                 (removed)="removeEmail(email)"
-              >
-                {{ email }}
-                <mat-icon matChipRemove>cancel</mat-icon>
+              >{{ email }}<mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
               <input
                 placeholder="Email"
@@ -96,6 +86,15 @@
         </div>
       </div>
       <div class="row">
+        <div class="row-title">Room# :</div>
+        <div class="row-body">
+          <hospitality-bot-multiple-dropdown
+            style="width: 100%;"
+            [allItems]="rooms"
+            (updateData)="setRoomData($event)"></hospitality-bot-multiple-dropdown>
+        </div>
+      </div>
+      <div class="row">
         <div class="row-title base-align">Input Message:</div>
         <div class="row-body">
           <ckeditor [editor]="Editor" style="width: 100%;" formControlName="message_body"></ckeditor>
@@ -104,20 +103,14 @@
       <div class="row">
         <div class="row-title">Attachment:</div>
         <div class="row-body">
-          <mat-form-field style="width: 100%;">
-            <mat-select formControlName="template_type">
-              <mat-option
-                *ngFor="let messageType of messageTypeList"
-                [value]="messageType.name"
-                >{{ messageType.label }}</mat-option>
-            </mat-select>
+          <mat-form-field class="file-input">
+            <ngx-mat-file-input formControlName="attachment" [multiple]="'Multiple'" [accept]="'Accept'">
+            </ngx-mat-file-input>
           </mat-form-field>
         </div>
       </div>
-      <div style="align-items: center; width: 100%;">
-        <button class="button">
-          Preview & Send
-        </button>
+      <div style="align-self: center;">
+        <button class="button" (click)="sendMessage()"> Preview & Send </button>
       </div>
     </div>
   </form>

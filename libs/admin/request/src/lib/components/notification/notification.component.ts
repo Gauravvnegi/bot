@@ -16,9 +16,9 @@ export class NotificationComponent implements OnInit {
   email = new FormControl();
 
   channelList = [
-    { label: 'Whatsapp', name: 'whatsapp' },
-    { label: 'Messenger', name: 'messenger' },
-    { label: 'Telegram', name: 'telegram' },
+    { label: 'Whatsapp', name: 'Whatsapp' },
+    { label: 'Messenger', name: 'Messenger' },
+    { label: 'Telegram', name: 'Telegram' },
   ];
 
   messageTypeList = [
@@ -36,6 +36,7 @@ export class NotificationComponent implements OnInit {
   visible = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   fruits = [{ name: 'Lemon' }, { name: 'Lime' }, { name: 'Apple' }];
+  rooms: string[] = ['P001', 'P002', 'P003', 'P004', 'P005'];
 
   constructor(
     private _fb: FormBuilder,
@@ -49,6 +50,7 @@ export class NotificationComponent implements OnInit {
   initNotificationForm() {
     this.notificationForm = this._fb.group({
       social_channels: [''],
+      is_social_channel: [false],
       is_email_channel: [false],
       is_sms_channel: [false],
       message_type: [],
@@ -56,7 +58,7 @@ export class NotificationComponent implements OnInit {
       attachment: [],
       message_body: [],
       email_ids: [''],
-      room_no: [],
+      room_nos: [],
     });
   }
 
@@ -86,6 +88,15 @@ export class NotificationComponent implements OnInit {
     this._location.back();
   }
 
+  sendMessage() {
+    let values = this.notificationForm.getRawValue();
+    debugger;
+  }
+
+  setRoomData(event) {
+    this.notificationForm.get('room_nos').setValue(event.split(','));
+  }
+
   get social_channels() {
     return this.notificationForm.get('social_channels') as FormControl;
   }
@@ -97,4 +108,9 @@ export class NotificationComponent implements OnInit {
   get emailIdsList() {
     return this.email_ids.value.split(',').filter((email) => email);
   }
+
+  get isSocialChannel() {
+    return this.notificationForm.get('is_social_channel').value;
+  }
+
 }

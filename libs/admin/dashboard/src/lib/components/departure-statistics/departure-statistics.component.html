@@ -2,10 +2,8 @@
   <div class="title-container">
     <div class="icon">
       <img src="assets/svg/departure.svg" />
-      </div>
+    </div>
     <div class="stat-title">Departures</div>
-
-    
   </div>
   <div class="stat-val-container">
     <div class="stat-row">
@@ -17,10 +15,12 @@
       <div class="stat-val">{{ departures.expected.adults }}</div>
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">Chidren</div>
+      <div class="stat-val-title">Children</div>
       <div class="stat-val">{{ departures.expected.kids }}</div>
     </div>
-    <div class="division"><hr style="margin: 10px 0; border: 1px solid #EDEEF0;" /></div>
+    <div class="division">
+      <hr style="margin: 10px 0; border: 1px solid #edeef0;" />
+    </div>
     <div class="stat-row">
       <div class="stat-val-title">Already Checked Out</div>
       <div class="stat-val">{{ departures.actual.totalCount }}</div>
@@ -30,7 +30,7 @@
       <div class="stat-val">{{ departures.actual.adults }}</div>
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">Chidren</div>
+      <div class="stat-val-title">Children</div>
       <div class="stat-val">{{ departures.actual.kids }}</div>
     </div>
   </div>

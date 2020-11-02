@@ -253,6 +253,7 @@
           *ngIf="isReservationDetailFetched"
           [parentForm]="detailsForm"
           [data]="details"
+          (addFGEvent)="addFGEvent($event)"
         ></hospitality-bot-admin-payment-details>
       </mat-tab>
 

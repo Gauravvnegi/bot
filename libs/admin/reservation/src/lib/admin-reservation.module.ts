@@ -18,6 +18,7 @@ import { AirportPickupComponent } from './components/packages/airport-pickup/air
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 import { JourneyDialogComponent } from './components/journey-dialog/journey-dialog.component';
 import { RequestsTableComponent } from './components/requests-table/requests-table.component';
+import { DepositRuleComponent } from './components/deposit-rule/deposit-rule.component';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -43,6 +44,7 @@ export const adminReservationRoutes: Route[] = [];
     ButtonDependencyDirective,
     JourneyDialogComponent,
     RequestsTableComponent,
+    DepositRuleComponent,
   ],
   exports: [
     DetailsComponent,
@@ -55,6 +57,7 @@ export const adminReservationRoutes: Route[] = [];
     ButtonDependencyDirective,
     JourneyDialogComponent,
     RequestsTableComponent,
+    DepositRuleComponent,
   ],
 })
 export class AdminReservationModule {}

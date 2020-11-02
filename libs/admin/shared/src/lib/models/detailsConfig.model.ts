@@ -381,6 +381,8 @@ export class PaymentDetailsConfig implements Deserializable {
   totalAmount;
   totalDiscount;
   roomRates;
+  depositRules;
+
   deserialize(input: any) {
     Object.assign(
       this,
@@ -392,8 +394,33 @@ export class PaymentDetailsConfig implements Deserializable {
       set({}, 'totalAmount', get(input, ['totalAmount'])),
       set({}, 'totalDiscount', get(input, ['totalDiscount']))
     );
+    this.depositRules = new DepositRuleDetailsConfig().deserialize(
+      input.depositRules
+    );
     //to-do
     this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
+    return this;
+  }
+}
+
+export class DepositRuleDetailsConfig implements Deserializable {
+  payAtDesk;
+  amount;
+  depositNight;
+  guaranteeType;
+  amountType;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'payAtDesk', get(input, ['payAtDesk'])),
+      set({}, 'amount', get(input, ['amount'])),
+      set({}, 'depositNight', get(input, ['depositNight'])),
+      set({}, 'guaranteeType', get(input, ['guaranteeType'])),
+      set({}, 'amountType', get(input, ['type']))
+    );
+
+    // if amounttype is percentage then amount is amount percentage
     return this;
   }
 }
@@ -407,7 +434,6 @@ export class RoomRateConfig implements Deserializable {
   unit;
   label;
   taxAndFees;
-
   deserialize(input: any) {
     Object.assign(
       this,

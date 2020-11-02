@@ -1,0 +1,79 @@
+<form [formGroup]="depositRuleForm">
+  <div>
+    <div>
+      <mat-label class="mat-label">Type :</mat-label>
+      <mat-form-field>
+        <mat-select formControlName="guaranteeType">
+          <mat-option
+            *ngFor="let guaranteeType of guaranteeTypes"
+            [value]="guaranteeType.value"
+            >{{ guaranteeType.label }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            depositRuleForm.get('guaranteeType').touched &&
+            depositRuleForm.get('guaranteeType').hasError('required')
+          "
+        >
+          Guarantee type is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-label class="mat-label">Amount Type :</mat-label>
+      <mat-form-field>
+        <mat-select formControlName="amountType">
+          <mat-option
+            *ngFor="let amountType of amountTypes"
+            [value]="amountType.value"
+            >{{ amountType.label }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            depositRuleForm.get('amountType').touched &&
+            depositRuleForm.get('amountType').hasError('required')
+          "
+        >
+          Amount type is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div>
+    <div>
+      <mat-label class="mat-label"
+        >Pay Now
+        <span
+          *ngIf="['PERCENT'].includes(depositRuleForm.get('amountType').value)"
+          >(%age)
+        </span>
+        :</mat-label
+      >
+      <mat-form-field>
+        <input
+          appNumber
+          class="input-feild"
+          formControlName="amount"
+          type="text"
+          matInput
+        />
+
+        <mat-error
+          *ngIf="
+            depositRuleForm.get('amount').touched &&
+            depositRuleForm.get('amount').hasError('required')
+          "
+        >
+          Job title is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      Total payable amount : {{ depositRuleForm.get('amountPayable').value }}
+    </div>
+  </div>
+</form>
+
+{{ depositRuleForm.value | json }}

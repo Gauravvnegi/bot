@@ -250,5 +250,29 @@
             <mat-label>Status:</mat-label>
             <span>Approved</span>
         </div> -->
+    <div>
+      <mat-accordion>
+        <mat-expansion-panel #depositPanel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="container__title">
+              <p>
+                Deposit Rule
+              </p>
+              <mat-icon class="expand-icon" *ngIf="!depositPanel.expanded"
+                >add</mat-icon
+              >
+              <mat-icon class="expand-icon" *ngIf="depositPanel.expanded"
+                >remove</mat-icon
+              >
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <hospitality-bot-deposit-rule
+            [parentForm]="parentForm"
+            [data]="detailsData"
+          ></hospitality-bot-deposit-rule>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
   </div>
 </div>

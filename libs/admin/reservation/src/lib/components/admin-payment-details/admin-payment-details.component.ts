@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 
 @Component({
@@ -57,9 +57,19 @@ export class AdminPaymentDetailsComponent implements OnInit {
     'totalAmount',
   ];
 
+  paymentDetailForm: FormGroup;
+  @Output() addFGEvent = new EventEmitter();
+
   constructor(private _fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.paymentDetailForm = this._fb.group({});
+
+    this.addFGEvent.next({
+      name: 'paymentDetails',
+      value: this.paymentDetailForm,
+    });
+
     this.getPrimaryGuest();
     // this.dataSource = this.PaymentData;
     this.getModifiedPaymentSummary();

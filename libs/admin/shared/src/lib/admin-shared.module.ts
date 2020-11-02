@@ -11,7 +11,7 @@ import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
-
+import { NumberDirective } from './directives/number.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -24,7 +24,13 @@ import { ComingSoonComponent } from './components/coming-soon/coming-soon.compon
     TabMenuModule,
     DropdownModule,
   ],
-  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent, ComingSoonComponent],
+  declarations: [
+    DatatableComponent,
+    TabGroupComponent,
+    UploadFileComponent,
+    ComingSoonComponent,
+    NumberDirective,
+  ],
   exports: [
     DatatableComponent,
     TabGroupComponent,
@@ -35,6 +41,7 @@ import { ComingSoonComponent } from './components/coming-soon/coming-soon.compon
     PaginatorModule,
     TabMenuModule,
     DropdownModule,
+    NumberDirective,
   ],
 })
 export class AdminSharedModule {}

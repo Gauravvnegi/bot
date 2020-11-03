@@ -33,6 +33,7 @@ export class NotificationComponent implements OnInit {
   notificationForm: FormGroup;
 
   visible = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   rooms: string[] = ['P001', 'P002', 'P003', 'P004', 'P005'];
 
   @ViewChild('emailCsvReader') emailCsvReader: any;

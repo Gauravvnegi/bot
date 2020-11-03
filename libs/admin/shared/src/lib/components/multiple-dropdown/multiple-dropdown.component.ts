@@ -20,7 +20,7 @@ export class MultipleDropdownComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   itemCtrl = new FormControl();
   filtereditems: Observable<string[]>;
-  items: string[] = [];
+  @Input() items: string[] = [];
   @Input() allItems: string[];
   @Output() updateData = new EventEmitter();
 
@@ -32,8 +32,9 @@ export class MultipleDropdownComponent implements OnInit {
   
   ngOnInit() {
     this.filtereditems = this.itemCtrl.valueChanges.pipe(
-        startWith(null),
-        map((item: string | null) => item ? this._filter(item) : this.allItems.slice()));
+      startWith(null),
+      map((item: string | null) => item ? this._filter(item) : this.allItems.slice())
+    );
   }
 
   add(event: MatChipInputEvent): void {
@@ -68,6 +69,7 @@ export class MultipleDropdownComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     this.items.push(event.option.viewValue);
+    this.items = [...new Set(this.items)];
     this.updateData.emit(this.items.toString());
     this.itemInput.nativeElement.value = '';
     this.itemCtrl.setValue(null);

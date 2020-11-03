@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 
 import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
@@ -12,8 +12,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./notification.component.scss'],
 })
 export class NotificationComponent implements OnInit {
-  messageType = new FormControl();
-  email = new FormControl();
+  attachment: string;
 
   channelList = [
     { label: 'Whatsapp', name: 'Whatsapp' },
@@ -34,9 +33,11 @@ export class NotificationComponent implements OnInit {
   notificationForm: FormGroup;
 
   visible = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruits = [{ name: 'Lemon' }, { name: 'Lime' }, { name: 'Apple' }];
   rooms: string[] = ['P001', 'P002', 'P003', 'P004', 'P005'];
+
+  @ViewChild('emailCsvReader') emailCsvReader: any;
+  @ViewChild('roomCsvReader') roomCsvReader: any;
+  @ViewChild('attachmentUpload') attachmentUpload: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -82,6 +83,68 @@ export class NotificationComponent implements OnInit {
       .filter((email) => email != emailToRemove)
       .join(',');
     this.email_ids.patchValue(allEmails);
+    if (allEmails === '') {
+      this.emailCsvReader.nativeElement.value = "";
+    }
+  }
+
+  readEmailFromCSV($event: any): void {
+    let files = $event.srcElement.files;  
+  
+    if (files[0].name.endsWith(".csv")) {
+      let input = $event.target;  
+      let reader = new FileReader();  
+      reader.readAsText(input.files[0]);  
+  
+      reader.onload = () => {  
+        let csvData = reader.result;  
+        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);    
+  
+        let csvArr = [];
+        for (let i = 1; i < csvRecordsArray.length; i++) {
+          let curruntRecord = (<string>csvRecordsArray[i]).split(',');
+          csvArr.push(curruntRecord[0].trim());
+        }
+        if (csvArr.length) {
+          this.email_ids.patchValue(csvArr.join(','));
+        }
+      };  
+    } else {
+      this.emailCsvReader.nativeElement.value = "";
+    }
+  }
+
+  readRoomsFromCSV($event: any): void {
+    let files = $event.srcElement.files;  
+  
+    if (files[0].name.endsWith(".csv")) {
+      let input = $event.target;  
+      let reader = new FileReader();  
+      reader.readAsText(input.files[0]);  
+  
+      reader.onload = () => {  
+        let csvData = reader.result;  
+        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);    
+  
+        let csvArr = [];
+        for (let i = 1; i < csvRecordsArray.length; i++) {
+          let curruntRecord = (<string>csvRecordsArray[i]).split(',');
+          if (curruntRecord[0].trim()) {
+            csvArr.push(curruntRecord[0].trim());
+          }
+        }
+        if (csvArr.length) {
+          this.room_nos.patchValue(csvArr);
+        }
+      };  
+    } else {
+      this.roomCsvReader.nativeElement.value = "";
+    }
+  }
+
+  readAttachments(event) {
+    this.attachment = event.currentTarget.files[0].name;
+    this.notificationForm.get('attachment').patchValue(event.currentTarget.files[0]);
   }
 
   goBack() {
@@ -90,11 +153,16 @@ export class NotificationComponent implements OnInit {
 
   sendMessage() {
     let values = this.notificationForm.getRawValue();
-    debugger;
+    console.log(values);
   }
 
   setRoomData(event) {
-    this.notificationForm.get('room_nos').setValue(event.split(','));
+    if (event) {
+      this.notificationForm.get('room_nos').patchValue(event.split(','));
+    } else {
+      this.notificationForm.get('room_nos').patchValue([]);
+      this.roomCsvReader.nativeElement.value = ""; 
+    }
   }
 
   get social_channels() {
@@ -111,6 +179,14 @@ export class NotificationComponent implements OnInit {
 
   get isSocialChannel() {
     return this.notificationForm.get('is_social_channel').value;
+  }
+
+  get isEmailChannel() {
+    return this.notificationForm.get('is_email_channel').value;
+  }
+
+  get room_nos() {
+    return this.notificationForm.get('room_nos');
   }
 
 }

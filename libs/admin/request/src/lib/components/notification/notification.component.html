@@ -62,36 +62,49 @@
           </div>    
         </div>
       </div>
-      <div class="row">
-        <div class="row-title base-align">Email :</div>
-        <div class="row-body">
-          <mat-form-field class="chip-list" appearance="outline">
-            <mat-chip-list #chipList aria-label="Email selection">
-              <mat-chip
-                *ngFor="let email of emailIdsList"
-                selectable="true"
-                removable="true"
-                (removed)="removeEmail(email)"
-              >{{ email }}<mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip>
-              <input
-                placeholder="Email"
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                matChipInputAddOnBlur="true"
-                (matChipInputTokenEnd)="addEmail($event)"
-              />
-            </mat-chip-list>
-          </mat-form-field>
+      <div class="col" *ngIf="isEmailChannel">
+        <div class="row">
+          <div class="row-title">Email :</div>
+          <div class="row-body">
+            <mat-form-field class="chip-list" appearance="outline">
+              <mat-chip-list #chipList aria-label="Email selection">
+                <mat-chip
+                  *ngFor="let email of emailIdsList"
+                  selectable="true"
+                  removable="true"
+                  (removed)="removeEmail(email)"
+                >{{ email }}<mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Email"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  matChipInputAddOnBlur="true"
+                  (matChipInputTokenEnd)="addEmail($event)"
+                />
+              </mat-chip-list>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="upload-btn-wrapper">
+          <input type="file" #emailCsvReader name="Upload CSV" (change)="readEmailFromCSV($event)" accept=".csv" />
+          <div class="import"><img src="assets/svg/import.svg" /><div>Import</div></div>
         </div>
       </div>
-      <div class="row">
-        <div class="row-title">Room# :</div>
-        <div class="row-body">
-          <hospitality-bot-multiple-dropdown
-            style="width: 100%;"
-            [allItems]="rooms"
-            (updateData)="setRoomData($event)"></hospitality-bot-multiple-dropdown>
+      <div class="col">
+        <div class="row">
+          <div class="row-title">Room# :</div>
+          <div class="row-body">
+            <hospitality-bot-multiple-dropdown
+              style="width: 100%;"
+              [allItems]="rooms"
+              [items]="room_nos.value"
+              (updateData)="setRoomData($event)"></hospitality-bot-multiple-dropdown>
+          </div>
+        </div>
+        <div class="upload-btn-wrapper">
+          <input type="file" #roomCsvReader name="Upload CSV" (change)="readRoomsFromCSV($event)" accept=".csv" />
+          <div class="import"><img src="assets/svg/import.svg" /><div>Import</div></div>
         </div>
       </div>
       <div class="row">
@@ -103,10 +116,12 @@
       <div class="row">
         <div class="row-title">Attachment:</div>
         <div class="row-body">
-          <mat-form-field class="file-input">
-            <ngx-mat-file-input formControlName="attachment" [multiple]="'Multiple'" [accept]="'Accept'">
-            </ngx-mat-file-input>
-          </mat-form-field>
+          <div class="upload-attachment-wrapper">
+            <input type="file" #attachmentUpload name="Upload CSV" (change)="readAttachments($event)" />
+            <div class="attachment">
+              <div>{{ attachment }}</div><div><mat-icon matSuffix>attachment</mat-icon></div>
+            </div>
+          </div>
         </div>
       </div>
       <div style="align-self: center;">

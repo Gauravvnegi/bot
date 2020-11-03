@@ -98,7 +98,7 @@
             <hospitality-bot-multiple-dropdown
               style="width: 100%;"
               [allItems]="rooms"
-              [items]="room_nos.value"
+              [items]="room_nos.value || [] "
               (updateData)="setRoomData($event)"></hospitality-bot-multiple-dropdown>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -31,7 +32,9 @@ export class FeedbackMainComponent implements OnInit {
     private fb: FormBuilder,
     private _feedbackDetailsService: FeedbackDetailsService,
     private _snackBarService: SnackBarService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -90,16 +93,21 @@ export class FeedbackMainComponent implements OnInit {
       .addFeedback(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
-            panelClass: 'success',
-          });
+          // this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
+          //   panelClass: 'success',
+          // });
           this._buttonService.buttonLoading$.next(this.saveButton);
+          this.openThankyouPage('feedback');
         },
         ({ error }) => {
           this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(this.saveButton);
         }
       );
+  }
+
+  openThankyouPage(state){
+    this.router.navigateByUrl(`/thankyou?token=${this.route.snapshot.queryParamMap.get('token')}&entity=thankyou&state=${state}`);
   }
 
   private performActionIfNotValid(status: any[]) {

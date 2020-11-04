@@ -8,10 +8,10 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 
 @Component({
   selector: 'hospitality-bot-thank-you',
-  templateUrl: './thank-you.component.html',
-  styleUrls: ['./thank-you.component.scss']
+  templateUrl: './thank-you-main.component.html',
+  styleUrls: ['./thank-you-main.component.scss']
 })
-export class ThankYouComponent implements OnInit {
+export class ThankYouMain implements OnInit {
   journey: string;
   isReservationData = false;
   reservationData: ReservationDetails;
@@ -57,6 +57,10 @@ export class ThankYouComponent implements OnInit {
 
       case 'checkout': 
         this.journey = 'Check-Out';
+        break;
+
+      case 'feedback': 
+        this.journey = 'Feedback';
         break;
 
       default:

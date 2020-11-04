@@ -7,7 +7,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 
 @NgModule({
   imports: [
@@ -19,7 +18,6 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     AdminReservationModule,
     AdminRequestRoutingModule,
     CKEditorModule,
-    NgxMatFileInputModule,
   ],
   declarations: [...AdminRequestRoutingModule.components],
 })

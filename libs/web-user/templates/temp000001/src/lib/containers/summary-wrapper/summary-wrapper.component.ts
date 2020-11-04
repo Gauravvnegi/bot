@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputPopupComponent } from 'libs/web-user/shared/src/lib/presentational/input-popup/input-popup.component';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-summary-wrapper',
@@ -27,7 +28,9 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   constructor(
     public dialog: MatDialog,
     private _summaryService: SummaryService,
-    private _stepperService: StepperService
+    private _stepperService: StepperService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     super();
     this.self = this;
@@ -66,7 +69,16 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       // this.submit(result);
+      if(result.hasOwnProperty('state')){
+        if(result.state === 'success'){
+          this.openThankyouPage('checkin');
+        }
+      }
     });
+  }
+
+  openThankyouPage(state){
+    this.router.navigateByUrl(`/thankyou?token=${this.route.snapshot.queryParamMap.get('token')}&entity=thankyou&state=${state}`);
   }
 
   goBack() {

@@ -147,7 +147,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onCheckoutSubmit() {
-    this.onCheckinSubmit();
+    this.onPrecheckinSubmit();
   }
 
   openThankyouPage(state){
@@ -166,16 +166,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             );
             this._stepperService.setIndex('next');
           } else {
-            this._snackBarService.openSnackBarAsText(
-              'Pre-Checkin Sucessfull.',
-              '',
-              { panelClass: 'success' }
-            );
+            this.openThankyouPage(state);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['submitButton']
             );
           }
-          this.openThankyouPage(state);
         },
         ({error}) => {
           this._snackBarService.openSnackBarAsText(error.message);

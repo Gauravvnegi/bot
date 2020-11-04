@@ -124,6 +124,7 @@ export class RoomData {
 }
 
 export class Customer {
+  label: string;
   checkIn: any;
   expressCheckIn: any;
   checkout: any;
@@ -132,6 +133,7 @@ export class Customer {
   deserialize(statistics: any) {
     Object.assign(
       this,
+      set({}, 'label', get(statistics, ['label'])),
       set({}, 'checkIn', get(statistics, ['checkinStats'])),
       set({}, 'expressCheckIn', get(statistics, ['expressCheckinStats'])),
       set({}, 'checkout', get(statistics, ['checkoutStats'])),

@@ -5,15 +5,15 @@ import { PackageDatatableComponent } from './components/package-datatable/packag
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 
 export const adminSpecialAmenitiesRoutes: Route[] = [
-    // {
-    //   path: '',
-    //   component: PackageDatatableComponent,
-    //   children: [],
-    // },
     {
       path: '',
-      component: ComingSoonComponent,
+      component: PackageDatatableComponent,
+      children: [],
     },
+    // {
+    //   path: '',
+    //   component: ComingSoonComponent,
+    // },
     {
       path: 'amenity/:id',
       component: EditSpecialAmenitiesComponent,

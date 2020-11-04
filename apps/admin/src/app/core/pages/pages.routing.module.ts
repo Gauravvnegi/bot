@@ -33,13 +33,6 @@ const appRoutes: Route[] = [
       //     ),
       // },
       {
-        path: 'notification',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/notification').then(
-            (m) => m.AdminNotificationModule
-          ),
-      },
-      {
         path: 'package',
         loadChildren: () =>
           import('@hospitality-bot/admin/special-amenities').then(

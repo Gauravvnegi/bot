@@ -21,8 +21,12 @@ export class ArrivalsStatisticsComponent implements OnInit {
   }
 
   setProgress() {
-    this.progress = Math.abs(
-      (this.arrivals.currentlyArrived / this.arrivals.maxExpected) * 100
-    );
+    if (this.arrivals.maxExpected) {
+      this.progress = Math.abs(
+        (this.arrivals.currentlyArrived / this.arrivals.maxExpected) * 100
+      );
+    } else {
+      this.progress = 0;
+    }
   }
 }

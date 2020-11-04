@@ -70,18 +70,18 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
       .addFeedback(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
-            panelClass: 'success',
-          });
+          // this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
+          //   panelClass: 'success',
+          // });
           this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
+            this.buttonRefs['nextButton']
           );
-          //  this._stepperService.setIndex('next');
+          this._stepperService.setIndex('next');
         },
         ({ error }) => {
           this._snackBarService.openSnackBarAsText(error.cause);
           this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
+            this.buttonRefs['nextButton']
           );
         }
       );

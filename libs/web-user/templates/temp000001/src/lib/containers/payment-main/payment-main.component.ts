@@ -64,6 +64,7 @@ export class PaymentMainComponent implements OnInit {
     this._paymentDetailService
       .getPaymentStatus(this._reservationService.reservationId)
       .subscribe((response) => {
+        let status = response.status.toUpperCase();
         this._templateLoadingService.isTemplateLoading$.next(false);
         this.ispaymentStatusLoaded = true;
         let redirectUrl = window.location.href.substring(
@@ -76,30 +77,30 @@ export class PaymentMainComponent implements OnInit {
           nextRedirectUrl: redirectUrl,
         };
         this.paymentStatusData.label =
-          response.status === 'SUCCESS'
+          status === 'SUCCESS'
             ? 'Your Payment is completed successfully'
             : 'Your Payment is Failed';
 
         this.paymentStatusData.image =
-          response.status === 'SUCCESS'
+          status === 'SUCCESS'
             ? 'assets/payment_success.png'
             : 'assets/payment_fail.png';
 
         this.paymentStatusData.note =
-          response.status === 'SUCCESS'
+          status === 'SUCCESS'
             ? 'A confirmation email has been sent to '
             : 'An Error ocurred while processing your payment';
 
         this.paymentStatusData.showSummaryButton = true;
         this.paymentStatusData.showBackButton = true;
         this.paymentStatusData.back = `Back To ${this.titles[this.reservationData['currentJourney']]}`;
-        if (response.status === "SUCCESS") {
+        if (status === "SUCCESS") {
           this.paymentStatusData.next = 'View Summary';
           this.paymentStatusData.showBackButton = false;
         } else {
           this.paymentStatusData.next = 'Retry Payment';
         }
-        if (this.reservationData['currentJourney'] === 'PRECHECKIN' && response.status === 'SUCCESS') {
+        if (this.reservationData['currentJourney'] === 'PRECHECKIN' && status === 'SUCCESS') {
           this._snackBarService.openSnackBarAsText(
             'Pre-Checkin Sucessfull.',
             '',
@@ -124,14 +125,14 @@ export class PaymentMainComponent implements OnInit {
       if (this.reservationData['currentJourney'] === 'PRECHECKIN') {
         this.router.navigateByUrl(`/summary?token=${this.route.snapshot.queryParamMap.get('token')}&entity=summary`);
       } else {
-        this.router.navigateByUrl(`/?token=${this.reservationData['redirectionParameter'].journey.token}`);
+        this.router.navigateByUrl(`/?token=${this.reservationData['redirectionPaesponse.rameter'].journey.token}`);
       }
     }
   }
 
   get status() {
     if (this.paymentStatusData && this.paymentStatusData.data.data) {
-      return this.paymentStatusData.data.data.status;
+      return this.paymentStatusData.data.data.status.toUpperCase();
     }
     return null;
   }

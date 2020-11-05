@@ -64,6 +64,7 @@ export class ThankYouMainComponent implements OnInit {
 
       default:
         let { title } = this._hotelService.getCurrentJourneyConfig();
+        this.headerTitle = title;
         this.config.description = `Your ${title} is completed successfully`;
         break;
     }

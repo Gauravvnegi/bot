@@ -6,6 +6,7 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
     SharedMaterialModule,
     AdminReservationModule,
     AdminRequestRoutingModule,
+    CKEditorModule,
   ],
   declarations: [...AdminRequestRoutingModule.components],
 })

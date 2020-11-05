@@ -12,40 +12,69 @@ export class PackageDetail implements Deserializable{
     }
 }
 
+export class Packages implements Deserializable{
+    records: Package[];
+    deserialize(input: any) {
+        this.records = input.records.map((record) =>
+          new Package().deserialize(record)
+        );
+        return this;
+      }
+}
+
 export class Package implements Deserializable{
     id: string;
     status:boolean;
     description: string;
     name: string;
-    currencyCode: string;
+    currency: string;
     hotelId: string;
     packageCode: string;
     imageUrl: string;
     rate: number;
+    packageSource: string;
+    unit: string;
+    quantity: number;
     type: string;
+    autoAccept: boolean;
 
     deserialize(input: any) {
         Object.assign(
           this,
           set({}, 'id', get(input, ['id'])),
-          set({}, 'name', get(input, ['amenityName'])),
+          set({}, 'name', get(input, ['name'])),
           set({}, 'status', get(input, ['active'])),
-          set({}, 'description', get(input, ['amenityDescription'])),
-          set({}, 'currencyCode', get(input, ['currencyCode'])),
+          set({}, 'description', get(input, ['description'])),
+          set({}, 'currency', get(input, ['currency'])),
           set({}, 'packageCode', get(input, ['packageCode'])),
-          set({}, 'imageUrl', get(input, ['imgUrl'])),
+          set({}, 'imageUrl', get(input, ['imageUrl'])),
           set({}, 'rate', get(input, ['rate'])),
-          set({}, 'type', (get(input, ['type'])) == 0 ? 'Complimentary':'Paid'),
+          set({}, 'quantity', get(input, ['quantity'])),
+          set({}, 'packageSource', get(input, ['source'])),
+          set({}, 'unit', get(input, ['unit'])),
+          set({}, 'autoAccept', get(input, ['autoAccept'])),
+          set({}, 'type', (get(input, ['rate'])) == 0 ? 'Complimentary':'Paid'),
         );
         return this;
     }
 }
 
 export class Amenity{
-    active: boolean;
-    hotelId: string;
-    id: string;
-    imgUrl: string;
-    packageCode: string;
-    amenityName: string;
+     id : string;
+     name : string;
+     description :  string ;
+     quantity : number;
+     rate : number;
+     startDate : number;
+     endDate : number;
+     active : boolean;
+     currency :  string;
+     packageCode :  string;
+     imageUrl : string;
+     hotelId :  string;
+     source: string;
+     type :  string;
+     unit :  string;
+     downloadUrl : string; 
+     autoAccept :boolean;
 }

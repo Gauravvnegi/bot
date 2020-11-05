@@ -12,6 +12,7 @@ import * as FileSaver from 'file-saver';
 import { RequestService } from '../../services/request.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { RequestTable } from '../../data-models/request-datatable.model';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-request-data-table',
@@ -162,7 +163,9 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     super(fb);
   }
@@ -415,6 +418,10 @@ export class RequestDataTableComponent extends BaseDatatableComponent
         detailCompRef.close();
       })
     );
+  }
+
+  openAddRequest() {
+    this.router.navigateByUrl(`${this.route.snapshot['_routerState'].url}/add-request`);
   }
 
   ngOnDestroy() {

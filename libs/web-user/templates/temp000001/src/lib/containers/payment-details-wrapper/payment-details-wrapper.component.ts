@@ -17,6 +17,7 @@ import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -45,6 +46,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _hotelService: HotelService,
     private _summaryService: SummaryService,
     private _billSummaryService: BillSummaryService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     super();
     this.self = this;
@@ -144,9 +147,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onCheckoutSubmit() {
-    this.onCheckinSubmit();
+    this.onPrecheckinSubmit();
   }
 
+  openThankyouPage(state){
+    this.router.navigateByUrl(`/thankyou?token=${this.route.snapshot.queryParamMap.get('token')}&entity=thankyou&state=${state}`);
+  }
+  
   updatePaymentStatus(state) {
     const data = this.mapPaymentData();
     this._paymentDetailsService
@@ -159,11 +166,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             );
             this._stepperService.setIndex('next');
           } else {
-            this._snackBarService.openSnackBarAsText(
-              'Pre-Checkin Sucessfull.',
-              '',
-              { panelClass: 'success' }
-            );
+            this.openThankyouPage(state);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['submitButton']
             );

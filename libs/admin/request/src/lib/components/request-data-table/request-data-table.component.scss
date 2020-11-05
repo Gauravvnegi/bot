@@ -18,3 +18,12 @@
 :host ::ng-deep .p-datatable{
     margin-top: 1.5rem;
 }
+
+.link {
+  cursor: pointer;
+  color: rgb(209, 202, 202);
+}
+
+.link:hover {
+  color: #4B56C0;
+}

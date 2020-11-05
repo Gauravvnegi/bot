@@ -12,6 +12,10 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { NumberDirective } from './directives/number.directive';
+import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,6 +27,8 @@ import { NumberDirective } from './directives/number.directive';
     PaginatorModule,
     TabMenuModule,
     DropdownModule,
+    MatChipsModule,
+    MatAutocompleteModule
   ],
   declarations: [
     DatatableComponent,
@@ -30,6 +36,7 @@ import { NumberDirective } from './directives/number.directive';
     UploadFileComponent,
     ComingSoonComponent,
     NumberDirective,
+    MultipleDropdownComponent,
   ],
   exports: [
     DatatableComponent,
@@ -42,6 +49,7 @@ import { NumberDirective } from './directives/number.directive';
     TabMenuModule,
     DropdownModule,
     NumberDirective,
+    MultipleDropdownComponent,
   ],
 })
 export class AdminSharedModule {}

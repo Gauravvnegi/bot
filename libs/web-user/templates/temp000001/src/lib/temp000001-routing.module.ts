@@ -36,6 +36,7 @@ import { DefaultAmenityComponent } from './containers/default-amenity/default-am
 import { PaymentMainComponent } from './containers/payment-main/payment-main.component';
 import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
 import { SummaryMainComponent } from './containers/summary-main/summary-main.component';
+import { ThankYouMain } from './containers/thank-you/thank-you-main.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -65,6 +66,16 @@ export const sharedAuthRoutes: Route[] = [
       {
         path: '',
         component: FeedbackMainComponent,
+      },
+    ],
+  },
+  {
+    path: 'thankyou',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: ThankYouMain,
       },
     ],
   },
@@ -124,5 +135,6 @@ export class Temp000001RoutingModule {
     PaymentMainComponent,
     FeedbackMainComponent,
     SummaryMainComponent,
+    ThankYouMain
   ];
 }

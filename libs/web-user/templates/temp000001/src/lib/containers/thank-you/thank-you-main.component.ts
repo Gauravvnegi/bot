@@ -9,25 +9,31 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 @Component({
   selector: 'hospitality-bot-thank-you',
   templateUrl: './thank-you-main.component.html',
-  styleUrls: ['./thank-you-main.component.scss']
+  styleUrls: ['./thank-you-main.component.scss'],
 })
-export class ThankYouMain implements OnInit {
+export class ThankYouMainComponent implements OnInit {
   journey: string;
   isReservationData = false;
   reservationData: ReservationDetails;
+  config = {
+    icon: '',
+    title: '',
+    description: '',
+  };
+  headerTitle = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private _templateLoadingService: TemplateLoaderService,
     private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-  ) { }
+    private _hotelService: HotelService
+  ) {}
 
   ngOnInit(): void {
     this.getReservationDetails();
   }
-  
+
   private getReservationDetails() {
     forkJoin(
       this._reservationService.getReservationDetails(
@@ -44,30 +50,29 @@ export class ThankYouMain implements OnInit {
     });
   }
 
-  getState(){
-    const state = this.route.snapshot.queryParamMap.get('state')
-    switch (state){
+  getState() {
+    const state = this.route.snapshot.queryParamMap.get('state');
+    switch (state) {
       case 'preCheckin':
         this.journey = 'Precheck-In';
+
         break;
 
       case 'checkin':
         this.journey = 'Check-In';
         break;
 
-      case 'checkout': 
+      case 'checkout':
         this.journey = 'Check-Out';
         break;
 
-      case 'feedback': 
+      case 'feedback':
         this.journey = 'Feedback';
         break;
 
       default:
         this.journey = 'Journey';
         break;
-
     }
   }
-
 }

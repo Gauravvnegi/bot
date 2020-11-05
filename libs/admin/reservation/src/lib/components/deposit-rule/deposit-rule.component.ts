@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ReservationService } from '../../services/reservation.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-deposit-rule',
@@ -41,7 +43,11 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
 
   $subscription = new Subscription();
 
-  constructor(private _fb: FormBuilder) {}
+  constructor(
+    private _fb: FormBuilder,
+    private _reservationService: ReservationService,
+    private _snackBarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
     this.initDepositRuleForm();
@@ -108,6 +114,30 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
       'depositRuleDetails',
       this.depositRuleForm
     );
+  }
+
+  updateDepositRule() {
+    this._reservationService
+      .updateDepositRule(
+        this.parentForm.get('reservationDetails').get('bookingId').value,
+        {
+          amount: 50.0,
+          guaranteeType: 'DEPOSIT',
+          type: 'FLAT',
+        }
+      )
+      .subscribe(
+        (data) => {
+          this._snackBarService.openSnackBarAsText(
+            'Deposit rule updated sucessfully.',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   ngOnDestroy() {

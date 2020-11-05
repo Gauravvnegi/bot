@@ -52,9 +52,10 @@
         :</mat-label
       >
       <mat-form-field>
+        <!-- appNumber -->
         <input
-          appNumber
           class="input-feild"
+          appNumber
           formControlName="amount"
           type="text"
           matInput
@@ -75,5 +76,10 @@
     </div>
   </div>
 </form>
+<div>
+  <button (click)="updateDepositRule()" class="button">
+    Update Deposit Rule
+  </button>
+</div>
 
 {{ depositRuleForm.value | json }}

@@ -12,18 +12,22 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
   styleUrls: ['./thank-you-main.component.scss'],
 })
 export class ThankYouMainComponent implements OnInit {
-  journey: string;
+
   isReservationData = false;
   reservationData: ReservationDetails;
   config = {
-    icon: '',
-    title: '',
+    icon: 'assets/thanku.png',
+    title: 'Thank You!',
     description: '',
+    emailInfo: {
+      icon: 'assets/email_thanku.png',
+      description: ''
+    },
   };
   headerTitle = '';
+  state: string;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private _templateLoadingService: TemplateLoaderService,
     private _reservationService: ReservationService,
@@ -51,27 +55,16 @@ export class ThankYouMainComponent implements OnInit {
   }
 
   getState() {
-    const state = this.route.snapshot.queryParamMap.get('state');
-    switch (state) {
-      case 'preCheckin':
-        this.journey = 'Precheck-In';
-
-        break;
-
-      case 'checkin':
-        this.journey = 'Check-In';
-        break;
-
-      case 'checkout':
-        this.journey = 'Check-Out';
-        break;
-
+    this.state = this.route.snapshot.queryParamMap.get('state');
+    switch (this.state) {
       case 'feedback':
-        this.journey = 'Feedback';
+        this.config.description = "Your feedback is completed successfully";
+        this.headerTitle = 'Feedback';
         break;
 
       default:
-        this.journey = 'Journey';
+        let { title } = this._hotelService.getCurrentJourneyConfig();
+        this.config.description = `Your ${title} is completed successfully`;
         break;
     }
   }

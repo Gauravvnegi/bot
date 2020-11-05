@@ -1,0 +1,47 @@
+@import 'temp000001';
+
+.status-container {
+  min-height: 60.6vh;
+	width: 100%;
+  .wrapper {
+		color: $white;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+    margin: 40px;
+    border-radius: $border-radius-medium;
+    padding: 25px;
+    .image {
+			height: 70px; 
+			img {
+				width: 70px;
+			}
+      @media only screen and (max-width: $M) {
+        height: 40px;
+        img {
+          width: 40px;
+        }
+      }
+		}
+		&-title {
+			padding: $padding-medium;
+		}
+		&-description {
+			padding: $padding-medium;
+		}
+		&-email-info {
+			align-items: center;
+			display: flex;
+			width: 50%;
+			font-style: italic;
+			img {
+				height: 50px;
+				padding: $padding-medium;
+			}
+			.description {
+				padding: $padding-medium 0;
+			}
+		}
+	}
+}

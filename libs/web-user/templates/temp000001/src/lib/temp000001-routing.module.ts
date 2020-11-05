@@ -36,7 +36,7 @@ import { DefaultAmenityComponent } from './containers/default-amenity/default-am
 import { PaymentMainComponent } from './containers/payment-main/payment-main.component';
 import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
 import { SummaryMainComponent } from './containers/summary-main/summary-main.component';
-import { ThankYouMainComponent } from './containers/thank-you/thank-you-main.component';
+import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
 
 export const sharedAuthRoutes: Route[] = [
   {

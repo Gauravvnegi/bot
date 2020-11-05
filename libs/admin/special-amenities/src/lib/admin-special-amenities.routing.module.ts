@@ -5,24 +5,23 @@ import { PackageDatatableComponent } from './components/package-datatable/packag
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 
 export const adminSpecialAmenitiesRoutes: Route[] = [
-    {
-      path: '',
-      component: PackageDatatableComponent,
-      children: [],
-    },
-    // {
-    //   path: '',
-    //   component: ComingSoonComponent,
-    // },
-    {
-      path: 'amenity/:id',
-      component: EditSpecialAmenitiesComponent,
-    }
+  // {
+  //   path: '',
+  //   component: PackageDatatableComponent,
+  //   children: [],
+  // },
+  {
+    path: '',
+    component: ComingSoonComponent,
+  },
+  // {
+  //   path: 'amenity/:id',
+  //   component: EditSpecialAmenitiesComponent,
+  // }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(adminSpecialAmenitiesRoutes)],
-    exports: [RouterModule],
-  })
-  
+  imports: [RouterModule.forChild(adminSpecialAmenitiesRoutes)],
+  exports: [RouterModule],
+})
 export class AdminSpecialAmenitiesRoutingModule {}

@@ -80,7 +80,13 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
       {
         type: 'file',
         label: 'Upload',
-        settings: {},
+        settings: {
+          fileConfig:{
+            fileIcon: '',
+            accept: '.pdf,.img,.png,.jpg,.jpeg',
+            maxFileSize: 3145728,
+          }
+        },
         styles: {
           container: 'text-container',
         },

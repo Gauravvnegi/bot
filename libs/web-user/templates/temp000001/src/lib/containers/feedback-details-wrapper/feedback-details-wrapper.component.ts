@@ -63,13 +63,17 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
 
     let value = this.parentForm.getRawValue();
     let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail,this._reservationService.reservationData.guestDetails.primaryGuest.id
+      value && value.feedbackDetail,
+      this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
 
     this._feedbackDetailsService
       .addFeedback(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
+          this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
+            panelClass: 'success',
+          });
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

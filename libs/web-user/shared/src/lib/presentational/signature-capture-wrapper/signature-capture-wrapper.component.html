@@ -59,6 +59,7 @@
               [parentForm]="signatureForm"
               [name]="'imageSignature'"
               [url]="signatureForm.get('imageSignature').value"
+              [fileConfig]="option.settings.fileConfig"
               (documentData)="signatureUploadFile($event, {})"
             ></web-user-file-upload>
           </div>

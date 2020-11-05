@@ -41,7 +41,6 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
 
   listenForSignatureUrl() {
     this._billSummaryService.$signatureUrl.subscribe((res) => {
-      debugger;
       if (res) {
         this.signature = res;
       }

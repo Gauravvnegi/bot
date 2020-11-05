@@ -106,7 +106,7 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
     this.depositRuleForm = this._fb.group({
       guaranteeType: ['', Validators.required],
       amountType: ['', Validators.required],
-      amount: [''],
+      amount: ['', Validators.required],
       amountPayable: [0],
     });
 
@@ -117,13 +117,18 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
   }
 
   updateDepositRule() {
+    let {
+      guaranteeType,
+      amountType,
+      amount,
+    } = this.depositRuleForm.getRawValue();
     this._reservationService
       .updateDepositRule(
         this.parentForm.get('reservationDetails').get('bookingId').value,
         {
-          amount: 50.0,
-          guaranteeType: 'DEPOSIT',
-          type: 'FLAT',
+          amount: amount,
+          guaranteeType: guaranteeType,
+          type: amountType,
         }
       )
       .subscribe(

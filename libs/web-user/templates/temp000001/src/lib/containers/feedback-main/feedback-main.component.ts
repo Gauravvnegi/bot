@@ -93,7 +93,7 @@ export class FeedbackMainComponent implements OnInit {
       .addFeedback(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          // this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
+          // this._snackBarService.openSnackBarAsText('Feedback successful', '', {
           //   panelClass: 'success',
           // });
           this._buttonService.buttonLoading$.next(this.saveButton);

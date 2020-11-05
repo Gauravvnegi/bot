@@ -46,7 +46,7 @@ export class InputPopupComponent implements OnInit {
       .checkIn(this._reservationService.reservationData.id, data)
       .subscribe(
         (res) => {
-          this._snackbar.openSnackBarAsText('Checkin successfull', '', {
+          this._snackbar.openSnackBarAsText('Checkin successful', '', {
             panelClass: 'success',
           });
           this.close('success');

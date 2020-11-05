@@ -165,7 +165,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     private _snackbarService: SnackBarService,
     private _modal: ModalService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     super(fb);
   }
@@ -199,8 +199,8 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  loadInitialData(queries = []) {
-    this.loading = true;
+  loadInitialData(queries = [], loading = true) {
+    this.loading = loading && true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
@@ -407,21 +407,58 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     detailCompRef.componentInstance.tabKey = 'request_details';
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        this.loadInitialData([
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
-          },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
+            {
+              order: 'DESC',
+              entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            },
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false
+        );
         detailCompRef.close();
       })
     );
   }
 
+  updateRequest(event, reservationId, status, journey) {
+    event.stopPropagation();
+
+    this._requestService
+      .updateRequest(reservationId, {
+        journey,
+        state: status,
+      })
+      .subscribe(
+        (res) => {
+          //update rows
+          this.values = this.values.map((row) => {
+            if (row.booking.bookingId == reservationId) {
+              row.status = 'COMPLETED';
+            }
+            return row;
+          });
+
+          this._snackbarService.openSnackBarAsText(
+            'Request updated successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
+
   openAddRequest() {
-    this.router.navigateByUrl(`${this.route.snapshot['_routerState'].url}/add-request`);
+    this.router.navigateByUrl(
+      `${this.route.snapshot['_routerState'].url}/add-request`
+    );
   }
 
   ngOnDestroy() {

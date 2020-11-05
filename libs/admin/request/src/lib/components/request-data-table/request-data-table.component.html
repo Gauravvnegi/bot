@@ -45,7 +45,10 @@
                     [options]="documentActionTypes"
                     formControlName="documentActionType"
                   >
-                    <ng-template let-documentActionItem pTemplate="selectedItem">
+                    <ng-template
+                      let-documentActionItem
+                      pTemplate="selectedItem"
+                    >
                       <img src="assets/svg/Export.svg" />
                       <span style="margin-left: 0.5em; font-weight: 500;">{{
                         documentActionItem.label
@@ -319,6 +322,40 @@
       </td>
       <td class="message">
         <p *ngIf="rowData.remarks; else emptyCell">{{ rowData.remarks }}</p>
+
+        <ng-container
+          *ngIf="
+            rowData.journey != 'INHOUSE' &&
+            ['INITIATED'].includes(rowData.status)
+          "
+        >
+          <button
+            class="right"
+            (click)="
+              updateRequest(
+                $event,
+                rowData.booking.bookingId,
+                'ACCEPT',
+                rowData.journey
+              )
+            "
+          >
+            <img src="assets/svg/tick.svg" />
+          </button>
+          <button
+            class="right"
+            (click)="
+              updateRequest(
+                $event,
+                rowData.booking.bookingId,
+                'REJECT',
+                rowData.journey
+              )
+            "
+          >
+            <img src="assets/svg/cross.svg" />
+          </button>
+        </ng-container>
       </td>
     </tr>
   </ng-template>

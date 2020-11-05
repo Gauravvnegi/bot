@@ -13,4 +13,11 @@ export class RequestService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  updateRequest(reservationId, config) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/verify-request`,
+      config
+    );
+  }
 }

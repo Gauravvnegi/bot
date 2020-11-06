@@ -117,6 +117,12 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
   }
 
   updateDepositRule() {
+    if (this.depositRuleForm.invalid) {
+      this.depositRuleForm.markAllAsTouched();
+      this._snackBarService.openSnackBarAsText('Please fill required fields.');
+      return;
+    }
+
     let {
       guaranteeType,
       amountType,

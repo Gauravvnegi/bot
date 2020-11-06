@@ -19,17 +19,16 @@ export const defaultErrors = {
 };
 
 export const customPatternValid = (config: any): ValidatorFn => {
-  
   return (control: FormControl) => {
     let urlRegEx: RegExp = config.pattern;
     // need to remove toString
     let value;
-    if(control.value){
+    if (control.value) {
       value = control.value.toString();
-    }else{
+    } else {
       value = control.value;
     }
-  
+
     if (value && !value.match(urlRegEx)) {
       return config;
     } else {
@@ -57,7 +56,6 @@ export class ValidatorService {
       .pipe(untilDestroyed(fieldComponent))
       .subscribe(() => {
         const controlErrors = control.errors;
-
         if (controlErrors) {
           // if error is found
           const errorType = Object.keys(controlErrors)[0];
@@ -70,6 +68,8 @@ export class ValidatorService {
               controlErrors.msg
             )
           );
+        } else {
+          this.errorMessageEvent.next('');
         }
       });
   }

@@ -1,4 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SpaConfigI } from 'libs/web-user/shared/src/lib/data-models/spaConfig.model';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
@@ -12,19 +19,18 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 @Component({
   selector: 'hospitality-bot-spa',
   templateUrl: './spa.component.html',
-  styleUrls: ['./spa.component.scss']
+  styleUrls: ['./spa.component.scss'],
 })
 export class SpaComponent implements OnInit {
-
   @Input() uniqueData;
   @Input() amenityData;
   @Input() paidAmenitiesForm;
-  @Output() removeEvent : EventEmitter<any> = new EventEmitter<any>();
-  @Output() addEvent : EventEmitter<any> = new EventEmitter<any>(); 
+  @Output() removeEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() addEvent: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('saveButton') saveButton;
   @ViewChild('removeButton') removeButton;
-  
+
   spaForm: FormGroup;
   spaConfig: SpaConfigI;
   minDate;
@@ -38,7 +44,7 @@ export class SpaComponent implements OnInit {
     private _dateService: DateService
   ) {
     this.initSpaForm();
-   }
+  }
 
   ngOnInit(): void {
     this.minDate = new Date(this._dateService.getCurrentDateString());
@@ -47,24 +53,29 @@ export class SpaComponent implements OnInit {
 
   initSpaForm() {
     this.spaForm = this._fb.group({
-      quantity: ['', [Validators.required,
-        customPatternValid({
-          pattern: Regex.NUMBER_REGEX,
-          msg: 'Please enter valid count',
-        })]],
-      usageTime: [''],
-      spaDate:['']
+      quantity: [
+        '',
+        [
+          Validators.required,
+          customPatternValid({
+            pattern: Regex.NUMBER_REGEX,
+            msg: 'Please enter valid count',
+          }),
+        ],
+      ],
+      usageTime: ['', Validators.required],
+      spaDate: [''],
     });
   }
 
-  addForm(){
+  addForm() {
     this._paidService.uniqueData = this.uniqueData;
     this._paidService.amenityForm = this.spaForm;
     this._paidService.isComponentRendered$.next(true);
   }
 
-  populateFormData(){
-    if(this.amenityData === ""){
+  populateFormData() {
+    if (this.amenityData === '') {
       this.spaConfig.removeButton.disable = true;
     }
     this._spaService.initSpaDetailDS(this.amenityData);
@@ -75,10 +86,8 @@ export class SpaComponent implements OnInit {
     return this._spaService.setFieldConfigForSpaDetails();
   }
 
-  submit(){
-    const status = this._spaService.validateSpaForm(
-      this.spaForm
-    ) as Array<any>;
+  submit() {
+    const status = this._spaService.validateSpaForm(this.spaForm) as Array<any>;
 
     if (status.length) {
       this.performActionIfNotValid(status);
@@ -98,10 +107,16 @@ export class SpaComponent implements OnInit {
     return;
   }
 
-  removeSpaData(event){
+  removeSpaData(event) {
     event.preventDefault();
-    if(this.spaForm.valid && this.paidAmenitiesForm.get('isSelected').value == true){
-     this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
+    if (
+      this.spaForm.valid &&
+      this.paidAmenitiesForm.get('isSelected').value == true
+    ) {
+      this.removeEvent.emit({
+        amenityId: this.uniqueData.id,
+        packageCode: this.uniqueData.code,
+      });
     }
- }
+  }
 }

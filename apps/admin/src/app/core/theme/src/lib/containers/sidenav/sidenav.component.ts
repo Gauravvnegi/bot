@@ -56,6 +56,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
         this.branchConfig = brandConfig.branches.find(
           (branch) => branch.id == branchId
         );
+
+        this.initSideNavConfigs({
+          headerBgColor: this.branchConfig.headerBgColor,
+        });
       })
     );
   }
@@ -91,12 +95,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._modal.openDialog(OrientationPopupComponent, dialogConfig);
   }
 
-  private initSideNavConfigs() {
+  private initSideNavConfigs(config = {}) {
     this.activeFontColor = '#4B56C0';
     this.normalFontColor = '#C5C5C5';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
-    this.headerBgColor = '#4B56C0';
+    this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     //check if admin or super admin by using command pattern
     this.menuItems = ADMIN_ROUTES;
   }

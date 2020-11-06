@@ -26,10 +26,12 @@ export class StayDetailsService extends ApiService {
     stayDetailsFieldSchema['startDate'] = new FieldSchema().deserialize({
       label: 'Arrival Date',
       disable: true,
+      isDatePickerDisable: true,
     });
     stayDetailsFieldSchema['endDate'] = new FieldSchema().deserialize({
       label: 'Departure Date',
       disable: true,
+      isDatePickerDisable: true,
     });
     stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
       label: 'Expected Arrival Time',
@@ -101,16 +103,18 @@ export class StayDetailsService extends ApiService {
     let arrivalTime = this.getArrivalTimeTimestamp(stayDetails);
     return {
       stayDetails: {
-        comments:stayDetails.special_comments.comments,
-        expectedArrivalTime: arrivalTime
-      }
+        comments: stayDetails.special_comments.comments,
+        expectedArrivalTime: arrivalTime,
+      },
     };
   }
 
-  getArrivalTimeTimestamp(stayDetails){
+  getArrivalTimeTimestamp(stayDetails) {
     let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
-    let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm').format('hh:mm');
-    return new DateService().convertDateToTimestamp(arrivalDate +'T'+ time);
+    let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm').format(
+      'hh:mm'
+    );
+    return new DateService().convertDateToTimestamp(arrivalDate + 'T' + time);
   }
 
   updateStayDetailDS(value) {

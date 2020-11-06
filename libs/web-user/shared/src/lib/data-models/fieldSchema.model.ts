@@ -7,6 +7,7 @@ export interface Deserializable {
 export class FieldSchema implements Deserializable {
   label?: string;
   disable?: boolean;
+  isDatePickerDisable: boolean;
   checked?: boolean;
   align?: boolean;
   master_label?: string;
@@ -39,6 +40,7 @@ export class FieldSchema implements Deserializable {
       this,
       _.set({}, 'label', _.get(input, ['label'])),
       _.set({}, 'disable', _.get(input, ['disable'])),
+      _.set({}, 'isDatePickerDisable', _.get(input, ['isDatePickerDisable'])),
       _.set({}, 'master_label', _.get(input, ['master_label'])),
       _.set({}, 'value', _.get(input, ['value'])),
       _.set({}, 'key', _.get(input, ['key'])),

@@ -1,12 +1,14 @@
 <div class="container">
   <form [formGroup]="guestDetailsForm">
-    <mat-accordion>
-      <mat-expansion-panel #panel [expanded]="true">
+    <mat-accordion #primaryGuestAccordian="matAccordion" [multi]="true">
+      <mat-expansion-panel #primaryGuestPanel [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span class="container__title">Primary Guest</span>
-            <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
-            <mat-icon class="expand-icon" *ngIf="panel.expanded"
+            <mat-icon class="expand-icon" *ngIf="!primaryGuestPanel.expanded"
+              >add</mat-icon
+            >
+            <mat-icon class="expand-icon" *ngIf="primaryGuestPanel.expanded"
               >remove</mat-icon
             >
           </mat-panel-title>
@@ -71,15 +73,19 @@
       <ng-container
         *ngFor="let guestFormGroup of secondaryGuests.controls; let i = index"
       >
-        <mat-accordion>
-          <mat-expansion-panel #panel>
+        <mat-accordion #secondaryGuestAccordian="matAccordion" [multi]="true">
+          <mat-expansion-panel #secondaryGuestpanel>
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <span class="container__title">Secondary Guest</span>
-                <mat-icon class="expand-icon" *ngIf="!panel.expanded"
+                <mat-icon
+                  class="expand-icon"
+                  *ngIf="!secondaryGuestpanel.expanded"
                   >add</mat-icon
                 >
-                <mat-icon class="expand-icon" *ngIf="panel.expanded"
+                <mat-icon
+                  class="expand-icon"
+                  *ngIf="secondaryGuestpanel.expanded"
                   >remove</mat-icon
                 >
               </mat-panel-title>

@@ -1,6 +1,6 @@
-<form [formGroup]="depositRuleForm">
-  <div>
-    <div>
+<form class="deposit-wrapper" [formGroup]="depositRuleForm">
+  <div class="feilds-wrapper">
+    <div class="feild">
       <mat-label class="mat-label">Type :</mat-label>
       <mat-form-field>
         <mat-select formControlName="guaranteeType">
@@ -20,7 +20,7 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div>
+    <div class="feild">
       <mat-label class="mat-label">Amount Type :</mat-label>
       <mat-form-field>
         <mat-select formControlName="amountType">
@@ -41,8 +41,8 @@
       </mat-form-field>
     </div>
   </div>
-  <div>
-    <div>
+  <div class="feilds-wrapper">
+    <div class="feild">
       <mat-label class="mat-label"
         >Pay Now
         <span
@@ -71,12 +71,13 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div>
-      Total payable amount : {{ depositRuleForm.get('amountPayable').value }}
+    <div class="feild-payment">
+      <p class="mat-label">Total payable amount :</p>
+      <p>{{ depositRuleForm.get('amountPayable').value }}</p>
     </div>
   </div>
 </form>
-<div>
+<div class="button-wrapper">
   <button (click)="updateDepositRule()" class="button">
     Update Deposit Rule
   </button>

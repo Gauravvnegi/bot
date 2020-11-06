@@ -1,0 +1,54 @@
+@import 'main';
+
+.deposit-wrapper {
+  padding: 0 10px;
+}
+
+.feilds-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+:host ::ng-deep .mat-label {
+  font-size: $font14;
+  color: $primary-gray;
+  letter-spacing: 0.84px;
+  margin-right: 10px;
+}
+
+:host ::ng-deep .mat-form-field-underline {
+  background-color: $primary-gray;
+}
+
+:host ::ng-deep .mat-select-arrow {
+  color: $primary-gray;
+}
+
+.feild-payment {
+  display: flex;
+  .value {
+    font-size: $font14;
+    color: #484848;
+  }
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 2px solid rgb(33, 138, 243 , 0.1);
+  padding: 10px 0;
+  button {
+    outline: none;
+    border: none;
+    background: transparent;
+    color: $primary-gray;
+    font-size: $font14;
+    letter-spacing: 0.84px;
+    &:hover {
+      cursor: pointer;
+      color: $primary-purple;
+    }
+  }
+}

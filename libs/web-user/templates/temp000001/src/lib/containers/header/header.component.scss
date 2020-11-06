@@ -19,18 +19,22 @@
   flex-direction: column;
   @media only screen and (max-width: $M) {
     font-size: $font-responsive-small;
+    width: 33%;
+    text-align: center;
   }
 }
 
-// .template__header--logo {
-//   height: 40px;
-//   img {
-//     height: $full-width;
-//   }
-//   @media only screen and (max-width: $M) {
-//     height: 25px;
-//   }
-// }
+.responsive {
+  @media only screen and (max-width: $M) {
+    width: 33%;
+  }
+}
+
+.template__header--logo {
+  @media only screen and (max-width: $M) {
+    width: 33%;
+  }
+}
 .template__header--status {
   @include flex-justify-center();
   flex-direction: column;

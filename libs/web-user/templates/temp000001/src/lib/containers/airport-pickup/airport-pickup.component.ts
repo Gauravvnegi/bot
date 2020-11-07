@@ -57,8 +57,8 @@ export class AirportPickupComponent implements OnInit {
           pattern: Regex.ALPHANUMERIC_REGEX,
           msg: 'Please enter valid Flight number',
         })]],
-      pickupDate:[''],
-      pickupTime: [''],
+      pickupDate:['', [Validators.required]],
+      pickupTime: ['', [Validators.required]],
       quantity: ['', [Validators.required,
         customPatternValid({
           pattern: Regex.NUMBER_REGEX,

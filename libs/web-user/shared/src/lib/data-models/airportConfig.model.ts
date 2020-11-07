@@ -25,18 +25,23 @@ export class AirportAmenity {
   terminal: string;
 
   deserialize(input: any) {
+    let pickTimeFormatted;
+    let pickupDate ;
+    
     if(input){
       let pickTime = new DateService().convertTimestampToDate(get(input,['pickupTime'])*1000,'DD-MM-YYYY hh:mm a');
+      pickTimeFormatted = moment(pickTime.split(' ')[1]+pickTime.split(' ')[2], 'h:mm a').format('h:mm a')||'12:00 pm';
+      pickupDate =  new Date(get(input, ['pickupTime'])*1000).toISOString();
+     }
       Object.assign(
         this,
         set({},'airportName',get(input, ['airportName'])),
         set({},'flightNumber', get(input, ['flightNumber'])),
-        set({}, 'quantity', get(input, ['quantity'])),
+        set({}, 'quantity', get(input, ['quantity'])||1),
         set({}, 'terminal', get(input, ['terminal'])),
-        set({}, 'pickupDate', new Date(get(input, ['pickupTime'])*1000).toISOString()),
-        set({}, 'pickupTime', moment(pickTime.split(' ')[1]+pickTime.split(' ')[2], 'h:mm a').format('h:mm a')||'7:00 am'),
+        set({}, 'pickupDate',pickupDate),
+        set({}, 'pickupTime', pickTimeFormatted),
       );
-    }
     
     return this;
   }

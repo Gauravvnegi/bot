@@ -65,9 +65,7 @@ export class BreakfastComponent implements OnInit {
       this.breakfastConfig.removeButton.disable = true;
     }
     this._breakfastService.initBreakfastDetailDS(this.amenityData);
-    if(this.amenityData){
-      this.breakfastForm.patchValue(this._breakfastService.breakfastDetail.breakfastDetail);
-    }
+    this.breakfastForm.patchValue(this._breakfastService.breakfastDetail.breakfastDetail);
   }
 
   setFieldConfiguration() {

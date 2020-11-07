@@ -18,12 +18,10 @@ export class BreakfastDetails {
   quantity: string;
 
   deserialize(input: any) {
-    if (input) {
       Object.assign(
         this,
-        set({}, 'quantity', get(input, ['quantity'])),
+        set({}, 'quantity', get(input, ['quantity'])||1),
       );
-    }
     return this;
   }
 }

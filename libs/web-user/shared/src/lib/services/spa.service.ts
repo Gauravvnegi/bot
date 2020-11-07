@@ -29,8 +29,8 @@ export class SpaService extends ApiService{
       disable: false,
     });
 
-    spaFormFieldSchema['usageTime'] = new FieldSchema().deserialize({
-      label: 'Enter Usage Time',
+    spaFormFieldSchema['startTime'] = new FieldSchema().deserialize({
+      label: 'Usage Time',
       disable: false,
       style: {
         childLabelStyles: {
@@ -67,14 +67,15 @@ export class SpaService extends ApiService{
     const spaTime =  this.modifyPickUpData(spaFormValue,spaDate);
     let spaData = new SpaDetail()
     spaData.quantity = spaFormValue.quantity;
-    spaData.usageTime = spaTime;
+    spaData.startTime = spaTime;
+    spaData.endTime = 0;
     return spaData;
   }
 
   modifyPickUpData(data, spaTime){
-    if(data.usageTime){
+    if(data.startTime){
       let spaDate = spaTime.split('T')[0];
-      let time = moment(data.usageTime, 'hh:mm').format('hh:mm');
+      let time = moment(data.startTime, 'hh:mm').format('hh:mm');
       return new DateService().convertDateToTimestamp(spaDate +'T'+ time);
     }
   }

@@ -213,18 +213,3 @@ export class SelectedPaymentOption {
   config: PaymentConfig;
   type: PaymentMethod;
 }
-
-export class PaymentMainStatus {
-  data: {
-    data: any;
-    backRedirectUrl: string;
-    nextRedirectUrl: string;
-  };
-  label: string;
-  note: string;
-  image: string;
-  back: string;
-  next: string;
-  showBackButton: boolean;
-  showSummaryButton: boolean;
-}

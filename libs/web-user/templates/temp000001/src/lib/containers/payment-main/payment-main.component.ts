@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray } from '@angular/forms';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -8,8 +8,8 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { forkJoin, of } from 'rxjs';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
+import { Router } from '@angular/router';
+import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentStatusConfig.model';
 
 @Component({
   selector: 'hospitality-bot-payment-main',
@@ -23,11 +23,6 @@ export class PaymentMainComponent implements OnInit {
   ispaymentStatusLoaded: boolean = false;
   isReservationData = false;
   parentForm = new FormArray([]);
-  titles: any = {
-    PRECHECKIN:'Pre Check-In',
-    CHECKIN: 'Check-In',
-    CHECKOUT: 'Check-Out'
-  };
   reservationData: ReservationDetails;
   constructor(
     private _reservationService: ReservationService,
@@ -37,7 +32,6 @@ export class PaymentMainComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService,
     private _paymentDetailService: PaymentDetailsService,
     private router: Router,
-    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -66,40 +60,13 @@ export class PaymentMainComponent implements OnInit {
       .subscribe((response) => {
         let status = response.status.toUpperCase();
         this._templateLoadingService.isTemplateLoading$.next(false);
-        this.ispaymentStatusLoaded = true;
         let redirectUrl = window.location.href.substring(
           0,
           window.location.href.lastIndexOf('&')
         );
-        this.paymentStatusData.data = {
-          data: response,
-          backRedirectUrl: redirectUrl + '&index=1',
-          nextRedirectUrl: redirectUrl,
-        };
-        this.paymentStatusData.label =
-          status === 'SUCCESS'
-            ? 'Your Payment is completed successfully'
-            : 'Your Payment is Failed';
-
-        this.paymentStatusData.image =
-          status === 'SUCCESS'
-            ? 'assets/payment_success.png'
-            : 'assets/payment_fail.png';
-
-        this.paymentStatusData.note =
-          status === 'SUCCESS'
-            ? 'A confirmation email has been sent to '
-            : 'An Error ocurred while processing your payment';
-
-        this.paymentStatusData.showSummaryButton = true;
-        this.paymentStatusData.showBackButton = true;
-        this.paymentStatusData.back = `Back To ${this.titles[this.reservationData['currentJourney']]}`;
-        if (status === "SUCCESS") {
-          this.paymentStatusData.next = 'View Summary';
-          this.paymentStatusData.showBackButton = false;
-        } else {
-          this.paymentStatusData.next = 'Retry Payment';
-        }
+        let { title } = this._hotelService.getCurrentJourneyConfig();
+        this.paymentStatusData = new PaymentMainStatus().deserialize(response, redirectUrl, title, status);
+        this.ispaymentStatusLoaded = true;
         if (this.reservationData['currentJourney'] === 'PRECHECKIN' && status === 'SUCCESS') {
           this._snackBarService.openSnackBarAsText(
             'Pre-Checkin Sucessfull.',
@@ -122,24 +89,24 @@ export class PaymentMainComponent implements OnInit {
     if (redirectUrl) {
       window.location.href = redirectUrl;
     } else {
-      if (this.reservationData['currentJourney'] === 'PRECHECKIN') {
-        this.router.navigateByUrl(`/summary?token=${this.route.snapshot.queryParamMap.get('token')}&entity=summary`);
+      if (this.reservationData['currentJourney'] !== 'CHECKIN') {
+        this.router.navigateByUrl(`/summary?token=${this.reservationData['redirectionParameter'].journey.token}&entity=summary`);
       } else {
-        this.router.navigateByUrl(`/?token=${this.reservationData['redirectionPaesponse.rameter'].journey.token}`);
+        this.router.navigateByUrl(`/?token=${this.reservationData['redirectionParameter'].journey.token}`);
       }
     }
   }
 
   get status() {
-    if (this.paymentStatusData && this.paymentStatusData.data.data) {
-      return this.paymentStatusData.data.data.status.toUpperCase();
+    if (this.paymentStatusData && this.paymentStatusData.data) {
+      return this.paymentStatusData.data.status.toUpperCase();
     }
     return null;
   }
 
   get data() {
-    if (this.paymentStatusData && this.paymentStatusData.data) {
-      return this.paymentStatusData.data.data;
+    if (this.paymentStatusData) {
+      return this.paymentStatusData.data;
     }
     return null;
   }

@@ -62,7 +62,7 @@
   >
     <web-user-button
       *ngIf="paymentStatusData.showBackButton"
-      (click)="redirect(paymentStatusData.data.backRedirectUrl)"
+      (click)="redirect(paymentStatusData.backRedirectUrl)"
       [settings]="{ label: paymentStatusData.back }"
       [buttonClass]="'back-button'"
       class="user-button"
@@ -71,7 +71,7 @@
     <web-user-button
       (click)="
         redirect(
-          status === 'SUCCESS' ? paymentStatusData.data.nextRedirectUrl : ''
+          status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl
         )
       "
       [settings]="{ label: paymentStatusData.next }"

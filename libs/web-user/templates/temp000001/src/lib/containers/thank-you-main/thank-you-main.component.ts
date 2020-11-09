@@ -62,7 +62,11 @@ export class ThankYouMainComponent implements OnInit {
     this.$subscription.add(
       this._thankyouService.explore(this._reservationService.reservationId)
         .subscribe((response) => {
-          window.location.href = `https://${response.botRedirectUrl}`;
+          if (response.botRedirectUrl) {
+            window.location.href = `https://${response.botRedirectUrl}`;
+          } else {
+            window.location.href = response.websiteUrl;
+          }
         }, ({ error }) => this._snackbarService.openSnackBarAsText(error))
     );
   }

@@ -44,7 +44,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     public _stepperService: StepperService,
     private _buttonService: ButtonService,
     private _hotelService: HotelService,
-    private _summaryService: SummaryService,
     private _billSummaryService: BillSummaryService,
     private router: Router,
     private route: ActivatedRoute
@@ -68,13 +67,15 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   getPaymentConfiguration() {
     const res_data = this._reservationService.reservationData;
     const journey = this._hotelService.getCurrentJourneyConfig();
-    this._paymentDetailsService
-      .getPaymentConfiguration(res_data.hotel.id, journey.name)
-      .subscribe((response) => {
-        this.hotelPaymentConfig = response;
-        this.isConfigLoaded = true;
-        this.initPaymentDetailsDS(this.hotelPaymentConfig);
-      });
+    this.$subscription.add(
+      this._paymentDetailsService
+        .getPaymentConfiguration(res_data.hotel.id, journey.name)
+        .subscribe((response) => {
+          this.hotelPaymentConfig = response;
+          this.isConfigLoaded = true;
+          this.initPaymentDetailsDS(this.hotelPaymentConfig);
+        })
+    );
   }
 
   onPrecheckinSubmit() {
@@ -86,19 +87,21 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.selectedPaymentOption.config &&
         this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
       ) {
-        this._paymentDetailsService
-          .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
-          .subscribe(
-            (response) => {
-              window.location.href = response.billingUrl;
-            },
-            ({error}) => {
-              this._snackBarService.openSnackBarAsText(error.message);
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
-              );
-            }
-          );
+        this.$subscription.add(
+          this._paymentDetailsService
+            .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
+            .subscribe(
+              (response) => {
+                window.location.href = response.billingUrl;
+              },
+              ({error}) => {
+                this._snackBarService.openSnackBarAsText(error.message);
+                this._buttonService.buttonLoading$.next(
+                  this.buttonRefs['submitButton']
+                );
+              }
+            )
+        );
       } else {
         this._snackBarService.openSnackBarAsText(
           'Please select a payment method!'
@@ -122,19 +125,21 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.selectedPaymentOption.config &&
         this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
       ) {
-        this._paymentDetailsService
-          .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
-          .subscribe(
-            (response) => {
-              window.location.href = response.billingUrl;
-            },
-            ({error}) => {
-              this._snackBarService.openSnackBarAsText(error.message);
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['nextButton']
-              );
-            }
-          );
+        this.$subscription.add(
+          this._paymentDetailsService
+            .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
+            .subscribe(
+              (response) => {
+                window.location.href = response.billingUrl;
+              },
+              ({error}) => {
+                this._snackBarService.openSnackBarAsText(error.message);
+                this._buttonService.buttonLoading$.next(
+                  this.buttonRefs['nextButton']
+                );
+              }
+            )
+        );
       } else {
         this._snackBarService.openSnackBarAsText(
           'Please select a payment method!'
@@ -156,35 +161,37 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   
   updatePaymentStatus(state) {
     const data = this.mapPaymentData();
-    this._paymentDetailsService
-      .updatePaymentStatus(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          if (state === 'checkin') {
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['nextButton']
-            );
-            this._stepperService.setIndex('next');
-          } else {
-            this.openThankyouPage(state);
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['submitButton']
-            );
+    this.$subscription.add(
+      this._paymentDetailsService
+        .updatePaymentStatus(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            if (state === 'checkin') {
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['nextButton']
+              );
+              this._stepperService.setIndex('next');
+            } else {
+              this.openThankyouPage(state);
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['submitButton']
+              );
+            }
+          },
+          ({error}) => {
+            this._snackBarService.openSnackBarAsText(error.message);
+            if (state === 'checkin') {
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['nextButton']
+              );
+            } else {
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['submitButton']
+              );
+            }
           }
-        },
-        ({error}) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          if (state === 'checkin') {
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['nextButton']
-            );
-          } else {
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['submitButton']
-            );
-          }
-        }
-      );
+        )
+    );
   }
 
   setPaymentMethodData(event) {
@@ -200,7 +207,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     if (this.billSummary && this.billSummary.signatureUrl) {
       paymentStatusData.signatureUrl = this.billSummary.signatureUrl;
     }
-    console.log(this.reservationData)
     return paymentStatusData;
   }
 
@@ -240,5 +246,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       return this._billSummaryService.billSummaryDetails.billSummary;
     }
     return null;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

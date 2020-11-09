@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-thank-you',
@@ -15,6 +17,7 @@ export class ThankYouMainComponent implements OnInit {
 
   isReservationData = false;
   reservationData: ReservationDetails;
+  $subscription: Subscription = new Subscription();
   config = {
     icon: 'assets/thanku.png',
     title: 'Thank You!',
@@ -31,7 +34,9 @@ export class ThankYouMainComponent implements OnInit {
     private route: ActivatedRoute,
     private _templateLoadingService: TemplateLoaderService,
     private _reservationService: ReservationService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _thankyouService: ThankYouService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -39,19 +44,27 @@ export class ThankYouMainComponent implements OnInit {
   }
 
   private getReservationDetails() {
-    forkJoin(
+    this.$subscription.add(
       this._reservationService.getReservationDetails(
         this._reservationService.reservationId
-      ),
-      of(true)
-    ).subscribe(([reservationData, val]) => {
-      this._hotelService.hotelConfig = reservationData['hotel'];
-      this.isReservationData = true;
-      this.reservationData = reservationData;
-      this._reservationService.reservationData = reservationData;
-      this._templateLoadingService.isTemplateLoading$.next(false);
-      this.getState();
-    });
+      ).subscribe((reservationData) => {
+        this._hotelService.hotelConfig = reservationData['hotel'];
+        this.isReservationData = true;
+        this.reservationData = reservationData;
+        this._reservationService.reservationData = reservationData;
+        this._templateLoadingService.isTemplateLoading$.next(false);
+        this.getState();
+      })
+    );
+  }
+
+  explore() {
+    this.$subscription.add(
+      this._thankyouService.explore(this._reservationService.reservationId)
+        .subscribe((response) => {
+          window.location.href = `https://${response.botRedirectUrl}`;
+        }, ({ error }) => this._snackbarService.openSnackBarAsText(error))
+    );
   }
 
   getState() {
@@ -68,5 +81,9 @@ export class ThankYouMainComponent implements OnInit {
         this.config.description = `Your ${title} is completed successfully`;
         break;
     }
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

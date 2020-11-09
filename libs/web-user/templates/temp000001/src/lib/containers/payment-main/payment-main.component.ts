@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray } from '@angular/forms';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { forkJoin, of } from 'rxjs';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 import { Router } from '@angular/router';
 import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentStatusConfig.model';
@@ -22,11 +19,9 @@ export class PaymentMainComponent implements OnInit {
   
   ispaymentStatusLoaded: boolean = false;
   isReservationData = false;
-  parentForm = new FormArray([]);
   reservationData: ReservationDetails;
   constructor(
     private _reservationService: ReservationService,
-    private _parentFormService: ParentFormService,
     private _hotelService: HotelService,
     private _snackBarService: SnackBarService,
     private _templateLoadingService: TemplateLoaderService,
@@ -36,25 +31,21 @@ export class PaymentMainComponent implements OnInit {
 
   ngOnInit(): void {
     this.getReservationDetails();
-    this.registerListeners();
   }
 
   private getReservationDetails() {
-    forkJoin(
-      this._reservationService.getReservationDetails(
-        this._reservationService.reservationId
-      ),
-      of(true)
-    ).subscribe(([reservationData, val]) => {
+    this._reservationService.getReservationDetails(
+      this._reservationService.reservationId
+    ).subscribe((reservationData) => {
       this._hotelService.hotelConfig = reservationData['hotel'];
       this.isReservationData = true;
       this.reservationData = reservationData;
       this._reservationService.reservationData = reservationData;
-      this.setPaymentStatus();
+      this.getPaymentStatus();
     });
   }
 
-  private setPaymentStatus() {
+  private getPaymentStatus() {
     this._paymentDetailService
       .getPaymentStatus(this._reservationService.reservationId)
       .subscribe((response) => {
@@ -75,14 +66,6 @@ export class PaymentMainComponent implements OnInit {
           );
         }
       }, ({error}) => this._snackBarService.openSnackBarAsText(error.message));
-  }
-
-  private registerListeners() {
-    this.parentForm.valueChanges.subscribe((val) => {
-      this._parentFormService.parentFormValueAndValidity$.next({
-        parentForm: this.parentForm,
-      });
-    });
   }
 
   redirect(redirectUrl?) {

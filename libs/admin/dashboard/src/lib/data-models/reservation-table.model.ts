@@ -1,4 +1,4 @@
-import { get, set } from 'lodash';
+import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -258,8 +258,8 @@ export class Guest implements Deserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'nameTitle', get(input, ['nameTitle'])),
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'lastName', get(input, ['lastName']))
+      set({}, 'firstName', trim(get(input, ['firstName']))),
+      set({}, 'lastName', trim(get(input, ['lastName'])))
     );
     return this;
   }

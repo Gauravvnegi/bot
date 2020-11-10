@@ -46,6 +46,13 @@
     }
   }
   @media only screen and (max-width: $M) {
-	  min-height: 79vh;
+	  min-height: 70vh;
+  }
+}
+
+
+@media only screen and (max-width: $tab-size) {
+  .user-button {
+    width: $half-width;
   }
 }

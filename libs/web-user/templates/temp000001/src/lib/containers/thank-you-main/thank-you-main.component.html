@@ -11,6 +11,14 @@
         <div><img [src]="config.emailInfo.icon" /></div>
         <div class="description">An email including {{ config.emailInfo.description }} details has been sent to the email address provided. Please keep it for your records.</div>
       </div> -->
+      <div>
+        <web-user-button
+          (click)="explore()"
+          [settings]="{ label: 'Explore More' }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+        ></web-user-button>
+      </div>
     </div>
   </div>
   <hospitality-bot-footer></hospitality-bot-footer>

@@ -1,5 +1,12 @@
 @import 'temp000001';
 
+.parent_block {
+  min-height: calc(100vh - 16vh);
+  @media only screen and (max-width: 990px) {
+    min-height: calc(100vh - 7vh);
+  }
+}
+
 .wrapper {
   color: $white;
   display: flex;
@@ -7,7 +14,7 @@
   justify-content: center;
   align-items: center;
   padding: 0 10px;
-  min-height: 72.56vh;
+  min-height: calc(100vh - 30vh);
   .image {
     height: 70px;
     img {
@@ -46,13 +53,16 @@
     }
   }
   @media only screen and (max-width: $M) {
-	  min-height: 70vh;
+    min-height: calc(100vh -17vh);
   }
 }
 
+:host ::ng-deep .next-button {
+  @include footer-next();
+}
 
-@media only screen and (max-width: $tab-size) {
+@media only screen and (max-width: $M) {
   .user-button {
-    width: $half-width;
+    width: $full-width;
   }
 }

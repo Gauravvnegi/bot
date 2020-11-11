@@ -20,6 +20,7 @@
     padding: 5px;
     &--title {
       font-size: $font-small;
+      padding-left: 10px;
     }
   }
 }
@@ -27,7 +28,7 @@
 .user__info--wrapper {
   padding: 25px 0px;
   @media only screen and (max-width: $M) {
-    padding: 5px 0px;
+    padding: 10px;
   }
 }
 
@@ -47,15 +48,20 @@
       text-align: left;
       width: 46%;
     }
+    @media only screen and (max-width: $M) {
+      width: auto;
+      font-size: $font-small;
+      margin-bottom: $margin-large;
+      p {
+        text-align: right;
+      }
+    }
   }
   @media only screen and (max-width: $M) {
     margin-top: 5px;
-    &--details {
-      font-size: 5px;
-      p {
-        min-width: 32%;
-      }
-    }
+  }
+  @media only screen and (max-width: $M) {
+    display: block;
   }
 }
 .remove-gap {
@@ -110,16 +116,21 @@
   @media only screen and (max-width: $M) {
     padding: 0px 5px;
     margin: 5px 0px;
+    flex-direction: column-reverse;
     &--manager {
       width: 41%;
       font-size: $font-responsive-small;
     }
     &--amounts {
-      width: $half-width;
+      width: auto;
       &--wrapper {
-        font-size: $font-responsive-small;
+        font-size: $font-small;
+        margin-bottom: 20px;
+        .label {
+          text-align: left;
+        }
         .final__label {
-          font-size: $font-responsive-small;
+          font-size: $font-small;
         }
         .final__amount {
           font-size: $font-small;
@@ -181,20 +192,9 @@
   padding: 0px $padding-large;
   margin: $margin-large 0px;
 
-  .add__gst {
-    text-decoration: underline;
-    color: #a1a1a1;
-    font-weight: $medium;
-    &:hover{
-      cursor: pointer;
-    }
-  }
   @media only screen and (max-width: $M) {
     font-size: $font-small;
     padding: 0px 5px;
-    .add__gst {
-      font-size: $font-responsive-small;
-    }
   }
 }
 
@@ -208,13 +208,13 @@
   }
 }
 
-.change-color{
+.change-color {
   color: #09a053;
 }
 
-.description-table-wrapper {
-  margin-top: $margin-large;
-}
+// .description-table-wrapper {
+//   margin-bottom: $margin-large;
+// }
 
 .description-table {
   width: $full-width;
@@ -288,5 +288,32 @@
   &:focus {
     border: none;
     outline: none;
+  }
+}
+
+.add__gst {
+  text-decoration: underline;
+  color: #a1a1a1;
+  font-weight: $medium;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    font-size: $font-responsive-small;
+  }
+}
+
+.mobile-show {
+  display: none;
+  @media only screen and (max-width: $M) {
+    display: block;
+    text-align: right;
+    margin-bottom: $margin-large;
+  }
+}
+
+.mobile-hide {
+  @media only screen and (max-width: $M) {
+    display: none;
   }
 }

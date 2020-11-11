@@ -63,6 +63,16 @@
   &-feedback {
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin-top: $margin-large;
+    img {
+      height: 20px;
+      margin-right: 8px;
+    }
+    p {
+      font-weight: $bold;
+      font-size: $font-small;
+    }
   }
   @media screen and (max-width: $M) {
     display: flex;

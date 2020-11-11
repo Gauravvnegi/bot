@@ -3,7 +3,7 @@
   [ngClass]="defaultClasses.fieldMainWrapperClasses"
   [style]="settings.style"
 >
-  <div *ngIf="!!settings.master_label">
+  <div class="text-area-heading" *ngIf="!!settings.master_label">
     <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
       settings.master_label
     }}</mat-label>

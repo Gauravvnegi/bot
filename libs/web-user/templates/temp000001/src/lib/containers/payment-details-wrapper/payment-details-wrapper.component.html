@@ -6,12 +6,19 @@
           <div class="custom-tab">
             <div>
               <!-- <img [src]="header.imageUrl" style="height: 53px" /> -->
-              <svg-icon [src]="header.imageUrl" [svgStyle]="{ 'width.px':48, 'height.px': 48 }"></svg-icon>
+              <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon>
             </div>
             <div class="inner-label">
               <div class="type-label">
-                <div><span>{{ header.type }}</span></div>
-                <div><span class="amount">{{ currencyCode }} {{ reservationData.paymentSummary.dueAmount }}</span></div>
+                <div>
+                  <span>{{ header.type }}</span>
+                </div>
+                <div class="amount">
+                  <span
+                    >{{ currencyCode }}
+                    {{ reservationData.paymentSummary.dueAmount }}</span
+                  >
+                </div>
               </div>
               <div class="info-label">
                 {{ header.description }}
@@ -21,7 +28,10 @@
         </ng-template>
         <div class="payment-wrapper">
           <div>
-            <div class="payment__wrapper--header" *ngIf="header.type !== 'Pay At Desk'">
+            <div
+              class="payment__wrapper--header"
+              *ngIf="header.type !== 'Pay At Desk'"
+            >
               Payment Methods
             </div>
             <web-user-payment-method

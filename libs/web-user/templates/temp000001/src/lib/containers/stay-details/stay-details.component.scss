@@ -13,7 +13,7 @@
 //   font-size: 12px;
 //   font-weight: 700;
 //   letter-spacing: 1px;
-// } 
+// }
 
 .wrapper {
   &__item {
@@ -75,7 +75,6 @@
 :host ::ng-deep .mat-form-field-underline {
   background-image: none !important;
   border-bottom: 1px solid lightgray !important;
-  // position: relative;
 }
 
 :host ::ng-deep .mat-vertical-content-container {
@@ -98,4 +97,14 @@
     margin-right: $margin-small;
     margin-bottom: $margin-medium;
   }
+}
+
+:host ::ng-deep .mat-button-wrapper > svg {
+  width: 1.5em !important;
+}
+
+:host ::ng-deep .mat-select-arrow {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid;
 }

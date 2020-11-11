@@ -39,3 +39,20 @@ mat-icon {
     width: $half-width;
   }
 }
+
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+  background-color: $primary-blue;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+  color: $primary-blue;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .material-icons{
+  color: $primary-blue;
+}
+
+// :host ::ng-deep .mat-form-field.mat-form-field-invalid .material-icons{
+//   color: #f44336;
+// }

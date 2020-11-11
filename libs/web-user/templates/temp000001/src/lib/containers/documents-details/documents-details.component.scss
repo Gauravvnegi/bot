@@ -59,8 +59,8 @@ mat-icon {
     &--doc {
       width: $full-width;
     }
-    & .passport {
-      margin-top: $margin-large;
+    .extra-gap {
+      margin-bottom: $margin-large;
     }
   }
   .doc__warning_section {

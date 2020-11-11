@@ -10,9 +10,10 @@
         </a>
       </div>
     </div>
-    <a [href]="footerConfig.privacyPolicy" target="_blank"
-      >Privacy Policy | Terms & Conditions</a
-    >
+    <div class="footer-privacy-text">
+      <a [href]="footerConfig.privacyPolicy" target="_blank">Privacy Policy</a>
+      <p>Terms & Conditions</p>
+    </div>
   </div>
   <div class="footer__wrapper--contact-details">
     <a href="tel:{{ footerConfig.contactDetails.contactNo }}">
@@ -24,7 +25,9 @@
     <a href="mailto:{{ footerConfig.contactDetails.email }}">
       <div class="text">
         <mat-icon class="material-icon" matSuffix>email</mat-icon>
-        <p style="word-break: break-all ">{{ footerConfig.contactDetails.email }}</p>
+        <p style="word-break: break-all;">
+          {{ footerConfig.contactDetails.email }}
+        </p>
       </div>
     </a>
   </div>

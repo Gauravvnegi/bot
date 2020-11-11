@@ -15,7 +15,7 @@
       font-weight: $bolder;
       text-align: center;
       width: 33%;
-      @media screen and (max-width:700px) {
+      @media screen and (max-width: $M) {
         font-size: $font-small;
       }
     }
@@ -36,14 +36,35 @@
           brightness(99%) contrast(89%);
         margin-right: $margin-small;
       }
-      .feedback-label{
-        @media screen and (max-width:700px) {
+      .feedback-label {
+        @media screen and (max-width: $M) {
           display: none;
         }
       }
     }
+    @media screen and (max-width: $M) {
+      display: none;
+    }
   }
-  @media screen and (max-width:700px) {
+  @media screen and (max-width: 700px) {
     padding: $padding-small;
+  }
+}
+
+.header-mobile {
+  display: none;
+  flex-direction: column;
+  &-title {
+    font-size: $font-large;
+    font-weight: $bolder;
+    text-align: center;
+    font-size: $font-small;
+  }
+  &-feedback {
+    display: flex;
+    align-items: center;
+  }
+  @media screen and (max-width: $M) {
+    display: flex;
   }
 }

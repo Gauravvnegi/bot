@@ -5,16 +5,37 @@
   position: relative;
   .cross {
     position: absolute;
-    right: 5px;
-    top: -20px;
+    right: -12px;
+    top: -32px;
     &:hover {
       cursor: pointer;
+    }
+    @media screen and (max-width: 500px) {
+      right: 0px;
+      top: -20px;
     }
   }
   &--heading {
     text-align: center;
-    margin: $margin-large 0px;
+    margin: $margin-medium 0px;
+    margin-bottom: 25px;
     font-weight: $bolder;
+    @media screen and (max-width: 500px) {
+      font-size: $font-small;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    padding: 0 $padding-large;
+  }
+}
+
+:host ::ng-deep .text-area-heading{
+  margin-bottom: 5px;
+  mat-label{
+    font-size: $font-small;
+    @media screen and (max-width: 500px) {
+      font-size: $font-responsive-small;
+    }
   }
 }
 

@@ -70,7 +70,7 @@
               "
             >
               <ng-container>
-                <div class="doc__upload__section--doc">
+                <div class="doc__upload__section--doc extra-gap">
                   <web-user-file-upload
                     [parentForm]="documentFG"
                     [fileSize]="maxFileSize"
@@ -118,7 +118,7 @@
                     guestGroup.get('selectedDocumentType').value ||
                     documentFG.get('documentType').value !== 'VISA'
                   "
-                  class="doc__upload__section--doc passport"
+                  class="doc__upload__section--doc extra-gap"
                 >
                   <web-user-file-upload
                     [parentForm]="documentFG"

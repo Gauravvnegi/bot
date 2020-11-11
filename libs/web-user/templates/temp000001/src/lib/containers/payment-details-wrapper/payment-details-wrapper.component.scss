@@ -13,6 +13,15 @@
   @include footer-next();
 }
 
+:host ::ng-deep .svg-payment > svg{
+  height: 48px;
+  width: 48px;
+  @media only screen and (max-width: $M) {
+   height: 25px;
+   width: 25px;
+  }
+}
+
 .payment-wrapper {
   background-color: $white;
   border-radius: 0 0 $border-radius-small $border-radius-small;
@@ -26,27 +35,31 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  justify-content: space-between;
-  min-width: 50%;
-  height: 75px;
-  background-color: rgb(250, 250, 250);
-  box-shadow: 0px 2px 7px 2px rgb(245, 244, 244);
-  margin-right: 10px;
+  width: 47.6vw;
+  padding: $padding-large;
+  height: auto;
   opacity: 1;
-  color: #d4cfcf;
+  background-color: #fafafa;
+  color: #979797;
   svg path {
-    fill: #d4cfcf !important;
+    fill: #979797 !important;
   }
   @media only screen and (max-width: $M) {
-    min-width: auto;
-    padding: 0 15px;
+    padding: $padding-small;
   }
 }
 
-:host ::ng-deep .amount{
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none;
+}
+
+:host ::ng-deep .amount {
   font-size: 23px;
   @media only screen and (max-width: $M) {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -89,14 +102,19 @@
 
 .type-label {
   display: flex;
-  padding-bottom: 15px;
   justify-content: space-between;
+  @media only screen and (max-width: $M) {
+    justify-content: inherit;
+    flex-direction: column;
+    font-size: $font-small;
+    text-align: left;
+  }
 }
 
 .info-label {
   display: flex;
   @media only screen and (max-width: $M) {
-    font-size: 12px;
+    display: none;
   }
 }
 

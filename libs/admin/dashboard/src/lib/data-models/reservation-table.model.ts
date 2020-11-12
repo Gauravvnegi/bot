@@ -22,6 +22,7 @@ export class Reservation implements Deserializable {
   status;
   feedback;
   packages;
+  currentJourney;
   deserialize(input: any) {
     this.booking = new Booking().deserialize(input);
     this.rooms = new Room().deserialize(input.stayDetails);
@@ -30,7 +31,7 @@ export class Reservation implements Deserializable {
     this.status = new Status().deserialize(input);
     this.feedback = new Feedback().deserialize(input.feedback);
     this.packages = new Package().deserialize(input.packages);
-
+    this.currentJourney = new CurrentJourney().deserialize(input);
     return this;
   }
 }
@@ -100,17 +101,31 @@ export class Status implements Deserializable {
   deserialize(input: any) {
     this.journeyStatus = new JourneyStatus().deserialize(input.journeysStatus);
     this.stepsStatus = new StepsStatus().deserialize(input.stepsStatus);
+
+    return this;
+  }
+}
+
+export class CurrentJourney implements Deserializable {
+  currentJourneyName;
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'currentJourneyName', get(input, ['currentJourney']))
+    );
     return this;
   }
 }
 
 export class JourneyStatus implements Deserializable {
+  new;
   preCheckin;
   checkin;
   checkout;
   deserialize(input) {
     Object.assign(
       this,
+      set({}, 'new', get(input, ['NEW'])),
       set({}, 'preCheckin', get(input, ['PRECHECKIN'])),
       set({}, 'checkin', get(input, ['CHECKIN'])),
       set({}, 'checkout', get(input, ['CHECKOUT']))

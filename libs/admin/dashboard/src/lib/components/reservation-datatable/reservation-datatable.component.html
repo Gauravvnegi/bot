@@ -482,6 +482,38 @@
               src="assets/svg/precheckin.svg"
               [ngClass]="{
                 'status-image-initiated':
+                  rowData.status.journeyStatus.new == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.new == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.new == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.new == 'COMPLETED'
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'NEW'"
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.new == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.new == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.new == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.new == 'COMPLETED'
+              }"
+            >
+              New
+            </p>
+          </div>
+          <div class="icon">
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/precheckin.svg"
+              [ngClass]="{
+                'status-image-initiated':
                   rowData.status.journeyStatus.preCheckin == 'INITIATED',
                 'status-image-pending':
                   rowData.status.journeyStatus.preCheckin == 'PENDING',
@@ -492,6 +524,7 @@
               }"
             />
             <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'PRECHECKIN'"
               class="label"
               [ngClass]="{
                 'status-text-initiated':
@@ -523,6 +556,7 @@
               }"
             />
             <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKIN'"
               class="label"
               [ngClass]="{
                 'status-text-initiated':
@@ -554,6 +588,7 @@
               }"
             />
             <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKOUT'"
               class="label"
               [ngClass]="{
                 'status-text-initiated':
@@ -585,5 +620,5 @@
 </p-table>
 
 <ng-template #emptyCell>
-  <div class="emptyCell">--</div>
+  <div class="emptyCell">&mdash;</div>
 </ng-template>

@@ -113,7 +113,7 @@
 
 .info-label {
   display: flex;
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $T) {
     display: none;
   }
 }

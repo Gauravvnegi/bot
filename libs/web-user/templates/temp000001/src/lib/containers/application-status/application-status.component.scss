@@ -121,6 +121,9 @@
       display: flex;
       &-detail {
         margin-left: 10px;
+        @media screen and (max-width: $M) {
+          font-size: $font-small;
+        }
       }
       mat-icon {
         font-size: 35px;
@@ -168,10 +171,16 @@
       b {
         color: black;
       }
+      @media only screen and (max-width: $T) {
+        font-size: $font-small
+      }
     }
     &--value {
       font-size: $font-large;
       font-weight: $bolder;
+      @media only screen and (max-width: $T) {
+        font-size: 17px;
+      }
     }
     &--value--container {
       font-size: $font-large;
@@ -187,8 +196,11 @@
       @media screen and (max-width: 700px) {
         justify-content: space-between;
       }
+      @media only screen and (max-width: $T) {
+        font-size: 17px;
+      }
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       margin: 10px 0;
       &--title {
         font-size: 12px;
@@ -201,7 +213,7 @@
       }
     }
   }
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $M) {
     flex-wrap: wrap;
   }
 }
@@ -234,7 +246,9 @@
   color: green;
 }
 
-// .print_download {
-//   @include flex-space-between();
-//   cursor: pointer;
-// }
+:host ::ng-deep .conditional-icon {
+  height: 40px;
+  @media screen and (max-width: $M) {
+    height: 30px;
+  }
+}

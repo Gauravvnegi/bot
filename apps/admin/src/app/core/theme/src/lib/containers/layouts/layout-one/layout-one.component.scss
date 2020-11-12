@@ -121,7 +121,6 @@
         z-index: 22;
       }
       .date-range {
-        // width: 23%;
         @media screen and (max-width: 800px) {
           width: 20%;
         }
@@ -130,18 +129,15 @@
   }
   &--container {
     .main {
-      max-height: calc(100vh - 14vh);
       overflow-x: hidden;
       background-color: #f4f5f6;
       .router__wrapper {
-        min-height: calc(100vh - 24vh);
+        min-height: calc(100vh - 19.4vh);
         padding: 0px 1.5rem;
+        padding-top: 1.5rem;
         @media only screen and (max-width: 1300px) {
           padding: 0px 10px;
         }
-      }
-      @media only screen and (max-width: 1070px) {
-        max-height: calc(100vh - 6vh);
       }
     }
   }

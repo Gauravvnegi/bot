@@ -27,3 +27,18 @@
 .link:hover {
   color: #4B56C0;
 }
+
+
+.conditional{
+  border: none;
+  outline: none;
+  background: transparent;
+  margin: 0 3px;
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+:host ::ng-deep .p-datatable{
+  margin-top: 0;
+}

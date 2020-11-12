@@ -13,7 +13,7 @@
       "prefix": "web-user",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "outputPath": "dist/apps/web-user",
             "index": "apps/web-user/src/index.html",
@@ -21,6 +21,9 @@
             "polyfills": "apps/web-user/src/polyfills.ts",
             "tsConfig": "apps/web-user/tsconfig.app.json",
             "aot": true,
+            "customWebpackConfig": {
+              "path": "./custom-webpack.config.js"
+            },
             "assets": [
               "apps/web-user/src/favicon.ico",
               "apps/web-user/src/assets"

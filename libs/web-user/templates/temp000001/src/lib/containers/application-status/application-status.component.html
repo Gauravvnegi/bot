@@ -88,25 +88,25 @@
             "
           >
             <ng-container *ngSwitchCase="'PENDING'">
-              <mat-icon class="alert">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Your documents are pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <mat-icon class="warning">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Your documents verification is initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <mat-icon class="completed">{{ 'check_circle_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
                 Your documents are verified successfully.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <mat-icon class="alert">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Your documents verification failed.
               </div>
@@ -132,25 +132,25 @@
             [ngSwitch]="summaryDetails.healthDeclaration.statusMessage.status"
           >
             <ng-container *ngSwitchCase="'PENDING'">
-              <mat-icon class="alert">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration form Pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <mat-icon class="warning">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration form Initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <mat-icon class="completed">{{ 'check_circle_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration form has been signed.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <mat-icon class="alert">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration form verification failed.
               </div>
@@ -180,25 +180,25 @@
             [ngSwitch]="summaryDetails.paymentSummary.statusMessage.status"
           >
             <ng-container *ngSwitchCase="'PENDING'">
-              <mat-icon class="alert">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Payment Pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <mat-icon class="warning">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Payment Initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <mat-icon class="completed">{{ 'check_circle_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
                 Payment Success.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <mat-icon class="alert">{{ 'error_outline' }}</mat-icon>
+              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Payment Failed.
               </div>
@@ -224,7 +224,19 @@
       <div class="section--content">
         <div class="section--content--label">
           <div>
-            <mat-icon
+            <img
+              *ngif="
+                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
+                  undefined;
+                else error
+              "
+              class="conditional-icon"
+              src="assets/Right.png"
+            />
+            <ng-template #error>
+              <img class="conditional-icon" src="assets/Info.png" />
+            </ng-template>
+            <!-- <mat-icon
               [ngClass]="
                 summaryDetails.guestDetails.primaryGuest.signatureUrl !==
                 undefined
@@ -238,7 +250,7 @@
                   ? 'check_circle_outline'
                   : 'error_outline'
               }}</mat-icon
-            >
+            > -->
           </div>
           <div style="margin-left: 10px;">
             <label>

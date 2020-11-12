@@ -129,15 +129,20 @@
   }
   &--container {
     .main {
+      max-height: calc(100vh - 9.5vh);
       overflow-x: hidden;
       background-color: #f4f5f6;
       .router__wrapper {
-        min-height: calc(100vh - 19.4vh);
+        min-height: calc(100vh - 19.5vh);
         padding: 0px 1.5rem;
         padding-top: 1.5rem;
         @media only screen and (max-width: 1300px) {
           padding: 0px 10px;
+          padding-top: 10px;
         }
+      }
+      @media only screen and (max-width: 1070px) {
+        max-height: calc(100vh - 6vh);
       }
     }
   }

@@ -1,12 +1,12 @@
 <footer class="footer__wrapper">
   <div class="footer__wrapper--logo">
-    <img loading="'lazy'" [src]="footerConfig.footerLogo" />
+    <img [src]="footerConfig.footerLogo" />
   </div>
   <div class="footer__wrapper--text">
     <div class="social_icons">
       <div *ngFor="let option of footerConfig.social" class="icon">
         <a [href]="option.redirectUrl" target="_blank" rel="noreferrer">
-          <img loading="'lazy'" [src]="option.imageUrl" />
+          <img [src]="option.imageUrl" />
         </a>
       </div>
     </div>

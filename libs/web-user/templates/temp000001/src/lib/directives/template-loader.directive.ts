@@ -6,6 +6,7 @@ import {
   OnChanges,
   OnInit,
   ViewContainerRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { TempLoader000001Component } from '../containers/temp-loader000001/temp-loader000001.component';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
@@ -23,7 +24,8 @@ export class TemplateLoaderDirective implements OnChanges {
   constructor(
     protected _container: ViewContainerRef,
     private _resolver: ComponentFactoryResolver,
-    private _templateLoadingService: TemplateLoaderService
+    private _templateLoadingService: TemplateLoaderService,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnChanges() {
@@ -45,7 +47,10 @@ export class TemplateLoaderDirective implements OnChanges {
   listenForLoadingComplete() {
     this._templateLoadingService.isTemplateLoading$.subscribe(
       (isLoading: boolean) => {
-        isLoading === false && this._loaderCompObj.destroy();
+        if (isLoading === false) {
+          this._loaderCompObj.destroy();
+          this._changeDetectorRef.detectChanges();
+        }
       }
     );
   }

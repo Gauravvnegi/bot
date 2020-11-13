@@ -37,6 +37,15 @@
   &:hover{
     cursor: pointer;
   }
+  img{
+    height: 20px;
+  }
+}
+
+:host ::ng-deep .message{
+  p{
+    margin-bottom: 10px;
+  }
 }
 
 :host ::ng-deep .p-datatable{

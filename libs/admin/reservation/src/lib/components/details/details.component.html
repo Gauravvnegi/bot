@@ -127,7 +127,7 @@
             >
               {{ details.feedbackDetails.rating }}
             </p>
-            <span
+            <ng-container
               *ngFor="
                 let suggestion of details.feedbackDetails.suggestions.slice(
                   0,
@@ -143,7 +143,7 @@
                 }"
                 [src]="feedbackService.getServiceUrl(suggestion.id)"
               />
-            </span>
+            </ng-container>
 
             <div
               *ngIf="details.feedbackDetails.comments"

@@ -293,7 +293,7 @@
           >
             {{ rowData.feedback.rating }}
           </p>
-          <span
+          <ng-container
             *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
           >
             <img
@@ -304,7 +304,7 @@
               }"
               [src]="feedbackService.getServiceUrl(suggestion.id)"
             />
-          </span>
+          </ng-container>
           <div
             *ngIf="rowData.feedback.comments"
             [ngClass]="{
@@ -479,7 +479,7 @@
           <div class="icon extra-width">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/precheckin.svg"
+              src="assets/svg/New-Journey.svg"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.new == 'INITIATED',

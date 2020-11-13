@@ -16,7 +16,7 @@
     margin: 25px 0px;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    // align-items: center;
     .img-with-text {
       width: 25%;
       display: flex;
@@ -48,6 +48,7 @@
       }
       p {
         margin-top: $margin20;
+        text-align: center;
       }
     }
   }

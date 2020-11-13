@@ -95,10 +95,12 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
 
     if (get(status[0], ['data', 'type']) == 'primary') {
       this.guestDetailsComp.primaryGuestAccordian.openAll();
-      this.guestDetailsComp.secondaryGuestAccordian.closeAll();
+      this.guestDetailsComp.secondaryGuestAccordian &&
+        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
     } else {
       this.guestDetailsComp.primaryGuestAccordian.closeAll();
-      this.guestDetailsComp.secondaryGuestAccordian.closeAll();
+      this.guestDetailsComp.secondaryGuestAccordian &&
+        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
       const allPanels = this.guestDetailsComp.secondaryGuestPanelList.toArray();
       allPanels[status[0].data.index].open();
     }

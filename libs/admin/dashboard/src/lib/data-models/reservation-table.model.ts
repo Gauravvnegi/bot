@@ -71,8 +71,8 @@ export class Feedback implements Deserializable {
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'rating', get(input, ['rating'])),
-      set({}, 'comments', get(input, ['comments'])),
+      set({}, 'rating', trim(get(input, ['rating']))),
+      set({}, 'comments', trim(get(input, ['comments']))),
       set({}, 'status', get(input, ['statusMessage', 'status']))
     );
 

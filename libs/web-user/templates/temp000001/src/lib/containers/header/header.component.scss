@@ -1,8 +1,8 @@
 @import 'temp000001';
 
 .template__header {
-  @include flex-space-between();
-  align-items: center;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
   background-color: var(--header-background-color, $header-background-color);
   padding: $padding-large;
   box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
@@ -15,29 +15,16 @@
   font-size: $font-large;
   font-weight: $bold;
   @include flex-justify-center();
+  align-items: center;
   color: var(--header-font-color, $header-font-color);
-  flex-direction: column;
   @media only screen and (max-width: $M) {
     font-size: $font-responsive-small;
-    width: 33%;
-    text-align: center;
-  }
-}
-
-.responsive {
-  @media only screen and (max-width: $M) {
-    width: 33%;
-  }
-}
-
-.template__header--logo {
-  @media only screen and (max-width: $M) {
-    width: 33%;
   }
 }
 .template__header--status {
-  @include flex-justify-center();
-  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   img:hover {
     cursor: pointer;
   }

@@ -5,8 +5,7 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
 import { CakeConfigI } from 'libs/web-user/shared/src/lib/data-models/cakeConfig.model';
-import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
-import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-cake',
@@ -26,16 +25,19 @@ export class CakeComponent implements OnInit {
 
   cakeForm: FormGroup;
   cakeConfig: CakeConfigI;
+  minDate;
   
   constructor(
     private _fb: FormBuilder,
     private _cakeService: CakeService,
     private _snackBarService: SnackBarService,
     private _paidService: PaidService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _dateService: DateService
   ) { }
 
   ngOnInit(): void {
+    this.minDate = new Date(this._dateService.getCurrentDateString());
   }
 
   initBreakfastForm() {

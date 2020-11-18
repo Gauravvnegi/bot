@@ -13,7 +13,7 @@
       "prefix": "web-user",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "outputPath": "dist/apps/web-user",
             "index": "apps/web-user/src/index.html",
@@ -21,6 +21,9 @@
             "polyfills": "apps/web-user/src/polyfills.ts",
             "tsConfig": "apps/web-user/tsconfig.app.json",
             "aot": true,
+            "customWebpackConfig": {
+              "path": "./custom-webpack.config.js"
+            },
             "assets": [
               "apps/web-user/src/favicon.ico",
               "apps/web-user/src/assets"
@@ -236,14 +239,17 @@
               "node_modules/primeng/resources/themes/md-light-deeppurple/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
-              "apps/admin/src/styles.scss",
               "node_modules/ng2-daterangepicker/assets/daterangepicker.css",
-              "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css"
+              "node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "apps/admin/src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/slick-carousel/slick/slick.min.js"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["apps/admin/src/assets/sass"]
+            }
           },
           "configurations": {
             "production": {
@@ -264,12 +270,68 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
+                  "maximumWarning": "36kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/admin/src/environments/environment.ts",
+                  "with": "apps/admin/src/environments/environment.staging.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "36kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
+            "development": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/admin/src/environments/environment.ts",
+                  "with": "apps/admin/src/environments/environment.dev.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "10mb",
+                  "maximumError": "15mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "36kb",
                   "maximumError": "10kb"
                 }
               ]
@@ -284,6 +346,12 @@
           "configurations": {
             "production": {
               "browserTarget": "admin:build:production"
+            },
+            "development": {
+              "browserTarget": "admin:build:development"
+            },
+            "staging": {
+              "browserTarget": "admin:build:staging"
             }
           }
         },
@@ -673,38 +741,6 @@
         }
       }
     },
-    "admin-notification": {
-      "projectType": "library",
-      "root": "libs/admin/notification",
-      "sourceRoot": "libs/admin/notification/src",
-      "prefix": "hospitality-bot",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/admin/notification/tsconfig.lib.json",
-              "libs/admin/notification/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/admin/notification/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/admin/notification/jest.config.js",
-            "tsConfig": "libs/admin/notification/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/admin/notification/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "admin-special-amenities": {
       "projectType": "library",
       "root": "libs/admin/special-amenities",
@@ -830,6 +866,38 @@
             "tsConfig": "libs/admin/roles-and-permissions/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/roles-and-permissions/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-request": {
+      "projectType": "library",
+      "root": "libs/admin/request",
+      "sourceRoot": "libs/admin/request/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/request/tsconfig.lib.json",
+              "libs/admin/request/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/request/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/request/jest.config.js",
+            "tsConfig": "libs/admin/request/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/request/src/test-setup.ts"
           }
         }
       },

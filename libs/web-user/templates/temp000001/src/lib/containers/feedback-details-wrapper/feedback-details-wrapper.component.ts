@@ -51,7 +51,6 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   saveFeedbackDetails() {
-
     const status = this._feedbackDetailsService.validateFeedbackDetailForm(
       this.parentForm
     ) as Array<any>;
@@ -64,25 +63,26 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
 
     let value = this.parentForm.getRawValue();
     let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail
+      value && value.feedbackDetail,
+      this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
 
     this._feedbackDetailsService
       .addFeedback(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
+          this._snackBarService.openSnackBarAsText('Feedback successful', '', {
             panelClass: 'success',
           });
           this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
+            this.buttonRefs['nextButton']
           );
-          //  this._stepperService.setIndex('next');
+          this._stepperService.setIndex('next');
         },
         ({ error }) => {
           this._snackBarService.openSnackBarAsText(error.cause);
           this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
+            this.buttonRefs['nextButton']
           );
         }
       );

@@ -9,18 +9,47 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
+import { NumberDirective } from './directives/number.directive';
+import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedMaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TableModule,
+    ButtonModule,
+    PaginatorModule,
+    TabMenuModule,
+    DropdownModule,
+    MatChipsModule,
+    MatAutocompleteModule
+  ],
+  declarations: [
+    DatatableComponent,
+    TabGroupComponent,
+    UploadFileComponent,
+    ComingSoonComponent,
+    NumberDirective,
+    MultipleDropdownComponent,
+  ],
+  exports: [
+    DatatableComponent,
+    TabGroupComponent,
+    UploadFileComponent,
     SharedMaterialModule,
     TableModule,
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
     DropdownModule,
+    NumberDirective,
+    MultipleDropdownComponent,
   ],
-  declarations: [DatatableComponent, TabGroupComponent, UploadFileComponent],
-  exports: [DatatableComponent, TabGroupComponent, UploadFileComponent],
 })
 export class AdminSharedModule {}

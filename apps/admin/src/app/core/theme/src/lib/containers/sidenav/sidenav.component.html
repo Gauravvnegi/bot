@@ -1,9 +1,20 @@
-<div class="logo text-uppercase" [style.color]="normalFontColor">
-  <div class="sidenav-logo" (click)="toggleMenuButton()">
-    <img src="assets/taj-logo.png" />
-    <!-- <div class="bar1"></div>
-    <div class="bar2"></div>
-    <div class="bar3"></div> -->
+<div
+  class="logo text-uppercase"
+  [style.color]="normalFontColor"
+  [style.background-color]="headerBgColor"
+>
+  <div class="sidenav-header">
+    <div [style.display]="status ? 'none' : ''" class="logo">
+      <img
+        [src]="branchConfig.logoUrl"
+        onerror="this.src='assets/hotelhilltop.png';"
+      />
+    </div>
+    <div class="menu_button" (click)="toggleMenuButton()">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
+    </div>
   </div>
 </div>
 <div class="divider" [style.background-color]="dividerBgColor"></div>
@@ -26,10 +37,13 @@
             rla.isActive ? list_item_colour : 'transparent'
           "
           [style.color]="rla.isActive ? activeFontColor : normalFontColor"
+          [style.padding]="'0px 15px'"
         >
-          <mat-icon>{{ menuItem.icon }}</mat-icon>
-          <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
-          <span *ngIf="isExpanded">{{ menuItem.title }}</span>
+          <!-- <mat-icon>{{ menuItem.icon }}</mat-icon> -->
+          <img [src]="menuItem.url" class="svg-icon" />
+          <span class="icon-label" *ngIf="isExpanded">{{
+            menuItem.title
+          }}</span>
         </a>
         <div [hidden]="menuItem.children === null" class="collapse-container">
           <a

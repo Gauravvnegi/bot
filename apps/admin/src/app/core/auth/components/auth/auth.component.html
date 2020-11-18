@@ -1,1 +1,53 @@
-<router-outlet></router-outlet>
+<div class="wrapper">
+  <div class="wrapper--left">
+    <div class="wrapper--left-logo">
+      <img src="assets/hilltop-logo.png" />
+    </div>
+    <div class="wrapper--left-auth-panel">
+      <router-outlet></router-outlet>
+    </div>
+    <footer class="wrapper--left-footer">
+      I hereby agree to&nbsp;<a
+        href="https://www.botshot.in/terms-of-uses/"
+        target="_blank"
+        >Terms and Conditions</a
+      >
+    </footer>
+    <div class="wrapper--left-svg-icons first">
+      <img src="assets/svg/bell.svg" />
+    </div>
+    <div class="wrapper--left-svg-icons second">
+      <img src="assets/svg/hotel.svg" />
+    </div>
+    <div class="wrapper--left-svg-icons third">
+      <img src="assets/svg/luggage.svg" />
+    </div>
+    <div class="wrapper--left-svg-icons fourth">
+      <img src="assets/svg/metro-hotel.svg" />
+    </div>
+  </div>
+  <div class="wrapper--right">
+    <header class="wrapper--right-header">
+      <a href="https://www.botshot.in/about-us/" target="_blank">About Us</a>
+      <a href="https://www.botshot.in/privacy-policy/" target="_blank"
+        >Privacy Policy</a
+      >
+    </header>
+    <div class="wrapper--right-managing-hotel">
+      <p class="heading">Managing Hotel is Now Easy</p>
+      <div class="wrapper--right-managing-hotel-option-box">
+        <div *ngFor="let option of managingOptions" class="option">
+          <img class="material-icons" [src]="option.url" />
+          <p class="option-label">{{ option.label }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper--right-footer">
+      <div class="image">
+        <img src="assets/botshotlogo.png" />
+      </div>
+      ©&nbsp;{{ dateService.getCurrentDateWithFormat('YYYY') }}, Botshot. All
+      Right Reserved
+    </div>
+  </div>
+</div>

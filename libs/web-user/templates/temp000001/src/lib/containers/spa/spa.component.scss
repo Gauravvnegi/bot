@@ -22,3 +22,20 @@
   .heading{
     margin-bottom: $margin-small;
   }
+
+  .wrapper {
+    &__item {
+      width: 45%;
+      margin: 5px 0;
+      @media only screen and (max-width: $M) {
+        width: auto;
+      }
+    }
+  
+    @include flex-between-center();
+    @include display-block-on-breakpoint($M);
+    @media only screen and (max-width: $M) {
+      flex-direction: column;
+      justify-content: inherit;
+    }
+  }

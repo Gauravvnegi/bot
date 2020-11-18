@@ -9,15 +9,34 @@ export class DateService {
     return moment(inputDate).unix();
   }
 
-  convertTimestampToDate(inputTimeStamp) {
+  convertTimestampToDate(inputTimeStamp, format?) {
+    if (format) {
+      return moment.unix(inputTimeStamp / 1000).format(format);
+    }
     return moment.unix(inputTimeStamp / 1000).format('DD-MM-YYYY');
   }
 
-  currentDate() {
-    return this.convertTimestampToDate(moment.now());
+  currentDate(format?) {
+    return this.convertTimestampToDate(moment.now(),format);
+  }
+
+  getCurrentDateString(){
+    return moment().format();
   }
 
   getCurrentDateWithFormat(format: string = 'DD-MM-YYYY') {
     return moment().format(format);
+  }
+
+  getDateDifference(date1, date2) {
+    return moment(date1).diff(moment(date2), 'days')
+  }
+
+  getMonthFromDate(timestamp) {
+    return moment.unix(timestamp / 1000).month();
+  }
+
+  getYearFromDate(timestamp) {
+    return moment.unix(timestamp / 1000).year();
   }
 }

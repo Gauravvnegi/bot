@@ -1,13 +1,15 @@
 <!-- <div (click)="openRegCardModal(content)">
   <div>{{ settings.label }}<span [ngClass]="settings.styles.link">{{ settings.linkLabel }}</span></div>
 </div> -->
-<div>
+<div class="reg-card-wrapper">
   <div [ngClass]="settings.modal.style.container">
     <div [ngClass]="settings.modal.style.header">
       <div [ngClass]="settings.modal.style.title">
         <h3>{{ settings.modal.title }}</h3>
       </div>
-      <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+      <div class="close_wrapper">
+        <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+      </div>
     </div>
     <div [ngClass]="settings.modal.style.body">
       <div [ngClass]="settings.modal.style.pdfHeader">
@@ -23,11 +25,13 @@
         <pdf-viewer
           [src]="regCard.URL"
           [render-text]="true"
+          [original-size]="false"
           style="display: block;"
         ></pdf-viewer>
       </div>
       <div [ngClass]="settings.styles.signatureContainer">
         <hospitality-bot-signature-capture-wrapper
+          [imgUrl]="settings.signatureImageUrl"
           [settings]="{ uploadAPI: settings.signatureUploadAPI }"
           (signatureData)="signatureUploadFile($event)"
         >

@@ -2,30 +2,36 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '../../../../../../libs/admin/dashboard/src/lib/components/dashboard/dashboard.component';
+import { UserDetailResolver } from './resolvers/user-detail.resolver';
+import { FeedbackConfigResolver } from './resolvers/feedback-config.resolver';
 
 const appRoutes: Route[] = [
   {
     path: '',
     component: PagesComponent,
+    resolve: {
+      userDetails: UserDetailResolver,
+      feedbackConfig: FeedbackConfigResolver,
+    },
     children: [
       {
         path: 'dashboard',
         component: DashboardComponent,
       },
       {
-        path: 'reservation',
+        path: 'request',
         loadChildren: () =>
-          import('@hospitality-bot/admin/reservation').then(
-            (m) => m.AdminReservationModule
+          import('@hospitality-bot/admin/request').then(
+            (m) => m.AdminRequestModule
           ),
       },
-      {
-        path: 'notification',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/notification').then(
-            (m) => m.AdminNotificationModule
-          ),
-      },
+      // {
+      //   path: 'reservation',
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/reservation').then(
+      //       (m) => m.AdminReservationModule
+      //     ),
+      // },
       {
         path: 'package',
         loadChildren: () =>

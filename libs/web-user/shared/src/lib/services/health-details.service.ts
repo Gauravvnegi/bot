@@ -5,6 +5,7 @@ import { FileDetails } from '../data-models/reservationDetails';
 
 @Injectable()
 export class HealthDetailsService extends ApiService {
+  
   getHealthTemplate(formId): Observable<any> {
     return this.get(`/api/v1/cms/health-form/${formId}`);
   }

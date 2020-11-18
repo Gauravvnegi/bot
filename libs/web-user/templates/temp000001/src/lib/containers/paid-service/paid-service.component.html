@@ -1,20 +1,25 @@
 <div>
   <h3>What would you like to book for special amenities ?</h3>
-
   <ngx-slick-carousel
     class="carousel"
     #slickModal="slick-carousel"
     [config]="slideConfig"
+    (afterChange)="afterChange($event)"
     responsive="breakpoints"
   >
-    <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+    <div
+      ngxSlickItem
+      *ngFor="let slide of slides; trackBy: trackByPackageId"
+      class="slide"
+    >
       <div
         class="paid__service__data"
-        (click)="servicePackage(slide)"
+        (click)="servicePackage(slide.packageCode)"
         [ngClass]="{
           active: selectedService === slide.packageCode,
           activated: slide.isSelected
         }"
+        [attr.data-slidedata]="slide.packageCode"
       >
         <div class="slider__image">
           <img loading="'lazy'" src="{{ slide.imgUrl }}" />

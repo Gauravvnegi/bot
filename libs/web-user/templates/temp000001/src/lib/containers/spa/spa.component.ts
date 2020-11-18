@@ -7,6 +7,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-spa',
@@ -26,29 +27,36 @@ export class SpaComponent implements OnInit {
   
   spaForm: FormGroup;
   spaConfig: SpaConfigI;
+  minDate;
 
   constructor(
     private _fb: FormBuilder,
     private _spaService: SpaService,
     private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
-    private _paidService: PaidService
+    private _paidService: PaidService,
+    private _dateService: DateService
   ) {
     this.initSpaForm();
    }
 
   ngOnInit(): void {
+    this.minDate = new Date(this._dateService.getCurrentDateString());
     this.spaConfig = this.setFieldConfiguration();
+    this.addForm();
+    this.populateFormData();
   }
 
   initSpaForm() {
     this.spaForm = this._fb.group({
-      personCount: ['', [Validators.required,
+      quantity: ['', [Validators.required,
         customPatternValid({
           pattern: Regex.NUMBER_REGEX,
           msg: 'Please enter valid count',
         })]],
-      usageTime: [''],
+      startTime: ['', [Validators.required]],
+      endTime: [''],
+      spaDate:['', [Validators.required]]
     });
   }
 
@@ -62,7 +70,8 @@ export class SpaComponent implements OnInit {
     if(this.amenityData === ""){
       this.spaConfig.removeButton.disable = true;
     }
-    this.spaForm.patchValue(this.amenityData);
+    this._spaService.initSpaDetailDS(this.amenityData);
+    this.spaForm.patchValue(this._spaService.spaDetails.spaDetail);
   }
 
   setFieldConfiguration() {
@@ -79,9 +88,11 @@ export class SpaComponent implements OnInit {
       this._buttonService.buttonLoading$.next(this.saveButton);
       return;
     }
-
+    
     this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    this._paidService.amenityData = this.spaForm.getRawValue();
+    const formValue = this.spaForm.getRawValue();
+    const data = this._spaService.mapSpaData(formValue);
+    this._paidService.amenityData = data;
     this.addEvent.emit(this.uniqueData.code);
   }
 

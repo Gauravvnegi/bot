@@ -1,0 +1,38 @@
+@import 'main';
+
+.date-time {
+  font-size: 12px;
+  color: $dark-grey;
+  font-weight: 500;
+  .time {
+    color: $primary-gray;
+    margin-top: 5px;
+  }
+}
+
+.activity-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 15px;
+  &--header {
+    display: flex;
+    align-items: center;
+    .heading {
+      font-size: $font16;
+      margin-right: $margin20;
+      font-weight: $bolder;
+    }
+  }
+
+  .go-to {
+    color: $primary-gray;
+    font-size: $font16;
+    font-weight: $bolder;
+  }
+}
+
+:host ::ng-deep td{
+  border-bottom: none !important;
+  border-right: none !important;
+}

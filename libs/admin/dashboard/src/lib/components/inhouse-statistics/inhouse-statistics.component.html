@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/inhouse.svg" />
+    </div>
+    <div class="stat-title">In-House</div>
+  </div>
+  <div class="stat-val-container">
+    <div class="semi-donut margin" [style]="percentStyle">
+      <div class="progress-detail-container">
+        <div class="stat-value">{{ inhouse.roomOccupied }}</div>
+        <div class="stat-val-title">Room Occupied</div>
+      </div>
+    </div>
+  </div>
+  <div class="progress-info-labels-container">
+    <div>
+      <!-- <div class="adult_icon"></div> -->
+      <div class="progress-info-labels">
+        <img class="stat-image" src="assets/svg/stat-adult.svg" />
+        <span style="letter-spacing: 0.72px; color: #6d7580; margin-right: 5px;"
+          >Adult</span
+        >
+        {{ inhouse.adultCount }}
+      </div>
+    </div>
+    <div>
+      <!-- <div class="child_icon"></div> -->
+      <div class="progress-info-labels">
+        <img class="stat-image" src="assets/svg/stat-child.svg" />
+        <span style="letter-spacing: 0.72px; color: #6d7580; margin-right: 5px;"
+          >Kid</span
+        >
+        {{ inhouse.kidsCount }}
+      </div>
+    </div>
+  </div>
+</div>

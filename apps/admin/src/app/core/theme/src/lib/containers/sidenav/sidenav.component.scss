@@ -3,7 +3,6 @@
   font-size: 18px;
   text-align: center;
   position: relative;
-  padding: 10px 0px;
   display: flex;
   justify-content: center;
 }
@@ -12,17 +11,23 @@
   transform: rotate(-45deg) translate(-8px, 7px);
 }
 
-.sidenav-logo{
-  height: 50px;
-  width: 70px;
-  &:hover{
-    cursor: pointer;
-  }
-  img{
-    height: 100%;
-    width: 100%;
+.sidenav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  .logo {
+    height: 40px;
+    width: 65px;
+    img {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
+
+
 
 .change .bar2 {
   opacity: 0;
@@ -31,25 +36,29 @@
 .change .bar3 {
   transform: rotate(45deg) translate(-8px, -8px);
 }
-.menu_button {
+.change {
   margin-left: 10px;
 }
 
 .menu_button .bar1,
 .bar2,
 .bar3 {
-  width: 35px;
-  height: 5px;
-  background-color: darkgray;
+  width: 27px;
+  height: 3px;
+  background-color: white;
   border-radius: 5px;
   margin: 6px 0;
   transition: 0.4s;
 }
 
+:host ::ng-deep .material-icons{
+  height: auto;
+  width: auto;
+}
+
 .menu_button:hover {
   cursor: pointer;
 }
-
 
 .divider {
   content: '';
@@ -87,14 +96,18 @@ ul {
 
 .nav li {
   margin-bottom: 9px;
+  &:hover{
+    background-color: rgba(232, 238, 245, 0.25);
+  }
 }
 
 .nav li a {
   display: flex;
   align-items: center;
   color: rgba(255, 255, 255, 0.8);
-  margin: 0 15px;
-  border-radius: 3px;
+  // margin: 0 15px;
+  // border-radius: 3px;
+  border: none;
   -webkit-transition: all 400ms;
   -moz-transition: all 400ms;
   -ms-transition: all 400ms;
@@ -102,7 +115,10 @@ ul {
   transition: all 400ms;
   height: 50px;
   text-decoration: none;
+  
 }
+
+
 
 .nav li a:hover,
 .parent-active {
@@ -111,19 +127,29 @@ ul {
 
 .nav li a span {
   margin-left: 20px;
+  font-weight: 500;
 }
 
 .active a,
 .active a:hover {
-  /*color: rgba(0,0,0,.6) !important;*/
-  /*background-color: #fff !important;*/
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
-    0 7px 10px -5px rgba(60, 72, 88, 0.4);
-  -webkit-transition: all 400ms;
-  -moz-transition: all 400ms;
-  -ms-transition: all 400ms;
-  -o-transition: all 400ms;
-  transition: all 400ms;
+  border: 1px solid;
+  box-shadow: none;
+}
+
+.active a .svg-icon{
+  filter: invert(34%) sepia(23%) saturate(3170%) hue-rotate(209deg) brightness(90%) contrast(89%);
+}
+
+.svg-icon{
+  @media screen and (max-width: 800px) {
+    height: 13px;
+  }
+}
+
+:host ::ng-deep .icon-label{
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 }
 
 .collapse-a {

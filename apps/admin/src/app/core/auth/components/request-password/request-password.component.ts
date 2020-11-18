@@ -8,54 +8,49 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'admin-request-password',
   templateUrl: './request-password.component.html',
-  styleUrls: ['./request-password.component.scss']
+  styleUrls: ['./request-password.component.scss'],
 })
 export class RequestPasswordComponent implements OnInit {
-
   requestPasswordForm: FormGroup;
-  isEmailSent: boolean; 
+  isEmailSent: boolean;
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
     private _authService: AuthService,
-    private _snackbarService:SnackBarService,
+    private _snackbarService: SnackBarService
   ) {
     this.initRequestForm();
-   }
-
-  ngOnInit(): void {
   }
 
-  initRequestForm(){
+  ngOnInit(): void {}
+
+  initRequestForm() {
     this.requestPasswordForm = this._fb.group({
-      email: ['', [
-        Validators.required,
-        Validators.pattern(Regex.EMAIL_REGEX)
-      ]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
     });
   }
 
-  requestPassword(){
-    if(!this.requestPasswordForm.valid){
+  requestPassword() {
+    if (!this.requestPasswordForm.valid) {
       return;
     }
     const email = this.requestPasswordForm.get('email').value;
-    this._authService.forgotPassword(email).subscribe(response =>{
-      this.isEmailSent = response.status;
-      this._snackbarService.openSnackBarAsText(
-        response.message,'',
-        { panelClass: 'success' }
-      );
-      this._router.navigate(['/auth/resend-password']);
-    },
-    (error) =>{
-      this._snackbarService.openSnackBarAsText(error.error.message);
-    })
+    this._authService.forgotPassword(email).subscribe(
+      (response) => {
+        this.isEmailSent = response.status;
+        this._snackbarService.openSnackBarAsText(response.message, '', {
+          panelClass: 'success',
+        });
+        this._router.navigate(['/auth/resend-password']);
+      },
+      (error) => {
+        this._snackbarService.openSnackBarAsText(error.error.message);
+      }
+    );
   }
 
-  navigateToLogin(){
+  navigateToLogin() {
     this._router.navigate(['/auth/login']);
   }
-
 }

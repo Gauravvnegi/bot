@@ -6,29 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manage-permission.component.scss'],
 })
 export class ManagePermissionComponent implements OnInit {
-  permissionConfigs = [
-    {
-      entity: 'preCheckin',
-      label: 'Pre-Checkin',
-      permissions: [
-        {
-          name: 'view',
-          label: 'View General Info',
-        },
-      ],
-    },
-    {
-      entity: 'preCheckin',
-      label: 'Pre-Checkin',
-      permissions: [
-        {
-          name: 'view',
-          label: 'View General Info',
-        },
-      ],
-    },
-  ];
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 }
+
+//auth -- x-authorization
+//x-acess--token   x-access-token
+//refresh-token x-refresh-authorization
+//x-acess-refresh  x-access-refresh-token

@@ -1,32 +1,29 @@
 @import 'temp000001';
 
 .footer__wrapper {
-  @include flex-space-between();
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
   background-color: var(--footer-background-color, $footer-background-color);
   padding: $padding-medium;
-  align-items: center;
-
-  &--logo {
-    height: 30px;
-    img {
-      height: $full-width;
-      width: $full-width;
-    }
-    @media only screen and (max-width: $M) {
-      height: 15px;
-      width: 30%;
-    }
-  }
   &--text {
     font-size: $font-responsive-small;
     font-weight: $bold;
     @include flex-justify-center();
     flex-direction: column;
     margin: 0px $margin-small;
-    a {
-      text-decoration: none;
+    .footer-privacy-text {
+      text-align: center;
       color: var(--footer-font-color, $footer-font-color);
+      a {
+        text-decoration: none;
+        color: var(--footer-font-color, $footer-font-color);
+        margin-bottom: 10px;
+        @media only screen and (max-width: $M) {
+          margin-bottom: 5px;
+        }
+      }
     }
+
     .social_icons {
       @include flex-justify-center();
 
@@ -43,13 +40,12 @@
       }
     }
     @media only screen and (max-width: $M) {
-      width: 36%;
       font-size: 9px;
       text-align: center;
       .social_icons {
         margin-bottom: 5px;
         .icon {
-          height:25px;
+          height: 25px;
           width: 25px;
           margin: 0px 2px;
         }
@@ -58,26 +54,28 @@
   }
   &--contact-details {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-end;
     font-weight: $bold;
-    a {
-      text-decoration: none;
-    }
-    .text {
-      font-size: $font-responsive-small;
-      display: flex;
-      align-items: center;
-      color: var(--footer-font-color, $footer-font-color);
-    }
-    .material-icons{
-      height: 23px;
-      width: 22px;
-      font-size: $font-medium;
-      color: var(--footer-icon-color, $footer-icon-color);
+
+    .wrap-details {
+      a {
+        text-decoration: none;
+      }
+      .text {
+        font-size: $font-responsive-small;
+        display: flex;
+        align-items: center;
+        color: var(--footer-font-color, $footer-font-color);
+      }
+      .material-icons {
+        height: 23px;
+        width: 22px;
+        font-size: $font-medium;
+        color: var(--footer-icon-color, $footer-icon-color);
+      }
     }
     @media only screen and (max-width: $M) {
       justify-content: initial;
-      width: 29%;
       .text {
         font-size: $font-responsive-smaller;
       }
@@ -88,6 +86,6 @@
   }
   @media only screen and (max-width: $M) {
     padding: 5px;
-    margin-bottom: 100px;
+    margin-bottom: 15%;
   }
 }

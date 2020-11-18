@@ -55,6 +55,22 @@ mat-icon {
 }
 
 :host ::ng-deep .material-icons{
-  color: rgba(0, 0, 0, 0.38);
-  font-size: $font-medium;
+  color: #7f7f7f;
+  // font-size: $font-medium;
 }
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+  background-color: $primary-blue;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+  color: $primary-blue;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .material-icons{
+  color: $primary-blue;
+}
+
+// :host ::ng-deep .mat-form-field.mat-form-field-invalid .material-icons{
+//   color: #f44336;
+// }

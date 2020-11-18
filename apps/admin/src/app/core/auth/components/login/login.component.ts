@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Regex } from '../../../../../../../../libs/shared/constants/regex';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { AuthService } from '../../services/auth.service';
+import { UserDetailService } from '../../../../../../../../libs/admin/shared/src/lib/services/user-detail.service';
 
 @Component({
   selector: 'admin-login',
@@ -11,50 +12,53 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
   isPasswordVisible = false;
-  dataSource = {id:'1234', token:'token_xyz'};
+  dataSource = { id: '1234', token: 'token_xyz' };
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
     private _authService: AuthService,
-    private _snackbarService:SnackBarService
+    private _userDetailService: UserDetailService,
+    private _snackbarService: SnackBarService
   ) {
     this.initLoginForm();
   }
 
   ngOnInit(): void {}
 
-  initLoginForm(){
+  initLoginForm() {
     this.loginForm = this._fb.group({
-      email: ['', [
-        Validators.required, 
-        Validators.pattern(Regex.EMAIL_REGEX)
-      ]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(10),
-      ]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(10),
+        ],
+      ],
     });
   }
 
-  Login(){
-    if(!this.loginForm.valid){
+  login() {
+    if (!this.loginForm.valid) {
       return;
     }
     const data = this.loginForm.getRawValue();
-    this._authService.login(data).subscribe(response =>{
-      this._router.navigate(['/pages']);
-    },
-    (error)=>{
-      this._snackbarService.openSnackBarAsText(error.error.message);
-    })
+    this._authService.login(data).subscribe(
+      (response) => {
+        this._userDetailService.setLoggedInUserId(response.id);
+        this._router.navigate(['/pages/dashboard']);
+      },
+      (error) => {
+        this._snackbarService.openSnackBarAsText(error.error.message);
+      }
+    );
   }
 
-  navigateToRequestPassword(){
+  navigateToRequestPassword() {
     this._router.navigate(['/auth/request-password']);
   }
 }

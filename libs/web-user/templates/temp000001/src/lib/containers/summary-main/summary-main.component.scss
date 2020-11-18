@@ -1,0 +1,33 @@
+@import 'temp000001';
+
+.summary-wrapper {
+  background-color: $white;
+  margin: 40px;
+  border-radius: $border-radius-medium;
+  padding: 25px;
+  &-header {
+    @include flex-space-between();
+    align-items: center;
+    &-equi-width {
+      width: 33%;
+    }
+    &-title {
+      font-size: $font-large;
+      font-weight: $bolder;
+      text-align: center;
+      width: 33%;
+    }
+    &-feedback {
+      text-align: right;
+      color: #2187d5;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-decoration-color: #2187d5;
+      cursor: pointer;
+      // width: 33%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}

@@ -1,3 +1,5 @@
+@import 'main';
+
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 16px;
 }
@@ -27,11 +29,6 @@
 :host ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
   background-color: #288ad6;
 }
-// mat-radio-button {
-//   display: none;
-//   position: absolute;
-//   margin-right: 35px;
-// }
 
 .method {
   border: 1px solid gainsboro;
@@ -43,8 +40,11 @@
 .methods-container {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   margin: 25px;
-  justify-content: space-between;
+  @media only screen and (max-width: $M) {
+    margin: $margin-medium;
+  }
 }
 
 .method-style {
@@ -64,37 +64,38 @@
   border-color: #288ad6;
 }
 
-
 .labl {
-    display : block;
-    width: 275px;
+  width: 23%;
+  margin: 0 1%;
+  @media only screen and (max-width: $M) {
+    width: 46%;
+    margin: 10px 2%;
+  }
 }
-.labl > input { /* HIDE RADIO */
-    visibility: hidden; /* Makes input not-clickable */
-    position: absolute; /* Remove input from document flow */
+.labl > input {
+  visibility: hidden;
+  position: absolute;
 }
-.labl > input + div{ /* DIV STYLES */
+.labl > input + div {
   position: relative;
-  cursor:pointer;
+  cursor: pointer;
   border: 1px solid gainsboro;
-  border-radius: 5px;
-  height: 175px;
-  width: 275px;
+  border-radius: 25px;
 }
-.labl > input:checked + div{ /* (RADIO CHECKED) DIV STYLES */
+.labl > input:checked + div {
   border: 1px solid #288ad6;
 }
 
 .labl > div > .circle {
   display: none;
   position: absolute;
-  top: -9px;
-  right: -9px;
+  top: -2px;
+  right: -2px;
   width: 17px;
   height: 17px;
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
-  border-radius: 25px;
+  border-radius: 50%;
   background: #4bda82;
 }
 
@@ -105,7 +106,7 @@
 .tick {
   height: 9px;
   width: 5px;
-  border: solid #FFFFFF;
+  border: solid #ffffff;
   border-width: 0px 2px 2px 0px;
   transform: rotate(45deg);
   margin-top: 2px;
@@ -117,14 +118,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 30vh;
   margin-bottom: 10px;
+  @media screen and (max-width: $M) {
+    height: 20vh;
+  }
 }
 
 .method-image-container {
   display: flex;
-  width: 80%;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 10px;
+  flex-direction: column;
+  align-items: center;
+  .image {
+    height: 25px;
+    width: 100px;
+    margin: 5px 0px;
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
 }

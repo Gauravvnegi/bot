@@ -21,39 +21,11 @@
   ></p-button>
 </div> -->
 
-<div class="header">
-  <div class="header--text">
-    <p class="heading">Reservations</p>
-    <p class="selected">2 record(s) are selected</p>
-  </div>
-  <div class="icons">
-    <mat-icon class="material-icons" matSuffix>vertical_align_bottom</mat-icon>
-    <mat-icon class="material-icons" matSuffix>credit_card</mat-icon>
-    <mat-icon class="material-icons" matSuffix>description</mat-icon>
-    <mat-icon class="material-icons" matSuffix>more_vert</mat-icon>
-  </div>
-  <div class="seperator"></div>
-  <p-dropdown [options]="export" [(ngModel)]="selectedExport1">
-    <ng-template let-item pTemplate="selectedItem">
-      <mat-icon class="material-icons" matSuffix
-        >vertical_align_bottom</mat-icon
-      >
-      <span style="vertical-align: middle; margin-left: 0.5em;">Export</span>
-    </ng-template>
-  </p-dropdown>
-  <p-dropdown [options]="csv" [(ngModel)]="selectedExport2">
-    <ng-template let-item pTemplate="selectedItem">
-      <span style="vertical-align: middle; margin-left: 0.5em;">CSV</span>
-    </ng-template>
-  </p-dropdown>
-  <button class="go" (click)="exportExcel()">GO</button>
-  <div class="seperator"></div>
-  <a href="#" class="reset-link">Reset Filter</a>
-</div>
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="true"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
   [loading]="loading"
   [columns]="cols"
   [value]="values"
@@ -69,27 +41,119 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
-      <div class="caption__wrapper--tabmenu">
-        <hospitality-bot-tab-group [list]="tabList"></hospitality-bot-tab-group>
-      </div>
-      <div class="caption__wrapper--buttons">
-        <button class="filter">
-          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
-        </button>
-        <div class="button__wrapper" *ngFor="let data of buttons">
-          <button pButton type="button" [label]="data.label"></button>
+      <form [formGroup]="tableFG">
+        <div class="caption__wrapper--tabmenu">
+          <div class="header">
+            <!-- <div class="header--text"> -->
+            <p class="heading">{{ tableName }}</p>
+            <!-- <p class="selected">2 record(s) are selected</p> -->
+            <div class="options">
+              <div *ngIf="isActionButtons" class="icons">
+                <img src="assets/svg/Download.svg" class="svg" />
+                <img src="assets/svg/google-docs.svg" class="svg" />
+                <img src="assets/svg/card.svg" class="svg" />
+              </div>
+              <div *ngIf="isActionButtons" class="seperator"></div>
+              <div formGroupName="documentActions" class="dropdown--wrapper">
+                <p-dropdown class="export"
+                  [options]="documentActionTypes"
+                  formControlName="documentActionType"
+                >
+                  <ng-template let-documentActionItem pTemplate="selectedItem">
+                    <img src="assets/svg/Export.svg" />
+                    <span
+                      style="
+                        vertical-align: middle;
+                        margin-left: 0.5em;
+                        font-weight: 500;
+                      "
+                      >{{ documentActionItem.label }}</span
+                    >
+                  </ng-template>
+                </p-dropdown>
+                <div class="divider"></div>
+                <p-dropdown class="export"
+                  [options]="documentTypes"
+                  formControlName="documentType"
+                >
+                  <ng-template let-documentTypeItem pTemplate="selectedItem">
+                    <img src="assets/svg/CSV.svg" />
+                    <span
+                      style="
+                        vertical-align: middle;
+                        margin-left: 0.5em;
+                        font-weight: 500;
+                      "
+                      >{{ documentTypeItem.label }}</span
+                    >
+                  </ng-template>
+                </p-dropdown>
+                <button class="go" (click)="onDocumentActions()">
+                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isTabFilters">
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+            ></hospitality-bot-tab-group>
+          </div>
         </div>
-      </div>
+        <div *ngIf="isQuickFilters" class="caption__wrapper--buttons">
+          <!-- <button class="filter">
+            All
+          </button> -->
+          <div class="button__wrapper">
+            <mat-chip-list
+              multiple
+              #chipList
+              aria-label="Quick Reply selection"
+              formControlName="quickReplyActionFilters"
+            >
+              <mat-chip
+                *ngFor="let quickReplyType of quickReplyTypes"
+                selectable="true"
+                [selected]="isQuickReplyFilterSelected(quickReplyType)"
+                (click)="toggleQuickReplyFilter(quickReplyType)"
+              >
+                {{ quickReplyType.label }}
+              </mat-chip>
+            </mat-chip-list>
+            <img src="assets/svg/Filter-Icon.svg" />
+          </div>
+          <!-- <div
+            class="button__wrapper"
+            *ngFor="let quickReplyType of quickReplyTypes"
+          >
+            <button
+              pButton
+              type="button"
+              [label]="quickReplyType.label"
+            ></button>
+          </div> -->
+        </div>
+      </form>
+      {{ tableFG.value | json }}
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    No data found
+    <p class="no-data-found">No data available in table</p>
   </ng-template>
-
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 5%; background-color: #2187d5;" pResizableColumn>
+      <th
+        style="
+          width: 5%;
+          background-color: #eaf0f6;
+          border-top: 0 !important;
+          border-bottom: 0 !important;
+          text-align: center;
+        "
+        pResizableColumn
+      >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -144,15 +208,15 @@
       </th> -->
     </tr>
   </ng-template>
-
+  <!-- **************************************BODY********************************* -->
   <ng-template
     pTemplate="body"
     let-rowData
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr>
-      <td>
+    <tr class="data-table-row">
+      <td class="table--checkbox">
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
       <td *ngFor="let col of columns">
@@ -160,7 +224,7 @@
       </td>
     </tr>
   </ng-template>
-
+  <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
     <p-paginator
       [rows]="rowsPerPage"

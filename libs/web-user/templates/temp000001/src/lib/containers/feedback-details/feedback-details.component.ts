@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
-import { FeedbackDetailsConfigI } from './../../../../../../shared/src/lib/data-models/feedbackDetailsConfig.model';
+import { FeedbackDetailsConfigI, FeedBackDetail } from './../../../../../../shared/src/lib/data-models/feedbackDetailsConfig.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-details',
@@ -91,7 +91,7 @@ export class FeedbackDetailsComponent implements OnInit {
     this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.ratingScaleConfig;
   }
 
-  get HotelServices() {
+  get hotelServices() {
     return this._feedbackDetailsService.feedbackConfigDS &&
     this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.suggestions;
   }

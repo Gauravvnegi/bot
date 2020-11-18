@@ -5,36 +5,46 @@
       <div class="wrapper__item">
         <web-user-input
           [parentForm]="spaForm"
-          [name]="'personCount'"
-          [settings]="spaConfig.personCount"
+          [name]="'quantity'"
+          [settings]="spaConfig.quantity"
         ></web-user-input>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="wrapper__item">
+        <web-user-date-picker
+          [parentForm]="spaForm"
+          [name]="'spaDate'"
+          [settings]="spaConfig.spaDate"
+          [minDate]="minDate"
+        ></web-user-date-picker>
       </div>
       <div class="wrapper__item">
         <web-user-time-picker
           [parentForm]="spaForm"
-          [name]="'usageTime'"
-          [settings]="spaConfig.usageTime"
+          [name]="'startTime'"
+          [settings]="spaConfig.startTime"
         >
         </web-user-time-picker>
       </div>
     </div>
     <div class="save-button">
       <web-user-button
-      #removeButton
-      buttonTemplateSwitch
-      [settings]="spaConfig.removeButton"
-      [buttonClass]="'back-button'"
-      class="user-button"
-      (click)="removeSpaData($event)"
+        #removeButton
+        buttonTemplateSwitch
+        [settings]="spaConfig.removeButton"
+        [buttonClass]="'back-button'"
+        class="user-button"
+        (click)="removeSpaData($event)"
       ></web-user-button>
       <web-user-button
-      #saveButton
-      buttonTemplateSwitch
-      [settings]="{ label: 'Save' }"
-      [buttonClass]="'next-button'"
-      class="user-button"
-      (click)="submit()"
+        #saveButton
+        buttonTemplateSwitch
+        [settings]="{ label: 'Save' }"
+        [buttonClass]="'next-button'"
+        class="user-button"
+        (click)="submit()"
       ></web-user-button>
-  </div>
+    </div>
   </form>
 </div>

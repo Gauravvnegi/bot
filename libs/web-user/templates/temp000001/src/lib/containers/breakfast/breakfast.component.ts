@@ -17,6 +17,7 @@ export class BreakfastComponent implements OnInit {
 
   @Input() uniqueData;
   @Input() amenityData;
+  @Input() quantity;
   @Input() paidAmenitiesForm;
   @Output() removeEvent : EventEmitter<any> = new EventEmitter<any>();
   @Output() addEvent : EventEmitter<any> = new EventEmitter<any>(); 
@@ -45,7 +46,7 @@ export class BreakfastComponent implements OnInit {
 
   initBreakfastForm() {
     this.breakfastForm = this._fb.group({
-      personCount: ['', [Validators.required,
+      quantity: ['', [Validators.required,
         customPatternValid({
           pattern: Regex.NUMBER_REGEX,
           msg: 'Please enter valid count',
@@ -63,7 +64,8 @@ export class BreakfastComponent implements OnInit {
     if(this.amenityData === ""){
       this.breakfastConfig.removeButton.disable = true;
     }
-    this.breakfastForm.patchValue(this.amenityData);
+    this._breakfastService.initBreakfastDetailDS(this.amenityData);
+    this.breakfastForm.patchValue(this._breakfastService.breakfastDetail.breakfastDetail);
   }
 
   setFieldConfiguration() {

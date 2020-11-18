@@ -1,0 +1,29 @@
+.container-background {
+	background: url('../../assets/checkin-stat-background.svg');
+}
+
+
+
+.stat-val-container {
+    height: 176px;
+    display: flex;
+    justify-content: flex-end;
+	flex-direction: column;
+}
+
+.stat-value {
+    text-align: left;
+    font: normal normal bold 25px/33px Roboto;
+    letter-spacing: 1.5px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+.stat-val-title {
+    height: 16px;
+    text-align: left;
+    font: normal normal normal 12px/16px Roboto;
+    letter-spacing: 0.72px;
+    color: #C6F0EF;
+    opacity: 1;
+}

@@ -8,5 +8,260 @@
     </div>
   </div>
 </ng-template>
-<ng-container *ngIf="!isLoaderVisible; else loader" #parentPanelContent>
+<ng-container *ngIf="!isLoaderVisible; else loader">
+  <div class="status--heading">
+    <div class="heading">Status:&nbsp;<b class="status">Active</b></div>
+    <div class="icon-wrapper">
+      <img src="assets/svg/Download.svg" />
+      <img src="assets/svg/print.svg" />
+    </div>
+  </div>
+  <div #content>
+    <div *ngIf="guestDetail">
+      <div class="section--heading">Guest Details</div>
+      <div class="section--content">
+        <div class="section--content--container">
+          <div class="section--content--container--title">
+            Full Name&nbsp;<b>(Primary)</b>
+          </div>
+          <div class="section--content--container--value">
+            {{ guestDetail.primaryGuest.nameTitle }}
+            {{ guestDetail.primaryGuest.firstName }}
+            {{ guestDetail.primaryGuest.lastName }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Phone No.</div>
+          <div class="section--content--container--value">
+            {{
+              contactDetails.mobileNumber
+                ? contactDetails.cc + ' ' + contactDetails.mobileNumber
+                : '-'
+            }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Email ID</div>
+          <div class="section--content--container--value">
+            {{ contactDetails.emailId || '-' }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="stayDetail">
+      <div class="section--heading">Stay Details</div>
+      <div class="section--content">
+        <div class="section--content--container">
+          <div class="section--content--container--title">Arrival Date</div>
+          <div class="section--content--container--value">
+            {{ stayDetail.arrivalTime | date: 'dd - MM - yyyy' }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Departure Date</div>
+          <div class="section--content--container--value">
+            {{ stayDetail.departureTime | date: 'dd - MM - yyyy' }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Room Type</div>
+          <div class="section--content--container--value">
+            {{ stayDetail.roomType }}
+          </div>
+        </div>
+        <div class="section--content--container">
+          <div class="section--content--container--title">Travelling With</div>
+          <div class="section--content--container--value--container">
+            <div class="element">Adults: {{ stayDetail.adultsCount }}</div>
+            <div>Kids: {{ stayDetail.kidsCount }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section--heading">Documents</div>
+      <div class="section--content">
+        <div class="section--content--label">
+          <ng-container
+            [ngSwitch]="
+              summaryDetails.guestDetails.primaryGuest.statusMessage.status
+            "
+          >
+            <ng-container *ngSwitchCase="'PENDING'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Your documents are pending.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Your documents verification is initiated.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <img class="conditional-icon" src="assets/Right.png" />
+              <div class="section--content--health--message-detail">
+                Your documents are verified successfully.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Your documents verification failed.
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <div
+        class="section--content"
+        *ngIf="
+          summaryDetails.guestDetails.primaryGuest.statusMessage.status ===
+          'FAILED'
+        "
+      >
+        {{ summaryDetails.guestDetails.primaryGuest.statusMessage.remarks }}
+      </div>
+    </div>
+    <div>
+      <div class="section--heading">Health Declaration Form</div>
+      <div class="section--content--health">
+        <div class="section--content--health--message">
+          <ng-container
+            [ngSwitch]="summaryDetails.healthDeclaration.statusMessage.status"
+          >
+            <ng-container *ngSwitchCase="'PENDING'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Health Declaration form Pending.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Health Declaration form Initiated.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <img class="conditional-icon" src="assets/Right.png" />
+              <div class="section--content--health--message-detail">
+                Health Declaration form has been signed.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Health Declaration form verification failed.
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div
+          class="section--content"
+          *ngIf="
+            summaryDetails.healthDeclaration.statusMessage.status === 'FAILED'
+          "
+        >
+          {{ summaryDetails.healthDeclaration.statusMessage.remarks }}
+        </div>
+        <div class="section--content--health--disclaimer">
+          Disclaimer: Health Declaration Form will be validated at Front Desk
+          the time of Check-in. To ensure safety of all customers, Hotel holds
+          the right to take appropriate action as per the outcome.
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section--heading">Payment Info</div>
+      <div class="section--content">
+        <div class="section--content--label">
+          <ng-container
+            [ngSwitch]="summaryDetails.paymentSummary.statusMessage.status"
+          >
+            <ng-container *ngSwitchCase="'PENDING'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Payment Pending.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'INITIATED'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Payment Initiated.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'COMPLETED'">
+              <img class="conditional-icon" src="assets/Right.png" />
+              <div class="section--content--health--message-detail">
+                Payment Success.
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'FAILED'">
+              <img class="conditional-icon" src="assets/Info.png" />
+              <div class="section--content--health--message-detail">
+                Payment Failed.
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="section--content--label margin-added">
+          Amount to pay :&nbsp;<span
+            >{{ currencyCode }}
+            {{ paymentDetails ? paymentDetails.dueAmount : 0 }}</span
+          >
+        </div>
+      </div>
+      <div
+        class="section--content"
+        *ngIf="summaryDetails.paymentSummary.statusMessage.status === 'FAILED'"
+      >
+        {{ summaryDetails.paymentSummary.statusMessage.remarks }}
+      </div>
+    </div>
+    <div>
+      <div class="section--heading">Registration Card</div>
+      <div class="section--content">
+        <div class="section--content--label">
+          <div>
+            <img
+              *ngIf="
+                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
+                  undefined;
+                else error
+              "
+              class="conditional-icon"
+              src="assets/Right.png"
+            />
+            <ng-template #error>
+              <img class="conditional-icon" src="assets/Info.png" />
+            </ng-template>
+            <!-- <mat-icon
+              [ngClass]="
+                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
+                undefined
+                  ? 'completed'
+                  : 'alert'
+              "
+            >
+              {{
+                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
+                undefined
+                  ? 'check_circle_outline'
+                  : 'error_outline'
+              }}</mat-icon
+            > -->
+          </div>
+          <div style="margin-left: 10px;">
+            <label>
+              Verify
+              <span class="link" (click)="openRegCard()"
+                >Registration Card</span
+              ></label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-container>

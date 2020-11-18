@@ -1,0 +1,142 @@
+<div class="filter--header">
+  <div class="close--wrapper">
+    <mat-icon (click)="closePopup()" class="material-icon" matSuffix
+      >cancel</mat-icon
+    >
+    <p class="filter">Filter</p>
+  </div>
+  <div (click)="resetFilter()" class="reset-wrapper">
+    <p class="filter">Reset All</p>
+    <mat-icon class="material-icon" matSuffix>undo</mat-icon>
+  </div>
+</div>
+<div class="filter--form">
+  <form [formGroup]="filterForm">
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <svg
+            class="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="19.35"
+            height="17.2"
+            viewBox="0 0 19.35 17.2"
+          >
+            <path
+              id="Icon_awesome-hotel"
+              data-name="Icon awesome-hotel"
+              d="M18.813,2.15a.537.537,0,0,0,.538-.538V.538A.537.537,0,0,0,18.813,0H.538A.537.537,0,0,0,0,.538V1.613a.537.537,0,0,0,.538.538h.537v12.9H.538A.537.537,0,0,0,0,15.588v1.075a.537.537,0,0,0,.538.538H8.6V14.513a.539.539,0,0,1,.538-.538h1.075a.539.539,0,0,1,.538.538V17.2h8.063a.537.537,0,0,0,.538-.538V15.588a.537.537,0,0,0-.538-.538h-.538V2.15ZM8.6,3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V3.655Zm0,3.225a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43V8.17a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V6.88ZM4.3,3.655a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H4.73a.462.462,0,0,1-.43-.43ZM6.02,8.6H4.73a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43V8.17A.462.462,0,0,1,6.02,8.6Zm.43,4.3a3.225,3.225,0,0,1,6.45,0Zm8.6-4.73a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Zm0-3.225a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Z"
+            />
+          </svg>
+          Property
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </ng-template>
+        <div formGroupName="property">
+          <div class="hotel-branch">
+            Choose Brand or Hotel
+          </div>
+          <div>
+            <div>
+              <mat-form-field>
+                <mat-label>Brand</mat-label>
+                <mat-select formControlName="hotelName">
+                  <!-- <mat-select-trigger>
+                    {{ hotelNameFC.value ? hotelNameFC.value[0] : '' }}
+                    <span
+                      *ngIf="hotelNameFC.value?.length > 1"
+                      class="additional-selection"
+                    >
+                      (+{{ hotelNameFC.value.length - 1 }}
+                      {{
+                        hotelNameFC.value?.length === 2 ? 'other' : 'others'
+                      }})
+                    </span>
+                  </mat-select-trigger> -->
+                  <mat-option
+                    *ngFor="let hotel of hotelList"
+                    [value]="hotel.value"
+                    >{{ hotel.label }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Hotel Name</mat-label>
+                <mat-select formControlName="branchName">
+                  <!-- <mat-select-trigger>
+                    {{ branchNameFC.value ? branchNameFC.value[0] : '' }}
+                    <span
+                      *ngIf="branchNameFC.value?.length > 1"
+                      class="additional-selection"
+                    >
+                      (+{{ branchNameFC.value.length - 1 }}
+                      {{
+                        branchNameFC.value?.length === 2 ? 'other' : 'others'
+                      }})
+                    </span>
+                  </mat-select-trigger> -->
+                  <mat-option
+                    *ngFor="let branch of branchList"
+                    [value]="branch.value"
+                    >{{ branch.label }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <svg
+            class="svg"
+            id="Capa_1"
+            enable-background="new 0 0 515.556 515.556"
+            height="512"
+            viewBox="0 0 515.556 515.556"
+            width="512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m348.918 37.751c50.334 50.334 50.334 131.942 0 182.276s-131.942 50.334-182.276 0-50.334-131.942 0-182.276c50.334-50.335 131.942-50.335 182.276 0"
+            />
+            <path
+              d="m455.486 350.669c-117.498-79.391-277.917-79.391-395.415 0-17.433 11.769-27.848 31.656-27.848 53.211v111.676h451.111v-111.676c0-21.555-10.416-41.442-27.848-53.211z"
+            />
+          </svg>
+          <!-- <img src="assets/Guest.svg" class="svg" /> -->
+          Guest Type
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </ng-template>
+        <div formGroupName="guest">
+          <div formGroupName="guestCategory">
+            <p class="guest-title">Select Guest Category</p>
+            <div class="checkbox--wrapper">
+              <mat-checkbox formControlName="isRepeatedGuest"
+                >Repeat Guest</mat-checkbox
+              >
+              <mat-checkbox formControlName="isNewGuest"
+                >New Guest</mat-checkbox
+              >
+            </div>
+          </div>
+          <div formGroupName="guestType">
+            <p class="guest-title">Select Guest Type</p>
+            <div class="checkbox--wrapper">
+              <mat-checkbox formControlName="isVip">VIP</mat-checkbox>
+              <mat-checkbox formControlName="isMembership"
+                >Membership</mat-checkbox
+              >
+              <mat-checkbox formControlName="isGeneral">General</mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <button (click)="applyFilter()" class="apply-button">Apply</button>
+  </form>
+</div>
+
+<!-- {{ filterForm.value | json }} -->

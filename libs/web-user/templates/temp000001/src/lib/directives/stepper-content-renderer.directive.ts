@@ -10,6 +10,7 @@ import {
   Input,
   OnChanges,
   ViewContainerRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
@@ -48,7 +49,8 @@ export class StepperContentRendererDirective implements OnChanges {
     private _container: ViewContainerRef,
     private _breakpointObserver: BreakpointObserver,
     private _templateLoadingService: TemplateLoaderService,
-    private _stepperService: StepperService
+    private _stepperService: StepperService,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnChanges() {
@@ -118,6 +120,8 @@ export class StepperContentRendererDirective implements OnChanges {
         if (isRendered && this.dataToPopulate) {
           this._isStepperRendered = true;
           this.createStepperContentComponents();
+          this.stepperConfig.position == 'vertical' &&
+            this._changeDetectorRef.detectChanges();
         }
       }
     );
@@ -148,28 +152,33 @@ export class StepperContentRendererDirective implements OnChanges {
             stepperIndex: index,
             buttonConfig: this.stepperConfig.stepConfigs[index].buttons,
           };
-          this.addPropsToComponentInstance(componentObj, props);
+          this.addPropsToComponentInstance(componentObj, props, index);
         }
       }
     );
   }
 
-  private addPropsToComponentInstance(componentObj: ComponentRef<any>, props) {
+  private addPropsToComponentInstance(
+    componentObj: ComponentRef<any>,
+    props,
+    index
+  ) {
     componentObj.instance.parentForm = props.formGroup;
     componentObj.instance.reservationData = props.reservationData;
     componentObj.instance.stepperIndex = props.stepperIndex;
     componentObj.instance.buttonConfig = props.buttonConfig;
 
-    this.listenForWrapperRendered(componentObj);
+    this.listenForWrapperRendered(componentObj, index);
 
-    this.stepperConfig.position == 'vertical' &&
-      componentObj.changeDetectorRef.detectChanges();
+    // this.stepperConfig.position == 'vertical' &&
+    //   componentObj.changeDetectorRef.detectChanges();
   }
 
-  private listenForWrapperRendered(componentObj: ComponentRef<any>) {
+  private listenForWrapperRendered(componentObj: ComponentRef<any>, index) {
     try {
       componentObj.instance.isWrapperRendered$.subscribe((val) => {
-        this._templateLoadingService.isTemplateLoading$.next(false);
+        this.stepperConfig.stepConfigs.length - 1 == index &&
+          this._templateLoadingService.isTemplateLoading$.next(false);
         componentObj.instance.isRendered = true;
       });
     } catch (error) {}

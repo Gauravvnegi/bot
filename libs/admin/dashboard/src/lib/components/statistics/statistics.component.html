@@ -1,0 +1,35 @@
+<div class="stats--wrapper" *ngIf="statistics">
+  <div class="stats">
+    <hospitality-bot-arrivals-statistics
+      [arrivals]="statistics.arrivals"
+    ></hospitality-bot-arrivals-statistics>
+  </div>
+  <div class="stats">
+    <hospitality-bot-inhouse-statistics
+      [inhouse]="statistics.inhouse"
+    ></hospitality-bot-inhouse-statistics>
+  </div>
+  <div class="stats">
+    <hospitality-bot-departure-statistics
+      [departures]="statistics.departures"
+    ></hospitality-bot-departure-statistics>
+  </div>
+  <div class="stats">
+    <hospitality-bot-inhouse-request-statistics
+      [inhouseRequest]="statistics.inhouseRequest"
+    ></hospitality-bot-inhouse-request-statistics>
+  </div>
+  <!-- <div class="stats change-height">
+    <hospitality-bot-checkin-statistics
+      [expectedCheckIn]="statistics.expressCheckIn"
+    ></hospitality-bot-checkin-statistics>
+  </div> -->
+  <div class="stats change-width">
+    <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
+  </div>
+  <!-- <div class="stats change-height">
+    <hospitality-bot-checkout-statistics
+      [expectedCheckout]="statistics.expressCheckOut"
+    ></hospitality-bot-checkout-statistics>
+  </div> -->
+</div>

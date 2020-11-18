@@ -19,39 +19,25 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
 }
 
-@mixin full-width-on-breakpoint($breakpoint) {
-  @media only screen and (max-width: $breakpoint) {
-    width: 100%;
-  }
-}
-
-@mixin display-block-on-breakpoint($breakpoint) {
-  @media only screen and (max-width: $breakpoint) {
-    width: 100%;
+@mixin auth-heading() {
+  font-weight: $medium;
+  font-size: 35px;
+  color: $auth-color;
+  margin-bottom: 15px;
+  @media only screen and (max-width: 1300px) {
+    font-size: 25px;
   }
 }
 
-//breakpoints
-
-$S:     480px;   
-$M:     768px;     
-$L:     1170px;  
-$XL:    1500px;
-
-@mixin MQ($canvas) {
-  @if $canvas == S {
-   @media only screen and (min-width: $S) { @content; } 
-  }
-  @else if $canvas == M {
-   @media only screen and (min-width: $M) { @content; } 
-  }
-  @else if $canvas == L {
-   @media only screen and (min-width: $L) { @content; } 
-  }
-  @else if $canvas == XL {
-   @media only screen and (min-width: $XL) { @content; } 
+@mixin auth-quote() {
+  font-weight: 400;
+  font-size: $font16;
+  color: $auth-quote-color;
+  letter-spacing: 0.54px;
+  line-height: 25px;
+  @media only screen and (max-width: 800px) {
+    font-size: 12px;
   }
 }

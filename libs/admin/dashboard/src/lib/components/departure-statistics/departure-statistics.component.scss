@@ -1,0 +1,38 @@
+@import 'main';
+
+.division {
+  height: 20px;
+}
+
+
+
+.stat-val-container {
+  padding-top: 10px;
+  height: 162px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-val-title {
+  letter-spacing: 0.72px;
+  font-size: 14px;
+  color: #6d7580;
+  @media only screen and (max-width: 1100px) {
+    font-size: 12px;
+  }
+}
+
+.stat-val {
+  color: $primary-purple;
+  font-size: 13px;
+  @media only screen and (max-width: 1100px) {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,179 @@
+<div>
+  <div class="material-body">
+    <div class="label-wrapper">
+      <mat-label class="mat-head">Guest Info</mat-label>
+      <ng-container [ngSwitch]="healthCardDetailsForm.get('status').value">
+        <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
+
+        <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+
+        <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+
+        <img
+          *ngSwitchCase="'INITIATED'"
+          src="assets/svg/status/initiated.svg"
+        />
+
+        <!-- add default case icon -->
+      </ng-container>
+    </div>
+    <form [formGroup]="guestDetailsForm">
+      <ng-container
+        formArrayName="guests"
+        *ngFor="
+          let guestFormGroup of guestDetailsForm.controls.guests?.value;
+          let i = index
+        "
+      >
+        <div class="feilds-wrapper" [formGroupName]="i">
+          <div class="feild width-added">
+            <mat-label class="label">Full Name</mat-label>
+            <div class="value">
+              {{ guestFormGroup.title }}
+              {{ guestFormGroup.firstName }}
+              {{ guestFormGroup.lastName }}
+            </div>
+          </div>
+          <div class="feild width-added">
+            <mat-label class="label">Phone No.</mat-label>
+            <div
+              *ngIf="guestFormGroup.phoneNumber; else emptyCell"
+              class="value"
+            >
+              {{ guestFormGroup.countryCode }}
+              {{ guestFormGroup.phoneNumber }}
+            </div>
+          </div>
+          <div class="feild width-added">
+            <mat-label class="label">Email</mat-label>
+            <div *ngIf="guestFormGroup.email; else emptyCell" class="value">
+              {{ guestFormGroup.email }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </form>
+    <hr class="data-seperator" />
+    <mat-label class="mat-head">Stay Details</mat-label>
+    <ng-container>
+      <div class="feilds-wrapper">
+        <div class="feild width-quarter">
+          <mat-label class="label">Arrival Date</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('arrivalDate').value }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Departure Date</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('departureDate').value }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Expected Arrival Time</mat-label>
+          <div
+            *ngIf="
+              stayDetailsForm.get('expectedArrivalTime').value;
+              else emptyCell
+            "
+            class="value"
+          >
+            {{ stayDetailsForm.get('expectedArrivalTime').value }}
+          </div>
+        </div>
+      </div>
+      <div class="feilds-wrapper">
+        <div class="feild width-quarter">
+          <mat-label class="label">Duration</mat-label>
+          <div class="value">
+            {{ detailsData.stayDetails.getDaysAndNights().nights }}N |
+            {{ detailsData.stayDetails.getDaysAndNights().days }}D
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Room Type</mat-label>
+          <div class="value">
+            {{ stayDetailsForm.get('roomType').value }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <hr class="data-seperator" />
+    <mat-label class="mat-head">Health Declaration</mat-label>
+    <ng-container>
+      <div class="pending-button-wrapper">
+        <p class="health-status">
+          Health Declaration Status :&nbsp;
+          <ng-container
+            class="status-icon"
+            [ngSwitch]="healthCardDetailsForm.get('status').value"
+          >
+            <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+            <b *ngSwitchCase="'FAILED'" class="status-text-reject">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+            <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+            <b *ngSwitchCase="'PENDING'" class="status-text-pending">
+              {{ healthCardDetailsForm.get('status').value }}
+            </b>
+
+            <!-- add default case icon -->
+          </ng-container>
+        </p>
+        <div
+          *ngIf="
+            ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey)
+          "
+        >
+          <div class="decision-button-wrapper">
+            <ng-container
+              *ngIf="
+                ['INITIATED', 'FAILED'].includes(
+                  healthCardDetailsForm.get('status').value
+                )
+              "
+            >
+              <button class="right" (click)="updateHealthCardStatus('ACCEPT')">
+                <img src="assets/svg/tick.svg" />
+              </button>
+              <button class="right" (click)="updateHealthCardStatus('REJECT')">
+                <img src="assets/svg/cross.svg" />
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div
+        class="remark-wrapper"
+        *ngIf="
+          ['CHECKIN', 'CHECKOUT'].includes(
+            detailsData.currentJourneyDetails.journey
+          ) &&
+          ['INITIATED', 'COMPLETED', 'FAILED'].includes(
+            healthCardDetailsForm.get('status').value
+          )
+        "
+      >
+        <form [formGroup]="healthCardDetailsForm">
+          <span class="text">Remark :</span>
+          <mat-form-field class="remark">
+            <input matInput formControlName="remarks" />
+          </mat-form-field>
+        </form>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">--</div>
+</ng-template>
+
+<!-- !(
+  ['COMPLETED'].includes(healthCardDetailsForm.get('status').value) &&
+  !healthCardDetailsForm.get('remarks').value
+) -->

@@ -1,31 +1,78 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import {
+  RouterOutlet,
+  Router,
+  NavigationStart,
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+} from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-
+import { FilterService } from '../../../services/filter.service';
+import { DateRangeFilterService } from '../../../services/daterange-filter.service';
+import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { GlobalFilterService } from '../../../services/global-filters.service';
+import { AuthService } from '../../../../../../auth/services/auth.service';
+import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
   styleUrls: ['./layout-one.component.scss'],
 })
 export class LayoutOneComponent implements OnInit {
-  public backgroundColor: string;
-  public background_image: string;
-  profile: MenuItem[];
+  backgroundColor: string;
+  background_image: string;
+  profile = [
+    { label: 'Profile', value: 'profile' },
+    { label: 'Logout', value: 'logout' },
+  ];
   lastUpdatedAt: string;
-  constructor(private _router: Router, public dateService: DateService) {}
+  isGlobalFilterVisible: boolean = false;
+  filterConfig = {
+    brandName: '',
+    branchName: '',
+    totalFilters: 0,
+    totalFilterContent: function () {
+      return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
+    },
+  };
+  constructor(
+    private _router: Router,
+    public dateService: DateService,
+    public filterService: FilterService,
+    public dateRangeFilterService: DateRangeFilterService,
+    public progressSpinnerService: ProgressSpinnerService,
+    public globalFilterService: GlobalFilterService,
+    private _hotelDetailService: HotelDetailService,
+    private _authService: AuthService,
+    private _userDetailService: UserDetailService
+  ) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
-    this.profile = [
-      { label: 'Profile', icon: 'person' },
-      { label: 'Logout', icon: 'person_remove' },
-    ];
+    this.globalFilterService.listenForGlobalFilterChange();
+    this.setInitialFilterValue();
   }
 
   initLayoutConfigs() {
-    this.backgroundColor = '#0483f4';
+    this.backgroundColor = 'white';
     this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
+  }
+
+  setInitialFilterValue() {
+    this.filterConfig.brandName = this._hotelDetailService.hotelDetails.brands[0].label;
+    this.filterConfig.branchName = this._hotelDetailService.hotelDetails.brands[0].branches[0].label;
+    this.filterService.emitFilterValue$.next({
+      property: {
+        hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
+        branchName: this._hotelDetailService.hotelDetails.brands[0].branches[0]
+          .id,
+      },
+    });
   }
 
   refreshDashboard() {
@@ -56,5 +103,79 @@ export class LayoutOneComponent implements OnInit {
     // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
     //   this._router.navigate([currentUrl]);
     // });
+  }
+
+  toggleGlobalFilter() {
+    this.isGlobalFilterVisible = !this.isGlobalFilterVisible;
+  }
+
+  applyFilter(event) {
+    this.filterService.emitFilterValue$.next(event);
+    this.resetFilterCount();
+    this.getFilterCount({ ...event });
+    this.toggleGlobalFilter();
+  }
+
+  resetFilterCount() {
+    this.filterConfig.totalFilters = 0;
+  }
+
+  getFilterCount(event) {
+    if (!event) {
+      return;
+    }
+    if (event.property) {
+      delete event.property;
+    }
+    let filterObj = event;
+    for (let key in filterObj) {
+      if (
+        !Array.isArray(filterObj[key]) &&
+        filterObj[key] &&
+        filterObj[key].constructor.name != 'Object'
+      ) {
+        if (filterObj[key]) {
+          this.filterConfig.totalFilters += 1;
+        }
+      } else {
+        this.getFilterCount(filterObj[key]);
+      }
+    }
+  }
+
+  resetFilter(event) {
+    this.filterService.emitFilterValue$.next(event);
+    this.resetFilterCount();
+    this.getFilterCount({ ...event });
+  }
+
+  applyDateRangeFilter(event) {
+    this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
+  }
+
+  profileAction(event) {
+    const itemType = event;
+
+    switch (itemType) {
+      case 'profile':
+        this.displayProfile();
+        break;
+      case 'logout':
+        this.logoutUser();
+        break;
+      default:
+        return;
+    }
+  }
+
+  displayProfile() {
+    this._router.navigate([
+      `/pages/roles-permissions/${this._userDetailService.getLoggedInUserid()}`,
+    ]);
+  }
+
+  logoutUser() {
+    this._authService.clearToken();
+    this._router.navigate(['/auth']);
   }
 }

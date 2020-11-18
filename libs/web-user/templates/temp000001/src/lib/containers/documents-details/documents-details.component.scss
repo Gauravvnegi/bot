@@ -38,9 +38,9 @@ mat-icon {
     & span {
       margin-left: $margin-small;
     }
-    @include MQ(M){
-      font-size: $font-responsive-smaller;
-    }
+    // @include MQ(M){
+    //   font-size: $font-responsive-smaller;
+    // }
   }
 }
 
@@ -59,8 +59,8 @@ mat-icon {
     &--doc {
       width: $full-width;
     }
-    & .passport {
-      margin-top: $margin-large;
+    .extra-gap {
+      margin-bottom: $margin-large;
     }
   }
   .doc__warning_section {

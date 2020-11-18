@@ -66,9 +66,6 @@
     "admin-reservation": {
       "tags": []
     },
-    "admin-notification": {
-      "tags": []
-    },
     "admin-special-amenities": {
       "tags": []
     },
@@ -76,6 +73,9 @@
       "tags": []
     },
     "admin-roles-and-permissions": {
+      "tags": []
+    },
+    "admin-request": {
       "tags": []
     }
   }

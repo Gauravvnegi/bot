@@ -8,6 +8,8 @@ import {
   StayDetailDS,
   StayDetailsConfigI,
 } from '../data-models/stayDetailsConfig.model';
+import * as moment from 'moment';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Injectable()
 export class StayDetailsService extends ApiService {
@@ -24,14 +26,23 @@ export class StayDetailsService extends ApiService {
     stayDetailsFieldSchema['startDate'] = new FieldSchema().deserialize({
       label: 'Arrival Date',
       disable: true,
+      isDatePickerDisable: true,
     });
     stayDetailsFieldSchema['endDate'] = new FieldSchema().deserialize({
       label: 'Departure Date',
       disable: true,
+      isDatePickerDisable: true,
     });
     stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
       label: 'Expected Arrival Time',
       disable: false,
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '13px',
+        },
+      },
     });
 
     stayDetailsFieldSchema[
@@ -41,7 +52,8 @@ export class StayDetailsService extends ApiService {
       style: {
         childLabelStyles: {
           'font-weight': 700,
-          color: '#737373',
+          color: '#888888',
+          'font-size': '13px',
         },
       },
     });
@@ -87,10 +99,22 @@ export class StayDetailsService extends ApiService {
     return this.patch(`/api/v1/reservation/${reservationId}`, data);
   }
 
-  modifyStayDetails({ special_comments }) {
+  modifyStayDetails(stayDetails) {
+    let arrivalTime = this.getArrivalTimeTimestamp(stayDetails);
     return {
-      stayDetails: special_comments,
+      stayDetails: {
+        comments: stayDetails.special_comments.comments,
+        expectedArrivalTime: arrivalTime,
+      },
     };
+  }
+
+  getArrivalTimeTimestamp(stayDetails) {
+    let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
+    let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm').format(
+      'hh:mm'
+    );
+    return new DateService().convertDateToTimestamp(arrivalDate + 'T' + time);
   }
 
   updateStayDetailDS(value) {

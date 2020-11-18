@@ -16,7 +16,7 @@ export class PaymentDetailsService extends ApiService {
   initPaymentDetailDS(paymentData, hotelPaymentConfig) {
     this._paymentDetailDS = new PaymentDetailDS().deserialize(
       paymentData.rooms,
-      paymentData.roomRates,
+      paymentData.paymentSummary,
       hotelPaymentConfig
     );
   }
@@ -87,5 +87,16 @@ export class PaymentDetailsService extends ApiService {
 
   get paymentSummaryDetails() {
     return this._paymentDetailDS;
+  }
+
+  get paymentConfiguration() {
+    return this.paymentSummaryDetails['hotelConfigDetail'].hotelPaymentConfig.paymentConfigurations;
+  }
+
+  get currencyCode() {
+    if (this.paymentSummaryDetails) {
+      return this.paymentSummaryDetails.paymentDetail.currencyCode;
+    }
+    return null;
   }
 }

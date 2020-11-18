@@ -1,6 +1,128 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons&display=swap');
 
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
-// @import 'main.scss';
+@import 'main.scss';
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: roboto;
+}
+
+// Four color state
+
+// images-color
+
+// .status-image-pending {
+//   filter: invert(95%) sepia(19%) saturate(0%) hue-rotate(193deg) brightness(77%)
+//     contrast(101%);
+// }
+
+// @media screen and (max-width: 1100px) and (orientation: landscape) {
+//   html {
+//     transform: rotate(90deg);
+//     transform-origin: left top;
+//     width: 100vh;
+//     overflow-x: hidden;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//   }
+// }
+
+// popup modal box
+
+.mat-dialog-container {
+  overflow: auto !important;
+  overflow-x: hidden !important;
+  // max-height: 100vh !important;
+  padding: 0 !important;
+}
+
+.status-image-initiated {
+  filter: invert(56%) sepia(92%) saturate(448%) hue-rotate(185deg)
+    brightness(101%) contrast(95%);
+}
+
+.status-image-reject {
+  filter: invert(18%) sepia(89%) saturate(7441%) hue-rotate(348deg)
+    brightness(95%) contrast(97%);
+}
+
+.status-image-success {
+  filter: invert(58%) sepia(10%) saturate(2479%) hue-rotate(63deg)
+    brightness(99%) contrast(100%);
+}
+
+// dialouge - box
+
+// to-do change classes for multiple pop-up
+
+.cdk-overlay-pane {
+  max-height: 85vh;
+  @media screen and (max-width: 1100px) {
+    max-height: 53vh;
+  }
+}
+
+// text-color
+
+.status-text-pending {
+  color: $pending !important;
+}
+
+.status-text-initiated {
+  color: $initiated !important;
+}
+
+.status-text-reject {
+  color: $reject !important;
+}
+
+.status-text-success {
+  color: $completed !important;
+}
+
+.status-opacity-pending {
+  background-color: #c2c2c226 !important;
+}
+
+.status-opacity-initiated {
+  background-color: #6bacf826 !important;
+}
+
+.status-opacity-reject {
+  background-color: #f00d2a26 !important;
+}
+
+.status-opacity-success {
+  background-color: #53b33e26 !important;
+}
+
+.status-background-pending {
+  background-color: $pending;
+}
+
+.status-background-initiated {
+  background-color: $initiated;
+}
+
+.status-background-reject {
+  background-color: $reject;
+}
+
+.status-background-success {
+  background-color: $completed;
+}
+
+.danger {
+  background-color: $reject !important;
+}
+
+.success {
+  background-color: $completed !important;
+  color: white !important;
+}

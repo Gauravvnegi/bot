@@ -13,15 +13,21 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-dropdown.component';
 import { FooterComponent } from './containers/footer/footer.component';
 import { SearchBarComponent } from './containers/search-bar/search-bar.component';
-
+import { FilterComponent } from './containers/filter/filter.component';
+import { TabViewModule } from 'primeng/tabview';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     Daterangepicker,
     RouterModule,
     InputTextModule,
     DropdownModule,
     SharedMaterialModule,
+    TabViewModule,
   ],
   declarations: [
     SidenavComponent,
@@ -31,6 +37,8 @@ import { SearchBarComponent } from './containers/search-bar/search-bar.component
     ProfileDropdownComponent,
     FooterComponent,
     SearchBarComponent,
+    FilterComponent,
+    OrientationPopupComponent,
   ],
   exports: [
     SidenavComponent,
@@ -40,6 +48,7 @@ import { SearchBarComponent } from './containers/search-bar/search-bar.component
     ProfileDropdownComponent,
     FooterComponent,
     SearchBarComponent,
+    FilterComponent,
   ],
 })
 export class ThemeModule {}

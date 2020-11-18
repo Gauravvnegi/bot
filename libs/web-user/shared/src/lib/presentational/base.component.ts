@@ -24,6 +24,7 @@ export class BaseComponent
   private _defaultValue = {
     label: '',
     disable: false,
+    isDatePickerDisable: false,
     master_label: '',
     placeholder: '',
     value: '',
@@ -51,6 +52,7 @@ export class BaseComponent
   @Input('settings') set settings(value: {
     label?: string;
     disable?: boolean;
+    isDatePickerDisable: boolean;
     checked?: boolean;
     align?: boolean;
     master_label?: string;

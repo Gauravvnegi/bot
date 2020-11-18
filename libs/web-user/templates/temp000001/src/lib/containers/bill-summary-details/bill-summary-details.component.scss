@@ -2,9 +2,9 @@
 
 .payment-summary-wrapper {
   padding: 0px $padding-medium;
-@media only screen and (max-width: $M) {
-  padding: 0px;
-}
+  @media only screen and (max-width: $M) {
+    padding: 0px;
+  }
 }
 
 .summary-details-wrapper {
@@ -16,19 +16,20 @@
     font-weight: $bolder;
     font-size: 25px;
   }
-@media only screen and (max-width: $M) {
-  padding: 5px;
-  &--title{
-    font-size: $font-small;
+  @media only screen and (max-width: $M) {
+    padding: 5px;
+    &--title {
+      font-size: $font-small;
+      padding-left: 10px;
+    }
   }
-}
 }
 
 .user__info--wrapper {
   padding: 25px 0px;
-@media only screen and (max-width: $M) {
-  padding: 5px 0px;
-}
+  @media only screen and (max-width: $M) {
+    padding: 10px;
+  }
 }
 
 .user__info {
@@ -36,31 +37,37 @@
   margin-top: $margin-large;
   &--details {
     @include flex-between-center();
-    width: 30%;
-    font-size: $font-large;
+    width: 31%;
+    font-size: $font16;
     font-weight: $bolder;
     label {
       color: #929292;
+      width: 46%;
     }
     p {
       text-align: left;
-      min-width: 36%;
+      width: 46%;
+    }
+    @media only screen and (max-width: $M) {
+      width: auto;
+      font-size: $font-small;
+      margin-bottom: $margin-large;
+      p {
+        text-align: right;
+      }
     }
   }
-@media only screen and (max-width: $M) {
-  margin-top: 5px;
-  &--details{
-    font-size: 8px;
-    p{
-      min-width: 32%;
-    }
+  @media only screen and (max-width: $M) {
+    margin-top: 5px;
   }
-}
+  @media only screen and (max-width: $M) {
+    display: block;
+  }
 }
 .remove-gap {
   justify-content: inherit;
   .user__info--details {
-    margin-right: 5%;
+    margin-right: 3.4%;
   }
 }
 
@@ -71,7 +78,9 @@
   &--manager {
     width: 30%;
     font-weight: $bolder;
-    padding-top: 21%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     &--text {
       color: #a1a1a1;
     }
@@ -79,7 +88,7 @@
       margin-top: $margin-small;
     }
     &--signature {
-      margin-top: $margin-large
+      margin-top: $margin-large;
     }
   }
   &--amounts {
@@ -89,8 +98,8 @@
     &--wrapper {
       @include flex-between-center();
       font-size: $font-large;
-       margin-top: $margin-large;
-      .label{
+      margin-top: $margin-large;
+      .label {
         text-align: right;
         min-width: 35%;
       }
@@ -103,62 +112,119 @@
         font-size: 27px;
       }
     }
+    @media only screen and (max-width: 800px) {
+      width: 55%;
+    }
   }
-@media only screen and (max-width: $M) {
-  padding: 0px 5px;
-  margin: 5px 0px;
-  &--manager{
-    width: 41%;
-    font-size: $font-responsive-small;
-    padding-top: 61%;
-  }
-  &--amounts{
-    width: $half-width;
-    &--wrapper{
+  @media only screen and (max-width: $M) {
+    padding: 0px 5px;
+    margin: 5px 0px;
+    flex-direction: column-reverse;
+    &--manager {
+      width: 41%;
       font-size: $font-responsive-small;
-      .final__label{
-        font-size: $font-responsive-small;
-      }
-      .final__amount{
+    }
+    &--amounts {
+      width: auto;
+      &--wrapper {
         font-size: $font-small;
+        margin-bottom: 20px;
+        .label {
+          text-align: left;
+        }
+        .final__label {
+          font-size: $font-small;
+        }
+        .final__amount {
+          font-size: $font-small;
+        }
       }
     }
   }
 }
+
+.summary-table {
+  width: 100%;
+  border: none;
+  td,
+  th {
+    text-align: center;
+  }
+  th {
+    background-color: $primary-blue;
+    font-size: $font-medium;
+    font-weight: $bold;
+    color: white;
+  }
+  td {
+    padding: 10px;
+    font-size: $font16;
+    font-weight: $bold;
+    @media screen and (max-width: 600px) {
+      padding: 4px;
+      font-size: 7px;
+    }
+  }
+  .room-data {
+    text-align: left;
+    padding-left: 14px;
+    font-size: $font16;
+    .room {
+      font-weight: $bold;
+    }
+    .room-type {
+      font-weight: $bold;
+      color: #929292;
+      margin-top: 8px;
+    }
+    @media screen and (max-width: 600px) {
+      font-size: 7px;
+      padding-left: 0;
+      .room-type {
+        margin-top: 3px;
+      }
+    }
+  }
 }
 
-.add__more__gst{
+.add__more__gst {
   @include flex-between-center();
 
   font-size: $font-large;
   font-weight: $bolder;
   padding: 0px $padding-large;
+  margin: $margin-large 0px;
 
-
-  .add__gst{
-    text-decoration: underline;
-    color: #a1a1a1;
-    font-weight: $medium;
-  }
-@media only screen and (max-width: $M) {
-  font-size: $font-small;
-  padding: 0px 5px;
-  .add__gst{
-    font-size: $font-responsive-small;
+  @media only screen and (max-width: $M) {
+    font-size: $font-small;
+    padding: 0px 5px;
   }
 }
+
+:host ::ng-deep .mat-header-row {
+  @media screen and (max-width: 600px) {
+    height: 24px;
+    th {
+      padding: 5px !important;
+      font-size: 7px !important;
+    }
+  }
 }
 
-.description-table-wrapper {
-  margin-top: $margin-large;
+.change-color {
+  color: #09a053;
 }
+
+// .description-table-wrapper {
+//   margin-bottom: $margin-large;
+// }
 
 .description-table {
   width: $full-width;
   border-collapse: collapse;
-  tr{
+  tr {
     border: 0;
-   @include flex-between-center();
+    @include flex-between-center();
   }
   .header {
     background-color: $primary-blue;
@@ -201,23 +267,23 @@
       }
     }
   }
-@media only screen and (max-width: $M) {
-  .header{
-    font-size: 8px;
-    td{
-      padding: 5px;
+  @media only screen and (max-width: $M) {
+    .header {
+      font-size: 8px;
+      td {
+        padding: 5px;
+      }
+    }
+    .order-details {
+      font-size: 8px;
+      td {
+        padding: 5px;
+      }
     }
   }
-  .order-details{
-    font-size: 8px;
-    td{
-      padding: 5px;
-    }
-  }
-}
 }
 
-.verify__button{
+.verify__button {
   border: none;
   border-radius: 5px;
   height: 36px;
@@ -225,5 +291,32 @@
   &:focus {
     border: none;
     outline: none;
+  }
+}
+
+.add__gst {
+  text-decoration: underline;
+  color: #a1a1a1;
+  font-weight: $medium;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    font-size: $font-responsive-small;
+  }
+}
+
+.mobile-show {
+  display: none;
+  @media only screen and (max-width: $M) {
+    display: block;
+    text-align: right;
+    margin-bottom: $margin-large;
+  }
+}
+
+.mobile-hide {
+  @media only screen and (max-width: $M) {
+    display: none;
   }
 }

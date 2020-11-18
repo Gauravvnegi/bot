@@ -1,0 +1,128 @@
+@import 'main';
+
+.wrapper {
+  display: flex;
+  &--left {
+    width: 35%;
+    padding: 1%;
+    height: 100vh;
+    position: relative;
+    &-logo {
+      height: 80px;
+      width: 100px;
+      img {
+        height: $full;
+        width: $full;
+      }
+    }
+    &-auth-panel {
+      padding: $padding30;
+      @media only screen and (max-width: 1300px) {
+        padding: $padding20;
+      }
+    }
+    &-footer {
+      font-size: 14px;
+      width: 97%;
+      font-weight: 400;
+      text-align: center;
+      position: absolute;
+      bottom: 15px;
+      color: #6d7580;
+      a {
+        text-decoration: none;
+        color: $primary-purple;
+        &:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+      @media only screen and (max-width: 800px) {
+        font-size: 13px;
+        bottom: 25px;
+      }
+    }
+    &-svg-icons {
+      position: absolute;
+    }
+    .first {
+      top: 14px;
+      right: 45%;
+    }
+    .second {
+      top: 83px;
+      right: 10px;
+    }
+    .third {
+      top: 80%;
+      right: 35px;
+    }
+    .fourth {
+      bottom: 0px;
+      left: 10px;
+    }
+  }
+  &--right {
+    width: 65%;
+    padding: 1%;
+    height: 100vh;
+    background-image: url('../../../../../assets/auth-banner.png');
+    background-repeat: no-repeat;
+    background-size: $full $full;
+    position: relative;
+    &-header {
+      padding: $padding15 0px;
+      @include flex-item-center();
+      justify-content: flex-end;
+      a {
+        text-decoration: none;
+        font-size: $font12;
+        font-weight: $bolder;
+        margin: 0px $margin10;
+        color: white;
+      }
+    }
+    &-managing-hotel {
+      margin: 0px 8%;
+      margin-top: 15%;
+      color: white;
+      .heading {
+        font-size: 40px;
+        margin: $margin20 0px;
+        @media only screen and (max-width: 1300px) {
+          font-size: 30px;
+        }
+      }
+      &-option-box {
+        @include flex-space-between();
+        flex-wrap: wrap;
+        .option {
+          width: $half;
+          margin-bottom: $margin20;
+          @include flex-item-center();
+          padding: $padding10;
+
+          .material-icons {
+            margin-right: $margin10;
+          }
+          .option-label {
+            margin: 0;
+            @media only screen and (max-width: 800px) {
+              font-size: $font14;
+            }
+          }
+        }
+      }
+    }
+    &-footer {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 96%;
+      bottom: 10px;
+      font-size: 14px;
+      color: white;
+    }
+  }
+}

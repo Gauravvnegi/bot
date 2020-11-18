@@ -22,9 +22,11 @@ import { GuestDetailsService } from './../../../../../../shared/src/lib/services
   styleUrls: ['./guest-details.component.scss'],
 })
 export class GuestDetailsComponent implements OnInit, OnChanges {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  @ViewChildren('panel')
-  panelList: QueryList<MatExpansionPanel>;
+  @ViewChild('primaryGuestAccordian') primaryGuestAccordian: MatAccordion;
+  @ViewChild('secondaryGuestAccordian') secondaryGuestAccordian: MatAccordion;
+
+  @ViewChildren('secondaryGuestpanel')
+  secondaryGuestPanelList: QueryList<MatExpansionPanel>;
 
   @Input() guestType: string;
   @Input() parentForm: FormGroup;

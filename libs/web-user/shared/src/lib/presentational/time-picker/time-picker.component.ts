@@ -8,8 +8,7 @@ import { ValidatorService } from '../../services/validator.service';
   styleUrls: ['./time-picker.component.scss'],
   providers: [ValidatorService],
 })
-export class TimePickerComponent extends BaseComponent implements AfterViewInit{
-
+export class TimePickerComponent extends BaseComponent {
   // @ViewChild('timePickerRef') timePicker;
   @Input() defaultTime = '11:00 am';
 

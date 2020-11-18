@@ -6,7 +6,6 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
@@ -38,6 +37,7 @@ import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/def
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 
 @NgModule({
   imports: [
@@ -88,6 +88,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     SpaService,
     CakeService,
     DefaultAmenityService,
+    ThankYouService,
   ],
 })
 export class Temp000001Module {}

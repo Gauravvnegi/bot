@@ -6,7 +6,8 @@ import {
   ViewChild,
   OnDestroy,
   Input,
-  OnChanges} from '@angular/core';
+  OnChanges,
+} from '@angular/core';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { AirportPickupComponent } from '../airport-pickup/airport-pickup.component';
 import { BreakfastComponent } from '../breakfast/breakfast.component';
@@ -21,9 +22,9 @@ import { DefaultAmenityComponent } from '../default-amenity/default-amenity.comp
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
-  'BF': BreakfastComponent,
-  'DNI': BreakfastComponent,
-  'SPA': SpaComponent,
+  BF: BreakfastComponent,
+  DNI: BreakfastComponent,
+  SPA: SpaComponent,
 };
 
 @Component({
@@ -32,12 +33,11 @@ const componentMapping = {
   styleUrls: ['./paid-service.component.scss'],
 })
 export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
- 
-  @ViewChild("serviceMetadata", { read: ViewContainerRef }) serviceContainer;
+  @ViewChild('serviceMetadata', { read: ViewContainerRef }) serviceContainer;
 
   @Input() parentForm: FormGroup;
- 
-  slides;
+
+  slides = [];
   componentRef;
   selectedService = '';
   dialogRef;
@@ -69,50 +69,61 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     private _snackbarService: SnackBarService,
     private _resolver: ComponentFactoryResolver,
     private _buttonService: ButtonService
-  ) { 
+  ) {
     this.initPaidAmenitiesForm();
   }
 
   ngOnInit(): void {
-    this.slides = this.hotelComplimentaryAmenities;
+    this.slides = this.paidAmenities;
     this.addAmenityToForm();
     this.listenForComponentRender();
   }
 
-  ngOnChanges(){
-    this.amenitiesForm.addControl('paidAmenities',this.paidAmenitiesForm);
+  ngOnChanges() {
+    this.amenitiesForm.addControl('paidAmenities', this.paidAmenitiesForm);
   }
 
   initPaidAmenitiesForm() {
     this.paidAmenitiesForm = this._fb.group({});
   }
 
-  addAmenityToForm(){
-    this.slides.forEach(slide => {
-      this.paidAmenitiesForm.addControl(slide.packageCode, this.getAmenitiesFG());
-      this.getAminityForm(slide.packageCode).get('id').patchValue(slide.id);
-      this.getAminityForm(slide.packageCode).get('isSelected').patchValue(slide.isSelected);
+  addAmenityToForm() {
+    this.slides.forEach((slide) => {
+      this.paidAmenitiesForm.addControl(
+        slide.packageCode,
+        this.getAmenitiesFG()
+      );
+      this.getAminityForm(slide.packageCode).patchValue(slide);
     });
   }
 
-  getAmenitiesFG(){
+  getAmenitiesFG() {
     return this._fb.group({
       id: [''],
+      rate: [''],
+      currencyCode: [''],
+      packageCode: [''],
+      imgUrl: [''],
+      label: [''],
+      quantity: [''],
       isSelected: [''],
-    })
+    });
   }
 
-  servicePackage(slideData){
-    this.selectedService = slideData.packageCode;
-    let component = componentMapping[slideData.packageCode];
-    if(component === undefined){
+  servicePackage(slidePackageCode) {
+    this.selectedService = slidePackageCode;
+    let component = componentMapping[slidePackageCode];
+    if (component === undefined) {
       component = DefaultAmenityComponent;
     }
-    this.createComponent(component, slideData);
+    this.createComponent(
+      component,
+      this.slides.find((slide) => slide.packageCode == slidePackageCode)
+    );
   }
 
   createComponent(component, slideData) {
-    this.clearContainer(); 
+    this.clearContainer();
     const factory = this._resolver.resolveComponentFactory(component);
     this.componentRef = this.serviceContainer.createComponent(factory);
     this.listenForServiceAddition();
@@ -120,60 +131,87 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     this.addPropsToComponentInstance(slideData);
   }
 
-  addPropsToComponentInstance(slideData){
-    this.componentRef.instance.paidAmenitiesForm = this.paidAmenityForm.get(slideData.packageCode) as FormGroup;
-    this.componentRef.instance.uniqueData = {code:slideData.packageCode, id:slideData.id};
-    this.componentRef.instance.amenityData = this.getAminityData(slideData.packageCode);
+  addPropsToComponentInstance(slideData) {
+    this.componentRef.instance.paidAmenitiesForm = this.paidAmenityForm.get(
+      slideData.packageCode
+    ) as FormGroup;
+    this.componentRef.instance.uniqueData = {
+      code: slideData.packageCode,
+      id: slideData.id,
+    };
+    this.componentRef.instance.amenityData = this.getAminityData(
+      slideData.packageCode
+    );
+    this.componentRef.instance.quantity = slideData.quantity;
   }
 
-  getAminityData(packageCode){
-    let aminityData; 
-    this.slides.forEach(amenity => {
-        if(amenity.packageCode === packageCode){
-          aminityData = amenity.metaData; 
-        }
-      });
+  getAminityData(packageCode) {
+    let aminityData;
+    this.slides.forEach((amenity) => {
+      if (amenity.packageCode === packageCode) {
+        aminityData = amenity.metaData;
+      }
+    });
     return aminityData;
   }
 
   clearContainer() {
-    this.serviceContainer.clear();
+    if (this.serviceContainer) {
+      this.serviceContainer.clear();
+    }
   }
 
-  listenForComponentRender(){
-    this._paidService.isComponentRendered$.subscribe(()=>{
-      this.getAminityForm(this._paidService.uniqueData.code).addControl('metaData', this._paidService.amenityForm);
-    })
+  listenForComponentRender() {
+    this._paidService.isComponentRendered$.subscribe(() => {
+      this.getAminityForm(this._paidService.uniqueData.code).addControl(
+        'metaData',
+        this._paidService.amenityForm
+      );
+    });
   }
 
-  listenForServiceAddition(){
-    this.componentRef && 
-    this.componentRef.instance.addEvent &&
-    this.componentRef.instance.addEvent.subscribe(packageCode => {
-      if(this.paidAmenitiesForm.get(packageCode).get('metaData')){
-        this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
-      }
-      this.addAmenity(packageCode);
-    })
-  }
-
-  addAmenity(packageCode){
-    let amenityId = this.getAminityForm(packageCode).get('id').value;
-    let data = this._paidService.mapDataForAminity(this._paidService.amenityData, amenityId);
-    this._paidService.addAmenity(this._reservationService.reservationId, data)
-    .subscribe(response =>{
-      this._paidService.updateAmenitiesDS(response);
-      this.clearContainer();
-      this.selectedService ='';
-      this._snackbarService.openSnackBarAsText('Amenity added successfully', '', {
-        panelClass: 'success',
+  listenForServiceAddition() {
+    this.componentRef &&
+      this.componentRef.instance.addEvent &&
+      this.componentRef.instance.addEvent.subscribe((packageCode) => {
+        // if(this.paidAmenitiesForm.get(packageCode).get('metaData')){
+        //   this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
+        // }
+        this.addAmenity(packageCode);
       });
-      this._buttonService.buttonLoading$.next(this.componentRef.instance.saveButton);
-    },
-    (error) => {
-      this._snackbarService.openSnackBarAsText('Some error occured');
-      this._buttonService.buttonLoading$.next(this.componentRef.instance.saveButton);
-    })
+  }
+
+  addAmenity(packageCode) {
+    let amenityId = this.getAminityForm(packageCode).get('id').value;
+    let data = this._paidService.mapDataForAminity(
+      this._paidService.amenityData,
+      amenityId
+    );
+    this._paidService
+      .addAmenity(this._reservationService.reservationId, data)
+      .subscribe(
+        (response) => {
+          this._paidService.updateAmenitiesDS(response);
+          this.clearContainer();
+          this.selectedService = '';
+          this._snackbarService.openSnackBarAsText(
+            'Amenity added successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+          this._buttonService.buttonLoading$.next(
+            this.componentRef.instance.saveButton
+          );
+        },
+        (error) => {
+          this._snackbarService.openSnackBarAsText('Some error occured');
+          this._buttonService.buttonLoading$.next(
+            this.componentRef.instance.saveButton
+          );
+        }
+      );
   }
 
   openDialog(aminityId, packageCode) {
@@ -182,55 +220,95 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     dialogConfig.autoFocus = true;
     this.dialogRef = this.dialog.open(ConfirmationPopupComponent, dialogConfig);
 
-    this.dialogRef.componentInstance.onSubmitEvent.subscribe(() =>{
+    this.dialogRef.componentInstance.onSubmitEvent.subscribe(() => {
       this.removeAmenity(aminityId, packageCode);
-    })
+    });
   }
 
-  listenForServiceRemoval(){
+  listenForServiceRemoval() {
     this.componentRef.instance.removeEvent.subscribe((uniqueData) => {
       this.openDialog(uniqueData.amenityId, uniqueData.packageCode);
     });
   }
 
-  removeAmenity(aminityId, packageCode){
-    this._paidService.removeAmenity(this._reservationService.reservationId, aminityId)
-    .subscribe(response =>{
-      this._paidService.updateAmenitiesDS(response);
-      this.clearContainer();
-      this.selectedService ='';
-      this._snackbarService.openSnackBarAsText('Amenity removed successfully', '', {
-        panelClass: 'success',
-      });
-      this.dialogRef.close()
-      this.getAminityForm(packageCode).removeControl('metaData');
-    },
-    (error) => {
-      this._snackbarService.openSnackBarAsText('Some error occured');
-      this.dialogRef.close()
-    })
+  removeAmenity(aminityId, packageCode) {
+    this._paidService
+      .removeAmenity(this._reservationService.reservationId, aminityId)
+      .subscribe(
+        (response) => {
+          this._paidService.updateAmenitiesDS(response);
+          this.clearContainer();
+          this.selectedService = '';
+          this._snackbarService.openSnackBarAsText(
+            'Amenity removed successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+          this.dialogRef.close();
+          this.getAminityForm(packageCode).removeControl('metaData');
+        },
+        (error) => {
+          this._snackbarService.openSnackBarAsText('Some error occured');
+          this.dialogRef.close();
+        }
+      );
   }
 
-  getAminityForm(packageCode){
+  getAminityForm(packageCode) {
     return this.paidAmenitiesForm.get(packageCode) as FormGroup;
   }
 
-  ngOnDestroy() {
-    this.componentRef.destroy();
+  afterChange(e) {
+    let draggableList = (e.event.target as HTMLElement).getElementsByClassName(
+      'slick-list draggable'
+    );
+    if (draggableList && draggableList.length) {
+      let draggableEL = draggableList[0];
+      const elements = Array.from(
+        (draggableEL.firstChild as HTMLElement).getElementsByClassName(
+          'slick-cloned'
+        )
+      );
+
+      for (const element of elements) {
+        const slidePackageCode = (element.firstChild as HTMLElement).getAttribute(
+          'data-slidedata'
+        );
+
+        if (slidePackageCode) {
+          element.addEventListener(
+            'click',
+            this.servicePackage.bind(this, slidePackageCode)
+          );
+        }
+      }
+    }
   }
 
-  get hotelComplimentaryAmenities() {
+  trackByPackageId(index: number, paidPackage: any) {
+    return paidPackage['id'];
+  }
+
+  ngOnDestroy() {
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
+  }
+
+  get paidAmenities() {
     return (
       this._paidService.paidAmenities &&
       this._paidService.paidAmenities.paidService
     );
   }
 
-  get amenitiesForm(){
-    return this.parentForm.get('amenities') as FormGroup; 
+  get amenitiesForm() {
+    return this.parentForm.get('amenities') as FormGroup;
   }
 
-  get paidAmenityForm(){
+  get paidAmenityForm() {
     return this.amenitiesForm.get('paidAmenities') as FormGroup;
   }
 }

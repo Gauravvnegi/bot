@@ -46,19 +46,26 @@ export class InputPopupComponent implements OnInit {
       .checkIn(this._reservationService.reservationData.id, data)
       .subscribe(
         (res) => {
-          this._snackbar.openSnackBarAsText('Checkin successfull', '', {
+          this._snackbar.openSnackBarAsText('Checkin successful', '', {
             panelClass: 'success',
           });
-          this.close();
+          this.close('success');
         },
         ({ error }) => {
           this._snackbar.openSnackBarAsText(error.cause);
           this._buttonService.buttonLoading$.next(this.saveButton);
+          //this.close('success');
         }
       );
   }
 
-  close() {
-    this.dialogRef.close({ event: 'close' });
+  close(state?) {
+    let data;
+    if(state){
+      data = { event: 'close',state: state}
+    }else{
+      data = {event: 'close'}
+    }
+    this.dialogRef.close(data);
   }
 }

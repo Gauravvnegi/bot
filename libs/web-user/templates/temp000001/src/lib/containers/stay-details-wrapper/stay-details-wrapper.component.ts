@@ -58,11 +58,14 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     this._amenitiesService.getHotelAmenities(this._hotelService.hotelId)
     .subscribe(response =>{
       this.amenities = response;
-      this._complimentaryService.initComplimentaryAmenitiesDetailDS(this.amenities && this.amenities.complimentryAmenities);
-      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidAmenities, this.reservationData.specialAmenities.paidAmenities);
+      this._complimentaryService.initComplimentaryAmenitiesDetailDS(this.amenities && this.amenities.complimentryPackages);
+      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidPackages, this.reservationData.packages.paidPackages,this._stayDetailService.stayDetails.stayDetail.arrivalTime);
     })
   }
 
+  /**
+   * Funtion to save/update all the details for guest stay on Next button click
+   */
   saveStayDetails() {
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(formValue);
@@ -77,8 +80,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
           );
           this._stepperService.setIndex('next');
         },
-        (error) => {
-          this._snackBarService.openSnackBarAsText('Some error occured');
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

@@ -1,0 +1,68 @@
+@import 'main';
+
+.popup-wrapper {
+//   height: 30vh;
+  border-radius: 5px;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f4f5f7;
+    .title-container {
+      @include flex-item-center();
+    }
+    .heading {
+      font-size: $font14;
+      color: $primary-black;
+      font-weight: $medium;
+    }
+    .warning {
+      color: $primary-gray;
+      margin-right: 20px;
+    }
+    .clear {
+      color: $primary-black;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px 0px;
+    p {
+      color: $primary-black;
+      font-size: $font14;
+      margin: 3px 0;
+      font-weight: $medium;
+    }
+    .button-wrapper {
+      display: flex;
+      margin-top: 2rem;
+      button {
+        margin: 0 7px;
+        color: white;
+        font-size: $font12;
+        font-weight: 400;
+        width: $popup-button-width;
+        border-radius: 25px;
+        &:hover {
+          cursor: pointer;
+          box-shadow: 0px 4px 4px #4b56c04d;
+        }
+      }
+      .cancel {
+        background-color: white;
+        margin-right: $margin20;
+        color: $primary-purple;
+        border: 1px solid $primary-purple;
+      }
+      .accept {
+        background-color: $primary-purple;
+      }
+    }
+  }
+}

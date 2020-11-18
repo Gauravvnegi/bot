@@ -8,6 +8,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { get } from 'lodash';
 import { GuestDetailsComponent } from '../guest-details/guest-details.component';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-guest-details-wrapper',
@@ -49,6 +50,10 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     this.parentForm.addControl(data.name, data.value);
   }
 
+  /**
+   * Funtion to save/update all the guests personal details for on Next button click
+   */
+
   saveGuestDetails() {
     const status = this._guestDetailService.validateGuestDetailForm(
       this.parentForm
@@ -73,8 +78,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
           );
           this._stepperService.setIndex('next');
         },
-        (error) => {
-          this._snackBarService.openSnackBarAsText('Some error occured');
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );
@@ -83,13 +88,21 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private performActionIfNotValid(status: any[]) {
+    const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
+    guestDetailFG.markAllAsTouched();
+
     this._snackBarService.openSnackBarAsText(status[0]['msg']);
-    if (get(status[0], ['data', 'index']) >= 0) {
-      this.guestDetailsComp.accordion.closeAll();
-      const allPanels = this.guestDetailsComp.panelList.toArray();
-      allPanels[status[0].data.index].open();
+
+    if (get(status[0], ['data', 'type']) == 'primary') {
+      this.guestDetailsComp.primaryGuestAccordian.openAll();
+      this.guestDetailsComp.secondaryGuestAccordian &&
+        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
     } else {
-      this.guestDetailsComp.accordion.openAll();
+      this.guestDetailsComp.primaryGuestAccordian.closeAll();
+      this.guestDetailsComp.secondaryGuestAccordian &&
+        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
+      const allPanels = this.guestDetailsComp.secondaryGuestPanelList.toArray();
+      allPanels[status[0].data.index].open();
     }
     return;
   }

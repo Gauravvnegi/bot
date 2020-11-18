@@ -12,32 +12,76 @@
   </div>
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
-      <!-- Header goes in here -->
-      <div style="display: flex; align-items: center; width: 59%;">
-        <admin-search-bar style="width: 70%;"></admin-search-bar>
-        <button class="header--button">Go</button>
-        <button class="header--button">
-          Filter
-          <mat-icon class="material-icons" matSuffix>filter_list</mat-icon>
-        </button>
-      </div>
-
-      <hospitality-bot-daterange></hospitality-bot-daterange>
-      <admin-profile-dropdown [items]="profile"></admin-profile-dropdown>
-    </div>
-
-    <div class="main-panel--container">
-      <div class="refresh__wrapper">
-        <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
-          <p>Refresh</p>
-          <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
+      <div class="options">
+        <!-- <admin-search-bar class="search-bar"></admin-search-bar> -->
+        <div class="filter-range-wrapper">
+          <div style="position: relative;" class="temp-width">
+            <button (click)="toggleGlobalFilter()" class="header--button">
+              <p class="filter-button--text">
+                {{ filterConfig.branchName }}&nbsp;<b
+                  style="color: #d9d9d9; font-size: 12px;"
+                  >{{ filterConfig.totalFilterContent() }}
+                </b>
+              </p>
+              <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
+            </button>
+            <div
+              class="filter-wrapper"
+              *ngIf="
+                isGlobalFilterVisible &&
+                (filterService.emitFilterValue$ | async) as initialFilterValue
+              "
+            >
+              <admin-filter
+                [initialFilterValue]="initialFilterValue"
+                (onCloseFilter)="toggleGlobalFilter()"
+                (onApplyFilter)="applyFilter($event)"
+                (onResetFilter)="resetFilter($event)"
+              ></admin-filter>
+            </div>
+          </div>
+          <hospitality-bot-daterange
+            class="date-range temp-width"
+            (onDateRangeFilter)="applyDateRangeFilter($event)"
+          ></hospitality-bot-daterange>
         </div>
-        <div class="seperator"></div>
+        <!-- <div
+        class="filter-wrapper"
+        *ngIf="
+          isGlobalFilterVisible &&
+          (filterService.emitFilterValue$ | async) as initialFilterValue
+        "
+      >
+        <admin-filter
+          [initialFilterValue]="initialFilterValue"
+          (onCloseFilter)="toggleGlobalFilter()"
+          (onApplyFilter)="applyFilter($event)"
+          (onResetFilter)="resetFilter($event)"
+        ></admin-filter>
+      </div> -->
+        <div class="dropdown-wrapper">
+          <admin-profile-dropdown
+            [items]="profile"
+            (onProfileAction)="profileAction($event)"
+          ></admin-profile-dropdown>
+        </div>
+      </div>
+      <!-- <div class="refresh__wrapper">
         <p class="status">
-          Dashboard last updated at
+          Last updated at
           {{ lastUpdatedAt }}
         </p>
-      </div>
+        <div class="seperator"></div>
+        <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
+          <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
+        </div>
+      </div> -->
+      <mat-progress-bar
+        *ngIf="progressSpinnerService.isProgressSpinnerVisible"
+        mode="query"
+      ></mat-progress-bar>
+    </div>
+    <div class="main-panel--container">
       <div class="main">
         <div class="router__wrapper">
           <router-outlet></router-outlet>

@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { delay } from 'rxjs/operators';
-import { pipe, of } from 'rxjs';
+import { pipe, of, Observable } from 'rxjs';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
-
+import { FormGroup, FormBuilder } from '@angular/forms';
+import * as FileSaver from 'file-saver';
 interface Import {
   name: string;
   code: string;
@@ -14,27 +15,48 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  @ViewChild('dt') table: Table; //reference to data-table
+  tableName = 'Datatable'; //table name
+
   @Input() cols = [
     { field: 'vin', header: 'Vin' },
     { field: 'year', header: 'Year' },
     { field: 'brand', header: 'Brand' },
     { field: 'color', header: 'Color' },
-  ];
+  ]; // table columns in header
+
+  /**
+   * Action Buttons & filters visibility
+   */
+  isActionButtons: boolean = false;
+  isQuickFilters: boolean = false;
+  isTabFilters = true;
+  isCustomSort = true;
+
+  tableFG: FormGroup;
+
+  isPaginaton: boolean = false;
+  rowsPerPage = 5;
+  showCurrentPageReport: boolean = true;
+  rowsPerPageOptions = [5, 10, 25, 50];
+  first = 0; //index of the first page to show
 
   @Input() tableConfig = {
-    styleClass: 'p-datatable-lg p-datatable-gridlines p-datatable-striped',
+    styleClass: 'p-datatable-sm p-datatable-gridlines',
     striped: true,
     gridLines: true,
     size: 'lg',
     paginator: true,
-  };
+  }; // table-config
 
+  isResizableColumns = true;
+  isAutoLayout = false;
   @Input() loading: boolean = false;
 
-  tabList = [
-    { label: 'Inhouse(3)', content: '' },
-    { label: 'Arrival(3)', content: '' },
-    { label: 'Departure(3)', content: '' },
+  tabFilterItems = [
+    { label: 'Inhouse', content: '', value: 'INHOUSE' },
+    { label: 'Arrival', content: '', value: 'ARRIVAL' },
+    { label: 'Departure', content: '', value: 'DEPARTURE' },
   ];
 
   values = [];
@@ -42,12 +64,6 @@ export class BaseDatatableComponent implements OnInit {
   TabItems: MenuItem[];
 
   buttons = [];
-
-  isPaginaton: boolean = false;
-  rowsPerPage = 5;
-  showCurrentPageReport: boolean = true;
-  rowsPerPageOptions = [5, 10, 25, 50];
-  first = 0; //index of the first page to show
 
   selectedExport1: Import;
 
@@ -70,36 +86,56 @@ export class BaseDatatableComponent implements OnInit {
     { vin: 9, year: 2023, brand: 'mg', color: 'yellow' },
     { vin: 10, year: 2023, brand: 'mg', color: 'yellow' },
     { vin: 11, year: 2023, brand: 'mg', color: 'yellow' },
-  ];
-
-  // only field property is used by table rest are dummy
+  ]; // testing data-source
 
   totalRecords = 20;
-  @ViewChild('dt') table: Table;
-  tableName = 'Datatable';
 
   selectionMode = 'multiple';
   selectedRows = [];
 
-  constructor() {}
+  documentActionTypes = [
+    {
+      label: 'Export All',
+      value: 'exportAll',
+      type: '',
+      defaultLabel: 'Export All',
+    },
+    {
+      label: `Export`,
+      value: 'export',
+      type: 'countType',
+      defaultLabel: 'Export',
+    },
+  ];
+  documentTypes = [
+    { label: 'CSV', value: 'csv' },
+    // { label: 'EXCEL', value: 'excel' },
+    // { label: 'PDF', value: 'pdf' },
+  ];
 
-  export = [{ label: 'Export', value: 'export' }];
+  quickReplyTypes = [
+    { label: 'All', icon: '', isSelected: true },
+    { label: 'Check-In Pending (3)', icon: '', isSelected: false },
+    { label: 'Check-In Completed (3)', icon: '', isSelected: false },
+    { label: 'Express Check-In (10)', icon: '', isSelected: false },
+  ];
 
-  csv = [{ label: 'CSV', value: 'csv' }];
+  constructor(private _fb: FormBuilder) {
+    this.initTableFG();
+  }
+
+  initTableFG() {
+    this.tableFG = this._fb.group({
+      documentActions: this._fb.group({
+        documentActionType: ['exportAll'],
+        documentType: ['csv'],
+      }),
+      quickReplyActionFilters: [[]],
+    });
+  }
 
   ngOnInit(): void {
     this.loadInitialData();
-    this.TabItems = [
-      { label: 'Inhouse(3)', icon: '' },
-      { label: 'Arrival(3)', icon: '' },
-      { label: 'Departure(3)', icon: '' },
-    ];
-
-    this.buttons = [
-      { label: 'Check-In Pending (3)', icon: '' },
-      { label: 'Check-In Completed (3)', icon: '' },
-      { label: 'Express Check-In (10)', icon: '' },
-    ];
     //this.values = [...this.dataSource];
   }
 
@@ -107,15 +143,12 @@ export class BaseDatatableComponent implements OnInit {
 
   loadInitialData() {
     this.loading = true;
-    of(this.dataSource.slice(0, this.rowsPerPage))
-      .pipe(delay(2000))
-      .subscribe((data) => {
-        this.values = data;
-        this.loading = false;
-
-        //setting pagination
-        this.totalRecords = this.dataSource.length;
-      });
+    this.fetchDataFrom().subscribe((data) => {
+      this.values = data;
+      this.loading = false;
+      //setting pagination
+      this.totalRecords = this.dataSource.length;
+    });
   }
 
   private paginate(event) {
@@ -128,14 +161,22 @@ export class BaseDatatableComponent implements OnInit {
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
-    of(this.dataSource.slice(event.first, event.first + event.rows))
-      .pipe(delay(2000))
-      .subscribe((data) => {
+    this.fetchDataFrom({ first: event.first, rows: event.rows }).subscribe(
+      (data) => {
         this.values = data;
         this.loading = false;
         //setting pagination
         this.totalRecords = this.dataSource.length;
-      });
+      }
+    );
+  }
+
+  fetchDataFrom(
+    config = { first: 0, rows: this.rowsPerPage }
+  ): Observable<any> {
+    return of(
+      this.dataSource.slice(config.first, config.first + config.rows)
+    ).pipe(delay(2000));
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
@@ -143,10 +184,20 @@ export class BaseDatatableComponent implements OnInit {
     this.table.filter(value, field, matchMode);
   }
 
-  exportCSV() {
+  onDocumentActions() {
     //check for selected. if true pass an option
-    this.table.exportCSV();
+    this.tableFG.value;
+    //this.table.exportCSV();
+    switch (this.tableFG.get('documentActions').get('documentType').value) {
+      case 'csv':
+        this.exportCSV();
+        break;
+      default:
+        break;
+    }
   }
+
+  exportCSV() {}
 
   exportPdf() {
     import('jspdf').then((jsPDF) => {
@@ -205,5 +256,52 @@ export class BaseDatatableComponent implements OnInit {
 
   isFirstPage(): boolean {
     return this.values ? this.first === 0 : true;
+  }
+
+  isQuickReplyFilterSelected(quickReplyFilter) {
+    // const index = this.quickReplyTypes.indexOf(offer);
+    // return index >= 0;
+    return true;
+  }
+
+  // toggleQuickReplyFilter(quickReplyFilter) {}
+
+  onRowSelect(event) {
+    this.documentActionTypes.forEach((item) => {
+      if (item.type == 'countType') {
+        item.label = `Export (${this.selectedRows.length})`;
+        this.tableFG
+          .get('documentActions')
+          .get('documentActionType')
+          .patchValue('export');
+      }
+    });
+  }
+
+  onRowUnselect(event?) {
+    this.documentActionTypes.forEach((item) => {
+      if (item.type == 'countType') {
+        item.label =
+          this.selectedRows.length > 0
+            ? `Export (${this.selectedRows.length})`
+            : 'Export';
+
+        if (!this.selectedRows.length) {
+          this.tableFG
+            .get('documentActions')
+            .get('documentActionType')
+            .patchValue('exportAll');
+        }
+      }
+    });
+  }
+
+  resetRowSelection() {
+    this.selectedRows = [];
+    this.onRowUnselect();
+  }
+
+  onCheckboxClicked(event) {
+    event.stopPropagation();
   }
 }

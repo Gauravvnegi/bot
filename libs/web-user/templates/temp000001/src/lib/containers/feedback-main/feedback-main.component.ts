@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { forkJoin, of } from 'rxjs';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -31,8 +31,10 @@ export class FeedbackMainComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService,
     private fb: FormBuilder,
     private _feedbackDetailsService: FeedbackDetailsService,
-    private _buttonService: ButtonService,
     private _snackBarService: SnackBarService,
+    private _buttonService: ButtonService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -62,7 +64,6 @@ export class FeedbackMainComponent implements OnInit {
 
   addFGEvent(data) {
     this.parentForm.addControl(data.name, data.value);
-    console.log(this.parentForm);
   }
 
   getFeedBackConfig() {
@@ -75,7 +76,7 @@ export class FeedbackMainComponent implements OnInit {
   saveFeedbackDetails() {
     const status = this._feedbackDetailsService.validateFeedbackDetailForm(
       this.parentForm
-    );
+    ) as Array<any>;
 
     if (status.length) {
       this.performActionIfNotValid(status);
@@ -85,32 +86,28 @@ export class FeedbackMainComponent implements OnInit {
 
     let value = this.parentForm.getRawValue();
     let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail
+      value && value.feedbackDetail,this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
 
     this._feedbackDetailsService
       .addFeedback(this._reservationService.reservationId, data)
       .subscribe(
         (response) => {
-          this._snackBarService.openSnackBarAsText('Feedback successfull', '', {
-            panelClass: 'success',
-          });
-
-      this._buttonService.buttonLoading$.next(this.saveButton);
-          // this._buttonService.buttonLoading$.next(
-          //   this.buttonRefs['saveButton']
-          // );
-          //  this._stepperService.setIndex('next');
+          // this._snackBarService.openSnackBarAsText('Feedback successful', '', {
+          //   panelClass: 'success',
+          // });
+          this._buttonService.buttonLoading$.next(this.saveButton);
+          this.openThankyouPage('feedback');
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.cause);
-          // this._buttonService.buttonLoading$.next(
-          //   this.buttonRefs['saveButton']
-          // );
-
-      this._buttonService.buttonLoading$.next(this.saveButton);
+          this._snackBarService.openSnackBarAsText(error.message);
+          this._buttonService.buttonLoading$.next(this.saveButton);
         }
       );
+  }
+
+  openThankyouPage(state){
+    this.router.navigateByUrl(`/thankyou?token=${this.route.snapshot.queryParamMap.get('token')}&entity=thankyou&state=${state}`);
   }
 
   private performActionIfNotValid(status: any[]) {

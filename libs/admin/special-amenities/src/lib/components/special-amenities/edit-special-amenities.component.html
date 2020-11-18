@@ -33,11 +33,9 @@
       </div>
       <div>
         <mat-label>Upload Image:</mat-label>
-       
         <hospitality-bot-upload-file
-        [maxFileSize]="fileSize"
+        [fileUploadData]="fileUploadData"
         [url]="amenityImageUrl"
-        [fileType]="fileType"
         [uploadStatus]="uploadStatus"
         (fileData)="uploadFile($event)">
       </hospitality-bot-upload-file>

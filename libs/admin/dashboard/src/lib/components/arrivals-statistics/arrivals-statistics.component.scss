@@ -1,0 +1,67 @@
+@import 'main';
+
+.stat-val-container {
+  //   height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-value {
+  // height: 46px;
+  text-align: center;
+  // font: normal normal bold 35px/46px Roboto;
+  letter-spacing: 2.1px;
+  font-size: 35px;
+  color: $primary-purple;
+  // opacity: 1;
+}
+
+.stat-val-title {
+  height: 16px;
+  text-align: center;
+  font: normal normal bold 12px/16px Roboto;
+  letter-spacing: 0.72px;
+  color: #6d7580;
+  opacity: 1;
+}
+
+.progress-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-bar-height {
+  height: 10px;
+  background-color: #e7f4f6;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.progress-color {
+  background-color: #1495a4;
+  height: 100%;
+  width: 0px;
+  border-radius: 5px;
+}
+
+.progress-info-labels {
+  //   letter-spacing: 0.72px;
+  display: flex;
+  align-items: center;
+  .label {
+    letter-spacing: 0.72px;
+    color: #6d7580;
+    margin-right: 5px;
+    font-size: 12px;
+    b{
+      font-size: 13px;
+    }
+    @media only screen and (max-width: 1100px) {
+      font-size: 11px;
+    }
+  }
+}

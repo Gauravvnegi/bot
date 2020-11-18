@@ -26,6 +26,7 @@ import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/heal
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 const components = {
   radio: RadioComponent,
@@ -66,8 +67,8 @@ export class HealthDeclarationComponent implements OnInit {
     private _healthDetailsService: HealthDetailsService,
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
+    private _utilityService: UtilityService,
     private _snackBarService: SnackBarService
-
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +97,10 @@ export class HealthDeclarationComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
+          this._utilityService.$signatureUploaded.next(true);
+        }, ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+          this._utilityService.$signatureUploaded.next(false);
         });
     }
   }

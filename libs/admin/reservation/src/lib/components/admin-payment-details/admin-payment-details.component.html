@@ -1,0 +1,278 @@
+<div class="material-body">
+  <div class="payment-header">
+    <mat-label class="heading">Payment Summary</mat-label>
+    <ng-container [ngSwitch]="'COMPLETED'">
+      <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
+
+      <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+
+      <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+
+      <img *ngSwitchCase="'INITIATED'" src="assets/svg/status/initiated.svg" />
+    </ng-container>
+  </div>
+
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">Billed to:</mat-label>
+      <span class="value">
+        {{ primaryGuestFG.get('title').value }}
+        {{ primaryGuestFG.get('firstName').value }}
+        {{ primaryGuestFG.get('lastName').value }}
+      </span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">Arrival Date:</mat-label>
+      <span class="value">
+        {{ stayDetailsFG.get('arrivalDate').value }}
+      </span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">Current Date:</mat-label>
+      <span class="value">
+        <!-- {{ stayDetailsFG.get('currentDate').value }} -->
+      </span>
+    </div>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">Room No.</mat-label>
+      <span class="value">{{ stayDetailsFG.get('roomNumber').value }}</span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">Departure Date:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('departureDate').value }}</span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">Booking No.:</mat-label>
+      <span class="value">{{
+        reservationDetailsFG.get('bookingNumber').value
+      }}</span>
+    </div>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">Room Type:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('roomType').value }}</span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">No. of Adults:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('adultsCount').value }}</span>
+    </div>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild width-chnage">
+      <mat-label class="label">No. of Rooms:</mat-label>
+      <span class="value">{{ detailsData.roomsDetails.totalRooms }}</span>
+    </div>
+    <div class="feild">
+      <mat-label class="label">No. of Children:</mat-label>
+      <span class="value">{{ stayDetailsFG.get('kidsCount').value }}</span>
+    </div>
+  </div>
+  <div>
+    <mat-accordion>
+      <mat-expansion-panel #panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="container__title">
+            <p>
+              Payment Detail
+            </p>
+            <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+            <mat-icon class="expand-icon" *ngIf="panel.expanded"
+              >remove</mat-icon
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <table mat-table [dataSource]="dataSource">
+          <ng-container matColumnDef="label">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.label }}
+              <p style="color: #9eaeb8; font-size: 13px;">
+                {{ element.description }}
+              </p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unit">
+            <th mat-header-cell *matHeaderCellDef>Unit</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.unit }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unitPrice">
+            <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+              {{ element.unitPrice }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+
+              {{ element.amount }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="CGST">
+            <th mat-header-cell *matHeaderCellDef>CGST</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.CGST }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="SGST">
+            <th mat-header-cell *matHeaderCellDef>SGST</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.SGST }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="discount">
+            <th mat-header-cell *matHeaderCellDef>Discount</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+
+              {{ element.discount }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="totalAmount">
+            <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+
+              {{ element.totalAmount }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="total-detail-wrapper">
+      <div class="total">
+        <mat-label class="label">Total Amount:</mat-label>
+        <span class="value"
+          >{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.totalAmount }}</span
+        >
+      </div>
+      <div class="total">
+        <mat-label class="label">Total Savings:</mat-label>
+        <span class="value"
+          >-{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.totalDiscount }}</span
+        >
+      </div>
+      <div class="green total">
+        <mat-label class="label">Paid Amount:</mat-label>
+        <span class="value"
+          >-{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.paidAmount }}</span
+        >
+      </div>
+      <div class="red total">
+        <mat-label class="label">Due Amount:</mat-label>
+        <span class="value"
+          >{{ detailsData.paymentDetails.currency }}
+          {{ detailsData.paymentDetails.dueAmount }}</span
+        >
+      </div>
+    </div>
+    <div class="signature-wrapper">
+      <mat-label class="heading">Guest Signature</mat-label>
+      <div class="image-wrapper">
+        <img src="assets/signature.png" />
+      </div>
+    </div>
+    <!-- <hr class="data-seperator" /> -->
+    <!-- <div>
+      <p class="heading">Payment Details</p>
+      <div class="status-wrapper">
+        <p class="status">
+          Status :&nbsp;
+          <ng-container [ngSwitch]="'PENDING'">
+            <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
+              COMPLETED
+            </b>
+            <b *ngSwitchCase="'FAILED'" class="status-text-reject">
+              FAILED
+            </b>
+            <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
+              INITIATED
+            </b>
+            <b *ngSwitchCase="'PENDING'" class="status-text-pending">
+              PENDING
+            </b>
+          </ng-container>
+        </p> -->
+        <!-- <div class="images">
+          <button class="right">
+            <img src="assets/svg/tick.svg" />
+          </button>
+          <button class="right">
+            <img src="assets/svg/cross.svg" />
+          </button>
+        </div> -->
+      <!-- </div>
+    </div> -->
+    <!-- <div>
+            <span>Guest Signature</span>
+            <img
+                src="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/c4cd8e80-d21b-4496-ac56-85edf9a4ca0d/aadhaar/tv.png">
+        </div>
+        <span>Payment Details</span>
+        <div>
+            <mat-label>Payment Method:</mat-label>
+            <span>Credit Card</span>
+            <mat-label>Card Holder Name:</mat-label>
+            <span>John Wick</span>
+        </div>
+        <div>
+            <mat-label>Card Number:</mat-label>
+            <span>xxxx xxxx xxxx xxxx</span>
+            <mat-label>Expiry Date:</mat-label>
+            <span>01/34</span>
+        </div>
+        <span>Transaction Details</span>
+        <div>
+            <mat-label>Receipt No.</mat-label>
+            <span>xxxxxxxxxxxxxxxxx</span>
+            <mat-label>Payment Amount:</mat-label>
+            <span>INR 3284</span>
+            <mat-label>Status:</mat-label>
+            <span>Approved</span>
+        </div> -->
+    <div class="deposit-box">
+      <mat-accordion>
+        <mat-expansion-panel #depositPanel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="container__title">
+              <p>
+                Deposit Rule
+              </p>
+              <mat-icon class="expand-icon" *ngIf="!depositPanel.expanded"
+                >add</mat-icon
+              >
+              <mat-icon class="expand-icon" *ngIf="depositPanel.expanded"
+                >remove</mat-icon
+              >
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <hospitality-bot-deposit-rule
+            [parentForm]="parentForm"
+            [data]="detailsData"
+          ></hospitality-bot-deposit-rule>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

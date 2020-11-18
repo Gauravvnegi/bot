@@ -90,42 +90,39 @@ export class GuestDetailsService extends ApiService {
   }
 
   validateGuestDetailForm(guestDetailForm: FormGroup) {
+    let guestDetailFG = guestDetailForm.get('guestDetail') as FormGroup;
     let status = [];
-    this.guestDetailForm = guestDetailForm;
-
-    if (guestDetailForm.invalid) {
-      const primaryGuest = this.primaryGuest;
-      status = this.validate(primaryGuest, status);
-      const secondaryGuest = this.secondaryGuest;
-      secondaryGuest &&
-        secondaryGuest.controls.forEach((guest, index) => {
-          status = this.validate(guest, status, index);
-        });
-    }
-    return status;
-  }
-
-  validate(form, status, index?) {
-    let id = form.get('id').value;
-    Object.keys(form.controls).forEach((key) => {
-      let control = form.get(key);
-      let msg;
-      if (control.invalid) {
-        if (control.value === '') {
-          msg = `Please enter the ${key}`;
-        } else {
-          msg = `Please enter the valid ${key}`;
-        }
+    if (guestDetailFG.invalid) {
+      if (guestDetailFG.get('primaryGuest').invalid) {
         status.push({
           validity: false,
-          msg: msg,
+          msg: 'Invalid Form! Please provide valid details',
           data: {
-            guestId: id,
-            index,
+            guestId: guestDetailFG.get('primaryGuest').get('id').value,
+            type: 'primary',
+            index: 0,
           },
         });
+      } else if (guestDetailFG.get('secondaryGuest').invalid) {
+        const secondaryGuestFA = guestDetailFG.get(
+          'secondaryGuest'
+        ) as FormArray;
+
+        secondaryGuestFA.controls.forEach((control: FormGroup, index) => {
+          if (control.invalid) {
+            status.push({
+              validity: false,
+              msg: 'Invalid Form! Please provide valid details',
+              data: {
+                guestId: control.get('id').value,
+                index,
+                type: 'secondary',
+              },
+            });
+          }
+        });
       }
-    });
+    }
     return status;
   }
 
@@ -148,18 +145,6 @@ export class GuestDetailsService extends ApiService {
   updateGuestDetailDS(value) {
     this._guestDetailDS.deserialize(value);
     this.guestDetailDS$.next(this._guestDetailDS);
-  }
-
-  get primaryGuest() {
-    return this.guestDetailForm.controls.guestDetail.get(
-      'primaryGuest'
-    ) as FormGroup;
-  }
-
-  get secondaryGuest() {
-    return this.guestDetailForm.controls.guestDetail.get(
-      'secondaryGuest'
-    ) as FormArray;
   }
 
   get guestDetails() {

@@ -11,10 +11,38 @@
 }
 
 .wrapper {
-  min-height: 63.8vh;
   padding: 20px;
   padding-top: 40px;
   @media only screen and (max-width: 990px) {
-    min-height: 90.5vh;
+    padding: 10px;
+  }
+}
+
+:host ::ng-deep .container {
+  max-width: 1300px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  @media only screen and (max-width: 990px) {
+    height: calc(100vh - 156px);
+  }
+}
+
+.parent_block {
+  min-height: 86.3vh;
+  @media only screen and (max-width: 990px) {
+    min-height: 93.5vh;
+  }
+}
+
+.feedback-button {
+  @media only screen and (max-width: $M) {
+    left: 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  :host ::ng-deep .mat-expansion-panel-body {
+    margin: 0px 5px 16px;
+    padding: $padding-large $padding-medium !important;
   }
 }

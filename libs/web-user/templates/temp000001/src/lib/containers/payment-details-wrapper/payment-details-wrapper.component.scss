@@ -1,10 +1,5 @@
 @import 'temp000001';
 
-// .example-button-row {
-//   @include template-footer-button();
-//   // padding-top: $padding-large;
-// }
-
 @media only screen and (max-width: $M) {
   .user-button {
     width: $half-width;
@@ -16,6 +11,15 @@
 }
 :host ::ng-deep .next-button {
   @include footer-next();
+}
+
+:host ::ng-deep .svg-payment > svg{
+  height: 48px;
+  width: 48px;
+  @media only screen and (max-width: $M) {
+   height: 25px;
+   width: 25px;
+  }
 }
 
 .payment-wrapper {
@@ -31,21 +35,32 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  justify-content: space-between;
-  min-width: 50%;
-  height: 75px;
-  background-color: white;
-  box-shadow: 0px 2px 7px 2px rgb(245, 244, 244);
-  margin-right: 10px;
+  width: 47.6vw;
+  padding: $padding-large;
+  height: auto;
   opacity: 1;
-  color: #737373;
+  background-color: #fafafa;
+  color: #979797;
   svg path {
-    fill: #737373 !important;
+    fill: #979797 !important;
+  }
+  @media only screen and (max-width: $M) {
+    padding: $padding-small;
   }
 }
 
-:host ::ng-deep .amount{
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none;
+}
+
+:host ::ng-deep .amount {
   font-size: 23px;
+  @media only screen and (max-width: $M) {
+    font-size: 14px;
+  }
 }
 
 :host ::ng-deep .mat-tab-labels {
@@ -57,12 +72,13 @@
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  color: white;
-  background-color: #2187d5;
+  color: #000000;
+  background-color: white;
   border-radius: 10px 0px 0px 0px;
   border: 1px solid white;
+  border-bottom-color: #2187d5;
   svg path {
-    fill: #ffffff !important;
+    fill: #000000 !important;
   }
 }
 
@@ -74,6 +90,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .inner-label {
@@ -85,12 +102,20 @@
 
 .type-label {
   display: flex;
-  padding-bottom: 15px;
   justify-content: space-between;
+  @media only screen and (max-width: $M) {
+    justify-content: inherit;
+    flex-direction: column;
+    font-size: $font-small;
+    text-align: left;
+  }
 }
 
 .info-label {
   display: flex;
+  @media only screen and (max-width: $T) {
+    display: none;
+  }
 }
 
 .payment__wrapper--header {
@@ -98,15 +123,7 @@
   font-size: $font-large;
   font-weight: $bolder;
   @media only screen and (max-width: $tab-size) {
-    font-size: $font-small;
+    font-size: $font-medium;
     padding: $padding-small;
   }
 }
-
-// :host ::ng-deep .mat-tab-label svg path {
-//   fill: #000000;
-// }
-
-// :host ::ng-deep .mat-tab-label-active svg path {
-//   fill: #ffffff;
-// }

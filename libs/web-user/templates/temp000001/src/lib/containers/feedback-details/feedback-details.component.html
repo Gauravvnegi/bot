@@ -18,10 +18,10 @@
           [ratingScaleConfig]="ratingScaleConfig"
           (ratingData)="setRating($event)"
         ></web-user-rating>
-        <ng-container *ngIf="rating && rating.value">
+        <div [hidden]="!rating.value">
           <h3>{{ title }}</h3>
           <div class="hotel__services--images">
-            <div *ngFor="let service of HotelServices" class="img-with-text">
+            <div *ngFor="let service of hotelServices" class="img-with-text">
               <div
                 class="image"
                 (click)="SetHotelServices(service)"
@@ -33,14 +33,14 @@
               <p>{{ service.label }}</p>
             </div>
           </div>
-          <div>
+          <div *ngIf="rating && rating.value">
             <web-user-textarea
               [parentForm]="feedbackDetailsForm"
               [name]="'feedback'"
               [settings]="feedbackDetailsConfig.feedbackComents"
             ></web-user-textarea>
           </div>
-        </ng-container>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
   </form>

@@ -1,76 +1,83 @@
-<div class="parent_block" *ngIf="isReservationData">
+<div class="parent_block" *ngIf="isReservationData && paymentStatusData">
   <hospitality-bot-header [headerName]="'Payment'"></hospitality-bot-header>
-  <div class="status-container">
+  <div class="status-container" *ngIf="ispaymentStatusLoaded">
     <div class="wrapper">
       <div class="image">
-        <img [src]="paymentImage" />
+        <img [src]="paymentStatusData.image" />
       </div>
       <div class="text">
-        <p class="label">{{ paymentLabel }}</p>
+        <p class="label">{{ paymentStatusData.label }}</p>
         <p
           class="note"
           [ngStyle]="
-            paymentStatusData.data.status === 'SUCCESS'
-              ? { 'display': 'block' }
-              : { 'display': 'none' }
+            status === 'SUCCESS' ? { display: 'block' } : { display: 'none' }
           "
         >
-          {{ paymentNote }}<b>johndeo@gmail.com</b>
+          {{ paymentNote }}
         </p>
         <p
-        class="note"
-        [ngStyle]="
-          paymentStatusData.data.status === 'FAILED'
-            ? { 'display': 'block' }
-            : { 'display': 'none' }
-        "
-      >
-        {{ paymentNote }}
-      </p>
-      <p
-        class="error_code"
-        [ngStyle]="
-          paymentStatusData.data.status === 'FAILED'
-            ? { 'display': 'block' }
-            : { 'display': 'none' }
-        "
-      >
-        Error code : 309
-      </p>
+          class="note"
+          [ngStyle]="
+            status === 'FAILED' ? { display: 'block' } : { display: 'none' }
+          "
+        >
+          {{ paymentNote }}
+        </p>
+        <p
+          class="error_code"
+          [ngStyle]="
+            status === 'FAILED' ? { display: 'block' } : { display: 'none' }
+          "
+        >
+          Error code : 309
+        </p>
       </div>
       <div class="detail-box-wrapper">
         <div class="detail-box">
           <div class="detail">
             <p class="label">Confirmation No.</p>
-            <p class="value">{{ paymentStatusData.data.orderId }}</p>
+            <p class="value">{{ data.confirmationNumber }}</p>
           </div>
           <div class="seperator"></div>
           <div class="detail">
             <p class="label">Payment Mode</p>
-            <p class="value">{{ paymentStatusData.data.orderId }}</p>
+            <p class="value">{{ data.gateway }}</p>
           </div>
           <div class="seperator"></div>
 
           <div class="detail">
             <p class="label">Total Payment</p>
             <p class="value">
-              {{ paymentStatusData.data.currency }}
-              {{ paymentStatusData.data.amount }}
+              {{ data.currency }}
+              {{ data.amount }}
             </p>
           </div>
         </div>
       </div>
-      <div class="main-template-button">
-        <web-user-button
-          #saveButton
-          buttonTemplateSwitch
-          (click)="redirect()"
-          [settings]="{ label: buttonLabel }"
-          [buttonClass]="'next-button'"
-          class="user-button"
-        ></web-user-button>
-      </div>
     </div>
+  </div>
+  <div
+    class="main-template-button payment-button"
+    *ngIf="ispaymentStatusLoaded"
+  >
+    <web-user-button
+      *ngIf="paymentStatusData.showBackButton"
+      (click)="redirect(paymentStatusData.backRedirectUrl)"
+      [settings]="{ label: paymentStatusData.back }"
+      [buttonClass]="'back-button'"
+      class="user-button"
+      style="margin-right: 20px;"
+    ></web-user-button>
+    <web-user-button
+      (click)="
+        redirect(
+          status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl
+        )
+      "
+      [settings]="{ label: paymentStatusData.next }"
+      [buttonClass]="'next-button'"
+      class="user-button"
+    ></web-user-button>
   </div>
 </div>
 <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

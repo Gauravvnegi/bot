@@ -1,0 +1,84 @@
+<form class="deposit-wrapper" [formGroup]="depositRuleForm">
+  <div class="feilds-wrapper">
+    <div class="feild">
+      <mat-label class="mat-label">Type :</mat-label>
+      <mat-form-field>
+        <mat-select formControlName="guaranteeType">
+          <mat-option
+            *ngFor="let guaranteeType of guaranteeTypes"
+            [value]="guaranteeType.value"
+            >{{ guaranteeType.label }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            depositRuleForm.get('guaranteeType').touched &&
+            depositRuleForm.get('guaranteeType').hasError('required')
+          "
+        >
+          Guarantee type is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="feild">
+      <mat-label class="mat-label">Amount Type :</mat-label>
+      <mat-form-field>
+        <mat-select formControlName="amountType">
+          <mat-option
+            *ngFor="let amountType of amountTypes"
+            [value]="amountType.value"
+            >{{ amountType.label }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            depositRuleForm.get('amountType').touched &&
+            depositRuleForm.get('amountType').hasError('required')
+          "
+        >
+          Amount type is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="feilds-wrapper">
+    <div class="feild">
+      <mat-label class="mat-label"
+        >Pay Now
+        <span
+          *ngIf="['PERCENT'].includes(depositRuleForm.get('amountType').value)"
+          >(%age)
+        </span>
+        :</mat-label
+      >
+      <mat-form-field>
+        <!-- appNumber -->
+        <input
+          class="input-feild"
+          appNumber
+          formControlName="amount"
+          type="text"
+          matInput
+        />
+
+        <mat-error
+          *ngIf="
+            depositRuleForm.get('amount').touched &&
+            depositRuleForm.get('amount').hasError('required')
+          "
+        >
+          Amount(%age) is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="feild-payment">
+      <p class="mat-label">Total payable amount :</p>
+      <p>{{ depositRuleForm.get('amountPayable').value }}</p>
+    </div>
+  </div>
+</form>
+<div class="button-wrapper">
+  <button (click)="updateDepositRule()" class="button">
+    Update Deposit Rule
+  </button>
+</div>

@@ -13,6 +13,12 @@
     padding: 25px;
     .image {
       @include flex-justify-center();
+      @media only screen and (max-width: $M) {
+        height: 40px;
+        img {
+          width: 40px;
+        }
+      }
     }
     .text {
       text-align: center;
@@ -36,6 +42,19 @@
         margin-top: $margin-small;
         font-weight: $medium;
       }
+      @media only screen and (max-width: $M) {
+        margin-bottom: 11%;
+        .label {
+          font-size: 15px;
+        }
+        .note {
+          font-size: 13px;
+          margin-top: 30px;
+        }
+        .error_code {
+          font-size: 13px;
+        }
+      }
     }
     .detail-box-wrapper {
       @include flex-justify-center();
@@ -58,8 +77,26 @@
           height: $full-width;
           border-right: 2px dashed $light-gray;
         }
+        @media only screen and (max-width: $M) {
+          width: 90%;
+          padding: $padding-small;
+          .detail {
+            font-size: $font-responsive-smaller;
+            .value {
+              margin-top: 1rem;
+            }
+          }
+        }
       }
     }
+    @media only screen and (max-width: $M) {
+      border-radius: $border-radius-smaller;
+      margin: 22% $margin-small;
+      padding: 40px $padding-small;
+    }
+  }
+  @media only screen and (max-width: $M) {
+    min-height: auto;
   }
 }
 
@@ -70,5 +107,23 @@
 }
 
 .main-template-button {
-  margin-top: 5%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+
+
+.payment-button{
+  @media only screen and (max-width: $M) {
+
+  left: 0;
+  }
+}
+
+:host ::ng-deep .back-button {
+  @include secondary-button();
+  @media only screen and (max-width: $M) {
+    width: 100px;
+  }
 }

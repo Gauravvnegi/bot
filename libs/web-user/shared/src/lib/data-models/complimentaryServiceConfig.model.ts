@@ -31,11 +31,11 @@ export class ComplimentaryServiceDetail implements Deserializable {
       Object.assign(
         this,set({}, 'id',get(input, ['id'])),
         set({}, 'rate',get(input, ['rate'])),
-        set({}, 'currencyCode', get(input, ['currencyCode'])),
+        set({}, 'currencyCode', get(input, ['currency'])),
         set({}, 'packageCode', get(input, ['packageCode'])),
-        set({}, 'amenityName', get(input, ['amenityName'])),
+        set({}, 'amenityName', get(input, ['name'])),
         set({}, 'hotelId', get(input, ['hotelId'])),
-        set({}, 'imgUrl', get(input, ['imgUrl']))
+        set({}, 'imgUrl', get(input, ['imageUrl']))
       );
       return this;
     }

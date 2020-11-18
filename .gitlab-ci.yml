@@ -20,7 +20,7 @@ deploy to Stage-web-user:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; ls $web_user_work_dir && netstat -tnlp"
   only:
     - stage
-    
+
 deploy to Stage-admin:
   stage: deploy
   environment: stage-admin

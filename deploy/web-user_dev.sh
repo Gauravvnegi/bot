@@ -1,2 +1,3 @@
 #!/bin/bash
-npm i && ng run web-user:build --configuration=development
+rm -rf dist
+npm i && ng run web-user:build --configuration=staging

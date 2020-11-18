@@ -1,8 +1,6 @@
 import { Component, Input, Inject } from '@angular/core';
-
 import * as JSZipUtils from 'jszip-utils';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { Subscription } from 'rxjs';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
@@ -16,10 +14,11 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
   styleUrls: ['./registration-card.component.scss'],
 })
 export class RegistrationCardComponent {
-  regCardSrc;
   regCard = {
     fileName: '',
-    URL: '',
+    src: this._sanitizer.bypassSecurityTrustResourceUrl(
+      window.URL.createObjectURL('')
+    ),
   };
   private _settings;
   private _subscription: Subscription = new Subscription();
@@ -61,7 +60,6 @@ export class RegistrationCardComponent {
 
   constructor(
     private _sanitizer: DomSanitizer,
-    private _regCardService: RegCardService,
     private _reservation: ReservationService,
     private _docService: DocumentDetailsService,
     private _snackbar: SnackBarService,
@@ -77,30 +75,14 @@ export class RegistrationCardComponent {
   }
 
   setRegCardSRC() {
-    if (this.settings.regcardUrl) {
-      this.regCard.URL = this.settings.regcardUrl;
-    } else {
-      //TO-DO: Uncomment once data gets corrected at back-end (API giving bad request as the data from PMS isn't correct)
-      this._subscription.add(
-        this._regCardService.getRegCard(this._reservation.reservationId).subscribe((res) => {
-          this.regCard.URL = res.file_download_url;
-        }, (err) => {
-          throw(err);
-        })
-      );
-      if (this.regCard.URL === '') {
-        this.regCard.URL =
-          'https://nyc3.digitaloceanspaces.com/craterzone-backup/MINDLABZ-37238/regcard/MINDLABZ-37238_regcard.pdf';
-      }
-    }
-    const url = this.regCard.URL;
+    const url = this.settings.regcardUrl;
     this.regCard.fileName = url.substring(url.lastIndexOf('/') + 1, url.length);
     JSZipUtils.getBinaryContent(url, (err, data) => {
       if (err) {
         throw err;
       }
       const blob = new Blob([data], { type: 'application/octet-stream' });
-      this.regCardSrc = this._sanitizer.bypassSecurityTrustResourceUrl(
+      this.regCard.src = this._sanitizer.bypassSecurityTrustResourceUrl(
         window.URL.createObjectURL(blob)
       );
     });

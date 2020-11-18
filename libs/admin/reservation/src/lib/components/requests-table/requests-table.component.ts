@@ -87,6 +87,39 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     );
   }
 
+  updateRequest(status, journey, id) {
+    this._reservationService
+      .updateRequest(
+        this.parentForm.get('reservationDetails').get('bookingId').value,
+        {
+          journey,
+          state: status,
+        }
+      )
+      .subscribe(
+        (res) => {
+          //update rows
+          this.values = this.values.map((row) => {
+            if (row.id == id) {
+              row.status = 'COMPLETED';
+            }
+            return row;
+          });
+
+          this._snackbarService.openSnackBarAsText(
+            'Request updated successfully',
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
+
   goToRequestTable() {
     this._router.navigate(['pages', 'request']);
     //this._router.navigate(['add-user'], { relativeTo: this._route });

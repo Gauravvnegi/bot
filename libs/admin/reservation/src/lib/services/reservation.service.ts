@@ -61,10 +61,14 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}/live-request`);
   }
 
-  updateDepositRule(reservationId,data){
-    return this.put(
-      `/api/v1/reservation/${reservationId}/deposit-rules`,
-      data
-    ); 
+  updateDepositRule(reservationId, data) {
+    return this.put(`/api/v1/reservation/${reservationId}/deposit-rules`, data);
+  }
+
+  updateRequest(reservationId, config) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/verify-request`,
+      config
+    );
   }
 }

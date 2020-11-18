@@ -74,6 +74,25 @@
         </td>
         <td class="message">
           <p *ngIf="rowData.remarks; else emptyCell">{{ rowData.remarks }}</p>
+          <ng-container
+            *ngIf="
+              rowData.journey != 'INHOUSE' &&
+              ['INITIATED'].includes(rowData.status)
+            "
+          >
+            <button
+              class="conditional"
+              (click)="updateRequest('ACCEPT', rowData.journey, rowData.id)"
+            >
+              <img src="assets/svg/tick.svg" />
+            </button>
+            <button
+              class="conditional"
+              (click)="updateRequest('REJECT', rowData.journey, rowData.id)"
+            >
+              <img src="assets/svg/cross.svg" />
+            </button>
+          </ng-container>
         </td>
         <td class="category">
           <div>
@@ -124,7 +143,7 @@
 </div>
 
 <ng-template #emptyCell>
-  <div class="emptyCell">--</div>
+  <div class="emptyCell">&mdash;</div>
 </ng-template>
 
 <ng-template #emptyView>

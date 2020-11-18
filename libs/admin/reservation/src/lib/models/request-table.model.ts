@@ -15,6 +15,7 @@ export class RequestTable implements Deserializable {
 }
 
 export class Request implements Deserializable {
+  id;
   requestTimeStamp;
   remarks;
   journey;
@@ -22,6 +23,7 @@ export class Request implements Deserializable {
   deserialize(input) {
     Object.assign(
       this,
+      set({}, 'id', get(input, ['id'])),
       set({}, 'requestTimeStamp', get(input, ['requestTime'])),
       set({}, 'remarks', get(input, ['remarks'])),
       set({}, 'status', get(input, ['status'])),

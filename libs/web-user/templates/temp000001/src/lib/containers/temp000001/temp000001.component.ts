@@ -30,7 +30,7 @@ export class Temp000001Component implements OnInit, AfterViewInit {
   }
 
   private initConfig() {
-    //this.loadStyle('taj.styles.css');
+    // this.loadStyle('taj.styles.css');
   }
 
   private registerListeners() {

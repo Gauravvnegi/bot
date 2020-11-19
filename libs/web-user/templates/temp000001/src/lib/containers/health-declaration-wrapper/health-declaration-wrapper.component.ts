@@ -6,6 +6,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -25,7 +26,8 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     private _healthDetailsService: HealthDetailsService,
     private _snackBarService: SnackBarService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -57,7 +59,12 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
           this._stepperService.setIndex('next');
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((res) => {
+              this._snackBarService.openSnackBarAsText(res);
+            });
+          //   this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

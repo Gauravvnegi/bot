@@ -9,6 +9,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -51,7 +52,8 @@ export class BillSummaryDetailsComponent implements OnInit {
     private _reservationService: ReservationService,
     private _snackBarService: SnackBarService,
     private _utilityService: UtilityService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _translateService: TranslateService
   ) {
     this.initRequestForm();
   }
@@ -170,19 +172,29 @@ export class BillSummaryDetailsComponent implements OnInit {
           this._reservationService.reservationData.guestDetails.primaryGuest.id,
           formData
         )
-        .subscribe((response) => {
-          this._summaryService.$signatureUrl.next(response['fileDownloadUri']);
-          this.signature = response['fileDownloadUri'];
-          this._utilityService.$signatureUploaded.next(true);
-          this._snackBarService.openSnackBarAsText(
-            'Signature upload successful',
-            '',
-            { panelClass: 'success' }
-          );
-        }, ({ error }) => {
-          this._utilityService.$signatureUploaded.next(true);
-          this._snackBarService.openSnackBarAsText(error.message)
-        });
+        .subscribe(
+          (response) => {
+            this._summaryService.$signatureUrl.next(
+              response['fileDownloadUri']
+            );
+            this.signature = response['fileDownloadUri'];
+            this._utilityService.$signatureUploaded.next(true);
+            this._snackBarService.openSnackBarAsText(
+              'Signature upload successful',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          ({ error }) => {
+            this._utilityService.$signatureUploaded.next(true);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((res) => {
+                this._snackBarService.openSnackBarAsText(res);
+              });
+            // this._snackBarService.openSnackBarAsText(error.message)
+          }
+        );
     }
   }
 

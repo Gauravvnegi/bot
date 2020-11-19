@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+  HttpClient,
+} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { SignaturePadModule } from 'angular2-signaturepad';
@@ -38,6 +42,20 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
+import {
+  TranslateModule,
+  TranslateLoader,
+  TranslateService,
+} from '@ngx-translate/core';
+
+import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new MultiTranslateHttpLoader(http, [
+    { prefix: './assets/i18n/core/', suffix: '.json' },
+    { prefix: './assets/i18n/temp000001/', suffix: '.json' },
+  ]);
+}
 
 @NgModule({
   imports: [
@@ -51,6 +69,13 @@ import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you
     MatTabsModule,
     MatIconModule,
     AngularSvgIconModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   declarations: [
     Temp000001RoutingModule.components,
@@ -90,5 +115,6 @@ import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you
     DefaultAmenityService,
     ThankYouService,
   ],
+  exports: [TranslateModule],
 })
 export class Temp000001Module {}

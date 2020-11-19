@@ -27,6 +27,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { SnackBarService } from 'libs/shared/material/src';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { TranslateService } from '@ngx-translate/core';
 
 const components = {
   radio: RadioComponent,
@@ -68,7 +69,8 @@ export class HealthDeclarationComponent implements OnInit {
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
     private _utilityService: UtilityService,
-    private _snackBarService: SnackBarService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -90,18 +92,26 @@ export class HealthDeclarationComponent implements OnInit {
           this._reservationService.reservationData.guestDetails.primaryGuest.id,
           formData
         )
-        .subscribe((response) => {
-          this.signature = response.fileDownloadUrl;
-          this._snackBarService.openSnackBarAsText(
-            'Signature upload successful',
-            '',
-            { panelClass: 'success' }
-          );
-          this._utilityService.$signatureUploaded.next(true);
-        }, ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          this._utilityService.$signatureUploaded.next(false);
-        });
+        .subscribe(
+          (response) => {
+            this.signature = response.fileDownloadUrl;
+            this._snackBarService.openSnackBarAsText(
+              'Signature upload successful',
+              '',
+              { panelClass: 'success' }
+            );
+            this._utilityService.$signatureUploaded.next(true);
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((res) => {
+                this._snackBarService.openSnackBarAsText(res);
+              });
+            //   this._snackBarService.openSnackBarAsText(error.message);
+            this._utilityService.$signatureUploaded.next(false);
+          }
+        );
     }
   }
 
@@ -770,11 +780,20 @@ export class HealthDeclarationComponent implements OnInit {
         this._reservationService.reservationId,
         this._reservationService.reservationData.guestDetails.primaryGuest.id
       )
-      .subscribe((response) => {
-        if (response && response.data) {
-          this.patchHealthData(response.data, response.signatureUrl);
+      .subscribe(
+        (response) => {
+          if (response && response.data) {
+            this.patchHealthData(response.data, response.signatureUrl);
+          }
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((res) => {
+              this._snackBarService.openSnackBarAsText(res);
+            });
         }
-      });
+      );
   }
 
   extractDataFromHealthForm() {

@@ -4,6 +4,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
@@ -24,6 +25,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -44,7 +46,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
       if (res) {
         this.signature = res;
       }
-    })
+    });
   }
 
   initBillSummaryDetailsDS(paymentSummary) {
@@ -55,12 +57,15 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
   }
 
   getAmountSummary() {
-    this._billSummaryService.getBillingSummary(this._reservationService.reservationId)
-    .subscribe(summary =>{
-      this.paymentSummary = summary;
-      this._billSummaryService.$signatureUrl.next(this.paymentSummary.signatureUrl);
-      this.initBillSummaryDetailsDS(this.paymentSummary);
-    })
+    this._billSummaryService
+      .getBillingSummary(this._reservationService.reservationId)
+      .subscribe((summary) => {
+        this.paymentSummary = summary;
+        this._billSummaryService.$signatureUrl.next(
+          this.paymentSummary.signatureUrl
+        );
+        this.initBillSummaryDetailsDS(this.paymentSummary);
+      });
   }
 
   onSubmit() {
@@ -69,14 +74,25 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
       return;
     }
     let formData = {
-      'billingSignatureUrl': this.signature
+      billingSignatureUrl: this.signature,
     };
-    this._billSummaryService.bindSignatureWithSummary(
-      this._reservationService.reservationId,
-      formData
-    )
-    .subscribe((res) => {
-      this._stepperService.setIndex('next');
-    }, ({ error }) => this._snackBarService.openSnackBarAsText(error.message));
+    this._billSummaryService
+      .bindSignatureWithSummary(
+        this._reservationService.reservationId,
+        formData
+      )
+      .subscribe(
+        (res) => {
+          this._stepperService.setIndex('next');
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((res) => {
+              this._snackBarService.openSnackBarAsText(res);
+            });
+          // this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 }

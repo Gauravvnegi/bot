@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
@@ -21,8 +21,11 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     public _templateLoadingService: TemplateLoaderService,
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
-    private _templateService: TemplateService
-  ) {}
+    private _templateService: TemplateService,
+    translate: TranslateService
+  ) {
+    translate.use('en-us');
+  }
 
   ngOnInit(): void {
     this.initConfig();

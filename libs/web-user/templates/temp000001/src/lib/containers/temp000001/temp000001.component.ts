@@ -22,10 +22,8 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     private _templateService: TemplateService,
-    translate: TranslateService
-  ) {
-    translate.use('en-us');
-  }
+    private _translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
     this.initConfig();
@@ -34,6 +32,11 @@ export class Temp000001Component implements OnInit, AfterViewInit {
 
   private initConfig() {
     //this.loadStyle('taj.styles.css');
+    this.initTranslationService();
+  }
+
+  initTranslationService() {
+    this._translateService.use('en-us');
   }
 
   private registerListeners() {

@@ -9,6 +9,9 @@ import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/pay
 import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -31,7 +34,9 @@ export class ApplicationStatusComponent implements OnInit {
     private _paymentDetailsService: PaymentDetailsService,
     private _summaryService: SummaryService,
     private _stepperService: StepperService,
-    private _templateService: TemplateService
+    private _templateService: TemplateService,
+    private _regCardService: RegCardService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -89,16 +94,35 @@ export class ApplicationStatusComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
     dialogConfig.width = '70vw';
-    dialogConfig.data = {
-      regcardUrl:
-        this.summaryDetails.guestDetails.primaryGuest.regcardUrl || '',
-      signatureImageUrl:
-        this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
-    };
-    this._dialogRef = this._modal.openDialog(
-      RegistrationCardComponent,
-      dialogConfig
-    );
+    if (this.summaryDetails.guestDetails.primaryGuest.regcardUrl) {
+      dialogConfig.data = {
+        regcardUrl:
+          this.summaryDetails.guestDetails.primaryGuest.regcardUrl,
+        signatureImageUrl:
+          this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
+      };
+      this._dialogRef = this._modal.openDialog(
+        RegistrationCardComponent,
+        dialogConfig
+      );
+    } else {
+      this.$subscription.add(
+        this._regCardService.getRegCard(this._reservationService.reservationId).subscribe((res: FileData) => {
+          dialogConfig.data = {
+            regcardUrl:
+              this.summaryDetails.guestDetails.primaryGuest.regcardUrl || res.file_download_url,
+            signatureImageUrl:
+              this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
+          };
+          this._dialogRef = this._modal.openDialog(
+            RegistrationCardComponent,
+            dialogConfig
+          );
+        }, ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        })
+      );
+    }
   }
 
   printSummary() {}

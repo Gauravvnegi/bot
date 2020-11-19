@@ -16,9 +16,7 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 export class RegistrationCardComponent {
   regCard = {
     fileName: '',
-    src: this._sanitizer.bypassSecurityTrustResourceUrl(
-      window.URL.createObjectURL('')
-    ),
+    src: '',
   };
   private _settings;
   private _subscription: Subscription = new Subscription();
@@ -47,7 +45,7 @@ export class RegistrationCardComponent {
     },
     signatureUploadAPI: '',
     regcardUrl: '',
-    signatureImageUrl: ''
+    signatureImageUrl: '',
   };
 
   @Input('settings') set settings(value) {
@@ -65,7 +63,7 @@ export class RegistrationCardComponent {
     private _snackbar: SnackBarService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private _utilityService: UtilityService,
+    private _utilityService: UtilityService
   ) {
     this.settings = data;
   }
@@ -84,7 +82,7 @@ export class RegistrationCardComponent {
       const blob = new Blob([data], { type: 'application/octet-stream' });
       this.regCard.src = this._sanitizer.bypassSecurityTrustResourceUrl(
         window.URL.createObjectURL(blob)
-      );
+      ) as string;
     });
   }
 
@@ -99,12 +97,15 @@ export class RegistrationCardComponent {
         this._reservation.reservationData.guestDetails.primaryGuest.id,
         formData
       )
-      .subscribe((res) => {
-        this._utilityService.$signatureUploaded.next(true);
-      }, (err) => {
-        this._snackbar.openSnackBarAsText(err.message);
-        this._utilityService.$signatureUploaded.next(false);
-      });
+      .subscribe(
+        (res) => {
+          this._utilityService.$signatureUploaded.next(true);
+        },
+        (err) => {
+          this._snackbar.openSnackBarAsText(err.message);
+          this._utilityService.$signatureUploaded.next(false);
+        }
+      );
   }
 
   onClose() {

@@ -1,21 +1,23 @@
 import { DOCUMENT } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
   Inject,
   OnInit,
-  ElementRef,
-  AfterViewInit,
 } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
-import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
   styleUrls: ['./temp000001.component.scss'],
 })
 export class Temp000001Component implements OnInit, AfterViewInit {
-  isLoaderVisible = true;
+  isLoaderVisible: boolean = true;
+  $subscription = new Subscription();
 
   constructor(
     public _templateLoadingService: TemplateLoaderService,
@@ -35,16 +37,18 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.initTranslationService();
   }
 
-  initTranslationService() {
+  private initTranslationService() {
     this._translateService.use('en-us');
   }
 
   private registerListeners() {
-    this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
-      if (isLoading === false) {
-        this.isLoaderVisible = false;
-      }
-    });
+    this.$subscription.add(
+      this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
+        if (isLoading === false) {
+          this.isLoaderVisible = false;
+        }
+      })
+    );
   }
 
   ngAfterViewInit() {
@@ -86,5 +90,9 @@ export class Temp000001Component implements OnInit, AfterViewInit {
 
       head.appendChild(style);
     }
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

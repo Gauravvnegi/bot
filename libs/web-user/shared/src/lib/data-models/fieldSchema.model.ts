@@ -34,6 +34,9 @@ export class FieldSchema implements Deserializable {
   appearance?: string;
   maskPattern?;
   options?: { key: string; value: string }[];
+  translation?: {
+    label?: '';
+  };
 
   deserialize(input: any) {
     Object.assign(
@@ -53,7 +56,8 @@ export class FieldSchema implements Deserializable {
       _.set({}, 'options', _.get(input, ['options'])),
       _.set({}, 'placeholder', _.get(input, ['placeholder'])),
       _.set({}, 'isUploading', _.get(input, ['isUploading'])),
-      _.set({}, 'style', _.get(input, ['style']))
+      _.set({}, 'style', _.get(input, ['style'])),
+      _.set({}, 'translation', _.get(input, ['translation']))
     );
     return this;
   }

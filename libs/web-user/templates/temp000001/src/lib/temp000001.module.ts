@@ -42,26 +42,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
-import {
-  TranslateModule,
-  TranslateLoader,
-  TranslateService,
-} from '@ngx-translate/core';
-
-import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new MultiTranslateHttpLoader(http, [
-    { prefix: './assets/i18n/core/', suffix: '.json' },
-    { prefix: './assets/i18n/temp000001/', suffix: '.json' },
-  ]);
-}
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
-    WebUserSharedModule,
+    WebUserSharedModule.forRoot({ templateId: 'temp000001' }),
     Temp000001RoutingModule,
     SignaturePadModule,
     PdfViewerModule,
@@ -69,13 +55,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTabsModule,
     MatIconModule,
     AngularSvgIconModule.forRoot(),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
   ],
   declarations: [
     Temp000001RoutingModule.components,
@@ -115,6 +94,5 @@ export function HttpLoaderFactory(http: HttpClient) {
     DefaultAmenityService,
     ThankYouService,
   ],
-  exports: [TranslateModule],
 })
 export class Temp000001Module {}

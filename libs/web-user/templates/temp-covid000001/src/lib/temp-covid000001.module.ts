@@ -15,7 +15,7 @@ import { FooterService } from 'libs/web-user/shared/src/lib/services/footer.serv
 @NgModule({
   imports: [
     CommonModule,
-    WebUserSharedModule,
+    WebUserSharedModule.forRoot({ templateId: 'temp-covid00000001' }),
     RouterModule,
     SlickCarouselModule,
     TempCovid000001RoutingModule,

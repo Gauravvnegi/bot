@@ -95,4 +95,8 @@ export class Temp000001Component implements OnInit, AfterViewInit {
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
+
+  updateTran(lan) {
+    this._translateService.use(lan);
+  }
 }

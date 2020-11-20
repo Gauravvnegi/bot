@@ -1,4 +1,7 @@
 {
+  "STAYDETAILS": {
+    "ADULTS": "Adults"
+  },
   "MESSAGES": {
     "SUCCESS": {},
     "ERROR": {

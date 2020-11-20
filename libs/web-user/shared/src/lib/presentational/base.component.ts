@@ -47,6 +47,10 @@ export class BaseComponent
     appearance: '',
     maskPattern: false,
     floatLabel: 'auto',
+    translation: {
+      master_label: '',
+      label: '',
+    },
   };
   _settings;
   @Input('settings') set settings(value: {
@@ -102,6 +106,10 @@ export class BaseComponent
         suffixIcon: '';
         suffixString: '';
       };
+    };
+    translation?: {
+      master_label?: '';
+      label?: '';
     };
     transforms: Function[];
     valueType: string;

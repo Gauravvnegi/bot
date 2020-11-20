@@ -32,7 +32,26 @@
   }
 }
 
-:host ::ng-deep td{
+:host ::ng-deep td {
   border-bottom: none !important;
   border-right: none !important;
+}
+
+:host ::ng-deep .message {
+  p {
+    margin-bottom: 10px;
+  }
+}
+
+.conditional {
+  border: none;
+  outline: none;
+  background: transparent;
+  margin: 0 3px;
+  &:hover {
+    cursor: pointer;
+  }
+  img {
+    height: 20px;
+  }
 }

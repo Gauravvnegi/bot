@@ -95,15 +95,15 @@ export class DetailsComponent implements OnInit, OnChanges {
   ngOnChanges() {}
 
   getReservationDetails() {
-    //'b1d717f5-36ad-470d-8a0b-48e87b53220a' ||
     this._reservationService.getReservationDetails(this.bookingId).subscribe(
       (response) => {
         this.details = new Details().deserialize(response);
         this.mapValuesInForm();
         this.isReservationDetailFetched = true;
       },
-      (error) => {
+      ({ error }) => {
         this._snackBarService.openSnackBarAsText(error.message);
+        this.closeDetails();
       }
     );
   }

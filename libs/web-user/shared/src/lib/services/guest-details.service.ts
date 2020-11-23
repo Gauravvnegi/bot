@@ -97,6 +97,7 @@ export class GuestDetailsService extends ApiService {
         status.push({
           validity: false,
           code: 'INVALID_FORM',
+          msg: "Invalid form. Please fill all the fields.",
           data: {
             guestId: guestDetailFG.get('primaryGuest').get('id').value,
             type: 'primary',
@@ -113,6 +114,7 @@ export class GuestDetailsService extends ApiService {
             status.push({
               validity: false,
               code: 'INVALID_FORM',
+              msg: "Invalid form. Please fill all the fields.",
               data: {
                 guestId: control.get('id').value,
                 index,

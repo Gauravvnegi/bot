@@ -74,10 +74,16 @@ export class PaymentMainComponent implements OnInit {
               this.reservationData['currentJourney'] === 'PRECHECKIN' &&
               status === 'SUCCESS'
             ) {
-              this._snackBarService.openSnackBarAsText(
-                'Pre-Checkin Sucessfull.',
-                '',
-                { panelClass: 'success' }
+              this.$subscription.add(
+                this._translateService
+                  .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
+                  .subscribe((res) => {
+                    this._snackBarService.openSnackBarAsText(
+                      res,
+                      '',
+                      { panelClass: 'success' }
+                    );
+                  })
               );
             }
           },

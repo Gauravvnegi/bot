@@ -2,7 +2,14 @@
   "CUSTOM": {},
   "VALIDATION": {},
   "MESSAGES": {
-    "SUCCESS": {},
+    "SUCCESS": {
+      "SIGNATURE_UPLOAD_COMPLETE": "Signature upload successful",
+      "DOCUMENT_UPLOAD_COMPLETE": "Document upload successful",
+      "FEEDBACK_COMPLETE": "Feedback successful",
+      "AMENITY_ADD_COMPLETE": "Amenity added successfully",
+      "AMENITY_REMOVE_COMPLETE": "Amenity removed successfully",
+      "PRECHECKIN_COMPLETE": "Pre-Checkin Sucessfull"
+    },
     "ERROR": {
       "STAY_DETAILS_COMPLETE": "Stay details of reservation has been completed",
       "STAY_DETAILS_PENDING": "Stay details of reservation is pending",

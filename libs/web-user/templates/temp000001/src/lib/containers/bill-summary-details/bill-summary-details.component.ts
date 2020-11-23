@@ -182,10 +182,16 @@ export class BillSummaryDetailsComponent implements OnInit {
               );
               this.signature = response['fileDownloadUri'];
               this._utilityService.$signatureUploaded.next(true);
-              this._snackBarService.openSnackBarAsText(
-                'Signature upload successful',
-                '',
-                { panelClass: 'success' }
+              this.$subscription.add(
+                this._translateService
+                  .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+                  .subscribe((res) => {
+                    this._snackBarService.openSnackBarAsText(
+                      res,
+                      '',
+                      { panelClass: 'success' }
+                    );
+                  })
               );
             },
             ({ error }) => {

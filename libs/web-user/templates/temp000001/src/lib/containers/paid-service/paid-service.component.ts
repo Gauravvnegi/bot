@@ -203,12 +203,16 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this._paidService.updateAmenitiesDS(response);
             this.clearContainer();
             this.selectedService = '';
-            this._snackbarService.openSnackBarAsText(
-              'Amenity added successfully',
-              '',
-              {
-                panelClass: 'success',
-              }
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.AMENITY_ADD_COMPLETE')
+                .subscribe((res) => {
+                  this._snackbarService.openSnackBarAsText(
+                    res,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
             );
             this._buttonService.buttonLoading$.next(
               this.componentRef.instance.saveButton
@@ -258,12 +262,16 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this._paidService.updateAmenitiesDS(response);
             this.clearContainer();
             this.selectedService = '';
-            this._snackbarService.openSnackBarAsText(
-              'Amenity removed successfully',
-              '',
-              {
-                panelClass: 'success',
-              }
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.AMENITY_REMOVE_COMPLETE')
+                .subscribe((res) => {
+                  this._snackbarService.openSnackBarAsText(
+                    res,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
             );
             this.dialogRef.close();
             this.getAminityForm(packageCode).removeControl('metaData');

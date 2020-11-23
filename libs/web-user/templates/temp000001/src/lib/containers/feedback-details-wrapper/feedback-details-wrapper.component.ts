@@ -75,9 +75,17 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
         .addFeedback(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
-            this._snackBarService.openSnackBarAsText('Feedback successful', '', {
-              panelClass: 'success',
-            });
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
+                .subscribe((res) => {
+                  this._snackBarService.openSnackBarAsText(
+                    res,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
+            );
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );

@@ -98,10 +98,16 @@ export class HealthDeclarationComponent implements OnInit {
           .subscribe(
             (response) => {
               this.signature = response.fileDownloadUrl;
-              this._snackBarService.openSnackBarAsText(
-                'Signature upload successful',
-                '',
-                { panelClass: 'success' }
+              this.$subscription.add(
+                this._translateService
+                  .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+                  .subscribe((res) => {
+                    this._snackBarService.openSnackBarAsText(
+                      res,
+                      '',
+                      { panelClass: 'success' }
+                    );
+                  })
               );
               this._utilityService.$signatureUploaded.next(true);
             },

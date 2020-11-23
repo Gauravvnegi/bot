@@ -425,10 +425,16 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this._snackBarService.openSnackBarAsText(
-              'Document upload successful',
-              '',
-              { panelClass: 'success' }
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
+                .subscribe((res) => {
+                  this._snackBarService.openSnackBarAsText(
+                    res,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
             );
           },
           ({ error }) => {

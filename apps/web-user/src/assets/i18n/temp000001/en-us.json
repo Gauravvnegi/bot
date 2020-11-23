@@ -5,7 +5,9 @@
     "SIGNATURE_UPLOAD_PENDING": "Please upload signature",
     "SELECT_RATING_PENDING": "Please select the Rating",
     "PAYMENT_METHOD_SELECT_PENDING": "Please select a payment method",
-    "UPLOAD_GUEST_DOCUMENT_PENDING": "Please upload documents for guests."
+    "UPLOAD_GUEST_DOCUMENT_PENDING": "Please upload documents for guests.",
+    "UPLOAD_FRONT_DOCUMENT_PENDING": "Please upload front document for {{documentType}}.",
+    "UPLOAD_BACK_DOCUMENT_PENDING": "Please upload back document for {{documentType}}."
   },
   "MESSAGES": {
     "SUCCESS": {

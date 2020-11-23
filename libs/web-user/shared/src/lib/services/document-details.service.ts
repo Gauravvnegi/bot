@@ -221,6 +221,8 @@ export class DocumentDetailsService extends ApiService {
               status.push({
                 validity: false,
                 msg: `Please upload front document for ${document.documentType}.`,
+                code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                type: document.documentType,
                 data: {
                   guestId: guest.id,
                   index,
@@ -232,6 +234,8 @@ export class DocumentDetailsService extends ApiService {
               status.push({
                 validity: false,
                 msg: `Please upload back document for ${document.documentType}.`,
+                code: 'UPLOAD_BACK_DOCUMENT_PENDING',
+                type: document.documentType,
                 data: {
                   guestId: guest.id,
                   index,
@@ -246,6 +250,8 @@ export class DocumentDetailsService extends ApiService {
                 status.push({
                   validity: false,
                   msg: `Please upload front document for ${document.documentType}.`,
+                  code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                  type: document.documentType,
                   data: {
                     guestId: guest.id,
                     index,
@@ -257,6 +263,8 @@ export class DocumentDetailsService extends ApiService {
                 status.push({
                   validity: false,
                   msg: `Please upload back document for ${document.documentType}.`,
+                  code: 'UPLOAD_BACK_DOCUMENT_PENDING',
+                  type: document.documentType,
                   data: {
                     guestId: guest.id,
                     index,
@@ -270,6 +278,8 @@ export class DocumentDetailsService extends ApiService {
                 status.push({
                   validity: false,
                   msg: `Please upload front document for ${document.documentType}.`,
+                  code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                  type: document.documentType,
                   data: {
                     guestId: guest.id,
                     index,

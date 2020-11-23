@@ -96,7 +96,7 @@ export class GuestDetailsService extends ApiService {
       if (guestDetailFG.get('primaryGuest').invalid) {
         status.push({
           validity: false,
-          msg: 'Invalid Form! Please provide valid details',
+          code: 'INVALID_FORM',
           data: {
             guestId: guestDetailFG.get('primaryGuest').get('id').value,
             type: 'primary',
@@ -112,7 +112,7 @@ export class GuestDetailsService extends ApiService {
           if (control.invalid) {
             status.push({
               validity: false,
-              msg: 'Invalid Form! Please provide valid details',
+              code: 'INVALID_FORM',
               data: {
                 guestId: control.get('id').value,
                 index,

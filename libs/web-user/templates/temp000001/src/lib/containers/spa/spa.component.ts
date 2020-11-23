@@ -8,6 +8,8 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-spa',
@@ -28,6 +30,7 @@ export class SpaComponent implements OnInit {
   spaForm: FormGroup;
   spaConfig: SpaConfigI;
   minDate;
+  private $subscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -35,7 +38,8 @@ export class SpaComponent implements OnInit {
     private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
     private _paidService: PaidService,
-    private _dateService: DateService
+    private _dateService: DateService,
+    private _translateService: TranslateService
   ) {
     this.initSpaForm();
    }
@@ -97,7 +101,13 @@ export class SpaComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`MESSAGES.VALIDATION.${status[0].code}`)
+        .subscribe((res) => {
+          this._snackBarService.openSnackBarAsText(res);
+        })
+    );
     return;
   }
 

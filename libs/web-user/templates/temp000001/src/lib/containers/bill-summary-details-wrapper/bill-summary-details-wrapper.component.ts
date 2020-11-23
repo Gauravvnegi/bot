@@ -74,7 +74,13 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
 
   onSubmit() {
     if (!this.signature) {
-      this._snackBarService.openSnackBarAsText('Please upload signature');
+      this.$subscription.add(
+        this._translateService
+          .get(`MESSAGES.VALIDATION.SIGNATURE_UPLOAD_PENDING`)
+          .subscribe((res) => {
+            this._snackBarService.openSnackBarAsText(res);
+          })
+      );
       return;
     }
     let formData = {

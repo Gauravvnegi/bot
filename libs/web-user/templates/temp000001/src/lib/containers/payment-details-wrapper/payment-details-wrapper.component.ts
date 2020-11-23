@@ -112,9 +112,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             )
         );
       } else {
-        this._snackBarService.openSnackBarAsText(
-          'Please select a payment method!'
-        );
+        this._translateService
+          .get('MESSAGES.VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .subscribe((res) => {
+            this._snackBarService.openSnackBarAsText(res);
+          });
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
@@ -160,9 +162,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             )
         );
       } else {
-        this._snackBarService.openSnackBarAsText(
-          'Please select a payment method!'
-        );
+        this._translateService
+          .get('MESSAGES.VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .subscribe((res) => {
+            this._snackBarService.openSnackBarAsText(res);
+          });
         this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       }
     } else {

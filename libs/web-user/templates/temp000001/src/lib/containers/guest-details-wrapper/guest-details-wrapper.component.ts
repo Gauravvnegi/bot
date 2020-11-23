@@ -100,7 +100,13 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
 
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`MESSAGES.VALIDATION.${status[0].code}`)
+        .subscribe((res) => {
+          this._snackBarService.openSnackBarAsText(res);
+        })
+    );
 
     if (get(status[0], ['data', 'type']) == 'primary') {
       this.guestDetailsComp.primaryGuestAccordian.openAll();

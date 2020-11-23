@@ -98,7 +98,13 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`MESSAGES.VALIDATION.${status[0].code}`)
+        .subscribe((res) => {
+          this._snackBarService.openSnackBarAsText(res);
+        })
+    );
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();

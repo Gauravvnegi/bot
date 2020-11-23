@@ -1,6 +1,11 @@
 {
   "CUSTOM": {},
-  "VALIDATION": {},
+  "VALIDATION": {
+    "INVALID_FORM": "Invalid form. Please fill all the fields.",
+    "SIGNATURE_UPLOAD_PENDING": "Please upload signature",
+    "SELECT_RATING_PENDING": "Please select the Rating",
+    "PAYMENT_METHOD_SELECT_PENDING": "Please select a payment method"
+  },
   "MESSAGES": {
     "SUCCESS": {
       "SIGNATURE_UPLOAD_COMPLETE": "Signature upload successful",

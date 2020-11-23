@@ -55,7 +55,7 @@ export class SpaService extends ApiService{
     if (spaForm.invalid) {
       status.push({
         validity: false,
-        msg: 'Invalid form. Please fill required fields.'
+        code: 'INVALID_FORM'
       });
     }
     return status;

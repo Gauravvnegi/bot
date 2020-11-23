@@ -15,6 +15,8 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -34,6 +36,7 @@ export class AirportPickupComponent implements OnInit {
   airportForm: FormGroup;
   airportConfig: AirportConfigI;
   minDate;
+  private $subscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -41,7 +44,8 @@ export class AirportPickupComponent implements OnInit {
     private _snackBarService: SnackBarService,
     private _paidService: PaidService,
     private _buttonService: ButtonService,
-    private _dateService: DateService
+    private _dateService: DateService,
+    private _translateService: TranslateService
   ) {
     this.initAirportForm();
   }
@@ -122,7 +126,13 @@ export class AirportPickupComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`MESSAGES.VALIDATION.${status[0].code}`)
+        .subscribe((res) => {
+          this._snackBarService.openSnackBarAsText(res);
+        })
+    );
     return;
   }
 
@@ -134,5 +144,9 @@ export class AirportPickupComponent implements OnInit {
         packageCode: this.uniqueData.code,
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

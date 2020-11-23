@@ -219,11 +219,13 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             );
           },
           (error) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackbarService.openSnackBarAsText(res);
-              });
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((res) => {
+                  this._snackbarService.openSnackBarAsText(res);
+                })
+            );
             this._buttonService.buttonLoading$.next(
               this.componentRef.instance.saveButton
             );
@@ -276,8 +278,12 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.dialogRef.close();
             this.getAminityForm(packageCode).removeControl('metaData');
           },
-          (error) => {
-            this._snackbarService.openSnackBarAsText('Some error occured');
+          ({error}) => {
+            this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((res) => {
+                  this._snackbarService.openSnackBarAsText(res);
+                })
             this.dialogRef.close();
           }
         )

@@ -124,7 +124,13 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`MESSAGES.VALIDATION.${status[0].code}`)
+        .subscribe((res) => {
+          this._snackBarService.openSnackBarAsText(res);
+        })
+    );
     return;
   }
 

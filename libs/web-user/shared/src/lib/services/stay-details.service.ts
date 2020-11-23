@@ -62,9 +62,6 @@ export class StayDetailsService extends ApiService {
       label: '',
       disable: true,
       master_label: 'Adults',
-      translation: {
-        master_label: 'STAYDETAILS.ADULTS',
-      },
     });
     stayDetailsFieldSchema['kidsGuest'] = new FieldSchema().deserialize({
       label: '',

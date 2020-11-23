@@ -1,7 +1,6 @@
 {
-  "STAYDETAILS": {
-    "ADULTS": "Adults"
-  },
+  "CUSTOM": {},
+  "VALIDATION": {},
   "MESSAGES": {
     "SUCCESS": {},
     "ERROR": {

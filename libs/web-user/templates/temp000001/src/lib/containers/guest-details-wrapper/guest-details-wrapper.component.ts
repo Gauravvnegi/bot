@@ -9,6 +9,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { get } from 'lodash';
 import { GuestDetailsComponent } from '../guest-details/guest-details.component';
 import { FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-guest-details-wrapper',
@@ -31,7 +32,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     private _snackBarService: SnackBarService,
     private _hotelService: HotelService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -79,7 +81,12 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
           this._stepperService.setIndex('next');
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((res) => {
+              this._snackBarService.openSnackBarAsText(res);
+            });
+          //   this._snackBarService.openSnackBarAsText(error.message);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

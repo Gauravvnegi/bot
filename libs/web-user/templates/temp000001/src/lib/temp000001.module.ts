@@ -43,7 +43,7 @@ import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you
   imports: [
     CommonModule,
     HttpClientModule,
-    WebUserSharedModule,
+    WebUserSharedModule.forRoot({ templateId: 'temp000001' }),
     Temp000001RoutingModule,
     SignaturePadModule,
     PdfViewerModule,

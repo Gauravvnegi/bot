@@ -8,6 +8,7 @@ import {
   ViewChildren,
   ViewContainerRef,
   QueryList,
+  OnDestroy,
 } from '@angular/core';
 import {
   FormGroup,
@@ -19,17 +20,18 @@ import {
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { DocumentDetailsConfigI } from './../../../../../../shared/src/lib/data-models/documentDetailsConfig.model';
 import { DocumentDetailsService } from './../../../../../../shared/src/lib/services/document-details.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-documents-details',
   templateUrl: './documents-details.component.html',
   styleUrls: ['./documents-details.component.scss'],
 })
-export class DocumentsDetailsComponent implements OnInit {
+export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() reservationData;
   @Input() countries;
@@ -49,13 +51,15 @@ export class DocumentsDetailsComponent implements OnInit {
   secondaryDocumentFieldConfig = [];
   validFileType = ['pdf', 'png', 'jpg', 'jpeg'];
   maxFileSize = '3145728';
+  $subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
     public _documentDetailService: DocumentDetailsService,
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
-    private _snackBarService: SnackBarService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.initDocumentDetailForm();
   }
@@ -78,20 +82,24 @@ export class DocumentsDetailsComponent implements OnInit {
   }
 
   getCountriesList() {
-    this._documentDetailService.getCountryList().subscribe((countriesList) => {
-      this.countries = countriesList.map((country) => {
-        //@todo change key
-        return {
-          key: country.nationality,
-          value: country.name,
-          id: country.id,
-          nationality: country.nationality,
-        };
-      });
+    this.$subscription.add(
+      this._documentDetailService
+        .getCountryList()
+        .subscribe((countriesList) => {
+          this.countries = countriesList.map((country) => {
+            //@todo change key
+            return {
+              key: country.nationality,
+              value: country.name,
+              id: country.id,
+              nationality: country.nationality,
+            };
+          });
 
-      this.setDocumentDetails();
-      this.setDocumentDetailConfigs();
-    });
+          this.setDocumentDetails();
+          this.setDocumentDetailConfigs();
+        })
+    );
   }
 
   setDocumentDetailConfigs() {
@@ -384,54 +392,77 @@ export class DocumentsDetailsComponent implements OnInit {
   }
 
   saveDocument(event, { guestId, doc_page, doc_type, doc_issue_place }) {
-    this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, true );
+    this.updateDocumentUploadingStatus(guestId, doc_page, doc_type, true);
     let formData = new FormData();
     formData.append('file', event.file);
     formData.append('doc_type', doc_type);
     formData.append('doc_page', doc_page);
     formData.append('doc_issue_place', doc_issue_place);
 
-    this._documentDetailService
-      .uploadDocumentFile(
-        this._reservationService.reservationId,
-        guestId,
-        formData
-      )
-      .subscribe(
-        (response) => {
-          let value = event.formGroup;
-          this.updateDocumentFG(
-            guestId,
-            doc_type,
-            doc_page,
-            response.fileDownloadUrl
-          );
-          this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, false );
-          this._snackBarService.openSnackBarAsText(
-            'Document upload successful',
-            '',
-            { panelClass: 'success' }
-          );
-        },
-        ({ error }) => {
-          this.updateDocumentFG(guestId, doc_type, doc_page, '');
-          this.updateDocumentUploadingStatus( guestId, doc_page, doc_type, false);
-          this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+    this.$subscription.add(
+      this._documentDetailService
+        .uploadDocumentFile(
+          this._reservationService.reservationId,
+          guestId,
+          formData
+        )
+        .subscribe(
+          (response) => {
+            let value = event.formGroup;
+            this.updateDocumentFG(
+              guestId,
+              doc_type,
+              doc_page,
+              response.fileDownloadUrl
+            );
+            this.updateDocumentUploadingStatus(
+              guestId,
+              doc_page,
+              doc_type,
+              false
+            );
+            this._snackBarService.openSnackBarAsText(
+              'Document upload successful',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          ({ error }) => {
+            this.updateDocumentFG(guestId, doc_type, doc_page, '');
+            this.updateDocumentUploadingStatus(
+              guestId,
+              doc_page,
+              doc_type,
+              false
+            );
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((res) => {
+                this._snackBarService.openSnackBarAsText(res);
+              });
+          }
+        )
+    );
   }
 
-  updateDocumentUploadingStatus( guestId, doc_page, doc_type, isUploading ){
+  updateDocumentUploadingStatus(guestId, doc_page, doc_type, isUploading) {
     let documentIndex;
-      documentIndex = this.guestDetailsConfig[guestId].documents
-                      .findIndex(doc => (doc.documentFileFront.label.split(' '))[0] == doc_type);
-      if(documentIndex >= 0){
-        Object.keys(this.guestDetailsConfig[guestId].documents[documentIndex])
-        .forEach(key =>{
-        if(this.guestDetailsConfig[guestId].documents[documentIndex][key].type === doc_page){
-          this.guestDetailsConfig[guestId].documents[documentIndex][key].isUploading = isUploading;
+    documentIndex = this.guestDetailsConfig[guestId].documents.findIndex(
+      (doc) => doc.documentFileFront.label.split(' ')[0] == doc_type
+    );
+    if (documentIndex >= 0) {
+      Object.keys(
+        this.guestDetailsConfig[guestId].documents[documentIndex]
+      ).forEach((key) => {
+        if (
+          this.guestDetailsConfig[guestId].documents[documentIndex][key]
+            .type === doc_page
+        ) {
+          this.guestDetailsConfig[guestId].documents[documentIndex][
+            key
+          ].isUploading = isUploading;
         }
-      })
+      });
     }
   }
 
@@ -457,23 +488,25 @@ export class DocumentsDetailsComponent implements OnInit {
   }
 
   onNationalityChange(event, guestId) {
-    this._documentDetailService
-      .getDocumentsByNationality(
-        this._hotelService.hotelId,
-        event.selectEvent.value
-      )
-      .subscribe(({ documentList, verifyAllDocuments }) => {
-        if (verifyAllDocuments) {
-          this.resetIfInternationalGuest(guestId);
-          this.setConfigIfInternational(guestId, {
-            dropDownDocumentList: documentList,
-          });
-        } else {
-          this.resetIfNotInternationalGuest(guestId, {
-            dropDownDocumentList: documentList,
-          });
-        }
-      });
+    this.$subscription.add(
+      this._documentDetailService
+        .getDocumentsByNationality(
+          this._hotelService.hotelId,
+          event.selectEvent.value
+        )
+        .subscribe(({ documentList, verifyAllDocuments }) => {
+          if (verifyAllDocuments) {
+            this.resetIfInternationalGuest(guestId);
+            this.setConfigIfInternational(guestId, {
+              dropDownDocumentList: documentList,
+            });
+          } else {
+            this.resetIfNotInternationalGuest(guestId, {
+              dropDownDocumentList: documentList,
+            });
+          }
+        })
+    );
   }
 
   onSelectedDocumentTypeChange(event, guestId) {
@@ -481,6 +514,10 @@ export class DocumentsDetailsComponent implements OnInit {
     this.setConfigIfNotInternational(guestId, {
       selectedDocumentType: event.selectEvent.value,
     });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 
   get guestsFA(): FormArray {

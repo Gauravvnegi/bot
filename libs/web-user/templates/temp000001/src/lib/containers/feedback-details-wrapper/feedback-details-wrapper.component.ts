@@ -5,6 +5,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-details-wrapper',
@@ -24,7 +25,8 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _snackBarService: SnackBarService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -80,7 +82,12 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
           this._stepperService.setIndex('next');
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.cause);
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((res) => {
+              this._snackBarService.openSnackBarAsText(res);
+            });
+          //    this._snackBarService.openSnackBarAsText(error.cause);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );

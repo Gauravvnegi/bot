@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector, Inject, ModuleWithProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SignaturePadModule } from 'angular2-signaturepad';
@@ -38,6 +38,32 @@ import { ConfirmationPopupComponent } from './presentational/confirmation-popup/
 import { NumberInputComponent } from './presentational/number-input/number-input.component';
 import { PaymentMethodComponent } from './presentational/payment-method/payment-method.component';
 import { PromocodeComponent } from './presentational/promocode/promocode.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+
+import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
+import { HttpClient } from '@angular/common/http';
+
+export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
+  let { templateId } = injector.get('TEMPLATE_CONFIG');
+
+  if (templateId) {
+    return new MultiTranslateHttpLoader(http, [
+      { prefix: './assets/i18n/core/', suffix: '.json' },
+      {
+        prefix: `./assets/i18n/${templateId}/`,
+        suffix: '.json',
+      },
+    ]);
+  }
+
+  return new MultiTranslateHttpLoader(http, [
+    { prefix: './assets/i18n/core/', suffix: '.json' },
+  ]);
+}
+
+export interface IThemeConfig {
+  templateId: string;
+}
 
 @NgModule({
   imports: [
@@ -48,42 +74,14 @@ import { PromocodeComponent } from './presentational/promocode/promocode.compone
     TextMaskModule,
     SignaturePadModule,
     MatTabsModule,
-    NgxMaterialTimepickerModule
-  ],
-  exports: [
-    SharedMaterialModule,
-    ReactiveFormsModule,
-    FormsModule,
     NgxMaterialTimepickerModule,
-    StepperComponent,
-    RadioComponent,
-    TextareaComponent,
-    SelectBoxComponent,
-    InputComponent,
-    NumberInputComponent,
-    FileUploadComponent,
-    PaymentCardComponent,
-    ButtonComponent,
-    DatePickerComponent,
-    TimePickerComponent,
-    TextMaskModule,
-    LabelComponent,
-    FieldsetComponent,
-    RatingComponent,
-    CustomStepperComponent,
-    ButtonTemplateSwitchDirective,
-    ImageClassDirective,
-    DetailComponent,
-    SignaturePadScribbleComponent,
-    SignatureCaptureWrapperComponent,
-    CheckboxComponent,
-    LinkifyTextPipe,
-    SafeHtmlPipe,
-    FileUploadCssDirective,
-    RepeaterPipe,
-    SlideComponent,
-    PaymentMethodComponent,
-    PromocodeComponent,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient, Injector],
+      },
+    }),
   ],
   declarations: [
     StepperComponent,
@@ -119,5 +117,50 @@ import { PromocodeComponent } from './presentational/promocode/promocode.compone
     PaymentMethodComponent,
     PromocodeComponent,
   ],
+  exports: [
+    SharedMaterialModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NgxMaterialTimepickerModule,
+    SignaturePadModule,
+    MatTabsModule,
+    StepperComponent,
+    RadioComponent,
+    TextareaComponent,
+    SelectBoxComponent,
+    InputComponent,
+    NumberInputComponent,
+    FileUploadComponent,
+    PaymentCardComponent,
+    ButtonComponent,
+    DatePickerComponent,
+    TimePickerComponent,
+    TextMaskModule,
+    LabelComponent,
+    FieldsetComponent,
+    RatingComponent,
+    CustomStepperComponent,
+    ButtonTemplateSwitchDirective,
+    ImageClassDirective,
+    DetailComponent,
+    SignaturePadScribbleComponent,
+    SignatureCaptureWrapperComponent,
+    CheckboxComponent,
+    LinkifyTextPipe,
+    SafeHtmlPipe,
+    FileUploadCssDirective,
+    RepeaterPipe,
+    SlideComponent,
+    PaymentMethodComponent,
+    PromocodeComponent,
+    TranslateModule,
+  ],
 })
-export class WebUserSharedModule {}
+export class WebUserSharedModule {
+  public static forRoot(config: IThemeConfig): ModuleWithProviders {
+    return {
+      ngModule: WebUserSharedModule,
+      providers: [{ provide: 'TEMPLATE_CONFIG', useValue: config }],
+    };
+  }
+}

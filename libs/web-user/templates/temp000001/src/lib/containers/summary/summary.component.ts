@@ -21,9 +21,9 @@ export class SummaryComponent implements OnInit {
   constructor(
     private _stepperService: StepperService,
     private _fb: FormBuilder,
-    private route:ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
-    private _reservationService: ReservationService,
+    private _reservationService: ReservationService
   ) {
     this.context = this;
   }
@@ -34,7 +34,11 @@ export class SummaryComponent implements OnInit {
   }
 
   openFeedback() {
-    this.router.navigateByUrl(`/feedback?token=${this.route.snapshot.queryParamMap.get('token')}&entity=feedback`);
+    this.router.navigateByUrl(
+      `/feedback?token=${this.route.snapshot.queryParamMap.get(
+        'token'
+      )}&entity=feedback`
+    );
   }
 
   goToDocumentsStep(event: any, ...args: any) {

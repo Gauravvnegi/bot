@@ -7,7 +7,10 @@
     "PAYMENT_METHOD_SELECT_PENDING": "Please select a payment method",
     "UPLOAD_GUEST_DOCUMENT_PENDING": "Please upload documents for guests.",
     "UPLOAD_FRONT_DOCUMENT_PENDING": "Please upload front document for {{documentType}}.",
-    "UPLOAD_BACK_DOCUMENT_PENDING": "Please upload back document for {{documentType}}."
+    "UPLOAD_BACK_DOCUMENT_PENDING": "Please upload back document for {{documentType}}.",
+    "SIGNATURE_PAD_PENDING": "Please enter signature on the signature pad",
+    "SIGNATURE_NAME_PENDING": "Please enter your name",
+    "SIGNATURE_FILE_PENDING": "Please upload an image file"
   },
   "MESSAGES": {
     "SUCCESS": {
@@ -17,7 +20,8 @@
       "AMENITY_ADD_COMPLETE": "Amenity added successfully",
       "AMENITY_REMOVE_COMPLETE": "Amenity removed successfully",
       "PRECHECKIN_COMPLETE": "Pre-Checkin Sucessfull",
-      "PAYMENT_DETAILS_COMPLETE": "Payment details added successfully"
+      "PAYMENT_DETAILS_COMPLETE": "Payment details added successfully",
+      "CHECKIN_COMPLETE": "Checkin successful"
     },
     "ERROR": {
       "STAY_DETAILS_COMPLETE": "Stay details of reservation has been completed",

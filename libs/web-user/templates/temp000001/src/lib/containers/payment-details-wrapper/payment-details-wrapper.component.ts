@@ -104,8 +104,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 );
                 this._translateService
                   .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((res) => {
-                    this._snackBarService.openSnackBarAsText(res);
+                  .subscribe((translated_msg) => {
+                    this._snackBarService.openSnackBarAsText(translated_msg);
                   });
                 // this._snackBarService.openSnackBarAsText(error.message);
               }
@@ -114,8 +114,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       } else {
         this._translateService
           .get('MESSAGES.VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-          .subscribe((res) => {
-            this._snackBarService.openSnackBarAsText(res);
+          .subscribe((translated_msg) => {
+            this._snackBarService.openSnackBarAsText(translated_msg);
           });
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
@@ -150,8 +150,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 this.$subscription.add(
                   this._translateService
                     .get(`MESSAGES.ERROR.${error.type}`)
-                    .subscribe((res) => {
-                      this._snackBarService.openSnackBarAsText(res);
+                    .subscribe((translated_msg) => {
+                      this._snackBarService.openSnackBarAsText(translated_msg);
                     })
                 );
                 // this._snackBarService.openSnackBarAsText(error.message);
@@ -164,8 +164,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       } else {
         this._translateService
           .get('MESSAGES.VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-          .subscribe((res) => {
-            this._snackBarService.openSnackBarAsText(res);
+          .subscribe((translated_msg) => {
+            this._snackBarService.openSnackBarAsText(translated_msg);
           });
         this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       }
@@ -197,8 +197,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               this.$subscription.add(
                 this._translateService
                   .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
-                  .subscribe((res) => {
-                    this._snackBarService.openSnackBarAsText(res);
+                  .subscribe((translated_msg) => {
+                    this._snackBarService.openSnackBarAsText(translated_msg);
                   })
               );
               this._buttonService.buttonLoading$.next(
@@ -215,8 +215,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
+              .subscribe((translated_msg) => {
+                this._snackBarService.openSnackBarAsText(translated_msg);
               });
             //       this._snackBarService.openSnackBarAsText(error.message);
             if (state === 'checkin') {

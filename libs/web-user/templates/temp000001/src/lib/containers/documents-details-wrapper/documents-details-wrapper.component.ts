@@ -85,8 +85,8 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
           ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
+              .subscribe((translated_msg) => {
+                this._snackBarService.openSnackBarAsText(translated_msg);
               });
             // this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
@@ -101,8 +101,8 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     this.$subscription.add(
       this._translateService
         .get(`MESSAGES.VALIDATION.${status[0].code}`)
-        .subscribe((res) => {
-          this._snackBarService.openSnackBarAsText(res);
+        .subscribe((translated_msg) => {
+          this._snackBarService.openSnackBarAsText(translated_msg);
         })
     );
     if (get(status[0], ['data', 'index']) >= 0) {

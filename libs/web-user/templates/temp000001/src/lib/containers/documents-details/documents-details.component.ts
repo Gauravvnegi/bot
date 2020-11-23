@@ -428,9 +428,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
-                .subscribe((res) => {
+                .subscribe((translated_msg) => {
                   this._snackBarService.openSnackBarAsText(
-                    res,
+                    translated_msg,
                     '',
                     { panelClass: 'success' }
                   );
@@ -448,8 +448,8 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((res) => {
-                  this._snackBarService.openSnackBarAsText(res);
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(translated_msg);
                 })
             );
           }

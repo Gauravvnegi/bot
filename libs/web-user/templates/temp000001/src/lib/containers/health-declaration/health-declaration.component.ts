@@ -101,9 +101,9 @@ export class HealthDeclarationComponent implements OnInit {
               this.$subscription.add(
                 this._translateService
                   .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-                  .subscribe((res) => {
+                  .subscribe((translated_msg) => {
                     this._snackBarService.openSnackBarAsText(
-                      res,
+                      translated_msg,
                       '',
                       { panelClass: 'success' }
                     );
@@ -115,8 +115,8 @@ export class HealthDeclarationComponent implements OnInit {
               this.$subscription.add(
                 this._translateService
                   .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((res) => {
-                    this._snackBarService.openSnackBarAsText(res);
+                  .subscribe((translated_msg) => {
+                    this._snackBarService.openSnackBarAsText(translated_msg);
                   })
               );
               //   this._snackBarService.openSnackBarAsText(error.message);
@@ -807,8 +807,8 @@ export class HealthDeclarationComponent implements OnInit {
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((res) => {
-                  this._snackBarService.openSnackBarAsText(res);
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(translated_msg);
                 })
             );
           }

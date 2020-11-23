@@ -78,9 +78,9 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
-                .subscribe((res) => {
+                .subscribe((translated_msg) => {
                   this._snackBarService.openSnackBarAsText(
-                    res,
+                    translated_msg,
                     '',
                     { panelClass: 'success' }
                   );
@@ -95,8 +95,8 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((res) => {
-                  this._snackBarService.openSnackBarAsText(res);
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(translated_msg);
                 })
             );
             //    this._snackBarService.openSnackBarAsText(error.cause);

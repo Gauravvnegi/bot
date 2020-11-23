@@ -206,9 +206,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.AMENITY_ADD_COMPLETE')
-                .subscribe((res) => {
+                .subscribe((translated_msg) => {
                   this._snackbarService.openSnackBarAsText(
-                    res,
+                    translated_msg,
                     '',
                     { panelClass: 'success' }
                   );
@@ -222,8 +222,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((res) => {
-                  this._snackbarService.openSnackBarAsText(res);
+                .subscribe((translated_msg) => {
+                  this._snackbarService.openSnackBarAsText(translated_msg);
                 })
             );
             this._buttonService.buttonLoading$.next(
@@ -267,9 +267,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.AMENITY_REMOVE_COMPLETE')
-                .subscribe((res) => {
+                .subscribe((translated_msg) => {
                   this._snackbarService.openSnackBarAsText(
-                    res,
+                    translated_msg,
                     '',
                     { panelClass: 'success' }
                   );
@@ -281,8 +281,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
           ({error}) => {
             this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((res) => {
-                  this._snackbarService.openSnackBarAsText(res);
+                .subscribe((translated_msg) => {
+                  this._snackbarService.openSnackBarAsText(translated_msg);
                 })
             this.dialogRef.close();
           }

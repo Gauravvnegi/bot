@@ -104,8 +104,8 @@ export class SpaComponent implements OnInit {
     this.$subscription.add(
       this._translateService
         .get(`MESSAGES.VALIDATION.${status[0].code}`)
-        .subscribe((res) => {
-          this._snackBarService.openSnackBarAsText(res);
+        .subscribe((translated_msg) => {
+          this._snackBarService.openSnackBarAsText(translated_msg);
         })
     );
     return;

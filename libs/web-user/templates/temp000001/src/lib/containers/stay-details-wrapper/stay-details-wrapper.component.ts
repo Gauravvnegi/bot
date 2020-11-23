@@ -97,8 +97,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
             );
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
+              .subscribe((translated_msg) => {
+                this._snackBarService.openSnackBarAsText(translated_msg);
               });
             //  this._snackBarService.openSnackBarAsText(error.message);
           }

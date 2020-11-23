@@ -72,8 +72,8 @@ export class ThankYouMainComponent implements OnInit {
         }, ({ error }) => {
           this._translateService
             .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackbarService.openSnackBarAsText(res);
+            .subscribe((translated_msg) => {
+              this._snackbarService.openSnackBarAsText(translated_msg);
             })
           })
     );

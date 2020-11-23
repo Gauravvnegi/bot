@@ -76,7 +76,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     if (!this.signature) {
       this.$subscription.add(
         this._translateService
-          .get(`MESSAGES.VALIDATION.SIGNATURE_UPLOAD_PENDING`)
+          .get(`VALIDATION.SIGNATURE_UPLOAD_PENDING`)
           .subscribe((translated_msg) => {
             this._snackBarService.openSnackBarAsText(translated_msg);
           })

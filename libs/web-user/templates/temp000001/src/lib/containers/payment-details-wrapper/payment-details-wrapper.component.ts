@@ -113,7 +113,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         );
       } else {
         this._translateService
-          .get('MESSAGES.VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
           .subscribe((translated_msg) => {
             this._snackBarService.openSnackBarAsText(translated_msg);
           });
@@ -163,7 +163,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         );
       } else {
         this._translateService
-          .get('MESSAGES.VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
           .subscribe((translated_msg) => {
             this._snackBarService.openSnackBarAsText(translated_msg);
           });

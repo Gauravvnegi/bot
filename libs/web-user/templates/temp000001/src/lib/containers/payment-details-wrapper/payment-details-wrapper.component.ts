@@ -145,11 +145,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 window.location.href = response.billingUrl;
               },
               ({ error }) => {
-                this._translateService
-                  .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((res) => {
-                    this._snackBarService.openSnackBarAsText(res);
-                  });
+                this.$subscription.add(
+                  this._translateService
+                    .get(`MESSAGES.ERROR.${error.type}`)
+                    .subscribe((res) => {
+                      this._snackBarService.openSnackBarAsText(res);
+                    })
+                );
                 // this._snackBarService.openSnackBarAsText(error.message);
                 this._buttonService.buttonLoading$.next(
                   this.buttonRefs['nextButton']
@@ -188,6 +190,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         .subscribe(
           (response) => {
             if (state === 'checkin') {
+              this.$subscription.add(
+                this._translateService
+                  .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
+                  .subscribe((res) => {
+                    this._snackBarService.openSnackBarAsText(res);
+                  })
+              );
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['nextButton']
               );

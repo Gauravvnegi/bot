@@ -198,7 +198,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 this._translateService
                   .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
                   .subscribe((translated_msg) => {
-                    this._snackBarService.openSnackBarAsText(translated_msg);
+                    this._snackBarService.openSnackBarAsText(translated_msg, '', { panelClass: 'SUCCESS' });
                   })
               );
               this._buttonService.buttonLoading$.next(

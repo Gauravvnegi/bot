@@ -98,13 +98,17 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translated_msg) => {
-          this._snackBarService.openSnackBarAsText(translated_msg);
-        })
-    );
+    if (status[0].code) {
+      this.$subscription.add(
+        this._translateService
+          .get(`VALIDATION.${status[0].code}`)
+          .subscribe((translated_msg) => {
+            this._snackBarService.openSnackBarAsText(translated_msg);
+          })
+      );
+    } else {
+      this._snackBarService.openSnackBarAsText(status[0].msg);
+    }
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();

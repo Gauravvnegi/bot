@@ -7,6 +7,7 @@ import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/do
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-registration-card',
@@ -63,7 +64,8 @@ export class RegistrationCardComponent {
     private _snackbar: SnackBarService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private _utilityService: UtilityService
+    private _utilityService: UtilityService,
+    private _translateService: TranslateService
   ) {
     this.settings = data;
   }
@@ -102,8 +104,12 @@ export class RegistrationCardComponent {
           (res) => {
             this._utilityService.$signatureUploaded.next(true);
           },
-          (err) => {
-            this._snackbar.openSnackBarAsText(err.message);
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((res) => {
+                this._snackbar.openSnackBarAsText(res);
+              });
             this._utilityService.$signatureUploaded.next(false);
           }
         )

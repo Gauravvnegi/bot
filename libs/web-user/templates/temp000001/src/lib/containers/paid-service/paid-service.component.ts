@@ -20,6 +20,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { DefaultAmenityComponent } from '../default-amenity/default-amenity.component';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
@@ -70,7 +71,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     private _reservationService: ReservationService,
     private _snackbarService: SnackBarService,
     private _resolver: ComponentFactoryResolver,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     this.initPaidAmenitiesForm();
   }
@@ -213,7 +215,11 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             );
           },
           (error) => {
-            this._snackbarService.openSnackBarAsText('Some error occured');
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((res) => {
+                this._snackbarService.openSnackBarAsText(res);
+              });
             this._buttonService.buttonLoading$.next(
               this.componentRef.instance.saveButton
             );

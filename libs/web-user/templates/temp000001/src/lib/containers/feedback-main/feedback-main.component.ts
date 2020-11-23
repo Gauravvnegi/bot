@@ -9,6 +9,7 @@ import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/res
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -35,7 +36,8 @@ export class FeedbackMainComponent implements OnInit {
     private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -106,7 +108,11 @@ export class FeedbackMainComponent implements OnInit {
             this.openThankyouPage('feedback');
           },
           ({ error }) => {
-            this._snackBarService.openSnackBarAsText(error.message);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((res) => {
+                this._snackBarService.openSnackBarAsText(res);
+              });
             this._buttonService.buttonLoading$.next(this.saveButton);
           }
         )

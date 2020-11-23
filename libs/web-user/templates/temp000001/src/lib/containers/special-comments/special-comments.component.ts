@@ -9,6 +9,7 @@ import {
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { SpecialCommentsConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-special-comments',
@@ -16,6 +17,7 @@ import { SpecialCommentsConfigI } from 'libs/web-user/shared/src/lib/data-models
   styleUrls: ['./special-comments.component.scss'],
 })
 export class SpecialCommentsComponent implements OnInit, OnChanges {
+  private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;
 
@@ -72,10 +74,16 @@ export class SpecialCommentsComponent implements OnInit, OnChanges {
   }
 
   listenForStayDetailDSchange() {
-    this._stayDetailService.stayDetailDS$.subscribe((value) => {
-      this.specialCommentsForm.patchValue(
-        this._stayDetailService.special_comments
-      );
-    });
+    this.$subscription.add(
+      this._stayDetailService.stayDetailDS$.subscribe((value) => {
+        this.specialCommentsForm.patchValue(
+          this._stayDetailService.special_comments
+        );
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

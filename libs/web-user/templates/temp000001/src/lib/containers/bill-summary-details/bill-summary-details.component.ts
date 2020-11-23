@@ -10,6 +10,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -17,6 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./bill-summary-details.component.scss'],
 })
 export class BillSummaryDetailsComponent implements OnInit {
+  private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;
   @Input() stepperIndex;
@@ -165,36 +167,40 @@ export class BillSummaryDetailsComponent implements OnInit {
       let formData = new FormData();
       formData.append('files', event.file);
 
-      this._summaryService
-        .uploadSignature(
-          this._reservationService.reservationId,
-          this._hotelService.hotelId,
-          this._reservationService.reservationData.guestDetails.primaryGuest.id,
-          formData
-        )
-        .subscribe(
-          (response) => {
-            this._summaryService.$signatureUrl.next(
-              response['fileDownloadUri']
-            );
-            this.signature = response['fileDownloadUri'];
-            this._utilityService.$signatureUploaded.next(true);
-            this._snackBarService.openSnackBarAsText(
-              'Signature upload successful',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          ({ error }) => {
-            this._utilityService.$signatureUploaded.next(true);
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
-              });
+      this.$subscription.add(
+        this._summaryService
+          .uploadSignature(
+            this._reservationService.reservationId,
+            this._hotelService.hotelId,
+            this._reservationService.reservationData.guestDetails.primaryGuest.id,
+            formData
+          )
+          .subscribe(
+            (response) => {
+              this._summaryService.$signatureUrl.next(
+                response['fileDownloadUri']
+              );
+              this.signature = response['fileDownloadUri'];
+              this._utilityService.$signatureUploaded.next(true);
+              this._snackBarService.openSnackBarAsText(
+                'Signature upload successful',
+                '',
+                { panelClass: 'success' }
+              );
+            },
+            ({ error }) => {
+              this._utilityService.$signatureUploaded.next(true);
+              this.$subscription.add(
+                this._translateService
+                  .get(`MESSAGES.ERROR.${error.type}`)
+                  .subscribe((res) => {
+                    this._snackBarService.openSnackBarAsText(res);
+                  })
+              );
+            }
+          )
+      );
             // this._snackBarService.openSnackBarAsText(error.message)
-          }
-        );
     }
   }
 
@@ -204,5 +210,9 @@ export class BillSummaryDetailsComponent implements OnInit {
 
   get billSummary() {
     return this._summaryService.billSummaryDetails.billSummary;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -28,6 +28,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 const components = {
   radio: RadioComponent,
@@ -45,6 +46,7 @@ const components = {
   styleUrls: ['./health-declaration.component.scss'],
 })
 export class HealthDeclarationComponent implements OnInit {
+  private $subscription: Subscription = new Subscription();
   @Output()
   addFGEvent = new EventEmitter();
 
@@ -86,32 +88,36 @@ export class HealthDeclarationComponent implements OnInit {
       let formData = new FormData();
       formData.append('file', event.file);
 
-      this._healthDetailsService
-        .uploadSignature(
-          this._reservationService.reservationId,
-          this._reservationService.reservationData.guestDetails.primaryGuest.id,
-          formData
-        )
-        .subscribe(
-          (response) => {
-            this.signature = response.fileDownloadUrl;
-            this._snackBarService.openSnackBarAsText(
-              'Signature upload successful',
-              '',
-              { panelClass: 'success' }
-            );
-            this._utilityService.$signatureUploaded.next(true);
-          },
-          ({ error }) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
-              });
-            //   this._snackBarService.openSnackBarAsText(error.message);
-            this._utilityService.$signatureUploaded.next(false);
-          }
-        );
+      this.$subscription.add(
+        this._healthDetailsService
+          .uploadSignature(
+            this._reservationService.reservationId,
+            this._reservationService.reservationData.guestDetails.primaryGuest.id,
+            formData
+          )
+          .subscribe(
+            (response) => {
+              this.signature = response.fileDownloadUrl;
+              this._snackBarService.openSnackBarAsText(
+                'Signature upload successful',
+                '',
+                { panelClass: 'success' }
+              );
+              this._utilityService.$signatureUploaded.next(true);
+            },
+            ({ error }) => {
+              this.$subscription.add(
+                this._translateService
+                  .get(`MESSAGES.ERROR.${error.type}`)
+                  .subscribe((res) => {
+                    this._snackBarService.openSnackBarAsText(res);
+                  })
+              );
+              //   this._snackBarService.openSnackBarAsText(error.message);
+              this._utilityService.$signatureUploaded.next(false);
+            }
+          )
+      );
     }
   }
 
@@ -143,11 +149,13 @@ export class HealthDeclarationComponent implements OnInit {
   }
 
   listenForQueryListchange() {
-    this.parentPanelContentContainer.changes.subscribe((value) => {
-      if (this.parentPanelContentContainer.length > 0) {
-        this.makeComponentsDynamic();
-      }
-    });
+    this.$subscription.add(
+      this.parentPanelContentContainer.changes.subscribe((value) => {
+        if (this.parentPanelContentContainer.length > 0) {
+          this.makeComponentsDynamic();
+        }
+      })
+    );
   }
 
   makeComponentsDynamic() {
@@ -760,12 +768,14 @@ export class HealthDeclarationComponent implements OnInit {
     // ];
     //  this.settings = data;
 
-    this._healthDetailsService
-      .getHealthTemplate(this._hotelService.healthFormId)
-      .subscribe((response) => {
-        this.settings = [response];
-        this.createFormgroupForPanel();
-      });
+    this.$subscription.add(
+      this._healthDetailsService
+        .getHealthTemplate(this._hotelService.healthFormId)
+        .subscribe((response) => {
+          this.settings = [response];
+          this.createFormgroupForPanel();
+        })
+    );
   }
 
   patchHealthData(data, signatureUrl) {
@@ -775,25 +785,29 @@ export class HealthDeclarationComponent implements OnInit {
 
   getHealthData() {
     // 'a2f5f063-6a29-4a30-ac50-ae46a81933b6' ||
-    this._healthDetailsService
-      .getHealthData(
-        this._reservationService.reservationId,
-        this._reservationService.reservationData.guestDetails.primaryGuest.id
-      )
-      .subscribe(
-        (response) => {
-          if (response && response.data) {
-            this.patchHealthData(response.data, response.signatureUrl);
+    this.$subscription.add(
+      this._healthDetailsService
+        .getHealthData(
+          this._reservationService.reservationId,
+          this._reservationService.reservationData.guestDetails.primaryGuest.id
+        )
+        .subscribe(
+          (response) => {
+            if (response && response.data) {
+              this.patchHealthData(response.data, response.signatureUrl);
+            }
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((res) => {
+                  this._snackBarService.openSnackBarAsText(res);
+                })
+            );
           }
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackBarService.openSnackBarAsText(res);
-            });
-        }
-      );
+        )
+    );
   }
 
   extractDataFromHealthForm() {
@@ -808,5 +822,9 @@ export class HealthDeclarationComponent implements OnInit {
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

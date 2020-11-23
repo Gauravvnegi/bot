@@ -14,6 +14,7 @@ import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  private $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: StepperComponent;
 
   stepperData;
@@ -35,21 +36,23 @@ export class MainComponent implements OnInit {
   }
 
   private getReservationDetails() {
-    forkJoin(
-      this._reservationService.getReservationDetails(
-        this._reservationService.reservationId
-      ),
-      of(true)
-    ).subscribe(([reservationData, val]) => {
-      this._hotelService.hotelConfig = reservationData['hotel'];
-      this.isReservationData = true;
-      this.stepperData = this._templateService.templateData;
-      // TO_DO: Remove function call
-      // this.stepperData = this.modifyStepperData(this._templateService.templateData);
-      this.getStepperData();
-      this.reservationData = reservationData;
-      this._reservationService.reservationData = reservationData;
-    });
+    this.$subscription.add(
+      forkJoin(
+        this._reservationService.getReservationDetails(
+          this._reservationService.reservationId
+        ),
+        of(true)
+      ).subscribe(([reservationData, val]) => {
+        this._hotelService.hotelConfig = reservationData['hotel'];
+        this.isReservationData = true;
+        this.stepperData = this._templateService.templateData;
+        // TO_DO: Remove function call
+        // this.stepperData = this.modifyStepperData(this._templateService.templateData);
+        this.getStepperData();
+        this.reservationData = reservationData;
+        this._reservationService.reservationData = reservationData;
+      })
+    );
   }
 
   // TO-DO: Remove this function
@@ -69,11 +72,13 @@ export class MainComponent implements OnInit {
   }
 
   private registerListeners() {
-    this.parentForm.valueChanges.subscribe((val) => {
-      this._parentFormService.parentFormValueAndValidity$.next({
-        parentForm: this.parentForm,
-      });
-    });
+    this.$subscription.add(
+      this.parentForm.valueChanges.subscribe((val) => {
+        this._parentFormService.parentFormValueAndValidity$.next({
+          parentForm: this.parentForm,
+        });
+      })
+    );
   }
 
   private getStepperData() {

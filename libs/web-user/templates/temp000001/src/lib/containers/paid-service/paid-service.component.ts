@@ -19,6 +19,7 @@ import { ConfirmationPopupComponent } from 'libs/web-user/shared/src/lib/present
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { DefaultAmenityComponent } from '../default-amenity/default-amenity.component';
+import { Subscription } from 'rxjs';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
@@ -33,6 +34,7 @@ const componentMapping = {
   styleUrls: ['./paid-service.component.scss'],
 })
 export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
+  private $subscription: Subscription = new Subscription();
   @ViewChild('serviceMetadata', { read: ViewContainerRef }) serviceContainer;
 
   @Input() parentForm: FormGroup;
@@ -162,23 +164,27 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   listenForComponentRender() {
-    this._paidService.isComponentRendered$.subscribe(() => {
-      this.getAminityForm(this._paidService.uniqueData.code).addControl(
-        'metaData',
-        this._paidService.amenityForm
-      );
-    });
+    this.$subscription.add(
+      this._paidService.isComponentRendered$.subscribe(() => {
+        this.getAminityForm(this._paidService.uniqueData.code).addControl(
+          'metaData',
+          this._paidService.amenityForm
+        );
+      })
+    );
   }
 
   listenForServiceAddition() {
-    this.componentRef &&
-      this.componentRef.instance.addEvent &&
-      this.componentRef.instance.addEvent.subscribe((packageCode) => {
-        // if(this.paidAmenitiesForm.get(packageCode).get('metaData')){
-        //   this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
-        // }
-        this.addAmenity(packageCode);
-      });
+    this.$subscription.add(
+      this.componentRef &&
+        this.componentRef.instance.addEvent &&
+        this.componentRef.instance.addEvent.subscribe((packageCode) => {
+          // if(this.paidAmenitiesForm.get(packageCode).get('metaData')){
+          //   this.getAminityForm(packageCode).get('metaData').patchValue(this._paidService.amenityData);
+          // }
+          this.addAmenity(packageCode);
+        })
+    );
   }
 
   addAmenity(packageCode) {
@@ -187,31 +193,33 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
       this._paidService.amenityData,
       amenityId
     );
-    this._paidService
-      .addAmenity(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._paidService.updateAmenitiesDS(response);
-          this.clearContainer();
-          this.selectedService = '';
-          this._snackbarService.openSnackBarAsText(
-            'Amenity added successfully',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-          this._buttonService.buttonLoading$.next(
-            this.componentRef.instance.saveButton
-          );
-        },
-        (error) => {
-          this._snackbarService.openSnackBarAsText('Some error occured');
-          this._buttonService.buttonLoading$.next(
-            this.componentRef.instance.saveButton
-          );
-        }
-      );
+    this.$subscription.add(
+      this._paidService
+        .addAmenity(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._paidService.updateAmenitiesDS(response);
+            this.clearContainer();
+            this.selectedService = '';
+            this._snackbarService.openSnackBarAsText(
+              'Amenity added successfully',
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
+            this._buttonService.buttonLoading$.next(
+              this.componentRef.instance.saveButton
+            );
+          },
+          (error) => {
+            this._snackbarService.openSnackBarAsText('Some error occured');
+            this._buttonService.buttonLoading$.next(
+              this.componentRef.instance.saveButton
+            );
+          }
+        )
+    );
   }
 
   openDialog(aminityId, packageCode) {
@@ -220,40 +228,46 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     dialogConfig.autoFocus = true;
     this.dialogRef = this.dialog.open(ConfirmationPopupComponent, dialogConfig);
 
-    this.dialogRef.componentInstance.onSubmitEvent.subscribe(() => {
-      this.removeAmenity(aminityId, packageCode);
-    });
+    this.$subscription.add(
+      this.dialogRef.componentInstance.onSubmitEvent.subscribe(() => {
+        this.removeAmenity(aminityId, packageCode);
+      })
+    );
   }
 
   listenForServiceRemoval() {
-    this.componentRef.instance.removeEvent.subscribe((uniqueData) => {
-      this.openDialog(uniqueData.amenityId, uniqueData.packageCode);
-    });
+    this.$subscription.add(
+      this.componentRef.instance.removeEvent.subscribe((uniqueData) => {
+        this.openDialog(uniqueData.amenityId, uniqueData.packageCode);
+      })
+    );
   }
 
   removeAmenity(aminityId, packageCode) {
-    this._paidService
-      .removeAmenity(this._reservationService.reservationId, aminityId)
-      .subscribe(
-        (response) => {
-          this._paidService.updateAmenitiesDS(response);
-          this.clearContainer();
-          this.selectedService = '';
-          this._snackbarService.openSnackBarAsText(
-            'Amenity removed successfully',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-          this.dialogRef.close();
-          this.getAminityForm(packageCode).removeControl('metaData');
-        },
-        (error) => {
-          this._snackbarService.openSnackBarAsText('Some error occured');
-          this.dialogRef.close();
-        }
-      );
+    this.$subscription.add(
+      this._paidService
+        .removeAmenity(this._reservationService.reservationId, aminityId)
+        .subscribe(
+          (response) => {
+            this._paidService.updateAmenitiesDS(response);
+            this.clearContainer();
+            this.selectedService = '';
+            this._snackbarService.openSnackBarAsText(
+              'Amenity removed successfully',
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
+            this.dialogRef.close();
+            this.getAminityForm(packageCode).removeControl('metaData');
+          },
+          (error) => {
+            this._snackbarService.openSnackBarAsText('Some error occured');
+            this.dialogRef.close();
+          }
+        )
+    );
   }
 
   getAminityForm(packageCode) {
@@ -295,6 +309,7 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
     if (this.componentRef) {
       this.componentRef.destroy();
     }
+    this.$subscription.unsubscribe();
   }
 
   get paidAmenities() {

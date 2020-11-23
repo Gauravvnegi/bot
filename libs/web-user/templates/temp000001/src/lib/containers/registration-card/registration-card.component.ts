@@ -19,7 +19,7 @@ export class RegistrationCardComponent {
     src: '',
   };
   private _settings;
-  private _subscription: Subscription = new Subscription();
+  private $subscription: Subscription = new Subscription();
   private _defaultValue = {
     label: 'Verify ',
     linkLabel: 'Registration Card',
@@ -91,28 +91,30 @@ export class RegistrationCardComponent {
     formData.append('doc_type', 'signature');
     formData.append('doc_page', 'front');
     formData.append('file', event.file);
-    this._docService
-      .uploadDocumentFile(
-        this._reservation.reservationData.id,
-        this._reservation.reservationData.guestDetails.primaryGuest.id,
-        formData
-      )
-      .subscribe(
-        (res) => {
-          this._utilityService.$signatureUploaded.next(true);
-        },
-        (err) => {
-          this._snackbar.openSnackBarAsText(err.message);
-          this._utilityService.$signatureUploaded.next(false);
-        }
-      );
+    this.$subscription.add(
+      this._docService
+        .uploadDocumentFile(
+          this._reservation.reservationData.id,
+          this._reservation.reservationData.guestDetails.primaryGuest.id,
+          formData
+        )
+        .subscribe(
+          (res) => {
+            this._utilityService.$signatureUploaded.next(true);
+          },
+          (err) => {
+            this._snackbar.openSnackBarAsText(err.message);
+            this._utilityService.$signatureUploaded.next(false);
+          }
+        )
+    );
   }
 
   onClose() {
     this.dialogRef.close();
   }
 
-  onDestroy() {
-    this._subscription.unsubscribe();
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

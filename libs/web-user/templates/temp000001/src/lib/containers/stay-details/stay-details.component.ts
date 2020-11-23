@@ -13,6 +13,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import { StayDetailsConfigI } from './../../../../../../shared/src/lib/data-models/stayDetailsConfig.model';
 import { StayDetailsService } from './../../../../../../shared/src/lib/services/stay-details.service';
+import { Subscription } from 'rxjs';
 
 export const MY_FORMATS = {
   parse: {
@@ -40,11 +41,11 @@ export const MY_FORMATS = {
   ],
 })
 export class StayDetailsComponent implements OnInit, OnChanges {
+  private $subscription: Subscription = new Subscription();
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   @Input() parentForm: FormGroup;
   @Input() reservationData;
-
   @Output()
   addFGEvent = new EventEmitter();
 
@@ -95,8 +96,14 @@ export class StayDetailsComponent implements OnInit, OnChanges {
   }
 
   listenForStayDetailDSchange() {
-    this._stayDetailService.stayDetailDS$.subscribe((value) => {
-      this.stayDetailsForm.patchValue(this._stayDetailService.stayDetail);
-    });
+    this.$subscription.add(
+      this._stayDetailService.stayDetailDS$.subscribe((value) => {
+        this.stayDetailsForm.patchValue(this._stayDetailService.stayDetail);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

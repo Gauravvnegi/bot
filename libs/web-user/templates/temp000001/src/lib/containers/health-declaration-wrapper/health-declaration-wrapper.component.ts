@@ -42,37 +42,45 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
    */
   saveHealthDeclarationDetails() {
     const dataToBeSaved = this.healthComponent.extractDataFromHealthForm();
-    this._healthDetailsService
-      .updateHealthForm(
-        this._reservationService.reservationId,
-        this._reservationService.reservationData.guestDetails.primaryGuest.id,
-        dataToBeSaved
-      )
-      .subscribe(
-        (response) => {
-          if (response && response.data) {
-            // this.patchHealthData(response.data, response.signatureUrl);
+    this.$subscription.add(
+      this._healthDetailsService
+        .updateHealthForm(
+          this._reservationService.reservationId,
+          this._reservationService.reservationData.guestDetails.primaryGuest.id,
+          dataToBeSaved
+        )
+        .subscribe(
+          (response) => {
+            if (response && response.data) {
+              // this.patchHealthData(response.data, response.signatureUrl);
+            }
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((res) => {
+                  this._snackBarService.openSnackBarAsText(res);
+                })
+            );
+            //   this._snackBarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
           }
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackBarService.openSnackBarAsText(res);
-            });
-          //   this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+        )
+    );
   }
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

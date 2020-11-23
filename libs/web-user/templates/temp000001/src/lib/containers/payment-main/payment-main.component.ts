@@ -8,6 +8,7 @@ import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/pay
 import { Router } from '@angular/router';
 import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentStatusConfig.model';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-payment-main',
@@ -15,6 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./payment-main.component.scss'],
 })
 export class PaymentMainComponent implements OnInit {
+  private $subscription: Subscription = new Subscription();
   paymentStatusData: PaymentMainStatus = new PaymentMainStatus();
 
   ispaymentStatusLoaded: boolean = false;
@@ -35,56 +37,62 @@ export class PaymentMainComponent implements OnInit {
   }
 
   private getReservationDetails() {
-    this._reservationService
-      .getReservationDetails(this._reservationService.reservationId)
-      .subscribe((reservationData) => {
-        this._hotelService.hotelConfig = reservationData['hotel'];
-        this.isReservationData = true;
-        this.reservationData = reservationData;
-        this._reservationService.reservationData = reservationData;
-        this.getPaymentStatus();
-      });
+    this.$subscription.add(
+      this._reservationService
+        .getReservationDetails(this._reservationService.reservationId)
+        .subscribe((reservationData) => {
+          this._hotelService.hotelConfig = reservationData['hotel'];
+          this.isReservationData = true;
+          this.reservationData = reservationData;
+          this._reservationService.reservationData = reservationData;
+          this.getPaymentStatus();
+        })
+    );
   }
 
   private getPaymentStatus() {
-    this._paymentDetailService
-      .getPaymentStatus(this._reservationService.reservationId)
-      .subscribe(
-        (response) => {
-          let status = response.status.toUpperCase();
-          this._templateLoadingService.isTemplateLoading$.next(false);
-          let redirectUrl = window.location.href.substring(
-            0,
-            window.location.href.lastIndexOf('&')
-          );
-          let { title } = this._hotelService.getCurrentJourneyConfig();
-          this.paymentStatusData = new PaymentMainStatus().deserialize(
-            response,
-            redirectUrl,
-            title,
-            status
-          );
-          this.ispaymentStatusLoaded = true;
-          if (
-            this.reservationData['currentJourney'] === 'PRECHECKIN' &&
-            status === 'SUCCESS'
-          ) {
-            this._snackBarService.openSnackBarAsText(
-              'Pre-Checkin Sucessfull.',
-              '',
-              { panelClass: 'success' }
+    this.$subscription.add(
+      this._paymentDetailService
+        .getPaymentStatus(this._reservationService.reservationId)
+        .subscribe(
+          (response) => {
+            let status = response.status.toUpperCase();
+            this._templateLoadingService.isTemplateLoading$.next(false);
+            let redirectUrl = window.location.href.substring(
+              0,
+              window.location.href.lastIndexOf('&')
             );
+            let { title } = this._hotelService.getCurrentJourneyConfig();
+            this.paymentStatusData = new PaymentMainStatus().deserialize(
+              response,
+              redirectUrl,
+              title,
+              status
+            );
+            this.ispaymentStatusLoaded = true;
+            if (
+              this.reservationData['currentJourney'] === 'PRECHECKIN' &&
+              status === 'SUCCESS'
+            ) {
+              this._snackBarService.openSnackBarAsText(
+                'Pre-Checkin Sucessfull.',
+                '',
+                { panelClass: 'success' }
+              );
+            }
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((res) => {
+                  this._snackBarService.openSnackBarAsText(res);
+                })
+            );
+            // this._snackBarService.openSnackBarAsText(error.message);
           }
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackBarService.openSnackBarAsText(res);
-            });
-          // this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+        )
+    );
   }
 
   redirect(redirectUrl?) {
@@ -115,5 +123,9 @@ export class PaymentMainComponent implements OnInit {
       return this.paymentStatusData.data;
     }
     return null;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

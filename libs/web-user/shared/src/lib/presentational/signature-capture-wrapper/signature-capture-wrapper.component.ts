@@ -189,8 +189,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
         this.$subscription.add(
           this._translateService
             .get(`VALIDATION.SIGNATURE_PAD_PENDING`)
-            .subscribe((translated_msg) => {
-              this._snackBarService.openSnackBarAsText(translated_msg);
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
             })
         );
         this._buttonService.buttonLoading$.next(this.saveButton);
@@ -207,8 +207,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
         this.$subscription.add(
           this._translateService
             .get(`VALIDATION.SIGNATURE_NAME_PENDING`)
-            .subscribe((translated_msg) => {
-              this._snackBarService.openSnackBarAsText(translated_msg);
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
             })
         );
         this._buttonService.buttonLoading$.next(this.saveButton);
@@ -220,8 +220,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
         this.$subscription.add(
           this._translateService
             .get(`VALIDATION.SIGNATURE_FILE_PENDING`)
-            .subscribe((translated_msg) => {
-              this._snackBarService.openSnackBarAsText(translated_msg);
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
             })
         );
         this._buttonService.buttonLoading$.next(this.saveButton);
@@ -260,8 +260,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
       }, ({ error }) => this.$subscription.add(
         this._translateService
           .get(`MESSAGES.ERROR.${error.type}`)
-          .subscribe((translated_msg) => {
-            this._snackBarService.openSnackBarAsText(translated_msg);
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
           })
       ))
     );

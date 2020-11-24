@@ -77,8 +77,8 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
       this.$subscription.add(
         this._translateService
           .get(`VALIDATION.SIGNATURE_UPLOAD_PENDING`)
-          .subscribe((translated_msg) => {
-            this._snackBarService.openSnackBarAsText(translated_msg);
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
           })
       );
       return;
@@ -100,8 +100,8 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translated_msg) => {
-                  this._snackBarService.openSnackBarAsText(translated_msg);
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
                 })
             );
             // this._snackBarService.openSnackBarAsText(error.message);

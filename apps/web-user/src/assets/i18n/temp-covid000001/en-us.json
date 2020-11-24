@@ -1,0 +1,50 @@
+{
+  "CUSTOM": {},
+  "VALIDATION": {},
+  "MESSAGES": {
+    "SUCCESS": {
+      "REQUEST_RAISE_COMPLETE": "Request was raised successfully"
+    },
+    "ERROR": {
+      "STAY_DETAILS_COMPLETE": "Stay details of reservation has been completed",
+      "STAY_DETAILS_PENDING": "Stay details of reservation is pending",
+      "INVALID_START_END_DATES": "Start date is greatet than end date",
+      "GUEST_DETAILS_COMPLETE": "Document has been verified",
+      "GUEST_DETAILS_PENDING": "Document has not been verified",
+      "GUEST_NOT_FOUND": "Guest not found for this reservation",
+      "LASTNAME_NOT_MATCH": "Last Name does not match with reservation details",
+      "DOCUMENTS_UPLOADS_COMPLETE": "Document has not been verified",
+      "DOCUMENTS_UPLOADS_PENDING": "Document has not been verified",
+      "DOCUMENT_NOT_FOUND": "Could not find document {0}",
+      "DOCUMENT_NOT_VERIFIED": "Document submitted is not matching uploaded docs",
+      "UPLOAD_FAILED": "Document failed to upload",
+      "FILEFORMAT_NOT_VALID": "Invalid file extension/name/type",
+      "OCR_NAME_MISMATCH": "Name on document does not match",
+      "OCR_NATIONALITY_MISMATCH": "Nationality does not match with uploaded document",
+      "OCR_DOCUMENT_EXPIRED": "{0} has expired, please upload a valid document",
+      "OCR_EXCEPTION_CONNECT": "OCR Exception, Unable to connect OCR Server",
+      "OCR_EXCEPTION_DOCUMENT": "OCR Exception, Invalid Document",
+      "HEALTH_DECLARATION_COMPLETE": "Health Decalaration form has been signed",
+      "HEALTH_DECLARATION_PENDING": "Health Declaration form has not been signed",
+      "SIGNATURE_MISSING": "Signature missing on document",
+      "HEALTH_DECLARARTION_NOT_FOUND": "Health declaration does not exists",
+      "PAYMENT_STATUS_COMPLETE": "Payment Successful",
+      "PAYMENT_STATUS_PENDING": "Payment Pending",
+      "PAY_ZERO_AMOUNT": "Payable amount should be greater than zero",
+      "PAYMENT_RECORD_NOT_FOUND": "Payment record for the reservation does not found",
+      "FEEDBACK_NOT_FOUND": "Feedback does not exists",
+      "REGCARD_DOWNLOAD_FAILED": "Regcard download failed",
+      "INVALID_DATA": "Invalid data",
+      "STATUS_PENDING": "Status pending",
+      "NOT_FOUND": "The page you have requested does not exists.",
+      "RESERVATION_NOT_FOUND": "This Reservation does not exists",
+      "PMS_CHECKIN_FAILED": "PMS Checkin failed",
+      "PRECHECKIN_NOT_COMPLETED": "Precheckin for this reservation has not been completed",
+      "CHECKIN_NOT_COMPLETED": "Checkin for this reservation has not been completed",
+      "CHECKOUT_ALREADY_COMPLETED": "Checkout for this reservation has already been completed",
+      "CHECKIN_ALREADY_COMPLETED": "Checkin for this reservation has already been completed",
+      "INVALID_PARAMETERS": "Error while processing. please check parameters.",
+      "SERVER_ERROR": "Something went wrong. please try again later."
+    }
+  }
+}

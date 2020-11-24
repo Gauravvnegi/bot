@@ -53,8 +53,8 @@ export class InputPopupComponent implements OnInit {
           this.$subscription.add(
             this._translateService
               .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
-              .subscribe((translated_msg) => {
-                this._snackbar.openSnackBarAsText(translated_msg);
+              .subscribe((translatedMsg) => {
+                this._snackbar.openSnackBarAsText(translatedMsg);
               })
           );
           this.close('success');
@@ -63,8 +63,8 @@ export class InputPopupComponent implements OnInit {
           this.$subscription.add(
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translated_msg) => {
-                this._snackbar.openSnackBarAsText(translated_msg);
+              .subscribe((translatedMsg) => {
+                this._snackbar.openSnackBarAsText(translatedMsg);
               })
           )
           this._buttonService.buttonLoading$.next(this.saveButton);

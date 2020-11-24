@@ -107,8 +107,8 @@ export class RegistrationCardComponent {
           ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translated_msg) => {
-                this._snackbar.openSnackBarAsText(translated_msg);
+              .subscribe((translatedMsg) => {
+                this._snackbar.openSnackBarAsText(translatedMsg);
               });
             this._utilityService.$signatureUploaded.next(false);
           }

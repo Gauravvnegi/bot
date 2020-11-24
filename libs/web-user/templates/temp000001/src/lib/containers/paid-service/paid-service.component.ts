@@ -206,9 +206,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.AMENITY_ADD_COMPLETE')
-                .subscribe((translated_msg) => {
+                .subscribe((translatedMsg) => {
                   this._snackbarService.openSnackBarAsText(
-                    translated_msg,
+                    translatedMsg,
                     '',
                     { panelClass: 'success' }
                   );
@@ -222,8 +222,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translated_msg) => {
-                  this._snackbarService.openSnackBarAsText(translated_msg);
+                .subscribe((translatedMsg) => {
+                  this._snackbarService.openSnackBarAsText(translatedMsg);
                 })
             );
             this._buttonService.buttonLoading$.next(
@@ -267,9 +267,9 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.AMENITY_REMOVE_COMPLETE')
-                .subscribe((translated_msg) => {
+                .subscribe((translatedMsg) => {
                   this._snackbarService.openSnackBarAsText(
-                    translated_msg,
+                    translatedMsg,
                     '',
                     { panelClass: 'success' }
                   );
@@ -281,8 +281,8 @@ export class PaidServiceComponent implements OnInit, OnDestroy, OnChanges {
           ({error}) => {
             this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translated_msg) => {
-                  this._snackbarService.openSnackBarAsText(translated_msg);
+                .subscribe((translatedMsg) => {
+                  this._snackbarService.openSnackBarAsText(translatedMsg);
                 })
             this.dialogRef.close();
           }

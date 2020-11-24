@@ -125,8 +125,8 @@ export class ApplicationStatusComponent implements OnInit {
         }, ({ error }) => {
           this._translateService
             .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translated_msg) => {
-              this._snackbarService.openSnackBarAsText(translated_msg);
+            .subscribe((translatedMsg) => {
+              this._snackbarService.openSnackBarAsText(translatedMsg);
             })
         })
       );

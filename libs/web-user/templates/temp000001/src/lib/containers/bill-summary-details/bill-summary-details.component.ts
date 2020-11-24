@@ -185,9 +185,9 @@ export class BillSummaryDetailsComponent implements OnInit {
               this.$subscription.add(
                 this._translateService
                   .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-                  .subscribe((translated_msg) => {
+                  .subscribe((translatedMsg) => {
                     this._snackBarService.openSnackBarAsText(
-                      translated_msg,
+                      translatedMsg,
                       '',
                       { panelClass: 'success' }
                     );
@@ -199,8 +199,8 @@ export class BillSummaryDetailsComponent implements OnInit {
               this.$subscription.add(
                 this._translateService
                   .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((translated_msg) => {
-                    this._snackBarService.openSnackBarAsText(translated_msg);
+                  .subscribe((translatedMsg) => {
+                    this._snackBarService.openSnackBarAsText(translatedMsg);
                   })
               );
             }

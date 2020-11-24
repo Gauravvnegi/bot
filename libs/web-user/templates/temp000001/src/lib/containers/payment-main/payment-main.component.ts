@@ -77,9 +77,9 @@ export class PaymentMainComponent implements OnInit {
               this.$subscription.add(
                 this._translateService
                   .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
-                  .subscribe((translated_msg) => {
+                  .subscribe((translatedMsg) => {
                     this._snackBarService.openSnackBarAsText(
-                      translated_msg,
+                      translatedMsg,
                       '',
                       { panelClass: 'success' }
                     );
@@ -91,8 +91,8 @@ export class PaymentMainComponent implements OnInit {
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translated_msg) => {
-                  this._snackBarService.openSnackBarAsText(translated_msg);
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
                 })
             );
             // this._snackBarService.openSnackBarAsText(error.message);

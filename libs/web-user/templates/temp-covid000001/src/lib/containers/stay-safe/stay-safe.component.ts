@@ -5,6 +5,7 @@ import { HyperlinkElementService } from '../../../../../../shared/src/lib/servic
 import { Subscription } from 'rxjs';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-stay-safe',
@@ -20,6 +21,7 @@ export class StaySafeComponent implements OnInit {
     public _hyperlink: HyperlinkElementService,
     private _hotelService: HotelService,
     private _snackbarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +50,13 @@ export class StaySafeComponent implements OnInit {
       .subscribe((measuresResponse) => {
         this.safeMeasures = measuresResponse;
       },({error})=>{
-        this._snackbarService.openSnackBarAsText(error.message);
+        this.$subscription.add(
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackbarService.openSnackBarAsText(translatedMsg);
+            })
+        );
       })
     );
   }

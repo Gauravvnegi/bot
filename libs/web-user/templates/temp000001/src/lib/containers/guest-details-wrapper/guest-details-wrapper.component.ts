@@ -84,8 +84,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
           ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translated_msg) => {
-                this._snackBarService.openSnackBarAsText(translated_msg);
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
               });
             //   this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
@@ -103,8 +103,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     this.$subscription.add(
       this._translateService
         .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translated_msg) => {
-          this._snackBarService.openSnackBarAsText(translated_msg);
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
         })
     );
 

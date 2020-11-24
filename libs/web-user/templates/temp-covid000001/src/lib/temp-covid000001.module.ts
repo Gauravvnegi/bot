@@ -11,13 +11,15 @@ import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise
 import { HyperlinkElementService } from '../../../../shared/src/lib/services/hyperlink-element.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { FooterService } from 'libs/web-user/shared/src/lib/services/footer.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
-    WebUserSharedModule.forRoot({ templateId: 'temp-covid000001' }),
     RouterModule,
     SlickCarouselModule,
+    HttpClientModule,
+    WebUserSharedModule.forRoot({ templateId: 'temp-covid000001' }),
     TempCovid000001RoutingModule,
   ],
   declarations: [

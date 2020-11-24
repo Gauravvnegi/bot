@@ -42,11 +42,13 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
   }
 
   listenForSignatureUrl() {
-    this._billSummaryService.$signatureUrl.subscribe((res) => {
-      if (res) {
-        this.signature = res;
-      }
-    });
+    this.$subscription.add(
+      this._billSummaryService.$signatureUrl.subscribe((res) => {
+        if (res) {
+          this.signature = res;
+        }
+      })
+    );
   }
 
   initBillSummaryDetailsDS(paymentSummary) {
@@ -57,42 +59,58 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
   }
 
   getAmountSummary() {
-    this._billSummaryService
-      .getBillingSummary(this._reservationService.reservationId)
-      .subscribe((summary) => {
-        this.paymentSummary = summary;
-        this._billSummaryService.$signatureUrl.next(
-          this.paymentSummary.signatureUrl
-        );
-        this.initBillSummaryDetailsDS(this.paymentSummary);
-      });
+    this.$subscription.add(
+      this._billSummaryService
+        .getBillingSummary(this._reservationService.reservationId)
+        .subscribe((summary) => {
+          this.paymentSummary = summary;
+          this._billSummaryService.$signatureUrl.next(
+            this.paymentSummary.signatureUrl
+          );
+          this.initBillSummaryDetailsDS(this.paymentSummary);
+        })
+    )
   }
 
   onSubmit() {
     if (!this.signature) {
-      this._snackBarService.openSnackBarAsText('Please upload signature');
+      this.$subscription.add(
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_UPLOAD_PENDING`)
+          .subscribe((translated_msg) => {
+            this._snackBarService.openSnackBarAsText(translated_msg);
+          })
+      );
       return;
     }
     let formData = {
       billingSignatureUrl: this.signature,
     };
-    this._billSummaryService
-      .bindSignatureWithSummary(
-        this._reservationService.reservationId,
-        formData
-      )
-      .subscribe(
-        (res) => {
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackBarService.openSnackBarAsText(res);
-            });
-          // this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+    this.$subscription.add(
+      this._billSummaryService
+        .bindSignatureWithSummary(
+          this._reservationService.reservationId,
+          formData
+        )
+        .subscribe(
+          (res) => {
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(translated_msg);
+                })
+            );
+            // this._snackBarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

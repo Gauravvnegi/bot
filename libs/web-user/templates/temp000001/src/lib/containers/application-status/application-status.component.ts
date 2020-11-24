@@ -12,6 +12,7 @@ import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.
 import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -36,7 +37,8 @@ export class ApplicationStatusComponent implements OnInit {
     private _stepperService: StepperService,
     private _templateService: TemplateService,
     private _regCardService: RegCardService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -53,19 +55,21 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   listenForSummaryDetails() {
-    this._stepperService.stepperSelectedIndex$.subscribe((index) => {
-      if (this._templateService.templateData) {
-        let data;
-        this._templateService.templateData.stepConfigs.find((item, ix) => {
-          if (item.stepperName === 'Summary') {
-            data = ix;
+    this.$subscription.add(
+      this._stepperService.stepperSelectedIndex$.subscribe((index) => {
+        if (this._templateService.templateData) {
+          let data;
+          this._templateService.templateData.stepConfigs.find((item, ix) => {
+            if (item.stepperName === 'Summary') {
+              data = ix;
+            }
+          });
+          if (data === index) {
+            this.getSummaryDetails();
           }
-        });
-        if (data === index) {
-          this.getSummaryDetails();
         }
-      }
-    });
+      })
+    );
   }
 
   getSummaryDetails() {
@@ -119,7 +123,11 @@ export class ApplicationStatusComponent implements OnInit {
             dialogConfig
           );
         }, ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translated_msg) => {
+              this._snackbarService.openSnackBarAsText(translated_msg);
+            })
         })
       );
     }

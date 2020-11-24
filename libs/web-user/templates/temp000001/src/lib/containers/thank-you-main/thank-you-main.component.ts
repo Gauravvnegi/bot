@@ -7,6 +7,7 @@ import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/res
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-thank-you',
@@ -36,7 +37,8 @@ export class ThankYouMainComponent implements OnInit {
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
     private _thankyouService: ThankYouService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +69,13 @@ export class ThankYouMainComponent implements OnInit {
           } else {
             window.location.href = response.websiteUrl;
           }
-        }, ({ error }) => this._snackbarService.openSnackBarAsText(error))
+        }, ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translated_msg) => {
+              this._snackbarService.openSnackBarAsText(translated_msg);
+            })
+          })
     );
   }
 

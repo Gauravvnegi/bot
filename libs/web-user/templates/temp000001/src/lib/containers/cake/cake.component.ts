@@ -6,6 +6,8 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
 import { CakeConfigI } from 'libs/web-user/shared/src/lib/data-models/cakeConfig.model';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-cake',
@@ -26,6 +28,7 @@ export class CakeComponent implements OnInit {
   cakeForm: FormGroup;
   cakeConfig: CakeConfigI;
   minDate;
+  private $subscription: Subscription = new Subscription();
   
   constructor(
     private _fb: FormBuilder,
@@ -33,7 +36,8 @@ export class CakeComponent implements OnInit {
     private _snackBarService: SnackBarService,
     private _paidService: PaidService,
     private _buttonService: ButtonService,
-    private _dateService: DateService
+    private _dateService: DateService,
+    private _translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -84,7 +88,13 @@ export class CakeComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translated_msg) => {
+          this._snackBarService.openSnackBarAsText(translated_msg);
+        })
+    );
     return;
   }
 
@@ -93,5 +103,9 @@ export class CakeComponent implements OnInit {
     if(this.cakeForm.valid && this.paidAmenitiesForm.get('isSelected').value == true){
      this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
     }
- }
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

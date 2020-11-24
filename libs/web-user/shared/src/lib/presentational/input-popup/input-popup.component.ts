@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationService } from '../../services/booking.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ButtonService } from '../../services/button.service';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'web-user-input-popup',
@@ -15,6 +17,7 @@ export class InputPopupComponent implements OnInit {
   requestForm: FormGroup;
   button;
   @ViewChild('saveButton') saveButton;
+  private $subscription: Subscription = new Subscription();
 
   constructor(
     public dialogRef: MatDialogRef<InputPopupComponent>,
@@ -22,7 +25,8 @@ export class InputPopupComponent implements OnInit {
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private _snackbar: SnackBarService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     this.dialaogData = data.pageValue;
   }
@@ -46,13 +50,23 @@ export class InputPopupComponent implements OnInit {
       .checkIn(this._reservationService.reservationData.id, data)
       .subscribe(
         (res) => {
-          this._snackbar.openSnackBarAsText('Checkin successful', '', {
-            panelClass: 'success',
-          });
+          this.$subscription.add(
+            this._translateService
+              .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
+              .subscribe((translated_msg) => {
+                this._snackbar.openSnackBarAsText(translated_msg);
+              })
+          );
           this.close('success');
         },
         ({ error }) => {
-          this._snackbar.openSnackBarAsText(error.cause);
+          this.$subscription.add(
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translated_msg) => {
+                this._snackbar.openSnackBarAsText(translated_msg);
+              })
+          )
           this._buttonService.buttonLoading$.next(this.saveButton);
           //this.close('success');
         }

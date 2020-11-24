@@ -193,7 +193,8 @@ export class DocumentDetailsService extends ApiService {
     if (documentForm.invalid) {
       status.push({
         validity: false,
-        msg: 'Invalid form. Please fill required fields.',
+        code: "INVALID_FORM",
+        msg: "Invalid form. Please fill all the fields.",
       });
     }
 
@@ -205,6 +206,7 @@ export class DocumentDetailsService extends ApiService {
         status.push({
           validity: false,
           msg: 'Please upload documents for guests.',
+          code: 'UPLOAD_GUEST_DOCUMENT_PENDING',
           data: {
             guestId: guest.id,
             index,
@@ -219,6 +221,8 @@ export class DocumentDetailsService extends ApiService {
               status.push({
                 validity: false,
                 msg: `Please upload front document for ${document.documentType}.`,
+                code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                type: document.documentType,
                 data: {
                   guestId: guest.id,
                   index,
@@ -230,6 +234,8 @@ export class DocumentDetailsService extends ApiService {
               status.push({
                 validity: false,
                 msg: `Please upload back document for ${document.documentType}.`,
+                code: 'UPLOAD_BACK_DOCUMENT_PENDING',
+                type: document.documentType,
                 data: {
                   guestId: guest.id,
                   index,
@@ -244,6 +250,8 @@ export class DocumentDetailsService extends ApiService {
                 status.push({
                   validity: false,
                   msg: `Please upload front document for ${document.documentType}.`,
+                  code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                  type: document.documentType,
                   data: {
                     guestId: guest.id,
                     index,
@@ -255,6 +263,8 @@ export class DocumentDetailsService extends ApiService {
                 status.push({
                   validity: false,
                   msg: `Please upload back document for ${document.documentType}.`,
+                  code: 'UPLOAD_BACK_DOCUMENT_PENDING',
+                  type: document.documentType,
                   data: {
                     guestId: guest.id,
                     index,
@@ -268,6 +278,8 @@ export class DocumentDetailsService extends ApiService {
                 status.push({
                   validity: false,
                   msg: `Please upload front document for ${document.documentType}.`,
+                  code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                  type: document.documentType,
                   data: {
                     guestId: guest.id,
                     index,

@@ -54,7 +54,8 @@ export class CakeService {
     if (cakeForm.invalid) {
       status.push({
         validity: false,
-        msg: 'Invalid form. Please fill required fields.'
+        code: "INVALID_FORM",
+        msg: "Invalid form. Please fill all the fields.",
       });
     }
     return status;

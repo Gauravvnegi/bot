@@ -46,10 +46,12 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   getFeedBackConfig() {
-    this._feedbackDetailsService.getFeedback().subscribe((response) => {
-      this.feedBackConfig = response;
-      this.initFeedbackConfigDS();
-    });
+    this.$subscription.add(
+      this._feedbackDetailsService.getFeedback().subscribe((response) => {
+        this.feedBackConfig = response;
+        this.initFeedbackConfigDS();
+      })
+    );
   }
 
   saveFeedbackDetails() {
@@ -68,31 +70,42 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
       value && value.feedbackDetail,
       this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
-
-    this._feedbackDetailsService
-      .addFeedback(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._snackBarService.openSnackBarAsText('Feedback successful', '', {
-            panelClass: 'success',
-          });
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackBarService.openSnackBarAsText(res);
-            });
-          //    this._snackBarService.openSnackBarAsText(error.cause);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+    this.$subscription.add(
+      this._feedbackDetailsService
+        .addFeedback(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(
+                    translated_msg,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
+            );
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(translated_msg);
+                })
+            );
+            //    this._snackBarService.openSnackBarAsText(error.cause);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          }
+        )
+    );
   }
 
   private performActionIfNotValid(status: any[]) {
@@ -102,5 +115,9 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

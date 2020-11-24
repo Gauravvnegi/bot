@@ -104,17 +104,19 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 );
                 this._translateService
                   .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((res) => {
-                    this._snackBarService.openSnackBarAsText(res);
+                  .subscribe((translated_msg) => {
+                    this._snackBarService.openSnackBarAsText(translated_msg);
                   });
                 // this._snackBarService.openSnackBarAsText(error.message);
               }
             )
         );
       } else {
-        this._snackBarService.openSnackBarAsText(
-          'Please select a payment method!'
-        );
+        this._translateService
+          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .subscribe((translated_msg) => {
+            this._snackBarService.openSnackBarAsText(translated_msg);
+          });
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
@@ -145,11 +147,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 window.location.href = response.billingUrl;
               },
               ({ error }) => {
-                this._translateService
-                  .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((res) => {
-                    this._snackBarService.openSnackBarAsText(res);
-                  });
+                this.$subscription.add(
+                  this._translateService
+                    .get(`MESSAGES.ERROR.${error.type}`)
+                    .subscribe((translated_msg) => {
+                      this._snackBarService.openSnackBarAsText(translated_msg);
+                    })
+                );
                 // this._snackBarService.openSnackBarAsText(error.message);
                 this._buttonService.buttonLoading$.next(
                   this.buttonRefs['nextButton']
@@ -158,9 +162,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             )
         );
       } else {
-        this._snackBarService.openSnackBarAsText(
-          'Please select a payment method!'
-        );
+        this._translateService
+          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .subscribe((translated_msg) => {
+            this._snackBarService.openSnackBarAsText(translated_msg);
+          });
         this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       }
     } else {
@@ -188,6 +194,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         .subscribe(
           (response) => {
             if (state === 'checkin') {
+              this.$subscription.add(
+                this._translateService
+                  .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
+                  .subscribe((translated_msg) => {
+                    this._snackBarService.openSnackBarAsText(translated_msg, '', { panelClass: 'success' });
+                  })
+              );
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['nextButton']
               );
@@ -202,8 +215,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
+              .subscribe((translated_msg) => {
+                this._snackBarService.openSnackBarAsText(translated_msg);
               });
             //       this._snackBarService.openSnackBarAsText(error.message);
             if (state === 'checkin') {

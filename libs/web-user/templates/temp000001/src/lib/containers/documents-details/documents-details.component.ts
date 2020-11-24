@@ -110,131 +110,135 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
             guest.nationality
           ) as Observable<any>;
 
-          getDropDownDocType$.subscribe((response) => {
-            this.guestDetailsConfig[guest.id] = this.setFieldConfiguration();
-
-            this.guestDetailsConfig[guest.id]['documents'] = [];
-
-            if (guest.documents.length == response.documentList.length) {
-              let documentFA = this.guestsFA
-                .at(index)
-                .get('documents') as FormArray;
-
-              guest.documents.forEach((document) => {
-                documentFA.push(this.getFileFG());
-
-                this.guestDetailsConfig[guest.id]['documents'].push(
-                  this._documentDetailService.setDocumentFileConfig(
-                    document.documentType
-                  )
-                );
-              });
-            } else if (
-              guest.documents.length &&
-              guest.documents.length < response.documentList.length
-            ) {
-              let documentFA = this.guestsFA
-                .at(index)
-                .get('documents') as FormArray;
-
-              let uploadedDocs = [];
-
-              guest.documents.forEach((document) => {
-                documentFA.push(this.getFileFG());
-
-                this.guestDetailsConfig[guest.id]['documents'].push(
-                  this._documentDetailService.setDocumentFileConfig(
-                    document.documentType
-                  )
-                );
-                uploadedDocs.push(document.documentType.toUpperCase());
-              });
-
-              let documentTypes = response.documentList.filter(
-                (doc) => !uploadedDocs.includes(doc)
-              );
-
-              documentTypes.forEach((documentType) => {
+          this.$subscription.add(
+            getDropDownDocType$.subscribe((response) => {
+              this.guestDetailsConfig[guest.id] = this.setFieldConfiguration();
+  
+              this.guestDetailsConfig[guest.id]['documents'] = [];
+  
+              if (guest.documents.length == response.documentList.length) {
                 let documentFA = this.guestsFA
                   .at(index)
                   .get('documents') as FormArray;
-
-                let documentTypeIndex = documentFA.controls.length;
-                documentFA.push(this.getFileFG());
-
-                this.guestDetailsConfig[guest.id]['documents'].push(
-                  this._documentDetailService.setDocumentFileConfig(
-                    documentType
-                  )
-                );
-
-                documentFA
-                  .at(documentTypeIndex)
-                  .get('documentType')
-                  .patchValue(documentType);
-              });
-            } else {
-              let documentTypes = response.documentList.map((doc) =>
-                doc.toUpperCase()
-              );
-
-              documentTypes.forEach((documentType, documentTypeIndex) => {
+  
+                guest.documents.forEach((document) => {
+                  documentFA.push(this.getFileFG());
+  
+                  this.guestDetailsConfig[guest.id]['documents'].push(
+                    this._documentDetailService.setDocumentFileConfig(
+                      document.documentType
+                    )
+                  );
+                });
+              } else if (
+                guest.documents.length &&
+                guest.documents.length < response.documentList.length
+              ) {
                 let documentFA = this.guestsFA
                   .at(index)
                   .get('documents') as FormArray;
-                documentFA.push(this.getFileFG());
-
-                this.guestDetailsConfig[guest.id]['documents'].push(
-                  this._documentDetailService.setDocumentFileConfig(
-                    documentType
-                  )
+  
+                let uploadedDocs = [];
+  
+                guest.documents.forEach((document) => {
+                  documentFA.push(this.getFileFG());
+  
+                  this.guestDetailsConfig[guest.id]['documents'].push(
+                    this._documentDetailService.setDocumentFileConfig(
+                      document.documentType
+                    )
+                  );
+                  uploadedDocs.push(document.documentType.toUpperCase());
+                });
+  
+                let documentTypes = response.documentList.filter(
+                  (doc) => !uploadedDocs.includes(doc)
                 );
-
-                documentFA
-                  .at(documentTypeIndex)
-                  .get('documentType')
-                  .patchValue(documentType);
-              });
-            }
-
-            this.documentDetailsForm.patchValue(
-              this._documentDetailService.documentDetailDS
-            );
-          });
+  
+                documentTypes.forEach((documentType) => {
+                  let documentFA = this.guestsFA
+                    .at(index)
+                    .get('documents') as FormArray;
+  
+                  let documentTypeIndex = documentFA.controls.length;
+                  documentFA.push(this.getFileFG());
+  
+                  this.guestDetailsConfig[guest.id]['documents'].push(
+                    this._documentDetailService.setDocumentFileConfig(
+                      documentType
+                    )
+                  );
+  
+                  documentFA
+                    .at(documentTypeIndex)
+                    .get('documentType')
+                    .patchValue(documentType);
+                });
+              } else {
+                let documentTypes = response.documentList.map((doc) =>
+                  doc.toUpperCase()
+                );
+  
+                documentTypes.forEach((documentType, documentTypeIndex) => {
+                  let documentFA = this.guestsFA
+                    .at(index)
+                    .get('documents') as FormArray;
+                  documentFA.push(this.getFileFG());
+  
+                  this.guestDetailsConfig[guest.id]['documents'].push(
+                    this._documentDetailService.setDocumentFileConfig(
+                      documentType
+                    )
+                  );
+  
+                  documentFA
+                    .at(documentTypeIndex)
+                    .get('documentType')
+                    .patchValue(documentType);
+                });
+              }
+  
+              this.documentDetailsForm.patchValue(
+                this._documentDetailService.documentDetailDS
+              );
+            })
+          );
         } else {
           // call api to fetch options
           let getDropDownDocType$ = this.getDropDownDocTypes(
             guest.nationality
           ) as Observable<any>;
 
-          getDropDownDocType$.subscribe(
-            (response) => {
-              const documentsList = this._documentDetailService.setDocumentsList(
-                response.documentList
-              );
-
-              this.guestDetailsConfig[guest.id] = this.setFieldConfiguration(
-                documentsList
-              );
-
-              if (guest.documents.length) {
-                let documentFA = this.guestsFA
-                  .at(index)
-                  .get('documents') as FormArray;
-                documentFA.push(this.getFileFG());
-
-                this.guestDetailsConfig[guest.id]['documents'] = [
-                  this._documentDetailService.setDocumentFileConfig(
-                    guest.selectedDocumentType
-                  ),
-                ];
-              }
-
-              this.documentDetailsForm.patchValue(
-                this._documentDetailService.documentDetailDS
-              );
-            },
-            (error) => {}
+          this.$subscription.add(
+            getDropDownDocType$.subscribe(
+              (response) => {
+                const documentsList = this._documentDetailService.setDocumentsList(
+                  response.documentList
+                );
+  
+                this.guestDetailsConfig[guest.id] = this.setFieldConfiguration(
+                  documentsList
+                );
+  
+                if (guest.documents.length) {
+                  let documentFA = this.guestsFA
+                    .at(index)
+                    .get('documents') as FormArray;
+                  documentFA.push(this.getFileFG());
+  
+                  this.guestDetailsConfig[guest.id]['documents'] = [
+                    this._documentDetailService.setDocumentFileConfig(
+                      guest.selectedDocumentType
+                    ),
+                  ];
+                }
+  
+                this.documentDetailsForm.patchValue(
+                  this._documentDetailService.documentDetailDS
+                );
+              },
+              (error) => {}
+            )
           );
         }
       }
@@ -421,10 +425,16 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this._snackBarService.openSnackBarAsText(
-              'Document upload successful',
-              '',
-              { panelClass: 'success' }
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(
+                    translated_msg,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
             );
           },
           ({ error }) => {
@@ -435,11 +445,13 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
-              });
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translated_msg) => {
+                  this._snackBarService.openSnackBarAsText(translated_msg);
+                })
+            );
           }
         )
     );

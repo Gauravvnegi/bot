@@ -85,8 +85,8 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
           ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((res) => {
-                this._snackBarService.openSnackBarAsText(res);
+              .subscribe((translated_msg) => {
+                this._snackBarService.openSnackBarAsText(translated_msg);
               });
             // this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
@@ -98,7 +98,13 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`, { documentType: status[0].type })
+        .subscribe((translated_msg) => {
+          this._snackBarService.openSnackBarAsText(translated_msg);
+        })
+    );
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();

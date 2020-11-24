@@ -15,6 +15,7 @@ import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstan
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { GuestDetailsConfigI } from '../../../../../../shared/src/lib/data-models/guestDetailsConfig.model';
 import { GuestDetailsService } from './../../../../../../shared/src/lib/services/guest-details.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-guest-details',
@@ -22,6 +23,7 @@ import { GuestDetailsService } from './../../../../../../shared/src/lib/services
   styleUrls: ['./guest-details.component.scss'],
 })
 export class GuestDetailsComponent implements OnInit, OnChanges {
+  private $subscription: Subscription = new Subscription();
   @ViewChild('primaryGuestAccordian') primaryGuestAccordian: MatAccordion;
   @ViewChild('secondaryGuestAccordian') secondaryGuestAccordian: MatAccordion;
 
@@ -132,12 +134,19 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   }
 
   listenForStayDetailDSchange() {
-    this._guestDetailService.guestDetailDS$.subscribe((value) => {
-      this.guestDetailsForm.patchValue(this._guestDetailService.guestDetails);
-    });
+    this.$subscription.add(
+      this._guestDetailService.guestDetailDS$.subscribe((value) => {
+        this.guestDetailsForm.patchValue(this._guestDetailService.guestDetails);
+      })
+    );
   }
 
   get secondaryGuests(): FormArray {
     return this.guestDetailsForm.get('secondaryGuest') as FormArray;
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+  
 }

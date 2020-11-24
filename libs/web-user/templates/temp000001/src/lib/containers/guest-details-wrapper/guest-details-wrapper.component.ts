@@ -70,35 +70,43 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     const formValue = this.parentForm.getRawValue();
     const data = this._guestDetailService.modifyGuestDetails(formValue);
 
-    this._guestDetailService
-      .updateGuestDetails(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._guestDetailService.updateGuestDetailDS(response.guestDetails);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((res) => {
-              this._snackBarService.openSnackBarAsText(res);
-            });
-          //   this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+    this.$subscription.add(
+      this._guestDetailService
+        .updateGuestDetails(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._guestDetailService.updateGuestDetailDS(response.guestDetails);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translated_msg) => {
+                this._snackBarService.openSnackBarAsText(translated_msg);
+              });
+            //   this._snackBarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          }
+        )      
+    );
   }
 
   private performActionIfNotValid(status: any[]) {
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
 
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translated_msg) => {
+          this._snackBarService.openSnackBarAsText(translated_msg);
+        })
+    );
 
     if (get(status[0], ['data', 'type']) == 'primary') {
       this.guestDetailsComp.primaryGuestAccordian.openAll();
@@ -116,5 +124,9 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

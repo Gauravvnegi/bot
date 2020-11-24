@@ -4,6 +4,7 @@ import { StatusComponent } from '../status/status.component';
 import { SummaryComponent } from '../summary/summary.component';
 import { HeaderSummaryComponent } from '../header-summary/header-summary.component';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-header',
@@ -11,6 +12,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  private $subscription: Subscription = new Subscription();
   @Input() headerName;
   headerLogo = 'assets/logo.png';
   status = 'Status:';
@@ -43,10 +45,16 @@ export class HeaderComponent implements OnInit {
       dialogConfig
     );
 
-    modalDialog.componentInstance.isRenderedEvent.subscribe((val) => {
-      if (val === true) {
-        modalDialog.componentInstance.showAppStatusForm = true;
-      }
-    });
+    this.$subscription.add(
+      modalDialog.componentInstance.isRenderedEvent.subscribe((val) => {
+        if (val === true) {
+          modalDialog.componentInstance.showAppStatusForm = true;
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -17,6 +17,7 @@ export class FieldSchema implements Deserializable {
   required?: boolean;
   type: string;
   contentType?: string;
+  floatLabel?: string;
   style?: {
     fieldSetWrapperStyles: '';
     labelWrapperStyles: '';
@@ -57,7 +58,8 @@ export class FieldSchema implements Deserializable {
       _.set({}, 'placeholder', _.get(input, ['placeholder'])),
       _.set({}, 'isUploading', _.get(input, ['isUploading'])),
       _.set({}, 'style', _.get(input, ['style'])),
-      _.set({}, 'translation', _.get(input, ['translation']))
+      _.set({}, 'translation', _.get(input, ['translation'])),
+      _.set({}, 'floatLabel', _.get(input, ['floatLabel']))
     );
     return this;
   }

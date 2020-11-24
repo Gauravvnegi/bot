@@ -1,17 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FaqService } from 'libs/web-user/shared/src/lib/services/faq.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-faq-wrapper',
   templateUrl: './faq-wrapper.component.html',
   styleUrls: ['./faq-wrapper.component.scss'],
 })
-export class FaqWrapperComponent implements OnInit {
+export class FaqWrapperComponent implements OnInit, OnDestroy {
+  
   faq: boolean;
+  $subscription: Subscription = new Subscription();
+
   constructor(
     private _faqService: FaqService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -23,11 +29,19 @@ export class FaqWrapperComponent implements OnInit {
   }
 
   getFaqs() {
+    this.$subscription.add(
     this._faqService
       .getFaqs(this._hotelService.hotelId)
       .subscribe((faqResponse) => {
         this.faq = true;
         this.initFaqDetailsDs(faqResponse);
-      });
+      },({error})=>{
+        this._snackbarService.openSnackBarAsText(error.message);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

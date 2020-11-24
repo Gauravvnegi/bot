@@ -34,6 +34,7 @@ export class RaiseRequestService extends ApiService {
       label: '',
       appearance: 'outline',
       placeholder: 'Enter Your Email',
+      floatLabel: 'always'
     });
 
     return raiseRequestFieldSchema as RaiseRequestConfigI;

@@ -10,8 +10,6 @@ import {
 } from '@angular/core';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { AirportPickupComponent } from '../airport-pickup/airport-pickup.component';
-import { BreakfastComponent } from '../breakfast/breakfast.component';
-import { SpaComponent } from '../spa/spa.component';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
@@ -24,9 +22,6 @@ import { TranslateService } from '@ngx-translate/core';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
-  BF: BreakfastComponent,
-  DNI: BreakfastComponent,
-  SPA: SpaComponent,
 };
 
 @Component({

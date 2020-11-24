@@ -29,9 +29,6 @@ import { AmenitiesComponent } from './containers/amenities/amenities.component';
 import { ComplimentaryServiceComponent } from './containers/complimentary-service/complimentary-service.component';
 import { PaidServiceComponent } from './containers/paid-service/paid-service.component';
 import { AirportPickupComponent } from './containers/airport-pickup/airport-pickup.component';
-import { BreakfastComponent } from './containers/breakfast/breakfast.component';
-import { SpaComponent } from './containers/spa/spa.component';
-import { CakeComponent } from './containers/cake/cake.component';
 import { DefaultAmenityComponent } from './containers/default-amenity/default-amenity.component';
 import { PaymentMainComponent } from './containers/payment-main/payment-main.component';
 import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
@@ -128,9 +125,6 @@ export class Temp000001RoutingModule {
     ComplimentaryServiceComponent,
     PaidServiceComponent,
     AirportPickupComponent,
-    BreakfastComponent,
-    SpaComponent,
-    CakeComponent,
     DefaultAmenityComponent,
     PaymentMainComponent,
     FeedbackMainComponent,

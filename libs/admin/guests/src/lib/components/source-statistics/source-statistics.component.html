@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/arrivals_icon.svg" />
+    </div>
+    <div class="stat-title">Source</div>
+	</div>
+	<div class="graph-container">
+		<canvas baseChart style="height: 140px; width: 140px;"
+    	[data]="doughnutChartData"
+    	[labels]="doughnutChartLabels"
+    	[chartType]="doughnutChartType">
+  	</canvas>
+	</div>
+	<div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon bot"></div>
+				<div class="stat-lable">Bot</div>
+			</div>
+			<div class="stat-val">161</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon website"></div>
+				<div class="stat-lable">Websit</div>
+			</div>
+			<div class="stat-val">60</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon weblink"></div>
+				<div class="stat-lable">Webink</div>
+			</div>
+			<div class="stat-val">180</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon others"></div>
+				<div class="stat-lable">Others</div>
+			</div>
+			<div class="stat-val">84</div>
+		</div>
+	</div>
+</div>

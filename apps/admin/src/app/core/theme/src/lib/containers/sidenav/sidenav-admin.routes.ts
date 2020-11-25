@@ -18,8 +18,8 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/Roles_&_Permission.svg',
   },
   {
-    path: 'guests',
-    title: 'Guests',
+    path: 'guest',
+    title: 'Guest',
     children: null,
     url: 'assets/svg/request.svg',
   },

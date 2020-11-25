@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/arrivals_icon.svg" />
+    </div>
+    <div class="stat-title">Guest Documents</div>
+	</div>
+	<div class="graph-container">
+		<canvas baseChart style="height: 140px; width: 140px;"
+    	[data]="doughnutChartData"
+    	[labels]="doughnutChartLabels"
+    	[chartType]="doughnutChartType">
+  	</canvas>
+	</div>
+	<div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon initiated"></div>
+				<div class="stat-lable">Initiated</div>
+			</div>
+			<div class="stat-val">161</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon pending"></div>
+				<div class="stat-lable">Pending</div>
+			</div>
+			<div class="stat-val">60</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon accepted"></div>
+				<div class="stat-lable">Accepted</div>
+			</div>
+			<div class="stat-val">180</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon rejected"></div>
+				<div class="stat-lable">Rejected</div>
+			</div>
+			<div class="stat-val">84</div>
+		</div>
+	</div>
+</div>

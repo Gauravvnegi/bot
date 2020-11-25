@@ -1,0 +1,58 @@
+
+.stat-title {
+	font: normal normal bold 16px/19px Roboto;
+	letter-spacing: 0.96px;
+	color: #002046;
+	opacity: 1;
+}
+
+.graph-container {
+	height: 138px;
+	display: flex;
+	justify-content: center;
+}
+
+.stat-val-container {
+	width: 100%;
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	padding: 5px 0;
+	.stat-lable-container{
+		display: flex;
+		align-items: center;
+		.icon {
+			width: 10px;
+			height: 10px;
+			opacity: 1;
+			border-radius: 50%;
+		}
+		.bot {
+			background: #745AF2 0% 0% no-repeat padding-box;
+		}
+		.website {
+			background: #3E8EF7 0% 0% no-repeat padding-box;
+		}
+		.weblink {
+			background: #0BB2D4 0% 0% no-repeat padding-box;
+		}
+		.others {
+			background: #FAA700 0% 0% no-repeat padding-box;
+		}
+		.stat-lable {
+			padding-left: 10px;
+			text-align: left;
+			font: normal normal medium 12px/14px Roboto;
+			letter-spacing: 0.72px;
+			color: #6D7580;
+			opacity: 1;
+		}
+	}
+	.stat-val {
+		text-align: right;
+		font: normal normal bold 12px/14px Roboto;
+		letter-spacing: 0.72px;
+		color: #4B56C0;
+		opacity: 1;
+	}
+}

@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/arrivals_icon.svg" />
+    </div>
+    <div class="stat-title">Guest Payments</div>
+	</div>
+	<div class="graph-container">
+		<canvas baseChart style="height: 140px; width: 140px;"
+    	[data]="doughnutChartData"
+    	[labels]="doughnutChartLabels"
+    	[chartType]="doughnutChartType">
+  	</canvas>
+	</div>
+	<div class="stat-vals-container">
+		<div class="stat-val-container">
+				<div class="icon full"></div>
+				<div class="stat-val">161</div>
+				<div class="stat-lable">Fully Received</div>
+		</div>
+		<div class="stat-val-container">
+				<div class="icon partial"></div>
+				<div class="stat-val">60</div>
+				<div class="stat-lable">Partially Received</div>
+		</div>
+		<div class="stat-val-container">
+				<div class="icon not"></div>
+				<div class="stat-val">180</div>
+				<div class="stat-lable">Not Received</div>
+		</div>
+	</div>
+</div>

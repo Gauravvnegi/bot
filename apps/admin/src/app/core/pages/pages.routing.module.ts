@@ -54,7 +54,7 @@ const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'guests',
+        path: 'guest',
         loadChildren: () =>
           import('@hospitality-bot/admin/guests').then(
             (m) => m.AdminGuestsModule

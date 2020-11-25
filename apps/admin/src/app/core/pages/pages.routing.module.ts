@@ -54,6 +54,13 @@ const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'guests',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/guests').then(
+            (m) => m.AdminGuestsModule
+          ),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

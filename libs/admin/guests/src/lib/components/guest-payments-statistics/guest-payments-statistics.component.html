@@ -6,11 +6,21 @@
     <div class="stat-title">Guest Payments</div>
 	</div>
 	<div class="graph-container">
-		<canvas baseChart style="height: 140px; width: 140px;"
-    	[data]="doughnutChartData"
-    	[labels]="doughnutChartLabels"
-    	[chartType]="doughnutChartType">
-  	</canvas>
+		<div class="graph">
+			<canvas baseChart style="height: 138px;"
+				[data]="doughnutChartData"
+				[labels]="doughnutChartLabels"
+				[chartType]="doughnutChartType"
+				[legend]="chartLegend"
+				[colors]="chartColors"
+				[options]="chartOptions">
+			</canvas>
+		</div>
+		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+		<div class="detail-container">
+			<div class="val">401</div>
+			<div class="label">Total Users</div>
+		</div>
 	</div>
 	<div class="stat-vals-container">
 		<div class="stat-val-container">

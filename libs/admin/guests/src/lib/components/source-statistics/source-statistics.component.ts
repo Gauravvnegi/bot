@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BaseChartDirective, Label, MultiDataSet } from 'ng2-charts';
 import { ChartType } from 'chart.js';
+import { BaseChartDirective, Label, MultiDataSet, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
 
 @Component({
   selector: 'hospitality-bot-source-statistics',
@@ -9,13 +9,35 @@ import { ChartType } from 'chart.js';
 })
 export class SourceStatisticsComponent implements OnInit {
 
-  @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
-
-  doughnutChartLabels: Label[] = ['BMW', 'Ford', 'Tesla'];
+  // @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
+  
+  doughnutChartLabels: Label[] = ['Bot', 'Website', 'Weblink', 'Others'];
   doughnutChartData: MultiDataSet = [
-    [55, 25, 20]
+    [161, 60, 180, 84]
   ];
   doughnutChartType: ChartType = 'doughnut';
+
+  chartLegend = false;
+  chartColors = [
+    {
+      backgroundColor: ['#745AF2', '#3E8EF7', '#0BB2D4', '#FAA700'],
+      borderColor: ['#745AF2', '#3E8EF7', '#0BB2D4', '#FAA700'],
+    }
+  ];
+  chartOptions = {
+    elements: {
+      center: {
+        text: '401',
+        text3: "Total Users",
+        fontColor: '#000',
+        fontFamily: "CalibreWeb, 'Helvetica Neue', Arial ",
+        fontSize: 36,
+        fontStyle: 'normal'
+      }
+    },
+    cutoutPercentage: 75
+  };
+  
   constructor() { }
 
   ngOnInit(): void {

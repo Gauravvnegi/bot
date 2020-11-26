@@ -6,11 +6,20 @@
     <div class="stat-title">Source</div>
 	</div>
 	<div class="graph-container">
-		<canvas baseChart style="height: 140px; width: 140px;"
-    	[data]="doughnutChartData"
-    	[labels]="doughnutChartLabels"
-    	[chartType]="doughnutChartType">
-  	</canvas>
+		<div style="display: block;">
+			<canvas baseChart style="height: 138px;"
+			[data]="doughnutChartData"
+			[labels]="doughnutChartLabels"
+			[chartType]="doughnutChartType"
+			[legend]="chartLegend"
+			[colors]="chartColors"
+			[options]="chartOptions">
+			</canvas>
+		</div>
+		<div class="labels">
+			<div class="val">401</div>
+			<div class="label">Total Guests</div>
+		</div>
 	</div>
 	<div>
 		<div class="stat-val-container">
@@ -23,14 +32,14 @@
 		<div class="stat-val-container">
 			<div class="stat-lable-container">
 				<div class="icon website"></div>
-				<div class="stat-lable">Websit</div>
+				<div class="stat-lable">Website</div>
 			</div>
 			<div class="stat-val">60</div>
 		</div>
 		<div class="stat-val-container">
 			<div class="stat-lable-container">
 				<div class="icon weblink"></div>
-				<div class="stat-lable">Webink</div>
+				<div class="stat-lable">Weblink</div>
 			</div>
 			<div class="stat-val">180</div>
 		</div>

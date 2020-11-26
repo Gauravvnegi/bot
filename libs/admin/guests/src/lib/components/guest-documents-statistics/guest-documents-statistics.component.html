@@ -6,11 +6,20 @@
     <div class="stat-title">Guest Documents</div>
 	</div>
 	<div class="graph-container">
-		<canvas baseChart style="height: 140px; width: 140px;"
-    	[data]="doughnutChartData"
-    	[labels]="doughnutChartLabels"
-    	[chartType]="doughnutChartType">
-  	</canvas>
+		<div>
+			<canvas baseChart style="height: 138px;"
+			[data]="doughnutChartData"
+			[labels]="doughnutChartLabels"
+			[chartType]="doughnutChartType"
+			[legend]="chartLegend"
+			[colors]="chartColors"
+			[options]="chartOptions">
+		  </canvas>
+		</div>
+		<div class="labels">
+			<div class="val">401</div>
+			<div class="label">Total Users</div>
+		</div>
 	</div>
 	<div>
 		<div class="stat-val-container">

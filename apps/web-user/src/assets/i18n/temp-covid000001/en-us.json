@@ -3,7 +3,7 @@
   "VALIDATION": {},
   "MESSAGES": {
     "SUCCESS": {
-      "REQUEST_RAISE_COMPLETE": "Request was raised successfully"
+      "REQUEST_RAISE_COMPLETE": "Request raised successfully"
     },
     "ERROR": {
       "STAY_DETAILS_COMPLETE": "Changes updated successfully.",

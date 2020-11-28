@@ -15,7 +15,8 @@ import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstan
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { GuestDetailsConfigI } from '../../../../../../shared/src/lib/data-models/guestDetailsConfig.model';
 import { GuestDetailsService } from './../../../../../../shared/src/lib/services/guest-details.service';
-import { Subscription } from 'rxjs';
+import { Subscription, config } from 'rxjs';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
   selector: 'hospitality-bot-guest-details',
@@ -43,7 +44,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
 
   constructor(
     private _fb: FormBuilder,
-    private _guestDetailService: GuestDetailsService
+    private _guestDetailService: GuestDetailsService,
+    private _hotelService: HotelService
   ) {
     this.initGuestDetailForm();
   }
@@ -98,7 +100,9 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   }
 
   setFieldConfiguration() {
-    return this._guestDetailService.setFieldConfigForGuestDetails();
+    return this._guestDetailService.setFieldConfigForGuestDetails({
+      hotelNationality: this._hotelService.hotelConfig.address.countryCode,
+    });
   }
 
   setGuestDetails() {
@@ -148,5 +152,4 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-  
 }

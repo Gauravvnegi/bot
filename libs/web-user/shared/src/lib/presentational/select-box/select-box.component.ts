@@ -2,6 +2,7 @@ import { Component, OnInit, Output } from '@angular/core';
 import { BaseComponent } from '../base.component';
 import { ValidatorService } from '../../services/validator.service';
 import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'web-user-select-box',
@@ -10,18 +11,26 @@ import { EventEmitter } from '@angular/core';
   providers: [ValidatorService],
 })
 export class SelectBoxComponent extends BaseComponent {
+  private _onOpenedChange = new Subject();
+  onOpenedChange = this._onOpenedChange.asObservable();
+  @Output()
+  optionChange = new EventEmitter();
 
-  @Output() 
-  optionChange= new EventEmitter();
-  
-  change(event)
-  {
+  change(event) {
     const selectData = {
-      "index" : this.index,
-      "selectEvent" : event,
-      'formControlName': this.name,
-      'formGroup':this.parentForm,
-    }
+      index: this.index,
+      selectEvent: event,
+      formControlName: this.name,
+      formGroup: this.parentForm,
+    };
     this.optionChange.emit(selectData);
+  }
+
+  openedChange(event) {
+    this._onOpenedChange.next(event);
+  }
+
+  trackByFn(index, item) {
+    return index;
   }
 }

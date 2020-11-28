@@ -35,6 +35,9 @@ export class FieldSchema implements Deserializable {
   appearance?: string;
   maskPattern?;
   options?: { key: string; value: string }[];
+  optionsClosed?: { key: string; value: string }[];
+  optionsOpened?: { key: string; value: string }[];
+  isOptionsOpenedChanged?: boolean;
   translation?: {
     label?: '';
   };
@@ -59,7 +62,14 @@ export class FieldSchema implements Deserializable {
       _.set({}, 'isUploading', _.get(input, ['isUploading'])),
       _.set({}, 'style', _.get(input, ['style'])),
       _.set({}, 'translation', _.get(input, ['translation'])),
-      _.set({}, 'floatLabel', _.get(input, ['floatLabel']))
+      _.set({}, 'floatLabel', _.get(input, ['floatLabel'])),
+      _.set(
+        {},
+        'isOptionsOpenedChanged',
+        _.get(input, ['isOptionsOpenedChanged'])
+      ),
+      _.set({}, 'optionsClosed', _.get(input, ['optionsClosed'])),
+      _.set({}, 'optionsOpened', _.get(input, ['optionsOpened']))
     );
     return this;
   }

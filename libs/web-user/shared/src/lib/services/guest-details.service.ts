@@ -8,7 +8,10 @@ import {
   ReservationDetails,
 } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { Observable, Subject } from 'rxjs';
-import { CountryCodes } from '../../../../shared/src/lib/data-models/countryCode';
+import {
+  CountryCodes,
+  Country,
+} from '../../../../shared/src/lib/data-models/countryCode';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   GuestDetailDS,
@@ -25,7 +28,7 @@ export class GuestDetailsService extends ApiService {
     this._guestDetailDS = new GuestDetailDS().deserialize(guestDetails);
   }
 
-  setFieldConfigForGuestDetails() {
+  setFieldConfigForGuestDetails(config) {
     let guestDetailsFieldSchema = {};
 
     guestDetailsFieldSchema['salutation'] = new FieldSchema().deserialize({
@@ -55,10 +58,15 @@ export class GuestDetailsService extends ApiService {
       label: 'Phone No.',
       icon: 'call',
     });
+
     guestDetailsFieldSchema['country'] = new FieldSchema().deserialize({
       label: ' ',
       disable: false,
-      options: CountryCodes,
+      isOptionsOpenedChanged: true,
+      optionsOpened: new Country().getCountryListWithDialCode([
+        config.hotelNationality,
+      ]),
+      optionsClosed: new Country().getCountryList([config.hotelNationality]),
     });
 
     return guestDetailsFieldSchema as GuestDetailsConfigI;
@@ -97,7 +105,7 @@ export class GuestDetailsService extends ApiService {
         status.push({
           validity: false,
           code: 'INVALID_FORM',
-          msg: "Invalid form. Please fill all the fields.",
+          msg: 'Invalid form. Please fill all the fields.',
           data: {
             guestId: guestDetailFG.get('primaryGuest').get('id').value,
             type: 'primary',
@@ -114,7 +122,7 @@ export class GuestDetailsService extends ApiService {
             status.push({
               validity: false,
               code: 'INVALID_FORM',
-              msg: "Invalid form. Please fill all the fields.",
+              msg: 'Invalid form. Please fill all the fields.',
               data: {
                 guestId: control.get('id').value,
                 index,

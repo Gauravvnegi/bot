@@ -18,15 +18,37 @@
       <mat-select
         matNativeControl
         (selectionChange)="change($event)"
+        (openedChange)="openedChange($event)"
         [formControlName]="name"
         [ngClass]="defaultClasses.fieldClasses"
       >
-        <!-- <option value="" selected>None</option> -->
-        <mat-option
-          *ngFor="let option of settings.options"
-          [value]="option.key"
-          >{{ option.value }}</mat-option
+        <ng-container
+          *ngIf="!settings.isOptionsOpenedChanged; else optionsChanged"
         >
+          <mat-option
+            *ngFor="let option of settings.options; trackBy: trackByFn"
+            [value]="option.key"
+            >{{ option.value }}</mat-option
+          >
+        </ng-container>
+
+        <ng-template #optionsChanged>
+          <ng-container *ngIf="!(onOpenedChange | async); else opendOptions">
+            <mat-option
+              *ngFor="let option of settings.optionsClosed; trackBy: trackByFn"
+              [value]="option.key"
+              >{{ option.value }}</mat-option
+            >
+          </ng-container>
+
+          <ng-template #opendOptions>
+            <mat-option
+              *ngFor="let option of settings.optionsOpened; trackBy: trackByFn"
+              [value]="option.key"
+              >{{ option.value }}</mat-option
+            >
+          </ng-template>
+        </ng-template>
       </mat-select>
       <mat-error>{{ errorMsg }}</mat-error>
     </mat-form-field>

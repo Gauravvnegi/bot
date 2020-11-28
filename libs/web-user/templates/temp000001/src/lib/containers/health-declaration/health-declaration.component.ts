@@ -18,7 +18,10 @@ import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 import { TextareaComponent } from 'libs/web-user/shared/src/lib/presentational/textarea/textarea.component';
 import { LabelComponent } from 'libs/web-user/shared/src/lib/presentational/label/label.component';
 import { FieldsetComponent } from 'libs/web-user/shared/src/lib/presentational/fieldset/fieldset.component';
-import { CountryCodes } from 'libs/web-user/shared/src/lib/data-models/countryCode';
+import {
+  CountryCodes,
+  Country,
+} from 'libs/web-user/shared/src/lib/data-models/countryCode';
 import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
 import { FileUploadComponent } from 'libs/web-user/shared/src/lib/presentational/file-upload/file-upload.component';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
@@ -92,7 +95,8 @@ export class HealthDeclarationComponent implements OnInit {
         this._healthDetailsService
           .uploadSignature(
             this._reservationService.reservationId,
-            this._reservationService.reservationData.guestDetails.primaryGuest.id,
+            this._reservationService.reservationData.guestDetails.primaryGuest
+              .id,
             formData
           )
           .subscribe(
@@ -273,7 +277,9 @@ export class HealthDeclarationComponent implements OnInit {
 
   setConfigData(config) {
     if (config.component.label === 'Country') {
-      config.component.options = CountryCodes;
+      config.component.options = new Country().getCountryListWithDialCode([
+        this._hotelService.hotelConfig.address.countryCode,
+      ]);
     } else if (config.component.label === 'Email ID') {
       config = this.setConfigValidation(config, Regex.EMAIL_REGEX);
     } else if (config.component.label === 'Phone No.') {

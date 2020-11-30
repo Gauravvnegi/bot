@@ -13,11 +13,12 @@
 	position: relative;
 	.labels {
 		position: absolute;
-		top: 32%;
-		left: 36%;
-		width: 80px;
+		height: 100%;
+		width: 100%;
+		top: 0;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
 		align-items: center;
 		.val {
 			font: normal normal bold 25px/30px Roboto;

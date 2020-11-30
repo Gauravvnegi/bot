@@ -26,6 +26,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       }
     ],
     Options : {
+      responsive: true,
       elements: {
         center: {
           text: '401',

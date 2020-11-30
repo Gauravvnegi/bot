@@ -6,7 +6,7 @@
     <div class="stat-title">Source</div>
 	</div>
 	<div class="graph-container">
-		<div style="display: block;">
+		<div style="position: relative;">
 			<canvas baseChart style="height: 138px;"
 				[data]="chart.Data"
 				[labels]="chart.Labels"
@@ -15,10 +15,10 @@
 				[colors]="chart.Colors"
 				[options]="chart.Options">
 			</canvas>
-		</div>
-		<div class="labels">
-			<div class="val">401</div>
-			<div class="label">Total Guests</div>
+			<div class="labels">
+				<div class="val">401</div>
+				<div class="label">Total Guests</div>
+			</div>
 		</div>
 	</div>
 	<div>

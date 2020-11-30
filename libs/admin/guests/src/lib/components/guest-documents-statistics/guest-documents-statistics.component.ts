@@ -24,6 +24,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       }
     ],
     Options : {
+      responsive: true,
       elements: {
         center: {
           text: '401',

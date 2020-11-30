@@ -66,7 +66,7 @@ export class GuestDetailsService extends ApiService {
       optionsOpened: new Country().getCountryListWithDialCode([
         config.hotelNationality,
       ]),
-      optionsClosed: new Country().getCountryList([config.hotelNationality]),
+      optionsClosed: new Country().getDialCodeList([config.hotelNationality]),
     });
 
     return guestDetailsFieldSchema as GuestDetailsConfigI;

@@ -11,7 +11,11 @@
 	display: flex;
 	justify-content: center;
 	position: relative;
+	.graph {
+		z-index: 2;
+	}
 	.labels {
+		z-index: 1;
 		position: absolute;
 		height: 100%;
 		width: 100%;

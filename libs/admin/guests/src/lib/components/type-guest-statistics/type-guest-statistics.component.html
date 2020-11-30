@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="stat-header">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/vip_guest.svg" />
+      </div>
+      <div class="stat-title">VIP Guest</div>
+    </div>
+		<div class="stat-labels-container">
+			<div class="stat-label" (click)="legendOnClick(0)">
+				<input class="legends" type="checkbox" />
+				<span class="arrival-bubble"></span>
+				<p class="stat-label-title">Arrival</p>
+			</div>
+			<div class="stat-label" (click)="legendOnClick(1)">
+				<input class="legends" type="checkbox" />
+				<span class="inhouse-bubble"></span>
+				<p class="stat-label-title">In House</p>
+			</div>
+			<div class="stat-label" (click)="legendOnClick(2)">
+				<input class="legends" type="checkbox" />
+				<span class="departure-bubble"></span>
+				<p class="stat-label-title">Departure</p>
+			</div>
+			<div class="stat-label" (click)="legendOnClick(3)">
+				<input class="legends" type="checkbox" />
+				<span class="out-guest-bubble"></span>
+				<p class="stat-label-title">Out-Guest</p>
+			</div>
+		</div>
+  </div>
+  <div class="stat-val-container">
+    <div class="line-chart">
+      <canvas
+        baseChart
+        style="max-width: 100%; max-height: 235px;"
+        [datasets]="chart.chartData"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
+      </canvas>
+    </div>
+	</div>
+</div>

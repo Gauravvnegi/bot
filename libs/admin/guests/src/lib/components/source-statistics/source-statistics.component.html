@@ -1,19 +1,19 @@
 <div class="container">
   <div class="title-container">
     <div class="icon">
-      <img src="assets/svg/arrivals_icon.svg" />
+      <img src="assets/svg/guest_source.svg" />
     </div>
     <div class="stat-title">Source</div>
 	</div>
 	<div class="graph-container">
 		<div style="display: block;">
 			<canvas baseChart style="height: 138px;"
-			[data]="doughnutChartData"
-			[labels]="doughnutChartLabels"
-			[chartType]="doughnutChartType"
-			[legend]="chartLegend"
-			[colors]="chartColors"
-			[options]="chartOptions">
+				[data]="chart.Data"
+				[labels]="chart.Labels"
+				[chartType]="chart.Type"
+				[legend]="chart.Legend"
+				[colors]="chart.Colors"
+				[options]="chart.Options">
 			</canvas>
 		</div>
 		<div class="labels">

@@ -7,6 +7,7 @@ import { GuestStatusStatisticsComponent } from './components/guest-status-statis
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SourceStatisticsComponent } from './components/source-statistics/source-statistics.component';
 import { ChartsModule } from 'ng2-charts';
+import { TypeGuestStatisticsComponent } from './components/type-guest-statistics/type-guest-statistics.component';
 
 const appRoutes: Route[] = [
   {
@@ -30,5 +31,6 @@ export class AdminGuestsRoutingModule {
 		GuestPaymentsStatisticsComponent,
 		GuestStatusStatisticsComponent,
 		SourceStatisticsComponent,
+		TypeGuestStatisticsComponent,
   ];
 }

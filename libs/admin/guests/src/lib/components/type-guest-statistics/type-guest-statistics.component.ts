@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
-  selector: 'hospitality-bot-guest-status-statistics',
-  templateUrl: './guest-status-statistics.component.html',
-  styleUrls: ['./guest-status-statistics.component.scss']
+  selector: 'hospitality-bot-type-guest-statistics',
+  templateUrl: './type-guest-statistics.component.html',
+  styleUrls: ['./type-guest-statistics.component.scss']
 })
-export class GuestStatusStatisticsComponent implements OnInit {
+export class TypeGuestStatisticsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   public getLegendCallback: any = ((self: this): any => {
@@ -21,10 +21,10 @@ export class GuestStatusStatisticsComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false, borderDash: [10, 5] },
+      { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false },
       { data: [50, 65, 60, 75, 72, 80], label: 'Pre Check-In', fill: false },
       { data: [20, 28, 24, 35, 29, 55], label: 'Check-In', fill: false },
-      { data: [50, 48, 60, 58, 65, 85], label: 'Checkout', fill: false, borderDash: [10, 5] },
+      { data: [50, 48, 60, 58, 65, 85], label: 'Checkout', fill: false },
     ],
     chartLabels: ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'],
     chartOptions: {
@@ -34,7 +34,10 @@ export class GuestStatusStatisticsComponent implements OnInit {
           radius: 5,
           hitRadius: 5,
           hoverRadius: 7,
-          hoverBorderWidth: 2
+          hoverBorderWidth: 2,
+        },
+        line: {
+          tension: 0
         }
       },
       scales: {
@@ -61,20 +64,20 @@ export class GuestStatusStatisticsComponent implements OnInit {
     },
     chartColors: [
       {
-        borderColor: '#0239CF',
-        backgroundColor: '#FFFFFF',
+        borderColor: '#FF9F67',
+        backgroundColor: '#FF9F67'
       },
       {
-        borderColor: '#F2509B',
-        backgroundColor: '#FFFFFF',
+        borderColor: '#30D8B6',
+        backgroundColor: '#30D8B6'
       },
       {
-        borderColor: '#0239CF',
-        backgroundColor: '#FFFFFF',
+        borderColor: '#F25E5E',
+        backgroundColor: '#F25E5E'
       },
       {
-        borderColor: '#F2509B',
-        backgroundColor: '#FFFFFF',
+        borderColor: '#4A73FB',
+        backgroundColor: '#4A73FB'
       },
     ],
     chartLegend: false,

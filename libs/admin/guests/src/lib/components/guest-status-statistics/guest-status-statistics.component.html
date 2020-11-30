@@ -2,7 +2,7 @@
   <div class="stat-header">
     <div class="title-container">
       <div class="icon">
-        <img src="assets/svg/Reservation.svg" />
+		<img src="assets/svg/guest_status.svg" />
       </div>
       <div class="stat-title">Guest Status</div>
     </div>
@@ -11,7 +11,7 @@
     <div class="line-chart">
       <canvas
         baseChart
-        style="max-width: 100%; max-height: 160px;"
+        style="max-width: 100%; max-height: 175px;"
         [datasets]="chart.chartData"
         [labels]="chart.chartLabels"
         [options]="chart.chartOptions"
@@ -25,17 +25,17 @@
 	<div class="stat-labels-container">
 		<div class="stat-label" (click)="legendOnClick(0)">
 			<input class="legends" type="checkbox" />
-			<span class="checkIn-border"></span>
+			<span class="new-border dashed"></span>
 			<p class="stat-label-title">New</p>
 		</div>
 		<div class="stat-label" (click)="legendOnClick(1)">
 			<input class="legends" type="checkbox" />
-			<span class="checkIn-border dashed"></span>
+			<span class="preCheckIn-border"></span>
 			<p class="stat-label-title">Pre Check-In</p>
 		</div>
 		<div class="stat-label" (click)="legendOnClick(2)">
 			<input class="legends" type="checkbox" />
-			<span class="checkout-border"></span>
+			<span class="checkin-border"></span>
 			<p class="stat-label-title">Check-In</p>
 		</div>
 		<div class="stat-label" (click)="legendOnClick(3)">

@@ -30,7 +30,7 @@ export class BaseComponent
     value: '',
     key: '',
     required: '',
-    typ: '',
+    type: '',
     contentType: '',
     style: {
       fieldSetWrapperStyles: '',
@@ -47,6 +47,11 @@ export class BaseComponent
     appearance: '',
     maskPattern: false,
     floatLabel: 'auto',
+    isOptionsOpenedChanged: false,
+    translation: {
+      master_label: '',
+      label: '',
+    },
   };
   _settings;
   @Input('settings') set settings(value: {
@@ -78,6 +83,9 @@ export class BaseComponent
     appearance?: string;
     maskPattern?;
     options?: { key: string; value: string }[];
+    optionsClosed?: { key: string; value: string }[];
+    optionsOpened?: { key: string; value: string }[];
+    isOptionsOpenedChanged?: boolean;
     validation?: { systemValidation: [] };
     handler?: {
       type: string[];
@@ -102,6 +110,10 @@ export class BaseComponent
         suffixIcon: '';
         suffixString: '';
       };
+    };
+    translation?: {
+      master_label?: '';
+      label?: '';
     };
     transforms: Function[];
     valueType: string;

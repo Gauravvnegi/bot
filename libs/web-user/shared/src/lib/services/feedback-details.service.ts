@@ -60,7 +60,7 @@ export class FeedbackDetailsService extends ApiService {
     if (feedbackDetailForm.invalid) {
       status.push({
         validity: false,
-        msg: 'Please select the Rating',
+        code: "SELECT_RATING_PENDING",
         data: {},
       });
     }

@@ -7,6 +7,7 @@ import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/do
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-registration-card',
@@ -19,7 +20,7 @@ export class RegistrationCardComponent {
     src: '',
   };
   private _settings;
-  private _subscription: Subscription = new Subscription();
+  private $subscription: Subscription = new Subscription();
   private _defaultValue = {
     label: 'Verify ',
     linkLabel: 'Registration Card',
@@ -63,7 +64,8 @@ export class RegistrationCardComponent {
     private _snackbar: SnackBarService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private _utilityService: UtilityService
+    private _utilityService: UtilityService,
+    private _translateService: TranslateService
   ) {
     this.settings = data;
   }
@@ -91,28 +93,34 @@ export class RegistrationCardComponent {
     formData.append('doc_type', 'signature');
     formData.append('doc_page', 'front');
     formData.append('file', event.file);
-    this._docService
-      .uploadDocumentFile(
-        this._reservation.reservationData.id,
-        this._reservation.reservationData.guestDetails.primaryGuest.id,
-        formData
-      )
-      .subscribe(
-        (res) => {
-          this._utilityService.$signatureUploaded.next(true);
-        },
-        (err) => {
-          this._snackbar.openSnackBarAsText(err.message);
-          this._utilityService.$signatureUploaded.next(false);
-        }
-      );
+    this.$subscription.add(
+      this._docService
+        .uploadDocumentFile(
+          this._reservation.reservationData.id,
+          this._reservation.reservationData.guestDetails.primaryGuest.id,
+          formData
+        )
+        .subscribe(
+          (res) => {
+            this._utilityService.$signatureUploaded.next(true);
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackbar.openSnackBarAsText(translatedMsg);
+              });
+            this._utilityService.$signatureUploaded.next(false);
+          }
+        )
+    );
   }
 
   onClose() {
     this.dialogRef.close();
   }
 
-  onDestroy() {
-    this._subscription.unsubscribe();
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { HyperlinkElementService } from 'libs/web-user/shared/src/lib/services/hyperlink-element.service';
 import { FooterService } from 'libs/web-user/shared/src/lib/services/footer.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service'
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, OnDestroy {
 
   slides;
   // slides = [
@@ -56,12 +58,14 @@ export class FooterComponent implements OnInit {
     autoplay: true,
   };
   @ViewChild("safety") hyperlinkElement: ElementRef;
-  $subscriber: Subscription = new Subscription();
+  $subscription: Subscription = new Subscription();
 
   constructor(
     public _hyperlink: HyperlinkElementService,
     private _footerService: FooterService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _snackbarService: SnackBarService,
+    private _translateService: TranslateService
     ) {}
 
   ngOnInit(): void {
@@ -70,14 +74,24 @@ export class FooterComponent implements OnInit {
   }
 
   getCovidGalleries(){
-    this._footerService.getCovidGallery(this._hotelService.hotelId)
-    .subscribe(response =>{
-      this.slides = response;
-    })
+    this.$subscription.add(
+      this._footerService.getCovidGallery(this._hotelService.hotelId)
+      .subscribe(response =>{
+        this.slides = response;
+      }, ({error})=>{
+        this.$subscription.add(
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackbarService.openSnackBarAsText(translatedMsg);
+            })
+        );
+      })
+    );
   }
 
   listenForElementClicked() {
-    this.$subscriber.add(
+    this.$subscription.add(
       this._hyperlink.$element.subscribe((res) => {
         if(res && res['element'] && res['element'] === 'safety') {
           this.scrollIntoView(this.hyperlinkElement.nativeElement);
@@ -89,5 +103,9 @@ export class FooterComponent implements OnInit {
   scrollIntoView($element): void {
     $element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     this._hyperlink.setSelectedElement('');
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

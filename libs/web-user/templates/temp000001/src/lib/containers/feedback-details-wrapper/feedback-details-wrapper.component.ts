@@ -5,6 +5,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-details-wrapper',
@@ -24,7 +25,8 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _snackBarService: SnackBarService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -44,10 +46,12 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   getFeedBackConfig() {
-    this._feedbackDetailsService.getFeedback().subscribe((response) => {
-      this.feedBackConfig = response;
-      this.initFeedbackConfigDS();
-    });
+    this.$subscription.add(
+      this._feedbackDetailsService.getFeedback().subscribe((response) => {
+        this.feedBackConfig = response;
+        this.initFeedbackConfigDS();
+      })
+    );
   }
 
   saveFeedbackDetails() {
@@ -66,26 +70,42 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
       value && value.feedbackDetail,
       this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
-
-    this._feedbackDetailsService
-      .addFeedback(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._snackBarService.openSnackBarAsText('Feedback successful', '', {
-            panelClass: 'success',
-          });
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.cause);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+    this.$subscription.add(
+      this._feedbackDetailsService
+        .addFeedback(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(
+                    translatedMsg,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
+            );
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                })
+            );
+            //    this._snackBarService.openSnackBarAsText(error.cause);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          }
+        )
+    );
   }
 
   private performActionIfNotValid(status: any[]) {
@@ -95,5 +115,9 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

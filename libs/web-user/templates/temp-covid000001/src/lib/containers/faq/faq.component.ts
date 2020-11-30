@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { FaqService } from 'libs/web-user/shared/src/lib/services/faq.service';
 import { HyperlinkElementService } from 'libs/web-user/shared/src/lib/services/hyperlink-element.service';
 import { Subscription } from 'rxjs';
@@ -8,9 +8,9 @@ import { Subscription } from 'rxjs';
   templateUrl: './faq.component.html',
   styleUrls: ['./faq.component.scss'],
 })
-export class FaqComponent implements OnInit {
+export class FaqComponent implements OnInit, OnDestroy {
   @ViewChild("advisories") hyperlinkElement: ElementRef;
-  $subscriber: Subscription = new Subscription();
+  $subscription: Subscription = new Subscription();
   faqCategories = [];
   faqQuestions = [];
 
@@ -28,7 +28,7 @@ export class FaqComponent implements OnInit {
   }
 
   listenForElementClicked() {
-    this.$subscriber.add(
+    this.$subscription.add(
       this._hyperlink.$element.subscribe((res) => {
         if(res && res['element'] && res['element'] === 'advisories') {
           this.scrollIntoView(this.hyperlinkElement.nativeElement);
@@ -71,5 +71,9 @@ export class FaqComponent implements OnInit {
 
   get Faq() {
     return this._faqService.faqDetails.faq;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

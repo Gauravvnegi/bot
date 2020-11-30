@@ -4,6 +4,8 @@ import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-
 import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
 import { Subscription } from 'rxjs';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-stay-safe',
@@ -13,11 +15,13 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 export class StaySafeComponent implements OnInit {
   @ViewChild('precautionaryMeasures') hyperlinkElement: ElementRef;
   safeMeasures: Measures;
-  $subscriber: Subscription = new Subscription();
+  $subscription: Subscription = new Subscription();
   constructor(
     private _safeMeasures: SafeMeasuresService,
     public _hyperlink: HyperlinkElementService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _snackbarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +30,7 @@ export class StaySafeComponent implements OnInit {
   }
 
   listenForElementClicked() {
-    this.$subscriber.add(
+    this.$subscription.add(
       this._hyperlink.$element.subscribe((res) => {
         if (
           res &&
@@ -40,11 +44,21 @@ export class StaySafeComponent implements OnInit {
   }
 
   getSafeMeasures() {
-    this._safeMeasures
+    this.$subscription.add(
+      this._safeMeasures
       .getSafeMeasures(this._hotelService.hotelId)
       .subscribe((measuresResponse) => {
         this.safeMeasures = measuresResponse;
-      });
+      },({error})=>{
+        this.$subscription.add(
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackbarService.openSnackBarAsText(translatedMsg);
+            })
+        );
+      })
+    );
   }
 
   scrollIntoView($element): void {
@@ -57,6 +71,6 @@ export class StaySafeComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.$subscriber.unsubscribe();
+    this.$subscription.unsubscribe();
   }
 }

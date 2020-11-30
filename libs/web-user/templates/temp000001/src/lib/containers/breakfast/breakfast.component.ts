@@ -7,6 +7,8 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-breakfast',
@@ -27,13 +29,15 @@ export class BreakfastComponent implements OnInit {
 
   breakfastForm: FormGroup;
   breakfastConfig: BreakfastConfigI;
+  private $subscription: Subscription = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
     private _breakfastService: BreakfastService,
     private _snackBarService: SnackBarService,
     private _paidService: PaidService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) { 
     this.initBreakfastForm();
   }
@@ -89,7 +93,13 @@ export class BreakfastComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        })
+    );
     return;
   }
 
@@ -98,6 +108,9 @@ export class BreakfastComponent implements OnInit {
     if(this.breakfastForm.valid && this.paidAmenitiesForm.get('isSelected').value == true){
      this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
     }
- }
+  }
 
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

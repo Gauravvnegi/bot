@@ -9,6 +9,7 @@ import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-d
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-stay-details-wrapper',
@@ -17,7 +18,6 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 })
 export class StayDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
-
   @Input() parentForm;
   @Input() reservationData;
   @Input() stepperIndex;
@@ -34,7 +34,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     private _reservationService: ReservationService,
     private _snackBarService: SnackBarService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -54,13 +55,22 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     this.parentForm.addControl(data.name, data.value);
   }
 
-  getHotelAmenities(){
-    this._amenitiesService.getHotelAmenities(this._hotelService.hotelId)
-    .subscribe(response =>{
-      this.amenities = response;
-      this._complimentaryService.initComplimentaryAmenitiesDetailDS(this.amenities && this.amenities.complimentryPackages);
-      this._paidService.initPaidAmenitiesDetailDS(this.amenities && this.amenities.paidPackages, this.reservationData.packages.paidPackages,this._stayDetailService.stayDetails.stayDetail.arrivalTime);
-    })
+  getHotelAmenities() {
+    this.$subscription.add(
+      this._amenitiesService
+        .getHotelAmenities(this._hotelService.hotelId)
+        .subscribe((response) => {
+          this.amenities = response;
+          this._complimentaryService.initComplimentaryAmenitiesDetailDS(
+            this.amenities && this.amenities.complimentryPackages
+          );
+          this._paidService.initPaidAmenitiesDetailDS(
+            this.amenities && this.amenities.paidPackages,
+            this.reservationData.packages.paidPackages,
+            this._stayDetailService.stayDetails.stayDetail.arrivalTime
+          );
+        })
+    );
   }
 
   /**
@@ -70,22 +80,33 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(formValue);
 
-    this._stayDetailService
-      .updateStayDetails(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._stayDetailService.updateStayDetailDS(response.stayDetails);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+    this.$subscription.add(
+      this._stayDetailService
+        .updateStayDetails(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._stayDetailService.updateStayDetailDS(response.stayDetails);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            //  this._snackBarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 }

@@ -36,7 +36,8 @@ export class BreakfastService extends ApiService {
     if (breakfastForm.invalid) {
       status.push({
         validity: false,
-        msg: 'Invalid form. Please fill all the fields.'
+        code: "INVALID_FORM",
+        msg: "Invalid form. Please fill all the fields.",
       });
     }
     return status;

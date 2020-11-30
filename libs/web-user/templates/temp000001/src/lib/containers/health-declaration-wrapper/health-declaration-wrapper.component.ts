@@ -6,6 +6,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -25,7 +26,8 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     private _healthDetailsService: HealthDetailsService,
     private _snackBarService: SnackBarService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -40,32 +42,45 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
    */
   saveHealthDeclarationDetails() {
     const dataToBeSaved = this.healthComponent.extractDataFromHealthForm();
-    this._healthDetailsService
-      .updateHealthForm(
-        this._reservationService.reservationId,
-        this._reservationService.reservationData.guestDetails.primaryGuest.id,
-        dataToBeSaved
-      )
-      .subscribe(
-        (response) => {
-          if (response && response.data) {
-            // this.patchHealthData(response.data, response.signatureUrl);
+    this.$subscription.add(
+      this._healthDetailsService
+        .updateHealthForm(
+          this._reservationService.reservationId,
+          this._reservationService.reservationData.guestDetails.primaryGuest.id,
+          dataToBeSaved
+        )
+        .subscribe(
+          (response) => {
+            if (response && response.data) {
+              // this.patchHealthData(response.data, response.signatureUrl);
+            }
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                })
+            );
+            //   this._snackBarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
           }
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+        )
+    );
   }
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

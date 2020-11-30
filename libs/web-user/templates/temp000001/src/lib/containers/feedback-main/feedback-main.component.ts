@@ -3,12 +3,13 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -17,6 +18,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class FeedbackMainComponent implements OnInit {
 
+  private $subscription: Subscription = new Subscription();
   paymentStatusData;
   isReservationData = false;
   parentForm: FormGroup;
@@ -34,7 +36,8 @@ export class FeedbackMainComponent implements OnInit {
     private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -44,18 +47,20 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   private getReservationDetails() {
-    forkJoin(
-      this._reservationService.getReservationDetails(
-        this._reservationService.reservationId
-      ),
-      of(true)
-    ).subscribe(([reservationData, val]) => {
-      this._hotelService.hotelConfig = reservationData['hotel'];
-      this.isReservationData = true;
-      this.reservationDetails = reservationData;
-      this._reservationService.reservationData = reservationData;
-      this._templateLoadingService.isTemplateLoading$.next(false);
-    });
+    this.$subscription.add(
+      forkJoin(
+        this._reservationService.getReservationDetails(
+          this._reservationService.reservationId
+        ),
+        of(true)
+      ).subscribe(([reservationData, val]) => {
+        this._hotelService.hotelConfig = reservationData['hotel'];
+        this.isReservationData = true;
+        this.reservationDetails = reservationData;
+        this._reservationService.reservationData = reservationData;
+        this._templateLoadingService.isTemplateLoading$.next(false);
+      })
+    );
   }
 
   initFeedbackConfigDS() {
@@ -67,10 +72,12 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   getFeedBackConfig() {
-    this._feedbackDetailsService.getFeedback().subscribe((response) => {
-      this.feedBackConfig = response;
-      this.initFeedbackConfigDS();
-    });
+    this.$subscription.add(
+      this._feedbackDetailsService.getFeedback().subscribe((response) => {
+        this.feedBackConfig = response;
+        this.initFeedbackConfigDS();
+      })
+    );
   }
 
   saveFeedbackDetails() {
@@ -89,21 +96,27 @@ export class FeedbackMainComponent implements OnInit {
       value && value.feedbackDetail,this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
 
-    this._feedbackDetailsService
-      .addFeedback(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          // this._snackBarService.openSnackBarAsText('Feedback successful', '', {
-          //   panelClass: 'success',
-          // });
-          this._buttonService.buttonLoading$.next(this.saveButton);
-          this.openThankyouPage('feedback');
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(this.saveButton);
-        }
-      );
+    this.$subscription.add(
+      this._feedbackDetailsService
+        .addFeedback(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            // this._snackBarService.openSnackBarAsText('Feedback successful', '', {
+            //   panelClass: 'success',
+            // });
+            this._buttonService.buttonLoading$.next(this.saveButton);
+            this.openThankyouPage('feedback');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            this._buttonService.buttonLoading$.next(this.saveButton);
+          }
+        )
+    );
   }
 
   openThankyouPage(state){
@@ -111,8 +124,18 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        })
+    );
     return;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
 }

@@ -67,21 +67,31 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
       data: { pageValue: this.summaryDetails },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      // this.submit(result);
-      if(result.hasOwnProperty('state')){
-        if(result.state === 'success'){
-          this.openThankyouPage('checkin');
+    this.$subscription.add(
+      dialogRef.afterClosed().subscribe((result) => {
+        // this.submit(result);
+        if (result.hasOwnProperty('state')) {
+          if (result.state === 'success') {
+            this.openThankyouPage('checkin');
+          }
         }
-      }
-    });
+      })
+    );
   }
 
-  openThankyouPage(state){
-    this.router.navigateByUrl(`/thankyou?token=${this.route.snapshot.queryParamMap.get('token')}&entity=thankyou&state=${state}`);
+  openThankyouPage(state) {
+    this.router.navigateByUrl(
+      `/thankyou?token=${this.route.snapshot.queryParamMap.get(
+        'token'
+      )}&entity=thankyou&state=${state}`
+    );
   }
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 }

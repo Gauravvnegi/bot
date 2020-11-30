@@ -5,7 +5,9 @@
   class="input_feild"
 >
   <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
-    settings.master_label
+    settings.translation && settings.translation.label
+      ? (settings.translation.label | translate)
+      : settings.master_label
   }}</mat-label>
 
   <div [ngClass]="defaultClasses.fieldParentWrapperClasses">

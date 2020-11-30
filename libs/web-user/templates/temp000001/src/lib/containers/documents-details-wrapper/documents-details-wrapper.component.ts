@@ -8,6 +8,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { DocumentsDetailsComponent } from '../documents-details/documents-details.component';
 import { get } from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'hospitality-bot-documents-details-wrapper',
   templateUrl: './documents-details-wrapper.component.html',
@@ -29,7 +30,8 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     private _snackBarService: SnackBarService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private _hotelService: HotelService
+    private _hotelService: HotelService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -70,26 +72,39 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
       this._hotelService.currentJourney
     );
 
-    this._documentDetailService
-      .updateGuestDetails(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+    this.$subscription.add(
+      this._documentDetailService
+        .updateGuestDetails(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            // this._snackBarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          }
+        )
+    );
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`, { documentType: status[0].type })
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        })
+    );
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();
@@ -102,5 +117,9 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 }

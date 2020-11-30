@@ -9,6 +9,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { get } from 'lodash';
 import { GuestDetailsComponent } from '../guest-details/guest-details.component';
 import { FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-guest-details-wrapper',
@@ -31,7 +32,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     private _snackBarService: SnackBarService,
     private _hotelService: HotelService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -68,30 +70,43 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
     const formValue = this.parentForm.getRawValue();
     const data = this._guestDetailService.modifyGuestDetails(formValue);
 
-    this._guestDetailService
-      .updateGuestDetails(this._reservationService.reservationId, data)
-      .subscribe(
-        (response) => {
-          this._guestDetailService.updateGuestDetailDS(response.guestDetails);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-          this._stepperService.setIndex('next');
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
-      );
+    this.$subscription.add(
+      this._guestDetailService
+        .updateGuestDetails(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._guestDetailService.updateGuestDetailDS(response.guestDetails);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            //   this._snackBarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          }
+        )      
+    );
   }
 
   private performActionIfNotValid(status: any[]) {
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
 
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        })
+    );
 
     if (get(status[0], ['data', 'type']) == 'primary') {
       this.guestDetailsComp.primaryGuestAccordian.openAll();
@@ -109,5 +124,9 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

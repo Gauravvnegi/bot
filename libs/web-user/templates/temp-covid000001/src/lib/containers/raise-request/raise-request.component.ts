@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise-request.service';
 import { RaiseRequestConfigI } from 'libs/web-user/shared/src/lib/data-models/raiseRequestConfig.model';
 import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
@@ -6,13 +6,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
   templateUrl: './raise-request.component.html',
   styleUrls: ['./raise-request.component.scss'],
 })
-export class RaiseRequestComponent implements OnInit {
+export class RaiseRequestComponent implements OnInit, OnDestroy {
+
+  $subscription: Subscription = new Subscription();
   raiseRequestConfig: RaiseRequestConfigI;
   raiseRequestForm: FormGroup;
 
@@ -20,7 +25,9 @@ export class RaiseRequestComponent implements OnInit {
     private _fb: FormBuilder,
     private _raiseRequestService: RaiseRequestService,
     private _hotelService: HotelService,
-    public dialogRef: MatDialogRef<RaiseRequestComponent>
+    private _snackbarService: SnackBarService,
+    public dialogRef: MatDialogRef<RaiseRequestComponent>,
+    private _translateService: TranslateService
   ) {
     this.initRaiseRequestForm();
   }
@@ -55,10 +62,35 @@ export class RaiseRequestComponent implements OnInit {
 
   onSubmit() {
     const data = this.raiseRequestForm.getRawValue();
-    this._raiseRequestService
+    this.$subscription.add(
+      this._raiseRequestService
       .saveRaiseRequest(this._hotelService.hotelId, data)
       .subscribe((response) => {
+        this.$subscription.add(
+          this._translateService
+            .get(`MESSAGES.SUCCESS.REQUEST_RAISE_COMPLETE`)
+            .subscribe((translatedMsg) => {
+              this._snackbarService.openSnackBarAsText(
+                translatedMsg,
+                '',
+                { panelClass: 'success' }
+              );
+            })
+        );
         this.close();
-      });
+      },({error})=>{
+        this.$subscription.add(
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackbarService.openSnackBarAsText(translatedMsg);
+            })
+        );
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -3,15 +3,22 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { AdminGuestsRoutingModule } from './admin-guests.routing.module';
 import { ChartsModule } from 'ng2-charts';
+import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedMaterialModule } from 'libs/shared/material/src';
 
 export const adminGuestsRoutes: Route[] = [];
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     AdminGuestsRoutingModule,
     ChartsModule,
+    ReactiveFormsModule,
+    SharedMaterialModule,
+    AdminSharedModule,
   ],
   declarations: [...AdminGuestsRoutingModule.components]
 })

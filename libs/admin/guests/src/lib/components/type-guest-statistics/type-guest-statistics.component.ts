@@ -19,6 +19,11 @@ export class TypeGuestStatisticsComponent implements OnInit {
     };
   })(this);
 
+  chartTypes = [
+    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
+    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
+  ];
+
   chart: any = {
     chartData: [
       { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false },
@@ -31,7 +36,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       responsive: true,
       elements: { 
         point: {
-          radius: 5,
+          radius: [0, 5 , 5, 5, 5, 5],
           hitRadius: 5,
           hoverRadius: 7,
           hoverBorderWidth: 2,
@@ -109,4 +114,11 @@ export class TypeGuestStatisticsComponent implements OnInit {
 
     ci.update();
   };
+
+  setChartType(option) {
+    if (this.chart.chartType !== option) {
+      this.chart.chartType = option.value;
+      // this.chart.chartLabels = ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'];
+    }
+  }
 }

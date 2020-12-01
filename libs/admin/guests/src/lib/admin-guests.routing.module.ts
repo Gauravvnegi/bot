@@ -8,6 +8,7 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { SourceStatisticsComponent } from './components/source-statistics/source-statistics.component';
 import { ChartsModule } from 'ng2-charts';
 import { TypeGuestStatisticsComponent } from './components/type-guest-statistics/type-guest-statistics.component';
+import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
 
 const appRoutes: Route[] = [
   {
@@ -25,12 +26,13 @@ const appRoutes: Route[] = [
 })
 export class AdminGuestsRoutingModule {
   static components = [
-		GuestComponent,
-		StatisticsComponent,
-		GuestDocumentsStatisticsComponent,
-		GuestPaymentsStatisticsComponent,
-		GuestStatusStatisticsComponent,
-		SourceStatisticsComponent,
-		TypeGuestStatisticsComponent,
+	GuestComponent,
+	StatisticsComponent,
+	GuestDocumentsStatisticsComponent,
+	GuestPaymentsStatisticsComponent,
+	GuestStatusStatisticsComponent,
+	SourceStatisticsComponent,
+	TypeGuestStatisticsComponent,
+	GuestDatatableComponent,
   ];
 }

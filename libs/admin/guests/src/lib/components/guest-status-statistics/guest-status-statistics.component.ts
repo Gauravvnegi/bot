@@ -19,6 +19,11 @@ export class GuestStatusStatisticsComponent implements OnInit {
     };
   })(this);
 
+  chartTypes = [
+    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
+    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
+  ];
+
   chart: any = {
     chartData: [
       { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false, borderDash: [10, 5] },
@@ -31,7 +36,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       responsive: true,
       elements: { 
         point: {
-          radius: 5,
+          radius: [0, 5 , 5, 5, 5, 5],
           hitRadius: 5,
           hoverRadius: 7,
           hoverBorderWidth: 2
@@ -106,4 +111,49 @@ export class GuestStatusStatisticsComponent implements OnInit {
 
     ci.update();
   };
+
+  setChartType(option) {
+    if (this.chart.chartType !== option) {
+      this.chart.chartType = option.value;
+      this.setChartColors();
+    }
+  }
+
+  setChartColors() {
+    if (this.chart.chartType === 'bar') {
+      this.chart.chartColors = [
+        {
+          backgroundColor: '#0239CF',
+        },
+        {
+          backgroundColor: '#288ad6',
+        },
+        {
+          backgroundColor: '#F2509B',
+        },
+        {
+          backgroundColor: '#F2809B',
+        },
+      ];
+    } else {
+      this.chart.chartColors = [
+        {
+          borderColor: '#0239CF',
+          backgroundColor: '#FFFFFF',
+        },
+        {
+          borderColor: '#F2509B',
+          backgroundColor: '#FFFFFF',
+        },
+        {
+          borderColor: '#0239CF',
+          backgroundColor: '#FFFFFF',
+        },
+        {
+          borderColor: '#F2509B',
+          backgroundColor: '#FFFFFF',
+        },
+      ];
+    }
+  }
 }

@@ -165,7 +165,6 @@
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
-  margin-top: 5px;
 }
 
 .stat-label > input {
@@ -190,42 +189,42 @@
   text-decoration: line-through;
 }
 
-// .checkIn-Background {
-//   background-color: #0239cf;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkIn-border {
-//     display: none;
-//   }
-// }
+.checkIn-Background {
+  background-color: #0239cf;
+  .stat-label-title {
+    color: white;
+  }
+  .checkIn-border {
+    display: none;
+  }
+}
 
-// .express-checkIn-Background {
-//   background-color: #288ad6;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkIn-border {
-//     display: none;
-//   }
-// }
+.express-checkIn-Background {
+  background-color: #288ad6;
+  .stat-label-title {
+    color: white;
+  }
+  .checkIn-border {
+    display: none;
+  }
+}
 
-// .checkOut-Background {
-//   background-color: #f2509b;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkout-border {
-//     display: none;
-//   }
-// }
+.checkOut-Background {
+  background-color: #f2509b;
+  .stat-label-title {
+    color: white;
+  }
+  .checkout-border {
+    display: none;
+  }
+}
 
-// .express-checkOut-Background {
-//   background-color: #f2809b;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkout-border {
-//     display: none;
-//   }
-// }
+.express-checkOut-Background {
+  background-color: #f2809b;
+  .stat-label-title {
+    color: white;
+  }
+  .checkout-border {
+    display: none;
+  }
+}

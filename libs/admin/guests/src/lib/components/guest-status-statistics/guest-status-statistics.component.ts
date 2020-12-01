@@ -26,10 +26,10 @@ export class GuestStatusStatisticsComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false, borderDash: [10, 5] },
+      { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false, borderDash: [5, 5] },
       { data: [50, 65, 60, 75, 72, 80], label: 'Pre Check-In', fill: false },
       { data: [20, 28, 24, 35, 29, 55], label: 'Check-In', fill: false },
-      { data: [50, 48, 60, 58, 65, 85], label: 'Checkout', fill: false, borderDash: [10, 5] },
+      { data: [50, 48, 60, 58, 65, 85], label: 'Checkout', fill: false, borderDash: [5, 5] },
     ],
     chartLabels: ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'],
     chartOptions: {

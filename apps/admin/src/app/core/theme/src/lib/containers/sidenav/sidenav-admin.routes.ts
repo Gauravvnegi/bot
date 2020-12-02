@@ -30,6 +30,12 @@ export const ADMIN_ROUTES = [
   //   url: 'assets/svg/notification.svg',
   // },
   {
+    path: 'feedbacks',
+    title: 'Feedbacks',
+    children: null,
+    url: 'assets/svg/box.svg',
+  },
+  {
     path: 'package',
     title: 'Packages',
     children: null,

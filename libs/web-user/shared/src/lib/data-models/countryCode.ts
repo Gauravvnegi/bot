@@ -17,7 +17,35 @@ export class Country {
     countryLists.forEach((country) => {
       let item = {
         key: `${country.dial_code}`,
+        value: `${country.en_short_name} ${country.dial_code}`,
+      };
+      if (preferences.includes(country.alpha_3_code)) {
+        tempCountryConfig[country.alpha_3_code] = item;
+      } else {
+        result.push(item);
+      }
+    });
+
+    return [
+      ...preferences.map((preference) => tempCountryConfig[preference]),
+      ...result,
+    ];
+  }
+
+  getDialCodeList(preferences = []) {
+    if (!preferences.length) {
+      return countryLists.map((country) => ({
+        key: `${country.dial_code}`,
         value: `${country.dial_code} ${country.en_short_name}`,
+      }));
+    }
+
+    let result = [];
+    let tempCountryConfig = {};
+    countryLists.forEach((country) => {
+      let item = {
+        key: `${country.dial_code}`,
+        value: `${country.dial_code}`,
       };
       if (preferences.includes(country.alpha_3_code)) {
         tempCountryConfig[country.alpha_3_code] = item;

@@ -60,6 +60,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       total: 0,
       chips: [
         { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+        { label: 'New', icon: '', value: 'NEW', total: 0, isSelected: false },
         {
           label: 'Precheckin_Pending ',
           icon: '',

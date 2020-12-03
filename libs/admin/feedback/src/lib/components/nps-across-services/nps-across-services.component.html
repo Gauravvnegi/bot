@@ -1,1 +1,40 @@
-<p>nps-across-services works!</p>
+<div class="container">
+	<div class="header">
+		<div class="title-container">
+			<div class="icon">
+				<img src="assets/svg/nps-services.svg" />
+			</div>
+			<div class="stat-title">NPS Across Services</div>
+		</div>
+		<div [formGroup]="npsFG" class="dropdown--wrapper">
+			<p-dropdown
+				class="export"
+				[options]="documentActionTypes"
+				formControlName="documentActionType"
+			>
+				<ng-template let-documentActionItem pTemplate="selectedItem">
+					<img src="assets/svg/Export.svg" />
+					<span style="margin-left: 0.5em; font-weight: 500;">{{
+						documentActionItem.label
+					}}</span>
+				</ng-template>
+			</p-dropdown>
+			<div class="divider"></div>
+			<p-dropdown
+				class="export"
+				[options]="documentTypes"
+				formControlName="documentType"
+			>
+				<ng-template let-documentTypeItem pTemplate="selectedItem">
+					<img src="assets/svg/CSV.svg" />
+					<span style="margin-left: 0.5em; font-weight: 500;">{{
+						documentTypeItem.label
+					}}</span>
+				</ng-template>
+			</p-dropdown>
+			<button class="go">
+				<mat-icon class="material-icons" matSuffix>east</mat-icon>
+			</button>
+		</div>
+	</div>
+</div>

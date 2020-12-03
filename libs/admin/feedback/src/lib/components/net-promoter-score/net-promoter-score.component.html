@@ -6,41 +6,57 @@
 			</div>
 			<div class="stat-title">Net Promoter Score</div>
 		</div>
-		<div [formGroup]="npsFG" class="dropdown--wrapper">
-			<p-dropdown
-				class="export"
-				[options]="documentActionTypes"
-				formControlName="documentActionType"
-			>
-				<ng-template let-documentActionItem pTemplate="selectedItem">
-					<img src="assets/svg/Export.svg" />
-					<span style="margin-left: 0.5em; font-weight: 500;">{{
-						documentActionItem.label
-					}}</span>
-				</ng-template>
-			</p-dropdown>
-			<div class="divider"></div>
-			<p-dropdown
-				class="export"
-				[options]="documentTypes"
-				formControlName="documentType"
-			>
-				<ng-template let-documentTypeItem pTemplate="selectedItem">
-					<img src="assets/svg/CSV.svg" />
-					<span style="margin-left: 0.5em; font-weight: 500;">{{
-						documentTypeItem.label
-					}}</span>
-				</ng-template>
-			</p-dropdown>
-			<button class="go">
-				<mat-icon class="material-icons" matSuffix>east</mat-icon>
-			</button>
+		<div class="menu-container">
+			<div class="pull-right">
+				<label class="labl" *ngFor="let option of chartTypes">
+				  <input
+					name="method"
+					type="radio"
+					[checked]="chart.chartType === option.value"
+					[value]="option.value"
+					(click)="setChartType(option)"
+				  />
+				  <div class="image">
+					<img [src]="option.url" />
+				  </div>
+				</label>
+			</div>
+			<div [formGroup]="npsFG" class="dropdown--wrapper">
+				<p-dropdown
+					class="export"
+					[options]="documentActionTypes"
+					formControlName="documentActionType"
+				>
+					<ng-template let-documentActionItem pTemplate="selectedItem">
+						<img src="assets/svg/Export.svg" />
+						<span style="margin-left: 0.5em; font-weight: 500;">{{
+							documentActionItem.label
+						}}</span>
+					</ng-template>
+				</p-dropdown>
+				<div class="divider"></div>
+				<p-dropdown
+					class="export"
+					[options]="documentTypes"
+					formControlName="documentType"
+				>
+					<ng-template let-documentTypeItem pTemplate="selectedItem">
+						<img src="assets/svg/CSV.svg" />
+						<span style="margin-left: 0.5em; font-weight: 500;">{{
+							documentTypeItem.label
+						}}</span>
+					</ng-template>
+				</p-dropdown>
+				<button class="go">
+					<mat-icon class="material-icons" matSuffix>east</mat-icon>
+				</button>
+			</div>
 		</div>
 	</div>
 	<div class="line-chart">
 		<canvas
 			baseChart
-			style="max-width: 100%; max-height: 220px;"
+			style="max-width: 100%; max-height: 350px;"
 			[datasets]="chart.chartData"
 			[labels]="chart.chartLabels"
 			[options]="chart.chartOptions"

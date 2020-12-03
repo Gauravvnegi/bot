@@ -5,6 +5,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminFeedbackRoutingModule } from './admin-feedback.routing.module';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { ChartsModule } from 'ng2-charts';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ChartsModule } from 'ng2-charts';
     ReactiveFormsModule,
     SharedMaterialModule,
     AdminSharedModule,
-    AdminFeedbackRoutingModule
+    AdminFeedbackRoutingModule,
+    FlexLayoutModule,
   ],
   declarations: [...AdminFeedbackRoutingModule.components]
 })

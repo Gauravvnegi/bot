@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NpsAcrossTouchpointsComponent implements OnInit {
 
+  isOpened = false;
   constructor() { }
 
   ngOnInit(): void {

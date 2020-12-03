@@ -1,5 +1,5 @@
 <div>
-  <h3>What would you like to book for special amenities ?</h3>
+    <h3>What would you like to book for special amenities ?</h3>
   <ngx-slick-carousel
     class="carousel"
     #slickModal="slick-carousel"
@@ -14,7 +14,7 @@
     >
       <div
         class="paid__service__data"
-        (click)="servicePackage(slide.packageCode)"
+        (click)="openPackage(slide.packageCode)"
         [ngClass]="{
           active: selectedService === slide.packageCode,
           activated: slide.isSelected
@@ -43,5 +43,11 @@
       </div>
     </div>
   </ngx-slick-carousel>
-  <ng-container #serviceMetadata> </ng-container>
+  <div *ngIf="packageControl">
+    <hospitality-bot-package-renderer
+    [parentForm]="packageControl"
+    [slideData]="selectedSlide"
+    (onPackageUpdate)="onPackageUpdate($event)">
+    </hospitality-bot-package-renderer>
+  </div>
 </div>

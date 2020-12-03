@@ -1,0 +1,339 @@
+import {
+  Component,
+  OnInit,
+  ComponentFactoryResolver,
+  ViewContainerRef,
+  ViewChild,
+  OnDestroy,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
+import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
+import { FormGroup, FormArray } from '@angular/forms';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { ConfirmationPopupComponent } from 'libs/web-user/shared/src/lib/presentational/confirmation-popup/confirmation-popup.component';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { SubPackageDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/paidServiceConfig.model';
+
+const componentMapping = {
+  'AIRPORT P/UP': AirportFacilitiesComponent,
+  'AIRPORT DROP': AirportFacilitiesComponent
+};
+
+@Component({
+  selector: 'hospitality-bot-package-renderer',
+  templateUrl: './package-renderer.component.html',
+  styleUrls: ['./package-renderer.component.scss'],
+})
+export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+
+  private $subscription: Subscription = new Subscription();
+
+  @ViewChild('serviceMetadata', { read: ViewContainerRef }) serviceContainer;
+  @ViewChild('saveButton') saveButton;
+
+  @Input() parentForm: FormGroup;
+  @Input() slideData;
+  @Output() onPackageUpdate = new EventEmitter();
+
+
+  subPackageFieldConfig: SubPackageDetailsConfigI[] = [];
+  selectedSubPackageArray=[];
+  slides = [];
+  selectedService = '';
+  componentRef;
+
+  slideConfig = {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    dots: true,
+    infinite: true,
+    speed: 100,
+    autoplay: true,
+    responsive: [
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
+  constructor(
+    public dialog: MatDialog,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _paidService: PaidService,
+    private _reservationService: ReservationService,
+    private _snackbarService: SnackBarService,
+    private _resolver: ComponentFactoryResolver,
+    private _buttonService: ButtonService,
+    private _translateService: TranslateService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.listenForComponentRender();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.setSubPackageConfiguration();
+    this.selectedSubPackageArray=[];
+      this.clearContainer();
+      if(this.serviceContainer){
+        this.checkForSelectedPackage();
+      }
+  }
+
+  ngAfterViewInit(){
+    if(this.serviceContainer){
+      this.checkForSelectedPackage();
+      this._changeDetectorRef.detectChanges();
+    }
+  }
+
+  setSubPackageConfiguration() {
+    this.subPackages.controls.forEach(subPackage =>{
+      this.subPackageFieldConfig.push(this.setFieldConfiguration(subPackage.get('label').value));
+    })
+  }
+
+  setFieldConfiguration(subPackage){
+    return this._paidService.setFieldConfigForSubPackageDetails();
+  }
+
+  checkForSelectedPackage(){
+    this.subPackages.controls.forEach(subPackage =>{
+      if(subPackage.get('isSelected').value === true){
+        this.servicePackage(subPackage.get('packageCode').value);
+      }
+    });
+  }
+
+  servicePackage(subPackageCode) {
+    this.selectedService = subPackageCode;
+    let component = componentMapping[subPackageCode];
+    if (component === undefined) {
+      component = DefaultAmenityComponent;
+    }
+    let subPackage;
+    this.subPackages.controls.forEach(control =>{
+      if(control.get('packageCode').value === subPackageCode){
+        subPackage = control.value;
+      }
+    })
+    this.createComponent(component,subPackage);
+  }
+
+  createComponent(component, subPackageData) {
+    const factory = this._resolver.resolveComponentFactory(component);
+    this.componentRef = this.serviceContainer.createComponent(factory);
+    this.selectedSubPackageArray.push(subPackageData.packageCode);
+    this.addPropsToComponentInstance(subPackageData);
+  }
+
+  addPropsToComponentInstance(subPackageData) {
+    this.componentRef.instance.subPackageForm = this.getSubPackageForm(subPackageData.packageCode);
+    this.componentRef.instance.uniqueData = {
+      code: subPackageData.packageCode,
+      id: subPackageData.id,
+    };
+    this.componentRef.instance.amenityData = this.getAminityData(
+      subPackageData.packageCode
+    );
+    this.componentRef.instance.quantity = subPackageData.quantity;
+  }
+
+  getSubPackageForm(packageCode){
+    let subPackageForm;
+    this.subPackages.controls.forEach(subPackage =>{
+      if(subPackage.get('packageCode').value === packageCode){
+        subPackageForm = subPackage;
+      }
+    });
+    return subPackageForm;
+  }
+
+  getAminityData(packageCode) {
+    let aminityData;
+    this.slideData.subPackages.forEach((subPackage) => {
+      if (subPackage.packageCode === packageCode) {
+        aminityData = subPackage.metaData;
+      }
+    });
+    return aminityData;
+  }
+
+  clearContainer() {
+    if (this.serviceContainer) {
+      this.serviceContainer.clear();
+    }
+  }
+
+  onSubPackageStatusChange(data){
+    if(data.currentValue){
+      this.servicePackage(data.formGroup.get('packageCode').value);
+    }else{
+      this.removeComponentFromContainer(data.formGroup.get('packageCode').value);
+    }
+  }
+
+  removeComponentFromContainer(packageCode){
+    let componentIndex = this.selectedSubPackageArray.findIndex(code =>code === packageCode);
+    if(componentIndex >= 0){
+      this.serviceContainer.remove(componentIndex);
+      this.selectedSubPackageArray.splice(componentIndex,1);
+    }
+  }
+
+  listenForComponentRender() {
+    this.$subscription.add(
+      this._paidService.isComponentRendered$.subscribe(() => {
+        this.getSubPackageForm(this._paidService.uniqueData.code).addControl(
+          'metaData',
+          this._paidService.amenityForm
+        );
+      })
+    );
+  }
+  
+  onSaveSubPackages(){
+
+    const status = this._paidService.validatePackageForm(
+      this.parentForm
+    ) as Array<any>;
+
+    if (status.length) {
+      this.performActionIfNotValid(status);
+      this._buttonService.buttonLoading$.next(this.saveButton);
+      return;
+    }
+
+    let packagesToBeAdd =[];
+    let packagesToBeRemove = [];
+    this.subPackages.controls.forEach(subPackage =>{
+      if(subPackage.get('isSelected').value === true){
+        packagesToBeAdd.push(this._paidService.mapDataForAminityAddition(subPackage.value));
+      }else{
+        packagesToBeRemove.push(this._paidService.mapDataForAmenityRemoval(subPackage.get('id').value));
+      }
+    })
+    this.addAmenity(
+      {
+        packagesToBeAdd:packagesToBeAdd,
+        packagesToBeRemove:packagesToBeRemove
+      }
+    );
+  }
+
+  addAmenity(data) {
+    this.$subscription.add(
+      this._paidService
+        .updateAmenity(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._paidService.updateAmenitiesDS(response);
+            this._paidService.updateDSForRemovedAmenity(data.packagesToBeRemove);
+            this.resetSubPackageForm(data.packagesToBeRemove);
+            this.selectedSubPackageArray=[];
+            this.selectedService = '';
+            this.onPackageUpdate.emit(true);
+            this.$subscription.add(
+              this._translateService
+                .get('MESSAGES.SUCCESS.AMENITY_ADD_COMPLETE')
+                .subscribe((translated_msg) => {
+                  this._snackbarService.openSnackBarAsText(
+                    translated_msg,
+                    '',
+                    { panelClass: 'success' }
+                  );
+                })
+            );
+            // this._buttonService.buttonLoading$.next(
+            //   this.saveButton
+            // );
+          },
+          (error) => {
+            this.$subscription.add(
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translated_msg) => {
+                  this._snackbarService.openSnackBarAsText(translated_msg);
+                })
+            );
+            this._buttonService.buttonLoading$.next(
+              this.saveButton
+            );
+          }
+        )
+    );
+  }
+
+  resetSubPackageForm(packagesToBeRemove){
+      packagesToBeRemove.forEach(removedPackage =>{
+        this.subPackages.controls.forEach(subPackageForm =>{
+          if(removedPackage.packageId === subPackageForm.get('id').value){
+            if(subPackageForm.get('metaData')){
+              subPackageForm.get('metaData').reset();
+            }
+          }
+        })
+      })
+  }
+
+  private performActionIfNotValid(status: any[]) {
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translated_msg) => {
+          this._snackbarService.openSnackBarAsText(translated_msg);
+        })
+    );
+    return;
+  }
+
+  ngOnDestroy() {
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
+    this.$subscription.unsubscribe();
+  }
+
+  get paidAmenities() {
+    return (
+      this._paidService.paidAmenities &&
+      this._paidService.paidAmenities.paidService
+    );
+  }
+
+  get subPackages(): FormArray{
+    return this.parentForm.get('subPackages')as FormArray;
+  }
+
+  get checkForUpdatePossibility(){
+    let isUpdatePossible = false;
+    this.slideData.subPackages.forEach(subPackage => {
+      if(subPackage.isSelected === true){
+        isUpdatePossible = true;
+      }
+    });
+
+    this.subPackages.controls.forEach(subPackage =>{
+      if(subPackage.get('isSelected').value === true){
+        isUpdatePossible = true;
+      }
+    })
+    return isUpdatePossible;
+  }
+}

@@ -1,6 +1,6 @@
 <div>
-  <form [formGroup]="airportForm" (ngSubmit)="submit()">
-    <h3 class="heading">Enter Airport Pickup details</h3>
+  <form [formGroup]="airportForm">
+    <h3 class="heading">Enter below details to book {{subPackageForm.get('label').value}}</h3>
     <div class="wrapper">
       <div class="wrapper__item">
         <web-user-input
@@ -51,7 +51,7 @@
       </div>
     </div>
     <h4>Note: Our in house chaffeur will call you on registered number.</h4>
-    <div class="save-button">
+    <!-- <div class="save-button">
       <web-user-button
         [settings]="airportConfig.removeButton"
         [buttonClass]="'back-button'"
@@ -66,6 +66,6 @@
         class="user-button"
         (click)="submit()"
       ></web-user-button>
-    </div>
+    </div> -->
   </form>
 </div>

@@ -35,6 +35,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
+import { PaidAmenitiesComponent } from './containers/paid-amenities/paid-amenities.component';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you
     StepperContentRendererDirective,
     TemplateLoaderDirective,
     ButtonDirective,
+    PaidAmenitiesComponent,
   ],
   providers: [
     {

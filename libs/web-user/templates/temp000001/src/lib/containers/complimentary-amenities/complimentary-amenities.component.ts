@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
 
 @Component({
-  selector: 'hospitality-bot-complimentary-service',
-  templateUrl: './complimentary-service.component.html',
-  styleUrls: ['./complimentary-service.component.scss']
+  selector: 'hospitality-bot-complimentary-amenities',
+  templateUrl: './complimentary-amenities.component.html',
+  styleUrls: ['./complimentary-amenities.component.scss']
 })
-export class ComplimentaryServiceComponent implements OnInit {
+export class ComplimentaryAmenitiesComponent implements OnInit {
 
   constructor(
     private _complimentaryService: ComplimentaryService

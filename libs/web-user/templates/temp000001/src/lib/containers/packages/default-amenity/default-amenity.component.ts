@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { DefaultAmenityConfigI } from 'libs/web-user/shared/src/lib/data-models/defaultAmenityConfig.model';
 import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
@@ -13,12 +13,7 @@ export class DefaultAmenityComponent implements OnInit {
 
   @Input() uniqueData;
   @Input() amenityData;
-  @Input() paidAmenitiesForm;
-  @Output() removeEvent : EventEmitter<any> = new EventEmitter<any>();
-  @Output() addEvent : EventEmitter<any> = new EventEmitter<any>(); 
-
-  @ViewChild('saveButton') saveButton;
-  @ViewChild('removeButton') removeButton;
+  @Input() subPackageForm;
 
   defaultForm: FormGroup;
   defaultAmenityConfig: DefaultAmenityConfigI;
@@ -28,7 +23,7 @@ export class DefaultAmenityComponent implements OnInit {
     private _paidService: PaidService,
     private _defaultService: DefaultAmenityService
   ) {
-    this.initDefaultForm();
+      this.initDefaultForm();
    }
 
   ngOnInit(): void {
@@ -38,7 +33,10 @@ export class DefaultAmenityComponent implements OnInit {
   }
 
   initDefaultForm() {
-    this.defaultForm = this._fb.group({});
+    this.defaultForm = this._fb.group({
+      quantity:['', [Validators.required]],
+      remarks:['']
+    });
   }
 
   addForm(){
@@ -48,8 +46,10 @@ export class DefaultAmenityComponent implements OnInit {
   }
 
   populateFormData(){
-    if(this.paidAmenitiesForm.get('isSelected').value !== true){
-      this.defaultAmenityConfig.removeButton.disable = true;
+   // this._defaultService.initDefaultDetailDS(this.amenityData);
+    if(this.amenityData){
+      this.defaultForm.patchValue(
+        this._defaultService.defaultDetails.defaultDetail);
     }
   }
 
@@ -57,17 +57,4 @@ export class DefaultAmenityComponent implements OnInit {
     return this._defaultService.setFieldConfigForDefaultAmenityDetails();
   }
 
-  submit(){
-    this._paidService.amenityData = {};
-    this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    this.addEvent.emit(this.uniqueData.code);
-  }
-
-  removeDefaultAmenityData(event){
-    event.preventDefault();
-    if(this.paidAmenitiesForm.get('isSelected').value == true){
-      this.paidAmenitiesForm.get('isSelected').patchValue(false);
-      this.removeEvent.emit({amenityId:this.uniqueData.id , packageCode: this.uniqueData.code});
-    }
- }
 }

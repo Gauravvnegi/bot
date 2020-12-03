@@ -1,37 +1,26 @@
 import {
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
-  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AirportConfigI } from 'libs/web-user/shared/src/lib/data-models/airportConfig.model';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
-  templateUrl: './airport-pickup.component.html',
-  styleUrls: ['./airport-pickup.component.scss'],
+  templateUrl: './airport-facilities.component.html',
+  styleUrls: ['./airport-facilities.component.scss'],
 })
-export class AirportPickupComponent implements OnInit {
+export class AirportFacilitiesComponent implements OnInit {
   @Input() uniqueData;
   @Input() amenityData;
-  @Input() paidAmenitiesForm;
-  @Output() removeEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output() addEvent: EventEmitter<any> = new EventEmitter<any>();
-
-  @ViewChild('saveButton') saveButton;
-  @ViewChild('removeButton') removeButton;
+  @Input() subPackageForm;
 
   airportForm: FormGroup;
   airportConfig: AirportConfigI;
@@ -41,11 +30,8 @@ export class AirportPickupComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _airportService: AirportService,
-    private _snackBarService: SnackBarService,
     private _paidService: PaidService,
-    private _buttonService: ButtonService,
-    private _dateService: DateService,
-    private _translateService: TranslateService
+    private _dateService: DateService
   ) {
     this.initAirportForm();
   }
@@ -93,57 +79,14 @@ export class AirportPickupComponent implements OnInit {
   }
 
   populateFormData() {
-    if (this.amenityData === '') {
-      this.airportConfig.removeButton.disable = true;
-    }
     this._airportService.initAirportDetailDS(this.amenityData);
     this.airportForm.patchValue(
-      this._airportService.airportDetails.airportDetail,
-      { emitEvent: false }
+      this._airportService.airportDetails.airportDetail
     );
   }
 
   setFieldConfiguration() {
     return this._airportService.setFieldConfigForAirportDetails();
-  }
-
-  submit() {
-    const status = this._airportService.validateAirportForm(
-      this.airportForm
-    ) as Array<any>;
-
-    if (status.length) {
-      this.performActionIfNotValid(status);
-      this._buttonService.buttonLoading$.next(this.saveButton);
-      return;
-    }
-
-    this.paidAmenitiesForm.get('isSelected').patchValue(true);
-    const formValue = this.airportForm.getRawValue();
-    const data = this._airportService.mapAirportData(formValue);
-    this._paidService.amenityData = data;
-    this.addEvent.emit(this.uniqueData.code);
-  }
-
-  private performActionIfNotValid(status: any[]) {
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translated_msg) => {
-          this._snackBarService.openSnackBarAsText(translated_msg);
-        })
-    );
-    return;
-  }
-
-  removeAirportData(event) {
-    event.preventDefault();
-    if (this.airportForm.valid) {
-      this.removeEvent.emit({
-        amenityId: this.uniqueData.id,
-        packageCode: this.uniqueData.code,
-      });
-    }
   }
 
   ngOnDestroy(): void {

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaidServiceComponent } from './paid-service.component';
+import { PackageRendererComponent } from './package-renderer.component';
 
 describe('PaidServiceComponent', () => {
-  let component: PaidServiceComponent;
-  let fixture: ComponentFixture<PaidServiceComponent>;
+  let component: PackageRendererComponent;
+  let fixture: ComponentFixture<PackageRendererComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaidServiceComponent ]
+      declarations: [ PackageRendererComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PaidServiceComponent);
+    fixture = TestBed.createComponent(PackageRendererComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

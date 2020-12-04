@@ -46,7 +46,7 @@ export class DefaultAmenityComponent implements OnInit {
   }
 
   populateFormData(){
-   // this._defaultService.initDefaultDetailDS(this.amenityData);
+    this._defaultService.initDefaultDetailDS(this.amenityData);
     if(this.amenityData){
       this.defaultForm.patchValue(
         this._defaultService.defaultDetails.defaultDetail);

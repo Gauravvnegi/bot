@@ -23,7 +23,6 @@
       >
         <div class="slider__image">
           <img loading="'lazy'" src="{{ slide.imgUrl }}" />
-          <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
           <div
             [ngStyle]="
               slide.isSelected ? { display: 'block' } : { display: 'none' }

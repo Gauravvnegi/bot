@@ -9,11 +9,12 @@ import { SourceStatisticsComponent } from './components/source-statistics/source
 import { ChartsModule } from 'ng2-charts';
 import { TypeGuestStatisticsComponent } from './components/type-guest-statistics/type-guest-statistics.component';
 import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    component: GuestComponent,
+    component: ComingSoonComponent,
   },
 ];
 

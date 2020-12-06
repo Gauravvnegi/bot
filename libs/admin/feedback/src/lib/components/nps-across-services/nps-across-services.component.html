@@ -37,4 +37,57 @@
 			</button>
 		</div>
 	</div>
+	<div class="progress-container">
+        <div class="label-container">
+            <div class="label">Services</div>
+        </div>
+        <ng-container *ngFor="let progress of progresses">
+            <div class="label-container">
+                <div class="label">{{ progress.label }}</div>
+                <div class="progress-wrapper">
+                    <div class="dropdown-list">
+                        <div class="title">{{ progress.label }}</div>
+                        <div class="key">
+                            <div class="icon" [style]="'background: #1FABDB;'"></div>
+                            <div class="label">Positive</div>
+                            <div class="value">{{ progress.positive }}</div>
+                        </div>
+                        <div class="key">
+                            <div class="icon" [style]="'background: #DF0A20;'"></div>
+                            <div class="label">Negative</div>
+                            <div class="value">{{ progress.negative }}</div>
+                        </div>
+					</div>
+					<div style="display: flex;">
+						<div fxLayout="row" class="progress">
+							<div [fxFlex]="100 - progress.negative" [style]="'background: transparent;'"></div>
+							<div [fxFlex]="progress.negative" class="progress-value" [style]="'background: #DF0A20;'"></div>
+						</div>
+						<div fxLayout="row" class="progress">
+							<div [fxFlex]="progress.positive" class="progress-value" [style]="'background: #1FABDB;'"></div>
+							<div [fxFlex]="100 - progress.positive" [style]="'background: transparent;'"></div>
+						</div>
+					</div>
+                </div>
+            </div>
+        </ng-container>
+        <div class="label-container">
+            <div class="label"></div>
+            <div class="progress-values">
+                <div *ngFor="let value of progressValues">{{ value }}</div>
+            </div>
+        </div>
+        <div class="label-container">
+            <div class="label"></div>
+            <div class="divider-container" [style]="'height: ' + (40 * progresses.length) + 'px;'">
+                <div class="divider" *ngFor="let value of progressValues"></div>
+            </div>
+        </div>
+    </div>
+    <div class="key-container">
+		<div class="label"></div>
+        <div class="key">
+            <div class="label">Score</div>
+        </div>
+    </div>
 </div>

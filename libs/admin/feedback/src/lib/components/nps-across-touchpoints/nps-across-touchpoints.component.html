@@ -10,52 +10,46 @@
             <div class="label">Source</div>
             <div class="progress"></div>
         </div>
-        <div class="label-container">
-            <div class="label">Checkin</div>
-            <div fxLayout="row" class="progress">
-                <div [fxFlex]="'23'" class="front"></div>
-                <div [fxFlex]="'35'" class="room"></div>
-                <div [fxFlex]="'42'" class="luggage"></div>
+        <ng-container *ngFor="let progress of progresses">
+            <div class="label-container">
+                <div class="label">{{ progress.label }}</div>
+                <div class="progress-wrapper">
+                    <div class="dropdown-list">
+                        <div class="title">NPS Across All Touchpoints</div>
+                        <div class="key">
+                            <div class="icon front"></div>
+                            <div class="label">Front Desk</div>
+                            <div class="value">{{ progress.frontDesk }}</div>
+                        </div>
+                        <div class="key">
+                            <div class="icon room"></div>
+                            <div class="label">Room Cleaning</div>
+                            <div class="value">{{ progress.roomCleaning }}</div>
+                        </div>
+                        <div class="key">
+                            <div class="icon luggage"></div>
+                            <div class="label">Luggage Service</div>
+                            <div class="value">{{ progress.luggageServices }}</div>
+                        </div>
+                    </div>
+                    <div fxLayout="row" class="progress">
+                        <div [fxFlex]="progress.frontDesk" [style]="'background: #F18533;'"></div>
+                        <div [fxFlex]="progress.roomCleaning" class="room"></div>
+                        <div [fxFlex]="progress.luggageServices" class="luggage"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="label-container">
-            <div class="label">Checkout</div>
-            <div fxLayout="row" class="progress">
-                <div [fxFlex]="'30'" class="front"></div>
-                <div [fxFlex]="'40'" class="room"></div>
-                <div [fxFlex]="'30'" class="luggage"></div>
-            </div>
-        </div>
+        </ng-container>
         <div class="label-container">
             <div class="label"></div>
             <div class="progress-values">
-                <div>0</div>
-                <div>10</div>
-                <div>20</div>
-                <div>30</div>
-                <div>40</div>
-                <div>50</div>
-                <div>60</div>
-                <div>70</div>
-                <div>80</div>
-                <div>90</div>
-                <div>100</div>
+                <div *ngFor="let value of progressValues">{{ value }}</div>
             </div>
         </div>
         <div class="label-container">
             <div class="label"></div>
             <div class="divider-container full-height">
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
-                <div class="divider"></div>
+                <div class="divider" *ngFor="let value of progressValues"></div>
             </div>
         </div>
     </div>

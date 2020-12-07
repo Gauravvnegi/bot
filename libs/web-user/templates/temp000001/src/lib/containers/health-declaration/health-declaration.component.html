@@ -1,5 +1,9 @@
 <div #healthDiv id="healthDiv" class="container">
-  <mat-accordion class="example-headers-align">
+  <mat-accordion
+    #accordian="matAccordion"
+    [multi]="true"
+    class="example-headers-align"
+  >
     <mat-expansion-panel
       #panel
       *ngFor="let setting of settings; let panelIndex = index"
@@ -22,5 +26,3 @@
     </mat-expansion-panel>
   </mat-accordion>
 </div>
-
-<!-- {{ healthDeclarationForm.getRawValue() | json }} -->

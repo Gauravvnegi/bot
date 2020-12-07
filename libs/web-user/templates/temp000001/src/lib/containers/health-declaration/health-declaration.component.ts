@@ -32,6 +32,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 
 const components = {
   radio: RadioComponent,
@@ -57,6 +58,9 @@ export class HealthDeclarationComponent implements OnInit {
   parentPanelContentContainer: QueryList<any>;
   @ViewChild('healthDiv', { static: false }) healthDiv: ElementRef;
   @ViewChild('nextButton') nextButton;
+  @ViewChild('accordian') accordion: MatAccordion;
+  @ViewChildren('panel')
+  panelList: QueryList<MatExpansionPanel>;
 
   healthDeclarationForm: FormGroup;
   currentParentContainer: ViewContainerRef;

@@ -29,6 +29,24 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       defaultLabel: 'Export',
     },
   ];
+
+  slideConfig = {
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    dots: true,
+    infinite: true,
+    speed: 100,
+    autoplay: true,
+    responsive: [
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
   constructor(
     private fb: FormBuilder
   ) { }

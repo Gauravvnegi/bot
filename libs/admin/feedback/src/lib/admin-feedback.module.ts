@@ -6,6 +6,7 @@ import { AdminFeedbackRoutingModule } from './admin-feedback.routing.module';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     AdminSharedModule,
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
+    SlickCarouselModule,
   ],
   declarations: [...AdminFeedbackRoutingModule.components]
 })

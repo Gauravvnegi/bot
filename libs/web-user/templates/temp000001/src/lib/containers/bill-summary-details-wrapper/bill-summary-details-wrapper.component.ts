@@ -71,7 +71,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
           );
           this.initBillSummaryDetailsDS(this.paymentSummary);
         })
-    )
+    );
   }
 
   onSummarySubmit() {
@@ -83,6 +83,8 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
             this._snackBarService.openSnackBarAsText(translatedMsg);
           })
       );
+
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;
     }
     let formData = {

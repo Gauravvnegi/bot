@@ -38,6 +38,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
+import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
 
 @NgModule({
   imports: [
@@ -59,6 +60,11 @@ import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you
     ButtonDirective,
   ],
   providers: [
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: TimezoneInterceptor,
+    //   multi: true,
+    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenRetievalInterceptor,

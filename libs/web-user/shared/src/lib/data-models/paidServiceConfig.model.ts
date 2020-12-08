@@ -31,11 +31,11 @@ export class PaidServiceDetailDS implements Deserializable {
         this.selectedService.push(new PaidServiceDetail().deserialize(service));
       });
       
-      this.paidService = this.updateAminities(this.paidService, this.selectedService);
+      this.paidService = this.updateAmenities(this.paidService, this.selectedService);
       return this;
     }
 
-    updateAminities( paidService, selectedService ){
+    updateAmenities( paidService, selectedService ){
       this.paidService = new PaidServiceDetail().checkForSelectedAmenity(paidService, selectedService);
       return this.paidService;
     }
@@ -48,7 +48,6 @@ export class PaidServiceDetail implements Deserializable {
     packageCode: string;
     imgUrl: string;
     label: string; 
-    hotelId: string;
     quantity: string;
     isSelected: boolean;
     metaData: any;
@@ -73,7 +72,6 @@ export class PaidServiceDetail implements Deserializable {
         set({}, 'label', get(input, ['name'])),
         set({}, 'quantity', get(input, ['quantity'])||1),
         set({}, 'imgUrl', get(input, ['imageUrl'])),
-        set({}, 'hotelId', get(input, ['hotelId'])),
         set({}, 'description', get(input, ['description'])),
         set({}, 'metaData',get(input, ['metaData'])),
         set({}, 'remarks',get(input, ['remarks'])),

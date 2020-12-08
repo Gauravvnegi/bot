@@ -41,7 +41,7 @@ export class PaidService extends ApiService {
   }
 
   updateAmenitiesDS(selectedAmenities) {
-    this._paidServiceDetailDS.paidService = new PaidServiceDetailDS().updateAminities(
+    this._paidServiceDetailDS.paidService = new PaidServiceDetailDS().updateAmenities(
       this.paidAmenities.paidService,
       selectedAmenities
     );
@@ -124,9 +124,9 @@ export class PaidService extends ApiService {
     this._amenityForm = form;
   }
 
-  set amenityData(data) {
-    this._amenitiesData = data;
-  }
+  // set amenityData(data) {
+  //   this._amenitiesData = data;
+  // }
 
   set uniqueData(uniqueData) {
     this._uniqueData = uniqueData;
@@ -136,9 +136,9 @@ export class PaidService extends ApiService {
     return this._amenityForm;
   }
 
-  get amenityData() {
-    return this._amenitiesData;
-  }
+  // get amenityData() {
+  //   return this._amenitiesData;
+  // }
 
   get uniqueData() {
     return this._uniqueData;
@@ -146,9 +146,5 @@ export class PaidService extends ApiService {
 
   get paidAmenities() {
     return this._paidServiceDetailDS;
-  }
-
-  get arrivalTime() {
-    return this._paidServiceDetailDS.arrivalTime;
   }
 }

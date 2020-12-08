@@ -1,21 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
+import { Subscription } from 'rxjs';
+import { PackageRendererComponent } from '../package-renderer/package-renderer.component';
 
 @Component({
   selector: 'hospitality-bot-paid-amenities',
   templateUrl: './paid-amenities.component.html',
   styleUrls: ['./paid-amenities.component.scss']
 })
-export class PaidAmenitiesComponent implements OnInit {
+export class PaidAmenitiesComponent implements OnInit, OnDestroy {
 
   @Input() parentForm: FormGroup;
 
-  packageControl;
-  selectedSlide;
+  @ViewChild('packageRenderer', { read: ViewContainerRef }) packageRendererContainer;
 
-  paidAmenitiesForm: FormGroup;
-  slides = [];
+  private $subscription: Subscription = new Subscription();
+
+  selectedSlide;
+  packageRendererComponentRefObj;
+
   slideConfig = {
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -33,30 +37,23 @@ export class PaidAmenitiesComponent implements OnInit {
     ],
   };
 
-
   constructor(
     private _fb: FormBuilder,
     private _paidService: PaidService,
-  ) {
-    this.initPaidAmenitiesForm();
-   }
+    private _resolver: ComponentFactoryResolver,
+  ) {}
 
   ngOnInit(): void {
-    this.slides = this.paidAmenities;
     this.addAmenityToForm();
   }
 
-  ngOnChanges() {
-    this.amenitiesForm.addControl('paidAmenities', this.paidAmenitiesForm);
-  }
-
   initPaidAmenitiesForm() {
-    this.paidAmenitiesForm = this._fb.group({});
+    this.parentForm = this._fb.group({});
   }
 
   addAmenityToForm() {
-    this.slides.forEach((slide) => {
-      this.paidAmenitiesForm.addControl(
+    this.paidAmenities.forEach((slide) => {
+      this.parentForm.addControl(
         slide.packageCode,
         this.getAmenitiesFG()
       );
@@ -64,14 +61,13 @@ export class PaidAmenitiesComponent implements OnInit {
         this.addSubPackageToAmenity(slide);
       }
       this.getAminityForm(slide.packageCode).patchValue(slide);
-      // console.log('paidamenityForm',this.paidAmenitiesForm);
     });
   }
 
   addSubPackageToAmenity(slide){
     slide.subPackages.forEach(subPackage => {
       let subPackageFA = 
-      this.paidAmenitiesForm.get(slide.packageCode).get('subPackages')as FormArray;
+      this.parentForm.get(slide.packageCode).get('subPackages')as FormArray;
       subPackageFA.push(this.getAmenitiesFG());
     });
   }
@@ -98,12 +94,36 @@ export class PaidAmenitiesComponent implements OnInit {
   }
 
   openPackage(packageCode){
-    this.packageControl = this.getAminityForm(packageCode);
-    this.selectedSlide = Object.assign({},this.slides.find(slideData =>slideData.packageCode === packageCode));
+    this.clearPackageRendererContainer();
+    let serviceFormGroup = this.getAminityForm(packageCode);
+    this.selectedSlide = this.paidAmenities.find(slideData =>slideData.packageCode === packageCode);
+    this.createComponent(PackageRendererComponent, serviceFormGroup, this.selectedSlide);
   }
 
-  onPackageUpdate(event){
-    this.packageControl = null;
+  createComponent(component, serviceFormGroup, selectedSlide) {
+    const factory = this._resolver.resolveComponentFactory(component);
+    this.packageRendererComponentRefObj = this.packageRendererContainer.createComponent(factory);
+    this.addPropsToComponentInstance(serviceFormGroup, selectedSlide);
+  }
+
+  addPropsToComponentInstance(serviceFormGroup, selectedSlide) {
+    this.packageRendererComponentRefObj.instance.parentForm = serviceFormGroup;
+    this.packageRendererComponentRefObj.instance.slideData = selectedSlide;
+    this.listenForPackageUpdate();
+  }
+
+  listenForPackageUpdate(){
+    this.$subscription.add(
+      this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(() => {
+        this.packageRendererComponentRefObj.destroy();
+      })
+    );
+  }
+
+  clearPackageRendererContainer() {
+    if (this.packageRendererContainer) {
+      this.packageRendererContainer.clear();
+    }
   }
 
   afterChange(e) {
@@ -138,7 +158,14 @@ export class PaidAmenitiesComponent implements OnInit {
   }
 
   getAminityForm(packageCode) {
-    return this.paidAmenitiesForm.get(packageCode) as FormGroup;
+    return this.parentForm.get(packageCode) as FormGroup;
+  }
+
+  ngOnDestroy() {
+    if (this.packageRendererComponentRefObj) {
+      this.packageRendererComponentRefObj.destroy();
+    }
+    this.$subscription.unsubscribe();
   }
 
   get amenitiesForm() {

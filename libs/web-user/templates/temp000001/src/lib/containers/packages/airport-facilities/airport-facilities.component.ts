@@ -65,7 +65,7 @@ export class AirportFacilitiesComponent implements OnInit {
           Validators.required,
           customPatternValid({
             pattern: Regex.NUMBER_REGEX,
-            msg: 'Please enter valid Person count',
+            msg: 'Please enter valid Quantity',
           }),
         ],
       ],

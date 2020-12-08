@@ -6,8 +6,6 @@ import {
   ViewChild,
   OnDestroy,
   Input,
-  OnChanges,
-  SimpleChanges,
   AfterViewInit,
   ChangeDetectorRef,
   Output,
@@ -36,40 +34,21 @@ const componentMapping = {
   templateUrl: './package-renderer.component.html',
   styleUrls: ['./package-renderer.component.scss'],
 })
-export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
-
-  private $subscription: Subscription = new Subscription();
-
-  @ViewChild('serviceMetadata', { read: ViewContainerRef }) serviceContainer;
-  @ViewChild('saveButton') saveButton;
+export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() parentForm: FormGroup;
   @Input() slideData;
   @Output() onPackageUpdate = new EventEmitter();
 
+  @ViewChild('packageMetadata', { read: ViewContainerRef }) packageContainer;
+  @ViewChild('saveButton') saveButton;
 
+  private $subscription: Subscription = new Subscription();
+ 
   subPackageFieldConfig: SubPackageDetailsConfigI[] = [];
   selectedSubPackageArray=[];
-  slides = [];
   selectedService = '';
-  componentRef;
-
-  slideConfig = {
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    dots: true,
-    infinite: true,
-    speed: 100,
-    autoplay: true,
-    responsive: [
-      {
-        breakpoint: 500,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
+  packageComponentRefObj;
 
   constructor(
     public dialog: MatDialog,
@@ -85,31 +64,25 @@ export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, A
 
   ngOnInit(): void {
     this.listenForComponentRender();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
     this.setSubPackageConfiguration();
     this.selectedSubPackageArray=[];
-      this.clearContainer();
-      if(this.serviceContainer){
-        this.checkForSelectedPackage();
-      }
   }
 
   ngAfterViewInit(){
-    if(this.serviceContainer){
+    this.clearPackageContainer();
+    if(this.packageContainer){
       this.checkForSelectedPackage();
       this._changeDetectorRef.detectChanges();
     }
   }
 
   setSubPackageConfiguration() {
-    this.subPackages.controls.forEach(subPackage =>{
-      this.subPackageFieldConfig.push(this.setFieldConfiguration(subPackage.get('label').value));
+    this.subPackages.controls.forEach(() =>{
+      this.subPackageFieldConfig.push(this.setFieldConfiguration());
     })
   }
 
-  setFieldConfiguration(subPackage){
+  setFieldConfiguration(){
     return this._paidService.setFieldConfigForSubPackageDetails();
   }
 
@@ -138,21 +111,21 @@ export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, A
 
   createComponent(component, subPackageData) {
     const factory = this._resolver.resolveComponentFactory(component);
-    this.componentRef = this.serviceContainer.createComponent(factory);
+    this.packageComponentRefObj = this.packageContainer.createComponent(factory);
     this.selectedSubPackageArray.push(subPackageData.packageCode);
     this.addPropsToComponentInstance(subPackageData);
   }
 
   addPropsToComponentInstance(subPackageData) {
-    this.componentRef.instance.subPackageForm = this.getSubPackageForm(subPackageData.packageCode);
-    this.componentRef.instance.uniqueData = {
+    this.packageComponentRefObj.instance.subPackageForm = this.getSubPackageForm(subPackageData.packageCode);
+    this.packageComponentRefObj.instance.uniqueData = {
       code: subPackageData.packageCode,
       id: subPackageData.id,
     };
-    this.componentRef.instance.amenityData = this.getAminityData(
+    this.packageComponentRefObj.instance.amenityData = this.getAminityData(
       subPackageData.packageCode
     );
-    this.componentRef.instance.quantity = subPackageData.quantity;
+    this.packageComponentRefObj.instance.quantity = subPackageData.quantity;
   }
 
   getSubPackageForm(packageCode){
@@ -175,9 +148,9 @@ export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, A
     return aminityData;
   }
 
-  clearContainer() {
-    if (this.serviceContainer) {
-      this.serviceContainer.clear();
+  clearPackageContainer() {
+    if (this.packageContainer) {
+      this.packageContainer.clear();
     }
   }
 
@@ -192,7 +165,7 @@ export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, A
   removeComponentFromContainer(packageCode){
     let componentIndex = this.selectedSubPackageArray.findIndex(code =>code === packageCode);
     if(componentIndex >= 0){
-      this.serviceContainer.remove(componentIndex);
+      this.packageContainer.remove(componentIndex);
       this.selectedSubPackageArray.splice(componentIndex,1);
     }
   }
@@ -304,8 +277,8 @@ export class PackageRendererComponent implements OnInit, OnDestroy, OnChanges, A
   }
 
   ngOnDestroy() {
-    if (this.componentRef) {
-      this.componentRef.destroy();
+    if (this.packageComponentRefObj) {
+      this.packageComponentRefObj.destroy();
     }
     this.$subscription.unsubscribe();
   }

@@ -9,7 +9,7 @@
   >
     <div
       ngxSlickItem
-      *ngFor="let slide of slides; trackBy: trackByPackageId"
+      *ngFor="let slide of paidAmenities; trackBy: trackByPackageId"
       class="slide"
     >
       <div
@@ -42,11 +42,5 @@
       </div>
     </div>
   </ngx-slick-carousel>
-  <div *ngIf="packageControl">
-    <hospitality-bot-package-renderer
-    [parentForm]="packageControl"
-    [slideData]="selectedSlide"
-    (onPackageUpdate)="onPackageUpdate($event)">
-    </hospitality-bot-package-renderer>
-  </div>
+  <ng-container #packageRenderer> </ng-container>
 </div>

@@ -48,9 +48,9 @@ export class AirportService extends ApiService{
       placeholder: 'Enter Flight No.'
     });
     airportFormFieldSchema['quantity'] = new FieldSchema().deserialize({
-      label: 'Person Count',
+      label: 'Quantity',
       disable: false,
-      placeholder: 'No. of Persons'
+      placeholder: 'Quantity'
     });
     airportFormFieldSchema['removeButton'] = new FieldSchema().deserialize({
       label: 'Remove',

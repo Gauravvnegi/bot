@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { DefaultAmenityConfigI } from 'libs/web-user/shared/src/lib/data-models/defaultAmenityConfig.model';
 import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
+import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
+import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 
 @Component({
   selector: 'hospitality-bot-default-amenity',
@@ -34,23 +36,28 @@ export class DefaultAmenityComponent implements OnInit {
 
   initDefaultForm() {
     this.defaultForm = this._fb.group({
-      quantity:['', [Validators.required]],
+      quantity:['',
+      [
+        Validators.required,
+        customPatternValid({
+          pattern: Regex.NUMBER_REGEX,
+          msg: 'Please enter valid Quantity',
+        }),
+      ],],
       remarks:['']
     });
   }
 
   addForm(){
     this._paidService.uniqueData = this.uniqueData;
-    this._paidService.amenityForm = this.defaultForm;
-    this._paidService.isComponentRendered$.next(true);
   }
 
   populateFormData(){
     this._defaultService.initDefaultDetailDS(this.amenityData);
-    if(this.amenityData){
-      this.defaultForm.patchValue(
+    this.defaultForm.patchValue(
         this._defaultService.defaultDetails.defaultDetail);
-    }
+    this._paidService.amenityForm = this.defaultForm;
+    this._paidService.isComponentRendered$.next(true);
   }
 
   setFieldConfiguration() {

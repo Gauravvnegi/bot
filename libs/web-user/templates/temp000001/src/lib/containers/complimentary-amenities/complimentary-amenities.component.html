@@ -1,11 +1,13 @@
-<div *ngIf="hotelComplimentaryAmenities && hotelComplimentaryAmenities.length > 0" class="service__wrapper">
-    <h3 class="service__wrapper--heading">Our Complimentary Services</h3>
-    <div class="service__wrapper--images">
-        <div *ngFor="let service of hotelComplimentaryAmenities" class="img-with-text">
-            <div class="image" imageClass>
-                <img [src]="service.imgUrl" class="hotel-services-images" />
+<form [formGroup]="parentForm">
+    <div *ngIf="hotelComplimentaryAmenities && hotelComplimentaryAmenities.length > 0" class="service__wrapper">
+        <h3 class="service__wrapper--heading">Our Complimentary Services</h3>
+        <div class="service__wrapper--images">
+            <div *ngFor="let complimentaryServiceFormGroup of parentForm.controls; let i = index" class="img-with-text">
+                <div class="image" imageClass [formGroupName]="i">
+                    <img [src]="complimentaryServiceFormGroup.get('imgUrl').value " class="hotel-services-images" />
+                </div>
+                <p>{{ complimentaryServiceFormGroup.get('name').value }}</p>
             </div>
-            <p>{{ service.amenityName }}</p>
         </div>
     </div>
-</div>
+</form>

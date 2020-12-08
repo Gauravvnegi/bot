@@ -12,15 +12,12 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             
-              <hospitality-bot-complimentary-amenities>
+              <hospitality-bot-complimentary-amenities
+              [parentForm]="complimentaryServicesForm">
               </hospitality-bot-complimentary-amenities>
 
-              <!-- <hospitality-bot-package-renderer
-              [parentForm]="parentForm">
-              </hospitality-bot-package-renderer> -->
-
               <hospitality-bot-paid-amenities
-              [parentForm]="parentForm">
+              [parentForm]="paidServicesForm">
               </hospitality-bot-paid-amenities>
             
           </mat-expansion-panel>

@@ -1,0 +1,62 @@
+@import 'main';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .heading {
+    color: #6d7580;
+    margin-bottom: 20px;
+  }
+  .progress-bars {
+    position: relative;
+    width: 128px;
+    height: 138px;
+    .gray-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .red-bar {
+      position: absolute;
+      z-index: 2;
+    }
+    .green-bar {
+      position: absolute;
+      z-index: 2;
+    }
+  }
+  .limit-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    width: 100%;
+    .limit {
+      font-size: 12px;
+      color: #c1c5c9;
+    }
+    .added-margin{
+        margin-right: 20px;
+    }
+  }
+  .smiley-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .smiley {
+      .image {
+        height: 30px;
+        width: 30px;
+        img {
+          height: 100%;
+          width: 100%;
+        }
+      }
+      .label {
+        font-size: 14px;
+        color: #6d7580;
+      }
+    }
+  }
+}

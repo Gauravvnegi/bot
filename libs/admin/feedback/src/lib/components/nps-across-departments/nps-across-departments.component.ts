@@ -51,29 +51,29 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     {
       title: 'Reservation',
       progress: {
-        negative: 50,
-        positive: 60,
+        negative: 90,
+        positive: 20,
       }
     },
     {
       title: 'Front Office',
       progress: {
         negative: 50,
-        positive: 60,
+        positive: 25,
       }
     },
     {
       title: 'Housekeeping',
       progress: {
-        negative: 50,
+        negative: 25,
         positive: 60,
       }
     },
     {
       title: 'Maintenance',
       progress: {
-        negative: 50,
-        positive: 60,
+        negative: 100,
+        positive: 100,
       }
     },
     // {

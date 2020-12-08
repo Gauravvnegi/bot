@@ -1,26 +1,32 @@
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-<div style="margin: 10px 0;">{{ settings.title }}</div>
-<div style="display: flex; flex-direction: row;margin: 10px 0;">
-	<canvas #canvas3 width="138" height="138"></canvas>
-	<canvas #canvas width="138" height="138"></canvas>
-	<canvas #canvas1 width="138" height="138"></canvas>
-</div>
-<div style="display: flex; flex-direction: row; justify-content: center; width: 100%;margin: 5px 0;">
-	<div style="margin: 0 10px;">-100</div>
-	<div style="margin: 0 10px;">100</div>
-</div>
-<div style="display: flex; flex-direction: row; justify-content: space-between; width: 100%;margin: 10px 0;">
-	<div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-		<div><img src="assets/svg/happy.svg" height="27px" width="27px" /></div>
-		<div>1225</div>
-	</div>
-	<div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-		<div><img src="assets/svg/sceptic.svg" height="27px" width="27px" /></div>
-		<div>1135</div>
-	</div>
-	<div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-		<div><img src="assets/svg/sad.svg" height="27px" width="27px" /></div>
-		<div>1015</div>
-	</div>
-</div>
+<div class="wrapper">
+  <p class="heading">{{ settings.title }}</p>
+  <div class="progress-bars">
+    <canvas class="red-bar" #canvas3 width="128" height="138"></canvas>
+    <canvas class="green-bar" #canvas width="128" height="138"></canvas>
+    <canvas class="gray-bar" #canvas1 width="128" height="138"></canvas>
+  </div>
+  <div class="limit-box">
+    <div class="limit added-margin">-100</div>
+    <div class="limit">100</div>
+  </div>
+  <div class="smiley-wrapper">
+    <div class="smiley">
+      <div class="image">
+        <img src="assets/svg/happy.svg" />
+      </div>
+      <div class="label">1225</div>
+    </div>
+    <div class="smiley">
+      <div class="image">
+        <img src="assets/svg/sceptic.svg" />
+      </div>
+      <div class="label">1135</div>
+    </div>
+    <div class="smiley">
+      <div class="image">
+        <img src="assets/svg/sad.svg" />
+      </div>
+      <div class="label">1015</div>
+    </div>
+  </div>
 </div>

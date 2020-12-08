@@ -5,6 +5,7 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
@@ -25,7 +26,8 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    private _translateService: TranslateService,
+    private _buttonService: ButtonService
   ) {
     super();
     this.self = this;
@@ -72,7 +74,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     )
   }
 
-  onSubmit() {
+  onSummarySubmit() {
     if (!this.signature) {
       this.$subscription.add(
         this._translateService
@@ -94,9 +96,15 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
         )
         .subscribe(
           (res) => {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
             this.$subscription.add(
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)

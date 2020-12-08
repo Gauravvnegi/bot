@@ -47,6 +47,51 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     ],
   };
 
+  progressValues = [
+    {
+      title: 'Reservation',
+      progress: {
+        negative: 50,
+        positive: 60,
+      }
+    },
+    {
+      title: 'Front Office',
+      progress: {
+        negative: 50,
+        positive: 60,
+      }
+    },
+    {
+      title: 'Housekeeping',
+      progress: {
+        negative: 50,
+        positive: 60,
+      }
+    },
+    {
+      title: 'Maintenance',
+      progress: {
+        negative: 50,
+        positive: 60,
+      }
+    },
+    // {
+    //   title: 'Food & Beverage',
+    //   progress: {
+    //     negative: 50,
+    //     positive: 60,
+    //   }
+    // },
+    // {
+    //   title: 'Spa & Salon',
+    //   progress: {
+    //     negative: 50,
+    //     positive: 60,
+    //   }
+    // }
+  ]
+
   constructor(
     private fb: FormBuilder
   ) { }

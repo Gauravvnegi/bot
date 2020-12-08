@@ -37,5 +37,9 @@
 			</button>
 		</div>
 	</div>
-	<hospitality-bot-two-way-progress></hospitality-bot-two-way-progress>
+	<div style=" display: flex; overflow-x: hidden;">
+		<div style="width: 149px;margin-right: 40px;" *ngFor="let progress of progressValues" >
+			<hospitality-bot-two-way-progress [settings]="progress"></hospitality-bot-two-way-progress>
+		</div>
+	</div>
 </div>

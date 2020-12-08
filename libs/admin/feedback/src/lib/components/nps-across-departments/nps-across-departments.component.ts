@@ -72,17 +72,17 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     {
       title: 'Maintenance',
       progress: {
-        negative: 100,
-        positive: 100,
+        negative: 75,
+        positive: 85,
       }
     },
-    // {
-    //   title: 'Food & Beverage',
-    //   progress: {
-    //     negative: 50,
-    //     positive: 60,
-    //   }
-    // },
+    {
+      title: 'Food & Beverage',
+      progress: {
+        negative: 50,
+        positive: 60,
+      }
+    },
     // {
     //   title: 'Spa & Salon',
     //   progress: {

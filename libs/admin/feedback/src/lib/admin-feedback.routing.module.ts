@@ -8,6 +8,7 @@ import { NpsAcrossTouchpointsComponent } from './components/nps-across-touchpoin
 import { NpsAcrossServicesComponent } from './components/nps-across-services/nps-across-services.component';
 import { NpsAcrossDepartmentsComponent } from './components/nps-across-departments/nps-across-departments.component';
 import { TextAnalyticsExplorerComponent } from './components/text-analytics-explorer/text-analytics-explorer.component';
+import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
 
 const appRoutes: Route[] = [
   {
@@ -28,6 +29,7 @@ export class AdminFeedbackRoutingModule {
         NpsAcrossTouchpointsComponent,
         NpsAcrossServicesComponent,
         NpsAcrossDepartmentsComponent,
-        TextAnalyticsExplorerComponent
+        TextAnalyticsExplorerComponent,
+        TwoWayProgressComponent
     ];
   }

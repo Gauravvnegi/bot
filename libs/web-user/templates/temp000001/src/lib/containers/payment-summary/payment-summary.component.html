@@ -125,13 +125,13 @@
           </div>
         </td>
       </tr>
-      <tr>
+      <!-- <tr>
         <td colspan="8">
           <web-user-promocode
             (promocodeData)="applyPromocode($event)"
           ></web-user-promocode>
         </td>
-      </tr>
+      </tr> -->
       <tr class="total__amount">
         <td colspan="8">
           <div class="enteries">
@@ -145,7 +145,7 @@
           <div class="enteries due__amount">
             <p class="label">Due Amount:</p>
             <p class="value">
-              {{ currencyCode }} {{ paymentSummary.dueAmount }}
+              {{ currencyCode }} {{ paymentSummary.payableAmount }}
             </p>
           </div>
         </td>

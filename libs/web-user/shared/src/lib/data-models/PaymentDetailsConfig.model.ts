@@ -29,6 +29,7 @@ export class PaymentDetail implements Deserializable {
   currencyCode: string;
   roomRates: Rates;
   packages: Rates[];
+  payableAmount: number;
 
   deserialize(paymentSummary: any) {
     Object.assign(
@@ -39,7 +40,8 @@ export class PaymentDetail implements Deserializable {
       set({}, 'totalDiscount', get(paymentSummary, ['totalDiscount'])),
       set({}, 'subtotal', get(paymentSummary, ['subtotal'])),
       set({}, 'paidAmount', get(paymentSummary, ['paidAmount'])),
-      set({}, 'dueAmount', get(paymentSummary, ['dueAmount']))
+      set({}, 'dueAmount', get(paymentSummary, ['dueAmount'])),
+      set({}, 'payableAmount', get(paymentSummary, ['payableAmount'])),
     );
     this.roomRates = new Rates().deserialize(paymentSummary.roomRates);
     this.packages = new Array<Rates>();

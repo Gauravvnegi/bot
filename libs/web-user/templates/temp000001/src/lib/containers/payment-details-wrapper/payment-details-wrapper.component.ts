@@ -80,97 +80,105 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onPrecheckinSubmit() {
-    const data = this.mapPaymentInitiationData();
-    const TAB_INDEX = this.matTab['_selectedIndex'];
-    const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
-    if (TAB_LABEL === 'Pay Now') {
-      if (
-        this.selectedPaymentOption.config &&
-        this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
-      ) {
-        this.$subscription.add(
-          this._paymentDetailsService
-            .initiatePaymentCCAvenue(
-              this._reservationService.reservationId,
-              data
-            )
-            .subscribe(
-              (response) => {
-                window.location.href = response.billingUrl;
-              },
-              ({ error }) => {
-                this._buttonService.buttonLoading$.next(
-                  this.buttonRefs['submitButton']
-                );
-                this._translateService
-                  .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(translatedMsg);
-                  });
-                // this._snackBarService.openSnackBarAsText(error.message);
-              }
-            )
-        );
-      } else {
-        this._translateService
-          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-          .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg);
-          });
-        this._buttonService.buttonLoading$.next(
-          this.buttonRefs['submitButton']
-        );
-      }
+    if (this.reservationData.paymentSummary.payableAmount === 0) {
+      this.submitWithoutPayment('preCheckin');
     } else {
-      this.updatePaymentStatus('preCheckin');
-      this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
-    }
-  }
-
-  onCheckinSubmit() {
-    const data = this.mapPaymentInitiationData();
-    const TAB_INDEX = this.matTab['_selectedIndex'];
-    const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
-    if (TAB_LABEL === 'Pay Now') {
-      if (
-        this.selectedPaymentOption.config &&
-        this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
-      ) {
-        this.$subscription.add(
-          this._paymentDetailsService
-            .initiatePaymentCCAvenue(
-              this._reservationService.reservationId,
-              data
-            )
-            .subscribe(
-              (response) => {
-                window.location.href = response.billingUrl;
-              },
-              ({ error }) => {
-                this.$subscription.add(
+      const data = this.mapPaymentInitiationData();
+      const TAB_INDEX = this.matTab['_selectedIndex'];
+      const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
+      if (TAB_LABEL === 'Pay Now') {
+        if (
+          this.selectedPaymentOption.config &&
+          this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+        ) {
+          this.$subscription.add(
+            this._paymentDetailsService
+              .initiatePaymentCCAvenue(
+                this._reservationService.reservationId,
+                data
+              )
+              .subscribe(
+                (response) => {
+                  window.location.href = response.billingUrl;
+                },
+                ({ error }) => {
+                  this._buttonService.buttonLoading$.next(
+                    this.buttonRefs['submitButton']
+                  );
                   this._translateService
                     .get(`MESSAGES.ERROR.${error.type}`)
                     .subscribe((translatedMsg) => {
                       this._snackBarService.openSnackBarAsText(translatedMsg);
-                    })
-                );
-                // this._snackBarService.openSnackBarAsText(error.message);
-                this._buttonService.buttonLoading$.next(
-                  this.buttonRefs['nextButton']
-                );
-              }
-            )
-        );
+                    });
+                  // this._snackBarService.openSnackBarAsText(error.message);
+                }
+              )
+          );
+        } else {
+          this._translateService
+            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+          this._buttonService.buttonLoading$.next(
+            this.buttonRefs['submitButton']
+          );
+        }
       } else {
-        this._translateService
-          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-          .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg);
-          });
-        this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+        this.updatePaymentStatus('preCheckin');
+        this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
       }
+    }
+  }
+
+  onCheckinSubmit() {
+    if (this.reservationData.paymentSummary.payableAmount === 0) {
+      this.submitWithoutPayment('checkin');
     } else {
-      this.updatePaymentStatus('checkin');
+      const data = this.mapPaymentInitiationData();
+      const TAB_INDEX = this.matTab['_selectedIndex'];
+      const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
+      if (TAB_LABEL === 'Pay Now') {
+        if (
+          this.selectedPaymentOption.config &&
+          this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+        ) {
+          this.$subscription.add(
+            this._paymentDetailsService
+              .initiatePaymentCCAvenue(
+                this._reservationService.reservationId,
+                data
+              )
+              .subscribe(
+                (response) => {
+                  window.location.href = response.billingUrl;
+                },
+                ({ error }) => {
+                  this.$subscription.add(
+                    this._translateService
+                      .get(`MESSAGES.ERROR.${error.type}`)
+                      .subscribe((translatedMsg) => {
+                        this._snackBarService.openSnackBarAsText(translatedMsg);
+                      })
+                  );
+                  // this._snackBarService.openSnackBarAsText(error.message);
+                  this._buttonService.buttonLoading$.next(
+                    this.buttonRefs['nextButton']
+                  );
+                }
+              )
+          );
+        } else {
+          this._translateService
+            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+          this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+        }
+      } else {
+        this.updatePaymentStatus('checkin');
+      }
     }
   }
 
@@ -231,6 +239,20 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           }
         )
     );
+  }
+
+  submitWithoutPayment(state) {
+    if (state === 'checkin') {
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['nextButton']
+      );
+      this._stepperService.setIndex('next');
+    } else {
+      this.openThankyouPage('');
+        this._buttonService.buttonLoading$.next(
+        this.buttonRefs['submitButton']
+      );
+    }
   }
 
   setPaymentMethodData(event) {

@@ -12,7 +12,6 @@
     <img src="{{subPackageFormGroup.get('imgUrl').value}}" class="subPackage_img"/>{{subPackageFormGroup.get("label").value}}
     {{subPackageFormGroup.get("currencyCode").value}}{{subPackageFormGroup.get("rate").value}}
   </div>
-  <!-- <pre>{{parentForm.getRawValue()|json}}</pre> -->
   <ng-container #packageMetadata> </ng-container>
   <div *ngIf="checkForUpdatePossibility">
     <web-user-button

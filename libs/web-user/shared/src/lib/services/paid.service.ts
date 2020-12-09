@@ -14,6 +14,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Injectable()
 export class PaidService extends ApiService {
+  
   isComponentRendered$ = new Subject();
   _amenityForm: FormGroup;
   _uniqueData;
@@ -124,10 +125,6 @@ export class PaidService extends ApiService {
     this._amenityForm = form;
   }
 
-  // set amenityData(data) {
-  //   this._amenitiesData = data;
-  // }
-
   set uniqueData(uniqueData) {
     this._uniqueData = uniqueData;
   }
@@ -135,10 +132,6 @@ export class PaidService extends ApiService {
   get amenityForm() {
     return this._amenityForm;
   }
-
-  // get amenityData() {
-  //   return this._amenitiesData;
-  // }
 
   get uniqueData() {
     return this._uniqueData;

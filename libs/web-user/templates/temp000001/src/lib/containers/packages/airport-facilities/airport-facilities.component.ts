@@ -25,6 +25,7 @@ export class AirportFacilitiesComponent implements OnInit {
   airportForm: FormGroup;
   airportConfig: AirportConfigI;
   minDate;
+
   private $subscription: Subscription = new Subscription();
 
   constructor(
@@ -39,7 +40,7 @@ export class AirportFacilitiesComponent implements OnInit {
   ngOnInit(): void {
     this.minDate = new Date(this._dateService.getCurrentDateString());
     this.airportConfig = this.setFieldConfiguration();
-    this.addForm();
+    this.assignUniqueData();
     this.populateFormData();
   }
 
@@ -72,10 +73,8 @@ export class AirportFacilitiesComponent implements OnInit {
     });
   }
 
-  addForm() {
+  assignUniqueData() {
     this._paidService.uniqueData = this.uniqueData;
-    this._paidService.amenityForm = this.airportForm;
-    this._paidService.isComponentRendered$.next(true);
   }
 
   populateFormData() {
@@ -83,6 +82,8 @@ export class AirportFacilitiesComponent implements OnInit {
     this.airportForm.patchValue(
       this._airportService.airportDetails.airportDetail
     );
+     this._paidService.amenityForm = this.airportForm;
+    this._paidService.isComponentRendered$.next(true);
   }
 
   setFieldConfiguration() {
@@ -91,5 +92,9 @@ export class AirportFacilitiesComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get metaDataForm(){
+    return this.subPackageForm && this.subPackageForm.get('metaData') as FormGroup;
   }
 }

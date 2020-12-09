@@ -30,7 +30,7 @@ export class DefaultAmenityComponent implements OnInit {
 
   ngOnInit(): void {
     this.defaultAmenityConfig = this.setFieldConfiguration();
-    this.addForm();
+    this.assignUniqueData();
     this.populateFormData();
   }
 
@@ -48,7 +48,7 @@ export class DefaultAmenityComponent implements OnInit {
     });
   }
 
-  addForm(){
+  assignUniqueData(){
     this._paidService.uniqueData = this.uniqueData;
   }
 
@@ -62,6 +62,10 @@ export class DefaultAmenityComponent implements OnInit {
 
   setFieldConfiguration() {
     return this._defaultService.setFieldConfigForDefaultAmenityDetails();
+  }
+
+  get metaDataForm(){
+    return this.subPackageForm && this.subPackageForm.get('metaData') as FormGroup;
   }
 
 }

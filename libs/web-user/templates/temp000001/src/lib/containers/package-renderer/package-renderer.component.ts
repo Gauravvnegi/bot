@@ -15,8 +15,7 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
 import { FormGroup, FormArray } from '@angular/forms';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
-import { ConfirmationPopupComponent } from 'libs/web-user/shared/src/lib/presentational/confirmation-popup/confirmation-popup.component';
+import { MatDialog } from '@angular/material/dialog';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
@@ -224,7 +223,7 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
             this.onPackageUpdate.emit(true);
             this.$subscription.add(
               this._translateService
-                .get('MESSAGES.SUCCESS.AMENITY_ADD_COMPLETE')
+                .get('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE')
                 .subscribe((translated_msg) => {
                   this._snackbarService.openSnackBarAsText(
                     translated_msg,
@@ -233,9 +232,9 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
                   );
                 })
             );
-            // this._buttonService.buttonLoading$.next(
-            //   this.saveButton
-            // );
+            this._buttonService.buttonLoading$.next(
+              this.saveButton
+            );
           },
           (error) => {
             this.$subscription.add(

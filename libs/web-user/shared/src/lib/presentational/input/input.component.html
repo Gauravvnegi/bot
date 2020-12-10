@@ -10,7 +10,10 @@
       : settings.master_label
   }}</mat-label>
 
-  <div [ngClass]="defaultClasses.fieldParentWrapperClasses">
+  <div
+    [ngStyle]="settings.style && settings.style.fieldParentWrapperStyles"
+    [ngClass]="defaultClasses.fieldParentWrapperClasses"
+  >
     <mat-form-field
       [ngClass]="defaultClasses.fieldContainerWrapperClasses"
       [appearance]="settings.appearance"

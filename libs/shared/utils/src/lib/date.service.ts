@@ -17,10 +17,10 @@ export class DateService {
   }
 
   currentDate(format?) {
-    return this.convertTimestampToDate(moment.now(),format);
+    return this.convertTimestampToDate(moment.now(), format);
   }
 
-  getCurrentDateString(){
+  getCurrentDateString() {
     return moment().format();
   }
 
@@ -29,7 +29,7 @@ export class DateService {
   }
 
   getDateDifference(date1, date2) {
-    return moment(date1).diff(moment(date2), 'days')
+    return moment(date1).diff(moment(date2), 'days');
   }
 
   getMonthFromDate(timestamp) {
@@ -38,5 +38,9 @@ export class DateService {
 
   getYearFromDate(timestamp) {
     return moment.unix(timestamp / 1000).year();
+  }
+
+  getCurrentTimeZone() {
+    return moment().format('Z');
   }
 }

@@ -12,6 +12,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ProgressSpinnerInterceptor } from './theme/src/lib/interceptor/progress-spinner.interceptor';
 import { environment } from '@hospitality-bot/admin/environment';
 import { RefreshTokenInterceptor } from './interceptors/refresh-token.interceptor';
+import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
 
 @NgModule({
   declarations: [],
@@ -20,6 +21,11 @@ import { RefreshTokenInterceptor } from './interceptors/refresh-token.intercepto
     {
       provide: 'BASE_URL',
       useValue: environment.base_url,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TimezoneInterceptor,
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,

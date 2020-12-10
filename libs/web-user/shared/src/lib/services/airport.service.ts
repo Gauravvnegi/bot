@@ -3,8 +3,6 @@ import { FieldSchema } from '../data-models/fieldSchema.model';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { AirportConfigI, AirportAmenity, AirportDetailDS } from '../data-models/airportConfig.model';
 import { FormGroup } from '@angular/forms';
-import * as moment from 'moment';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Injectable()
 export class AirportService extends ApiService{
@@ -50,9 +48,9 @@ export class AirportService extends ApiService{
       placeholder: 'Enter Flight No.'
     });
     airportFormFieldSchema['quantity'] = new FieldSchema().deserialize({
-      label: 'Person Count',
+      label: 'Quantity',
       disable: false,
-      placeholder: 'No. of Persons'
+      placeholder: 'Quantity'
     });
     airportFormFieldSchema['removeButton'] = new FieldSchema().deserialize({
       label: 'Remove',
@@ -60,27 +58,6 @@ export class AirportService extends ApiService{
     });
 
     return airportFormFieldSchema as AirportConfigI;
-  }
-
-  mapAirportData(airportFormValue){
-    const pickUpDateTimestamp =  new DateService().convertDateToTimestamp(airportFormValue.pickupDate);
-    const pickupDate = new Date(pickUpDateTimestamp*1000).toISOString();
-    const pickupTime =  this.modifyPickUpData(airportFormValue,pickupDate);
-    let airportData = new AirportAmenity();
-    airportData.airportName = airportFormValue.airportName;
-    airportData.flightNumber = airportFormValue.flightNumber;
-    airportData.pickupTime = pickupTime;
-    airportData.quantity = airportFormValue.quantity;
-    airportData.terminal = airportFormValue.terminal;
-    return airportData;
-  }
-
-  modifyPickUpData(amenityData, arrivalTime){
-    if(amenityData.pickupTime){
-      let arrivalDate = arrivalTime.split('T')[0];
-      let time = moment(amenityData.pickupTime, 'hh:mm').format('hh:mm');
-      return new DateService().convertDateToTimestamp(arrivalDate +'T'+ time);
-    }
   }
 
   validateAirportForm(airportForm: FormGroup) {

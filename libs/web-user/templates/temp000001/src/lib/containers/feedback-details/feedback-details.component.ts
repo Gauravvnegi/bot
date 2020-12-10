@@ -1,7 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
-import { FeedbackDetailsConfigI, FeedBackDetail } from './../../../../../../shared/src/lib/data-models/feedbackDetailsConfig.model';
+import {
+  FeedbackDetailsConfigI,
+  FeedBackDetail,
+} from './../../../../../../shared/src/lib/data-models/feedbackDetailsConfig.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-details',
@@ -33,7 +36,7 @@ export class FeedbackDetailsComponent implements OnInit {
     this.ratingScale = this.ratingScaleRange;
     this.ratingScaleConfig = this.ratingConfig;
     this._feedbackDetailsService.selectedServices = this.suggestionArray;
-    
+
     this.setfeedbackDetails();
   }
 
@@ -48,15 +51,22 @@ export class FeedbackDetailsComponent implements OnInit {
   }
 
   setFieldConfiguration(feedbackText) {
-    return this._feedbackDetailsService.setFieldConfigForFeedbackDetails(feedbackText);
+    return this._feedbackDetailsService.setFieldConfigForFeedbackDetails(
+      feedbackText
+    );
   }
 
   SetHotelServices(event) {
-    let serviceIndex = this.suggestionArray.findIndex(suggestion => suggestion.serviceId === event.id);
-    if(serviceIndex < 0){
-      this.suggestionArray.push({serviceId:event.id, serviceName:event.label});
-    }else{
-      this.suggestionArray.splice(serviceIndex,1);
+    let serviceIndex = this.suggestionArray.findIndex(
+      (suggestion) => suggestion.serviceId === event.id
+    );
+    if (serviceIndex < 0) {
+      this.suggestionArray.push({
+        serviceId: event.id,
+        serviceName: event.label,
+      });
+    } else {
+      this.suggestionArray.splice(serviceIndex, 1);
     }
     this._feedbackDetailsService.selectedServices = this.suggestionArray;
   }
@@ -64,13 +74,17 @@ export class FeedbackDetailsComponent implements OnInit {
   setRating(event) {
     this.rating.patchValue(event);
     let feedbackText;
-    if(event <= this.ratingScale.length/2){
-      this.title = this._feedbackDetailsService.feedbackConfigDS &&
-                    this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.negativeTitle;
+    if (event <= this.ratingScale.length / 2) {
+      this.title =
+        this._feedbackDetailsService.feedbackConfigDS &&
+        this._feedbackDetailsService.feedbackConfigDS.feedBackConfig
+          .negativeTitle;
       feedbackText = 'Tell us what went wrong';
-    }else{
-      this.title = this._feedbackDetailsService.feedbackConfigDS &&
-                    this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.positiveTitle;
+    } else {
+      this.title =
+        this._feedbackDetailsService.feedbackConfigDS &&
+        this._feedbackDetailsService.feedbackConfigDS.feedBackConfig
+          .positiveTitle;
       feedbackText = 'Tell us what did you like';
     }
     this.feedbackDetailsConfig = this.setFieldConfiguration(feedbackText);
@@ -78,27 +92,33 @@ export class FeedbackDetailsComponent implements OnInit {
 
   setfeedbackDetails() {
     if (this.reservationData) {
-      this.addFGEvent.next({ name: 'feedbackDetail', value: this.feedbackDetailsForm });
+      this.addFGEvent.next({
+        name: 'feedbackDetail',
+        value: this.feedbackDetailsForm,
+      });
     }
   }
 
-  onSubmit() {
-    this.feedbackDetailsForm.getRawValue();
-  }
-
   get ratingConfig() {
-    return this._feedbackDetailsService.feedbackConfigDS &&
-    this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.ratingScaleConfig;
+    return (
+      this._feedbackDetailsService.feedbackConfigDS &&
+      this._feedbackDetailsService.feedbackConfigDS.feedBackConfig
+        .ratingScaleConfig
+    );
   }
 
   get hotelServices() {
-    return this._feedbackDetailsService.feedbackConfigDS &&
-    this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.suggestions;
+    return (
+      this._feedbackDetailsService.feedbackConfigDS &&
+      this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.suggestions
+    );
   }
 
   get ratingScaleRange() {
-    return this._feedbackDetailsService.feedbackConfigDS &&
-    this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.ratingScale;
+    return (
+      this._feedbackDetailsService.feedbackConfigDS &&
+      this._feedbackDetailsService.feedbackConfigDS.feedBackConfig.ratingScale
+    );
   }
 
   get rating() {

@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.valid) {
       return;
     }
-    const data = this.loginForm.getRawValue();
+    const data = this.loginForm.value;
     this._authService.login(data).subscribe(
       (response) => {
         this._userDetailService.setLoggedInUserId(response.id);

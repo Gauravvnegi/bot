@@ -1,0 +1,55 @@
+<div>
+  <form [formGroup]="subPackageForm">
+    <h3 class="heading">Enter below details to book {{subPackageForm.get('label').value}}</h3>
+    <div class="wrapper">
+      <div class="wrapper__item">
+        <web-user-input
+          [parentForm]="metaDataForm"
+          [name]="'airportName'"
+          [settings]="airportConfig.airportName"
+        ></web-user-input>
+      </div>
+      <div class="wrapper__item">
+        <web-user-input
+          [parentForm]="metaDataForm"
+          [name]="'terminal'"
+          [settings]="airportConfig.terminal"
+        ></web-user-input>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="wrapper__item width-added">
+        <web-user-input
+          [parentForm]="metaDataForm"
+          [name]="'flightNumber'"
+          [settings]="airportConfig.flightNumber"
+        ></web-user-input>
+      </div>
+      <div class="wrapper__item width-added">
+        <web-user-date-picker
+          [parentForm]="metaDataForm"
+          [name]="'pickupDate'"
+          [settings]="airportConfig.pickupDate"
+          [minDate]="minDate"
+        ></web-user-date-picker>
+      </div>
+      <div class="wrapper__item width-added">
+        <web-user-time-picker
+          [parentForm]="metaDataForm"
+          [name]="'pickupTime'"
+          [settings]="airportConfig.pickupTime"
+        ></web-user-time-picker>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="wrapper__item">
+        <web-user-input
+          [parentForm]="metaDataForm"
+          [name]="'quantity'"
+          [settings]="airportConfig.quantity"
+        ></web-user-input>
+      </div>
+    </div>
+    <h4>Note: Our in house chaffeur will call you on registered number.</h4>
+  </form>
+</div>

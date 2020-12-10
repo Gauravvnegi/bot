@@ -7,6 +7,8 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';
 import { TranslateService } from '@ngx-translate/core';
+import { FormGroup } from '@angular/forms';
+import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -41,6 +43,16 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
    * Function to save/update the health details for the guest on next click
    */
   saveHealthDeclarationDetails() {
+    const status = this._healthDetailsService.validateHealthDecForm(
+      this.parentForm
+    ) as Array<any>;
+
+    if (status.length) {
+      this.performActionIfNotValid(status);
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+      return;
+    }
+
     const dataToBeSaved = this.healthComponent.extractDataFromHealthForm();
     this.$subscription.add(
       this._healthDetailsService
@@ -74,6 +86,30 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
           }
         )
     );
+  }
+
+  private performActionIfNotValid(status: any[]) {
+    const healthDecFG = this.parentForm.get(
+      'healthDeclarationForm'
+    ) as FormGroup;
+    healthDecFG.markAllAsTouched();
+
+    this.$subscription.add(
+      this._translateService
+        .get(`VALIDATION.${status[0].code}`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        })
+    );
+
+    if (get(status[0], ['data', 'index']) >= 0) {
+      this.healthComponent.accordion.closeAll();
+      const allPanels = this.healthComponent.panelList.toArray();
+      allPanels[status[0].data.index].open();
+    } else {
+      this.healthComponent.accordion.openAll();
+    }
+    return;
   }
 
   goBack() {

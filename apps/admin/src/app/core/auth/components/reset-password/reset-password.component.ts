@@ -7,22 +7,20 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 @Component({
   selector: 'admin-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.scss']
+  styleUrls: ['./reset-password.component.scss'],
 })
 export class ResetPasswordComponent implements OnInit {
-
   resetPasswordForm: FormGroup;
-  isPasswordVisible:boolean = false;
+  isPasswordVisible: boolean = false;
   changePasswordToken: string;
-  dataSource = {id:'1234', token:'token_xyz'};
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _snackbarService:SnackBarService,
+    private _snackbarService: SnackBarService,
     private _authService: AuthService
-  ) { 
+  ) {
     this.initResetForm();
   }
 
@@ -30,43 +28,60 @@ export class ResetPasswordComponent implements OnInit {
     this.getChangePasswordToken();
   }
 
-  initResetForm(){
-    this.resetPasswordForm = this._fb.group({
-      password: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(10),]],
-      resetPassword: ['', [
-        Validators.required]],
-    },{
-      validator: this._authService.matchPasswords('password', 'resetPassword')
+  initResetForm() {
+    this.resetPasswordForm = this._fb.group(
+      {
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(10),
+          ],
+        ],
+        resetPassword: ['', [Validators.required]],
+      },
+      {
+        validator: this._authService.matchPasswords(
+          'password',
+          'resetPassword'
+        ),
+      }
+    );
+  }
+
+  getChangePasswordToken() {
+    this._activatedRoute.queryParams.subscribe((params) => {
+      this.changePasswordToken = params['token'];
     });
   }
 
-  getChangePasswordToken(){
-    this._activatedRoute.queryParams.subscribe(params =>{
-      this.changePasswordToken = params['token'];
-    })
-  }
-
-  ResetPassword(){
-    if(!this.resetPasswordForm.valid){
+  resetPassword() {
+    if (!this.resetPasswordForm.valid) {
       return;
     }
-    const password = this.resetPasswordForm.get('password').value;
-    this._authService.changePassword(this.changePasswordToken, password).subscribe(()=>{
-      this._snackbarService.openSnackBarAsText('Reset password successful','',
-        { panelClass: 'success' }
+    const data= {
+      token: this.changePasswordToken,
+      password: this.resetPasswordForm.get('password').value
+    }
+    this._authService
+      .changePassword(data)
+      .subscribe(
+        () => {
+          this._snackbarService.openSnackBarAsText(
+            'Reset password successful',
+            '',
+            { panelClass: 'success' }
+          );
+          this.navigateToLogin();
+        },
+        (error) => {
+          this._snackbarService.openSnackBarAsText(error.error.message);
+        }
       );
-      this.navigateToLogin();
-    },
-    (error)=>{
-      this._snackbarService.openSnackBarAsText(error.error.message);
-    })
   }
 
-  navigateToLogin(){
+  navigateToLogin() {
     this._router.navigate(['/auth/login']);
   }
-
 }

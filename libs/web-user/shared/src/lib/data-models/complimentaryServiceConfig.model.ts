@@ -12,7 +12,9 @@ export class ComplimentaryServiceDetailDS implements Deserializable {
       this.complimentaryService = new Array<ComplimentaryServiceDetail>();
 
       input.forEach(service => {
-         this.complimentaryService.push(new ComplimentaryServiceDetail().deserialize(service));
+        if(service.active){
+          this.complimentaryService.push(new ComplimentaryServiceDetail().deserialize(service));
+        }
       });
       return this;
     }
@@ -24,8 +26,13 @@ export class ComplimentaryServiceDetail implements Deserializable {
     currencyCode: string;
     packageCode: string;
     imgUrl: string;
-    amenityName: string;
-    hotelId: string;
+    description: string;
+    active:boolean;
+    unit:string;
+    hasChild:boolean;
+    source:string;
+    type:string;
+    name: string;
   
     deserialize(input: any) {
       Object.assign(
@@ -33,9 +40,16 @@ export class ComplimentaryServiceDetail implements Deserializable {
         set({}, 'rate',get(input, ['rate'])),
         set({}, 'currencyCode', get(input, ['currency'])),
         set({}, 'packageCode', get(input, ['packageCode'])),
-        set({}, 'amenityName', get(input, ['name'])),
-        set({}, 'hotelId', get(input, ['hotelId'])),
-        set({}, 'imgUrl', get(input, ['imageUrl']))
+        set({}, 'name', get(input, ['name'])),
+        set({}, 'imgUrl', get(input, ['imageUrl'])),
+        set({}, 'description', get(input, ['description'])),
+        set({}, 'active', get(input, ['active'])),
+        set({}, 'unit', get(input, ['unit'])),
+        set({}, 'hasChild', get(input, ['hasChild'])),
+        set({}, 'autoAccept', get(input, ['autoAccept'])),
+        set({}, 'source', get(input, ['source'])),
+        set({}, 'type', get(input, ['type'])),
+        set({}, 'quantity', get(input, ['quantity'])),
       );
       return this;
     }

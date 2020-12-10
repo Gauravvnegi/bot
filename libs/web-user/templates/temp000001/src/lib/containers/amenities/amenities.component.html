@@ -1,4 +1,4 @@
-<div class="">
+<div>
     <form>
         <mat-accordion>
           <mat-expansion-panel #panel>
@@ -12,13 +12,13 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             
-              <hospitality-bot-complimentary-service>
-              </hospitality-bot-complimentary-service>
+              <hospitality-bot-complimentary-amenities
+              [parentForm]="complimentaryServicesForm">
+              </hospitality-bot-complimentary-amenities>
 
-              <hospitality-bot-paid-service
-              [parentForm]="parentForm">
-              </hospitality-bot-paid-service>
-
+              <hospitality-bot-paid-amenities
+              [parentForm]="paidServicesForm">
+              </hospitality-bot-paid-amenities>
             
           </mat-expansion-panel>
         </mat-accordion>

@@ -1,0 +1,34 @@
+@import 'temp000001';
+
+
+.heading {
+  margin-bottom: $margin-medium;
+}
+
+:host ::ng-deep .ngx-timepicker-control__input{
+  background-color: #f8f8f8;
+}
+
+.wrapper {
+  &__item {
+    width: 45%;
+    margin: 5px 0;
+    @media only screen and (max-width: $M) {
+      width: 100%;
+    }
+  }
+
+  @include flex-between-center();
+  @include display-block-on-breakpoint($M);
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: inherit;
+  }
+}
+
+.width-added {
+  width: 31%;
+  @media screen and (max-width: 780px) {
+    width: 100%;
+  }
+}

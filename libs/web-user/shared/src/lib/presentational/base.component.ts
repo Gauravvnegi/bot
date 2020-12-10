@@ -34,6 +34,7 @@ export class BaseComponent
     contentType: '',
     style: {
       fieldSetWrapperStyles: '',
+      fieldParentWrapperStyles: '',
       labelWrapperStyles: '',
       detailLabelStyles: '',
       childLabelStyles: '',
@@ -70,6 +71,7 @@ export class BaseComponent
     floatLabel?: string;
     style?: {
       fieldSetWrapperStyles: '';
+      fieldParentWrapperStyles: '';
       labelWrapperStyles: '';
       childLabelStyles: '';
       detailLabelStyles: '';

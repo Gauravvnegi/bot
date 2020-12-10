@@ -1,17 +1,25 @@
 <div>
-    <form [formGroup]="subPackageForm">
-        <div class="save-button">
-            <h2>Enter below details to book {{subPackageForm.get('label').value}}</h2>
-            <web-user-input
+  <form [formGroup]="subPackageForm">
+    <div>
+      <p class="heading">
+        Enter below details to book {{ subPackageForm.get('label').value }}
+      </p>
+      <div class="wrapper">
+        <div class="wrapper__item">
+          <web-user-input
             [parentForm]="metaDataForm"
             [name]="'quantity'"
             [settings]="defaultAmenityConfig.quantity"
-            ></web-user-input>
-            <web-user-input
+          ></web-user-input>
+        </div>
+        <div class="wrapper__item">
+          <web-user-input
             [parentForm]="metaDataForm"
             [name]="'remarks'"
             [settings]="defaultAmenityConfig.remark"
-            ></web-user-input>
+          ></web-user-input>
         </div>
-    </form>
+      </div>
+    </div>
+  </form>
 </div>

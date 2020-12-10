@@ -7,9 +7,9 @@
 }
 
 :host ::ng-deep .draggable {
-  margin: 3% 0px;
+  margin-top: 3%;
   .slick-track {
-    height: 54vh;
+    height: 49vh;
     min-width: 1300px;
     display: inline-block;
     div:focus {
@@ -155,6 +155,10 @@
       color: $primary-blue;
     }
   }
+}
+
+:host ::ng-deep .slick-dotted.slick-slider{
+  margin-bottom: 0;
 }
 
 :host ::ng-deep .slick-prev {

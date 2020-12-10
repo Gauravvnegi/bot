@@ -24,6 +24,10 @@
   margin-bottom: $margin-medium;
 }
 
+:host ::ng-deep .ngx-timepicker-control__input{
+  background-color: #f8f8f8;
+}
+
 .wrapper {
   &__item {
     width: 45%;

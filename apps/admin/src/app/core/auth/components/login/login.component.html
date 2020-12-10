@@ -2,7 +2,7 @@
   <div class="row">
     <!-- Here header will come -->
   </div>
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
+  <form [formGroup]="loginForm">
     <div class="card">
       <h4 class="card--heading">Login</h4>
       <h3 class="card--quote">Welcome to BOTSHOT Admin Panel</h3>
@@ -79,16 +79,8 @@
         >
       </div>
       <div class="card-footer">
-        <button class="login" mat-button>Login</button>
+        <button class="login" mat-button (click)="login()">Login</button>
       </div>
     </div>
   </form>
-
-  <!-- <div class="footer">
-    <div class="links">
-      <a href="#">About Us</a>
-      <a href="#">Privacy</a>
-    </div>
-    <p>&copy;&nbsp;2020,Botshot. All Rights Reserved</p>
-  </div> -->
 </div>

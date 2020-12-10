@@ -1,5 +1,5 @@
 <div>
-  <h3>What would you like to book for special amenities ?</h3>
+    <h3>What would you like to book for special amenities ?</h3>
   <ngx-slick-carousel
     class="carousel"
     #slickModal="slick-carousel"
@@ -9,12 +9,12 @@
   >
     <div
       ngxSlickItem
-      *ngFor="let slide of slides; trackBy: trackByPackageId"
+      *ngFor="let slide of paidAmenities; trackBy: trackByPackageId"
       class="slide"
     >
       <div
         class="paid__service__data"
-        (click)="servicePackage(slide.packageCode)"
+        (click)="openPackage(slide.packageCode)"
         [ngClass]="{
           active: selectedService === slide.packageCode,
           activated: slide.isSelected
@@ -23,7 +23,6 @@
       >
         <div class="slider__image">
           <img loading="'lazy'" src="{{ slide.imgUrl }}" />
-          <p class="amount">{{ slide.currencyCode }}/{{ slide.rate }}</p>
           <div
             [ngStyle]="
               slide.isSelected ? { display: 'block' } : { display: 'none' }
@@ -43,5 +42,5 @@
       </div>
     </div>
   </ngx-slick-carousel>
-  <ng-container #serviceMetadata> </ng-container>
+  <ng-container #packageRenderer> </ng-container>
 </div>

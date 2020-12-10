@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SpaComponent } from './spa.component';
+import { PackageRendererComponent } from './package-renderer.component';
 
-describe('SpaComponent', () => {
-  let component: SpaComponent;
-  let fixture: ComponentFixture<SpaComponent>;
+describe('PaidServiceComponent', () => {
+  let component: PackageRendererComponent;
+  let fixture: ComponentFixture<PackageRendererComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SpaComponent ]
+      declarations: [ PackageRendererComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SpaComponent);
+    fixture = TestBed.createComponent(PackageRendererComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -19,9 +19,9 @@ export class AirportDetailDS implements Deserializable {
 export class AirportAmenity {
   airportName: string;
   flightNumber: string;
-  pickupTime: number;
+  pickupTime: string;
   pickupDate: string;
-  quantity: string;
+  quantity: number;
   terminal: string;
 
   deserialize(input: any) {
@@ -54,6 +54,5 @@ export interface AirportConfigI {
   pickupTime: FieldSchema;
   quantity: FieldSchema;
   pickupDate: FieldSchema;
-  removeButton: FieldSchema;
 }
   

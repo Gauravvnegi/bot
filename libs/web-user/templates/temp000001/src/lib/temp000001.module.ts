@@ -30,15 +30,13 @@ import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenitie
 import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
-import { BreakfastService } from 'libs/web-user/shared/src/lib/services/breakfast.service';
-import { SpaService } from 'libs/web-user/shared/src/lib/services/spa.service';
-import { CakeService } from 'libs/web-user/shared/src/lib/services/cake.service';
 import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
+import { PaidAmenitiesComponent } from './containers/paid-amenities/paid-amenities.component';
 
 @NgModule({
   imports: [
@@ -58,6 +56,7 @@ import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
     StepperContentRendererDirective,
     TemplateLoaderDirective,
     ButtonDirective,
+    PaidAmenitiesComponent,
   ],
   providers: [
     // {
@@ -90,9 +89,6 @@ import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
     ComplimentaryService,
     PaidService,
     AirportService,
-    BreakfastService,
-    SpaService,
-    CakeService,
     DefaultAmenityService,
     ThankYouService,
   ],

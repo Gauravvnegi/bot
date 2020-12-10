@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AirportPickupComponent } from './airport-pickup.component';
+import { AirportFacilitiesComponent } from './airport-facilities.component';
 
 describe('AirportPickupComponent', () => {
-  let component: AirportPickupComponent;
-  let fixture: ComponentFixture<AirportPickupComponent>;
+  let component: AirportFacilitiesComponent;
+  let fixture: ComponentFixture<AirportFacilitiesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AirportPickupComponent ]
+      declarations: [ AirportFacilitiesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AirportPickupComponent);
+    fixture = TestBed.createComponent(AirportFacilitiesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,26 @@
+<div>
+  
+  <div *ngFor="let subPackageFormGroup of subPackages.controls; let i = index">
+
+    <web-user-checkbox
+    [parentForm]="subPackageFormGroup"
+    [name]="'isSelected'"
+    [settings]="subPackageFieldConfig[i].amenity"
+    (onValueChange)="onSubPackageStatusChange($event)">
+    </web-user-checkbox>
+
+    <img src="{{subPackageFormGroup.get('imgUrl').value}}" class="subPackage_img"/>{{subPackageFormGroup.get("label").value}}
+    {{subPackageFormGroup.get("currencyCode").value}}{{subPackageFormGroup.get("rate").value}}
+  </div>
+  <ng-container #packageMetadata> </ng-container>
+  <div *ngIf="checkForUpdatePossibility">
+    <web-user-button
+      #saveButton
+      buttonTemplateSwitch
+      [settings]="{ label: 'Save' }"
+      [buttonClass]="'next-button'"
+      class="user-button"
+      (click)="onSaveSubPackages()"
+      ></web-user-button> 
+  </div>
+</div>

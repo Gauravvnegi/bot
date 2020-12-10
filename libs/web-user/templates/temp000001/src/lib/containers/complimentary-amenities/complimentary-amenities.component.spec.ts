@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ComplimentaryServiceComponent } from './complimentary-service.component';
+import { ComplimentaryAmenitiesComponent } from './complimentary-amenities.component';
 
 describe('ComplimentaryServiceComponent', () => {
-  let component: ComplimentaryServiceComponent;
-  let fixture: ComponentFixture<ComplimentaryServiceComponent>;
+  let component: ComplimentaryAmenitiesComponent;
+  let fixture: ComponentFixture<ComplimentaryAmenitiesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ComplimentaryServiceComponent ]
+      declarations: [ ComplimentaryAmenitiesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ComplimentaryServiceComponent);
+    fixture = TestBed.createComponent(ComplimentaryAmenitiesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

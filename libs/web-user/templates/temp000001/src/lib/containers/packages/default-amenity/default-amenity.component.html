@@ -1,0 +1,17 @@
+<div>
+    <form [formGroup]="subPackageForm">
+        <div class="save-button">
+            <h2>Enter below details to book {{subPackageForm.get('label').value}}</h2>
+            <web-user-input
+            [parentForm]="metaDataForm"
+            [name]="'quantity'"
+            [settings]="defaultAmenityConfig.quantity"
+            ></web-user-input>
+            <web-user-input
+            [parentForm]="metaDataForm"
+            [name]="'remarks'"
+            [settings]="defaultAmenityConfig.remark"
+            ></web-user-input>
+        </div>
+    </form>
+</div>

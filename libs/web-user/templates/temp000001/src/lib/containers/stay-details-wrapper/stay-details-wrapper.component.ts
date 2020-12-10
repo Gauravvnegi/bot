@@ -23,13 +23,11 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   @Input() stepperIndex;
   @Input() buttonConfig;
 
-  amenities;
+  isAmenityDataAvl: boolean = false;
 
   constructor(
     private _stayDetailService: StayDetailsService,
     private _amenitiesService: AmenitiesService,
-    private _complimentaryService: ComplimentaryService,
-    private _paidService: PaidService,
     private _hotelService: HotelService,
     private _reservationService: ReservationService,
     private _snackBarService: SnackBarService,
@@ -60,13 +58,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
       this._amenitiesService
         .getHotelAmenities(this._hotelService.hotelId)
         .subscribe((response) => {
-          this.amenities = response;
-          this._complimentaryService.initComplimentaryAmenitiesDetailDS(
-            this.amenities && this.amenities.complimentryPackages
-          );
-          this._paidService.initPaidAmenitiesDetailDS(
-            this.amenities && this.amenities.paidPackages,
-            this.reservationData.packages.paidPackages,
+          this.isAmenityDataAvl = true;
+          this._amenitiesService.initAmenitiesDetailDS(
+            response,
             this._stayDetailService.stayDetails.stayDetail.arrivalTime
           );
         })

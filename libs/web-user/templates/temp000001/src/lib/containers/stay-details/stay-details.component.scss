@@ -81,13 +81,36 @@
   margin: 0px 18px;
 }
 
+:host ::ng-deep .adult-type-feild {
+  .mat-form-field-infix {
+    width: 10px;
+  }
+}
+
+:host ::ng-deep .time-picker {
+  .mat__field--heading {
+    display: none;
+  }
+}
+
+:host ::ng-deep .room-type-feild {
+  .input-feild-wrapper {
+    width: 100%;
+  }
+  .mat__field--heading {
+    display: none;
+  }
+  input {
+    padding-left: 0;
+  }
+  .mat__field--wrapper {
+    margin-bottom: 0;
+  }
+}
+
 :host ::ng-deep .input_feild {
   display: flex;
   align-items: center;
-}
-
-:host ::ng-deep .mat-form-field-infix {
-  width: 10px;
 }
 
 :host ::ng-deep .mat__field--heading {

@@ -12,10 +12,10 @@ export class AuthService extends ApiService {
     return this.put(`/api/v1/user/forgot-password`, { email });
   }
 
-  changePassword(changeToken, password) {
+  changePassword(data) {
     return this.put(
-      `/api/v1/user/change-password?token=${changeToken}&password=${password}`,
-      ''
+      `/api/v1/user/change-password`,
+      data
     );
   }
 

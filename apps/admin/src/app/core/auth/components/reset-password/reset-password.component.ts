@@ -60,9 +60,12 @@ export class ResetPasswordComponent implements OnInit {
     if (!this.resetPasswordForm.valid) {
       return;
     }
-    const password = this.resetPasswordForm.get('password').value;
+    const data= {
+      token: this.changePasswordToken,
+      password: this.resetPasswordForm.get('password').value
+    }
     this._authService
-      .changePassword(this.changePasswordToken, password)
+      .changePassword(data)
       .subscribe(
         () => {
           this._snackbarService.openSnackBarAsText(

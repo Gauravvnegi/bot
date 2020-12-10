@@ -25,7 +25,7 @@ import { SubPackageDetailsConfigI } from 'libs/web-user/shared/src/lib/data-mode
 
 const componentMapping = {
   'AIRPORT P/UP': AirportFacilitiesComponent,
-  'AIRPORT DROP': AirportFacilitiesComponent
+  'AIRPORT DROP': AirportFacilitiesComponent,
 };
 
 @Component({
@@ -33,8 +33,8 @@ const componentMapping = {
   templateUrl: './package-renderer.component.html',
   styleUrls: ['./package-renderer.component.scss'],
 })
-export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewInit {
-
+export class PackageRendererComponent
+  implements OnInit, OnDestroy, AfterViewInit {
   @Input() parentForm: FormGroup;
   @Input() slideData;
   @Output() onPackageUpdate = new EventEmitter();
@@ -43,9 +43,9 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
   @ViewChild('saveButton') saveButton;
 
   private $subscription: Subscription = new Subscription();
- 
+
   subPackageFieldConfig: SubPackageDetailsConfigI[] = [];
-  selectedSubPackageArray=[];
+  selectedSubPackageArray = [];
   selectedService = '';
   packageComponentRefObj;
 
@@ -58,36 +58,35 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
     private _resolver: ComponentFactoryResolver,
     private _buttonService: ButtonService,
     private _translateService: TranslateService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.listenForComponentRender();
     this.setSubPackageConfiguration();
-    this.selectedSubPackageArray=[];
+    this.selectedSubPackageArray = [];
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.clearPackageContainer();
-    if(this.packageContainer){
+    if (this.packageContainer) {
       this.checkForSelectedPackage();
       this._changeDetectorRef.detectChanges();
     }
   }
 
   setSubPackageConfiguration() {
-    this.subPackages.controls.forEach(() =>{
+    this.subPackages.controls.forEach(() => {
       this.subPackageFieldConfig.push(this.setFieldConfiguration());
-    })
+    });
   }
 
-  setFieldConfiguration(){
+  setFieldConfiguration() {
     return this._paidService.setFieldConfigForSubPackageDetails();
   }
 
-  checkForSelectedPackage(){
-    this.subPackages.controls.forEach(subPackage =>{
-      if(subPackage.get('isSelected').value === true){
+  checkForSelectedPackage() {
+    this.subPackages.controls.forEach((subPackage) => {
+      if (subPackage.get('isSelected').value === true) {
         this.servicePackage(subPackage.get('packageCode').value);
       }
     });
@@ -100,23 +99,27 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
       component = DefaultAmenityComponent;
     }
     let subPackage;
-    this.subPackages.controls.forEach(control =>{
-      if(control.get('packageCode').value === subPackageCode){
+    this.subPackages.controls.forEach((control) => {
+      if (control.get('packageCode').value === subPackageCode) {
         subPackage = control.value;
       }
-    })
-    this.createComponent(component,subPackage);
+    });
+    this.createComponent(component, subPackage);
   }
 
   createComponent(component, subPackageData) {
     const factory = this._resolver.resolveComponentFactory(component);
-    this.packageComponentRefObj = this.packageContainer.createComponent(factory);
+    this.packageComponentRefObj = this.packageContainer.createComponent(
+      factory
+    );
     this.selectedSubPackageArray.push(subPackageData.packageCode);
     this.addPropsToComponentInstance(subPackageData);
   }
 
   addPropsToComponentInstance(subPackageData) {
-    this.packageComponentRefObj.instance.subPackageForm = this.getSubPackageForm(subPackageData.packageCode);
+    this.packageComponentRefObj.instance.subPackageForm = this.getSubPackageForm(
+      subPackageData.packageCode
+    );
     this.packageComponentRefObj.instance.uniqueData = {
       code: subPackageData.packageCode,
       id: subPackageData.id,
@@ -127,10 +130,10 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
     this.packageComponentRefObj.instance.quantity = subPackageData.quantity;
   }
 
-  getSubPackageForm(packageCode){
+  getSubPackageForm(packageCode) {
     let subPackageForm;
-    this.subPackages.controls.forEach(subPackage =>{
-      if(subPackage.get('packageCode').value === packageCode){
+    this.subPackages.controls.forEach((subPackage) => {
+      if (subPackage.get('packageCode').value === packageCode) {
         subPackageForm = subPackage;
       }
     });
@@ -153,19 +156,23 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
-  onSubPackageStatusChange(data){
-    if(data.currentValue){
+  onSubPackageStatusChange(data) {
+    if (data.currentValue) {
       this.servicePackage(data.formGroup.get('packageCode').value);
-    }else{
-      this.removeComponentFromContainer(data.formGroup.get('packageCode').value);
+    } else {
+      this.removeComponentFromContainer(
+        data.formGroup.get('packageCode').value
+      );
     }
   }
 
-  removeComponentFromContainer(packageCode){
-    let componentIndex = this.selectedSubPackageArray.findIndex(code =>code === packageCode);
-    if(componentIndex >= 0){
+  removeComponentFromContainer(packageCode) {
+    let componentIndex = this.selectedSubPackageArray.findIndex(
+      (code) => code === packageCode
+    );
+    if (componentIndex >= 0) {
       this.packageContainer.remove(componentIndex);
-      this.selectedSubPackageArray.splice(componentIndex,1);
+      this.selectedSubPackageArray.splice(componentIndex, 1);
     }
   }
 
@@ -179,9 +186,8 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
       })
     );
   }
-  
-  onSaveSubPackages(){
 
+  onSaveSubPackages() {
     const status = this._paidService.validatePackageForm(
       this.parentForm
     ) as Array<any>;
@@ -192,21 +198,23 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
       return;
     }
 
-    let packagesToBeAdd =[];
+    let packagesToBeAdd = [];
     let packagesToBeRemove = [];
-    this.subPackages.controls.forEach(subPackage =>{
-      if(subPackage.get('isSelected').value === true){
-        packagesToBeAdd.push(this._paidService.mapDataForAminityAddition(subPackage.value));
-      }else{
-        packagesToBeRemove.push(this._paidService.mapDataForAmenityRemoval(subPackage.get('id').value));
+    this.subPackages.controls.forEach((subPackage) => {
+      if (subPackage.get('isSelected').value === true) {
+        packagesToBeAdd.push(
+          this._paidService.mapDataForAminityAddition(subPackage.value)
+        );
+      } else {
+        packagesToBeRemove.push(
+          this._paidService.mapDataForAmenityRemoval(subPackage.get('id').value)
+        );
       }
-    })
-    this.addAmenity(
-      {
-        packagesToBeAdd:packagesToBeAdd,
-        packagesToBeRemove:packagesToBeRemove
-      }
-    );
+    });
+    this.addAmenity({
+      packagesToBeAdd: packagesToBeAdd,
+      packagesToBeRemove: packagesToBeRemove,
+    });
   }
 
   addAmenity(data) {
@@ -216,25 +224,23 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
         .subscribe(
           (response) => {
             this._paidService.updateAmenitiesDS(response);
-            this._paidService.updateDSForRemovedAmenity(data.packagesToBeRemove);
+            this._paidService.updateDSForRemovedAmenity(
+              data.packagesToBeRemove
+            );
             this.resetSubPackageForm(data.packagesToBeRemove);
-            this.selectedSubPackageArray=[];
+            this.selectedSubPackageArray = [];
             this.selectedService = '';
             this.onPackageUpdate.emit(true);
             this.$subscription.add(
               this._translateService
                 .get('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE')
                 .subscribe((translated_msg) => {
-                  this._snackbarService.openSnackBarAsText(
-                    translated_msg,
-                    '',
-                    { panelClass: 'success' }
-                  );
+                  this._snackbarService.openSnackBarAsText(translated_msg, '', {
+                    panelClass: 'success',
+                  });
                 })
             );
-            this._buttonService.buttonLoading$.next(
-              this.saveButton
-            );
+            this._buttonService.buttonLoading$.next(this.saveButton);
           },
           (error) => {
             this.$subscription.add(
@@ -244,24 +250,22 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
                   this._snackbarService.openSnackBarAsText(translated_msg);
                 })
             );
-            this._buttonService.buttonLoading$.next(
-              this.saveButton
-            );
+            this._buttonService.buttonLoading$.next(this.saveButton);
           }
         )
     );
   }
 
-  resetSubPackageForm(packagesToBeRemove){
-      packagesToBeRemove.forEach(removedPackage =>{
-        this.subPackages.controls.forEach(subPackageForm =>{
-          if(removedPackage.packageId === subPackageForm.get('id').value){
-            if(subPackageForm.get('metaData')){
-              subPackageForm.get('metaData').reset();
-            }
+  resetSubPackageForm(packagesToBeRemove) {
+    packagesToBeRemove.forEach((removedPackage) => {
+      this.subPackages.controls.forEach((subPackageForm) => {
+        if (removedPackage.packageId === subPackageForm.get('id').value) {
+          if (subPackageForm.get('metaData')) {
+            subPackageForm.get('metaData').reset();
           }
-        })
-      })
+        }
+      });
+    });
   }
 
   private performActionIfNotValid(status: any[]) {
@@ -289,23 +293,23 @@ export class PackageRendererComponent implements OnInit, OnDestroy, AfterViewIni
     );
   }
 
-  get subPackages(): FormArray{
-    return this.parentForm.get('subPackages')as FormArray;
+  get subPackages(): FormArray {
+    return this.parentForm.get('subPackages') as FormArray;
   }
 
-  get checkForUpdatePossibility(){
+  get checkForUpdatePossibility() {
     let isUpdatePossible = false;
-    this.slideData.subPackages.forEach(subPackage => {
-      if(subPackage.isSelected === true){
+    this.slideData.subPackages.forEach((subPackage) => {
+      if (subPackage.isSelected === true) {
         isUpdatePossible = true;
       }
     });
 
-    this.subPackages.controls.forEach(subPackage =>{
-      if(subPackage.get('isSelected').value === true){
+    this.subPackages.controls.forEach((subPackage) => {
+      if (subPackage.get('isSelected').value === true) {
         isUpdatePossible = true;
       }
-    })
+    });
     return isUpdatePossible;
   }
 }

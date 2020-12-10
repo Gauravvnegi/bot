@@ -5,16 +5,15 @@ import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/comp
 @Component({
   selector: 'hospitality-bot-complimentary-amenities',
   templateUrl: './complimentary-amenities.component.html',
-  styleUrls: ['./complimentary-amenities.component.scss']
+  styleUrls: ['./complimentary-amenities.component.scss'],
 })
 export class ComplimentaryAmenitiesComponent implements OnInit {
-
   @Input() parentForm;
 
   constructor(
     private _fb: FormBuilder,
     private _complimentaryService: ComplimentaryService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.addComplimentaryServicesToForm();
@@ -22,11 +21,9 @@ export class ComplimentaryAmenitiesComponent implements OnInit {
 
   addComplimentaryServicesToForm() {
     this.hotelComplimentaryAmenities.forEach((service) => {
-      this.parentForm.controls.push(
-        this.getComplimentaryServicesFG()
-      );
+      this.parentForm.controls.push(this.getComplimentaryServicesFG());
     });
-    this.parentForm.patchValue( this.hotelComplimentaryAmenities);
+    this.parentForm.patchValue(this.hotelComplimentaryAmenities);
   }
 
   getComplimentaryServicesFG() {
@@ -37,17 +34,19 @@ export class ComplimentaryAmenitiesComponent implements OnInit {
       packageCode: [''],
       imgUrl: [''],
       name: [''],
-      active:[''],
-      hasChild:[''],
-      description:[''],
-      unit:[''],
-      type:[''],
-      source:['']
+      active: [''],
+      hasChild: [''],
+      description: [''],
+      unit: [''],
+      type: [''],
+      source: [''],
     });
   }
 
-  get hotelComplimentaryAmenities(){
-    return this._complimentaryService.complimentaryAmenities && 
-    this._complimentaryService.complimentaryAmenities.complimentaryService;
+  get hotelComplimentaryAmenities() {
+    return (
+      this._complimentaryService.complimentaryAmenities &&
+      this._complimentaryService.complimentaryAmenities.complimentaryService
+    );
   }
 }

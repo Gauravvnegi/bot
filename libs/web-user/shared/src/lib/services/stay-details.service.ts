@@ -71,11 +71,14 @@ export class StayDetailsService extends ApiService {
     stayDetailsFieldSchema['roomType'] = new FieldSchema().deserialize({
       label: 'Room Type',
       disable: true,
-      options: [
-        { key: 'DELUXE', value: 'DELUXE' },
-        { key: 'LUXURY', value: 'LUXURY' },
-        { key: 'BASE', value: 'BASE' },
-      ],
+      // options: [
+      //   { key: 'DELUXE', value: 'DELUXE' },
+      //   { key: 'LUXURY', value: 'LUXURY' },
+      //   { key: 'BASE', value: 'BASE' },
+      // ],
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
     });
 
     return stayDetailsFieldSchema as StayDetailsConfigI;

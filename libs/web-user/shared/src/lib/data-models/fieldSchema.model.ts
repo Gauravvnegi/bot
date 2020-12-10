@@ -20,6 +20,7 @@ export class FieldSchema implements Deserializable {
   floatLabel?: string;
   style?: {
     fieldSetWrapperStyles: '';
+    fieldParentWrapperStyles: '';
     labelWrapperStyles: '';
     detailLabelStyles: '';
     childLabelStyles: '';

@@ -1,0 +1,18 @@
+.progress-bars {
+	position: relative;
+	width: 174px;
+	height: 174px;
+	transform: rotate(-90deg);
+	.positive-bar {
+		position: absolute;
+	}
+	.negative-bar {
+		position: absolute;
+	}
+	.no-bar {
+		position: absolute;
+	}
+	.mixed-bar {
+		position: absolute;
+	}
+}

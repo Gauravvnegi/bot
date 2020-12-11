@@ -49,7 +49,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   primarydocumentDetailsConfig: DocumentDetailsConfigI;
   secondaryDocumentFieldConfig = [];
-  validFileType = ['pdf', 'png', 'jpg', 'jpeg'];
+  validFileType = ['png', 'jpg', 'jpeg'];
   maxFileSize = '3145728';
   $subscription = new Subscription();
 
@@ -113,17 +113,17 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           this.$subscription.add(
             getDropDownDocType$.subscribe((response) => {
               this.guestDetailsConfig[guest.id] = this.setFieldConfiguration();
-  
+
               this.guestDetailsConfig[guest.id]['documents'] = [];
-  
+
               if (guest.documents.length == response.documentList.length) {
                 let documentFA = this.guestsFA
                   .at(index)
                   .get('documents') as FormArray;
-  
+
                 guest.documents.forEach((document) => {
                   documentFA.push(this.getFileFG());
-  
+
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
                       document.documentType
@@ -137,12 +137,12 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                 let documentFA = this.guestsFA
                   .at(index)
                   .get('documents') as FormArray;
-  
+
                 let uploadedDocs = [];
-  
+
                 guest.documents.forEach((document) => {
                   documentFA.push(this.getFileFG());
-  
+
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
                       document.documentType
@@ -150,25 +150,25 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                   );
                   uploadedDocs.push(document.documentType.toUpperCase());
                 });
-  
+
                 let documentTypes = response.documentList.filter(
                   (doc) => !uploadedDocs.includes(doc)
                 );
-  
+
                 documentTypes.forEach((documentType) => {
                   let documentFA = this.guestsFA
                     .at(index)
                     .get('documents') as FormArray;
-  
+
                   let documentTypeIndex = documentFA.controls.length;
                   documentFA.push(this.getFileFG());
-  
+
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
                       documentType
                     )
                   );
-  
+
                   documentFA
                     .at(documentTypeIndex)
                     .get('documentType')
@@ -178,26 +178,26 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                 let documentTypes = response.documentList.map((doc) =>
                   doc.toUpperCase()
                 );
-  
+
                 documentTypes.forEach((documentType, documentTypeIndex) => {
                   let documentFA = this.guestsFA
                     .at(index)
                     .get('documents') as FormArray;
                   documentFA.push(this.getFileFG());
-  
+
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
                       documentType
                     )
                   );
-  
+
                   documentFA
                     .at(documentTypeIndex)
                     .get('documentType')
                     .patchValue(documentType);
                 });
               }
-  
+
               this.documentDetailsForm.patchValue(
                 this._documentDetailService.documentDetailDS
               );
@@ -215,24 +215,24 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                 const documentsList = this._documentDetailService.setDocumentsList(
                   response.documentList
                 );
-  
+
                 this.guestDetailsConfig[guest.id] = this.setFieldConfiguration(
                   documentsList
                 );
-  
+
                 if (guest.documents.length) {
                   let documentFA = this.guestsFA
                     .at(index)
                     .get('documents') as FormArray;
                   documentFA.push(this.getFileFG());
-  
+
                   this.guestDetailsConfig[guest.id]['documents'] = [
                     this._documentDetailService.setDocumentFileConfig(
                       guest.selectedDocumentType
                     ),
                   ];
                 }
-  
+
                 this.documentDetailsForm.patchValue(
                   this._documentDetailService.documentDetailDS
                 );
@@ -429,11 +429,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               this._translateService
                 .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
                 .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(
-                    translatedMsg,
-                    '',
-                    { panelClass: 'success' }
-                  );
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
                 })
             );
           },

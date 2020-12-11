@@ -64,6 +64,8 @@ export class FileUploadComponent extends BaseComponent {
   }
 
   checkFileType(extension: string) {
-    return this.fileConfig.accept.split(',').includes(`.${extension}`);
+    return this.fileConfig.accept
+      .split(',')
+      .includes(`.${extension.toLowerCase()}`);
   }
 }

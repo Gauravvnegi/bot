@@ -39,7 +39,8 @@ export class FileUploadComponent extends BaseComponent {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
       const file = event.target.files[0];
       const fileSize = event.target.files[0].size;
-      const extension = file.name.split('.')[1];
+      const splitVal = file.name.split('.');
+      const extension = splitVal[splitVal.length - 1];
       if (
         this.checkFileType(extension) &&
         fileSize <= +this.fileConfig.maxFileSize
@@ -64,6 +65,8 @@ export class FileUploadComponent extends BaseComponent {
   }
 
   checkFileType(extension: string) {
-    return this.fileConfig.accept.split(',').includes(`.${extension}`);
+    return this.fileConfig.accept
+      .split(',')
+      .includes(`.${extension.toLowerCase()}`);
   }
 }

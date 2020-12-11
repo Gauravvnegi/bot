@@ -67,7 +67,9 @@
         [dataSource]="dataSource"
       >
         <ng-container matColumnDef="label">
-          <th style="text-align: left;" mat-header-cell *matHeaderCellDef>Description</th>
+          <th style="text-align: left;" mat-header-cell *matHeaderCellDef>
+            Description
+          </th>
           <td mat-cell *matCellDef="let element">
             <div class="room-data">
               <p class="room">{{ element.label }}</p>
@@ -138,8 +140,8 @@
     </div>
     <div class="total__details" *ngIf="this.staySummaryDetails">
       <div class="total__details--manager">
-        <p class="total__details--manager--text">Manager Name</p>
-        <p class="total__details--manager--name">G. Murry</p>
+        <!-- <p class="total__details--manager--text">Manager Name</p>
+        <p class="total__details--manager--name">G. Murry</p> -->
       </div>
       <div class="total__details--amounts">
         <div class="total__details--amounts--wrapper">
@@ -151,7 +153,10 @@
         </div>
         <div class="total__details--amounts--wrapper">
           <p class="label">Total Savings</p>
-          <b class="amount">{{ billSummaryDetails.currency }} 20%</b>
+          <b class="amount"
+            >{{ billSummaryDetails.currency }}
+            {{ billSummaryDetails.totalDiscount }}</b
+          >
         </div>
         <div class="total__details--amounts--wrapper change-color">
           <p class="label">Paid Amount</p>

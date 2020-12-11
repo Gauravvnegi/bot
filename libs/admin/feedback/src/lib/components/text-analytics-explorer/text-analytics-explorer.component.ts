@@ -19,11 +19,11 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       dimension: 84,
       strokeWidth: 4,
       style: `position: absolute;
-      left: 10%;
+      left: 8%;
       top: 0;`
     },
     {
-      title: 'Price',
+      title: 'Payment',
       progress: {
         negative: 5,
         positive: 44,
@@ -33,11 +33,11 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       dimension: 130,
       strokeWidth: 6,
       style: `position: absolute;
-      left: calc(10% + 100px);
+      left: calc(8% + 100px);
       top: -20px;`
     },
     {
-      title: 'Price',
+      title: 'Product',
       progress: {
         negative: 5,
         positive: 44,
@@ -47,11 +47,11 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       dimension: 84,
       strokeWidth: 4,
       style: `    position: absolute;
-      left: calc(10% + 254px);
+      left: calc(8% + 254px);
       top: -60px;`
     },
     {
-      title: 'Price',
+      title: 'Purchase',
       progress: {
         negative: 5,
         positive: 44,
@@ -62,10 +62,10 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       strokeWidth: 6,
       style: `position: absolute;
       top: 110px;
-      left: calc(10% + 60px);`
+      left: calc(8% + 60px);`
     },
     {
-      title: 'Price',
+      title: 'Claims',
       progress: {
         negative: 5,
         positive: 44,
@@ -74,12 +74,12 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       },
       dimension: 174,
       strokeWidth: 8,
-      style: `left: calc(10% + 200px);
+      style: `left: calc(8% + 200px);
       position: absolute;
       top: 125px;`
     },
     {
-      title: 'Price',
+      title: 'Store',
       progress: {
         negative: 5,
         positive: 44,
@@ -88,12 +88,12 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       },
       dimension: 130,
       strokeWidth: 6,
-      style: `left: calc(10% + 360px);
+      style: `left: calc(8% + 360px);
       position: absolute;
       top: 25px;`
     },
     {
-      title: 'Price',
+      title: 'Service',
       progress: {
         negative: 5,
         positive: 44,
@@ -102,12 +102,12 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       },
       dimension: 130,
       strokeWidth: 6,
-      style: `left: 10%;
+      style: `left: 8%;
       position: absolute;
       top: 240px;`
     },
     {
-      title: 'Price',
+      title: 'Cusomer Services',
       progress: {
         negative: 5,
         positive: 44,
@@ -116,12 +116,12 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       },
       dimension: 130,
       strokeWidth: 6,
-      style: `left: calc(10% + 135px);
+      style: `left: calc(8% + 135px);
       position: absolute;
       top: 235px;`
     },
     {
-      title: 'Price',
+      title: 'Sales',
       progress: {
         negative: 5,
         positive: 44,
@@ -130,12 +130,12 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       },
       dimension: 130,
       strokeWidth: 6,
-      style: `left: calc(10% + 270px);
+      style: `left: calc(8% + 270px);
       position: absolute;
       top: 255px;`
     },
     {
-      title: 'Price',
+      title: 'Love',
       progress: {
         negative: 5,
         positive: 44,
@@ -144,7 +144,7 @@ export class TextAnalyticsExplorerComponent implements OnInit {
       },
       dimension: 84,
       strokeWidth: 4,
-      style: `left: calc(10% + 380px);
+      style: `left: calc(8% + 380px);
       position: absolute;
       top: 130px;`
     }

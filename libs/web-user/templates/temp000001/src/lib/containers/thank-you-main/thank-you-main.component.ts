@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { forkJoin, of, Subscription } from 'rxjs';
-import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
-import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { SnackBarService } from 'libs/shared/material/src';
+import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-thank-you',
@@ -15,8 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./thank-you-main.component.scss'],
 })
 export class ThankYouMainComponent implements OnInit {
-
-  isReservationData = false;
+  isReservationData: boolean = false;
   reservationData: ReservationDetails;
   $subscription: Subscription = new Subscription();
   config = {
@@ -25,10 +24,10 @@ export class ThankYouMainComponent implements OnInit {
     description: '',
     emailInfo: {
       icon: 'assets/email_thanku.png',
-      description: ''
+      description: '',
     },
   };
-  headerTitle = '';
+  headerTitle: string = '';
   state: string;
 
   constructor(
@@ -47,35 +46,39 @@ export class ThankYouMainComponent implements OnInit {
 
   private getReservationDetails() {
     this.$subscription.add(
-      this._reservationService.getReservationDetails(
-        this._reservationService.reservationId
-      ).subscribe((reservationData) => {
-        this._hotelService.hotelConfig = reservationData['hotel'];
-        this.isReservationData = true;
-        this.reservationData = reservationData;
-        this._reservationService.reservationData = reservationData;
-        this._templateLoadingService.isTemplateLoading$.next(false);
-        this.getState();
-      })
+      this._reservationService
+        .getReservationDetails(this._reservationService.reservationId)
+        .subscribe((reservationData) => {
+          this._hotelService.hotelConfig = reservationData['hotel'];
+          this.isReservationData = true;
+          this.reservationData = reservationData;
+          this._reservationService.reservationData = reservationData;
+          this._templateLoadingService.isTemplateLoading$.next(false);
+          this.getState();
+        })
     );
   }
 
   explore() {
     this.$subscription.add(
-      this._thankyouService.explore(this._reservationService.reservationId)
-        .subscribe((response) => {
-          if (response.botRedirectUrl) {
-            window.location.href = `https://${response.botRedirectUrl}`;
-          } else {
-            window.location.href = response.websiteUrl;
+      this._thankyouService
+        .explore(this._reservationService.reservationId)
+        .subscribe(
+          (response) => {
+            if (response.botRedirectUrl) {
+              window.location.href = `https://${response.botRedirectUrl}`;
+            } else {
+              window.location.href = response.websiteUrl;
+            }
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackbarService.openSnackBarAsText(translatedMsg);
+              });
           }
-        }, ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translatedMsg) => {
-              this._snackbarService.openSnackBarAsText(translatedMsg);
-            })
-          })
+        )
     );
   }
 
@@ -83,7 +86,7 @@ export class ThankYouMainComponent implements OnInit {
     this.state = this.route.snapshot.queryParamMap.get('state');
     switch (this.state) {
       case 'feedback':
-        this.config.description = "Your feedback is completed successfully";
+        this.config.description = 'Your feedback is completed successfully';
         this.headerTitle = 'Feedback';
         break;
 

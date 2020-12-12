@@ -1,12 +1,15 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Subscription, forkJoin, of } from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
-import { FormArray, FormBuilder } from '@angular/forms';
-import { ReservationService } from '../../../../../../shared/src/lib/services/booking.service';
-import { ReservationDetails } from './../../../../../../shared/src/lib/data-models/reservationDetails';
-import { ParentFormService } from '../../../../../../shared/src/lib/services/parentForm.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
+import {
+  ITemplate,
+  TemplateService,
+} from 'libs/web-user/shared/src/lib/services/template.service';
+import { forkJoin, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -17,10 +20,10 @@ export class MainComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: StepperComponent;
 
-  stepperData;
-  parentForm = new FormArray([]);
+  stepperData: ITemplate;
+  parentForm: FormArray = new FormArray([]);
   reservationData: ReservationDetails;
-  isReservationData = false;
+  isReservationData: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +38,7 @@ export class MainComponent implements OnInit {
     this.registerListeners();
   }
 
-  private getReservationDetails() {
+  private getReservationDetails(): void {
     this.$subscription.add(
       forkJoin(
         this._reservationService.getReservationDetails(
@@ -291,9 +294,9 @@ export class MainComponent implements OnInit {
     return true;
   }
 
-  private initStepperParentFG() {
+  private initStepperParentFG(): void {
     this.stepperData.stepConfigs.forEach((stepConfig) => {
-      const group = this.fb.group({});
+      const group: FormGroup = this.fb.group({});
       this.parentForm.push(group);
     });
   }

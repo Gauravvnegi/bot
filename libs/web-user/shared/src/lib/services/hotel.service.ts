@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class HotelService extends ApiService {
   private _hotelConfig;
   private _currentJourney;
-  private _hotelId;
+  private _hotelId: string;
 
   getCurrentJourneyConfig() {
     return this.hotelConfig && this.hotelConfig.journeys[this.currentJourney];

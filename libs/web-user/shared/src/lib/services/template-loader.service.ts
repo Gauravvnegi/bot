@@ -3,6 +3,5 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TemplateLoaderService {
-  isTemplateLoading$ = new BehaviorSubject(true);
-  constructor() {}
+  isTemplateLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 }

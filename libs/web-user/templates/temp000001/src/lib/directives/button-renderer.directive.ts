@@ -21,12 +21,12 @@ export class ButtonDirective {
     private _buttonService: ButtonService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initButtonConfig();
     this.registerListeners();
   }
 
-  private initButtonConfig() {
+  private initButtonConfig(): void {
     this.config.forEach((config) => {
       const buttonFactoryComponent = this._resolver.resolveComponentFactory(
         ButtonComponent
@@ -44,7 +44,7 @@ export class ButtonDirective {
     });
   }
 
-  private addButtonProps(host: ButtonComponent, config: any) {
+  private addButtonProps(host: ButtonComponent, config: any): void {
     host.settings = config.settings;
     host.buttonClass = config.buttonClass;
   }
@@ -53,7 +53,7 @@ export class ButtonDirective {
     config: any,
     buttonComponentObj: ComponentRef<ButtonComponent>,
     host: ButtonComponent
-  ) {
+  ): void {
     config.settings &&
       config.settings.isClickedTemplateSwitch &&
       this._renderer.listen(
@@ -70,7 +70,7 @@ export class ButtonDirective {
     config: any,
     buttonComponentObj: ComponentRef<ButtonComponent>,
     host: ButtonComponent
-  ) {
+  ): void {
     if (config.click && config.click.fn_name) {
       if (typeof this.context[config.click.fn_name] != 'function') {
         console.error('No function exists in context');
@@ -94,11 +94,11 @@ export class ButtonDirective {
     }
   }
 
-  private registerListeners() {
+  private registerListeners(): void {
     this.listenForButtonLoading();
   }
 
-  private listenForButtonLoading() {
+  private listenForButtonLoading(): void {
     this._buttonService.buttonLoading$.subscribe((buttonComponent) => {
       buttonComponent['isTemplateVisible'] = false;
     });

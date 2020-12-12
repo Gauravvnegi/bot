@@ -4,13 +4,13 @@ import {
   BreakpointState,
 } from '@angular/cdk/layout';
 import {
+  ChangeDetectorRef,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
   Input,
   OnChanges,
   ViewContainerRef,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
@@ -24,7 +24,10 @@ import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wr
 import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
 
-const componentMapping = {
+interface IComponentMap {
+  [key: string]: any;
+}
+const componentMapping: IComponentMap = {
   'stay-details-wrapper': StayDetailsWrapperComponent,
   'guest-details-wrapper': GuestDetailsWrapperComponent,
   'health-declaration-wrapper': HealthDeclarationWrapperComponent,
@@ -53,22 +56,22 @@ export class StepperContentRendererDirective implements OnChanges {
     private _changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.stepperConfig && this.parentForm && this.dataToPopulate) {
       this.renderStepper();
     }
   }
 
-  renderStepper() {
+  private renderStepper(): void {
     this.createStepperFactory();
     this.registerListeners();
   }
 
-  private registerListeners() {
+  private registerListeners(): void {
     this.listenForViewChanged();
   }
 
-  private createStepperFactory() {
+  private createStepperFactory(): void {
     const stepperFactoryComponent = this._resolver.resolveComponentFactory(
       StepperComponent
     );
@@ -78,7 +81,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  private listenForViewChanged() {
+  private listenForViewChanged(): void {
     this._breakpointObserver
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
@@ -99,7 +102,7 @@ export class StepperContentRendererDirective implements OnChanges {
       });
   }
 
-  private setStepperConfig() {
+  private setStepperConfig(): void {
     this._stepperComponentObj.instance.parentForm = this.parentForm;
     this._stepperComponentObj.instance.stepperConfig = this.stepperConfig;
 
@@ -114,7 +117,7 @@ export class StepperContentRendererDirective implements OnChanges {
       this.stepperConfig.stepConfigs && this.stepperConfig.stepConfigs.length;
   }
 
-  private _listenForStepperRenderer() {
+  private _listenForStepperRenderer(): void {
     this._stepperComponentObj.instance.isComponentRendered.subscribe(
       (isRendered: boolean) => {
         if (isRendered && this.dataToPopulate) {
@@ -127,7 +130,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  private createStepperContentComponents() {
+  private createStepperContentComponents(): void {
     this._stepperComponentObj.instance.stepperContent.map(
       (item: ViewContainerRef, index: number) => {
         const componentToRender =
@@ -161,8 +164,8 @@ export class StepperContentRendererDirective implements OnChanges {
   private addPropsToComponentInstance(
     componentObj: ComponentRef<any>,
     props,
-    index
-  ) {
+    index: number
+  ): void {
     componentObj.instance.parentForm = props.formGroup;
     componentObj.instance.reservationData = props.reservationData;
     componentObj.instance.stepperIndex = props.stepperIndex;
@@ -174,7 +177,10 @@ export class StepperContentRendererDirective implements OnChanges {
     //   componentObj.changeDetectorRef.detectChanges();
   }
 
-  private listenForWrapperRendered(componentObj: ComponentRef<any>, index) {
+  private listenForWrapperRendered(
+    componentObj: ComponentRef<any>,
+    index: number
+  ): void {
     try {
       componentObj.instance.isWrapperRendered$.subscribe((val) => {
         this.stepperConfig.stepConfigs.length - 1 == index &&

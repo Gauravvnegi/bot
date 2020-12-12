@@ -34,6 +34,7 @@ import { PaymentMainComponent } from './containers/payment-main/payment-main.com
 import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
 import { SummaryMainComponent } from './containers/summary-main/summary-main.component';
 import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
+import { PaidAmenitiesComponent } from './containers/paid-amenities/paid-amenities.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -94,7 +95,7 @@ export const sharedAuthRoutes: Route[] = [
   providers: [],
 })
 export class Temp000001RoutingModule {
-  static components = [
+  static readonly components = [
     Temp000001Component,
     MainComponent,
     StayDetailsComponent,
@@ -130,5 +131,6 @@ export class Temp000001RoutingModule {
     FeedbackMainComponent,
     SummaryMainComponent,
     ThankYouMainComponent,
+    PaidAmenitiesComponent,
   ];
 }

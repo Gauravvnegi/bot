@@ -1,10 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { StatusComponent } from '../status/status.component';
-import { SummaryComponent } from '../summary/summary.component';
-import { HeaderSummaryComponent } from '../header-summary/header-summary.component';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { Subscription } from 'rxjs';
+import { HeaderSummaryComponent } from '../header-summary/header-summary.component';
 
 @Component({
   selector: 'hospitality-bot-header',
@@ -13,9 +11,8 @@ import { Subscription } from 'rxjs';
 })
 export class HeaderComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
-  @Input() headerName;
-  headerLogo = 'assets/logo.png';
-  status = 'Status:';
+  @Input() headerName: string;
+  headerLogo: string = 'assets/logo.png';
   headerData = {};
   isCustomHeader: boolean = false;
   constructor(
@@ -35,7 +32,7 @@ export class HeaderComponent implements OnInit {
     this.headerName = this.headerName || title;
   }
 
-  openModal() {
+  openModal(): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';

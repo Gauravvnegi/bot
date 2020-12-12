@@ -1,17 +1,19 @@
 import {
+  ChangeDetectorRef,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
   Input,
   OnChanges,
-  OnInit,
   ViewContainerRef,
-  ChangeDetectorRef,
 } from '@angular/core';
-import { TempLoader000001Component } from '../containers/temp-loader000001/temp-loader000001.component';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { TempLoader000001Component } from '../containers/temp-loader000001/temp-loader000001.component';
 
-const componentMapping = {
+interface ITemplateLoader {
+  [key: string]: any;
+}
+const componentMapping: ITemplateLoader = {
   temp000001: TempLoader000001Component,
 };
 
@@ -22,19 +24,19 @@ export class TemplateLoaderDirective implements OnChanges {
   private _loaderCompObj: ComponentRef<any>;
 
   constructor(
-    protected _container: ViewContainerRef,
+    private _container: ViewContainerRef,
     private _resolver: ComponentFactoryResolver,
     private _templateLoadingService: TemplateLoaderService,
     private _changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.templateId && componentMapping[this.templateId]) {
       this.renderLoader();
     }
   }
 
-  renderLoader() {
+  private renderLoader(): void {
     const loaderFactoryComp = this._resolver.resolveComponentFactory(
       componentMapping[this.templateId]
     );
@@ -44,7 +46,7 @@ export class TemplateLoaderDirective implements OnChanges {
     this.listenForLoadingComplete();
   }
 
-  listenForLoadingComplete() {
+  private listenForLoadingComplete(): void {
     this._templateLoadingService.isTemplateLoading$.subscribe(
       (isLoading: boolean) => {
         if (isLoading === false) {

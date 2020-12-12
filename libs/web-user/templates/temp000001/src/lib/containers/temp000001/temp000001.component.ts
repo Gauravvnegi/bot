@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class Temp000001Component implements OnInit, AfterViewInit {
   isLoaderVisible: boolean = true;
-  $subscription = new Subscription();
+  $subscription: Subscription = new Subscription();
 
   constructor(
     public _templateLoadingService: TemplateLoaderService,
@@ -32,16 +32,16 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.registerListeners();
   }
 
-  private initConfig() {
+  private initConfig(): void {
     //this.loadStyle('taj.styles.css');
     this.initTranslationService();
   }
 
-  private initTranslationService() {
+  private initTranslationService(): void {
     this._translateService.use('en-us');
   }
 
-  private registerListeners() {
+  private registerListeners(): void {
     this.$subscription.add(
       this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
         if (isLoading === false) {
@@ -51,12 +51,12 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     );
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.initCssVariables();
   }
 
-  initCssVariables() {
-    let cssText = '';
+  private initCssVariables(): void {
+    let cssText: string = '';
     // this._templateService.templateData.layout_variables = {
     //   '--stepper-background-color': 'blue',
     //   '--header-background-color': 'red',
@@ -75,7 +75,7 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
   }
 
-  loadStyle(styleName: string) {
+  loadStyle(styleName: string): void {
     const head = this.document.getElementsByTagName('head')[0];
     let themeLink = this.document.getElementById(
       'client-theme'
@@ -92,7 +92,7 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 

@@ -36,7 +36,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
-import { PaidAmenitiesComponent } from './containers/paid-amenities/paid-amenities.component';
 
 @NgModule({
   imports: [
@@ -52,11 +51,10 @@ import { PaidAmenitiesComponent } from './containers/paid-amenities/paid-ameniti
     AngularSvgIconModule.forRoot(),
   ],
   declarations: [
-    Temp000001RoutingModule.components,
+    ...Temp000001RoutingModule.components,
     StepperContentRendererDirective,
     TemplateLoaderDirective,
     ButtonDirective,
-    PaidAmenitiesComponent,
   ],
   providers: [
     // {

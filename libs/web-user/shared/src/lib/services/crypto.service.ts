@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { Observable } from 'rxjs';
+
+interface ITokenInfo {
+  templateId: string;
+  expiry: string;
+  journey: string;
+  reservationId: string;
+  hotelId: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class CryptoService extends ApiService {
-  decryptToken(token) {
-    // return of(
-    //   'temp000001*1595995155870&PRECHECKIN$8f7a6be7-d366-43db-b47d-6fcf1a25dbea'
-    // );
+  decryptToken(token): Observable<{ token: string }> {
     return this.post(`/api/v1/reservation/decrypt`, {
       token,
     });
@@ -17,8 +23,12 @@ export class CryptoService extends ApiService {
   //   let originalText = bytes.toString(CryptoJS.enc.Utf8);
   // }
 
-  extractTokenInfo(data) {
-    let templateId, expiry, journey, reservationId, hotelId;
+  extractTokenInfo(data: string): ITokenInfo {
+    let templateId: string,
+      expiry: string,
+      journey: string,
+      reservationId: string,
+      hotelId: string;
 
     [templateId, data] = data.split('*');
     [expiry, data] = data.split('&');

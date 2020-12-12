@@ -19,5 +19,5 @@ export const sharedAuthRoutes: Route[] = [
   providers: [],
 })
 export class WebUserTemplateRendererRoutingModule {
-  static components = [TemplateRendererComponent];
+  static readonly components: any[] = [TemplateRendererComponent];
 }

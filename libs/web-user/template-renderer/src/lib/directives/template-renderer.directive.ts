@@ -1,18 +1,17 @@
-import {
-  Compiler,
-  ComponentRef,
-  Directive,
-  Injector,
-  Input,
-  NgModuleFactory,
-  OnChanges,
-  OnInit,
-  ViewContainerRef,
-} from '@angular/core';
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Directive, Input, OnChanges, ViewContainerRef } from '@angular/core';
+import { ActivatedRoute, Router, Route } from '@angular/router';
 
-const templates = {
+export interface ITemplates {
+  [templateId: string]: ITemplate;
+}
+export interface ITemplate {
+  module: string;
+  component: string;
+  modulePath: () => Promise<any>;
+  componentPath: () => Promise<any>;
+}
+
+const templates: ITemplates = {
   temp000001: {
     module: 'Temp000001Module',
     component: 'Temp000001Component',
@@ -41,11 +40,7 @@ const templates = {
 export class TemplateRendererDirective implements OnChanges {
   @Input() templateId: string;
 
-  constructor(
-    protected _container: ViewContainerRef,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnChanges() {
     if (this.templateId) {
@@ -58,7 +53,7 @@ export class TemplateRendererDirective implements OnChanges {
     const entity = this.route.snapshot.queryParamMap.get('entity');
     const id = this.route.snapshot.queryParamMap.get('id');
 
-    const config = [
+    const config: Route[] = [
       {
         path: '',
         loadChildren: () => {

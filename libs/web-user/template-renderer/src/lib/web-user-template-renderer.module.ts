@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WebUserTemplateRendererRoutingModule } from './web-user-template-renderer-routing.module';
+import { NgModule } from '@angular/core';
 import { TemplateRendererDirective } from './directives/template-renderer.directive';
+import { WebUserTemplateRendererRoutingModule } from './web-user-template-renderer-routing.module';
 
 @NgModule({
   imports: [CommonModule, WebUserTemplateRendererRoutingModule],
   declarations: [
-    WebUserTemplateRendererRoutingModule.components,
+    ...WebUserTemplateRendererRoutingModule.components,
     TemplateRendererDirective,
   ],
 })

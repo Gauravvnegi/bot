@@ -41,10 +41,6 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     this._documentDetailService.initDocumentDetailDS(this.reservationData);
   }
 
-  addFGEvent(data) {
-    this.parentForm.addControl(data.name, data.value);
-  }
-
   /**
    * Function to save/update the documents for all the guests on next click
    */

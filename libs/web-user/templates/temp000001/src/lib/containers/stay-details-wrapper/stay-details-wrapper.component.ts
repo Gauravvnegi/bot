@@ -7,10 +7,7 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import {
-  BaseWrapperComponent,
-  IFGEvent,
-} from '../../base/base-wrapper.component';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 
 export interface IStayDetailsWrapper {
   saveStayDetails(): void;
@@ -51,10 +48,6 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
 
   initStayDetailsDS(): void {
     this._stayDetailService.initStayDetailDS(this.reservationData);
-  }
-
-  addFGEvent(data: IFGEvent): void {
-    this.parentForm.addControl(data.name, data.value);
   }
 
   getHotelAmenities(): void {

@@ -30,10 +30,6 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     this.self = this;
   }
 
-  addFGEvent(data) {
-    this.parentForm.addControl(data.name, data.value);
-  }
-
   /**
    * Function to save/update the health details for the guest on next click
    */

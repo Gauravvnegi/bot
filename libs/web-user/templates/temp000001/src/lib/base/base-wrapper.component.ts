@@ -37,6 +37,10 @@ export class BaseWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isWrapperRendered$.next(true);
   }
 
+  addFGEvent(data: IFGEvent): void {
+    this.parentForm.addControl(data.name, data.value);
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

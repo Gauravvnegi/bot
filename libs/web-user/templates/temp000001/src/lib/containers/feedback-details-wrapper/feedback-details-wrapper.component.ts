@@ -12,8 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './feedback-details-wrapper.component.html',
   styleUrls: ['./feedback-details-wrapper.component.scss'],
 })
-export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
-  implements OnInit {
+export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
   feedBackConfig;
 
   constructor(
@@ -35,10 +34,6 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
 
   initFeedbackConfigDS() {
     this._feedbackDetailsService.initFeedbackConfigDS(this.feedBackConfig);
-  }
-
-  addFGEvent(data) {
-    this.parentForm.addControl(data.name, data.value);
   }
 
   getFeedBackConfig() {

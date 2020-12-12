@@ -16,8 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './guest-details-wrapper.component.html',
   styleUrls: ['./guest-details-wrapper.component.scss'],
 })
-export class GuestDetailsWrapperComponent extends BaseWrapperComponent
-  implements OnInit {
+export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
   @ViewChild('guestDetailsComp')
   guestDetailsComp: GuestDetailsComponent;
 
@@ -41,10 +40,6 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
 
   initGuestDetailsDS() {
     this._guestDetailService.initGuestDetailDS(this.reservationData);
-  }
-
-  addFGEvent(data) {
-    this.parentForm.addControl(data.name, data.value);
   }
 
   /**

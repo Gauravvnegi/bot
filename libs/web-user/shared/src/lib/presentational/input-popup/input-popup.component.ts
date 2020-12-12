@@ -54,7 +54,9 @@ export class InputPopupComponent implements OnInit {
             this._translateService
               .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
               .subscribe((translatedMsg) => {
-                this._snackbar.openSnackBarAsText(translatedMsg);
+                this._snackbar.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
               })
           );
           this.close('success');
@@ -66,7 +68,7 @@ export class InputPopupComponent implements OnInit {
               .subscribe((translatedMsg) => {
                 this._snackbar.openSnackBarAsText(translatedMsg);
               })
-          )
+          );
           this._buttonService.buttonLoading$.next(this.saveButton);
           //this.close('success');
         }
@@ -75,10 +77,10 @@ export class InputPopupComponent implements OnInit {
 
   close(state?) {
     let data;
-    if(state){
-      data = { event: 'close',state: state}
-    }else{
-      data = {event: 'close'}
+    if (state) {
+      data = { event: 'close', state: state };
+    } else {
+      data = { event: 'close' };
     }
     this.dialogRef.close(data);
   }

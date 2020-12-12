@@ -35,10 +35,10 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
       label: 'Flat',
       value: 'FLAT',
     },
-    {
-      label: 'Percent',
-      value: 'PERCENT',
-    },
+    // {
+    //   label: 'Percent',
+    //   value: 'PERCENT',
+    // },
   ];
 
   $subscription = new Subscription();

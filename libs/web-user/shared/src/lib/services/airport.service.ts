@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { AirportConfigI, AirportAmenity, AirportDetailDS } from '../data-models/airportConfig.model';
+import {
+  AirportConfigI,
+  AirportAmenity,
+  AirportDetailDS,
+} from '../data-models/airportConfig.model';
 import { FormGroup } from '@angular/forms';
 
 @Injectable()
-export class AirportService extends ApiService{
-
+export class AirportService extends ApiService {
   private _airportDetailDS: AirportDetailDS;
 
   initAirportDetailDS(airportDetails) {
@@ -24,7 +27,7 @@ export class AirportService extends ApiService{
     airportFormFieldSchema['terminal'] = new FieldSchema().deserialize({
       label: 'Terminal',
       disable: false,
-      placeholder: 'Enter Terminal'
+      placeholder: 'Enter Terminal',
     });
     airportFormFieldSchema['pickupDate'] = new FieldSchema().deserialize({
       label: 'Pickup Date',
@@ -45,12 +48,12 @@ export class AirportService extends ApiService{
     airportFormFieldSchema['flightNumber'] = new FieldSchema().deserialize({
       label: 'Flight No',
       disable: false,
-      placeholder: 'Enter Flight No.'
+      placeholder: 'Enter Flight No.',
     });
     airportFormFieldSchema['quantity'] = new FieldSchema().deserialize({
-      label: 'Quantity',
+      label: 'No. of passengers',
       disable: false,
-      placeholder: 'Quantity'
+      placeholder: 'No. of passengers',
     });
     airportFormFieldSchema['removeButton'] = new FieldSchema().deserialize({
       label: 'Remove',
@@ -66,14 +69,14 @@ export class AirportService extends ApiService{
     if (airportForm.invalid) {
       status.push({
         validity: false,
-        code: "INVALID_FORM",
-        msg: "Invalid form. Please fill all the fields.",
+        code: 'INVALID_FORM',
+        msg: 'Invalid form. Please fill all the fields.',
       });
     }
     return status;
   }
 
-  get airportDetails(){
+  get airportDetails() {
     return this._airportDetailDS;
   }
 }

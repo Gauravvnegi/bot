@@ -13,10 +13,6 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
   styleUrls: ['./bill-summary-details-wrapper.component.scss'],
 })
 export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
   signature: string;
 
   paymentSummary;

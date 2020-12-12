@@ -16,11 +16,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
-
   @ViewChild('documentDetailsComp')
   documentDetailsComp: DocumentsDetailsComponent;
 

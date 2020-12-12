@@ -16,11 +16,6 @@ import { get } from 'lodash';
   styleUrls: ['./health-declaration-wrapper.component.scss'],
 })
 export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
-
   @ViewChild('healthComponent') healthComponent: HealthDeclarationComponent;
 
   constructor(

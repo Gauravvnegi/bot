@@ -28,10 +28,6 @@ import { TranslateService } from '@ngx-translate/core';
 export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
   @ViewChild('matTab') matTab: MatTabGroup;
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
 
   hotelPaymentConfig: HotelPaymentConfig;
   isConfigLoaded: boolean = false;
@@ -126,7 +122,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         }
       } else {
         this.updatePaymentStatus('preCheckin');
-        this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
+        this._buttonService.buttonLoading$.next(
+          this.buttonRefs['submitButton']
+        );
       }
     }
   }
@@ -174,7 +172,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             .subscribe((translatedMsg) => {
               this._snackBarService.openSnackBarAsText(translatedMsg);
             });
-          this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+          this._buttonService.buttonLoading$.next(
+            this.buttonRefs['nextButton']
+          );
         }
       } else {
         this.updatePaymentStatus('checkin');
@@ -206,7 +206,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                 this._translateService
                   .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
                   .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(translatedMsg, '', { panelClass: 'success' });
+                    this._snackBarService.openSnackBarAsText(
+                      translatedMsg,
+                      '',
+                      { panelClass: 'success' }
+                    );
                   })
               );
               this._buttonService.buttonLoading$.next(
@@ -243,15 +247,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   submitWithoutPayment(state) {
     if (state === 'checkin') {
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['nextButton']
-      );
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {
       this.openThankyouPage('');
-        this._buttonService.buttonLoading$.next(
-        this.buttonRefs['submitButton']
-      );
+      this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
     }
   }
 

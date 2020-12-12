@@ -16,11 +16,6 @@ import { Router, ActivatedRoute } from '@angular/router';
   providers: [SummaryService],
 })
 export class SummaryWrapperComponent extends BaseWrapperComponent {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
-
   requestForm: FormGroup;
   summaryConfig: SummaryDetailsConfigI;
   summaryDetails;

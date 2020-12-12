@@ -14,10 +14,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-
   feedBackConfig;
 
   constructor(
@@ -79,11 +75,9 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent
               this._translateService
                 .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
                 .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(
-                    translatedMsg,
-                    '',
-                    { panelClass: 'success' }
-                  );
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
                 })
             );
             this._buttonService.buttonLoading$.next(

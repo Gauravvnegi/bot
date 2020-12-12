@@ -1,15 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
-import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
-import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { TranslateService } from '@ngx-translate/core';
+import {
+  BaseWrapperComponent,
+  IFGEvent,
+} from '../../base/base-wrapper.component';
+
+export interface IStayDetailsWrapper {
+  saveStayDetails(): void;
+}
 
 @Component({
   selector: 'hospitality-bot-stay-details-wrapper',
@@ -17,12 +22,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./stay-details-wrapper.component.scss'],
 })
 export class StayDetailsWrapperComponent extends BaseWrapperComponent
-  implements OnInit {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
-
+  implements IStayDetailsWrapper {
   isAmenityDataAvl: boolean = false;
 
   constructor(
@@ -41,19 +41,23 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.fetchData();
     this.initStayDetailsDS();
+  }
+
+  fetchData(): void {
     this.getHotelAmenities();
   }
 
-  initStayDetailsDS() {
+  initStayDetailsDS(): void {
     this._stayDetailService.initStayDetailDS(this.reservationData);
   }
 
-  addFGEvent(data) {
+  addFGEvent(data: IFGEvent): void {
     this.parentForm.addControl(data.name, data.value);
   }
 
-  getHotelAmenities() {
+  getHotelAmenities(): void {
     this.$subscription.add(
       this._amenitiesService
         .getHotelAmenities(this._hotelService.hotelId)
@@ -68,9 +72,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   /**
-   * Funtion to save/update all the details for guest stay on Next button click
+   * Function to save/update all the details for guest stay on Next button click
    */
-  saveStayDetails() {
+  saveStayDetails(): void {
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(formValue);
 
@@ -94,13 +98,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
               });
-            //  this._snackBarService.openSnackBarAsText(error.message);
           }
         )
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     super.ngOnDestroy();
   }
 }

@@ -18,11 +18,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class GuestDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
-  @Input() parentForm;
-  @Input() reservationData;
-  @Input() stepperIndex;
-  @Input() buttonConfig;
-
   @ViewChild('guestDetailsComp')
   guestDetailsComp: GuestDetailsComponent;
 
@@ -92,7 +87,7 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent
               this.buttonRefs['nextButton']
             );
           }
-        )      
+        )
     );
   }
 

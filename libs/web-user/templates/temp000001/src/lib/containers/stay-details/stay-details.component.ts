@@ -2,17 +2,24 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
-  OnChanges,
 } from '@angular/core';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MomentDateAdapter,
+} from '@angular/material-moment-adapter';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatAccordion } from '@angular/material/expansion';
-import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-import { StayDetailsConfigI } from './../../../../../../shared/src/lib/data-models/stayDetailsConfig.model';
-import { StayDetailsService } from './../../../../../../shared/src/lib/services/stay-details.service';
+import { StayDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
+import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { Subscription } from 'rxjs';
 
 export const MY_FORMATS = {
@@ -35,9 +42,9 @@ export const MY_FORMATS = {
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
 export class StayDetailsComponent implements OnInit, OnChanges {
@@ -59,7 +66,7 @@ export class StayDetailsComponent implements OnInit, OnChanges {
     this.initStayDetailForm();
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.setStayDetails();
   }
 
@@ -68,7 +75,7 @@ export class StayDetailsComponent implements OnInit, OnChanges {
     this.registerListeners();
   }
 
-  initStayDetailForm() {
+  initStayDetailForm(): void {
     this.stayDetailsForm = this._fb.group({
       arrivalTime: ['', [Validators.required]],
       departureTime: ['', [Validators.required]],
@@ -79,11 +86,11 @@ export class StayDetailsComponent implements OnInit, OnChanges {
     });
   }
 
-  setFieldConfiguration() {
+  setFieldConfiguration(): void {
     this.stayDetailsConfig = this._stayDetailService.setFieldConfigForStayDetails();
   }
 
-  setStayDetails() {
+  setStayDetails(): void {
     if (this.reservationData) {
       this.addFGEvent.next({ name: 'stayDetail', value: this.stayDetailsForm });
 
@@ -91,11 +98,11 @@ export class StayDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForStayDetailDSchange();
   }
 
-  listenForStayDetailDSchange() {
+  listenForStayDetailDSchange(): void {
     this.$subscription.add(
       this._stayDetailService.stayDetailDS$.subscribe((value) => {
         this.stayDetailsForm.patchValue(this._stayDetailService.stayDetail);

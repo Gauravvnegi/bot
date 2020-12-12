@@ -40,21 +40,18 @@ export class MainComponent implements OnInit {
 
   private getReservationDetails(): void {
     this.$subscription.add(
-      forkJoin(
-        this._reservationService.getReservationDetails(
-          this._reservationService.reservationId
-        ),
-        of(true)
-      ).subscribe(([reservationData, val]) => {
-        this._hotelService.hotelConfig = reservationData['hotel'];
-        this.isReservationData = true;
-        this.stepperData = this._templateService.templateData;
-        // TO_DO: Remove function call
-        // this.stepperData = this.modifyStepperData(this._templateService.templateData);
-        this.getStepperData();
-        this.reservationData = reservationData;
-        this._reservationService.reservationData = reservationData;
-      })
+      this._reservationService
+        .getReservationDetails(this._reservationService.reservationId)
+        .subscribe((reservationData) => {
+          this._hotelService.hotelConfig = reservationData['hotel'];
+          this.isReservationData = true;
+          this.stepperData = this._templateService.templateData;
+          // TO_DO: Remove function call
+          // this.stepperData = this.modifyStepperData(this._templateService.templateData);
+          this.getStepperData();
+          this.reservationData = reservationData;
+          this._reservationService.reservationData = reservationData;
+        })
     );
   }
 

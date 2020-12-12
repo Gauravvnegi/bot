@@ -11,6 +11,7 @@ import {
   Input,
   OnChanges,
   ViewContainerRef,
+  ComponentFactory,
 } from '@angular/core';
 import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
@@ -23,9 +24,29 @@ import { HealthDeclarationWrapperComponent } from '../containers/health-declarat
 import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
 import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
+import { FormGroup } from '@angular/forms';
 
-interface IComponentMap {
+export interface IComponentMap {
   [key: string]: any;
+}
+
+export interface IComponentProps {
+  formGroup: FormGroup;
+  reservationData: any;
+  stepperIndex: number;
+  buttonConfig: IComponentButton[];
+}
+
+export interface IComponentButton {
+  buttonClass: string;
+  name: string;
+  click: {
+    fn_name: string;
+  };
+  settings: {
+    isClickedTemplateSwitch: boolean;
+    label: string;
+  };
 }
 const componentMapping: IComponentMap = {
   'stay-details-wrapper': StayDetailsWrapperComponent,
@@ -72,7 +93,7 @@ export class StepperContentRendererDirective implements OnChanges {
   }
 
   private createStepperFactory(): void {
-    const stepperFactoryComponent = this._resolver.resolveComponentFactory(
+    const stepperFactoryComponent: ComponentFactory<StepperComponent> = this._resolver.resolveComponentFactory(
       StepperComponent
     );
 
@@ -149,7 +170,7 @@ export class StepperContentRendererDirective implements OnChanges {
           );
 
           const componentObj = item.createComponent(factoryComponent);
-          const props = {
+          const props: IComponentProps = {
             formGroup: this.parentForm.at(index),
             reservationData: this.dataToPopulate,
             stepperIndex: index,
@@ -163,7 +184,7 @@ export class StepperContentRendererDirective implements OnChanges {
 
   private addPropsToComponentInstance(
     componentObj: ComponentRef<any>,
-    props,
+    props: IComponentProps,
     index: number
   ): void {
     componentObj.instance.parentForm = props.formGroup;

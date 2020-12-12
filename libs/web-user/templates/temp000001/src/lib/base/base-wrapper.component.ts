@@ -1,26 +1,43 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  Input,
+} from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+import { IComponentButton } from '../directives/stepper-content-renderer.directive';
 
+export interface IFGEvent {
+  name: string;
+  value: FormGroup;
+}
 @Component({ template: '' })
 export class BaseWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
-  public isWrapperRendered$: Subject<boolean> = new Subject();
+  @Input() parentForm: FormGroup;
+  @Input() reservationData;
+  @Input() stepperIndex: number;
+  @Input() buttonConfig: IComponentButton[];
+
+  protected self: this;
+  protected $subscription: Subscription = new Subscription();
   protected buttonRefs = {};
 
+  public isWrapperRendered$: Subject<boolean> = new Subject();
   public isRendered: boolean = false;
-  protected self: this;
-  protected $subscription = new Subscription();
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.isWrapperRendered();
   }
 
-  isWrapperRendered() {
+  isWrapperRendered(): void {
     this.isWrapperRendered$.next(true);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }

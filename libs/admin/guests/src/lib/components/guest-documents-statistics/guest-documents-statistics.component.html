@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/guest_documents.svg" />
+    </div>
+    <div class="stat-title">Guest Documents</div>
+	</div>
+	<div class="graph-container">
+		<div class="graph">
+			<canvas baseChart style="height: 138px;"
+				[data]="chart.Data"
+				[labels]="chart.Labels"
+				[chartType]="chart.Type"
+				[legend]="chart.Legend"
+				[colors]="chart.Colors"
+				[options]="chart.Options">
+		  </canvas>
+		</div>
+		<div class="labels">
+			<div class="val">401</div>
+			<div class="label">Total Users</div>
+		</div>
+	</div>
+	<div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon initiated"></div>
+				<div class="stat-lable">Initiated</div>
+			</div>
+			<div class="stat-val">161</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon pending"></div>
+				<div class="stat-lable">Pending</div>
+			</div>
+			<div class="stat-val">60</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon accepted"></div>
+				<div class="stat-lable">Accepted</div>
+			</div>
+			<div class="stat-val">180</div>
+		</div>
+		<div class="stat-val-container">
+			<div class="stat-lable-container">
+				<div class="icon rejected"></div>
+				<div class="stat-lable">Rejected</div>
+			</div>
+			<div class="stat-val">84</div>
+		</div>
+	</div>
+</div>

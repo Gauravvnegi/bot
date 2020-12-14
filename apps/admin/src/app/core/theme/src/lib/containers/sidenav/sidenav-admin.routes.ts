@@ -17,6 +17,12 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/Roles_&_Permission.svg',
   },
+  {
+    path: 'guest',
+    title: 'Guest',
+    children: null,
+    url: 'assets/svg/request.svg',
+  },
   // {
   //   path: 'reservation',
   //   title: 'Reservations',

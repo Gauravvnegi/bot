@@ -80,6 +80,9 @@
     },
     "admin-feedback": {
       "tags": []
+    },
+    "admin-guests": {
+      "tags": []
     }
   }
 }

@@ -8,72 +8,28 @@ before_script:
   - ls -l
   - ls | wc -l
 
-deploy to Development-web-user:
+deploy to Stage-web-user:
   stage: deploy
-  #  variables:
-  #    ENVIRONMENT_NAME: development
-  #    TYPE: web-user
-  environment:
-    name: development-web-user
+  environment: stage-web-user
   when: manual
 
-  #  artifacts:
-  #    paths:
-  #      - build/
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$web_user_work_dir"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; ls $web_user_work_dir && netstat -tnlp"
   only:
-    - development
+    - stage
 
-deploy to Development-admin:
+deploy to Stage-admin:
   stage: deploy
-  environment:
-    name: development-admin
+  environment: stage-admin
   when: manual
 
-  #  artifacts:
-  #    paths:
-  #      - build/
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
   only:
-    - development
-#backend_build:
-#  stage: build
-#  when: manual
-#  only:
-#    changes:
-#      - "backend/**/*"
-#  script:
-#    - docker login -u $DOCKER_USER -p $ACCESS_TOKEN $CI_REGISTRY
-#    - cd backend
-#    - docker build -f Dockerfile --tag latest .
-#    - docker push latest
-
-#stages:
-#    - trigger-child-pipelines
-#when: manual
-#web-client:
-#    stage: trigger-child-pipeline
-#    trigger:
-#        include: web-client/.gitlab-ci.yml
-#        strategy: depend
-#    only:
-#        changes:
-#            - web-client/**/*
-
-#.backend-setup:
-#    before_script:
-#        - cd backend
-
-#test:
-#    extends: .backend-setup
-#    stage: test
-#    script:
-#        - mvn test
+    - stage

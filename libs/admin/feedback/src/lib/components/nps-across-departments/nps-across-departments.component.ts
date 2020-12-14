@@ -4,7 +4,10 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 @Component({
   selector: 'hospitality-bot-nps-across-departments',
   templateUrl: './nps-across-departments.component.html',
-  styleUrls: ['./nps-across-departments.component.scss']
+  styleUrls: [
+    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    './nps-across-departments.component.scss'
+  ]
 })
 export class NpsAcrossDepartmentsComponent implements OnInit {
 

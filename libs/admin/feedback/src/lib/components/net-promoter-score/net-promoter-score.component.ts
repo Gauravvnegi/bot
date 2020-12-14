@@ -5,7 +5,10 @@ import { JUL } from '@angular/material/core';
 @Component({
   selector: 'hospitality-bot-net-promoter-score',
   templateUrl: './net-promoter-score.component.html',
-  styleUrls: ['./net-promoter-score.component.scss']
+  styleUrls: [
+    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    './net-promoter-score.component.scss'
+  ]
 })
 export class NetPromoterScoreComponent implements OnInit {
 

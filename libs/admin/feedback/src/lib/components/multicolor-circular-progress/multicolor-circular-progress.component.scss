@@ -16,3 +16,21 @@
 		position: absolute;
 	}
 }
+
+.label {
+	position: absolute;
+	// bottom: 0;
+	transform: rotate(90deg);
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 174px;
+	width: 174px;
+	div {
+		font: normal normal normal 10px/13px Roboto;
+		letter-spacing: 0.6px;
+		color: #002046;
+		opacity: 1;
+	}
+}

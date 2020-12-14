@@ -18,6 +18,8 @@ export class MulticolorCircularProgressComponent implements OnInit {
     strokeWidth: 8
   };
 
+  labelDimension;
+
   @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
   @ViewChild('canvas1', { static: true }) canvas1: ElementRef<HTMLCanvasElement>;
   @ViewChild('canvas2', { static: true }) canvas2: ElementRef<HTMLCanvasElement>;
@@ -27,6 +29,7 @@ export class MulticolorCircularProgressComponent implements OnInit {
   ngOnInit(): void {
     if (this.settings && this.canvas) {
       this.drawArcs();
+      this.labelDimension = `height: ${this.settings.dimension}px; width: ${this.settings.dimension}px;`;
     }
   }
 

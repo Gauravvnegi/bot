@@ -37,10 +37,10 @@ export class FeedBackDetail implements Deserializable {
       set({}, 'ratingScaleConfig', get(input, ['ratingScaleConfig']))
     );
 
-    this.suggestions.length>0 &&
-    this.suggestions.forEach((suggestion) => {
-      suggestion.id = `SER${Math.random().toString(36).substring(7)}`;
-    });
+    // this.suggestions.length > 0 &&
+    //   this.suggestions.forEach((suggestion) => {
+    //     suggestion.id = `SER${Math.random().toString(36).substring(7)}`;
+    //   });
     return this;
   }
 }
@@ -61,7 +61,7 @@ export interface Suggestion {
   id: string;
 }
 
-export class FeedbackData{
+export class FeedbackData {
   guestId: string;
   rating: number;
   comments: string;

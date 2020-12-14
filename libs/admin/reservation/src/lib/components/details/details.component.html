@@ -187,13 +187,19 @@
         </ng-container>
         <p class="text">Reg card</p>
       </button>
-      <button class="check-button">
+      <button (click)="downloadHealthcard(details.healDeclarationDetails.url)" class="check-button">
         <ng-container [ngSwitch]="healthCardDetailsFG.get('status').value">
-          <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix
+          <mat-icon
+            *ngSwitchCase="'COMPLETED'"
+            class="material-icons"
+            matSuffix
             >check_circle</mat-icon
           >
 
-          <mat-icon *ngSwitchCase="'FAILED'" class="material-icons" matSuffix
+          <mat-icon
+            *ngSwitchCase="'FAILED'"
+            class="material-icons"
+            matSuffix
             >disabled_by_default</mat-icon
           >
 
@@ -201,7 +207,10 @@
             >help</mat-icon
           >
 
-          <mat-icon *ngSwitchCase="'INITIATED'" class="material-icons" matSuffix
+          <mat-icon
+            *ngSwitchCase="'INITIATED'"
+            class="material-icons"
+            matSuffix
             >help</mat-icon
           >
 

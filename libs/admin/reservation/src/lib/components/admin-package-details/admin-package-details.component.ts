@@ -14,6 +14,7 @@ import { AirportPickupComponent } from '../packages/airport-pickup/airport-picku
 
 const componentPackageMapping = {
   'AIRPORT P/UP': AirportPickupComponent,
+  'AIRPORT DROP': AirportPickupComponent,
 };
 
 @Component({

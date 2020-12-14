@@ -292,6 +292,18 @@ export class DetailsComponent implements OnInit, OnChanges {
     }
   }
 
+  downloadHealthcard(healthCardUrl) {
+    if (healthCardUrl) {
+      FileSaver.saveAs(
+        healthCardUrl,
+        'healthCard' +
+          this.reservationDetailsFG.get('bookingNumber').value +
+          new Date().getTime() +
+          '.pdf'
+      );
+    }
+  }
+
   sendInvoice() {}
 
   confirmAndNotifyCheckin() {

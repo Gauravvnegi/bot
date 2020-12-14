@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DefaultPackageComponent } from '../default-package/default-package.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from '../../../services/reservation.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -17,7 +18,8 @@ export class AirportPickupComponent extends DefaultPackageComponent
   constructor(
     private _fb: FormBuilder,
     protected snackBarService: SnackBarService,
-    protected reservationService: ReservationService
+    protected reservationService: ReservationService,
+    private dateService: DateService
   ) {
     super(snackBarService, reservationService);
   }
@@ -28,7 +30,16 @@ export class AirportPickupComponent extends DefaultPackageComponent
 
   addMetaData() {
     this.paidAmenityFG.addControl('metaData', this.getAirportPickupFG());
-    this.paidAmenityFG.patchValue({ metaData: this.config.metaData });
+
+    this.paidAmenityFG.patchValue({
+      metaData: {
+        ...this.config.metaData,
+        pickupTime: this.dateService.convertTimestampToDate(
+          this.config.metaData.pickupTime * 1000,
+          'DD-MM-YYYY hh:mm a'
+        ),
+      },
+    });
   }
 
   getAirportPickupFG() {
@@ -37,6 +48,7 @@ export class AirportPickupComponent extends DefaultPackageComponent
       terminal: [''],
       flightNumber: [''],
       quantity: [''],
+      pickupTime: [''],
     });
   }
 

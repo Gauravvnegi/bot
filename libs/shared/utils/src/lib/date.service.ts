@@ -43,4 +43,8 @@ export class DateService {
   getCurrentTimeZone() {
     return moment().format('Z');
   }
+
+  getDateFromTimeStamp(inputTimeStamp, format = 'DD-MM-YYYY') {
+    return moment(inputTimeStamp).format(format);
+  }
 }

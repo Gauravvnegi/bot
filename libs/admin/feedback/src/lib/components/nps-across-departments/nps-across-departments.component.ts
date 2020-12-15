@@ -33,22 +33,22 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     },
   ];
 
-  slideConfig = {
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    dots: true,
-    infinite: true,
-    speed: 100,
-    autoplay: true,
-    responsive: [
-      {
-        breakpoint: 500,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
+  // slideConfig = {
+  //   slidesToShow: 5,
+  //   arrows:true,
+  //   slidesToScroll: 1,
+  //   infinite: false,
+  //   speed: 100,
+  //   autoplay: false,
+  //   responsive: [
+  //     {
+  //       breakpoint: 500,
+  //       settings: {
+  //         slidesToShow: 1,
+  //       },
+  //     },
+  //   ],
+  // };
 
   progressValues = [
     {
@@ -84,6 +84,27 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       progress: {
         negative: 50,
         positive: 60,
+      }
+    },
+    {
+      title: 'Reservation',
+      progress: {
+        negative: 90,
+        positive: 20,
+      }
+    },
+    {
+      title: 'Reservation',
+      progress: {
+        negative: 90,
+        positive: 20,
+      }
+    },
+    {
+      title: 'Reservation',
+      progress: {
+        negative: 90,
+        positive: 20,
       }
     },
     // {

@@ -14,6 +14,19 @@
   }
 }
 
+
+
+.carousel-box {
+  display: flex;
+  overflow: auto;
+  overflow-x: scroll;
+  width: 75vw;
+  white-space: nowrap;
+  .slide {
+    margin-right: 3rem;
+  }
+}
+
 .header {
   display: flex;
   align-items: center;

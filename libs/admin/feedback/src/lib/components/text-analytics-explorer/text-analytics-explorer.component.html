@@ -1,151 +1,125 @@
 <div class="container">
-	<div class="header">
-		<div class="title-container">
-			<div class="icon">
-				<img src="assets/svg/text_analytics.svg" />
-			</div>
-			<div class="stat-title">Text Analysis Explorer</div>
-        </div>
-        <div class="date-container">
-            <div class="label">11 JUL-14 NOV</div>
-        </div>
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/text_analytics.svg" />
+      </div>
+      <div class="stat-title">Text Analysis Explorer</div>
     </div>
-    <div class="divider"></div>
-    <div class="body">
-        <div class="graph-container">
-            <div class="title">All Topics</div>
-            <div class="body">
-                <hospitality-bot-multicolor-circular-progress
-                    *ngFor="let progress of progressValues"
-                    [settings]="progress" [style]="progress.style"></hospitality-bot-multicolor-circular-progress>
-            </div>
-        </div>
-        <div class="details-container">
-            <div style="display: flex; align-items: center;">
-                <div style="display: flex; width: 50%;">
-                    <div style="font: normal normal bold 33px/39px Roboto;
-                    letter-spacing: 1.98px;
-                    color: #0BB2D4;
-                    padding-right: 3px;
-                    opacity: 1;">44%</div>
-                    <div>
-                        <div style="font: normal normal medium 14px/17px Roboto;
-                        letter-spacing: 0.84px;
-                        color: #6D7580;
-                        opacity: 1;">Positive</div>
-                        <div style="font: normal normal normal 12px/14px Roboto;
-                        letter-spacing: 0.72px;
-                        color: #6D7580;
-                        opacity: 1;">12,312 Records</div>
-                    </div>
-                </div>
-                <div style="display: flex; width: 50%;">
-                    <div style="font: normal normal bold 33px/39px Roboto;
-                    letter-spacing: 1.98px;
-                    color: #F4226B;
-                    padding-right: 3px;
-                    opacity: 1;">5%</div>
-                    <div>
-                        <div style="font: normal normal medium 14px/17px Roboto;
-                        letter-spacing: 0.84px;
-                        color: #6D7580;
-                        opacity: 1;">Negative</div>
-                        <div style="font: normal normal normal 12px/14px Roboto;
-                        letter-spacing: 0.72px;
-                        color: #6D7580;
-                        opacity: 1;">12,312 Records</div>
-                    </div>
-                </div>
-            </div>
-            <div style="display: flex; align-items: center; margin: 10px 0">
-                <div style="display: flex; align-items: center; padding-right: 20px;">
-                        <div style="font: normal normal bold 14px/17px Roboto;
-                        letter-spacing: 0.84px;
-                        color: #3E8EF7;
-                        padding-right: 3px;
-                        opacity: 1;">42%</div>
-                        <div style="font: normal normal medium 14px/17px Roboto;
-                        letter-spacing: 0.84px;
-                        color: #6D7580;
-                        opacity: 1;">No Opinion</div>
-                </div>
-                <div style="display: flex; align-items: center;">
-                        <div style="font: normal normal bold 14px/17px Roboto;
-                        letter-spacing: 0.84px;
-                        color: #FAA700;
-                    padding-right: 3px;
-                        opacity: 1;">9%</div>
-                        <div style="font: normal normal medium 14px/17px Roboto;
-                        letter-spacing: 0.84px;
-                        color: #6D7580;
-                        opacity: 1;">Mixed Opinion</div>
-                </div>
-            </div>
-            <div style="font: normal normal medium 14px/17px Roboto;
-            letter-spacing: 0.84px;
-            color: #6D7580;
-            margin-top: 20px;
-            opacity: 1;">Statements</div>
-            <div style="border: 1px solid #DCDDE6;
-            margin-top: 5px;
-            width: 100%; 
-            opacity: 1;"></div>
-            <div style="display: flex; margin: 10px 0">
-                <div style="width: 27px;
-                height: 27px;
-                padding-top: 10px;
-                opacity: 1;"><img src="assets/svg/happy.svg" /></div>
-                <div style="width: calc(100% - 27px);
-                font: normal normal normal 12px/20px Roboto;
-                letter-spacing: 0.24px;
-                color: #9A9A9A;
-                padding: 5px;">orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a <span style="font: normal normal bold 12px/20px Roboto;
-letter-spacing: 0.24px;
-color: #6D7580;">galley</span> of type and scrambled it to make a type specimen book. It has surviv..orem Ipsum is simply ith…<span style="font: normal normal normal 12px/20px Roboto;
-letter-spacing: 0.24px;
-color: #3E8EF7;
-cursor: pointer;">More</span></div>
-            </div>
-            <div style="border: 1px solid #DCDDE6;
-            margin-top: 5px;
-            width: 100%; 
-            opacity: 1;"></div>
-            <div style="display: flex; margin: 10px 0">
-                <div style="width: 27px;
-                height: 27px;
-                padding-top: 10px;
-                opacity: 1;"><img src="assets/svg/sceptic.svg" /></div>
-                <div style="width: calc(100% - 27px);
-                font: normal normal normal 12px/20px Roboto;
-                letter-spacing: 0.24px;
-                color: #9A9A9A;
-                padding: 5px;">orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem <span style="font: normal normal bold 12px/20px Roboto;
-letter-spacing: 0.24px;
-color: #6D7580;">Love</span> has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has surviv..orem Ipsum is simply ith…<span style="font: normal normal normal 12px/20px Roboto;
-letter-spacing: 0.24px;
-color: #3E8EF7;
-cursor: pointer;">More</span></div>
-            </div>
-            <div style="border: 1px solid #DCDDE6;
-            margin-top: 5px;
-            width: 100%; 
-            opacity: 1;"></div>
-            <div style="display: flex; margin: 10px 0">
-                <div style="width: 27px;
-                height: 27px;
-                padding-top: 10px;
-                opacity: 1;"><img src="assets/svg/sad.svg" /></div>
-                <div style="width: calc(100% - 27px);
-                font: normal normal normal 12px/20px Roboto;
-                letter-spacing: 0.24px;
-                color: #9A9A9A;
-                padding: 5px;">orem Ipsum is simply dummy text of the printing and typesetting <span style="font: normal normal bold 12px/20px Roboto;
-letter-spacing: 0.24px;
-color: #6D7580;">Service</span> Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has surviv..<span style="font: normal normal normal 12px/20px Roboto;
-letter-spacing: 0.24px;
-color: #3E8EF7;
-cursor: pointer;">More</span></div>
-            </div>
-        </div>
+    <div class="date-container">
+      <div class="label">11 JUL-14 NOV</div>
     </div>
+  </div>
+  <div class="divider"></div>
+  <div class="body">
+    <div class="graph-container">
+      <div class="title">All Topics</div>
+      <div class="body">
+        <hospitality-bot-multicolor-circular-progress
+          *ngFor="let progress of progressValues"
+          [settings]="progress"
+          [style]="progress.style"
+        ></hospitality-bot-multicolor-circular-progress>
+      </div>
+    </div>
+    <div class="details-container">
+      <div class="details-container__records">
+        <div class="details-container__records__box">
+          <p class="records-percentage records-percentage--positive">
+            44%
+          </p>
+          <div class="details-container__records__box__text">
+            <p class="status">
+              Positive
+            </p>
+            <p class="records">
+              12,312 Records
+            </p>
+          </div>
+        </div>
+        <div class="details-container__records__box">
+          <p class="records-percentage records-percentage--negative">
+            5%
+          </p>
+          <div class="details-container__records__box__text">
+            <p class="status">
+              Negative
+            </p>
+            <p class="records">
+              12,312 Records
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="details-container__opinion">
+        <div
+          class="details-container__opinion__box details-container__opinion__box--right-gap"
+        >
+          <p class="opinion-percentage opinion-percentage--no-opinion">
+            42%
+          </p>
+          <p class="opinion-text">
+            No Opinion
+          </p>
+        </div>
+        <div class="details-container__opinion__box">
+          <p class="opinion-percentage opinion-percentage--mixed-opinion">
+            9%
+          </p>
+          <p class="opinion-text">
+            Mixed Opinion
+          </p>
+        </div>
+      </div>
+      <div class="details-container__heading">
+        Statements
+      </div>
+      <div class="details-container__seperator-line"></div>
+      <div class="details-container__statement-box">
+        <div class="details-container__statement-box__image">
+          <img src="assets/svg/happy.svg" />
+        </div>
+        <div class="details-container__statement-box__text">
+          orem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a
+          <span class="bold">galley</span>
+          of type and scrambled it to make a type specimen book. It has
+          surviv..orem Ipsum is simply ith…<span class="more">More</span>
+        </div>
+      </div>
+      <div class="details-container__seperator-line"></div>
+      <div class="details-container__statement-box">
+        <div class="details-container__statement-box__image">
+          <img src="assets/svg/sceptic.svg" />
+        </div>
+        <div class="details-container__statement-box__text">
+          orem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem
+          <span class="bold">Love</span>
+          has been the industry’s standard dummy text ever since the 1500s, when
+          an unknown printer took a galley of type and scrambled it to make a
+          type specimen book. It has surviv..orem Ipsum is simply ith…<span
+            class="more"
+            >More</span
+          >
+        </div>
+      </div>
+      <div class="details-container__seperator-line"></div>
+      <div class="details-container__statement-box">
+        <div class="details-container__statement-box__image">
+          <img src="assets/svg/sad.svg" />
+        </div>
+        <div class="details-container__statement-box__text">
+          orem Ipsum is simply dummy text of the printing and typesetting
+          <span class="bold">Service</span>
+          Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it
+          to make a type specimen book. It has surviv..<span class="more"
+            >More</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

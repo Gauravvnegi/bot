@@ -31,7 +31,7 @@ export class AirportService extends ApiService {
     });
     airportFormFieldSchema['pickupDate'] = new FieldSchema().deserialize({
       label: 'Pickup Date',
-      disable: false,
+      disable: true,
     });
 
     airportFormFieldSchema['pickupTime'] = new FieldSchema().deserialize({

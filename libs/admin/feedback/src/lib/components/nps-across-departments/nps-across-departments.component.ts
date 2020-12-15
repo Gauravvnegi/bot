@@ -62,7 +62,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       title: 'Front Office',
       progress: {
         negative: 50,
-        positive: 25,
+        positive: 40,
       }
     },
     {

@@ -47,7 +47,11 @@ export class TwoWayProgressComponent implements OnInit {
     ctx.lineWidth = 10;
     ctx1.lineWidth = 10;
     ctx3.lineWidth = 10;
-    ctx.strokeStyle="#1AB99F";
+    if (this.settings.progress.positive <= 40) {
+      ctx.strokeStyle = "#4BA0F5";
+    } else {
+      ctx.strokeStyle="#1AB99F";
+    }
     ctx1.strokeStyle="#f2f2f2";
     ctx3.strokeStyle="#EF1D45";
     ctx.stroke();

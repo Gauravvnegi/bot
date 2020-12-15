@@ -23,7 +23,7 @@ export class FaqService extends ApiService {
   }
 
   getFaqs(hotelId: any): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/covid-faqs`);
+    return this.get(`/api/v1/hotel/${hotelId}/covid/faqs`);
   }
 
   get faqDetails() {

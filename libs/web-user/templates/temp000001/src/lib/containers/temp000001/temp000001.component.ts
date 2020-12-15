@@ -10,6 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { Subscription } from 'rxjs';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
@@ -24,6 +26,8 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     private _templateService: TemplateService,
+    private reservationService: ReservationService,
+    private hotelService: HotelService,
     private _translateService: TranslateService
   ) {}
 
@@ -33,8 +37,21 @@ export class Temp000001Component implements OnInit, AfterViewInit {
   }
 
   private initConfig(): void {
+    this.initTemplateConfig();
     //this.loadStyle('taj.styles.css');
     this.initTranslationService();
+  }
+
+  initTemplateConfig() {
+    const {
+      journey,
+      reservationId,
+      hotelId,
+    } = this._templateService.templateConfig;
+
+    this.reservationService.reservationId = reservationId;
+    this.hotelService.currentJourney = journey;
+    this.hotelService.hotelId = hotelId;
   }
 
   private initTranslationService(): void {

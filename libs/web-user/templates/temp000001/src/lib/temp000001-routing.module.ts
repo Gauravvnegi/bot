@@ -92,7 +92,6 @@ export const sharedAuthRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(sharedAuthRoutes)],
   exports: [RouterModule],
-  providers: [],
 })
 export class Temp000001RoutingModule {
   static readonly components = [

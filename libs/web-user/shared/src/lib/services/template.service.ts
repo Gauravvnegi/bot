@@ -6,8 +6,15 @@ export interface ITemplate {
   [key: string]: any;
 }
 
+export interface IConfigData {
+  reservationId: string;
+  journey: string;
+  hotelId: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class TemplateService extends ApiService {
+  templateConfig: IConfigData;
   templateData: ITemplate;
 
   getTemplateData(templateId: string, journey?: string): Observable<ITemplate> {

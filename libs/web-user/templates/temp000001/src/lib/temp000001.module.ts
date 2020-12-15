@@ -36,6 +36,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @NgModule({
   imports: [
@@ -68,6 +70,8 @@ import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    ReservationService,
+    HotelService,
     ParentFormService,
     StepperService,
     StayDetailsService,

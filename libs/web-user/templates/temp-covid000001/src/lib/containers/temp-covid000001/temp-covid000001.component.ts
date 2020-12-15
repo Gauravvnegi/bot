@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TranslateService } from '@ngx-translate/core';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
   selector: 'hospitality-bot-temp-covid000001',
@@ -12,17 +13,28 @@ export class TempCovid000001Component implements OnInit {
   @Input() visibilityHidden = true;
   @Input() config;
 
-  constructor(private _hotelService: HotelService,
-    private _translateService: TranslateService) {}
+  constructor(
+    private _templateService: TemplateService,
+    private _hotelService: HotelService,
+    private _translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
-    this.getHotelConfig();
     this.initConfig();
+    this.getHotelConfig();
   }
 
   private initConfig() {
+    this.initTemplateConfig();
     //this.loadStyle('taj.styles.css');
     this.initTranslationService();
+  }
+
+  initTemplateConfig() {
+    const { journey, hotelId } = this._templateService.templateConfig;
+
+    this._hotelService.currentJourney = journey;
+    this._hotelService.hotelId = hotelId;
   }
 
   private initTranslationService() {

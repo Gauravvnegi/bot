@@ -57,8 +57,6 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
     const dialogRef = this.dialog.open(InputPopupComponent, {
       disableClose: true,
       autoFocus: true,
-      height: '300px',
-      width: '400px',
       data: { pageValue: this.summaryDetails },
     });
 

@@ -4,9 +4,10 @@
   @include flex-justify-center();
 }
 
-// .reg-card-wrapper{
-//   height: 70vh;
-// }
+.reg-card-wrapper{
+  height: 80vh;
+  width: 75vw;
+}
 
 :host ::ng-deep .next-button {
   @include primary-button();

@@ -3,6 +3,8 @@
 
 .popup__wrapper {
   position: relative;
+  width: 50vw;
+  max-height: 41vh;
   .cross {
     position: absolute;
     right: -12px;
@@ -26,6 +28,8 @@
   }
   @media screen and (max-width: 500px) {
     padding: 0 $padding-large;
+    width: auto;
+    min-height: 40vh;
   }
 }
 
@@ -62,6 +66,10 @@
 
 .user-button {
   @include flex-justify-center();
+  margin-top: 1rem;
+  @media screen and (max-width: 600px) {
+    margin-top: 0;
+  }
 }
 
 :host ::ng-deep .mat-raised-button {

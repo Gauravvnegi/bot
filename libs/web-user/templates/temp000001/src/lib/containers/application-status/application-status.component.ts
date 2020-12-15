@@ -97,7 +97,6 @@ export class ApplicationStatusComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '70vw';
     if (this.summaryDetails.guestDetails.primaryGuest.regcardUrl) {
       dialogConfig.data = {
         regcardUrl:

@@ -12,6 +12,9 @@ export interface IConfigData {
   hotelId: string;
 }
 
+/**
+ * @service_usage This service is to be registred in root and not override to any module
+ */
 @Injectable({ providedIn: 'root' })
 export class TemplateService extends ApiService {
   templateConfig: IConfigData;

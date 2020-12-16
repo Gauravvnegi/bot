@@ -10,18 +10,16 @@ interface ITokenInfo {
   hotelId: string;
 }
 
+/**
+ * @service_usage This service is to be registred in root and not override to any module
+ */
 @Injectable({ providedIn: 'root' })
 export class CryptoService extends ApiService {
-  decryptToken(token): Observable<{ token: string }> {
+  decryptToken(token: string): Observable<{ token: string }> {
     return this.post(`/api/v1/reservation/decrypt`, {
       token,
     });
   }
-
-  // decryptToken(token) {
-  //   let bytes = CryptoJS.AES.decrypt(token, 'h85yt8567');
-  //   let originalText = bytes.toString(CryptoJS.enc.Utf8);
-  // }
 
   extractTokenInfo(data: string): ITokenInfo {
     let templateId: string,

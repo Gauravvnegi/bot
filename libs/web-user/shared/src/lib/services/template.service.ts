@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import {
+  ITemplateConfig,
+  ITemplatesData,
+  TemplateCodes,
+} from 'libs/web-user/shared/src/lib/types/template';
 import { Observable } from 'rxjs';
 
 export interface ITemplate {
   [key: string]: any;
-}
-
-export interface IConfigData {
-  reservationId: string;
-  journey: string;
-  hotelId: string;
 }
 
 /**
@@ -17,12 +16,35 @@ export interface IConfigData {
  */
 @Injectable({ providedIn: 'root' })
 export class TemplateService extends ApiService {
-  templateConfig: IConfigData;
-  templateData: ITemplate;
+  private _templateConfig: ITemplateConfig;
+  private _templateData: ITemplatesData;
 
-  getTemplateData(templateId: string, journey?: string): Observable<ITemplate> {
+  getTemplateData(
+    templateId: TemplateCodes,
+    journey?: string
+  ): Observable<ITemplate> {
     return journey
       ? this.get(`/api/v1/cms/template/${templateId}?journey=${journey}`)
       : this.get(`/api/v1/cms/template/${templateId}`);
+  }
+
+  setTemplateData<K extends keyof ITemplatesData>(
+    templateId: K,
+    templateData: ITemplatesData[K]
+  ): ITemplatesData[K] {
+    this._templateData = { [templateId]: templateData };
+    return templateData;
+  }
+
+  set templateConfig(config: ITemplateConfig) {
+    this._templateConfig = config;
+  }
+
+  get templateConfig(): ITemplateConfig {
+    return this._templateConfig;
+  }
+
+  get templateData(): ITemplatesData {
+    return this._templateData;
   }
 }

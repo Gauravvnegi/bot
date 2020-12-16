@@ -36,13 +36,13 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.registerListeners();
   }
 
-  private initConfig(): void {
+  initConfig(): void {
     this.initTemplateConfig();
     //this.loadStyle('taj.styles.css');
     this.initTranslationService();
   }
 
-  initTemplateConfig() {
+  initTemplateConfig(): void {
     const {
       journey,
       reservationId,
@@ -54,11 +54,11 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.hotelService.hotelId = hotelId;
   }
 
-  private initTranslationService(): void {
+  initTranslationService(): void {
     this._translateService.use('en-us');
   }
 
-  private registerListeners(): void {
+  registerListeners(): void {
     this.$subscription.add(
       this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
         if (isLoading === false) {
@@ -79,12 +79,13 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     //   '--header-background-color': 'red',
     //   '--primary-button-background-color': 'red',
     // };
-    for (let stepperLayoutVariable in this._templateService.templateData
-      .layout_variables) {
+    for (let stepperLayoutVariable in this._templateService.templateData[
+      'temp000001'
+    ].layout_variables) {
       cssText +=
         stepperLayoutVariable +
         ':' +
-        this._templateService.templateData.layout_variables[
+        this._templateService.templateData['temp000001'].layout_variables[
           stepperLayoutVariable
         ] +
         ';';
@@ -109,11 +110,11 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
-
   updateTran(lan) {
     this._translateService.use(lan);
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

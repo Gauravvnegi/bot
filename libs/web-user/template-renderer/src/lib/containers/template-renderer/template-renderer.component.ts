@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
 import { CryptoService } from 'libs/web-user/shared/src/lib/services/crypto.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import { TemplateCodes } from 'libs/web-user/shared/src/lib/types/template';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -11,7 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class TemplateRendererComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
-  templateId: string;
+  templateId: TemplateCodes;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,8 +45,9 @@ export class TemplateRendererComponent implements OnInit, OnDestroy {
           reservationId,
           hotelId,
         } = this.cryptoService.extractTokenInfo(token);
-        //can set a general loader
-        this.getTemplateData(templateId, journey);
+        //can set a general loader here
+        //call to fetch template data for the given templateId
+        this.getTemplateData(templateId as TemplateCodes, journey);
         this.templateService.templateConfig = {
           reservationId,
           journey,
@@ -54,13 +57,16 @@ export class TemplateRendererComponent implements OnInit, OnDestroy {
     );
   }
 
-  getTemplateData(templateId: string, journey?: string): void {
+  getTemplateData(templateId: TemplateCodes, journey?: string): void {
     this.$subscription.add(
       this.templateService
         .getTemplateData(templateId, journey)
         .subscribe((response) => {
           this.templateId = response.template_id;
-          this.templateService.templateData = response;
+          this.templateService.setTemplateData(
+            TemplateCode[this.templateId],
+            response
+          );
         })
     );
   }

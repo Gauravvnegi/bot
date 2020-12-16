@@ -57,13 +57,15 @@ export class ApplicationStatusComponent implements OnInit {
   listenForSummaryDetails() {
     this.$subscription.add(
       this._stepperService.stepperSelectedIndex$.subscribe((index) => {
-        if (this._templateService.templateData) {
+        if (this._templateService.templateData['temp000001']) {
           let data;
-          this._templateService.templateData.stepConfigs.find((item, ix) => {
-            if (item.stepperName === 'Summary') {
-              data = ix;
+          this._templateService.templateData['temp000001'].stepConfigs.find(
+            (item, ix) => {
+              if (item.stepperName === 'Summary') {
+                data = ix;
+              }
             }
-          });
+          );
           if (data === index) {
             this.getSummaryDetails();
           }
@@ -100,8 +102,7 @@ export class ApplicationStatusComponent implements OnInit {
     dialogConfig.width = '70vw';
     if (this.summaryDetails.guestDetails.primaryGuest.regcardUrl) {
       dialogConfig.data = {
-        regcardUrl:
-          this.summaryDetails.guestDetails.primaryGuest.regcardUrl,
+        regcardUrl: this.summaryDetails.guestDetails.primaryGuest.regcardUrl,
         signatureImageUrl:
           this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
       };
@@ -111,24 +112,31 @@ export class ApplicationStatusComponent implements OnInit {
       );
     } else {
       this.$subscription.add(
-        this._regCardService.getRegCard(this._reservationService.reservationId).subscribe((res: FileData) => {
-          dialogConfig.data = {
-            regcardUrl:
-              this.summaryDetails.guestDetails.primaryGuest.regcardUrl || res.file_download_url,
-            signatureImageUrl:
-              this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
-          };
-          this._dialogRef = this._modal.openDialog(
-            RegistrationCardComponent,
-            dialogConfig
-          );
-        }, ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translatedMsg) => {
-              this._snackbarService.openSnackBarAsText(translatedMsg);
-            })
-        })
+        this._regCardService
+          .getRegCard(this._reservationService.reservationId)
+          .subscribe(
+            (res: FileData) => {
+              dialogConfig.data = {
+                regcardUrl:
+                  this.summaryDetails.guestDetails.primaryGuest.regcardUrl ||
+                  res.file_download_url,
+                signatureImageUrl:
+                  this.summaryDetails.guestDetails.primaryGuest.signatureUrl ||
+                  '',
+              };
+              this._dialogRef = this._modal.openDialog(
+                RegistrationCardComponent,
+                dialogConfig
+              );
+            },
+            ({ error }) => {
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackbarService.openSnackBarAsText(translatedMsg);
+                });
+            }
+          )
       );
     }
   }

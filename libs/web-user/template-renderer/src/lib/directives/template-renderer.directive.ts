@@ -1,10 +1,11 @@
 import { Directive, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { templateConfig as templates } from '../constants/template-config';
+import { TemplateCodes } from 'libs/web-user/shared/src/lib/types/template';
 
 @Directive({ selector: '[template-renderer]' })
 export class TemplateRendererDirective implements OnChanges {
-  @Input() templateId: string;
+  @Input() templateId: TemplateCodes;
 
   constructor(private router: Router, private route: ActivatedRoute) {}
 

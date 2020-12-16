@@ -45,7 +45,7 @@ export class MainComponent implements OnInit {
         .subscribe((reservationData) => {
           this._hotelService.hotelConfig = reservationData['hotel'];
           this.isReservationData = true;
-          this.stepperData = this._templateService.templateData;
+          this.stepperData = this._templateService.templateData['temp000001'];
           // TO_DO: Remove function call
           // this.stepperData = this.modifyStepperData(this._templateService.templateData);
           this.getStepperData();

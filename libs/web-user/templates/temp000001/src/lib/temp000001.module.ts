@@ -59,11 +59,11 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
     ButtonDirective,
   ],
   providers: [
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: TimezoneInterceptor,
-    //   multi: true,
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TimezoneInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenRetievalInterceptor,

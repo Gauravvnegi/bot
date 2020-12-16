@@ -3,12 +3,12 @@ import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReservationDetails } from '../data-models/reservationDetails';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ReservationService extends ApiService {
   private _reservationId: string;
   private _reservationData;
 
-  getReservationDetails(reservationId): Observable<ReservationDetails> {
+  getReservationDetails(reservationId: string): Observable<ReservationDetails> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
@@ -16,11 +16,11 @@ export class ReservationService extends ApiService {
     return this.post(`/api/v1/reservation/${reservationId}/checkin`, data);
   }
 
-  get reservationId() {
+  get reservationId(): string {
     return this._reservationId;
   }
 
-  set reservationId(reservationId) {
+  set reservationId(reservationId: string) {
     this._reservationId = reservationId;
   }
 

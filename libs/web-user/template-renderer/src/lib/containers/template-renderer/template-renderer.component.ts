@@ -1,66 +1,77 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { CryptoService } from '../../../../../shared/src/lib/services/crypto.service';
-import { TemplateService } from '../../../../../shared/src/lib/services/template.service';
+import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
+import { CryptoService } from 'libs/web-user/shared/src/lib/services/crypto.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import { TemplateCodes } from 'libs/web-user/shared/src/lib/types/template';
+import { Subscription } from 'rxjs';
 
-interface IConfigData {
-  reservationId: string;
-  journey: string;
-  hotelId: string;
-}
 @Component({
   selector: 'hospitality-bot-template-renderer',
   templateUrl: './template-renderer.component.html',
   styleUrls: ['./template-renderer.component.scss'],
 })
-export class TemplateRendererComponent implements OnInit {
-  templateId: string;
-  config: IConfigData;
+export class TemplateRendererComponent implements OnInit, OnDestroy {
+  private $subscription: Subscription = new Subscription();
+  templateId: TemplateCodes;
 
   constructor(
     private route: ActivatedRoute,
     private templateService: TemplateService,
-    private cryptoService: CryptoService,
-    private reservationService: ReservationService,
-    private hotelService: HotelService
+    private cryptoService: CryptoService
   ) {}
 
   ngOnInit(): void {
     const token: string = this.checkForToken();
+    if (!!!token) {
+      //Do something in future
+      console.log('Not a valid token.');
+      return;
+    }
     this.decryptToken(token);
   }
 
-  private checkForToken(): string {
+  checkForToken(): string {
     return this.route.snapshot.queryParamMap.get('token');
   }
 
-  private decryptToken(token: string): void {
-    this.cryptoService.decryptToken(token).subscribe(({ token }) => {
-      const {
-        templateId,
-        expiry,
-        journey,
-        reservationId,
-        hotelId,
-      } = this.cryptoService.extractTokenInfo(token);
-      //can set a general loader
-      //set values in services
-      this.getTemplateData(templateId, journey);
-      this.config = { reservationId, journey, hotelId };
-      this.reservationService.reservationId = reservationId;
-      this.hotelService.currentJourney = journey;
-      this.hotelService.hotelId = hotelId;
-    });
+  decryptToken(token: string): void {
+    this.$subscription.add(
+      this.cryptoService.decryptToken(token).subscribe(({ token }) => {
+        const {
+          templateId,
+          expiry,
+          journey,
+          reservationId,
+          hotelId,
+        } = this.cryptoService.extractTokenInfo(token);
+        //can set a general loader here
+        //call to fetch template data for the given templateId
+        this.getTemplateData(templateId as TemplateCodes, journey);
+        this.templateService.templateConfig = {
+          reservationId,
+          journey,
+          hotelId,
+        };
+      })
+    );
   }
 
-  private getTemplateData(templateId: string, journey?: string): void {
-    this.templateService
-      .getTemplateData(templateId, journey)
-      .subscribe((response) => {
-        this.templateId = response.template_id;
-        this.templateService.templateData = response;
-      });
+  getTemplateData(templateId: TemplateCodes, journey?: string): void {
+    this.$subscription.add(
+      this.templateService
+        .getTemplateData(templateId, journey)
+        .subscribe((response) => {
+          this.templateId = response.template_id;
+          this.templateService.setTemplateData(
+            TemplateCode[this.templateId],
+            response
+          );
+        })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

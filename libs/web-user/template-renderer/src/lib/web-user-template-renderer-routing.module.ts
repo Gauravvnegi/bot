@@ -16,7 +16,6 @@ export const sharedAuthRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(sharedAuthRoutes)],
   exports: [RouterModule],
-  providers: [],
 })
 export class WebUserTemplateRendererRoutingModule {
   static readonly components: any[] = [TemplateRendererComponent];

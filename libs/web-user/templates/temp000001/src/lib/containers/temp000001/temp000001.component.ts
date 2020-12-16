@@ -10,6 +10,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { Subscription } from 'rxjs';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 @Component({
   selector: 'hospitality-bot-temp000001',
   templateUrl: './temp000001.component.html',
@@ -24,6 +26,8 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private document: Document,
     private elementRef: ElementRef,
     private _templateService: TemplateService,
+    private reservationService: ReservationService,
+    private hotelService: HotelService,
     private _translateService: TranslateService
   ) {}
 
@@ -32,16 +36,29 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.registerListeners();
   }
 
-  private initConfig(): void {
+  initConfig(): void {
+    this.initTemplateConfig();
     //this.loadStyle('taj.styles.css');
     this.initTranslationService();
   }
 
-  private initTranslationService(): void {
+  initTemplateConfig(): void {
+    const {
+      journey,
+      reservationId,
+      hotelId,
+    } = this._templateService.templateConfig;
+
+    this.reservationService.reservationId = reservationId;
+    this.hotelService.currentJourney = journey;
+    this.hotelService.hotelId = hotelId;
+  }
+
+  initTranslationService(): void {
     this._translateService.use('en-us');
   }
 
-  private registerListeners(): void {
+  registerListeners(): void {
     this.$subscription.add(
       this._templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
         if (isLoading === false) {
@@ -62,12 +79,13 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     //   '--header-background-color': 'red',
     //   '--primary-button-background-color': 'red',
     // };
-    for (let stepperLayoutVariable in this._templateService.templateData
-      .layout_variables) {
+    for (let stepperLayoutVariable in this._templateService.templateData[
+      'temp000001'
+    ].layout_variables) {
       cssText +=
         stepperLayoutVariable +
         ':' +
-        this._templateService.templateData.layout_variables[
+        this._templateService.templateData['temp000001'].layout_variables[
           stepperLayoutVariable
         ] +
         ';';
@@ -92,11 +110,11 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
-
   updateTran(lan) {
     this._translateService.use(lan);
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

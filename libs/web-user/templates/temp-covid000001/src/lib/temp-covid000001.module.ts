@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
     TempCovid000001Component,
   ],
   providers: [
+    HotelService,
     FaqService,
     SafeMeasuresService,
     RaiseRequestService,

@@ -1,0 +1,209 @@
+@import 'main';
+
+.stat-title {
+	font: normal normal bold 16px/19px Roboto;
+	letter-spacing: 0.96px;
+	color: #002046;
+	opacity: 1;
+}
+
+.stat-val-container {
+  height: 176px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  padding: 3px 0;
+}
+
+.stat-value {
+  text-align: left;
+  font: normal normal bold 25px/33px Roboto;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.stat-val-title {
+  height: 16px;
+  text-align: left;
+  font: normal normal normal 12px/16px Roboto;
+  letter-spacing: 0.72px;
+  color: #c6f0ef;
+  opacity: 1;
+}
+
+.stat-labels-container {
+  height: 35px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  .stat-label {
+    cursor: pointer;
+    height: 28px;
+    align-items: center;
+    opacity: 1;
+    padding: 5px 8px;
+    margin: 0 5px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    .stat-label-title {
+      height: 16px;
+      text-align: left;
+      font: normal normal normal 10px/12px Roboto;
+      letter-spacing: 0.72px;
+      color: #6d7580;
+      opacity: 1;
+      padding-top: 2px;
+      padding-left: 5px;
+    }
+    .out-guest-bubble {
+      width: 14px;
+      height: 14px;
+      background: #4A73FB 0% 0% no-repeat padding-box;
+      border-radius: 2px;
+      opacity: 1;
+    }
+    .departure-bubble {
+      width: 14px;
+      height: 14px;
+      background: #F25E5E 0% 0% no-repeat padding-box;
+      border-radius: 2px;
+      opacity: 1;
+    }
+    .inhouse-bubble {
+      width: 14px;
+      height: 14px;
+      background: #30D8B6 0% 0% no-repeat padding-box;
+      border-radius: 2px;
+      opacity: 1;
+    }
+    .arrival-bubble {
+      width: 14px;
+      height: 14px;
+      background: #FF9F67 0% 0% no-repeat padding-box;
+      border-radius: 2px;
+      opacity: 1;
+    }
+  }
+}
+
+
+.stat-label-content {
+  height: 16px;
+  text-align: right;
+  font: normal normal bold 12px/16px Roboto;
+  letter-spacing: 0.72px;
+  color: #0239cf;
+  opacity: 1;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.labl{
+  margin: 0 1%;
+}
+
+.labl > .image {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid $primary-purple;
+}
+.labl > input {
+  /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.legends:checked ~ p {
+  text-decoration: line-through;
+}
+
+.labl > input + .image {
+  position: relative;
+  cursor: pointer;
+}
+
+.labl > input:checked + .image {
+  background-color: $primary-purple;
+  img {
+    filter: invert(1);
+  }
+}
+
+.pull-right {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.stat-label > input {
+  opacity: 0;
+  position: absolute; /* Remove input from document flow */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// .stat-label > input + span{ /* DIV STYLES */
+//     position: relative;
+//     cursor:pointer;
+// }
+
+.stat-label > input:checked + p {
+  text-decoration: line-through;
+}
+
+// .checkIn-Background {
+//   background-color: #0239cf;
+//   .stat-label-title {
+//     color: white;
+//   }
+//   .checkIn-border {
+//     display: none;
+//   }
+// }
+
+// .express-checkIn-Background {
+//   background-color: #288ad6;
+//   .stat-label-title {
+//     color: white;
+//   }
+//   .checkIn-border {
+//     display: none;
+//   }
+// }
+
+// .checkOut-Background {
+//   background-color: #f2509b;
+//   .stat-label-title {
+//     color: white;
+//   }
+//   .checkout-border {
+//     display: none;
+//   }
+// }
+
+// .express-checkOut-Background {
+//   background-color: #f2809b;
+//   .stat-label-title {
+//     color: white;
+//   }
+//   .checkout-border {
+//     display: none;
+//   }
+// }

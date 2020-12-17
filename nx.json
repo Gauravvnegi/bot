@@ -77,6 +77,15 @@
     },
     "admin-request": {
       "tags": []
+    },
+    "admin-feedback": {
+      "tags": []
+    },
+    "admin-guests": {
+      "tags": []
+    },
+    "admin-packages": {
+      "tags": []
     }
   }
 }

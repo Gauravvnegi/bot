@@ -26,6 +26,16 @@ import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
 import { FormGroup } from '@angular/forms';
 
+enum componentMap {
+  'stay-details-wrapper' = 'stay-details-wrapper',
+  'guest-details-wrapper' = 'guest-details-wrapper',
+  'health-declaration-wrapper' = 'health-declaration-wrapper',
+  'payment-details-wrapper' = 'payment-details-wrapper',
+  'document-details-wrapper' = 'document-details-wrapper',
+  'feedback-details-wrapper' = 'feedback-details-wrapper',
+  'bill-summary-details-wrapper' = 'bill-summary-details-wrapper',
+  'summary-wrapper' = 'summary-wrapper',
+}
 export interface IComponentMap {
   [key: string]: any;
 }
@@ -48,6 +58,7 @@ export interface IComponentButton {
     label: string;
   };
 }
+
 const componentMapping: IComponentMap = {
   'stay-details-wrapper': StayDetailsWrapperComponent,
   'guest-details-wrapper': GuestDetailsWrapperComponent,
@@ -83,16 +94,16 @@ export class StepperContentRendererDirective implements OnChanges {
     }
   }
 
-  private renderStepper(): void {
+  renderStepper(): void {
     this.createStepperFactory();
     this.registerListeners();
   }
 
-  private registerListeners(): void {
+  registerListeners(): void {
     this.listenForViewChanged();
   }
 
-  private createStepperFactory(): void {
+  createStepperFactory(): void {
     const stepperFactoryComponent: ComponentFactory<StepperComponent> = this._resolver.resolveComponentFactory(
       StepperComponent
     );
@@ -102,7 +113,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  private listenForViewChanged(): void {
+  listenForViewChanged(): void {
     this._breakpointObserver
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
@@ -123,7 +134,7 @@ export class StepperContentRendererDirective implements OnChanges {
       });
   }
 
-  private setStepperConfig(): void {
+  setStepperConfig(): void {
     this._stepperComponentObj.instance.parentForm = this.parentForm;
     this._stepperComponentObj.instance.stepperConfig = this.stepperConfig;
 
@@ -138,7 +149,7 @@ export class StepperContentRendererDirective implements OnChanges {
       this.stepperConfig.stepConfigs && this.stepperConfig.stepConfigs.length;
   }
 
-  private _listenForStepperRenderer(): void {
+  _listenForStepperRenderer(): void {
     this._stepperComponentObj.instance.isComponentRendered.subscribe(
       (isRendered: boolean) => {
         if (isRendered && this.dataToPopulate) {
@@ -151,7 +162,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  private createStepperContentComponents(): void {
+  createStepperContentComponents(): void {
     this._stepperComponentObj.instance.stepperContent.map(
       (item: ViewContainerRef, index: number) => {
         const componentToRender =
@@ -182,7 +193,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  private addPropsToComponentInstance(
+  addPropsToComponentInstance(
     componentObj: ComponentRef<any>,
     props: IComponentProps,
     index: number
@@ -198,7 +209,7 @@ export class StepperContentRendererDirective implements OnChanges {
     //   componentObj.changeDetectorRef.detectChanges();
   }
 
-  private listenForWrapperRendered(
+  listenForWrapperRendered(
     componentObj: ComponentRef<any>,
     index: number
   ): void {

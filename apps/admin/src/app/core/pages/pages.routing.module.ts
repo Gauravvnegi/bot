@@ -35,8 +35,8 @@ const appRoutes: Route[] = [
       {
         path: 'package',
         loadChildren: () =>
-          import('@hospitality-bot/admin/special-amenities').then(
-            (m) => m.AdminSpecialAmenitiesModule
+          import('@hospitality-bot/admin/packages').then(
+            (m) => m.AdminPackagesModule
           ),
       },
       {
@@ -51,6 +51,20 @@ const appRoutes: Route[] = [
         loadChildren: () =>
           import('@hospitality-bot/admin/roles-and-permissions').then(
             (m) => m.AdminRolesAndPermissionsModule
+          ),
+      },
+      {
+        path: 'feedbacks',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/feedback').then(
+            (m) => m.AdminFeedbackModule
+          ),
+      },
+      {
+        path: 'guest',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/guests').then(
+            (m) => m.AdminGuestsModule
           ),
       },
       {

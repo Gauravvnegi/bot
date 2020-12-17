@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class HotelService extends ApiService {
   private _hotelConfig;
-  private _currentJourney;
+  private _currentJourney: string;
   private _hotelId: string;
 
   getCurrentJourneyConfig() {
@@ -16,11 +16,11 @@ export class HotelService extends ApiService {
     return this.get(`/api/v1/hotel/${hotelId}`);
   }
 
-  get currentJourney() {
+  get currentJourney(): string {
     return this._currentJourney;
   }
 
-  set currentJourney(currentJourney) {
+  set currentJourney(currentJourney: string) {
     this._currentJourney = currentJourney;
   }
 
@@ -32,15 +32,15 @@ export class HotelService extends ApiService {
     this._hotelConfig = hotelConfig;
   }
 
-  get hotelId() {
+  get hotelId(): string {
     return this._hotelId || (this.hotelConfig && this._hotelConfig.id);
   }
 
-  set hotelId(hotelId) {
+  set hotelId(hotelId: string) {
     this._hotelId = hotelId;
   }
 
-  get healthFormId() {
+  get healthFormId(): string {
     return this._hotelConfig.healthFormId;
   }
 }

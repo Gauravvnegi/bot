@@ -1,0 +1,40 @@
+import { NgModule } from '@angular/core';
+import { Route, RouterModule } from '@angular/router';
+import { EditPackageComponent } from './components/edit-package/edit-package.component';
+import { AdminPackagesWrapperComponent } from './components/admin-packages-wrapper/admin-packages-wrapper.component';
+import { EditCategoryComponent } from './components/edit-category/edit-category.component';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+
+export const adminPackagesRoutes: Route[] = [
+  {
+    path: '',
+    component: ComingSoonComponent,
+  },
+  // {
+  //   path: '',
+  //   component: AdminPackagesWrapperComponent,
+  //   children: [],
+  // },
+  // {
+  //   path: 'amenity',
+  //   component: EditPackageComponent,
+  // },
+  // {
+  //   path: 'amenity/:id',
+  //   component: EditPackageComponent,
+  // },
+  // {
+  //   path: 'category',
+  //   component: EditCategoryComponent,
+  // },
+  // {
+  //   path: 'category/:id',
+  //   component: EditCategoryComponent,
+  // }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(adminPackagesRoutes)],
+  exports: [RouterModule],
+})
+export class AdminPackagesRoutingModule {}

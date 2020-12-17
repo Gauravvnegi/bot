@@ -56,9 +56,7 @@
     margin: 0px 15px;
   }
 
-  .progress-bar{
-    display: flex;
-  }
+  
 
   .dropdown--wrapper {
     display: flex;
@@ -144,6 +142,10 @@
           font: normal normal normal 12px/14px Roboto;
       }
   }
+}
+
+.progress-bar{
+  display: flex;
 }
 
 .label {

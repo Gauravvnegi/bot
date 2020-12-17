@@ -5,7 +5,7 @@
   <div class="upload__box">
     <div class="before-upload">
       <img src="assets/svg/upload.svg" />
-      <p class="upload-label">Upload Passport</p>
+      <p class="upload-label">Upload Image</p>
       <p class="upload-label">Recommended size : 3mb</p>
     </div>
     <img
@@ -24,8 +24,8 @@
       #fileInput
       type="file"
       accept="image/*"
-      [attr.disabled]="true"
       (click)="fileInput.value = null"
+      [attr.disabled]="isDisable ? true : null"
       (change)="onSelectFile($event)"
       class="input-upload"
     />

@@ -1,23 +1,31 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { EditSpecialAmenitiesComponent } from './components/special-amenities/edit-special-amenities.component';
-import { PackageDatatableComponent } from './components/package-datatable/package-datatable.component';
-import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { EditPackageComponent } from './components/edit-package/edit-package.component';
+import { AdminPackagesWrapperComponent } from './components/admin-packages-wrapper/admin-packages-wrapper.component';
+import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 
 export const adminSpecialAmenitiesRoutes: Route[] = [
-  // {
-  //   path: '',
-  //   component: PackageDatatableComponent,
-  //   children: [],
-  // },
   {
     path: '',
-    component: ComingSoonComponent,
+    component: AdminPackagesWrapperComponent,
+    children: [],
   },
-  // {
-  //   path: 'amenity/:id',
-  //   component: EditSpecialAmenitiesComponent,
-  // }
+  {
+    path: 'amenity',
+    component: EditPackageComponent,
+  },
+  {
+    path: 'amenity/:id',
+    component: EditPackageComponent,
+  },
+  {
+    path: 'category',
+    component: EditCategoryComponent,
+  },
+  {
+    path: 'category/:id',
+    component: EditCategoryComponent,
+  }
 ];
 
 @NgModule({

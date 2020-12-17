@@ -1,27 +1,27 @@
-import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { Packages } from '../../data-models/packageConfig.model';
-import { PackageService } from '../../services/package.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
-import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { LazyLoadEvent } from 'primeng/api/public_api';
+import { Observable, Subscription } from 'rxjs';
+import { Categories } from '../../data-models/categoryConfig.model';
+import { CategoriesService } from '../../services/category.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
-  selector: 'hospitality-bot-package-datatable',
-  templateUrl: './package-datatable.component.html',
+  selector: 'hospitality-bot-categories-datatable',
+  templateUrl: './categories-datatable.component.html',
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './package-datatable.component.scss'
-  ],
+    './categories-datatable.component.scss'
+  ]
 })
-export class PackageDatatableComponent extends BaseDatatableComponent {
+export class CategoriesDatatableComponent extends BaseDatatableComponent {
 
-  tableName = 'Packages';
+  tableName = 'Categories';
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
@@ -33,25 +33,22 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   hotelId;
 
   cols = [
-    { field: 'name', header: 'Package Name' },
-    { field: 'packageCode', header: 'Package Code/Source' },
+    { field: 'name', header: 'Category Name' },
     { field: 'description', header: 'Description' },
-    { field: 'type', header: 'Type' },
-    { field: 'rate', header: 'Amount' },
-    { field: 'status', header: 'Active' },
+    { field: 'subPackageNameList', header: 'Packages' },
   ];
-
+  
   constructor(
-    private _packageService: PackageService,
+    public fb: FormBuilder,
     private _route: ActivatedRoute,
+    private _categoriesService: CategoriesService,
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
     private _router: Router,
-    public fb: FormBuilder
   ) {
     super(fb);
-  }
+   }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
@@ -76,8 +73,6 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   }
 
   getHotelId(globalQueries) {
-    //todo 
-
     globalQueries.forEach(element => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -90,7 +85,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     this.$subscription.add(
     this.fetchDataFrom(queries).subscribe(
       (data) => {
-        this.values = new Packages().deserialize(data).records;
+        this.values = new Categories().deserialize(data).records;
         //set pagination
         this.totalRecords = data.total;
         this.loading = false;
@@ -111,9 +106,8 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
-    return this._packageService.getHotelPackages(config);
+    return this._categoriesService.getHotelCategories(config);
   }
-
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
@@ -128,7 +122,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
       limit: this.rowsPerPage,
     }).subscribe(
       (data) => {
-        this.values = new Packages().deserialize(data).records;
+        this.values = new Categories().deserialize(data).records;
 
         //set pagination
         this.totalRecords = data.total;
@@ -160,7 +154,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
       ]),
     };
     this.$subscription.add(
-    this._packageService.exportCSV(config).subscribe(
+    this._categoriesService.exportCategoryCSV(config).subscribe(
       (res) => {
         FileSaver.saveAs(
           res,
@@ -176,30 +170,17 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     );
   }
 
-  updatePackageStatus(event, packageId) {
-    let packages = [];
-    packages.push(packageId);
-    this._packageService.updatePackageStatus(this.hotelId, event.checked, packages)
-      .subscribe(response => {
-        this._snackbarService.openSnackBarAsText('Status updated successfully',
-          '',
-          { panelClass: 'success' }
-        );
-      }, ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      })
+  redirectToAddCategory() {
+     this._router.navigate(['category'], { relativeTo: this._route });
   }
 
-  redirectToAddPackage() {
-    this._router.navigate(['amenity'], { relativeTo: this._route });
-  }
-
-  openPackageDetails(amenity) {
-    this._router.navigate(['amenity', amenity.id], { relativeTo: this._route });
+  openCategoryDetails(category) {
+    this._router.navigate(['category', category.id], { relativeTo: this._route });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }
+
 }

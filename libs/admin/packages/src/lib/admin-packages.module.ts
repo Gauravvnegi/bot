@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Route } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
-import { AdminSpecialAmenitiesRoutingModule } from './admin-special-amenities.routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { EditPackageComponent } from './components/edit-package/edit-package.component';
@@ -14,10 +13,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AdminPackagesWrapperComponent } from './components/admin-packages-wrapper/admin-packages-wrapper.component';
 import { CategoriesService } from './services/category.service';
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
-
+import { AdminPackagesRoutingModule } from './admin-packages.routing.module';
 
 @NgModule({
-  imports: [
+  imports: [ 
     CommonModule, 
     FormsModule,
     ReactiveFormsModule,
@@ -26,7 +25,7 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
     TableModule,
     SharedMaterialModule,
     DropdownModule,
-    AdminSpecialAmenitiesRoutingModule
+    AdminPackagesRoutingModule
   ],
   declarations: [
     EditPackageComponent, 
@@ -40,4 +39,4 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
     CategoriesService
   ]
 })
-export class AdminSpecialAmenitiesModule {}
+export class AdminPackagesModule {}

@@ -17,6 +17,7 @@ export class UploadFileComponent implements OnInit {
   @Input() uploadStatus: boolean;
   @Input() pageType: string;
   @Input() documentType: string;
+  @Input() isDisable: boolean =false;
   @Input('fileUploadData') set fileUploadData(value: {
   }) {
     this._fileUploadData = { ...this.defaultValue, ...value };

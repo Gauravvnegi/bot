@@ -37,6 +37,7 @@ export class Package implements Deserializable{
     quantity: number;
     type: string;
     autoAccept: boolean;
+    categoryName : string;
 
     deserialize(input: any) {
         Object.assign(
@@ -53,6 +54,7 @@ export class Package implements Deserializable{
           set({}, 'packageSource', get(input, ['source'])),
           set({}, 'unit', get(input, ['unit'])),
           set({}, 'autoAccept', get(input, ['autoAccept'])),
+          set({}, 'categoryName', get(input, ['categoryName'])||''),
           set({}, 'type', (get(input, ['rate'])) == 0 ? 'Complimentary':'Paid'),
         );
         return this;
@@ -61,6 +63,7 @@ export class Package implements Deserializable{
 
 export class Amenity{
      id : string;
+     parentId: string;
      name : string;
      description :  string ;
      quantity : number;

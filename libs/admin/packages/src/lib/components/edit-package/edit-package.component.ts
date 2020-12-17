@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SpecialAmenitiesService } from '../../services/special-amenities.service';
+import { PackageService } from '../../services/package.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PackageDetail } from '../../data-models/packageConfig.model'
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Regex } from 'libs/shared/constants/regex';
+import { Category } from '../../data-models/categoryConfig.model';
 
 @Component({
-  selector: 'hospitality-bot-edit-special-amenities',
-  templateUrl: './edit-special-amenities.component.html',
-  styleUrls: ['./edit-special-amenities.component.scss']
+  selector: 'hospitality-bot-edit-package',
+  templateUrl: './edit-package.component.html',
+  styleUrls: ['./edit-package.component.scss']
 })
-export class EditSpecialAmenitiesComponent implements OnInit {
+export class EditPackageComponent implements OnInit {
 
   file: File;
   amenityForm: FormGroup;
@@ -37,8 +38,10 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     {key:'TRIP', value:'TRIP'}
   ]
   
-  hotelPackage:PackageDetail;
-  amenityId: string;
+  hotelPackage: PackageDetail;
+  selectedCategory: string;
+  categories : Category[];
+  packageId: string;
   globalQueries = [];
   uploadStatus;
   hotelId;
@@ -49,16 +52,16 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _snackbarService: SnackBarService,
     private _globalFilterService: GlobalFilterService,
-    private _amenitiesService: SpecialAmenitiesService
+    private _packageService: PackageService,
   ) {
-    this.initAddAmenityForm();
+    this.initAddPackageForm();
    }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
   }
 
-  initAddAmenityForm(){
+  initAddPackageForm(){
     this.amenityForm = this._fb.group({
       id:[''],
       packageCode: ['',[Validators.required]],
@@ -70,8 +73,9 @@ export class EditSpecialAmenitiesComponent implements OnInit {
       unit:['',[Validators.required]],
       packageSource:[''],
       imageUrl:['',[Validators.required]],
-      status: ['',[Validators.required]],
-      autoAccept:['',[Validators.required]]
+      status: [false],
+      autoAccept:[false],
+      category: ['',[Validators.required]],
     })
   }
 
@@ -100,7 +104,8 @@ export class EditSpecialAmenitiesComponent implements OnInit {
       ];
      
       this.getHotelId(this.globalQueries);
-      this.getAmenityId();
+      this.getCategoriesList(this.hotelId);
+      this.getPackageId();
     });
   }
 
@@ -112,17 +117,17 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     });
   }
 
-  getAmenityId(){
+  getPackageId(){
     this._activatedRoute.params.subscribe(params =>{
       if(params['id']){
-        this.amenityId = params['id'];
-        this.getPackageDetails(this.amenityId);
+        this.packageId = params['id'];
+        this.getPackageDetails(this.packageId);
       }
     })
   }
 
-  getPackageDetails(amenityId){
-    this._amenitiesService.getPackageDetails(this.hotelId, amenityId)
+  getPackageDetails(packageId){
+    this._packageService.getPackageDetails(this.hotelId, packageId)
     .subscribe(response =>{
       this.hotelPackage = new PackageDetail().deserialize(response);
       this.amenityForm.patchValue(this.hotelPackage.amenityPackage);
@@ -130,16 +135,24 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     })
   }
 
+  getCategoriesList(hotelId){
+    this._packageService.getHotelPackageCategories(hotelId)
+    .subscribe(response =>{
+      this.categories = response.records;
+      this.selectedCategory = response.records[0].id;
+    })
+  }
+
   saveDetails(){
-    if(this.amenityId){
-      this.updateAmenity();
+    if(this.packageId){
+      this.updatePackage();
     }else{
       this.addPackage();
     }
   }
 
   addPackage(){
-    const status = this._amenitiesService.validateGuestDetailForm(
+    const status = this._packageService.validatePackageDetailForm(
       this.amenityForm
     ) as Array<any>;
 
@@ -148,8 +161,8 @@ export class EditSpecialAmenitiesComponent implements OnInit {
       return;
     }
 
-    let data = this._amenitiesService.mapAmenityData(this.amenityForm.getRawValue(), this.hotelId);
-    this._amenitiesService.addPackage(this.hotelId, data)
+    let data = this._packageService.mapPackageData(this.amenityForm.getRawValue(), this.hotelId);
+    this._packageService.addPackage(this.hotelId, data)
     .subscribe(response =>{
       this.hotelPackage = new PackageDetail().deserialize(response);
       this.amenityForm.patchValue(this.hotelPackage.amenityPackage);
@@ -167,7 +180,7 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     let formData = new FormData();
     this.uploadStatus =   true;
     formData.append('files', event.file);
-    this._amenitiesService.uploadAmenityImage(this.hotelId, formData)
+    this._packageService.uploadImage(this.hotelId, formData)
     .subscribe(response =>{
       this.amenityForm.get('imageUrl').patchValue(response.fileDownloadUri);
       this._snackbarService.openSnackBarAsText( 'Package image uploaded successfully',
@@ -181,8 +194,8 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     })
   }
 
-  updateAmenity(){
-    const status = this._amenitiesService.validateGuestDetailForm(
+  updatePackage(){
+    const status = this._packageService.validatePackageDetailForm(
       this.amenityForm
     ) as Array<any>;
 
@@ -191,8 +204,8 @@ export class EditSpecialAmenitiesComponent implements OnInit {
       return;
     }
     
-    const data = this._amenitiesService.mapAmenityData(this.amenityForm.getRawValue(),this.hotelId, this.hotelPackage.amenityPackage.id);
-    this._amenitiesService.updateAmenity(this.hotelId, this.hotelPackage.amenityPackage.id, data).subscribe(response =>{
+    const data = this._packageService.mapPackageData(this.amenityForm.getRawValue(),this.hotelId, this.hotelPackage.amenityPackage.id);
+    this._packageService.updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data).subscribe(response =>{
       this._snackbarService.openSnackBarAsText( 'Package updated successfully',
         '',
         { panelClass: 'success' }
@@ -208,7 +221,7 @@ export class EditSpecialAmenitiesComponent implements OnInit {
     return;
   }
 
-  get amenityImageUrl(){
+  get packageImageUrl(){
     return this.amenityForm.get('imageUrl').value;
   }
 

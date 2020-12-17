@@ -35,8 +35,8 @@ const appRoutes: Route[] = [
       {
         path: 'package',
         loadChildren: () =>
-          import('@hospitality-bot/admin/special-amenities').then(
-            (m) => m.AdminSpecialAmenitiesModule
+          import('@hospitality-bot/admin/packages').then(
+            (m) => m.AdminPackagesModule
           ),
       },
       {

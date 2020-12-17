@@ -3,9 +3,9 @@ import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
 import { Amenity } from '../data-models/packageConfig.model';
 import { FormGroup } from '@angular/forms';
 
-@Injectable({ providedIn: 'root' })
-export class SpecialAmenitiesService extends ApiService {
-  uploadAmenityImage(hotelId, data) {
+@Injectable()
+export class PackageService extends ApiService {
+  uploadImage(hotelId, data) {
     return this.post(
       `/api/v1/uploads?folder_name=hotel/${hotelId}/static-content/packages`,
       data
@@ -24,11 +24,15 @@ export class SpecialAmenitiesService extends ApiService {
     );
   }
 
+  getHotelPackageCategories(hotelId){
+    return this.get(`/api/v1/packages/categories?hotelId=${hotelId}`);
+  }
+
   getPackageDetails(hotelId, packageId) {
     return this.get(`/api/v1/hotel/${hotelId}/packages/${packageId}`);
   }
 
-  updateAmenity(hotelId, packageId, data) {
+  updatePackage(hotelId, packageId, data) {
     return this.patch(`/api/v1/hotel/${hotelId}/packages/${packageId}`, data);
   }
 
@@ -40,29 +44,30 @@ export class SpecialAmenitiesService extends ApiService {
     return this.put(`/api/v1/hotel/${hotelId}/packages/status?active=${status}`,data);
   }
 
-  mapAmenityData(formValue, hotelId, id?) {
-    const amenityData = new Amenity();
-    amenityData.active = formValue.status;
-    amenityData.hotelId = hotelId;
-    amenityData.imageUrl = formValue.imageUrl;
-    amenityData.packageCode = formValue.packageCode;
-    amenityData.id = id || '';
-    amenityData.name = formValue.name;
-    amenityData.description = formValue.description;
-    amenityData.currency = formValue.currency;
-    amenityData.rate = formValue.rate;
-    amenityData.quantity = 0;
-    amenityData.source = 'BOTSHOT'
-    amenityData.startDate = 0;
-    amenityData.endDate = 0
-    amenityData.type = formValue.packageCode;
-    amenityData.downloadUrl = '';
-    amenityData.unit = formValue.unit;
-    amenityData.autoAccept = formValue.autoAccept;
-    return amenityData;
+  mapPackageData(formValue, hotelId, id?) {
+    const packageData = new Amenity();
+    packageData.active = formValue.status;
+    packageData.hotelId = hotelId;
+    packageData.imageUrl = formValue.imageUrl;
+    packageData.packageCode = formValue.packageCode;
+    packageData.id = id || '';
+    packageData.parentId = formValue.category;
+    packageData.name = formValue.name;
+    packageData.description = formValue.description;
+    packageData.currency = formValue.currency;
+    packageData.rate = formValue.rate;
+    packageData.quantity = 0;
+    packageData.source = 'BOTSHOT'
+    packageData.startDate = 0;
+    packageData.endDate = 0
+    packageData.type = formValue.packageCode;
+    packageData.downloadUrl = '';
+    packageData.unit = formValue.unit;
+    packageData.autoAccept = formValue.autoAccept;
+    return packageData;
   }
 
-  validateGuestDetailForm(packageForm: FormGroup) {
+  validatePackageDetailForm(packageForm: FormGroup) {
     let status = [];
     if (packageForm.invalid) {
       status = this.validate(packageForm, status);

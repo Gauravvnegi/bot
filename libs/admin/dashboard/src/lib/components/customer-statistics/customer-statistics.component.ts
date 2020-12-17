@@ -46,6 +46,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
 
   chart: any = {
     chartData: [
+      { data: [], label: 'New', fill: false },
       { data: [], label: 'Check-In', fill: false },
       { data: [], label: 'Express Check-In', fill: false, borderDash: [10, 5] },
       { data: [], label: 'Checkout', fill: false },
@@ -84,6 +85,9 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
         borderColor: '#0239CF',
       },
       {
+        borderColor: '#0239CF',
+      },
+      {
         borderColor: '#F2509B',
       },
       {
@@ -114,6 +118,9 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
           backgroundColor: '#0239CF',
         },
         {
+          backgroundColor: '#0239CF',
+        },
+        {
           backgroundColor: '#288ad6',
         },
         {
@@ -140,10 +147,11 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       this.chart.chartLabels.push(
         this.convertTimestampToLabels(this.selectedInterval, d)
       );
-      this.chart.chartData[0].data.push(this.customerData.checkIn[d]);
-      this.chart.chartData[1].data.push(this.customerData.expressCheckIn[d]);
-      this.chart.chartData[2].data.push(this.customerData.checkout[d]);
-      this.chart.chartData[3].data.push(this.customerData.expressCheckout[d]);
+      this.chart.chartData[0].data.push(this.customerData.new[d]);
+      this.chart.chartData[1].data.push(this.customerData.checkIn[d]);
+      this.chart.chartData[2].data.push(this.customerData.expressCheckIn[d]);
+      this.chart.chartData[3].data.push(this.customerData.checkout[d]);
+      this.chart.chartData[4].data.push(this.customerData.expressCheckout[d]);
     });
     this.setChartColors();
   }

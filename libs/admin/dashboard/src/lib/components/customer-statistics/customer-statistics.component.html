@@ -12,19 +12,24 @@
           <div class="stat-label" (click)="legendOnClick(0)">
             <input class="legends" type="checkbox" />
             <span class="checkIn-border"></span>
-            <p class="stat-label-title">Check-In</p>
+            <p class="stat-label-title">New</p>
           </div>
           <div class="stat-label" (click)="legendOnClick(1)">
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border"></span>
+            <p class="stat-label-title">Check-In</p>
+          </div>
+          <div class="stat-label" (click)="legendOnClick(2)">
             <input class="legends" type="checkbox" />
             <span class="checkIn-border dashed"></span>
             <p class="stat-label-title">Express Check-In</p>
           </div>
-          <div class="stat-label" (click)="legendOnClick(2)">
+          <div class="stat-label" (click)="legendOnClick(3)">
             <input class="legends" type="checkbox" />
             <span class="checkout-border"></span>
             <p class="stat-label-title">Checkout</p>
           </div>
-          <div class="stat-label" (click)="legendOnClick(3)">
+          <div class="stat-label" (click)="legendOnClick(4)">
             <input class="legends" type="checkbox" />
             <span class="checkout-border dashed"></span>
             <p class="stat-label-title">Express Checkout</p>
@@ -38,12 +43,21 @@
           >
             <input class="legends" type="checkbox" />
             <span class="checkIn-border"></span>
+            <p class="stat-label-title">New</p>
+          </div>
+          <div
+            class="stat-label"
+            [ngClass]="'checkIn-Background'"
+            (click)="legendOnClick(1)"
+          >
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border"></span>
             <p class="stat-label-title">Check-In</p>
           </div>
           <div
             class="stat-label"
             [ngClass]="'express-checkIn-Background'"
-            (click)="legendOnClick(1)"
+            (click)="legendOnClick(2)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkIn-border dashed"></span>
@@ -52,7 +66,7 @@
           <div
             class="stat-label"
             [ngClass]="'checkOut-Background'"
-            (click)="legendOnClick(2)"
+            (click)="legendOnClick(3)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkout-border"></span>
@@ -61,7 +75,7 @@
           <div
             class="stat-label"
             [ngClass]="'express-checkOut-Background'"
-            (click)="legendOnClick(3)"
+            (click)="legendOnClick(4)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkout-border dashed"></span>

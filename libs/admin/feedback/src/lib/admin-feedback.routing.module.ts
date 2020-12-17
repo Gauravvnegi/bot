@@ -10,11 +10,12 @@ import { NpsAcrossDepartmentsComponent } from './components/nps-across-departmen
 import { TextAnalyticsExplorerComponent } from './components/text-analytics-explorer/text-analytics-explorer.component';
 import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
 import { MulticolorCircularProgressComponent } from './components/multicolor-circular-progress/multicolor-circular-progress.component';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    component: FeedbackComponent,
+    component: ComingSoonComponent,
   },
 ];
 

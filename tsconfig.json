@@ -56,7 +56,9 @@
       "@hospitality-bot/admin/roles-and-permissions": [
         "libs/admin/roles-and-permissions/src/index.ts"
       ],
-      "@hospitality-bot/admin/request": ["libs/admin/request/src/index.ts"]
+      "@hospitality-bot/admin/request": ["libs/admin/request/src/index.ts"],
+      "@hospitality-bot/admin/feedback": ["libs/admin/feedback/src/index.ts"],
+      "@hospitality-bot/admin/guests": ["libs/admin/guests/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

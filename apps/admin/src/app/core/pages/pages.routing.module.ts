@@ -54,6 +54,20 @@ const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'feedbacks',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/feedback').then(
+            (m) => m.AdminFeedbackModule
+          ),
+      },
+      {
+        path: 'guest',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/guests').then(
+            (m) => m.AdminGuestsModule
+          ),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

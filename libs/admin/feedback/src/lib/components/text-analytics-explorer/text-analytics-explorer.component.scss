@@ -1,0 +1,149 @@
+@import 'main';
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .heading {
+    font-size: 16px;
+    margin: 0;
+  }
+  .date-container {
+    height: 38px;
+    background: #e5e5e5 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    opacity: 0.3;
+    padding: 13px;
+    .label {
+      text-align: center;
+      font: normal normal normal 12px/14px Roboto;
+      letter-spacing: 0.72px;
+      color: #002046;
+      opacity: 0.5;
+    }
+  }
+}
+
+.divider {
+  height: 1px;
+  border: 1px solid #dcdde6;
+  margin: 10px -15px;
+  opacity: 1;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+  height: 475px;
+  .graph-container {
+    width: 60%;
+    .title {
+      font: normal normal medium 14px/17px Roboto;
+      letter-spacing: 0.84px;
+      color: #6d7580;
+      opacity: 1;
+    }
+    .body {
+      height: 433px;
+      position: relative;
+    }
+  }
+  .details-container {
+    width: 40%;
+    overflow-y: auto;
+    &__records {
+      display: flex;
+      align-items: center;
+      &__box {
+        display: flex;
+        width: 50%;
+        .records-percentage {
+          font: normal normal bold 33px/39px Roboto;
+          letter-spacing: 1.98px;
+
+          padding-right: 3px;
+        }
+        .records-percentage--positive {
+          color: #0bb2d4;
+        }
+        .records-percentage--negative {
+          color: #f4226b;
+        }
+        &__text {
+          color: #6d7580;
+          .status {
+            font: normal normal medium 14px/17px Roboto;
+            letter-spacing: 0.84px;
+          }
+          .records {
+            font: normal normal normal 12px/14px Roboto;
+            letter-spacing: 0.72px;
+          }
+        }
+      }
+    }
+    &__opinion {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      &__box {
+        display: flex;
+        align-items: center;
+        font: normal normal bold 14px/17px Roboto;
+        letter-spacing: 0.84px;
+        .opinion-percentage {
+          padding-right: 3px;
+        }
+        .opinion-percentage--no-opinion {
+          color: #3e8ef7;
+        }
+        .opinion-percentage--mixed-opinion {
+          color: #faa700;
+        }
+        .opinion-text {
+          color: #6d7580;
+        }
+      }
+      &__box--right-gap {
+        padding-right: 20px;
+      }
+    }
+    &__heading {
+      font: normal normal medium 14px/17px Roboto;
+      letter-spacing: 0.84px;
+      color: #6d7580;
+      margin-top: 20px;
+    }
+    &__seperator-line {
+      border: 1px solid #dcdde6;
+      margin-top: 5px;
+      width: 100%;
+    }
+    &__statement-box {
+      display: flex;
+      margin: 10px 0;
+      &__image {
+        // width: 27px;
+        // height: 27px;
+        padding-top: 10px;
+      }
+      &__text {
+        font: normal normal normal 12px/20px Roboto;
+        letter-spacing: 0.24px;
+        color: #9a9a9a;
+        padding: 5px;
+        .bold {
+          color: #6d7580;
+        }
+        .more {
+          color: #3e8ef7;
+          cursor: pointer;
+        }
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

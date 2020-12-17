@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/text_analytics.svg" />
+      </div>
+      <div class="stat-title">Text Analysis Explorer</div>
+    </div>
+    <div class="date-container">
+      <div class="label">11 JUL-14 NOV</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="body">
+    <div class="graph-container">
+      <div class="title">All Topics</div>
+      <div class="body">
+        <hospitality-bot-multicolor-circular-progress
+          *ngFor="let progress of progressValues"
+          [settings]="progress"
+          [style]="progress.style"
+        ></hospitality-bot-multicolor-circular-progress>
+      </div>
+    </div>
+    <div class="details-container">
+      <div class="details-container__records">
+        <div class="details-container__records__box">
+          <p class="records-percentage records-percentage--positive">
+            44%
+          </p>
+          <div class="details-container__records__box__text">
+            <p class="status">
+              Positive
+            </p>
+            <p class="records">
+              12,312 Records
+            </p>
+          </div>
+        </div>
+        <div class="details-container__records__box">
+          <p class="records-percentage records-percentage--negative">
+            5%
+          </p>
+          <div class="details-container__records__box__text">
+            <p class="status">
+              Negative
+            </p>
+            <p class="records">
+              12,312 Records
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="details-container__opinion">
+        <div
+          class="details-container__opinion__box details-container__opinion__box--right-gap"
+        >
+          <p class="opinion-percentage opinion-percentage--no-opinion">
+            42%
+          </p>
+          <p class="opinion-text">
+            No Opinion
+          </p>
+        </div>
+        <div class="details-container__opinion__box">
+          <p class="opinion-percentage opinion-percentage--mixed-opinion">
+            9%
+          </p>
+          <p class="opinion-text">
+            Mixed Opinion
+          </p>
+        </div>
+      </div>
+      <div class="details-container__heading">
+        Statements
+      </div>
+      <div class="details-container__seperator-line"></div>
+      <div class="details-container__statement-box">
+        <div class="details-container__statement-box__image">
+          <img src="assets/svg/happy.svg" />
+        </div>
+        <div class="details-container__statement-box__text">
+          orem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a
+          <span class="bold">galley</span>
+          of type and scrambled it to make a type specimen book. It has
+          surviv..orem Ipsum is simply ith…<span class="more">More</span>
+        </div>
+      </div>
+      <div class="details-container__seperator-line"></div>
+      <div class="details-container__statement-box">
+        <div class="details-container__statement-box__image">
+          <img src="assets/svg/sceptic.svg" />
+        </div>
+        <div class="details-container__statement-box__text">
+          orem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem
+          <span class="bold">Love</span>
+          has been the industry’s standard dummy text ever since the 1500s, when
+          an unknown printer took a galley of type and scrambled it to make a
+          type specimen book. It has surviv..orem Ipsum is simply ith…<span
+            class="more"
+            >More</span
+          >
+        </div>
+      </div>
+      <div class="details-container__seperator-line"></div>
+      <div class="details-container__statement-box">
+        <div class="details-container__statement-box__image">
+          <img src="assets/svg/sad.svg" />
+        </div>
+        <div class="details-container__statement-box__text">
+          orem Ipsum is simply dummy text of the printing and typesetting
+          <span class="bold">Service</span>
+          Lorem Ipsum has been the industry's standard dummy text ever since the
+          1500s, when an unknown printer took a galley of type and scrambled it
+          to make a type specimen book. It has surviv..<span class="more"
+            >More</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

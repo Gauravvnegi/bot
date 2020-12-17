@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Packages } from '../../data-models/packageConfig.model';
-import { SpecialAmenitiesService } from '../../services/special-amenities.service';
+import { PackageService } from '../../services/package.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
@@ -42,7 +42,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   ];
 
   constructor(
-    private _amenitiesService: SpecialAmenitiesService,
+    private _packageService: PackageService,
     private _route: ActivatedRoute,
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
@@ -111,7 +111,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
-    return this._amenitiesService.getHotelPackages(config);
+    return this._packageService.getHotelPackages(config);
   }
 
 
@@ -160,7 +160,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
       ]),
     };
     this.$subscription.add(
-    this._amenitiesService.exportCSV(config).subscribe(
+    this._packageService.exportCSV(config).subscribe(
       (res) => {
         FileSaver.saveAs(
           res,
@@ -179,7 +179,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   updatePackageStatus(event, packageId) {
     let packages = [];
     packages.push(packageId);
-    this._amenitiesService.updatePackageStatus(this.hotelId, event.checked, packages)
+    this._packageService.updatePackageStatus(this.hotelId, event.checked, packages)
       .subscribe(response => {
         this._snackbarService.openSnackBarAsText('Status updated successfully',
           '',

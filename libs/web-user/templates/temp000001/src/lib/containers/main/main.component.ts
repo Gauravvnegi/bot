@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
-import {
-  ITemplate,
-  TemplateService,
-} from 'libs/web-user/shared/src/lib/services/template.service';
-import { forkJoin, of, Subscription } from 'rxjs';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -20,7 +19,7 @@ export class MainComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: StepperComponent;
 
-  stepperData: ITemplate;
+  stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
   reservationData: ReservationDetails;
   isReservationData: boolean = false;
@@ -38,14 +37,16 @@ export class MainComponent implements OnInit {
     this.registerListeners();
   }
 
-  private getReservationDetails(): void {
+  getReservationDetails(): void {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe((reservationData) => {
           this._hotelService.hotelConfig = reservationData['hotel'];
           this.isReservationData = true;
-          this.stepperData = this._templateService.templateData['temp000001'];
+          this.stepperData = this._templateService.templateData[
+            TemplateCode.temp000001
+          ];
           // TO_DO: Remove function call
           // this.stepperData = this.modifyStepperData(this._templateService.templateData);
           this.getStepperData();
@@ -56,7 +57,7 @@ export class MainComponent implements OnInit {
   }
 
   // TO-DO: Remove this function
-  private modifyStepperData(data) {
+  modifyStepperData(data) {
     return {
       ...data,
       stepConfigs: data.stepConfigs
@@ -71,7 +72,7 @@ export class MainComponent implements OnInit {
     };
   }
 
-  private registerListeners() {
+  registerListeners() {
     this.$subscription.add(
       this.parentForm.valueChanges.subscribe((val) => {
         this._parentFormService.parentFormValueAndValidity$.next({
@@ -81,7 +82,7 @@ export class MainComponent implements OnInit {
     );
   }
 
-  private getStepperData() {
+  getStepperData() {
     // const data = {
     //   component: 'stepper',
     //   labelPosition: 'bottom',
@@ -291,7 +292,7 @@ export class MainComponent implements OnInit {
     return true;
   }
 
-  private initStepperParentFG(): void {
+  initStepperParentFG(): void {
     this.stepperData.stepConfigs.forEach((stepConfig) => {
       const group: FormGroup = this.fb.group({});
       this.parentForm.push(group);

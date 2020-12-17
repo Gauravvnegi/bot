@@ -7,6 +7,7 @@ import {
   OnChanges,
   ViewContainerRef,
 } from '@angular/core';
+import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TempLoader000001Component } from '../containers/temp-loader000001/temp-loader000001.component';
 
@@ -14,7 +15,7 @@ interface ITemplateLoader {
   [key: string]: any;
 }
 const componentMapping: ITemplateLoader = {
-  temp000001: TempLoader000001Component,
+  [TemplateCode.temp000001]: TempLoader000001Component,
 };
 
 @Directive({ selector: '[template-loader]' })
@@ -36,7 +37,7 @@ export class TemplateLoaderDirective implements OnChanges {
     }
   }
 
-  private renderLoader(): void {
+  renderLoader(): void {
     const loaderFactoryComp = this._resolver.resolveComponentFactory(
       componentMapping[this.templateId]
     );
@@ -46,7 +47,7 @@ export class TemplateLoaderDirective implements OnChanges {
     this.listenForLoadingComplete();
   }
 
-  private listenForLoadingComplete(): void {
+  listenForLoadingComplete(): void {
     this._templateLoadingService.isTemplateLoading$.subscribe(
       (isLoading: boolean) => {
         if (isLoading === false) {

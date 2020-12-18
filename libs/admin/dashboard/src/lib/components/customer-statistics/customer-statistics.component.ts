@@ -26,7 +26,38 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
 
-  legendData;
+  legendData = [
+    {
+      label: 'New',
+      borderColor: '#0749fc',
+      backgroundColor: '#0749fc',
+      dashed: false,
+    },
+    {
+      label: 'Check-In',
+      borderColor: '#0239cf',
+      backgroundColor: '#0239cf',
+      dashed: false,
+    },
+    {
+      label: 'Ex Check-In',
+      borderColor: '#0239cf',
+      backgroundColor: '#288ad6',
+      dashed: true,
+    },
+    {
+      label: 'Checkout',
+      borderColor: '#f2509b',
+      backgroundColor: '#f2509b',
+      dashed: false,
+    },
+    {
+      label: 'Ex Checkout',
+      borderColor: '#f2509b',
+      backgroundColor: '#f2809b',
+      dashed: true,
+    },
+  ];
   chartTypes = [
     { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
     { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
@@ -79,7 +110,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     },
     chartColors: [
       {
-        borderColor: '#0239CF',
+        borderColor: '#0749fc',
       },
       {
         borderColor: '#0239CF',
@@ -115,7 +146,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     if (this.chart.chartType === 'bar') {
       this.chart.chartColors = [
         {
-          backgroundColor: '#0239CF',
+          backgroundColor: '#0749fc',
         },
         {
           backgroundColor: '#0239CF',

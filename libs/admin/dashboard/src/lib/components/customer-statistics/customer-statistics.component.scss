@@ -45,6 +45,10 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+  @media screen and (max-width: 1070px) {
+    padding: 5px;
+    margin: 0px 2.5px;
+  }
 }
 
 .stat-label-title {
@@ -53,7 +57,10 @@
   font: normal normal normal 10px/16px Roboto;
   letter-spacing: 0.72px;
   color: #6d7580;
-  opacity: 1;
+  @media screen and (max-width: 1070px) {
+    font: normal normal normal 8px/16px Roboto;  
+    letter-spacing: 0;
+  }
 }
 
 .stat-label-content {
@@ -75,6 +82,9 @@
   &.dashed {
     border-top: 1px dashed #0239cf !important;
   }
+  @media screen and (max-width: 1070px) {
+    width: 8px;
+  }
 }
 
 .checkout-border {
@@ -86,6 +96,9 @@
   margin-right: 3px;
   &.dashed {
     border-top: 1px dashed #f2509b !important;
+  }
+  @media screen and (max-width: 1070px) {
+    width: 8px;
   }
 }
 
@@ -100,6 +113,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .labl{

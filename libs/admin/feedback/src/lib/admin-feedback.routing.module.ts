@@ -15,7 +15,7 @@ import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming
 const appRoutes: Route[] = [
   {
     path: '',
-    component: ComingSoonComponent,
+    component: FeedbackComponent,
   },
 ];
 

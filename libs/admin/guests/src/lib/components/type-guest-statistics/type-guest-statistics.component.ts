@@ -1,5 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
+import { VIP } from '../../data-models/statistics.model';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { StatisticsService } from '../../services/statistics.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-type-guest-statistics',
@@ -8,6 +15,9 @@ import { BaseChartDirective } from 'ng2-charts';
 })
 export class TypeGuestStatisticsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
+  selectedInterval: any;
+  customerData: VIP = new VIP();
+  $subscription = new Subscription();
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -26,21 +36,15 @@ export class TypeGuestStatisticsComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false },
-      { data: [50, 65, 60, 75, 72, 80], label: 'Pre Check-In', fill: false },
-      { data: [20, 28, 24, 35, 29, 55], label: 'Check-In', fill: false },
-      { data: [50, 48, 60, 58, 65, 85], label: 'Checkout', fill: false },
+      { data: [20, 25, 22, 30, 27, 45], label: 'Arrival', fill: false },
+      { data: [50, 65, 60, 75, 72, 80], label: 'In House', fill: false },
+      { data: [20, 28, 24, 35, 29, 55], label: 'Departure', fill: false },
+      { data: [50, 48, 60, 58, 65, 85], label: 'Out-Guest', fill: false },
     ],
     chartLabels: ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'],
     chartOptions: {
       responsive: true,
-      elements: { 
-        point: {
-          radius: [0, 5 , 5, 5, 5, 5],
-          hitRadius: 5,
-          hoverRadius: 7,
-          hoverBorderWidth: 2,
-        },
+      elements: {
         line: {
           tension: 0
         }
@@ -88,9 +92,15 @@ export class TypeGuestStatisticsComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
-  constructor() { }
+  constructor(
+    private _dateService: DateService,
+    private _adminUtilityService: AdminUtilityService,
+    private _statisticService: StatisticsService,
+    private _globalFilterService: GlobalFilterService
+  ) { }
 
   ngOnInit(): void {
+    this.getVIPStatistics();
   }
 
   legendOnClick = (index) => {
@@ -118,7 +128,75 @@ export class TypeGuestStatisticsComponent implements OnInit {
   setChartType(option) {
     if (this.chart.chartType !== option) {
       this.chart.chartType = option.value;
-      // this.chart.chartLabels = ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'];
     }
   }
+
+  private initGraphData() {
+    const botKeys = Object.keys(this.customerData.inHouse);
+    this.chart.chartData.forEach((d) => {
+      d.data = [];
+    });
+    this.chart.chartLabels = [];
+    botKeys.forEach((d) => {
+      this.chart.chartLabels.push(
+        this.convertTimestampToLabels(this.selectedInterval, d)
+      );
+      this.chart.chartData[0].data.push(this.customerData.arrival[d]);
+      this.chart.chartData[1].data.push(this.customerData.inHouse[d]);
+      this.chart.chartData[2].data.push(this.customerData.departure[d]);
+      this.chart.chartData[3].data.push(this.customerData.outGuest[d]);
+    });
+  }
+
+  private convertTimestampToLabels(type, data) {
+    let returnTime;
+    if (type === 'year') {
+      returnTime = data;
+    } else if (type === 'month') {
+      returnTime = moment.unix(data).format('MMM YYYY');
+    } else if (type === 'date') {
+      returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
+    } else {
+      returnTime = `${data > 12 ? data - 12 : data}:00 ${
+        data > 11 ? 'PM' : 'AM'
+      }`;
+    }
+    return returnTime;
+  }
+
+  private getVIPStatistics() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this._adminUtilityService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        const queries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+
+        const config = {
+          queryObj: this._adminUtilityService.makeQueryParams(queries),
+        };
+        this.$subscription.add(
+          this._statisticService
+            .getVIPStatistics(config)
+            .subscribe((res) => {
+              this.customerData = new VIP().deserialize(res);
+              this.initGraphData();
+            })
+        );
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
+
 }

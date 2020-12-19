@@ -6,6 +6,7 @@ import { ChartsModule } from 'ng2-charts';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedMaterialModule } from 'libs/shared/material/src';
+import { StatisticsService } from './services/statistics.service';
 
 export const adminGuestsRoutes: Route[] = [];
 
@@ -20,6 +21,7 @@ export const adminGuestsRoutes: Route[] = [];
     SharedMaterialModule,
     AdminSharedModule,
   ],
-  declarations: [...AdminGuestsRoutingModule.components]
+  declarations: [...AdminGuestsRoutingModule.components],
+  providers: [StatisticsService]
 })
 export class AdminGuestsModule {}

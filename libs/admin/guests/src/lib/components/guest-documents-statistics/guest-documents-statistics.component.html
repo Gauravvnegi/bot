@@ -17,7 +17,7 @@
 		  </canvas>
 		</div>
 		<div class="labels">
-			<div class="val">401</div>
+			<div class="val">{{ document.totalCount }}</div>
 			<div class="label">Total Users</div>
 		</div>
 	</div>
@@ -27,28 +27,28 @@
 				<div class="icon initiated"></div>
 				<div class="stat-lable">Initiated</div>
 			</div>
-			<div class="stat-val">161</div>
+			<div class="stat-val">{{ document.INITIATED }}</div>
 		</div>
 		<div class="stat-val-container">
 			<div class="stat-lable-container">
 				<div class="icon pending"></div>
 				<div class="stat-lable">Pending</div>
 			</div>
-			<div class="stat-val">60</div>
+			<div class="stat-val">{{ document.PENDING }}</div>
 		</div>
 		<div class="stat-val-container">
 			<div class="stat-lable-container">
 				<div class="icon accepted"></div>
 				<div class="stat-lable">Accepted</div>
 			</div>
-			<div class="stat-val">180</div>
+			<div class="stat-val">{{ document.ACCEPTED }}</div>
 		</div>
 		<div class="stat-val-container">
 			<div class="stat-lable-container">
 				<div class="icon rejected"></div>
 				<div class="stat-lable">Rejected</div>
 			</div>
-			<div class="stat-val">84</div>
+			<div class="stat-val">{{ document.REJECTED }}</div>
 		</div>
 	</div>
 </div>

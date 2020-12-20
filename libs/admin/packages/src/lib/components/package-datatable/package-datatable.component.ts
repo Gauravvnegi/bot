@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
+import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
 import { Packages } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
-import * as FileSaver from 'file-saver';
-import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -42,13 +42,14 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   ];
 
   constructor(
-    private _packageService: PackageService,
-    private _route: ActivatedRoute,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _router: Router,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private packageService: PackageService,
+    private route: ActivatedRoute,
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
+    private router: Router,
+
   ) {
     super(fb);
   }
@@ -57,8 +58,8 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
-    this._globalFilterService.globalFilter$.subscribe((data) => {
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
       //set-global query everytime global filter changes
       this.globalQueries = [
         ...data['filter'].queryValue,
@@ -75,7 +76,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     });
   }
 
-  getHotelId(globalQueries) {
+  getHotelId(globalQueries): void {
     //todo 
 
     globalQueries.forEach(element => {
@@ -85,21 +86,21 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     });
   }
 
-  loadInitialData(queries = [], loading = true) {
+  loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
     this.$subscription.add(
-    this.fetchDataFrom(queries).subscribe(
-      (data) => {
-        this.values = new Packages().deserialize(data).records;
-        //set pagination
-        this.totalRecords = data.total;
-        this.loading = false;
-      },
-      ({error}) => {
-        this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
-     )
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.values = new Packages().deserialize(data).records;
+          //set pagination
+          this.totalRecords = data.total;
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -109,49 +110,49 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   ): Observable<any> {
     queries.push(defaultProps);
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(queries),
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this._packageService.getHotelPackages(config);
+    return this.packageService.getHotelPackages(config);
   }
 
 
-  loadData(event: LazyLoadEvent) {
+  loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
     this.$subscription.add(
-    this.fetchDataFrom(
-      [...this.globalQueries,
-    {
-      order: 'DESC',
-    },], {
-      offset: this.first,
-      limit: this.rowsPerPage,
-    }).subscribe(
-      (data) => {
-        this.values = new Packages().deserialize(data).records;
+      this.fetchDataFrom(
+        [...this.globalQueries,
+        {
+          order: 'DESC',
+        },], {
+        offset: this.first,
+        limit: this.rowsPerPage,
+      }).subscribe(
+        (data) => {
+          this.values = new Packages().deserialize(data).records;
 
-        //set pagination
-        this.totalRecords = data.total;
-        this.loading = false;
-      },
-      ({error}) => {
-        this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
+          //set pagination
+          this.totalRecords = data.total;
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(error.message);
+        }
       )
     );
   }
 
-  updatePaginations(event) {
+  updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
   }
 
-  exportCSV() {
+  exportCSV(): void {
     this.loading = true;
 
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
+      queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           order: 'DESC',
@@ -160,45 +161,45 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
       ]),
     };
     this.$subscription.add(
-    this._packageService.exportCSV(config).subscribe(
-      (res) => {
-        FileSaver.saveAs(
-          res,
-          this.tableName.toLowerCase() + '_export_' + new Date().getTime() + '.csv'
-        );
-        this.loading = false;
-      },
-      ({error}) => {
-        this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
-     )
+      this.packageService.exportCSV(config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            this.tableName.toLowerCase() + '_export_' + new Date().getTime() + '.csv'
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
-  updatePackageStatus(event, packageId) {
+  updatePackageStatus(event, packageId): void {
     let packages = [];
     packages.push(packageId);
-    this._packageService.updatePackageStatus(this.hotelId, event.checked, packages)
+    this.packageService.updatePackageStatus(this.hotelId, event.checked, packages)
       .subscribe(response => {
-        this._snackbarService.openSnackBarAsText('Status updated successfully',
+        this.snackbarService.openSnackBarAsText('Status updated successfully',
           '',
           { panelClass: 'success' }
         );
       }, ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
+        this.snackbarService.openSnackBarAsText(error.message);
       })
   }
 
-  redirectToAddPackage() {
-    this._router.navigate(['amenity'], { relativeTo: this._route });
+  redirectToAddPackage(): void {
+    this.router.navigate(['amenity'], { relativeTo: this.route });
   }
 
-  openPackageDetails(amenity) {
-    this._router.navigate(['amenity', amenity.id], { relativeTo: this._route });
+  openPackageDetails(amenity): void {
+    this.router.navigate(['amenity', amenity.id], { relativeTo: this.route });
   }
 
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+  onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }

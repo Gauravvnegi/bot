@@ -14,4 +14,8 @@ export class StatisticsService extends ApiService {
   getPaymentStatistics(config) {
     return this.get(`/api/v1/guest-stats/payment/${config.queryObj}`);
   }
+
+  getGuestStatus(config) {
+    return this.get(`/api/v1/guest-stats/journey/${config.queryObj}`);
+  }
 }

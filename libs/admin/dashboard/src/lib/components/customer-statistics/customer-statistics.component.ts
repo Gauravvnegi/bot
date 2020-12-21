@@ -12,7 +12,6 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { StatisticsService } from '../../services/statistics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import * as moment from 'moment';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 
@@ -138,7 +137,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this.convertTimestampToLabels(this.selectedInterval, d)
+        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
       );
       this.chart.chartData[0].data.push(this.customerData.checkIn[d]);
       this.chart.chartData[1].data.push(this.customerData.expressCheckIn[d]);
@@ -146,22 +145,6 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       this.chart.chartData[3].data.push(this.customerData.expressCheckout[d]);
     });
     this.setChartColors();
-  }
-
-  convertTimestampToLabels(type, data) {
-    let returnTime;
-    if (type === 'year') {
-      returnTime = data;
-    } else if (type === 'month') {
-      returnTime = moment.unix(data).format('MMM YYYY');
-    } else if (type === 'date') {
-      returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
-    } else {
-      returnTime = `${data > 12 ? data - 12 : data}:00 ${
-        data > 11 ? 'PM' : 'AM'
-      }`;
-    }
-    return returnTime;
   }
 
   legendOnClick = (index) => {

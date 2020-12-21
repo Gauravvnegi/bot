@@ -57,9 +57,9 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
     this.getPaymentStatistics();
   }
 
-  ngOnChanges(): void {
-    this.getPaymentStatistics();
-  }
+  // ngOnChanges(): void {
+  //   this.getPaymentStatistics();
+  // }
 
   private initGraphData() {
     this.chart.Data = [[]];

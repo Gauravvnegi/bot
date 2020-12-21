@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { VIP } from '../../data-models/statistics.model';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -28,6 +26,25 @@ export class TypeGuestStatisticsComponent implements OnInit {
       return handle(chart);
     };
   })(this);
+
+  legendData = [
+    {
+      label: 'Arrival',
+      bubbleColor: '#FF9F67',
+    },
+    {
+      label: 'In House',
+      bubbleColor: '#30D8B6',
+    },
+    {
+      label: 'Departure',
+      bubbleColor: '#F25E5E',
+    },
+    {
+      label: 'Out-Guest',
+      bubbleColor: '#4A73FB',
+    },
+  ];
 
   chartTypes = [
     { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
@@ -93,7 +110,6 @@ export class TypeGuestStatisticsComponent implements OnInit {
     chartType: 'line',
   };
   constructor(
-    private _dateService: DateService,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService
@@ -139,7 +155,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this.convertTimestampToLabels(this.selectedInterval, d)
+        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
       );
       this.chart.chartData[0].data.push(this.customerData.arrival[d]);
       this.chart.chartData[1].data.push(this.customerData.inHouse[d]);
@@ -148,21 +164,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
     });
   }
 
-  private convertTimestampToLabels(type, data) {
-    let returnTime;
-    if (type === 'year') {
-      returnTime = data;
-    } else if (type === 'month') {
-      returnTime = moment.unix(data).format('MMM YYYY');
-    } else if (type === 'date') {
-      returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
-    } else {
-      returnTime = `${data > 12 ? data - 12 : data}:00 ${
-        data > 11 ? 'PM' : 'AM'
-      }`;
-    }
-    return returnTime;
-  }
+  
 
   private getVIPStatistics() {
     this.$subscription.add(
@@ -186,8 +188,8 @@ export class TypeGuestStatisticsComponent implements OnInit {
         this.$subscription.add(
           this._statisticService
             .getVIPStatistics(config)
-            .subscribe((res) => {
-              this.customerData = new VIP().deserialize(res);
+            .subscribe((response) => {
+              this.customerData = new VIP().deserialize(response);
               this.initGraphData();
             })
         );

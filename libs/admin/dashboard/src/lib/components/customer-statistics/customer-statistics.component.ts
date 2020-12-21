@@ -26,7 +26,38 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
 
-  legendData;
+  legendData = [
+    {
+      label: 'New',
+      borderColor: '#0749fc',
+      backgroundColor: '#0749fc',
+      dashed: false,
+    },
+    {
+      label: 'Check-In',
+      borderColor: '#0239cf',
+      backgroundColor: '#0239cf',
+      dashed: false,
+    },
+    {
+      label: 'Ex Check-In',
+      borderColor: '#0239cf',
+      backgroundColor: '#288ad6',
+      dashed: true,
+    },
+    {
+      label: 'Checkout',
+      borderColor: '#f2509b',
+      backgroundColor: '#f2509b',
+      dashed: false,
+    },
+    {
+      label: 'Ex Checkout',
+      borderColor: '#f2509b',
+      backgroundColor: '#f2809b',
+      dashed: true,
+    },
+  ];
   chartTypes = [
     { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
     { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
@@ -46,6 +77,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
 
   chart: any = {
     chartData: [
+      { data: [], label: 'New', fill: false },
       { data: [], label: 'Check-In', fill: false },
       { data: [], label: 'Express Check-In', fill: false, borderDash: [10, 5] },
       { data: [], label: 'Checkout', fill: false },
@@ -77,6 +109,9 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       legendCallback: this.getLegendCallback,
     },
     chartColors: [
+      {
+        borderColor: '#0749fc',
+      },
       {
         borderColor: '#0239CF',
       },
@@ -111,6 +146,9 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     if (this.chart.chartType === 'bar') {
       this.chart.chartColors = [
         {
+          backgroundColor: '#0749fc',
+        },
+        {
           backgroundColor: '#0239CF',
         },
         {
@@ -140,10 +178,11 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       this.chart.chartLabels.push(
         this.convertTimestampToLabels(this.selectedInterval, d)
       );
-      this.chart.chartData[0].data.push(this.customerData.checkIn[d]);
-      this.chart.chartData[1].data.push(this.customerData.expressCheckIn[d]);
-      this.chart.chartData[2].data.push(this.customerData.checkout[d]);
-      this.chart.chartData[3].data.push(this.customerData.expressCheckout[d]);
+      this.chart.chartData[0].data.push(this.customerData.new[d]);
+      this.chart.chartData[1].data.push(this.customerData.checkIn[d]);
+      this.chart.chartData[2].data.push(this.customerData.expressCheckIn[d]);
+      this.chart.chartData[3].data.push(this.customerData.checkout[d]);
+      this.chart.chartData[4].data.push(this.customerData.expressCheckout[d]);
     });
     this.setChartColors();
   }

@@ -96,7 +96,6 @@
       <hospitality-bot-upload-file
       [fileUploadData]="fileUploadData"
       [url]="packageImageUrl"
-      [uploadStatus]="uploadStatus"
       [isDisable]= false
       (fileData)="uploadFile($event)">
     </hospitality-bot-upload-file>
@@ -108,6 +107,7 @@
       <mat-slide-toggle formControlName="autoAccept"></mat-slide-toggle>
     </div>
     <button  mat-button (click)="saveDetails()">Save</button>
+    <button  mat-button (click)="redirectToPackages()">Back</button>
   </form>
 </div>
 

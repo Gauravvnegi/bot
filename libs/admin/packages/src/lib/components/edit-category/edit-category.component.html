@@ -36,11 +36,11 @@
         <hospitality-bot-upload-file
         [fileUploadData]="fileUploadData"
         [url]="categoryImageUrl"
-        [uploadStatus]="uploadStatus"
         (fileData)="uploadFile($event)">
       </hospitality-bot-upload-file>
       </div>
       <button  mat-button (click)="saveDetails()">Save</button>
+      <button  mat-button (click)="redirectToCategories()">Back</button>
     </form>
   </div>
   

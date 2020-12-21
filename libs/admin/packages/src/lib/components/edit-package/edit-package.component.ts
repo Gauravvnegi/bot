@@ -188,6 +188,10 @@ export class EditPackageComponent implements OnInit {
     );
   }
 
+  redirectToPackages(){
+    this.router.navigate(['/pages/package']);
+  }
+
   uploadFile(event): void {
     let formData = new FormData();
     formData.append('files', event.file);

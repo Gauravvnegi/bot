@@ -185,6 +185,10 @@ export class EditCategoryComponent implements OnInit {
     );
   }
 
+  redirectToCategories(){
+    this.router.navigate(['/pages/package/']);
+  }
+
   private performActionIfNotValid(status: any[]): any[] {
     this.snackbarService.openSnackBarAsText(status[0]['msg']);
     return;

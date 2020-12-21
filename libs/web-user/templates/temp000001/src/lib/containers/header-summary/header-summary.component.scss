@@ -93,8 +93,12 @@
   font-weight: bold;
 }
 
+.header-summary {
+  width: 75vw;
+}
+
 .modal-body {
-  max-height: calc(70vh - 100px);
+  max-height: calc(90vh - 100px);
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 4px;

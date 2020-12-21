@@ -8,31 +8,31 @@ import { PackageDatatableComponent } from './components/package-datatable/packag
 import { CategoriesDatatableComponent } from './components/categories-datatable/categories-datatable.component';
 
 export const adminPackagesRoutes: Route[] = [
-  // {
-  //   path: '',
-  //   component: ComingSoonComponent,
-  // },
   {
     path: '',
-    component: AdminPackagesWrapperComponent,
-    children: [],
+    component: ComingSoonComponent,
   },
-  {
-    path: 'amenity',
-    component: EditPackageComponent,
-  },
-  {
-    path: 'amenity/:id',
-    component: EditPackageComponent,
-  },
-  {
-    path: 'category',
-    component: EditCategoryComponent,
-  },
-  {
-    path: 'category/:id',
-    component: EditCategoryComponent,
-  }
+  // {
+  //   path: '',
+  //   component: AdminPackagesWrapperComponent,
+  //   children: [],
+  // },
+  // {
+  //   path: 'amenity',
+  //   component: EditPackageComponent,
+  // },
+  // {
+  //   path: 'amenity/:id',
+  //   component: EditPackageComponent,
+  // },
+  // {
+  //   path: 'category',
+  //   component: EditCategoryComponent,
+  // },
+  // {
+  //   path: 'category/:id',
+  //   component: EditCategoryComponent,
+  // }
 ];
 
 @NgModule({
@@ -45,6 +45,6 @@ export class AdminPackagesRoutingModule {
     PackageDatatableComponent,
     CategoriesDatatableComponent,
     AdminPackagesWrapperComponent,
-    EditCategoryComponent
-    ];
+    EditCategoryComponent,
+  ];
 }

@@ -1,13 +1,11 @@
-import { Component, Input, Inject } from '@angular/core';
-import * as JSZipUtils from 'jszip-utils';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { Subscription } from 'rxjs';
-import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { Component, Inject, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import * as JSZipUtils from 'jszip-utils';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
-import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-registration-card',
@@ -61,11 +59,9 @@ export class RegistrationCardComponent {
     private _sanitizer: DomSanitizer,
     private _reservation: ReservationService,
     private _docService: DocumentDetailsService,
-    private _snackbar: SnackBarService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private _utilityService: UtilityService,
-    private _translateService: TranslateService
   ) {
     this.settings = data;
   }
@@ -105,11 +101,7 @@ export class RegistrationCardComponent {
             this._utilityService.$signatureUploaded.next(true);
           },
           ({ error }) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackbar.openSnackBarAsText(translatedMsg);
-              });
+            this._utilityService.showErrorMessage(error);
             this._utilityService.$signatureUploaded.next(false);
           }
         )

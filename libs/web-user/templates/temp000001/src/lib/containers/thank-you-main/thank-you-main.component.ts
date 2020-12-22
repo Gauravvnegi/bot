@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { Subscription } from 'rxjs';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-thank-you',
@@ -36,8 +35,7 @@ export class ThankYouMainComponent implements OnInit {
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
     private _thankyouService: ThankYouService,
-    private _snackbarService: SnackBarService,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -72,11 +70,7 @@ export class ThankYouMainComponent implements OnInit {
             }
           },
           ({ error }) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackbarService.openSnackBarAsText(translatedMsg);
-              });
+            this.utilService.showErrorMessage(`MESSAGES.ERROR.${error.type}`);
           }
         )
     );

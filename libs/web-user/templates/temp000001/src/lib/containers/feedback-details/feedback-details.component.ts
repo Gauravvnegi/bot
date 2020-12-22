@@ -1,10 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FeedbackDetailsConfigI } from './../../../../../../shared/src/lib/data-models/feedbackDetailsConfig.model';
 import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
-import {
-  FeedbackDetailsConfigI,
-  FeedBackDetail,
-} from './../../../../../../shared/src/lib/data-models/feedbackDetailsConfig.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-details',

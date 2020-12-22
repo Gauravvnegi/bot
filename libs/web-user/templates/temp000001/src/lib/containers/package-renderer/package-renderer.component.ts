@@ -1,27 +1,14 @@
-import {
-  Component,
-  OnInit,
-  ComponentFactoryResolver,
-  ViewContainerRef,
-  ViewChild,
-  OnDestroy,
-  Input,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Output,
-  EventEmitter,
-} from '@angular/core';
-import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
-import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
-import { FormGroup, FormArray } from '@angular/forms';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
-import { Subscription } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
 import { SubPackageDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/paidServiceConfig.model';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { Subscription } from 'rxjs';
+import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
+import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportFacilitiesComponent,
@@ -54,10 +41,9 @@ export class PackageRendererComponent
     private _changeDetectorRef: ChangeDetectorRef,
     private _paidService: PaidService,
     private _reservationService: ReservationService,
-    private _snackbarService: SnackBarService,
     private _resolver: ComponentFactoryResolver,
     private _buttonService: ButtonService,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -231,25 +217,11 @@ export class PackageRendererComponent
             this.selectedSubPackageArray = [];
             this.selectedService = '';
             this.onPackageUpdate.emit(true);
-            this.$subscription.add(
-              this._translateService
-                .get('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE')
-                .subscribe((translated_msg) => {
-                  this._snackbarService.openSnackBarAsText(translated_msg, '', {
-                    panelClass: 'success',
-                  });
-                })
-            );
+            this.utilService.showSuccessMessage('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE');
             this._buttonService.buttonLoading$.next(this.saveButton);
           },
           (error) => {
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translated_msg) => {
-                  this._snackbarService.openSnackBarAsText(translated_msg);
-                })
-            );
+            this.utilService.showErrorMessage(error);
             this._buttonService.buttonLoading$.next(this.saveButton);
           }
         )
@@ -269,13 +241,7 @@ export class PackageRendererComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translated_msg) => {
-          this._snackbarService.openSnackBarAsText(translated_msg);
-        })
-    );
+    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`);
     return;
   }
 

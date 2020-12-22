@@ -1,11 +1,16 @@
 import { BreakpointState } from '@angular/cdk/layout';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class UtilityService {
   $signatureUploaded: BehaviorSubject<any> = new BehaviorSubject(null);
-  constructor() {}
+  constructor(
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
+  ) {}
 
   getFieldClasses(fieldComponent) {
     let classes: any = {
@@ -85,6 +90,26 @@ export class UtilityService {
               .fieldSetWrapperStyles
           );
         }
+      });
+  }
+
+  showSuccessMessage(key): void {
+    this._translateService
+    .get(key)
+    .subscribe((translatedMsg) => {
+      this._snackBarService.openSnackBarAsText(
+        translatedMsg,
+        '',
+        { panelClass: 'success' }
+      );
+    })
+  }
+
+  showErrorMessage(error, obj?): void {
+    this._translateService
+      .get(`MESSAGES.ERROR.${error.type}`, obj)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
       });
   }
 }

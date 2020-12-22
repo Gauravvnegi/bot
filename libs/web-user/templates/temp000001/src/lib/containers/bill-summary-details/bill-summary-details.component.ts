@@ -1,16 +1,13 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-
-import { BillSummaryService } from '../../../../../../shared/src/lib/services/bill-summary.service';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
-import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { BillSummaryService } from '../../../../../../shared/src/lib/services/bill-summary.service';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -52,10 +49,8 @@ export class BillSummaryDetailsComponent implements OnInit {
     private _stepperService: StepperService,
     private _hotelService: HotelService,
     private _reservationService: ReservationService,
-    private _snackBarService: SnackBarService,
     private _utilityService: UtilityService,
     public dialog: MatDialog,
-    private _translateService: TranslateService
   ) {
     this.initRequestForm();
   }
@@ -182,27 +177,11 @@ export class BillSummaryDetailsComponent implements OnInit {
               );
               this.signature = response['fileDownloadUri'];
               this._utilityService.$signatureUploaded.next(true);
-              this.$subscription.add(
-                this._translateService
-                  .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(
-                      translatedMsg,
-                      '',
-                      { panelClass: 'success' }
-                    );
-                  })
-              );
+              this._utilityService.showSuccessMessage('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE');
             },
             ({ error }) => {
               this._utilityService.$signatureUploaded.next(true);
-              this.$subscription.add(
-                this._translateService
-                  .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(translatedMsg);
-                  })
-              );
+              this._utilityService.showErrorMessage(error);
             }
           )
       );

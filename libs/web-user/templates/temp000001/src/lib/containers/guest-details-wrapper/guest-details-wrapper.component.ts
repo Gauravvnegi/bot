@@ -1,15 +1,13 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { get } from 'lodash';
-import { GuestDetailsComponent } from '../guest-details/guest-details.component';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { get } from 'lodash';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { GuestDetailsComponent } from '../guest-details/guest-details.component';
 
 @Component({
   selector: 'hospitality-bot-guest-details-wrapper',
@@ -23,11 +21,9 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
   constructor(
     private _guestDetailService: GuestDetailsService,
     private _reservationService: ReservationService,
-    private _snackBarService: SnackBarService,
-    private _hotelService: HotelService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {
     super();
     this.self = this;
@@ -72,11 +68,7 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+            this.utilService.showErrorMessage(error);
             //   this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
@@ -90,13 +82,7 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
 
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        })
-    );
+    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`);
 
     if (get(status[0], ['data', 'type']) == 'primary') {
       this.guestDetailsComp.primaryGuestAccordian.openAll();

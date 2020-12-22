@@ -1,18 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
+import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
-import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
-import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -37,8 +36,7 @@ export class ApplicationStatusComponent implements OnInit {
     private _stepperService: StepperService,
     private _templateService: TemplateService,
     private _regCardService: RegCardService,
-    private _snackbarService: SnackBarService,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -129,11 +127,7 @@ export class ApplicationStatusComponent implements OnInit {
               );
             },
             ({ error }) => {
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackbarService.openSnackBarAsText(translatedMsg);
-                });
+              this.utilService.showErrorMessage(error);
             }
           )
       );

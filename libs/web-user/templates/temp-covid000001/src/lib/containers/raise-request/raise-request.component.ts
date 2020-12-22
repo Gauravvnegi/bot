@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise-request.service';
-import { RaiseRequestConfigI } from 'libs/web-user/shared/src/lib/data-models/raiseRequestConfig.model';
-import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { RaiseRequestConfigI } from 'libs/web-user/shared/src/lib/data-models/raiseRequestConfig.model';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise-request.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Subscription } from 'rxjs';
-import { SnackBarService } from 'libs/shared/material/src';
-import { TranslateService } from '@ngx-translate/core';
+import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -25,9 +24,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _raiseRequestService: RaiseRequestService,
     private _hotelService: HotelService,
-    private _snackbarService: SnackBarService,
     public dialogRef: MatDialogRef<RaiseRequestComponent>,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {
     this.initRaiseRequestForm();
   }
@@ -66,26 +64,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._raiseRequestService
       .saveRaiseRequest(this._hotelService.hotelId, data)
       .subscribe((response) => {
-        this.$subscription.add(
-          this._translateService
-            .get(`MESSAGES.SUCCESS.REQUEST_RAISE_COMPLETE`)
-            .subscribe((translatedMsg) => {
-              this._snackbarService.openSnackBarAsText(
-                translatedMsg,
-                '',
-                { panelClass: 'success' }
-              );
-            })
-        );
+        this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.REQUEST_RAISE_COMPLETE`);
         this.close();
       },({error})=>{
-        this.$subscription.add(
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translatedMsg) => {
-              this._snackbarService.openSnackBarAsText(translatedMsg);
-            })
-        );
+        this.utilService.showErrorMessage(error);
       })
     );
   }

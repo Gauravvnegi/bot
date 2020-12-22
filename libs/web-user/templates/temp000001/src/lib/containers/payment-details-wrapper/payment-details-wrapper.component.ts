@@ -1,24 +1,18 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatTabGroup } from '@angular/material/tabs';
-import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { SnackBarService } from 'libs/shared/material/src';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import {
-  PaymentStatus,
-  PaymentCCAvenue,
-  SelectedPaymentOption,
-} from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { MatTabGroup } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
+import { PaymentCCAvenue, PaymentStatus, SelectedPaymentOption } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { IPaymentConfiguration } from 'libs/web-user/shared/src/lib/types/payment';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -35,7 +29,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
-    private _snackBarService: SnackBarService,
     private _reservationService: ReservationService,
     public _stepperService: StepperService,
     private _buttonService: ButtonService,
@@ -43,7 +36,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _billSummaryService: BillSummaryService,
     private router: Router,
     private route: ActivatedRoute,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {
     super();
     this.self = this;
@@ -101,21 +94,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                   this._buttonService.buttonLoading$.next(
                     this.buttonRefs['submitButton']
                   );
-                  this._translateService
-                    .get(`MESSAGES.ERROR.${error.type}`)
-                    .subscribe((translatedMsg) => {
-                      this._snackBarService.openSnackBarAsText(translatedMsg);
-                    });
+                  this.utilService.showErrorMessage(error);
                   // this._snackBarService.openSnackBarAsText(error.message);
                 }
               )
           );
         } else {
-          this._translateService
-            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
+          this.utilService.showErrorMessage(`VALIDATION.PAYMENT_METHOD_SELECT_PENDING`);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['submitButton']
           );
@@ -139,7 +124,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       if (TAB_LABEL === 'Pay Now') {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+          this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
         ) {
           this.$subscription.add(
             this._paymentDetailsService
@@ -152,14 +137,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
                   window.location.href = response.billingUrl;
                 },
                 ({ error }) => {
-                  this.$subscription.add(
-                    this._translateService
-                      .get(`MESSAGES.ERROR.${error.type}`)
-                      .subscribe((translatedMsg) => {
-                        this._snackBarService.openSnackBarAsText(translatedMsg);
-                      })
-                  );
-                  // this._snackBarService.openSnackBarAsText(error.message);
+                  this.utilService.showErrorMessage(error);
                   this._buttonService.buttonLoading$.next(
                     this.buttonRefs['nextButton']
                   );
@@ -167,11 +145,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               )
           );
         } else {
-          this._translateService
-            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
+          this.utilService.showErrorMessage('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );
@@ -202,17 +176,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         .subscribe(
           (response) => {
             if (state === 'checkin') {
-              this.$subscription.add(
-                this._translateService
-                  .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(
-                      translatedMsg,
-                      '',
-                      { panelClass: 'success' }
-                    );
-                  })
-              );
+              this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['nextButton']
               );
@@ -225,12 +189,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             }
           },
           ({ error }) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
-            //       this._snackBarService.openSnackBarAsText(error.message);
+            this.utilService.showErrorMessage(error);
             if (state === 'checkin') {
               this._buttonService.buttonLoading$.next(
                 this.buttonRefs['nextButton']
@@ -274,7 +233,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   mapPaymentInitiationData() {
     if (
       this.selectedPaymentOption.config &&
-      this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+      this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
     ) {
       const paymentInitiationData = new PaymentCCAvenue().deserialize(
         this.selectedPaymentOption.config,

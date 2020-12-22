@@ -1,30 +1,12 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  Output,
-  EventEmitter,
-  ViewChildren,
-  ViewContainerRef,
-  QueryList,
-  OnDestroy,
-} from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormArray,
-  Form,
-} from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
-import { DocumentDetailsConfigI } from './../../../../../../shared/src/lib/data-models/documentDetailsConfig.model';
-import { DocumentDetailsService } from './../../../../../../shared/src/lib/services/document-details.service';
-import { Observable, Subscription } from 'rxjs';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { TranslateService } from '@ngx-translate/core';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { Observable, Subscription } from 'rxjs';
+import { DocumentDetailsConfigI } from './../../../../../../shared/src/lib/data-models/documentDetailsConfig.model';
+import { DocumentDetailsService } from './../../../../../../shared/src/lib/services/document-details.service';
 
 @Component({
   selector: 'hospitality-bot-documents-details',
@@ -58,8 +40,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     public _documentDetailService: DocumentDetailsService,
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {
     this.initDocumentDetailForm();
   }
@@ -425,15 +406,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this.$subscription.add(
-              this._translateService
-                .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
-                    panelClass: 'success',
-                  });
-                })
-            );
+            this.utilService.showSuccessMessage('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE');
           },
           ({ error }) => {
             this.updateDocumentFG(guestId, doc_type, doc_page, '');
@@ -443,13 +416,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
-                })
-            );
+            this.utilService.showErrorMessage(error);
           }
         )
     );

@@ -1,13 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
 import { InputPopupComponent } from 'libs/web-user/shared/src/lib/presentational/input-popup/input-popup.component';
-import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 
 @Component({
   selector: 'hospitality-bot-summary-wrapper',

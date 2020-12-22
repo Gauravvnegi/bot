@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { TranslateService } from '@ngx-translate/core';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
@@ -21,9 +20,8 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     private _billSummaryService: BillSummaryService,
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private utilService: UtilityService
   ) {
     super();
     this.self = this;
@@ -72,14 +70,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
 
   onSummarySubmit() {
     if (!this.signature) {
-      this.$subscription.add(
-        this._translateService
-          .get(`VALIDATION.SIGNATURE_UPLOAD_PENDING`)
-          .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg);
-          })
-      );
-
+      this.utilService.showErrorMessage(`VALIDATION.SIGNATURE_UPLOAD_PENDING`);
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;
     }
@@ -103,13 +94,7 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
-                })
-            );
+            this.utilService.showErrorMessage(error);
             // this._snackBarService.openSnackBarAsText(error.message);
           }
         )

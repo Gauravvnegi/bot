@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
+import { Component } from '@angular/core';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { TranslateService } from '@ngx-translate/core';
+import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-details-wrapper',
@@ -19,9 +18,8 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
     private _feedbackDetailsService: FeedbackDetailsService,
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
-    private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) {
     super();
     this.self = this;
@@ -66,29 +64,14 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
         .addFeedback(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
-            this.$subscription.add(
-              this._translateService
-                .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
-                    panelClass: 'success',
-                  });
-                })
-            );
+            this.utilService.showSuccessMessage('MESSAGES.SUCCESS.FEEDBACK_COMPLETE');
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
-                })
-            );
-            //    this._snackBarService.openSnackBarAsText(error.cause);
+            this.utilService.showErrorMessage(error);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
@@ -98,7 +81,7 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this._snackBarService.openSnackBarAsText(status[0]['msg']);
+    this.utilService.showErrorMessage(`VALIDATION.${status[0]['code']}`);
     return;
   }
 

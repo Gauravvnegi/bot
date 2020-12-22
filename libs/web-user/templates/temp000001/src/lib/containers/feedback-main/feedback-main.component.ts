@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { forkJoin, of, Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { forkJoin, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -33,11 +32,10 @@ export class FeedbackMainComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService,
     private fb: FormBuilder,
     private _feedbackDetailsService: FeedbackDetailsService,
-    private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
     private router: Router,
     private route: ActivatedRoute,
-    private _translateService: TranslateService
+    private utilService: UtilityService
   ) { }
 
   ngOnInit(): void {
@@ -108,11 +106,7 @@ export class FeedbackMainComponent implements OnInit {
             this.openThankyouPage('feedback');
           },
           ({ error }) => {
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+            this.utilService.showErrorMessage(error);
             this._buttonService.buttonLoading$.next(this.saveButton);
           }
         )
@@ -124,13 +118,7 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        })
-    );
+    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`);
     return;
   }
 

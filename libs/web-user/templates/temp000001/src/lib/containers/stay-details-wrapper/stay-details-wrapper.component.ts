@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { SnackBarService } from 'libs/shared/material/src';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 
 export interface IStayDetailsWrapper {
@@ -27,10 +26,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     private _amenitiesService: AmenitiesService,
     private _hotelService: HotelService,
     private _reservationService: ReservationService,
-    private _snackBarService: SnackBarService,
+    private utilService: UtilityService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -86,11 +84,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+            this.utilService.showErrorMessage(error);
           }
         )
     );

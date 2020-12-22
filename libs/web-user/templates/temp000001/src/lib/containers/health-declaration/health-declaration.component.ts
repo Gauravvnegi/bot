@@ -1,38 +1,21 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewContainerRef,
-  ViewChildren,
-  QueryList,
-  ComponentFactoryResolver,
-  ViewChild,
-  ElementRef,
-  Output,
-  EventEmitter,
-} from '@angular/core';
-import { RadioComponent } from 'libs/web-user/shared/src/lib/presentational/radio/radio.component';
-import { InputComponent } from 'libs/web-user/shared/src/lib/presentational/input/input.component';
-import { SelectBoxComponent } from 'libs/web-user/shared/src/lib/presentational/select-box/select-box.component';
-import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
-import { TextareaComponent } from 'libs/web-user/shared/src/lib/presentational/textarea/textarea.component';
-import { LabelComponent } from 'libs/web-user/shared/src/lib/presentational/label/label.component';
-import { FieldsetComponent } from 'libs/web-user/shared/src/lib/presentational/fieldset/fieldset.component';
-import {
-  CountryCodes,
-  Country,
-} from 'libs/web-user/shared/src/lib/data-models/countryCode';
-import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
-import { FileUploadComponent } from 'libs/web-user/shared/src/lib/presentational/file-upload/file-upload.component';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
-import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
+import { Country } from 'libs/web-user/shared/src/lib/data-models/countryCode';
+import { FieldsetComponent } from 'libs/web-user/shared/src/lib/presentational/fieldset/fieldset.component';
+import { FileUploadComponent } from 'libs/web-user/shared/src/lib/presentational/file-upload/file-upload.component';
+import { InputComponent } from 'libs/web-user/shared/src/lib/presentational/input/input.component';
+import { LabelComponent } from 'libs/web-user/shared/src/lib/presentational/label/label.component';
+import { RadioComponent } from 'libs/web-user/shared/src/lib/presentational/radio/radio.component';
+import { SelectBoxComponent } from 'libs/web-user/shared/src/lib/presentational/select-box/select-box.component';
+import { TextareaComponent } from 'libs/web-user/shared/src/lib/presentational/textarea/textarea.component';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { Subscription } from 'rxjs';
+import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
 
 const components = {
   radio: RadioComponent,
@@ -78,8 +61,6 @@ export class HealthDeclarationComponent implements OnInit {
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
     private _utilityService: UtilityService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -106,27 +87,11 @@ export class HealthDeclarationComponent implements OnInit {
           .subscribe(
             (response) => {
               this.signature = response.fileDownloadUrl;
-              this.$subscription.add(
-                this._translateService
-                  .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(
-                      translatedMsg,
-                      '',
-                      { panelClass: 'success' }
-                    );
-                  })
-              );
+              this._utilityService.showSuccessMessage('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE');
               this._utilityService.$signatureUploaded.next(true);
             },
             ({ error }) => {
-              this.$subscription.add(
-                this._translateService
-                  .get(`MESSAGES.ERROR.${error.type}`)
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(translatedMsg);
-                  })
-              );
+              this._utilityService.showErrorMessage(error);
               //   this._snackBarService.openSnackBarAsText(error.message);
               this._utilityService.$signatureUploaded.next(false);
             }
@@ -814,13 +779,7 @@ export class HealthDeclarationComponent implements OnInit {
             }
           },
           ({ error }) => {
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
-                })
-            );
+            this._utilityService.showErrorMessage(error);
           }
         )
     );

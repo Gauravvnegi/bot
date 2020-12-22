@@ -1,4 +1,4 @@
-import { DepositRules, PaymentHeaders } from '../constants/payment';
+import { DepositRules, PaymentHeaders, GatewayTypes } from '../constants/payment';
 
 export interface IRoomRates {
 	base: number;
@@ -42,7 +42,7 @@ export interface IPaymentConfiguration {
 	id: string;
 	merchantId: string;
 	accessCode: string;
-	gatewayType: string;
+	gatewayType: GatewayTypes.ccavenue;
 	subAccountId: string;
 	chainId: string;
 	secretKey: string;

@@ -6,7 +6,6 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import {
-  HotelPaymentConfig,
   PaymentStatus,
   PaymentCCAvenue,
   SelectedPaymentOption,
@@ -19,6 +18,7 @@ import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { IPaymentConfiguration } from 'libs/web-user/shared/src/lib/types/payment';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -29,7 +29,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
   @ViewChild('matTab') matTab: MatTabGroup;
 
-  hotelPaymentConfig: HotelPaymentConfig;
+  hotelPaymentConfig: IPaymentConfiguration;
   isConfigLoaded: boolean = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
 
@@ -130,7 +130,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onCheckinSubmit() {
-    if (this.reservationData.paymentSummary.payableAmount === 0) {
+    if (this.reservationData.paymentSummary.payableAmount !== 0) {
       this.submitWithoutPayment('checkin');
     } else {
       const data = this.mapPaymentInitiationData();

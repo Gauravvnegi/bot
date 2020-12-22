@@ -9,7 +9,7 @@ export interface Deserializable {
 
 export class PaymentDetailDS implements Deserializable {
   paymentSummary: PaymentSummary;
-  hotelConfig;
+  hotelConfig: HotelConfig;
 
   deserialize(paymentSummary: any, config: any) {
     this.paymentSummary = new PaymentSummary().deserialize(paymentSummary);
@@ -26,7 +26,7 @@ export class PaymentSummary {
   paidAmount: number;
   dueAmount: number;
   payableAmount: number;
-  currency: string;
+  currencyCode: string;
   roomRates: paymentType.IRoomRates;
   packages: paymentType.IPackage[];
   transactionsHistory: any[];
@@ -42,7 +42,7 @@ export class PaymentSummary {
       set({}, 'paidAmount', get(paymentSummary, ['paidAmount'])),
       set({}, 'dueAmount', get(paymentSummary, ['dueAmount'])),
       set({}, 'payableAmount', get(paymentSummary, ['payableAmount'])),
-      set({}, 'currency', get(paymentSummary, ['currency'])),
+      set({}, 'currencyCode', get(paymentSummary, ['currency'])),
       set({}, 'roomRates', get(paymentSummary, ['roomRates'])),
       set({}, 'packages', get(paymentSummary, ['packages'])),
       set({}, 'transactionsHistory', get(paymentSummary, ['transactionsHistory'])),
@@ -90,9 +90,9 @@ export class PaymentCCAvenue {
   signatureUrl?: string;
 
   deserialize(
-    config,
-    depositRules,
-    type
+    config: paymentType.IPaymentConfiguration,
+    depositRules: paymentType.IDepositRule,
+    type: paymentType.IPrePaymentPM | paymentType.IDepositPM | paymentType.IGuaranteePM
   ) {
     Object.assign(
       this,

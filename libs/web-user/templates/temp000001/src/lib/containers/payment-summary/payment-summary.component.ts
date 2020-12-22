@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { PaymentDetail } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
+import { PaymentSummary } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 
 @Component({
   selector: 'hospitality-bot-payment-summary',
@@ -13,7 +13,7 @@ export class PaymentSummaryComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() reservationData;
 
-  paymentSummary: PaymentDetail;
+  paymentSummary: PaymentSummary;
 
   displayedColumns: string[] = [
     'label',
@@ -100,7 +100,7 @@ export class PaymentSummaryComponent implements OnInit {
   }
 
   get bookingSummary(){
-    return this._paymentDetailsService.paymentSummaryDetails.paymentDetail;
+    return this._paymentDetailsService.paymentSummaryDetails.paymentSummary;
   }
 
   get currencyCode(){

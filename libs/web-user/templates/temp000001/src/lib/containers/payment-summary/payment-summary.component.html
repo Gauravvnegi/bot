@@ -20,25 +20,6 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="unit">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
-            Unit
-          </th>
-          <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
-            {{ element.unit }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="base">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
-            Unit Price
-          </th>
-          <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
-            {{ element.currency }}
-            {{ element.base }}
-          </td>
-        </ng-container>
-
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
             Amount
@@ -50,32 +31,12 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="CGST">
+        <ng-container matColumnDef="currency">
           <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
-            CGST
-          </th>
-          <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
-            {{ element.CGST }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="SGST">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
-            SGST
-          </th>
-          <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
-            {{ element.SGST }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="discount">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="'text-center'">
-            Discount
+            Currency
           </th>
           <td mat-cell *matCellDef="let element" [ngClass]="'text-center'">
             {{ element.currency }}
-
-            {{ element.discount }}
           </td>
         </ng-container>
 
@@ -97,53 +58,8 @@
     <table class="description-table" cellspacing="0" cellpadding="0">
       <tr class="total__amount">
         <td colspan="8">
-          <div class="enteries">
-            <p class="label">Total Amount:</p>
-            <p class="value">
-              {{ currencyCode }} {{ paymentSummary.totalAmount }}
-            </p>
-          </div>
-        </td>
-      </tr>
-      <tr class="total__amount">
-        <td colspan="8">
-          <div class="enteries">
-            <p class="label">Total Saving:</p>
-            <p class="value">
-              {{ currencyCode }} {{ paymentSummary.totalDiscount }}
-            </p>
-          </div>
-        </td>
-      </tr>
-      <tr class="total__amount">
-        <td colspan="8">
-          <div class="enteries paid__amount">
-            <p class="label">Paid Amount:</p>
-            <p class="value">
-              -{{ currencyCode }} {{ paymentSummary.paidAmount }}
-            </p>
-          </div>
-        </td>
-      </tr>
-      <!-- <tr>
-        <td colspan="8">
-          <web-user-promocode
-            (promocodeData)="applyPromocode($event)"
-          ></web-user-promocode>
-        </td>
-      </tr> -->
-      <tr class="total__amount">
-        <td colspan="8">
-          <div class="enteries">
-            <p class="label">Coupon Discount:</p>
-            <p class="value">-{{ currencyCode }} 0</p>
-          </div>
-        </td>
-      </tr>
-      <tr class="total__amount">
-        <td colspan="8">
           <div class="enteries due__amount">
-            <p class="label">Due Amount:</p>
+            <p class="label">Amount to Pay:</p>
             <p class="value">
               {{ currencyCode }} {{ paymentSummary.payableAmount }}
             </p>

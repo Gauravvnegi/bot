@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
 import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
 import { PaymentCCAvenue, PaymentStatus, SelectedPaymentOption } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
@@ -70,7 +71,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   onPrecheckinSubmit() {
     if (this.reservationData.paymentSummary.payableAmount === 0) {
-      this.submitWithoutPayment('preCheckin');
+      this.submitWithoutPayment(journeyEnums.JOURNEY.preCheckin);
     } else {
       const data = this.mapPaymentInitiationData();
       const TAB_INDEX = this.matTab['_selectedIndex'];
@@ -78,34 +79,16 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
+          this.selectedPaymentOption.config.gatewayType === paymentEnum.GatewayTypes.ccavenue
         ) {
-          this.$subscription.add(
-            this._paymentDetailsService
-              .initiatePaymentCCAvenue(
-                this._reservationService.reservationId,
-                data
-              )
-              .subscribe(
-                (response) => {
-                  window.location.href = response.billingUrl;
-                },
-                ({ error }) => {
-                  this._buttonService.buttonLoading$.next(
-                    this.buttonRefs['submitButton']
-                  );
-                  this.utilService.showErrorMessage(error);
-                  // this._snackBarService.openSnackBarAsText(error.message);
-                }
-              )
-          );
+          this.initiateCCAvenuePayment(data, 'submitButton');
         } else {
           this.utilService.showErrorMessage(`VALIDATION.PAYMENT_METHOD_SELECT_PENDING`);
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['submitButton']
           );
         }
-      } else {
+      } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
         this.updatePaymentStatus('preCheckin');
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
@@ -116,44 +99,48 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   onCheckinSubmit() {
     if (this.reservationData.paymentSummary.payableAmount !== 0) {
-      this.submitWithoutPayment('checkin');
+      this.submitWithoutPayment(journeyEnums.JOURNEY.checkin);
     } else {
       const data = this.mapPaymentInitiationData();
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
-      if (TAB_LABEL === 'Pay Now') {
+      if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
+          this.selectedPaymentOption.config.gatewayType === paymentEnum.GatewayTypes.ccavenue
         ) {
-          this.$subscription.add(
-            this._paymentDetailsService
-              .initiatePaymentCCAvenue(
-                this._reservationService.reservationId,
-                data
-              )
-              .subscribe(
-                (response) => {
-                  window.location.href = response.billingUrl;
-                },
-                ({ error }) => {
-                  this.utilService.showErrorMessage(error);
-                  this._buttonService.buttonLoading$.next(
-                    this.buttonRefs['nextButton']
-                  );
-                }
-              )
-          );
+          this.initiateCCAvenuePayment(data, 'nextButton');
         } else {
           this.utilService.showErrorMessage('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );
         }
-      } else {
+      } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
         this.updatePaymentStatus('checkin');
       }
     }
+  }
+
+  private initiateCCAvenuePayment(data, buttonRef): void {
+    this.$subscription.add(
+      this._paymentDetailsService
+        .initiatePaymentCCAvenue(
+          this._reservationService.reservationId,
+          data
+        )
+        .subscribe(
+          (response) => {
+            window.location.href = response.billingUrl;
+          },
+          ({ error }) => {
+            this.utilService.showErrorMessage(error);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs[buttonRef]
+            );
+          }
+        )
+    );
   }
 
   onCheckoutSubmit() {
@@ -168,43 +155,51 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     );
   }
 
-  updatePaymentStatus(state) {
+  private updatePaymentStatus(state): void {
     const data = this.mapPaymentData();
     this.$subscription.add(
       this._paymentDetailsService
         .updatePaymentStatus(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
-            if (state === 'checkin') {
-              this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['nextButton']
-              );
-              this._stepperService.setIndex('next');
-            } else {
-              this.openThankyouPage(state);
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
-              );
-            }
+            this.successAction(state);
           },
           ({ error }) => {
             this.utilService.showErrorMessage(error);
-            if (state === 'checkin') {
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['nextButton']
-              );
-            } else {
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
-              );
-            }
+            this.failureAction(state);
           }
         )
     );
   }
 
-  submitWithoutPayment(state) {
+  private successAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
+    if (state === journeyEnums.JOURNEY.checkin) {
+      this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['nextButton']
+      );
+      this._stepperService.setIndex('next');
+    } else {
+      this.openThankyouPage(state);
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['submitButton']
+      );
+    }
+  }
+
+  private failureAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
+    if (state === journeyEnums.JOURNEY.checkin) {
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['nextButton']
+      );
+    } else {
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['submitButton']
+      );
+    }
+  }
+
+  private submitWithoutPayment(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
     if (state === 'checkin') {
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
@@ -219,7 +214,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     this.selectedPaymentOption.type = event.methodType;
   }
 
-  mapPaymentData() {
+  private mapPaymentData(): PaymentStatus {
     const paymentStatusData = new PaymentStatus();
     paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk || true;
     paymentStatusData.status = 'SUCCESS';

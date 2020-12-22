@@ -17,12 +17,8 @@ export class PaymentSummaryComponent implements OnInit {
 
   displayedColumns: string[] = [
     'label',
-    'unit',
-    'base',
     'amount',
-    'CGST',
-    'SGST',
-    'discount',
+    'currency',
     'totalAmount',
   ];
   dataSource: any[] = [];
@@ -41,60 +37,34 @@ export class PaymentSummaryComponent implements OnInit {
   }
 
   getModifiedPaymentSummary() {
-    let {
-      label,
-      description,
-      unit,
-      base,
-      amount,
-      discount,
-      totalAmount,
-      taxAndFees,
-    } = this.paymentSummary.roomRates;
+    // let {
+    //   label,
+    //   description,
+    //   amount,
+    //   totalAmount,
+    // } = this.paymentSummary.roomRates;
 
-    this.dataSource.push({
-      label,
-      description,
-      unit,
-      base,
-      amount,
-      discount,
-      totalAmount,
-      currency: this.paymentSummary.currencyCode,
-      ...Object.assign(
-        {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
-      ),
-    });
+    // this.dataSource.push({
+    //   label,
+    //   description,
+    //   amount,
+    //   totalAmount,
+    //   currency: this.paymentSummary.currencyCode,
+    // });
     this.paymentSummary.packages.forEach((amenity) => {
       let {
         label,
         description,
-        unit,
-        base,
         amount,
-        discount,
         totalAmount,
-        taxAndFees,
       } = amenity;
 
       this.dataSource.push({
         label,
         description,
-        unit,
-        base,
         amount,
-        discount,
         totalAmount,
         currency: this.paymentSummary.currencyCode,
-        ...Object.assign(
-          {},
-          ...taxAndFees.map((taxType) => ({
-            [taxType.type]: taxType.value,
-          }))
-        ),
       });
     });
   }

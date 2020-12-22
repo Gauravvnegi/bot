@@ -4,6 +4,8 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { HyperlinkElementService } from 'libs/web-user/shared/src/lib/services/hyperlink-element.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-footer',
@@ -63,7 +65,8 @@ export class FooterComponent implements OnInit, OnDestroy {
     public _hyperlink: HyperlinkElementService,
     private _footerService: FooterService,
     private _hotelService: HotelService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
     ) {}
 
   ngOnInit(): void {
@@ -77,7 +80,11 @@ export class FooterComponent implements OnInit, OnDestroy {
       .subscribe(response =>{
         this.slides = response;
       }, ({error})=>{
-        this.utilService.showErrorMessage(error);
+        this._translateService
+          .get(`MESSAGES.ERROR.${error.type}`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
       })
     );
   }

@@ -8,6 +8,8 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 import { get } from 'lodash';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { DocumentsDetailsComponent } from '../documents-details/documents-details.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'hospitality-bot-documents-details-wrapper',
   templateUrl: './documents-details-wrapper.component.html',
@@ -24,7 +26,8 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
     private _hotelService: HotelService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -72,7 +75,11 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             // this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
@@ -83,7 +90,11 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`, { documentType: status[0].type });
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`, { documentType: status[0].type })
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();

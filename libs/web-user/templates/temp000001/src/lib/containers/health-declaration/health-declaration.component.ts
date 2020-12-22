@@ -16,6 +16,8 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
+import { TranslateService } from '@ngx-translate/core';
+import { SnackBarService } from 'libs/shared/material/src';
 
 const components = {
   radio: RadioComponent,
@@ -60,7 +62,9 @@ export class HealthDeclarationComponent implements OnInit {
     private _healthDetailsService: HealthDetailsService,
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
-    private _utilityService: UtilityService,
+    private _translateService: TranslateService,
+    private _snackBarService:SnackBarService,
+    private _utilityService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -87,11 +91,24 @@ export class HealthDeclarationComponent implements OnInit {
           .subscribe(
             (response) => {
               this.signature = response.fileDownloadUrl;
-              this._utilityService.showSuccessMessage('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE');
+              this._translateService
+              .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(
+                  translatedMsg,
+                  '',
+                  { panelClass: 'success' }
+                );
+              });
               this._utilityService.$signatureUploaded.next(true);
             },
             ({ error }) => {
-              this._utilityService.showErrorMessage(error);
+              
+              this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
               //   this._snackBarService.openSnackBarAsText(error.message);
               this._utilityService.$signatureUploaded.next(false);
             }
@@ -779,7 +796,11 @@ export class HealthDeclarationComponent implements OnInit {
             }
           },
           ({ error }) => {
-            this._utilityService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
           }
         )
     );

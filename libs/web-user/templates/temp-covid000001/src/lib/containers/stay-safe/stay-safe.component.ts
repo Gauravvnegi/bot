@@ -5,6 +5,8 @@ import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-stay-safe',
@@ -19,7 +21,8 @@ export class StaySafeComponent implements OnInit {
     private _safeMeasures: SafeMeasuresService,
     public _hyperlink: HyperlinkElementService,
     private _hotelService: HotelService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +51,11 @@ export class StaySafeComponent implements OnInit {
       .subscribe((measuresResponse) => {
         this.safeMeasures = measuresResponse;
       },({error})=>{
-        this.utilService.showErrorMessage(error);
+        this._translateService
+          .get(`MESSAGES.ERROR.${error.type}`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
       })
     );
   }

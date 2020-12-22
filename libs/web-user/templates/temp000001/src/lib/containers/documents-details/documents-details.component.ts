@@ -7,6 +7,8 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 import { Observable, Subscription } from 'rxjs';
 import { DocumentDetailsConfigI } from './../../../../../../shared/src/lib/data-models/documentDetailsConfig.model';
 import { DocumentDetailsService } from './../../../../../../shared/src/lib/services/document-details.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-documents-details',
@@ -40,7 +42,8 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     public _documentDetailService: DocumentDetailsService,
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.initDocumentDetailForm();
   }
@@ -406,7 +409,11 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this.utilService.showSuccessMessage('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE');
+            this._translateService
+              .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
           },
           ({ error }) => {
             this.updateDocumentFG(guestId, doc_type, doc_page, '');
@@ -416,7 +423,11 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
               doc_type,
               false
             );
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
           }
         )
     );

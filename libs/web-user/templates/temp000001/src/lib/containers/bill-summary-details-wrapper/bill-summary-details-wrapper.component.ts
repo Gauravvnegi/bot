@@ -5,6 +5,8 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
@@ -21,7 +23,8 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -70,7 +73,11 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
 
   onSummarySubmit() {
     if (!this.signature) {
-      this.utilService.showErrorMessage(`VALIDATION.SIGNATURE_UPLOAD_PENDING`);
+      this._translateService
+        .get(`VALIDATION.SIGNATURE_UPLOAD_PENDING`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;
     }
@@ -94,7 +101,11 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             // this._snackBarService.openSnackBarAsText(error.message);
           }
         )

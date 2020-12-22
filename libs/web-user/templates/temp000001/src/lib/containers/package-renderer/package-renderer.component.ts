@@ -9,6 +9,8 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 import { Subscription } from 'rxjs';
 import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
 import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportFacilitiesComponent,
@@ -43,7 +45,8 @@ export class PackageRendererComponent
     private _reservationService: ReservationService,
     private _resolver: ComponentFactoryResolver,
     private _buttonService: ButtonService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -217,11 +220,23 @@ export class PackageRendererComponent
             this.selectedSubPackageArray = [];
             this.selectedService = '';
             this.onPackageUpdate.emit(true);
-            this.utilService.showSuccessMessage('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE');
+            this._translateService
+              .get('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE')
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(
+                  translatedMsg,
+                  '',
+                  { panelClass: 'success' }
+                );
+              });
             this._buttonService.buttonLoading$.next(this.saveButton);
           },
           (error) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this._buttonService.buttonLoading$.next(this.saveButton);
           }
         )
@@ -241,7 +256,11 @@ export class PackageRendererComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`);
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
     return;
   }
 

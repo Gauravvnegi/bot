@@ -6,6 +6,8 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-registration-card',
@@ -62,6 +64,8 @@ export class RegistrationCardComponent {
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
     @Inject(MAT_DIALOG_DATA) data,
     private _utilityService: UtilityService,
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.settings = data;
   }
@@ -101,7 +105,11 @@ export class RegistrationCardComponent {
             this._utilityService.$signatureUploaded.next(true);
           },
           ({ error }) => {
-            this._utilityService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this._utilityService.$signatureUploaded.next(false);
           }
         )

@@ -9,6 +9,8 @@ import { ButtonService } from '../../services/button.service';
 import { SignatureService } from '../../services/signature.service';
 import { UtilityService } from '../../services/utility.service';
 import { SignaturePadScribbleComponent } from '../signature-pad-scribble/signature-pad-scribble.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-signature-capture-wrapper',
@@ -118,7 +120,8 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
     private _signatureService: SignatureService,
     private _buttonService: ButtonService,
     private _utilityService: UtilityService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.initFormGroup();
   }
@@ -174,7 +177,11 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
     let image;
     if (TAB_LABEL === 'Draw') {
       if (this.signatuePadScribbleComponent.signaturePad.isEmpty()) {
-        this.utilService.showErrorMessage(`VALIDATION.SIGNATURE_PAD_PENDING`);
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_PAD_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -186,14 +193,22 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
     } else if (TAB_LABEL === 'Type') {
       const text = this.textSignature;
       if (text === '') {
-        this.utilService.showErrorMessage(`VALIDATION.SIGNATURE_NAME_PENDING`);
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_NAME_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
       this.textToFile(text);
     } else if (TAB_LABEL === 'Upload') {
       if (this.uploadType === '') {
-        this.utilService.showErrorMessage(`VALIDATION.SIGNATURE_FILE_PENDING`);
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_FILE_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -228,7 +243,11 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
         this.signature.signatureImg = res['file_download_url'];
         this.urlToFile(res.file_download_url, res.file_type);
       }, ({ error }) => this.$subscription.add(
-        this.utilService.showErrorMessage(error)
+        this._translateService
+          .get(`MESSAGES.ERROR.${error.type}`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        })
       ))
     );
   }

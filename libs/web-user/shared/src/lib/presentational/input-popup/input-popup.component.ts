@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { ReservationService } from '../../services/booking.service';
 import { ButtonService } from '../../services/button.service';
 import { UtilityService } from '../../services/utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'web-user-input-popup',
@@ -24,7 +26,8 @@ export class InputPopupComponent implements OnInit {
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private _buttonService: ButtonService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.dialaogData = data.pageValue;
   }
@@ -48,11 +51,19 @@ export class InputPopupComponent implements OnInit {
       .checkIn(this._reservationService.reservationData.id, data)
       .subscribe(
         (res) => {
-          this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`);
+          this._translateService
+          .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
           this.close('success');
         },
         ({ error }) => {
-          this.utilService.showErrorMessage(error);
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
           this._buttonService.buttonLoading$.next(this.saveButton);
           //this.close('success');
         }

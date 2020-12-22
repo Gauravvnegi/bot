@@ -7,6 +7,8 @@ import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-d
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface IStayDetailsWrapper {
   saveStayDetails(): void;
@@ -26,7 +28,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     private _amenitiesService: AmenitiesService,
     private _hotelService: HotelService,
     private _reservationService: ReservationService,
-    private utilService: UtilityService,
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
   ) {
@@ -84,7 +87,11 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
-            this.utilService.showErrorMessage(error);
+            this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
           }
         )
     );

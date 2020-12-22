@@ -12,6 +12,8 @@ import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -36,7 +38,8 @@ export class ApplicationStatusComponent implements OnInit {
     private _stepperService: StepperService,
     private _templateService: TemplateService,
     private _regCardService: RegCardService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -127,7 +130,11 @@ export class ApplicationStatusComponent implements OnInit {
               );
             },
             ({ error }) => {
-              this.utilService.showErrorMessage(error);
+              this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             }
           )
       );

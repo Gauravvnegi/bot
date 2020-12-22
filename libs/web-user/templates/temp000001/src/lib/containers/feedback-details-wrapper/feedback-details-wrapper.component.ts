@@ -5,6 +5,8 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-details-wrapper',
@@ -19,7 +21,8 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -64,14 +67,22 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
         .addFeedback(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
-            this.utilService.showSuccessMessage('MESSAGES.SUCCESS.FEEDBACK_COMPLETE');
+            this._translateService
+              .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
@@ -81,7 +92,11 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.utilService.showErrorMessage(`VALIDATION.${status[0]['code']}`);
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
     return;
   }
 

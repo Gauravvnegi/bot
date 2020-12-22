@@ -8,6 +8,8 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 import { get } from 'lodash';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { GuestDetailsComponent } from '../guest-details/guest-details.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-guest-details-wrapper',
@@ -23,7 +25,8 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
     private _reservationService: ReservationService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -68,7 +71,11 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             //   this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
@@ -82,7 +89,11 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
 
-    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`);
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
 
     if (get(status[0], ['data', 'type']) == 'primary') {
       this.guestDetailsComp.primaryGuestAccordian.openAll();

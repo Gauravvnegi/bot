@@ -3,6 +3,8 @@ import { FaqService } from 'libs/web-user/shared/src/lib/services/faq.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-faq-wrapper',
@@ -17,7 +19,8 @@ export class FaqWrapperComponent implements OnInit, OnDestroy {
   constructor(
     private _faqService: FaqService,
     private _hotelService: HotelService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +39,11 @@ export class FaqWrapperComponent implements OnInit, OnDestroy {
         this.faq = true;
         this.initFaqDetailsDs(faqResponse);
       },({error})=>{
-        this.utilService.showErrorMessage(error);
+        this._translateService
+        .get(`MESSAGES.ERROR.${error.type}`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
       })
     );
   }

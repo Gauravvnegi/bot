@@ -8,6 +8,8 @@ import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/pay
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-payment-main',
@@ -27,7 +29,8 @@ export class PaymentMainComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService,
     private _paymentDetailService: PaymentDetailsService,
     private router: Router,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -72,11 +75,23 @@ export class PaymentMainComponent implements OnInit {
               this.reservationData['currentJourney'] === 'PRECHECKIN' &&
               status === 'SUCCESS'
             ) {
-              this.utilService.showSuccessMessage('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE');
+              this._translateService
+                .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
+                .subscribe((translatedMsg) => {
+                    this._snackBarService.openSnackBarAsText(
+                    translatedMsg,
+                    '',
+                    { panelClass: 'success' }
+                    );
+                  })
             }
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             // this._snackBarService.openSnackBarAsText(error.message);
           }
         )

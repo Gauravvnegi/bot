@@ -8,6 +8,8 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { BillSummaryService } from '../../../../../../shared/src/lib/services/bill-summary.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -51,6 +53,8 @@ export class BillSummaryDetailsComponent implements OnInit {
     private _reservationService: ReservationService,
     private _utilityService: UtilityService,
     public dialog: MatDialog,
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.initRequestForm();
   }
@@ -177,11 +181,23 @@ export class BillSummaryDetailsComponent implements OnInit {
               );
               this.signature = response['fileDownloadUri'];
               this._utilityService.$signatureUploaded.next(true);
-              this._utilityService.showSuccessMessage('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE');
+              this._translateService
+              .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(
+                  translatedMsg,
+                  '',
+                  { panelClass: 'success' }
+                );
+              });
             },
             ({ error }) => {
               this._utilityService.$signatureUploaded.next(true);
-              this._utilityService.showErrorMessage(error);
+              this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             }
           )
       );

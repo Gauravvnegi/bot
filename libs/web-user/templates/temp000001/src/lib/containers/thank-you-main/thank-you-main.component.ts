@@ -7,6 +7,8 @@ import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/tem
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { Subscription } from 'rxjs';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-thank-you',
@@ -35,7 +37,8 @@ export class ThankYouMainComponent implements OnInit {
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
     private _thankyouService: ThankYouService,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -70,7 +73,11 @@ export class ThankYouMainComponent implements OnInit {
             }
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(`MESSAGES.ERROR.${error.type}`);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
           }
         )
     );

@@ -8,6 +8,8 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Subscription } from 'rxjs';
 import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-raise-request',
@@ -25,7 +27,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private _raiseRequestService: RaiseRequestService,
     private _hotelService: HotelService,
     public dialogRef: MatDialogRef<RaiseRequestComponent>,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     this.initRaiseRequestForm();
   }
@@ -64,10 +67,22 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._raiseRequestService
       .saveRaiseRequest(this._hotelService.hotelId, data)
       .subscribe((response) => {
-        this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.REQUEST_RAISE_COMPLETE`);
+        this._translateService
+          .get(`MESSAGES.SUCCESS.REQUEST_RAISE_COMPLETE`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(
+              translatedMsg,
+              '',
+              { panelClass: 'success' }
+            );
+          });
         this.close();
       },({error})=>{
-        this.utilService.showErrorMessage(error);
+        this._translateService
+          .get(`MESSAGES.ERROR.${error.type}`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
       })
     );
   }

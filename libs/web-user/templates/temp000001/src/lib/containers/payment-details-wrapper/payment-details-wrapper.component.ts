@@ -14,6 +14,8 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { IPaymentConfiguration } from 'libs/web-user/shared/src/lib/types/payment';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -37,7 +39,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _billSummaryService: BillSummaryService,
     private router: Router,
     private route: ActivatedRoute,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -83,7 +86,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         ) {
           this.initiateCCAvenuePayment(data, 'submitButton');
         } else {
-          this.utilService.showErrorMessage(`VALIDATION.PAYMENT_METHOD_SELECT_PENDING`);
+          this._translateService
+            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['submitButton']
           );
@@ -98,7 +105,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   onCheckinSubmit() {
-    if (this.reservationData.paymentSummary.payableAmount !== 0) {
+    if (this.reservationData.paymentSummary.payableAmount === 0) {
       this.submitWithoutPayment(journeyEnums.JOURNEY.checkin);
     } else {
       const data = this.mapPaymentInitiationData();
@@ -111,7 +118,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         ) {
           this.initiateCCAvenuePayment(data, 'nextButton');
         } else {
-          this.utilService.showErrorMessage('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          this._translateService
+            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
           this._buttonService.buttonLoading$.next(
             this.buttonRefs['nextButton']
           );
@@ -134,7 +145,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             window.location.href = response.billingUrl;
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this._buttonService.buttonLoading$.next(
               this.buttonRefs[buttonRef]
             );
@@ -165,7 +180,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             this.successAction(state);
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this.failureAction(state);
           }
         )
@@ -174,7 +193,15 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   private successAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
     if (state === journeyEnums.JOURNEY.checkin) {
-      this.utilService.showSuccessMessage(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
+      this._translateService
+        .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(
+          translatedMsg,
+          '',
+          { panelClass: 'success' }
+        );
+      });
       this._buttonService.buttonLoading$.next(
         this.buttonRefs['nextButton']
       );

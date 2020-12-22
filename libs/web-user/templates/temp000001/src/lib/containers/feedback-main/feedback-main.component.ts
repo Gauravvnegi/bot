@@ -9,6 +9,8 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { forkJoin, of, Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -35,7 +37,8 @@ export class FeedbackMainComponent implements OnInit {
     private _buttonService: ButtonService,
     private router: Router,
     private route: ActivatedRoute,
-    private utilService: UtilityService
+    private _snackBarService: SnackBarService,
+    private _translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -106,7 +109,11 @@ export class FeedbackMainComponent implements OnInit {
             this.openThankyouPage('feedback');
           },
           ({ error }) => {
-            this.utilService.showErrorMessage(error);
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             this._buttonService.buttonLoading$.next(this.saveButton);
           }
         )
@@ -118,7 +125,11 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.utilService.showErrorMessage(`VALIDATION.${status[0].code}`);
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
     return;
   }
 

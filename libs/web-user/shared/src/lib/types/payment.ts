@@ -26,6 +26,7 @@ export interface IPackage {
 export interface IDepositRule {
 	id: string;
 	amount: number;
+	label: string;
 	guaranteeType: DepositRules.deposit | DepositRules.guarantee | DepositRules.prePayment;
 	type: string;
 	depositNight: number;

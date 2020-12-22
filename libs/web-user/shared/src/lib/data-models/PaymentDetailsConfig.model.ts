@@ -27,6 +27,8 @@ export class PaymentSummary {
   dueAmount: number;
   payableAmount: number;
   currencyCode: string;
+  inclusions: string;
+  printRate: boolean;
   roomRates: paymentType.IRoomRates;
   packages: paymentType.IPackage[];
   transactionsHistory: any[];
@@ -45,8 +47,11 @@ export class PaymentSummary {
       set({}, 'currencyCode', get(paymentSummary, ['currency'])),
       set({}, 'roomRates', get(paymentSummary, ['roomRates'])),
       set({}, 'packages', get(paymentSummary, ['packages'])),
+      set({}, 'inclusions', get(paymentSummary, ['inclusions'])),
+      set({}, 'roomRates', get(paymentSummary, ['roomRates'])),
       set({}, 'transactionsHistory', get(paymentSummary, ['transactionsHistory'])),
       set({}, 'depositRules', get(paymentSummary, ['depositRules'])),
+      set({}, 'printRate', get(paymentSummary, ['printRate']))
     )
     return this;
   }

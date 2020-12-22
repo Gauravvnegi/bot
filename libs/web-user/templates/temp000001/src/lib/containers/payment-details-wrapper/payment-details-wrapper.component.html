@@ -27,15 +27,14 @@
           </div>
         </ng-template>
         <div class="payment-wrapper">
-          <div>
+          <div *ngIf="header.type !== 'Pay At Desk'">
             <div
               class="payment__wrapper--header"
-              *ngIf="header.type !== 'Pay At Desk'"
             >
               Payment Methods
             </div>
             <web-user-payment-method
-              *ngIf="hotelPaymentConfig && header.type !== 'Pay At Desk'"
+              *ngIf="hotelPaymentConfig"
               [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
             ></web-user-payment-method>

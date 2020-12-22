@@ -37,20 +37,16 @@ export class PaymentSummaryComponent implements OnInit {
   }
 
   getModifiedPaymentSummary() {
-    // let {
-    //   label,
-    //   description,
-    //   amount,
-    //   totalAmount,
-    // } = this.paymentSummary.roomRates;
-
-    // this.dataSource.push({
-    //   label,
-    //   description,
-    //   amount,
-    //   totalAmount,
-    //   currency: this.paymentSummary.currencyCode,
-    // });
+    if (this.paymentSummary.depositRules.label) {
+      let { label, amount } = this.paymentSummary.depositRules;
+      this.dataSource.push({
+        label,
+        description: '',
+        amount,
+        totalAmount: amount,
+        currency: this.paymentSummary.currencyCode
+      })
+    }
     this.paymentSummary.packages.forEach((amenity) => {
       let {
         label,
@@ -75,6 +71,10 @@ export class PaymentSummaryComponent implements OnInit {
 
   get currencyCode(){
     return this._paymentDetailsService.currencyCode;
+  }
+
+  get roomRates() {
+    return this.paymentSummary.roomRates;
   }
 
 }

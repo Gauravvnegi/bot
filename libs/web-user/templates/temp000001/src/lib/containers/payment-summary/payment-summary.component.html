@@ -3,6 +3,10 @@
     Payment Summary
   </div>
   <div class="table__wrapper">
+    <div *ngIf="paymentSummary">
+      <div *ngIf="paymentSummary.printRate">{{ roomRates.label }}: {{ currencyCode }} {{ roomRates.amount }}</div>
+      <div>Your Inclusions: {{ paymentSummary.inclusions }}</div>
+    </div>
     <div class="description-table-wrapper">
       <table
         class="description-table"

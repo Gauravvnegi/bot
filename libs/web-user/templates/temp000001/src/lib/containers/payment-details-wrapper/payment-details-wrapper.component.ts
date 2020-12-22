@@ -15,7 +15,7 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
+import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -82,10 +82,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       const data = this.mapPaymentInitiationData();
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
-      if (TAB_LABEL === 'Pay Now') {
+      if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+          this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
         ) {
           this.$subscription.add(
             this._paymentDetailsService

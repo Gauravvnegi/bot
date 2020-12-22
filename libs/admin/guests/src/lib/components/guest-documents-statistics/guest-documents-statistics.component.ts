@@ -45,7 +45,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     this.getDocumentStatistics();
   }
 
-  private initGraphData() {
+  private initGraphData(): void {
     this.chart.Data = [[]];
     this.chart.Data[0][0] = this.document.INITIATED;
     this.chart.Data[0][1] = this.document.PENDING;
@@ -53,7 +53,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     this.chart.Data[0][3] = this.document.REJECTED;
   }
 
-  private getDocumentStatistics() {
+  private getDocumentStatistics(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
@@ -84,7 +84,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 

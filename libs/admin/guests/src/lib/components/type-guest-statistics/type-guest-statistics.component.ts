@@ -141,13 +141,13 @@ export class TypeGuestStatisticsComponent implements OnInit {
     ci.update();
   };
 
-  setChartType(option) {
+  setChartType(option): void {
     if (this.chart.chartType !== option) {
       this.chart.chartType = option.value;
     }
   }
 
-  private initGraphData() {
+  private initGraphData(): void {
     const botKeys = Object.keys(this.customerData.inHouse);
     this.chart.chartData.forEach((d) => {
       d.data = [];
@@ -166,7 +166,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
 
   
 
-  private getVIPStatistics() {
+  private getVIPStatistics(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
@@ -197,7 +197,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 

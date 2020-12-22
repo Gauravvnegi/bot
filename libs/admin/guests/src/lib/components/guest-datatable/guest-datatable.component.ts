@@ -200,11 +200,11 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     this.registerListeners();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes

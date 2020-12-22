@@ -61,14 +61,14 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
   //   this.getPaymentStatistics();
   // }
 
-  private initGraphData() {
+  private initGraphData(): void {
     this.chart.Data = [[]];
     this.chart.Data[0][0] = this.payment.FULL;
     this.chart.Data[0][1] = this.payment.PARTIAL;
     this.chart.Data[0][2] = this.payment.PENDING;
   }
 
-  private getPaymentStatistics() {
+  private getPaymentStatistics(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
@@ -99,7 +99,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 

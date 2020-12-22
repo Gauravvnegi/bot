@@ -7,8 +7,6 @@
       <div class="stat-title">VIP Guest</div>
     </div>
     <div class="stat-labels-container">
-      <!-- <ng-container [ngSwitch]="chart.chartType">
-        <ng-container *ngSwitchCase="'line'"> -->
       <ng-container *ngFor="let legend of legendData; let legendIndex = index">
         <div class="stat-label" (click)="legendOnClick(legendIndex)">
           <input class="legends" type="checkbox" />
@@ -19,50 +17,6 @@
           <p class="stat-label-title">{{ legend.label }}</p>
         </div>
       </ng-container>
-      <!-- <div class="stat-label" (click)="legendOnClick(0)">
-            <input class="legends" type="checkbox" />
-            <span class="arrival-bubble"></span>
-            <p class="stat-label-title">Arrival</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(1)">
-            <input class="legends" type="checkbox" />
-            <span class="inhouse-bubble"></span>
-            <p class="stat-label-title">In House</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(2)">
-            <input class="legends" type="checkbox" />
-            <span class="departure-bubble"></span>
-            <p class="stat-label-title">Departure</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(3)">
-            <input class="legends" type="checkbox" />
-            <span class="out-guest-bubble"></span>
-            <p class="stat-label-title">Out-Guest</p>
-          </div> -->
-      <!-- </ng-container> -->
-      <!-- <ng-container *ngSwitchCase="'bar'">
-          <div class="stat-label" (click)="legendOnClick(0)">
-            <input class="legends" type="checkbox" />
-            <span class="arrival-bubble"></span>
-            <p class="stat-label-title">Arrival</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(1)">
-            <input class="legends" type="checkbox" />
-            <span class="inhouse-bubble"></span>
-            <p class="stat-label-title">In House</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(2)">
-            <input class="legends" type="checkbox" />
-            <span class="departure-bubble"></span>
-            <p class="stat-label-title">Departure</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(3)">
-            <input class="legends" type="checkbox" />
-            <span class="out-guest-bubble"></span>
-            <p class="stat-label-title">Out-Guest</p>
-          </div>
-        </ng-container> -->
-      <!-- </ng-container> -->
     </div>
     <form>
       <div class="pull-right">

@@ -149,7 +149,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
     ci.update();
   };
 
-  private initGraphData() {
+  private initGraphData(): void {
     const botKeys = Object.keys(this.guestStatusData.checkinGuestStats);
     this.chart.chartData.forEach((d) => {
       d.data = [];
@@ -166,14 +166,14 @@ export class GuestStatusStatisticsComponent implements OnInit {
     });
   }
 
-  setChartType(option) {
+  setChartType(option): void {
     if (this.chart.chartType !== option) {
       this.chart.chartType = option.value;
       this.setChartColors();
     }
   }
 
-  private getGuestStatus() {
+  private getGuestStatus(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
@@ -204,7 +204,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
     );
   }
 
-  setChartColors() {
+  setChartColors(): void {
     if (this.chart.chartType === 'bar') {
       this.chart.chartColors = [
         {

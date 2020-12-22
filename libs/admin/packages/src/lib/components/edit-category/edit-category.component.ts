@@ -5,6 +5,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { CategoryDetail } from '../../data-models/categoryConfig.model';
+import { Package } from '../../data-models/packageConfig.model';
 import { CategoriesService } from '../../services/category.service';
 import { PackageService } from '../../services/package.service';
 
@@ -19,18 +20,16 @@ export class EditCategoryComponent implements OnInit {
 
   fileUploadData = {
     fileSize: 3145728,
-    fileType: ['png', 'jpg']
+    fileType: ['png','jpg','jpeg','gif','eps']
   }
 
-  file: File;
   categoryForm: FormGroup;
   hotelCategory: CategoryDetail;
   categoryId: string;
-  selectedPackage: string;
   hotelId: string;
+  subPackages = new Array<Package>();
   globalQueries = [];
-  subPackages = [];
-
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -99,7 +98,7 @@ export class EditCategoryComponent implements OnInit {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory.category);
           this.subPackages = this.hotelCategory.category.subpackages;
-          this.selectedPackage = this.subPackages && this.subPackages.length > 0 && this.subPackages[0].id;
+          this.categoryForm.get('packages').patchValue(this.subPackages && this.subPackages.length > 0 && this.subPackages[0].id);
         })
     );
   }

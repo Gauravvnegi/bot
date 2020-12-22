@@ -15,7 +15,7 @@
         <mat-label>Packages:</mat-label>
         <span *ngIf="subPackages.length <= 0">NA</span>
         <mat-form-field *ngIf="subPackages && subPackages.length > 0">  
-          <mat-select [(ngModel)]="selectedPackage" formControlName="packages">
+          <mat-select formControlName="packages">
             <mat-option *ngFor="let subPackage of subPackages" [value]="subPackage.id">{{subPackage.name}}</mat-option>
           </mat-select> 
         </mat-form-field>

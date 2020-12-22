@@ -83,3 +83,8 @@ export class Amenity{
      downloadUrl : string; 
      autoAccept :boolean;
 }
+
+export interface packageOptionsI {
+    key: string;
+    value: string;
+}

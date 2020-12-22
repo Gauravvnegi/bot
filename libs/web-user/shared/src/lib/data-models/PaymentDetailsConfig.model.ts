@@ -59,15 +59,13 @@ export class PaymentSummary {
 
 export class HotelConfig {
   payAtDesk: boolean;
-  onlinePayment: boolean;
   paymentConfigurations: paymentType.IPaymentConfiguration;
   paymentMethods: paymentType.IPrePaymentPM[] | paymentType.IDepositPM[] | paymentType.IGuaranteePM[];
 
-  deserialize(input: any, paymentSummary: any) {
+  deserialize(input: paymentType.IPaymentConfiguration, paymentSummary: any) {
     Object.assign(
       this,
       set({}, 'payAtDesk', get(paymentSummary, ['depositRules', 'payAtDesk'])),
-      set({}, 'onlinePayment', get(input, ['onlinePayment']))
     )
 
     this.paymentMethods = input.paymentMethods[paymentSummary.depositRules.guaranteeType];
@@ -78,8 +76,6 @@ export class HotelConfig {
 
 export class PaymentStatus {
   payOnDesk: boolean;
-  transactionId: string;
-  status: string;
   signatureUrl?: string;
 }
 export class PaymentCCAvenue {

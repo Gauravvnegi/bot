@@ -2,7 +2,6 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { FooterService } from 'libs/web-user/shared/src/lib/services/footer.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { HyperlinkElementService } from 'libs/web-user/shared/src/lib/services/hyperlink-element.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';

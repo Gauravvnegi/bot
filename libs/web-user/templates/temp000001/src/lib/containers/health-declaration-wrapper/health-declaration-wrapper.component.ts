@@ -4,7 +4,6 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { get } from 'lodash';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';

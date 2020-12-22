@@ -4,7 +4,6 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { get } from 'lodash';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { DocumentsDetailsComponent } from '../documents-details/documents-details.component';

@@ -1,25 +1,10 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  Renderer2,
-  ElementRef,
-  ViewContainerRef,
-  ViewChildren,
-  QueryList,
-  InjectionToken,
-  Inject,
-  ContentChildren,
-} from '@angular/core';
-import { FormBuilder, Validators, FormArray } from '@angular/forms';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { BaseComponent } from '../base.component';
-import { UtilityService } from '../../services/utility.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { ValidatorService } from '../../services/validator.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, ContentChildren, ElementRef, EventEmitter, Inject, InjectionToken, Input, Output, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { StepperService } from '../../services/stepper.service';
+import { UtilityService } from '../../services/utility.service';
+import { ValidatorService } from '../../services/validator.service';
+import { BaseComponent } from '../base.component';
 
 export const FORM_ERRORS = new InjectionToken('FORM_ERRORS', {
   providedIn: 'root',
@@ -56,9 +41,6 @@ export class StepperComponent extends BaseComponent {
   stepperContents: QueryList<any>;
 
   constructor(
-    private fb: FormBuilder,
-    private renderer: Renderer2,
-    private elementRef: ElementRef,
     private utility: UtilityService,
     private breakpointObserver: BreakpointObserver,
     private stepperService: StepperService,

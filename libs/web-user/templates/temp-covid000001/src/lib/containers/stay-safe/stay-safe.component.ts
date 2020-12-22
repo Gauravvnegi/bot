@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Measures } from 'libs/web-user/shared/src/lib/data-models/safeMeasureConfig.model';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-measures.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
 import { SnackBarService } from 'libs/shared/material/src';

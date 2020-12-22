@@ -5,7 +5,6 @@ import { SubPackageDetailsConfigI } from 'libs/web-user/shared/src/lib/data-mode
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
 import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';

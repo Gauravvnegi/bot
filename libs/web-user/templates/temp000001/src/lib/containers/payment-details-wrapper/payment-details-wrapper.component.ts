@@ -11,7 +11,6 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { IPaymentConfiguration } from 'libs/web-user/shared/src/lib/types/payment';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';

@@ -5,7 +5,6 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';

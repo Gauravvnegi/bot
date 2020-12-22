@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FaqService } from 'libs/web-user/shared/src/lib/services/faq.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';

@@ -6,7 +6,6 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you.service';
 import { Subscription } from 'rxjs';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 

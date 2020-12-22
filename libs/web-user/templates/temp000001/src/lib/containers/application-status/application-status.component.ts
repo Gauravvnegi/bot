@@ -9,7 +9,6 @@ import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.s
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { Subscription } from 'rxjs';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
 import { SnackBarService } from 'libs/shared/material/src';

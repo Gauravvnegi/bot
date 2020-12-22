@@ -7,7 +7,6 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { forkJoin, of, Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';

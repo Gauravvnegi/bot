@@ -4,7 +4,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { RaiseRequestConfigI } from 'libs/web-user/shared/src/lib/data-models/raiseRequestConfig.model';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise-request.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Subscription } from 'rxjs';
 import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';

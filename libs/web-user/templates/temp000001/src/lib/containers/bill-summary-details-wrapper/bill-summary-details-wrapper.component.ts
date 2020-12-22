@@ -3,7 +3,6 @@ import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-s
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';

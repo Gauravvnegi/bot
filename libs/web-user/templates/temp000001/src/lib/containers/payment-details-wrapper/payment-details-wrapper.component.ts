@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { SnackBarService } from 'libs/shared/material/src';
 import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
 import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
 import { PaymentCCAvenue, PaymentStatus, SelectedPaymentOption } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
@@ -13,8 +15,6 @@ import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/pay
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { IPaymentConfiguration } from 'libs/web-user/shared/src/lib/types/payment';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { SnackBarService } from 'libs/shared/material/src';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -95,7 +95,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           );
         }
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
-        this.updatePaymentStatus('preCheckin');
+        this.updatePaymentStatus(journeyEnums.JOURNEY.checkin);
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
@@ -127,7 +127,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           );
         }
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
-        this.updatePaymentStatus('checkin');
+        this.updatePaymentStatus(journeyEnums.JOURNEY.checkin);
       }
     }
   }
@@ -226,7 +226,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private submitWithoutPayment(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
-    if (state === 'checkin') {
+    if (state === journeyEnums.JOURNEY.checkin) {
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {
@@ -243,8 +243,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   private mapPaymentData(): PaymentStatus {
     const paymentStatusData = new PaymentStatus();
     paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk || true;
-    paymentStatusData.status = 'SUCCESS';
-    paymentStatusData.transactionId = '12345678';
     if (this.billSummary && this.billSummary.signatureUrl) {
       paymentStatusData.signatureUrl = this.billSummary.signatureUrl;
     }

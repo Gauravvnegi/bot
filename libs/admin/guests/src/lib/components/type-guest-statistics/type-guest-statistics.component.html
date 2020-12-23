@@ -6,71 +6,35 @@
       </div>
       <div class="stat-title">VIP Guest</div>
     </div>
-		<div class="stat-labels-container">
-			<ng-container [ngSwitch]="chart.chartType">
-				<ng-container *ngSwitchCase="'line'">
-					<div class="stat-label" (click)="legendOnClick(0)">
-						<input class="legends" type="checkbox" />
-						<span class="arrival-bubble"></span>
-						<p class="stat-label-title">Arrival</p>
-					</div>
-					<div class="stat-label" (click)="legendOnClick(1)">
-						<input class="legends" type="checkbox" />
-						<span class="inhouse-bubble"></span>
-						<p class="stat-label-title">In House</p>
-					</div>
-					<div class="stat-label" (click)="legendOnClick(2)">
-						<input class="legends" type="checkbox" />
-						<span class="departure-bubble"></span>
-						<p class="stat-label-title">Departure</p>
-					</div>
-					<div class="stat-label" (click)="legendOnClick(3)">
-						<input class="legends" type="checkbox" />
-						<span class="out-guest-bubble"></span>
-						<p class="stat-label-title">Out-Guest</p>
-					</div>
-				</ng-container>
-				<ng-container *ngSwitchCase="'bar'">
-					<div class="stat-label" (click)="legendOnClick(0)">
-						<input class="legends" type="checkbox" />
-						<span class="arrival-bubble"></span>
-						<p class="stat-label-title">Arrival</p>
-					</div>
-					<div class="stat-label" (click)="legendOnClick(1)">
-						<input class="legends" type="checkbox" />
-						<span class="inhouse-bubble"></span>
-						<p class="stat-label-title">In House</p>
-					</div>
-					<div class="stat-label" (click)="legendOnClick(2)">
-						<input class="legends" type="checkbox" />
-						<span class="departure-bubble"></span>
-						<p class="stat-label-title">Departure</p>
-					</div>
-					<div class="stat-label" (click)="legendOnClick(3)">
-						<input class="legends" type="checkbox" />
-						<span class="out-guest-bubble"></span>
-						<p class="stat-label-title">Out-Guest</p>
-					</div>
-				</ng-container>
-			</ng-container>
-		</div>
-		<form>
-			<div class="pull-right">
-			  <label class="labl" *ngFor="let option of chartTypes">
-				<input
-				  name="method"
-				  type="radio"
-				  [checked]="chart.chartType === option.value"
-				  [value]="option.value"
-				  (click)="setChartType(option)"
-				  [id]="option.value + '-type'"
-				/>
-				<div class="image">
-				  <img [src]="option.url" />
-				</div>
-			  </label>
-			</div>
-		</form>
+    <div class="stat-labels-container">
+      <ng-container *ngFor="let legend of legendData; let legendIndex = index">
+        <div class="stat-label" (click)="legendOnClick(legendIndex)">
+          <input class="legends" type="checkbox" />
+          <span
+            [style.background-color]="legend.bubbleColor"
+            class="bubble"
+          ></span>
+          <p class="stat-label-title">{{ legend.label }}</p>
+        </div>
+      </ng-container>
+    </div>
+    <form>
+      <div class="pull-right">
+        <label class="labl" *ngFor="let option of chartTypes">
+          <input
+            name="method"
+            type="radio"
+            [checked]="chart.chartType === option.value"
+            [value]="option.value"
+            (click)="setChartType(option)"
+            [id]="option.value + '-type'"
+          />
+          <div class="image">
+            <img [src]="option.url" />
+          </div>
+        </label>
+      </div>
+    </form>
   </div>
   <div class="stat-val-container">
     <div class="line-chart">
@@ -86,5 +50,5 @@
       >
       </canvas>
     </div>
-	</div>
+  </div>
 </div>

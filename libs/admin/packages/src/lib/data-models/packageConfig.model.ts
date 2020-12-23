@@ -84,7 +84,12 @@ export class Amenity{
      autoAccept :boolean;
 }
 
-export interface packageOptionsI {
+export enum PackageSource {
+    Botshot = 'BOTSHOT',
+	Pms = 'PMS'
+}
+
+export interface IpackageOptions {
     key: string;
     value: string;
 }

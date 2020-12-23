@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
-import { CategoryDetail } from '../../data-models/categoryConfig.model';
+import { CategoryDetail, IPackage } from '../../data-models/categoryConfig.model';
 import { Package } from '../../data-models/packageConfig.model';
 import { CategoriesService } from '../../services/category.service';
 import { PackageService } from '../../services/package.service';
@@ -27,7 +27,7 @@ export class EditCategoryComponent implements OnInit {
   hotelCategory: CategoryDetail;
   categoryId: string;
   hotelId: string;
-  subPackages = new Array<Package>();
+  subPackages : IPackage[];
   globalQueries = [];
   
   constructor(

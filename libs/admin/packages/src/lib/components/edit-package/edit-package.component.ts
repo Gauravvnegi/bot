@@ -6,7 +6,7 @@ import { Regex } from 'libs/shared/constants/regex';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { Category } from '../../data-models/categoryConfig.model';
-import { PackageDetail, packageOptionsI } from '../../data-models/packageConfig.model';
+import { IpackageOptions, PackageDetail, PackageSource } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
 
 @Component({
@@ -23,17 +23,17 @@ export class EditPackageComponent implements OnInit {
     fileType: ['png','jpg','jpeg','gif','eps']
   }
 
-  currency: packageOptionsI[] = [
+  currency: IpackageOptions[] = [
     { key: 'INR', value: 'INR' },
     { key: 'USD', value: 'USD' }
   ]
 
-  packageType: packageOptionsI[] = [
+  packageType: IpackageOptions[] = [
     { key: 'Complimentary', value: 'Complimentary' },
     { key: 'Paid', value: 'Paid' }
   ]
 
-  unit: packageOptionsI[] = [
+  unit: IpackageOptions[] = [
     { key: 'Km', value: 'Km' },
     { key: 'PERSON', value: 'PERSON' },
     { key: 'TRIP', value: 'TRIP' }
@@ -80,7 +80,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   disableForm(packageData): void {
-    if (packageData.packageSource === 'PMS') {
+    if (packageData.packageSource === PackageSource.Pms) {
       this.packageForm.disable();
       this.packageForm.get('description').enable();
       this.packageForm.get('name').enable();

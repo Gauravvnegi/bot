@@ -52,6 +52,7 @@ export class EditCategoryComponent implements OnInit {
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       imageUrl: ['', [Validators.required]],
+      imageName: ['', [Validators.required]],
       packages: [''],
       active: ['']
     })
@@ -174,6 +175,7 @@ export class EditCategoryComponent implements OnInit {
       this.packageService.uploadImage(this.hotelId, formData)
         .subscribe(response => {
           this.categoryForm.get('imageUrl').patchValue(response.fileDownloadUri);
+          this.categoryForm.get('imageName').patchValue(response.fileName);
           this.snackbarService.openSnackBarAsText('Category image uploaded successfully',
             '',
             { panelClass: 'success' }

@@ -73,6 +73,7 @@ export class EditPackageComponent implements OnInit {
       unit: ['', [Validators.required]],
       packageSource: [''],
       imageUrl: ['', [Validators.required]],
+      imageName: [''],
       status: [false],
       autoAccept: [false],
       category: ['', [Validators.required]],
@@ -197,6 +198,7 @@ export class EditPackageComponent implements OnInit {
       this.packageService.uploadImage(this.hotelId, formData)
         .subscribe(response => {
           this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
+          this.packageForm.get('imageName').patchValue(response.fileName);
           this.snackbarService.openSnackBarAsText('Package image uploaded successfully',
             '',
             { panelClass: 'success' }

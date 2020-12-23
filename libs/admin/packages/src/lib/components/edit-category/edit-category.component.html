@@ -13,7 +13,7 @@
       </div>
       <div>
         <mat-label>Packages:</mat-label>
-        <span *ngIf="subPackages.length <= 0">NA</span>
+        <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
         <mat-form-field *ngIf="subPackages && subPackages.length > 0">  
           <mat-select formControlName="packages">
             <mat-option *ngFor="let subPackage of subPackages" [value]="subPackage.id">{{subPackage.name}}</mat-option>
@@ -39,6 +39,7 @@
         (fileData)="uploadFile($event)">
       </hospitality-bot-upload-file>
       </div>
+      <p>{{ categoryForm.get('imageName').value }}</p>
       <button  mat-button (click)="saveDetails()">Save</button>
       <button  mat-button (click)="redirectToCategories()">Back</button>
     </form>

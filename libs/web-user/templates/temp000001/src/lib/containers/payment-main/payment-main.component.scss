@@ -106,18 +106,29 @@
   }
 }
 
+.action_box {
+  display: flex;
+  margin-top: 30px;
+  justify-content: center;
+  &__icon {
+    padding: 10px 20px;
+    border: 1px solid #dbdbdb;
+    background-color: #f8fcff;
+    img {
+      height: 25px;
+    }
+  }
+}
+
 .main-template-button {
   margin-top: 10px;
   margin-bottom: 20px;
   display: flex;
 }
 
-
-
-.payment-button{
+.payment-button {
   @media only screen and (max-width: $M) {
-
-  left: 0;
+    left: 0;
   }
 }
 

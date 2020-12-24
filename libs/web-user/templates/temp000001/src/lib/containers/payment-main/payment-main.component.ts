@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
+import { SnackBarService } from 'libs/shared/material/src';
 import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentStatusConfig.model';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -7,8 +10,6 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { Subscription } from 'rxjs';
-import { SnackBarService } from 'libs/shared/material/src';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-payment-main',
@@ -111,6 +112,31 @@ export class PaymentMainComponent implements OnInit {
         );
       }
     }
+  }
+
+  downloadInvoice() {
+    this._paymentDetailService
+      .downloadInvoice(this._reservationService.reservationId)
+      .subscribe(
+        (response) => {
+          if (response && response.file_download_url) {
+            FileSaver.saveAs(
+              response.file_download_url,
+              'invoice_' +
+                this._reservationService.reservationId +
+                new Date().getTime() +
+                '.pdf'
+            );
+          }
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+        }
+      );
   }
 
   get status() {

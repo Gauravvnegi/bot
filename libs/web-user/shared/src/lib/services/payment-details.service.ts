@@ -73,6 +73,10 @@ export class PaymentDetailsService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}/payment/status?`);
   }
 
+  downloadInvoice(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}/invoice`);
+  }
+
   set payAtDesk(paymentOption) {
     this._payAtDesk = paymentOption;
   }

@@ -1,5 +1,5 @@
 export enum JOURNEY {
     preCheckin = 'preCheckin',
     checkin = 'checkin',
-    checkout = 'checkout'
+    checkout = 'CHECKOUT'
 }

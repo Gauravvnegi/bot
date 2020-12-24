@@ -16,12 +16,15 @@
 
 .progress_container {
   position: relative;
-  min-height: 265px;
+  min-height: 275px;
   &__carousel_box {
     position: absolute;
     width: 100%;
     overflow: auto;
     white-space: nowrap;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-around;
     .slide {
       margin-right: 3rem;
       display: inline-block;

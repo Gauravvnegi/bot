@@ -1,14 +1,14 @@
 <div class="wrapper">
-  <p class="heading">{{ settings.title }}</p>
+  <p class="heading">{{ settings.label }}</p>
   <div class="progress-bars">
     <canvas class="red-bar" #canvas3 width="128" height="138"></canvas>
     <canvas class="green-bar" #canvas width="128" height="138"></canvas>
     <canvas class="gray-bar" #canvas1 width="128" height="138"></canvas>
     <div class="text-box">
-      <p class="label">23.7</p>
+      <p class="label">{{ settings.score }}</p>
       <div class="value">
         <img src="" />
-        <p>10</p>
+        <p>{{ settings.difference }}</p>
       </div>
     </div>
     <img class="location-icon" src="assets/svg/location.svg" />
@@ -22,19 +22,19 @@
       <div class="image">
         <img src="assets/svg/happy.svg" />
       </div>
-      <div class="label">1225</div>
+      <div class="label">{{ settings.positive }}</div>
     </div>
     <div class="smiley">
       <div class="image">
         <img src="assets/svg/sceptic.svg" />
       </div>
-      <div class="label">1135</div>
+      <div class="label">{{ settings.neutral }}</div>
     </div>
     <div class="smiley">
       <div class="image">
         <img src="assets/svg/sad.svg" />
       </div>
-      <div class="label">1015</div>
+      <div class="label">{{ settings.negative }}</div>
     </div>
   </div>
 </div>

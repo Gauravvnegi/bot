@@ -164,8 +164,6 @@ export class TypeGuestStatisticsComponent implements OnInit {
     });
   }
 
-  
-
   private getVIPStatistics(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {

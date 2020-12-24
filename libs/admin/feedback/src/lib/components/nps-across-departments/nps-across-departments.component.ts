@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { StatisticsService } from '../../services/statistics.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { NPSDepartments, Department } from '../../data-models/statistics.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-nps-across-departments',
@@ -17,6 +22,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     // { label: 'EXCEL', value: 'excel' },
     // { label: 'PDF', value: 'pdf' },
   ];
+  npsChartData: NPSDepartments;
+  $subscription: Subscription = new Subscription();
+  selectedInterval: string;
 
   documentActionTypes = [
     {
@@ -33,95 +41,18 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     },
   ];
 
-  // slideConfig = {
-  //   slidesToShow: 5,
-  //   arrows:true,
-  //   slidesToScroll: 1,
-  //   infinite: false,
-  //   speed: 100,
-  //   autoplay: false,
-  //   responsive: [
-  //     {
-  //       breakpoint: 500,
-  //       settings: {
-  //         slidesToShow: 1,
-  //       },
-  //     },
-  //   ],
-  // };
-
-  progressValues = [
-    {
-      title: 'Reservation',
-      progress: {
-        negative: 90,
-        positive: 20,
-      }
-    },
-    {
-      title: 'Front Office',
-      progress: {
-        negative: 50,
-        positive: 40,
-      }
-    },
-    {
-      title: 'Housekeeping',
-      progress: {
-        negative: 25,
-        positive: 60,
-      }
-    },
-    {
-      title: 'Maintenance',
-      progress: {
-        negative: 75,
-        positive: 85,
-      }
-    },
-    {
-      title: 'Food & Beverage',
-      progress: {
-        negative: 50,
-        positive: 60,
-      }
-    },
-    {
-      title: 'Reservation',
-      progress: {
-        negative: 90,
-        positive: 20,
-      }
-    },
-    {
-      title: 'Reservation',
-      progress: {
-        negative: 90,
-        positive: 20,
-      }
-    },
-    {
-      title: 'Reservation',
-      progress: {
-        negative: 90,
-        positive: 20,
-      }
-    },
-    // {
-    //   title: 'Spa & Salon',
-    //   progress: {
-    //     negative: 50,
-    //     positive: 60,
-    //   }
-    // }
-  ]
+  progressValues: any[] = [];
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _adminUtilityService: AdminUtilityService,
+    private _statisticService: StatisticsService,
+    private _globalFilterService: GlobalFilterService
   ) { }
 
   ngOnInit(): void {
     this.initFG();
+    this.getNPSChartData();
   }
 
   initFG(): void {
@@ -129,6 +60,45 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       documentType: ['csv'],
       documentActionType: ['Export All']
     })
+  }
+
+  private initGraphData(): void {
+    this.progressValues.length = 0;
+    Object.keys(this.npsChartData).forEach((key) => {
+      // let value: Department = this.npsChartData[key];
+      this.progressValues.push(this.npsChartData[key]);
+    });
+  }
+
+  private getNPSChartData(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this._adminUtilityService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        const queries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+
+        const config = {
+          queryObj: this._adminUtilityService.makeQueryParams(queries),
+        };
+        this.$subscription.add(
+          this._statisticService
+            .getDepartmentsStatistics(config)
+            .subscribe((response) => {
+              this.npsChartData = new NPSDepartments().deserialize(response.npsStats);
+              this.initGraphData();
+            })
+        );
+      })
+    );
   }
 
 }

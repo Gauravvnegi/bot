@@ -81,7 +81,7 @@
         </div>
         <div class="label-container">
             <div class="label"></div>
-            <div class="divider-container" [style]="'height: ' + (40 * progresses.length) + 'px;'">
+            <div class="divider-container" [style.height]="(40 * progresses.length) + 'px'">
                 <div class="divider" *ngFor="let value of progressValues"></div>
             </div>
         </div>

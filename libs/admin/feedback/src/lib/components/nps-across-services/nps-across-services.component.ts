@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { StatisticsService } from '../../services/statistics.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { NPSDepartments, NPSAcrossServices } from '../../data-models/statistics.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-nps-across-services',
@@ -17,149 +22,13 @@ export class NpsAcrossServicesComponent implements OnInit {
     // { label: 'EXCEL', value: 'excel' },
     { label: 'PDF', value: 'pdf' },
   ];
+  $subscription: Subscription = new Subscription();
+  selectedInterval: string;
+  npsProgressData: NPSAcrossServices;
 
   tabFilterIdx: number = 0;
 
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [
-        { label: 'Vallet Service', icon: '', value: 'VALLETSERVICE', total: 0, isSelected: true },
-        {
-          label: 'Luggage Service',
-          icon: '',
-          value: 'LUGGAGESERVICE',
-          total: 0,
-          isSelected: false,
-          type: 'pending',
-        },
-        {
-          label: 'Public Area Cleaning',
-          icon: '',
-          value: 'PUBLICAREACLEANING',
-          total: 0,
-          isSelected: false,
-          type: 'initiated',
-        },
-        {
-          label: 'Room Cleaning',
-          icon: '',
-          value: 'ROOMCLEANING',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Beverage',
-          icon: '',
-          value: 'BEVERAGE',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Checkin',
-          icon: '',
-          value: 'CHECKIN',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Checkout',
-          icon: '',
-          value: 'CHECKOUT',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Spa',
-          icon: '',
-          value: 'SPA',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Salon',
-          icon: '',
-          value: 'SALON',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Gym',
-          icon: '',
-          value: 'GYM',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Music',
-          icon: '',
-          value: 'MUSIC',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-        {
-          label: 'Overall Ambience',
-          icon: '',
-          value: 'OVERALLAMBIENCE',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-      ],
-    },
-    {
-      label: 'Front Office',
-      content: '',
-      value: 'FRONTOFFICE',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Housekeeping',
-      content: '',
-      value: 'HOUSEKEEPING',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Food & Beverage',
-      content: '',
-      value: 'FOODANDBEVERAGE',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Maintenance',
-      content: '',
-      value: 'MAINTENANCE',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Spa & Salon',
-      content: '',
-      value: 'SPAANDSALON',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ];
+  tabFilterItems = [];
 
   documentActionTypes = [
     {
@@ -177,30 +46,20 @@ export class NpsAcrossServicesComponent implements OnInit {
   ];
 
   isOpened = false;
-  progresses: any = [
-    { label: 'Vallet Service', positive: 55, negative: 45 },
-    { label: 'Luggage Service', positive: 18, negative: 65 },
-    { label: 'Public area cleaning', positive: 45, negative: 58 },
-    { label: 'Room cleaning', positive: 20, negative: 80 },
-    { label: 'Beverage', positive: 55, negative: 45 },
-    { label: 'Checkin', positive: 18, negative: 65 },
-    { label: 'Checkout', positive: 45, negative: 58 },
-    { label: 'Spa', positive: 20, negative: 80 },
-    { label: 'Salon', positive: 55, negative: 45 },
-    { label: 'Fragrance', positive: 18, negative: 65 },
-    { label: 'Gym', positive: 45, negative: 58 },
-    { label: 'Music', positive: 20, negative: 80 },
-    { label: 'Overall Ambience', positive: 80, negative: 20 }
-  ];
+  progresses: any = [];
 
   progressValues = [-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100];
 
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _adminUtilityService: AdminUtilityService,
+    private _statisticService: StatisticsService,
+    private _globalFilterService: GlobalFilterService
   ) { }
 
   ngOnInit(): void {
     this.initFG();
+    this.getNPSServices();
   }
 
   initFG(): void {
@@ -229,6 +88,93 @@ export class NpsAcrossServicesComponent implements OnInit {
     ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
       quickReplyTypeIdx
     ].isSelected;
+  }
+
+  private initTabLabels(entities): void {
+    this.tabFilterItems.length = 0;
+    Object.keys(entities).forEach((key) => {
+      let chips = entities[key];
+      let idx = this.tabFilterItems.length;
+      this.tabFilterItems.push({
+        label: key,
+        content: '',
+        value: key,
+        disabled: false,
+        total: 0,
+        chips: []
+      });
+
+      chips.forEach((chip) => {
+        if (this.tabFilterItems[idx].chips.length) {
+          this.tabFilterItems[idx].chips.push({
+            label: chip,
+            icon: '',
+            value: chip,
+            total: 0,
+            isSelected: false,
+            type: 'completed',
+          });
+        } else {
+          this.tabFilterItems[idx].chips.push({
+            label: chip,
+            icon: '',
+            value: chip,
+            total: 0,
+            isSelected: true,
+            type: 'completed',
+          });
+        }
+      })
+    });
+  }
+
+  private initProgressData(progresses) {
+    this.progresses.length = 0;
+    Object.keys(progresses).forEach((key) => {
+      this.progresses.push({
+        label: progresses[key].label,
+        positive: progresses[key].score,
+        negative: Number((100 - progresses[key].score).toFixed(2))
+      });
+    });
+  }
+
+  private getNPSServices(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this._adminUtilityService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        const queries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+
+        const config = {
+          queryObj: this._adminUtilityService.makeQueryParams(queries),
+        };
+        this.$subscription.add(
+          this._statisticService
+            .getServicesStatistics(config)
+            .subscribe((response) => {
+              this.npsProgressData = new NPSAcrossServices().deserialize(response);
+              if (this.npsProgressData.entities) {
+                this.initTabLabels(this.npsProgressData.entities);
+              }
+              this.initProgressData(this.npsProgressData.npsStats);
+            })
+        );
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
 }

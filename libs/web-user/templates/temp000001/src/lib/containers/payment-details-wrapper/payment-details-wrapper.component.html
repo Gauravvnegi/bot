@@ -3,7 +3,7 @@
     <mat-tab-group #matTab dynamicHeight>
       <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
         <ng-template mat-tab-label>
-          <div class="custom-tab">
+          <div [ngClass]="hotelPaymentConfig.paymentHeaders?.length < 2 ? 'custom-tab full_width' : 'custom-tab'">
             <div>
               <img [src]="header.imageUrl" style="height: 53px" class="svg-payment" />
               <!-- <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon> -->

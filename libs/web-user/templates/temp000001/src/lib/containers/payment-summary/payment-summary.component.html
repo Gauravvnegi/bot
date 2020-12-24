@@ -3,20 +3,27 @@
     Payment Summary
   </div>
   <div class="payment__wrapper__summary">
-    <div class="payment__wrapper__summary__text" *ngIf="paymentSummary && journey !== 'CHECKOUT'">
+    <div
+      class="payment__wrapper__summary__text"
+      *ngIf="paymentSummary && journey !== 'CHECKOUT'"
+    >
       <div *ngIf="paymentSummary.printRate">
-        {{ roomRates.label }} :      {{ currencyCode }} {{ roomRates.amount }}
+        {{ roomRates.label }} : {{ currencyCode }} {{ roomRates.amount }}
       </div>
-      <div>Your Inclusions :  <b>{{ paymentSummary.inclusions }}</b></div>
+      <div>
+        Your Inclusions : <b>{{ paymentSummary.inclusions }}</b>
+      </div>
     </div>
     <div class="payment__wrapper__summary__table">
       <table cellspacing="0" mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="label">
-          <th style="text-align: left;" mat-header-cell *matHeaderCellDef>Description</th>
+          <th style="text-align: left;" mat-header-cell *matHeaderCellDef>
+            Description
+          </th>
           <td mat-cell *matCellDef="let element">
-            <div class="room-data">
-              <p class="room">{{ element.label }}</p>
-              <p class="room-type">{{ element.description }}</p>
+            <div class="room_feild">
+              <p class="label">{{ element.label }}</p>
+              <p class="type">{{ element.description }}</p>
             </div>
           </td>
         </ng-container>
@@ -89,41 +96,40 @@
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns.columns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns.columns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns.columns"
+        ></tr>
       </table>
     </div>
-    <table class="description-table" cellspacing="0" cellpadding="0" *ngIf="journey === 'CHECKOUT'">
-      <tr class="total__amount">
-        <td colspan="8">
-          <div class="enteries">
-            <p class="label">Total Amount:</p>
-            <p class="value">
-              {{ currencyCode }} {{ paymentSummary.totalAmount }}
-            </p>
-          </div>
-        </td>
-      </tr>
-      <tr class="total__amount">
-        <td colspan="8">
-          <div class="enteries paid__amount">
-            <p class="label">Paid Amount:</p>
-            <p class="value">
-              -{{ currencyCode }} {{ paymentSummary.paidAmount }}
-            </p>
-          </div>
-        </td>
-      </tr>
-      <tr class="total__amount">
-        <td colspan="8">
-          <div class="enteries due__amount">
-            <p class="label">Due Amount:</p>
-            <p class="value">
-              {{ currencyCode }} {{ paymentSummary.payableAmount }}
-            </p>
-          </div>
-        </td>
-      </tr>
-    </table>
+    <div *ngIf="journey === 'CHECKOUT'">
+      <div class="payment__wrapper__summary__amount_pay">
+        <div class="text_box">
+          <p class="label">Total Amount:</p>
+          <p class="value">
+            {{ currencyCode }} {{ paymentSummary.totalAmount }}
+          </p>
+        </div>
+      </div>
+
+      <div class="payment__wrapper__summary__amount_pay">
+        <div class="text_box paid__amount">
+          <p class="label">Paid Amount:</p>
+          <p class="value">
+            -{{ currencyCode }} {{ paymentSummary.paidAmount }}
+          </p>
+        </div>
+      </div>
+
+      <div class="payment__wrapper__summary__amount_pay">
+        <div class="text_box due__amount">
+          <p class="label">Due Amount:</p>
+          <p class="value">
+            {{ currencyCode }} {{ paymentSummary.payableAmount }}
+          </p>
+        </div>
+      </div>
+    </div>
     <div class="payment__wrapper__summary__amount_pay" *ngIf="journey !== 'CHECKOUT'">
       <div class="text_box">
         <p class="label">Amount to Pay :</p>

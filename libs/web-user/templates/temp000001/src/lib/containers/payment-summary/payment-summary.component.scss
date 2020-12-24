@@ -224,11 +224,11 @@
 }
 
 .paid__amount {
-  color: #159855;
+  color: #159855 !important;
 }
 
 .due__amount {
-  color: $primary-blue;
+  color: $primary-blue !important;
 }
 
 // :host ::ng-deep .mat-table {

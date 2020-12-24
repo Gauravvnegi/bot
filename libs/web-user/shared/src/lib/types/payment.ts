@@ -48,7 +48,7 @@ export interface IPaymentConfiguration {
 	chainId: string;
 	secretKey: string;
 	paymentMethods: IPaymentMethods;
-	exernalRedirect: boolean;
+	externalRedirect: boolean;
 	iconUrl: string;
 	currency: string;
 	paymentHeaders: IPaymentHeader[];

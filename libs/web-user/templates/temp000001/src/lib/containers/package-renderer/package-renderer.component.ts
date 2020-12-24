@@ -211,13 +211,13 @@ export class PackageRendererComponent
         );
       }
     });
-    this.addAmenity({
+    this.updateAmenity({
       packagesToBeAdd: packagesToBeAdd,
       packagesToBeRemove: packagesToBeRemove,
     });
   }
 
-  addAmenity(data) {
+  updateAmenity(data) {
     this.$subscription.add(
       this._paidService
         .updateAmenity(this._reservationService.reservationId, data)

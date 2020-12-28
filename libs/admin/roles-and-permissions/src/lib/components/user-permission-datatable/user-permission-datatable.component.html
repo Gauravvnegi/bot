@@ -225,7 +225,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openUserDetails(rowData)">
+    <tr class="data-table-row"(click)="openUserDetails(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -270,7 +270,10 @@
       <td class="">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <input type="checkbox" [checked]="rowData.status" />
-          <span class="slider round"></span>
+          <mat-slide-toggle
+          [checked]="rowData.status"
+          (change)="updateRolesStatus($event, rowData )"
+          ></mat-slide-toggle>
         </label>
       </td>
     </tr>

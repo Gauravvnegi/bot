@@ -117,8 +117,8 @@
     background-color: #f8fcff;
     padding: 5px 0;
     &__icon {
-      width: 7vw;
-      height: 60px;
+      width: 11vw;
+      height: 40px;
       @include flex-all-center();
       img {
         height: 25px;
@@ -132,18 +132,28 @@
             brightness(86%) contrast(81%);
         }
       }
+      @media only screen and (max-width: $M) {
+        width: 23vw;        
+      }
     }
     .seperator {
-      height: 60px;
+      height: 35px;
       border: 0.5px solid #dbdbdb;
     }
   }
   &__title_box {
     display: flex;
     margin-top: 10px;
+    justify-content: space-between;
     p {
       color: #8e8e8e;
       font-weight: 600;
+      margin: 0 13px;
+      font-size: 14px;
+      @media only screen and (max-width: $M) {
+       font-size: 8px;  
+       margin: 0 5px;   
+      }
     }
   }
 }

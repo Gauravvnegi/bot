@@ -1,14 +1,7 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  Input,
-  OnChanges,
-} from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { SpecialCommentsConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
+import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { Subscription } from 'rxjs';
 
 @Component({

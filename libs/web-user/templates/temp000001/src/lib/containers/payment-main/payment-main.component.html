@@ -54,6 +54,11 @@
           </div>
         </div>
       </div>
+      <div class="action_box">
+        <div class="action_box__icon" (click)="downloadInvoice()">
+          <img src="assets/svg/Download.svg" />
+        </div>
+      </div>
     </div>
   </div>
   <div
@@ -70,9 +75,7 @@
     ></web-user-button>
     <web-user-button
       (click)="
-        redirect(
-          status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl
-        )
+        redirect(status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl)
       "
       [settings]="{ label: paymentStatusData.next }"
       [buttonClass]="'next-button'"

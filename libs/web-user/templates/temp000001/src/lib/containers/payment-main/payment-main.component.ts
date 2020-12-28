@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
+import { SnackBarService } from 'libs/shared/material/src';
+import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentStatusConfig.model';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { Router } from '@angular/router';
-import { PaymentMainStatus } from 'libs/web-user/shared/src/lib/data-models/PaymentStatusConfig.model';
-import { TranslateService } from '@ngx-translate/core';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -25,10 +26,10 @@ export class PaymentMainComponent implements OnInit {
   constructor(
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
-    private _snackBarService: SnackBarService,
     private _templateLoadingService: TemplateLoaderService,
     private _paymentDetailService: PaymentDetailsService,
     private router: Router,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {}
 
@@ -74,27 +75,23 @@ export class PaymentMainComponent implements OnInit {
               this.reservationData['currentJourney'] === 'PRECHECKIN' &&
               status === 'SUCCESS'
             ) {
-              this.$subscription.add(
-                this._translateService
-                  .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
-                  .subscribe((translatedMsg) => {
+              this._translateService
+                .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
+                .subscribe((translatedMsg) => {
                     this._snackBarService.openSnackBarAsText(
-                      translatedMsg,
-                      '',
-                      { panelClass: 'success' }
+                    translatedMsg,
+                    '',
+                    { panelClass: 'success' }
                     );
                   })
-              );
             }
           },
           ({ error }) => {
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
-                })
-            );
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             // this._snackBarService.openSnackBarAsText(error.message);
           }
         )
@@ -115,6 +112,31 @@ export class PaymentMainComponent implements OnInit {
         );
       }
     }
+  }
+
+  downloadInvoice() {
+    this._paymentDetailService
+      .downloadInvoice(this._reservationService.reservationId)
+      .subscribe(
+        (response) => {
+          if (response && response.file_download_url) {
+            FileSaver.saveAs(
+              response.file_download_url,
+              'invoice_' +
+                this._reservationService.reservationId +
+                new Date().getTime() +
+                '.pdf'
+            );
+          }
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+        }
+      );
   }
 
   get status() {

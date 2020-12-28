@@ -1,22 +1,12 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-  OnChanges,
-  ViewChildren,
-  QueryList,
-} from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
-import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
-import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
-import { GuestDetailsConfigI } from '../../../../../../shared/src/lib/data-models/guestDetailsConfig.model';
-import { GuestDetailsService } from './../../../../../../shared/src/lib/services/guest-details.service';
-import { Subscription, config } from 'rxjs';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
+import { Subscription } from 'rxjs';
+import { GuestDetailsConfigI } from '../../../../../../shared/src/lib/data-models/guestDetailsConfig.model';
+import { Regex } from '../../../../../../shared/src/lib/data-models/regexConstant';
+import { GuestDetailsService } from './../../../../../../shared/src/lib/services/guest-details.service';
 
 @Component({
   selector: 'hospitality-bot-guest-details',

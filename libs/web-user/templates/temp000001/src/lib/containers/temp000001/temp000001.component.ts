@@ -1,11 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DEFAULT_LANG } from 'libs/web-user/shared/src/lib/constants/lang';
 import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';

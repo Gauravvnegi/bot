@@ -21,6 +21,140 @@
   }
 }
 
+.payment__wrapper {
+  &__summary {
+    padding: 0px 25px;
+    @media only screen and (max-width: $tab-size) {
+      padding: 0px 5px;
+    }
+    &__text {
+      div {
+        color: #080808;
+        margin: 20px 0;
+        margin-left: 20px;
+        font-weight: 600;
+        @media screen and (max-width: 600px) {
+          font-size: $font-small;
+          margin: 10px;
+        }
+        b {
+          color: #929292;
+        }
+      }
+    }
+    &__table {
+      table {
+        padding-top: $padding-small;
+        width: $full-width;
+        border: none;
+
+        th {
+          background-color: $primary-blue;
+          font-size: $font-medium;
+          font-weight: $bold;
+          color: white;
+        }
+        td {
+          padding: 20px;
+          font-size: $font16;
+          font-weight: $bold;
+        }
+        td,
+        th {
+          text-align: center;
+          @media screen and (max-width: 600px) {
+            padding: 5px;
+            font-size: 10px;
+          }
+        }
+        .room_feild {
+          text-align: left;
+          padding-left: 14px;
+          font-size: $font16;
+          .label {
+            font-weight: $bold;
+          }
+          .type {
+            font-weight: $bold;
+            color: #929292;
+            margin-top: 8px;
+          }
+          @media screen and (max-width: 600px) {
+            font-size: 8.5px;
+            padding-left: 0;
+            .type {
+              margin-top: 3px;
+            }
+          }
+        }
+        // .total__amount {
+        //   td {
+        //     font-size: $font16;
+        //     text-align: right;
+        //     font-weight: $bold;
+        //     padding: $padding-medium;
+        //     .enteries {
+        //       display: flex;
+        //       justify-content: flex-end;
+        //       font-weight: 700;
+        //       font-size: 20px;
+        //       .label {
+        //         width: 28%;
+        //         text-align: left;
+        //       }
+        //       .value {
+        //         width: 12%;
+        //         text-align: right;
+        //       }
+        //     }
+        //     b {
+        //       color: black;
+        //       font-weight: $bolder;
+        //       font-size: $font-large;
+        //     }
+        //     @media only screen and (max-width: $M) {
+        //       padding: 12px $padding-small;
+        //       .enteries {
+        //         justify-content: space-between;
+        //         font-size: $font16;
+        //         .label {
+        //           width: 50%;
+        //         }
+        //         .value {
+        //           width: 50%;
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
+        @media only screen and (max-width: $M) {
+          border-width: 1px;
+        }
+      }
+    }
+    &__amount_pay {
+      display: flex;
+      justify-content: flex-end;
+      .text_box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 18%;
+        margin: 20px;
+        color: $primary-blue;
+        .label {
+          font-size: $font16;
+          font-weight: 600;
+        }
+        .value {
+          font-size: $font-large;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
 .payment__wrapper--header {
   padding: $padding-medium;
   font-size: $font-large;
@@ -82,120 +216,19 @@
 :host ::ng-deep .mat-header-row {
   @media screen and (max-width: 600px) {
     height: 24px;
-    th {
-      padding: 5px !important;
-      font-size: 7px !important;
-    }
-  }
-}
-
-.description-table {
-  padding-top: $padding-small;
-  width: $full-width;
-  border: none;
-  td,
-  th {
-    text-align: center;
-  }
-  th {
-    background-color: $primary-blue;
-    font-size: $font-medium;
-    font-weight: $bold;
-    color: white;
-  }
-  td {
-    padding: 10px;
-    font-size: $font16;
-    font-weight: $bold;
-    @media screen and (max-width: 600px) {
-      padding: 4px;
-      font-size: 7px;
-    }
-  }
-
-  .room-data {
-    text-align: left;
-    padding-left: 14px;
-    font-size: $font16;
-    .room {
-      font-weight: $bold;
-    }
-    .room-type {
-      font-weight: $bold;
-      color: #929292;
-      margin-top: 8px;
-    }
-    @media screen and (max-width: 600px) {
-      font-size: 7px;
-      padding-left: 0;
-      .room-type {
-        margin-top: 3px;
-      }
-    }
-  }
-  .total__amount {
-    td {
-      font-size: $font16;
-      text-align: right;
-      font-weight: $bold;
-      padding: $padding-medium;
-      .enteries {
-        display: flex;
-        justify-content: flex-end;
-        font-weight: 700;
-        font-size: 20px;
-        .label {
-          width: 28%;
-          text-align: left;
-        }
-        .value {
-          width: 12%;
-          text-align: right;
-        }
-      }
-      b {
-        color: black;
-        font-weight: $bolder;
-        font-size: $font-large;
-      }
-      @media only screen and (max-width: $M) {
-        padding: 12px $padding-small;
-        .enteries {
-          justify-content: space-between;
-          font-size: $font16;
-          .label {
-            width: 50%;
-          }
-          .value {
-            width: 50%;
-          }
-        }
-      }
-    }
-  }
-  @media only screen and (max-width: $M) {
-    border-width: 1px;
-    .header {
-      font-size: $font-responsive-smaller;
-      td {
-        padding: 5px;
-      }
-    }
-    .order__details {
-      font-size: $font-responsive-smaller;
-      td {
-        padding: 5px;
-      }
-    }
+    // th {
+    //   padding: 5px !important;
+    //   font-size: 7px !important;
+    // }
   }
 }
 
 .paid__amount {
-  color: #159855;
+  color: #159855 !important;
 }
 
 .due__amount {
-  color: $primary-blue;
+  color: $primary-blue !important;
 }
 
 // :host ::ng-deep .mat-table {

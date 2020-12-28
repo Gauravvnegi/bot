@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
-import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   PaymentDetailDS,
-  PaymentDetailsConfigI,
 } from '../data-models/PaymentDetailsConfig.model';
-import { Months, Years } from '../data-models/year';
 
 @Injectable()
 export class PaymentDetailsService extends ApiService {
@@ -15,47 +12,46 @@ export class PaymentDetailsService extends ApiService {
 
   initPaymentDetailDS(paymentData, hotelPaymentConfig) {
     this._paymentDetailDS = new PaymentDetailDS().deserialize(
-      paymentData.rooms,
       paymentData.paymentSummary,
       hotelPaymentConfig
     );
   }
 
-  setFieldConfigForPaymentDetails(regex) {
-    let paymentDetailsFieldSchema = {};
+  // setFieldConfigForPaymentDetails(regex) {
+  //   let paymentDetailsFieldSchema = {};
 
-    paymentDetailsFieldSchema['name'] = new FieldSchema().deserialize({
-      label: 'Name on Card',
-      disable: false,
-      icon: 'person',
-      maskPattern: false,
-    });
-    paymentDetailsFieldSchema['cardNumber'] = new FieldSchema().deserialize({
-      label: 'Card Number',
-      disable: false,
-      icon: 'payment',
-      maskPattern: regex,
-    });
-    paymentDetailsFieldSchema['month'] = new FieldSchema().deserialize({
-      label: 'mm',
-      disable: false,
-      style: 'font-size: 17px; font-weight:700',
-      options: Months,
-    });
-    paymentDetailsFieldSchema['year'] = new FieldSchema().deserialize({
-      label: 'yyyy',
-      disable: false,
-      style: 'font-size: 17px; font-weight:700',
-      options: Years,
-    });
-    paymentDetailsFieldSchema['cvv'] = new FieldSchema().deserialize({
-      label: 'CVV',
-      icon: 'payment',
-      type: 'password',
-    });
+  //   paymentDetailsFieldSchema['name'] = new FieldSchema().deserialize({
+  //     label: 'Name on Card',
+  //     disable: false,
+  //     icon: 'person',
+  //     maskPattern: false,
+  //   });
+  //   paymentDetailsFieldSchema['cardNumber'] = new FieldSchema().deserialize({
+  //     label: 'Card Number',
+  //     disable: false,
+  //     icon: 'payment',
+  //     maskPattern: regex,
+  //   });
+  //   paymentDetailsFieldSchema['month'] = new FieldSchema().deserialize({
+  //     label: 'mm',
+  //     disable: false,
+  //     style: 'font-size: 17px; font-weight:700',
+  //     options: Months,
+  //   });
+  //   paymentDetailsFieldSchema['year'] = new FieldSchema().deserialize({
+  //     label: 'yyyy',
+  //     disable: false,
+  //     style: 'font-size: 17px; font-weight:700',
+  //     options: Years,
+  //   });
+  //   paymentDetailsFieldSchema['cvv'] = new FieldSchema().deserialize({
+  //     label: 'CVV',
+  //     icon: 'payment',
+  //     type: 'password',
+  //   });
 
-    return paymentDetailsFieldSchema as PaymentDetailsConfigI;
-  }
+  //   return paymentDetailsFieldSchema as PaymentDetailsConfigI;
+  // }
   
   getPaymentConfiguration(hotelId, journeyName): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/payment-configuration?journeyName=${journeyName}`);
@@ -77,6 +73,10 @@ export class PaymentDetailsService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}/payment/status?`);
   }
 
+  downloadInvoice(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}/invoice`);
+  }
+
   set payAtDesk(paymentOption) {
     this._payAtDesk = paymentOption;
   }
@@ -90,12 +90,12 @@ export class PaymentDetailsService extends ApiService {
   }
 
   get paymentConfiguration() {
-    return this.paymentSummaryDetails['hotelConfigDetail'].hotelPaymentConfig.paymentConfigurations;
+    return this.paymentSummaryDetails.hotelConfig;
   }
 
   get currencyCode() {
     if (this.paymentSummaryDetails) {
-      return this.paymentSummaryDetails.paymentDetail.currencyCode;
+      return this.paymentSummaryDetails.paymentSummary.currencyCode;
     }
     return null;
   }

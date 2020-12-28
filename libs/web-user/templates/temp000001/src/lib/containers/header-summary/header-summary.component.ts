@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 
 @Component({
   selector: 'hospitality-bot-header-summary',

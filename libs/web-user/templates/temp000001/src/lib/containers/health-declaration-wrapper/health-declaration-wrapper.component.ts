@@ -1,14 +1,14 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
-import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { get } from 'lodash';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -21,9 +21,9 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
   constructor(
     private _reservationService: ReservationService,
     private _healthDetailsService: HealthDetailsService,
-    private _snackBarService: SnackBarService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {
     super();
@@ -63,13 +63,11 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
             this._stepperService.setIndex('next');
           },
           ({ error }) => {
-            this.$subscription.add(
-              this._translateService
-                .get(`MESSAGES.ERROR.${error.type}`)
-                .subscribe((translatedMsg) => {
-                  this._snackBarService.openSnackBarAsText(translatedMsg);
-                })
-            );
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
             //   this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
@@ -85,13 +83,11 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     ) as FormGroup;
     healthDecFG.markAllAsTouched();
 
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        })
-    );
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
 
     if (get(status[0], ['data', 'index']) >= 0) {
       this.healthComponent.accordion.closeAll();

@@ -1,10 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Measures } from 'libs/web-user/shared/src/lib/data-models/safeMeasureConfig.model';
-import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-measures.service';
-import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
-import { Subscription } from 'rxjs';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-measures.service';
+import { Subscription } from 'rxjs';
+import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -20,7 +20,7 @@ export class StaySafeComponent implements OnInit {
     private _safeMeasures: SafeMeasuresService,
     public _hyperlink: HyperlinkElementService,
     private _hotelService: HotelService,
-    private _snackbarService: SnackBarService,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {}
 
@@ -50,13 +50,11 @@ export class StaySafeComponent implements OnInit {
       .subscribe((measuresResponse) => {
         this.safeMeasures = measuresResponse;
       },({error})=>{
-        this.$subscription.add(
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translatedMsg) => {
-              this._snackbarService.openSnackBarAsText(translatedMsg);
-            })
-        );
+        this._translateService
+          .get(`MESSAGES.ERROR.${error.type}`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
       })
     );
   }

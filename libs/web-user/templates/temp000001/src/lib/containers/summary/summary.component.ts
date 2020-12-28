@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 
 @Component({
   selector: 'hospitality-bot-summary',

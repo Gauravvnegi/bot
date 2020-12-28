@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { SnackBarService } from 'libs/shared/material/src';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { forkJoin, of, Subscription } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -33,10 +33,10 @@ export class FeedbackMainComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService,
     private fb: FormBuilder,
     private _feedbackDetailsService: FeedbackDetailsService,
-    private _snackBarService: SnackBarService,
     private _buttonService: ButtonService,
     private router: Router,
     private route: ActivatedRoute,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) { }
 
@@ -124,13 +124,11 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`)
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        })
-    );
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`)
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
     return;
   }
 

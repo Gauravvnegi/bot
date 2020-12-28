@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';

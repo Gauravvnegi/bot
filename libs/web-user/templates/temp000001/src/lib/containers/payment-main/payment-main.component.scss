@@ -106,16 +106,44 @@
   }
 }
 
-.action_box {
+.actions_wrapper {
   display: flex;
   margin-top: 30px;
-  justify-content: center;
-  &__icon {
-    padding: 10px 20px;
+  flex-direction: column;
+  align-items: center;
+  &__icon_box {
     border: 1px solid #dbdbdb;
+    display: flex;
     background-color: #f8fcff;
-    img {
-      height: 25px;
+    padding: 5px 0;
+    &__icon {
+      width: 7vw;
+      height: 60px;
+      @include flex-all-center();
+      img {
+        height: 25px;
+        filter: invert(62%) sepia(0%) saturate(631%) hue-rotate(163deg)
+          brightness(93%) contrast(78%);
+      }
+      &:hover {
+        cursor: pointer;
+        img {
+          filter: invert(52%) sepia(16%) saturate(2193%) hue-rotate(162deg)
+            brightness(86%) contrast(81%);
+        }
+      }
+    }
+    .seperator {
+      height: 60px;
+      border: 0.5px solid #dbdbdb;
+    }
+  }
+  &__title_box {
+    display: flex;
+    margin-top: 10px;
+    p {
+      color: #8e8e8e;
+      font-weight: 600;
     }
   }
 }

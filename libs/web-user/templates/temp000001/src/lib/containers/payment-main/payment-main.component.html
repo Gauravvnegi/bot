@@ -54,9 +54,31 @@
           </div>
         </div>
       </div>
-      <div class="action_box">
-        <div class="action_box__icon" (click)="downloadInvoice()">
-          <img src="assets/svg/Download.svg" />
+      <div class="actions_wrapper">
+        <div class="actions_wrapper__icon_box">
+          <div
+            class="actions_wrapper__icon_box__icon"
+            (click)="downloadInvoice()"
+          >
+            <img src="assets/svg/Download.svg" />
+          </div>
+          <!-- <div class="seperator"></div>
+          <div
+            class="actions_wrapper__icon_box__icon"
+            (click)="downloadInvoice()"
+          >
+            <img src="assets/svg/Download.svg" />
+          </div>
+          <div class="seperator"></div>
+          <div
+            class="actions_wrapper__icon_box__icon"
+            (click)="downloadInvoice()"
+          >
+            <img src="assets/svg/Download.svg" />
+          </div> -->
+        </div>
+        <div class="actions_wrapper__title_box">
+          <p>Download Receipt</p>
         </div>
       </div>
     </div>

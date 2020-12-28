@@ -10,7 +10,7 @@
       <div class="row">
         <div class="row-title">Channel:</div>
         <div class="row-body">
-          <div style="display: flex; align-items: center;">
+          <div style="display: flex; align-items: center;" *ngIf="config.channels.bot">
             <mat-checkbox formControlName="is_social_channel"></mat-checkbox>
             <mat-form-field style="margin-left: 10px;">
               <mat-select formControlName="social_channels" multiple [disabled]="!isSocialChannel">
@@ -25,14 +25,14 @@
                   </span>
                 </mat-select-trigger>
                 <mat-option
-                  *ngFor="let channel of channelList"
-                  [value]="channel.name"
+                  *ngFor="let channel of config.channels.bot.options"
+                  [value]="channel.value"
                   >{{ channel.label }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          <div><mat-checkbox formControlName="is_email_channel"> Email </mat-checkbox></div>
-          <div><mat-checkbox formControlName="is_sms_channel"> SMS </mat-checkbox></div>
+          <div><mat-checkbox formControlName="is_email_channel" *ngIf="config.channels.email"> Email </mat-checkbox></div>
+          <div><mat-checkbox formControlName="is_sms_channel" *ngIf="config.channels.sms"> SMS </mat-checkbox></div>
         </div>
       </div>
   
@@ -41,10 +41,10 @@
         <div class="row-body">  
           <div>
             <mat-form-field>
-              <mat-select formControlName="message_type">
+              <mat-select formControlName="messageType" (selectionChange)="changeTemplateIds($event.value)">
                 <mat-option
-                  *ngFor="let messageType of messageTypeList"
-                  [value]="messageType.name"
+                  *ngFor="let messageType of config.messageTypes"
+                  [value]="messageType.value"
                   >{{ messageType.label }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -52,10 +52,13 @@
           <div style="display: flex; align-items: center;">
             <div style="width: 130px;color: rgb(199, 196, 196); font-size: 14px;">Template:</div>
             <mat-form-field>
-              <mat-select formControlName="template_type">
+              <mat-select formControlName="templateId">
                 <mat-option
-                  *ngFor="let messageType of messageTypeList"
-                  [value]="messageType.name"
+                  value=""
+                  >No data</mat-option>
+                <mat-option
+                  *ngFor="let messageType of templates.ids"
+                  [value]="messageType.value"
                   >{{ messageType.label }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -98,7 +101,7 @@
             <hospitality-bot-multiple-dropdown
               style="width: 100%;"
               [allItems]="rooms"
-              [items]="room_nos.value || [] "
+              [items]="roomNumbers.value || [] "
               (updateData)="setRoomData($event)"></hospitality-bot-multiple-dropdown>
           </div>
         </div>
@@ -110,7 +113,7 @@
       <div class="row">
         <div class="row-title base-align">Input Message:</div>
         <div class="row-body">
-          <ckeditor [editor]="Editor" style="width: 100%;" formControlName="message_body"></ckeditor>
+          <ckeditor [editor]="Editor" style="width: 100%;" formControlName="message"></ckeditor>
         </div>
       </div>
       <div class="row">
@@ -125,7 +128,7 @@
         </div>
       </div>
       <div style="align-self: center;">
-        <button class="button" (click)="sendMessage()"> Preview & Send </button>
+        <button class="button" (click)="sendMessage()"> Send </button>
       </div>
     </div>
   </form>

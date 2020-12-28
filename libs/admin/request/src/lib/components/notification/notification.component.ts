@@ -1,10 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
-
-import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { Location } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
+import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
+import { RequestService } from '../../services/request.service.js';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service.js';
+import { Subscription } from 'rxjs';
+import { RequestData, RequestConfig } from '../../data-models/request.model.js';
+import { SnackBarService } from 'libs/shared/material/src/index.js';
 
 @Component({
   selector: 'hospitality-bot-notification',
@@ -13,18 +17,12 @@ import { Location } from '@angular/common';
 })
 export class NotificationComponent implements OnInit {
   attachment: string;
-
-  channelList = [
-    { label: 'Whatsapp', name: 'Whatsapp' },
-    { label: 'Messenger', name: 'Messenger' },
-    { label: 'Telegram', name: 'Telegram' },
-  ];
-
-  messageTypeList = [
-    { label: 'Precheckin', name: 'precheckin' },
-    { label: 'Checkin', name: 'checkin' },
-    { label: 'Checkout', name: 'checkout' },
-  ];
+  templates = {
+    ids: []
+  };
+  hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
+  
+  config: RequestConfig;
 
   ckeditorContent;
   public Editor = ClassicEditor;
@@ -35,6 +33,7 @@ export class NotificationComponent implements OnInit {
   visible = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   rooms: string[] = ['P001', 'P002', 'P003', 'P004', 'P005'];
+  $subscription = new Subscription();
 
   @ViewChild('emailCsvReader') emailCsvReader: any;
   @ViewChild('roomCsvReader') roomCsvReader: any;
@@ -42,12 +41,26 @@ export class NotificationComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _location: Location
-  ) {
+    private _location: Location,
+    private requestService: RequestService,
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
+  ) { }
+
+  ngOnInit(): void {
     this.initNotificationForm();
+    this.getConfigData();
+    // this.registerListeners();
   }
 
-  ngOnInit(): void {}
+  // listenForGlobalFilters() {
+  //   this.$subscription.add(
+  //     this._globalFilterService.globalFilter$.subscribe((data) => {
+  //       debugger;
+  //       this.hotelId = data['filter'].queryValue[0].hotelId;
+  //     })
+  //   );
+  // }
 
   initNotificationForm() {
     this.notificationForm = this._fb.group({
@@ -55,12 +68,38 @@ export class NotificationComponent implements OnInit {
       is_social_channel: [false],
       is_email_channel: [false],
       is_sms_channel: [false],
-      message_type: [],
-      template_type: [],
-      attachment: [],
-      message_body: [],
-      email_ids: [''],
-      room_nos: [],
+      messageType: [''],
+      templateId: [],
+      attachments: [[]],
+      message: [''],
+      emailIds: [''],
+      roomNumbers: [[]],
+    });
+  }
+
+  getConfigData() {
+    this.config = new RequestConfig().deserialize({
+      channels: {
+        bot: {
+          title: "Bot",
+          options: [
+            { label: 'Whatsapp', value: 'Whatsapp' },
+            { label: 'Messenger', value: 'Messenger' },
+            { label: 'Telegram', value: 'Telegram' }
+          ],
+        },
+        email: {
+          title: "Email"
+        },
+        sms: {
+          title: "SMS"
+        }
+      },
+      messageTypes: [
+        { label: 'Precheckin', value: 'precheckin', templeteIds: [] },
+        { label: 'Checkin', value: 'checkin', templeteIds: [] },
+        { label: 'Checkout', value: 'checkout', templeteIds: [] },
+      ]
     });
   }
 
@@ -69,7 +108,7 @@ export class NotificationComponent implements OnInit {
     const value = event.value;
     //check for email regex before adding @to-do
     if ((value || '').trim()) {
-      this.email_ids.patchValue(this.email_ids.value.concat(',', value.trim()));
+      this.emailIds.patchValue(this.emailIds.value);
     }
 
     // Reset the input value
@@ -79,12 +118,10 @@ export class NotificationComponent implements OnInit {
   }
 
   removeEmail(emailToRemove): void {
-    const allEmails = this.email_ids.value
-      .split(',')
-      .filter((email) => email != emailToRemove)
-      .join(',');
-    this.email_ids.patchValue(allEmails);
-    if (allEmails === '') {
+    const allEmails = this.emailIds.value
+      .filter((email) => email != emailToRemove);
+    this.emailIds.patchValue(allEmails);
+    if (!allEmails.length) {
       this.emailCsvReader.nativeElement.value = "";
     }
   }
@@ -104,10 +141,12 @@ export class NotificationComponent implements OnInit {
         let csvArr = [];
         for (let i = 1; i < csvRecordsArray.length; i++) {
           let curruntRecord = (<string>csvRecordsArray[i]).split(',');
-          csvArr.push(curruntRecord[0].trim());
+          if (curruntRecord[0].trim()) {
+            csvArr.push(curruntRecord[0].trim());
+          }
         }
         if (csvArr.length) {
-          this.email_ids.patchValue(csvArr.join(','));
+          this.emailIds.patchValue(csvArr.join(',').split(','));
         }
       };  
     } else {
@@ -135,7 +174,7 @@ export class NotificationComponent implements OnInit {
           }
         }
         if (csvArr.length) {
-          this.room_nos.patchValue(csvArr);
+          this.roomNumbers.patchValue(csvArr);
         }
       };  
     } else {
@@ -145,23 +184,46 @@ export class NotificationComponent implements OnInit {
 
   readAttachments(event) {
     this.attachment = event.currentTarget.files[0].name;
-    this.notificationForm.get('attachment').patchValue(event.currentTarget.files[0]);
+    let formData = new FormData();
+    formData.append('files', event.currentTarget.files[0]);
+    this.requestService.uploadAttachments(this.hotelId, formData)
+      .subscribe((response) => {
+        this.attachment = response.fileName;
+        this.notificationForm.get('attachments').patchValue([response.fileDownloadUri]);
+      }, ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      });
   }
 
   goBack() {
     this._location.back();
   }
 
+  changeTemplateIds(method): void {
+    this.templates.ids.length = 0;
+    let data = this.config.messageTypes.filter((d) => d.value === method);
+    this.templates.ids = data['templateIds'];
+  }
+
   sendMessage() {
-    let values = this.notificationForm.getRawValue();
-    console.log(values);
+    let values = new RequestData().deserialize(this.notificationForm.getRawValue());
+
+    this.$subscription.add(
+      this.requestService.createRequestData(this.hotelId, values)
+        .subscribe((res) => {
+          this._snackbarService.openSnackBarAsText('', 'Notification sent.', { panelClass: 'success' });
+          this._location.back();
+        }, ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        })
+    );
   }
 
   setRoomData(event) {
     if (event) {
-      this.notificationForm.get('room_nos').patchValue(event.split(','));
+      this.roomNumbers.patchValue(event.split(','));
     } else {
-      this.notificationForm.get('room_nos').patchValue([]);
+      this.roomNumbers.patchValue([]);
       this.roomCsvReader.nativeElement.value = ""; 
     }
   }
@@ -170,12 +232,12 @@ export class NotificationComponent implements OnInit {
     return this.notificationForm.get('social_channels') as FormControl;
   }
 
-  get email_ids() {
-    return this.notificationForm.get('email_ids') as FormControl;
+  get emailIds() {
+    return this.notificationForm.get('emailIds') as FormControl;
   }
 
   get emailIdsList() {
-    return this.email_ids.value.split(',').filter((email) => email);
+    return this.emailIds.value;
   }
 
   get isSocialChannel() {
@@ -186,8 +248,8 @@ export class NotificationComponent implements OnInit {
     return this.notificationForm.get('is_email_channel').value;
   }
 
-  get room_nos() {
-    return this.notificationForm.get('room_nos');
+  get roomNumbers() {
+    return this.notificationForm.get('roomNumbers');
   }
 
 }

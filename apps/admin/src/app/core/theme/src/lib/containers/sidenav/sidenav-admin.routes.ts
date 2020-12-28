@@ -6,12 +6,6 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/dashboard.svg',
   },
   {
-    path: 'request',
-    title: 'Requests',
-    children: null,
-    url: 'assets/svg/request.svg',
-  },
-  {
     path: 'roles-permissions',
     title: 'Roles & Permissions',
     children: null,
@@ -40,6 +34,12 @@ export const ADMIN_ROUTES = [
     title: 'Feedbacks',
     children: null,
     url: 'assets/svg/box.svg',
+  },
+  {
+    path: 'request',
+    title: 'Requests',
+    children: null,
+    url: 'assets/svg/request.svg',
   },
   {
     path: 'package',

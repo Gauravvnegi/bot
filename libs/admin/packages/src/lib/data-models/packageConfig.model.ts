@@ -83,3 +83,13 @@ export class Amenity{
      downloadUrl : string; 
      autoAccept :boolean;
 }
+
+export enum PackageSource {
+    Botshot = 'BOTSHOT',
+	Pms = 'PMS'
+}
+
+export interface IpackageOptions {
+    key: string;
+    value: string;
+}

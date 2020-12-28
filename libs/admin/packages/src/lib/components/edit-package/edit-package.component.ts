@@ -6,7 +6,7 @@ import { Regex } from 'libs/shared/constants/regex';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { Category } from '../../data-models/categoryConfig.model';
-import { PackageDetail } from '../../data-models/packageConfig.model';
+import { IpackageOptions, PackageDetail, PackageSource } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
 
 @Component({
@@ -20,29 +20,27 @@ export class EditPackageComponent implements OnInit {
 
   fileUploadData = {
     fileSize: 3145728,
-    fileType: ['png', 'jpg']
+    fileType: ['png','jpg','jpeg','gif','eps']
   }
 
-  currency = [
+  currency: IpackageOptions[] = [
     { key: 'INR', value: 'INR' },
     { key: 'USD', value: 'USD' }
   ]
 
-  packageType = [
+  packageType: IpackageOptions[] = [
     { key: 'Complimentary', value: 'Complimentary' },
     { key: 'Paid', value: 'Paid' }
   ]
 
-  unit = [
+  unit: IpackageOptions[] = [
     { key: 'Km', value: 'Km' },
     { key: 'PERSON', value: 'PERSON' },
     { key: 'TRIP', value: 'TRIP' }
   ]
 
-  file: File;
-  amenityForm: FormGroup;
-  hotelPackage: PackageDetail;
-  selectedCategory: string;
+  packageForm: FormGroup;
+  hotelPackage: PackageDetail
   categories: Category[];
   packageId: string;
   hotelId: string;
@@ -64,7 +62,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   initAddPackageForm(): void {
-    this.amenityForm = this.fb.group({
+    this.packageForm = this.fb.group({
       id: [''],
       packageCode: ['', [Validators.required]],
       name: ['', [Validators.required]],
@@ -75,6 +73,7 @@ export class EditPackageComponent implements OnInit {
       unit: ['', [Validators.required]],
       packageSource: [''],
       imageUrl: ['', [Validators.required]],
+      imageName: [''],
       status: [false],
       autoAccept: [false],
       category: ['', [Validators.required]],
@@ -82,18 +81,18 @@ export class EditPackageComponent implements OnInit {
   }
 
   disableForm(packageData): void {
-    if (packageData.packageSource === 'PMS') {
-      this.amenityForm.disable();
-      this.amenityForm.get('description').enable();
-      this.amenityForm.get('name').enable();
+    if (packageData.packageSource === PackageSource.Pms) {
+      this.packageForm.disable();
+      this.packageForm.get('description').enable();
+      this.packageForm.get('name').enable();
     } else {
-      this.amenityForm.get('packageCode').disable();
+      this.packageForm.get('packageCode').disable();
     }
   }
 
   enableEditableFields(): void {
-    this.amenityForm.get('status').enable();
-    this.amenityForm.get('rate').enable();
+    this.packageForm.get('status').enable();
+    this.packageForm.get('rate').enable();
   }
 
   listenForGlobalFilters(): void {
@@ -137,8 +136,8 @@ export class EditPackageComponent implements OnInit {
       this.packageService.getPackageDetails(this.hotelId, packageId)
         .subscribe(response => {
           this.hotelPackage = new PackageDetail().deserialize(response);
-          this.amenityForm.patchValue(this.hotelPackage.amenityPackage);
-          this.disableForm(this.amenityForm.getRawValue());
+          this.packageForm.patchValue(this.hotelPackage.amenityPackage);
+          this.disableForm(this.packageForm.getRawValue());
         })
     );
   }
@@ -148,7 +147,7 @@ export class EditPackageComponent implements OnInit {
       this.packageService.getHotelPackageCategories(hotelId)
         .subscribe(response => {
           this.categories = response.records;
-          this.selectedCategory = this.hotelPackage.amenityPackage.category || response.records[0].id;
+          this.packageForm.get('category').patchValue(this.hotelPackage && this.hotelPackage.amenityPackage.category || response.records[0].id);
         })
     );
   }
@@ -163,7 +162,7 @@ export class EditPackageComponent implements OnInit {
 
   addPackage(): void {
     const status = this.packageService.validatePackageDetailForm(
-      this.amenityForm
+      this.packageForm
     ) as Array<any>;
 
     if (status.length) {
@@ -171,12 +170,12 @@ export class EditPackageComponent implements OnInit {
       return;
     }
 
-    let data = this.packageService.mapPackageData(this.amenityForm.getRawValue(), this.hotelId);
+    let data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId);
     this.$subscription.add(
       this.packageService.addPackage(this.hotelId, data)
         .subscribe(response => {
           this.hotelPackage = new PackageDetail().deserialize(response);
-          this.amenityForm.patchValue(this.hotelPackage.amenityPackage);
+          this.packageForm.patchValue(this.hotelPackage.amenityPackage);
           this.snackbarService.openSnackBarAsText('Package added successfully',
             '',
             { panelClass: 'success' }
@@ -198,7 +197,8 @@ export class EditPackageComponent implements OnInit {
     this.$subscription.add(
       this.packageService.uploadImage(this.hotelId, formData)
         .subscribe(response => {
-          this.amenityForm.get('imageUrl').patchValue(response.fileDownloadUri);
+          this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
+          this.packageForm.get('imageName').patchValue(response.fileName);
           this.snackbarService.openSnackBarAsText('Package image uploaded successfully',
             '',
             { panelClass: 'success' }
@@ -211,7 +211,7 @@ export class EditPackageComponent implements OnInit {
 
   updatePackage(): void {
     const status = this.packageService.validatePackageDetailForm(
-      this.amenityForm
+      this.packageForm
     ) as Array<any>;
 
     if (status.length) {
@@ -219,7 +219,7 @@ export class EditPackageComponent implements OnInit {
       return;
     }
 
-    const data = this.packageService.mapPackageData(this.amenityForm.getRawValue(), this.hotelId, this.hotelPackage.amenityPackage.id);
+    const data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId, this.hotelPackage.amenityPackage.id);
     this.$subscription.add(
       this.packageService.updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
         .subscribe(response => {
@@ -244,7 +244,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   get packageImageUrl(): string {
-    return this.amenityForm.get('imageUrl').value;
+    return this.packageForm.get('imageUrl').value;
   }
 
 }

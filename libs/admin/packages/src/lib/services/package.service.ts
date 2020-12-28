@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
-import { Amenity } from '../data-models/packageConfig.model';
 import { FormGroup } from '@angular/forms';
+import { ApiService } from '../../../../../shared/utils/src/lib/api.service';
+import { Amenity, PackageSource } from '../data-models/packageConfig.model';
 
 @Injectable()
 export class PackageService extends ApiService {
@@ -57,7 +57,7 @@ export class PackageService extends ApiService {
     packageData.currency = formValue.currency;
     packageData.rate = formValue.rate;
     packageData.quantity = 0;
-    packageData.source = 'BOTSHOT'
+    packageData.source = PackageSource.Botshot
     packageData.startDate = 0;
     packageData.endDate = 0
     packageData.type = formValue.packageCode;

@@ -249,19 +249,21 @@
       </td>
       <td class="guest">
         {{ rowData.getSecGuestDisplayConfig().displayString }}
-        <!-- <div
-          *ngIf="rowData.guests.secondaryGuest.length > 0"
-          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        <div
+        
+          *ngIf="rowData.permissionConfigs.length > 0"
+          [ngClass]="{ demo: rowData.permissionConfigs.length > 0 }"
         >
+        <pre>{{rowData && rowData.permissionConfigs.length}}</pre>
           <div
             *ngFor="
-              let secondaryGuest of rowData.guests.secondaryGuest;
-              let guestIdx = index
+              let permission of rowData.permissionConfigs;
+              let permissionIdx = index
             "
           >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+            {{ rowData.permissionConfigs[permissionIdx].label }}
           </div>
-        </div> -->
+        </div>
       </td>
       <td class="service-details">
         {{ userDetailService.userDetails.getFullName() }}

@@ -3,12 +3,12 @@ import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
-import { RequestService } from '../../services/request.service.js';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service.js';
-import { Subscription } from 'rxjs';
-import { RequestData, RequestConfig } from '../../data-models/request.model.js';
 import { SnackBarService } from 'libs/shared/material/src/index.js';
+import { Subscription } from 'rxjs';
+import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
+import { RequestConfig, RequestData } from '../../data-models/request.model.js';
+import { RequestService } from '../../services/request.service.js';
 
 @Component({
   selector: 'hospitality-bot-notification',
@@ -53,11 +53,11 @@ export class NotificationComponent implements OnInit {
     this.getConfigData();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     // this.$subscription.add(
       this._globalFilterService
         .globalFilter$.subscribe((data) => {
@@ -67,7 +67,7 @@ export class NotificationComponent implements OnInit {
     // );
   }
 
-  initNotificationForm() {
+  initNotificationForm(): void {
     this.notificationForm = this._fb.group({
       social_channels: [[]],
       is_social_channel: [false, Validators.required],
@@ -82,7 +82,7 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  getConfigData() {
+  getConfigData(): void {
     this.config = new RequestConfig().deserialize({
       channels: {
         bot: {
@@ -122,7 +122,7 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  removeEmail(emailToRemove): void {
+  removeEmail(emailToRemove: string): void {
     const allEmails = this.emailIds.value
       .filter((email) => email != emailToRemove);
     this.emailIds.patchValue(allEmails);
@@ -131,7 +131,7 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  readEmailFromCSV($event: any): void {
+  readDataFromCSV($event: any, control: FormControl): void {
     let files = $event.srcElement.files;  
   
     if (files[0].name.endsWith(".csv")) {
@@ -151,44 +151,19 @@ export class NotificationComponent implements OnInit {
           }
         }
         if (csvArr.length) {
-          this.emailIds.patchValue(csvArr.join(',').split(','));
+          control.patchValue(csvArr.join(',').split(','));
         }
       };  
     } else {
-      this.emailCsvReader.nativeElement.value = "";
+      if (control === this.roomNumbers) {
+        this.roomCsvReader.nativeElement.value = "";
+      } else {
+        this.emailCsvReader.nativeElement.value = "";
+      }
     }
   }
 
-  readRoomsFromCSV($event: any): void {
-    let files = $event.srcElement.files;  
-  
-    if (files[0].name.endsWith(".csv")) {
-      let input = $event.target;  
-      let reader = new FileReader();  
-      reader.readAsText(input.files[0]);  
-  
-      reader.onload = () => {  
-        let csvData = reader.result;  
-        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);    
-  
-        let csvArr = [];
-        for (let i = 1; i < csvRecordsArray.length; i++) {
-          let curruntRecord = (<string>csvRecordsArray[i]).split(',');
-          if (curruntRecord[0].trim()) {
-            csvArr.push(curruntRecord[0].trim());
-          }
-        }
-        if (csvArr.length) {
-          this.roomNumbers.patchValue(csvArr);
-        }
-      };  
-    } else {
-      this.roomCsvReader.nativeElement.value = "";
-    }
-  }
-
-  readAttachments(event) {
-    this.attachment = event.currentTarget.files[0].name;
+  uploadAttachments(event): void {
     let formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
     this.requestService.uploadAttachments(this.hotelId, formData)
@@ -200,17 +175,15 @@ export class NotificationComponent implements OnInit {
       });
   }
 
-  goBack() {
+  goBack(): void {
     this._location.back();
   }
 
   changeTemplateIds(method): void {
-    this.templates.ids.length = 0;
-    let data = this.config.messageTypes.filter((d) => d.value === method);
-    this.templates.ids = data['templateIds'];
+    this.templates.ids = this.config.messageTypes.filter((d) => d.value === method)['templateIds'];
   }
 
-  sendMessage() {
+  sendMessage(): void {
     let validation = this.requestService.validateRequestData(
       this.notificationForm,
       !(this.isEmailChannel || this.isSocialChannel)
@@ -233,36 +206,29 @@ export class NotificationComponent implements OnInit {
     );
   }
 
-  setRoomData(event) {
-    if (event) {
-      this.roomNumbers.patchValue(event.split(','));
-    } else {
-      this.roomNumbers.patchValue([]);
-      this.roomCsvReader.nativeElement.value = ""; 
-    }
+  setRoomData(event): void {
+    let value = event ? event.split(',') : [];
+    this.roomNumbers.patchValue(value);
+    this.roomCsvReader.nativeElement.value = "";
   }
 
-  modifyControl(event, control) {
+  modifyControl(event: boolean, control: string): void {
     let formControl = this.notificationForm.get(control);
     formControl.setValue([]);
     event ? formControl.setValidators([Validators.required]) : formControl.clearValidators();
     formControl.updateValueAndValidity();
   }
 
-  changeSocialChannels(event) {
+  changeSocialChannels(event: string[]): void {
     this.social_channels.setValue(event);
   }
 
-  get social_channels() {
+  get social_channels(): FormControl {
     return this.notificationForm.get('social_channels') as FormControl;
   }
 
-  get emailIds() {
+  get emailIds(): FormControl {
     return this.notificationForm.get('emailIds') as FormControl;
-  }
-
-  get emailIdsList() {
-    return this.emailIds.value;
   }
 
   get isSocialChannel() {
@@ -273,8 +239,8 @@ export class NotificationComponent implements OnInit {
     return this.notificationForm.get('is_email_channel').value;
   }
 
-  get roomNumbers() {
-    return this.notificationForm.get('roomNumbers');
+  get roomNumbers(): FormControl {
+    return this.notificationForm.get('roomNumbers') as FormControl;
   }
 
 }

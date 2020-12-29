@@ -213,7 +213,7 @@ export class NotificationComponent implements OnInit {
   sendMessage() {
     let validation = this.requestService.validateRequestData(
       this.notificationForm,
-      !(this.isEmailChannel && this.isSocialChannel)
+      !(this.isEmailChannel || this.isSocialChannel)
     );
 
     if (validation.length) {
@@ -243,12 +243,10 @@ export class NotificationComponent implements OnInit {
   }
 
   modifyControl(event, control) {
-    this.notificationForm.removeControl(control)
-    if (event) {
-      this.notificationForm.addControl(control, new FormControl([], Validators.required));
-      return;
-    }
-    this.notificationForm.addControl(control, new FormControl([]));
+    let formControl = this.notificationForm.get(control);
+    formControl.setValue([]);
+    event ? formControl.setValidators([Validators.required]) : formControl.clearValidators();
+    formControl.updateValueAndValidity();
   }
 
   changeSocialChannels(event) {

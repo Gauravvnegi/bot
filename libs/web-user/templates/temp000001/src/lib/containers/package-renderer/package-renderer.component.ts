@@ -254,6 +254,10 @@ export class PackageRendererComponent
     });
   }
 
+  closeCategory(){
+    this.onPackageUpdate.emit(true);
+  }
+
   private performActionIfNotValid(status: any[]) {
     this._translateService
       .get(`VALIDATION.${status[0].code}`)

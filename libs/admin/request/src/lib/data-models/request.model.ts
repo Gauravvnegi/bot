@@ -17,8 +17,6 @@ export class RequestData {
 			set({}, 'templateId', get(data, ['templateId'])),
 			set({}, 'attachments', get(data, ['attachments'])),
 			set({}, 'message', get(data, ['message'])),
-			// set({}, 'emailIds', get(data, ['emailIds'])),
-			// set({}, 'sources', get(data, ['sources'])),
 			set({}, 'messageType', get(data, ['messageType'])),
 			set({}, 'phoneNumbers', get(data, ['phoneNumbers']))
 		)
@@ -28,7 +26,7 @@ export class RequestData {
 			this.sources = ['email'];
 		}
 		if (data.is_social_channel) {
-			this.sources = this.sources.length ? [...this.sources, ...data.social_channels] : data.social_channels;
+			this.sources = this.sources && this.sources.length ? [...this.sources, ...data.social_channels] : data.social_channels;
 		}
 		return this;
 	}

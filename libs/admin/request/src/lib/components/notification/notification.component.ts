@@ -1,7 +1,7 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
 import { RequestService } from '../../services/request.service.js';
@@ -40,35 +40,40 @@ export class NotificationComponent implements OnInit {
   @ViewChild('attachmentUpload') attachmentUpload: any;
 
   constructor(
+    private _globalFilterService: GlobalFilterService,
     private _fb: FormBuilder,
     private _location: Location,
     private requestService: RequestService,
-    private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
+    this.registerListeners();
     this.initNotificationForm();
     this.getConfigData();
-    // this.registerListeners();
   }
 
-  // listenForGlobalFilters() {
-  //   this.$subscription.add(
-  //     this._globalFilterService.globalFilter$.subscribe((data) => {
-  //       debugger;
-  //       this.hotelId = data['filter'].queryValue[0].hotelId;
-  //     })
-  //   );
-  // }
+  registerListeners() {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    // this.$subscription.add(
+      this._globalFilterService
+        .globalFilter$.subscribe((data) => {
+        // debugger;
+        // this.hotelId = data['filter'].queryValue[0].hotelId;
+      })
+    // );
+  }
 
   initNotificationForm() {
     this.notificationForm = this._fb.group({
       social_channels: [[]],
-      is_social_channel: [false],
-      is_email_channel: [false],
-      is_sms_channel: [false],
-      messageType: [''],
+      is_social_channel: [false, Validators.required],
+      is_email_channel: [false, Validators.required],
+      is_sms_channel: [false, Validators.required],
+      messageType: ['', Validators.required],
       templateId: [],
       attachments: [[]],
       message: [''],
@@ -206,7 +211,10 @@ export class NotificationComponent implements OnInit {
   }
 
   sendMessage() {
-    let validation = this.requestService.validateRequestData(this.notificationForm.getRawValue());
+    let validation = this.requestService.validateRequestData(
+      this.notificationForm,
+      !(this.isEmailChannel && this.isSocialChannel)
+    );
 
     if (validation.length) {
       this._snackbarService.openSnackBarAsText(validation[0].data.message);
@@ -217,7 +225,7 @@ export class NotificationComponent implements OnInit {
     this.$subscription.add(
       this.requestService.createRequestData(this.hotelId, values)
         .subscribe((res) => {
-          this._snackbarService.openSnackBarAsText('', 'Notification sent.', { panelClass: 'success' });
+          this._snackbarService.openSnackBarAsText('Notification sent.', '', { panelClass: 'success' });
           this._location.back();
         }, ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);
@@ -232,6 +240,19 @@ export class NotificationComponent implements OnInit {
       this.roomNumbers.patchValue([]);
       this.roomCsvReader.nativeElement.value = ""; 
     }
+  }
+
+  modifyControl(event, control) {
+    this.notificationForm.removeControl(control)
+    if (event) {
+      this.notificationForm.addControl(control, new FormControl([], Validators.required));
+      return;
+    }
+    this.notificationForm.addControl(control, new FormControl([]));
+  }
+
+  changeSocialChannels(event) {
+    this.social_channels.setValue(event);
   }
 
   get social_channels() {

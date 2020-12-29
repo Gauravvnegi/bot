@@ -11,10 +11,10 @@
         <div class="row-title">Channel:</div>
         <div class="row-body">
           <div style="display: flex; align-items: center;" *ngIf="config.channels.bot">
-            <mat-checkbox formControlName="is_social_channel"></mat-checkbox>
+            <mat-checkbox formControlName="is_social_channel" (change)="modifyControl($event.checked, 'social_channels')"></mat-checkbox>
             <mat-form-field style="margin-left: 10px;">
-              <mat-select formControlName="social_channels" multiple [disabled]="!isSocialChannel">
-                <mat-select-trigger>
+              <mat-select multiple formControlName="social_channels" [disabled]="!isSocialChannel" (selectionChange)="changeSocialChannels($event.value)">
+                <mat-select-trigger *ngIf="social_channels">
                   {{ social_channels.value ? social_channels.value[0] : '' }}
                   <span
                     *ngIf="social_channels.value?.length > 1"
@@ -31,7 +31,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div><mat-checkbox formControlName="is_email_channel" *ngIf="config.channels.email"> Email </mat-checkbox></div>
+          <div><mat-checkbox formControlName="is_email_channel" *ngIf="config.channels.email" (change)="modifyControl($event.checked, 'emailIds')"> Email </mat-checkbox></div>
           <div><mat-checkbox formControlName="is_sms_channel" *ngIf="config.channels.sms"> SMS </mat-checkbox></div>
         </div>
       </div>

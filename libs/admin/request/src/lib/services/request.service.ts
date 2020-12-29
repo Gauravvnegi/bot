@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
 import { RequestData } from '../data-models/request.model';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
@@ -33,39 +34,23 @@ export class RequestService extends ApiService {
     );
   }
 
-  validateRequestData(data) {
+  validateRequestData(fg: FormGroup, channelSelection) {
     let status = [];
 
-    if (!data.is_email_channel && !data.is_social_channel) {
+    if (channelSelection) {
       status.push({
         validity: false,
         code: "",
         data: {
-          message: 'Select a channel'
+          message: 'Select atleast one channel'
         },
       });
-    } else if (data.is_social_channel && data.social_channels.length === 0) {
+    } else if (fg.invalid) {
       status.push({
         validity: false,
         code: "",
         data: {
-          message: 'Select Bot Channels'
-        },
-      });
-    } else if (!data.messageType) {
-      status.push({
-        validity: false,
-        code: "",
-        data: {
-          message: 'Select message type'
-        },
-      });
-    } else if (data.is_email_channel && data.emailIds.length === 0) {
-      status.push({
-        validity: false,
-        code: "",
-        data: {
-          message: 'Enter emailIds'
+          message: 'Invalid form'
         },
       });
     }

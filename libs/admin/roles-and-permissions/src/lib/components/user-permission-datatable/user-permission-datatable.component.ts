@@ -143,6 +143,22 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  updateRolesStatus(event, userData){
+    const data = {
+      id: userData.parentId,
+      status: event.checked
+    };
+    this._managePermissionService.updateRolesStatus(userData.userId, data)
+    .subscribe(response =>{
+      this._snackbarService.openSnackBarAsText('Status updated successfully',
+      '',
+      { panelClass: 'success' }
+    );
+    }, ({ error }) => {
+      this._snackbarService.openSnackBarAsText(error.message);
+    })
+  }
+
   addUser() {
     this._router.navigate(['add-user'], { relativeTo: this._route });
   }

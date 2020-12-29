@@ -33,6 +33,15 @@
   background-color: #f8f8f8;
   padding: 30px 20px;
   border-radius: 5px;
+  position: relative;
+  .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
   .checkbox-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -93,7 +102,7 @@
   height: auto !important;
 }
 
-.package-button{
+.package-button {
   display: flex;
   justify-content: center;
 }

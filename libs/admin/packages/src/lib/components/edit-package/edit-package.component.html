@@ -52,7 +52,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="feilds image-wrapper">
+      <!-- <div class="feilds image-wrapper">
         <div class="image">
           <hospitality-bot-upload-file
             [fileUploadData]="fileUploadData"
@@ -62,19 +62,28 @@
           >
           </hospitality-bot-upload-file>
         </div>
-      </div>
+      </div> -->
       <div class="feilds margin-adjust">
         <div class="image-button">
           <mat-label class="mat-label">Upload Image:</mat-label>
+          <div class="image">
+            <hospitality-bot-upload-file
+              [fileUploadData]="fileUploadData"
+              [url]="packageImageUrl"
+              [isDisable]="false"
+              (fileData)="uploadFile($event)"
+            >
+            </hospitality-bot-upload-file>
+          </div>
           <!-- <button class="button">Choose File</button> -->
-          <p class="image-name">{{ packageForm.get('imageName').value }}</p>
+          <!-- <p class="image-name">{{ packageForm.get('imageName').value }}</p> -->
         </div>
       </div>
-      <div class="feilds margin-adjust">
+      <!-- <div class="feilds margin-adjust">
         <div class="note">
           Recommended dimension (in px) : 60*60
         </div>
-      </div>
+      </div> -->
       <!-- <div>
         <mat-label>Description:</mat-label>
         <mat-form-field>

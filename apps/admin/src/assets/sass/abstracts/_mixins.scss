@@ -41,3 +41,21 @@
     font-size: 12px;
   }
 }
+
+@mixin admin-panel-button(){
+  background-color: $primary-purple;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: $font14;
+  font-weight: $medium;
+  border-radius: 25px;
+  padding: 12px 0px;
+  width: $normal-button-width;
+  opacity: 0.85;
+  box-shadow: 0px 0px 5px 0px $primary-purple;
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+}

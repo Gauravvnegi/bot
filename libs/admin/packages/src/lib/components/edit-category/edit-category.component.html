@@ -1,47 +1,86 @@
-<div>
-    <form [formGroup]="categoryForm">
-      <div>
-        <mat-label>Category Name:</mat-label>
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon
+        (click)="redirectToCategories()"
+        class="material-icons"
+        matSuffix
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">Edit Category 1</p>
+    </div>
+  </header>
+  <form [formGroup]="categoryForm">
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Category Name:</mat-label>
           <mat-form-field>
-              <input matInput formControlName="name">
-              <mat-error
-              *ngIf="categoryForm.get('name').touched &&
-              categoryForm.get('name').hasError('required')">
+            <input matInput formControlName="name" />
+            <mat-error
+              *ngIf="
+                categoryForm.get('name').touched &&
+                categoryForm.get('name').hasError('required')
+              "
+            >
               Name is required
-              </mat-error>
+            </mat-error>
           </mat-form-field>
+        </div>
+        <div class="feild">
+          <mat-label class="mat-label">Packages:</mat-label>
+          <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
+          <mat-form-field *ngIf="subPackages && subPackages.length > 0">
+            <mat-select formControlName="packages">
+              <mat-option
+                *ngFor="let subPackage of subPackages"
+                [value]="subPackage.id"
+                >{{ subPackage.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-      <div>
-        <mat-label>Packages:</mat-label>
-        <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
-        <mat-form-field *ngIf="subPackages && subPackages.length > 0">  
-          <mat-select formControlName="packages">
-            <mat-option *ngFor="let subPackage of subPackages" [value]="subPackage.id">{{subPackage.name}}</mat-option>
-          </mat-select> 
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-label>Description:</mat-label>
-        <mat-form-field>
-          <input matInput formControlName="description">
-          <mat-error
-              *ngIf="categoryForm.get('description').touched &&
-              categoryForm.get('description').hasError('required')">
+      <div class="feilds">
+        <div class="feild full-width">
+          <mat-label class="mat-label">Description:</mat-label>
+          <mat-form-field>
+            <input matInput formControlName="description" />
+            <mat-error
+              *ngIf="
+                categoryForm.get('description').touched &&
+                categoryForm.get('description').hasError('required')
+              "
+            >
               Description is required
-              </mat-error>
-        </mat-form-field>
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
-      <div>
-        <mat-label>Upload Image:</mat-label>
-        <hospitality-bot-upload-file
-        [fileUploadData]="fileUploadData"
-        [url]="categoryImageUrl"
-        (fileData)="uploadFile($event)">
-      </hospitality-bot-upload-file>
+      <div class="feilds image-wrapper">
+        <div class="image">
+          <hospitality-bot-upload-file
+            [fileUploadData]="fileUploadData"
+            [url]="categoryImageUrl"
+            (fileData)="uploadFile($event)"
+          >
+          </hospitality-bot-upload-file>
+        </div>
       </div>
-      <p>{{ categoryForm.get('imageName').value }}</p>
-      <button  mat-button (click)="saveDetails()">Save</button>
-      <button  mat-button (click)="redirectToCategories()">Back</button>
-    </form>
-  </div>
-  
+      <div class="feilds margin-adjust">
+        <div class="image-button">
+          <mat-label class="mat-label">Upload Image:</mat-label>
+          <p class="image-name">{{ categoryForm.get('imageName').value }}</p>
+        </div>
+      </div>
+      <div class="feilds margin-adjust">
+        <div class="note">
+          Recommended dimension (in px) : 60*60
+        </div>
+      </div>
+    </div>
+    <div class="footer_button">
+      <button mat-button (click)="saveDetails()">Save</button>
+    </div>
+  </form>
+</div>

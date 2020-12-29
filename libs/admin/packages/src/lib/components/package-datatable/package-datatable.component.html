@@ -1,6 +1,6 @@
 <!-- <p (click)="redirectToAddPackage()">+Add Package</p> -->
 
-  <p-table
+<p-table
   #dt
   [styleClass]="tableConfig.styleClass"
   [resizableColumns]="isResizableColumns"
@@ -30,7 +30,9 @@
             <!-- <p class="selected">2 record(s) are selected</p> -->
 
             <div class="options">
-              <button class="add-user" (click)="redirectToAddPackage()">+Add Package</button>
+              <button class="add-user" (click)="redirectToAddPackage()">
+                +Add Package
+              </button>
               <div *ngIf="isActionButtons" class="icons">
                 <img src="assets/svg/Download.svg" class="svg" />
                 <img src="assets/svg/google-docs.svg" class="svg" />
@@ -179,9 +181,7 @@
         <input
           pInputText
           type="text"
-          (input)="
-            onFilterTypeTextChange($event.target.value, 'packageCode')
-          "
+          (input)="onFilterTypeTextChange($event.target.value, 'packageCode')"
           class="p-column-filter"
         />
       </th>
@@ -189,12 +189,7 @@
         <input
           pInputText
           type="text"
-          (input)="
-            onFilterTypeTextChange(
-              $event.target.value,
-              'description'
-            )
-          "
+          (input)="onFilterTypeTextChange($event.target.value, 'description')"
           class="p-column-filter"
         />
       </th>
@@ -245,15 +240,26 @@
         <!-- <div class="profile">
           <img src="assets/bg.png" />
         </div> -->
-        <div class="data">
+        <div class="package_image_wrapper">
+          <div class="image">
+            <img class="package-image" src="{{ rowData.imageUrl }}" />
+          </div>
+          <div class="text">
+            <div>{{ rowData.name }}</div>
+            <p>{{ rowData.categoryName }}</p>
+          </div>
+        </div>
+        <!-- <div class="data">
           {{ rowData.name }}
           <p>{{ rowData.categoryName }}</p>
           <img class="package-image" src="{{rowData.imageUrl}}" />
-        </div>
+        </div> -->
       </td>
-      <td class="brand-name">
-        {{ rowData.packageCode}}
-        <p>{{ rowData.packageSource }}</p>
+      <td>
+        <div class="brand-name">
+          <div>{{ rowData.packageCode }}</div>
+          <p>{{ rowData.packageSource }}</p>
+        </div>
       </td>
       <td class="guest">
         {{ rowData.description }}
@@ -273,19 +279,19 @@
       </td>
       <td class="service-details">
         {{ rowData.type }}
-        
       </td>
-      <td>
-        <p></p>
-        {{rowData.currency}}{{rowData.rate}}/{{rowData.unit}}
+      <td class="amount_wrapper">
+        <p class="amount">
+          {{ rowData.currency }}{{ rowData.rate }}/{{ rowData.unit }}
+        </p>
       </td>
       <td class="">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <input type="checkbox" [checked]="rowData.status" />
           <!-- <span class="slider round" (click)="updatePackageStatus($event)"></span> -->
           <mat-slide-toggle
-          [checked]="rowData.status"
-          (change)="updatePackageStatus($event,rowData.id)"
+            [checked]="rowData.status"
+            (change)="updatePackageStatus($event, rowData.id)"
           ></mat-slide-toggle>
         </label>
       </td>

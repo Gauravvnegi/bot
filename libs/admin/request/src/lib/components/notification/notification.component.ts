@@ -64,7 +64,7 @@ export class NotificationComponent implements OnInit {
 
   initNotificationForm() {
     this.notificationForm = this._fb.group({
-      social_channels: [''],
+      social_channels: [[]],
       is_social_channel: [false],
       is_email_channel: [false],
       is_sms_channel: [false],
@@ -72,7 +72,7 @@ export class NotificationComponent implements OnInit {
       templateId: [],
       attachments: [[]],
       message: [''],
-      emailIds: [''],
+      emailIds: [[]],
       roomNumbers: [[]],
     });
   }
@@ -206,6 +206,12 @@ export class NotificationComponent implements OnInit {
   }
 
   sendMessage() {
+    let validation = this.requestService.validateRequestData(this.notificationForm.getRawValue());
+
+    if (validation.length) {
+      this._snackbarService.openSnackBarAsText(validation[0].data.message);
+      return;
+    }
     let values = new RequestData().deserialize(this.notificationForm.getRawValue());
 
     this.$subscription.add(

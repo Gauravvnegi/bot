@@ -32,4 +32,43 @@ export class RequestService extends ApiService {
       formData
     );
   }
+
+  validateRequestData(data) {
+    let status = [];
+
+    if (!data.is_email_channel && !data.is_social_channel) {
+      status.push({
+        validity: false,
+        code: "",
+        data: {
+          message: 'Select a channel'
+        },
+      });
+    } else if (data.is_social_channel && data.social_channels.length === 0) {
+      status.push({
+        validity: false,
+        code: "",
+        data: {
+          message: 'Select Bot Channels'
+        },
+      });
+    } else if (!data.messageType) {
+      status.push({
+        validity: false,
+        code: "",
+        data: {
+          message: 'Select message type'
+        },
+      });
+    } else if (data.is_email_channel && data.emailIds.length === 0) {
+      status.push({
+        validity: false,
+        code: "",
+        data: {
+          message: 'Enter emailIds'
+        },
+      });
+    }
+    return status;
+  }
 }

@@ -40,17 +40,17 @@ export class RequestService extends ApiService {
     if (channelSelection) {
       status.push({
         validity: false,
-        code: "",
+        code: '',
         data: {
-          message: 'Select atleast one channel'
+          message: 'Select atleast one channel',
         },
       });
     } else if (fg.invalid) {
       status.push({
         validity: false,
-        code: "",
+        code: '',
         data: {
-          message: 'Invalid form'
+          message: 'Invalid form',
         },
       });
     }

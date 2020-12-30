@@ -1,7 +1,12 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service.js';
 import { SnackBarService } from 'libs/shared/material/src/index.js';
@@ -18,10 +23,10 @@ import { RequestService } from '../../services/request.service.js';
 export class NotificationComponent implements OnInit {
   attachment: string;
   templates = {
-    ids: []
+    ids: [],
   };
   hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
-  
+
   config: RequestConfig;
 
   ckeditorContent;
@@ -45,7 +50,7 @@ export class NotificationComponent implements OnInit {
     private _location: Location,
     private requestService: RequestService,
     private _snackbarService: SnackBarService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.registerListeners();
@@ -53,21 +58,20 @@ export class NotificationComponent implements OnInit {
     this.getConfigData();
   }
 
-  registerListeners(): void {
+  private registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters(): void {
+  private listenForGlobalFilters(): void {
     // this.$subscription.add(
-      this._globalFilterService
-        .globalFilter$.subscribe((data) => {
-        // debugger;
-        // this.hotelId = data['filter'].queryValue[0].hotelId;
-      })
+    this._globalFilterService.globalFilter$.subscribe((data) => {
+      // debugger;
+      // this.hotelId = data['filter'].queryValue[0].hotelId;
+    });
     // );
   }
 
-  initNotificationForm(): void {
+  private initNotificationForm(): void {
     this.notificationForm = this._fb.group({
       social_channels: [[]],
       is_social_channel: [false, Validators.required],
@@ -82,29 +86,29 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  getConfigData(): void {
+  private getConfigData(): void {
     this.config = new RequestConfig().deserialize({
       channels: {
         bot: {
-          title: "Bot",
+          title: 'Bot',
           options: [
             { label: 'Whatsapp', value: 'Whatsapp' },
             { label: 'Messenger', value: 'Messenger' },
-            { label: 'Telegram', value: 'Telegram' }
+            { label: 'Telegram', value: 'Telegram' },
           ],
         },
         email: {
-          title: "Email"
+          title: 'Email',
         },
         sms: {
-          title: "SMS"
-        }
+          title: 'SMS',
+        },
       },
       messageTypes: [
         { label: 'Precheckin', value: 'precheckin', templeteIds: [] },
         { label: 'Checkin', value: 'checkin', templeteIds: [] },
         { label: 'Checkout', value: 'checkout', templeteIds: [] },
-      ]
+      ],
     });
   }
 
@@ -123,26 +127,27 @@ export class NotificationComponent implements OnInit {
   }
 
   removeEmail(emailToRemove: string): void {
-    const allEmails = this.emailIds.value
-      .filter((email) => email != emailToRemove);
+    const allEmails = this.emailIds.value.filter(
+      (email) => email != emailToRemove
+    );
     this.emailIds.patchValue(allEmails);
     if (!allEmails.length) {
-      this.emailCsvReader.nativeElement.value = "";
+      this.emailCsvReader.nativeElement.value = '';
     }
   }
 
   readDataFromCSV($event: any, control: FormControl): void {
-    let files = $event.srcElement.files;  
-  
-    if (files[0].name.endsWith(".csv")) {
-      let input = $event.target;  
-      let reader = new FileReader();  
-      reader.readAsText(input.files[0]);  
-  
-      reader.onload = () => {  
-        let csvData = reader.result;  
-        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);    
-  
+    let files = $event.srcElement.files;
+
+    if (files[0].name.endsWith('.csv')) {
+      let input = $event.target;
+      let reader = new FileReader();
+      reader.readAsText(input.files[0]);
+
+      reader.onload = () => {
+        let csvData = reader.result;
+        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+
         let csvArr = [];
         for (let i = 1; i < csvRecordsArray.length; i++) {
           let curruntRecord = (<string>csvRecordsArray[i]).split(',');
@@ -153,12 +158,12 @@ export class NotificationComponent implements OnInit {
         if (csvArr.length) {
           control.patchValue(csvArr.join(',').split(','));
         }
-      };  
+      };
     } else {
       if (control === this.roomNumbers) {
-        this.roomCsvReader.nativeElement.value = "";
+        this.roomCsvReader.nativeElement.value = '';
       } else {
-        this.emailCsvReader.nativeElement.value = "";
+        this.emailCsvReader.nativeElement.value = '';
       }
     }
   }
@@ -166,13 +171,17 @@ export class NotificationComponent implements OnInit {
   uploadAttachments(event): void {
     let formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.hotelId, formData)
-      .subscribe((response) => {
+    this.requestService.uploadAttachments(this.hotelId, formData).subscribe(
+      (response) => {
         this.attachment = response.fileName;
-        this.notificationForm.get('attachments').patchValue([response.fileDownloadUri]);
-      }, ({ error }) => {
+        this.notificationForm
+          .get('attachments')
+          .patchValue([response.fileDownloadUri]);
+      },
+      ({ error }) => {
         this._snackbarService.openSnackBarAsText(error.message);
-      });
+      }
+    );
   }
 
   goBack(): void {
@@ -180,7 +189,9 @@ export class NotificationComponent implements OnInit {
   }
 
   changeTemplateIds(method): void {
-    this.templates.ids = this.config.messageTypes.filter((d) => d.value === method)['templateIds'];
+    this.templates.ids = this.config.messageTypes.filter(
+      (d) => d.value === method
+    )['templateIds'];
   }
 
   sendMessage(): void {
@@ -193,29 +204,37 @@ export class NotificationComponent implements OnInit {
       this._snackbarService.openSnackBarAsText(validation[0].data.message);
       return;
     }
-    let values = new RequestData().deserialize(this.notificationForm.getRawValue());
+    let values = new RequestData().deserialize(
+      this.notificationForm.getRawValue()
+    );
 
     this.$subscription.add(
-      this.requestService.createRequestData(this.hotelId, values)
-        .subscribe((res) => {
-          this._snackbarService.openSnackBarAsText('Notification sent.', '', { panelClass: 'success' });
+      this.requestService.createRequestData(this.hotelId, values).subscribe(
+        (res) => {
+          this._snackbarService.openSnackBarAsText('Notification sent.', '', {
+            panelClass: 'success',
+          });
           this._location.back();
-        }, ({ error }) => {
+        },
+        ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);
-        })
+        }
+      )
     );
   }
 
   setRoomData(event): void {
     let value = event ? event.split(',') : [];
     this.roomNumbers.patchValue(value);
-    this.roomCsvReader.nativeElement.value = "";
+    this.roomCsvReader.nativeElement.value = '';
   }
 
   modifyControl(event: boolean, control: string): void {
     let formControl = this.notificationForm.get(control);
     formControl.setValue([]);
-    event ? formControl.setValidators([Validators.required]) : formControl.clearValidators();
+    event
+      ? formControl.setValidators([Validators.required])
+      : formControl.clearValidators();
     formControl.updateValueAndValidity();
   }
 
@@ -242,5 +261,4 @@ export class NotificationComponent implements OnInit {
   get roomNumbers(): FormControl {
     return this.notificationForm.get('roomNumbers') as FormControl;
   }
-
 }

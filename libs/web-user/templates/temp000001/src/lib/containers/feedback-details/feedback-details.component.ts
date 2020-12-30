@@ -53,7 +53,7 @@ export class FeedbackDetailsComponent implements OnInit {
     );
   }
 
-  SetHotelServices(event) {
+  setHotelServices(event) {
     let serviceIndex = this.suggestionArray.findIndex(
       (suggestion) => suggestion.serviceId === event.id
     );
@@ -68,10 +68,10 @@ export class FeedbackDetailsComponent implements OnInit {
     this._feedbackDetailsService.selectedServices = this.suggestionArray;
   }
 
-  setRating(event) {
-    this.rating.patchValue(event);
+  onRatingSelection({ rating }) {
+    this.rating.patchValue(rating);
     let feedbackText;
-    if (event <= this.ratingScale.length / 2) {
+    if (rating <= this.ratingScale.length / 2) {
       this.title =
         this._feedbackDetailsService.feedbackConfigDS &&
         this._feedbackDetailsService.feedbackConfigDS.feedBackConfig

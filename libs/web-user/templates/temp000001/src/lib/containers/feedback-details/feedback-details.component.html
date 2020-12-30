@@ -13,18 +13,20 @@
             >
           </mat-panel-title>
         </mat-expansion-panel-header>
+
         <web-user-rating
           [ratingScale]="ratingScale"
           [ratingScaleConfig]="ratingScaleConfig"
-          (ratingData)="setRating($event)"
+          (onRatingSelection)="onRatingSelection($event)"
         ></web-user-rating>
+
         <div [hidden]="!rating.value">
           <h3>{{ title }}</h3>
           <div class="hotel__services--images">
             <div *ngFor="let service of hotelServices" class="img-with-text">
               <div
                 class="image"
-                (click)="SetHotelServices(service)"
+                (click)="setHotelServices(service)"
                 imageClass
                 [styleConfig]="'#2187d5'"
               >

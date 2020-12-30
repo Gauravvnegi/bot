@@ -1,0 +1,90 @@
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+
+@Component({
+  selector: 'hospitality-bot-add-gst',
+  templateUrl: './add-gst.component.html',
+  styleUrls: ['./add-gst.component.scss'],
+})
+export class AddGstComponent implements OnInit {
+  gstFG: FormGroup;
+  @Output()
+  isSubmittedEvent = new EventEmitter<Object>();
+  @ViewChild('saveButton') saveButton;
+  $subscription = new Subscription();
+  constructor(
+    private fb: FormBuilder,
+    private gstService: GSTService,
+    private reservationService: ReservationService,
+    private translateService: TranslateService,
+    private snackbarService: SnackBarService,
+    private _buttonService: ButtonService,
+    public dialogRef: MatDialogRef<AddGstComponent>
+  ) {}
+
+  ngOnInit(): void {
+    this.initFG();
+  }
+
+  private initFG(): void {
+    this.gstFG = this.fb.group({
+      customerName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          // Validators.pattern('/^[a-zA-Z ]{2,30}$/')
+        ])
+      ],
+      customerGSTIn: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.pattern('^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$')
+        ])
+      ],
+      address: [''],
+    });
+  }
+
+  submitGSTDetails(): void {
+    if (this.gstFG.invalid) {
+      this.snackbarService.openSnackBarAsText('Invalid Form');
+      this._buttonService.buttonLoading$.next(this.saveButton);
+      return;
+    }
+
+    this.$subscription.add(
+      this.gstService
+        .addGSTDetail(
+          this.reservationService.reservationId,
+          this.gstFG.getRawValue()
+        )
+        .subscribe(
+          (response) => {
+            this.snackbarService.openSnackBarAsText(
+              'GST details added successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this._buttonService.buttonLoading$.next(this.saveButton);
+            this.closeModal();
+          },
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(this.saveButton);
+          }
+        )
+    );
+  }
+
+  closeModal() {
+    this.dialogRef.close();
+  }
+}

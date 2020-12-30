@@ -39,6 +39,7 @@ import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interce
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
+import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 
 @NgModule({
   imports: [
@@ -94,7 +95,8 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
     AirportService,
     DefaultAmenityService,
     ThankYouService,
-    UtilityService
+    UtilityService,
+    GSTService
   ],
 })
 export class Temp000001Module {}

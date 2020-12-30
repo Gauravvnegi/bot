@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { BillSummaryService } from '../../../../../../shared/src/lib/services/bill-summary.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { AddGstComponent } from '../add-gst/add-gst.component';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details',
@@ -201,8 +202,25 @@ export class BillSummaryDetailsComponent implements OnInit {
             }
           )
       );
-            // this._snackBarService.openSnackBarAsText(error.message)
     }
+  }
+
+  openAddGSTDetails() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'modal-component';
+    const modalDialog = this.dialog.open(
+      AddGstComponent,
+      dialogConfig
+    );
+
+    // this.$subscription.add(
+    //   modalDialog.componentInstance.isRenderedEvent.subscribe((val) => {
+    //     if (val === true) {
+    //       modalDialog.componentInstance.showAppStatusForm = true;
+    //     }
+    //   })
+    // );
   }
 
   get staySummary() {

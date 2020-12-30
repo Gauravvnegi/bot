@@ -66,7 +66,7 @@ export class EditPackageComponent implements OnInit {
       id: [''],
       packageCode: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      description: [''],
       type: ['', [Validators.required]],
       rate: ['', [Validators.required, Validators.pattern(Regex.DECIMAL_REGEX)]],
       currency: ['', [Validators.required]],

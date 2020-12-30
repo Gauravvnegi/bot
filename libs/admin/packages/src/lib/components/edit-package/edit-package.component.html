@@ -4,7 +4,7 @@
       <mat-icon (click)="redirectToPackages()" class="material-icons" matSuffix
         >keyboard_backspace</mat-icon
       >
-      <p class="label">Edit Spa</p>
+      <p class="label">{{ packageForm.get('name').value }}</p>
     </div>
   </header>
 
@@ -67,7 +67,7 @@
         <div class="image-button">
           <mat-label class="mat-label">Upload Image:</mat-label>
           <!-- <button class="button">Choose File</button> -->
-          <p class="image-name">{{ packageForm.get('imageName').value }}</p>
+          <!-- <p class="image-name">{{ packageForm.get('imageName').value }}</p> -->
         </div>
       </div>
       <div class="feilds margin-adjust">

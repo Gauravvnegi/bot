@@ -172,7 +172,6 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
         }
       )
     );
-    this.loading = false;
   }
 
   getSelectedQuickReplyFilters() {
@@ -256,7 +255,6 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
         }
       )
     );
-    this.loading = false;
   }
 
   updatePaginations(event) {

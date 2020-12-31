@@ -10,6 +10,8 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { GuestTableService } from '../../services/guest-table.service';
+import { GuestTable } from '../../data-models/guest-table.model';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -31,14 +33,42 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
   triggerInitialData = false;
 
   cols = [
-    { field: 'rooms.roomNumber', header: 'Guest/ Company' },
-    { field: 'booking.bookingNumber', header: 'Arrival/ Departure' },
-    { field: 'guests.primaryGuest.firstName', header: 'Booking No./ Feedback' },
-    { field: 'arrivalAndDepartureDate', header: 'Amount Due/ Total Spend' },
-    { field: 'amountDueAndTotal', header: 'Transaction Usage' },
-    { field: 'package', header: 'Overall NPS' },
-    { field: 'stageAndourney', header: 'Churn Prob/ Prediction' },
+    { field: 'guests.primaryGuest.firstName', header: 'Guest/ Company' },
+    { field: 'arrivalAndDepartureDate', header: 'Arrival/ Departure' },
+    { field: 'booking.bookingNumber', header: 'Booking No./ Feedback' },
+    { field: 'amountDueAndTotal', header: 'Amount Due/ Total Spend' },
+    { field: 'guestAttributes.transactionUsage', header: 'Transaction Usage' },
+    { field: 'guestAttributes.overAllNps', header: 'Overall NPS' },
+    { field: 'guestAttributes.churnProbalilty', header: 'Churn Prob/ Prediction' },
     { field: 'stageAndourney', header: 'Stage/ Channels' },
+  ];
+
+  chips = [
+    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    {
+      label: 'VIP',
+      icon: '',
+      value: 'VIP',
+      total: 0,
+      isSelected: false,
+      type: 'pending',
+    },
+    {
+      label: 'High Potential ',
+      icon: '',
+      value: 'High Potential',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'High Risk ',
+      icon: '',
+      value: 'High Risk',
+      total: 0,
+      isSelected: false,
+      type: 'completed',
+    },
   ];
 
   tabFilterItems = [
@@ -48,33 +78,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
       value: 'ARRIVAL',
       disabled: false,
       total: 0,
-      chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        {
-          label: 'VIP',
-          icon: '',
-          value: 'VIP',
-          total: 0,
-          isSelected: false,
-          type: 'pending',
-        },
-        {
-          label: 'High Potential ',
-          icon: '',
-          value: 'HIGHPOTENTIAL',
-          total: 0,
-          isSelected: false,
-          type: 'initiated',
-        },
-        {
-          label: 'High Risk ',
-          icon: '',
-          value: 'HIGHRISK',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-      ],
+      chips: this.chips,
     },
     {
       label: 'Inhouse',
@@ -82,33 +86,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
       value: 'INHOUSE',
       disabled: false,
       total: 0,
-      chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        {
-          label: 'VIP',
-          icon: '',
-          value: 'VIP',
-          total: 0,
-          isSelected: false,
-          type: 'pending',
-        },
-        {
-          label: 'High Potential ',
-          icon: '',
-          value: 'HIGHPOTENTIAL',
-          total: 0,
-          isSelected: false,
-          type: 'initiated',
-        },
-        {
-          label: 'High Risk ',
-          icon: '',
-          value: 'HIGHRISK',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-      ],
+      chips: this.chips,
     },
     {
       label: 'Departure',
@@ -116,33 +94,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
       value: 'DEPARTURE',
       disabled: false,
       total: 0,
-      chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        {
-          label: 'VIP',
-          icon: '',
-          value: 'VIP',
-          total: 0,
-          isSelected: false,
-          type: 'pending',
-        },
-        {
-          label: 'High Potential ',
-          icon: '',
-          value: 'HIGHPOTENTIAL',
-          total: 0,
-          isSelected: false,
-          type: 'initiated',
-        },
-        {
-          label: 'High Risk ',
-          icon: '',
-          value: 'HIGHRISK',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-      ],
+      chips: this.chips,
     },
     {
       label: 'Out-Guest',
@@ -150,33 +102,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
       value: 'OUTGUEST',
       disabled: false,
       total: 0,
-      chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        {
-          label: 'VIP',
-          icon: '',
-          value: 'VIP',
-          total: 0,
-          isSelected: false,
-          type: 'pending',
-        },
-        {
-          label: 'High Potential ',
-          icon: '',
-          value: 'HIGHPOTENTIAL',
-          total: 0,
-          isSelected: false,
-          type: 'initiated',
-        },
-        {
-          label: 'High Risk ',
-          icon: '',
-          value: 'HIGHRISK',
-          total: 0,
-          isSelected: false,
-          type: 'completed',
-        },
-      ],
+      chips: this.chips,
     },
   ];
   tabFilterIdx: number = 0;
@@ -185,8 +111,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    // private _reservationService: ReservationService,
-    // private _guestService,
+    private _guestService: GuestTableService,
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -228,25 +153,25 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
 
   loadInitialData(queries = [], loading = true) {
     this.loading = loading && true;
-    // this.$subscription.add(
-    //   this.fetchDataFrom(queries).subscribe(
-    //     (data) => {
-    //       this.values = new ReservationTable().deserialize(data).records;
-    //       //set pagination
-    //       this.totalRecords = data.total;
-    //       data.entityTypeCounts &&
-    //         this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-    //       data.entityStateCounts &&
-    //         this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.values = new GuestTable().deserialize(data).records;
+          //set pagination
+          this.totalRecords = data.total;
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
 
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this._snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
     this.loading = false;
   }
 
@@ -289,48 +214,48 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     }
   }
 
-  // fetchDataFrom(
-  //   queries,
-  //   defaultProps = { offset: this.first, limit: this.rowsPerPage }
-  // ): Observable<any> {
-  //   this.resetRowSelection();
-  //   queries.push(defaultProps);
-  //   const config = {
-  //     queryObj: this._adminUtilityService.makeQueryParams(queries),
-  //   };
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
+    this.resetRowSelection();
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
+    };
 
-  //   return this._guestService.getReservationDetails(config);
-  // }
+    return this._guestService.getGuestList(config);
+  }
 
   loadData(event: LazyLoadEvent) {
     this.loading = true;
     this.updatePaginations(event);
-    // this.$subscription.add(
-    //   this.fetchDataFrom(
-    //     [
-    //       ...this.globalQueries,
-    //       {
-    //         order: 'DESC',
-    //         entityType: this.tabFilterItems[this.tabFilterIdx].value,
-    //       },
-    //       ...this.getSelectedQuickReplyFilters(),
-    //     ],
-    //     { offset: this.first, limit: this.rowsPerPage }
-    //   ).subscribe(
-    //     (data) => {
-    //       // this.values = new ReservationTable().deserialize(data).records;
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ],
+        { offset: this.first, limit: this.rowsPerPage }
+      ).subscribe(
+        (data) => {
+          this.values = new GuestTable().deserialize(data).records;
 
-    //       //set pagination
-    //       this.totalRecords = data.total;
-    //       //check for update tabs and quick reply filters
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this._snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+          //set pagination
+          this.totalRecords = data.total;
+          //check for update tabs and quick reply filters
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
     this.loading = false;
   }
 

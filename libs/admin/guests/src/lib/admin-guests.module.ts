@@ -7,6 +7,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { StatisticsService } from './services/statistics.service';
+import { GuestTableService } from './services/guest-table.service';
 
 export const adminGuestsRoutes: Route[] = [];
 
@@ -22,6 +23,6 @@ export const adminGuestsRoutes: Route[] = [];
     AdminSharedModule,
   ],
   declarations: [...AdminGuestsRoutingModule.components],
-  providers: [StatisticsService]
+  providers: [StatisticsService, GuestTableService]
 })
 export class AdminGuestsModule {}

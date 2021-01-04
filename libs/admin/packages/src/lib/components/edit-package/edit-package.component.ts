@@ -44,6 +44,7 @@ export class EditPackageComponent implements OnInit {
   categories: Category[];
   packageId: string;
   hotelId: string;
+  isSavingPackage = false;
   globalQueries = [];
 
   constructor(
@@ -66,7 +67,7 @@ export class EditPackageComponent implements OnInit {
       id: [''],
       packageCode: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      description: [''],
       type: ['', [Validators.required]],
       rate: ['', [Validators.required, Validators.pattern(Regex.DECIMAL_REGEX)]],
       currency: ['', [Validators.required]],
@@ -170,6 +171,7 @@ export class EditPackageComponent implements OnInit {
       return;
     }
 
+    this.isSavingPackage = true;
     let data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId);
     this.$subscription.add(
       this.packageService.addPackage(this.hotelId, data)
@@ -181,8 +183,10 @@ export class EditPackageComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
+          this.isSavingPackage = false;
         }, ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
+          this.isSavingPackage = false;
         })
     );
   }
@@ -218,7 +222,7 @@ export class EditPackageComponent implements OnInit {
       this.performActionIfNotValid(status);
       return;
     }
-
+    this.isSavingPackage = true;
     const data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId, this.hotelPackage.amenityPackage.id);
     this.$subscription.add(
       this.packageService.updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
@@ -228,8 +232,10 @@ export class EditPackageComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
+          this.isSavingPackage = false;
         }, ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
+          this.isSavingPackage = false;
         })
     );
   }

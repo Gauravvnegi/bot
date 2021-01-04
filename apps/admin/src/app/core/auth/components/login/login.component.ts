@@ -14,6 +14,7 @@ import { UserDetailService } from '../../../../../../../../libs/admin/shared/src
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPasswordVisible = false;
+  isSigningIn = false;
   dataSource = { id: '1234', token: 'token_xyz' };
 
   constructor(
@@ -46,6 +47,7 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.valid) {
       return;
     }
+    this.isSigningIn = true;
     const data = this.loginForm.value;
     this._authService.login(data).subscribe(
       (response) => {
@@ -53,6 +55,7 @@ export class LoginComponent implements OnInit {
         this._router.navigate(['/pages/dashboard']);
       },
       (error) => {
+        this.isSigningIn = false;
         this._snackbarService.openSnackBarAsText(error.error.message);
       }
     );

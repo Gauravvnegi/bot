@@ -80,7 +80,10 @@
       </div>
     </div>
     <div class="footer_button">
-      <button mat-button (click)="saveDetails()">Save</button>
+      <button mat-button (click)="saveDetails()">
+        <i *ngIf="isSavingCategory" class="fa fa-spinner fa-spin"></i>
+          {{isSavingCategory ? "Saving Category" : "Save"}}
+      </button>
     </div>
   </form>
 </div>

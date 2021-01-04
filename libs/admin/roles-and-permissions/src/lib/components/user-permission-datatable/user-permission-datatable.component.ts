@@ -145,10 +145,10 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   updateRolesStatus(event, userData){
     const data = {
-      id: userData.parentId,
+      id: userData.userId,
       status: event.checked
     };
-    this._managePermissionService.updateRolesStatus(userData.userId, data)
+    this._managePermissionService.updateRolesStatus(userData.parentId, data)
     .subscribe(response =>{
       this._snackbarService.openSnackBarAsText('Status updated successfully',
       '',

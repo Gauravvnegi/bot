@@ -52,7 +52,7 @@ export class EditCategoryComponent implements OnInit {
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       imageUrl: ['', [Validators.required]],
-      imageName: ['', [Validators.required]],
+      imageName: [''],
       packages: [''],
       active: ['']
     })

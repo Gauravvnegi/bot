@@ -7,7 +7,7 @@
         matSuffix
         >keyboard_backspace</mat-icon
       >
-      <p class="label">Edit Category 1</p>
+      <p class="label">{{ categoryForm.get('name').value }}</p>
     </div>
   </header>
   <form [formGroup]="categoryForm">

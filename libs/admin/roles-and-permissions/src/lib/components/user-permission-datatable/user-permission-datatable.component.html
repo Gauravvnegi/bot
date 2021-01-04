@@ -249,7 +249,7 @@
       </td>
       <td class="guest">
         {{ rowData.getSecGuestDisplayConfig().displayString }}
-        <div
+        <!-- <div
         
           *ngIf="rowData.permissionConfigs.length > 0"
           [ngClass]="{ demo: rowData.permissionConfigs.length > 0 }"
@@ -263,7 +263,7 @@
           >
             {{ rowData.permissionConfigs[permissionIdx].label }}
           </div>
-        </div>
+        </div> -->
       </td>
       <td class="service-details">
         {{ userDetailService.userDetails.getFullName() }}

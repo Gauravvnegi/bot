@@ -174,6 +174,7 @@ export class Payment implements Deserializable {
 export class Booking implements Deserializable {
   bookingId;
   bookingNumber;
+  roomStatus;
   arrivalTimeStamp;
   departureTimeStamp;
   expectedArrivalTimeStamp;
@@ -186,6 +187,7 @@ export class Booking implements Deserializable {
       set({}, 'bookingId', get(input, ['id'])),
       set({}, 'arrivalTimeStamp', get(input, ['arrivalTime'])),
       set({}, 'departureTimeStamp', get(input, ['departureTime'])),
+      set({}, 'roomStatus', get(input, ['stayDetails', 'status'])),
       set(
         {},
         'expectedArrivalTimeStamp',

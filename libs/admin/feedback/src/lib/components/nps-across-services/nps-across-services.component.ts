@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -72,6 +72,7 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.getNPSServices();
   }
 
   isQuickReplyFilterSelected(quickReplyFilter) {
@@ -88,44 +89,57 @@ export class NpsAcrossServicesComponent implements OnInit {
     ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
       quickReplyTypeIdx
     ].isSelected;
+    this.updateQuickReplyActionFilters();
+  }
+
+  updateQuickReplyActionFilters(): void {
+    let value = [];
+    this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((chip) => chip.isSelected)
+      .forEach((d) => {
+        value.push(d.value);
+      });
+    this.quickReplyActionFilters.patchValue(value);
+    this.getNPSServices();
   }
 
   private initTabLabels(entities): void {
-    this.tabFilterItems.length = 0;
-    Object.keys(entities).forEach((key) => {
-      let chips = entities[key];
-      let idx = this.tabFilterItems.length;
-      this.tabFilterItems.push({
-        label: key,
-        content: '',
-        value: key,
-        disabled: false,
-        total: 0,
-        chips: []
+    if(!this.tabFilterItems.length) {
+      Object.keys(entities).forEach((key) => {
+        let chips = entities[key];
+        let idx = this.tabFilterItems.length;
+        this.tabFilterItems.push({
+          label: key,
+          content: '',
+          value: key,
+          disabled: false,
+          total: 0,
+          chips: []
+        });
+  
+        chips.forEach((chip) => {
+          if (this.tabFilterItems[idx].chips.length) {
+            this.tabFilterItems[idx].chips.push({
+              label: chip,
+              icon: '',
+              value: chip,
+              total: 0,
+              isSelected: false,
+              type: 'completed',
+            });
+          } else {
+            this.tabFilterItems[idx].chips.push({
+              label: chip,
+              icon: '',
+              value: chip,
+              total: 0,
+              isSelected: true,
+              type: 'completed',
+            });
+          }
+        })
       });
-
-      chips.forEach((chip) => {
-        if (this.tabFilterItems[idx].chips.length) {
-          this.tabFilterItems[idx].chips.push({
-            label: chip,
-            icon: '',
-            value: chip,
-            total: 0,
-            isSelected: false,
-            type: 'completed',
-          });
-        } else {
-          this.tabFilterItems[idx].chips.push({
-            label: chip,
-            icon: '',
-            value: chip,
-            total: 0,
-            isSelected: true,
-            type: 'completed',
-          });
-        }
-      })
-    });
+    }
   }
 
   private initProgressData(progresses) {
@@ -175,6 +189,10 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get quickReplyActionFilters(): FormControl {
+    return this.npsFG.get('quickReplyActionFilters') as FormControl;
   }
 
 }

@@ -12,6 +12,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestTable } from '../../data-models/guest-table.model';
+import { DetailsComponent } from '../details/details.component';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -355,11 +356,13 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     const detailCompRef = this._modal.openDialog(
-      // DetailsComponent,
+      DetailsComponent,
       dialogConfig
     );
+    debugger;
 
     detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
+    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

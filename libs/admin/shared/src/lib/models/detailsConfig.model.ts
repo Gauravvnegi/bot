@@ -20,6 +20,7 @@ export class Details implements Deserializable {
   feedbackDetails;
 
   deserialize(input: any) {
+    debugger;
     let hotelNationality = input.hotel.address.countryCode;
 
     input.guestDetails.primaryGuest['isPrimary'] = true;

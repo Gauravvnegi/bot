@@ -8,6 +8,18 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/guests${config.queryObj}`);
   }
 
+  getReservationFeedback(reservationId: string): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}/feedback`);
+  }
+
+  getReservationDetail(bookingId: string): Observable<any> {
+    return this.get(`/api/v1/reservation/${bookingId}?raw=true`)
+  }
+
+  getGuestReservations(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}/reservations`);
+  }
+
   exportCSV(config): Observable<any> {
     return this.get(`/api/v1/guests/export/${config.queryObj}`, {
       responseType: 'blob',

@@ -502,27 +502,3 @@ export class DetailsComponent implements OnInit, OnChanges {
     return index ? index : 0;
   }
 }
-
-// CLIENT
-// Activate & Generate Checkin Link
-
-// HEALTH - documentStatus (Checkin )
-// checkin -- if within a window -- time -- before -- popup for early checkin - params(remarks -- admin user-id), 2 api calls for early checkin
-// checkin -- if within a window -- time -- after -- popup for late checkin -- api call with admin user id
-
-// checkout
-// Prepare invoice - when i have to do checkout , (and chnage it to send-invoice)
-
-// Activate & Generate Checkout Link
-// dependency -- checkin complete & (start end end in betweeen) and prepare invoice done
-// if (checkout -- pending)
-// checkout -- if within a window -- time -- before -- popup for early checkout - params(remarks -- admin user-id), 2 api calls for early checkout
-// checkout -- if within a window -- time -- after -- popup for late checkout -- api call with admin user id
-
-// Manual (Precheckin- Inactive)
-// Add deposit rule
-// send Ativate and Generate pre- checkinn link -- enable when precheckin window or when add deposit rule is done
-
-// states-
-// Precheckin
-// Activate and Generate

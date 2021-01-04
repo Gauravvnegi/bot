@@ -111,7 +111,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _guestService: GuestTableService,
+    private _guestTableService: GuestTableService,
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -223,7 +223,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
 
-    return this._guestService.getGuestList(config);
+    return this._guestTableService.getGuestList(config);
   }
 
   loadData(event: LazyLoadEvent) {
@@ -312,7 +312,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     };
     this.loading = false;
     // this.$subscription.add(
-    //   this._reservationService.exportCSV(config).subscribe(
+    //   this._guestTableService.exportCSV(config).subscribe(
     //     (res) => {
     //       FileSaver.saveAs(
     //         res,

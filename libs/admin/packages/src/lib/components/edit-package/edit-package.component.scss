@@ -68,50 +68,53 @@
         }
       }
     }
-    .image-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: inherit;
-      padding-left: 11%;
-      .image {
-        height: 150px;
-        width: 200px;
-      }
-    }
+    // .image-wrapper {
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: inherit;
+    //   padding-left: 11%;
+    //   .image {
+    //     height: 150px;
+    //     width: 200px;
+    //   }
+    // }
     .image-button {
       display: flex;
-      align-items: center;
-      width: 33.5%;
-      .text {
-        font-size: $font14;
-        color: $primary-gray;
-      }
-      .button {
-        border-radius: 20px;
-        padding: 10px 35px;
-        opacity: 0.85;
-        outline: none;
-        color: $primary-purple;
-        background-color: white;
-        font-size: $font14;
-        margin-right: 15px;
-        border: 1.5px solid $primary-purple;
+      align-items: baseline;
+      // .text {
+      //   font-size: $font14;
+      //   color: $primary-gray;
+      // }
+      .image {
+            height: 150px;
+            width: 200px;
+          }
+      // .button {
+      //   border-radius: 20px;
+      //   padding: 10px 35px;
+      //   opacity: 0.85;
+      //   outline: none;
+      //   color: $primary-purple;
+      //   background-color: white;
+      //   font-size: $font14;
+      //   margin-right: 15px;
+      //   border: 1.5px solid $primary-purple;
 
-        &:hover {
-          cursor: pointer;
-          background-color: $primary-purple;
-          color: white;
-          opacity: 1;
-        }
-      }
-      .image-name {
-        font-size: $font14;
-        letter-spacing: 0.96px;
-        color: #002046;
-      }
+      //   &:hover {
+      //     cursor: pointer;
+      //     background-color: $primary-purple;
+      //     color: white;
+      //     opacity: 1;
+      //   }
+      // }
+      // .image-name {
+      //   font-size: $font14;
+      //   letter-spacing: 0.96px;
+      //   color: #002046;
+      // }
     }
     .margin-adjust {
-      margin-top: 20px;
+      padding: 20px 0;
     }
   }
 }

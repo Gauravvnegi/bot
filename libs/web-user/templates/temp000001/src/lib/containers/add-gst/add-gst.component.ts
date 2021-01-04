@@ -7,6 +7,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { GstConfigI } from 'libs/web-user/shared/src/lib/data-models/gstConfig.model';
 
 @Component({
   selector: 'hospitality-bot-add-gst',
@@ -18,6 +19,7 @@ export class AddGstComponent implements OnInit {
   @Output()
   isSubmittedEvent = new EventEmitter<Object>();
   @ViewChild('saveButton') saveButton;
+  gstFieldConfig: GstConfigI;
   $subscription = new Subscription();
   constructor(
     private fb: FormBuilder,
@@ -30,6 +32,7 @@ export class AddGstComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.gstFieldConfig = this.gstService.setFieldConfigForStayDetails();
     this.initFG();
   }
 
@@ -68,11 +71,14 @@ export class AddGstComponent implements OnInit {
         )
         .subscribe(
           (response) => {
-            this.snackbarService.openSnackBarAsText(
-              'GST details added successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this.translateService.get('MESSAGES.SUCCESS.GST_ADD_COMPLETE')
+              .subscribe((translated_msg) => {
+                this.snackbarService.openSnackBarAsText(
+                  translated_msg,
+                  '',
+                  { panelClass: 'success' }
+                );
+              })
             this._buttonService.buttonLoading$.next(this.saveButton);
             this.closeModal();
           },

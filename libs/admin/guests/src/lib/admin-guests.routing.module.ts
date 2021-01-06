@@ -11,6 +11,8 @@ import { TypeGuestStatisticsComponent } from './components/type-guest-statistics
 import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { DetailsComponent } from './components/details/details.component';
+import { GuestDetailsComponent } from './components/guest-details/guest-details.component';
+import { DocumentsComponent } from './components/documents/documents.component';
 
 const appRoutes: Route[] = [
   {
@@ -36,6 +38,8 @@ export class AdminGuestsRoutingModule {
 	SourceStatisticsComponent,
 	TypeGuestStatisticsComponent,
 	GuestDatatableComponent,
-	DetailsComponent
+	DetailsComponent,
+	GuestDetailsComponent,
+	DocumentsComponent
   ];
 }

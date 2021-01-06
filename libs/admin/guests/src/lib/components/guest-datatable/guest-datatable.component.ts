@@ -359,10 +359,10 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
       DetailsComponent,
       dialogConfig
     );
-    debugger;
 
     detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
     detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
+    detailCompRef.componentInstance.data = rowData;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

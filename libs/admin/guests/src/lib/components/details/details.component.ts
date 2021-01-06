@@ -5,6 +5,8 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { GuestTableService } from '../../services/guest-table.service';
+import { Reservation, GuestReservation } from '../../data-models/guest-table.model';
+import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -17,36 +19,39 @@ export class DetailsComponent implements OnInit {
   isGuestInfoPatched: boolean = false;
   @Input() guestId;
   @Input() bookingId;
+  @Input() data: Reservation;
   detailsFG: FormGroup;
-  details;
-  reservationDetails;
-  primaryGuest;
+  details: GuestReservation;
+  reservationData;
 
   @Output() onDetailsClose = new EventEmitter();
 
   constructor(
     private guestTableService: GuestTableService,
     private fb: FormBuilder,
-    private changeDetectorRef: ChangeDetectorRef
+    private feedbackService: FeedbackService
   ) { }
 
   ngOnInit(): void {
-    this.initFG();
+  }
+  
+  ngAfterViewInit(): void {
     this.loadGuestReservations();
   }
 
   loadGuestReservations(): void {
     this.guestTableService.getGuestReservations(this.guestId)
       .subscribe((response) => {
-        this.details = response;
-        this.getBookingDetails();
+        this.details = new GuestReservation().deserialize(response);
+        this.initFG();
+        this.loadReservation();
       });
   }
 
-  getBookingDetails(): void {
+  loadReservation(): void {
     this.guestTableService.getReservationDetail(this.bookingId)
-      .subscribe((response)=> {
-        this.reservationDetails = new Details().deserialize(response);
+      .subscribe((response) => {
+        this.reservationData = new Reservation().deserialize(response);
         this.isReservationDetailFetched = true;
       })
   }
@@ -63,22 +68,27 @@ export class DetailsComponent implements OnInit {
     this.detailsFG.setControl(data.name, data.value);
   }
 
-  guestInfoPatched(data: boolean) {
-    if (data) {
-      const guestFA = this.detailsFG
-        .get('guestInfoDetails')
-        .get('guests') as FormArray;
-      guestFA.controls.forEach((guestFG) => {
-        if (guestFG.get('isPrimary').value === true) {
-          this.primaryGuest = guestFG.value;
-        }
-      });
-      this.isGuestInfoPatched = true;
-      this.changeDetectorRef.detectChanges();
-    }
-  }
-
   closeDetails() {
     this.onDetailsClose.next(true);
+  }
+
+  get primaryGuest() {
+    return this.reservationData.guests.primaryGuest;
+  }
+
+  get guestAttributes() {
+    return this.data.guestAttributes;
+  }
+
+  get feedback() {
+    return this.reservationData.feedback;
+  }
+
+  get bookingCount() {
+    let count = 0;
+    count += this.details.pastBookings.length;
+    count += this.details.presentBookings.length;
+    count += this.details.upcomingBookings.length;
+    return count;
   }
 }

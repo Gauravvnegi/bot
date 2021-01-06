@@ -114,3 +114,25 @@ export class GuestAttributes {
     return this;
   }
 }
+
+export class GuestReservation {
+  presentBookings: Reservation[];
+  upcomingBookings: Reservation[];
+  pastBookings: Reservation[];
+
+  deserialize(data) {
+    this.presentBookings = [];
+    this.upcomingBookings = [];
+    this.pastBookings = [];
+    data['present_booking_count'].forEach((item, i)=> {
+      this.presentBookings[i] = new Reservation().deserialize(item);
+    });
+    data['upcoming_booking_count'].forEach((item, i)=> {
+      this.upcomingBookings[i] = new Reservation().deserialize(item);
+    });
+    data['past_booking_count'].forEach((item, i)=> {
+      this.pastBookings[i] = new Reservation().deserialize(item);
+    });
+    return this;
+  }
+}

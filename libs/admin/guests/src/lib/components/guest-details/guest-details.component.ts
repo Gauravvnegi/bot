@@ -24,7 +24,6 @@ export class GuestDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    debugger;
     this.addFormsControls();
     this.pushDataToForm();
   }
@@ -32,17 +31,16 @@ export class GuestDetailsComponent implements OnInit {
   addFormsControls() {
     (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
       this.initGuestDetailsForm();
-
-    // this.parentForm.addControl('guestDetails', this.initGuestDetailForm());
-    // this.addGuests(this.guestDetails);
   }
 
   pushDataToForm() {
+    let guestData = [this.detailsData.guests.primaryGuest];
+    this.detailsData.guests.secondaryGuest.forEach((data) => guestData.push(data));
     this.guestDetailsForm
       .get('guests')
-      .patchValue(this.detailsData.guestDetails);
+      .patchValue(guestData);
     this.addFGEvent.next({
-      name: 'guestInfoDetails',
+      name: 'guestDetails',
       value: this.guestDetailsForm,
     });
 
@@ -51,33 +49,9 @@ export class GuestDetailsComponent implements OnInit {
 
   initGuestDetailsForm() {
     const guestFA = this.guestDetailsForm.get('guests') as FormArray;
-    this.detailsData.guestDetails.forEach((guest) => {
+    guestFA.push(this.getGuestFG());
+    this.detailsData.guests.secondaryGuest.forEach((guest) => {
       guestFA.push(this.getGuestFG());
-    });
-
-    //this.mapValuesInForm();
-    // this.extractPrimaryDetails();
-  }
-
-  initHealthCardDetailsForm() {
-    return this._fb.group({
-      status: [''],
-      remarks: [''],
-      url: [''],
-    });
-  }
-
-  initStayDetailsForm() {
-    return this._fb.group({
-      arrivalDate: [''],
-      departureDate: [''],
-      expectedArrivalTime: [''],
-      roomType: [''],
-      kidsCount: [''],
-      adultsCount: [''],
-      roomNumber: [''],
-      special_comments: [''],
-      checkin_comments:['']
     });
   }
 
@@ -94,36 +68,10 @@ export class GuestDetailsComponent implements OnInit {
       nationality: [''],
       isInternational: [''],
       selectedDocumentType: [''],
+      documents: [[]],
       status: [''],
       remarks: [''],
     });
   }
-
-  // addGuests(guestDetail) {
-  //   this.guestDetailsForm.addControl('guests', new FormArray([]));
-  //   guestDetail.guestDetails.forEach((guest) => {
-  //     let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-  //     controlFA.push(this.getGuestFG());
-  //   });
-
-  //   this.mapValuesInForm();
-  //   this.extractPrimaryDetails();
-  // }
-
-  // mapValuesInForm() {
-  //   this.guests.patchValue(this.guestDetails.guestDetails);
-  // }
-
-  // extractPrimaryDetails() {
-  //   this.guests.controls.forEach((guestFG) => {
-  //     if (guestFG.get('isPrimary').value === true) {
-  //       this.primaryGuest = guestFG;
-  //     }
-  //   });
-  // }
-
-  // editHealthStatus() {
-  //   this.isActionEdit = true;
-  // }
 
 }

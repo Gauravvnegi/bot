@@ -2,20 +2,6 @@
   <div class="material-body">
     <div class="label-wrapper">
       <mat-label class="mat-head">Guest Info</mat-label>
-      <ng-container [ngSwitch]="healthCardDetailsForm.get('status').value">
-        <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
-
-        <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
-
-        <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
-
-        <img
-          *ngSwitchCase="'INITIATED'"
-          src="assets/svg/status/initiated.svg"
-        />
-
-        <!-- add default case icon -->
-      </ng-container>
     </div>
     <form [formGroup]="guestDetailsForm">
       <ng-container

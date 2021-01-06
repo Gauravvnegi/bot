@@ -411,7 +411,10 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
             this._translateService
               .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
               .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
+                this._snackBarService.openSnackBarAsText(translatedMsg,
+                  '',
+                  { panelClass: 'success' }
+                  );
               });
           },
           ({ error }) => {

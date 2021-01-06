@@ -13,6 +13,7 @@ import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming
 import { DetailsComponent } from './components/details/details.component';
 import { GuestDetailsComponent } from './components/guest-details/guest-details.component';
 import { DocumentsComponent } from './components/documents/documents.component';
+import { StayDetailsComponent } from './components/stay-details/stay-details.component';
 
 const appRoutes: Route[] = [
   {
@@ -40,6 +41,7 @@ export class AdminGuestsRoutingModule {
 	GuestDatatableComponent,
 	DetailsComponent,
 	GuestDetailsComponent,
-	DocumentsComponent
+	DocumentsComponent,
+	StayDetailsComponent
   ];
 }

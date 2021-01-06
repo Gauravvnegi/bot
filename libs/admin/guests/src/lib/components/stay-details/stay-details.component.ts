@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './stay-details.component.html',
   styleUrls: ['./stay-details.component.scss']
 })
-export class StayFeedbackDetailsComponent implements OnInit {
+export class StayDetailsComponent implements OnInit {
 
   constructor() { }
 

@@ -10,33 +10,16 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="gstFG">
-            <div class="control-wrapper">
-                <div class="label">Name:</div>
-                <mat-form-field class="control">
-                    <input type="text" matInput formControlName="customerName" /><br />
-                </mat-form-field>
-            </div>
-            <div class="control-wrapper">
-                <div class="label">GST Number:</div>
-                <mat-form-field class="control">
-                    <input type="text" matInput formControlName="customerGSTIn" /><br />
-                </mat-form-field>
-            </div>
-            <div class="control-wrapper">
-                <div class="label">Address:</div>
-                <mat-form-field class="control">
-                    <textarea matInput formControlName="address"></textarea>
-                </mat-form-field>
-            </div>
+            <web-user-input [parentForm]="gstFG" [name]="'customerName'" [settings]="gstFieldConfig.customerName">
+            </web-user-input>
+            <web-user-input [parentForm]="gstFG" [name]="'customerGSTIn'" [settings]="gstFieldConfig.customerGSTIn">
+            </web-user-input>
+            <web-user-input [parentForm]="gstFG" [name]="'address'" [settings]="gstFieldConfig.address">
+            </web-user-input>
             <div class="btn-wrapper">
-                <web-user-button
-                    #saveButton
-                    buttonTemplateSwitch
-                    (click)="submitGSTDetails()"
-                    [settings]="{ label: 'Submit' }"
-                    [buttonClass]="'next-button'"
-                    class="user-button"
-                ></web-user-button>
+                <web-user-button #saveButton buttonTemplateSwitch (click)="submitGSTDetails()"
+                    [settings]="{ label: 'Submit' }" [buttonClass]="'next-button'" class="user-button">
+                </web-user-button>
             </div>
         </form>
     </div>

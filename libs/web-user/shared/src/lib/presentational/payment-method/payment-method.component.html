@@ -3,8 +3,8 @@
     <input
       name='method'
       type="radio"
-      [value]="settings.paymentConfigurations.gatewayType"
-      (click)="setOption(settings.paymentConfigurations, method)"
+      [value]="settings.paymentConfigurations.paymentConfigurations.gatewayType"
+      (click)="setOption(settings.paymentConfigurations.paymentConfigurations, method)"
     />
     <div>
       <div class="method-content">

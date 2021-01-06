@@ -35,6 +35,7 @@ import { SummaryWrapperComponent } from './containers/summary-wrapper/summary-wr
 import { SummaryComponent } from './containers/summary/summary.component';
 import { Temp000001Component } from './containers/temp000001/temp000001.component';
 import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
+import { AddGstComponent } from './containers/add-gst/add-gst.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -131,5 +132,6 @@ export class Temp000001RoutingModule {
     SummaryMainComponent,
     ThankYouMainComponent,
     PaidAmenitiesComponent,
+    AddGstComponent,
   ];
 }

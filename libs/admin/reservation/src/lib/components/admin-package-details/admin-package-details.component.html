@@ -41,4 +41,12 @@
       </div> -->
     </div>
   </div>
+
+  <div *ngIf="stayDetailsFG.get('checkin_comments').value">
+    <hr class="data-seperator" />
+    <mat-label class="package-label">Checkin Request</mat-label>
+    <div class="special-request-wrapper">
+      <p class="text">{{ stayDetailsFG.get('checkin_comments').value }}</p>
+    </div>
+  </div>
 </div>

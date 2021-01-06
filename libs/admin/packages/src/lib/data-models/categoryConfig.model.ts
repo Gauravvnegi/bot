@@ -30,10 +30,10 @@ export class Category implements Deserializable{
     imageUrl: string;
     active: boolean;
     subPackageNameList='';
-    subpackages:[];
+    subpackages: IPackage[];
 
     deserialize(input: any) {
-        input.subPackages.forEach(subPackage => {
+        input.subPackages && input.subPackages.forEach(subPackage => {
             this.subPackageNameList = this.subPackageNameList.concat(subPackage.name,',');
         });
         this.subPackageNameList = this.subPackageNameList.substring(0, this.subPackageNameList.length - 1);
@@ -50,4 +50,11 @@ export class Category implements Deserializable{
         );
         return this;
     }
+}
+
+export interface IPackage {
+    id: string;
+    name: string;
+    imageUrl: string;
+    packageCode: string;
 }

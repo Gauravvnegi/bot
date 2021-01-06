@@ -23,6 +23,7 @@ export class User implements Deserializable {
   email;
   profileUrl;
   userId;
+  parentId;
   hotelAccess;
   status;
   permissionConfigs;
@@ -30,6 +31,7 @@ export class User implements Deserializable {
     Object.assign(
       this,
       set({}, 'userId', get(input, ['id'])),
+      set({}, 'parentId', get(input, ['parentId'])),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'jobTitle', get(input, ['title'])),

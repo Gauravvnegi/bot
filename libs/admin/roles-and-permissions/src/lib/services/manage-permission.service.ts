@@ -80,6 +80,10 @@ export class ManagePermissionService extends ApiService {
     return this.put(`/api/v1/user/${config.parentUserId}`, config.data);
   }
 
+  updateRolesStatus(userId, statusData){
+    return this.patch(`/api/v1/user/${userId}`,statusData);
+  }
+
   getUserDetailsById(userId): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }

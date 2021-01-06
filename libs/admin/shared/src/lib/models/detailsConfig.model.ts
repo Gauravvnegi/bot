@@ -220,6 +220,7 @@ export class StayDetailsConfig implements Deserializable {
   roomNumber: string;
   expectedArrivalTime;
   special_comments: string;
+  checkin_comments:string;
   arrivalTimeStamp;
   departureTimeStamp;
 
@@ -261,7 +262,8 @@ export class StayDetailsConfig implements Deserializable {
         'roomNumber',
         get(input, ['roomNumber']) == 0 ? '' : get(input, ['roomNumber'])
       ),
-      set({}, 'special_comments', get(input, ['comments']))
+      set({}, 'special_comments', get(input, ['comments'])),
+      set({}, 'checkin_comments', get(input, ['checkInComment']))
     );
     return this;
   }

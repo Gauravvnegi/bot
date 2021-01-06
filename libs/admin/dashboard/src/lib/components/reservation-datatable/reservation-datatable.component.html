@@ -270,7 +270,12 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <p class="tabel-room-no status-text-success">
+        <p class="tabel-room-no" [ngClass]="{
+          'status-text-success': rowData.booking.roomStatus === 'CL',
+          'status-text-reject': rowData.booking.roomStatus === 'DI',
+          'status-text-initiated': rowData.booking.roomStatus === 'IN',
+          'status-text-pending': rowData.booking.roomStatus === 'PI'
+        }">
           {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
         </p>
       </td>

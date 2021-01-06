@@ -21,29 +21,27 @@
 }
 
 :host ::ng-deep .name {
-  display: flex;
-  align-items: center;
-  .data {
-    font-size: 12px;
-    color: #484848;
-    p {
-      color: $primary-gray;
-      margin-top: 5px;
+  .package_image_wrapper {
+    display: flex;
+    align-items: center;
+    .image {
+      height: 40px;
+      width: 40px;
+      margin-right: 10px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+      }
     }
-  }
-  .profile {
-    margin-right: 10px;
-    height: 45px;
-    width: 45px;
-    border-radius: 50%;
-    img{
-      width: 100%;
-      height: 100%;
+    .text {
+      font-size: 12px;
+      color: #484848;
     }
   }
 }
 
-.package-image{
+.category-image{
   width: 40%;
   height: 40%;
 }

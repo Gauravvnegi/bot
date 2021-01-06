@@ -18,24 +18,24 @@
 		</div>
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
 		<div class="detail-container">
-			<div class="val">401</div>
+			<div class="val">{{ payment.totalCount }}</div>
 			<div class="label">Total Users</div>
 		</div>
 	</div>
 	<div class="stat-vals-container">
 		<div class="stat-val-container">
 				<div class="icon full"></div>
-				<div class="stat-val">161</div>
+				<div class="stat-val">{{ payment.FULL }}</div>
 				<div class="stat-lable">Fully Received</div>
 		</div>
 		<div class="stat-val-container">
 				<div class="icon partial"></div>
-				<div class="stat-val">60</div>
+				<div class="stat-val">{{ payment.PARTIAL }}</div>
 				<div class="stat-lable">Partially Received</div>
 		</div>
 		<div class="stat-val-container">
 				<div class="icon not"></div>
-				<div class="stat-val">180</div>
+				<div class="stat-val">{{ payment.PENDING }}</div>
 				<div class="stat-lable">Not Received</div>
 		</div>
 	</div>

@@ -1,7 +1,4 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApplicationStatusComponent } from '../application-status/application-status.component';
 
 @Component({

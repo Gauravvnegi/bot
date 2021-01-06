@@ -38,6 +38,7 @@ export class Package implements Deserializable{
     type: string;
     autoAccept: boolean;
     categoryName : string;
+    category: string;
 
     deserialize(input: any) {
         Object.assign(
@@ -55,6 +56,7 @@ export class Package implements Deserializable{
           set({}, 'unit', get(input, ['unit'])),
           set({}, 'autoAccept', get(input, ['autoAccept'])),
           set({}, 'categoryName', get(input, ['categoryName'])||''),
+          set({}, 'category', get(input, ['parentId'])||''),
           set({}, 'type', (get(input, ['rate'])) == 0 ? 'Complimentary':'Paid'),
         );
         return this;
@@ -80,4 +82,14 @@ export class Amenity{
      unit :  string;
      downloadUrl : string; 
      autoAccept :boolean;
+}
+
+export enum PackageSource {
+    Botshot = 'BOTSHOT',
+	Pms = 'PMS'
+}
+
+export interface IpackageOptions {
+    key: string;
+    value: string;
 }

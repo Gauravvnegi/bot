@@ -35,7 +35,6 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  width: 47.6vw;
   padding: $padding-large;
   height: auto;
   opacity: 1;
@@ -43,6 +42,9 @@
   color: #979797;
   svg path {
     fill: #979797 !important;
+  }
+  img {
+    filter: contrast(0);
   }
   @media only screen and (max-width: $M) {
     padding: $padding-small;
@@ -65,6 +67,9 @@
 
 :host ::ng-deep .mat-tab-labels {
   padding-bottom: 10px;
+  @media only screen and (max-width: $M) {
+    padding-bottom: 0;
+  }
 }
 
 :host ::ng-deep .mat-ink-bar {
@@ -76,9 +81,12 @@
   background-color: white;
   border-radius: 10px 0px 0px 0px;
   border: 1px solid white;
-  border-bottom-color: #2187d5;
+  border-bottom-color: rgb(33, 135, 213, 0.6);
   svg path {
     fill: #000000 !important;
+  }
+  img {
+    filter: contrast(1);
   }
 }
 
@@ -87,10 +95,13 @@
 }
 
 .custom-tab {
-  width: 100%;
+  width: 44.7vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media only screen and (max-width: $M) {
+    width: 40.7vw;
+  }
 }
 
 .inner-label {
@@ -104,7 +115,7 @@
   display: flex;
   justify-content: space-between;
   @media only screen and (max-width: $M) {
-    justify-content: inherit;
+    align-items: flex-end;
     flex-direction: column;
     font-size: $font-small;
     text-align: left;
@@ -118,12 +129,19 @@
   }
 }
 
-.payment__wrapper--header {
+:host ::ng-deep .payment__wrapper__heading {
   padding: $padding-medium;
   font-size: $font-large;
   font-weight: $bolder;
   @media only screen and (max-width: $tab-size) {
     font-size: $font-medium;
     padding: $padding-small;
+  }
+}
+
+:host ::ng-deep .full_width{
+  width: 92vw;
+  @media only screen and (max-width: $M) {
+    width: 85vw;
   }
 }

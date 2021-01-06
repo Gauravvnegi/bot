@@ -2,27 +2,27 @@
   <div class="stat-header">
     <div class="title-container">
       <div class="icon">
-		<img src="assets/svg/guest_status.svg" />
+        <img src="assets/svg/guest_status.svg" />
       </div>
       <div class="stat-title">Guest Status</div>
     </div>
-	<form>
-	<div class="pull-right">
-	  <label class="labl" *ngFor="let option of chartTypes">
-		<input
-		  name="method"
-		  type="radio"
-		  [checked]="chart.chartType === option.value"
-		  [value]="option.value"
-		  (click)="setChartType(option)"
-		  [id]="option.value + '-status'"
-		/>
-		<div class="image">
-		  <img [src]="option.url" />
-		</div>
-	  </label>
-  </div>
-  </form>
+    <form>
+      <div class="pull-right">
+        <label class="labl" *ngFor="let option of chartTypes">
+          <input
+            name="method"
+            type="radio"
+            [checked]="chart.chartType === option.value"
+            [value]="option.value"
+            (click)="setChartType(option)"
+            [id]="option.value + '-status'"
+          />
+          <div class="image">
+            <img [src]="option.url" />
+          </div>
+        </label>
+      </div>
+    </form>
   </div>
   <div class="stat-val-container">
     <div class="line-chart">
@@ -38,71 +38,81 @@
       >
       </canvas>
     </div>
-	</div>
-	<div class="stat-labels-container">
-		<ng-container [ngSwitch]="chart.chartType">
-			<ng-container *ngSwitchCase="'line'">
-			  <div class="stat-label" (click)="legendOnClick(0)">
-				<input class="legends" type="checkbox" />
-				<span class="new-border dashed"></span>
-				<p class="stat-label-title">New</p>
-			  </div>
-			  <div class="stat-label" (click)="legendOnClick(1)">
-				<input class="legends" type="checkbox" />
-				<span class="preCheckIn-border"></span>
-				<p class="stat-label-title">Pre Check-In</p>
-			  </div>
-			  <div class="stat-label" (click)="legendOnClick(2)">
-				<input class="legends" type="checkbox" />
-				<span class="checkin-border"></span>
-				<p class="stat-label-title">Check-In</p>
-			  </div>
-			  <div class="stat-label" (click)="legendOnClick(3)">
-				<input class="legends" type="checkbox" />
-				<span class="checkout-border dashed"></span>
-				<p class="stat-label-title">Checkout</p>
-			  </div>
-			</ng-container>
-			<ng-container *ngSwitchCase="'bar'">
-			  <div
-				class="stat-label"
-				[ngClass]="'checkIn-Background'"
-				(click)="legendOnClick(0)"
-			  >
-				<input class="legends" type="checkbox" />
-				<span class="checkIn-border"></span>
-				<p class="stat-label-title">New</p>
-			  </div>
-			  <div
-				class="stat-label"
-				[ngClass]="'express-checkIn-Background'"
-				(click)="legendOnClick(1)"
-			  >
-				<input class="legends" type="checkbox" />
-				<span class="checkIn-border dashed"></span>
-				<p class="stat-label-title">Pre Check-In</p>
-			  </div>
-			  <div
-				class="stat-label"
-				[ngClass]="'checkOut-Background'"
-				(click)="legendOnClick(2)"
-			  >
-				<input class="legends" type="checkbox" />
-				<span class="checkout-border"></span>
-				<p class="stat-label-title">Check-In</p>
-			  </div>
-			  <div
-				class="stat-label"
-				[ngClass]="'express-checkOut-Background'"
-				(click)="legendOnClick(3)"
-			  >
-				<input class="legends" type="checkbox" />
-				<span class="checkout-border dashed"></span>
-				<p class="stat-label-title">Checkout</p>
-			  </div>
-			</ng-container>
-		  </ng-container>
-		<!-- <div class="stat-label" (click)="legendOnClick(0)">
+  </div>
+  <div class="stat-labels-container">
+    <ng-container [ngSwitch]="chart.chartType">
+      <ng-container *ngSwitchCase="'line'">
+        <ng-container *ngFor="let legend of legendData; let legendIndex = index"
+          ><div class="stat-label" (click)="legendOnClick(legendIndex)">
+            <input class="legends" type="checkbox" />
+            <div
+              class="legend-border"
+              [ngStyle]="
+                legend.dashed
+                  ? {
+                      'border-top': '1px dashed',
+                      'border-color': legend.borderColor
+                    }
+                  : { 'border-color': legend.borderColor }
+              "
+            ></div>
+            <p class="stat-label-title">{{ legend.label }}</p>
+          </div></ng-container
+        >
+      </ng-container>
+      <ng-container *ngSwitchCase="'bar'">
+		<ng-container
+		*ngFor="let legend of legendData; let legendIndex = index"
+	  >
+		<div
+		  class="stat-label"
+		  [style.background-color]="legend.backgroundColor"
+		  (click)="legendOnClick(legendIndex)"
+		>
+		  <input class="legends" type="checkbox" />
+		  <span class="legend-border no-border"></span>
+		  <p class="stat-label-title text-white">{{ legend.label }}</p>
+		</div>
+	  </ng-container>
+        <!-- <div
+          class="stat-label"
+          [ngClass]="'checkIn-Background'"
+          (click)="legendOnClick(0)"
+        >
+          <input class="legends" type="checkbox" />
+          <span class="checkIn-border"></span>
+          <p class="stat-label-title">New</p>
+        </div>
+        <div
+          class="stat-label"
+          [ngClass]="'express-checkIn-Background'"
+          (click)="legendOnClick(1)"
+        >
+          <input class="legends" type="checkbox" />
+          <span class="checkIn-border dashed"></span>
+          <p class="stat-label-title">Pre Check-In</p>
+        </div>
+        <div
+          class="stat-label"
+          [ngClass]="'checkOut-Background'"
+          (click)="legendOnClick(2)"
+        >
+          <input class="legends" type="checkbox" />
+          <span class="checkout-border"></span>
+          <p class="stat-label-title">Check-In</p>
+        </div>
+        <div
+          class="stat-label"
+          [ngClass]="'express-checkOut-Background'"
+          (click)="legendOnClick(3)"
+        >
+          <input class="legends" type="checkbox" />
+          <span class="checkout-border dashed"></span>
+          <p class="stat-label-title">Checkout</p>
+        </div> -->
+      </ng-container>
+    </ng-container>
+    <!-- <div class="stat-label" (click)="legendOnClick(0)">
 			<input class="legends" type="checkbox" />
 			<span class="new-border dashed"></span>
 			<p class="stat-label-title">New</p>
@@ -122,5 +132,5 @@
 			<span class="checkout-border dashed"></span>
 			<p class="stat-label-title">Checkout</p>
 		</div> -->
-	</div>
+  </div>
 </div>

@@ -1,24 +1,20 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatTabGroup } from '@angular/material/tabs';
-import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
-import { SnackBarService } from 'libs/shared/material/src';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import {
-  HotelPaymentConfig,
-  PaymentStatus,
-  PaymentCCAvenue,
-  SelectedPaymentOption,
-} from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
-import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
-import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { MatTabGroup } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { SnackBarService } from 'libs/shared/material/src';
+import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
+import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
+import { PaymentCCAvenue, PaymentStatus, SelectedPaymentOption } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
+import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
+import { IPaymentConfiguration } from 'libs/web-user/shared/src/lib/types/payment';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 
 @Component({
   selector: 'hospitality-bot-payment-details-wrapper',
@@ -29,13 +25,12 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
   @ViewChild('matTab') matTab: MatTabGroup;
 
-  hotelPaymentConfig: HotelPaymentConfig;
+  hotelPaymentConfig: IPaymentConfiguration;
   isConfigLoaded: boolean = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
-    private _snackBarService: SnackBarService,
     private _reservationService: ReservationService,
     public _stepperService: StepperService,
     private _buttonService: ButtonService,
@@ -43,6 +38,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     private _billSummaryService: BillSummaryService,
     private router: Router,
     private route: ActivatedRoute,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {
     super();
@@ -77,39 +73,17 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   onPrecheckinSubmit() {
     if (this.reservationData.paymentSummary.payableAmount === 0) {
-      this.submitWithoutPayment('preCheckin');
+      this.submitWithoutPayment(journeyEnums.JOURNEY.preCheckin);
     } else {
       const data = this.mapPaymentInitiationData();
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
-      if (TAB_LABEL === 'Pay Now') {
+      if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+          this.selectedPaymentOption.config.gatewayType === paymentEnum.GatewayTypes.ccavenue
         ) {
-          this.$subscription.add(
-            this._paymentDetailsService
-              .initiatePaymentCCAvenue(
-                this._reservationService.reservationId,
-                data
-              )
-              .subscribe(
-                (response) => {
-                  window.location.href = response.billingUrl;
-                },
-                ({ error }) => {
-                  this._buttonService.buttonLoading$.next(
-                    this.buttonRefs['submitButton']
-                  );
-                  this._translateService
-                    .get(`MESSAGES.ERROR.${error.type}`)
-                    .subscribe((translatedMsg) => {
-                      this._snackBarService.openSnackBarAsText(translatedMsg);
-                    });
-                  // this._snackBarService.openSnackBarAsText(error.message);
-                }
-              )
-          );
+          this.initiateCCAvenuePayment(data, 'submitButton');
         } else {
           this._translateService
             .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
@@ -120,8 +94,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             this.buttonRefs['submitButton']
           );
         }
-      } else {
-        this.updatePaymentStatus('preCheckin');
+      } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
+        this.updatePaymentStatus(journeyEnums.JOURNEY.checkin);
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
@@ -131,41 +105,17 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   onCheckinSubmit() {
     if (this.reservationData.paymentSummary.payableAmount === 0) {
-      this.submitWithoutPayment('checkin');
+      this.submitWithoutPayment(journeyEnums.JOURNEY.checkin);
     } else {
       const data = this.mapPaymentInitiationData();
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
-      if (TAB_LABEL === 'Pay Now') {
+      if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+          this.selectedPaymentOption.config.gatewayType === paymentEnum.GatewayTypes.ccavenue
         ) {
-          this.$subscription.add(
-            this._paymentDetailsService
-              .initiatePaymentCCAvenue(
-                this._reservationService.reservationId,
-                data
-              )
-              .subscribe(
-                (response) => {
-                  window.location.href = response.billingUrl;
-                },
-                ({ error }) => {
-                  this.$subscription.add(
-                    this._translateService
-                      .get(`MESSAGES.ERROR.${error.type}`)
-                      .subscribe((translatedMsg) => {
-                        this._snackBarService.openSnackBarAsText(translatedMsg);
-                      })
-                  );
-                  // this._snackBarService.openSnackBarAsText(error.message);
-                  this._buttonService.buttonLoading$.next(
-                    this.buttonRefs['nextButton']
-                  );
-                }
-              )
-          );
+          this.initiateCCAvenuePayment(data, 'nextButton');
         } else {
           this._translateService
             .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
@@ -176,10 +126,35 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             this.buttonRefs['nextButton']
           );
         }
-      } else {
-        this.updatePaymentStatus('checkin');
+      } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
+        this.updatePaymentStatus(journeyEnums.JOURNEY.checkin);
       }
     }
+  }
+
+  private initiateCCAvenuePayment(data, buttonRef): void {
+    this.$subscription.add(
+      this._paymentDetailsService
+        .initiatePaymentCCAvenue(
+          this._reservationService.reservationId,
+          data
+        )
+        .subscribe(
+          (response) => {
+            window.location.href = response.billingUrl;
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs[buttonRef]
+            );
+          }
+        )
+    );
   }
 
   onCheckoutSubmit() {
@@ -194,35 +169,14 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     );
   }
 
-  updatePaymentStatus(state) {
+  private updatePaymentStatus(state): void {
     const data = this.mapPaymentData();
     this.$subscription.add(
       this._paymentDetailsService
         .updatePaymentStatus(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
-            if (state === 'checkin') {
-              this.$subscription.add(
-                this._translateService
-                  .get(`MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE`)
-                  .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(
-                      translatedMsg,
-                      '',
-                      { panelClass: 'success' }
-                    );
-                  })
-              );
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['nextButton']
-              );
-              this._stepperService.setIndex('next');
-            } else {
-              this.openThankyouPage(state);
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
-              );
-            }
+            this.successAction(state);
           },
           ({ error }) => {
             this._translateService
@@ -230,23 +184,49 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
               });
-            //       this._snackBarService.openSnackBarAsText(error.message);
-            if (state === 'checkin') {
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['nextButton']
-              );
-            } else {
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
-              );
-            }
+            this.failureAction(state);
           }
         )
     );
   }
 
-  submitWithoutPayment(state) {
-    if (state === 'checkin') {
+  private successAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
+    if (state === journeyEnums.JOURNEY.checkin) {
+      this._translateService
+        .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(
+          translatedMsg,
+          '',
+          { panelClass: 'success' }
+        );
+      });
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['nextButton']
+      );
+      this._stepperService.setIndex('next');
+    } else {
+      this.openThankyouPage(state);
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['submitButton']
+      );
+    }
+  }
+
+  private failureAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
+    if (state === journeyEnums.JOURNEY.checkin) {
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['nextButton']
+      );
+    } else {
+      this._buttonService.buttonLoading$.next(
+        this.buttonRefs['submitButton']
+      );
+    }
+  }
+
+  private submitWithoutPayment(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
+    if (state === journeyEnums.JOURNEY.checkin) {
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {
@@ -260,11 +240,9 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     this.selectedPaymentOption.type = event.methodType;
   }
 
-  mapPaymentData() {
+  private mapPaymentData(): PaymentStatus {
     const paymentStatusData = new PaymentStatus();
     paymentStatusData.payOnDesk = this._paymentDetailsService.payAtDesk || true;
-    paymentStatusData.status = 'SUCCESS';
-    paymentStatusData.transactionId = '12345678';
     if (this.billSummary && this.billSummary.signatureUrl) {
       paymentStatusData.signatureUrl = this.billSummary.signatureUrl;
     }
@@ -274,7 +252,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   mapPaymentInitiationData() {
     if (
       this.selectedPaymentOption.config &&
-      this.selectedPaymentOption.config['gatewayType'] === 'CCAVENUE'
+      this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
     ) {
       const paymentInitiationData = new PaymentCCAvenue().deserialize(
         this.selectedPaymentOption.config,

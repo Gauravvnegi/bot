@@ -36,7 +36,6 @@ export class HeaderComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
-    dialogConfig.width = '70vw';
     const modalDialog = this._matDialog.open(
       HeaderSummaryComponent,
       dialogConfig

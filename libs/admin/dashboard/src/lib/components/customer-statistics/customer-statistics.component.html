@@ -9,32 +9,53 @@
     <div class="stat-labels-container">
       <ng-container [ngSwitch]="chart.chartType">
         <ng-container *ngSwitchCase="'line'">
-          <div class="stat-label" (click)="legendOnClick(0)">
-            <input class="legends" type="checkbox" />
-            <span class="checkIn-border"></span>
-            <p class="stat-label-title">Check-In</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(1)">
-            <input class="legends" type="checkbox" />
-            <span class="checkIn-border dashed"></span>
-            <p class="stat-label-title">Express Check-In</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(2)">
-            <input class="legends" type="checkbox" />
-            <span class="checkout-border"></span>
-            <p class="stat-label-title">Checkout</p>
-          </div>
-          <div class="stat-label" (click)="legendOnClick(3)">
-            <input class="legends" type="checkbox" />
-            <span class="checkout-border dashed"></span>
-            <p class="stat-label-title">Express Checkout</p>
-          </div>
+          <ng-container
+            *ngFor="let legend of legendData; let legendIndex = index"
+          >
+            <div class="stat-label" (click)="legendOnClick(legendIndex)">
+              <input class="legends" type="checkbox" />
+              <div
+                class="legend-border"
+                [ngStyle]="
+                  legend.dashed
+                    ? {
+                        'border-top': '1px dashed',
+                        'border-color': legend.borderColor
+                      }
+                    : { 'border-color': legend.borderColor }
+                "
+              ></div>
+              <p class="stat-label-title">{{ legend.label }}</p>
+            </div>
+          </ng-container>
         </ng-container>
         <ng-container *ngSwitchCase="'bar'">
-          <div
+          <ng-container
+            *ngFor="let legend of legendData; let legendIndex = index"
+          >
+            <div
+              class="stat-label"
+              [style.background-color]="legend.backgroundColor"
+              (click)="legendOnClick(legendIndex)"
+            >
+              <input class="legends" type="checkbox" />
+              <span class="legend-border no-border"></span>
+              <p class="stat-label-title text-white">{{ legend.label }}</p>
+            </div>
+          </ng-container>
+          <!-- <div
             class="stat-label"
             [ngClass]="'checkIn-Background'"
             (click)="legendOnClick(0)"
+          >
+            <input class="legends" type="checkbox" />
+            <span class="checkIn-border"></span>
+            <p class="stat-label-title">New</p>
+          </div>
+          <div
+            class="stat-label"
+            [ngClass]="'checkIn-Background'"
+            (click)="legendOnClick(1)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkIn-border"></span>
@@ -43,7 +64,7 @@
           <div
             class="stat-label"
             [ngClass]="'express-checkIn-Background'"
-            (click)="legendOnClick(1)"
+            (click)="legendOnClick(2)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkIn-border dashed"></span>
@@ -52,7 +73,7 @@
           <div
             class="stat-label"
             [ngClass]="'checkOut-Background'"
-            (click)="legendOnClick(2)"
+            (click)="legendOnClick(3)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkout-border"></span>
@@ -61,12 +82,12 @@
           <div
             class="stat-label"
             [ngClass]="'express-checkOut-Background'"
-            (click)="legendOnClick(3)"
+            (click)="legendOnClick(4)"
           >
             <input class="legends" type="checkbox" />
             <span class="checkout-border dashed"></span>
             <p class="stat-label-title">Express Checkout</p>
-          </div>
+          </div> -->
         </ng-container>
       </ng-container>
     </div>

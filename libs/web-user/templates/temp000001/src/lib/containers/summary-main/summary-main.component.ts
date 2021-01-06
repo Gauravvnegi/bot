@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { Subscription } from 'rxjs';
 
 @Component({

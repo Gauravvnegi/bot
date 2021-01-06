@@ -1,0 +1,43 @@
+<div class="gst-form">
+    <div class="modal-header">
+        <!-- <div class="temp-div"></div> -->
+        <div class="modal-title">
+            <p class="title">Add GST Details</p>
+        </div>
+        <div class="close_wrapper">
+            <span aria-hidden="true" class="close" (click)="closeModal()">&times;</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="gstFG">
+            <div class="control-wrapper">
+                <div class="label">Name:</div>
+                <mat-form-field class="control">
+                    <input type="text" matInput formControlName="customerName" /><br />
+                </mat-form-field>
+            </div>
+            <div class="control-wrapper">
+                <div class="label">GST Number:</div>
+                <mat-form-field class="control">
+                    <input type="text" matInput formControlName="customerGSTIn" /><br />
+                </mat-form-field>
+            </div>
+            <div class="control-wrapper">
+                <div class="label">Address:</div>
+                <mat-form-field class="control">
+                    <textarea matInput formControlName="address"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="btn-wrapper">
+                <web-user-button
+                    #saveButton
+                    buttonTemplateSwitch
+                    (click)="submitGSTDetails()"
+                    [settings]="{ label: 'Submit' }"
+                    [buttonClass]="'next-button'"
+                    class="user-button"
+                ></web-user-button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -91,6 +91,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       adultsCount: [''],
       roomNumber: [''],
       special_comments: [''],
+      checkin_comments:['']
     });
   }
 

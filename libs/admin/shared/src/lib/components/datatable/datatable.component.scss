@@ -286,6 +286,10 @@
   }
 }
 
+:host ::ng-deep .p-checkbox .p-checkbox-box{
+  border-color: #D9D9D9;
+}
+
 :host ::ng-deep .mat-chip-list-wrapper {
   overflow: auto;
   white-space: nowrap;

@@ -17,7 +17,8 @@
 		  multiple
 		  #chipList
 		  aria-label="Quick Reply selection"
-		  formControlName="quickReplyActionFilters"
+          formControlName="quickReplyActionFilters"
+          *ngIf="tabFilterItems.length"
 		>
 		  <mat-chip
 			*ngFor="
@@ -31,14 +32,14 @@
 			"
 		  >
 			{{ quickReplyType.label }}
-			<span *ngIf="quickReplyType.value != 'ALL'"> (</span
+			<!-- <span *ngIf="quickReplyType.value != 'ALL'"> (</span
 			>{{ quickReplyType.total
-			}}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
+			}}<span *ngIf="quickReplyType.value != 'ALL'">)</span> -->
 		  </mat-chip>
 		</mat-chip-list>
 		<img src="assets/svg/Filter-Icon.svg" />
 	</div>
-    <div class="progress-container">
+    <div class="progress-container" *ngIf="progresses.length">
         <div class="label-container">
             <div class="label">Source</div>
             <div class="progress"></div>
@@ -49,26 +50,14 @@
                 <div class="progress-wrapper">
                     <div class="dropdown-list">
                         <div class="title">NPS Across All Touchpoints</div>
-                        <div class="key">
+                        <div class="key" *ngFor="let p of progress.progressValues">
                             <div class="icon front"></div>
-                            <div class="label">Front Desk</div>
-                            <div class="value">{{ progress.frontDesk }}</div>
-                        </div>
-                        <div class="key">
-                            <div class="icon room"></div>
-                            <div class="label">Room Cleaning</div>
-                            <div class="value">{{ progress.roomCleaning }}</div>
-                        </div>
-                        <div class="key">
-                            <div class="icon luggage"></div>
-                            <div class="label">Luggage Service</div>
-                            <div class="value">{{ progress.luggageServices }}</div>
+                            <div class="label">{{ p.label }}</div>
+                            <div class="value">{{ p.score }}</div>
                         </div>
                     </div>
                     <div fxLayout="row" class="progress">
-                        <div [fxFlex]="progress.frontDesk" [style]="'background: #F18533;'"></div>
-                        <div [fxFlex]="progress.roomCleaning" class="room"></div>
-                        <div [fxFlex]="progress.luggageServices" class="luggage"></div>
+                        <div *ngFor="let p of progress.progressValues" [fxFlex]="p.score" [style.background]="p.colorCode"></div>
                     </div>
                 </div>
             </div>
@@ -81,23 +70,15 @@
         </div>
         <div class="label-container">
             <div class="label"></div>
-            <div class="divider-container" [style]="'height: ' + (40 * progresses.length) + 'px;'">
+            <div class="divider-container" [style.height]="(40 * progresses.length) + 'px'">
                 <div class="divider" *ngFor="let value of progressValues"></div>
             </div>
         </div>
     </div>
-    <div class="key-container">
-        <div class="key">
-            <div class="icon front"></div>
-            <div class="label">Front Desk</div>
-        </div>
-        <div class="key">
-            <div class="icon room"></div>
-            <div class="label">Room Cleaning</div>
-        </div>
-        <div class="key">
-            <div class="icon luggage"></div>
-            <div class="label">Luggage Service</div>
+    <div class="key-container" *ngIf="progresses.length">
+        <div class="key" *ngFor="let p of progresses[0].progressValues">
+            <div class="icon" [style.background]="p.colorCode"></div>
+            <div class="label">{{ p.label }}</div>
         </div>
     </div>
 </div>

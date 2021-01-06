@@ -3,10 +3,10 @@
     <mat-tab-group #matTab dynamicHeight>
       <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
         <ng-template mat-tab-label>
-          <div class="custom-tab">
+          <div [ngClass]="hotelPaymentConfig.paymentHeaders?.length < 2 ? 'custom-tab full_width' : 'custom-tab'">
             <div>
-              <!-- <img [src]="header.imageUrl" style="height: 53px" /> -->
-              <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon>
+              <img [src]="header.imageUrl" style="height: 53px" class="svg-payment" />
+              <!-- <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon> -->
             </div>
             <div class="inner-label">
               <div class="type-label">
@@ -27,15 +27,14 @@
           </div>
         </ng-template>
         <div class="payment-wrapper">
-          <div>
+          <div *ngIf="header.type !== 'Pay At Desk'">
             <div
-              class="payment__wrapper--header"
-              *ngIf="header.type !== 'Pay At Desk'"
+              class="payment__wrapper__heading"
             >
               Payment Methods
             </div>
             <web-user-payment-method
-              *ngIf="hotelPaymentConfig && header.type !== 'Pay At Desk'"
+              *ngIf="hotelPaymentConfig"
               [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
             ></web-user-payment-method>

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { PackageService } from '../../services/package.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PackageDetail } from '../../data-models/packageConfig.model'
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Regex } from 'libs/shared/constants/regex';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { Subscription } from 'rxjs';
 import { Category } from '../../data-models/categoryConfig.model';
+import { IpackageOptions, PackageDetail, PackageSource } from '../../data-models/packageConfig.model';
+import { PackageService } from '../../services/package.service';
 
 @Component({
   selector: 'hospitality-bot-edit-package',
@@ -15,145 +16,153 @@ import { Category } from '../../data-models/categoryConfig.model';
 })
 export class EditPackageComponent implements OnInit {
 
-  file: File;
-  amenityForm: FormGroup;
+  private $subscription: Subscription = new Subscription();
+
   fileUploadData = {
-    fileSize : 3145728,
-    fileType : ['png', 'jpg']
+    fileSize: 3145728,
+    fileType: ['png','jpg','jpeg','gif','eps']
   }
 
-  currency =[
-    {key:'INR', value:'INR'},
-    {key:'USD', value:'USD'}
+  currency: IpackageOptions[] = [
+    { key: 'INR', value: 'INR' },
+    { key: 'USD', value: 'USD' }
   ]
 
-  packageType = [
-    {key:'Complimentary', value:'Complimentary'},
-    {key:'Paid', value:'Paid'}
+  packageType: IpackageOptions[] = [
+    { key: 'Complimentary', value: 'Complimentary' },
+    { key: 'Paid', value: 'Paid' }
   ]
 
-  unit = [
-    {key:'Km', value:'Km'},
-    {key:'PERSON', value:'PERSON'},
-    {key:'TRIP', value:'TRIP'}
+  unit: IpackageOptions[] = [
+    { key: 'Km', value: 'Km' },
+    { key: 'PERSON', value: 'PERSON' },
+    { key: 'TRIP', value: 'TRIP' }
   ]
-  
-  hotelPackage: PackageDetail;
-  selectedCategory: string;
-  categories : Category[];
+
+  packageForm: FormGroup;
+  hotelPackage: PackageDetail
+  categories: Category[];
   packageId: string;
+  hotelId: string;
   globalQueries = [];
-  uploadStatus;
-  hotelId;
-  
+
   constructor(
-    private _fb: FormBuilder,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private _snackbarService: SnackBarService,
-    private _globalFilterService: GlobalFilterService,
-    private _packageService: PackageService,
+    private fb: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private packageService: PackageService,
   ) {
     this.initAddPackageForm();
-   }
+  }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
   }
 
-  initAddPackageForm(){
-    this.amenityForm = this._fb.group({
-      id:[''],
-      packageCode: ['',[Validators.required]],
-      name: ['',[Validators.required]],
-      description: ['',[Validators.required]],
-      type: ['',[Validators.required]],
-      rate: ['',[Validators.required,Validators.pattern(Regex.DECIMAL_REGEX)]],
-      currency: ['',[Validators.required]],
-      unit:['',[Validators.required]],
-      packageSource:[''],
-      imageUrl:['',[Validators.required]],
+  initAddPackageForm(): void {
+    this.packageForm = this.fb.group({
+      id: [''],
+      packageCode: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      description: [''],
+      type: ['', [Validators.required]],
+      rate: ['', [Validators.required, Validators.pattern(Regex.DECIMAL_REGEX)]],
+      currency: ['', [Validators.required]],
+      unit: ['', [Validators.required]],
+      packageSource: [''],
+      imageUrl: ['', [Validators.required]],
+      imageName: [''],
       status: [false],
-      autoAccept:[false],
-      category: ['',[Validators.required]],
+      autoAccept: [false],
+      category: ['', [Validators.required]],
     })
   }
 
-  disableForm(packageData){
-    if(packageData.packageSource === 'PMS'){
-      this.amenityForm.disable();
-      this.amenityForm.get('description').enable();
-      this.amenityForm.get('name').enable();
-    }else{
-      this.amenityForm.get('packageCode').disable();
+  disableForm(packageData): void {
+    if (packageData.packageSource === PackageSource.Pms) {
+      this.packageForm.disable();
+      this.packageForm.get('description').enable();
+      this.packageForm.get('name').enable();
+    } else {
+      this.packageForm.get('packageCode').disable();
     }
   }
 
-  enableEditableFields(){
-    this.amenityForm.get('status').enable();
-    this.amenityForm.get('rate').enable();
-    
+  enableEditableFields(): void {
+    this.packageForm.get('status').enable();
+    this.packageForm.get('rate').enable();
   }
 
-  listenForGlobalFilters() {
-    this._globalFilterService.globalFilter$.subscribe((data) => {
-      //set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-     
-      this.getHotelId(this.globalQueries);
-      this.getCategoriesList(this.hotelId);
-      this.getPackageId();
-    });
+  listenForGlobalFilters(): void {
+
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        //set-global query everytime global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+
+        this.getHotelId(this.globalQueries);
+        this.getCategoriesList(this.hotelId);
+        this.getPackageId();
+      })
+    );
   }
 
-  getHotelId(globalQueries){
+  getHotelId(globalQueries): void {
     globalQueries.forEach(element => {
-      if(element.hasOwnProperty('hotelId')){
+      if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
       }
     });
   }
 
-  getPackageId(){
-    this._activatedRoute.params.subscribe(params =>{
-      if(params['id']){
-        this.packageId = params['id'];
-        this.getPackageDetails(this.packageId);
-      }
-    })
+  getPackageId(): void {
+    this.$subscription.add(
+      this.activatedRoute.params.subscribe(params => {
+        if (params['id']) {
+          this.packageId = params['id'];
+          this.getPackageDetails(this.packageId);
+        }
+      })
+    );
   }
 
-  getPackageDetails(packageId){
-    this._packageService.getPackageDetails(this.hotelId, packageId)
-    .subscribe(response =>{
-      this.hotelPackage = new PackageDetail().deserialize(response);
-      this.amenityForm.patchValue(this.hotelPackage.amenityPackage);
-      this.disableForm(this.amenityForm.getRawValue());
-    })
+  getPackageDetails(packageId: string): void {
+    this.$subscription.add(
+      this.packageService.getPackageDetails(this.hotelId, packageId)
+        .subscribe(response => {
+          this.hotelPackage = new PackageDetail().deserialize(response);
+          this.packageForm.patchValue(this.hotelPackage.amenityPackage);
+          this.disableForm(this.packageForm.getRawValue());
+        })
+    );
   }
 
-  getCategoriesList(hotelId){
-    this._packageService.getHotelPackageCategories(hotelId)
-    .subscribe(response =>{
-      this.categories = response.records;
-      this.selectedCategory = response.records[0].id;
-    })
+  getCategoriesList(hotelId: string): void {
+    this.$subscription.add(
+      this.packageService.getHotelPackageCategories(hotelId)
+        .subscribe(response => {
+          this.categories = response.records;
+          this.packageForm.get('category').patchValue(this.hotelPackage && this.hotelPackage.amenityPackage.category || response.records[0].id);
+        })
+    );
   }
 
-  saveDetails(){
-    if(this.packageId){
+  saveDetails(): void {
+    if (this.packageId) {
       this.updatePackage();
-    }else{
+    } else {
       this.addPackage();
     }
   }
 
-  addPackage(){
-    const status = this._packageService.validatePackageDetailForm(
-      this.amenityForm
+  addPackage(): void {
+    const status = this.packageService.validatePackageDetailForm(
+      this.packageForm
     ) as Array<any>;
 
     if (status.length) {
@@ -161,68 +170,81 @@ export class EditPackageComponent implements OnInit {
       return;
     }
 
-    let data = this._packageService.mapPackageData(this.amenityForm.getRawValue(), this.hotelId);
-    this._packageService.addPackage(this.hotelId, data)
-    .subscribe(response =>{
-      this.hotelPackage = new PackageDetail().deserialize(response);
-      this.amenityForm.patchValue(this.hotelPackage.amenityPackage);
-      this._snackbarService.openSnackBarAsText( 'Package added successfully',
-      '',
-      { panelClass: 'success' }
+    let data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId);
+    this.$subscription.add(
+      this.packageService.addPackage(this.hotelId, data)
+        .subscribe(response => {
+          this.hotelPackage = new PackageDetail().deserialize(response);
+          this.packageForm.patchValue(this.hotelPackage.amenityPackage);
+          this.snackbarService.openSnackBarAsText('Package added successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this.router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
+        }, ({ error }) => {
+          this.snackbarService.openSnackBarAsText(error.message);
+        })
     );
-      this._router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
-    },({error})=>{
-      this._snackbarService.openSnackBarAsText(error.message);
-    })
   }
 
-  uploadFile(event){
+  redirectToPackages(){
+    this.router.navigate(['/pages/package']);
+  }
+
+  uploadFile(event): void {
     let formData = new FormData();
-    this.uploadStatus =   true;
     formData.append('files', event.file);
-    this._packageService.uploadImage(this.hotelId, formData)
-    .subscribe(response =>{
-      this.amenityForm.get('imageUrl').patchValue(response.fileDownloadUri);
-      this._snackbarService.openSnackBarAsText( 'Package image uploaded successfully',
-        '',
-        { panelClass: 'success' }
-      );
-      this.uploadStatus =   false;
-    },({error})=>{
-      this.uploadStatus =   false;
-      this._snackbarService.openSnackBarAsText(error.message);
-    })
+    this.$subscription.add(
+      this.packageService.uploadImage(this.hotelId, formData)
+        .subscribe(response => {
+          this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
+          this.packageForm.get('imageName').patchValue(response.fileName);
+          this.snackbarService.openSnackBarAsText('Package image uploaded successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        }, ({ error }) => {
+          this.snackbarService.openSnackBarAsText(error.message);
+        })
+    );
   }
 
-  updatePackage(){
-    const status = this._packageService.validatePackageDetailForm(
-      this.amenityForm
+  updatePackage(): void {
+    const status = this.packageService.validatePackageDetailForm(
+      this.packageForm
     ) as Array<any>;
 
     if (status.length) {
       this.performActionIfNotValid(status);
       return;
     }
-    
-    const data = this._packageService.mapPackageData(this.amenityForm.getRawValue(),this.hotelId, this.hotelPackage.amenityPackage.id);
-    this._packageService.updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data).subscribe(response =>{
-      this._snackbarService.openSnackBarAsText( 'Package updated successfully',
-        '',
-        { panelClass: 'success' }
-      );
-      this._router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
-    },({error})=>{
-      this._snackbarService.openSnackBarAsText(error.message);
-    })
+
+    const data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId, this.hotelPackage.amenityPackage.id);
+    this.$subscription.add(
+      this.packageService.updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
+        .subscribe(response => {
+          this.snackbarService.openSnackBarAsText('Package updated successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this.router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
+        }, ({ error }) => {
+          this.snackbarService.openSnackBarAsText(error.message);
+        })
+    );
   }
 
-  private performActionIfNotValid(status: any[]) {
-    this._snackbarService.openSnackBarAsText(status[0]['msg']);
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+
+  private performActionIfNotValid(status: any[]): any[] {
+    this.snackbarService.openSnackBarAsText(status[0]['msg']);
     return;
   }
 
-  get packageImageUrl(){
-    return this.amenityForm.get('imageUrl').value;
+  get packageImageUrl(): string {
+    return this.packageForm.get('imageUrl').value;
   }
 
 }

@@ -225,7 +225,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openUserDetails(rowData)">
+    <tr class="data-table-row"(click)="openUserDetails(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -250,16 +250,18 @@
       <td class="guest">
         {{ rowData.getSecGuestDisplayConfig().displayString }}
         <!-- <div
-          *ngIf="rowData.guests.secondaryGuest.length > 0"
-          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        
+          *ngIf="rowData.permissionConfigs.length > 0"
+          [ngClass]="{ demo: rowData.permissionConfigs.length > 0 }"
         >
+        <pre>{{rowData && rowData.permissionConfigs.length}}</pre>
           <div
             *ngFor="
-              let secondaryGuest of rowData.guests.secondaryGuest;
-              let guestIdx = index
+              let permission of rowData.permissionConfigs;
+              let permissionIdx = index
             "
           >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+            {{ rowData.permissionConfigs[permissionIdx].label }}
           </div>
         </div> -->
       </td>
@@ -270,7 +272,10 @@
       <td class="">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <input type="checkbox" [checked]="rowData.status" />
-          <span class="slider round"></span>
+          <mat-slide-toggle
+          [checked]="rowData.status"
+          (change)="updateRolesStatus($event, rowData )"
+          ></mat-slide-toggle>
         </label>
       </td>
     </tr>

@@ -12,7 +12,6 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { StatisticsService } from '../../services/statistics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import * as moment from 'moment';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 
@@ -26,7 +25,38 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
 
-  legendData;
+  legendData = [
+    {
+      label: 'New',
+      borderColor: '#0749fc',
+      backgroundColor: '#0749fc',
+      dashed: false,
+    },
+    {
+      label: 'Check-In',
+      borderColor: '#0239cf',
+      backgroundColor: '#0239cf',
+      dashed: false,
+    },
+    {
+      label: 'Ex Check-In',
+      borderColor: '#0239cf',
+      backgroundColor: '#288ad6',
+      dashed: true,
+    },
+    {
+      label: 'Checkout',
+      borderColor: '#f2509b',
+      backgroundColor: '#f2509b',
+      dashed: false,
+    },
+    {
+      label: 'Ex Checkout',
+      borderColor: '#f2509b',
+      backgroundColor: '#f2809b',
+      dashed: true,
+    },
+  ];
   chartTypes = [
     { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
     { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
@@ -46,6 +76,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
 
   chart: any = {
     chartData: [
+      { data: [], label: 'New', fill: false },
       { data: [], label: 'Check-In', fill: false },
       { data: [], label: 'Express Check-In', fill: false, borderDash: [10, 5] },
       { data: [], label: 'Checkout', fill: false },
@@ -77,6 +108,9 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       legendCallback: this.getLegendCallback,
     },
     chartColors: [
+      {
+        borderColor: '#0749fc',
+      },
       {
         borderColor: '#0239CF',
       },
@@ -111,6 +145,9 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     if (this.chart.chartType === 'bar') {
       this.chart.chartColors = [
         {
+          backgroundColor: '#0749fc',
+        },
+        {
           backgroundColor: '#0239CF',
         },
         {
@@ -138,30 +175,15 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this.convertTimestampToLabels(this.selectedInterval, d)
+        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
       );
-      this.chart.chartData[0].data.push(this.customerData.checkIn[d]);
-      this.chart.chartData[1].data.push(this.customerData.expressCheckIn[d]);
-      this.chart.chartData[2].data.push(this.customerData.checkout[d]);
-      this.chart.chartData[3].data.push(this.customerData.expressCheckout[d]);
+      this.chart.chartData[0].data.push(this.customerData.new[d]);
+      this.chart.chartData[1].data.push(this.customerData.checkIn[d]);
+      this.chart.chartData[2].data.push(this.customerData.expressCheckIn[d]);
+      this.chart.chartData[3].data.push(this.customerData.checkout[d]);
+      this.chart.chartData[4].data.push(this.customerData.expressCheckout[d]);
     });
     this.setChartColors();
-  }
-
-  convertTimestampToLabels(type, data) {
-    let returnTime;
-    if (type === 'year') {
-      returnTime = data;
-    } else if (type === 'month') {
-      returnTime = moment.unix(data).format('MMM YYYY');
-    } else if (type === 'date') {
-      returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
-    } else {
-      returnTime = `${data > 12 ? data - 12 : data}:00 ${
-        data > 11 ? 'PM' : 'AM'
-      }`;
-    }
-    return returnTime;
   }
 
   legendOnClick = (index) => {

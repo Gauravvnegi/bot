@@ -308,7 +308,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
-
+          console.log('loadData',this.values);
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters

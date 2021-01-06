@@ -1,13 +1,13 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
-import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
-import { DocumentsDetailsComponent } from '../documents-details/documents-details.component';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { get } from 'lodash';
+import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { DocumentsDetailsComponent } from '../documents-details/documents-details.component';
+import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'hospitality-bot-documents-details-wrapper',
@@ -22,10 +22,10 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   constructor(
     private _documentDetailService: DocumentDetailsService,
     private _reservationService: ReservationService,
-    private _snackBarService: SnackBarService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
     private _hotelService: HotelService,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {
     super();
@@ -89,13 +89,11 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   private performActionIfNotValid(status: any[]) {
-    this.$subscription.add(
-      this._translateService
-        .get(`VALIDATION.${status[0].code}`, { documentType: status[0].type })
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        })
-    );
+    this._translateService
+      .get(`VALIDATION.${status[0].code}`, { documentType: status[0].type })
+      .subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();

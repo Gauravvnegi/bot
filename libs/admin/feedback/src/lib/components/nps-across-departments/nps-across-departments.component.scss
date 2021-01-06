@@ -14,16 +14,40 @@
   }
 }
 
+.progress_container {
+  position: relative;
+  min-height: 275px;
+  &__carousel_box {
+    position: absolute;
+    width: 100%;
+    overflow: auto;
+    white-space: nowrap;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    .slide {
+      margin-right: 3rem;
+      display: inline-block;
+    }
+    &::-webkit-scrollbar {
+      height: 6px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
 
-
-.carousel-box {
-  display: flex;
-  overflow: auto;
-  overflow-x: scroll;
-  width: 75vw;
-  white-space: nowrap;
-  .slide {
-    margin-right: 3rem;
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background: darkgray;
+        border-radius: 10px;
+      }
+    }
   }
 }
 

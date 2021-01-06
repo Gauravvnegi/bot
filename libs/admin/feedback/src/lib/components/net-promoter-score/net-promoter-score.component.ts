@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { JUL } from '@angular/material/core';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { StatisticsService } from '../../services/statistics.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { Subscription } from 'rxjs';
+import { NPS } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-net-promoter-score',
@@ -18,6 +22,9 @@ export class NetPromoterScoreComponent implements OnInit {
     // { label: 'EXCEL', value: 'excel' },
     // { label: 'PDF', value: 'pdf' },
   ];
+  $subscription = new Subscription();
+  selectedInterval: string;
+  npsChartData: NPS;
 
   chartTypes = [
     { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
@@ -42,38 +49,23 @@ export class NetPromoterScoreComponent implements OnInit {
   chart: any = {
     chartData: [
       {
-        data: [95, 85, 70, 65, 80, 40, 75, 60, 75, 25, 43, 80, 62, 55, 75, 75, 55, 45, 60, 75, 70],
+        data: [],
         label: 'Overall NPS'
       },
     ],
-    chartLabels: [
-      new Date(2020, 7, 4),
-      new Date(2020, 7, 11),
-      new Date(2020, 7, 17),
-      new Date(2020, 7, 25),
-      new Date(2020, 7, 31),
-      new Date(2020, 8, 8),
-      new Date(2020, 8, 15),
-      new Date(2020, 8, 22),
-      new Date(2020, 8, 30),
-      new Date(2020, 9, 5),
-      new Date(2020, 9, 12),
-      new Date(2020, 9, 19),
-      new Date(2020, 9, 28),
-      new Date(2020, 10, 3),
-      new Date(2020, 10, 10),
-      new Date(2020, 10, 17),
-      new Date(2020, 10, 25),
-      new Date(2020, 10, 31),
-      new Date(2020, 11, 5),
-      new Date(2020, 11, 14),
-      new Date(2020, 11, 22)
-    ],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {
         line: {
           tension: 0
+        },
+        point: {
+          radius: 4,
+          borderWidth: 2,
+          hitRadius: 5,
+          hoverRadius: 5,
+          hoverBorderWidth: 2
         }
       },
       scales: {
@@ -101,6 +93,10 @@ export class NetPromoterScoreComponent implements OnInit {
       {
         borderColor: '#0C8054',
         backgroundColor: '#DEFFF3',
+        pointBackgroundColor: 'white',
+        pointBorderColor: '#0C8054',
+        pointHoverBackgroundColor: 'white',
+        pointHoverBorderColor: '#0C8054'
       },
     ],
     chartLegend: false,
@@ -109,12 +105,16 @@ export class NetPromoterScoreComponent implements OnInit {
 
   
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _adminUtilityService: AdminUtilityService,
+    private _statisticService: StatisticsService,
+    private _globalFilterService: GlobalFilterService
   ) { }
 
   ngOnInit(): void {
     this.initFG();
-    this.setChartLabels();
+    // this.setChartLabels();
+    this.getNPSChartData();
   }
 
   initFG(): void {
@@ -124,22 +124,55 @@ export class NetPromoterScoreComponent implements OnInit {
     })
   }
 
-  setChartLabels(): void {
-    let i = 0;
-    this.chart.chartLabels.forEach(element => {
-      this.chart.chartLabels[i] = element.toLocaleDateString('en-GB', {
-        day: 'numeric', month: 'short'
-      }).replace(/ /g, ' ');
-      i = i+1;
+  setChartType(option): void {
+    this.chart.chartType = option.value;
+  }
+
+  private initGraphData(): void {
+    const botKeys = Object.keys(this.npsChartData.npsGraph);
+    this.chart.chartData[0].data = [];
+    this.chart.chartLabels = [];
+    botKeys.forEach((d) => {
+      this.chart.chartLabels.push(
+        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
+      );
+      this.chart.chartData[0].data.push(this.npsChartData.npsGraph[d]);
     });
   }
 
-  modifyXLabels() {
+  private getNPSChartData(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this._adminUtilityService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        const queries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
 
+        const config = {
+          queryObj: this._adminUtilityService.makeQueryParams(queries),
+        };
+        this.$subscription.add(
+          this._statisticService
+            .getOverallNPSStatistics(config)
+            .subscribe((response) => {
+              this.npsChartData = new NPS().deserialize(response);
+              this.initGraphData();
+            })
+        );
+      })
+    );
   }
 
-  setChartType(option): void {
-    this.chart.chartType = option.value;
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
 }

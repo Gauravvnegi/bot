@@ -58,33 +58,11 @@
       padding-top: 2px;
       padding-left: 5px;
     }
-    .out-guest-bubble {
+    .bubble {
       width: 14px;
       height: 14px;
-      background: #4A73FB 0% 0% no-repeat padding-box;
+      background: 0% 0% no-repeat padding-box;
       border-radius: 2px;
-      opacity: 1;
-    }
-    .departure-bubble {
-      width: 14px;
-      height: 14px;
-      background: #F25E5E 0% 0% no-repeat padding-box;
-      border-radius: 2px;
-      opacity: 1;
-    }
-    .inhouse-bubble {
-      width: 14px;
-      height: 14px;
-      background: #30D8B6 0% 0% no-repeat padding-box;
-      border-radius: 2px;
-      opacity: 1;
-    }
-    .arrival-bubble {
-      width: 14px;
-      height: 14px;
-      background: #FF9F67 0% 0% no-repeat padding-box;
-      border-radius: 2px;
-      opacity: 1;
     }
   }
 }

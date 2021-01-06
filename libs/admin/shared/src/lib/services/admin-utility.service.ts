@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
 export class AdminUtilityService {
@@ -29,6 +30,22 @@ export class AdminUtilityService {
       .join('&');
 
     return `?${queryStr}`;
+  }
+
+  convertTimestampToLabels(type, data) {
+    let returnTime;
+    if (type === 'year') {
+      returnTime = data;
+    } else if (type === 'month') {
+      returnTime = moment.unix(data).format('MMM YYYY');
+    } else if (type === 'date') {
+      returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
+    } else {
+      returnTime = `${data > 12 ? data - 12 : data}:00 ${
+        data > 11 ? 'PM' : 'AM'
+      }`;
+    }
+    return returnTime;
   }
 
   getCalendarType(startDate, endDate) {

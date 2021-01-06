@@ -1,10 +1,10 @@
-import { Component, OnInit, Optional, Inject, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ReservationService } from '../../services/booking.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { ButtonService } from '../../services/button.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { ReservationService } from '../../services/booking.service';
+import { ButtonService } from '../../services/button.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -24,8 +24,8 @@ export class InputPopupComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private _snackbar: SnackBarService,
     private _buttonService: ButtonService,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {
     this.dialaogData = data.pageValue;
@@ -50,25 +50,19 @@ export class InputPopupComponent implements OnInit {
       .checkIn(this._reservationService.reservationData.id, data)
       .subscribe(
         (res) => {
-          this.$subscription.add(
-            this._translateService
-              .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
-              .subscribe((translatedMsg) => {
-                this._snackbar.openSnackBarAsText(translatedMsg, '', {
-                  panelClass: 'success',
-                });
-              })
-          );
+          this._translateService
+          .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
           this.close('success');
         },
         ({ error }) => {
-          this.$subscription.add(
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackbar.openSnackBarAsText(translatedMsg);
-              })
-          );
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
           this._buttonService.buttonLoading$.next(this.saveButton);
           //this.close('success');
         }

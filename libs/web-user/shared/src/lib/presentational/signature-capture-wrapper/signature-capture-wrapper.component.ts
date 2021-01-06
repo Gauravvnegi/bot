@@ -1,24 +1,15 @@
-import {
-  Component,
-  ViewChild,
-  Input,
-  OnChanges,
-  Output,
-  EventEmitter,
-  ElementRef,
-  AfterViewInit,
-} from '@angular/core';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { MatTabGroup } from '@angular/material/tabs';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { SignaturePadScribbleComponent } from '../signature-pad-scribble/signature-pad-scribble.component';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { SignatureService } from '../../services/signature.service';
+import { MatTabGroup } from '@angular/material/tabs';
 import * as JSZipUtils from 'jszip-utils';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import { ButtonService } from '../../services/button.service';
+import { SignatureService } from '../../services/signature.service';
 import { UtilityService } from '../../services/utility.service';
+import { SignaturePadScribbleComponent } from '../signature-pad-scribble/signature-pad-scribble.component';
+import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -126,10 +117,10 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
   constructor(
     private _fb: FormBuilder,
     private _modal: ModalService,
-    private _snackBarService: SnackBarService,
     private _signatureService: SignatureService,
     private _buttonService: ButtonService,
     private _utilityService: UtilityService,
+    private _snackBarService: SnackBarService,
     private _translateService: TranslateService
   ) {
     this.initFormGroup();
@@ -186,13 +177,11 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
     let image;
     if (TAB_LABEL === 'Draw') {
       if (this.signatuePadScribbleComponent.signaturePad.isEmpty()) {
-        this.$subscription.add(
-          this._translateService
-            .get(`VALIDATION.SIGNATURE_PAD_PENDING`)
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            })
-        );
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_PAD_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -204,26 +193,22 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
     } else if (TAB_LABEL === 'Type') {
       const text = this.textSignature;
       if (text === '') {
-        this.$subscription.add(
-          this._translateService
-            .get(`VALIDATION.SIGNATURE_NAME_PENDING`)
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            })
-        );
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_NAME_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
       this.textToFile(text);
     } else if (TAB_LABEL === 'Upload') {
       if (this.uploadType === '') {
-        this.$subscription.add(
-          this._translateService
-            .get(`VALIDATION.SIGNATURE_FILE_PENDING`)
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            })
-        );
+        this._translateService
+          .get(`VALIDATION.SIGNATURE_FILE_PENDING`)
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -262,7 +247,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
           .get(`MESSAGES.ERROR.${error.type}`)
           .subscribe((translatedMsg) => {
             this._snackBarService.openSnackBarAsText(translatedMsg);
-          })
+        })
       ))
     );
   }

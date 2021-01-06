@@ -1,8 +1,10 @@
-import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { Subscription } from 'rxjs';
 import { PackageRendererComponent } from '../package-renderer/package-renderer.component';
+import { SlickCarouselComponent } from 'ngx-slick-carousel';
+
 
 @Component({
   selector: 'hospitality-bot-paid-amenities',
@@ -14,6 +16,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
 
   @ViewChild('packageRenderer', { read: ViewContainerRef }) packageRendererContainer;
+  @ViewChild('slickModal') slickModal: SlickCarouselComponent;
 
   private $subscription: Subscription = new Subscription();
 
@@ -27,6 +30,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     infinite: true,
     speed: 100,
     autoplay: true,
+    method: {},
     responsive: [
       {
         breakpoint: 500,
@@ -94,6 +98,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   }
 
   openPackage(packageCode){
+    this.pauseSlickCarousel();
     this.clearPackageRendererContainer();
     let serviceFormGroup = this.getAminityForm(packageCode);
     this.selectedSlide = this.paidAmenities.find(slideData =>slideData.packageCode === packageCode);
@@ -116,6 +121,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(() => {
         this.packageRendererComponentRefObj.destroy();
+        this.playSlickCarousel();
       })
     );
   }
@@ -155,6 +161,14 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
 
   trackByPackageId(index: number, paidPackage: any) {
     return paidPackage['id'];
+  }
+
+  pauseSlickCarousel(){
+    this.slickModal.slickPause();
+  }
+
+  playSlickCarousel(){
+    this.slickModal.slickPlay();
   }
 
   getAminityForm(packageCode) {

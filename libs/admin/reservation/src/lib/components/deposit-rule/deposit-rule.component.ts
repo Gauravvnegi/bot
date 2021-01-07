@@ -14,6 +14,7 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
   @Input() parentForm;
 
   depositRuleForm: FormGroup;
+  isUpdatingRule = false;
 
   guaranteeTypes = [
     {
@@ -128,6 +129,8 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
       amountType,
       amount,
     } = this.depositRuleForm.getRawValue();
+
+    this.isUpdatingRule = true;
     this._reservationService
       .updateDepositRule(
         this.parentForm.get('reservationDetails').get('bookingId').value,
@@ -144,9 +147,11 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
             '',
             { panelClass: 'success' }
           );
+          this.isUpdatingRule = false;
         },
         ({ error }) => {
           this._snackBarService.openSnackBarAsText(error.message);
+          this.isUpdatingRule = false;
         }
       );
   }

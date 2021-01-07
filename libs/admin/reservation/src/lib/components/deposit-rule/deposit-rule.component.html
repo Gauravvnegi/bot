@@ -79,6 +79,7 @@
 </form>
 <div class="button-wrapper">
   <button (click)="updateDepositRule()" class="button">
-    Update Deposit Rule
+    <i *ngIf="isUpdatingRule" class="fa fa-spinner fa-spin"></i>
+    {{isUpdatingRule ? "updating Deposit Rule" : "Update Deposit Rule"}}
   </button>
 </div>

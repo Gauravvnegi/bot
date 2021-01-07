@@ -29,6 +29,7 @@ export class EditUserPermissionComponent implements OnInit {
   branchNames: [];
   countries = new CountryCode().getByLabelAndValue();
   userPermissions;
+  isUpdatingPermissions = false;
   userForm: FormGroup;
   managedBy: {
     firstName: string;
@@ -177,6 +178,7 @@ export class EditUserPermissionComponent implements OnInit {
       this.value
     );
 
+    this.isUpdatingPermissions = true;
     this._managePermissionService
       .updateUserDetailsById({
         data,
@@ -189,9 +191,11 @@ export class EditUserPermissionComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
+          this.isUpdatingPermissions = false;
         },
         (error) => {
           this._snackbarService.openSnackBarAsText(error.error.message);
+          this.isUpdatingPermissions = false;
         }
       );
   }

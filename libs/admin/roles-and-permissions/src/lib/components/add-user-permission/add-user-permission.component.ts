@@ -23,6 +23,7 @@ export class AddUserPermissionComponent implements OnInit {
   branchNames: [];
   countries = new CountryCode().getByLabelAndValue();
   userPermissions;
+  isSavingPermissions = false;
   userForm: FormGroup;
   managedBy: {
     firstName: string;
@@ -161,6 +162,7 @@ export class AddUserPermissionComponent implements OnInit {
       this.value
     );
 
+    this.isSavingPermissions = true;
     this._managePermissionService
       .addUser({
         data,
@@ -173,9 +175,11 @@ export class AddUserPermissionComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
+          this.isSavingPermissions = false;
         },
         (error) => {
           this._snackbarService.openSnackBarAsText(error.error.message);
+          this.isSavingPermissions = false;
         }
       );
   }

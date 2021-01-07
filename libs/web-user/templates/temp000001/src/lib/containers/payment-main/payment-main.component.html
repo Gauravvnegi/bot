@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <div class="actions_wrapper">
+      <div class="actions_wrapper" *ngIf="reservationData && reservationData.currentJourney === 'CHECKOUT'">
         <div class="actions_wrapper__icon_box">
           <div
             class="actions_wrapper__icon_box__icon"

@@ -24,7 +24,6 @@ export class DocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLOV();
-    console.log(this.guestsFA)
   }
 
   getLOV() {
@@ -63,7 +62,6 @@ export class DocumentsComponent implements OnInit {
       if (guest.get('id').value === value) {
         this.selectedGuestId = value;
         this.selectedGuestGroup = guest;
-        console.log(guest.get('documents'));
         this.getDocumentsByCountry(
           guest.get('nationality').value
         );

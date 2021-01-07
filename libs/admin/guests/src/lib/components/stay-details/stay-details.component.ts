@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { GuestTableService } from '../../services/guest-table.service';
+import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
 
 @Component({
   selector: 'hospitality-bot-stay-details',
@@ -14,14 +16,24 @@ export class StayDetailsComponent implements OnInit {
   @Output() addFGEvent = new EventEmitter();
 
   stayDetailsFG: FormGroup;
+  feedbackConfig: FeedBackDetail;
   constructor(
     private feedbackService: FeedbackService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private guestTableService: GuestTableService,
   ) {}
 
   ngOnInit(): void {
     this.addFormsControl();
     this.pushDataToForm();
+    this.loadFeedbackCongif();
+  }
+
+  loadFeedbackCongif() {
+    this.guestTableService.getFeedback()
+      .subscribe((response) => {
+        this.feedbackConfig = new FeedBackDetail().deserialize(response);
+      })
   }
 
   addFormsControl(): void {

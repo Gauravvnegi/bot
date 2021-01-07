@@ -91,7 +91,9 @@ export class Reservation implements Deserializable {
     this.feedback = new Feedback().deserialize(input.feedback);
     this.packages = new Package().deserialize(input.packages);
     this.currentJourney = new CurrentJourney().deserialize(input);
-    this.guestAttributes = new GuestAttributes().deserialize(input.guestAttributes);
+    this.guestAttributes = new GuestAttributes().deserialize(
+      input.guestAttributes
+    );
     return this;
   }
 }
@@ -125,13 +127,13 @@ export class GuestReservation {
     this.presentBookings = [];
     this.upcomingBookings = [];
     this.pastBookings = [];
-    data['present_booking_count'].forEach((item, i)=> {
+    data['present_booking_count'].forEach((item, i) => {
       this.presentBookings[i] = new Reservation().deserialize(item);
     });
-    data['upcoming_booking_count'].forEach((item, i)=> {
+    data['upcoming_booking_count'].forEach((item, i) => {
       this.upcomingBookings[i] = new Reservation().deserialize(item);
     });
-    data['past_booking_count'].forEach((item, i)=> {
+    data['past_booking_count'].forEach((item, i) => {
       this.pastBookings[i] = new Reservation().deserialize(item);
     });
     return this;

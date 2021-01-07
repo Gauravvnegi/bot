@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
+import { FeedbackConfigI } from '../data-models/feedbackDetailsConfig.model';
 
 @Injectable()
 export class GuestTableService extends ApiService {
@@ -24,5 +25,9 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/guests/export/${config.queryObj}`, {
       responseType: 'blob',
     });
+  }
+
+  getFeedback(): Observable<FeedbackConfigI> {
+    return this.get(`/api/v1/cms/feedback-form`);
   }
 }

@@ -20,7 +20,6 @@ export class StayDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.guestBookings);
     this.addFormsControl();
     this.pushDataToForm();
   }

@@ -14,6 +14,7 @@ import { DetailsComponent } from './components/details/details.component';
 import { GuestDetailsComponent } from './components/guest-details/guest-details.component';
 import { DocumentsComponent } from './components/documents/documents.component';
 import { StayDetailsComponent } from './components/stay-details/stay-details.component';
+import { BookingFeedbackComponent } from './components/booking-feedback/booking-feedback.component';
 
 const appRoutes: Route[] = [
   {
@@ -42,6 +43,7 @@ export class AdminGuestsRoutingModule {
 	DetailsComponent,
 	GuestDetailsComponent,
 	DocumentsComponent,
-	StayDetailsComponent
+	StayDetailsComponent,
+	BookingFeedbackComponent
   ];
 }

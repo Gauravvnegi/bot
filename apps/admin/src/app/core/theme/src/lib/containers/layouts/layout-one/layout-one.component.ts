@@ -54,6 +54,8 @@ export class LayoutOneComponent implements OnInit {
       return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
     },
   };
+
+  searchDropdownVisible=true;
   constructor(
     private _router: Router,
     public dateService: DateService,

@@ -13,8 +13,19 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <div class="options">
-        <admin-search-bar class="search-bar" [parentForm]="searchFG" [name]="'search'"
-          (selectedSearchOption)="onSearchOptionSelected($event)"></admin-search-bar>
+        <div class="global_search">
+          <admin-search-bar
+            [parentForm]="searchFG"
+            [name]="'search'"
+            (selectedSearchOption)="onSearchOptionSelected($event)"
+          ></admin-search-bar>
+          <div *ngIf="searchDropdownVisible" class="global_search__dropdown">
+            <p>Test</p>
+            <p>Test</p>
+            <p>Test</p>
+            <p>Test</p>
+          </div>
+        </div>
         <div class="filter-range-wrapper">
           <div style="position: relative;" class="temp-width">
             <button (click)="toggleGlobalFilter()" class="header--button">

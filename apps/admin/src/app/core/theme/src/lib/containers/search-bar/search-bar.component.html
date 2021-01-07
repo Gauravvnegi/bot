@@ -1,6 +1,14 @@
-<span class="p-input-icon-right">
-  <i class="pi pi-search"></i>
-  <form [formGroup]="parentForm">
-    <input type="text" pInputText [formControlName]="name" placeholder="Search by Name, Number,Conf no..." />
-  </form>
-</span>
+<div class="global__search">
+  <span class="p-input-icon-right">
+    <i class="pi pi-search"></i>
+    <form [formGroup]="parentForm">
+      <input type="text" pInputText [formControlName]="name" placeholder="Search by Name, Number,Conf no..." />
+    </form>
+  </span>
+  <div *ngIf="searchDropdownVisible" class="global__search__dropdown">
+    <p *ngFor="let option of searchOptions" (click)="setOptionSelection(option)">{{ option.type }}</p>
+    <!-- <p (click)="setOptionSelection(1)">Test</p>
+    <p (click)="setOptionSelection(1)">Test</p>
+    <p (click)="setOptionSelection(1)">Test</p> -->
+  </div>
+</div>

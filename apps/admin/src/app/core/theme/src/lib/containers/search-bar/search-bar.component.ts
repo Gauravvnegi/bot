@@ -17,6 +17,7 @@ export class SearchBarComponent implements OnInit {
   @Output() selectedSearchOption = new EventEmitter();
 
   searchOptions = [];
+  searchDropdownVisible: boolean = false;
   constructor(
     private searchService: SearchService,
   ) { }
@@ -49,13 +50,20 @@ export class SearchBarComponent implements OnInit {
         )
       )
       .subscribe((response) => {
-        this.searchOptions = response;
+        if (response.length) {
+          this.searchOptions = response;
+          this.searchDropdownVisible = true;
+        } else {
+          this.searchOptions = [];
+          this.searchDropdownVisible = false;
+        }
       }, ({ error }) => {
         console.log(error.message);
       });
   }
 
   setOptionSelection(value) {
+    this.searchDropdownVisible = false;
     this.selectedSearchOption.next(value);
   }
 }

@@ -55,7 +55,6 @@ export class LayoutOneComponent implements OnInit {
     },
   };
 
-  searchDropdownVisible=true;
   constructor(
     private _router: Router,
     public dateService: DateService,
@@ -204,7 +203,11 @@ export class LayoutOneComponent implements OnInit {
     this._router.navigate(['/auth']);
   }
 
-  onSearchOptionSelected($event) {}
+  onSearchOptionSelected($event) {
+    if ($event.type === 'Booking') {
+      this.openDetailPage($event.bookingId, DetailsComponent);
+    }
+  }
 
   openDetailPage(bookingId, component) {
     const dialogConfig = new MatDialogConfig();

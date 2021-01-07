@@ -13,7 +13,7 @@
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <div class="options">
-        <!-- <admin-search-bar class="search-bar"></admin-search-bar> -->
+        <admin-search-bar class="search-bar" [parentForm]="searchFG" [name]="'search'"></admin-search-bar>
         <div class="filter-range-wrapper">
           <div style="position: relative;" class="temp-width">
             <button (click)="toggleGlobalFilter()" class="header--button">

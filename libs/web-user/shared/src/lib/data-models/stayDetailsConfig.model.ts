@@ -27,7 +27,7 @@ export class StayDetail implements Deserializable {
   expectedTime:string;
   deserialize(input: any) {
     //input.expectedArrivalTime = 1604201400;
-    let expectedTime = new DateService().convertTimestampToDate(get(input,['expectedArrivalTime'])*1000,'DD-MM-YYYY hh:mm a');
+    let expectedTime = new DateService().convertTimestampToDate(get(input,['expectedArrivalTime']),'DD-MM-YYYY hh:mm a');
     Object.assign(
       this,
       set(

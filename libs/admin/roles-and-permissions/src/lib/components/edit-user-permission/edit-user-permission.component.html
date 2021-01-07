@@ -302,7 +302,10 @@
         </div>
       </div>
       <div class="permission-button-wrapper">
-        <button (click)="savePermission()">Save</button>
+        <button (click)="savePermission()">
+          <i *ngIf="isUpdatingPermissions" class="fa fa-spinner fa-spin"></i>
+          {{isUpdatingPermissions ? "updating User Permissions" : "Save"}}
+        </button>
       </div>
     </div>
   </form>

@@ -27,6 +27,7 @@ export class EditCategoryComponent implements OnInit {
   hotelCategory: CategoryDetail;
   categoryId: string;
   hotelId: string;
+  isSavingCategory = false;
   subPackages : IPackage[];
   globalQueries = [];
   
@@ -121,7 +122,7 @@ export class EditCategoryComponent implements OnInit {
       this.performActionIfNotValid(status);
       return;
     }
-
+    this.isSavingCategory = true;
     let data = this.categoriesService.mapCategoryData(this.categoryForm.getRawValue());
     this.$subscription.add(
       this.categoriesService.addCategory(this.hotelId, data)
@@ -133,8 +134,10 @@ export class EditCategoryComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate(['/pages/package/category', this.hotelCategory.category.id]);
+          this.isSavingCategory = false;
         }, ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
+          this.isSavingCategory = false;
         })
     );
   }
@@ -149,6 +152,7 @@ export class EditCategoryComponent implements OnInit {
       return;
     }
 
+    this.isSavingCategory = true;
     const data = this.categoriesService.mapCategoryData(this.categoryForm.getRawValue(), this.hotelCategory.category.id);
     this.$subscription.add(
       this.categoriesService.updateCategory(this.hotelId, this.hotelCategory.category.id, data)
@@ -158,8 +162,10 @@ export class EditCategoryComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate(['/pages/package/category', this.hotelCategory.category.id]);
+          this.isSavingCategory = false;
         }, ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
+          this.isSavingCategory = false;
         })
     );
   }

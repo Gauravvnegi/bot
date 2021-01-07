@@ -12,12 +12,26 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { FilterService } from '../../../services/filter.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
+import {
+  map,
+  filter,
+  tap,
+  debounceTime,
+  switchMap,
+  catchError,
+} from 'rxjs/operators';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { SearchBarComponent } from '../../search-bar/search-bar.component';
+import { SearchService } from '../../../services/search.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
@@ -32,6 +46,8 @@ export class LayoutOneComponent implements OnInit {
   ];
   lastUpdatedAt: string;
   isGlobalFilterVisible: boolean = false;
+  isDetailPageVisible: boolean = false;
+  searchFG: FormGroup;
   filterConfig = {
     brandName: '',
     branchName: '',
@@ -49,13 +65,55 @@ export class LayoutOneComponent implements OnInit {
     public globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private _authService: AuthService,
-    private _userDetailService: UserDetailService
+    private _userDetailService: UserDetailService,
+    private fb: FormBuilder,
+    private searchService: SearchService,
+    private _modal: ModalService 
   ) {}
 
   ngOnInit() {
     this.initLayoutConfigs();
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
+    this.initSearchQueryForm();
+    this.registerListeners();
+  }
+
+  initSearchQueryForm(): void {
+    this.searchFG = this.fb.group({
+      search: [''],
+    });
+  }
+
+  registerListeners(): void {
+    this.listenForSearchChanges();
+  }
+
+  listenForSearchChanges(): void {
+    const formChanges$ = this.searchFG.valueChanges;
+
+    const findSearch$ = ({ search }) =>
+      this.searchService.search({
+        search,
+      });
+
+    formChanges$
+      .pipe(
+        debounceTime(500),
+        switchMap((formValue) =>
+          findSearch$(formValue).pipe(
+            catchError((err) => {
+              return empty();
+            })
+          )
+        )
+      )
+      .subscribe((res) => {
+        if (res.type === 'booking' && !this.isDetailPageVisible) {
+          this.openDetailPage(res.bookingId, DetailsComponent);
+          this.isDetailPageVisible = true;
+        }
+      });
   }
 
   initLayoutConfigs() {
@@ -177,5 +235,22 @@ export class LayoutOneComponent implements OnInit {
   logoutUser() {
     this._authService.clearToken();
     this._router.navigate(['/auth']);
+  }
+
+  openDetailPage(bookingId, component) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      component,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = bookingId;
+
+    detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+      this.isDetailPageVisible = false;
+      detailCompRef.close();
+    })
   }
 }

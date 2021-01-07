@@ -1,10 +1,14 @@
-<div class="parent_block" *ngIf="isReservationData">
+<div
+  class="parent_block"
+  *ngIf="isReservationData && feedbackConfig$ | async as feedBackConfig"
+>
   <hospitality-bot-header [headerName]="'Feedback'"></hospitality-bot-header>
   <div class="wrapper">
     <hospitality-bot-feedback-details
       *ngIf="feedBackConfig"
       [parentForm]="parentForm"
       [reservationData]="reservationDetails"
+      [feedbackConfig]="feedBackConfig"
       (addFGEvent)="addFGEvent($event)"
     ></hospitality-bot-feedback-details>
     <div class="main-template-button feedback-button">

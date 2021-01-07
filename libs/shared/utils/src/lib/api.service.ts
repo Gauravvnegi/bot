@@ -28,7 +28,7 @@ export class ApiService {
   /**
    * GET request
    */
-  get(uri: string, config = {}): any {
+  get(uri: string, config = {}): Observable<any> {
     return this.httpClient
       .get(this.getBaseUrl() + uri, config)
       .pipe(catchError(this.handleError));

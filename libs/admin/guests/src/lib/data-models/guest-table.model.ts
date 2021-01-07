@@ -77,6 +77,7 @@ export class Reservation implements Deserializable {
   booking;
   payment;
   status;
+  stayDetails;
   feedback;
   packages;
   currentJourney;

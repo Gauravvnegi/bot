@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { SnackBarService } from 'libs/shared/material/src';
-import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-guest-details',

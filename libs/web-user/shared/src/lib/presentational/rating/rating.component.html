@@ -3,7 +3,6 @@
     <div
       *ngFor="let rating of ratingScale"
       class="rating-box"
-      [ngClass]="{ ratingActive: selectedRatingObj?.rating === rating }"
       [ngStyle]="
         selectedRatingObj?.rating >= rating
           ? {
@@ -15,10 +14,21 @@
       (click)="setRatingValue(rating)"
     >
       {{ rating }}
+      <div
+        [ngClass]="{ ratingActive: selectedRatingObj?.rating === rating }"
+        [ngStyle]="
+        selectedRatingObj?.rating >= rating
+          ? {
+              'border-bottom-color': selectedRatingObj?.color
+            }
+          : {}
+      "
+      ></div>
     </div>
   </div>
   <div
     class="rating-scale-bar"
+    *ngIf="selectedRatingObj?.category"
     [ngStyle]="{ 'background-color': selectedRatingObj?.color }"
   >
     {{ selectedRatingObj?.category }}

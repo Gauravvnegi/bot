@@ -73,11 +73,12 @@
                       "
                     >
                     </web-user-checkbox>
-
-                    {{ departmentFG.get('label').value }}
+                    <p class="checkbox_label">
+                      {{ departmentFG.get('label').value }}
+                    </p>
                   </ng-template>
 
-                  <h3 *ngIf="ratingQuestion.service">
+                  <h3 class="service_question" *ngIf="ratingQuestion.service">
                     {{ ratingQuestion.service }} (Optional)
                   </h3>
                   <mat-tab-group>
@@ -104,11 +105,13 @@
                           "
                         >
                         </web-user-checkbox>
-
-                        {{ serviceFG.get('label').value }}
+                        <p class="checkbox_label">
+                          {{ serviceFG.get('label').value }}
+                        </p>
                       </ng-template>
 
                       <div
+                        class="service_checkbox"
                         *ngFor="
                           let touchPointFG of serviceFG.get('touchPoints')[
                             'controls'
@@ -116,20 +119,24 @@
                           let index = touchPointIdx
                         "
                       >
-                        <web-user-checkbox
-                          *ngIf="touchPointFG.get('isSelected').value"
-                          [parentForm]="touchPointFG"
-                          [name]="'isSelected'"
-                          (onValueChange)="
-                            removeFeedback($event, 'Touchpoint', [
-                              departmentFG,
-                              serviceFG,
-                              touchPointFG
-                            ])
-                          "
-                        >
-                        </web-user-checkbox>
-                        {{ touchPointFG.get('label').value }}
+                        <div class="service_checkbox__text">
+                          <web-user-checkbox
+                            *ngIf="touchPointFG.get('isSelected').value"
+                            [parentForm]="touchPointFG"
+                            [name]="'isSelected'"
+                            (onValueChange)="
+                              removeFeedback($event, 'Touchpoint', [
+                                departmentFG,
+                                serviceFG,
+                                touchPointFG
+                              ])
+                            "
+                          >
+                          </web-user-checkbox>
+                          <p class="service_checkbox_label">
+                            {{ touchPointFG.get('label').value }}
+                          </p>
+                        </div>
                         <web-user-rating
                           [parentForm]="touchPointFG"
                           [name]="'rating'"
@@ -137,6 +144,7 @@
                           [ratingScaleConfig]="
                             feedbackConfig?.ratingScaleConfig
                           "
+                          class="service_rating"
                           (onRatingSelection)="
                             onRatingSelection($event, 'Touchpoint', [
                               departmentFG,

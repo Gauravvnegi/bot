@@ -86,14 +86,18 @@ export class Reservation implements Deserializable {
     this.booking = new Booking().deserialize(input);
     this.rooms = new Room().deserialize(input.stayDetails);
     this.guests = new GuestType().deserialize(input.guestDetails);
-    this.payment = new Payment().deserialize(input.paymentSummary);
+    if (input.paymentSummary) {
+      this.payment = new Payment().deserialize(input.paymentSummary);
+    }
     this.status = new Status().deserialize(input);
     this.feedback = new Feedback().deserialize(input.feedback);
-    this.packages = new Package().deserialize(input.packages);
     this.currentJourney = new CurrentJourney().deserialize(input);
     this.guestAttributes = new GuestAttributes().deserialize(
       input.guestAttributes
     );
+    if (input.packages) {
+      this.packages = new Package().deserialize(input.packages);
+    }
     return this;
   }
 }

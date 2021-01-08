@@ -269,7 +269,7 @@ export class Guest implements Deserializable {
   countryCode: string;
   phoneNumber: string;
   email: string;
-  documents: any[];
+  documents?: any[];
   nationality: string;
   deserialize(input: any) {
     Object.assign(
@@ -284,9 +284,6 @@ export class Guest implements Deserializable {
       set({}, 'documents', get(input, ['documents'])),
       set({}, 'nationality', get(input, ['nationality']))
     );
-    if (input.documents.length) {
-      
-    }
     return this;
   }
 

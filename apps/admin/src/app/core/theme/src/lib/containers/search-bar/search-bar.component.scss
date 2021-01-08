@@ -30,3 +30,23 @@
       }
     }
   }
+
+.global__search {
+  position: relative;
+  &__dropdown {
+    position: absolute;
+    background-color: white;
+    border-radius: 5px;
+    width: 99%;
+    left: 2px;
+    top: 100%;
+    z-index: 222;
+    padding: 10px;
+    box-shadow: 0px 0px 5px 0px darkgray;
+    p {
+      padding: 5px;
+      cursor: pointer;
+      // border-bottom: 1px solid rgb(202, 196, 196);
+    }
+  }
+}

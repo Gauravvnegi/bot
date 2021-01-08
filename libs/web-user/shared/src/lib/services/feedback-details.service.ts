@@ -10,40 +10,74 @@ import {
   Service,
 } from '../data-models/feedbackDetailsConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
+import { IFeedbackConfigResObj } from 'libs/web-user/templates/temp000001/src/lib/types/feedback';
+import { map } from 'rxjs/operators';
+import {
+  HotelRatingConfig,
+  Hotel,
+} from 'libs/web-user/templates/temp000001/src/lib/models/feedback';
 
 @Injectable()
 export class FeedbackDetailsService extends ApiService {
-  private _feedBackConfigDS: FeedbackConfigDS;
   public _selectedServices;
 
-  initFeedbackConfigDS(feedbackConfig) {
-    this._feedBackConfigDS = new FeedbackConfigDS().deserialize(feedbackConfig);
-  }
-
-  setFieldConfigForFeedbackDetails(feedbackText) {
+  setFieldConfigForFeedbackDetails({
+    hotelRatingQuestion,
+    departmentRatingQuestion,
+    serviceRatingQuestion,
+  }) {
     let feedbackDetailsFieldSchema = {};
 
+    feedbackDetailsFieldSchema['hotelFeedback'] = new FieldSchema().deserialize(
+      {
+        label: '',
+        disable: false,
+        appearance: 'outline',
+        placeholder: hotelRatingQuestion,
+      }
+    );
+
     feedbackDetailsFieldSchema[
-      'feedbackComents'
+      'departmentFeedback'
     ] = new FieldSchema().deserialize({
       label: '',
       disable: false,
       appearance: 'outline',
-      placeholder: feedbackText,
+      placeholder: departmentRatingQuestion,
     });
 
-    return feedbackDetailsFieldSchema as FeedbackDetailsConfigI;
+    feedbackDetailsFieldSchema[
+      'serviceFeedback'
+    ] = new FieldSchema().deserialize({
+      label: '',
+      disable: false,
+      appearance: 'outline',
+      placeholder: serviceRatingQuestion,
+    });
+
+    return feedbackDetailsFieldSchema;
   }
 
-  getFeedback(): Observable<FeedbackConfigI> {
-    return this.get(`/api/v1/cms/feedback-form`);
+  getHotelFeedbackConfig({
+    hotelId,
+  }: {
+    hotelId: string;
+  }): Observable<IFeedbackConfigResObj> {
+    return this.get(`/api/v1/cms/hotel/${hotelId}/feedback-form`).pipe(
+      map((res) => {
+        return {
+          ...new HotelRatingConfig().deserialize(res),
+          ...new Hotel().deserialize(res),
+        };
+      })
+    );
   }
 
   addFeedback(reservationId, data) {
     return this.post(`/api/v1/reservation/${reservationId}/feedback`, data);
   }
 
-  mapFeedbackData(feedbackValues,guestId) {
+  mapFeedbackData(feedbackValues, guestId) {
     const selectedServices = this.selectedServices;
     let feedbackData = new FeedbackData();
     feedbackData.services = new Array<Service>();
@@ -60,7 +94,7 @@ export class FeedbackDetailsService extends ApiService {
     if (feedbackDetailForm.invalid) {
       status.push({
         validity: false,
-        code: "SELECT_RATING_PENDING",
+        code: 'SELECT_RATING_PENDING',
         data: {},
       });
     }
@@ -73,9 +107,5 @@ export class FeedbackDetailsService extends ApiService {
 
   get selectedServices() {
     return this._selectedServices;
-  }
-
-  get feedbackConfigDS() {
-    return this._feedBackConfigDS;
   }
 }

@@ -1,6 +1,18 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { BaseComponent } from '../base.component';
+import { filter } from 'rxjs/operators';
+export interface IRatingScaleConfig {
+  [key: string]: IRatingConfig;
+}
 
+export interface IRatingConfig {
+  category: string;
+  color: string;
+}
+
+export interface ISelectedRatingConfig extends IRatingConfig {
+  rating: number;
+}
 @Component({
   selector: 'web-user-rating',
   templateUrl: './rating.component.html',
@@ -8,33 +20,44 @@ import { BaseComponent } from '../base.component';
 })
 export class RatingComponent extends BaseComponent {
   @Input() ratingScale: number[];
-  @Input() ratingScaleConfig;
-
+  @Input() ratingScaleConfig: IRatingScaleConfig;
   @Output()
-  ratingData = new EventEmitter();
+  onRatingSelection: EventEmitter<
+    Pick<ISelectedRatingConfig, 'rating'>
+  > = new EventEmitter();
 
-  ratingValue: string;
-  ratingColor: string;
-  selectedRating: number;
+  selectedRatingObj: ISelectedRatingConfig;
 
-  setRatingValue(event) {
-    this.selectedRating = event;
+  ngOnInit() {
+    super.ngOnInit();
+    this.listenForZeroRating();
+  }
+
+  listenForZeroRating() {
+    this.parentForm
+      .get(this.name)
+      .valueChanges.pipe(filter((val) => val == 0))
+      .subscribe((res) => {
+        this.selectedRatingObj = null;
+      });
+  }
+
+  setRatingValue(rating: number) {
     Object.keys(this.ratingScaleConfig).map((key) => {
       let ratingKey = JSON.parse(key);
       ratingKey.forEach((element) => {
-        if (element === event) {
-          const rating = this.ratingScaleConfig[key];
-          this.ratingValue = rating.category;
-          this.ratingColor = rating.color;
+        if (element === rating) {
+          this.selectedRatingObj = { ...this.ratingScaleConfig[key], rating };
         }
       });
     });
 
-    document.documentElement.style.setProperty(
-      '--rating-color',
-      this.ratingColor
-    );
+    // document.documentElement.style.setProperty(
+    //   '--rating-color',
+    //   this.selectedRatingObj.color
+    // );
 
-    this.ratingData.emit(event);
+    this.parentForm.get(this.name).patchValue(rating);
+    this.onRatingSelection.emit({ rating });
   }
 }

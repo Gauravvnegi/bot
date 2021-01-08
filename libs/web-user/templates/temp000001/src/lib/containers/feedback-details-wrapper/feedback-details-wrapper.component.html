@@ -1,8 +1,9 @@
-<div *ngIf="isRendered">
+<div *ngIf="isRendered && feedbackConfig$ | async as feedBackConfig">
   <hospitality-bot-feedback-details
     *ngIf="feedBackConfig"
     [parentForm]="parentForm"
     [reservationData]="reservationData"
+    [feedbackConfig]="feedBackConfig"
     (addFGEvent)="addFGEvent($event)"
   ></hospitality-bot-feedback-details>
 

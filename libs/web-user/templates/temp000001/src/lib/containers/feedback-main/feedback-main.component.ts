@@ -7,24 +7,24 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
-import { forkJoin, of, Subscription } from 'rxjs';
+import { forkJoin, of, Subscription, Observable } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { IFeedbackConfigResObj } from '../../types/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
   templateUrl: './feedback-main.component.html',
-  styleUrls: ['./feedback-main.component.scss']
+  styleUrls: ['./feedback-main.component.scss'],
 })
 export class FeedbackMainComponent implements OnInit {
-
   private $subscription: Subscription = new Subscription();
   paymentStatusData;
   isReservationData = false;
   parentForm: FormGroup;
   reservationDetails: ReservationDetails;
 
-  feedBackConfig;
+  feedbackConfig$: Observable<IFeedbackConfigResObj>;
 
   @ViewChild('saveButton') saveButton;
   constructor(
@@ -38,11 +38,10 @@ export class FeedbackMainComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBarService: SnackBarService,
     private _translateService: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getReservationDetails();
-    this.getFeedBackConfig();
     this.parentForm = this.fb.group({});
   }
 
@@ -59,12 +58,9 @@ export class FeedbackMainComponent implements OnInit {
         this.reservationDetails = reservationData;
         this._reservationService.reservationData = reservationData;
         this._templateLoadingService.isTemplateLoading$.next(false);
+        this.getFeedBackConfig();
       })
     );
-  }
-
-  initFeedbackConfigDS() {
-    this._feedbackDetailsService.initFeedbackConfigDS(this.feedBackConfig);
   }
 
   addFGEvent(data) {
@@ -72,12 +68,9 @@ export class FeedbackMainComponent implements OnInit {
   }
 
   getFeedBackConfig() {
-    this.$subscription.add(
-      this._feedbackDetailsService.getFeedback().subscribe((response) => {
-        this.feedBackConfig = response;
-        this.initFeedbackConfigDS();
-      })
-    );
+    this.feedbackConfig$ = this._feedbackDetailsService.getHotelFeedbackConfig({
+      hotelId: this._hotelService.hotelId,
+    });
   }
 
   saveFeedbackDetails() {
@@ -93,7 +86,8 @@ export class FeedbackMainComponent implements OnInit {
 
     let value = this.parentForm.getRawValue();
     let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail,this._reservationService.reservationData.guestDetails.primaryGuest.id
+      value && value.feedbackDetail,
+      this._reservationService.reservationData.guestDetails.primaryGuest.id
     );
 
     this.$subscription.add(
@@ -119,8 +113,12 @@ export class FeedbackMainComponent implements OnInit {
     );
   }
 
-  openThankyouPage(state){
-    this.router.navigateByUrl(`/thankyou?token=${this.route.snapshot.queryParamMap.get('token')}&entity=thankyou&state=${state}`);
+  openThankyouPage(state) {
+    this.router.navigateByUrl(
+      `/thankyou?token=${this.route.snapshot.queryParamMap.get(
+        'token'
+      )}&entity=thankyou&state=${state}`
+    );
   }
 
   private performActionIfNotValid(status: any[]) {
@@ -135,5 +133,4 @@ export class FeedbackMainComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

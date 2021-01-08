@@ -6,6 +6,9 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { Observable } from 'rxjs';
+import { IFeedbackConfigResObj } from '../../types/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback-details-wrapper',
@@ -13,11 +16,11 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./feedback-details-wrapper.component.scss'],
 })
 export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
-  feedBackConfig;
-
+  feedbackConfig$: Observable<IFeedbackConfigResObj>;
   constructor(
     private _feedbackDetailsService: FeedbackDetailsService,
     private _reservationService: ReservationService,
+    private _hotelService: HotelService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
     private _snackBarService: SnackBarService,
@@ -32,17 +35,10 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
     this.getFeedBackConfig();
   }
 
-  initFeedbackConfigDS() {
-    this._feedbackDetailsService.initFeedbackConfigDS(this.feedBackConfig);
-  }
-
   getFeedBackConfig() {
-    this.$subscription.add(
-      this._feedbackDetailsService.getFeedback().subscribe((response) => {
-        this.feedBackConfig = response;
-        this.initFeedbackConfigDS();
-      })
-    );
+    this.feedbackConfig$ = this._feedbackDetailsService.getHotelFeedbackConfig({
+      hotelId: this._hotelService.hotelId,
+    });
   }
 
   saveFeedbackDetails() {
@@ -69,7 +65,9 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
             this._translateService
               .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
               .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg, '', { panelClass: 'success' });
+                this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
               });
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']

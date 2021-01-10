@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { GuestTableService } from '../../services/guest-table.service';
 import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
@@ -18,7 +17,6 @@ export class StayDetailsComponent implements OnInit {
   stayDetailsFG: FormGroup;
   feedbackConfig: FeedBackDetail;
   constructor(
-    private feedbackService: FeedbackService,
     private fb: FormBuilder,
     private guestTableService: GuestTableService,
   ) {}

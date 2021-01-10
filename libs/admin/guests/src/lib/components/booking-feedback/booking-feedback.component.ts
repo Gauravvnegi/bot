@@ -16,6 +16,7 @@ export class BookingFeedbackComponent implements OnInit {
   @Input() feedbackConfig: FeedBackDetail;
 
   feedbackData;
+  services;
   showMore: boolean = true;
   constructor(
     private feedbackService: FeedbackService,
@@ -28,12 +29,19 @@ export class BookingFeedbackComponent implements OnInit {
     if (!this.feedbackData) {
       this.guestTableService.getReservationFeedback('22040354-3e4c-4429-8676-591cd5c29ad7')
         .subscribe((response) => {
-          console.log(new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig))
           this.feedbackData = new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig);
+          this.setFeedbackData(new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig));
         }, ({ error }) => {
           console.log(error.message);
         });
     }
+  }
+
+  setFeedbackData(feedback: BookingFeedback) {
+    this.services = [];
+    feedback.departments.forEach((data) => {
+      this.services = [...this.services, ...data.services];
+    });
   }
 
   toggleShowMore() {

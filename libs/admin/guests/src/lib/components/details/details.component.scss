@@ -90,7 +90,10 @@
       }
     }
     .booking-id-wrapper {
-      // margin-top: 20px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
       .booking-id {
         text-align: center;
       }
@@ -99,7 +102,7 @@
         font-size: $font10;
         display: flex;
         align-items: center;
-        margin-top: 10px;
+        // margin-top: 10px;
         .booking-feedback {
           display: flex;
           align-items: center;

@@ -131,7 +131,7 @@
 			</div>
 		</div>
 		<hr class="data-seperator" />
-		<div *ngIf="feedbackData">
+		<div *ngIf="services" style="margin-bottom: 15px;">
 			<div class="container__title">
 				<p>Service Feedback</p>
 				<div *ngIf="showMore" (click)="toggleShowMore()" style="display: flex; align-items: center; cursor: pointer;font: normal normal medium 14px/19px Roboto;
@@ -148,39 +148,28 @@
 				</div>
 			</div>
 			<div *ngIf="!showMore">
-				<div class="feilds-wrapper">
-					<div class="feild width-quarter">
-						<mat-label class="label">Date/Time</mat-label>
-						<div class="value">
-							{{ feedbackData.getFeedbackDate() }}, {{ feedbackData.getFeedbackTime() }}
+				<div *ngFor="let service of services">
+					<div class="feilds-wrapper">
+						<div class="feild width-quarter">
+							<mat-label class="label">Name</mat-label>
+							<div class="value">
+								{{ service.name }}
+							</div>
+						</div>
+						<div class="feild width-quarter">
+							<mat-label class="label">Ratings</mat-label>
+							<div class="value" [style.color]="service.ratingColor.color">
+								{{ service.rating }} ({{ service.ratingColor.category }})
+							</div>
 						</div>
 					</div>
-					<div class="feild width-quarter">
-						<mat-label class="label">Ratings</mat-label>
-						<div class="value" [style.color]="feedbackData.ratingColor.color">
-							{{ feedbackData.rating }} ({{ feedbackData.ratingColor.category }})
+					<div class="feilds-wrapper" *ngIf="service.comments">
+						<div class="field">
+							<mat-label class="label">Comments</mat-label>
+							<div class="value">{{ service.comments }}</div>
 						</div>
 					</div>
-					<div class="feild width-quarter">
-						<mat-label class="label">Facilities</mat-label>
-						<div class="value" style="display: flex;">
-							<ng-container *ngFor="
-										let suggestion of rowData.feedback.suggestions.slice(
-											0,
-											2
-										)
-									">
-								<img style="height: 20px; margin-right: 10px;"
-									[src]="feedbackService.getServiceUrl(suggestion.id)" />
-							</ng-container>
-						</div>
-					</div>
-				</div>
-				<div class="fields-wrapper" *ngIf="feedbackData.comments">
-					<div class="field">
-						<mat-label class="label">Comments</mat-label>
-						<div class="value">{{ feedbackData.comments }}</div>
-					</div>
+					<hr class="data-seperator" />
 				</div>
 			</div>
 		</div>

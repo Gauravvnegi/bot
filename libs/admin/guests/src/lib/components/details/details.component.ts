@@ -23,6 +23,7 @@ export class DetailsComponent implements OnInit {
   detailsFG: FormGroup;
   details: GuestReservation;
   reservationData;
+  tabIndex = 0;
 
   @Output() onDetailsClose = new EventEmitter();
 
@@ -70,6 +71,10 @@ export class DetailsComponent implements OnInit {
 
   closeDetails() {
     this.onDetailsClose.next(true);
+  }
+
+  gotoStayDetails() {
+    this.tabIndex = 2;
   }
 
   get primaryGuest() {

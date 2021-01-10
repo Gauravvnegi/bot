@@ -1,38 +1,47 @@
 @import 'main';
 
-
 :host ::ng-deep .p-input-icon-right {
+  width: 100%;
+  input {
+    border: none;
+    padding: 5px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
     width: 100%;
-    input {
-      border: none;
-      padding: 5px;
-      border: 1px solid #D9D9D9;
-      border-radius: 5px;
-      width: 100%;
-      font-size: 14px;
-      height: 42px;
-      &::placeholder {
-        font-style: italic;
-        font-size: 12px;
-        @media only screen and (max-width: 1250px) {
-          font-size: 10px;
-        }
-        @media only screen and (max-width: 1100px) {
-          font-size: 8px;
-        }
+    font-size: 14px;
+    height: 42px;
+    &::placeholder {
+      font-style: italic;
+      font-size: 12px;
+      @media only screen and (max-width: 1250px) {
+        font-size: 10px;
       }
-      &:focus {
-        border: 2px solid $primary-purple;
-        box-shadow: none;
-      }
-      &:hover{
-        border-color: $primary-purple;
+      @media only screen and (max-width: 1100px) {
+        font-size: 8px;
       }
     }
+    &:focus {
+      border: 2px solid $primary-purple;
+      box-shadow: none;
+    }
+    &:hover {
+      border-color: $primary-purple;
+    }
   }
+}
 
 .global__search {
   position: relative;
+  .cross_icon {
+    color: #c5c5c5;
+    font-size: $font20;
+    position: absolute;
+    right: 0;
+    top: 25%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
   &__dropdown {
     position: absolute;
     background-color: white;

@@ -7,10 +7,9 @@ import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'admin-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.scss']
+  styleUrls: ['./search-bar.component.scss'],
 })
 export class SearchBarComponent implements OnInit {
-
   @Input() parentForm: FormGroup;
   @Input() name: string;
 
@@ -18,9 +17,9 @@ export class SearchBarComponent implements OnInit {
 
   searchOptions = [];
   searchDropdownVisible: boolean = false;
-  constructor(
-    private searchService: SearchService,
-  ) { }
+  constructor(private searchService: SearchService) {}
+
+  searchValue = false;
 
   ngOnInit(): void {
     this.registerListeners();
@@ -32,7 +31,7 @@ export class SearchBarComponent implements OnInit {
 
   listenForSearchChanges(): void {
     const formChanges$ = this.parentForm.valueChanges;
-
+    console.log('');
     const findSearch$ = ({ search }) =>
       this.searchService.search({
         search,
@@ -49,21 +48,32 @@ export class SearchBarComponent implements OnInit {
           )
         )
       )
-      .subscribe((response) => {
-        if (response.length) {
-          this.searchOptions = response;
-          this.searchDropdownVisible = true;
-        } else {
-          this.searchOptions = [];
-          this.searchDropdownVisible = false;
+      .subscribe(
+        (response) => {
+          if (response.length) {
+            this.searchOptions = response;
+            this.searchDropdownVisible = true;
+            this.searchValue = true;
+          } else {
+            this.searchOptions = [];
+            this.searchDropdownVisible = false;
+            this.searchValue = false;
+          }
+        },
+        ({ error }) => {
+          console.log(error.message);
         }
-      }, ({ error }) => {
-        console.log(error.message);
-      });
+      );
   }
 
   setOptionSelection(value) {
     this.searchDropdownVisible = false;
     this.selectedSearchOption.next(value);
+  }
+
+  clearSearch() {
+    this.parentForm.reset();
+    this.searchOptions = [];
+    this.searchDropdownVisible = false;
   }
 }

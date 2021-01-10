@@ -20,10 +20,25 @@ export class DetailsComponent implements OnInit {
   @Input() guestId;
   @Input() bookingId;
   @Input() data: Reservation;
+  @Input() tabKey = 'guest_details';
   detailsFG: FormGroup;
   details: GuestReservation;
   reservationData;
-  tabIndex = 0;
+
+  detailsConfig = [
+    {
+      key: 'guest_details',
+      index: 0,
+    },
+    {
+      key: 'document_details',
+      index: 1,
+    },
+    {
+      key: 'stay_details',
+      index: 2,
+    },
+  ];
 
   @Output() onDetailsClose = new EventEmitter();
 
@@ -74,7 +89,7 @@ export class DetailsComponent implements OnInit {
   }
 
   gotoStayDetails() {
-    this.tabIndex = 2;
+    // this.tabIndex = 2;
   }
 
   get primaryGuest() {
@@ -95,5 +110,16 @@ export class DetailsComponent implements OnInit {
     count += this.details.presentBookings.length;
     count += this.details.upcomingBookings.length;
     return count;
+  }
+
+  setTabKey(key: string) {
+    this.tabKey = key;
+  }
+
+  get tabIndex() {
+    let { index } = this.detailsConfig.find(
+      (tabConfig) => tabConfig.key == this.tabKey
+    );
+    return index ? index : 0;
   }
 }

@@ -30,7 +30,7 @@
         <div class="name">
           <span>Latest Booking</span>
         </div>
-        <div class="booking-id-wrapper" (click)="gotoStayDetails();">
+        <div class="booking-id-wrapper" (click)="setTabKey('stay_details');">
           <div>{{ data.booking.bookingNumber }}</div>
           <div *ngIf="['COMPLETED'].includes(feedback.status)" class="feedback">
             <!-- <p class="label">Feedback :</p> -->

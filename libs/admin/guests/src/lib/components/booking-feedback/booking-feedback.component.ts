@@ -29,7 +29,8 @@ export class BookingFeedbackComponent implements OnInit {
 
   loadFeedbackData(reservationId) {
     if (!this.feedbackData) {
-      this.guestTableService.getReservationFeedback('09335387-1fd6-484d-a5b5-91a7c823d2d0')
+      // this.guestTableService.getReservationFeedback('09335387-1fd6-484d-a5b5-91a7c823d2d0')
+      this.guestTableService.getReservationFeedback(reservationId)
         .subscribe((response) => {
           if (response) {
             this.feedbackData = new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig);

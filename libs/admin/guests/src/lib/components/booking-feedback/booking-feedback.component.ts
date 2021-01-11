@@ -3,6 +3,7 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
 import { GuestTableService } from '../../services/guest-table.service';
 import { BookingFeedback } from '../../data-models/feedback.model';
 import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-booking-feedback',
@@ -21,6 +22,7 @@ export class BookingFeedbackComponent implements OnInit {
   constructor(
     private feedbackService: FeedbackService,
     private guestTableService: GuestTableService,
+    private _snackbarService: SnackBarService
   ) { }
 
   ngOnInit(): void {}
@@ -32,7 +34,7 @@ export class BookingFeedbackComponent implements OnInit {
           this.feedbackData = new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig);
           this.setFeedbackData(new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig));
         }, ({ error }) => {
-          console.log(error.message);
+          this._snackbarService.openSnackBarAsText(error.message);
         });
     }
   }

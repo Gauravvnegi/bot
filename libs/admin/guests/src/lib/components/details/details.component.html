@@ -31,7 +31,7 @@
           <span>Latest Booking</span>
         </div>
         <div class="booking-id-wrapper" (click)="setTabKey('stay_details');">
-          <div>{{ data.booking.bookingNumber }}</div>
+          <div style="margin-right: 10px;">{{ data.booking.bookingNumber }}</div>
           <div *ngIf="['COMPLETED'].includes(feedback.status)" class="feedback">
             <!-- <p class="label">Feedback :</p> -->
             <div class="booking-feedback">
@@ -60,7 +60,7 @@
               </div>
             </div>
           </div>
-          <div>{{ data.rooms.roomNumber }}-{{ data.rooms.type }}</div>
+          <div style="margin-right: 10px;">{{ data.rooms.roomNumber }}-{{ data.rooms.type }}</div>
         </div>
       </div>
     </div>

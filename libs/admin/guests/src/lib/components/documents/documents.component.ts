@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ReservationService } from '../../../../../reservation/src/lib/services/reservation.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-documents',
@@ -20,6 +21,7 @@ export class DocumentsComponent implements OnInit {
   hotelId: string;
   constructor(
     private _reservationService: ReservationService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +37,8 @@ export class DocumentsComponent implements OnInit {
       .subscribe((response)=> {
         this.hotelId = response.hotel.id;
         this.getCountriesList();
+      }, ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
       })
   }
 

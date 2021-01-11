@@ -45,7 +45,8 @@ export class DetailsComponent implements OnInit {
   constructor(
     private guestTableService: GuestTableService,
     private fb: FormBuilder,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
+    private _snackBarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +62,9 @@ export class DetailsComponent implements OnInit {
         this.details = new GuestReservation().deserialize(response);
         this.initFG();
         this.loadReservation();
+      },({ error }) => {
+        this._snackBarService.openSnackBarAsText(error.message);
+        this.closeDetails();
       });
   }
 
@@ -69,6 +73,9 @@ export class DetailsComponent implements OnInit {
       .subscribe((response) => {
         this.reservationData = new Reservation().deserialize(response);
         this.isReservationDetailFetched = true;
+      }, ({ error }) => {
+        this._snackBarService.openSnackBarAsText(error.message);
+        this.closeDetails();
       })
   }
 

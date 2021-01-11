@@ -12,9 +12,9 @@
                     }} ({{ rowData.booking.getDaysAndNights().nights }}N |
 					{{ rowData.booking.getDaysAndNights().days }}D)
 				</p>
-				<div class="header-seperator"></div>
 				<div class="booking-id-wrapper">
 					<div *ngIf="['COMPLETED'].includes(rowData.feedback.status)" class="feedback">
+						<div class="header-seperator"></div>
 						<!-- <p class="label">Feedback :</p> -->
 						<div class="booking-feedback">
 							<p class="number" [ngClass]="{
@@ -23,16 +23,18 @@
                                 }">
 								{{ rowData.feedback.rating }}
 							</p>
-							<ng-container *ngFor="
-                                    let suggestion of rowData.feedback.suggestions.slice(
-                                        0,
-                                        2
-                                    )
-                                ">
-								<img class="feedback-icon" [ngClass]="{
-                                        'status-image-reject': rowData.feedback.rating < 5,
-                                        'status-image-success': rowData.feedback.rating >= 5
-                                    }" [src]="feedbackService.getServiceUrl(suggestion.id)" />
+							<ng-container *ngIf="rowData.feedback.suggestions">
+								<ng-container *ngFor="
+										let suggestion of rowData.feedback.suggestions.slice(
+											0,
+											2
+										)
+									">
+									<img class="feedback-icon" [ngClass]="{
+											'status-image-reject': rowData.feedback.rating < 5,
+											'status-image-success': rowData.feedback.rating >= 5
+										}" [src]="feedbackService.getServiceUrl(suggestion.id)" />
+								</ng-container>
 							</ng-container>
 
 							<div *ngIf="rowData.feedback.comments" [ngClass]="{
@@ -108,7 +110,7 @@
 						{{ feedbackData.rating }} ({{ feedbackData.ratingColor.category }})
 					</div>
 				</div>
-				<div class="feild width-quarter">
+				<div class="feild width-quarter" *ngIf="rowData.feedback.suggestions">
 					<mat-label class="label">Facilities</mat-label>
 					<div class="value" style="display: flex;">
 						<ng-container *ngFor="

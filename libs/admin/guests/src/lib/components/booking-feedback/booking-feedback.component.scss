@@ -1,0 +1,149 @@
+@import 'main';
+
+.width-quarter {
+  width: 33%;
+}
+
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  // img {
+  //   margin-left: 10px;
+  // }
+}
+
+.feilds-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 30px 0px;
+  .feild {
+    .label {
+      letter-spacing: 0.72px;
+      font-size: $font12;
+      color: $primary-gray;
+    }
+    .value {
+      letter-spacing: 0.84px;
+      font-size: $font14;
+      margin-top: $margin10;
+      font-weight: $medium;
+    }
+  }
+}
+
+.data-seperator {
+  border: 2px solid #4b56c0;
+  margin: $margin20 0px;
+  opacity: 0.1;
+}
+
+:host ::ng-deep .mat-head {
+  font-size: $font16;
+  font-weight: $bolder;
+  color: #002046;
+  letter-spacing: 0.96px;
+}
+
+:host ::ng-deep .container__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $primary-black;
+  font-weight: 500;
+  letter-spacing: 0.84px;
+  margin-right: 0 !important;
+}
+
+:host ::ng-deep .expand-icon {
+  color: $primary-purple;
+}
+
+:host ::ng-deep .mat-expansion-indicator {
+  display: none !important;
+}
+
+.accordian__header {
+  background: #e8eef5e6 0% 0% no-repeat padding-box;
+}
+
+:host ::ng-deep .mat-expansion-panel-header:focus {
+  background: #e8eef5e6 0% 0% no-repeat padding-box;
+}
+
+.booking__container {
+  margin: 7.5px 0;
+}
+
+.booking-id-wrapper {
+  // margin-top: 20px;
+  .booking-id {
+    text-align: center;
+  }
+  .feedback {
+    color: white;
+    font-size: $font10;
+    display: flex;
+    align-items: center;
+    .booking-feedback {
+      display: flex;
+      align-items: center;
+      background-color: #f5f5f5;
+      justify-content: space-around;
+      padding: 2px;
+      margin: 0 10px;
+      // margin-top: 7px;
+      border-radius: 25px;
+      position: relative;
+      &:hover {
+        cursor: pointer;
+        .feedback-msg {
+          display: block;
+        }
+      }
+      .feedback-msg {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        font-size: 12px;
+        color: $dark-grey;
+        background-color: white;
+        left: 0%;
+        padding: 7px;
+        box-shadow: 0px 0px 5px 0px lightgray;
+        border-radius: 5px;
+        display: none;
+      }
+      .feedback-icon {
+        height: 10px;
+        margin: 0 2px;
+      }
+      .number {
+        padding: 2px;
+        color: white;
+        text-align: center;
+        width: 15px;
+        border-radius: 50%;
+        font-size: 9px;
+        margin: 0 2px;
+      }
+      @media screen and (max-width: 800px) {
+        margin: 0;
+        margin-top: 7px;
+        .feedback-icon {
+          height: 12px;
+        }
+        .number {
+          font-size: 10px;
+          padding: 2px;
+          width: 15px;
+        }
+      }
+    }
+  }
+}
+
+.header-seperator {
+  height: 20px;
+  border: 1px solid #b8b8b8;
+}

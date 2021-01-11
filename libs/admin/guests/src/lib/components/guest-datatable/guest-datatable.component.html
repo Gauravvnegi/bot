@@ -80,9 +80,6 @@
           *ngIf="tabFilterItems[tabFilterIdx].chips.length"
           class="caption__wrapper--buttons"
         >
-          <!-- <button class="filter">
-            All
-          </button> -->
           <div class="button__wrapper">
             <mat-chip-list
               multiple
@@ -133,17 +130,6 @@
             </mat-chip-list>
             <img src="assets/svg/Filter-Icon.svg" />
           </div>
-
-          <!-- <div
-            class="button__wrapper"
-            *ngFor="let quickReplyType of quickReplyTypes"
-          >
-            <button
-              pButton
-              type="button"
-              [label]="quickReplyType.label"
-            ></button>
-          </div> -->
         </div>
       </form>
     </div>
@@ -187,9 +173,21 @@
           pInputText
           type="text"
           (input)="
-            onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
+            onFilterTypeTextChange(
+              $event.target.value,
+              'guests.primaryGuest.firstName'
+            )
           "
           class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
         />
       </th>
       <th class="table-search-head">
@@ -206,22 +204,19 @@
         <input
           pInputText
           type="text"
-          (input)="
-            onFilterTypeTextChange(
-              $event.target.value,
-              'guests.primaryGuest.firstName'
-            )
-          "
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
           class="p-column-filter"
+          disabled="true"
         />
       </th>
       <th class="table-search-head">
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'guestAttributes.transactionUsage')
+          "
           class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">
@@ -269,9 +264,45 @@
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td>
+      <td class="guest">
+        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+        <b style="color: #4b56c0;">{{
+          rowData.guests.getSecGuestDisplayConfig().countString
+        }}</b>
+        <div
+          *ngIf="rowData.guests.secondaryGuest.length > 0"
+          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        >
+          <div
+            *ngFor="
+              let secondaryGuest of rowData.guests.secondaryGuest;
+              let guestIdx = index
+            "
+          >
+            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+          </div>
+        </div>
+      </td>
+      <!-- <td>
         <p class="tabel-room-no status-text-success">
           {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
+        </p>
+      </td> -->
+      <td>
+        <p class="arrival-date">
+          {{ rowData.booking.getArrivalDate() }}-{{
+            rowData.booking.getDepartureDate()
+          }}
+        </p>
+
+        <p class="arrival-time">
+          {{ rowData.booking.getArrivalTime() }}-{{
+            rowData.booking.getDepartureTime()
+          }}
+        </p>
+        <p class="arrival-time">
+          {{ rowData.booking.getDaysAndNights().nights }}N |
+          {{ rowData.booking.getDaysAndNights().days }}D
         </p>
       </td>
       <td>
@@ -315,42 +346,6 @@
           </div>
         </div>
       </td>
-      <td class="guest">
-        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
-        <b style="color: #4b56c0;">{{
-          rowData.guests.getSecGuestDisplayConfig().countString
-        }}</b>
-        <div
-          *ngIf="rowData.guests.secondaryGuest.length > 0"
-          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
-        >
-          <div
-            *ngFor="
-              let secondaryGuest of rowData.guests.secondaryGuest;
-              let guestIdx = index
-            "
-          >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <p class="arrival-date">
-          {{ rowData.booking.getArrivalDate() }}-{{
-            rowData.booking.getDepartureDate()
-          }}
-        </p>
-
-        <p class="arrival-time">
-          {{ rowData.booking.getArrivalTime() }}-{{
-            rowData.booking.getDepartureTime()
-          }}
-        </p>
-        <p class="arrival-time">
-          {{ rowData.booking.getDaysAndNights().nights }}N |
-          {{ rowData.booking.getDaysAndNights().days }}D
-        </p>
-      </td>
       <td class="amount">
         <span
           [ngClass]="{
@@ -363,12 +358,17 @@
         >/{{ rowData.payment.totalAmount }}
       </td>
       <td class="package">
-        <span
-          *ngIf="
-            rowData.packages.getPaidPackagesLabels().length;
-            else emptyCell
-          "
-          >{{ rowData.packages.getPaidPackagesLabels() }}
+        <span>{{ rowData.guestAttributes.transactionUsage }}
+        </span>
+      </td>
+
+      <td class="package">
+        <span>{{ rowData.guestAttributes.overAllNps }}
+        </span>
+      </td>
+
+      <td class="package">
+        <span>{{ rowData.guestAttributes.churnProbalilty }}
         </span>
       </td>
 

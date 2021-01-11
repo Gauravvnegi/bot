@@ -12,9 +12,9 @@
                     }} ({{ rowData.booking.getDaysAndNights().nights }}N |
 					{{ rowData.booking.getDaysAndNights().days }}D)
 				</p>
+				<div class="header-seperator" *ngIf="['COMPLETED'].includes(rowData.feedback.status)"></div>
 				<div class="booking-id-wrapper">
 					<div *ngIf="['COMPLETED'].includes(rowData.feedback.status)" class="feedback">
-						<div class="header-seperator"></div>
 						<!-- <p class="label">Feedback :</p> -->
 						<div class="booking-feedback">
 							<p class="number" [ngClass]="{

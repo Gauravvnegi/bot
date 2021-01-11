@@ -52,8 +52,8 @@
           <div style="display: flex; align-items: center;">
             <div style="width: 130px;color: rgb(199, 196, 196); font-size: 14px;">Template:</div>
             <mat-form-field>
-              <mat-select formControlName="templateId">
-                <mat-option
+              <mat-select formControlName="templateId" (selectionChange)="fetchTemplate($event.value)">
+                <mat-option *ngIf="templates.ids.length === 0"
                   value=""
                   >No data</mat-option>
                 <mat-option

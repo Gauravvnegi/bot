@@ -105,9 +105,9 @@ export class NotificationComponent implements OnInit {
         },
       },
       messageTypes: [
-        { label: 'Precheckin', value: 'precheckin', templeteIds: [] },
-        { label: 'Checkin', value: 'checkin', templeteIds: [] },
-        { label: 'Checkout', value: 'checkout', templeteIds: [] },
+        { label: 'Precheckin', value: 'precheckin', templateIds: [{ label: 1234, value: 1234 }] },
+        { label: 'Checkin', value: 'checkin', templateIds: [] },
+        { label: 'Checkout', value: 'checkout', templateIds: [] },
       ],
     });
   }
@@ -177,6 +177,7 @@ export class NotificationComponent implements OnInit {
         this.notificationForm
           .get('attachments')
           .patchValue([response.fileDownloadUri]);
+        this._snackbarService.openSnackBarAsText('Attachment uploaded', '', { panelClass: 'success' });
       },
       ({ error }) => {
         this._snackbarService.openSnackBarAsText(error.message);
@@ -189,9 +190,11 @@ export class NotificationComponent implements OnInit {
   }
 
   changeTemplateIds(method): void {
-    this.templates.ids = this.config.messageTypes.filter(
+    let data = this.config.messageTypes.filter(
       (d) => d.value === method
-    )['templateIds'];
+    )[0];
+    this.templates.ids = data['templateIds'];
+    this.modifyControl(this.templates.ids.length > 0, 'templateId');
   }
 
   sendMessage(): void {
@@ -227,6 +230,16 @@ export class NotificationComponent implements OnInit {
     let value = event ? event.split(',') : [];
     this.roomNumbers.patchValue(value);
     this.roomCsvReader.nativeElement.value = '';
+  }
+
+  fetchTemplate(templateId) {
+    let journey = this.notificationForm.get('messageType').value;
+    this.requestService.getTemplate(this.hotelId, templateId, journey.toUpperCase())
+      .subscribe((response) => {
+        this.notificationForm.get('message').patchValue(response.template);
+      }, ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      })
   }
 
   modifyControl(event: boolean, control: string): void {

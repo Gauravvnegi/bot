@@ -34,6 +34,16 @@ export class RequestService extends ApiService {
     );
   }
 
+  getTemplate(
+    hotelId: string,
+    templateId: string,
+    journey: string
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/templates/${templateId}?journey=${journey}`
+    );
+  }
+
   validateRequestData(fg: FormGroup, channelSelection) {
     let status = [];
 

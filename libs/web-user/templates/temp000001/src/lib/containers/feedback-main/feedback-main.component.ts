@@ -11,6 +11,7 @@ import { forkJoin, of, Subscription, Observable } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { IFeedbackConfigResObj } from '../../types/feedback';
+import { FeedbackDetailsComponent } from '../feedback-details/feedback-details.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
@@ -27,6 +28,8 @@ export class FeedbackMainComponent implements OnInit {
   feedbackConfig$: Observable<IFeedbackConfigResObj>;
 
   @ViewChild('saveButton') saveButton;
+  @ViewChild('feedbackDetail')
+  feedbackDetailCmp: FeedbackDetailsComponent;
   constructor(
     private _reservationService: ReservationService,
     private _hotelService: HotelService,
@@ -85,14 +88,14 @@ export class FeedbackMainComponent implements OnInit {
     }
 
     let value = this.parentForm.getRawValue();
-    let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail,
-      this._reservationService.reservationData.guestDetails.primaryGuest.id
-    );
 
     this.$subscription.add(
       this._feedbackDetailsService
-        .addFeedback(this._reservationService.reservationId, data)
+        .addFeedback(this._reservationService.reservationId, {
+          ...value.feedbackDetail,
+          journey: this._hotelService.currentJourney,
+          quickServices: this.feedbackDetailCmp.selectedQuickServices,
+        })
         .subscribe(
           (response) => {
             // this._snackBarService.openSnackBarAsText('Feedback successful', '', {

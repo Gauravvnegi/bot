@@ -5,6 +5,7 @@
   <hospitality-bot-header [headerName]="'Feedback'"></hospitality-bot-header>
   <div class="wrapper">
     <hospitality-bot-feedback-details
+      #feedbackDetail
       *ngIf="feedBackConfig"
       [parentForm]="parentForm"
       [reservationData]="reservationDetails"

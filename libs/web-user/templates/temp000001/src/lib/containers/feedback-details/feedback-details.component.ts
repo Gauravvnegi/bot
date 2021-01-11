@@ -37,7 +37,7 @@ export class FeedbackDetailsComponent implements OnInit {
     service;
   };
 
-  suggestionArray = new Array<any>();
+  selectedQuickServices = new Array<any>();
 
   constructor(
     private _fb: FormBuilder,
@@ -57,19 +57,18 @@ export class FeedbackDetailsComponent implements OnInit {
     });
   }
 
-  setHotelServices(event) {
-    let serviceIndex = this.suggestionArray.findIndex(
-      (suggestion) => suggestion.serviceId === event.id
+  setHotelServices(service) {
+    let serviceIndex = this.selectedQuickServices.findIndex(
+      (suggestion) => suggestion.serviceId === service.id
     );
     if (serviceIndex < 0) {
-      this.suggestionArray.push({
-        serviceId: event.id,
-        serviceName: event.label,
+      this.selectedQuickServices.push({
+        serviceId: service.id,
+        serviceName: service.label,
       });
     } else {
-      this.suggestionArray.splice(serviceIndex, 1);
+      this.selectedQuickServices.splice(serviceIndex, 1);
     }
-    this._feedbackDetailsService.selectedServices = this.suggestionArray;
   }
 
   onRatingSelection(

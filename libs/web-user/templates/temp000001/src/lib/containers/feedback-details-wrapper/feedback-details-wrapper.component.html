@@ -1,5 +1,6 @@
 <div *ngIf="isRendered && feedbackConfig$ | async as feedBackConfig">
   <hospitality-bot-feedback-details
+    #feedbackDetail
     *ngIf="feedBackConfig"
     [parentForm]="parentForm"
     [reservationData]="reservationData"

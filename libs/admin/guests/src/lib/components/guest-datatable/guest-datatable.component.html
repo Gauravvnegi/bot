@@ -325,17 +325,19 @@
           >
             {{ rowData.feedback.rating }}
           </p>
-          <ng-container
-            *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
-          >
-            <img
-              class="feedback-icon"
-              [ngClass]="{
-                'status-image-reject': rowData.feedback.rating < 5,
-                'status-image-success': rowData.feedback.rating >= 5
-              }"
-              [src]="feedbackService.getServiceUrl(suggestion.id)"
-            />
+          <ng-container *ngIf="rowData.feedback.suggestions">
+            <ng-container
+              *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
+            >
+              <img
+                class="feedback-icon"
+                [ngClass]="{
+                  'status-image-reject': rowData.feedback.rating < 5,
+                  'status-image-success': rowData.feedback.rating >= 5
+                }"
+                [src]="feedbackService.getServiceUrl(suggestion.id)"
+              />
+            </ng-container>
           </ng-container>
           <div
             *ngIf="rowData.feedback.comments"

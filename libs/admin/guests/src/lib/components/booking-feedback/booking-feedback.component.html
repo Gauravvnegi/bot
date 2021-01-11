@@ -94,7 +94,7 @@
 				</div>
 			</ng-container>
 		</div>
-		<hr class="data-seperator" />
+		<hr class="data-seperator" *ngIf="feedbackData" />
 		<div *ngIf="feedbackData">
 			<div class="container__title"><p>Journey Feedback</p></div>
 			<div class="feilds-wrapper">
@@ -110,11 +110,11 @@
 						{{ feedbackData.rating }} ({{ feedbackData.ratingColor.category }})
 					</div>
 				</div>
-				<div class="feild width-quarter" *ngIf="rowData.feedback.suggestions">
+				<div class="feild width-quarter" *ngIf="feedbackData.suggestions">
 					<mat-label class="label">Facilities</mat-label>
 					<div class="value" style="display: flex;">
 						<ng-container *ngFor="
-                                    let suggestion of rowData.feedback.suggestions.slice(
+                                    let suggestion of feedbackData.suggestions.slice(
                                         0,
                                         2
                                     )
@@ -132,7 +132,7 @@
 				</div>
 			</div>
 		</div>
-		<hr class="data-seperator" />
+		<hr class="data-seperator" *ngIf="services" />
 		<div *ngIf="services" style="margin-bottom: 15px;">
 			<div class="container__title">
 				<p>Service Feedback</p>
@@ -150,7 +150,7 @@
 				</div>
 			</div>
 			<div *ngIf="!showMore">
-				<div *ngFor="let service of services">
+				<div *ngFor="let service of services; let i=index;">
 					<div class="feilds-wrapper">
 						<div class="feild width-quarter">
 							<mat-label class="label">Name</mat-label>
@@ -171,7 +171,7 @@
 							<div class="value">{{ service.comments }}</div>
 						</div>
 					</div>
-					<hr class="data-seperator" />
+					<hr class="data-seperator" *ngIf="i < (services.length-1)" />
 				</div>
 			</div>
 		</div>

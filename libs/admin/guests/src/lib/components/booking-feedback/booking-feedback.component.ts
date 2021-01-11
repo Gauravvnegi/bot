@@ -29,10 +29,12 @@ export class BookingFeedbackComponent implements OnInit {
 
   loadFeedbackData(reservationId) {
     if (!this.feedbackData) {
-      this.guestTableService.getReservationFeedback('22040354-3e4c-4429-8676-591cd5c29ad7')
+      this.guestTableService.getReservationFeedback('09335387-1fd6-484d-a5b5-91a7c823d2d0')
         .subscribe((response) => {
-          this.feedbackData = new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig);
-          this.setFeedbackData(new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig));
+          if (response) {
+            this.feedbackData = new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig);
+            this.setFeedbackData(new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig));
+          }
         }, ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);
         });

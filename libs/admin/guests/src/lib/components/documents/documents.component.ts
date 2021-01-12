@@ -36,13 +36,15 @@ export class DocumentsComponent implements OnInit {
   }
 
   getHotelId() {
-    this._reservationService.getReservationDetails(this.bookingId)
-      .subscribe((response)=> {
+    this._reservationService.getReservationDetails(this.bookingId).subscribe(
+      (response) => {
         this.hotelId = response.hotel.id;
         this.getCountriesList();
-      }, ({ error }) => {
+      },
+      ({ error }) => {
         this._snackbarService.openSnackBarAsText(error.message);
-      })
+      }
+    );
   }
 
   getCountriesList() {
@@ -69,19 +71,14 @@ export class DocumentsComponent implements OnInit {
       if (guest.get('id').value === value) {
         this.selectedGuestId = value;
         this.selectedGuestGroup = guest;
-        this.getDocumentsByCountry(
-          guest.get('nationality').value
-        );
+        this.getDocumentsByCountry(guest.get('nationality').value);
       }
     });
   }
 
   getDocumentsByCountry(nationality) {
     this._reservationService
-      .getDocumentsByNationality(
-        this.hotelId,
-        nationality
-      )
+      .getDocumentsByNationality(this.hotelId, nationality)
       .subscribe((response) => {
         this.documentsList = response.documentList;
         // this._adminDetailsService.guestNationality = response.verifyAllDocuments;
@@ -90,7 +87,7 @@ export class DocumentsComponent implements OnInit {
 
   downloadDocs(documents) {
     let urls = [];
-    
+
     documents.forEach((doc) => {
       urls.push(doc.frontUrl);
       if (doc.documentType != 'VISA') {
@@ -105,11 +102,18 @@ export class DocumentsComponent implements OnInit {
       fileName = fileName.slice(index + 1);
       fileName = decodeURIComponent(fileName);
       JSZipUtils.getBinaryContent(url, (err, data) => {
+        if (err) {
+          this._snackbarService.openSnackBarAsText(err);
+          throw err;
+        }
         zipFile.file(fileName, data, { binary: true });
         count++;
         if (count === urls.length) {
-          zipFile.generateAsync({ type: 'blob' }).then(content => {
-            saveAs(content, `${this.detailsData.guests.primaryGuest.firstName}.zip`);
+          zipFile.generateAsync({ type: 'blob' }).then((content) => {
+            saveAs(
+              content,
+              `${this.detailsData.guests.primaryGuest.firstName}.zip`
+            );
           });
         }
       });

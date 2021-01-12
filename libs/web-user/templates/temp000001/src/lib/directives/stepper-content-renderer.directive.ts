@@ -5,15 +5,15 @@ import {
 } from '@angular/cdk/layout';
 import {
   ChangeDetectorRef,
+  ComponentFactory,
   ComponentFactoryResolver,
   ComponentRef,
   Directive,
   Input,
   OnChanges,
   ViewContainerRef,
-  ComponentFactory,
 } from '@angular/core';
-import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
+import { FormGroup } from '@angular/forms';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { BillSummaryDetailsWrapperComponent } from '../containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
@@ -24,7 +24,7 @@ import { HealthDeclarationWrapperComponent } from '../containers/health-declarat
 import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
 import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
-import { FormGroup } from '@angular/forms';
+import { Temp000001StepperComponent } from '../presentational/temp000001-stepper/temp000001-stepper.component';
 
 enum componentMap {
   'stay-details-wrapper' = 'stay-details-wrapper',
@@ -76,7 +76,7 @@ export class StepperContentRendererDirective implements OnChanges {
   @Input() parentForm;
   @Input() dataToPopulate;
 
-  private _stepperComponentObj: ComponentRef<StepperComponent>;
+  private _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
   private _isStepperRendered: boolean = false;
 
   constructor(
@@ -104,8 +104,8 @@ export class StepperContentRendererDirective implements OnChanges {
   }
 
   createStepperFactory(): void {
-    const stepperFactoryComponent: ComponentFactory<StepperComponent> = this._resolver.resolveComponentFactory(
-      StepperComponent
+    const stepperFactoryComponent: ComponentFactory<Temp000001StepperComponent> = this._resolver.resolveComponentFactory(
+      Temp000001StepperComponent
     );
 
     this._stepperComponentObj = this._container.createComponent(

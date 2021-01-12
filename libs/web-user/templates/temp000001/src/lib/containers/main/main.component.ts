@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { Subscription } from 'rxjs';
+import { Temp000001StepperComponent } from '../../presentational/temp000001-stepper/temp000001-stepper.component';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class MainComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
-  @ViewChild('stepperComponent') stepperComponent: StepperComponent;
+  @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
 
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);

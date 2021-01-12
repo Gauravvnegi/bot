@@ -96,7 +96,7 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
     DefaultAmenityService,
     ThankYouService,
     UtilityService,
-    GSTService
+    GSTService,
   ],
 })
 export class Temp000001Module {}

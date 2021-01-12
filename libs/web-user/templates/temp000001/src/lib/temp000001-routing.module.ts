@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { AddGstComponent } from './containers/add-gst/add-gst.component';
 import { AmenitiesComponent } from './containers/amenities/amenities.component';
 import { ApplicationStatusComponent } from './containers/application-status/application-status.component';
 import { BillSummaryDetailsWrapperComponent } from './containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
@@ -35,7 +36,7 @@ import { SummaryWrapperComponent } from './containers/summary-wrapper/summary-wr
 import { SummaryComponent } from './containers/summary/summary.component';
 import { Temp000001Component } from './containers/temp000001/temp000001.component';
 import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
-import { AddGstComponent } from './containers/add-gst/add-gst.component';
+import { Temp000001StepperComponent } from './presentational/temp000001-stepper/temp000001-stepper.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -133,5 +134,6 @@ export class Temp000001RoutingModule {
     ThankYouMainComponent,
     PaidAmenitiesComponent,
     AddGstComponent,
+    Temp000001StepperComponent,
   ];
 }

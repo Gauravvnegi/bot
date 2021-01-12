@@ -274,14 +274,14 @@
         <p
           class="tabel-room-no"
           [ngClass]="{
-            'status-text-success': rowData.booking.roomStatus === 'CL',
-            'status-text-reject': rowData.booking.roomStatus === 'DI',
-            'status-text-initiated': rowData.booking.roomStatus === 'IN',
-            'status-text-pending': rowData.booking.roomStatus === 'PI',
-            'status-opacity-success': rowData.booking.roomStatus === 'CL',
-            'status-opacity-reject': rowData.booking.roomStatus === 'DI',
-            'status-opacity-initiated': rowData.booking.roomStatus === 'IN',
-            'status-opacity-pending': rowData.booking.roomStatus === 'PI'
+            'status-text-success': rowData.rooms.status === 'CL',
+            'status-text-reject': rowData.rooms.status === 'DI',
+            'status-text-initiated': rowData.rooms.status === 'IN',
+            'status-text-pending': rowData.rooms.status === 'IP',
+            'status-opacity-success': rowData.rooms.status === 'CL',
+            'status-opacity-reject': rowData.rooms.status === 'DI',
+            'status-opacity-initiated': rowData.rooms.status === 'IN',
+            'status-opacity-pending': rowData.rooms.status === 'IP'
           }"
         >
           {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}

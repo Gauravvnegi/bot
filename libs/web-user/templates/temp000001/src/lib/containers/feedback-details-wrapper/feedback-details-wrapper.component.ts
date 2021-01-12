@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
@@ -6,6 +6,10 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { FeedbackDetailsService } from './../../../../../../shared/src/lib/services/feedback-details.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { Observable } from 'rxjs';
+import { IFeedbackConfigResObj } from '../../types/feedback';
+import { FeedbackDetailsComponent } from '../feedback-details/feedback-details.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-details-wrapper',
@@ -13,11 +17,13 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./feedback-details-wrapper.component.scss'],
 })
 export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
-  feedBackConfig;
-
+  feedbackConfig$: Observable<IFeedbackConfigResObj>;
+  @ViewChild('feedbackDetail')
+  feedbackDetailCmp: FeedbackDetailsComponent;
   constructor(
     private _feedbackDetailsService: FeedbackDetailsService,
     private _reservationService: ReservationService,
+    private _hotelService: HotelService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
     private _snackBarService: SnackBarService,
@@ -32,17 +38,10 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
     this.getFeedBackConfig();
   }
 
-  initFeedbackConfigDS() {
-    this._feedbackDetailsService.initFeedbackConfigDS(this.feedBackConfig);
-  }
-
   getFeedBackConfig() {
-    this.$subscription.add(
-      this._feedbackDetailsService.getFeedback().subscribe((response) => {
-        this.feedBackConfig = response;
-        this.initFeedbackConfigDS();
-      })
-    );
+    this.feedbackConfig$ = this._feedbackDetailsService.getHotelFeedbackConfig({
+      hotelId: this._hotelService.hotelId,
+    });
   }
 
   saveFeedbackDetails() {
@@ -57,19 +56,25 @@ export class FeedbackDetailsWrapperComponent extends BaseWrapperComponent {
     }
 
     let value = this.parentForm.getRawValue();
-    let data = this._feedbackDetailsService.mapFeedbackData(
-      value && value.feedbackDetail,
-      this._reservationService.reservationData.guestDetails.primaryGuest.id
-    );
+    // let data = this._feedbackDetailsService.mapFeedbackData(
+    //   value && value.feedbackDetail,
+    //   this._reservationService.reservationData.guestDetails.primaryGuest.id
+    // );
     this.$subscription.add(
       this._feedbackDetailsService
-        .addFeedback(this._reservationService.reservationId, data)
+        .addFeedback(this._reservationService.reservationId, {
+          ...value.feedbackDetail,
+          journey: this._hotelService.currentJourney,
+          quickServices: this.feedbackDetailCmp.selectedQuickServices,
+        })
         .subscribe(
           (response) => {
             this._translateService
               .get('MESSAGES.SUCCESS.FEEDBACK_COMPLETE')
               .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg, '', { panelClass: 'success' });
+                this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
               });
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']

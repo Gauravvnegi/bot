@@ -127,22 +127,24 @@
             >
               {{ details.feedbackDetails.rating }}
             </p>
-            <ng-container
-              *ngFor="
-                let suggestion of details.feedbackDetails.suggestions.slice(
-                  0,
-                  2
-                )
-              "
-            >
-              <img
-                class="feedback-icon"
-                [ngClass]="{
-                  'status-image-reject': details.feedbackDetails.rating < 5,
-                  'status-image-success': details.feedbackDetails.rating >= 5
-                }"
-                [src]="feedbackService.getServiceUrl(suggestion.id)"
-              />
+            <ng-container *ngIf="details.feedbackDetails.suggestions">
+              <ng-container
+                *ngFor="
+                  let suggestion of details.feedbackDetails.suggestions.slice(
+                    0,
+                    2
+                  )
+                "
+              >
+                <img
+                  class="feedback-icon"
+                  [ngClass]="{
+                    'status-image-reject': details.feedbackDetails.rating < 5,
+                    'status-image-success': details.feedbackDetails.rating >= 5
+                  }"
+                  [src]="feedbackService.getServiceUrl(suggestion.id)"
+                />
+              </ng-container>
             </ng-container>
 
             <div

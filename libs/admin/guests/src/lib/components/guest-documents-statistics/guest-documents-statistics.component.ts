@@ -12,7 +12,15 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./guest-documents-statistics.component.scss']
 })
 export class GuestDocumentsStatisticsComponent implements OnInit {
-  document: Document = new Document();
+  document: Document = new Document().deserialize({
+    totalCount: 0,
+    documentStats: {
+      INITIATED: 0,
+      FAILED: 0,
+      PENDING: 0,
+      COMPLETED: 0
+    }
+  });
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   $subscription = new Subscription();
@@ -20,14 +28,14 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   selectedInterval: any;
 
   chart: any = {
-    Labels: ['Initiated', 'Pending', 'Accepted', 'Rejected'],
-    Data: [[]],
+    Labels: ['No Data'],
+    Data: [[100, 0, 0, 0]],
     Type: 'doughnut',
     Legend : false,
     Colors : [
       {
-        backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-        borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
       }
     ],
     Options : {
@@ -78,10 +86,22 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
             .subscribe((res) => {
               this.document = new Document().deserialize(res);
               this.initGraphData();
+              this.setChartOptions();
             })
         );
       })
     );
+  }
+
+  setChartOptions() {
+    this.chart.Labels = ['Initiated', 'Pending', 'Accepted', 'Rejected'];
+
+    this.chart.Colors = [
+      {
+        backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+        borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+      }
+    ];
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,151 @@
+@import 'main';
+
+.width-added {
+  width: 33%;
+}
+
+.width-quarter {
+  width: 33%;
+}
+
+.svg-wrapper {
+  padding-left: 5px;
+  .svg {
+    height: 20px;
+    width: 20px;
+    path {
+      fill: white;
+    }
+  }
+}
+
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  // img {
+  //   margin-left: 10px;
+  // }
+}
+
+:host ::ng-deep .mat-head {
+  font-size: $font16;
+  font-weight: $bolder;
+  color: #002046;
+  letter-spacing: 0.96px;
+}
+
+.data-seperator {
+  border: 2px solid #218af3;
+  margin: $margin20 0px;
+  opacity: 0.1;
+}
+
+.feilds-wrapper {
+  display: flex;
+  margin: 30px 0px;
+  .feild {
+    .label {
+      letter-spacing: 0.72px;
+      font-size: $font12;
+      color: $primary-gray;
+    }
+    .value {
+      letter-spacing: 0.84px;
+      font-size: $font14;
+      margin-top: $margin10;
+      font-weight: $medium;
+    }
+  }
+}
+
+.form-wrapper {
+  display: flex;
+}
+.gap {
+  margin-top: $margin15;
+}
+
+.document-header {
+  display: flex;
+  margin-bottom: $margin20;
+  align-items: center;
+  .heading {
+    font-size: $font16;
+    margin-right: $margin20;
+    font-weight: $bolder;
+  }
+  .fa {
+    color: $pending;
+  }
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  border-top: none;
+}
+
+:host ::ng-deep .mat-select-value-text {
+  font-size: 14px;
+}
+
+.health-status {
+  letter-spacing: 0.84px;
+  color: $primary-gray;
+  font-size: $font14;
+  font-weight: $bolder;
+  margin: $margin20 0;
+}
+
+.remark-wrapper {
+  .text {
+    letter-spacing: 0.84px;
+    color: $primary-gray;
+    font-size: $font14;
+    font-weight: $bolder;
+    margin-right: 10px;
+  }
+}
+
+:host ::ng-deep .remark{
+  width: 70%;
+}
+
+.emptyCell{
+  text-align: center;
+}
+
+// :host ::ng-deep .remark > .mat-form-field-wrapper > .mat-form-field-underline {
+//   display: none;
+// }
+
+:host
+  ::ng-deep
+  .remark
+  > .mat-form-field-wrapper
+  > .mat-form-field-flex
+  > .mat-form-field-infix
+  > input {
+  letter-spacing: 0.84px;
+  font-size: $font14;
+  margin-top: $margin10;
+  font-weight: $medium;
+}
+
+.pending-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .decision-button-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: $margin10;
+    button {
+      margin: 0 $margin10;
+      border: none;
+      outline: none;
+      background: transparent;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

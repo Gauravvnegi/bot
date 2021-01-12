@@ -53,7 +53,8 @@ export class InputPopupComponent implements OnInit {
           this._translateService
           .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
           .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg);
+            this._snackBarService.openSnackBarAsText(translatedMsg,'',
+            { panelClass: 'success' });
           });
           this.close('success');
         },

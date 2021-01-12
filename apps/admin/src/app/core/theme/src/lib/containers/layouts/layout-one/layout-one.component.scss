@@ -61,12 +61,14 @@
       .search-bar-wrapper {
         @include flex-item-center();
       }
-      .search-bar {
+      .global_search {
+        position: relative;
         width: 23%;
         @media screen and (max-width: 800px) {
           width: 31%;
         }
       }
+
       .header--button {
         padding: 0px $padding10;
         height: 42px;

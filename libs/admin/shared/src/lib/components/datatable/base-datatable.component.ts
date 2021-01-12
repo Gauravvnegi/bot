@@ -120,6 +120,9 @@ export class BaseDatatableComponent implements OnInit {
     { label: 'Express Check-In (10)', icon: '', isSelected: false },
   ];
 
+  tempFirst;
+  tempRowsPerPage;
+
   constructor(private _fb: FormBuilder) {
     this.initTableFG();
   }
@@ -303,5 +306,10 @@ export class BaseDatatableComponent implements OnInit {
 
   onCheckboxClicked(event) {
     event.stopPropagation();
+  }
+
+  onDataFilter(event) {
+    this.first = this.tempFirst;
+    this.rowsPerPage = this.tempRowsPerPage;
   }
 }

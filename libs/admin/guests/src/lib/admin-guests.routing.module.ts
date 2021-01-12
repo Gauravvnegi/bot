@@ -10,6 +10,11 @@ import { ChartsModule } from 'ng2-charts';
 import { TypeGuestStatisticsComponent } from './components/type-guest-statistics/type-guest-statistics.component';
 import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { DetailsComponent } from './components/details/details.component';
+import { GuestDetailsComponent } from './components/guest-details/guest-details.component';
+import { DocumentsComponent } from './components/documents/documents.component';
+import { StayDetailsComponent } from './components/stay-details/stay-details.component';
+import { BookingFeedbackComponent } from './components/booking-feedback/booking-feedback.component';
 
 const appRoutes: Route[] = [
   {
@@ -35,5 +40,10 @@ export class AdminGuestsRoutingModule {
 	SourceStatisticsComponent,
 	TypeGuestStatisticsComponent,
 	GuestDatatableComponent,
+	DetailsComponent,
+	GuestDetailsComponent,
+	DocumentsComponent,
+	StayDetailsComponent,
+	BookingFeedbackComponent
   ];
 }

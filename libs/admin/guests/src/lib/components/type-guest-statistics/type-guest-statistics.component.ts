@@ -5,6 +5,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-type-guest-statistics',
@@ -53,12 +54,12 @@ export class TypeGuestStatisticsComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [20, 25, 22, 30, 27, 45], label: 'Arrival', fill: false },
-      { data: [50, 65, 60, 75, 72, 80], label: 'In House', fill: false },
-      { data: [20, 28, 24, 35, 29, 55], label: 'Departure', fill: false },
-      { data: [50, 48, 60, 58, 65, 85], label: 'Out-Guest', fill: false },
+      { data: [], label: 'Arrival', fill: false },
+      { data: [], label: 'In House', fill: false },
+      { data: [], label: 'Departure', fill: false },
+      { data: [], label: 'Out-Guest', fill: false },
     ],
-    chartLabels: ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {
@@ -112,7 +113,8 @@ export class TypeGuestStatisticsComponent implements OnInit {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -189,6 +191,8 @@ export class TypeGuestStatisticsComponent implements OnInit {
             .subscribe((response) => {
               this.customerData = new VIP().deserialize(response);
               this.initGraphData();
+            }, ({ error }) => {
+              this._snackbarService.openSnackBarAsText(error.message);
             })
         );
       })

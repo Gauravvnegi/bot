@@ -308,7 +308,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
-          console.log('loadData',this.values);
+          console.log('loadData', this.values);
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters
@@ -357,6 +357,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    this.tempFirst = this.first;
+    this.tempRowsPerPage = this.rowsPerPage;
+
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }

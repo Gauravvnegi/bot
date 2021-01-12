@@ -76,9 +76,10 @@ export class Feedback implements Deserializable {
       set({}, 'status', get(input, ['statusMessage', 'status']))
     );
 
+
     this.suggestions =
-      input.services &&
-      input.services.map((service) => {
+      input.quickServices &&
+      input.quickServices.map((service) => {
         return new FeedbackSuggestion().deserialize(service);
       });
     return this;
@@ -268,15 +269,23 @@ export class Guest implements Deserializable {
   nameTitle;
   firstName: string;
   lastName: string;
-  contactDetails;
-  documents = [];
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  documents?: any[];
+  nationality: string;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'nameTitle', get(input, ['nameTitle'])),
       set({}, 'firstName', trim(get(input, ['firstName']))),
-      set({}, 'lastName', trim(get(input, ['lastName'])))
+      set({}, 'lastName', trim(get(input, ['lastName']))),
+      set({}, 'countryCode', get(input, ['contactDetails', 'cc'])),
+      set({}, 'phoneNumber', get(input, ['contactDetails', 'contactNumber'])),
+      set({}, 'email', get(input, ['contactDetails', 'emailId'])),
+      set({}, 'documents', get(input, ['documents'])),
+      set({}, 'nationality', get(input, ['nationality']))
     );
     return this;
   }

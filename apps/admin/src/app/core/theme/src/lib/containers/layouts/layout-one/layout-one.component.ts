@@ -26,8 +26,6 @@ import { GlobalFilterService } from '../../../services/global-filters.service';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { SearchBarComponent } from '../../search-bar/search-bar.component';
-import { SearchService } from '../../../services/search.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
@@ -56,6 +54,7 @@ export class LayoutOneComponent implements OnInit {
       return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
     },
   };
+
   constructor(
     private _router: Router,
     public dateService: DateService,
@@ -67,7 +66,6 @@ export class LayoutOneComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
     private fb: FormBuilder,
-    private searchService: SearchService,
     private _modal: ModalService 
   ) {}
 
@@ -76,44 +74,12 @@ export class LayoutOneComponent implements OnInit {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.initSearchQueryForm();
-    this.registerListeners();
   }
 
   initSearchQueryForm(): void {
     this.searchFG = this.fb.group({
       search: [''],
     });
-  }
-
-  registerListeners(): void {
-    this.listenForSearchChanges();
-  }
-
-  listenForSearchChanges(): void {
-    const formChanges$ = this.searchFG.valueChanges;
-
-    const findSearch$ = ({ search }) =>
-      this.searchService.search({
-        search,
-      });
-
-    formChanges$
-      .pipe(
-        debounceTime(500),
-        switchMap((formValue) =>
-          findSearch$(formValue).pipe(
-            catchError((err) => {
-              return empty();
-            })
-          )
-        )
-      )
-      .subscribe((res) => {
-        if (res.type === 'booking' && !this.isDetailPageVisible) {
-          this.openDetailPage(res.bookingId, DetailsComponent);
-          this.isDetailPageVisible = true;
-        }
-      });
   }
 
   initLayoutConfigs() {
@@ -235,6 +201,12 @@ export class LayoutOneComponent implements OnInit {
   logoutUser() {
     this._authService.clearToken();
     this._router.navigate(['/auth']);
+  }
+
+  onSearchOptionSelected($event) {
+    if ($event.type === 'Booking') {
+      this.openDetailPage($event.bookingId, DetailsComponent);
+    }
   }
 
   openDetailPage(bookingId, component) {

@@ -6,14 +6,24 @@
     <div style="padding-left: 10px;">Send Message</div>
   </div>
   <form [formGroup]="notificationForm">
-    <div class="request-body">
+    <ng-template #loader>
+      <div>
+        <p class="loading">Loading</p>
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+      </div>
+    </ng-template>
+    <div class="request-body" *ngIf="config; else loader">
       <div class="row">
         <div class="row-title">Channel:</div>
         <div class="row-body">
           <div style="display: flex; align-items: center;" *ngIf="config.channels.bot">
             <mat-checkbox formControlName="is_social_channel" (change)="modifyControl($event.checked, 'social_channels')"></mat-checkbox>
             <mat-form-field style="margin-left: 10px;">
-              <mat-select multiple formControlName="social_channels" [disabled]="!isSocialChannel" (selectionChange)="changeSocialChannels($event.value)">
+              <mat-select multiple formControlName="social_channels" [disabled]="!isSocialChannel" placeholder="Select Channel" (selectionChange)="changeSocialChannels($event.value)">
                 <mat-select-trigger *ngIf="social_channels">
                   {{ social_channels.value ? social_channels.value[0] : '' }}
                   <span
@@ -41,7 +51,7 @@
         <div class="row-body">  
           <div>
             <mat-form-field>
-              <mat-select formControlName="messageType" (selectionChange)="changeTemplateIds($event.value)">
+              <mat-select formControlName="messageType" placeholder="Select Message Type" (selectionChange)="changeTemplateIds($event.value)">
                 <mat-option
                   *ngFor="let messageType of config.messageTypes"
                   [value]="messageType.value"
@@ -52,14 +62,14 @@
           <div style="display: flex; align-items: center;">
             <div style="width: 130px;color: rgb(199, 196, 196); font-size: 14px;">Template:</div>
             <mat-form-field>
-              <mat-select formControlName="templateId" (selectionChange)="fetchTemplate($event.value)">
+              <mat-select formControlName="templateId" placeholder="Select Template" (selectionChange)="fetchTemplate($event.value)">
                 <mat-option *ngIf="templates.ids.length === 0"
                   value=""
                   >No data</mat-option>
                 <mat-option
-                  *ngFor="let messageType of templates.ids"
-                  [value]="messageType.value"
-                  >{{ messageType.label }}</mat-option>
+                  *ngFor="let template of templates.ids"
+                  [value]="template.id"
+                  >{{ template.name }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>    

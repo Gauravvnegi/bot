@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Location } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -27,7 +27,7 @@ export class NotificationComponent implements OnInit {
   };
   hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
 
-  config: RequestConfig;
+  @Input() config: RequestConfig;
 
   ckeditorContent;
   public Editor = ClassicEditor;
@@ -63,12 +63,12 @@ export class NotificationComponent implements OnInit {
   }
 
   private listenForGlobalFilters(): void {
-    // this.$subscription.add(
-    this._globalFilterService.globalFilter$.subscribe((data) => {
-      // debugger;
-      // this.hotelId = data['filter'].queryValue[0].hotelId;
-    });
-    // );
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        // debugger;
+        // this.hotelId = data['filter'].queryValue[0].hotelId;
+      })
+    );
   }
 
   private initNotificationForm(): void {
@@ -87,29 +87,12 @@ export class NotificationComponent implements OnInit {
   }
 
   private getConfigData(): void {
-    this.config = new RequestConfig().deserialize({
-      channels: {
-        bot: {
-          title: 'Bot',
-          options: [
-            { label: 'Whatsapp', value: 'Whatsapp' },
-            { label: 'Messenger', value: 'Messenger' },
-            { label: 'Telegram', value: 'Telegram' },
-          ],
-        },
-        email: {
-          title: 'Email',
-        },
-        sms: {
-          title: 'SMS',
-        },
-      },
-      messageTypes: [
-        { label: 'Precheckin', value: 'precheckin', templateIds: [{ label: 1234, value: 1234 }] },
-        { label: 'Checkin', value: 'checkin', templateIds: [] },
-        { label: 'Checkout', value: 'checkout', templateIds: [] },
-      ],
-    });
+    this.requestService
+      .getNotificationConfig(this.hotelId)
+      .subscribe((response) => {
+        console.log(new RequestConfig().deserialize(response))
+        this.config = new RequestConfig().deserialize(response);
+      });
   }
 
   addEmail(event: MatChipInputEvent): void {
@@ -177,7 +160,9 @@ export class NotificationComponent implements OnInit {
         this.notificationForm
           .get('attachments')
           .patchValue([response.fileDownloadUri]);
-        this._snackbarService.openSnackBarAsText('Attachment uploaded', '', { panelClass: 'success' });
+        this._snackbarService.openSnackBarAsText('Attachment uploaded', '', {
+          panelClass: 'success',
+        });
       },
       ({ error }) => {
         this._snackbarService.openSnackBarAsText(error.message);
@@ -190,11 +175,10 @@ export class NotificationComponent implements OnInit {
   }
 
   changeTemplateIds(method): void {
-    let data = this.config.messageTypes.filter(
-      (d) => d.value === method
-    )[0];
+    let data = this.config.messageTypes.filter((d) => d.value === method)[0];
     this.templates.ids = data['templateIds'];
     this.modifyControl(this.templates.ids.length > 0, 'templateId');
+    this.notificationForm.get('message').patchValue('');
   }
 
   sendMessage(): void {
@@ -234,12 +218,16 @@ export class NotificationComponent implements OnInit {
 
   fetchTemplate(templateId) {
     let journey = this.notificationForm.get('messageType').value;
-    this.requestService.getTemplate(this.hotelId, templateId, journey.toUpperCase())
-      .subscribe((response) => {
-        this.notificationForm.get('message').patchValue(response.template);
-      }, ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      })
+    this.requestService
+      .getTemplate(this.hotelId, templateId, journey.toUpperCase())
+      .subscribe(
+        (response) => {
+          this.notificationForm.get('message').patchValue(response.template);
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   modifyControl(event: boolean, control: string): void {

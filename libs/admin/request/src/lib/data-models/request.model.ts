@@ -71,5 +71,10 @@ export interface IOption {
 export interface IMessageType {
   label: string;
   value: string;
-  templeteIds: any[];
+  templeteIds: ITemplateId[];
+}
+
+export interface ITemplateId {
+  id: string;
+  name: string;
 }

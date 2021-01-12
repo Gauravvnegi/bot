@@ -44,6 +44,10 @@ export class RequestService extends ApiService {
     );
   }
 
+  getNotificationConfig(hotelId: string): Observable<any> {
+    return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
+  }
+
   validateRequestData(fg: FormGroup, channelSelection) {
     let status = [];
 

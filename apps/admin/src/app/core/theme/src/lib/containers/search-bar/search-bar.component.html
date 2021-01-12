@@ -15,10 +15,10 @@
   </span>
   <div *ngIf="searchDropdownVisible" class="global__search__dropdown">
     <p
-      *ngFor="let option of searchOptions"
+      *ngFor="let option of searchOptions.searchResults"
       (click)="setOptionSelection(option)"
     >
-      {{ option.type }}
+      {{ option.label }}
     </p>
     <!-- <p (click)="setOptionSelection(1)">Test</p>
     <p (click)="setOptionSelection(1)">Test</p>

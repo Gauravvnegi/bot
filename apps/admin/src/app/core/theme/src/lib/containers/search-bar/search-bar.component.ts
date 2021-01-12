@@ -3,6 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { SearchService } from '../../services/search.service';
+import { HotelDetailService } from '../../../../../../../../../../libs/admin/shared/src/lib/services/hotel-detail.service';
+import { SearchResultDetail } from '../../data-models/search-bar.config.model';
 
 @Component({
   selector: 'admin-search-bar',
@@ -15,9 +17,12 @@ export class SearchBarComponent implements OnInit {
 
   @Output() selectedSearchOption = new EventEmitter();
 
-  searchOptions = [];
+  searchOptions: any;
   searchDropdownVisible: boolean = false;
-  constructor(private searchService: SearchService) {}
+  constructor(
+    private searchService: SearchService,
+    private hotelDetailService: HotelDetailService
+    ) {}
 
   searchValue = false;
 
@@ -33,9 +38,9 @@ export class SearchBarComponent implements OnInit {
     const formChanges$ = this.parentForm.valueChanges;
     console.log('');
     const findSearch$ = ({ search }) =>
-      this.searchService.search({
-        search,
-      });
+      this.searchService.search(
+        search,this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id
+      );
 
     formChanges$
       .pipe(
@@ -50,8 +55,9 @@ export class SearchBarComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-          if (response.length) {
-            this.searchOptions = response;
+          if (response) {
+            this.searchOptions = new SearchResultDetail().deserialize(response);
+            console.log(this.searchOptions);
             this.searchDropdownVisible = true;
             this.searchValue = true;
           } else {

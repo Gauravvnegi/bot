@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { GuestTableService } from '../../services/guest-table.service';
 import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-stay-details',
@@ -19,6 +20,7 @@ export class StayDetailsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private guestTableService: GuestTableService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +33,8 @@ export class StayDetailsComponent implements OnInit {
     this.guestTableService.getFeedback()
       .subscribe((response) => {
         this.feedbackConfig = new FeedBackDetail().deserialize(response);
+      }, ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
       })
   }
 

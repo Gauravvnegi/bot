@@ -6,6 +6,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-guest-status-statistics',
@@ -65,12 +66,12 @@ export class GuestStatusStatisticsComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [20, 25, 22, 30, 27, 45], label: 'New', fill: false, borderDash: [5, 5] },
-      { data: [50, 65, 60, 75, 72, 80], label: 'Pre Check-In', fill: false },
-      { data: [20, 28, 24, 35, 29, 55], label: 'Check-In', fill: false },
-      { data: [50, 48, 60, 58, 65, 85], label: 'Checkout', fill: false, borderDash: [5, 5] },
+      { data: [], label: 'New', fill: false, borderDash: [5, 5] },
+      { data: [], label: 'Pre Check-In', fill: false },
+      { data: [], label: 'Check-In', fill: false },
+      { data: [], label: 'Checkout', fill: false, borderDash: [5, 5] },
     ],
-    chartLabels: ['11 Jul', '25 Jul', '8 Aug', '22 Aug', '5 Sep', '19 Sep'],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       scales: {
@@ -120,7 +121,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
     private _dateService: DateService,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -198,6 +200,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
             .subscribe((response) => {
               this.guestStatusData = new Status().deserialize(response);
               this.initGraphData();
+            }, ({ error }) => {
+              this._snackbarService.openSnackBarAsText(error.message);
             })
         );
       })

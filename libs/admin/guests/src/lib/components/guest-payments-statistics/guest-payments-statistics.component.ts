@@ -6,6 +6,7 @@ import { Payment } from '../../data-models/statistics.model';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-guest-payments-statistics',
@@ -15,21 +16,28 @@ import { Subscription } from 'rxjs';
 export class GuestPaymentsStatisticsComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
-  payment: Payment = new Payment();
+  payment: Payment = new Payment().deserialize({
+    totalCount: 0,
+    guestPayment: {
+      FULL: 0,
+      PARTIAL: 0,
+      PENDING: 0
+    }
+  });
   $subscription = new Subscription();
   selectedInterval: any;
   chart: any = {
-    Labels: ['Fully Received', 'Partially Received', 'Not Received'],
+    Labels: ['No Data'],
     Data:  [
-      []
+      [100]
     ],
     Type: 'doughnut',
   
     Legend : false,
     Colors : [
       {
-        backgroundColor: ['#3E8EF7', '#FAA700', '#FF4C52'],
-        borderColor: ['#3E8EF7', '#FAA700', '#FF4C52'],
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
       }
     ],
     Options : {
@@ -50,7 +58,8 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -93,10 +102,23 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
             .subscribe((res) => {
               this.payment = new Payment().deserialize(res);
               this.initGraphData();
+              this.setChartOptions();
+            }, ({ error }) => {
+              this._snackbarService.openSnackBarAsText(error.message);
             })
         );
       })
     );
+  }
+
+  setChartOptions(): void {
+    this.chart.Colors = [
+      {
+        backgroundColor: ['#3E8EF7', '#FAA700', '#FF4C52'],
+        borderColor: ['#3E8EF7', '#FAA700', '#FF4C52'],
+      }
+    ];
+    this.chart.Labels = ['Fully Received', 'Partially Received', 'Not Received'];
   }
 
   ngOnDestroy(): void {

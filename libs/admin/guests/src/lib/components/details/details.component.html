@@ -31,36 +31,40 @@
           <span>Latest Booking</span>
         </div>
         <div class="booking-id-wrapper" (click)="setTabKey('stay_details');">
-          <div>{{ data.booking.bookingNumber }}</div>
+          <div style="margin-right: 10px;">{{ data.booking.bookingNumber }}</div>
           <div *ngIf="['COMPLETED'].includes(feedback.status)" class="feedback">
             <!-- <p class="label">Feedback :</p> -->
-            <div class="booking-feedback">
-              <p class="number" [ngClass]="{
-                  'status-background-reject': feedback.rating < 5,
-                  'status-background-success': feedback.rating >= 5
-                }">
-                {{ feedback.rating }}
-              </p>
-              <ng-container *ngFor="
-                  let suggestion of feedback.suggestions.slice(
-                    0,
-                    2
-                  )
-                ">
-                <img class="feedback-icon" [ngClass]="{
-                    'status-image-reject': feedback.rating < 5,
-                    'status-image-success': feedback.rating >= 5
-                  }" [src]="feedbackService.getServiceUrl(suggestion.id)" />
-              </ng-container>
-
-              <div *ngIf="feedback.comments" [ngClass]="{
-                  'feedback-msg': feedback.comments.length > 0
-                }">
-                {{ feedback.comments }}
+            <ng-container *ngIf="feedback">
+              <div class="booking-feedback">
+                <p class="number" [ngClass]="{
+                    'status-background-reject': feedback.rating < 5,
+                    'status-background-success': feedback.rating >= 5
+                  }">
+                  {{ feedback.rating }}
+                </p>
+                <ng-container *ngIf="feedback.suggestions">
+                  <ng-container *ngFor="
+                      let suggestion of feedback.suggestions.slice(
+                        0,
+                        2
+                      )
+                    ">
+                    <img class="feedback-icon" [ngClass]="{
+                        'status-image-reject': feedback.rating < 5,
+                        'status-image-success': feedback.rating >= 5
+                      }" [src]="feedbackService.getServiceUrl(suggestion.id)" />
+                  </ng-container>
+                </ng-container>
+  
+                <div *ngIf="feedback.comments" [ngClass]="{
+                    'feedback-msg': feedback.comments.length > 0
+                  }">
+                  {{ feedback.comments }}
+                </div>
               </div>
-            </div>
+            </ng-container>
           </div>
-          <div>{{ data.rooms.roomNumber }}-{{ data.rooms.type }}</div>
+          <div style="margin-right: 10px;">{{ data.rooms.roomNumber }}-{{ data.rooms.type }}</div>
         </div>
       </div>
     </div>

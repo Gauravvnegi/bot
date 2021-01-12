@@ -11,6 +11,7 @@ export class BookingFeedback {
   created: number;
   active: boolean;
   departments: Department[];
+  suggestions;
 
   deserialize(input, config) {
     Object.assign(
@@ -23,6 +24,11 @@ export class BookingFeedback {
       set({}, 'created', get(input, ['created'])),
       set({}, 'active', get(input, ['active']))
     );
+    this.suggestions =
+      input.quickServices &&
+      input.quickServices.map((service) => {
+        return new FeedbackSuggestion().deserialize(service);
+      });
     let departments: Department[] = [];
     input.departments.forEach((data, i) => {
       departments[i] = new Department().deserialize(data, config);
@@ -38,6 +44,16 @@ export class BookingFeedback {
 
   getFeedbackTime() {
     return moment(this.created).format('HH:mm');
+  }
+}
+
+export class FeedbackSuggestion {
+  id;
+  label;
+  url;
+  deserialize(input) {
+    this.id = input.serviceId;
+    return this;
   }
 }
 

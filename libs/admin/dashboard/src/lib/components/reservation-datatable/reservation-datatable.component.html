@@ -271,12 +271,19 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <p class="tabel-room-no" [ngClass]="{
-          'status-text-success': rowData.booking.roomStatus === 'CL',
-          'status-text-reject': rowData.booking.roomStatus === 'DI',
-          'status-text-initiated': rowData.booking.roomStatus === 'IN',
-          'status-text-pending': rowData.booking.roomStatus === 'PI'
-        }">
+        <p
+          class="tabel-room-no"
+          [ngClass]="{
+            'status-text-success': rowData.booking.roomStatus === 'CL',
+            'status-text-reject': rowData.booking.roomStatus === 'DI',
+            'status-text-initiated': rowData.booking.roomStatus === 'IN',
+            'status-text-pending': rowData.booking.roomStatus === 'PI',
+            'status-opacity-success': rowData.booking.roomStatus === 'CL',
+            'status-opacity-reject': rowData.booking.roomStatus === 'DI',
+            'status-opacity-initiated': rowData.booking.roomStatus === 'IN',
+            'status-opacity-pending': rowData.booking.roomStatus === 'PI'
+          }"
+        >
           {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
         </p>
       </td>
@@ -365,8 +372,8 @@
               rowData.payment.dueAmount <= rowData.payment.totalAmount,
             'status-text-success': rowData.payment.dueAmount == 0
           }"
-          >{{ rowData.payment.dueAmount }}</span
-        >/{{ rowData.payment.totalAmount }}
+          >{{ rowData.payment.dueAmount | number: '1.2-2' }}</span
+        >/{{ rowData.payment.totalAmount | number: '1.2-2' }}
       </td>
       <td class="package">
         <span

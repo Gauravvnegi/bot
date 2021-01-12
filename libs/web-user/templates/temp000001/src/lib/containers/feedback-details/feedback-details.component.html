@@ -51,7 +51,7 @@
             ></web-user-textarea>
           </div>
 
-          <div *ngIf="!!rating.value">
+          <!-- <div *ngIf="!!rating.value">
             <h3 *ngIf="ratingQuestion.department">
               {{ ratingQuestion.department }} (Optional)
             </h3>
@@ -82,7 +82,6 @@
                     {{ ratingQuestion.service }} (Optional)
                   </h3>
                   <mat-tab-group>
-                    <!--*************** Service*************** -->
                     <mat-tab
                       *ngFor="
                         let serviceFG of (departmentFG
@@ -92,7 +91,6 @@
                       "
                     >
                       <ng-template mat-tab-label>
-                        <!-- <mat-checkbox class="example-margin"></mat-checkbox> -->
                         <web-user-checkbox
                           *ngIf="serviceFG.get('isSelected').value"
                           [parentForm]="serviceFG"
@@ -165,7 +163,7 @@
                 </div>
               </mat-tab>
             </mat-tab-group>
-          </div>
+          </div> -->
         </div>
       </mat-expansion-panel>
     </mat-accordion>

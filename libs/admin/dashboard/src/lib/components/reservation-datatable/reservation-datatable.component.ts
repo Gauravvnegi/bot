@@ -32,6 +32,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
+  rowsPerPageOptions = [5, 10, 25, 50, 200];
 
   cols = [
     { field: 'rooms.roomNumber', header: 'Rooms' },

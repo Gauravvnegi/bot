@@ -34,7 +34,7 @@ export class AirportPickupComponent extends DefaultPackageComponent
     this.paidAmenityFG.patchValue({
       metaData: {
         ...this.config.metaData,
-        pickupTime: this.dateService.convertTimestampToDate(
+        pickupTime: this.dateService.getDateFromTimeStamp(
           this.config.metaData.pickupTime * 1000,
           'DD-MM-YYYY hh:mm a'
         ),

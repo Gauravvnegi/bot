@@ -24,10 +24,12 @@ export class StayDetail implements Deserializable {
   roomType: string;
   kidsCount: number;
   adultsCount: number;
-  expectedTime:string;
+  expectedTime: string;
   deserialize(input: any) {
-    //input.expectedArrivalTime = 1604201400;
-    let expectedTime = new DateService().convertTimestampToDate(get(input,['expectedArrivalTime']),'DD-MM-YYYY hh:mm a');
+    let expectedTime = new DateService().getDateFromTimeStamp(
+      get(input, ['expectedArrivalTime']),
+      'DD-MM-YYYY hh:mm a'
+    );
     Object.assign(
       this,
       set(
@@ -43,8 +45,14 @@ export class StayDetail implements Deserializable {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount'])),
-      set({}, 'expectedTime', moment(expectedTime.split(' ')[1]+expectedTime.split(' ')[2], 'h:mm a').format('h:mm a')||'7:00 am'),
-      
+      set(
+        {},
+        'expectedTime',
+        moment(
+          expectedTime.split(' ')[1] + expectedTime.split(' ')[2],
+          'h:mm a'
+        ).format('h:mm a')
+      )
     );
     return this;
   }

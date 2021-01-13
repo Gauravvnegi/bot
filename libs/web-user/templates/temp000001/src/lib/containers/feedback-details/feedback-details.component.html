@@ -51,8 +51,8 @@
             ></web-user-textarea>
           </div>
 
-          <!-- <div *ngIf="!!rating.value">
-            <h3 *ngIf="ratingQuestion.department">
+          <div *ngIf="!!rating.value">
+            <h3 class="rating_question" *ngIf="ratingQuestion.department">
               {{ ratingQuestion.department }} (Optional)
             </h3>
             <mat-tab-group>
@@ -163,7 +163,7 @@
                 </div>
               </mat-tab>
             </mat-tab-group>
-          </div> -->
+          </div>
         </div>
       </mat-expansion-panel>
     </mat-accordion>

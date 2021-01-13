@@ -15,7 +15,7 @@ mat-icon {
   align-items: center;
   font-size: $font-medium;
   font-weight: $bold;
-  @media only screen and (max-width: 900px) {
+  @media only screen and (max-width: $T) {
     width: 50%;
   }
 }
@@ -26,7 +26,7 @@ mat-icon {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  @media only screen and (max-width: 900px) {
+  @media only screen and (max-width: $T) {
     font-size: $font-responsive-small;
   }
 }
@@ -42,7 +42,7 @@ mat-icon {
   }
   p {
     margin-top: $margin-large;
-    @media only screen and (max-width: 900px) {
+    @media only screen and (max-width: $T) {
       font-size: $font-small;
       margin: $margin-small auto;
     }
@@ -59,7 +59,7 @@ mat-icon {
 .hotel-services-images {
   width: 80px;
 
-  @media only screen and (max-width: 900px) {
+  @media only screen and (max-width: $T) {
     width: 50px;
   }
 }
@@ -87,7 +87,7 @@ mat-icon {
 }
 
 :host ::ng-deep .checkbox--wrapper {
-  margin: 20px 0;
+  margin: $margin-large 0;
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -95,7 +95,7 @@ mat-icon {
 }
 
 :host ::ng-deep .mat-checkbox {
-  margin-right: 10px;
+  margin-right: $margin-small;
   margin-bottom: 4px;
 }
 
@@ -107,28 +107,34 @@ mat-icon {
 :host ::ng-deep .mat-tab-label-active {
   .checkbox_label {
     color: black;
-    font-weight: 600;
+    font-weight: $bold;
   }
 }
 
 .service_question {
-  margin: 20px 0;
+  margin: $margin-large 0;
+  @media only screen and (max-width: $T) {
+    font-size: $font-small;
+  }
 }
 
 .service_checkbox {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: $margin-large 0;
   &__text {
     display: flex;
     align-items: center;
+  }
+  @media only screen and (max-width: $M) {
+    display: block;
   }
 }
 
 .service_checkbox_label {
   color: black;
-  font-weight: 600;
+  font-weight: $bold;
 }
 
 :host ::ng-deep .service_rating {
@@ -137,5 +143,61 @@ mat-icon {
   }
   .rating-scale-bar {
     width: 363px;
+    @media only screen and (max-width: $T) {
+      width: 275px;
+    }
   }
+}
+
+:host ::ng-deep .mat-tab-list {
+  @media only screen and (max-width: $T) {
+    transform: none !important;
+  }
+}
+
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  @media only screen and (max-width: $T) {
+    display: none;
+  }
+}
+
+:host ::ng-deep .mat-tab-label-container {
+  @media only screen and (max-width: $T) {
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
+  }
+}
+
+.rating_question {
+  @media only screen and (max-width: $T) {
+    font-size: $font-small;
+  }
+}
+
+:host ::ng-deep .rating__container {
+  @media only screen and (max-width: $T) {
+    margin-top: $margin-small 7;
+  }
+}
+
+:host ::ng-deep .checkbox-section {
+  @media only screen and (max-width: $T) {
+    height: auto !important;
+  }
+}
+
+:host ::ng-deep .rating__container{
+  margin-top: 10px;
 }

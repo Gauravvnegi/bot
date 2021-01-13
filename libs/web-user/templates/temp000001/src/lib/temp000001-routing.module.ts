@@ -37,6 +37,9 @@ import { SummaryComponent } from './containers/summary/summary.component';
 import { Temp000001Component } from './containers/temp000001/temp000001.component';
 import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
 import { Temp000001StepperComponent } from './presentational/temp000001-stepper/temp000001-stepper.component';
+import { Temp000001TextareaComponent } from './presentational/temp000001-textarea/temp000001-textarea.component';
+import { Temp000001RadioComponent } from './presentational/temp000001-radio/temp000001-radio.component';
+import { Temp000001InputPopupComponent } from './presentational/temp000001-input-popup/temp000001-input-popup.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -135,5 +138,8 @@ export class Temp000001RoutingModule {
     PaidAmenitiesComponent,
     AddGstComponent,
     Temp000001StepperComponent,
+    Temp000001TextareaComponent,
+    Temp000001RadioComponent,
+    Temp000001InputPopupComponent,
   ];
 }

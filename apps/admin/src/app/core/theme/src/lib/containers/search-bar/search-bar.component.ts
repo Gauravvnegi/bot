@@ -1,10 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { debounceTime, switchMap, catchError } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { empty, Subscription } from 'rxjs';
+import { catchError, debounceTime, switchMap } from 'rxjs/operators';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { SearchResultDetail, SearchType } from '../../data-models/search-bar.config.model';
 import { SearchService } from '../../services/search.service';
-import { HotelDetailService } from '../../../../../../../../../../libs/admin/shared/src/lib/services/hotel-detail.service';
-import { SearchResultDetail } from '../../data-models/search-bar.config.model';
+import { EditPackageComponent } from 'libs/admin/packages/src/lib/components/edit-package/edit-package.component';
 
 @Component({
   selector: 'admin-search-bar',
@@ -17,11 +21,15 @@ export class SearchBarComponent implements OnInit {
 
   @Output() selectedSearchOption = new EventEmitter();
 
-  searchOptions: any;
+  searchOptions: SearchResultDetail[];
+  results: any;
   searchDropdownVisible: boolean = false;
+  $subscription = new Subscription();
+
   constructor(
     private searchService: SearchService,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private modal: ModalService,
     ) {}
 
   searchValue = false;
@@ -41,7 +49,6 @@ export class SearchBarComponent implements OnInit {
       this.searchService.search(
         search,this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id
       );
-
     formChanges$
       .pipe(
         debounceTime(500),
@@ -55,9 +62,9 @@ export class SearchBarComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-          if (response) {
-            this.searchOptions = new SearchResultDetail().deserialize(response);
-            console.log(this.searchOptions);
+          this.results = new SearchResultDetail().deserialize(response);
+          if(this.results.searchResults.length > 0){
+            this.searchOptions = this.results.searchResults.slice(0,3);
             this.searchDropdownVisible = true;
             this.searchValue = true;
           } else {
@@ -72,9 +79,54 @@ export class SearchBarComponent implements OnInit {
       );
   }
 
-  setOptionSelection(value) {
+  getAllResults(){
+    this.searchOptions = this.results.searchResults;
+  }
+
+  setOptionSelection(searchData) {
     this.searchDropdownVisible = false;
-    this.selectedSearchOption.next(value);
+    this.selectedSearchOption.next(searchData);
+    this.openDetails(searchData);
+  }
+
+  openDetails(searchData) {
+    switch (searchData.type) {
+      case SearchType.reservation: {
+        this.openDetailsPage(searchData, DetailsComponent);
+        break;
+      }
+      case SearchType.guest: {
+        //statements; 
+        break;
+      }
+      case SearchType.package: {
+        this.openDetailsPage(searchData, EditPackageComponent);
+        break;
+      }
+      default: {
+        //statements; 
+        break;
+      }
+    }
+  }
+
+  openDetailsPage(searchData, component) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modal.openDialog(
+      component,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = searchData.id;
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+       // TODO statements
+      detailCompRef.close();
+      })
+    );
   }
 
   clearSearch() {

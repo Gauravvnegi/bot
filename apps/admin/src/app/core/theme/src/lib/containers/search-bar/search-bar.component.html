@@ -15,11 +15,17 @@
   </span>
   <div *ngIf="searchDropdownVisible" class="global__search__dropdown">
     <p
-      *ngFor="let option of searchOptions.searchResults"
+      *ngFor="let option of searchOptions"
       (click)="setOptionSelection(option)"
     >
-      {{ option.label }}
+      {{ option.label }} {{ option.description }}
     </p>
+    <ng-container *ngIf="searchOptions.length >= 3 && searchOptions.length < this.results.searchResults.length">
+      <p (click)="getAllResults()">See All results for '{{parentForm.get('search').value}}'</p>
+    </ng-container>
+    <ng-container *ngIf="searchOptions.length === 0">
+      No results found
+    </ng-container>
     <!-- <p (click)="setOptionSelection(1)">Test</p>
     <p (click)="setOptionSelection(1)">Test</p>
     <p (click)="setOptionSelection(1)">Test</p> -->

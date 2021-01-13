@@ -167,6 +167,16 @@ mat-icon {
 :host ::ng-deep .mat-tab-label-container {
   @media only screen and (max-width: $T) {
     overflow: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
   }
 }
 
@@ -186,4 +196,8 @@ mat-icon {
   @media only screen and (max-width: $T) {
     height: auto !important;
   }
+}
+
+:host ::ng-deep .rating__container{
+  margin-top: 10px;
 }

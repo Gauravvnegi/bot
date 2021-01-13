@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { DetailsComponent as GuestDetailComponent } from 'libs/admin/guests/src/lib/components/details/details.component';
+import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { empty, Subscription } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { SearchResultDetail, SearchType } from '../../data-models/search-bar.config.model';
+import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
+import { SearchResultDetail } from '../../data-models/search-bar-config.model';
 import { SearchService } from '../../services/search.service';
-import { EditPackageComponent } from 'libs/admin/packages/src/lib/components/edit-package/edit-package.component';
 
 @Component({
   selector: 'admin-search-bar',
@@ -19,7 +20,12 @@ export class SearchBarComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() name: string;
 
-  @Output() selectedSearchOption = new EventEmitter();
+  // @Output() selectedSearchOption = new EventEmitter();
+
+  componentInstances = {
+    RESERVATIONS: BookingDetailComponent,
+    GUEST: GuestDetailComponent,
+  };
 
   searchOptions: SearchResultDetail[];
   results: any;
@@ -30,7 +36,8 @@ export class SearchBarComponent implements OnInit {
     private searchService: SearchService,
     private hotelDetailService: HotelDetailService,
     private modal: ModalService,
-    ) {}
+    private snackbarService: SnackBarService
+  ) {}
 
   searchValue = false;
 
@@ -47,7 +54,8 @@ export class SearchBarComponent implements OnInit {
     console.log('');
     const findSearch$ = ({ search }) =>
       this.searchService.search(
-        search,this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id
+        search,
+        this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id
       );
     formChanges$
       .pipe(
@@ -63,68 +71,47 @@ export class SearchBarComponent implements OnInit {
       .subscribe(
         (response) => {
           this.results = new SearchResultDetail().deserialize(response);
-          if(this.results.searchResults.length > 0){
-            this.searchOptions = this.results.searchResults.slice(0,3);
-            this.searchDropdownVisible = true;
-            this.searchValue = true;
-          } else {
-            this.searchOptions = [];
+          this.searchOptions = [];
+          this.searchDropdownVisible = true;
+          this.searchValue = true;
+          if (
+            this.results.searchResults &&
+            this.results.searchResults.length > 0
+          ) {
+            this.searchOptions = this.results.searchResults.slice(0, 3);
+          } else if (response && response.reservations !== undefined) {
             this.searchDropdownVisible = false;
             this.searchValue = false;
           }
         },
         ({ error }) => {
-          console.log(error.message);
+          this.snackbarService.openSnackBarAsText(error.message);
         }
       );
   }
 
-  getAllResults(){
+  getAllResults() {
     this.searchOptions = this.results.searchResults;
   }
 
   setOptionSelection(searchData) {
     this.searchDropdownVisible = false;
-    this.selectedSearchOption.next(searchData);
-    this.openDetails(searchData);
-  }
-
-  openDetails(searchData) {
-    switch (searchData.type) {
-      case SearchType.reservation: {
-        this.openDetailsPage(searchData, DetailsComponent);
-        break;
-      }
-      case SearchType.guest: {
-        //statements; 
-        break;
-      }
-      case SearchType.package: {
-        this.openDetailsPage(searchData, EditPackageComponent);
-        break;
-      }
-      default: {
-        //statements; 
-        break;
-      }
-    }
+    // this.selectedSearchOption.next(searchData);
+    this.openDetailsPage(searchData, this.componentInstances[searchData.type]);
   }
 
   openDetailsPage(searchData, component) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
-    const detailCompRef = this.modal.openDialog(
-      component,
-      dialogConfig
-    );
+    const detailCompRef = this.modal.openDialog(component, dialogConfig);
 
     detailCompRef.componentInstance.bookingId = searchData.id;
 
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-       // TODO statements
-      detailCompRef.close();
+        // TODO statements
+        detailCompRef.close();
       })
     );
   }

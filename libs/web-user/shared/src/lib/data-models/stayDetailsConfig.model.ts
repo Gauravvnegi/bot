@@ -26,7 +26,7 @@ export class StayDetail implements Deserializable {
   adultsCount: number;
   expectedTime: string;
   deserialize(input: any) {
-    let expectedTime = new DateService().getDateFromTimeStamp(
+    let expectedTime = DateService.getDateFromTimeStamp(
       get(input, ['expectedArrivalTime']),
       'DD-MM-YYYY hh:mm a'
     );

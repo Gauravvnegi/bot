@@ -8,7 +8,6 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Customer } from '../../data-models/statistics.model';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { StatisticsService } from '../../services/statistics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -130,7 +129,6 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   timeShow = false;
 
   constructor(
-    private _dateService: DateService,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService
@@ -175,7 +173,10 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
+        this._adminUtilityService.convertTimestampToLabels(
+          this.selectedInterval,
+          d
+        )
       );
       this.chart.chartData[0].data.push(this.customerData.new[d]);
       this.chart.chartData[1].data.push(this.customerData.checkIn[d]);

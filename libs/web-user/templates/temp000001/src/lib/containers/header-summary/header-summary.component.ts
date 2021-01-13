@@ -20,7 +20,6 @@ export class HeaderSummaryComponent implements OnInit {
 
   constructor(
     private _stepperService: StepperService,
-    private _date: DateService,
     public dialogRef: MatDialogRef<HeaderSummaryComponent>,
     private router: Router,
     private route: ActivatedRoute
@@ -37,7 +36,7 @@ export class HeaderSummaryComponent implements OnInit {
   }
 
   setCurrentDate() {
-    this.date = this._date.currentDate().toString();
+    this.date = DateService.currentDate().toString();
   }
 
   goToDocumentsStep(event: any, ...args: any) {
@@ -51,6 +50,10 @@ export class HeaderSummaryComponent implements OnInit {
 
   openFeedback() {
     this.closeModal();
-    this.router.navigateByUrl(`/feedback?token=${this.route.snapshot.queryParamMap.get('token')}&entity=feedback`);
+    this.router.navigateByUrl(
+      `/feedback?token=${this.route.snapshot.queryParamMap.get(
+        'token'
+      )}&entity=feedback`
+    );
   }
 }

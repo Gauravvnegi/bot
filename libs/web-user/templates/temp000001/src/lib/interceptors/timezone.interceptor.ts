@@ -10,14 +10,14 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Injectable()
 export class TimezoneInterceptor implements HttpInterceptor {
-  constructor(private _dateService: DateService) {}
+  constructor() {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const modifiedRequest = req.clone({
       setHeaders: {
-        'x-timezone': this._dateService.getCurrentTimeZone(),
+        'x-timezone': DateService.getCurrentTimeZone(),
       },
     });
     return next.handle(modifiedRequest);

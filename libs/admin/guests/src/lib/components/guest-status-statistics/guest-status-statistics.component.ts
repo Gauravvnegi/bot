@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Status } from '../../data-models/statistics.model';
 import { Subscription } from 'rxjs';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -11,7 +10,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 @Component({
   selector: 'hospitality-bot-guest-status-statistics',
   templateUrl: './guest-status-statistics.component.html',
-  styleUrls: ['./guest-status-statistics.component.scss']
+  styleUrls: ['./guest-status-statistics.component.scss'],
 })
 export class GuestStatusStatisticsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
@@ -118,12 +117,11 @@ export class GuestStatusStatisticsComponent implements OnInit {
     chartType: 'line',
   };
   constructor(
-    private _dateService: DateService,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getGuestStatus();
@@ -159,12 +157,21 @@ export class GuestStatusStatisticsComponent implements OnInit {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
+        this._adminUtilityService.convertTimestampToLabels(
+          this.selectedInterval,
+          d
+        )
       );
       this.chart.chartData[0].data.push(this.guestStatusData.newGuestStats[d]);
-      this.chart.chartData[1].data.push(this.guestStatusData.checkinGuestStats[d]);
-      this.chart.chartData[2].data.push(this.guestStatusData.precheckinGuestStats[d]);
-      this.chart.chartData[3].data.push(this.guestStatusData.checkoutGuestStats[d]);
+      this.chart.chartData[1].data.push(
+        this.guestStatusData.checkinGuestStats[d]
+      );
+      this.chart.chartData[2].data.push(
+        this.guestStatusData.precheckinGuestStats[d]
+      );
+      this.chart.chartData[3].data.push(
+        this.guestStatusData.checkoutGuestStats[d]
+      );
     });
   }
 
@@ -195,14 +202,15 @@ export class GuestStatusStatisticsComponent implements OnInit {
           queryObj: this._adminUtilityService.makeQueryParams(queries),
         };
         this.$subscription.add(
-          this._statisticService
-            .getGuestStatus(config)
-            .subscribe((response) => {
+          this._statisticService.getGuestStatus(config).subscribe(
+            (response) => {
               this.guestStatusData = new Status().deserialize(response);
               this.initGraphData();
-            }, ({ error }) => {
+            },
+            ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);
-            })
+            }
+          )
         );
       })
     );

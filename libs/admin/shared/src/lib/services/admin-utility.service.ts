@@ -4,7 +4,7 @@ import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
 export class AdminUtilityService {
-  constructor(private _dateService: DateService) {}
+  constructor() {}
 
   makeQueryParams(queries = [], callingMethod?) {
     if (!queries.length) {
@@ -39,7 +39,7 @@ export class AdminUtilityService {
     } else if (type === 'month') {
       returnTime = moment.unix(data).format('MMM YYYY');
     } else if (type === 'date') {
-      returnTime = this._dateService.convertTimestampToDate(data, 'DD MMM');
+      returnTime = DateService.convertTimestampToDate(data, 'DD MMM');
     } else {
       returnTime = `${data > 12 ? data - 12 : data}:00 ${
         data > 11 ? 'PM' : 'AM'
@@ -49,18 +49,24 @@ export class AdminUtilityService {
   }
 
   getCalendarType(startDate, endDate) {
-    const dateDiff = this._dateService.getDateDifference(startDate, endDate);
+    const dateDiff = DateService.getDateDifference(startDate, endDate);
     if (dateDiff === 0) {
       return 'day';
     } else if (dateDiff > 0 && dateDiff < 30) {
       return 'date';
-    } else if (dateDiff >= 30 && dateDiff <=365) {
-      if (this._dateService.getMonthFromDate(startDate) === this._dateService.getMonthFromDate(endDate)) {
+    } else if (dateDiff >= 30 && dateDiff <= 365) {
+      if (
+        DateService.getMonthFromDate(startDate) ===
+        DateService.getMonthFromDate(endDate)
+      ) {
         return 'date';
       }
       return 'month';
     } else {
-      if (this._dateService.getYearFromDate(startDate) === this._dateService.getYearFromDate(endDate)) {
+      if (
+        DateService.getYearFromDate(startDate) ===
+        DateService.getYearFromDate(endDate)
+      ) {
         return 'month';
       }
       return 'year';

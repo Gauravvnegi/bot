@@ -6,7 +6,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
@@ -78,7 +77,6 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
     StepperService,
     StayDetailsService,
     GuestDetailsService,
-    DateService,
     DocumentDetailsService,
     PaymentDetailsService,
     FeedbackDetailsService,
@@ -96,7 +94,7 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
     DefaultAmenityService,
     ThankYouService,
     UtilityService,
-    GSTService
+    GSTService,
   ],
 })
 export class Temp000001Module {}

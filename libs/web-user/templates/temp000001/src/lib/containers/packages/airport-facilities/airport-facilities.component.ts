@@ -27,14 +27,13 @@ export class AirportFacilitiesComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _airportService: AirportService,
-    private _paidService: PaidService,
-    private _dateService: DateService
+    private _paidService: PaidService
   ) {
     this.initAirportForm();
   }
 
   ngOnInit(): void {
-    this.minDate = new Date(this._dateService.getCurrentDateString());
+    this.minDate = new Date(DateService.getCurrentDateString());
     this.airportConfig = this.setFieldConfiguration();
     this.assignUniqueData();
     this.populateFormData();

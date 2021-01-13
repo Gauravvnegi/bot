@@ -7,7 +7,11 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  constructor(public dateService: DateService) {}
+  constructor() {}
 
   ngOnInit(): void {}
+
+  get currentDate() {
+    return DateService.getCurrentDateWithFormat('YYYY');
+  }
 }

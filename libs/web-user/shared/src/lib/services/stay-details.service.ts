@@ -117,7 +117,7 @@ export class StayDetailsService extends ApiService {
     let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm').format(
       'hh:mm'
     );
-    return new DateService().convertDateToTimestamp(arrivalDate + 'T' + time);
+    return DateService.convertDateToTimestamp(arrivalDate + 'T' + time);
   }
 
   updateStayDetailDS(value) {

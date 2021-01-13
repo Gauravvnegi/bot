@@ -42,7 +42,6 @@ import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.se
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 import { Temp000001TextareaComponent } from './presentational/temp000001-textarea/temp000001-textarea.component';
 import { Temp000001RadioComponent } from './presentational/temp000001-radio/temp000001-radio.component';
-import { Temp000001CustomStepperComponent } from './presentational/temp000001-custom-stepper/temp000001-custom-stepper.component';
 
 @NgModule({
   imports: [
@@ -64,7 +63,6 @@ import { Temp000001CustomStepperComponent } from './presentational/temp000001-cu
     ButtonDirective,
     Temp000001TextareaComponent,
     Temp000001RadioComponent,
-    Temp000001CustomStepperComponent,
   ],
   providers: [
     {

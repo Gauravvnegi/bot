@@ -87,13 +87,6 @@
           background-color: rgba(232, 238, 245, 0.25);
           color: white;
           border: 2px solid $primary-purple;
-          // .filter-icon {
-          //   filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
-          //     brightness(126%) contrast(101%);
-          // }
-          // .filter-button--text {
-          //   color: white;
-          // }
         }
         &:focus {
           outline: none;
@@ -114,8 +107,8 @@
       }
       .filter-wrapper {
         position: absolute;
-        top: 90%;
-        left: 92%;
+        top: 98%;
+        left: 1%;
         box-shadow: 0px 0px 5px 0px darkgray;
         width: 45vw;
         background-color: white;

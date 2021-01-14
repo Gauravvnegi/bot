@@ -56,9 +56,20 @@
       padding: 10px;
       padding-bottom: 0;
       font-weight: 500;
-      max-height: 50vh;
+      max-height: 38vh;
       overflow: auto;
       overflow-x: hidden;
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #c2c2c2;
+        border-radius: 10px;
+      }
       &__option {
         display: flex;
         margin: 10px 0;

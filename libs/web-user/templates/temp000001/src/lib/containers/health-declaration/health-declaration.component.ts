@@ -6,9 +6,9 @@ import { FieldsetComponent } from 'libs/web-user/shared/src/lib/presentational/f
 import { FileUploadComponent } from 'libs/web-user/shared/src/lib/presentational/file-upload/file-upload.component';
 import { InputComponent } from 'libs/web-user/shared/src/lib/presentational/input/input.component';
 import { LabelComponent } from 'libs/web-user/shared/src/lib/presentational/label/label.component';
-import { RadioComponent } from 'libs/web-user/shared/src/lib/presentational/radio/radio.component';
+import { Temp000001RadioComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-radio/temp000001-radio.component';
 import { SelectBoxComponent } from 'libs/web-user/shared/src/lib/presentational/select-box/select-box.component';
-import { TextareaComponent } from 'libs/web-user/shared/src/lib/presentational/textarea/textarea.component';
+import { Temp000001TextareaComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-textarea/temp000001-textarea.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -20,9 +20,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 
 const components = {
-  radio: RadioComponent,
+  radio: Temp000001RadioComponent,
   input: InputComponent,
-  textarea: TextareaComponent,
+  textarea: Temp000001TextareaComponent,
   label: LabelComponent,
   fieldset: FieldsetComponent,
   select: SelectBoxComponent,

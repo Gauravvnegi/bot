@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
-import { InputPopupComponent } from 'libs/web-user/shared/src/lib/presentational/input-popup/input-popup.component';
+import { Temp000001InputPopupComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-input-popup/temp000001-input-popup.component';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
@@ -53,7 +53,7 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   }
 
   onCheckinSubmit() {
-    const dialogRef = this.dialog.open(InputPopupComponent, {
+    const dialogRef = this.dialog.open(Temp000001InputPopupComponent, {
       disableClose: true,
       autoFocus: true,
       data: { pageValue: this.summaryDetails },

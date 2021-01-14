@@ -7,39 +7,29 @@
       <div class="stat-title">NPS Across Departments</div>
     </div>
     <div [formGroup]="npsFG" class="dropdown--wrapper">
-      <p-dropdown
-        class="export"
-        [options]="documentActionTypes"
-        formControlName="documentActionType"
-      >
+      <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
         <ng-template let-documentActionItem pTemplate="selectedItem">
           <img src="assets/svg/Export.svg" />
           <span class="dropdown-label">{{ documentActionItem.label }}</span>
         </ng-template>
       </p-dropdown>
       <div class="divider"></div>
-      <p-dropdown
-        class="export"
-        [options]="documentTypes"
-        formControlName="documentType"
-      >
+      <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
         <ng-template let-documentTypeItem pTemplate="selectedItem">
           <img src="assets/svg/CSV.svg" />
           <span class="dropdown-label">{{ documentTypeItem.label }}</span>
         </ng-template>
       </p-dropdown>
-      <button class="go">
+      <button class="go" (click)="exportCSV()">
         <mat-icon class="material-icons" matSuffix>east</mat-icon>
       </button>
     </div>
   </div>
   <div class="progress_container">
-  <div class="progress_container__carousel_box">
-    <div class="slide" *ngFor="let progress of progressValues">
-      <hospitality-bot-two-way-progress
-        [settings]="progress"
-      ></hospitality-bot-two-way-progress>
+    <div class="progress_container__carousel_box">
+      <div class="slide" *ngFor="let progress of progressValues">
+        <hospitality-bot-two-way-progress [settings]="progress"></hospitality-bot-two-way-progress>
+      </div>
     </div>
   </div>
-</div>
 </div>

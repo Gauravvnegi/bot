@@ -13,6 +13,7 @@ import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/dat
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestTable } from '../../data-models/guest-table.model';
 import { DetailsComponent } from '../details/details.component';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -20,9 +21,9 @@ import { DetailsComponent } from '../details/details.component';
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './guest-datatable.component.scss',
-  ]
+  ],
 })
-export class GuestDatatableComponent  extends BaseDatatableComponent
+export class GuestDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = 'Guest List';
   actionButtons = true;
@@ -40,7 +41,10 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     { field: 'amountDueAndTotal', header: 'Amount Due/ Total Spend' },
     { field: 'guestAttributes.transactionUsage', header: 'Transaction Usage' },
     { field: 'guestAttributes.overAllNps', header: 'Overall NPS' },
-    { field: 'guestAttributes.churnProbalilty', header: 'Churn Prob/ Prediction' },
+    {
+      field: 'guestAttributes.churnProbalilty',
+      header: 'Churn Prob/ Prediction',
+    },
     { field: 'stageAndourney', header: 'Stage/ Channels' },
   ];
 
@@ -311,25 +315,24 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
-    this.loading = false;
-    // this.$subscription.add(
-    //   this._guestTableService.exportCSV(config).subscribe(
-    //     (res) => {
-    //       FileSaver.saveAs(
-    //         res,
-    //         this.tableName.toLowerCase() +
-    //           '_export_' +
-    //           new Date().getTime() +
-    //           '.csv'
-    //       );
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this._snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+    this.$subscription.add(
+      this._guestTableService.exportCSV(config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {

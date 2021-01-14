@@ -14,7 +14,7 @@ export class GuestTableService extends ApiService {
   }
 
   getReservationDetail(bookingId: string): Observable<any> {
-    return this.get(`/api/v1/reservation/${bookingId}?raw=true`)
+    return this.get(`/api/v1/reservation/${bookingId}?raw=true`);
   }
 
   getGuestReservations(guestId: string): Observable<any> {
@@ -22,7 +22,7 @@ export class GuestTableService extends ApiService {
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/guests/export/${config.queryObj}`, {
+    return this.get(`/api/v1/guest/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }

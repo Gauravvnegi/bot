@@ -7,60 +7,40 @@
       <div class="stat-title">NPS Across Services</div>
     </div>
     <div class="dropdown--wrapper">
-      <p-dropdown
-        class="export"
-        [options]="documentActionTypes"
-        formControlName="documentActionType"
-      >
+      <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
         <ng-template let-documentActionItem pTemplate="selectedItem">
           <img src="assets/svg/Export.svg" />
           <span class="dropdown-label">{{
             documentActionItem.label
-          }}</span>
+            }}</span>
         </ng-template>
       </p-dropdown>
       <div class="divider"></div>
-      <p-dropdown
-        class="export"
-        [options]="documentTypes"
-        formControlName="documentType"
-      >
+      <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
         <ng-template let-documentTypeItem pTemplate="selectedItem">
           <img src="assets/svg/CSV.svg" />
           <span class="dropdown-label">{{
             documentTypeItem.label
-          }}</span>
+            }}</span>
         </ng-template>
       </p-dropdown>
-      <button class="go">
+      <button class="go" (click)="exportCSV()">
         <mat-icon class="material-icons" matSuffix>east</mat-icon>
       </button>
     </div>
   </div>
   <div class="tab-group">
-    <hospitality-bot-tab-group
-      [listItems]="tabFilterItems"
-      [selectedIndex]="tabFilterIdx"
-      (selectedTabChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-tab-group>
+    <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
   </div>
   <div class="button__wrapper">
-    <mat-chip-list
-      multiple
-      #chipList
-      aria-label="Quick Reply selection"
-      formControlName="quickReplyActionFilters"
-      *ngIf="tabFilterItems.length"
-    >
-      <mat-chip
-        *ngFor="
+    <mat-chip-list multiple #chipList aria-label="Quick Reply selection" formControlName="quickReplyActionFilters"
+      *ngIf="tabFilterItems.length">
+      <mat-chip *ngFor="
           let quickReplyType of tabFilterItems[tabFilterIdx].chips;
           let quickReplyTypeIdx = index
-        "
-        selectable="true"
-        [selected]="isQuickReplyFilterSelected(quickReplyType)"
-        (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
-      >
+        " selectable="true" [selected]="isQuickReplyFilterSelected(quickReplyType)"
+        (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)">
         {{ quickReplyType.label }}
         <!-- <span *ngIf="quickReplyType.value != 'ALL'"> (</span
         >{{ quickReplyType.total
@@ -92,26 +72,12 @@
           </div>
           <div class="progress-bar">
             <div fxLayout="row" class="progress">
-              <div
-                [fxFlex]="100 - progress.negative"
-                [style]="'background: transparent;'"
-              ></div>
-              <div
-                [fxFlex]="progress.negative"
-                class="progress-value"
-                [style]="'background: #DF0A20;'"
-              ></div>
+              <div [fxFlex]="100 - progress.negative" [style]="'background: transparent;'"></div>
+              <div [fxFlex]="progress.negative" class="progress-value" [style]="'background: #DF0A20;'"></div>
             </div>
             <div fxLayout="row" class="progress">
-              <div
-                [fxFlex]="progress.positive"
-                class="progress-value"
-                [style]="'background: #1FABDB;'"
-              ></div>
-              <div
-                [fxFlex]="100 - progress.positive"
-                [style]="'background: transparent;'"
-              ></div>
+              <div [fxFlex]="progress.positive" class="progress-value" [style]="'background: #1FABDB;'"></div>
+              <div [fxFlex]="100 - progress.positive" [style]="'background: transparent;'"></div>
             </div>
           </div>
         </div>
@@ -125,10 +91,7 @@
     </div>
     <div class="label-container">
       <div class="label"></div>
-      <div
-        class="divider-container"
-        [style.height]="(40 * progresses.length) + 'px'"
-      >
+      <div class="divider-container" [style.height]="(40 * progresses.length) + 'px'">
         <div class="divider" *ngFor="let value of progressValues"></div>
       </div>
     </div>

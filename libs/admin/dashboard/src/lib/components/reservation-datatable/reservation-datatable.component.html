@@ -306,7 +306,7 @@
           >
             {{ rowData.feedback.rating }}
           </p>
-          <ng-container
+          <!-- <ng-container
             *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
           >
             <img
@@ -317,7 +317,7 @@
               }"
               [src]="feedbackService.getServiceUrl(suggestion.id)"
             />
-          </ng-container>
+          </ng-container> -->
           <div
             *ngIf="rowData.feedback.comments"
             [ngClass]="{

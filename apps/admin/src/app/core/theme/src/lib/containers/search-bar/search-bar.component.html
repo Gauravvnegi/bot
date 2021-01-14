@@ -30,10 +30,9 @@
         <ng-container *ngSwitchCase="'RESERVATIONS'">
           <div class="option" (click)="setOptionSelection(option)">
             <div class="image"><img [src]="option.imageUrl" /></div>
+            <div class="detail">{{ option.bookingNumber }}</div>
             <div class="circle-divider"></div>
-            <div class="detail">{{ option.label }}</div>
-            <div class="circle-divider"></div>
-            <div class="description">{{ option.description }}</div>
+            <div class="description">{{ option.label }}</div>
           </div>
         </ng-container>
       </ng-container>

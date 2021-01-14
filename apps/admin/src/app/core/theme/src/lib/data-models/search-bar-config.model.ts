@@ -62,18 +62,22 @@ export class GuestSearchResult implements Deserializable {
 export class ReservationSearchResult implements Deserializable {
   id: string;
   label: string;
-  description: string;
+  bookingNumber: string;
   imageUrl: string;
   type: string;
+  arrivalTime: string;
+  departureTime: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'label', get(input, ['primaryGuestName'])),
-      set({}, 'description', get(input, ['number'])),
       set({}, 'type', get(input, ['searchType'])),
-      set({}, 'imageUrl', get(input, ['imageUrl']))
+      set({}, 'bookingNumber', get(input, ['number'])),
+      set({}, 'imageUrl', get(input, ['imageUrl'])),
+      set({}, 'arrivalTime', get(input, ['arrivalTime'])),
+      set({}, 'departureTime', get(input, ['departureTime']))
     );
     return this;
   }

@@ -96,14 +96,17 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService
-        .getDepartmentsStatistics(config)
-        .subscribe((response) => {
+      this._statisticService.getDepartmentsStatistics(config).subscribe(
+        (response) => {
           this.npsChartData = new NPSDepartments().deserialize(
             response.npsStats
           );
           this.initGraphData();
-        })
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -118,9 +121,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     };
     this.$subscription.add(
       this._statisticService.exportOverallDepartmentsCSV(config).subscribe(
-        (res) => {
+        (response) => {
           FileSaver.saveAs(
-            res,
+            response,
             'NPS_Across_Departments_export_' + new Date().getTime() + '.csv'
           );
         },

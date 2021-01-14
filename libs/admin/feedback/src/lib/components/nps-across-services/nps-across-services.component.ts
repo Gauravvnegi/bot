@@ -178,15 +178,18 @@ export class NpsAcrossServicesComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService
-        .getServicesStatistics(config)
-        .subscribe((response) => {
+      this._statisticService.getServicesStatistics(config).subscribe(
+        (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
           if (this.npsProgressData.entities) {
             this.initTabLabels(this.npsProgressData.entities);
           }
           this.initProgressData(this.npsProgressData.npsStats);
-        })
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -203,9 +206,9 @@ export class NpsAcrossServicesComponent implements OnInit {
     };
     this.$subscription.add(
       this._statisticService.exportOverallServicesCSV(config).subscribe(
-        (res) => {
+        (response) => {
           FileSaver.saveAs(
-            res,
+            response,
             'NPS_Across_Services_export_' + new Date().getTime() + '.csv'
           );
         },

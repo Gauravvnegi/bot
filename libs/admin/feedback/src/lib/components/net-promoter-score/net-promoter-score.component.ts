@@ -168,17 +168,19 @@ export class NetPromoterScoreComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService
-        .getOverallNPSStatistics(config)
-        .subscribe((response) => {
+      this._statisticService.getOverallNPSStatistics(config).subscribe(
+        (response) => {
           this.npsChartData = new NPS().deserialize(response);
           this.initGraphData();
-        })
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
   exportCSV() {
-
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -189,13 +191,8 @@ export class NetPromoterScoreComponent implements OnInit {
     };
     this.$subscription.add(
       this._statisticService.exportOverallNPSCSV(config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            'NPS_export_' +
-              new Date().getTime() +
-              '.csv'
-          );
+        (response) => {
+          FileSaver.saveAs(response, 'NPS_export_' + new Date().getTime() + '.csv');
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);

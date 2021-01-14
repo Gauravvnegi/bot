@@ -317,9 +317,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this._guestTableService.exportCSV(config).subscribe(
-        (res) => {
+        (response) => {
           FileSaver.saveAs(
-            res,
+            response,
             this.tableName.toLowerCase() +
               '_export_' +
               new Date().getTime() +

@@ -28,6 +28,7 @@ export class NotificationComponent implements OnInit {
   hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
 
   @Input() config: RequestConfig;
+  isSending: boolean = false;
 
   ckeditorContent;
   public Editor = ClassicEditor;
@@ -191,6 +192,7 @@ export class NotificationComponent implements OnInit {
       this._snackbarService.openSnackBarAsText(validation[0].data.message);
       return;
     }
+    this.isSending  = true;
     let values = new RequestData().deserialize(
       this.notificationForm.getRawValue()
     );
@@ -198,12 +200,14 @@ export class NotificationComponent implements OnInit {
     this.$subscription.add(
       this.requestService.createRequestData(this.hotelId, values).subscribe(
         (res) => {
+          this.isSending = false;
           this._snackbarService.openSnackBarAsText('Notification sent.', '', {
             panelClass: 'success',
           });
           this._location.back();
         },
         ({ error }) => {
+          this.isSending = false;
           this._snackbarService.openSnackBarAsText(error.message);
         }
       )

@@ -138,7 +138,9 @@
         </div>
       </div>
       <div style="align-self: center;">
-        <button class="button" (click)="sendMessage()"> Send </button>
+        <button class="button" (click)="sendMessage()">
+          <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
+          {{isSending ? "Sending" : "Send"}} </button>
       </div>
     </div>
   </form>

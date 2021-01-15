@@ -1,4 +1,4 @@
-<div class="global__search">
+<div class="global_search">
   <span class="p-input-icon-right">
     <i *ngIf="!searchValue" class="pi pi-search"></i>
     <mat-icon *ngIf="searchValue" (click)="clearSearch()" class="cross_icon"
@@ -13,15 +13,59 @@
       />
     </form>
   </span>
-  <div *ngIf="searchDropdownVisible" class="global__search__dropdown">
-    <p
-      *ngFor="let option of searchOptions"
-      (click)="setOptionSelection(option)"
+  <div *ngIf="searchDropdownVisible" class="global_search__dropdown">
+    <div class="global_search__dropdown__result">
+      <ng-container *ngFor="let option of searchOptions; let i = index">
+        <ng-container [ngSwitch]="option.type">
+          <ng-container *ngSwitchCase="'GUEST'">
+            <div
+              class="global_search__dropdown__result__option"
+              (click)="setOptionSelection(option)"
+            >
+              <div class="image"><img src="assets/svg/request.svg" /></div>
+              <div class="detail">{{ option.label }}</div>
+              <div class="circle-divider"></div>
+              <div class="description">{{ option.description }}</div>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'PACKAGES'">
+            <div
+              class="global_search__dropdown__result__option"
+              (click)="setOptionSelection(option)"
+            >
+              <div class="image"><img src="assets/svg/box.svg" /></div>
+              <div class="detail">{{ option.label }}</div>
+              <div class="circle-divider"></div>
+              <div class="description">{{ option.description }}</div>
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'RESERVATIONS'">
+            <div
+              class="global_search__dropdown__result__option"
+              (click)="setOptionSelection(option)"
+            >
+              <div class="image"><img src="assets/svg/chair.svg" /></div>
+              <div class="detail">{{ option.bookingNumber }}</div>
+              <div class="circle-divider"></div>
+              <div class="description">{{ option.label }}</div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="searchOptions.length === 0">
+       <div class="no_result">No results found</div> 
+      </ng-container>
+    </div>
+    <ng-container
+      *ngIf="
+        searchOptions.length >= 3 &&
+        searchOptions.length < this.results.searchResults.length
+      "
     >
-      {{ option.type }}
-    </p>
-    <!-- <p (click)="setOptionSelection(1)">Test</p>
-    <p (click)="setOptionSelection(1)">Test</p>
-    <p (click)="setOptionSelection(1)">Test</p> -->
+      <div class="show-all" (click)="getAllResults()">
+        See all results for '{{ parentForm.get('search').value }}'
+      </div>
+    </ng-container>
   </div>
 </div>

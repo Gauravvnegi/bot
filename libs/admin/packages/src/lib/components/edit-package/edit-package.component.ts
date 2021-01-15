@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -15,6 +15,8 @@ import { PackageService } from '../../services/package.service';
   styleUrls: ['./edit-package.component.scss']
 })
 export class EditPackageComponent implements OnInit {
+
+  @Input() id: string;
 
   private $subscription: Subscription = new Subscription();
 
@@ -126,6 +128,9 @@ export class EditPackageComponent implements OnInit {
       this.activatedRoute.params.subscribe(params => {
         if (params['id']) {
           this.packageId = params['id'];
+          this.getPackageDetails(this.packageId);
+        }else if(this.id){
+          this.packageId = this.id;
           this.getPackageDetails(this.packageId);
         }
       })

@@ -201,24 +201,4 @@ export class LayoutOneComponent implements OnInit {
     this._authService.clearToken();
     this._router.navigate(['/auth']);
   }
-
-  onSearchOptionSelected($event) {
-    if ($event.type === 'Booking') {
-      this.openDetailPage($event.bookingId, DetailsComponent);
-    }
-  }
-
-  openDetailPage(bookingId, component) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(component, dialogConfig);
-
-    detailCompRef.componentInstance.bookingId = bookingId;
-
-    detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-      this.isDetailPageVisible = false;
-      detailCompRef.close();
-    });
-  }
 }

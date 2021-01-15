@@ -43,7 +43,7 @@ export class EditUserPermissionComponent implements OnInit {
   userToModDetails;
   private _onOpenedChange = new Subject();
   onOpenedChange = this._onOpenedChange.asObservable();
-  isOptionsOpenedChanged = false;
+  isOptionsOpenedChanged = true;
   @Output()
   optionChange = new EventEmitter();
 

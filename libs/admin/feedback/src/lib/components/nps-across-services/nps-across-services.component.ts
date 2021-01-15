@@ -21,7 +21,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   documentTypes = [
     { label: 'CSV', value: 'csv' },
     // { label: 'EXCEL', value: 'excel' },
-    { label: 'PDF', value: 'pdf' },
+    // { label: 'PDF', value: 'pdf' },
   ];
   $subscription: Subscription = new Subscription();
   selectedInterval: string;

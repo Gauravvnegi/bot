@@ -87,11 +87,14 @@ export class DocumentsComponent implements OnInit {
 
   downloadDocs(documents) {
     let urls = [];
-
+    let fileNames = [];
+    const name = `${this.selectedGuestGroup.get('firstName').value}_${this.selectedGuestGroup.get('lastName').value}`;
     documents.forEach((doc) => {
       urls.push(doc.frontUrl);
+      fileNames.push(`${name}_${doc.documentType}_frontURL`);
       if (doc.documentType != 'VISA') {
         urls.push(doc.backUrl);
+        fileNames.push(`${name}_${doc.documentType}_backURL`);
       }
     });
     const zipFile = new JSZip();
@@ -101,6 +104,7 @@ export class DocumentsComponent implements OnInit {
       const index = fileName.lastIndexOf('/');
       fileName = fileName.slice(index + 1);
       fileName = decodeURIComponent(fileName);
+      fileName = `${fileNames[i]}_${fileName}`;
       JSZipUtils.getBinaryContent(url, (err, data) => {
         if (err) {
           this._snackbarService.openSnackBarAsText(err);

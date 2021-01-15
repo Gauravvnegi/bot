@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
+import { get } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
-import { FilterService } from './filter.service';
 import { DateRangeFilterService } from './daterange-filter.service';
-import * as moment from 'moment';
-import { get, set } from 'lodash';
+import { FilterService } from './filter.service';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalFilterService {

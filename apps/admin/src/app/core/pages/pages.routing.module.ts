@@ -25,13 +25,6 @@ const appRoutes: Route[] = [
             (m) => m.AdminRequestModule
           ),
       },
-      // {
-      //   path: 'reservation',
-      //   loadChildren: () =>
-      //     import('@hospitality-bot/admin/reservation').then(
-      //       (m) => m.AdminReservationModule
-      //     ),
-      // },
       {
         path: 'package',
         loadChildren: () =>

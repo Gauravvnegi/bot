@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -15,6 +15,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { ActivatedRoute } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
@@ -40,6 +41,12 @@ export class EditUserPermissionComponent implements OnInit {
   value;
 
   userToModDetails;
+  private _onOpenedChange = new Subject();
+  onOpenedChange = this._onOpenedChange.asObservable();
+  isOptionsOpenedChanged = false;
+  @Output()
+  optionChange = new EventEmitter();
+
   constructor(
     private _fb: FormBuilder,
     private _userDetailService: UserDetailService,
@@ -66,6 +73,24 @@ export class EditUserPermissionComponent implements OnInit {
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
     });
+  }
+
+  openedChange(event) {
+    this._onOpenedChange.next(event);
+  }
+
+  trackByFn(index, item) {
+    return index;
+  }
+
+  change(event) {
+    const selectData = {
+      // index: this.index,
+      selectEvent: event,
+      formControlName: 'cc',
+      formGroup: this.userForm,
+    };
+    this.optionChange.emit(selectData);
   }
 
   ngOnInit(): void {

@@ -217,10 +217,14 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  loadInitialData(queries = [], loading = true) {
+  loadInitialData(
+    queries = [],
+    loading = true,
+    props?: { offset: number; limit: number }
+  ) {
     this.loading = loading && true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
+      this.fetchDataFrom(queries, props).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
           //set pagination
@@ -326,6 +330,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
+    this.tempFirst = this.first;
+    this.tempRowsPerPage = this.rowsPerPage;
   }
 
   customSort(event: SortEvent) {
@@ -358,8 +364,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
+    // this.tempFirst = this.first;
+    // this.tempRowsPerPage = this.rowsPerPage;
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
 
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
@@ -442,7 +458,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
             },
             ...this.getSelectedQuickReplyFilters(),
           ],
-          false
+          false,
+          { offset: this.tempFirst, limit: this.tempRowsPerPage }
         );
         detailCompRef.close();
       })

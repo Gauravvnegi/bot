@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { GuestTableService } from '../../services/guest-table.service';
-import { BookingFeedback } from '../../data-models/feedback.model';
+import { BookingFeedback, Service } from '../../data-models/feedback.model';
 import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
 import { SnackBarService } from 'libs/shared/material/src';
 
@@ -17,7 +17,7 @@ export class BookingFeedbackComponent implements OnInit {
   @Input() feedbackConfig: FeedBackDetail;
 
   feedbackData;
-  services;
+  services: Service[];
   showMore: boolean = true;
   constructor(
     private feedbackService: FeedbackService,

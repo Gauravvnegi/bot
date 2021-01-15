@@ -3,7 +3,7 @@
 		<!-- Check if documents pending in any case ; then show pending template. If documents are initiated, completed or failed i can view docs-->
 		<div class="document-header">
 			<div class="heading">Doc Info</div>
-			<div class="download" (click)="downloadDocs()">Download</div>
+			<div class="download" (click)="downloadDocs(selectedGuestGroup.get('documents').value)">Download</div>
 		</div>
 		<ng-container *ngIf="selectedGuestGroup">
 			<form [formGroup]="selectedGuestGroup">

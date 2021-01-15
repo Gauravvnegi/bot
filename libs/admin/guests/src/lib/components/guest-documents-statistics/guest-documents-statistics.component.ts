@@ -29,7 +29,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
 
   chart: any = {
     Labels: ['No Data'],
-    Data: [[100, 0, 0, 0]],
+    Data: [[100]],
     Type: 'doughnut',
     Legend : false,
     Colors : [
@@ -59,6 +59,17 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     this.chart.Data[0][1] = this.document.PENDING;
     this.chart.Data[0][2] = this.document.ACCEPTED;
     this.chart.Data[0][3] = this.document.REJECTED;
+
+    if (this.chart.Data[0].reduce((a, b) => a + b, 0)) {
+      this.setChartOptions();
+    } else {
+      this.chart.Data = [[100]];
+      this.chart.Colors = [{
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
+      }];
+      this.chart.Labels = ['No data'];
+    }
   }
 
   private getDocumentStatistics(): void {
@@ -70,6 +81,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
             data['dateRange'].queryValue[1].fromDate
           ),
         };
+
         this.selectedInterval = calenderType.calenderType;
         const queries = [
           ...data['filter'].queryValue,
@@ -80,13 +92,13 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
         const config = {
           queryObj: this._adminUtilityService.makeQueryParams(queries),
         };
+
         this.$subscription.add(
           this._statisticService
             .getDocumentStatistics(config)
             .subscribe((res) => {
               this.document = new Document().deserialize(res);
               this.initGraphData();
-              this.setChartOptions();
             })
         );
       })
@@ -96,12 +108,10 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   setChartOptions() {
     this.chart.Labels = ['Initiated', 'Pending', 'Accepted', 'Rejected'];
 
-    this.chart.Colors = [
-      {
-        backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-        borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-      }
-    ];
+    this.chart.Colors = [{
+      backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+      borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+    }];
   }
 
   ngOnDestroy(): void {

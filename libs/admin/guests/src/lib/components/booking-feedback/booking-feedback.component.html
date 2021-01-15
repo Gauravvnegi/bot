@@ -132,8 +132,8 @@
 				</div>
 			</div>
 		</div>
-		<hr class="data-seperator" *ngIf="services" />
-		<div *ngIf="services" style="margin-bottom: 15px;">
+		<hr class="data-seperator" *ngIf="services && services.length" />
+		<div *ngIf="services && services.length" style="margin-bottom: 15px;">
 			<div class="container__title">
 				<p>Service Feedback</p>
 				<div *ngIf="showMore" (click)="toggleShowMore()" style="display: flex; align-items: center; cursor: pointer;font: normal normal medium 14px/19px Roboto;

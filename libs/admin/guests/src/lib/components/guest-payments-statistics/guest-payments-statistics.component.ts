@@ -55,6 +55,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       cutoutPercentage: 0
     },
   };
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
@@ -66,15 +67,22 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
     this.getPaymentStatistics();
   }
 
-  // ngOnChanges(): void {
-  //   this.getPaymentStatistics();
-  // }
-
   private initGraphData(): void {
     this.chart.Data = [[]];
     this.chart.Data[0][0] = this.payment.FULL;
     this.chart.Data[0][1] = this.payment.PARTIAL;
     this.chart.Data[0][2] = this.payment.PENDING;
+
+    if (this.chart.Data[0].reduce((a, b) => a + b, 0)) {
+      this.setChartOptions();
+    } else {
+      this.chart.Data = [[100]];
+      this.chart.Colors = [{
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
+      }];
+      this.chart.Labels = ['No data'];
+    }
   }
 
   private getPaymentStatistics(): void {
@@ -102,7 +110,6 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
             .subscribe((res) => {
               this.payment = new Payment().deserialize(res);
               this.initGraphData();
-              this.setChartOptions();
             }, ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);
             })
@@ -124,5 +131,4 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

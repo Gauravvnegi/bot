@@ -19,12 +19,12 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
   @ViewChild('healthComponent') healthComponent: HealthDeclarationComponent;
 
   constructor(
-    private _reservationService: ReservationService,
-    private _healthDetailsService: HealthDetailsService,
-    private _stepperService: StepperService,
-    private _buttonService: ButtonService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _reservationService: ReservationService,
+    protected _healthDetailsService: HealthDetailsService,
+    protected _stepperService: StepperService,
+    protected _buttonService: ButtonService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -33,7 +33,7 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
   /**
    * Function to save/update the health details for the guest on next click
    */
-  saveHealthDeclarationDetails() {
+  saveHealthDeclarationDetails(): void {
     const status = this._healthDetailsService.validateHealthDecForm(
       this.parentForm
     ) as Array<any>;
@@ -77,7 +77,7 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     );
   }
 
-  private performActionIfNotValid(status: any[]) {
+  protected performActionIfNotValid(status: any[]) {
     const healthDecFG = this.parentForm.get(
       'healthDeclarationForm'
     ) as FormGroup;

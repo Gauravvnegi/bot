@@ -21,10 +21,10 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
 
   constructor(
     public dialog: MatDialog,
-    private _summaryService: SummaryService,
-    private _stepperService: StepperService,
-    private router: Router,
-    private route: ActivatedRoute
+    protected _summaryService: SummaryService,
+    protected _stepperService: StepperService,
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
     super();
     this.self = this;

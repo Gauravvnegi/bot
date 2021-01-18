@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./payment-main.component.scss'],
 })
 export class PaymentMainComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
   paymentStatusData: PaymentMainStatus = new PaymentMainStatus();
 
   ispaymentStatusLoaded: boolean = false;
@@ -37,7 +37,7 @@ export class PaymentMainComponent implements OnInit {
     this.getReservationDetails();
   }
 
-  private getReservationDetails() {
+  protected getReservationDetails() {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
@@ -51,7 +51,7 @@ export class PaymentMainComponent implements OnInit {
     );
   }
 
-  private getPaymentStatus() {
+  protected getPaymentStatus() {
     this.$subscription.add(
       this._paymentDetailService
         .getPaymentStatus(this._reservationService.reservationId)

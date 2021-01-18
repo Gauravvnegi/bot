@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Route } from '@angular/router';
-
 import { AddGstComponent } from './containers/add-gst/add-gst.component';
 import { AmenitiesComponent } from './containers/amenities/amenities.component';
 import { ApplicationStatusComponent } from './containers/application-status/application-status.component';
@@ -38,6 +37,8 @@ import { Temp000002Component } from './containers/temp000002/temp000002.componen
 import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
 import { AirportFacilitiesComponent } from './containers/packages/airport-facilities/airport-facilities.component';
 import { DefaultAmenityComponent } from './containers/packages/default-amenity/default-amenity.component';
+import { Temp000002TextareaComponent } from './presentational/temp000002-textarea/temp000002-textarea.component';
+
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -135,5 +136,6 @@ export class Temp000002RoutingModule {
     ThankYouMainComponent,
     AirportFacilitiesComponent,
     DefaultAmenityComponent,
+    Temp000002TextareaComponent,
   ];
 }

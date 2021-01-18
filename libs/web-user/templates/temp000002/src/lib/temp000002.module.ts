@@ -32,6 +32,7 @@ import { ThankYouService } from 'libs/web-user/shared/src/lib/services/thank-you
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { Temp000002RoutingModule } from './temp000002-routing.module';
+import { Temp000002TextareaComponent } from './presentational/temp000002-textarea/temp000002-textarea.component';
 
 @NgModule({
   imports: [

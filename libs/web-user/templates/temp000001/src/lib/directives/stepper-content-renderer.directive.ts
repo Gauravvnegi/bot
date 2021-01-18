@@ -76,16 +76,16 @@ export class StepperContentRendererDirective implements OnChanges {
   @Input() parentForm;
   @Input() dataToPopulate;
 
-  private _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
-  private _isStepperRendered: boolean = false;
+  protected _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
+  protected _isStepperRendered: boolean = false;
 
   constructor(
-    private _resolver: ComponentFactoryResolver,
-    private _container: ViewContainerRef,
-    private _breakpointObserver: BreakpointObserver,
-    private _templateLoadingService: TemplateLoaderService,
-    private _stepperService: StepperService,
-    private _changeDetectorRef: ChangeDetectorRef
+    protected _resolver: ComponentFactoryResolver,
+    protected _container: ViewContainerRef,
+    protected _breakpointObserver: BreakpointObserver,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected _stepperService: StepperService,
+    protected _changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnChanges(): void {
@@ -94,16 +94,16 @@ export class StepperContentRendererDirective implements OnChanges {
     }
   }
 
-  renderStepper(): void {
+  protected renderStepper(): void {
     this.createStepperFactory();
     this.registerListeners();
   }
 
-  registerListeners(): void {
+  protected registerListeners(): void {
     this.listenForViewChanged();
   }
 
-  createStepperFactory(): void {
+  protected createStepperFactory(): void {
     const stepperFactoryComponent: ComponentFactory<Temp000001StepperComponent> = this._resolver.resolveComponentFactory(
       Temp000001StepperComponent
     );
@@ -113,7 +113,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  listenForViewChanged(): void {
+  protected listenForViewChanged(): void {
     this._breakpointObserver
       .observe([Breakpoints.XSmall])
       .subscribe((state: BreakpointState) => {
@@ -134,7 +134,7 @@ export class StepperContentRendererDirective implements OnChanges {
       });
   }
 
-  setStepperConfig(): void {
+  protected setStepperConfig(): void {
     this._stepperComponentObj.instance.parentForm = this.parentForm;
     this._stepperComponentObj.instance.stepperConfig = this.stepperConfig;
 
@@ -149,7 +149,7 @@ export class StepperContentRendererDirective implements OnChanges {
       this.stepperConfig.stepConfigs && this.stepperConfig.stepConfigs.length;
   }
 
-  _listenForStepperRenderer(): void {
+  protected _listenForStepperRenderer(): void {
     this._stepperComponentObj.instance.isComponentRendered.subscribe(
       (isRendered: boolean) => {
         if (isRendered && this.dataToPopulate) {
@@ -162,7 +162,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  createStepperContentComponents(): void {
+  protected createStepperContentComponents(): void {
     this._stepperComponentObj.instance.stepperContent.map(
       (item: ViewContainerRef, index: number) => {
         const componentToRender =
@@ -193,7 +193,7 @@ export class StepperContentRendererDirective implements OnChanges {
     );
   }
 
-  addPropsToComponentInstance(
+  protected addPropsToComponentInstance(
     componentObj: ComponentRef<any>,
     props: IComponentProps,
     index: number
@@ -209,7 +209,7 @@ export class StepperContentRendererDirective implements OnChanges {
     //   componentObj.changeDetectorRef.detectChanges();
   }
 
-  listenForWrapperRendered(
+  protected listenForWrapperRendered(
     componentObj: ComponentRef<any>,
     index: number
   ): void {

@@ -15,10 +15,10 @@ export class ButtonDirective {
   @Input() context;
 
   constructor(
-    private _resolver: ComponentFactoryResolver,
-    private _container: ViewContainerRef,
-    private _renderer: Renderer2,
-    private _buttonService: ButtonService
+    protected _resolver: ComponentFactoryResolver,
+    protected _container: ViewContainerRef,
+    protected _renderer: Renderer2,
+    protected _buttonService: ButtonService
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +26,7 @@ export class ButtonDirective {
     this.registerListeners();
   }
 
-  private initButtonConfig(): void {
+  protected initButtonConfig(): void {
     this.config.forEach((config) => {
       const buttonFactoryComponent = this._resolver.resolveComponentFactory(
         ButtonComponent
@@ -44,12 +44,12 @@ export class ButtonDirective {
     });
   }
 
-  private addButtonProps(host: ButtonComponent, config: any): void {
+  protected addButtonProps(host: ButtonComponent, config: any): void {
     host.settings = config.settings;
     host.buttonClass = config.buttonClass;
   }
 
-  private listenForButtonLoader(
+  protected listenForButtonLoader(
     config: any,
     buttonComponentObj: ComponentRef<ButtonComponent>,
     host: ButtonComponent
@@ -66,7 +66,7 @@ export class ButtonDirective {
       );
   }
 
-  private listenForContextFunction(
+  protected listenForContextFunction(
     config: any,
     buttonComponentObj: ComponentRef<ButtonComponent>,
     host: ButtonComponent
@@ -94,11 +94,11 @@ export class ButtonDirective {
     }
   }
 
-  private registerListeners(): void {
+  protected registerListeners(): void {
     this.listenForButtonLoading();
   }
 
-  private listenForButtonLoading(): void {
+  protected listenForButtonLoading(): void {
     this._buttonService.buttonLoading$.subscribe((buttonComponent) => {
       buttonComponent['isTemplateVisible'] = false;
     });

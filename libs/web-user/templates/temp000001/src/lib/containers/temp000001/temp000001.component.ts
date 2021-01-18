@@ -1,5 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, Inject, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DEFAULT_LANG } from 'libs/web-user/shared/src/lib/constants/lang';
 import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
@@ -14,18 +21,20 @@ import { Subscription } from 'rxjs';
   templateUrl: './temp000001.component.html',
   styleUrls: ['./temp000001.component.scss'],
 })
-export class Temp000001Component implements OnInit, AfterViewInit {
+export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
+  protected $subscription: Subscription = new Subscription();
+  protected templateId = TemplateCode.temp000001;
+
   isLoaderVisible: boolean = true;
-  $subscription: Subscription = new Subscription();
 
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private templateLoadingService: TemplateLoaderService,
-    private elementRef: ElementRef,
-    private templateService: TemplateService,
-    private reservationService: ReservationService,
-    private hotelService: HotelService,
-    private translateService: TranslateService
+    @Inject(DOCUMENT) protected document: Document,
+    protected templateLoadingService: TemplateLoaderService,
+    protected elementRef: ElementRef,
+    protected templateService: TemplateService,
+    protected reservationService: ReservationService,
+    protected hotelService: HotelService,
+    protected translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -33,13 +42,13 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.registerListeners();
   }
 
-  initConfig(): void {
+  protected initConfig(): void {
     this.initTemplateConfig();
     //this.loadStyle('taj.styles.css');
     this.initTranslationService();
   }
 
-  initTemplateConfig(): void {
+  protected initTemplateConfig(): void {
     const {
       journey,
       reservationId,
@@ -51,11 +60,11 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.hotelService.hotelId = hotelId;
   }
 
-  initTranslationService(): void {
+  protected initTranslationService(): void {
     this.translateService.use(DEFAULT_LANG);
   }
 
-  registerListeners(): void {
+  protected registerListeners(): void {
     this.$subscription.add(
       this.templateLoadingService.isTemplateLoading$.subscribe((isLoading) => {
         if (isLoading === false) {
@@ -69,7 +78,7 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     this.initCssVariables();
   }
 
-  private initCssVariables(): void {
+  protected initCssVariables(): void {
     let cssText: string = '';
     // this.templateService.templateData.layout_variables = {
     //   '--stepper-background-color': 'blue',
@@ -77,19 +86,20 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     //   '--primary-button-background-color': 'red',
     // };
     for (let stepperLayoutVariable in this.templateService.templateData[
-      TemplateCode.temp000001
+      this.templateId
     ].layout_variables) {
       cssText +=
         stepperLayoutVariable +
         ':' +
-        this.templateService.templateData[TemplateCode.temp000001]
-          .layout_variables[stepperLayoutVariable] +
+        this.templateService.templateData[this.templateId].layout_variables[
+          stepperLayoutVariable
+        ] +
         ';';
     }
     this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
   }
 
-  loadStyle(styleName: string): void {
+  protected loadStyle(styleName: string): void {
     const head = this.document.getElementsByTagName('head')[0];
     let themeLink = this.document.getElementById(
       'client-theme'
@@ -107,7 +117,7 @@ export class Temp000001Component implements OnInit, AfterViewInit {
     }
   }
 
-  updateTran(lan) {
+  protected updateTran(lan): void {
     this.translateService.use(lan);
   }
 

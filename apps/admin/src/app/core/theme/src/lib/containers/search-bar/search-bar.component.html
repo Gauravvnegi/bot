@@ -31,7 +31,7 @@
           <ng-container *ngSwitchCase="'PACKAGES'">
             <div
               class="global_search__dropdown__result__option"
-              (click)="setOptionSelection(option)"
+              (click)="openEditPackage(option.id)"
             >
               <div class="image"><img src="assets/svg/box.svg" /></div>
               <div class="detail">{{ option.label }}</div>

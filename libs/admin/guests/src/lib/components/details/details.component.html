@@ -1,4 +1,4 @@
-<div *ngIf="isReservationDetailFetched; else detailsLoader" class="details-wrapper">
+<div *ngIf="isReservationDetailFetched && data; else detailsLoader" class="details-wrapper">
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>

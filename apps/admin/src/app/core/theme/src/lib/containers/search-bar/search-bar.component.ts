@@ -10,6 +10,7 @@ import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
 import { SearchResultDetail } from '../../data-models/search-bar-config.model';
 import { SearchService } from '../../services/search.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-search-bar',
@@ -36,7 +37,8 @@ export class SearchBarComponent implements OnInit {
     private searchService: SearchService,
     private hotelDetailService: HotelDetailService,
     private modal: ModalService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private router: Router
   ) {}
 
   searchValue = false;
@@ -115,6 +117,11 @@ export class SearchBarComponent implements OnInit {
         detailCompRef.close();
       })
     );
+  }
+
+  openEditPackage(id: string) {
+    this.searchDropdownVisible = false;
+    this.router.navigateByUrl(`/pages/package/amenity/${id}`)
   }
 
   clearSearch() {

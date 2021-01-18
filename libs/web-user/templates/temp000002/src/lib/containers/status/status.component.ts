@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-status',
-  templateUrl: './status.component.html',
+  templateUrl: '../../../../../temp000001/src/lib/containers/status/status.component.html',
   styleUrls: ['./status.component.scss']
 })
 export class StatusComponent implements OnInit {

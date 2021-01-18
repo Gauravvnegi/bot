@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-summary',
-  templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss']
+  templateUrl:
+    '../../../../../temp000001/src/lib/containers/summary/summary.component.html',
+  styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

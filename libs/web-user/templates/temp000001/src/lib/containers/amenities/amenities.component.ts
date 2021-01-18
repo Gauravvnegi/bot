@@ -7,24 +7,23 @@ import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service'
 @Component({
   selector: 'hospitality-bot-amenities',
   templateUrl: './amenities.component.html',
-  styleUrls: ['./amenities.component.scss']
+  styleUrls: ['./amenities.component.scss'],
 })
 export class AmenitiesComponent implements OnInit {
-
   @Input() parentForm: FormGroup;
   @Input() reservationData;
   @Output() addFGEvent = new EventEmitter();
 
   amenitiesForm: FormGroup;
-  
+
   constructor(
-    private _fb: FormBuilder,
-    private _amenitiesService: AmenitiesService,
-    private _complimentaryService: ComplimentaryService,
-    private _paidService: PaidService,
+    protected _fb: FormBuilder,
+    protected _amenitiesService: AmenitiesService,
+    protected _complimentaryService: ComplimentaryService,
+    protected _paidService: PaidService
   ) {
     this.initAmenitiesForm();
-   }
+  }
 
   ngOnInit(): void {
     this.addFGEvent.next({ name: 'amenities', value: this.amenitiesForm });
@@ -35,17 +34,17 @@ export class AmenitiesComponent implements OnInit {
   initAmenitiesForm() {
     this.amenitiesForm = this._fb.group({
       complimentaryServices: new FormArray([]),
-      paidServices: new FormGroup({})
+      paidServices: new FormGroup({}),
     });
   }
 
-  initPaidServiceDetailDS(){
+  initPaidServiceDetailDS() {
     this._complimentaryService.initComplimentaryAmenitiesDetailDS(
       this.amenities && this.amenities.complimentaryServicesDetail
     );
   }
 
-  initComplimentaryDetailDS(){
+  initComplimentaryDetailDS() {
     this._paidService.initPaidAmenitiesDetailDS(
       this.amenities && this.amenities.paidServicesDetail,
       this.reservationData.packages.paidPackages,
@@ -53,19 +52,19 @@ export class AmenitiesComponent implements OnInit {
     );
   }
 
-  get complimentaryServicesForm(){
+  get complimentaryServicesForm() {
     return this.amenitiesForm.get('complimentaryServices') as FormGroup;
   }
 
-  get paidServicesForm(){
+  get paidServicesForm() {
     return this.amenitiesForm.get('paidServices') as FormGroup;
   }
 
-  get amenities(){
+  get amenities() {
     return this._amenitiesService.amenities.amenities;
   }
 
-  get arrivalTime(){
+  get arrivalTime() {
     return this._amenitiesService.amenities.arrivalTime;
   }
 }

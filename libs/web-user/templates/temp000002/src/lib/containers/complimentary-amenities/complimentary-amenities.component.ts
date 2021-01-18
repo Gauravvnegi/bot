@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ComplimentaryAmenitiesComponent as BaseComplimentaryAmenitiesComponent } from 'libs/web-user/templates/temp000001/src/lib/containers/complimentary-amenities/complimentary-amenities.component';
 
 @Component({
   selector: 'hospitality-bot-complimentary-amenities',
@@ -6,8 +7,4 @@ import { Component, OnInit } from '@angular/core';
     '../../../../../temp000001/src/lib/containers/complimentary-amenities/complimentary-amenities.component.html',
   styleUrls: ['./complimentary-amenities.component.scss'],
 })
-export class ComplimentaryAmenitiesComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class ComplimentaryAmenitiesComponent extends BaseComplimentaryAmenitiesComponent {}

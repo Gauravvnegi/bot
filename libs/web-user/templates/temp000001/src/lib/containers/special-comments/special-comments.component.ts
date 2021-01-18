@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SpecialCommentsConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
@@ -21,8 +28,8 @@ export class SpecialCommentsComponent implements OnInit, OnChanges {
   commentsDetailsConfig: SpecialCommentsConfigI;
 
   constructor(
-    private fb: FormBuilder,
-    private _stayDetailService: StayDetailsService
+    protected fb: FormBuilder,
+    protected _stayDetailService: StayDetailsService
   ) {
     this.initSpecialCommentsForm();
   }

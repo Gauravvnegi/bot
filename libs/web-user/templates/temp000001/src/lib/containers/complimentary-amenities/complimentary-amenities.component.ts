@@ -11,8 +11,8 @@ export class ComplimentaryAmenitiesComponent implements OnInit {
   @Input() parentForm;
 
   constructor(
-    private _fb: FormBuilder,
-    private _complimentaryService: ComplimentaryService
+    protected _fb: FormBuilder,
+    protected _complimentaryService: ComplimentaryService
   ) {}
 
   ngOnInit(): void {

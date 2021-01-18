@@ -1,7 +1,22 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MomentDateAdapter,
+} from '@angular/material-moment-adapter';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { StayDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
@@ -45,8 +60,8 @@ export class StayDetailsComponent implements OnInit, OnChanges {
   stayDetailsConfig: StayDetailsConfigI;
 
   constructor(
-    private _fb: FormBuilder,
-    private _stayDetailService: StayDetailsService
+    protected _fb: FormBuilder,
+    protected _stayDetailService: StayDetailsService
   ) {
     this.initStayDetailForm();
   }

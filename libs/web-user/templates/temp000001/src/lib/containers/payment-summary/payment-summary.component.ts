@@ -8,10 +8,9 @@ import { JOURNEY } from 'libs/web-user/shared/src/lib/constants/journey';
 @Component({
   selector: 'hospitality-bot-payment-summary',
   templateUrl: './payment-summary.component.html',
-  styleUrls: ['./payment-summary.component.scss']
+  styleUrls: ['./payment-summary.component.scss'],
 })
 export class PaymentSummaryComponent implements OnInit {
-
   @Input() parentForm: FormGroup;
   @Input() reservationData;
 
@@ -19,17 +18,13 @@ export class PaymentSummaryComponent implements OnInit {
   journey: string;
 
   displayedColumns = {
-    columns:[
-    'label',
-    'amount',
-    'currency',
-    'totalAmount',
-  ]};
+    columns: ['label', 'amount', 'currency', 'totalAmount'],
+  };
   dataSource: any[] = [];
-  
+
   constructor(
-    private _paymentDetailsService : PaymentDetailsService,
-    private hotelService: HotelService
+    protected _paymentDetailsService: PaymentDetailsService,
+    protected hotelService: HotelService
   ) {}
 
   ngOnInit(): void {
@@ -117,7 +112,7 @@ export class PaymentSummaryComponent implements OnInit {
           }))
         ),
       });
-    }); 
+    });
   }
 
   getModifiedPaymentSummary() {
@@ -128,16 +123,11 @@ export class PaymentSummaryComponent implements OnInit {
         description: '',
         amount,
         totalAmount: amount,
-        currency: this.paymentSummary.currencyCode
+        currency: this.paymentSummary.currencyCode,
       });
     }
     this.paymentSummary.packages.forEach((amenity) => {
-      let {
-        label,
-        description,
-        amount,
-        totalAmount,
-      } = amenity;
+      let { label, description, amount, totalAmount } = amenity;
 
       this.dataSource.push({
         label,
@@ -149,16 +139,15 @@ export class PaymentSummaryComponent implements OnInit {
     });
   }
 
-  get bookingSummary(){
+  get bookingSummary() {
     return this._paymentDetailsService.paymentSummaryDetails.paymentSummary;
   }
 
-  get currencyCode(){
+  get currencyCode() {
     return this._paymentDetailsService.currencyCode;
   }
 
   get roomRates() {
     return this.paymentSummary.roomRates;
   }
-
 }

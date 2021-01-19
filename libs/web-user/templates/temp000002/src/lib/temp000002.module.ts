@@ -39,6 +39,7 @@ import { StepperContentRendererDirective } from './directives/stepper-content-re
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
 import { TokenRetrievalInterceptor } from './interceptors/token-retrieval.interceptor';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { ButtonDirective } from './directives/button-renderer.directive';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     TemplateLoaderDirective,
     Temp000002StepperComponent,
     StepperContentRendererDirective,
+    ButtonDirective,
   ],
   providers: [
     {

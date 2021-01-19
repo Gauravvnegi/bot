@@ -4,12 +4,11 @@ import {
   Component,
   ElementRef,
   Inject,
-  OnInit,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DEFAULT_LANG } from 'libs/web-user/shared/src/lib/constants/lang';
-import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';

@@ -16,6 +16,10 @@ import {
 import { FormGroup } from '@angular/forms';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import {
+  IComponentWrapperMapTemp000001,
+  ITemplateTemp000001,
+} from 'libs/web-user/shared/src/lib/types/temp000001';
 import { BillSummaryDetailsWrapperComponent } from '../containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
 import { DocumentsDetailsWrapperComponent } from '../containers/documents-details-wrapper/documents-details-wrapper.component';
 import { FeedbackDetailsWrapperComponent } from '../containers/feedback-details-wrapper/feedback-details-wrapper.component';
@@ -25,20 +29,6 @@ import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wr
 import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
 import { Temp000001StepperComponent } from '../presentational/temp000001-stepper/temp000001-stepper.component';
-
-enum componentMap {
-  'stay-details-wrapper' = 'stay-details-wrapper',
-  'guest-details-wrapper' = 'guest-details-wrapper',
-  'health-declaration-wrapper' = 'health-declaration-wrapper',
-  'payment-details-wrapper' = 'payment-details-wrapper',
-  'document-details-wrapper' = 'document-details-wrapper',
-  'feedback-details-wrapper' = 'feedback-details-wrapper',
-  'bill-summary-details-wrapper' = 'bill-summary-details-wrapper',
-  'summary-wrapper' = 'summary-wrapper',
-}
-export interface IComponentMap {
-  [key: string]: any;
-}
 
 export interface IComponentProps {
   formGroup: FormGroup;
@@ -59,7 +49,7 @@ export interface IComponentButton {
   };
 }
 
-const componentMapping: IComponentMap = {
+const componentMapping: IComponentWrapperMapTemp000001 = {
   'stay-details-wrapper': StayDetailsWrapperComponent,
   'guest-details-wrapper': GuestDetailsWrapperComponent,
   'health-declaration-wrapper': HealthDeclarationWrapperComponent,
@@ -72,12 +62,13 @@ const componentMapping: IComponentMap = {
 
 @Directive({ selector: '[stepper-content-renderer]' })
 export class StepperContentRendererDirective implements OnChanges {
-  @Input() stepperConfig;
+  @Input() stepperConfig: ITemplateTemp000001;
   @Input() parentForm;
   @Input() dataToPopulate;
 
   protected _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
   protected _isStepperRendered: boolean = false;
+  protected componentMapping = componentMapping;
 
   constructor(
     protected _resolver: ComponentFactoryResolver,
@@ -173,7 +164,7 @@ export class StepperContentRendererDirective implements OnChanges {
 
         if (componentToRender) {
           const factoryComponent = this._resolver.resolveComponentFactory(
-            componentMapping[
+            this.componentMapping[
               this._stepperComponentObj.instance.stepperConfig.stepConfigs[
                 index
               ].component.name

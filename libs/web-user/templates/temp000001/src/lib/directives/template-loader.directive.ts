@@ -7,39 +7,31 @@ import {
   OnChanges,
   ViewContainerRef,
 } from '@angular/core';
-import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TempLoader000001Component } from '../containers/temp-loader000001/temp-loader000001.component';
-
-interface ITemplateLoader {
-  [key: string]: any;
-}
-const componentMapping: ITemplateLoader = {
-  [TemplateCode.temp000001]: TempLoader000001Component,
-};
 
 @Directive({ selector: '[template-loader]' })
 export class TemplateLoaderDirective implements OnChanges {
   @Input() templateId: string;
-
-  private _loaderCompObj: ComponentRef<any>;
+  protected _loaderCompObj: ComponentRef<TempLoader000001Component>;
+  protected loaderComponentName = TempLoader000001Component;
 
   constructor(
-    private _container: ViewContainerRef,
-    private _resolver: ComponentFactoryResolver,
-    private _templateLoadingService: TemplateLoaderService,
-    private _changeDetectorRef: ChangeDetectorRef
+    protected _container: ViewContainerRef,
+    protected _resolver: ComponentFactoryResolver,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected _changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnChanges(): void {
-    if (this.templateId && componentMapping[this.templateId]) {
+    if (this.templateId) {
       this.renderLoader();
     }
   }
 
-  renderLoader(): void {
+  protected renderLoader(): void {
     const loaderFactoryComp = this._resolver.resolveComponentFactory(
-      componentMapping[this.templateId]
+      this.loaderComponentName
     );
 
     this._loaderCompObj = this._container.createComponent(loaderFactoryComp);
@@ -47,7 +39,7 @@ export class TemplateLoaderDirective implements OnChanges {
     this.listenForLoadingComplete();
   }
 
-  listenForLoadingComplete(): void {
+  protected listenForLoadingComplete(): void {
     this._templateLoadingService.isTemplateLoading$.subscribe(
       (isLoading: boolean) => {
         if (isLoading === false) {

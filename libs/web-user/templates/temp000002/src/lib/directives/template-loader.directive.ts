@@ -1,60 +1,9 @@
-import {
-  ChangeDetectorRef,
-  ComponentFactoryResolver,
-  ComponentRef,
-  Directive,
-  Input,
-  OnChanges,
-  ViewContainerRef,
-} from '@angular/core';
-import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
-import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
+import { Directive, ComponentRef } from '@angular/core';
+import { TemplateLoaderDirective as BaseTemplateLoaderDirective } from 'libs/web-user/templates/temp000001/src/lib/directives/template-loader.directive';
 import { TempLoader000002Component } from '../containers/temp-loader000002/temp-loader000002.component';
 
-interface ITemplateLoader {
-  [key: string]: any;
-}
-const componentMapping: ITemplateLoader = {
-  [TemplateCode.temp000002]: TempLoader000002Component,
-};
-
 @Directive({ selector: '[template-loader]' })
-export class TemplateLoaderDirective implements OnChanges {
-  @Input() templateId: string;
-
-  private _loaderCompObj: ComponentRef<any>;
-
-  constructor(
-    private _container: ViewContainerRef,
-    private _resolver: ComponentFactoryResolver,
-    private _templateLoadingService: TemplateLoaderService,
-    private _changeDetectorRef: ChangeDetectorRef
-  ) {}
-
-  ngOnChanges(): void {
-    if (this.templateId && componentMapping[this.templateId]) {
-      this.renderLoader();
-    }
-  }
-
-  renderLoader(): void {
-    const loaderFactoryComp = this._resolver.resolveComponentFactory(
-      componentMapping[this.templateId]
-    );
-
-    this._loaderCompObj = this._container.createComponent(loaderFactoryComp);
-
-    this.listenForLoadingComplete();
-  }
-
-  listenForLoadingComplete(): void {
-    this._templateLoadingService.isTemplateLoading$.subscribe(
-      (isLoading: boolean) => {
-        if (isLoading === false) {
-          this._loaderCompObj.destroy();
-          this._changeDetectorRef.detectChanges();
-        }
-      }
-    );
-  }
+export class TemplateLoaderDirective extends BaseTemplateLoaderDirective {
+  protected _loaderCompObj: ComponentRef<TempLoader000002Component>;
+  protected loaderComponentName = TempLoader000002Component;
 }

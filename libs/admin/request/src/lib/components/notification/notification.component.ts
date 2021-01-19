@@ -96,8 +96,7 @@ export class NotificationComponent implements OnInit {
 
   private isValidEmail(email): RegExpMatchArray {
     let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return !!email && typeof email === 'string'
-      && email.match(emailRegex);
+    return !!email && typeof email === 'string' && email.match(emailRegex);
   }
 
   addChipElement(event: MatChipInputEvent, control: FormControl): void {
@@ -106,7 +105,7 @@ export class NotificationComponent implements OnInit {
 
     if ((value || '').trim()) {
       if (control === this.emailIds && !this.isValidEmail(value)) {
-        this._snackbarService.openSnackBarAsText('Invalid email format')
+        this._snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
         const controlValues = control.value.filter((cValue) => cValue == value);
@@ -127,6 +126,9 @@ export class NotificationComponent implements OnInit {
       (cValue) => cValue != valueToRemove
     );
     control.patchValue(controlValues);
+    control === this.roomNumbers
+      ? (this.roomCsvReader.nativeElement.value = '')
+      : (this.emailCsvReader.nativeElement.value = '');
   }
 
   readDataFromCSV($event: any, control: FormControl): void {
@@ -153,11 +155,9 @@ export class NotificationComponent implements OnInit {
         }
       };
     } else {
-      if (control === this.roomNumbers) {
-        this.roomCsvReader.nativeElement.value = '';
-      } else {
-        this.emailCsvReader.nativeElement.value = '';
-      }
+      control === this.roomNumbers
+        ? (this.roomCsvReader.nativeElement.value = '')
+        : (this.emailCsvReader.nativeElement.value = '');
     }
   }
 

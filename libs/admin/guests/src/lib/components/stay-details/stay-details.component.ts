@@ -12,6 +12,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 export class StayDetailsComponent implements OnInit {
   @Input('data') guestBookings;
   @Input() parentForm;
+  @Input() hotelId;
 
   @Output() addFGEvent = new EventEmitter();
 
@@ -20,7 +21,7 @@ export class StayDetailsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private guestTableService: GuestTableService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
   ) {}
 
   ngOnInit(): void {
@@ -30,7 +31,7 @@ export class StayDetailsComponent implements OnInit {
   }
 
   loadFeedbackCongif() {
-    this.guestTableService.getFeedback()
+    this.guestTableService.getFeedback(this.hotelId)
       .subscribe((response) => {
         this.feedbackConfig = new FeedBackDetail().deserialize(response);
       }, ({ error }) => {

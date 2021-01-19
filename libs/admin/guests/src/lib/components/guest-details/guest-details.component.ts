@@ -32,8 +32,7 @@ export class GuestDetailsComponent implements OnInit {
   }
 
   pushDataToForm() {
-    let guestData = [this.detailsData.guests.primaryGuest];
-    this.detailsData.guests.secondaryGuest.forEach((data) => guestData.push(data));
+    let guestData = [this.detailsData];
     this.guestDetailsForm
       .get('guests')
       .patchValue(guestData);
@@ -48,9 +47,6 @@ export class GuestDetailsComponent implements OnInit {
   initGuestDetailsForm() {
     const guestFA = this.guestDetailsForm.get('guests') as FormArray;
     guestFA.push(this.getGuestFG());
-    this.detailsData.guests.secondaryGuest.forEach((guest) => {
-      guestFA.push(this.getGuestFG());
-    });
   }
 
   getGuestFG(): FormGroup {

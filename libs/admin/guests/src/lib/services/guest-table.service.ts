@@ -9,6 +9,10 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/guests${config.queryObj}`);
   }
 
+  getGuestById(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}`);
+  }
+
   getReservationFeedback(reservationId: string): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/feedback`);
   }
@@ -21,13 +25,17 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/guest/${guestId}/reservations`);
   }
 
+  getGuestReservationById(guestId: string, reservationId: string) {
+    return this.get(`/api/v1/guest/${guestId}/reservations/${reservationId}`);
+  }
+
   exportCSV(config): Observable<any> {
     return this.get(`/api/v1/guest/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }
 
-  getFeedback(): Observable<FeedbackConfigI> {
+  getFeedback(hotelId): Observable<FeedbackConfigI> {
     return this.get(`/api/v1/cms/feedback-form`);
   }
 }

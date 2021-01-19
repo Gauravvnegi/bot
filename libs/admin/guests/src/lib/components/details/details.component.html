@@ -6,22 +6,21 @@
     <div class="name-details">
       <div class="name-details-wrapper">
         <div class="name">
-          <span>{{ primaryGuest.nameTitle }} {{ primaryGuest.firstName }}
-            {{ primaryGuest.lastName }}</span>
+          <span>{{ data.getFullName() }}</span>
           <div class="vip-image">
             <img src="assets/VIP.png" />
           </div>
         </div>
         <div class="contact-details">
-          <a href="tel:{{ primaryGuest.countryCode }}{{
-              primaryGuest.phoneNumber
-            }}" *ngIf="primaryGuest.phoneNumber" class="call">
+          <a href="tel:{{ data.countryCode }}{{
+              data.phoneNumber
+            }}" *ngIf="data.phoneNumber" class="call">
             <mat-icon class="material-icons" matSuffix>call</mat-icon>
-            {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
+            {{ data.countryCode }} {{ data.phoneNumber }}
           </a>
-          <a href="mailto:{{ primaryGuest.email }}" *ngIf="primaryGuest.email" class="email">
+          <a href="mailto:{{ data.email }}" *ngIf="data.email" class="email">
             <mat-icon class="material-icons" matSuffix>email</mat-icon>
-            {{ primaryGuest.email }}
+            {{ data.email }}
           </a>
         </div>
       </div>
@@ -32,34 +31,34 @@
         </div>
         <div class="booking-id-wrapper" (click)="setTabKey('stay_details');">
           <div style="margin-right: 10px;">{{ data.booking.bookingNumber }}</div>
-          <div *ngIf="['COMPLETED'].includes(feedback.status)" class="feedback">
+          <div *ngIf="['COMPLETED'].includes(data.feedback.status)" class="feedback">
             <!-- <p class="label">Feedback :</p> -->
-            <ng-container *ngIf="feedback">
+            <ng-container *ngIf="data.feedback">
               <div class="booking-feedback">
                 <p class="number" [ngClass]="{
-                    'status-background-reject': feedback.rating < 5,
-                    'status-background-success': feedback.rating >= 5
+                    'status-background-reject': data.feedback.rating < 5,
+                    'status-background-success': data.feedback.rating >= 5
                   }">
-                  {{ feedback.rating }}
+                  {{ data.feedback.rating }}
                 </p>
-                <ng-container *ngIf="feedback.suggestions">
+                <ng-container *ngIf="data.feedback.suggestions">
                   <ng-container *ngFor="
-                      let suggestion of feedback.suggestions.slice(
+                      let suggestion of data.feedback.suggestions.slice(
                         0,
                         2
                       )
                     ">
                     <img class="feedback-icon" [ngClass]="{
-                        'status-image-reject': feedback.rating < 5,
-                        'status-image-success': feedback.rating >= 5
+                        'status-image-reject': data.feedback.rating < 5,
+                        'status-image-success': data.feedback.rating >= 5
                       }" [src]="feedbackService.getServiceUrl(suggestion.id)" />
                   </ng-container>
                 </ng-container>
-  
-                <div *ngIf="feedback.comments" [ngClass]="{
-                    'feedback-msg': feedback.comments.length > 0
+
+                <div *ngIf="data.feedback.comments" [ngClass]="{
+                    'feedback-msg': data.feedback.comments.length > 0
                   }">
-                  {{ feedback.comments }}
+                  {{ data.feedback.comments }}
                 </div>
               </div>
             </ng-container>
@@ -70,19 +69,19 @@
     </div>
     <div class="name-details" style="margin-bottom: 15px;">
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <div>{{ guestAttributes.overAllNps / 10 }}/10</div>
+        <div>{{ data.guestAttributes.overAllNps / 10 }}/10</div>
         <div>Overall NPS</div>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <div>{{ guestAttributes.churnProbalilty }}</div>
+        <div>{{ data.guestAttributes.churnProbalilty }}</div>
         <div>Churn Probability</div>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <div>{{ guestAttributes.totalSpend }}</div>
+        <div>{{ data.guestAttributes.totalSpend }}</div>
         <div>Overall Spent</div>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <div>{{ guestAttributes.transactionUsage }}</div>
+        <div>{{ data.guestAttributes.transactionUsage }}</div>
         <div>Potential</div>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
@@ -95,15 +94,15 @@
     <div class="mat-group">
       <mat-tab-group [selectedIndex]="tabIndex">
         <mat-tab label="Guest Details">
-          <hospitality-bot-guest-details *ngIf="isReservationDetailFetched" [parentForm]="detailsForm" [data]="reservationData"
-            (addFGEvent)="addFGEvent($event)"></hospitality-bot-guest-details>
+          <hospitality-bot-guest-details *ngIf="isReservationDetailFetched" [parentForm]="detailsForm"
+            [data]="guestData" (addFGEvent)="addFGEvent($event)"></hospitality-bot-guest-details>
         </mat-tab>
         <mat-tab label="Documents">
-          <hospitality-bot-documents *ngIf="detailsFG.get('guestDetails')" [guestsFA]="detailsFG.get('guestDetails').get('guests')"
-            [parentForm]="detailsForm" [data]="reservationData" [bookingId]="bookingId"></hospitality-bot-documents>
+          <hospitality-bot-documents *ngIf="isReservationDetailFetched" [parentForm]="detailsForm" [data]="data"
+            [bookingId]="bookingId"></hospitality-bot-documents>
         </mat-tab>
         <mat-tab label="Stay Details">
-          <hospitality-bot-stay-details *ngIf="isReservationDetailFetched" [parentForm]="detailsForm" [data]="details"
+          <hospitality-bot-stay-details *ngIf="isReservationDetailFetched" [hotelId]="hotelId" [parentForm]="detailsForm" [data]="details"
           (addFGEvent)="addFGEvent($event)"></hospitality-bot-stay-details>
         </mat-tab>
       </mat-tab-group>

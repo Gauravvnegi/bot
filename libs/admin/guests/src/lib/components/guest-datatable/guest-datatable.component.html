@@ -266,23 +266,7 @@
         ></p-tableCheckbox>
       </td>
       <td class="guest">
-        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
-        <b style="color: #4b56c0;">{{
-          rowData.guests.getSecGuestDisplayConfig().countString
-        }}</b>
-        <div
-          *ngIf="rowData.guests.secondaryGuest.length > 0"
-          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
-        >
-          <div
-            *ngFor="
-              let secondaryGuest of rowData.guests.secondaryGuest;
-              let guestIdx = index
-            "
-          >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
-          </div>
-        </div>
+        <span>{{ rowData.getFullName() }}</span>
       </td>
       <!-- <td>
         <p class="tabel-room-no status-text-success">

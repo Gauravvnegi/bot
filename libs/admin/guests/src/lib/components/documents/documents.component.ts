@@ -20,8 +20,6 @@ export class DocumentsComponent implements OnInit {
   selectedGuestId;
   countriesLOV;
   selectedGuestGroup;
-  documentsList;
-  hotelId: string;
   constructor(
     private _reservationService: ReservationService,
     private _snackbarService: SnackBarService
@@ -32,19 +30,7 @@ export class DocumentsComponent implements OnInit {
   }
 
   getLOV() {
-    this.getHotelId();
-  }
-
-  getHotelId() {
-    this._reservationService.getReservationDetails(this.bookingId).subscribe(
-      (response) => {
-        this.hotelId = response.hotel.id;
-        this.getCountriesList();
-      },
-      ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
-    );
+    this.getCountriesList();
   }
 
   getCountriesList() {
@@ -62,33 +48,13 @@ export class DocumentsComponent implements OnInit {
   }
 
   setDefaultGuestForDocument() {
-    this.selectedGuestId = this.detailsData.guests.primaryGuest.id;
-    this.onGuestChange(this.detailsData.guests.primaryGuest.id);
-  }
-
-  onGuestChange(value) {
-    this.guestsFA.controls.forEach((guest) => {
-      if (guest.get('id').value === value) {
-        this.selectedGuestId = value;
-        this.selectedGuestGroup = guest;
-        this.getDocumentsByCountry(guest.get('nationality').value);
-      }
-    });
-  }
-
-  getDocumentsByCountry(nationality) {
-    this._reservationService
-      .getDocumentsByNationality(this.hotelId, nationality)
-      .subscribe((response) => {
-        this.documentsList = response.documentList;
-        // this._adminDetailsService.guestNationality = response.verifyAllDocuments;
-      });
+    this.selectedGuestId = this.detailsData.id;
   }
 
   downloadDocs(documents) {
     let urls = [];
     let fileNames = [];
-    const name = `${this.selectedGuestGroup.get('firstName').value}_${this.selectedGuestGroup.get('lastName').value}`;
+    const name = `${this.detailsData.firstName}_${this.detailsData.lastName}`;
     documents.forEach((doc) => {
       urls.push(doc.frontUrl);
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
@@ -116,7 +82,7 @@ export class DocumentsComponent implements OnInit {
           zipFile.generateAsync({ type: 'blob' }).then((content) => {
             saveAs(
               content,
-              `${this.detailsData.guests.primaryGuest.firstName}.zip`
+              `${this.detailsData.firstName}.zip`
             );
           });
         }

@@ -33,6 +33,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
+  hotelId: string;
 
   cols = [
     { field: 'guests.primaryGuest.firstName', header: 'Guest/ Company' },
@@ -142,6 +143,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getHotelId(this.globalQueries);
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -154,6 +156,16 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
+  }
+
+  getHotelId(globalQueries): void {
+    //todo 
+
+    globalQueries.forEach(element => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -364,8 +376,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     );
 
     detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
-    detailCompRef.componentInstance.data = rowData;
+    detailCompRef.componentInstance.guestId = rowData.id;
+    detailCompRef.componentInstance.hotelId = this.hotelId;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

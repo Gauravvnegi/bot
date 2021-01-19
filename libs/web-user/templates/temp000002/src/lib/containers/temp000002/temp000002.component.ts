@@ -8,6 +8,4 @@ import { Temp000001Component as BaseTemplateComponent } from 'libs/web-user/temp
     '../../../../../temp000001/src/lib/containers/temp000001/temp000001.component.html',
   styleUrls: ['./temp000002.component.scss'],
 })
-export class Temp000002Component extends BaseTemplateComponent {
-  templateId = TemplateCode.temp000002;
-}
+export class Temp000002Component extends BaseTemplateComponent {}

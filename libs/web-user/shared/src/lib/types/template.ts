@@ -16,8 +16,7 @@ export interface ITemplatePathConfig {
   componentPath: () => Promise<any>;
 }
 
-export interface ITemplateConfig
-  extends Omit<ITokenInfo, 'expiry' | 'templateId'> {}
+export interface ITemplateConfig extends Omit<ITokenInfo, 'expiry'> {}
 
 export interface ITemplatesData {
   [TemplateCode.temp000001]?: ITemplateTemp000001;

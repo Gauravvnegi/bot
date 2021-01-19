@@ -23,7 +23,6 @@ import { Subscription } from 'rxjs';
 })
 export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
-  templateId = TemplateCode.temp000001;
   isLoaderVisible: boolean = true;
 
   constructor(
@@ -122,5 +121,9 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get templateId() {
+    return this.templateService.templateConfig.templateId;
   }
 }

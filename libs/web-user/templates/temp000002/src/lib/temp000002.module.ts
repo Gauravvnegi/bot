@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -36,6 +36,9 @@ import { Temp000002TextareaComponent } from './presentational/temp000002-textare
 import { TemplateLoaderDirective } from './directives/template-loader.directive';
 import { Temp000002StepperComponent } from './presentational/temp000002-stepper/temp000002-stepper.component';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
+import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
+import { TokenRetrievalInterceptor } from './interceptors/token-retrieval.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   imports: [
@@ -57,6 +60,17 @@ import { StepperContentRendererDirective } from './directives/stepper-content-re
     StepperContentRendererDirective,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TimezoneInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenRetrievalInterceptor,
+      multi: true,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     ReservationService,
     HotelService,
     ParentFormService,

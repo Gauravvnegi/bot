@@ -47,4 +47,8 @@ export class TemplateService extends ApiService {
   get templateData(): ITemplatesData {
     return this._templateData;
   }
+
+  get templateId() {
+    return this.templateConfig.templateId;
+  }
 }

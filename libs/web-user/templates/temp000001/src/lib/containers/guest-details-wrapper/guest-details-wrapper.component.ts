@@ -20,12 +20,12 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
   guestDetailsComp: GuestDetailsComponent;
 
   constructor(
-    private _guestDetailService: GuestDetailsService,
-    private _reservationService: ReservationService,
-    private _stepperService: StepperService,
-    private _buttonService: ButtonService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _guestDetailService: GuestDetailsService,
+    protected _reservationService: ReservationService,
+    protected _stepperService: StepperService,
+    protected _buttonService: ButtonService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {
     super();
     this.self = this;

@@ -9,5 +9,5 @@ import { Temp000001Component as BaseTemplateComponent } from 'libs/web-user/temp
   styleUrls: ['./temp000002.component.scss'],
 })
 export class Temp000002Component extends BaseTemplateComponent {
-  protected templateId = TemplateCode.temp000002;
+  templateId = TemplateCode.temp000002;
 }

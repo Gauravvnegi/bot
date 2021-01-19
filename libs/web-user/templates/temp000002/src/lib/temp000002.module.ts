@@ -33,6 +33,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { Temp000002RoutingModule } from './temp000002-routing.module';
 import { Temp000002TextareaComponent } from './presentational/temp000002-textarea/temp000002-textarea.component';
+import { TemplateLoaderDirective } from './directives/template-loader.directive';
+import { Temp000002StepperComponent } from './presentational/temp000002-stepper/temp000002-stepper.component';
+import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 
 @NgModule({
   imports: [
@@ -47,7 +50,12 @@ import { Temp000002TextareaComponent } from './presentational/temp000002-textare
     MatIconModule,
     AngularSvgIconModule.forRoot(),
   ],
-  declarations: [...Temp000002RoutingModule.components],
+  declarations: [
+    ...Temp000002RoutingModule.components,
+    TemplateLoaderDirective,
+    Temp000002StepperComponent,
+    StepperContentRendererDirective,
+  ],
   providers: [
     ReservationService,
     HotelService,

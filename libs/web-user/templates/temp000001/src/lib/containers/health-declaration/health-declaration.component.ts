@@ -56,15 +56,15 @@ export class HealthDeclarationComponent implements OnInit {
   signature: string = '';
 
   constructor(
-    private _resolver: ComponentFactoryResolver,
-    private fb: FormBuilder,
-    private _stepperService: StepperService,
-    private _healthDetailsService: HealthDetailsService,
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _translateService: TranslateService,
-    private _snackBarService:SnackBarService,
-    private _utilityService: UtilityService
+    protected _resolver: ComponentFactoryResolver,
+    protected fb: FormBuilder,
+    protected _stepperService: StepperService,
+    protected _healthDetailsService: HealthDetailsService,
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _translateService: TranslateService,
+    protected _snackBarService:SnackBarService,
+    protected _utilityService: UtilityService
   ) {}
 
   ngOnInit(): void {

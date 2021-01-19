@@ -16,7 +16,7 @@ import { Temp000001StepperComponent } from '../../presentational/temp000001-step
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
 
   stepperData: ITemplateTemp000001;
@@ -25,11 +25,11 @@ export class MainComponent implements OnInit {
   isReservationData: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
-    private _reservationService: ReservationService,
-    private _parentFormService: ParentFormService,
-    private _hotelService: HotelService,
-    private _templateService: TemplateService
+    protected fb: FormBuilder,
+    protected _reservationService: ReservationService,
+    protected _parentFormService: ParentFormService,
+    protected _hotelService: HotelService,
+    protected _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {

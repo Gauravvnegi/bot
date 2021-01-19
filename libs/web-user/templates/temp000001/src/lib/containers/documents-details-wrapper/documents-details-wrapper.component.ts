@@ -20,13 +20,13 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   documentDetailsComp: DocumentsDetailsComponent;
 
   constructor(
-    private _documentDetailService: DocumentDetailsService,
-    private _reservationService: ReservationService,
-    private _stepperService: StepperService,
-    private _buttonService: ButtonService,
-    private _hotelService: HotelService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _documentDetailService: DocumentDetailsService,
+    protected _reservationService: ReservationService,
+    protected _stepperService: StepperService,
+    protected _buttonService: ButtonService,
+    protected _hotelService: HotelService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -37,7 +37,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     this.initDocumentDetailsDS();
   }
 
-  private initDocumentDetailsDS() {
+  protected initDocumentDetailsDS() {
     this._documentDetailService.initDocumentDetailDS(this.reservationData);
   }
 
@@ -45,7 +45,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
    * Function to save/update the documents for all the guests on next click
    */
 
-  private saveDocumentDetails() {
+  protected saveDocumentDetails() {
     const status = this._documentDetailService.validateDocumentationForm(
       this.parentForm,
       this._hotelService.currentJourney
@@ -88,7 +88,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     );
   }
 
-  private performActionIfNotValid(status: any[]) {
+  protected performActionIfNotValid(status: any[]) {
     this._translateService
       .get(`VALIDATION.${status[0].code}`, { documentType: status[0].type })
       .subscribe((translatedMsg) => {

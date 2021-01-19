@@ -14,7 +14,7 @@ import { GuestDetailsService } from './../../../../../../shared/src/lib/services
   styleUrls: ['./guest-details.component.scss'],
 })
 export class GuestDetailsComponent implements OnInit, OnChanges {
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
   @ViewChild('primaryGuestAccordian') primaryGuestAccordian: MatAccordion;
   @ViewChild('secondaryGuestAccordian') secondaryGuestAccordian: MatAccordion;
 
@@ -33,9 +33,9 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   secondaryGuestFieldConfig: GuestDetailsConfigI[] = [];
 
   constructor(
-    private _fb: FormBuilder,
-    private _guestDetailService: GuestDetailsService,
-    private _hotelService: HotelService
+    protected _fb: FormBuilder,
+    protected _guestDetailService: GuestDetailsService,
+    protected _hotelService: HotelService
   ) {
     this.initGuestDetailForm();
   }

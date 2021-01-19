@@ -18,7 +18,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   @ViewChild('packageRenderer', { read: ViewContainerRef }) packageRendererContainer;
   @ViewChild('slickModal') slickModal: SlickCarouselComponent;
 
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
 
   selectedSlide;
   packageRendererComponentRefObj;
@@ -42,9 +42,9 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private _fb: FormBuilder,
-    private _paidService: PaidService,
-    private _resolver: ComponentFactoryResolver,
+    protected _fb: FormBuilder,
+    protected _paidService: PaidService,
+    protected _resolver: ComponentFactoryResolver,
   ) {}
 
   ngOnInit(): void {

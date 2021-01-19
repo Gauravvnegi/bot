@@ -19,7 +19,7 @@ import { FeedbackDetailsComponent } from '../feedback-details/feedback-details.c
   styleUrls: ['./feedback-main.component.scss'],
 })
 export class FeedbackMainComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
   paymentStatusData;
   isReservationData = false;
   parentForm: FormGroup;
@@ -31,16 +31,16 @@ export class FeedbackMainComponent implements OnInit {
   @ViewChild('feedbackDetail')
   feedbackDetailCmp: FeedbackDetailsComponent;
   constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _templateLoadingService: TemplateLoaderService,
-    private fb: FormBuilder,
-    private _feedbackDetailsService: FeedbackDetailsService,
-    private _buttonService: ButtonService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected fb: FormBuilder,
+    protected _feedbackDetailsService: FeedbackDetailsService,
+    protected _buttonService: ButtonService,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -48,7 +48,7 @@ export class FeedbackMainComponent implements OnInit {
     this.parentForm = this.fb.group({});
   }
 
-  private getReservationDetails() {
+  protected getReservationDetails() {
     this.$subscription.add(
       forkJoin(
         this._reservationService.getReservationDetails(
@@ -124,7 +124,7 @@ export class FeedbackMainComponent implements OnInit {
     );
   }
 
-  private performActionIfNotValid(status: any[]) {
+  protected performActionIfNotValid(status: any[]) {
     this._translateService
       .get(`VALIDATION.${status[0].code}`)
       .subscribe((translatedMsg) => {

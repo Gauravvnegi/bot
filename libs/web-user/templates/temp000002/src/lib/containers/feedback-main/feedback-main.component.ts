@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FeedbackMainComponent as BaseFeedbackMainComponent } from 'libs/web-user/templates/temp000001/src/lib/containers/feedback-main/feedback-main.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
-  templateUrl: '../../../../../temp000001/src/lib/containers/feedback-main/feedback-main.component.html',
-  styleUrls: ['./feedback-main.component.scss']
+  templateUrl:
+    '../../../../../temp000001/src/lib/containers/feedback-main/feedback-main.component.html',
+  styleUrls: ['./feedback-main.component.scss'],
 })
-export class FeedbackMainComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class FeedbackMainComponent extends BaseFeedbackMainComponent {}

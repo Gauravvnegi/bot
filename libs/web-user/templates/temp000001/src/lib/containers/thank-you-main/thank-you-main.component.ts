@@ -31,20 +31,20 @@ export class ThankYouMainComponent implements OnInit {
   state: string;
 
   constructor(
-    private route: ActivatedRoute,
-    private _templateLoadingService: TemplateLoaderService,
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _thankyouService: ThankYouService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected route: ActivatedRoute,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _thankyouService: ThankYouService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.getReservationDetails();
   }
 
-  private getReservationDetails() {
+  protected getReservationDetails() {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)

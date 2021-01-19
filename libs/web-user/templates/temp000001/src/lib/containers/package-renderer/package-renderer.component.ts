@@ -30,7 +30,7 @@ export class PackageRendererComponent
   @ViewChild('packageMetadata', { read: ViewContainerRef }) packageContainer;
   @ViewChild('saveButton') saveButton;
 
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
 
   subPackageFieldConfig: SubPackageDetailsConfigI[] = [];
   selectedSubPackageArray = [];
@@ -39,13 +39,13 @@ export class PackageRendererComponent
 
   constructor(
     public dialog: MatDialog,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _paidService: PaidService,
-    private _reservationService: ReservationService,
-    private _resolver: ComponentFactoryResolver,
-    private _buttonService: ButtonService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _changeDetectorRef: ChangeDetectorRef,
+    protected _paidService: PaidService,
+    protected _reservationService: ReservationService,
+    protected _resolver: ComponentFactoryResolver,
+    protected _buttonService: ButtonService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -258,7 +258,7 @@ export class PackageRendererComponent
     this.onPackageUpdate.emit(true);
   }
 
-  private performActionIfNotValid(status: any[]) {
+  protected performActionIfNotValid(status: any[]) {
     this._translateService
       .get(`VALIDATION.${status[0].code}`)
       .subscribe((translatedMsg) => {

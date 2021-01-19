@@ -10,14 +10,14 @@ import { HeaderSummaryComponent } from '../header-summary/header-summary.compone
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
   @Input() headerName: string;
   headerLogo: string = 'assets/logo.png';
   headerData = {};
   isCustomHeader: boolean = false;
   constructor(
-    private _matDialog: MatDialog,
-    private _hotelService: HotelService
+    protected _matDialog: MatDialog,
+    protected _hotelService: HotelService
   ) {}
 
   ngOnInit(): void {

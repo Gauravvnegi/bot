@@ -30,13 +30,13 @@ export class FooterComponent implements OnInit {
     privacyPolicy: '',
   };
 
-  constructor(private _hotelService: HotelService) {}
+  constructor(protected _hotelService: HotelService) {}
 
   ngOnInit(): void {
     this.getHotelConfigData();
   }
 
-  private getHotelConfigData(): void {
+  protected getHotelConfigData(): void {
     let {
       footerLogo,
       contactDetails,

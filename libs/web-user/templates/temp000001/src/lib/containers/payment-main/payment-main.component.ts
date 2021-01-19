@@ -24,13 +24,13 @@ export class PaymentMainComponent implements OnInit {
   isReservationData = false;
   reservationData: ReservationDetails;
   constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _templateLoadingService: TemplateLoaderService,
-    private _paymentDetailService: PaymentDetailsService,
-    private router: Router,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected _paymentDetailService: PaymentDetailsService,
+    protected router: Router,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {

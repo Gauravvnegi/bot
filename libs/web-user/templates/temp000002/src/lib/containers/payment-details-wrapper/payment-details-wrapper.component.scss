@@ -1,0 +1,147 @@
+@import 'temp000002';
+
+@media only screen and (max-width: $M) {
+  .user-button {
+    width: $half-width;
+  }
+}
+
+:host ::ng-deep .back-button {
+  @include footer-back();
+}
+:host ::ng-deep .next-button {
+  @include footer-next();
+}
+
+:host ::ng-deep .svg-payment > svg{
+  height: 48px;
+  width: 48px;
+  @media only screen and (max-width: $M) {
+   height: 25px;
+   width: 25px;
+  }
+}
+
+.payment-wrapper {
+  background-color: $white;
+  border-radius: 0 0 $border-radius-small $border-radius-small;
+  padding-bottom: 20px;
+}
+
+:host ::ng-deep .mat-tab-header {
+  border-radius: $border-radius-small $border-radius-small 0 0;
+  border-bottom: none;
+  background-color: white;
+}
+
+:host ::ng-deep .mat-tab-label {
+  padding: $padding-large;
+  height: auto;
+  opacity: 1;
+  background-color: #fafafa;
+  color: #979797;
+  svg path {
+    fill: #979797 !important;
+  }
+  img {
+    filter: contrast(0);
+  }
+  @media only screen and (max-width: $M) {
+    padding: $padding-small;
+  }
+}
+
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none;
+}
+
+:host ::ng-deep .amount {
+  font-size: 23px;
+  @media only screen and (max-width: $M) {
+    font-size: 14px;
+  }
+}
+
+:host ::ng-deep .mat-tab-labels {
+  padding-bottom: 10px;
+  @media only screen and (max-width: $M) {
+    padding-bottom: 0;
+  }
+}
+
+:host ::ng-deep .mat-ink-bar {
+  background-color: white !important;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  color: #000000;
+  background-color: white;
+  border-radius: 10px 0px 0px 0px;
+  border: 1px solid white;
+  border-bottom-color: rgb(33, 135, 213, 0.6);
+  svg path {
+    fill: #000000 !important;
+  }
+  img {
+    filter: contrast(1);
+  }
+}
+
+:host ::ng-deep .mat-tab-label-content {
+  width: 100%;
+}
+
+.custom-tab {
+  width: 44.7vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media only screen and (max-width: $M) {
+    width: 40.7vw;
+  }
+}
+
+.inner-label {
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.type-label {
+  display: flex;
+  justify-content: space-between;
+  @media only screen and (max-width: $M) {
+    align-items: flex-end;
+    flex-direction: column;
+    font-size: $font-small;
+    text-align: left;
+  }
+}
+
+.info-label {
+  display: flex;
+  @media only screen and (max-width: $T) {
+    display: none;
+  }
+}
+
+:host ::ng-deep .payment__wrapper__heading {
+  padding: $padding-medium;
+  font-size: $font-large;
+  font-weight: $bolder;
+  @media only screen and (max-width: $tab-size) {
+    font-size: $font-medium;
+    padding: $padding-small;
+  }
+}
+
+:host ::ng-deep .full_width{
+  width: 92vw;
+  @media only screen and (max-width: $M) {
+    width: 85vw;
+  }
+}

@@ -85,7 +85,7 @@
                   *ngFor="let email of emailIds.value"
                   selectable="true"
                   removable="true"
-                  (removed)="removeEmail(email)"
+                  (removed)="removeChipElement(email, emailIds)"
                 >{{ email }}<mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
                 <input
@@ -93,7 +93,7 @@
                   [matChipInputFor]="chipList"
                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                   matChipInputAddOnBlur="true"
-                  (matChipInputTokenEnd)="addEmail($event)"
+                  (matChipInputTokenEnd)="addChipElement($event, emailIds)"
                 />
               </mat-chip-list>
             </mat-form-field>
@@ -104,22 +104,35 @@
           <div class="import"><img src="assets/svg/import.svg" /><div>Import</div></div>
         </div>
       </div>
-      <!-- <div class="col">
+      <div class="col">
         <div class="row">
           <div class="row-title">Room# :</div>
           <div class="row-body">
-            <hospitality-bot-multiple-dropdown
-              style="width: 100%;"
-              [allItems]="rooms"
-              [items]="roomNumbers.value || [] "
-              (updateData)="setRoomData($event)"></hospitality-bot-multiple-dropdown>
+            <mat-form-field class="chip-list" appearance="outline">
+              <mat-chip-list #chipList aria-label="Room selection">
+                <mat-chip
+                  *ngFor="let room of roomNumbers.value"
+                  selectable="true"
+                  removable="true"
+                  (removed)="removeChipElement(room, roomNumbers)"
+                >{{ room }}<mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Room"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  matChipInputAddOnBlur="true"
+                  (matChipInputTokenEnd)="addChipElement($event, roomNumbers)"
+                />
+              </mat-chip-list>
+            </mat-form-field>
           </div>
         </div>
         <div class="upload-btn-wrapper">
           <input type="file" #roomCsvReader name="Upload CSV" (change)="readDataFromCSV($event, roomNumbers)" accept=".csv" />
           <div class="import"><img src="assets/svg/import.svg" /><div>Import</div></div>
         </div>
-      </div> -->
+      </div>
       <div class="row">
         <div class="row-title base-align">Input Message:</div>
         <div class="row-body">

@@ -38,7 +38,6 @@ export class NotificationComponent implements OnInit {
 
   visible = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  rooms: string[] = ['P001', 'P002', 'P003', 'P004', 'P005'];
   $subscription = new Subscription();
 
   @ViewChild('emailCsvReader') emailCsvReader: any;
@@ -91,17 +90,30 @@ export class NotificationComponent implements OnInit {
     this.requestService
       .getNotificationConfig(this.hotelId)
       .subscribe((response) => {
-        console.log(new RequestConfig().deserialize(response))
         this.config = new RequestConfig().deserialize(response);
       });
   }
 
-  addEmail(event: MatChipInputEvent): void {
+  private isValidEmail(email): RegExpMatchArray {
+    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return !!email && typeof email === 'string'
+      && email.match(emailRegex);
+  }
+
+  addChipElement(event: MatChipInputEvent, control: FormControl): void {
     const input = event.input;
     const value = event.value;
-    //check for email regex before adding @to-do
+
     if ((value || '').trim()) {
-      this.emailIds.patchValue(this.emailIds.value);
+      if (control === this.emailIds && !this.isValidEmail(value)) {
+        this._snackbarService.openSnackBarAsText('Invalid email format')
+        return;
+      } else {
+        const controlValues = control.value.filter((cValue) => cValue == value);
+        if (!controlValues.length) {
+          control.patchValue([...control.value, ...[value]]);
+        }
+      }
     }
 
     // Reset the input value
@@ -110,14 +122,11 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  removeEmail(emailToRemove: string): void {
-    const allEmails = this.emailIds.value.filter(
-      (email) => email != emailToRemove
+  removeChipElement(valueToRemove: string, control: FormControl): void {
+    const controlValues = control.value.filter(
+      (cValue) => cValue != valueToRemove
     );
-    this.emailIds.patchValue(allEmails);
-    if (!allEmails.length) {
-      this.emailCsvReader.nativeElement.value = '';
-    }
+    control.patchValue(controlValues);
   }
 
   readDataFromCSV($event: any, control: FormControl): void {
@@ -192,7 +201,7 @@ export class NotificationComponent implements OnInit {
       this._snackbarService.openSnackBarAsText(validation[0].data.message);
       return;
     }
-    this.isSending  = true;
+    this.isSending = true;
     let values = new RequestData().deserialize(
       this.notificationForm.getRawValue()
     );
@@ -214,12 +223,6 @@ export class NotificationComponent implements OnInit {
     );
   }
 
-  setRoomData(event): void {
-    let value = event ? event.split(',') : [];
-    this.roomNumbers.patchValue(value);
-    this.roomCsvReader.nativeElement.value = '';
-  }
-
   fetchTemplate(templateId) {
     let journey = this.notificationForm.get('messageType').value;
     this.requestService
@@ -234,7 +237,7 @@ export class NotificationComponent implements OnInit {
       );
   }
 
-  modifyControl(event: boolean, control: string): void {
+  private modifyControl(event: boolean, control: string): void {
     let formControl = this.notificationForm.get(control);
     formControl.setValue([]);
     event

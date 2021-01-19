@@ -1,0 +1,126 @@
+@import 'temp000002';
+
+// Global CSS for Template
+
+.background__wrapper {
+  background: #f4f5f7;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  min-width: $full-width;
+  min-height: $full-width;
+}
+
+:host
+  ::ng-deep
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header-container {
+  background-color: white;
+  box-shadow: 0px 3px 6px #0000001a;
+  margin-bottom: 2px;
+}
+
+:host ::ng-deep .mat-horizontal-content-container {
+  padding: 2rem 20px;
+  margin: 0 2rem;
+  background-color: white;
+}
+
+:host ::ng-deep .mat-expanded {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+:host ::ng-deep .main-template-button {
+  @include template-footer-button();
+  @media only screen and (max-width: $M) {
+    web-user-button {
+      width: $full-width;
+    }
+  }
+}
+
+:host ::ng-deep .container {
+  max-width: 1300px;
+  margin: 0 auto;
+  margin-bottom: $margin-large;
+
+  &__title {
+    font-size: $font-medium;
+    font-weight: $bold;
+    color: var(--accordian-font-color, $accordian-font-color);
+  }
+  @media only screen and (max-width: $M) {
+    margin: $margin-small;
+    overflow: scroll;
+    overflow-x: hidden;
+    border-radius: $border-radius-smaller;
+    height: calc(100vh - 235px);
+  }
+}
+
+::ng-deep .mat {
+  &-horizontal-stepper-header-container {
+    padding: 0 4%;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  &-step-label {
+    font-weight: $bold;
+    font-size: $font16;
+    color: $white;
+  }
+  &-select-panel {
+    box-shadow: var(--dropdown-shadow, $dropdown-shadow) !important;
+  }
+  &-step-header .mat-step-label.mat-step-label-active {
+    color: var(--stepper-font-color,$stepper-font-color);
+  }
+  &-icon.expand-icon {
+    margin-right: -16px;
+    width: 20px;
+    height: 20px;
+    font-size: $font-medium;
+    color: var(--accordian-icon-color, $accordian-icon-color) !important;
+  }
+  &-expansion-indicator::after {
+    display: none !important;
+  }
+  &-step-icon {
+    height: 30px;
+    width: 30px;
+  }
+  &-expansion-panel {
+    margin-bottom: $margin-large !important;
+    background: var(--accordian-background-color, $accordian-background-color);
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  &-expansion-panel-header {
+    height: 50px !important;
+    background-color: var(
+      --accordian-header-background-color,
+      $accordian-header-background-color
+    ) !important;
+    &:hover {
+      background-color: var(
+        --accordian-header-background-color,
+        $accordian-header-background-color
+      ) !important;
+    }
+  }
+  &-expansion-panel-body {
+    padding: $padding-large $padding30 !important;
+    position: relative;
+    margin: 0;
+    border: 1px solid #d9d9d9;
+    border-radius: 0 0 10px 10px;
+    &::after {
+      display: none;
+    }
+    &::before {
+      display: none;
+    }
+  }
+}

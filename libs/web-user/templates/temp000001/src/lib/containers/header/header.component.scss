@@ -25,9 +25,13 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  img:hover {
-    cursor: pointer;
+  .icon {
+    color: var(--header-font-color, $header-font-color);
+    &:hover {
+      cursor: pointer;
+    }
   }
+
   p {
     color: var(--header-status-font-color, $header-status-font-color);
     font-weight: $bold;

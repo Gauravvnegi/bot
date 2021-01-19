@@ -40,6 +40,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
+import { Temp000001ButtonComponent } from './presentational/temp000001-button/temp000001-button.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
     StepperContentRendererDirective,
     TemplateLoaderDirective,
     ButtonDirective,
+    Temp000001ButtonComponent,
   
   ],
   providers: [

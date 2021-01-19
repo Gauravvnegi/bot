@@ -6,13 +6,14 @@ import {
   Renderer2,
   ViewContainerRef,
 } from '@angular/core';
-import { ButtonComponent } from 'libs/web-user/shared/src/lib/presentational/button/button.component';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { Temp000001ButtonComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-button/temp000001-button.component';
 
 @Directive({ selector: '[button-renderer]' })
 export class ButtonDirective {
   @Input() config;
   @Input() context;
+  protected buttonComponent = Temp000001ButtonComponent;
 
   constructor(
     protected _resolver: ComponentFactoryResolver,
@@ -29,7 +30,7 @@ export class ButtonDirective {
   protected initButtonConfig(): void {
     this.config.forEach((config) => {
       const buttonFactoryComponent = this._resolver.resolveComponentFactory(
-        ButtonComponent
+        this.buttonComponent
       );
 
       const buttonComponentObj = this._container.createComponent(
@@ -44,15 +45,15 @@ export class ButtonDirective {
     });
   }
 
-  protected addButtonProps(host: ButtonComponent, config: any): void {
+  protected addButtonProps(host, config: any): void {
     host.settings = config.settings;
     host.buttonClass = config.buttonClass;
   }
 
   protected listenForButtonLoader(
     config: any,
-    buttonComponentObj: ComponentRef<ButtonComponent>,
-    host: ButtonComponent
+    buttonComponentObj: ComponentRef<any>,
+    host
   ): void {
     config.settings &&
       config.settings.isClickedTemplateSwitch &&
@@ -68,8 +69,8 @@ export class ButtonDirective {
 
   protected listenForContextFunction(
     config: any,
-    buttonComponentObj: ComponentRef<ButtonComponent>,
-    host: ButtonComponent
+    buttonComponentObj: ComponentRef<any>,
+    host
   ): void {
     if (config.click && config.click.fn_name) {
       if (typeof this.context[config.click.fn_name] != 'function') {

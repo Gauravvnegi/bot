@@ -1,0 +1,124 @@
+@import 'temp000002';
+
+.expand-icon {
+  margin-left: auto;
+}
+
+:host ::ng-deep .mat-form-field-wrapper {
+  font-size: $font16;
+}
+
+
+.wrapper {
+  &__item {
+    width: 45%;
+    margin: 5px 0;
+    @media only screen and (max-width: $M) {
+      width: auto;
+    }
+  }
+
+  @include flex-space-between();
+  @include display-block-on-breakpoint($M);
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: inherit;
+  }
+}
+
+.wrapper__item--gender {
+  width: 45%;
+  margin-bottom: $margin-large;
+  &-heading {
+    margin-top: -3px;
+    font-size: $font16;
+    margin-bottom: 5px;
+  }
+  @include full-width-on-breakpoint($M);
+}
+
+.wrapper__input {
+  width: 40px;
+  .mat-form-field-underline {
+    height: 0;
+  }
+}
+
+.travelling__info {
+  width: 45%;
+
+  &--heading {
+    font-size: $font16;
+  }
+  &--block {
+    @include flex-space-between();
+
+    &-label {
+      font-weight: $bold;
+    }
+
+    &-item {
+      width: 25%;
+      align-items: center;
+      @include flex-space-between();
+    }
+  }
+  @include full-width-on-breakpoint($M);
+}
+
+:host ::ng-deep .mat-form-field-underline {
+  background-image: none !important;
+  border-bottom: 1px solid lightgray !important;
+}
+
+:host ::ng-deep .mat-vertical-content-container {
+  margin: 0px 18px;
+}
+
+:host ::ng-deep .adult-type-feild {
+  .mat-form-field-infix {
+    width: 10px;
+  }
+}
+
+:host ::ng-deep .time-picker {
+  .mat__field--heading {
+    display: none;
+  }
+}
+
+:host ::ng-deep .room-type-feild {
+  .mat__field--heading {
+    display: none;
+  }
+  input {
+    padding-left: 0;
+  }
+  .mat__field--wrapper {
+    margin-bottom: 0;
+  }
+}
+
+:host ::ng-deep .input_feild {
+  display: flex;
+  align-items: center;
+}
+
+:host ::ng-deep .mat__field--heading {
+  margin-right: 3rem;
+  margin-bottom: 13px;
+  @media only screen and (max-width: $M) {
+    margin-right: $margin-small;
+    margin-bottom: $margin-medium;
+  }
+}
+
+:host ::ng-deep .mat-button-wrapper > svg {
+  width: 1.5em !important;
+}
+
+:host ::ng-deep .mat-select-arrow {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid;
+}

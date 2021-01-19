@@ -6,13 +6,6 @@
   }
 }
 
-:host ::ng-deep .back-button {
-  @include footer-back();
-}
-:host ::ng-deep .next-button {
-  @include footer-next();
-}
-
 :host ::ng-deep .svg-payment > svg{
   height: 48px;
   width: 48px;

@@ -1,0 +1,254 @@
+@import 'temp000002';
+
+.loading {
+  margin: 80px auto 0;
+  text-align: center;
+  font-size: 25px;
+  font-weight: $bolder;
+  color: $primary-blue;
+  @media only screen and (max-width: $M) {
+    font-size: $font-small;
+    width: 150px;
+  }
+}
+
+.spinner {
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: $primary-blue;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  @media only screen and (max-width: $M) {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.status--heading {
+  @include flex-space-between();
+  align-items: center;
+  padding: 5px;
+
+  margin: $margin-large 0;
+  .heading {
+    font-weight: $bolder;
+    font-size: $font-large;
+    .status {
+      color: #53b33e;
+    }
+    @media screen and (max-width: 700px) {
+      font-size: $font-small;
+    }
+  }
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    img {
+      margin: 0 8px;
+      height: 20px;
+      filter: invert(40%) sepia(11%) saturate(443%) hue-rotate(196deg)
+        brightness(99%) contrast(89%);
+    }
+  }
+}
+
+.section--heading {
+  padding: $padding-small;
+  background-color: $primary-blue;
+  color: white;
+  border-radius: $border-radius-small;
+  font-weight: $bolder;
+  font-size: $font-large;
+  margin: 25px 0;
+  @media screen and (max-width: 700px) {
+    font-size: $font16;
+    margin: 15px 0;
+  }
+}
+
+.section--content {
+  @include flex-space-between();
+  margin: 0 $margin-medium;
+  &--health {
+    flex-direction: column;
+    margin: $margin-small $margin-medium;
+    &--message {
+      height: 35px;
+      font-size: larger;
+      font-weight: 600;
+      align-items: center;
+      display: flex;
+      &-detail {
+        margin-left: 10px;
+        @media screen and (max-width: $M) {
+          font-size: $font-small;
+        }
+      }
+      mat-icon {
+        font-size: 35px;
+        height: auto;
+        width: auto;
+      }
+    }
+    &--disclaimer {
+      margin-top: $margin-medium;
+      color: #8d8d8d;
+      @media screen and (max-width: 700px) {
+        font-size: 12px;
+      }
+    }
+    @media screen and (max-width: 700px) {
+      font-size: 14px;
+    }
+  }
+  &--label {
+    align-items: center;
+    display: flex;
+    font-size: $font-large;
+    font-weight: 600;
+    span {
+      color: $primary-blue;
+    }
+    mat-icon {
+      font-size: 35px;
+      height: auto;
+      width: auto;
+    }
+    @media screen and (max-width: 700px) {
+      font-size: 14px;
+    }
+  }
+  &--container {
+    font-weight: $bold;
+    @media screen and (max-width: 700px) {
+      width: 44%;
+    }
+    &--title {
+      font-size: $font16;
+      color: #8d8d8d;
+      margin-bottom: $margin-medium;
+      b {
+        color: black;
+      }
+      @media only screen and (max-width: $T) {
+        font-size: $font-small;
+      }
+    }
+    &--value {
+      font-size: $font-large;
+      font-weight: $bolder;
+      @media only screen and (max-width: $T) {
+        font-size: 17px;
+      }
+    }
+    &--value--container {
+      font-size: $font-large;
+      font-weight: $bolder;
+      margin-bottom: $margin-small;
+      @include flex-item-center();
+      .element {
+        margin-right: 35px;
+        @media screen and (max-width: 700px) {
+          margin-right: 0;
+        }
+      }
+      @media screen and (max-width: 700px) {
+        justify-content: space-between;
+      }
+      @media only screen and (max-width: $T) {
+        font-size: 17px;
+      }
+    }
+    @media screen and (max-width: $M) {
+      margin: 10px 0;
+      &--title {
+        font-size: 10px;
+      }
+      &--value {
+        font-size: 12px;
+      }
+      &--value--container {
+        font-size: 12px;
+      }
+    }
+  }
+  @media screen and (max-width: $M) {
+    flex-wrap: wrap;
+  }
+}
+
+.link {
+  color: #2187d5;
+  text-decoration: underline;
+  cursor: pointer;
+  &:hover {
+    color: $primary-blue;
+  }
+}
+
+.margin-added {
+  @media screen and (max-width: 700px) {
+    margin-left: 15%;
+    margin-top: 3%;
+  }
+}
+
+.alert {
+  color: red;
+}
+
+.warning {
+  color: orange;
+}
+
+.completed {
+  color: green;
+}
+
+:host ::ng-deep .conditional-icon {
+  height: 40px;
+  @media screen and (max-width: $M) {
+    height: 30px;
+  }
+}

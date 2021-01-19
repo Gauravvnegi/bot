@@ -1,0 +1,58 @@
+@import 'temp000002';
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.expand-icon {
+  margin-left: auto;
+}
+
+mat-icon {
+  @include mat-icon();
+  color: $primary-blue;
+}
+
+.example-button-row {
+  @include template-footer-button();
+}
+
+:host ::ng-deep .back-button {
+  @include footer-back();
+}
+:host ::ng-deep .next-button {
+  @include footer-next();
+}
+
+@media only screen and (max-width: $M) {
+  .user-button {
+    width: $half-width;
+  }
+}
+
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+  background-color: $primary-blue;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+  color: $primary-blue;
+}
+
+:host ::ng-deep .mat-form-field.mat-focused .material-icons{
+  color: $primary-blue;
+}
+
+// :host ::ng-deep .mat-form-field.mat-form-field-invalid .material-icons{
+//   color: #f44336;
+// }

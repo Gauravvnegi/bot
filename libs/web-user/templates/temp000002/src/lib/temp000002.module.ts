@@ -41,6 +41,7 @@ import { TokenRetrievalInterceptor } from './interceptors/token-retrieval.interc
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { Temp000002ButtonComponent } from './presentational/temp000002-button/temp000002-button.component';
+import { Temp000002InputPopupComponent } from './presentational/temp000002-input-popup/temp000002-input-popup.component';
 
 
 @NgModule({
@@ -63,7 +64,7 @@ import { Temp000002ButtonComponent } from './presentational/temp000002-button/te
     StepperContentRendererDirective,
     ButtonDirective,
     Temp000002ButtonComponent,
-    
+    Temp000002InputPopupComponent,
   ],
   providers: [
     {

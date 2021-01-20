@@ -1,3 +1,10 @@
 @import 'main';
 
-
+:host ::ng-deep .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .fa {
+    margin-right: 3px;
+  }
+}

@@ -10,8 +10,4 @@ import { RadioComponent } from 'libs/web-user/shared/src/lib/presentational/radi
     './temp000002-radio.component.scss',
   ],
 })
-export class Temp000002RadioComponent extends RadioComponent {
-
-  
-
-}
+export class Temp000002RadioComponent extends RadioComponent {}

@@ -6,3 +6,12 @@
 :host ::ng-deep .next-button {
   @include footer-next();
 }
+
+:host ::ng-deep .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .fa {
+    margin-right: 3px;
+  }
+}

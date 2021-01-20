@@ -36,6 +36,7 @@ const components = {
 })
 export class HealthDeclarationComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
+  protected healthComponents=components;
   @Output()
   addFGEvent = new EventEmitter();
 
@@ -232,9 +233,9 @@ export class HealthDeclarationComponent implements OnInit {
     if (config.isDummy == false) {
       this.keysToBeUpdated.push(config.id);
     }
-    if (config && components[config.component.type]) {
+    if (config && this.healthComponents[config.component.type]) {
       const factoryComponent = this._resolver.resolveComponentFactory(
-        components[config.component.type]
+        this.healthComponents[config.component.type]
       );
       const componentObj = container.createComponent(factoryComponent) as any;
 

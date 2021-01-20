@@ -1,1 +1,174 @@
-<p>feedback-details works!</p>
+<div class="container">
+    <form [formGroup]="feedbackDetailsForm">
+      <mat-accordion>
+        <mat-expansion-panel #panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="container__title">
+              Your overall experience on the scale of 1-{{
+                feedbackConfig?.ratingScale?.length
+              }}
+              <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+              <mat-icon class="expand-icon" *ngIf="panel.expanded"
+                >remove</mat-icon
+              >
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+  
+          <web-user-rating
+            [parentForm]="feedbackDetailsForm"
+            [name]="'rating'"
+            [ratingScale]="feedbackConfig?.ratingScale"
+            [ratingScaleConfig]="feedbackConfig?.ratingScaleConfig"
+            (onRatingSelection)="onRatingSelection($event, 'Hotel')"
+          ></web-user-rating>
+  
+          <div [hidden]="!!!rating.value">
+            <h3 *ngIf="ratingQuestion?.hotel">
+              {{ ratingQuestion?.hotel }}
+            </h3>
+            <div class="hotel__services--images">
+              <div
+                *ngFor="let service of feedbackConfig?.quickServices"
+                class="img-with-text"
+              >
+                <div
+                  class="image"
+                  (click)="setHotelServices(service)"
+                  imageClass
+                  [styleConfig]="'#4b56c0'"
+                >
+                  <img [src]="service.url" class="hotel-services-images" />
+                </div>
+                <p>{{ service.label }}</p>
+              </div>
+            </div>
+  
+            <div *ngIf="!!rating.value">
+              <hospitality-bot-temp000002-textarea
+                [parentForm]="feedbackDetailsForm"
+                [name]="'feedback'"
+                [settings]="feedbackDetailsConfig.hotelFeedback"
+              ></hospitality-bot-temp000002-textarea>
+            </div>
+  
+            <div *ngIf="!!rating.value">
+              <h3 *ngIf="ratingQuestion.department">
+                {{ ratingQuestion.department }} (Optional)
+              </h3>
+              <mat-tab-group>
+                <mat-tab
+                  *ngFor="
+                    let departmentFG of departmentsFA['controls'];
+                    let departmentIdx = index
+                  "
+                >
+                  <div>
+                    <ng-template mat-tab-label>
+                      <web-user-checkbox
+                        *ngIf="departmentFG.get('isSelected').value"
+                        [parentForm]="departmentFG"
+                        [name]="'isSelected'"
+                        (onValueChange)="
+                          removeFeedback($event, 'Department', [departmentFG])
+                        "
+                      >
+                      </web-user-checkbox>
+                      <p class="checkbox_label">
+                        {{ departmentFG.get('label').value }}
+                      </p>
+                    </ng-template>
+  
+                    <h3 class="service_question" *ngIf="ratingQuestion.service">
+                      {{ ratingQuestion.service }} (Optional)
+                    </h3>
+                    <mat-tab-group>
+                      <!--*************** Service*************** -->
+                      <mat-tab
+                        *ngFor="
+                          let serviceFG of (departmentFG
+                            .get('serviceForm')
+                            ?.get('services'))['controls'];
+                          let index = serviceIdx
+                        "
+                      >
+                        <ng-template mat-tab-label>
+                          <!-- <mat-checkbox class="example-margin"></mat-checkbox> -->
+                          <web-user-checkbox
+                            *ngIf="serviceFG.get('isSelected').value"
+                            [parentForm]="serviceFG"
+                            [name]="'isSelected'"
+                            (onValueChange)="
+                              removeFeedback($event, 'Service', [
+                                departmentFG,
+                                serviceFG
+                              ])
+                            "
+                          >
+                          </web-user-checkbox>
+                          <p class="checkbox_label">
+                            {{ serviceFG.get('label').value }}
+                          </p>
+                        </ng-template>
+  
+                        <div
+                          class="service_checkbox"
+                          *ngFor="
+                            let touchPointFG of serviceFG.get('touchPoints')[
+                              'controls'
+                            ];
+                            let index = touchPointIdx
+                          "
+                        >
+                          <div class="service_checkbox__text">
+                            <web-user-checkbox
+                              *ngIf="touchPointFG.get('isSelected').value"
+                              [parentForm]="touchPointFG"
+                              [name]="'isSelected'"
+                              (onValueChange)="
+                                removeFeedback($event, 'Touchpoint', [
+                                  departmentFG,
+                                  serviceFG,
+                                  touchPointFG
+                                ])
+                              "
+                            >
+                            </web-user-checkbox>
+                            <p class="service_checkbox_label">
+                              {{ touchPointFG.get('label').value }}
+                            </p>
+                          </div>
+                          <web-user-rating
+                            [parentForm]="touchPointFG"
+                            [name]="'rating'"
+                            [ratingScale]="feedbackConfig?.ratingScale"
+                            [ratingScaleConfig]="
+                              feedbackConfig?.ratingScaleConfig
+                            "
+                            class="service_rating"
+                            (onRatingSelection)="
+                              onRatingSelection($event, 'Touchpoint', [
+                                departmentFG,
+                                serviceFG,
+                                touchPointFG
+                              ])
+                            "
+                          ></web-user-rating>
+                        </div>
+  
+                        <hospitality-bot-temp000002-textarea
+                          [parentForm]="serviceFG"
+                          [name]="'feedback'"
+                          [settings]="feedbackDetailsConfig.serviceFeedback"
+                        ></hospitality-bot-temp000002-textarea>
+                      </mat-tab>
+                    </mat-tab-group>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+  </div>
+  

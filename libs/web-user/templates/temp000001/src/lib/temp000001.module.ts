@@ -41,6 +41,7 @@ import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 import { Temp000001ButtonComponent } from './presentational/temp000001-button/temp000001-button.component';
+import { Temp000001InputPopupComponent } from './presentational/temp000001-input-popup/temp000001-input-popup.component';
 
 
 @NgModule({
@@ -62,7 +63,7 @@ import { Temp000001ButtonComponent } from './presentational/temp000001-button/te
     TemplateLoaderDirective,
     ButtonDirective,
     Temp000001ButtonComponent,
-  
+    Temp000001InputPopupComponent,
   ],
   providers: [
     {

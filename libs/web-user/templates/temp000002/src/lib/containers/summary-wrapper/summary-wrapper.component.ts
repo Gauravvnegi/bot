@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { SummaryWrapperComponent as BaseSummaryWrapperComponent } from 'libs/web-user/templates/temp000001/src/lib/containers/summary-wrapper/summary-wrapper.component';
+import { Temp000002InputPopupComponent } from '../../presentational/temp000002-input-popup/temp000002-input-popup.component';
 @Component({
   selector: 'hospitality-bot-summary-wrapper',
   templateUrl:
@@ -19,6 +20,7 @@ export class SummaryWrapperComponent extends BaseSummaryWrapperComponent {
     route: ActivatedRoute
   ) {
     super(dialog, summaryService, stepperService, router, route);
-    this.self=this;
+    this.self = this;
   }
+  protected inputPopupComponent = Temp000002InputPopupComponent;
 }

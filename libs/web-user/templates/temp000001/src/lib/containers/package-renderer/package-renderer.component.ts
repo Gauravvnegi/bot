@@ -32,6 +32,10 @@ export class PackageRendererComponent
 
   protected $subscription: Subscription = new Subscription();
 
+  protected packageComponent=componentMapping;
+
+  protected packageDefaultComponent=DefaultAmenityComponent;
+
   subPackageFieldConfig: SubPackageDetailsConfigI[] = [];
   selectedSubPackageArray = [];
   selectedService = '';
@@ -82,9 +86,9 @@ export class PackageRendererComponent
 
   servicePackage(subPackageCode) {
     this.selectedService = subPackageCode;
-    let component = componentMapping[subPackageCode];
+    let component = this.packageComponent[subPackageCode];
     if (component === undefined) {
-      component = DefaultAmenityComponent;
+      component = this.packageDefaultComponent;
     }
     let subPackage;
     this.subPackages.controls.forEach((control) => {

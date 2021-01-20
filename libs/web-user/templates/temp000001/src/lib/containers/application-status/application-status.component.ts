@@ -22,6 +22,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ApplicationStatusComponent implements OnInit {
   protected _dialogRef: MatDialogRef<any>;
   summaryDetails: SummaryDetails = new SummaryDetails();
+  protected regCardComponent=RegistrationCardComponent;
 
   @Input()
   context: any;
@@ -106,7 +107,7 @@ export class ApplicationStatusComponent implements OnInit {
           this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
       };
       this._dialogRef = this._modal.openDialog(
-        RegistrationCardComponent,
+        this.regCardComponent,
         dialogConfig
       );
     } else {
@@ -124,7 +125,7 @@ export class ApplicationStatusComponent implements OnInit {
                   '',
               };
               this._dialogRef = this._modal.openDialog(
-                RegistrationCardComponent,
+                this.regCardComponent,
                 dialogConfig
               );
             },

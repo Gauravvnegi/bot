@@ -19,6 +19,8 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   summaryConfig: SummaryDetailsConfigI;
   summaryDetails;
 
+  protected inputPopupComponent=Temp000001InputPopupComponent;
+
   constructor(
     public dialog: MatDialog,
     protected _summaryService: SummaryService,
@@ -53,7 +55,7 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   }
 
   onCheckinSubmit() {
-    const dialogRef = this.dialog.open(Temp000001InputPopupComponent, {
+    const dialogRef = this.dialog.open(this.inputPopupComponent, {
       disableClose: true,
       autoFocus: true,
       data: { pageValue: this.summaryDetails },

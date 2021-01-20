@@ -223,10 +223,10 @@ export class GuestStatusStatisticsComponent implements OnInit {
           backgroundColor: '#0239CF',
         },
         {
-          backgroundColor: '#288ad6',
+          backgroundColor: '#F2509B',
         },
         {
-          backgroundColor: '#F2509B',
+          backgroundColor: '#288ad6',
         },
         {
           backgroundColor: '#F2809B',

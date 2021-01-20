@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   headerLogo: string = 'assets/logo.png';
   headerData = {};
   isCustomHeader: boolean = false;
+  protected summaryComponent=HeaderSummaryComponent;
   constructor(
     protected _matDialog: MatDialog,
     protected _hotelService: HotelService
@@ -37,7 +38,7 @@ export class HeaderComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
     const modalDialog = this._matDialog.open(
-      HeaderSummaryComponent,
+      this.summaryComponent,
       dialogConfig
     );
 

@@ -6,7 +6,7 @@ import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/st
   templateUrl:
     '../../../../../../shared/src/lib/presentational/stepper/stepper.component.html',
   styleUrls: [
-    '../../../../../../shared/src/lib/presentational/stepper/stepper.component.scss',
+   // '../../../../../../shared/src/lib/presentational/stepper/stepper.component.scss',
     './temp000002-stepper.component.scss',
   ],
 })

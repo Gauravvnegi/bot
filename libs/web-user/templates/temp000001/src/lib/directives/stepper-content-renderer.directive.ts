@@ -67,6 +67,7 @@ export class StepperContentRendererDirective implements OnChanges {
   @Input() dataToPopulate;
 
   protected _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
+  protected stepperComponent=Temp000001StepperComponent;
   protected _isStepperRendered: boolean = false;
   protected componentMapping = componentMapping;
 
@@ -95,8 +96,8 @@ export class StepperContentRendererDirective implements OnChanges {
   }
 
   protected createStepperFactory(): void {
-    const stepperFactoryComponent: ComponentFactory<Temp000001StepperComponent> = this._resolver.resolveComponentFactory(
-      Temp000001StepperComponent
+    const stepperFactoryComponent: ComponentFactory<any> = this._resolver.resolveComponentFactory(
+      this.stepperComponent
     );
 
     this._stepperComponentObj = this._container.createComponent(

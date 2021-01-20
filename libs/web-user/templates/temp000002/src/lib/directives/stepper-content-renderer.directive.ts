@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { ComponentRef, Directive, Input } from '@angular/core';
 import {
   IComponentWrapperMapTemp000002,
   ITemplateTemp000002,
@@ -12,6 +12,7 @@ import { HealthDeclarationWrapperComponent } from '../containers/health-declarat
 import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
 import { StayDetailsWrapperComponent } from '../containers/stay-details-wrapper/stay-details-wrapper.component';
 import { SummaryWrapperComponent } from '../containers/summary-wrapper/summary-wrapper.component';
+import { Temp000002StepperComponent } from '../presentational/temp000002-stepper/temp000002-stepper.component';
 
 const componentMapping: IComponentWrapperMapTemp000002 = {
   'stay-details-wrapper': StayDetailsWrapperComponent,
@@ -28,4 +29,6 @@ const componentMapping: IComponentWrapperMapTemp000002 = {
 export class StepperContentRendererDirective extends BaseStepperContentRendererDirective {
   @Input() stepperConfig: ITemplateTemp000002;
   protected componentMapping = componentMapping;
+  protected _stepperComponentObj: ComponentRef<Temp000002StepperComponent>;
+  protected stepperComponent=Temp000002StepperComponent;
 }

@@ -61,7 +61,7 @@ export class SearchBarComponent implements OnInit {
       );
     formChanges$
       .pipe(
-        debounceTime(3000),
+        debounceTime(1000),
         switchMap((formValue) =>
           findSearch$(formValue).pipe(
             catchError((err) => {

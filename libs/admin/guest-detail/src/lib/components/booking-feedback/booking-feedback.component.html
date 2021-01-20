@@ -110,7 +110,7 @@
 						{{ feedbackData.rating }} ({{ feedbackData.ratingColor.category }})
 					</div>
 				</div>
-				<div class="feild width-quarter" *ngIf="feedbackData.suggestions">
+				<div class="feild width-quarter" *ngIf="(feedbackData.suggestions && feedbackData.suggestions.length)">
 					<mat-label class="label">Facilities</mat-label>
 					<div class="value" style="display: flex;">
 						<ng-container *ngFor="

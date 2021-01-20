@@ -15,7 +15,6 @@ export class DocumentsComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input('data') detailsData;
   @Input() guestsFA;
-  @Input() bookingId: string;
 
   selectedGuestId;
   countriesLOV;

@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Reservation } from 'libs/admin/dashboard/src/lib/data-models/reservation-table.model';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Guest, GuestReservation } from '../../data-models/guest-table.model';
-import { GuestTableService } from '../../services/guest-table.service';
+import { Guest, GuestReservation } from '../../../../../guests/src/lib/data-models/guest-table.model';
+import { GuestDetailService } from '../../services/guest-detail.service';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -15,7 +14,6 @@ export class DetailsComponent implements OnInit {
   isReservationDetailFetched: boolean = false;
   isGuestInfoPatched: boolean = false;
   @Input() guestId;
-  @Input() bookingId;
   data: Guest;
   @Input() tabKey = 'guest_details';
   @Input() hotelId;
@@ -41,7 +39,7 @@ export class DetailsComponent implements OnInit {
   @Output() onDetailsClose = new EventEmitter();
 
   constructor(
-    private guestTableService: GuestTableService,
+    private guestDetailService: GuestDetailService,
     private fb: FormBuilder,
     private feedbackService: FeedbackService,
     private _snackBarService: SnackBarService
@@ -54,7 +52,7 @@ export class DetailsComponent implements OnInit {
   }
 
   loadGuestInfo(): void {
-    this.guestTableService.getGuestById(this.guestId).subscribe(
+    this.guestDetailService.getGuestById(this.guestId).subscribe(
       (response) => {
         this.data = new Guest().deserialize(response);
         this.loadGuestReservations();
@@ -66,7 +64,7 @@ export class DetailsComponent implements OnInit {
   }
 
   loadGuestReservations(): void {
-    this.guestTableService.getGuestReservations(this.guestId).subscribe(
+    this.guestDetailService.getGuestReservations(this.guestId).subscribe(
       (response) => {
         this.details = new GuestReservation().deserialize(response);
         this.isReservationDetailFetched = true;
@@ -94,22 +92,6 @@ export class DetailsComponent implements OnInit {
   closeDetails() {
     this.onDetailsClose.next(true);
   }
-
-  gotoStayDetails() {
-    // this.tabIndex = 2;
-  }
-
-  // get primaryGuest() {
-  //   return this.reservationData.guests.primaryGuest;
-  // }
-
-  // get guestAttributes() {
-  //   return this.data.guestAttributes;
-  // }
-
-  // get feedback() {
-  //   return this.reservationData.feedback;
-  // }
 
   get guestData() {
     return {

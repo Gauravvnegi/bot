@@ -16,11 +16,11 @@ export class SearchResultDetail implements Deserializable {
             new ReservationSearchResult().deserialize(booking)
           );
         });
-      // input.guests &&
-      //   input.guests.length > 0 &&
-      //   input.guests.forEach((guest) => {
-      //     this.searchResults.push(new GuestSearchResult().deserialize(guest));
-      //   });
+      input.guests &&
+        input.guests.length > 0 &&
+        input.guests.forEach((guest) => {
+          this.searchResults.push(new GuestSearchResult().deserialize(guest));
+        });
 
       input.packages &&
         input.packages.length > 0 &&

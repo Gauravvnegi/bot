@@ -12,7 +12,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestTable } from '../../data-models/guest-table.model';
-import { DetailsComponent } from '../details/details.component';
+import { DetailsComponent } from '../../../../../guest-detail/src/lib/components/details/details.component';
 import * as FileSaver from 'file-saver';
 
 @Component({

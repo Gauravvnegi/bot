@@ -98,12 +98,13 @@
             [data]="guestData" (addFGEvent)="addFGEvent($event)"></hospitality-bot-guest-details>
         </mat-tab>
         <mat-tab label="Documents">
-          <hospitality-bot-documents *ngIf="isReservationDetailFetched" [parentForm]="detailsForm" [data]="data"
-            [bookingId]="bookingId"></hospitality-bot-documents>
+          <hospitality-bot-documents *ngIf="isReservationDetailFetched" [parentForm]="detailsForm" [data]="data">
+          </hospitality-bot-documents>
         </mat-tab>
-        <mat-tab label="Stay Details">
-          <hospitality-bot-stay-details *ngIf="isReservationDetailFetched" [hotelId]="hotelId" [parentForm]="detailsForm" [data]="details"
-          (addFGEvent)="addFGEvent($event)"></hospitality-bot-stay-details>
+        <mat-tab label="Stay Details" *ngIf="details">
+          <hospitality-bot-stay-details *ngIf="isReservationDetailFetched" [hotelId]="hotelId"
+            [parentForm]="detailsForm" [data]="details" (addFGEvent)="addFGEvent($event)">
+          </hospitality-bot-stay-details>
         </mat-tab>
       </mat-tab-group>
     </div>

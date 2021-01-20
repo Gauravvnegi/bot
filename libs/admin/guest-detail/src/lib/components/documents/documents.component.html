@@ -1,5 +1,5 @@
 <div class="material-body">
-	<div>
+	<div *ngIf="detailsData.documents && detailsData.documents.length; else documentsPending;">
 		<!-- Check if documents pending in any case ; then show pending template. If documents are initiated, completed or failed i can view docs-->
 		<div class="document-header">
 			<div class="heading">Doc Info</div>
@@ -26,7 +26,7 @@
 					</mat-form-field>
 				</div>
 			</div>
-			<div *ngIf="detailsData.nationality">
+			<div *ngIf="detailsData.documents">
 				<ng-container *ngFor="let document of detailsData.documents; let i = index">
 					<div class="upload-image-wrapper">
 						<div class="upload-image">

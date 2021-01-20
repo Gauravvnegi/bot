@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { GuestTableService } from '../../services/guest-table.service';
-import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
+import { FeedBackDetail } from '../../../../../guests/src/lib/data-models/feedbackDetailsConfig.model';
 import { SnackBarService } from 'libs/shared/material/src';
+import { GuestDetailService } from '../../services/guest-detail.service';
 
 @Component({
   selector: 'hospitality-bot-stay-details',
@@ -20,7 +20,7 @@ export class StayDetailsComponent implements OnInit {
   feedbackConfig: FeedBackDetail;
   constructor(
     private fb: FormBuilder,
-    private guestTableService: GuestTableService,
+    private guestDetailService: GuestDetailService,
     private _snackbarService: SnackBarService,
   ) {}
 
@@ -31,7 +31,7 @@ export class StayDetailsComponent implements OnInit {
   }
 
   loadFeedbackCongif() {
-    this.guestTableService.getFeedback(this.hotelId)
+    this.guestDetailService.getFeedback(this.hotelId)
       .subscribe((response) => {
         this.feedbackConfig = new FeedBackDetail().deserialize(response);
       }, ({ error }) => {

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import { GuestTableService } from '../../services/guest-table.service';
-import { BookingFeedback, Service } from '../../data-models/feedback.model';
-import { FeedBackDetail } from '../../data-models/feedbackDetailsConfig.model';
+import { BookingFeedback, Service } from '../../../../../guests/src/lib/data-models/feedback.model';
+import { FeedBackDetail } from '../../../../../guests/src/lib/data-models/feedbackDetailsConfig.model';
 import { SnackBarService } from 'libs/shared/material/src';
+import { GuestDetailService } from '../../services/guest-detail.service';
 
 @Component({
   selector: 'hospitality-bot-booking-feedback',
@@ -21,7 +21,7 @@ export class BookingFeedbackComponent implements OnInit {
   showMore: boolean = true;
   constructor(
     private feedbackService: FeedbackService,
-    private guestTableService: GuestTableService,
+    private guestDetailService: GuestDetailService,
     private _snackbarService: SnackBarService
   ) { }
 
@@ -29,8 +29,8 @@ export class BookingFeedbackComponent implements OnInit {
 
   loadFeedbackData(reservationId) {
     if (!this.feedbackData) {
-      // this.guestTableService.getReservationFeedback('09335387-1fd6-484d-a5b5-91a7c823d2d0')
-      this.guestTableService.getReservationFeedback(reservationId)
+      // this.guestDetailService.getReservationFeedback('09335387-1fd6-484d-a5b5-91a7c823d2d0')
+      this.guestDetailService.getReservationFeedback(reservationId)
         .subscribe((response) => {
           if (response) {
             this.feedbackData = new BookingFeedback().deserialize(response, this.feedbackConfig.ratingScaleConfig);

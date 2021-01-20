@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { StatisticsService } from './services/statistics.service';
 import { GuestTableService } from './services/guest-table.service';
+import { AdminGuestDetailModule } from '../../../guest-detail/src/lib/admin-guest-detail.module'
 
 export const adminGuestsRoutes: Route[] = [];
 
@@ -21,6 +22,7 @@ export const adminGuestsRoutes: Route[] = [];
     ReactiveFormsModule,
     SharedMaterialModule,
     AdminSharedModule,
+    AdminGuestDetailModule
   ],
   declarations: [...AdminGuestsRoutingModule.components],
   providers: [StatisticsService, GuestTableService]

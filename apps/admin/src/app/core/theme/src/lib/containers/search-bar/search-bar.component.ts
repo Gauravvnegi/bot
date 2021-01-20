@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent as GuestDetailComponent } from 'libs/admin/guests/src/lib/components/details/details.component';
+import { DetailsComponent as GuestDetailComponent } from 'libs/admin/guest-detail/src/lib/components/details/details.component';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
@@ -109,7 +109,12 @@ export class SearchBarComponent implements OnInit {
     dialogConfig.width = '100%';
     const detailCompRef = this.modal.openDialog(component, dialogConfig);
 
-    detailCompRef.componentInstance.bookingId = searchData.id;
+    if (searchData.type === 'GUEST') {
+      detailCompRef.componentInstance.guestId = searchData.id;
+      detailCompRef.componentInstance.hotelId = this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id;
+    } else {
+      detailCompRef.componentInstance.bookingId = searchData.id;
+    }
 
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
@@ -121,7 +126,7 @@ export class SearchBarComponent implements OnInit {
 
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
-    this.router.navigateByUrl(`/pages/package/amenity/${id}`)
+    this.router.navigateByUrl(`/pages/package/amenity/${id}`);
   }
 
   clearSearch() {

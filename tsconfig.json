@@ -59,7 +59,10 @@
       "@hospitality-bot/admin/request": ["libs/admin/request/src/index.ts"],
       "@hospitality-bot/admin/feedback": ["libs/admin/feedback/src/index.ts"],
       "@hospitality-bot/admin/guests": ["libs/admin/guests/src/index.ts"],
-      "@hospitality-bot/admin/packages": ["libs/admin/packages/src/index.ts"]
+      "@hospitality-bot/admin/packages": ["libs/admin/packages/src/index.ts"],
+      "@hospitality-bot/admin/guest-detail": [
+        "libs/admin/guest-detail/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

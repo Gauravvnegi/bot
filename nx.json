@@ -86,6 +86,9 @@
     },
     "admin-packages": {
       "tags": []
+    },
+    "admin-guest-detail": {
+      "tags": []
     }
   }
 }

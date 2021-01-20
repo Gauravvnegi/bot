@@ -29,8 +29,8 @@ export class NetPromoterScoreComponent implements OnInit {
   globalQueries = [];
 
   chartTypes = [
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
+    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg', backgroundColor: '#3DB76B' },
+    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg', backgroundColor: '#DEFFF3' },
   ];
 
   documentActionTypes = [
@@ -146,6 +146,7 @@ export class NetPromoterScoreComponent implements OnInit {
 
   setChartType(option): void {
     this.chart.chartType = option.value;
+    this.chart.chartColors[0].backgroundColor = option.backgroundColor;
   }
 
   private initGraphData(): void {

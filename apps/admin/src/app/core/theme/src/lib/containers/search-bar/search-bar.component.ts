@@ -124,6 +124,12 @@ export class SearchBarComponent implements OnInit {
     );
   }
 
+  onFocus() {
+    if (this.searchOptions.length && !this.searchDropdownVisible) {
+      this.searchDropdownVisible = true;
+    }
+  }
+
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
     this.router.navigateByUrl(`/pages/package/amenity/${id}`);

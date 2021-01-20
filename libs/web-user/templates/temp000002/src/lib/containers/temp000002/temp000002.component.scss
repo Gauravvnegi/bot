@@ -10,6 +10,9 @@
   z-index: -1;
   min-width: $full-width;
   min-height: $full-width;
+  @media only screen and (max-width: $M) {
+    background: white;
+  }
 }
 
 :host
@@ -19,10 +22,6 @@
   background-color: white;
   box-shadow: 0px 3px 6px #0000001a;
   margin-bottom: 2px;
-}
-
-:host ::ng-deep .mat-stepper-vertical, .mat-stepper-horizontal{
-  
 }
 
 :host ::ng-deep .mat-horizontal-content-container {
@@ -78,7 +77,7 @@
     box-shadow: var(--dropdown-shadow, $dropdown-shadow) !important;
   }
   &-step-header .mat-step-label.mat-step-label-active {
-    color: var(--stepper-font-color,$stepper-font-color);
+    color: var(--stepper-font-color, $stepper-font-color);
   }
   &-icon.expand-icon {
     margin-right: -16px;

@@ -42,6 +42,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { Temp000002ButtonComponent } from './presentational/temp000002-button/temp000002-button.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -62,6 +63,7 @@ import { Temp000002ButtonComponent } from './presentational/temp000002-button/te
     StepperContentRendererDirective,
     ButtonDirective,
     Temp000002ButtonComponent,
+    
   ],
   providers: [
     {

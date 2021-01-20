@@ -38,7 +38,8 @@ import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-mai
 import { AirportFacilitiesComponent } from './containers/packages/airport-facilities/airport-facilities.component';
 import { DefaultAmenityComponent } from './containers/packages/default-amenity/default-amenity.component';
 import { Temp000002TextareaComponent } from './presentational/temp000002-textarea/temp000002-textarea.component';
-
+import { Temp000002InputPopupComponent } from './presentational/temp000002-input-popup/temp000002-input-popup.component';
+import { Temp000002RadioComponent } from './presentational/temp000002-radio/temp000002-radio.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -137,5 +138,7 @@ export class Temp000002RoutingModule {
     AirportFacilitiesComponent,
     DefaultAmenityComponent,
     Temp000002TextareaComponent,
+    Temp000002InputPopupComponent,
+    Temp000002RadioComponent,
   ];
 }

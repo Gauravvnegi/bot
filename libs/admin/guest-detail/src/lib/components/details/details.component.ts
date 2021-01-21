@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Guest, GuestReservation } from '../../../../../guests/src/lib/data-models/guest-table.model';
+import {
+  Guest,
+  GuestReservation,
+} from '../../../../../guests/src/lib/data-models/guest-table.model';
 import { GuestDetailService } from '../../services/guest-detail.service';
 
 @Component({
@@ -100,8 +103,8 @@ export class DetailsComponent implements OnInit {
       lastName: this.data.lastName,
       countryCode: this.data.countryCode,
       phoneNumber: this.data.phoneNumber,
-      email: this.data.email
-    }
+      email: this.data.email,
+    };
   }
 
   get bookingCount() {
@@ -114,6 +117,14 @@ export class DetailsComponent implements OnInit {
 
   setTabKey(key: string) {
     this.tabKey = key;
+  }
+
+  get bookingTitle() {
+    return this.details.presentBookings.length
+      ? 'Current Booking'
+      : this.details.upcomingBookings.length
+      ? 'Upcoming Booking'
+      : 'Past Booking';
   }
 
   get tabIndex() {

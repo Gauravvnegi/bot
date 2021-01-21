@@ -459,7 +459,12 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
             ...this.getSelectedQuickReplyFilters(),
           ],
           false,
-          { offset: this.tempFirst, limit: this.tempRowsPerPage }
+          {
+            offset: this.tempFirst,
+            limit: this.tempRowsPerPage
+              ? this.tempRowsPerPage
+              : this.rowsPerPage,
+          }
         );
         detailCompRef.close();
       })

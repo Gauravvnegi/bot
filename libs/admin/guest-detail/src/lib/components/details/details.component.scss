@@ -161,6 +161,29 @@
       }
     }
   }
+  .guest_data {
+    display: flex;
+    align-items: baseline;
+    color: white;
+    font-size: $font16;
+    padding-left: 25px;
+    margin-bottom: 15px;
+    &__feild {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 3rem;
+      .label {
+        letter-spacing: 0.84px;
+      }
+      .value {
+        font-size: 12px;
+        color: #bebebe;
+        letter-spacing: 0.66px;
+        margin-top: 15px;
+      }
+    }
+  }
 
   .options-wrapper {
     display: flex;
@@ -443,7 +466,6 @@
         background-color: $primary-purple;
         color: white;
       }
-     
     }
   }
   .right-bottom-icons {
@@ -487,7 +509,7 @@
   }
 }
 
-.loader{
+.loader {
   margin: 20px auto;
 }
 

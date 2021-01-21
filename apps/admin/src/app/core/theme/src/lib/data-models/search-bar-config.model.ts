@@ -46,7 +46,7 @@ export class GuestSearchResult implements Deserializable {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'label', this.getGuestName(input)),
+      set({}, 'label', this.getFullName(input)),
       set({}, 'description', ''),
       set({}, 'type', get(input, ['searchType'])),
       set({}, 'imageUrl', '')
@@ -54,8 +54,8 @@ export class GuestSearchResult implements Deserializable {
     return this;
   }
 
-  getGuestName(input): string {
-    return `${input.firstName}${input.lastName}`;
+  getFullName(input): string {
+    return `${input.firstName} ${input.lastName}`;
   }
 }
 

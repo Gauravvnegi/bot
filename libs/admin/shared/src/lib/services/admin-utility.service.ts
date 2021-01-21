@@ -13,6 +13,7 @@ export class AdminUtilityService {
 
     const queryObj = queries.reduce((acc, curr) => {
       for (let key in curr) {
+        // TO_DO: Readme
         if (curr[key]) {
           if (acc[key]) {
             acc[key] = [acc[key], curr[key]].join(',');

@@ -13,10 +13,12 @@ export class AdminUtilityService {
 
     const queryObj = queries.reduce((acc, curr) => {
       for (let key in curr) {
-        if (acc[key]) {
-          acc[key] = [acc[key], curr[key]].join(',');
-        } else if (curr[key] !== null && curr[key] !== undefined) {
-          acc[key] = curr[key];
+        if (curr[key]) {
+          if (acc[key]) {
+            acc[key] = [acc[key], curr[key]].join(',');
+          } else if (curr[key] !== null && curr[key] !== undefined) {
+            acc[key] = curr[key];
+          }
         }
       }
 

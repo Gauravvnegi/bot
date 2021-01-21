@@ -1,5 +1,5 @@
 <mat-accordion>
-	<mat-expansion-panel #depositPanel2>
+	<mat-expansion-panel #depositPanel2 [expanded]="openedState">
 		<mat-expansion-panel-header class="accordian__header" (click)="loadFeedbackData(rowData.booking.bookingId)">
 			<mat-panel-title class="container__title">
 				<p>

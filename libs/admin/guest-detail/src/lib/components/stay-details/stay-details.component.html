@@ -3,15 +3,18 @@
 		<mat-label class="heading">Stay Details</mat-label>
 	</div>
 	<div class="booking__container" *ngFor="let booking of guestBookings.presentBookings; let index = index;">
-		<hospitality-bot-booking-feedback [title]="'Current Booking'" [rowData]="booking" [feedbackConfig]="feedbackConfig">
+		<hospitality-bot-booking-feedback [title]="'Current Booking'" [rowData]="booking"
+			[feedbackConfig]="feedbackConfig" [openedState]="index === 0">
 		</hospitality-bot-booking-feedback>
 	</div>
 	<div class="booking__container" *ngFor="let booking of guestBookings.upcomingBookings; let index = index;">
-		<hospitality-bot-booking-feedback [title]="'Upcoming Booking'" [rowData]="booking" [feedbackConfig]="feedbackConfig">
+		<hospitality-bot-booking-feedback [title]="'Upcoming Booking'" [rowData]="booking"
+			[feedbackConfig]="feedbackConfig" [openedState]="index === 0 && guestBookings.presentBookings.length === 0">
 		</hospitality-bot-booking-feedback>
 	</div>
 	<div class="booking__container" *ngFor="let booking of guestBookings.pastBookings; let index = index;">
-		<hospitality-bot-booking-feedback [title]="'Past Booking'" [rowData]="booking" [feedbackConfig]="feedbackConfig">
+		<hospitality-bot-booking-feedback [title]="'Past Booking'" [rowData]="booking" [feedbackConfig]="feedbackConfig"
+			[openedState]="index === 0 && guestBookings.upcomingBookings.length === 0">
 		</hospitality-bot-booking-feedback>
 	</div>
 </div>

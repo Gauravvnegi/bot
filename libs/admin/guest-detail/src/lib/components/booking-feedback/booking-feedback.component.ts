@@ -15,6 +15,7 @@ export class BookingFeedbackComponent implements OnInit {
   @Input() title;
   @Input() rowData;
   @Input() feedbackConfig: FeedBackDetail;
+  @Input() openedState: boolean;
 
   feedbackData;
   services: Service[];
@@ -25,7 +26,11 @@ export class BookingFeedbackComponent implements OnInit {
     private _snackbarService: SnackBarService
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.openedState) {
+      this.loadFeedbackData(this.rowData.booking.bookingId);
+    }
+  }
 
   loadFeedbackData(reservationId) {
     if (!this.feedbackData) {

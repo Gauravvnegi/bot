@@ -1,1 +1,46 @@
-<p>add-gst works!</p>
+<div class="gst-form">
+  <div class="modal-header">
+    <!-- <div class="temp-div"></div> -->
+    <div class="modal-title">
+      <p class="title">Add GST Details</p>
+    </div>
+    <div class="close_wrapper">
+      <span aria-hidden="true" class="close" (click)="closeModal()"
+        >&times;</span
+      >
+    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="gstFG">
+      <web-user-input
+        [parentForm]="gstFG"
+        [name]="'customerName'"
+        [settings]="gstFieldConfig.customerName"
+      >
+      </web-user-input>
+      <web-user-input
+        [parentForm]="gstFG"
+        [name]="'customerGSTIn'"
+        [settings]="gstFieldConfig.customerGSTIn"
+      >
+      </web-user-input>
+      <web-user-input
+        [parentForm]="gstFG"
+        [name]="'address'"
+        [settings]="gstFieldConfig.address"
+      >
+      </web-user-input>
+      <div class="btn-wrapper">
+        <hospitality-bot-temp000002-button
+          #saveButton
+          buttonTemplateSwitchh
+          (click)="submitGSTDetails()"
+          [settings]="{ label: 'Submit' }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+        >
+        </hospitality-bot-temp000002-button>
+      </div>
+    </form>
+  </div>
+</div>

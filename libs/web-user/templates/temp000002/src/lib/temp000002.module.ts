@@ -42,7 +42,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { Temp000002ButtonComponent } from './presentational/temp000002-button/temp000002-button.component';
 import { Temp000002InputPopupComponent } from './presentational/temp000002-input-popup/temp000002-input-popup.component';
-
+import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
+import { Temp000002SignatureCaptureWrapperComponent } from './presentational/temp000002-signature-capture-wrapper/temp000002-signature-capture-wrapper.component';
 
 @NgModule({
   imports: [
@@ -65,6 +66,8 @@ import { Temp000002InputPopupComponent } from './presentational/temp000002-input
     ButtonDirective,
     Temp000002ButtonComponent,
     Temp000002InputPopupComponent,
+    ButtonTemplateSwitchDirective,
+    Temp000002SignatureCaptureWrapperComponent,
   ],
   providers: [
     {

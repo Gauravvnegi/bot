@@ -11,8 +11,8 @@ export class ButtonTemplateSwitchDirective {
   }
 
   constructor(
-    private _host: ButtonComponent,
-    private _buttonService: ButtonService
+    protected _host: ButtonComponent,
+    protected _buttonService: ButtonService
   ) {}
 
   ngOnInit() {
@@ -23,7 +23,7 @@ export class ButtonTemplateSwitchDirective {
     this.listenForButtonLoading();
   }
 
-  private listenForButtonLoading() {
+  protected listenForButtonLoading() {
     this._buttonService.buttonLoading$.subscribe((buttonComponent) => {
       buttonComponent['id'] == this._host.id &&
         (this._host.isTemplateVisible = false);

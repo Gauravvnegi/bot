@@ -1,22 +1,21 @@
 <div class="popup__wrapper">
-    <div (click)="close()" class="cross">
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </div>
-    <div>
-      <h4 class="popup__wrapper--heading">{{ dialaogData.heading }}</h4>
-      <hospitality-bot-temp000001-textarea
-        [parentForm]="requestForm"
-        [name]="'request'"
-        [settings]="dialaogData.requestConfig"
-      ></hospitality-bot-temp000001-textarea>
-      <hospitality-bot-temp000001-button
-        #saveButton
-        buttonTemplateSwitch
-        (click)="checkIn()"
-        [settings]="button"
-        [buttonClass]="'next-button'"
-        class="user-button"
-      ></hospitality-bot-temp000001-button>
-    </div>
+  <div (click)="close()" class="cross">
+    <i class="fa fa-times" aria-hidden="true"></i>
   </div>
-  
+  <div>
+    <h4 class="popup__wrapper--heading">{{ dialaogData.heading }}</h4>
+    <hospitality-bot-temp000001-textarea
+      [parentForm]="requestForm"
+      [name]="'request'"
+      [settings]="dialaogData.requestConfig"
+    ></hospitality-bot-temp000001-textarea>
+    <hospitality-bot-temp000001-button
+      #saveButton
+      buttonTemplateSwitchh
+      (click)="checkIn()"
+      [settings]="button"
+      [buttonClass]="'next-button'"
+      class="user-button"
+    ></hospitality-bot-temp000001-button>
+  </div>
+</div>

@@ -3,8 +3,7 @@ import { FeedbackMainComponent as BaseFeedbackMainComponent } from 'libs/web-use
 
 @Component({
   selector: 'hospitality-bot-feedback-main',
-  templateUrl:
-    '../../../../../temp000001/src/lib/containers/feedback-main/feedback-main.component.html',
+  templateUrl: './feedback-main.component.html',
   styleUrls: ['./feedback-main.component.scss'],
 })
 export class FeedbackMainComponent extends BaseFeedbackMainComponent {}

@@ -19,8 +19,7 @@ const components = {
 };
 @Component({
   selector: 'hospitality-bot-health-declaration',
-  templateUrl:
-    '../../../../../temp000001/src/lib/containers/health-declaration/health-declaration.component.html',
+  templateUrl: './health-declaration.component.html',
   styleUrls: ['./health-declaration.component.scss'],
 })
 export class HealthDeclarationComponent extends BaseHealthDeclarationComponent {

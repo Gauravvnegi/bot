@@ -13,8 +13,11 @@
 .wrapper {
   padding: 20px;
   padding-top: 40px;
+  margin: 0 30px;
+  background-color: white;
   @media only screen and (max-width: 990px) {
     padding: 10px;
+    margin: 0;
   }
 }
 
@@ -39,6 +42,10 @@
     left: 0;
   }
 }
+
+// :host ::ng-deep .mat-expansion-panel-header{
+//   border: 1px solid $primary-button-background-color;
+// }
 
 @media only screen and (max-width: 500px) {
   :host ::ng-deep .mat-expansion-panel-body {

@@ -137,7 +137,8 @@ export class SearchBarComponent implements OnInit {
 
   clearSearch() {
     this.searchOptions = [];
-    this.parentForm.reset();
     this.searchDropdownVisible = false;
+    this.searchValue = false;
+    this.parentForm.reset();
   }
 }

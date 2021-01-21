@@ -74,23 +74,28 @@
         display: flex;
         margin: 10px 0;
         cursor: pointer;
+        align-items: center;
         .image {
           margin-right: 15px;
         }
         .detail {
-          padding: 0 5px;
+          margin-right: 8px;
           font-size: $font16;
           color: #484848;
+          max-width: 66%;
+          @media only screen and (max-width: 1100px) {
+            font-size: $font14;
+            max-width: 54%;
+          }
         }
         .description {
-          padding: 0 5px;
+          margin-left: 8px;
           font-size: $font14;
           color: #c5c5c5;
         }
         .circle-divider {
           height: 5px;
           width: 5px;
-          margin: 5px;
           border-radius: 50%;
           background-color: #c5c5c5;
         }

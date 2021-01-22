@@ -39,6 +39,10 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
+import { Temp000001ButtonComponent } from './presentational/temp000001-button/temp000001-button.component';
+import { Temp000001InputPopupComponent } from './presentational/temp000001-input-popup/temp000001-input-popup.component';
+import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
+import { Temp000001SignatureCaptureWrapperComponent } from './presentational/temp000001-signature-capture-wrapper/temp000001-signature-capture-wrapper.component';
 
 @NgModule({
   imports: [
@@ -58,6 +62,10 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
     StepperContentRendererDirective,
     TemplateLoaderDirective,
     ButtonDirective,
+    Temp000001ButtonComponent,
+    Temp000001InputPopupComponent,
+    ButtonTemplateSwitchDirective,
+    Temp000001SignatureCaptureWrapperComponent,
   ],
   providers: [
     {

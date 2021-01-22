@@ -52,6 +52,7 @@ export class TemplateRendererComponent implements OnInit, OnDestroy {
           reservationId,
           journey,
           hotelId,
+          templateId,
         };
       })
     );

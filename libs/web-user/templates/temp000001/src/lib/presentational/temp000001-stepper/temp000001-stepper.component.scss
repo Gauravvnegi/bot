@@ -1,0 +1,84 @@
+@import 'temp000001';
+
+:host ::ng-deep .mat-step-header .mat-step-icon {
+  background: var(--stepper-background-color, $stepper-background-color);
+}
+
+:host ::ng-deep .mat-step-optional {
+  color: var(--stepper-font-color, $stepper-font-color);
+}
+
+:host ::ng-deep .mat-step-icon-selected > div > mat-icon {
+  color: var(
+    --stepper-icon-selected-font-color,
+    $stepper-icon-selected-font-color
+  );
+}
+
+:host ::ng-deep.mat-step-icon-state-number > div > span {
+  color: var(--stepper-icon-number-font-color, $stepper-icon-number-font-color);
+}
+
+:host ::ng-deep.mat-step-icon-state-done > div > mat-icon {
+  color: var(--stepper-icon-done-font-color, $stepper-icon-done-font-color);
+}
+
+:host::ng-deep .mat-step-header .mat-step-icon {
+  background: var(--stepper-background-color, $stepper-background-color);
+}
+
+:host ::ng-deep .mat-stepper-horizontal-line {
+  background: var(--stepper-background-color, $stepper-background-color);
+  border-color: var(--stepper-border-color, $stepper-border-color);
+}
+
+:host
+  ::ng-deep
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:last-child)::after,
+[dir='rtl']
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:first-child)::after {
+  border-color: var(--stepper-border-color, $stepper-border-color);
+  background: var(--stepper-background-color, $stepper-background-color);
+}
+
+:host
+  ::ng-deep
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:first-child)::before,
+[dir='rtl']
+  .mat-stepper-label-position-bottom
+  .mat-horizontal-stepper-header:not(:last-child)::before {
+  border-color: var(--stepper-border-color, $stepper-border-color);
+  background: var(--stepper-background-color, $stepper-background-color);
+}
+
+// only for vertical stepper
+:host ::ng-deep .mat-stepper-vertical-line::before {
+  border-color: var(--stepper-border-color, $stepper-border-color);
+}
+
+/// custom-stepper styling implemented from here
+
+:host ::ng-deep .custom_stepper--container {
+  .flex-wrapper {
+    .text {
+      color: var(--stepper-font-color, $stepper-font-color);
+    }
+  }
+
+  .circular-chart .circle {
+    stroke: var(--stepper-background-color, $stepper-background-color);
+  }
+
+  .percentage {
+    fill: var(--stepper-font-color, $stepper-font-color);
+  }
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}

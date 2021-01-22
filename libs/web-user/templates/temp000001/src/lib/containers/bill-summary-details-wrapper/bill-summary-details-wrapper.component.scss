@@ -2,5 +2,8 @@
 
 
 :host ::ng-deep .next-button {
-    @include footer-next();
+    @media only screen and (max-width: $M) {
+      width: 100vw !important;
+    }
   }
+  

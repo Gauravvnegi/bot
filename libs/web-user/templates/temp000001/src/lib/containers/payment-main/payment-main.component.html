@@ -90,22 +90,22 @@
     class="main-template-button payment-button"
     *ngIf="ispaymentStatusLoaded"
   >
-    <web-user-button
+    <hospitality-bot-temp000001-button
       *ngIf="paymentStatusData.showBackButton"
       (click)="redirect(paymentStatusData.backRedirectUrl)"
       [settings]="{ label: paymentStatusData.back }"
       [buttonClass]="'back-button'"
       class="user-button"
       style="margin-right: 20px;"
-    ></web-user-button>
-    <web-user-button
+    ></hospitality-bot-temp000001-button>
+    <hospitality-bot-temp000001-button
       (click)="
         redirect(status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl)
       "
       [settings]="{ label: paymentStatusData.next }"
       [buttonClass]="'next-button'"
       class="user-button"
-    ></web-user-button>
+    ></hospitality-bot-temp000001-button>
   </div>
 </div>
 <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

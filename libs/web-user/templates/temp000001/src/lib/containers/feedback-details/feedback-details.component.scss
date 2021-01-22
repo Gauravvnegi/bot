@@ -198,6 +198,24 @@ mat-icon {
   }
 }
 
-:host ::ng-deep .rating__container{
+.rating_question {
+  @media only screen and (max-width: $T) {
+    font-size: $font-small;
+  }
+}
+
+:host ::ng-deep .rating__container {
+  @media only screen and (max-width: $T) {
+    margin-top: $margin-small 7;
+  }
+}
+
+:host ::ng-deep .checkbox-section {
+  @media only screen and (max-width: $T) {
+    height: auto !important;
+  }
+}
+
+:host ::ng-deep .rating__container {
   margin-top: 10px;
 }

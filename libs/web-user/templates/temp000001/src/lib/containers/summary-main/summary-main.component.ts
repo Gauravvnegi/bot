@@ -8,25 +8,24 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'hospitality-bot-summary-main',
   templateUrl: './summary-main.component.html',
-  styleUrls: ['./summary-main.component.scss']
+  styleUrls: ['./summary-main.component.scss'],
 })
 export class SummaryMainComponent implements OnInit {
-
   reservationData;
   isReservationData = false;
   private $subscription: Subscription = new Subscription();
   constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _templateLoadingService: TemplateLoaderService,
-    private _paymentDetailsService: PaymentDetailsService,
-  ) { }
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected _paymentDetailsService: PaymentDetailsService
+  ) {}
 
   ngOnInit(): void {
     this.getReservationDetails();
   }
 
-  private initPaymentDS() {
+  protected initPaymentDS() {
     const journey = this._hotelService.getCurrentJourneyConfig();
     this.$subscription.add(
       this._paymentDetailsService
@@ -40,18 +39,18 @@ export class SummaryMainComponent implements OnInit {
     );
   }
 
-  private getReservationDetails() {
+  protected getReservationDetails() {
     this.$subscription.add(
-      this._reservationService.getReservationDetails(
-        this._reservationService.reservationId
-      ).subscribe((reservationData) => {
-        this._hotelService.hotelConfig = reservationData['hotel'];
-        this.isReservationData = true;
-        this._templateLoadingService.isTemplateLoading$.next(false);
-        this.reservationData = reservationData;
-        this._reservationService.reservationData = reservationData;
-        this.initPaymentDS();
-      })
+      this._reservationService
+        .getReservationDetails(this._reservationService.reservationId)
+        .subscribe((reservationData) => {
+          this._hotelService.hotelConfig = reservationData['hotel'];
+          this.isReservationData = true;
+          this._templateLoadingService.isTemplateLoading$.next(false);
+          this.reservationData = reservationData;
+          this._reservationService.reservationData = reservationData;
+          this.initPaymentDS();
+        })
     );
   }
 

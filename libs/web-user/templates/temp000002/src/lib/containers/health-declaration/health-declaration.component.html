@@ -1,0 +1,29 @@
+<div #healthDiv id="healthDiv" class="container">
+    <mat-accordion
+      #accordian="matAccordion"
+      [multi]="true"
+      class="example-headers-align"
+    >
+      <mat-expansion-panel
+        #panel
+        *ngFor="let setting of settings; let panelIndex = index"
+        [expanded]="0 == panelIndex"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel_title">
+            <span class="container__title">{{ setting.title }}</span>
+          </mat-panel-title>
+          <mat-icon *ngIf="!panel.expanded">add</mat-icon>
+          <mat-icon *ngIf="panel.expanded">remove</mat-icon>
+        </mat-expansion-panel-header>
+  
+        <ng-container #parentPanelContent> </ng-container>
+  
+        <hospitality-bot-temp000002-signature-capture-wrapper
+          [imgUrl]="signature"
+          (signatureData)="signatureUploadFile($event)"
+        ></hospitality-bot-temp000002-signature-capture-wrapper>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  

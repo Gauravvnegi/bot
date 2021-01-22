@@ -40,8 +40,8 @@ export class FeedbackDetailsComponent implements OnInit {
   selectedQuickServices = new Array<any>();
 
   constructor(
-    private _fb: FormBuilder,
-    private _feedbackDetailsService: FeedbackDetailsService
+    protected _fb: FormBuilder,
+    protected _feedbackDetailsService: FeedbackDetailsService
   ) {
     this.initFeedBackDetailForm();
   }

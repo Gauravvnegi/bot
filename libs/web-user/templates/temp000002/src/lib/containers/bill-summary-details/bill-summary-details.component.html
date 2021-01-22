@@ -1,0 +1,191 @@
+<div class="container">
+    <div class="summary-details-wrapper">
+      <div class="payment-summary-wrapper">
+        <span class="summary-details-wrapper--title">Payment Summary</span>
+        <div class="user__info--wrapper" *ngIf="this.staySummaryDetails">
+          <div class="user__info">
+            <div class="user__info--details">
+              <label>Billed To :&nbsp;</label>
+              <p>
+                {{ staySummaryDetails.firstname }}
+                {{ staySummaryDetails.lastname }}
+              </p>
+            </div>
+            <div class="user__info--details">
+              <label>Arrival Date :&nbsp;</label>
+              <p>{{ staySummaryDetails.arrivalDate }}</p>
+            </div>
+            <div class="user__info--details">
+              <label>CurrentDate :&nbsp;</label>
+              <p>{{ staySummaryDetails.currentDate }}</p>
+            </div>
+          </div>
+  
+          <div class="user__info">
+            <div class="user__info--details">
+              <label>Room No. :&nbsp;</label>
+              <p>{{ staySummaryDetails.roomNumber }}</p>
+            </div>
+            <div class="user__info--details">
+              <label>Departure Date :&nbsp;</label>
+              <p>{{ staySummaryDetails.departureDate }}</p>
+            </div>
+            <div class="user__info--details">
+              <label>Booking No. :&nbsp;</label>
+              <p>{{ staySummaryDetails.bookingNumber }}</p>
+            </div>
+          </div>
+  
+          <div class="user__info remove-gap">
+            <div class="user__info--details">
+              <label>Room Type :&nbsp;</label>
+              <p>{{ staySummaryDetails.roomType }}</p>
+            </div>
+            <div class="user__info--details">
+              <label>No. of Adults :&nbsp;</label>
+              <p>{{ staySummaryDetails.adultsCount }}</p>
+            </div>
+          </div>
+  
+          <div class="user__info remove-gap">
+            <div class="user__info--details">
+              <label>No. of Rooms :&nbsp;</label>
+              <p>{{ staySummaryDetails.unit }}</p>
+            </div>
+            <div class="user__info--details">
+              <label>No. of Children :&nbsp;</label>
+              <p>{{ staySummaryDetails.kidsCount }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="description-table-wrapper" *ngIf="this.staySummaryDetails">
+        <table
+          cellspacing="0"
+          class="summary-table"
+          mat-table
+          [dataSource]="dataSource"
+        >
+          <ng-container matColumnDef="label">
+            <th style="text-align: left;" mat-header-cell *matHeaderCellDef>
+              Description
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="room-data">
+                <p class="room">{{ element.label }}</p>
+                <p class="room-type">{{ element.description }}</p>
+              </div>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="unit">
+            <th mat-header-cell *matHeaderCellDef>Unit</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.unit }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="unitPrice">
+            <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+              {{ element.unitPrice }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef>Amount</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+  
+              {{ element.amount }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="CGST">
+            <th mat-header-cell *matHeaderCellDef>CGST</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.CGST }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="SGST">
+            <th mat-header-cell *matHeaderCellDef>SGST</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.SGST }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="discount">
+            <th mat-header-cell *matHeaderCellDef>Discount</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.currency }}
+  
+              {{ element.discount }}
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="totalAmount">
+            <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+            <td tex mat-cell *matCellDef="let element">
+              {{ element.currency }}
+  
+              {{ element.totalAmount }}
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <div class="total__details" *ngIf="this.staySummaryDetails">
+        <div class="total__details--manager">
+          <!-- <p class="total__details--manager--text">Manager Name</p>
+          <p class="total__details--manager--name">G. Murry</p> -->
+        </div>
+        <div class="total__details--amounts">
+          <div class="total__details--amounts--wrapper">
+            <p class="label">Total Amount</p>
+            <b class="amount"
+              >{{ billSummaryDetails.currency }}
+              {{ billSummaryDetails.totalAmount }}</b
+            >
+          </div>
+          <div class="total__details--amounts--wrapper">
+            <p class="label">Total Savings</p>
+            <b class="amount"
+              >{{ billSummaryDetails.currency }}
+              {{ billSummaryDetails.totalDiscount }}</b
+            >
+          </div>
+          <div class="total__details--amounts--wrapper change-color">
+            <p class="label">Paid Amount</p>
+            <b class="amount"
+              >-{{ billSummaryDetails.currency }}
+              {{ billSummaryDetails.paidAmount }}</b
+            >
+          </div>
+          <div class="total__details--amounts--wrapper">
+            <p class="final__label">Due Amount</p>
+            <b class="final__amount"
+              >{{ billSummaryDetails.currency }}
+              {{ billSummaryDetails.dueAmount }}</b
+            >
+          </div>
+          <p class="add__gst mobile-show" (click)="openAddGSTDetails()">+Add GST Details</p>
+        </div>
+      </div>
+      <div class="add__more__gst">
+        <p class="manager__signature">Guest Signature</p>
+        <p class="add__gst mobile-hide" (click)="openAddGSTDetails()">+Add GST Details</p>
+      </div>
+      <div>
+        <hospitality-bot-temp000002-signature-capture-wrapper
+          [imgUrl]="billSummary.signatureUrl"
+          (signatureData)="signatureUploadFile($event)"
+        ></hospitality-bot-temp000002-signature-capture-wrapper>
+      </div>
+    </div>
+  </div>
+  <div class="main-template-button"></div>
+  

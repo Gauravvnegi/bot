@@ -19,10 +19,11 @@ export class HeaderSummaryComponent implements OnInit {
   isRenderedEvent = new EventEmitter<boolean>();
 
   constructor(
-    private _stepperService: StepperService,
+    protected _stepperService: StepperService,
+    protected _date: DateService,
     public dialogRef: MatDialogRef<HeaderSummaryComponent>,
-    private router: Router,
-    private route: ActivatedRoute
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
     this.context = this;
   }

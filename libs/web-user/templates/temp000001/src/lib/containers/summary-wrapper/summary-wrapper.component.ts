@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
-import { InputPopupComponent } from 'libs/web-user/shared/src/lib/presentational/input-popup/input-popup.component';
+import { Temp000001InputPopupComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-input-popup/temp000001-input-popup.component';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
@@ -19,12 +19,14 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   summaryConfig: SummaryDetailsConfigI;
   summaryDetails;
 
+  protected inputPopupComponent=Temp000001InputPopupComponent;
+
   constructor(
     public dialog: MatDialog,
-    private _summaryService: SummaryService,
-    private _stepperService: StepperService,
-    private router: Router,
-    private route: ActivatedRoute
+    protected _summaryService: SummaryService,
+    protected _stepperService: StepperService,
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
     super();
     this.self = this;
@@ -53,7 +55,7 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   }
 
   onCheckinSubmit() {
-    const dialogRef = this.dialog.open(InputPopupComponent, {
+    const dialogRef = this.dialog.open(this.inputPopupComponent, {
       disableClose: true,
       autoFocus: true,
       data: { pageValue: this.summaryDetails },

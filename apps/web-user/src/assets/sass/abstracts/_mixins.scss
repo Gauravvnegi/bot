@@ -45,7 +45,10 @@
 }
 
 @mixin primary-button() {
-  background: var(--primary-button-background-color,$primary-button-background-color);
+  background: var(
+    --primary-button-background-color,
+    $primary-button-background-color
+  );
   width: 150px;
   font-weight: $bolder;
   border-radius: 10px;
@@ -72,24 +75,6 @@
 
 //breakpoints
 
-
-
-// @mixin MQ($canvas) {
-//   @if $canvas == $S {
-//     @media only screen and (min-width: $S) {
-//       @content;
-//     }
-//   } @else if $canvas == $M {
-//     @media only screen and (min-width: $M) {
-//       @content;
-//     }
-//   } @else if $canvas == $L {
-//     @media only screen and (min-width: $L) {
-//       @content;
-//     }
-//   } @else if $canvas == $XL {
-//     @media only screen and (min-width: $XL) {
-//       @content;
-//     }
-//   }
-// }
+$M: 650px;
+$T: 780px;
+$XL: 1500px;

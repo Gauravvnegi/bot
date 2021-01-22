@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -37,12 +47,12 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
 
   constructor(
-    private _fb: FormBuilder,
+    protected _fb: FormBuilder,
     public _documentDetailService: DocumentDetailsService,
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {
     this.initDocumentDetailForm();
   }
@@ -411,10 +421,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
             this._translateService
               .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
               .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg,
-                  '',
-                  { panelClass: 'success' }
-                  );
+                this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
               });
           },
           ({ error }) => {

@@ -13,15 +13,15 @@
       (addFGEvent)="addFGEvent($event)"
     ></hospitality-bot-feedback-details>
     <div class="main-template-button feedback-button">
-      <web-user-button
+      <hospitality-bot-temp000001-button
         #saveButton
-        buttonTemplateSwitch
+        buttonTemplateSwitchh
         [buttonClass]="'next-button'"
         (click)="saveFeedbackDetails()"
         [settings]="{ label: 'Save' }"
         class="user-button"
-      ></web-user-button>
+      ></hospitality-bot-temp000001-button>
     </div>
   </div>
+  <hospitality-bot-footer></hospitality-bot-footer>
 </div>
-<hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

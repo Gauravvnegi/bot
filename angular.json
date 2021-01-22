@@ -45,6 +45,7 @@
               "includePaths": [
                 "apps/web-user/src/assets/sass",
                 "libs/web-user/templates/temp000001/src/lib/assets/sass",
+                "libs/web-user/templates/temp000002/src/lib/assets/sass",
                 "libs/web-user/templates/temp-covid000001/src/lib/assets/sass"
               ]
             },

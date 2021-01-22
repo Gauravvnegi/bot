@@ -1,0 +1,72 @@
+@import 'temp000002';
+
+.parent_block {
+  min-height: calc(100vh - 16vh);
+  @media only screen and (max-width: 990px) {
+    min-height: calc(100vh - 7vh);
+  }
+}
+
+.wrapper {
+  color: $primary-blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+  min-height: calc(100vh - 30vh);
+  .image {
+    height: 70px;
+    img {
+      width: 70px;
+    }
+    @media only screen and (max-width: $M) {
+      height: 40px;
+      img {
+        width: 40px;
+      }
+    }
+  }
+  &-title {
+    padding: $padding-medium;
+    @media only screen and (max-width: $M) {
+      text-align: center;
+    }
+  }
+  &-description {
+    padding: $padding-medium;
+    @media only screen and (max-width: $M) {
+      text-align: center;
+    }
+  }
+  &-email-info {
+    align-items: center;
+    display: flex;
+    width: 50%;
+    font-style: italic;
+    img {
+      height: 50px;
+      padding: $padding-medium;
+    }
+    .description {
+      padding: $padding-medium 0;
+    }
+  }
+  @media only screen and (max-width: $M) {
+    min-height: calc(100vh -17vh);
+  }
+}
+
+
+:host ::ng-deep .next-button {
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
+  }
+}
+
+
+@media only screen and (max-width: $M) {
+  .user-button {
+    width: $full-width;
+  }
+}

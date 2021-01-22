@@ -22,15 +22,29 @@ export interface IStepConfig {
 }
 
 export interface IButton {
+  buttonClass: string;
+  name: string;
+  click: {
+    fn_name: string;
+  };
   settings: {
+    isClickedTemplateSwitch: boolean;
     label: string;
     loaderLabel?: string;
-    isClickedTemplateSwitch: boolean;
     disableButtonIfLoading?: boolean;
-    name: 'back';
-    buttonClass: string;
-    click: {
-      fn_name: string;
-    };
   };
 }
+
+export type ComponentWrappersTemp000001 =
+  | 'stay-details-wrapper'
+  | 'guest-details-wrapper'
+  | 'health-declaration-wrapper'
+  | 'payment-details-wrapper'
+  | 'document-details-wrapper'
+  | 'feedback-details-wrapper'
+  | 'bill-summary-details-wrapper'
+  | 'summary-wrapper';
+
+export type IComponentWrapperMapTemp000001 = {
+  [key in ComponentWrappersTemp000001]: any;
+};

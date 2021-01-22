@@ -1,0 +1,51 @@
+@import 'temp000002';
+
+.template__header {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  background-color: var(--header-background-color, $header-background-color);
+  padding: $padding-large;
+  box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
+  @media only screen and (max-width: $M) {
+    padding: $padding-small;
+  }
+}
+
+.template__header--heading {
+  font-size: $font-large;
+  font-weight: $bold;
+  @include flex-justify-center();
+  align-items: center;
+  color: var(--header-font-color, $header-font-color);
+  @media only screen and (max-width: $M) {
+    font-size: $font-responsive-small;
+  }
+}
+.template__header--status {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  .icon {
+    color: var(--header-font-color, $header-font-color);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  p {
+    color: var(--header-status-font-color, $header-status-font-color);
+    font-weight: $bold;
+    font-size: $font-medium;
+    b {
+      color: var(--header-font-color, $header-font-color);
+    }
+  }
+  @media only screen and (max-width: $M) {
+    p {
+      font-size: $font-responsive-small;
+    }
+    img {
+      height: 16px;
+    }
+  }
+}

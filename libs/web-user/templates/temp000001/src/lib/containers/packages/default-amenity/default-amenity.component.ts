@@ -21,9 +21,9 @@ export class DefaultAmenityComponent implements OnInit {
   defaultAmenityConfig: DefaultAmenityConfigI;
 
   constructor(
-    private _fb: FormBuilder,
-    private _paidService: PaidService,
-    private _defaultService: DefaultAmenityService
+    protected _fb: FormBuilder,
+    protected _paidService: PaidService,
+    protected _defaultService: DefaultAmenityService
   ) {
       this.initDefaultForm();
    }

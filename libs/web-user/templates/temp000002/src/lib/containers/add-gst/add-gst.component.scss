@@ -1,0 +1,111 @@
+@import 'temp000002';
+
+.cross_icon {
+  height: 15px;
+  &:hover {
+    cursor: pointer;
+  }
+  img {
+    height: 100%;
+  }
+}
+
+.container {
+  overflow: hidden;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.modal-header {
+  padding: 2px 8px;
+  display: flex;
+  padding-bottom: $padding-small;
+  width: 100%;
+  position: relative;
+}
+
+.close_wrapper {
+  position: absolute;
+  right: 14px;
+  top: -13px;
+}
+
+.modal-title {
+  text-align: center;
+  width: 33%;
+  .title {
+    margin-bottom: $margin-small;
+  }
+  p {
+    text-align: center;
+    font-weight: $bolder;
+  }
+  span {
+    text-align: center;
+    font-weight: 100;
+    color: #a7a1a1;
+    padding: 5px;
+  }
+  @media only screen and (max-width: $M) {
+    font-size: $font-responsive-small;
+    width: 70%;
+  }
+}
+
+.close {
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.gst-form {
+  width: 420px;
+  @media only screen and (max-width: $M) {
+    width: auto;
+  }
+}
+
+.modal-body {
+  max-height: calc(90vh - 100px);
+  overflow-y: auto;
+  margin: 0 10px;
+  .control-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    .label {
+      width: 120px;
+    }
+    .control {
+      width: calc(100% - 120px);
+    }
+  }
+  .btn-wrapper {
+    margin: 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: darkgray;
+    border-radius: 10px;
+  }
+}
+
+:host ::ng-deep .next-button {
+  @media only screen and (max-width: $M) {
+    width: 100px;
+    border-radius: 28px;
+  }
+}
+

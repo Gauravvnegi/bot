@@ -1,0 +1,126 @@
+@import 'temp000002';
+
+.save-button {
+  @include flex-justify-center();
+}
+
+.reg-card-wrapper{
+  height: 80vh;
+  width: 75vw;
+}
+
+:host ::ng-deep .next-button {
+  @include primary-button();
+}
+
+.close_wrapper {
+  position: absolute;
+  right: 14px;
+  top: -13px;
+}
+
+.payment-wrapper {
+  background-color: $white;
+  border-radius: $border-radius-small;
+}
+
+.example-small-box,
+.example-large-box {
+  @include flex-all-center();
+  margin: 16px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.pdf-header {
+	@include flex-space-between();
+}
+
+.modal-header {
+  padding: 2px 8px;
+  @include flex-space-between();
+
+	padding-bottom: $padding-small;
+  width: $full-width;
+  position: relative;
+}
+
+.modal-title {
+	width: 98%;
+	text-align: center;
+}
+
+.modal-body {
+  margin-bottom: $margin-small;
+	width: $full-width;
+	height: 65vh;
+}
+
+// .modal-footer {
+//   // padding: 2px;
+//   margin-top: 80px;
+// }
+
+.close {
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.modal--link {
+	text-decoration: underline;
+	color: mediumblue;
+	cursor: pointer;
+}
+
+.signature-container {
+  padding-top: $padding-large;
+}
+
+.container {
+  min-height: 50px;
+  &:hover {
+    cursor: pointer;
+  }
+  .signature--tagline {
+    text-align: center;
+  }
+}
+
+pdf-viewer {
+	display: block;
+  height: calc(51vh - 80px);
+	border: 1px solid rgb(243, 241, 241);
+	border-radius: 4px;
+	padding-bottom: 2px;
+}
+
+.text-container {
+  margin: $margin-medium $margin-medium 0 $margin-medium;
+  padding: $padding-medium 60px $padding-medium 60px;
+  background-color: rgb(243, 241, 241);
+  border-radius: $border-radius-small;
+  height: 305px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.signature-capture-style {
+  height: 50px;
+  font-size: $font-medium;
+  @include flex-item-center();
+  @media only screen and (max-width: $tab-size) {
+    font-size: $font-small;
+  }
+}
+
+.reg-card-container {
+	margin-top: $margin-small;
+	// min-height: calc(65vh - 50px);
+	// max-height: calc(65vh - 51px);
+}
+
+:host ::ng-deep .signature-image-container{
+  margin-top: $margin-large;
+}

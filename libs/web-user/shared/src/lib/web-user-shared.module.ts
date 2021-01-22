@@ -17,7 +17,6 @@ import { RepeaterPipe } from './pipes/repeater.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ButtonComponent } from './presentational/button/button.component';
 import { CheckboxComponent } from './presentational/checkbox/checkbox.component';
-import { ConfirmationPopupComponent } from './presentational/confirmation-popup/confirmation-popup.component';
 import { CustomStepperComponent } from './presentational/custom-stepper/custom-stepper.component';
 import { DatePickerComponent } from './presentational/date-picker/date-picker.component';
 import { DetailComponent } from './presentational/detail/detail.component';
@@ -111,7 +110,6 @@ export interface IThemeConfig {
     RepeaterPipe,
     TimePickerComponent,
     SlideComponent,
-    ConfirmationPopupComponent,
     NumberInputComponent,
     PaymentMethodComponent,
     PromocodeComponent,

@@ -30,22 +30,22 @@
         ></pdf-viewer>
       </div>
       <div [ngClass]="settings.styles.signatureContainer">
-        <hospitality-bot-signature-capture-wrapper
+        <hospitality-bot-temp000001-signature-capture-wrapper
           [imgUrl]="settings.signatureImageUrl"
           [settings]="{ uploadAPI: settings.signatureUploadAPI }"
           (signatureData)="signatureUploadFile($event)"
         >
-        </hospitality-bot-signature-capture-wrapper>
+        </hospitality-bot-temp000001-signature-capture-wrapper>
       </div>
     </div>
     <div [ngClass]="settings.modal.style.footer">
       <div class="save-button">
-        <web-user-button
+        <hospitality-bot-temp000001-button
           [settings]="{ label: 'Save' }"
           [buttonClass]="'next-button'"
           class="user-button"
           (click)="onClose()"
-        ></web-user-button>
+        ></hospitality-bot-temp000001-button>
       </div>
     </div>
   </div>

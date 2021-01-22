@@ -1,0 +1,12 @@
+@import 'temp000001';
+
+:host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-start {
+  border-color: $primary-blue;
+}
+:host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-end {
+  border-color: $primary-blue;
+}
+
+:host ::ng-deep .mat-raised-button {
+  @include primary-button();
+}

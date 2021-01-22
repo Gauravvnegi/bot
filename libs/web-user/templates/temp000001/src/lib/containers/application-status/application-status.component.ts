@@ -20,8 +20,9 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./application-status.component.scss'],
 })
 export class ApplicationStatusComponent implements OnInit {
-  private _dialogRef: MatDialogRef<any>;
+  protected _dialogRef: MatDialogRef<any>;
   summaryDetails: SummaryDetails = new SummaryDetails();
+  protected regCardComponent=RegistrationCardComponent;
 
   @Input()
   context: any;
@@ -30,15 +31,15 @@ export class ApplicationStatusComponent implements OnInit {
   isLoaderVisible = true;
 
   constructor(
-    private _modal: ModalService,
-    private _reservationService: ReservationService,
-    private _paymentDetailsService: PaymentDetailsService,
-    private _summaryService: SummaryService,
-    private _stepperService: StepperService,
-    private _templateService: TemplateService,
-    private _regCardService: RegCardService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _modal: ModalService,
+    protected _reservationService: ReservationService,
+    protected _paymentDetailsService: PaymentDetailsService,
+    protected _summaryService: SummaryService,
+    protected _stepperService: StepperService,
+    protected _templateService: TemplateService,
+    protected _regCardService: RegCardService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -106,7 +107,7 @@ export class ApplicationStatusComponent implements OnInit {
           this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
       };
       this._dialogRef = this._modal.openDialog(
-        RegistrationCardComponent,
+        this.regCardComponent,
         dialogConfig
       );
     } else {
@@ -124,16 +125,16 @@ export class ApplicationStatusComponent implements OnInit {
                   '',
               };
               this._dialogRef = this._modal.openDialog(
-                RegistrationCardComponent,
+                this.regCardComponent,
                 dialogConfig
               );
             },
             ({ error }) => {
               this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                });
             }
           )
       );

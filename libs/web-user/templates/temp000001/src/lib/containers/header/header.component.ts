@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { Subscription } from 'rxjs';
@@ -9,16 +9,24 @@ import { HeaderSummaryComponent } from '../header-summary/header-summary.compone
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
+export class HeaderComponent implements OnChanges, OnInit {
+  protected $subscription: Subscription = new Subscription();
   @Input() headerName: string;
   headerLogo: string = 'assets/logo.png';
   headerData = {};
   isCustomHeader: boolean = false;
+  protected summaryComponent = HeaderSummaryComponent;
   constructor(
-    private _matDialog: MatDialog,
-    private _hotelService: HotelService
+    protected _matDialog: MatDialog,
+    protected _hotelService: HotelService
   ) {}
+
+  ngOnChanges() {
+    if (this.headerName) {
+      this.isCustomHeader = !!this.headerName;
+      this.headerName = this.headerName;
+    }
+  }
 
   ngOnInit(): void {
     this.getCurentJourneyConfig();
@@ -37,7 +45,7 @@ export class HeaderComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
     const modalDialog = this._matDialog.open(
-      HeaderSummaryComponent,
+      this.summaryComponent,
       dialogConfig
     );
 

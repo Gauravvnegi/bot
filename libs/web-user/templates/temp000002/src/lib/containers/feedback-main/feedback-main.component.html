@@ -1,27 +1,26 @@
-<div
-  class="parent_block"
-  *ngIf="isReservationData && feedbackConfig$ | async as feedBackConfig"
->
-  <hospitality-bot-header [headerName]="'Feedback'"></hospitality-bot-header>
-  <div class="wrapper">
-    <hospitality-bot-feedback-details
-      #feedbackDetail
-      *ngIf="feedBackConfig"
-      [parentForm]="parentForm"
-      [reservationData]="reservationDetails"
-      [feedbackConfig]="feedBackConfig"
-      (addFGEvent)="addFGEvent($event)"
-    ></hospitality-bot-feedback-details>
-    <div class="main-template-button feedback-button">
-      <hospitality-bot-temp000002-button
-        #saveButton
-        buttonTemplateSwitchh
-        [buttonClass]="'next-button'"
-        (click)="saveFeedbackDetails()"
-        [settings]="{ label: 'Save' }"
-        class="user-button"
-      ></hospitality-bot-temp000002-button>
+<div *ngIf="isReservationData && feedbackConfig$ | async as feedBackConfig">
+  <div class="parent_block">
+    <hospitality-bot-header [headerName]="'Feedback'"></hospitality-bot-header>
+    <div class="wrapper">
+      <hospitality-bot-feedback-details
+        #feedbackDetail
+        *ngIf="feedBackConfig"
+        [parentForm]="parentForm"
+        [reservationData]="reservationDetails"
+        [feedbackConfig]="feedBackConfig"
+        (addFGEvent)="addFGEvent($event)"
+      ></hospitality-bot-feedback-details>
+      <div class="main-template-button feedback-button">
+        <hospitality-bot-temp000002-button
+          #saveButton
+          buttonTemplateSwitchh
+          [buttonClass]="'next-button'"
+          (click)="saveFeedbackDetails()"
+          [settings]="{ label: 'Save' }"
+          class="user-button"
+        ></hospitality-bot-temp000002-button>
+      </div>
     </div>
   </div>
+  <hospitality-bot-footer></hospitality-bot-footer>
 </div>
-<hospitality-bot-footer></hospitality-bot-footer>

@@ -44,6 +44,7 @@ import { Temp000002ButtonComponent } from './presentational/temp000002-button/te
 import { Temp000002InputPopupComponent } from './presentational/temp000002-input-popup/temp000002-input-popup.component';
 import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
 import { Temp000002SignatureCaptureWrapperComponent } from './presentational/temp000002-signature-capture-wrapper/temp000002-signature-capture-wrapper.component';
+import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 
 @NgModule({
   imports: [
@@ -104,6 +105,7 @@ import { Temp000002SignatureCaptureWrapperComponent } from './presentational/tem
     AirportService,
     DefaultAmenityService,
     ThankYouService,
+    GSTService,
   ],
 })
 export class Temp000002Module {}

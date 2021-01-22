@@ -54,9 +54,9 @@ export class SearchBarComponent implements OnInit {
   listenForSearchChanges(): void {
     const formChanges$ = this.parentForm.valueChanges;
     console.log('');
-    const findSearch$ = ({ search }) =>
+    const findSearch$ = ({ search }: { search: string }) =>
       this.searchService.search(
-        search,
+        search.trim(),
         this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id
       );
     formChanges$
@@ -125,7 +125,11 @@ export class SearchBarComponent implements OnInit {
   }
 
   onFocus() {
-    if (this.searchOptions.length && !this.searchDropdownVisible) {
+    if (
+      this.searchOptions &&
+      this.searchOptions.length &&
+      !this.searchDropdownVisible
+    ) {
       this.searchDropdownVisible = true;
     }
   }

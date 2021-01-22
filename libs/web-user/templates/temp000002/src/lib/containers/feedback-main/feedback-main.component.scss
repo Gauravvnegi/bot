@@ -53,3 +53,9 @@
     padding: $padding-large $padding-medium !important;
   }
 }
+
+:host ::ng-deep .next-button {
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
+  }
+}

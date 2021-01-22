@@ -23,6 +23,8 @@ export class BillSummaryDetailsComponent implements OnInit {
   @Input() reservationData;
   @Input() stepperIndex;
 
+  protected addGstComponent=AddGstComponent;
+
   @ViewChild('nextButton') nextButton;
 
   requestForm: FormGroup;
@@ -208,7 +210,7 @@ export class BillSummaryDetailsComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
-    const modalDialog = this.dialog.open(AddGstComponent, dialogConfig);
+    const modalDialog = this.dialog.open(this.addGstComponent, dialogConfig);
 
     // this.$subscription.add(
     //   modalDialog.componentInstance.isRenderedEvent.subscribe((val) => {

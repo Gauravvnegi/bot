@@ -137,7 +137,9 @@ export class PaymentSummaryDetail implements Deserializable {
       set({}, 'totalDiscount', get(input, ['totalDiscount'])),
       set({}, 'signatureUrl', get(input, ['signatureUrl']))
     );
-    this.roomRates = new RoomRateDetails().deserialize(input.roomRates);
+    if (input.roomRates) {
+      this.roomRates = new RoomRateDetails().deserialize(input.roomRates);
+    }
     input.packages.forEach((amenity) => {
       this.packages.push(new PackageDetails().deserialize(amenity));
     });

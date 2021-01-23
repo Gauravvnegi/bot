@@ -32,12 +32,9 @@
         [textMask]="{ mask: settings.maskPattern, guide: false }"
       />
 
-      <mat-icon
-        (click)="openNat()"
-        [ngClass]="defaultClasses.fieldIconClasses"
-        matSuffix
-        >{{ settings.icon }}</mat-icon
-      >
+      <mat-icon [ngClass]="defaultClasses.fieldIconClasses" matSuffix>{{
+        settings.icon
+      }}</mat-icon>
 
       <mat-error>{{ errorMsg }}</mat-error>
     </mat-form-field>

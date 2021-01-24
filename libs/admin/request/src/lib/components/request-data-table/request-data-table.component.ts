@@ -152,7 +152,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
       ],
     },
   ];
-  tabFilterIdx: number = 0;
+  tabFilterIdx: number = 1;
 
   globalQueries = [];
   $subscription = new Subscription();

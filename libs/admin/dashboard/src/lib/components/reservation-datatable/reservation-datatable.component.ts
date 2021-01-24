@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -22,7 +22,7 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
     './reservation-datatable.component.scss',
   ],
 })
-export class ReservationDatatableComponent extends BaseDatatableComponent
+export class  ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = 'Reservations';
   actionButtons = true;
@@ -44,7 +44,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     { field: 'stageAndourney', header: 'Stage/Journey' },
   ];
 
-  tabFilterItems = [
+  @Input() tabFilterItems = [
     {
       label: 'Inhouse',
       content: '',
@@ -171,17 +171,17 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       ],
     },
   ];
-  tabFilterIdx: number = 1;
+  @Input() tabFilterIdx: number = 1;
 
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _reservationService: ReservationService,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _modal: ModalService,
+    protected _reservationService: ReservationService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected _modal: ModalService,
     public feedbackService: FeedbackService
   ) {
     super(fb);

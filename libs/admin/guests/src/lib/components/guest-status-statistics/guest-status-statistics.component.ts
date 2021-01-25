@@ -88,7 +88,6 @@ export class GuestStatusStatisticsComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              stepSize: 25,
             },
           },
         ],

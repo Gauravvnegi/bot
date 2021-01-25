@@ -79,7 +79,6 @@ export class NetPromoterScoreComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              stepSize: 20,
             },
           },
         ],

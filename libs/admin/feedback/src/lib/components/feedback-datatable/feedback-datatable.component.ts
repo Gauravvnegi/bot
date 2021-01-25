@@ -80,7 +80,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     {
       label: 'Journey/Reservation',
       content: '',
-      value: 'ARRIVAL,INHOUSE,DEPARTURE',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: this.chips,

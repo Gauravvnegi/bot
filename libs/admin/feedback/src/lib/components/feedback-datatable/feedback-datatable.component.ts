@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { DetailsComponent } from 'libs/admin/guest-detail/src/lib/components/details/details.component';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
@@ -149,7 +149,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
-          console.log(this.values)
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&

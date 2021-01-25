@@ -21,7 +21,8 @@
 							</div>
 							<div *ngIf="isActionButtons" class="seperator"></div>
 							<div formGroupName="documentActions" class="dropdown--wrapper">
-								<p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+								<p-dropdown class="export" [options]="documentActionTypes"
+									formControlName="documentActionType">
 									<ng-template let-documentActionItem pTemplate="selectedItem">
 										<img src="assets/svg/Export.svg" />
 										<span style="margin-left: 0.5em; font-weight: 500;">{{
@@ -164,19 +165,15 @@
 	<!-- **************************************BODY********************************* -->
 	<ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
 		<!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-		<!-- <tr class="data-table-row" (click)="openDetailPage($event, rowData)"> -->
-		<tr class="data-table-row">
+		<tr class="data-table-row" (click)="openDetailPage($event, rowData, 'stay_details')">
+			<!-- <tr class="data-table-row"> -->
 			<td class="table--checkbox">
-				<p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
+				<p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)">
+				</p-tableCheckbox>
 			</td>
 			<td class="guest">
 				<span>{{ rowData.getFullName() }}</span>
 			</td>
-			<!-- <td>
-        <p class="tabel-room-no status-text-success">
-          {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
-        </p>
-      </td> -->
 			<td>
 				<p class="arrival-date">
 					{{ rowData.booking.getArrivalDate() }}-{{
@@ -253,7 +250,7 @@
 					<div class="line first"></div>
 					<div class="line second"></div>
 					<div class="icon">
-					<!-- <div (click)="openDetailPage($event, rowData, 'document_details')" class="icon"> -->
+						<!-- <div (click)="openDetailPage($event, rowData, 'document_details')" class="icon"> -->
 						<img class="table-body-journey-icon" src="assets/svg/Document.svg" [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.documents == 'INITIATED',

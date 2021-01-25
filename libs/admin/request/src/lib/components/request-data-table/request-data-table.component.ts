@@ -456,7 +456,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   }
 
   openAddRequest() {
-    this.router.navigate(['add-request'], { relativeTo: this.route });
+    this.router.navigate(['add-request'], { relativeTo: this.route, queryParams: { hotelId: this.globalQueries[0].hotelId } });
   }
 
   ngOnDestroy() {

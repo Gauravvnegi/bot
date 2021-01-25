@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service.js';
+import { ActivatedRoute } from '@angular/router';
 import { SnackBarService } from 'libs/shared/material/src/index.js';
 import { Subscription } from 'rxjs';
 import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
@@ -45,11 +45,11 @@ export class NotificationComponent implements OnInit {
   @ViewChild('attachmentUpload') attachmentUpload: any;
 
   constructor(
-    private _globalFilterService: GlobalFilterService,
     private _fb: FormBuilder,
     private _location: Location,
     private requestService: RequestService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -64,9 +64,9 @@ export class NotificationComponent implements OnInit {
 
   private listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        // debugger;
-        // this.hotelId = data['filter'].queryValue[0].hotelId;
+      this.route.queryParams.subscribe((params) => {
+        this.hotelId = params['hotelId'];
+        console.log(this.hotelId)
       })
     );
   }
@@ -187,7 +187,7 @@ export class NotificationComponent implements OnInit {
   changeTemplateIds(method): void {
     let data = this.config.messageTypes.filter((d) => d.value === method)[0];
     this.templates.ids = data['templateIds'];
-    this.modifyControl(this.templates.ids.length > 0, 'templateId');
+    this.modifyControl(this.templates.ids && this.templates.ids.length > 0, 'templateId');
     this.notificationForm.get('message').patchValue('');
   }
 

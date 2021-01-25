@@ -66,7 +66,7 @@ export class NotificationComponent implements OnInit {
     this.$subscription.add(
       this.route.queryParams.subscribe((params) => {
         this.hotelId = params['hotelId'];
-        console.log(this.hotelId)
+        console.log(this.hotelId);
       })
     );
   }
@@ -187,7 +187,10 @@ export class NotificationComponent implements OnInit {
   changeTemplateIds(method): void {
     let data = this.config.messageTypes.filter((d) => d.value === method)[0];
     this.templates.ids = data['templateIds'];
-    this.modifyControl(this.templates.ids && this.templates.ids.length > 0, 'templateId');
+    this.modifyControl(
+      this.templates.ids && this.templates.ids.length > 0,
+      'templateId'
+    );
     this.notificationForm.get('message').patchValue('');
   }
 
@@ -225,16 +228,22 @@ export class NotificationComponent implements OnInit {
 
   fetchTemplate(templateId) {
     let journey = this.notificationForm.get('messageType').value;
-    this.requestService
-      .getTemplate(this.hotelId, templateId, journey.toUpperCase())
-      .subscribe(
-        (response) => {
-          this.notificationForm.get('message').patchValue(response.template);
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+    if (templateId) {
+      this.$subscription.add(
+        this.requestService
+          .getTemplate(this.hotelId, templateId, journey.toUpperCase())
+          .subscribe(
+            (response) => {
+              this.notificationForm
+                .get('message')
+                .patchValue(response.template);
+            },
+            ({ error }) => {
+              this._snackbarService.openSnackBarAsText(error.message);
+            }
+          )
       );
+    }
   }
 
   private modifyControl(event: boolean, control: string): void {

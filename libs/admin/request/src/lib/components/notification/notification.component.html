@@ -5,7 +5,7 @@
     </div>
     <div style="padding-left: 10px;">Send Message</div>
   </div>
-  <form [formGroup]="notificationForm">
+  <div *ngIf="notificationForm" [formGroup]="notificationForm">
     <ng-template #loader>
       <div>
         <p class="loading">Loading</p>
@@ -156,5 +156,5 @@
           {{isSending ? "Sending" : "Send"}} </button>
       </div>
     </div>
-  </form>
+  </div>
 </div>

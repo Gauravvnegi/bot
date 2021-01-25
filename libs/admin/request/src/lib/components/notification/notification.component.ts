@@ -53,20 +53,21 @@ export class NotificationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.registerListeners();
-    this.initNotificationForm();
     this.getConfigData();
   }
 
   private registerListeners(): void {
-    this.listenForGlobalFilters();
+    this.listenForRouteParams();
   }
 
-  private listenForGlobalFilters(): void {
+  private listenForRouteParams(): void {
     this.$subscription.add(
       this.route.queryParams.subscribe((params) => {
         this.hotelId = params['hotelId'];
-        console.log(this.hotelId);
+        if (params['channel']) {
+          this.social_channels.patchValue([params['channel']]);
+          this.notificationForm.get('is_social_channel').patchValue(true);
+        }
       })
     );
   }
@@ -91,6 +92,8 @@ export class NotificationComponent implements OnInit {
       .getNotificationConfig(this.hotelId)
       .subscribe((response) => {
         this.config = new RequestConfig().deserialize(response);
+        this.initNotificationForm();
+        this.registerListeners();
       });
   }
 

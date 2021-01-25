@@ -229,7 +229,14 @@
 			</td>
 
 			<td class="package">
-				<span>{{ rowData.guestAttributes.overAllNps }}
+				<span [ngClass]="{
+					'status-text-initiated':
+					rowData.guestAttributes.overAllNps > 40 && rowData.guestAttributes.overAllNps <= 60,
+					'status-text-reject':
+					rowData.guestAttributes.overAllNps >= -100 && rowData.guestAttributes.overAllNps <= 40,
+					'status-text-success':
+					rowData.guestAttributes.overAllNps > 60
+				  }">{{ rowData.guestAttributes.overAllNps }}
 				</span>
 			</td>
 

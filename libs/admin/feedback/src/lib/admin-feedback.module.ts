@@ -8,6 +8,7 @@ import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { StatisticsService } from './services/statistics.service';
+import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { StatisticsService } from './services/statistics.service';
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
     SlickCarouselModule,
+    AdminGuestDetailModule
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
   providers: [StatisticsService]

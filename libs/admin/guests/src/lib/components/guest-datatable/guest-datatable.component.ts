@@ -36,7 +36,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   hotelId: string;
 
   cols = [
-    { field: 'guests.primaryGuest.firstName', header: 'Guest/ Company' },
+    { field: 'firstName', header: 'Guest/ Company' },
     { field: 'arrivalAndDepartureDate', header: 'Arrival/ Departure' },
     { field: 'booking.bookingNumber', header: 'Booking No./ Feedback' },
     { field: 'amountDueAndTotal', header: 'Amount Due/ Total Spend' },
@@ -211,17 +211,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      // this.tabFilterItems = this.tabFilterItems.map((tab) => {
-      //   return {
-      //     ...tab,
-      //     chips: tab.chips.map((chip) => {
-      //       return {
-      //         ...chip,
-      //         total: countObj[chip.value],
-      //       };
-      //     }),
-      //   };
-      // });
       this.tabFilterItems.forEach((tab) => {
         tab.chips.forEach((chip) => {
           chip.total = countObj[chip.value];

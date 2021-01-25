@@ -212,6 +212,10 @@ export class NotificationComponent implements OnInit {
       this.notificationForm.getRawValue()
     );
 
+    if (values.templateId.length === 0) {
+      values.templateId = '';
+    }
+
     this.$subscription.add(
       this.requestService.createRequestData(this.hotelId, values).subscribe(
         (res) => {

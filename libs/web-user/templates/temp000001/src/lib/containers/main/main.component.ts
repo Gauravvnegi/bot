@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
+import { Router } from '@angular/router';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { Subscription } from 'rxjs';
@@ -26,8 +27,10 @@ export class MainComponent implements OnInit {
 
   constructor(
     protected fb: FormBuilder,
-    protected _reservationService: ReservationService,
-    protected _parentFormService: ParentFormService,
+    private router: Router,
+    private _reservationService: ReservationService,
+    private _templateLoadingService: TemplateLoaderService,
+    private _parentFormService: ParentFormService,
     protected _hotelService: HotelService,
     protected _templateService: TemplateService
   ) {}
@@ -41,7 +44,8 @@ export class MainComponent implements OnInit {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
-        .subscribe((reservationData) => {
+        .subscribe(
+          (reservationData) => {
           this._hotelService.hotelConfig = reservationData['hotel'];
           this.isReservationData = true;
           this.stepperData = this._templateService.templateData[
@@ -52,6 +56,14 @@ export class MainComponent implements OnInit {
           this.getStepperData();
           this.reservationData = reservationData;
           this._reservationService.reservationData = reservationData;
+        },
+        ({ error }) => {
+          if (error.type == 'BOOKING_CANCELED') {
+            this._templateLoadingService.isTemplateLoading$.next(false);
+            this.router.navigate(['booking-cancel'], {
+              preserveQueryParams: true,
+            });
+          }
         })
     );
   }

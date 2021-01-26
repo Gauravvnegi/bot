@@ -17,6 +17,8 @@
           <admin-search-bar
             [parentForm]="searchFG"
             [name]="'search'"
+            [parentSearchVisible]="isGlobalSearchVisible"
+            (parentFilterVisible)="switchVisibility()"
           ></admin-search-bar>
         </div>
         <div class="filter-range-wrapper">
@@ -39,7 +41,7 @@
             >
               <admin-filter
                 [initialFilterValue]="initialFilterValue"
-                (onCloseFilter)="toggleGlobalFilter()"
+                (onCloseFilter)="closeGlobalFilter()"
                 (onApplyFilter)="applyFilter($event)"
                 (onResetFilter)="resetFilter($event)"
               ></admin-filter>

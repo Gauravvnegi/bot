@@ -17,6 +17,10 @@
 
 .details-wrapper {
   background-color: white;
+  height: 85vh;
+  @media screen and (max-width: 1100px) {
+    height: 53vh;
+  }
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
@@ -31,7 +35,7 @@
   background: transparent
     linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
     padding-box;
-  padding: $padding20;
+  padding: $padding20 0;
   position: relative;
   .close {
     position: absolute;
@@ -55,7 +59,7 @@
     color: white;
     font-size: $font16;
     padding: 0 25px;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     .name-details-wrapper {
       width: 49%;
       .name {
@@ -68,7 +72,6 @@
         display: flex;
         align-items: center;
         margin-top: $margin10;
-        // padding: 0 25px;
         .call,
         .email {
           display: flex;
@@ -180,7 +183,7 @@
         font-size: 12px;
         color: #bebebe;
         letter-spacing: 0.66px;
-        margin-top: 15px;
+        margin-top: 5px;
       }
     }
   }
@@ -255,7 +258,7 @@
 }
 
 .data-seperator {
-  border: 2px solid #218af3;
+  border: 2px solid #E8F3FE;
   margin: $margin20 0px;
   opacity: 0.1;
 }
@@ -263,7 +266,6 @@
 .feilds-wrapper {
   display: flex;
   justify-content: space-between;
-  // align-items: center;
   margin: 30px 0px;
   padding: 0px 30px;
   .feild {
@@ -283,13 +285,7 @@
 
 .form-wrapper {
   display: flex;
-  // .left {
-  //   width: 80%;
-  //   margin: $margin20;
-  //   margin-right: 0;
-  //   min-height: 60vh;
-  //   border-right: 3px solid rgb(108, 108, 243, 0.1);
-  // }
+  
 }
 .gap {
   margin-top: $margin15;
@@ -326,11 +322,6 @@
   color: #484848;
 }
 
-// :host ::ng-deep .mat-form-field-flex {
-//   padding: 5px $padding10;
-//   border-radius: 5px;
-//   border: 1px solid #d9d9d9;
-// }
 
 .health-status {
   letter-spacing: 0.84px;
@@ -370,10 +361,10 @@
 
 :host ::ng-deep .material-body {
   width: 80%;
-  margin: $margin20;
+  margin: $margin20 25px;
   margin-right: 0;
   min-height: 60vh;
-  border-right: 3px solid rgb(108, 108, 243, 0.1);
+  border-right: 3px solid #E8F3FE;
   padding-right: 15px;
   @media screen and (max-width: 1100px) {
     min-height: 35vh;
@@ -450,7 +441,8 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 93%;
+    max-height: 88%;
+    min-height: 50%;
     .button {
       border: 1px solid $primary-purple;
       font-size: $font12;
@@ -508,6 +500,8 @@
     padding: 10px;
   }
 }
+
+// Loader styling
 
 .loader {
   margin: 20px auto;

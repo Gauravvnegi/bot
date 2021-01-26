@@ -20,6 +20,8 @@ import { Router } from '@angular/router';
 export class SearchBarComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Input() name: string;
+  @Input() parentSearchVisible: boolean;
+  @Output() parentFilterVisible = new EventEmitter();
 
   // @Output() selectedSearchOption = new EventEmitter();
 
@@ -53,7 +55,6 @@ export class SearchBarComponent implements OnInit {
 
   listenForSearchChanges(): void {
     const formChanges$ = this.parentForm.valueChanges;
-    console.log('');
     const findSearch$ = ({ search }: { search: string }) =>
       this.searchService.search(
         search.trim(),
@@ -125,6 +126,8 @@ export class SearchBarComponent implements OnInit {
   }
 
   onFocus() {
+    this.parentFilterVisible.emit();
+
     if (
       this.searchOptions &&
       this.searchOptions.length &&

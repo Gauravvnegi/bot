@@ -44,6 +44,7 @@ import { Temp000002InputPopupComponent } from './presentational/temp000002-input
 import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
 import { Temp000002SignatureCaptureWrapperComponent } from './presentational/temp000002-signature-capture-wrapper/temp000002-signature-capture-wrapper.component';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
+import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
     Temp000002InputPopupComponent,
     ButtonTemplateSwitchDirective,
     Temp000002SignatureCaptureWrapperComponent,
+    CancelBookingComponent,
   ],
   providers: [
     {

@@ -21,11 +21,11 @@
             class="call"
           >
             <mat-icon class="material-icons" matSuffix>call</mat-icon>
-            {{ data.countryCode }} {{ data.phoneNumber }}
+            <u>{{ data.countryCode }} {{ data.phoneNumber }}</u>
           </a>
           <a href="mailto:{{ data.email }}" *ngIf="data.email" class="email">
             <mat-icon class="material-icons" matSuffix>email</mat-icon>
-            {{ data.email }}
+            <u>{{ data.email }}</u>
           </a>
         </div>
       </div>
@@ -36,7 +36,7 @@
         </div>
         <div class="booking-id-wrapper" (click)="setTabKey('stay_details')">
           <div style="margin-right: 10px;">
-            {{ data.booking.bookingNumber }}
+            <u>{{ data.booking.bookingNumber }}</u>
           </div>
           <div
             *ngIf="['COMPLETED'].includes(data.feedback.status)"
@@ -83,7 +83,7 @@
             </ng-container>
           </div>
           <div style="margin-right: 10px;">
-            {{ data.rooms.roomNumber }}-{{ data.rooms.type }}
+          <u>  {{ data.rooms.roomNumber }}-{{ data.rooms.type }}</u>
           </div>
         </div>
       </div>
@@ -141,6 +141,32 @@
           </hospitality-bot-stay-details>
         </mat-tab>
       </mat-tab-group>
+      <div *ngIf="isReservationDetailFetched" class="tab-buttons">
+        <div class="button-wrapper"></div>
+        <p class="contact">Contact Guest</p>
+        <div class="right-bottom-icons">
+          <div class="social-icons">
+            <div class="icon">
+              <img src="assets/svg/telegram.svg" />
+            </div>
+          </div>
+          <div class="social-icons">
+            <div class="icon">
+              <img src="assets/svg/whatsapp.svg" />
+            </div>
+          </div>
+          <div class="social-icons">
+            <div class="icon">
+              <img src="assets/svg/messenger.svg" />
+            </div>
+          </div>
+          <div class="social-icons">
+            <div class="icon">
+              <img src="assets/svg/share.svg" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

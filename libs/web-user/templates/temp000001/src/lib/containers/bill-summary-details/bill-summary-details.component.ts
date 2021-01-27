@@ -101,35 +101,7 @@ export class BillSummaryDetailsComponent implements OnInit {
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.billSummaryDetails;
-    let {
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      taxAndFees,
-    } = paymentSummary.roomRates;
-
-    this.dataSource.push({
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      currency: paymentSummary.currency,
-      ...Object.assign(
-        {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
-      ),
-    });
-
-    this.billSummaryDetails.packages.forEach((amenity) => {
+    if (paymentSummary.roomRates) {
       let {
         label,
         description,
@@ -139,7 +111,7 @@ export class BillSummaryDetailsComponent implements OnInit {
         discount,
         totalAmount,
         taxAndFees,
-      } = amenity;
+      } = paymentSummary.roomRates;
 
       this.dataSource.push({
         label,
@@ -157,7 +129,39 @@ export class BillSummaryDetailsComponent implements OnInit {
           }))
         ),
       });
-    });
+    }
+
+    if (this.billSummaryDetails.packages && this.billSummaryDetails.packages.length) {
+      this.billSummaryDetails.packages.forEach((amenity) => {
+        let {
+          label,
+          description,
+          unit,
+          unitPrice,
+          amount,
+          discount,
+          totalAmount,
+          taxAndFees,
+        } = amenity;
+
+        this.dataSource.push({
+          label,
+          description,
+          unit,
+          unitPrice,
+          amount,
+          discount,
+          totalAmount,
+          currency: paymentSummary.currency,
+          ...Object.assign(
+            {},
+            ...taxAndFees.map((taxType) => ({
+              [taxType.type]: taxType.value,
+            }))
+          ),
+        });
+      });
+    }
   }
 
   openDialog() {

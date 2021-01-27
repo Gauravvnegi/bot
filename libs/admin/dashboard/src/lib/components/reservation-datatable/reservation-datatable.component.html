@@ -100,6 +100,9 @@
                 [ngClass]="{
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
+                  'status-opacity-new status-text-new': quickReplyType.type == 'new',
+                  'status-selected-new': quickReplyType.type == 'new' &&
+                    quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
                     quickReplyType.type == 'pending',
                   'status-opacity-initiated status-text-initiated':

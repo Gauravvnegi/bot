@@ -70,6 +70,19 @@
 
 // text-color
 
+.status-opacity-new {
+  background-color: rgba(62, 142, 247, 0.1) !important;
+}
+
+.status-text-new {
+  color: #3E8EF7 !important;
+}
+
+.status-selected-new {
+  background-color: rgba(62, 142, 247, 1) !important;
+  color: white;
+}
+
 .status-text-pending {
   color: $pending !important;
 }

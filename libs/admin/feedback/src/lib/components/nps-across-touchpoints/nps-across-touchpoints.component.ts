@@ -87,14 +87,14 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
           disabled: false,
           total: 0,
           chips: [
-            { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: false },
+            { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
             {
               label: 'Checkin',
               icon: '',
               value: 'CHECKIN',
               total: 0,
               isSelected: false,
-              type: 'pending',
+              type: 'initiated',
             },
             {
               label: 'Checkout',

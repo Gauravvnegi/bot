@@ -28,6 +28,15 @@
         selectable="true"
         [selected]="isQuickReplyFilterSelected(quickReplyType)"
         (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
+        [ngClass]="{
+          'chipSelected status-selected-default':
+            quickReplyType.isSelected,
+          'status-opacity-initiated status-text-initiated':
+            quickReplyType.type == 'initiated',
+          'status-selected-initiated':
+            quickReplyType.type == 'initiated' &&
+            quickReplyType.isSelected
+        }"
       >
         {{ quickReplyType.label }}
         <!-- <span *ngIf="quickReplyType.value != 'ALL'"> (</span

@@ -138,25 +138,14 @@ export class NpsAcrossServicesComponent implements OnInit {
         });
 
         chips.forEach((chip) => {
-          if (this.tabFilterItems[idx].chips.length) {
-            this.tabFilterItems[idx].chips.push({
-              label: chip,
-              icon: '',
-              value: chip,
-              total: 0,
-              isSelected: false,
-              type: 'completed',
-            });
-          } else {
-            this.tabFilterItems[idx].chips.push({
-              label: chip,
-              icon: '',
-              value: chip,
-              total: 0,
-              isSelected: true,
-              type: 'completed',
-            });
-          }
+          this.tabFilterItems[idx].chips.push({
+            label: chip,
+            icon: '',
+            value: chip,
+            total: 0,
+            isSelected: true,
+            type: 'initiated',
+          });
         });
       });
     }

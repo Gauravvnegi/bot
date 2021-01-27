@@ -133,6 +133,7 @@ export class GuestAttributes {
   transactionUsage: string;
   totalSpend: number;
   churnProbalilty: number;
+  churnPrediction: string;
 
   deserialize(data) {
     Object.assign(
@@ -141,7 +142,8 @@ export class GuestAttributes {
       set({}, 'overAllNps', get(data, ['overAllNps'])),
       set({}, 'transactionUsage', get(data, ['transactionUsage'])),
       set({}, 'totalSpend', get(data, ['totalSpend'])),
-      set({}, 'churnProbalilty', get(data, ['churnProbalilty']))
+      set({}, 'churnProbalilty', get(data, ['churnProbalilty'])),
+      set({}, 'churnPrediction', get(data, ['churnPrediction']))
     );
     return this;
   }

@@ -1,10 +1,32 @@
-<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout"
-  [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginaton" [rows]="rowsPerPage"
-  [showCurrentPageReport]="showCurrentPageReport" [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(first)]="first"
-  [totalRecords]="totalRecords" [filterDelay]="0" [selectionMode]="selectionMode" [(selection)]="selectedRows"
-  (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" (sortFunction)="customSort($event)"
-  [customSort]="isCustomSort" (onFilter)="onDataFilter($event)">
+<div class="header">
+	<div (click)="closeModal()" class="close">
+		<i class="fa fa-times" aria-hidden="true"></i>
+	</div>
+</div>
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+>
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
       <form [formGroup]="tableFG">
@@ -21,21 +43,29 @@
               </div>
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+                <p-dropdown
+                  class="export"
+                  [options]="documentActionTypes"
+                  formControlName="documentActionType"
+                >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
                     <span style="margin-left: 0.5em; font-weight: 500;">{{
                       documentActionItem.label
-                      }}</span>
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
-                <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
+                <p-dropdown
+                  class="export"
+                  [options]="documentTypes"
+                  formControlName="documentType"
+                >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
                     <span style="margin-left: 0.5em; font-weight: 500;">{{
                       documentTypeItem.label
-                      }}</span>
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -44,19 +74,35 @@
               </div>
             </div>
           </div>
-          <div *ngIf="isTabFilters">
-            <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx"
-              (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
-          </div>
+          <!-- <div *ngIf="isTabFilters">
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
+          </div> -->
         </div>
-        <div *ngIf="tabFilterItems[tabFilterIdx].chips.length" class="caption__wrapper--buttons">
+        <div
+          *ngIf="tabFilterItems[tabFilterIdx].chips.length"
+          class="caption__wrapper--buttons"
+        >
+          <!-- <button class="filter">
+            All
+          </button> -->
           <div class="button__wrapper">
-            <mat-chip-list multiple #chipList aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters">
-              <mat-chip *ngFor="
+            <mat-chip-list
+              multiple
+              #chipList
+              aria-label="Quick Reply selection"
+              formControlName="quickReplyActionFilters"
+            >
+              <mat-chip
+                *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
                   let quickReplyTypeIdx = index
-                " selectable="true" [ngClass]="{
+                "
+                selectable="true"
+                [ngClass]="{
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
@@ -79,16 +125,31 @@
                     quickReplyType.isSelected,
                   'status-selected-reject':
                     quickReplyType.type == 'failed' && quickReplyType.isSelected
-                }" [selected]="isQuickReplyFilterSelected(quickReplyType)" (click)="
+                }"
+                [selected]="isQuickReplyFilterSelected(quickReplyType)"
+                (click)="
                   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                ">
+                "
+              >
                 {{ quickReplyType.label }}
-                <span *ngIf="quickReplyType.value != 'ALL'"> (</span>{{ quickReplyType.total
+                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                >{{ quickReplyType.total
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
             <img src="assets/svg/Filter-Icon.svg" />
           </div>
+
+          <!-- <div
+            class="button__wrapper"
+            *ngFor="let quickReplyType of quickReplyTypes"
+          >
+            <button
+              pButton
+              type="button"
+              [label]="quickReplyType.label"
+            ></button>
+          </div> -->
         </div>
       </form>
     </div>
@@ -100,16 +161,24 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="
+      <th
+        style="
           width: 5%;
           background-color: #eaf0f6;
           border-top: 0 !important;
           border-bottom: 0 !important;
           text-align: center;
-        " pResizableColumn>
+        "
+        pResizableColumn
+      >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th class="table-data-head" pResizableColumn [pSortableColumn]="col.field" *ngFor="let col of columns">
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
           <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -119,73 +188,176 @@
 
     <tr class="table-search-head">
       <th class="table-search-head"></th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
+          "
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'booking.bookingNumber')
+          "
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="
             onFilterTypeTextChange(
               $event.target.value,
-              'firstName'
+              'guests.primaryGuest.firstName'
             )
-          " class="p-column-filter" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-					class="p-column-filter" disabled="true" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="
-            onFilterTypeTextChange($event.target.value, 'booking.bookingNumber')
-          " class="p-column-filter" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-					class="p-column-filter" disabled="true" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="
-            onFilterTypeTextChange($event.target.value, 'guestAttributes.transactionUsage')
-          " class="p-column-filter" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="
-				onFilterTypeTextChange($event.target.value, 'guestAttributes.overAllNps')
-			" class="p-column-filter" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="
-				onFilterTypeTextChange($event.target.value, 'guestAttributes.churnProbalilty')
-			" class="p-column-filter" />
-			</th>
-			<th class="table-search-head">
-				<input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-					class="p-column-filter" disabled="true" />
-			</th>
+          "
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
     </tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
-  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
     <tr class="data-table-row" (click)="openDetailPage($event, rowData)">
       <td class="table--checkbox">
-        <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
       </td>
-      <td class="guest">
-        <span>{{ rowData.getFullName() }}</span>
-      </td>
-      <!-- <td>
-        <p class="tabel-room-no status-text-success">
+      <td>
+        <p
+          class="tabel-room-no"
+          [ngClass]="{
+            'status-text-success': rowData.booking.roomStatus === 'CL',
+            'status-text-reject': rowData.booking.roomStatus === 'DI',
+            'status-text-initiated': rowData.booking.roomStatus === 'IN',
+            'status-text-pending': rowData.booking.roomStatus === 'PI'
+          }"
+        >
           {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
         </p>
-      </td> -->
+      </td>
+      <td>
+        <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
+        <div
+          *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
+          class="booking-feedback"
+          [ngClass]="{
+            'status-opacity-reject': rowData.feedback.rating < 5,
+            'status-opacity-success': rowData.feedback.rating >= 5
+          }"
+        >
+          <p
+            class="number"
+            [ngClass]="{
+              'status-background-reject': rowData.feedback.rating < 5,
+              'status-background-success': rowData.feedback.rating >= 5
+            }"
+          >
+            {{ rowData.feedback.rating }}
+          </p>
+          <ng-container
+            *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
+          >
+            <img
+              class="feedback-icon"
+              [ngClass]="{
+                'status-image-reject': rowData.feedback.rating < 5,
+                'status-image-success': rowData.feedback.rating >= 5
+              }"
+              [src]="feedbackService.getServiceUrl(suggestion.id)"
+            />
+          </ng-container>
+          <div
+            *ngIf="rowData.feedback.comments"
+            [ngClass]="{
+              'feedback-msg': rowData.feedback.comments.length > 0
+            }"
+          >
+            {{ rowData.feedback.comments }}
+          </div>
+        </div>
+      </td>
+      <td class="guest">
+        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+        <b style="color: #4b56c0;">{{
+          rowData.guests.getSecGuestDisplayConfig().countString
+        }}</b>
+        <div
+          *ngIf="rowData.guests.secondaryGuest.length > 0"
+          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        >
+          <div
+            *ngFor="
+              let secondaryGuest of rowData.guests.secondaryGuest;
+              let guestIdx = index
+            "
+          >
+            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+          </div>
+        </div>
+      </td>
       <td>
         <p class="arrival-date">
           {{ rowData.booking.getArrivalDate() }}-{{
-          rowData.booking.getDepartureDate()
+            rowData.booking.getDepartureDate()
           }}
         </p>
 
         <p class="arrival-time">
           {{ rowData.booking.getArrivalTime() }}-{{
-          rowData.booking.getDepartureTime()
+            rowData.booking.getDepartureTime()
           }}
         </p>
         <p class="arrival-time">
@@ -193,63 +365,24 @@
           {{ rowData.booking.getDaysAndNights().days }}D
         </p>
       </td>
-      <td>
-        <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
-        <div *ngIf="['COMPLETED'].includes(rowData.feedback.status)" class="booking-feedback" [ngClass]="{
-            'status-opacity-reject': rowData.feedback.rating < 5,
-            'status-opacity-success': rowData.feedback.rating >= 5
-          }">
-          <p class="number" [ngClass]="{
-              'status-background-reject': rowData.feedback.rating < 5,
-              'status-background-success': rowData.feedback.rating >= 5
-            }">
-            {{ rowData.feedback.rating }}
-          </p>
-          <ng-container *ngIf="rowData.feedback.suggestions">
-            <ng-container *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)">
-              <img class="feedback-icon" [ngClass]="{
-                  'status-image-reject': rowData.feedback.rating < 5,
-                  'status-image-success': rowData.feedback.rating >= 5
-                }" [src]="feedbackService.getServiceUrl(suggestion.id)" />
-            </ng-container>
-          </ng-container>
-          <div *ngIf="rowData.feedback.comments" [ngClass]="{
-              'feedback-msg': rowData.feedback.comments.length > 0
-            }">
-            {{ rowData.feedback.comments }}
-          </div>
-        </div>
-      </td>
       <td class="amount">
-        <span [ngClass]="{
+        <span
+          [ngClass]="{
             'status-text-reject':
               rowData.payment.dueAmount > 0 &&
               rowData.payment.dueAmount <= rowData.payment.totalAmount,
             'status-text-success': rowData.payment.dueAmount == 0
-          }">{{ rowData.payment.dueAmount }}</span>/{{ rowData.payment.totalAmount }}
+          }"
+          >{{ rowData.payment.dueAmount }}</span
+        >/{{ rowData.payment.totalAmount }}
       </td>
       <td class="package">
-        <span>{{ rowData.guestAttributes.transactionUsage }}
-        </span>
-      </td>
-
-      <td class="package">
-        <span [ngClass]="{
-					'status-text-initiated':
-					rowData.guestAttributes.overAllNps > 40 && rowData.guestAttributes.overAllNps <= 60,
-					'status-text-reject':
-					rowData.guestAttributes.overAllNps >= -100 && rowData.guestAttributes.overAllNps <= 40,
-					'status-text-success':
-					rowData.guestAttributes.overAllNps > 60
-				  }">{{ rowData.guestAttributes.overAllNps }}
-        </span>
-      </td>
-
-      <td class="package">
-        <span>{{ rowData.guestAttributes.churnProbalilty }}/<span [ngClass]="{
-          'status-text-success': rowData.guestAttributes.churnPrediction === 'No',
-          'status-text-reject': rowData.guestAttributes.churnPrediction === 'Yes'
-        }">{{ rowData.guestAttributes.churnPrediction }}</span>
+        <span
+          *ngIf="
+            rowData.packages.getPaidPackagesLabels().length;
+            else emptyCell
+          "
+          >{{ rowData.packages.getPaidPackagesLabels() }}
         </span>
       </td>
 
@@ -258,8 +391,14 @@
         <div class="icon-wrapper">
           <div class="line first"></div>
           <div class="line second"></div>
-          <div (click)="openDetailPage($event, rowData, 'document_details')" class="icon">
-            <img class="table-body-journey-icon" src="assets/svg/Document.svg" [ngClass]="{
+          <div
+            (click)="openDetailPage($event, rowData, 'document_details')"
+            class="icon"
+          >
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/Document.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.documents == 'INITIATED',
                 'status-image-pending':
@@ -268,8 +407,11 @@
                   rowData.status.stepsStatus.documents == 'FAILED',
                 'status-image-success':
                   rowData.status.stepsStatus.documents == 'COMPLETED'
-              }" />
-            <p class="label" [ngClass]="{
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.stepsStatus.documents == 'INITIATED',
                 'status-text-pending':
@@ -278,12 +420,19 @@
                   rowData.status.stepsStatus.documents == 'FAILED',
                 'status-text-success':
                   rowData.status.stepsStatus.documents == 'COMPLETED'
-              }">
+              }"
+            >
               Document
             </p>
           </div>
-          <div class="icon">
-            <img class="table-body-journey-icon" src="assets/svg/Payment.svg" [ngClass]="{
+          <div
+            (click)="openDetailPage($event, rowData, 'payment_details')"
+            class="icon"
+          >
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/Payment.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.payment == 'INITIATED',
                 'status-image-pending':
@@ -292,8 +441,11 @@
                   rowData.status.stepsStatus.payment == 'FAILED',
                 'status-image-success':
                   rowData.status.stepsStatus.payment == 'COMPLETED'
-              }" />
-            <p class="label" [ngClass]="{
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.stepsStatus.payment == 'INITIATED',
                 'status-text-pending':
@@ -302,12 +454,16 @@
                   rowData.status.stepsStatus.payment == 'FAILED',
                 'status-text-success':
                   rowData.status.stepsStatus.payment == 'COMPLETED'
-              }">
+              }"
+            >
               Payment
             </p>
           </div>
           <div class="icon">
-            <img class="table-body-journey-icon" src="assets/svg/Feedback.svg" [ngClass]="{
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/Feedback.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.feedback == 'INITIATED',
                 'status-image-pending':
@@ -316,8 +472,11 @@
                   rowData.status.stepsStatus.feedback == 'FAILED',
                 'status-image-success':
                   rowData.status.stepsStatus.feedback == 'COMPLETED'
-              }" />
-            <p class="label" [ngClass]="{
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.stepsStatus.feedback == 'INITIATED',
                 'status-text-pending':
@@ -326,12 +485,16 @@
                   rowData.status.stepsStatus.feedback == 'FAILED',
                 'status-text-success':
                   rowData.status.stepsStatus.feedback == 'COMPLETED'
-              }">
+              }"
+            >
               Feedback
             </p>
           </div>
           <div class="icon extra-width">
-            <img class="table-body-journey-icon" src="assets/svg/New-Journey.svg" [ngClass]="{
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/New-Journey.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.new == 'INITIATED',
                 'status-image-pending':
@@ -340,8 +503,12 @@
                   rowData.status.journeyStatus.new == 'FAILED',
                 'status-image-success':
                   rowData.status.journeyStatus.new == 'COMPLETED'
-              }" />
-            <p *ngIf="rowData.currentJourney.currentJourneyName == 'NEW'" class="label" [ngClass]="{
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'NEW'"
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.journeyStatus.new == 'INITIATED',
                 'status-text-pending':
@@ -350,12 +517,16 @@
                   rowData.status.journeyStatus.new == 'FAILED',
                 'status-text-success':
                   rowData.status.journeyStatus.new == 'COMPLETED'
-              }">
+              }"
+            >
               New
             </p>
           </div>
           <div class="icon extra-width">
-            <img class="table-body-journey-icon" src="assets/svg/precheckin.svg" [ngClass]="{
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/precheckin.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.preCheckin == 'INITIATED',
                 'status-image-pending':
@@ -364,8 +535,12 @@
                   rowData.status.journeyStatus.preCheckin == 'FAILED',
                 'status-image-success':
                   rowData.status.journeyStatus.preCheckin == 'COMPLETED'
-              }" />
-            <p *ngIf="rowData.currentJourney.currentJourneyName == 'PRECHECKIN'" class="label" [ngClass]="{
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'PRECHECKIN'"
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.journeyStatus.preCheckin == 'INITIATED',
                 'status-text-pending':
@@ -374,12 +549,16 @@
                   rowData.status.journeyStatus.preCheckin == 'FAILED',
                 'status-text-success':
                   rowData.status.journeyStatus.preCheckin == 'COMPLETED'
-              }">
+              }"
+            >
               PreCheck-in
             </p>
           </div>
           <div class="icon extra-width">
-            <img class="table-body-journey-icon" src="assets/svg/checkin.svg" [ngClass]="{
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/checkin.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.checkin == 'INITIATED',
                 'status-image-pending':
@@ -388,8 +567,12 @@
                   rowData.status.journeyStatus.checkin == 'FAILED',
                 'status-image-success':
                   rowData.status.journeyStatus.checkin == 'COMPLETED'
-              }" />
-            <p *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKIN'" class="label" [ngClass]="{
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKIN'"
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.journeyStatus.checkin == 'INITIATED',
                 'status-text-pending':
@@ -398,12 +581,16 @@
                   rowData.status.journeyStatus.checkin == 'FAILED',
                 'status-text-success':
                   rowData.status.journeyStatus.checkin == 'COMPLETED'
-              }">
+              }"
+            >
               Check-In
             </p>
           </div>
           <div class="icon extra-width">
-            <img class="table-body-journey-icon" src="assets/svg/checkout.svg" [ngClass]="{
+            <img
+              class="table-body-journey-icon"
+              src="assets/svg/checkout.svg"
+              [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.checkout == 'INITIATED',
                 'status-image-pending':
@@ -412,8 +599,12 @@
                   rowData.status.journeyStatus.checkout == 'FAILED',
                 'status-image-success':
                   rowData.status.journeyStatus.checkout == 'COMPLETED'
-              }" />
-            <p *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKOUT'" class="label" [ngClass]="{
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKOUT'"
+              class="label"
+              [ngClass]="{
                 'status-text-initiated':
                   rowData.status.journeyStatus.checkout == 'INITIATED',
                 'status-text-pending':
@@ -422,7 +613,8 @@
                   rowData.status.journeyStatus.checkout == 'FAILED',
                 'status-text-success':
                   rowData.status.journeyStatus.checkout == 'COMPLETED'
-              }">
+              }"
+            >
               Check-Out
             </p>
           </div>
@@ -432,8 +624,12 @@
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
-    <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
-      (onPageChange)="paginate($event)"></p-paginator>
+    <p-paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
   </ng-template>
 </p-table>
 

@@ -29,7 +29,7 @@ export class NetPromoterScoreComponent implements OnInit {
   globalQueries = [];
 
   chartTypes = [
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg', backgroundColor: '#3DB76B' },
+    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg', backgroundColor: '#1AB99F' },
     { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg', backgroundColor: '#DEFFF3' },
   ];
 
@@ -79,7 +79,6 @@ export class NetPromoterScoreComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              stepSize: 20,
             },
           },
         ],

@@ -1,4 +1,15 @@
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { Country } from 'libs/web-user/shared/src/lib/data-models/countryCode';
@@ -93,23 +104,20 @@ export class HealthDeclarationComponent implements OnInit {
             (response) => {
               this.signature = response.fileDownloadUrl;
               this._translateService
-              .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(
-                  translatedMsg,
-                  '',
-                  { panelClass: 'success' }
-                );
-              });
+                .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
+                });
               this._utilityService.$signatureUploaded.next(true);
             },
             ({ error }) => {
-              
               this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                });
               //   this._snackBarService.openSnackBarAsText(error.message);
               this._utilityService.$signatureUploaded.next(false);
             }
@@ -255,6 +263,14 @@ export class HealthDeclarationComponent implements OnInit {
           mediaQuery: config.component.mediaQuery,
           validation: config.component.validation,
         };
+        if (config.component.isOptionsOpenedChanged) {
+          componentObj.instance.settings = {
+            ...componentObj.instance.settings,
+            isOptionsOpenedChanged: config.component.isOptionsOpenedChanged,
+            optionsOpened: config.component.optionsOpened,
+            optionsClosed: config.component.optionsClosed,
+          };
+        }
         componentObj.instance.name = config.id;
         componentObj.instance.parentForm = formGroup;
       }
@@ -264,7 +280,11 @@ export class HealthDeclarationComponent implements OnInit {
 
   setConfigData(config) {
     if (config.component.label === 'Country') {
-      config.component.options = new Country().getCountryListWithDialCode([
+      config.component.isOptionsOpenedChanged = true;
+      config.component.optionsOpened = new Country().getCountryListWithDialCode(
+        [this._hotelService.hotelConfig.address.countryCode]
+      );
+      config.component.optionsClosed = new Country().getDialCodeList([
         this._hotelService.hotelConfig.address.countryCode,
       ]);
     } else if (config.component.label === 'Email ID') {

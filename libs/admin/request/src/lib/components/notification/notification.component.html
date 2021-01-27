@@ -5,7 +5,7 @@
     </div>
     <div style="padding-left: 10px;">Send Message</div>
   </div>
-  <form [formGroup]="notificationForm">
+  <div *ngIf="notificationForm" [formGroup]="notificationForm">
     <ng-template #loader>
       <div>
         <p class="loading">Loading</p>
@@ -63,7 +63,7 @@
             <div style="width: 130px;color: rgb(199, 196, 196); font-size: 14px;">Template:</div>
             <mat-form-field>
               <mat-select formControlName="templateId" placeholder="Select Template" (selectionChange)="fetchTemplate($event.value)">
-                <mat-option *ngIf="templates.ids.length === 0"
+                <mat-option *ngIf="templates.ids === undefined || templates.ids.length === 0"
                   value=""
                   >No data</mat-option>
                 <mat-option
@@ -156,5 +156,5 @@
           {{isSending ? "Sending" : "Send"}} </button>
       </div>
     </div>
-  </form>
+  </div>
 </div>

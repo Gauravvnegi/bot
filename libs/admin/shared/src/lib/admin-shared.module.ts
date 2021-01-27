@@ -15,6 +15,7 @@ import { NumberDirective } from './directives/number.directive';
 import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ModalDirective } from './directives/modal.directive';
 
 @NgModule({
   imports: [
@@ -37,6 +38,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ComingSoonComponent,
     NumberDirective,
     MultipleDropdownComponent,
+    ModalDirective,
   ],
   exports: [
     DatatableComponent,
@@ -50,6 +52,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     DropdownModule,
     NumberDirective,
     MultipleDropdownComponent,
+    ModalDirective,
   ],
 })
 export class AdminSharedModule {}

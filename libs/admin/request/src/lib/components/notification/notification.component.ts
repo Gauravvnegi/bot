@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service.js';
+import { ActivatedRoute } from '@angular/router';
 import { SnackBarService } from 'libs/shared/material/src/index.js';
 import { Subscription } from 'rxjs';
 import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
@@ -45,28 +45,29 @@ export class NotificationComponent implements OnInit {
   @ViewChild('attachmentUpload') attachmentUpload: any;
 
   constructor(
-    private _globalFilterService: GlobalFilterService,
     private _fb: FormBuilder,
     private _location: Location,
     private requestService: RequestService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.registerListeners();
-    this.initNotificationForm();
     this.getConfigData();
   }
 
   private registerListeners(): void {
-    this.listenForGlobalFilters();
+    this.listenForRouteParams();
   }
 
-  private listenForGlobalFilters(): void {
+  private listenForRouteParams(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        // debugger;
-        // this.hotelId = data['filter'].queryValue[0].hotelId;
+      this.route.queryParams.subscribe((params) => {
+        this.hotelId = params['hotelId'];
+        if (params['channel']) {
+          this.social_channels.patchValue([params['channel']]);
+          this.notificationForm.get('is_social_channel').patchValue(true);
+        }
       })
     );
   }
@@ -91,6 +92,8 @@ export class NotificationComponent implements OnInit {
       .getNotificationConfig(this.hotelId)
       .subscribe((response) => {
         this.config = new RequestConfig().deserialize(response);
+        this.initNotificationForm();
+        this.registerListeners();
       });
   }
 
@@ -187,7 +190,10 @@ export class NotificationComponent implements OnInit {
   changeTemplateIds(method): void {
     let data = this.config.messageTypes.filter((d) => d.value === method)[0];
     this.templates.ids = data['templateIds'];
-    this.modifyControl(this.templates.ids.length > 0, 'templateId');
+    this.modifyControl(
+      this.templates.ids && this.templates.ids.length > 0,
+      'templateId'
+    );
     this.notificationForm.get('message').patchValue('');
   }
 
@@ -205,6 +211,10 @@ export class NotificationComponent implements OnInit {
     let values = new RequestData().deserialize(
       this.notificationForm.getRawValue()
     );
+
+    if (values.templateId.length === 0) {
+      values.templateId = '';
+    }
 
     this.$subscription.add(
       this.requestService.createRequestData(this.hotelId, values).subscribe(
@@ -225,16 +235,22 @@ export class NotificationComponent implements OnInit {
 
   fetchTemplate(templateId) {
     let journey = this.notificationForm.get('messageType').value;
-    this.requestService
-      .getTemplate(this.hotelId, templateId, journey.toUpperCase())
-      .subscribe(
-        (response) => {
-          this.notificationForm.get('message').patchValue(response.template);
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+    if (templateId) {
+      this.$subscription.add(
+        this.requestService
+          .getTemplate(this.hotelId, templateId, journey.toUpperCase())
+          .subscribe(
+            (response) => {
+              this.notificationForm
+                .get('message')
+                .patchValue(response.template);
+            },
+            ({ error }) => {
+              this._snackbarService.openSnackBarAsText(error.message);
+            }
+          )
       );
+    }
   }
 
   private modifyControl(event: boolean, control: string): void {

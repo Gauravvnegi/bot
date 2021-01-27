@@ -113,7 +113,6 @@
     }
     .progress-wrapper {
       width: calc(100% - 170px);
-      z-index: 2;
       position: relative;
       &:hover {
         cursor: pointer;
@@ -128,6 +127,9 @@
       .progress {
         height: 20px;
         width: 50%;
+        position: relative;
+        z-index: 5;
+        display: flex;
       }
     }
     .progress-values {
@@ -193,7 +195,7 @@
   position: absolute;
   top: 40px;
   left: 165px;
-  z-index: 1;
+  z-index: inherit;
   .divider {
     border: 1px dashed rgb(235, 236, 238);
   }

@@ -55,6 +55,8 @@ export class LayoutOneComponent implements OnInit {
     },
   };
 
+  isGlobalSearchVisible: boolean = true;
+
   constructor(
     private _router: Router,
     public filterService: FilterService,
@@ -129,7 +131,17 @@ export class LayoutOneComponent implements OnInit {
   }
 
   toggleGlobalFilter() {
-    this.isGlobalFilterVisible = !this.isGlobalFilterVisible;
+    this.isGlobalFilterVisible = true;
+    this.isGlobalSearchVisible = false;
+  }
+
+  switchVisibility(){
+    this.isGlobalFilterVisible = false;
+    this.isGlobalSearchVisible = true;
+  }
+
+  closeGlobalFilter(){
+    this.isGlobalFilterVisible = false;
   }
 
   applyFilter(event) {

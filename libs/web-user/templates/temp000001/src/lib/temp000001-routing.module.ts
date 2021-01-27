@@ -40,6 +40,7 @@ import { Temp000001StepperComponent } from './presentational/temp000001-stepper/
 import { Temp000001TextareaComponent } from './presentational/temp000001-textarea/temp000001-textarea.component';
 import { Temp000001RadioComponent } from './presentational/temp000001-radio/temp000001-radio.component';
 import { Temp000001InputPopupComponent } from './presentational/temp000001-input-popup/temp000001-input-popup.component';
+import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -49,6 +50,16 @@ export const sharedAuthRoutes: Route[] = [
       {
         path: '',
         component: MainComponent,
+      },
+    ],
+  },
+  {
+    path: 'booking-cancel',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: CancelBookingComponent,
       },
     ],
   },
@@ -141,5 +152,6 @@ export class Temp000001RoutingModule {
     Temp000001TextareaComponent,
     Temp000001RadioComponent,
     Temp000001InputPopupComponent,
+    CancelBookingComponent,
   ];
 }

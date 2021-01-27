@@ -14,7 +14,7 @@
       />
     </form>
   </span>
-  <div *ngIf="searchDropdownVisible" class="global_search__dropdown">
+  <div *ngIf="searchDropdownVisible && parentSearchVisible" class="global_search__dropdown">
     <div class="global_search__dropdown__result">
       <ng-container *ngFor="let option of searchOptions; let i = index">
         <ng-container [ngSwitch]="option.type">

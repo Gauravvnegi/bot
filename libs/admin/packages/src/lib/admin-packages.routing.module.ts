@@ -18,11 +18,11 @@ export const adminPackagesRoutes: Route[] = [
     children: [],
   },
   {
-    path: 'amenity',
+    path: 'add',
     component: EditPackageComponent,
   },
   {
-    path: 'amenity/:id',
+    path: ':id',
     component: EditPackageComponent,
   },
   {

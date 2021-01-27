@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import {
@@ -45,7 +46,8 @@ export class DetailsComponent implements OnInit {
     private guestDetailService: GuestDetailService,
     private fb: FormBuilder,
     private feedbackService: FeedbackService,
-    private _snackBarService: SnackBarService
+    private _snackBarService: SnackBarService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -85,6 +87,17 @@ export class DetailsComponent implements OnInit {
       stayDetails: this.fb.group({}),
       documents: this.fb.group({}),
       guestDetails: this.fb.group({}),
+    });
+  }
+
+  openSendNotification(channel) {
+    this.closeDetails();
+    this.router.navigate(['/pages/request/add-request'], {
+      queryParams: {
+        channel,
+        roomNumber: this.data.rooms.roomNumber,
+        hotelId: this.hotelId,
+      },
     });
   }
 

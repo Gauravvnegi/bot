@@ -68,6 +68,9 @@ export class NotificationComponent implements OnInit {
           this.social_channels.patchValue([params['channel']]);
           this.notificationForm.get('is_social_channel').patchValue(true);
         }
+        if (params['roomNumber']) {
+          this.roomNumbers.patchValue([params['roomNumber']]);
+        }
       })
     );
   }

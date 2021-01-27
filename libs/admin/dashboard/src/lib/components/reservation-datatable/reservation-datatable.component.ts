@@ -24,7 +24,7 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
 })
 export class  ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Reservations';
+  @Input() tableName = 'Reservations';
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;

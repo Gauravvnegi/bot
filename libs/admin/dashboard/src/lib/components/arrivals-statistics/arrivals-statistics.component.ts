@@ -123,6 +123,7 @@ export class ArrivalsStatisticsComponent implements OnInit {
       dialogConfig
     );
 
+    detailCompRef.componentInstance.tableName = 'Arrivals';
     detailCompRef.componentInstance.tabFilterItems = this.modalData.tabFilterItems;
     detailCompRef.componentInstance.tabFilterIdx = 0;
     detailCompRef.componentInstance.onModalClose.subscribe((res) => {

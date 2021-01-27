@@ -13,3 +13,8 @@
     cursor: pointer;
   }
 }
+
+:host ::ng-deep .p-datatable {
+  max-height: 80vh;
+  margin: 10px 1.5% !important;
+}

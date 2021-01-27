@@ -141,7 +141,12 @@ export class ApplicationStatusComponent implements OnInit {
     }
   }
 
-  printSummary() {}
+  printSummary() {
+    this._summaryService.summaryDownload(this._reservationService.reservationId)
+      .subscribe((response) => {
+        // debugger;
+      });
+  }
 
   downloadSummary() {}
 

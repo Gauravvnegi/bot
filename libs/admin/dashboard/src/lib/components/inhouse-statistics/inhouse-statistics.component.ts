@@ -53,6 +53,7 @@ export class InhouseStatisticsComponent implements OnInit {
       dialogConfig
     );
 
+    detailCompRef.componentInstance.tableName = 'In-House';
     detailCompRef.componentInstance.tabFilterItems = this.modalData.tabFilterItems;
     detailCompRef.componentInstance.tabFilterIdx = 0;
     detailCompRef.componentInstance.onModalClose.subscribe((res) => {

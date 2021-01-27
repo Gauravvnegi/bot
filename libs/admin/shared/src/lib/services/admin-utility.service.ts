@@ -40,9 +40,9 @@ export class AdminUtilityService {
     if (type === 'year') {
       returnTime = data;
     } else if (type === 'month') {
-      returnTime = moment.unix(data).format('MMM YYYY');
+      returnTime = data.length === 10 ? moment.unix(data).format('MMM YYYY'): moment(data).format('MMM YYYY');
     } else if (type === 'date') {
-      returnTime = DateService.convertTimestampToDate(data, 'DD MMM');
+      returnTime = data.length === 10 ? moment.unix(data).format('DD MMM'): moment(data).format('DD MMM');
     } else {
       returnTime = `${data > 12 ? data - 12 : data}:00 ${
         data > 11 ? 'PM' : 'AM'

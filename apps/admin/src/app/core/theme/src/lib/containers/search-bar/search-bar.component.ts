@@ -89,7 +89,9 @@ export class SearchBarComponent implements OnInit {
           }
         },
         ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
+          if (error) {
+            this.snackbarService.openSnackBarAsText(error.message);
+          }
         }
       );
   }
@@ -144,8 +146,8 @@ export class SearchBarComponent implements OnInit {
 
   clearSearch() {
     this.searchOptions = [];
+    this.parentForm.get('search').patchValue('');
     this.searchDropdownVisible = false;
     this.searchValue = false;
-    this.parentForm.reset();
   }
 }

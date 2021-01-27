@@ -22,6 +22,7 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { Subject } from 'rxjs';
 import * as FileSaver from 'file-saver';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -82,7 +83,8 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _snackBarService: SnackBarService,
     private _clipboard: Clipboard,
     public feedbackService: FeedbackService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private router: Router
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -464,6 +466,17 @@ export class DetailsComponent implements OnInit, OnChanges {
         this.primaryGuest = guest;
         return;
       }
+    });
+  }
+
+  openSendNotification(channel) {
+    this.closeDetails();
+    this.router.navigate(['/pages/request/add-request'], {
+      queryParams: {
+        channel,
+        roomNumber: this.details.stayDetails.roomNumber,
+        hotelId: this.details.reservationDetails.hotelId,
+      },
     });
   }
 

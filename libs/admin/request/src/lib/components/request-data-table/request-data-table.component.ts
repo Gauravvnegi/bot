@@ -152,7 +152,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
       ],
     },
   ];
-  tabFilterIdx: number = 1;
+  tabFilterIdx: number = 0;
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -175,7 +175,35 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   }
 
   registerListeners() {
-    this.listenForGlobalFilters();
+    this.listenForQueryParams();
+  }
+
+  listenForQueryParams() {
+    this.$subscription.add(
+      this.route.queryParams.subscribe((params) => {
+        if (params.filter) {
+          this.tabFilterIdx = this.tabFilterItems.findIndex(
+            (data) => data.value === params.filter
+          );
+          if (params.chip) {
+            this.tabFilterItems[this.tabFilterIdx].chips = this.tabFilterItems[
+              this.tabFilterIdx
+            ].chips.map((data) => {
+              return data.value === params.chip
+                ? {
+                    ...data,
+                    isSelected: true,
+                  }
+                : {
+                    ...data,
+                    isSelected: false,
+                  };
+            });
+          }
+        }
+        this.listenForGlobalFilters();
+      })
+    );
   }
 
   listenForGlobalFilters() {
@@ -456,7 +484,10 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   }
 
   openAddRequest() {
-    this.router.navigate(['add-request'], { relativeTo: this.route, queryParams: { hotelId: this.globalQueries[0].hotelId } });
+    this.router.navigate(['add-request'], {
+      relativeTo: this.route,
+      queryParams: { hotelId: this.globalQueries[0].hotelId },
+    });
   }
 
   ngOnDestroy() {

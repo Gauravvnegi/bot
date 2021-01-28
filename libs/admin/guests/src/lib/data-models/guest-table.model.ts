@@ -81,6 +81,7 @@ export class Guest implements Deserializable {
   currentJourney: CurrentJourney;
   rooms: Room;
   documents: any[];
+  vip: boolean;
 
   deserialize(input: any) {
     Object.assign(
@@ -108,6 +109,7 @@ export class Guest implements Deserializable {
       this.status = new Status().deserialize(reservation);
       this.currentJourney = new CurrentJourney().deserialize(input);
       this.rooms = new Room().deserialize(reservation.stayDetails);
+      this.vip = reservation.vip;
       if (reservation.guestDetails.primaryGuest.id === input.id) {
         this.documents = reservation.guestDetails.primaryGuest.documents;
       } else {

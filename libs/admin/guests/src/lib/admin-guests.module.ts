@@ -25,6 +25,7 @@ export const adminGuestsRoutes: Route[] = [];
     AdminGuestDetailModule
   ],
   declarations: [...AdminGuestsRoutingModule.components],
+  exports: [...AdminGuestsRoutingModule.components],
   providers: [StatisticsService, GuestTableService]
 })
 export class AdminGuestsModule {}

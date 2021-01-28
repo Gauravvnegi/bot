@@ -10,6 +10,7 @@ import { ChartsModule } from 'ng2-charts';
 import { TypeGuestStatisticsComponent } from './components/type-guest-statistics/type-guest-statistics.component';
 import { GuestDatatableComponent } from './components/guest-datatable/guest-datatable.component';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { GuestDatatableModalComponent } from './components/guest-datatable-modal/guest-datatable-modal.component';
 
 const appRoutes: Route[] = [
   {
@@ -35,5 +36,6 @@ export class AdminGuestsRoutingModule {
 	SourceStatisticsComponent,
 	TypeGuestStatisticsComponent,
 	GuestDatatableComponent,
+	GuestDatatableModalComponent
   ];
 }

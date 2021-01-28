@@ -38,4 +38,16 @@ export class GuestTableService extends ApiService {
   getFeedback(hotelId): Observable<FeedbackConfigI> {
     return this.get(`/api/v1/cms/feedback-form`);
   }
+
+  getAllGuestStatus(config): Observable<any> {
+    return this.get(`/api/v1/guests/status/${config.queryObj}`);
+  }
+
+  getAllGuestPayments(config): Observable<any> {
+    return this.get(`/api/v1/guests/payments/${config.queryObj}`);
+  }
+
+  getAllGuestDocuments(config): Observable<any> {
+    return this.get(`/api/v1/guests/documents/${config.queryObj}`);
+  }
 }

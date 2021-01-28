@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -25,7 +25,7 @@ import * as FileSaver from 'file-saver';
 })
 export class GuestDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Guest List';
+  @Input() tableName = 'Guest List';
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -77,7 +77,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     },
   ];
 
-  tabFilterItems = [
+  @Input() tabFilterItems = [
     {
       label: 'Arrival',
       content: '',
@@ -117,11 +117,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _guestTableService: GuestTableService,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _modal: ModalService,
+    protected _guestTableService: GuestTableService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected _modal: ModalService,
     public feedbackService: FeedbackService
   ) {
     super(fb);
@@ -173,6 +173,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
+          debugger;
           this.values = new GuestTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;

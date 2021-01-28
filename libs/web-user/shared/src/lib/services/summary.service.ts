@@ -33,7 +33,9 @@ export class SummaryService extends ApiService {
   }
 
   summaryDownload(reservationId) {
-    return this.get(`/api/v1/reservation/${reservationId}/checkin/summary`);
+    return this.get(`/api/v1/reservation/${reservationId}/checkin/summary`, {
+      responseType: 'blob',
+    });
   }
 
   get SummaryDetails() {

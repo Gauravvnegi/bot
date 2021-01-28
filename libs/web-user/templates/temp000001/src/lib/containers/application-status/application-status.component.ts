@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -22,7 +23,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ApplicationStatusComponent implements OnInit {
   protected _dialogRef: MatDialogRef<any>;
   summaryDetails: SummaryDetails = new SummaryDetails();
-  protected regCardComponent=RegistrationCardComponent;
+  protected regCardComponent = RegistrationCardComponent;
 
   @Input()
   context: any;
@@ -142,13 +143,36 @@ export class ApplicationStatusComponent implements OnInit {
   }
 
   printSummary() {
-    this._summaryService.summaryDownload(this._reservationService.reservationId)
-      .subscribe((response) => {
-        // debugger;
-      });
+    this.$subscription.add(
+      this._summaryService
+        .summaryDownload(this._reservationService.reservationId)
+        .subscribe((response) => {
+          var blob = new Blob([response], { type: 'application/pdf' });
+          const blobUrl = URL.createObjectURL(blob);
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = blobUrl;
+          document.body.appendChild(iframe);
+          iframe.contentWindow.print();
+        })
+    );
   }
 
-  downloadSummary() {}
+  downloadSummary() {
+    this.$subscription.add(
+      this._summaryService
+        .summaryDownload(this._reservationService.reservationId)
+        .subscribe((response) => {
+          FileSaver.saveAs(
+            response,
+            `${this.guestDetail.primaryGuest.firstName}_${this.guestDetail.primaryGuest.lastName}` +
+              '_export_summary_' +
+              new Date().getTime() +
+              '.pdf'
+          );
+        })
+    );
+  }
 
   get stayDetail() {
     return this.summaryDetails.stayDetails;

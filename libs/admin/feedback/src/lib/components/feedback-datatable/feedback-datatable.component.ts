@@ -56,7 +56,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       value: 'VIP',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'initiated',
     },
     {
       label: 'High Potential ',
@@ -72,7 +72,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       value: 'High Risk',
       total: 0,
       isSelected: false,
-      type: 'completed',
+      type: 'initiated',
     },
   ];
 

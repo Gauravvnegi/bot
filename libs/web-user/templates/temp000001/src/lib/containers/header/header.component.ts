@@ -33,7 +33,7 @@ export class HeaderComponent implements OnChanges, OnInit {
   }
 
   getCurentJourneyConfig() {
-    let { title } = this._hotelService.getCurrentJourneyConfig() || {};
+    let { title } = this._hotelService.getCurrentJourneyConfig();
     let { logo } = this._hotelService.hotelConfig;
     this.headerLogo = logo;
     this.isCustomHeader = !!this.headerName;

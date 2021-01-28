@@ -79,7 +79,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
 
   private initTabLabels(entities): void {
     if(!this.tabFilterItems.length) {
-      Object.keys(entities).forEach((key) => {
+      entities.forEach((key) => {
         this.tabFilterItems.push({
           label: key,
           content: '',
@@ -172,6 +172,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
             .getTouchpointStatistics(config)
             .subscribe((response) => {
               this.npsProgressData = new NPSTouchpoints().deserialize(response);
+              console.log(this.npsProgressData)
               if (this.npsProgressData.entities) {
                 this.initTabLabels(this.npsProgressData.entities);
               }

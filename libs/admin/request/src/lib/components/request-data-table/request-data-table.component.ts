@@ -185,11 +185,11 @@ export class RequestDataTableComponent extends BaseDatatableComponent
           this.tabFilterIdx = this.tabFilterItems.findIndex(
             (data) => data.value === params.filter
           );
-          if (params.chip) {
+          if (params.subFilter) {
             this.tabFilterItems[this.tabFilterIdx].chips = this.tabFilterItems[
               this.tabFilterIdx
             ].chips.map((data) => {
-              return data.value === params.chip
+              return data.value === params.subFilter
                 ? {
                     ...data,
                     isSelected: true,

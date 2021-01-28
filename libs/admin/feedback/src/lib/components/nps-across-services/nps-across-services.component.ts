@@ -26,6 +26,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   $subscription: Subscription = new Subscription();
   selectedInterval: string;
   npsProgressData: NPSAcrossServices;
+  dividerHeight: number = 0;
 
   tabFilterIdx: number = 0;
 
@@ -147,13 +148,19 @@ export class NpsAcrossServicesComponent implements OnInit {
             type: 'initiated',
           });
         });
+        if (key === 'ALL') {
+          this.tabFilterIdx = idx;
+        }
       });
     }
   }
 
   private initProgressData(progresses) {
     this.progresses.length = 0;
+    this.dividerHeight = 0;
     Object.keys(progresses).forEach((key) => {
+      let mod = Math.floor(progresses[key].label.length / 20);
+      this.dividerHeight += 40 + (mod * 13);
       this.progresses.push({
         label: progresses[key].label,
         positive: progresses[key].score,
@@ -162,14 +169,34 @@ export class NpsAcrossServicesComponent implements OnInit {
     });
   }
 
+  getSelectedQuickReplyFilters() {
+    return this.tabFilterItems.length
+      ? this.tabFilterItems[this.tabFilterIdx].chips
+          .filter((item) => item.isSelected == true)
+          .map((item) => ({
+            entityState: item.value,
+          }))
+      : '';
+  }
+
   private getNPSServices(): void {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems.length
+            ? this.tabFilterItems[this.tabFilterIdx].value
+            : '',
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]),
     };
     this.$subscription.add(
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
+          console.log(this.npsProgressData);
           if (this.npsProgressData.entities) {
             this.initTabLabels(this.npsProgressData.entities);
           }

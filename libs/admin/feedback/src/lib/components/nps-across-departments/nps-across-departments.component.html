@@ -26,8 +26,8 @@
     </div>
   </div>
   <div class="progress_container">
-    <div class="progress_container__carousel_box">
-      <div class="slide" *ngFor="let progress of progressValues">
+    <div class="progress_container__carousel_box" *ngIf="npsChartData">
+      <div class="slide" *ngFor="let progress of npsChartData.departments">
         <hospitality-bot-two-way-progress [settings]="progress"></hospitality-bot-two-way-progress>
       </div>
     </div>

@@ -43,7 +43,8 @@ export class FooterComponent implements OnInit {
       privacyPolicyUrl,
       socialPlatforms,
     } = this._hotelService.hotelConfig;
-    let { emailId, contactNumber, cc } = contactDetails;
+    // TO-DO: remove union when backend fixes the hotelConfig data
+    let { emailId, contactNumber, cc } = contactDetails || this._hotelService.hotelConfig;
     this.footerConfig.social = socialPlatforms;
     this.footerConfig.footerLogo = footerLogo;
     this.footerConfig.contactDetails.contactNo = cc + ' ' + contactNumber;

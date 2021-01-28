@@ -58,9 +58,11 @@
           <div class="dropdown-list">
             <div class="title">NPS Across All Touchpoints</div>
             <div class="key" *ngFor="let p of progress.progressValues">
-              <div class="icon front"></div>
-              <div class="label">{{ p.label }}</div>
-              <div class="value">{{ p.score }}</div>
+              <ng-container *ngIf="p.colorCode">
+                <div class="icon front"></div>
+                <div class="label">{{ p.label }}</div>
+                <div class="value">{{ p.score }}</div>
+              </ng-container>
             </div>
           </div>
           <div class="progress">
@@ -91,8 +93,10 @@
   </div>
   <div class="key-container" *ngIf="progresses.length">
     <div class="key" *ngFor="let p of progresses[0].progressValues">
-      <div class="icon" [style.background]="p.colorCode"></div>
-      <div class="label">{{ p.label }}</div>
+      <ng-container *ngIf="p.colorCode">
+        <div class="icon" [style.background]="p.colorCode"></div>
+        <div class="label">{{ p.label }}</div>
+      </ng-container>
     </div>
   </div>
 </div>

@@ -94,7 +94,6 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
             response.npsStats
           );
           this.loading = false;
-          console.log(this.npsChartData)
         },
         ({ error }) => {
           this.loading = false;

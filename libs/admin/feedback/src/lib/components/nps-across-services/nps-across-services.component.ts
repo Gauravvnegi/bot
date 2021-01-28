@@ -114,6 +114,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   }
 
   updateQuickReplyActionFilters(): void {
+    console.log(this.tabFilterItems)
     let value = [];
     this.tabFilterItems[this.tabFilterIdx].chips
       .filter((chip) => chip.isSelected)
@@ -126,7 +127,9 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   private initTabLabels(entities): void {
     if (!this.tabFilterItems.length) {
-      Object.keys(entities).forEach((key) => {
+      let keys = Object.keys(entities);
+      keys.reverse();
+      keys.forEach((key) => {
         let chips = entities[key];
         let idx = this.tabFilterItems.length;
         this.tabFilterItems.push({
@@ -148,9 +151,6 @@ export class NpsAcrossServicesComponent implements OnInit {
             type: 'initiated',
           });
         });
-        if (key === 'ALL') {
-          this.tabFilterIdx = idx;
-        }
       });
     }
   }
@@ -196,7 +196,6 @@ export class NpsAcrossServicesComponent implements OnInit {
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
-          console.log(this.npsProgressData);
           if (this.npsProgressData.entities) {
             this.initTabLabels(this.npsProgressData.entities);
           }

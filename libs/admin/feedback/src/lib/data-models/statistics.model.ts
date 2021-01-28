@@ -69,7 +69,8 @@ export class NPSTouchpoints {
     const entityKeys = Object.keys(statistics.entities);
     entityKeys.forEach((key) => {
       this.entities.push(key);
-		});
+    });
+    this.entities.reverse();
 		if (Object.keys(statistics.touchpoint.CHECKIN.npsStats).length) {
 			const keys = Object.keys(statistics.touchpoint.CHECKIN.npsStats);
 			keys.forEach((key) => {
@@ -79,7 +80,7 @@ export class NPSTouchpoints {
 		if (Object.keys(statistics.touchpoint.CHECKOUT.npsStats).length) {
 			const checkoutKeys = Object.keys(statistics.touchpoint.CHECKOUT.npsStats);
 			checkoutKeys.forEach((key) => {
-				this.CHECKOUT.push(statistics.touchpoint.CHECKOUT.npsStats);
+				this.CHECKOUT.push(statistics.touchpoint.CHECKOUT.npsStats[key]);
 			});
 		}
     return this;

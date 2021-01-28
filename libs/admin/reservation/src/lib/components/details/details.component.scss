@@ -17,10 +17,8 @@
 
 .details-wrapper {
   background-color: white;
-  height: 85vh;
-  @media screen and (max-width: 1100px) {
-    height: 53vh;
-  }
+  max-height: 85vh;
+  
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {

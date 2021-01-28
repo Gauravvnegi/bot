@@ -46,25 +46,23 @@ export class MainComponent implements OnInit {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
-          this._hotelService.hotelConfig = reservationData['hotel'];
-          this.isReservationData = true;
-          this.stepperData = this._templateService.templateData[
-            this._templateService.templateId
-          ];
-          // TO_DO: Remove function call
-          // this.stepperData = this.modifyStepperData(this._templateService.templateData);
-          this.getStepperData();
-          this.reservationData = reservationData;
-          this._reservationService.reservationData = reservationData;
-        },
-        ({ error }) => {
-          if (error.type == 'BOOKING_CANCELED') {
-            this._templateLoadingService.isTemplateLoading$.next(false);
-            this.router.navigate(['booking-cancel'], {
-              preserveQueryParams: true,
-            });
+            this._hotelService.hotelConfig = reservationData['hotel'];
+            this.isReservationData = true;
+            this.stepperData = this._templateService.templateData[
+              this._templateService.templateId
+            ];
+            // TO_DO: Remove function call
+            // this.stepperData = this.modifyStepperData(this._templateService.templateData);
+            this.getStepperData();
+            this.reservationData = reservationData;
+            this._reservationService.reservationData = reservationData;
+          },
+          ({ error }) => {
+            if (error.type == 'BOOKING_CANCELED') {
+              this.getHotelDataById();
+            }
           }
-        })
+        )
     );
   }
 
@@ -82,6 +80,22 @@ export class MainComponent implements OnInit {
           return element !== undefined;
         }),
     };
+  }
+
+  getHotelDataById() {
+    this._hotelService
+      .getHotelConfigById(this._hotelService.hotelId)
+      .subscribe(
+        (hotel) => {
+          this._hotelService.hotelConfig = hotel;
+          this.router.navigate(['booking-cancel'], {
+            preserveQueryParams: true,
+          });
+          this._templateLoadingService.isTemplateLoading$.next(false);
+
+        },
+        ({ error }) => {}
+      );
   }
 
   registerListeners() {

@@ -527,3 +527,9 @@ th {
 :host ::ng-deep .status-selected-default {
   background-color: $default;
 }
+
+
+:host ::ng-deep .details_wrapper {
+  background-color: white;
+  max-height: 85vh;
+}

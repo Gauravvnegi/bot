@@ -4,6 +4,16 @@
 	</div>
 </div>
 <div class="table-container">
+  <ng-template #loader>
+    <div class="loader">
+      <p class="loading">Loading</p>
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </ng-template>
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -27,6 +37,7 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter()"
+    *ngIf="!initialLoading; else loader;"
   >
     <ng-template pTemplate="caption">
       <div class="caption__wrapper">

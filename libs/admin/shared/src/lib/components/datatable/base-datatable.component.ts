@@ -52,6 +52,7 @@ export class BaseDatatableComponent implements OnInit {
   isResizableColumns = true;
   isAutoLayout = false;
   @Input() loading: boolean = false;
+  initialLoading: boolean = true;
 
   tabFilterItems = [
     { label: 'Inhouse', content: '', value: 'INHOUSE' },

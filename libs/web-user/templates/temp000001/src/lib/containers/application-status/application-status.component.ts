@@ -146,15 +146,24 @@ export class ApplicationStatusComponent implements OnInit {
     this.$subscription.add(
       this._summaryService
         .summaryDownload(this._reservationService.reservationId)
-        .subscribe((response) => {
-          var blob = new Blob([response], { type: 'application/pdf' });
-          const blobUrl = URL.createObjectURL(blob);
-          const iframe = document.createElement('iframe');
-          iframe.style.display = 'none';
-          iframe.src = blobUrl;
-          document.body.appendChild(iframe);
-          iframe.contentWindow.print();
-        })
+        .subscribe(
+          (response) => {
+            var blob = new Blob([response], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = blobUrl;
+            document.body.appendChild(iframe);
+            iframe.contentWindow.print();
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+          }
+        )
     );
   }
 
@@ -162,15 +171,24 @@ export class ApplicationStatusComponent implements OnInit {
     this.$subscription.add(
       this._summaryService
         .summaryDownload(this._reservationService.reservationId)
-        .subscribe((response) => {
-          FileSaver.saveAs(
-            response,
-            `${this.guestDetail.primaryGuest.firstName}_${this.guestDetail.primaryGuest.lastName}` +
-              '_export_summary_' +
-              new Date().getTime() +
-              '.pdf'
-          );
-        })
+        .subscribe(
+          (response) => {
+            FileSaver.saveAs(
+              response,
+              `${this.guestDetail.primaryGuest.firstName}_${this.guestDetail.primaryGuest.lastName}` +
+                '_export_summary_' +
+                new Date().getTime() +
+                '.pdf'
+            );
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+          }
+        )
     );
   }
 

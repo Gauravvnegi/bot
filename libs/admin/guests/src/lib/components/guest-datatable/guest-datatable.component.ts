@@ -173,7 +173,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          debugger;
           this.values = new GuestTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;

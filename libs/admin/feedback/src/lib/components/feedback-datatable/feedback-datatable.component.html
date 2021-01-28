@@ -169,6 +169,9 @@
 				</p-tableCheckbox>
 			</td>
 			<td class="guest">
+				<div class="vip-image" *ngIf="rowData.vip">
+					<img src="assets/VIP.png" />
+				</div>
 				<span>{{ rowData.getFullName() }}</span>
 			</td>
 			<td>

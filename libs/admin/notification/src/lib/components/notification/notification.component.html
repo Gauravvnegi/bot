@@ -1,6 +1,6 @@
 <div class="container">
   <div class="request-header">
-    <ng-template *ngIf="isModal === true; else default;">
+    <ng-template *ngIf="!!isModal; else default">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div></div>
         <div>Send Message</div>

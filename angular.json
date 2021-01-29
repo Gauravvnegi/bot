@@ -1035,6 +1035,38 @@
           "style": "scss"
         }
       }
+    },
+    "admin-notification": {
+      "projectType": "library",
+      "root": "libs/admin/notification",
+      "sourceRoot": "libs/admin/notification/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/notification/tsconfig.lib.json",
+              "libs/admin/notification/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/notification/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/notification/jest.config.js",
+            "tsConfig": "libs/admin/notification/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/notification/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

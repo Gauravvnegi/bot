@@ -1,6 +1,6 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Location } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -25,9 +25,12 @@ export class NotificationComponent implements OnInit {
   templates = {
     ids: [],
   };
-  hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
-
-  @Input() config: RequestConfig;
+  @Input() hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
+  @Input() channel;
+  @Input() roomNumber;
+  config: RequestConfig;
+  @Input() isModal = false;
+  @Output() onModalClose = new EventEmitter();
   isSending: boolean = false;
 
   ckeditorContent;
@@ -54,6 +57,7 @@ export class NotificationComponent implements OnInit {
 
   ngOnInit(): void {
     this.getConfigData();
+    console.log(this.isModal)
   }
 
   private registerListeners(): void {
@@ -76,18 +80,33 @@ export class NotificationComponent implements OnInit {
   }
 
   private initNotificationForm(): void {
-    this.notificationForm = this._fb.group({
-      social_channels: [[]],
-      is_social_channel: [false, Validators.required],
-      is_email_channel: [false, Validators.required],
-      is_sms_channel: [false, Validators.required],
-      messageType: ['', Validators.required],
-      templateId: [],
-      attachments: [[]],
-      message: [''],
-      emailIds: [[]],
-      roomNumbers: [[]],
-    });
+    if (this.isModal) {
+      this.notificationForm = this._fb.group({
+        social_channels: [[this.channel]],
+        is_social_channel: [true, Validators.required],
+        is_email_channel: [false, Validators.required],
+        is_sms_channel: [false, Validators.required],
+        messageType: ['', Validators.required],
+        templateId: [],
+        attachments: [[]],
+        message: [''],
+        emailIds: [[]],
+        roomNumbers: [[this.roomNumber]],
+      });
+    } else {
+      this.notificationForm = this._fb.group({
+        social_channels: [[]],
+        is_social_channel: [false, Validators.required],
+        is_email_channel: [false, Validators.required],
+        is_sms_channel: [false, Validators.required],
+        messageType: ['', Validators.required],
+        templateId: [],
+        attachments: [[]],
+        message: [''],
+        emailIds: [[]],
+        roomNumbers: [[]],
+      });
+    }
   }
 
   private getConfigData(): void {
@@ -226,7 +245,7 @@ export class NotificationComponent implements OnInit {
           this._snackbarService.openSnackBarAsText('Notification sent.', '', {
             panelClass: 'success',
           });
-          this._location.back();
+          this.isModal ? this.closeModal() : this._location.back();
         },
         ({ error }) => {
           this.isSending = false;
@@ -267,6 +286,10 @@ export class NotificationComponent implements OnInit {
 
   changeSocialChannels(event: string[]): void {
     this.social_channels.setValue(event);
+  }
+
+  closeModal() {
+    this.onModalClose.emit(true);
   }
 
   get social_channels(): FormControl {

@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import {
   Guest,
   GuestReservation,
@@ -47,7 +50,8 @@ export class DetailsComponent implements OnInit {
     private fb: FormBuilder,
     private feedbackService: FeedbackService,
     private _snackBarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private _modal: ModalService
   ) {}
 
   ngOnInit(): void {}
@@ -91,13 +95,22 @@ export class DetailsComponent implements OnInit {
   }
 
   openSendNotification(channel) {
-    this.closeDetails();
-    this.router.navigate(['/pages/request/add-request'], {
-      queryParams: {
-        channel,
-        roomNumber: this.data.rooms.roomNumber,
-        hotelId: this.hotelId,
-      },
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const notificationCompRef = this._modal.openDialog(
+      NotificationComponent,
+      dialogConfig
+    );
+
+    notificationCompRef.componentInstance.channel = channel;
+    notificationCompRef.componentInstance.roomNumber = this.data.rooms.roomNumber;
+    notificationCompRef.componentInstance.hotelId = this.hotelId;
+    notificationCompRef.componentInstance.isModal = true;
+    notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+      // remove loader for detail close
+      notificationCompRef.close();
     });
   }
 

@@ -198,3 +198,23 @@
   width: 100%;
 }
 
+.close {
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+  // position: absolute;
+  // top: 5px;
+  // right: 10px;
+  i {
+		color: gray;
+		margin: 0 10px;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fixedheight {
+  max-height: 85vh;
+  overflow: auto;
+}

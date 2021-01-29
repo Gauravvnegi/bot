@@ -1,9 +1,20 @@
 <div class="container">
   <div class="request-header">
-    <div style="padding: 5px">
-      <mat-icon class="back-icon" (click)="goBack()">keyboard_backspace</mat-icon>
-    </div>
-    <div style="padding-left: 10px;">Send Message</div>
+    <ng-template *ngIf="isModal === true; else default;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div></div>
+        <div>Send Message</div>
+        <div (click)="closeModal()" class="close">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #default>
+      <div style="padding: 5px">
+        <mat-icon class="back-icon" (click)="goBack()">keyboard_backspace</mat-icon>
+      </div>
+      <div style="padding-left: 10px;">Send Message</div>
+    </ng-template>
   </div>
   <ng-template #loader>
     <div class="loader">
@@ -17,7 +28,7 @@
   </ng-template>
   <div *ngIf="config; else loader">
     <div *ngIf="notificationForm" [formGroup]="notificationForm">
-      <div class="request-body">
+      <div class="request-body" [ngClass]="{ fixedHeight: isModal }">
         <div class="row">
           <div class="row-title">Channel:</div>
           <div class="row-body">

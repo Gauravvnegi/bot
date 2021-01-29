@@ -27,6 +27,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   tabFilterIdx: number = 0;
 
   tabFilterItems = [];
+  globalQueries;
 
   constructor(
     private fb: FormBuilder,
@@ -37,7 +38,27 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFG();
-    this.getNPSServices();
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this._adminUtilityService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getNPSServices();
+      })
+    );
   }
 
   initFG(): void {
@@ -77,36 +98,18 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     this.getNPSServices();
   }
 
-  private initTabLabels(entities): void {
-    if(!this.tabFilterItems.length) {
-      entities.forEach((key, i) => {
+  private initTabLabels(entities, departments): void {
+    if (!this.tabFilterItems.length) {
+      departments.forEach((data) =>
         this.tabFilterItems.push({
-          label: key,
+          label: data.value,
           content: '',
-          value: key,
+          value: data.key,
           disabled: false,
           total: 0,
-          chips: [
-            { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-            {
-              label: 'Checkin',
-              icon: '',
-              value: 'CHECKIN',
-              total: 0,
-              isSelected: false,
-              type: 'initiated',
-            },
-            {
-              label: 'Checkout',
-              icon: '',
-              value: 'CHECKOUT',
-              total: 0,
-              isSelected: false,
-              type: 'initiated',
-            },
-          ],
-        });
-      });
+          chips: entities[data.key],
+        })
+      );
     }
   }
 
@@ -119,12 +122,14 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   private mapCheckinData(Checkin): Object {
     let obj = { label: 'Checkin' };
     obj['progressValues'] = [];
+    obj['totalProgress'] = 0;
     Object.keys(Checkin).forEach((key) => {
       obj['progressValues'].push({
         label: Checkin[key].label,
         score: Checkin[key].score,
         colorCode: Checkin[key].colorCode,
       });
+      obj['totalProgress'] += Checkin[key].score;
     });
     return obj;
   }
@@ -132,56 +137,57 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   private mapCheckoutData(Checkout): Object {
     let obj = { label: 'Checkout' };
     obj['progressValues'] = [];
+    obj['totalProgress'] = 0;
     Object.keys(Checkout).forEach((key) => {
       obj['progressValues'].push({
         label: Checkout[key].label,
         score: Checkout[key].score,
         colorCode: Checkout[key].colorCode,
       });
+      obj['totalProgress'] += Checkout[key].score;
     });
     return obj;
   }
 
+  getSelectedQuickReplyFilters() {
+    return this.tabFilterItems.length
+      ? this.tabFilterItems[this.tabFilterIdx].chips
+          .filter((item) => item.isSelected == true)
+          .map((item) => ({
+            services: item.value,
+          }))
+      : '';
+  }
+
   private getNPSServices(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          departments: this.tabFilterItems.length
+            ? this.tabFilterItems[this.tabFilterIdx].value
+            : 'ALL',
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]),
+    };
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        const queries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-
-        const config = {
-          queryObj: this._adminUtilityService.makeQueryParams(queries),
-        };
-
-        config.queryObj += `&states=${this.quickReplyActionFilters.value}`;
-        config.queryObj += this.tabFilterItems.length
-          ? `&departments=${this.tabFilterItems[this.tabFilterIdx].value}`
-          : '';
-
-        this.$subscription.add(
-          this._statisticService
-            .getTouchpointStatistics(config)
-            .subscribe((response) => {
-              this.npsProgressData = new NPSTouchpoints().deserialize(response);
-              if (this.npsProgressData.entities) {
-                this.initTabLabels(this.npsProgressData.entities);
-              }
-              this.initProgressData(
-                this.npsProgressData.CHECKIN,
-                this.npsProgressData.CHECKOUT
-              );
-            })
-        );
-      })
+      this._statisticService
+        .getTouchpointStatistics(config)
+        .subscribe((response) => {
+          this.npsProgressData = new NPSTouchpoints().deserialize(response);
+          if (this.npsProgressData.entities) {
+            this.initTabLabels(
+              this.npsProgressData.entities,
+              this.npsProgressData.departments
+            );
+          }
+          this.initProgressData(
+            this.npsProgressData.CHECKIN,
+            this.npsProgressData.CHECKOUT
+          );
+        })
     );
   }
 

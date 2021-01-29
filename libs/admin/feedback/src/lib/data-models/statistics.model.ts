@@ -43,14 +43,23 @@ export class Department {
 
 export class NPSAcrossServices {
   npsStats;
-	entities;
+  entities;
+  departments;
 
   deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, 'npsStats', get(statistics, ['npsStats'])),
-			set({}, 'entities', get(statistics, ['entities']))
-		);
+    this.departments = new Array<any>();
+    this.entities = {};
+    Object.assign(
+      this,
+      set({}, 'npsStats', get(statistics, ['npsStats']))
+    );
+    Object.keys(statistics.departments).forEach((key) => {
+      this.departments.push({ key, value: statistics.departments[key] });
+      this.entities[key] = new Entity().deserialize(statistics.entities[key]).data;
+    });
+    this.entities['ALL'] = new Entity().deserialize(statistics.entities['ALL']).data;
+    this.departments.push({ key: 'ALL', value: 'All' });
+    this.departments.reverse();
     return this;
   }
 }
@@ -58,31 +67,45 @@ export class NPSAcrossServices {
 export class NPSTouchpoints {
   CHECKIN: Touchpoint[];
   CHECKOUT: Touchpoint[];
-  entities: string[];
+  entities;
   source: string[];
+  departments;
 
   deserialize(statistics) {
-		this.CHECKIN = new Array<Touchpoint>();
-		this.CHECKOUT = new Array<Touchpoint>();
-		this.entities = new Array<string>();
-    Object.assign(this, set({}, 'source', get(statistics, ['source'])));
-    const entityKeys = Object.keys(statistics.entities);
-    entityKeys.forEach((key) => {
-      this.entities.push(key);
+    this.CHECKIN = new Array<Touchpoint>();
+    this.CHECKOUT = new Array<Touchpoint>();
+    this.departments = new Array<any>();
+    this.entities = {};
+    Object.assign(
+      this,
+      set({}, 'source', get(statistics, ['source']))
+    );
+    Object.keys(statistics.departments).forEach((key) => {
+      this.departments.push({ key, value: statistics.departments[key] });
+      this.entities[key] = new Entity().deserialize(statistics.entities[key]).data;
     });
-    this.entities.reverse();
-		if (Object.keys(statistics.touchpoint.CHECKIN.npsStats).length) {
-			const keys = Object.keys(statistics.touchpoint.CHECKIN.npsStats);
-			keys.forEach((key) => {
-				this.CHECKIN.push(statistics.touchpoint.CHECKIN.npsStats[key]);
-			});
-		}
-		if (Object.keys(statistics.touchpoint.CHECKOUT.npsStats).length) {
-			const checkoutKeys = Object.keys(statistics.touchpoint.CHECKOUT.npsStats);
-			checkoutKeys.forEach((key) => {
-				this.CHECKOUT.push(statistics.touchpoint.CHECKOUT.npsStats[key]);
-			});
-		}
+    this.entities['ALL'] = new Entity().deserialize(statistics.entities['ALL']).data;
+    this.departments.push({ key: 'ALL', value: 'All' });
+    this.departments.reverse();
+    for (const key in statistics.touchpoint.CHECKIN.npsStats) {
+      this.CHECKIN.push(statistics.touchpoint.CHECKIN.npsStats[key]);
+    }
+    for (const key in statistics.touchpoint.CHECKOUT.npsStats) {
+      this.CHECKOUT.push(statistics.touchpoint.CHECKOUT.npsStats[key]);
+    }
+    console.log(this)
+    return this;
+  }
+}
+
+export class Entity {
+  data: any[];
+  deserialize(entity) {
+    this.data = new Array<any>();
+    this.data.push({ label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true });
+    for (const key in entity) {
+      this.data.push({ label: entity[key], icon: '', value: key, total: 0, isSelected: false, type: 'initiated' });
+    }
     return this;
   }
 }

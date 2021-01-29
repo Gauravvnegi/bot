@@ -125,33 +125,20 @@ export class NpsAcrossServicesComponent implements OnInit {
     this.getNPSServices();
   }
 
-  private initTabLabels(entities): void {
+  private initTabLabels(entities, departments): void {
     if (!this.tabFilterItems.length) {
-      let keys = Object.keys(entities);
-      keys.reverse();
-      keys.forEach((key) => {
-        let chips = entities[key];
-        let idx = this.tabFilterItems.length;
-        this.tabFilterItems.push({
-          label: key,
-          content: '',
-          value: key,
-          disabled: false,
-          total: 0,
-          chips: [],
-        });
-
-        chips.forEach((chip) => {
-          this.tabFilterItems[idx].chips.push({
-            label: chip,
-            icon: '',
-            value: chip,
+      if (!this.tabFilterItems.length) {
+        departments.forEach((data) =>
+          this.tabFilterItems.push({
+            label: data.value,
+            content: '',
+            value: data.key,
+            disabled: false,
             total: 0,
-            isSelected: true,
-            type: 'initiated',
-          });
-        });
-      });
+            chips: entities[data.key],
+          })
+        );
+      }
     }
   }
 
@@ -174,7 +161,7 @@ export class NpsAcrossServicesComponent implements OnInit {
       ? this.tabFilterItems[this.tabFilterIdx].chips
           .filter((item) => item.isSelected == true)
           .map((item) => ({
-            entityState: item.value,
+            services: item.value,
           }))
       : '';
   }
@@ -185,9 +172,9 @@ export class NpsAcrossServicesComponent implements OnInit {
         ...this.globalQueries,
         {
           order: 'DESC',
-          entityType: this.tabFilterItems.length
+          departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
-            : '',
+            : 'ALL',
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -197,7 +184,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
           if (this.npsProgressData.entities) {
-            this.initTabLabels(this.npsProgressData.entities);
+            this.initTabLabels(this.npsProgressData.entities, this.npsProgressData.departments);
           }
           this.initProgressData(this.npsProgressData.npsStats);
         },

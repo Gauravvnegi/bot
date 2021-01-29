@@ -33,6 +33,7 @@ export class HeaderComponent implements OnChanges, OnInit {
   }
 
   getCurentJourneyConfig() {
+    // TO DO: when there is no journey title not getting destructure needs to fix
     let { title } = this._hotelService.getCurrentJourneyConfig() || {};
     let { logo } = this._hotelService.hotelConfig;
     this.headerLogo = logo;

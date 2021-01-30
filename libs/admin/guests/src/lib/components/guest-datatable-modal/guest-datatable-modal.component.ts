@@ -13,11 +13,15 @@ import { GuestDatatableComponent } from '../guest-datatable/guest-datatable.comp
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
   templateUrl: './guest-datatable-modal.component.html',
-  styleUrls: ['./guest-datatable-modal.component.scss']
+  styleUrls: [
+    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    '../guest-datatable/guest-datatable.component.scss',
+    './guest-datatable-modal.component.scss',
+  ],
 })
-export class GuestDatatableModalComponent extends GuestDatatableComponent implements OnInit {
-
-  @Input() callingMethod:string;
+export class GuestDatatableModalComponent extends GuestDatatableComponent
+  implements OnInit {
+  @Input() callingMethod: string;
   @Output() onModalClose = new EventEmitter();
   constructor(
     public fb: FormBuilder,
@@ -59,5 +63,4 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent implem
   closeModal() {
     this.onModalClose.emit(true);
   }
-
 }

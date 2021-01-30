@@ -13,7 +13,7 @@
 		</div>
 	</div>
 </ng-template>
-<div class="table-container" *ngIf="initialLoading; else loader;">
+<div class="table-container" *ngIf="!!initialLoading; else loader;">
 	<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns"
 		[autoLayout]="isAutoLayout" [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginaton"
 		[rows]="rowsPerPage" [showCurrentPageReport]="showCurrentPageReport" [rowsPerPageOptions]="rowsPerPageOptions"

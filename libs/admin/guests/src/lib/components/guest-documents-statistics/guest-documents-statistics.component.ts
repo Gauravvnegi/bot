@@ -43,7 +43,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     {
       label: 'High Potential ',
       icon: '',
-      value: 'High Potential',
+      value: 'HIGHPOTENTIAL',
       total: 0,
       isSelected: false,
       type: 'initiated',
@@ -51,7 +51,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     {
       label: 'High Risk ',
       icon: '',
-      value: 'High Risk',
+      value: 'HIGHRISK',
       total: 0,
       isSelected: false,
       type: 'completed',

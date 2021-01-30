@@ -62,7 +62,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     {
       label: 'High Potential ',
       icon: '',
-      value: 'High Potential',
+      value: 'HIGHPOTENTIAL',
       total: 0,
       isSelected: false,
       type: 'initiated',
@@ -70,7 +70,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     {
       label: 'High Risk ',
       icon: '',
-      value: 'High Risk',
+      value: 'HIGHRISK',
       total: 0,
       isSelected: false,
       type: 'completed',

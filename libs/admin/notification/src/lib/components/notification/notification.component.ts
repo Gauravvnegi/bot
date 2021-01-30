@@ -24,8 +24,9 @@ export class NotificationComponent implements OnInit {
   attachment: string;
   templates = {
     ids: [],
+    hotelId: ''
   };
-  @Input() hotelId = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
+  @Input() hotelId;
   @Input() channel;
   @Input() roomNumber;
   config: RequestConfig;
@@ -56,8 +57,7 @@ export class NotificationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getConfigData();
-    console.log(this.isModal)
+    this.registerListeners();
   }
 
   private registerListeners(): void {
@@ -65,18 +65,26 @@ export class NotificationComponent implements OnInit {
   }
 
   private listenForRouteParams(): void {
-    this.$subscription.add(
-      this.route.queryParams.subscribe((params) => {
-        this.hotelId = params['hotelId'];
-        if (params['channel']) {
-          this.social_channels.patchValue([params['channel']]);
-          this.notificationForm.get('is_social_channel').patchValue(true);
-        }
-        if (params['roomNumber']) {
-          this.roomNumbers.patchValue([params['roomNumber']]);
-        }
-      })
-    );
+    if (this.isModal) {
+      this.getConfigData(this.hotelId);
+      this.templates.hotelId = this.hotelId;
+    } else {
+      this.$subscription.add(
+        this.route.queryParams.subscribe((params) => {
+          if (params) {
+            this.templates.hotelId = params['hotelId'];
+            if (params['channel']) {
+              this.social_channels.patchValue([params['channel']]);
+              this.notificationForm.get('is_social_channel').patchValue(true);
+            }
+            if (params['roomNumber']) {
+              this.roomNumbers.patchValue([params['roomNumber']]);
+            }
+            this.getConfigData(params['hotelId']);
+          }
+        })
+      );
+    }
   }
 
   private initNotificationForm(): void {
@@ -109,13 +117,12 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  private getConfigData(): void {
+  private getConfigData(hotelId): void {
     this.requestService
-      .getNotificationConfig(this.hotelId)
+      .getNotificationConfig(hotelId)
       .subscribe((response) => {
         this.config = new RequestConfig().deserialize(response);
         this.initNotificationForm();
-        this.registerListeners();
       });
   }
 
@@ -189,7 +196,7 @@ export class NotificationComponent implements OnInit {
   uploadAttachments(event): void {
     let formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.hotelId, formData).subscribe(
+    this.requestService.uploadAttachments(this.templates.hotelId, formData).subscribe(
       (response) => {
         this.attachment = response.fileName;
         this.notificationForm
@@ -239,7 +246,7 @@ export class NotificationComponent implements OnInit {
     }
 
     this.$subscription.add(
-      this.requestService.createRequestData(this.hotelId, values).subscribe(
+      this.requestService.createRequestData(this.templates.hotelId, values).subscribe(
         (res) => {
           this.isSending = false;
           this._snackbarService.openSnackBarAsText('Notification sent.', '', {
@@ -260,7 +267,7 @@ export class NotificationComponent implements OnInit {
     if (templateId) {
       this.$subscription.add(
         this.requestService
-          .getTemplate(this.hotelId, templateId, journey.toUpperCase())
+          .getTemplate(this.templates.hotelId, templateId, journey.toUpperCase())
           .subscribe(
             (response) => {
               this.notificationForm

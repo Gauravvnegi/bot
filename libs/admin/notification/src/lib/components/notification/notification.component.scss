@@ -108,12 +108,12 @@
 .button {
   width: 250px;
   height: 46px;
-  background: #4B56C0 0% 0% no-repeat padding-box;
+  background: #4b56c0 0% 0% no-repeat padding-box;
   border-radius: 23px;
   opacity: 1;
   font: normal normal medium 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: #FFFFFF;
+  color: #ffffff;
   opacity: 1;
   outline: none;
 }
@@ -164,7 +164,7 @@
   }
 }
 
-.upload-btn-wrapper input[type=file] {
+.upload-btn-wrapper input[type='file'] {
   font-size: 18px;
   position: absolute;
   right: 0;
@@ -189,7 +189,7 @@
   }
 }
 
-.upload-attachment-wrapper input[type=file] {
+.upload-attachment-wrapper input[type='file'] {
   font-size: 30px;
   position: absolute;
   left: 0;
@@ -199,15 +199,14 @@
 }
 
 .close {
-	display: flex;
-	justify-content: flex-end;
-	width: 100%;
+  display: flex;
+  justify-content: flex-end;
   // position: absolute;
   // top: 5px;
   // right: 10px;
   i {
-		color: gray;
-		margin: 0 10px;
+    color: gray;
+    margin: 0 10px;
   }
   &:hover {
     cursor: pointer;
@@ -215,6 +214,15 @@
 }
 
 .fixedheight {
-  max-height: 85vh;
-  overflow: auto;
+  height: 85vh !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
 }

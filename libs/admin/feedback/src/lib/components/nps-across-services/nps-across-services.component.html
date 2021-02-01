@@ -99,23 +99,23 @@
             </div>
             <div class="progress">
               <div
-                [fxFlex]="100 - progress.negative"
+                [fxFlex]="progress.negative ? 100 - progress.negative : 99"
                 [style]="'background: transparent;'"
               ></div>
               <div
-                [fxFlex]="progress.negative"
+                [fxFlex]="progress.negative ? progress.negative : 1"
                 class="progress-value"
                 [style]="'background: #DF0A20;'"
               ></div>
             </div>
             <div class="progress">
               <div
-                [fxFlex]="progress.positive"
+                [fxFlex]="progress.positive ? progress.positive : 1"
                 class="progress-value"
                 [style]="'background: #1FABDB;'"
               ></div>
               <div
-                [fxFlex]="100 - progress.positive"
+                [fxFlex]="progress.positive ? (100 - progress.positive) : 99"
                 [style]="'background: transparent;'"
               ></div>
             </div>

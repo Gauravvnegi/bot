@@ -151,7 +151,7 @@ export class NpsAcrossServicesComponent implements OnInit {
       this.progresses.push({
         label: progresses[key].label,
         positive: progresses[key].score,
-        negative: Number((100 - progresses[key].score).toFixed(2)),
+        negative: progresses[key].score ? Number((100 - progresses[key].score).toFixed(2)) : progresses[key].score,
       });
     });
   }

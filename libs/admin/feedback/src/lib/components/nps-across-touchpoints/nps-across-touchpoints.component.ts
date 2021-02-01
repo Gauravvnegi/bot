@@ -154,7 +154,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       ? this.tabFilterItems[this.tabFilterIdx].chips
           .filter((item) => item.isSelected == true)
           .map((item) => ({
-            services: item.value,
+            sources: item.value,
           }))
       : '';
   }

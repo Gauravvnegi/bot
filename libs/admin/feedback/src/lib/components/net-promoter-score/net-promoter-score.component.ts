@@ -78,7 +78,8 @@ export class NetPromoterScoreComponent implements OnInit {
               display: true,
             },
             ticks: {
-              min: 0,
+              min: -100,
+              max: 100,
             },
           },
         ],

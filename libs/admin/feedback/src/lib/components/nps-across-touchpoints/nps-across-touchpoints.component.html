@@ -93,12 +93,14 @@
       </div>
     </div>
   </div>
-  <div class="key-container" *ngIf="progresses.length">
-    <div class="key" *ngFor="let p of progresses[0].progressValues">
-      <ng-container *ngIf="p.colorCode">
-        <div class="icon" [style.background]="p.colorCode"></div>
-        <div class="label">{{ p.label }}</div>
-      </ng-container>
-    </div>
+  <div class="key-container" *ngIf="progresses.length && progresses[0].totalProgress">
+    <ng-container *ngFor="let p of progresses[0].progressValues">
+      <div class="key" *ngIf="p.colorCode && p.score">
+        <ng-container>
+          <div class="icon" [style.background]="p.colorCode"></div>
+          <div class="label">{{ p.label }}</div>
+        </ng-container>
+      </div>
+    </ng-container>
   </div>
 </div>

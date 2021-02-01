@@ -28,9 +28,9 @@ export class TwoWayProgressComponent implements OnInit {
     let ctx2 = this.canvas3.nativeElement.getContext("2d");
     ctx.strokeStyle = ctx1.strokeStyle = ctx2.strokeStyle = "#f2f2f2";
     if (this.settings.neutral === largest) {
-      ctx.strokeStyle = "#4BA0F5";
+      this.settings.score >= 0 ? ctx.strokeStyle = "#4BA0F5" : ctx2.strokeStyle="#EF1D45";
     } else if (this.settings.positive === largest) {
-      ctx.strokeStyle = "#1AB99F";
+      this.settings.score >= 0 ? ctx.strokeStyle = "#1AB99F" : ctx2.strokeStyle="#EF1D45";
     } else {
       ctx2.strokeStyle="#EF1D45";
     }
@@ -49,7 +49,8 @@ export class TwoWayProgressComponent implements OnInit {
   }
 
   private calculatevalues() {
-    let positiveValue = parseFloat((1.5 + (this.settings.score * 0.009)).toFixed(3));
+    let score = this.settings.score < 0 ? (this.settings.score * -1) : this.settings.score;
+    let positiveValue = parseFloat((1.5 + (score * 0.009)).toFixed(3));
     if (positiveValue > 1.991) {
       if (positiveValue < 2 ) {
         positiveValue = parseFloat((2 - positiveValue).toFixed(3));
@@ -57,7 +58,7 @@ export class TwoWayProgressComponent implements OnInit {
         positiveValue = parseFloat((positiveValue - 2).toFixed(3));
       }
     }
-    let negativeValue = 1.5 - (this.settings.score * 0.009);
+    let negativeValue = 1.5 - (score * 0.009);
     return {
       positiveValue,
       negativeValue

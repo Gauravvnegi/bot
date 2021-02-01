@@ -134,6 +134,7 @@ export class GuestAttributes {
   overAllNps: number;
   transactionUsage: string;
   totalSpend: number;
+  potential: string;
   churnProbalilty: number;
   churnPrediction: string;
 
@@ -144,6 +145,7 @@ export class GuestAttributes {
       set({}, 'overAllNps', get(data, ['overAllNps'])),
       set({}, 'transactionUsage', get(data, ['transactionUsage'])),
       set({}, 'totalSpend', get(data, ['totalSpend'])),
+      set({}, 'potential', get(data, ['potential'])),
       set({}, 'churnProbalilty', get(data, ['churnProbalilty'])),
       set({}, 'churnPrediction', get(data, ['churnPrediction']))
     );

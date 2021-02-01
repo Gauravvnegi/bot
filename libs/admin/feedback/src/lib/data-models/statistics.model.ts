@@ -53,13 +53,12 @@ export class NPSAcrossServices {
       this,
       set({}, 'npsStats', get(statistics, ['npsStats']))
     );
+    this.departments.push({ key: 'ALL', value: 'All' });
     Object.keys(statistics.departments).forEach((key) => {
       this.departments.push({ key, value: statistics.departments[key] });
       this.entities[key] = new Entity().deserialize(statistics.entities[key]).data;
     });
     this.entities['ALL'] = new Entity().deserialize(statistics.entities['ALL']).data;
-    this.departments.push({ key: 'ALL', value: 'All' });
-    this.departments.reverse();
     return this;
   }
 }
@@ -85,15 +84,13 @@ export class NPSTouchpoints {
       this.entities[key] = new Entity().deserialize(statistics.entities[key]).data;
     });
     this.entities['ALL'] = new Entity().deserialize(statistics.entities['ALL']).data;
-    this.departments.push({ key: 'ALL', value: 'All' });
-    this.departments.reverse();
+    // this.departments.reverse();
     for (const key in statistics.touchpoint.CHECKIN.npsStats) {
       this.CHECKIN.push(statistics.touchpoint.CHECKIN.npsStats[key]);
     }
     for (const key in statistics.touchpoint.CHECKOUT.npsStats) {
       this.CHECKOUT.push(statistics.touchpoint.CHECKOUT.npsStats[key]);
     }
-    console.log(this)
     return this;
   }
 }

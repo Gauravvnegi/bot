@@ -140,6 +140,11 @@ export class LayoutOneComponent implements OnInit {
     this.isGlobalSearchVisible = true;
   }
 
+  noFilterNoSearch(){
+    this.isGlobalFilterVisible = false;
+    this.isGlobalSearchVisible = false;
+  }
+
   closeGlobalFilter(){
     this.isGlobalFilterVisible = false;
   }

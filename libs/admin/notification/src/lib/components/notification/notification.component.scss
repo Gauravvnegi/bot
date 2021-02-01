@@ -226,3 +226,22 @@
   width: 100%;
   margin: 10px 0;
 }
+:host ::ng-deep .mat-checkbox {
+  display: block;
+  margin: 10px 0px;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: $primary-purple;
+}
+
+:host
+  ::ng-deep
+  .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
+  .mat-ripple-element {
+  background: $primary-purple;
+}
+
+:host ::ng-deep .mat-checkbox-frame {
+  border: 1.5px solid #e8eef5;
+}

@@ -11,6 +11,7 @@ import { DocumentsComponent } from './components/documents/documents.component';
 import { GuestDetailsComponent } from './components/guest-details/guest-details.component';
 import { StayDetailsComponent } from './components/stay-details/stay-details.component';
 import { GuestDetailService } from './services/guest-detail.service';
+import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { GuestDetailService } from './services/guest-detail.service';
     ReactiveFormsModule,
     SharedMaterialModule,
     AdminSharedModule,
+    AdminNotificationModule
   ],
   declarations: [
     DetailsComponent,

@@ -26,6 +26,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   $subscription: Subscription = new Subscription();
   selectedInterval: string;
   npsProgressData: NPSAcrossServices;
+  dividerHeight: number = 0;
 
   tabFilterIdx: number = 0;
 
@@ -113,6 +114,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   }
 
   updateQuickReplyActionFilters(): void {
+    console.log(this.tabFilterItems)
     let value = [];
     this.tabFilterItems[this.tabFilterIdx].chips
       .filter((chip) => chip.isSelected)
@@ -123,37 +125,29 @@ export class NpsAcrossServicesComponent implements OnInit {
     this.getNPSServices();
   }
 
-  private initTabLabels(entities): void {
+  private initTabLabels(entities, departments): void {
     if (!this.tabFilterItems.length) {
-      Object.keys(entities).forEach((key) => {
-        let chips = entities[key];
-        let idx = this.tabFilterItems.length;
-        this.tabFilterItems.push({
-          label: key,
-          content: '',
-          value: key,
-          disabled: false,
-          total: 0,
-          chips: [],
-        });
-
-        chips.forEach((chip) => {
-          this.tabFilterItems[idx].chips.push({
-            label: chip,
-            icon: '',
-            value: chip,
+      if (!this.tabFilterItems.length) {
+        departments.forEach((data) =>
+          this.tabFilterItems.push({
+            label: data.value,
+            content: '',
+            value: data.key,
+            disabled: false,
             total: 0,
-            isSelected: true,
-            type: 'initiated',
-          });
-        });
-      });
+            chips: entities[data.key],
+          })
+        );
+      }
     }
   }
 
   private initProgressData(progresses) {
     this.progresses.length = 0;
+    this.dividerHeight = 0;
     Object.keys(progresses).forEach((key) => {
+      let mod = Math.floor(progresses[key].label.length / 20);
+      this.dividerHeight += 40 + (mod * 13);
       this.progresses.push({
         label: progresses[key].label,
         positive: progresses[key].score,
@@ -162,16 +156,35 @@ export class NpsAcrossServicesComponent implements OnInit {
     });
   }
 
+  getSelectedQuickReplyFilters() {
+    return this.tabFilterItems.length
+      ? this.tabFilterItems[this.tabFilterIdx].chips
+          .filter((item) => item.isSelected == true)
+          .map((item) => ({
+            services: item.value,
+          }))
+      : '';
+  }
+
   private getNPSServices(): void {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          departments: this.tabFilterItems.length
+            ? this.tabFilterItems[this.tabFilterIdx].value
+            : 'ALL',
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]),
     };
     this.$subscription.add(
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
           if (this.npsProgressData.entities) {
-            this.initTabLabels(this.npsProgressData.entities);
+            this.initTabLabels(this.npsProgressData.entities, this.npsProgressData.departments);
           }
           this.initProgressData(this.npsProgressData.npsStats);
         },

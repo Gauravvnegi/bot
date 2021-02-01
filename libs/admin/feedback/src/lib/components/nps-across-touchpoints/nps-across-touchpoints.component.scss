@@ -50,10 +50,11 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  flex-flow: wrap;
   .key {
     display: flex;
     align-items: center;
-    margin: 0 10px;
+    margin: 10px;
     .icon {
       width: 10px;
       height: 10px;
@@ -114,6 +115,7 @@
   border-radius: 5px;
   opacity: 1;
   padding: 10px;
+  overflow: auto;
   .title {
     font: normal normal bold 12px/14px Roboto;
     letter-spacing: 0.72px;
@@ -149,4 +151,37 @@
 
 .tab-group {
   margin: 10px 0;
+}
+
+:host ::ng-deep .mat-tab-label-container {
+  overflow: scroll;
+  overflow-y: hidden;
+  width: 10px;
+  &::-webkit-scrollbar {
+    height: 6px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background: darkgray;
+      border-radius: 10px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-tab-list {
+  transform: none !important;
+}
+
+:host ::ng-deep .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+  display: none;
 }

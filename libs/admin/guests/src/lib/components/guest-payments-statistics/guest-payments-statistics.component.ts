@@ -7,6 +7,9 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { GuestDatatableModalComponent } from '../guest-datatable-modal/guest-datatable-modal.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 
 @Component({
   selector: 'hospitality-bot-guest-payments-statistics',
@@ -56,11 +59,75 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
     },
   };
 
+  chips = [
+    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    {
+      label: 'VIP',
+      icon: '',
+      value: 'VIP',
+      total: 0,
+      isSelected: false,
+      type: 'pending',
+    },
+    {
+      label: 'High Potential ',
+      icon: '',
+      value: 'HIGHPOTENTIAL',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'High Risk ',
+      icon: '',
+      value: 'HIGHRISK',
+      total: 0,
+      isSelected: false,
+      type: 'completed',
+    },
+  ];
+
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+    {
+      label: 'Fully Received',
+      content: '',
+      value: 'FULLYRECEIVED',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Partially Received',
+      content: '',
+      value: 'PARTIALLYRECEIVED',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Not Received',
+      content: '',
+      value: 'NOTRECEIVED',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    }
+  ];
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -126,6 +193,27 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       }
     ];
     this.chart.Labels = ['Fully Received', 'Partially Received', 'Not Received'];
+  }
+
+  openTableModal() {
+    // event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const tableCompRef = this._modal.openDialog(
+      GuestDatatableModalComponent,
+      dialogConfig
+    );
+
+    tableCompRef.componentInstance.tableName = 'Guest Payments';
+    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+    tableCompRef.componentInstance.callingMethod = 'getAllGuestPayments';
+
+    this.$subscription.add(
+      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+        tableCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

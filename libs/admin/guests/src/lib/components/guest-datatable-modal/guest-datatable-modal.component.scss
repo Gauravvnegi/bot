@@ -1,27 +1,8 @@
 @import 'main';
-.close {
-	display: flex;
-	justify-content: flex-end;
-	width: 100%;
-  // position: absolute;
-  // top: 5px;
-  // right: 10px;
-  i {
-		color: gray;
-		margin: 0 10px;
-  }
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-:host ::ng-deep .p-datatable {
-  margin: 10px 1.5% !important;
-  box-shadow: none !important;
-}
 
 .table-container {
-  max-height: 87vh;
+  max-height: 85vh;
+  margin: 20px;
   overflow: auto;
 }
 
@@ -84,5 +65,15 @@
   40% {
     -webkit-transform: scale(1);
     transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 20px;
+  .close {
+    margin-top: 20px;
+    cursor: pointer;
   }
 }

@@ -5,6 +5,9 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { GuestDatatableModalComponent } from '../guest-datatable-modal/guest-datatable-modal.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 
 @Component({
   selector: 'hospitality-bot-guest-documents-statistics',
@@ -27,6 +30,77 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
 
   selectedInterval: any;
 
+  chips = [
+    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    {
+      label: 'VIP',
+      icon: '',
+      value: 'VIP',
+      total: 0,
+      isSelected: false,
+      type: 'pending',
+    },
+    {
+      label: 'High Potential ',
+      icon: '',
+      value: 'HIGHPOTENTIAL',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'High Risk ',
+      icon: '',
+      value: 'HIGHRISK',
+      total: 0,
+      isSelected: false,
+      type: 'completed',
+    },
+  ];
+
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+    {
+      label: 'Initiated',
+      content: '',
+      value: 'INITIATED',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Pending',
+      content: '',
+      value: 'PENDING',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Accepted',
+      content: '',
+      value: 'ACCEPTED',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Rejected',
+      content: '',
+      value: 'REJECTED',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    }
+  ];
+
   chart: any = {
     Labels: ['No Data'],
     Data: [[100]],
@@ -46,7 +120,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -112,6 +187,27 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
       borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
     }];
+  }
+
+  openTableModal() {
+    // event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const tableCompRef = this._modal.openDialog(
+      GuestDatatableModalComponent,
+      dialogConfig
+    );
+
+    tableCompRef.componentInstance.tableName = 'Guest Documents';
+    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+    tableCompRef.componentInstance.callingMethod = 'getAllGuestDocuments';
+
+    this.$subscription.add(
+      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+        tableCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

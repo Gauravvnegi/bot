@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BaseChartDirective } from 'ng2-charts';
-import { Status } from '../../data-models/statistics.model';
-import { Subscription } from 'rxjs';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from '../../services/statistics.service';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { BaseChartDirective } from 'ng2-charts';
+import { Subscription } from 'rxjs';
+import { Status } from '../../data-models/statistics.model';
+import { StatisticsService } from '../../services/statistics.service';
+import { GuestDatatableModalComponent } from '../guest-datatable-modal/guest-datatable-modal.component';
 
 @Component({
   selector: 'hospitality-bot-guest-status-statistics',
@@ -115,11 +118,84 @@ export class GuestStatusStatisticsComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
+
+  chips = [
+    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    {
+      label: 'VIP',
+      icon: '',
+      value: 'VIP',
+      total: 0,
+      isSelected: false,
+      type: 'pending',
+    },
+    {
+      label: 'High Potential ',
+      icon: '',
+      value: 'HIGHPOTENTIAL',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'High Risk ',
+      icon: '',
+      value: 'HIGHRISK',
+      total: 0,
+      isSelected: false,
+      type: 'completed',
+    },
+  ];
+
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+    {
+      label: 'New',
+      content: '',
+      value: 'NEW',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Precheckin',
+      content: '',
+      value: 'PRECHECKIN',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Checkin',
+      content: '',
+      value: 'CHECKIN',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    },
+    {
+      label: 'Checkout',
+      content: '',
+      value: 'CHECKOUT',
+      disabled: false,
+      total: 0,
+      chips: this.chips
+    }
+  ];
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _modal: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -251,5 +327,26 @@ export class GuestStatusStatisticsComponent implements OnInit {
         },
       ];
     }
+  }
+
+  openTableModal() {
+    // event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const tableCompRef = this._modal.openDialog(
+      GuestDatatableModalComponent,
+      dialogConfig
+    );
+
+    tableCompRef.componentInstance.tableName = 'Guest Status';
+    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+    tableCompRef.componentInstance.callingMethod = 'getAllGuestStatus';
+
+    this.$subscription.add(
+      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+        tableCompRef.close();
+      })
+    );
   }
 }

@@ -23,8 +23,7 @@
     overflow: auto;
     white-space: nowrap;
     margin: 10px 0;
-    display: flex;
-    justify-content: space-around;
+    display: -webkit-inline-box;
     .slide {
       margin-right: 3rem;
       display: inline-block;

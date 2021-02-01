@@ -1,11 +1,15 @@
 @import 'main';
 
+.loader {
+  margin: 20px auto;
+}
+
 .loading {
-  margin: 80px auto 0;
+  // margin: 20px auto;
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color:  #2187d5;
+  color: $primary-purple;
 }
 
 .spinner {
@@ -15,7 +19,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color:  #2187d5;
+  background-color: $primary-purple;
 
   border-radius: 100%;
   display: inline-block;
@@ -31,6 +35,30 @@
 .spinner .bounce2 {
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
 }
 
 .container {
@@ -80,12 +108,12 @@
 .button {
   width: 250px;
   height: 46px;
-  background: #4B56C0 0% 0% no-repeat padding-box;
+  background: #4b56c0 0% 0% no-repeat padding-box;
   border-radius: 23px;
   opacity: 1;
   font: normal normal medium 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: #FFFFFF;
+  color: #ffffff;
   opacity: 1;
   outline: none;
 }
@@ -136,7 +164,7 @@
   }
 }
 
-.upload-btn-wrapper input[type=file] {
+.upload-btn-wrapper input[type='file'] {
   font-size: 18px;
   position: absolute;
   right: 0;
@@ -161,7 +189,7 @@
   }
 }
 
-.upload-attachment-wrapper input[type=file] {
+.upload-attachment-wrapper input[type='file'] {
   font-size: 30px;
   position: absolute;
   left: 0;
@@ -170,3 +198,31 @@
   width: 100%;
 }
 
+.close {
+  display: flex;
+  justify-content: flex-end;
+  // position: absolute;
+  // top: 5px;
+  // right: 10px;
+  i {
+    color: gray;
+    margin: 0 10px;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fixedheight {
+  height: 85vh !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+}

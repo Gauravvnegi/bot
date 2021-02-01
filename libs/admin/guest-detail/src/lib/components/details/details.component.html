@@ -7,7 +7,7 @@
       <div class="name-details-wrapper">
         <div class="name">
           <span>{{ data.getFullName() }}</span>
-          <div class="vip-image">
+          <div class="vip-image" *ngIf="data.vip">
             <img src="assets/VIP.png" />
           </div>
         </div>

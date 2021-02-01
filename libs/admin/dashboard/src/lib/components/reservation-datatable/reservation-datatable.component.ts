@@ -227,6 +227,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
+          this.initialLoading = false;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&

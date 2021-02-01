@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node", "jest"]
   },
-  "include": ["**/*.ts", "../notification/src/lib/data-models/request.model.ts"]
+  "include": ["**/*.ts"]
 }

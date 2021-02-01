@@ -27,6 +27,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   $subscription: Subscription = new Subscription();
   globalQueries = [];
   selectedInterval: string;
+  loading: boolean = false;
 
   documentActionTypes = [
     {
@@ -36,8 +37,6 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       defaultLabel: 'Export',
     },
   ];
-
-  progressValues: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -83,15 +82,8 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     });
   }
 
-  private initGraphData(): void {
-    this.progressValues.length = 0;
-    Object.keys(this.npsChartData).forEach((key) => {
-      // let value: Department = this.npsChartData[key];
-      this.progressValues.push(this.npsChartData[key]);
-    });
-  }
-
   private getNPSChartData(): void {
+    this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
@@ -101,9 +93,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
           this.npsChartData = new NPSDepartments().deserialize(
             response.npsStats
           );
-          this.initGraphData();
+          this.loading = false;
         },
         ({ error }) => {
+          this.loading = false;
           this._snackbarService.openSnackBarAsText(error.message);
         }
       )

@@ -89,14 +89,6 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
 
   tabFilterItems = [
     {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: this.chips,
-    },
-    {
       label: 'Fully Received',
       content: '',
       value: 'FULLYRECEIVED',

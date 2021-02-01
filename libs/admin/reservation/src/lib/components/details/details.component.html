@@ -450,6 +450,11 @@
       </div>
       <p class="contact">Contact Guest</p>
       <div class="right-bottom-icons">
+        <div class="social-icons" (click)="openRequest()">
+          <div class="icon">
+            <img src="assets/svg/request.svg" />
+          </div>
+        </div>
         <div class="social-icons" (click)="openSendNotification('Telegram')">
           <div class="icon">
             <img src="assets/svg/telegram.svg" />
@@ -465,9 +470,9 @@
             <img src="assets/svg/messenger.svg" />
           </div>
         </div>
-        <div class="social-icons">
+        <div class="social-icons" (click)="openSendNotification('email')">
           <div class="icon">
-            <img src="assets/svg/share.svg" />
+            <img src="assets/svg/email.svg" />
           </div>
         </div>
       </div>

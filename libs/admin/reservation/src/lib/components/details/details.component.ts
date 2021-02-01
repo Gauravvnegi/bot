@@ -472,14 +472,6 @@ export class DetailsComponent implements OnInit, OnChanges {
   }
 
   openSendNotification(channel) {
-    // this.closeDetails();
-    // this.router.navigate(['/pages/request/add-request'], {
-    //   queryParams: {
-    //     channel,
-    //     roomNumber: this.details.stayDetails.roomNumber,
-    //     hotelId: this.details.reservationDetails.hotelId,
-    //   },
-    // });
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -489,7 +481,13 @@ export class DetailsComponent implements OnInit, OnChanges {
       dialogConfig
     );
 
-    notificationCompRef.componentInstance.channel = channel;
+    if (channel === 'email') {
+      notificationCompRef.componentInstance.isEmail = true;
+      notificationCompRef.componentInstance.email = this.primaryGuest.email;
+    } else {
+      notificationCompRef.componentInstance.isEmail = false;
+      notificationCompRef.componentInstance.channel = channel;
+    }
     notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
     notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
     notificationCompRef.componentInstance.isModal = true;
@@ -497,6 +495,11 @@ export class DetailsComponent implements OnInit, OnChanges {
       // remove loader for detail close
       notificationCompRef.close();
     });
+  }
+
+  openRequest() {
+    this.closeDetails();
+    this.router.navigateByUrl('/pages/request');
   }
 
   closeDetails() {

@@ -1,6 +1,13 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Location } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -24,10 +31,12 @@ export class NotificationComponent implements OnInit {
   attachment: string;
   templates = {
     ids: [],
-    hotelId: ''
+    hotelId: '',
   };
   @Input() hotelId;
   @Input() channel;
+  @Input() isEmail;
+  @Input() email;
   @Input() roomNumber;
   config: RequestConfig;
   @Input() isModal = false;
@@ -90,15 +99,15 @@ export class NotificationComponent implements OnInit {
   private initNotificationForm(): void {
     if (this.isModal) {
       this.notificationForm = this._fb.group({
-        social_channels: [[this.channel]],
-        is_social_channel: [true, Validators.required],
-        is_email_channel: [false, Validators.required],
+        social_channels: [this.channel ? [this.channel] : []],
+        is_social_channel: [this.channel ? true : false, Validators.required],
+        is_email_channel: [this.isEmail, Validators.required],
         is_sms_channel: [false, Validators.required],
         messageType: ['', Validators.required],
         templateId: [],
         attachments: [[]],
         message: [''],
-        emailIds: [[]],
+        emailIds: [this.isEmail ? [this.email] : []],
         roomNumbers: [[this.roomNumber]],
       });
     } else {
@@ -118,12 +127,10 @@ export class NotificationComponent implements OnInit {
   }
 
   private getConfigData(hotelId): void {
-    this.requestService
-      .getNotificationConfig(hotelId)
-      .subscribe((response) => {
-        this.config = new RequestConfig().deserialize(response);
-        this.initNotificationForm();
-      });
+    this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
+      this.config = new RequestConfig().deserialize(response);
+      this.initNotificationForm();
+    });
   }
 
   private isValidEmail(email): RegExpMatchArray {
@@ -196,20 +203,22 @@ export class NotificationComponent implements OnInit {
   uploadAttachments(event): void {
     let formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.templates.hotelId, formData).subscribe(
-      (response) => {
-        this.attachment = response.fileName;
-        this.notificationForm
-          .get('attachments')
-          .patchValue([response.fileDownloadUri]);
-        this._snackbarService.openSnackBarAsText('Attachment uploaded', '', {
-          panelClass: 'success',
-        });
-      },
-      ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
-    );
+    this.requestService
+      .uploadAttachments(this.templates.hotelId, formData)
+      .subscribe(
+        (response) => {
+          this.attachment = response.fileName;
+          this.notificationForm
+            .get('attachments')
+            .patchValue([response.fileDownloadUri]);
+          this._snackbarService.openSnackBarAsText('Attachment uploaded', '', {
+            panelClass: 'success',
+          });
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   goBack(): void {
@@ -246,19 +255,21 @@ export class NotificationComponent implements OnInit {
     }
 
     this.$subscription.add(
-      this.requestService.createRequestData(this.templates.hotelId, values).subscribe(
-        (res) => {
-          this.isSending = false;
-          this._snackbarService.openSnackBarAsText('Notification sent.', '', {
-            panelClass: 'success',
-          });
-          this.isModal ? this.closeModal() : this._location.back();
-        },
-        ({ error }) => {
-          this.isSending = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
+      this.requestService
+        .createRequestData(this.templates.hotelId, values)
+        .subscribe(
+          (res) => {
+            this.isSending = false;
+            this._snackbarService.openSnackBarAsText('Notification sent.', '', {
+              panelClass: 'success',
+            });
+            this.isModal ? this.closeModal() : this._location.back();
+          },
+          ({ error }) => {
+            this.isSending = false;
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
+        )
     );
   }
 
@@ -267,7 +278,11 @@ export class NotificationComponent implements OnInit {
     if (templateId) {
       this.$subscription.add(
         this.requestService
-          .getTemplate(this.templates.hotelId, templateId, journey.toUpperCase())
+          .getTemplate(
+            this.templates.hotelId,
+            templateId,
+            journey.toUpperCase()
+          )
           .subscribe(
             (response) => {
               this.notificationForm

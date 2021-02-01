@@ -95,7 +95,6 @@ export class DetailsComponent implements OnInit {
   }
 
   openSendNotification(channel) {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -104,7 +103,14 @@ export class DetailsComponent implements OnInit {
       dialogConfig
     );
 
-    notificationCompRef.componentInstance.channel = channel;
+    if (channel === 'email') {
+      notificationCompRef.componentInstance.isEmail = true;
+      notificationCompRef.componentInstance.email = this.data.email;
+    } else {
+      notificationCompRef.componentInstance.isEmail = false;
+      notificationCompRef.componentInstance.channel = channel;
+    }
+
     notificationCompRef.componentInstance.roomNumber = this.data.rooms.roomNumber;
     notificationCompRef.componentInstance.hotelId = this.hotelId;
     notificationCompRef.componentInstance.isModal = true;
@@ -112,6 +118,11 @@ export class DetailsComponent implements OnInit {
       // remove loader for detail close
       notificationCompRef.close();
     });
+  }
+
+  openRequest() {
+    this.closeDetails();
+    this.router.navigateByUrl('/pages/request');
   }
 
   addFGEvent(data) {

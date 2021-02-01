@@ -6,17 +6,66 @@ import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { GuestDatatableModalComponent } from 'libs/admin/guests/src/lib/components/guest-datatable-modal/guest-datatable-modal.component';
 
 @Component({
   selector: 'hospitality-bot-type-guest-statistics',
   templateUrl: './type-guest-statistics.component.html',
-  styleUrls: ['./type-guest-statistics.component.scss']
+  styleUrls: ['./type-guest-statistics.component.scss'],
 })
 export class TypeGuestStatisticsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   selectedInterval: any;
   customerData: VIP = new VIP();
   $subscription = new Subscription();
+
+  chips = [
+    {
+      label: 'VIP',
+      icon: '',
+      value: 'VIP',
+      total: 0,
+      isSelected: true,
+      type: 'pending',
+    },
+  ];
+
+  tabFilterItems = [
+    {
+      label: 'Arrival',
+      content: '',
+      value: 'ARRIVAL',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+    {
+      label: 'Inhouse',
+      content: '',
+      value: 'INHOUSE',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+    {
+      label: 'Departure',
+      content: '',
+      value: 'DEPARTURE',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+    {
+      label: 'Out-Guest',
+      content: '',
+      value: 'OUTGUEST',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+  ];
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -64,8 +113,8 @@ export class TypeGuestStatisticsComponent implements OnInit {
       responsive: true,
       elements: {
         line: {
-          tension: 0
-        }
+          tension: 0,
+        },
       },
       scales: {
         xAxes: [
@@ -91,19 +140,19 @@ export class TypeGuestStatisticsComponent implements OnInit {
     chartColors: [
       {
         borderColor: '#FF9F67',
-        backgroundColor: '#FF9F67'
+        backgroundColor: '#FF9F67',
       },
       {
         borderColor: '#30D8B6',
-        backgroundColor: '#30D8B6'
+        backgroundColor: '#30D8B6',
       },
       {
         borderColor: '#F25E5E',
-        backgroundColor: '#F25E5E'
+        backgroundColor: '#F25E5E',
       },
       {
         borderColor: '#4A73FB',
-        backgroundColor: '#4A73FB'
+        backgroundColor: '#4A73FB',
       },
     ],
     chartLegend: false,
@@ -113,8 +162,9 @@ export class TypeGuestStatisticsComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService
-  ) { }
+    private _snackbarService: SnackBarService,
+    private _modal: ModalService
+  ) {}
 
   ngOnInit(): void {
     this.getVIPStatistics();
@@ -156,7 +206,10 @@ export class TypeGuestStatisticsComponent implements OnInit {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
+        this._adminUtilityService.convertTimestampToLabels(
+          this.selectedInterval,
+          d
+        )
       );
       this.chart.chartData[0].data.push(this.customerData.arrival[d]);
       this.chart.chartData[1].data.push(this.customerData.inHouse[d]);
@@ -185,15 +238,37 @@ export class TypeGuestStatisticsComponent implements OnInit {
           queryObj: this._adminUtilityService.makeQueryParams(queries),
         };
         this.$subscription.add(
-          this._statisticService
-            .getVIPStatistics(config)
-            .subscribe((response) => {
+          this._statisticService.getVIPStatistics(config).subscribe(
+            (response) => {
               this.customerData = new VIP().deserialize(response);
               this.initGraphData();
-            }, ({ error }) => {
+            },
+            ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);
-            })
+            }
+          )
         );
+      })
+    );
+  }
+
+  openTableModal() {
+    // event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const tableCompRef = this._modal.openDialog(
+      GuestDatatableModalComponent,
+      dialogConfig
+    );
+
+    tableCompRef.componentInstance.tableName = 'VIP Guest';
+    tableCompRef.componentInstance.callingMethod = 'getGuestList';
+    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
+
+    this.$subscription.add(
+      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+        tableCompRef.close();
       })
     );
   }
@@ -201,5 +276,4 @@ export class TypeGuestStatisticsComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

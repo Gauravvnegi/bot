@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartType } from 'chart.js';
-import { BaseChartDirective, Label, MultiDataSet, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-source-statistics',

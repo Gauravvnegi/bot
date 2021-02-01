@@ -47,7 +47,7 @@ const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'feedbacks',
+        path: 'feedback',
         loadChildren: () =>
           import('@hospitality-bot/admin/feedback').then(
             (m) => m.AdminFeedbackModule

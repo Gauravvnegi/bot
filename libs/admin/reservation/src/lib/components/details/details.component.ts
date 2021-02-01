@@ -12,6 +12,7 @@ import { ReservationService } from '../../services/reservation.service';
 import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
+import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { AdminDetailsService } from '../../services/admin-details.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -100,6 +101,7 @@ export class DetailsComponent implements OnInit, OnChanges {
     this._reservationService.getReservationDetails(this.bookingId).subscribe(
       (response) => {
         this.details = new Details().deserialize(response);
+        console.log(this.details)
         this.mapValuesInForm();
         this.isReservationDetailFetched = true;
       },
@@ -470,13 +472,30 @@ export class DetailsComponent implements OnInit, OnChanges {
   }
 
   openSendNotification(channel) {
-    this.closeDetails();
-    this.router.navigate(['/pages/request/add-request'], {
-      queryParams: {
-        channel,
-        roomNumber: this.details.stayDetails.roomNumber,
-        hotelId: this.details.reservationDetails.hotelId,
-      },
+    // this.closeDetails();
+    // this.router.navigate(['/pages/request/add-request'], {
+    //   queryParams: {
+    //     channel,
+    //     roomNumber: this.details.stayDetails.roomNumber,
+    //     hotelId: this.details.reservationDetails.hotelId,
+    //   },
+    // });
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const notificationCompRef = this._modal.openDialog(
+      NotificationComponent,
+      dialogConfig
+    );
+
+    notificationCompRef.componentInstance.channel = channel;
+    notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
+    notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
+    notificationCompRef.componentInstance.isModal = true;
+    notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+      // remove loader for detail close
+      notificationCompRef.close();
     });
   }
 

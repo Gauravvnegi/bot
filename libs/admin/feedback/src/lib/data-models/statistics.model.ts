@@ -1,5 +1,4 @@
 import { get, set } from 'lodash';
-import { Departments } from '../constants/departments';
 
 export class NPS {
   label: string;

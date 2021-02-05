@@ -9,7 +9,11 @@ import {
   Output,
 } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
-import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
+import {
+  ShareIconConfig,
+  Details,
+} from '../../../../../shared/src/lib/models/detailsConfig.model';
+
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
 import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
@@ -24,6 +28,7 @@ import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.compone
 import { Subject, Subscription } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
+import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
@@ -33,8 +38,6 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit, OnChanges {
-  // @ViewChild(AdminGuestDetailsComponent)
-  // guestDetailComponent: AdminGuestDetailsComponent;
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
@@ -52,11 +55,12 @@ export class DetailsComponent implements OnInit, OnChanges {
   @Output() onDetailsClose = new EventEmitter();
   branchConfig;
   $subscription = new Subscription();
-
-  // tabConfig={
-
-  // }
   @Input() tabKey = 'guest_details';
+
+  defaultIconList = [
+    { iconUrl: 'assets/svg/messenger.svg', label: 'Request', value: '' },
+    { iconUrl: 'assets/svg/email.svg', label: 'Email', value: 'email' },
+  ];
 
   detailsConfig = [
     {
@@ -92,7 +96,8 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _modal: ModalService,
     private router: Router,
     private _hotelDetailService: HotelDetailService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _userDetailService: UserDetailService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -119,11 +124,19 @@ export class DetailsComponent implements OnInit, OnChanges {
         );
       })
     );
-    this._adminDetailsService
+    this._userDetailService
       .getUserShareIconByNationality(this.branchConfig.nationality)
-      .subscribe((response) => {
-        this.shareIconList = response.applications;
-      });
+      .subscribe(
+        (response) => {
+          this.shareIconList = new ShareIconConfig().deserialize(response);
+          this.shareIconList = this.shareIconList.applications.concat(
+            this.defaultIconList
+          );
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   getReservationDetails() {
@@ -180,29 +193,10 @@ export class DetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  // confirmAllHealthDocs() {
-  //   if (this.healthCardDetailsFG.get('status').value == 'INITIATED') {
-  //     this._snackBarService.openSnackBarAsText(
-  //       'Please verify health declaration first'
-  //     );
-  //   }
-  // }
-
   mapValuesInForm() {
     this.reservationDetailsFG.patchValue(this.details.reservationDetails);
     this.regCardDetailsFG.patchValue(this.details.regCardDetails);
-    //  this.setStepsStatus();
   }
-
-  // setStepsStatus() {
-  //   this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get(
-  //     'isAccepted'
-  //   ).value;
-  // }
-
-  // confirmHealthDocs(status) {
-  //   this.guestDetailComponent.updateHealthDeclarationStatus(status);
-  // }
 
   verifyAllDocuments() {
     if (
@@ -501,33 +495,33 @@ export class DetailsComponent implements OnInit, OnChanges {
   }
 
   openSendNotification(channel) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const notificationCompRef = this._modal.openDialog(
-      NotificationComponent,
-      dialogConfig
-    );
+    if (channel) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '100%';
+      const notificationCompRef = this._modal.openDialog(
+        NotificationComponent,
+        dialogConfig
+      );
 
-    if (channel === 'email') {
-      notificationCompRef.componentInstance.isEmail = true;
-      notificationCompRef.componentInstance.email = this.primaryGuest.email;
+      if (channel === 'email') {
+        notificationCompRef.componentInstance.isEmail = true;
+        notificationCompRef.componentInstance.email = this.primaryGuest.email;
+      } else {
+        notificationCompRef.componentInstance.isEmail = false;
+        notificationCompRef.componentInstance.channel = channel;
+      }
+      notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
+      notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
+      notificationCompRef.componentInstance.isModal = true;
+      notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+        // remove loader for detail close
+        notificationCompRef.close();
+      });
     } else {
-      notificationCompRef.componentInstance.isEmail = false;
-      notificationCompRef.componentInstance.channel = channel;
+      this.closeDetails();
+      this.router.navigateByUrl('/pages/request');
     }
-    notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-    notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
-    notificationCompRef.componentInstance.isModal = true;
-    notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
-      notificationCompRef.close();
-    });
-  }
-
-  openRequest() {
-    this.closeDetails();
-    this.router.navigateByUrl('/pages/request');
   }
 
   closeDetails() {

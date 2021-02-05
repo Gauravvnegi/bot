@@ -12,6 +12,7 @@ export class Details implements Deserializable {
   stayDetails: StayDetailsConfig;
   amenitiesDetails: PackageDetailsConfig;
   paymentDetails: PaymentDetailsConfig;
+  shareIconsDetails: ShareIconConfig;
   regCardDetails: RegCardConfig;
   healDeclarationDetails: HealthDeclarationConfig;
   currentJourneyDetails: CurrentJourneyDetails;
@@ -207,6 +208,32 @@ export class GuestDetailsConfig implements Deserializable {
 
   getGuestFullNameWithTitle() {
     return `${this.title} ${this.firstName} ${this.lastName}`;
+  }
+}
+
+export class ShareIconConfig implements Deserializable {
+  applications;
+
+  deserialize(input: any) {
+    this.applications = input.applications.map((data) => {
+      return new ShareIconList().deserialize(data);
+    });
+    return this;
+  }
+}
+
+export class ShareIconList implements Deserializable {
+  value;
+  label;
+  iconUrl;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'value', get(input, ['value'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'iconUrl', get(input, ['iconUrl']))
+    );
+    return this;
   }
 }
 

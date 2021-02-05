@@ -450,34 +450,19 @@
       </div>
       <p class="contact">Contact Guest</p>
       <div class="right-bottom-icons">
-        <div class="social-icons" (click)="openRequest()">
-          <div class="icon">
-            <img src="assets/svg/messenger.svg" />
-          </div>
-        </div>
+    
         <ng-container *ngFor="let icon of shareIconList">
-          <div class="social-icons" (click)="openSendNotification(icon.value)">
+          <div
+            class="social-icons"
+            (click)="openSendNotification(icon.value)"
+          >
             <div class="icon">
               <img [src]="icon.iconUrl" />
             </div>
           </div>
         </ng-container>
         
-        <!-- <div class="social-icons" (click)="openSendNotification('Whatsapp')">
-          <div class="icon">
-            <img src="assets/svg/whatsapp.svg" />
-          </div>
-        </div>
-        <div class="social-icons" (click)="openSendNotification('Messenger')">
-          <div class="icon">
-            <img src="assets/svg/messenger.svg" />
-          </div>
-        </div> -->
-        <div class="social-icons" (click)="openSendNotification('email')">
-          <div class="icon">
-            <img src="assets/svg/email.svg" />
-          </div>
-        </div>
+      
       </div>
     </div>
   </div>

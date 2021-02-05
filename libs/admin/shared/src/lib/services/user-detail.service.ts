@@ -21,4 +21,10 @@ export class UserDetailService extends ApiService {
   getUserDetailsById(userId): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }
+
+  getUserShareIconByNationality(nationality): Observable<any> {
+    return this.get(
+      `/api/v1/countries/support-applications?nationality=${nationality}`
+    );
+  }
 }

@@ -21,9 +21,11 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -41,12 +43,15 @@ export class DetailsComponent implements OnInit, OnChanges {
   isGuestInfoPatched: boolean = false;
   primaryGuest;
   isReservationDetailFetched: boolean = false;
+  shareIconList;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
   @Input() bookingId;
   @Output() onDetailsClose = new EventEmitter();
+  branchConfig;
+  $subscription = new Subscription();
 
   // tabConfig={
 
@@ -85,7 +90,9 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _clipboard: Clipboard,
     public feedbackService: FeedbackService,
     private _modal: ModalService,
-    private router: Router
+    private router: Router,
+    private _hotelDetailService: HotelDetailService,
+    private _globalFilterService: GlobalFilterService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -93,15 +100,37 @@ export class DetailsComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.getReservationDetails();
+    this.getShareIcon();
   }
 
   ngOnChanges() {}
+
+  getShareIcon() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        const { hotelName: brandId, branchName: branchId } = data[
+          'filter'
+        ].value.property;
+        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+          (brand) => brand.id == brandId
+        );
+        this.branchConfig = brandConfig.branches.find(
+          (branch) => branch.id == branchId
+        );
+      })
+    );
+    this._adminDetailsService
+      .getUserShareIconByNationality(this.branchConfig.nationality)
+      .subscribe((response) => {
+        this.shareIconList = response.applications;
+      });
+  }
 
   getReservationDetails() {
     this._reservationService.getReservationDetails(this.bookingId).subscribe(
       (response) => {
         this.details = new Details().deserialize(response);
-        console.log(this.details)
+        console.log(this.details);
         this.mapValuesInForm();
         this.isReservationDetailFetched = true;
       },
@@ -472,7 +501,6 @@ export class DetailsComponent implements OnInit, OnChanges {
   }
 
   openSendNotification(channel) {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';

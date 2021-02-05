@@ -1,5 +1,5 @@
 # Apache2 Angular configuration
-Build and deploy Angular code on ubuntu machine served by Apache2
+Build and deploy Angular code on Ubuntu machine served by Apache2 webserver
 
 **Requirements:**
 

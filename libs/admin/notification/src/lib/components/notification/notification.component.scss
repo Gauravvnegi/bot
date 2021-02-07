@@ -68,6 +68,7 @@
   padding: 15px 10px;
   background-color: white;
   border-radius: 3px;
+  padding-bottom: 0;
   .back-icon {
     cursor: pointer;
   }
@@ -228,7 +229,7 @@
 }
 
 .fixedheight {
-  height: 75vh !important;
+  height: 77vh;
   overflow-y: auto;
   overflow-x: hidden;
 }

@@ -20,8 +20,13 @@
   box-shadow: none !important;
 }
 
+// :host ::ng-deep .details_wrapper{
+//   background-color: white;
+//   max-height: 85vh;
+// }
+
 .table-container {
-  max-height: 87vh;
+  max-height: 79vh;
   overflow: auto;
 }
 

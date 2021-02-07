@@ -174,6 +174,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
+          this.initialLoading = false;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&

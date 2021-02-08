@@ -43,4 +43,8 @@ export class StatisticsService extends ApiService {
       }
     );
   }
+
+  feedbackDistribution(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/distribution/${config.queryObj}`);
+  }
 }

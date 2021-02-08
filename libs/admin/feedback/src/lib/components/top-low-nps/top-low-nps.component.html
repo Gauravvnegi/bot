@@ -1,1 +1,33 @@
-<p>top-low-nps works!</p>
+<div class="container">
+	<div class="title-container">
+		<div class="icon">
+			<img src="assets/svg/speedometer.svg" />
+		</div>
+		<div class="stat-title">Top/Low NPS</div>
+	</div>
+	<div style="height: 310px; display: flex; justify-content: space-between; flex-direction: column;">
+		<hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx"
+			(selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
+		<div style="display: flex;flex-direction: column; margin:5px">
+			<div style="display: flex; flex-direction: row;margin: 7px 0" *ngFor="let item of progressItems">
+				<div style="min-width: 120px;">{{ item.label }}</div>
+				<div style="display: flex; width: calc(100% - 130px); margin-left: 10px;">
+					<div [fxFlex]="item.value < 0 ? item.value * (-1) : item.value" class="progress-value"
+						[style.background]="item.color"></div>
+					<div [fxFlex]="100 - (item.value < 0 ? item.value * (-1) : item.value)" class="progress-value"
+					[style.background]="'transparent'"></div>
+				</div>
+			</div>
+		</div>
+		<div style="display: flex; justify-content: space-around;">
+			<div class="key-container">
+				<div class="icon" [style.background]="'#1AB99F'"></div>
+				<div class="stat-lable">Top Performing</div>
+			</div>
+			<div class="key-container">
+				<div class="icon" [style.background]="'#EF1D45'"></div>
+				<div class="stat-lable">Low Performing</div>
+			</div>
+		</div>
+	</div>
+</div>

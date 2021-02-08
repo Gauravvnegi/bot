@@ -120,48 +120,32 @@ export class Touchpoint {
 
 export class FeedbackDistribution {
   totalCount: number;
-  values: Distribution;
-  percentage: Distribution;
+  veryPoor: Distribution;
+  poor: Distribution;
+  adequate: Distribution;
+  good: Distribution;
+  veryGood: Distribution;
+  outstanding: Distribution;
 
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'totalCount', get(input, ['totalCount'])),
+      set({}, 'totalCount', get(input, ['totalResponse'])),
+      set({}, 'veryPoor', get(input, ['feedbacks', 'VERYPOOR'])),
+      set({}, 'poor', get(input, ['feedbacks', 'POOR'])),
+      set({}, 'adequate', get(input, ['feedbacks', 'ADEQUATE'])),
+      set({}, 'good', get(input, ['feedbacks', 'GOOD'])),
+      set({}, 'veryGood', get(input, ['feedbacks', 'VERYGOOD'])),
+      set({}, 'outstanding', get(input, ['feedbacks', 'OUTSTANDING'])),
     );
-    this.values = new Distribution().deserialize(input, 'value');
-    this.percentage = new Distribution().deserialize(input, 'percentage');
     return this;
   }
 }
 
 export class Distribution {
-  veryPoor: number;
-  poor: number;
-  adequate: number;
-  good: number;
-  veryGood: number;
-  outstanding: number;
-
-  deserialize(input, type) {
-    if (type === 'value') {
-      Object.assign(
-        this,
-        set({}, 'veryPoor', get(input, ['veryPoor'])),
-        set({}, 'poor', get(input, ['poor'])),
-        set({}, 'adequate', get(input, ['adequate'])),
-        set({}, 'good', get(input, ['good'])),
-        set({}, 'veryGood', get(input, ['veryGood'])),
-        set({}, 'outstanding', get(input, ['outstanding'])),
-      )
-      return this;
-    } else {
-      this.veryPoor = Math.round((input.veryPoor / input.totalCount) *100);
-      this.poor = Math.round((input.poor / input.totalCount) *100);
-      this.adequate = Math.round((input.adequate / input.totalCount) *100);
-      this.good = Math.round((input.good / input.totalCount) *100);
-      this.veryGood = Math.round((input.veryGood / input.totalCount) *100);
-      this.outstanding = Math.round((input.outstanding / input.totalCount) *100);
-      return this;
-    }
-  }
+  label: string;
+  scale: string;
+  count: number;
+  percent: number;
+  color: string;
 }

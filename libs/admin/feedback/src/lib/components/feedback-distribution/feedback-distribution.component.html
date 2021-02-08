@@ -11,53 +11,18 @@
 				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">
 			</canvas>
 		</div>
-		<div class="labels">
+		<div class="labels" *ngIf="distribution">
 			<div class="val">{{ distribution.totalCount }}</div>
 			<div class="label">Total Responses</div>
 		</div>
 	</div>
-	<div>
-		<div class="stat-val-container">
+	<div *ngIf="keyLabels.length">
+		<div class="stat-val-container" *ngFor="let value of keyLabels; let i=index">
 			<div class="stat-lable-container">
-				<div class="icon" [style.background]="'#CC052B'"></div>
-				<div class="stat-lable">Very Poor</div>
+				<div class="icon" [style.background]="value.color"></div>
+				<div class="stat-lable">{{ value.label }} ({{ value.scale }})</div>
 			</div>
-			<div class="stat-val">{{ distribution.values.veryPoor }} ({{ distribution.percentage.veryPoor }}%)</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon" [style.background]="'#EF1D45'"></div>
-				<div class="stat-lable">Poor</div>
-			</div>
-			<div class="stat-val">{{ distribution.values.poor }} ({{ distribution.percentage.poor }}%)</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon" [style.background]="'#FF8F00'"></div>
-				<div class="stat-lable">Adequate</div>
-			</div>
-			<div class="stat-val">{{ distribution.values.adequate }} ({{ distribution.percentage.adequate }}%)</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon" [style.background]="'#4BA0F5'"></div>
-				<div class="stat-lable">Good</div>
-			</div>
-			<div class="stat-val">{{ distribution.values.good }} ({{ distribution.percentage.good }}%)</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon" [style.background]="'#224BD5'"></div>
-				<div class="stat-lable">Very Good</div>
-			</div>
-			<div class="stat-val">{{ distribution.values.veryGood }} ({{ distribution.percentage.veryGood }}%)</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon" [style.background]="'#508919'"></div>
-				<div class="stat-lable">Outstanding</div>
-			</div>
-			<div class="stat-val">{{ distribution.values.outstanding }} ({{ distribution.percentage.outstanding }}%)</div>
+			<div class="stat-val">{{ value.count }} ({{ value.percent }}%)</div>
 		</div>
 	</div>
 </div>

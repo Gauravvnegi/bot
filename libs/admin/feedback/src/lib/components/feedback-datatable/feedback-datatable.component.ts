@@ -78,7 +78,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   tabFilterItems = [
     {
-      label: 'Journey/Reservation',
+      label: 'Journey / Reservation',
       content: '',
       value: 'ALL',
       disabled: false,

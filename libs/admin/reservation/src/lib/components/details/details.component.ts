@@ -9,7 +9,11 @@ import {
   Output,
 } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
-import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
+import {
+  ShareIconConfig,
+  Details,
+} from '../../../../../shared/src/lib/models/detailsConfig.model';
+
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
 import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
@@ -21,9 +25,12 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
+import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -31,8 +38,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit, OnChanges {
-  // @ViewChild(AdminGuestDetailsComponent)
-  // guestDetailComponent: AdminGuestDetailsComponent;
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
@@ -41,17 +46,21 @@ export class DetailsComponent implements OnInit, OnChanges {
   isGuestInfoPatched: boolean = false;
   primaryGuest;
   isReservationDetailFetched: boolean = false;
+  shareIconList;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
   @Input() bookingId;
   @Output() onDetailsClose = new EventEmitter();
-
-  // tabConfig={
-
-  // }
+  branchConfig;
+  $subscription = new Subscription();
   @Input() tabKey = 'guest_details';
+
+  defaultIconList = [
+    { iconUrl: 'assets/svg/messenger.svg', label: 'Request', value: '' },
+    { iconUrl: 'assets/svg/email.svg', label: 'Email', value: 'email' },
+  ];
 
   detailsConfig = [
     {
@@ -85,7 +94,10 @@ export class DetailsComponent implements OnInit, OnChanges {
     private _clipboard: Clipboard,
     public feedbackService: FeedbackService,
     private _modal: ModalService,
-    private router: Router
+    private router: Router,
+    private _hotelDetailService: HotelDetailService,
+    private _globalFilterService: GlobalFilterService,
+    private _userDetailService: UserDetailService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -93,15 +105,45 @@ export class DetailsComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.getReservationDetails();
+    this.getShareIcon();
   }
 
   ngOnChanges() {}
+
+  getShareIcon() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        const { hotelName: brandId, branchName: branchId } = data[
+          'filter'
+        ].value.property;
+        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+          (brand) => brand.id == brandId
+        );
+        this.branchConfig = brandConfig.branches.find(
+          (branch) => branch.id == branchId
+        );
+      })
+    );
+    this._userDetailService
+      .getUserShareIconByNationality(this.branchConfig.nationality)
+      .subscribe(
+        (response) => {
+          this.shareIconList = new ShareIconConfig().deserialize(response);
+          this.shareIconList = this.shareIconList.applications.concat(
+            this.defaultIconList
+          );
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
 
   getReservationDetails() {
     this._reservationService.getReservationDetails(this.bookingId).subscribe(
       (response) => {
         this.details = new Details().deserialize(response);
-        console.log(this.details)
+        console.log(this.details);
         this.mapValuesInForm();
         this.isReservationDetailFetched = true;
       },
@@ -151,29 +193,10 @@ export class DetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  // confirmAllHealthDocs() {
-  //   if (this.healthCardDetailsFG.get('status').value == 'INITIATED') {
-  //     this._snackBarService.openSnackBarAsText(
-  //       'Please verify health declaration first'
-  //     );
-  //   }
-  // }
-
   mapValuesInForm() {
     this.reservationDetailsFG.patchValue(this.details.reservationDetails);
     this.regCardDetailsFG.patchValue(this.details.regCardDetails);
-    //  this.setStepsStatus();
   }
-
-  // setStepsStatus() {
-  //   this._adminDetailsService.healthDeclarationStatus = this.healDeclarationForm.get(
-  //     'isAccepted'
-  //   ).value;
-  // }
-
-  // confirmHealthDocs(status) {
-  //   this.guestDetailComponent.updateHealthDeclarationStatus(status);
-  // }
 
   verifyAllDocuments() {
     if (
@@ -472,34 +495,33 @@ export class DetailsComponent implements OnInit, OnChanges {
   }
 
   openSendNotification(channel) {
+    if (channel) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '100%';
+      const notificationCompRef = this._modal.openDialog(
+        NotificationComponent,
+        dialogConfig
+      );
 
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const notificationCompRef = this._modal.openDialog(
-      NotificationComponent,
-      dialogConfig
-    );
-
-    if (channel === 'email') {
-      notificationCompRef.componentInstance.isEmail = true;
-      notificationCompRef.componentInstance.email = this.primaryGuest.email;
+      if (channel === 'email') {
+        notificationCompRef.componentInstance.isEmail = true;
+        notificationCompRef.componentInstance.email = this.primaryGuest.email;
+      } else {
+        notificationCompRef.componentInstance.isEmail = false;
+        notificationCompRef.componentInstance.channel = channel;
+      }
+      notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
+      notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
+      notificationCompRef.componentInstance.isModal = true;
+      notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+        // remove loader for detail close
+        notificationCompRef.close();
+      });
     } else {
-      notificationCompRef.componentInstance.isEmail = false;
-      notificationCompRef.componentInstance.channel = channel;
+      this.closeDetails();
+      this.router.navigateByUrl('/pages/request');
     }
-    notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-    notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
-    notificationCompRef.componentInstance.isModal = true;
-    notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
-      notificationCompRef.close();
-    });
-  }
-
-  openRequest() {
-    this.closeDetails();
-    this.router.navigateByUrl('/pages/request');
   }
 
   closeDetails() {

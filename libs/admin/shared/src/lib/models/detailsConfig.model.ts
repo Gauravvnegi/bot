@@ -212,17 +212,18 @@ export class GuestDetailsConfig implements Deserializable {
 }
 
 export class ShareIconConfig implements Deserializable {
-  applications;
+  applications: ShareIcon[];
 
   deserialize(input: any) {
+    this.applications = new Array<ShareIcon>();
     this.applications = input.applications.map((data) => {
-      return new ShareIconList().deserialize(data);
+      return new ShareIcon().deserialize(data);
     });
     return this;
   }
 }
 
-export class ShareIconList implements Deserializable {
+export class ShareIcon implements Deserializable {
   value;
   label;
   iconUrl;

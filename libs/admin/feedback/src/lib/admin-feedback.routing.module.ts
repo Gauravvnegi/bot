@@ -11,6 +11,9 @@ import { TextAnalyticsExplorerComponent } from './components/text-analytics-expl
 import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
 import { MulticolorCircularProgressComponent } from './components/multicolor-circular-progress/multicolor-circular-progress.component';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { TopLowNpsComponent } from './components/top-low-nps/top-low-nps.component';
+import { GlobalNpsComponent } from './components/global-nps/global-nps.component';
+import { FeedbackDistributionComponent } from './components/feedback-distribution/feedback-distribution.component';
 
 const appRoutes: Route[] = [
   {
@@ -33,6 +36,9 @@ export class AdminFeedbackRoutingModule {
         NpsAcrossDepartmentsComponent,
         TextAnalyticsExplorerComponent,
         TwoWayProgressComponent,
-        MulticolorCircularProgressComponent
+        MulticolorCircularProgressComponent,
+        TopLowNpsComponent,
+        GlobalNpsComponent,
+        FeedbackDistributionComponent
     ];
   }

@@ -48,16 +48,17 @@ export class NPSAcrossServices {
   deserialize(statistics) {
     this.departments = new Array<any>();
     this.entities = {};
-    Object.assign(
-      this,
-      set({}, 'npsStats', get(statistics, ['npsStats']))
-    );
+    Object.assign(this, set({}, 'npsStats', get(statistics, ['npsStats'])));
     this.departments.push({ key: 'ALL', value: 'All' });
     Object.keys(statistics.departments).forEach((key) => {
       this.departments.push({ key, value: statistics.departments[key] });
-      this.entities[key] = new Entity().deserialize(statistics.entities[key]).data;
+      this.entities[key] = new Entity().deserialize(
+        statistics.entities[key]
+      ).data;
     });
-    this.entities['ALL'] = new Entity().deserialize(statistics.entities['ALL']).data;
+    this.entities['ALL'] = new Entity().deserialize(
+      statistics.entities['ALL']
+    ).data;
     return this;
   }
 }
@@ -74,15 +75,16 @@ export class NPSTouchpoints {
     this.CHECKOUT = new Array<Touchpoint>();
     this.departments = new Array<any>();
     this.entities = {};
-    Object.assign(
-      this,
-      set({}, 'source', get(statistics, ['source']))
-    );
+    Object.assign(this, set({}, 'source', get(statistics, ['source'])));
     Object.keys(statistics.departments).forEach((key) => {
       this.departments.push({ key, value: statistics.departments[key] });
-      this.entities[key] = new Entity().deserialize(statistics.entities[key]).data;
+      this.entities[key] = new Entity().deserialize(
+        statistics.entities[key]
+      ).data;
     });
-    this.entities['ALL'] = new Entity().deserialize(statistics.entities['ALL']).data;
+    this.entities['ALL'] = new Entity().deserialize(
+      statistics.entities['ALL']
+    ).data;
     // this.departments.reverse();
     for (const key in statistics.touchpoint.CHECKIN.npsStats) {
       this.CHECKIN.push(statistics.touchpoint.CHECKIN.npsStats[key]);
@@ -98,9 +100,22 @@ export class Entity {
   data: any[];
   deserialize(entity) {
     this.data = new Array<any>();
-    this.data.push({ label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true });
+    this.data.push({
+      label: 'All',
+      icon: '',
+      value: 'ALL',
+      total: 0,
+      isSelected: true,
+    });
     for (const key in entity) {
-      this.data.push({ label: entity[key], icon: '', value: key, total: 0, isSelected: false, type: 'initiated' });
+      this.data.push({
+        label: entity[key],
+        icon: '',
+        value: key,
+        total: 0,
+        isSelected: false,
+        type: 'initiated',
+      });
     }
     return this;
   }
@@ -136,7 +151,7 @@ export class FeedbackDistribution {
       set({}, 'adequate', get(input, ['feedbacks', 'ADEQUATE'])),
       set({}, 'good', get(input, ['feedbacks', 'GOOD'])),
       set({}, 'veryGood', get(input, ['feedbacks', 'VERYGOOD'])),
-      set({}, 'outstanding', get(input, ['feedbacks', 'OUTSTANDING'])),
+      set({}, 'outstanding', get(input, ['feedbacks', 'OUTSTANDING']))
     );
     return this;
   }
@@ -148,4 +163,44 @@ export class Distribution {
   count: number;
   percent: number;
   color: string;
+}
+
+export class GlobalNPS {
+  label: string;
+  score: number;
+  positive: number;
+  negative: number;
+  neutral: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'positive', get(input, ['positive'])),
+      set({}, 'negative', get(input, ['negative'])),
+      set({}, 'neutral', get(input, ['neutral']))
+    );
+    return this;
+  }
+}
+
+export class PerformanceNPS {
+  label: string;
+  performances: Touchpoint[];
+
+  deserialize(input) {
+    this.performances = new Array<Touchpoint>();
+    Object.assign(this, set({}, 'label', get(input, ['label'])));
+
+    input.npsPerformace.LOW_PERFORMING.forEach((data) =>
+      this.performances.push({ ...data, colorCode: '#EF1D45' })
+    );
+
+    input.npsPerformace.TOP_PERFORMING.forEach((data) =>
+      this.performances.push({ ...data, colorCode: '#1AB99F' })
+    );
+
+    return this;
+  }
 }

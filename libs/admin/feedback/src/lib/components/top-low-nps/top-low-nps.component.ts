@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { Subscription } from 'rxjs';
+import { PerformanceNPS } from '../../data-models/statistics.model';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-top-low-nps',
@@ -7,20 +12,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopLowNpsComponent implements OnInit {
 
-  constructor() { }
+  globalQueries;
+  performanceNPS: PerformanceNPS;
+  private $subscription = new Subscription();
+  constructor(
+    private statisticsService: StatisticsService,
+    private _globalFilterService: GlobalFilterService,
+    private _adminUtilityService: AdminUtilityService
+  ) { }
 
   ngOnInit(): void {
-    this.initData();
+    this.registerListeners();
+    this.getPerformanceNps();
   }
 
-  progressItems = [
-    { label: 'SPA & Salon', value: 80, color: '#1AB99F' },
-    { label: 'Safety & Security', value: 20, color: '#1AB99F' },
-    { label: 'Maintenance', value: 5, color: '#1AB99F' },
-    { label: 'Reservations', value: -50, color: '#EF1D45' },
-    { label: 'Front office', value: -10, color: '#EF1D45' },
-    { label: 'Housekeeping', value: -5, color: '#EF1D45' }
-  ]
+  registerListeners(): void {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        //set-global query everytime global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+      })
+    );
+  }
+
+  progressItems = [];
 
   tabFilterItems = [
     { label: 'Department', icon: '', value: 'DEPARTMENT', total: 0, isSelected: true },
@@ -30,10 +52,26 @@ export class TopLowNpsComponent implements OnInit {
 
   tabFilterIdx: number = 0;
 
-  initData() {}
+  getPerformanceNps(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          npsFilter: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+      ]),
+    };
+    this.statisticsService.getNPSPerformance(config)
+      .subscribe((response) => {
+        this.performanceNPS = new PerformanceNPS().deserialize(response);
+        // this.initData();
+      });
+  }
 
   onSelectedTabFilterChange($event) {
     this.tabFilterIdx = $event.index;
+    this.getPerformanceNps();
   }
 
 }

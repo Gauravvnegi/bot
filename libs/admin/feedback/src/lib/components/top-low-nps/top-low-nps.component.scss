@@ -20,6 +20,58 @@
   }
 }
 
+.stat-body {
+  height: 310px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  &-container {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    .progress-container {
+      display: flex;
+      flex-direction: row;
+      margin: 7px 0;
+      align-items: center;
+      .label {
+        min-width: 138px;
+        margin-right: 10px;
+        font: normal normal medium 12px/14px Roboto;
+        // letter-spacing: 0.72px;
+        color: #6d7580;
+      }
+      .progress {
+        display: flex;
+        width: calc(100% - 150px);
+      }
+    }
+  }
+  &-key {
+    display: flex;
+    justify-content: space-around;
+    .key-container {
+      display: flex;
+      margin: 0 10px;
+      align-items: center;
+      .icon {
+        width: 14px;
+        height: 14px;
+        opacity: 1;
+        margin-right: 5px;
+      }
+      .stat-lable {
+        text-align: center;
+        font: normal normal medium 9px/11px Roboto;
+        letter-spacing: 0.6px;
+        color: #6d7580;
+        opacity: 1;
+      }
+    }
+  }
+}
+
 .progress-value {
-	margin-left: 5px;
+  margin-left: 5px;
+  min-height: 20px;
 }

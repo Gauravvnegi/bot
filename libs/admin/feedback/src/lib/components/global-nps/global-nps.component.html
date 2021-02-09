@@ -5,7 +5,7 @@
 		</div>
 		<div class="stat-title">Global NPS</div>
 	</div>
-	<div class="graph-container">
+	<div class="graph-container" *ngIf="globalNps">
 		<div class="graph">
 			<canvas baseChart style="height: 138px;" [data]="chart.Data" [labels]="chart.Labels" [chartType]="chart.Type"
 				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">
@@ -14,11 +14,11 @@
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 		<div class="detail-container">
-			<div class="val">{{ globalNps.totalCount }}</div>
-			<div class="label">Global NPS</div>
+			<div class="val">{{ globalNps.score }}</div>
+			<div class="label">{{ globalNps.label }}</div>
 		</div>
 	</div>
-	<div class="stat-vals-container">
+	<div class="stat-vals-container" *ngIf="globalNps">
 		<div class="stat-val-container">
 			<div class="icon" [style.background]="'#EF1D45'"></div>
 			<div class="stat-val">{{ globalNps.negative }}%</div>

@@ -96,7 +96,6 @@ export class FeedbackDistributionComponent implements OnInit {
       .feedbackDistribution(config)
       .subscribe((response) => {
         this.distribution = new FeedbackDistribution().deserialize(response);
-        console.log(this.distribution);
         this.initChartData();
       });
   }

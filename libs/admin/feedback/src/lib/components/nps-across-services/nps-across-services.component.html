@@ -74,7 +74,7 @@
     </mat-chip-list>
     <img src="assets/svg/Filter-Icon.svg" />
   </div>
-  <div class="progress-container">
+  <!-- <div class="progress-container">
     <div class="label-container">
       <div class="label">Services</div>
     </div>
@@ -144,5 +144,9 @@
     <div class="key">
       <div class="label">Score</div>
     </div>
-  </div>
+  </div> -->
+  <canvas baseChart class="line-chart__canvas" [data]="data"
+      [options]="options" [legend]="false"
+      [chartType]="'bar'">
+    </canvas>
 </div>

@@ -47,4 +47,12 @@ export class StatisticsService extends ApiService {
   feedbackDistribution(config): Observable<any> {
     return this.get(`/api/v1/feedback-stats/distribution/${config.queryObj}`);
   }
+
+  getGlobalNPS(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/nps/${config.queryObj}`);
+  }
+
+  getNPSPerformance(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/nps/performance/${config.queryObj}`);
+  }
 }

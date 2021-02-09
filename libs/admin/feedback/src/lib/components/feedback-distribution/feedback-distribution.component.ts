@@ -68,7 +68,6 @@ export class FeedbackDistributionComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getFeedbackDistribution();
   }
 
   registerListeners(): void {
@@ -83,13 +82,14 @@ export class FeedbackDistributionComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getFeedbackDistribution();
       })
     );
   }
 
   initChartData(): void {
     this.totalDistribution = 0;
-    this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
+    this.keyLabels.length = this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
     Object.keys(this.distribution).forEach((key) => {
       if (key !== 'totalCount') {
         if (this.distribution[key].count) {

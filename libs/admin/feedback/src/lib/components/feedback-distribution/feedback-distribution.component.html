@@ -11,11 +11,13 @@
 				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">
 			</canvas>
 		</div>
-		<div class="graph" #defaultGraph>
-			<canvas baseChart style="height: 125px;" [data]="defaultChart.Data" [labels]="defaultChart.Labels" [chartType]="chart.Type"
-				[legend]="defaultChart.Legend" [colors]="defaultChart.Colors" [options]="defaultChart.Options">
-			</canvas>
-		</div>
+		<ng-template #defaultGraph>
+			<div class="graph">
+				<canvas baseChart style="height: 125px;" [data]="defaultChart.Data" [labels]="defaultChart.Labels" [chartType]="chart.Type"
+					[legend]="defaultChart.Legend" [colors]="defaultChart.Colors" [options]="defaultChart.Options">
+				</canvas>
+			</div>
+		</ng-template>
 		<div class="labels" *ngIf="distribution">
 			<div class="val">{{ distribution.totalCount }}</div>
 			<div class="label">Total Responses</div>

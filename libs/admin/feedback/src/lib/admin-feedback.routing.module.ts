@@ -7,7 +7,6 @@ import { NetPromoterScoreComponent } from './components/net-promoter-score/net-p
 import { NpsAcrossTouchpointsComponent } from './components/nps-across-touchpoints/nps-across-touchpoints.component';
 import { NpsAcrossServicesComponent } from './components/nps-across-services/nps-across-services.component';
 import { NpsAcrossDepartmentsComponent } from './components/nps-across-departments/nps-across-departments.component';
-import { TextAnalyticsExplorerComponent } from './components/text-analytics-explorer/text-analytics-explorer.component';
 import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
 import { MulticolorCircularProgressComponent } from './components/multicolor-circular-progress/multicolor-circular-progress.component';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
@@ -34,7 +33,6 @@ export class AdminFeedbackRoutingModule {
         NpsAcrossTouchpointsComponent,
         NpsAcrossServicesComponent,
         NpsAcrossDepartmentsComponent,
-        TextAnalyticsExplorerComponent,
         TwoWayProgressComponent,
         MulticolorCircularProgressComponent,
         TopLowNpsComponent,

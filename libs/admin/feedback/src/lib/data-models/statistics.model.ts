@@ -49,16 +49,16 @@ export class NPSAcrossServices {
     this.departments = new Array<any>();
     this.entities = {};
     Object.assign(this, set({}, 'npsStats', get(statistics, ['npsStats'])));
-    this.departments.push({ key: 'ALL', value: 'All' });
+    // this.departments.push({ key: 'ALL', value: 'All' });
     Object.keys(statistics.departments).forEach((key) => {
       this.departments.push({ key, value: statistics.departments[key] });
       this.entities[key] = new Entity().deserialize(
         statistics.entities[key]
       ).data;
     });
-    this.entities['ALL'] = new Entity().deserialize(
-      statistics.entities['ALL']
-    ).data;
+    // this.entities['ALL'] = new Entity().deserialize(
+    //   statistics.entities['ALL']
+    // ).data;
     return this;
   }
 }

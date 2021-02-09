@@ -44,6 +44,12 @@
       .progress {
         display: flex;
         width: calc(100% - 150px);
+        position: relative;
+        .value {
+          position: absolute;
+          font: normal normal medium 12px/14px Roboto;
+          letter-spacing: 0.72px;
+        }
       }
     }
   }

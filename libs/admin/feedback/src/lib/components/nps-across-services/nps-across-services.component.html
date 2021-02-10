@@ -128,7 +128,8 @@
 
     <!-- Progress Bars -->
     <div class="progress_data_wrapper__progress_services_bars_wrapper">
-      <ng-container *ngIf="tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
+      <ng-container
+        *ngIf="tabFilterItems[tabFilterIdx].chips[0] && tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
         <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
           <ng-container *ngIf="data.value !== 'ALL'">
             <div class="progress_bar_data"

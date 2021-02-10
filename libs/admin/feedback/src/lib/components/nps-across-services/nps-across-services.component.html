@@ -1,4 +1,4 @@
-<div [formGroup]="npsFG" class="container">
+<div [formGroup]="npsFG" class="container" *ngIf="npsProgressData">
   <div class="header">
     <div class="title-container">
       <div class="icon">
@@ -50,5 +50,20 @@
     </mat-chip-list>
     <img src="assets/svg/Filter-Icon.svg" />
   </div>
-  
+  <div *ngIf="tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
+    <div *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+      <div *ngIf="data.value !== 'ALL'">
+        <div>{{ data.label }}</div>
+        <div *ngFor="let progress of progresses[data.value]">{{ progress.statistic | json }}</div><br/>
+      </div>
+    </div>
+  </div>
+  <ng-template #noALL>
+    <div *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+      <div *ngIf="data.isSelected">
+        <div>{{ data.label }}</div>
+        <div *ngFor="let progress of progresses[data.value]">{{ progress.statistic | json }}</div><br/>
+      </div>
+    </div>
+  </ng-template>
 </div>

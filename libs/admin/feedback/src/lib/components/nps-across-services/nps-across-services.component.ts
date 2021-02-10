@@ -43,7 +43,7 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   isOpened = false;
   globalQueries = [];
-  progresses: any = [];
+  progresses = {};
 
   progressValues = [-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100];
 
@@ -146,25 +146,27 @@ export class NpsAcrossServicesComponent implements OnInit {
     }
   }
 
-  private initProgressData(progresses) {
-    this.progresses.length = 0;
-    this.dividerHeight = 0;
-    Object.keys(progresses).forEach((key) => {
-      let mod = Math.floor(progresses[key].label.length / 20);
-      this.dividerHeight += 40 + mod * 13;
-      this.progresses.push({
-        label: progresses[key].label,
-        positive:
-          progresses[key].score < 0
-            ? 100 + progresses[key].score
-            : progresses[key].score,
-        negative: progresses[key].score
-          ? progresses[key].score < 0
-            ? progresses[key].score * -1
-            : Number((100 - progresses[key].score).toFixed(2))
-          : progresses[key].score,
+  private initProgressData(entities) {
+    this.progresses = {};
+    if (
+      this.tabFilterItems[this.tabFilterIdx].chips.filter(
+        (data) => data.value === 'ALL' && data.isSelected
+      ).length
+    ) {
+      this.progresses = {
+        ...this.progresses,
+        ...entities,
+      };
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.isSelected) {
+          this.progresses = {
+            ...this.progresses,
+            [chip.value]: entities[chip.value],
+          };
+        }
       });
-    });
+    }
   }
 
   getSelectedQuickReplyFilters() {
@@ -194,14 +196,13 @@ export class NpsAcrossServicesComponent implements OnInit {
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
-          console.log(this.npsProgressData)
           if (this.npsProgressData.services) {
             this.initTabLabels(
               this.npsProgressData.services,
               this.npsProgressData.departments
             );
           }
-          // this.initProgressData(this.npsProgressData.npsStats);
+          this.initProgressData(this.npsProgressData.entities);
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);

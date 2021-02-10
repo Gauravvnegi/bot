@@ -42,7 +42,6 @@ export class GlobalNpsComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getGlobalNps();
   }
 
   registerListeners(): void {
@@ -57,8 +56,17 @@ export class GlobalNpsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getGlobalNps();
       })
     );
+  }
+
+  initGraphData(data) {
+    this.chart.Data[0].length = 0;
+    this.chart.Data[0].push(data.neutral);
+    this.chart.Data[0].push(data.positive);
+    this.chart.Data[0].push(data.negative);
+    console.log(this.chart.Data[0])
   }
 
   getGlobalNps(): void {
@@ -68,12 +76,7 @@ export class GlobalNpsComponent implements OnInit {
     this.statisticsService.getGlobalNPS(config).subscribe((response) => {
       this.globalNps = new GlobalNPS().deserialize(response);
 
-      this.chart.Data[0].length = 0;
-      this.chart.Data[0] = [
-        this.globalNps.neutral,
-        this.globalNps.positive,
-        this.globalNps.negative,
-      ];
+      this.initGraphData(this.globalNps);
     });
   }
 }

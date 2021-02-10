@@ -127,18 +127,23 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   private initTabLabels(entities, departments): void {
     if (!this.tabFilterItems.length) {
-      if (!this.tabFilterItems.length) {
-        departments.forEach((data) =>
-          this.tabFilterItems.push({
-            label: data.value,
-            content: '',
-            value: data.key,
-            disabled: false,
-            total: 0,
-            chips: entities[data.key],
-          })
-        );
-      }
+      departments.forEach((data, i) => {
+        let chips = [];
+        if (data.key === 'FRONTOFFICE') {
+          chips = entities;
+          this.tabFilterIdx = i;
+        }
+        this.tabFilterItems.push({
+          label: data.value,
+          content: '',
+          value: data.key,
+          disabled: false,
+          total: 0,
+          chips,
+        });
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips = entities;
     }
   }
 
@@ -181,7 +186,7 @@ export class NpsAcrossServicesComponent implements OnInit {
           order: 'DESC',
           departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
-            : 'ALL',
+            : 'FRONTOFFICE',
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -190,9 +195,10 @@ export class NpsAcrossServicesComponent implements OnInit {
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
-          if (this.npsProgressData.entities) {
+          console.log(this.npsProgressData);
+          if (this.npsProgressData.services) {
             this.initTabLabels(
-              this.npsProgressData.entities,
+              this.npsProgressData.services,
               this.npsProgressData.departments
             );
           }

@@ -44,21 +44,41 @@ export class NPSAcrossServices {
   npsStats;
   entities;
   departments;
+  services;
 
   deserialize(statistics) {
     this.departments = new Array<any>();
+    this.services = new Array<any>();
     this.entities = {};
-    Object.assign(this, set({}, 'npsStats', get(statistics, ['npsStats'])));
-    // this.departments.push({ key: 'ALL', value: 'All' });
-    Object.keys(statistics.departments).forEach((key) => {
-      this.departments.push({ key, value: statistics.departments[key] });
-      this.entities[key] = new Entity().deserialize(
-        statistics.entities[key]
-      ).data;
+    Object.keys(statistics.departments).forEach((key) =>
+      this.departments.push({ key, value: statistics.departments[key] })
+    );
+    this.services.push({
+      label: 'All',
+      icon: '',
+      value: 'ALL',
+      total: 0,
+      isSelected: true,
+      type: '',
     });
-    // this.entities['ALL'] = new Entity().deserialize(
-    //   statistics.entities['ALL']
-    // ).data;
+    Object.keys(statistics.services).forEach((key) => {
+      this.services.push({
+        label: statistics.services[key],
+        icon: '',
+        value: key,
+        total: 0,
+        isSelected: false,
+        type: 'initiated',
+      });
+      this.entities[key] = [];
+      Object.keys(statistics.entities[key]).forEach((entity) =>
+        this.entities[key].push({
+          entity,
+          value: statistics.entities[key][entity],
+          statistic: statistics.npsStats[key][entity],
+        })
+      );
+    });
     return this;
   }
 }
@@ -193,12 +213,12 @@ export class PerformanceNPS {
     this.performances = new Array<Touchpoint>();
     Object.assign(this, set({}, 'label', get(input, ['label'])));
 
-    input.npsPerformace.LOW_PERFORMING.forEach((data) =>
-      this.performances.push({ ...data, colorCode: '#EF1D45' })
-    );
-
     input.npsPerformace.TOP_PERFORMING.forEach((data) =>
       this.performances.push({ ...data, colorCode: '#1AB99F' })
+    );
+
+    input.npsPerformace.LOW_PERFORMING.forEach((data) =>
+      this.performances.push({ ...data, colorCode: '#EF1D45' })
     );
 
     return this;

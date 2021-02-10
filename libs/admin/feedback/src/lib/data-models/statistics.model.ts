@@ -71,13 +71,13 @@ export class NPSAcrossServices {
         type: 'initiated',
       });
       this.entities[key] = [];
-      Object.keys(statistics.entities[key]).forEach((entity) =>
+      statistics.entities[key] && Object.keys(statistics.entities[key]).forEach((entity) => {
         this.entities[key].push({
           entity,
           value: statistics.entities[key][entity],
-          statistic: statistics.npsStats[key][entity],
+          statistic: statistics.npsStats[key][entity] ? statistics.npsStats[key][entity]: {},
         })
-      );
+      });
     });
     return this;
   }

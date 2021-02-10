@@ -114,7 +114,6 @@ export class NpsAcrossServicesComponent implements OnInit {
   }
 
   updateQuickReplyActionFilters(): void {
-    console.log(this.tabFilterItems);
     let value = [];
     this.tabFilterItems[this.tabFilterIdx].chips
       .filter((chip) => chip.isSelected)
@@ -142,7 +141,7 @@ export class NpsAcrossServicesComponent implements OnInit {
           chips,
         });
       });
-    } else {
+    } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {
       this.tabFilterItems[this.tabFilterIdx].chips = entities;
     }
   }
@@ -195,14 +194,14 @@ export class NpsAcrossServicesComponent implements OnInit {
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
-          console.log(this.npsProgressData);
+          console.log(this.npsProgressData)
           if (this.npsProgressData.services) {
             this.initTabLabels(
               this.npsProgressData.services,
               this.npsProgressData.departments
             );
           }
-          this.initProgressData(this.npsProgressData.npsStats);
+          // this.initProgressData(this.npsProgressData.npsStats);
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);

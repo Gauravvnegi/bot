@@ -37,20 +37,18 @@
           let quickReplyTypeIdx = index
         " selectable="true" [selected]="isQuickReplyFilterSelected(quickReplyType)"
         (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)" [ngClass]="{
-          'chipSelected status-selected-default':
-            quickReplyType.isSelected,
+          'chipSelected status-selected-default': quickReplyType.isSelected,
           'status-opacity-initiated status-text-initiated':
             quickReplyType.type == 'initiated',
           'status-selected-initiated':
-            quickReplyType.type == 'initiated' &&
-            quickReplyType.isSelected
+            quickReplyType.type == 'initiated' && quickReplyType.isSelected
         }">
         {{ quickReplyType.label }}
       </mat-chip>
     </mat-chip-list>
     <img src="assets/svg/Filter-Icon.svg" />
   </div>
-  <div *ngIf="tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
+  <!-- <div *ngIf="tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
     <div *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
       <div *ngIf="data.value !== 'ALL'">
         <div>{{ data.label }}</div>
@@ -65,5 +63,153 @@
         <div *ngFor="let progress of progresses[data.value]">{{ progress.statistic | json }}</div><br/>
       </div>
     </div>
-  </ng-template>
+  </ng-template> -->
+
+  <!-- Graph container -->
+  <div class="progress_data_wrapper">
+    <div class="progress_data_wrapper__graph_pointer_wrapper">
+      <div class="pointer">
+        <p class="label">100</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">80</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">60</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">40</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">20</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">0</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">20</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">40</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">60</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">80</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">100</p>
+        <p class="bar">-</p>
+      </div>
+    </div>
+
+    <div class="progress_data_wrapper__back_bars">
+      <div class="seperator"></div>
+      <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+        <div *ngIf="data.value !== 'ALL'" class="dotted_seperator"></div>
+      </ng-container>
+      <!-- <div class="dotted_seperator"></div>
+      <div class="dotted_seperator"></div>
+      <div class="dotted_seperator"></div>
+      <div class="dotted_seperator"></div> -->
+      <div class="horizontal_seperator"></div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="progress_data_wrapper__progress_services_bars_wrapper">
+      <ng-container *ngIf="tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
+        <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+          <ng-container *ngIf="data.value !== 'ALL'">
+            <div class="progress_bar_data"
+              [style.width]="(100 / (tabFilterItems[tabFilterIdx].chips.length - 1)) + '%'">
+              <div class="progess_bars">
+                <div class="bar" *ngFor="let progress of progresses[data.value]">
+                  <div class="progress">
+                    <div style="background: transparent;"
+                      [style.height]="progress.statistic.positive === 0 ? '99%' : (100 - progress.statistic.positive) + '%'">
+                    </div>
+                    <div style="background: green;"
+                      [style.height]="progress.statistic.positive === 0 ? '1%' : progress.statistic.positive + '%'">
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div style="background: red;"
+                      [style.height]="progress.statistic.negative === 0 ? '1%' : progress.statistic.negative + '%'">
+                    </div>
+                    <div style="background: transparent;"
+                      [style.height]="progress.statistic.negative === 0 ? '99%' : (100 - progress.statistic.negative) + '%'">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-template #noALL>
+        <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+          <ng-container *ngIf="data.value !== 'ALL'">
+            <div class="progress_bar_data"
+              [style.width]="(100 / (tabFilterItems[tabFilterIdx].chips.length - 1)) + '%'">
+              <div class="progess_bars">
+                <ng-container *ngIf="data.isSelected">
+                  <div class="bar" *ngFor="let progress of progresses[data.value]">
+                    <div class="progress">
+                      <div style="background: transparent;"
+                        [style.height]="progress.statistic.positive === 0 ? '99%' : (100 - progress.statistic.positive) + '%'">
+                      </div>
+                      <div style="background: green;"
+                        [style.height]="progress.statistic.positive === 0 ? '1%' : progress.statistic.positive + '%'">
+                      </div>
+                    </div>
+                    <div class="progress">
+                      <div style="background: red;"
+                        [style.height]="progress.statistic.negative === 0 ? '1%' : progress.statistic.negative + '%'">
+                      </div>
+                      <div style="background: transparent;"
+                        [style.height]="progress.statistic.negative === 0 ? '99%' : (100 - progress.statistic.negative) + '%'">
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+      <!-- <div class="progress">
+        <div
+          [fxFlex]="progress.negative ? 100 - progress.negative : 99"
+          [style]="'background: transparent;'"
+        ></div>
+        <div
+          [fxFlex]="progress.negative ? progress.negative : 1"
+          class="progress-value"
+          [style]="'background: #DF0A20;'"
+        ></div>
+      </div>
+      <div class="progress">
+        <div
+          [fxFlex]="progress.positive ? progress.positive : 1"
+          class="progress-value"
+          [style]="'background: #1FABDB;'"
+        ></div>
+        <div
+          [fxFlex]="progress.positive ? 100 - progress.positive : 99"
+          [style]="'background: transparent;'"
+        ></div>
+      </div> -->
+    </div>
+  </div>
 </div>

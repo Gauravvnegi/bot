@@ -117,7 +117,7 @@
     <div class="progress_data_wrapper__back_bars">
       <div class="seperator"></div>
       <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
-        <div *ngIf="data.value !== 'ALL'" class="dotted_seperator"></div>
+        <div *ngIf="data.value !== 'ALL' && progresses[data.value]" class="dotted_seperator"></div>
       </ng-container>
       <!-- <div class="dotted_seperator"></div>
       <div class="dotted_seperator"></div>
@@ -154,15 +154,16 @@
                   </div>
                 </div>
               </div>
+              <div class="label">{{ data.label }}</div>
             </div>
           </ng-container>
         </ng-container>
       </ng-container>
       <ng-template #noALL>
         <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
-          <ng-container *ngIf="data.value !== 'ALL'">
+          <ng-container *ngIf="data.value !== 'ALL' && progresses[data.value]">
             <div class="progress_bar_data"
-              [style.width]="(100 / (tabFilterItems[tabFilterIdx].chips.length - 1)) + '%'">
+              [style.width]="(100 / progressLength) + '%'">
               <div class="progess_bars">
                 <ng-container *ngIf="data.isSelected">
                   <div class="bar" *ngFor="let progress of progresses[data.value]">
@@ -185,6 +186,7 @@
                   </div>
                 </ng-container>
               </div>
+              <div class="label">{{ data.label }}</div>
             </div>
           </ng-container>
         </ng-container>

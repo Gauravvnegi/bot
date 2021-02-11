@@ -105,6 +105,7 @@
   padding: 0 20px;
   padding-top: 30px;
   display: flex;
+  margin-bottom: 20px;
   position: relative;
   &__graph_pointer_wrapper {
     display: flex;
@@ -179,6 +180,7 @@
         font: normal normal bold 12px/14px Roboto;
         letter-spacing: 0.72px;
         color: rgba(0, 32, 70, 1);
+        margin: 10px 0;
       }
     }
   }

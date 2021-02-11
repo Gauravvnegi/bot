@@ -44,6 +44,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   isOpened = false;
   globalQueries = [];
   progresses = {};
+  progressLength = 0;
 
   progressValues = [-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100];
 
@@ -159,8 +160,10 @@ export class NpsAcrossServicesComponent implements OnInit {
       };
       console.log(this.progresses)
     } else {
+      this.progressLength = 0;
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.isSelected) {
+          this.progressLength += 1;
           this.progresses = {
             ...this.progresses,
             [chip.value]: entities[chip.value],
@@ -169,10 +172,6 @@ export class NpsAcrossServicesComponent implements OnInit {
       });
       console.log(this.progresses)
     }
-  }
-
-  progressLength() {
-    return Object.keys(this.progresses);
   }
 
   getSelectedQuickReplyFilters() {

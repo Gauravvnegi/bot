@@ -157,6 +157,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         ...this.progresses,
         ...entities,
       };
+      console.log(this.progresses)
     } else {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.isSelected) {
@@ -166,7 +167,12 @@ export class NpsAcrossServicesComponent implements OnInit {
           };
         }
       });
+      console.log(this.progresses)
     }
+  }
+
+  progressLength() {
+    return Object.keys(this.progresses);
   }
 
   getSelectedQuickReplyFilters() {

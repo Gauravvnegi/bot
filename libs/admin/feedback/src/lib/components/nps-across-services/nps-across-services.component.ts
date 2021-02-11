@@ -47,6 +47,7 @@ export class NpsAcrossServicesComponent implements OnInit {
   progressLength = 0;
 
   progressValues = [-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100];
+  maxBarCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -158,7 +159,14 @@ export class NpsAcrossServicesComponent implements OnInit {
         ...this.progresses,
         ...entities,
       };
+      this.maxBarCount = 0;
+      Object.keys(entities).forEach((data)=> {
+        if (this.maxBarCount < entities[data].length) {
+          this.maxBarCount = entities[data].length;
+        }
+      });
     } else {
+      this.maxBarCount = 0;
       this.progressLength = 0;
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.isSelected) {
@@ -167,6 +175,9 @@ export class NpsAcrossServicesComponent implements OnInit {
             ...this.progresses,
             [chip.value]: entities[chip.value],
           };
+          if (entities[chip.value] > this.maxBarCount) {
+            this.maxBarCount = entities[chip.value].length;
+          }
         }
       });
     }

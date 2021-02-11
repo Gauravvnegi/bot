@@ -119,12 +119,14 @@
             <div class="progress_bar_data"
               [style.width]="(100 / (tabFilterItems[tabFilterIdx].chips.length - 1)) + '%'">
               <div class="progess_bars">
-                <div class="bar" *ngFor="let progress of progresses[data.value]">
+                <div class="bar" *ngFor="let progress of progresses[data.value]"
+                  [style.width]="(100 / (maxBarCount * 2)) + '%'">
                   <div class="progress">
                     <div style="background: transparent;"
                       [style.height]="(progress.statistic.score === 0 ? 100-1 : progress.statistic.score >= 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
                     </div>
-                    <div [style.background]="((progress.statistic.score >=0 && progress.statistic.score < 31) || progress.statistic.score < -69) ? '#4BA0F5' : '#3DB76B'"
+                    <div
+                      [style.background]="((progress.statistic.score >=0 && progress.statistic.score < 31) || progress.statistic.score < -69) ? '#4BA0F5' : '#3DB76B'"
                       [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score >= 0 ? progress.statistic.score : (100 + progress.statistic.score)) + '%'">
                     </div>
                   </div>
@@ -149,7 +151,8 @@
             <div class="progress_bar_data" [style.width]="(100 / progressLength) + '%'">
               <div class="progess_bars">
                 <ng-container *ngIf="data.isSelected">
-                  <div class="bar" *ngFor="let progress of progresses[data.value]">
+                  <div class="bar" *ngFor="let progress of progresses[data.value]"
+                    [style.width]="(100 / (maxBarCount * 2)) + '%'">
                     <div class="progress">
                       <div style="background: transparent;"
                         [style.height]="progress.statistic.positive === 0 ? '99%' : (100 - progress.statistic.positive) + '%'">

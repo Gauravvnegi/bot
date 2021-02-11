@@ -181,7 +181,6 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
         .getTouchpointStatistics(config)
         .subscribe((response) => {
           this.npsProgressData = new NPSTouchpoints().deserialize(response);
-          console.log(this.npsProgressData)
           if (this.npsProgressData.departments) {
             this.initTabLabels(
               this.npsProgressData.departments,

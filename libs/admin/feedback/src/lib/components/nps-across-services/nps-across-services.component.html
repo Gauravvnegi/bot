@@ -124,12 +124,12 @@
                     <div style="background: transparent;"
                       [style.height]="(progress.statistic.score === 0 ? 100-1 : progress.statistic.score >= 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
                     </div>
-                    <div style="background: green;"
+                    <div [style.background]="((progress.statistic.score >=0 && progress.statistic.score < 31) || progress.statistic.score < -69) ? '#4BA0F5' : '#3DB76B'"
                       [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score >= 0 ? progress.statistic.score : (100 + progress.statistic.score)) + '%'">
                     </div>
                   </div>
                   <div class="progress">
-                    <div style="background: red;"
+                    <div style="background: #EA0431;"
                       [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score >= 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
                     </div>
                     <div style="background: transparent;"

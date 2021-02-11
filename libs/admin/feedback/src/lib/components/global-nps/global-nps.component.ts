@@ -12,17 +12,28 @@ import { StatisticsService } from '../../services/statistics.service';
 })
 export class GlobalNpsComponent implements OnInit {
   globalNps: GlobalNPS;
+  color = {
+    neutral: '#4BA0F5',
+    positive: '#1AB99F',
+    negative: '#EF1D45',
+  };
+
+  labels = {
+    neutral: 'Neutral',
+    positive: 'Positive',
+    negative: 'Negative',
+  };
 
   chart: any = {
-    Labels: ['Neutral', 'Positive', 'Negative'],
-    Data: [[5, 45, 50]],
+    Labels: ['No Data'],
+    Data: [[100]],
     Type: 'doughnut',
 
     Legend: false,
     Colors: [
       {
-        backgroundColor: ['#4BA0F5', '#1AB99F', '#EF1D45'],
-        borderColor: ['#4BA0F5', '#1AB99F', '#EF1D45'],
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
       },
     ],
     Options: {
@@ -62,11 +73,15 @@ export class GlobalNpsComponent implements OnInit {
   }
 
   initGraphData(data) {
-    this.chart.Data[0].length = 0;
-    this.chart.Data[0].push(data.neutral);
-    this.chart.Data[0].push(data.positive);
-    this.chart.Data[0].push(data.negative);
-    console.log(this.chart.Data[0])
+    this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
+    Object.keys(data).forEach((key) => {
+      if (key !== 'label' && key !== 'score' && data[key]) {
+        this.chart.Labels.push(this.labels[key]);
+        this.chart.Data[0].push(data[key]);
+        this.chart.Colors[0].backgroundColor.push(this.color[key]);
+        this.chart.Colors[0].borderColor.push(this.color[key]);
+      }
+    });
   }
 
   getGlobalNps(): void {

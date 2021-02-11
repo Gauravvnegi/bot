@@ -48,22 +48,6 @@
     </mat-chip-list>
     <img src="assets/svg/Filter-Icon.svg" />
   </div>
-  <!-- <div *ngIf="tabFilterItems[tabFilterIdx].chips[0].isSelected; else noALL;">
-    <div *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
-      <div *ngIf="data.value !== 'ALL'">
-        <div>{{ data.label }}</div>
-        <div *ngFor="let progress of progresses[data.value]">{{ progress.statistic | json }}</div><br/>
-      </div>
-    </div>
-  </div>
-  <ng-template #noALL>
-    <div *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
-      <div *ngIf="data.isSelected">
-        <div>{{ data.label }}</div>
-        <div *ngFor="let progress of progresses[data.value]">{{ progress.statistic | json }}</div><br/>
-      </div>
-    </div>
-  </ng-template> -->
 
   <!-- Graph container -->
   <div class="progress_data_wrapper">
@@ -138,18 +122,18 @@
                 <div class="bar" *ngFor="let progress of progresses[data.value]">
                   <div class="progress">
                     <div style="background: transparent;"
-                      [style.height]="progress.statistic.positive === 0 ? '99%' : (100 - progress.statistic.positive) + '%'">
+                      [style.height]="(progress.statistic.score === 0 ? 100-1 : progress.statistic.score >= 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
                     </div>
                     <div style="background: green;"
-                      [style.height]="progress.statistic.positive === 0 ? '1%' : progress.statistic.positive + '%'">
+                      [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score >= 0 ? progress.statistic.score : (100 + progress.statistic.score)) + '%'">
                     </div>
                   </div>
                   <div class="progress">
                     <div style="background: red;"
-                      [style.height]="progress.statistic.negative === 0 ? '1%' : progress.statistic.negative + '%'">
+                      [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score >= 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
                     </div>
                     <div style="background: transparent;"
-                      [style.height]="progress.statistic.negative === 0 ? '99%' : (100 - progress.statistic.negative) + '%'">
+                      [style.height]="(progress.statistic.score === 0 ? 100-1 : progress.statistic.score >= 0 ? progress.statistic.score : (100 + progress.statistic.score)) + '%'">
                     </div>
                   </div>
                 </div>
@@ -162,8 +146,7 @@
       <ng-template #noALL>
         <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
           <ng-container *ngIf="data.value !== 'ALL' && progresses[data.value]">
-            <div class="progress_bar_data"
-              [style.width]="(100 / progressLength) + '%'">
+            <div class="progress_bar_data" [style.width]="(100 / progressLength) + '%'">
               <div class="progess_bars">
                 <ng-container *ngIf="data.isSelected">
                   <div class="bar" *ngFor="let progress of progresses[data.value]">
@@ -191,28 +174,6 @@
           </ng-container>
         </ng-container>
       </ng-template>
-      <!-- <div class="progress">
-        <div
-          [fxFlex]="progress.negative ? 100 - progress.negative : 99"
-          [style]="'background: transparent;'"
-        ></div>
-        <div
-          [fxFlex]="progress.negative ? progress.negative : 1"
-          class="progress-value"
-          [style]="'background: #DF0A20;'"
-        ></div>
-      </div>
-      <div class="progress">
-        <div
-          [fxFlex]="progress.positive ? progress.positive : 1"
-          class="progress-value"
-          [style]="'background: #1FABDB;'"
-        ></div>
-        <div
-          [fxFlex]="progress.positive ? 100 - progress.positive : 99"
-          [style]="'background: transparent;'"
-        ></div>
-      </div> -->
     </div>
   </div>
 </div>

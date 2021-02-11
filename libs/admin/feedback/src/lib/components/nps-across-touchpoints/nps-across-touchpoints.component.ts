@@ -98,18 +98,23 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     this.getNPSServices();
   }
 
-  private initTabLabels(entities, departments): void {
+  private initTabLabels(departments, chips): void {
     if (!this.tabFilterItems.length) {
-      departments.forEach((data) =>
+      departments.forEach((data, i) => {
+        if (data.key === 'FRONTOFFICE') {
+          this.tabFilterIdx = i;
+        }
         this.tabFilterItems.push({
           label: data.value,
           content: '',
           value: data.key,
           disabled: false,
           total: 0,
-          chips: entities[data.key],
-        })
-      );
+          chips: chips[data.key] || [],
+        });
+      });
+    } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {
+      this.tabFilterItems[this.tabFilterIdx].chips = chips[this.tabFilterItems[this.tabFilterIdx].value];
     }
   }
 
@@ -154,7 +159,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       ? this.tabFilterItems[this.tabFilterIdx].chips
           .filter((item) => item.isSelected == true)
           .map((item) => ({
-            sources: item.value,
+            touchpoints: item.value,
           }))
       : '';
   }
@@ -164,10 +169,9 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
           departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
-            : 'ALL',
+            : 'FRONTOFFICE',
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -177,16 +181,13 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
         .getTouchpointStatistics(config)
         .subscribe((response) => {
           this.npsProgressData = new NPSTouchpoints().deserialize(response);
-          if (this.npsProgressData.entities) {
+          console.log(this.npsProgressData)
+          if (this.npsProgressData.departments) {
             this.initTabLabels(
-              this.npsProgressData.entities,
-              this.npsProgressData.departments
+              this.npsProgressData.departments,
+              this.npsProgressData.chips
             );
           }
-          this.initProgressData(
-            this.npsProgressData.CHECKIN,
-            this.npsProgressData.CHECKOUT
-          );
         })
     );
   }

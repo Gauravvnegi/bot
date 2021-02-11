@@ -17,7 +17,7 @@ export class StatisticsService extends ApiService {
   }
 
   getTouchpointStatistics(config): Observable<any> {
-    return this.get(`/api/v1/feedback-stats/touchpoint/${config.queryObj}`);
+    return this.get(`/api/v1/feedback-stats/touchpoints/${config.queryObj}`);
   }
 
   exportOverallNPSCSV(config): Observable<any> {

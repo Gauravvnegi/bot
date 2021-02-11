@@ -84,59 +84,39 @@ export class NPSAcrossServices {
 }
 
 export class NPSTouchpoints {
-  CHECKIN: Touchpoint[];
-  CHECKOUT: Touchpoint[];
-  entities;
-  source: string[];
   departments;
+  chips;
+  values;
 
   deserialize(statistics) {
-    this.CHECKIN = new Array<Touchpoint>();
-    this.CHECKOUT = new Array<Touchpoint>();
     this.departments = new Array<any>();
-    this.entities = {};
-    Object.assign(this, set({}, 'source', get(statistics, ['source'])));
+    this.values = new Array<any>();
+    this.chips = {};
     Object.keys(statistics.departments).forEach((key) => {
       this.departments.push({ key, value: statistics.departments[key] });
-      this.entities[key] = new Entity().deserialize(
-        statistics.entities[key]
-      ).data;
+      if (statistics.entities[key]) {
+        this.chips[key] = [];
+        this.chips[key].push({
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+          type: '',
+        });
+        Object.keys(statistics.entities[key]).forEach((touchpoint) => {
+          this.chips[key].push({
+            label: statistics.entities[key][touchpoint],
+            icon: '',
+            value: touchpoint,
+            total: 0,
+            isSelected: false,
+            type: 'initiated',
+          });
+          this.values.push({ key: touchpoint, value: statistics.entities[key][touchpoint], statistic: statistics.npsStats[touchpoint] });
+        });
+      }
     });
-    this.entities['ALL'] = new Entity().deserialize(
-      statistics.entities['ALL']
-    ).data;
-    // this.departments.reverse();
-    for (const key in statistics.touchpoint.CHECKIN.npsStats) {
-      this.CHECKIN.push(statistics.touchpoint.CHECKIN.npsStats[key]);
-    }
-    for (const key in statistics.touchpoint.CHECKOUT.npsStats) {
-      this.CHECKOUT.push(statistics.touchpoint.CHECKOUT.npsStats[key]);
-    }
-    return this;
-  }
-}
-
-export class Entity {
-  data: any[];
-  deserialize(entity) {
-    this.data = new Array<any>();
-    this.data.push({
-      label: 'All',
-      icon: '',
-      value: 'ALL',
-      total: 0,
-      isSelected: true,
-    });
-    for (const key in entity) {
-      this.data.push({
-        label: entity[key],
-        icon: '',
-        value: key,
-        total: 0,
-        isSelected: false,
-        type: 'initiated',
-      });
-    }
     return this;
   }
 }

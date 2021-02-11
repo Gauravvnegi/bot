@@ -158,7 +158,6 @@ export class NpsAcrossServicesComponent implements OnInit {
         ...this.progresses,
         ...entities,
       };
-      console.log(this.progresses)
     } else {
       this.progressLength = 0;
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
@@ -170,7 +169,6 @@ export class NpsAcrossServicesComponent implements OnInit {
           };
         }
       });
-      console.log(this.progresses)
     }
   }
 

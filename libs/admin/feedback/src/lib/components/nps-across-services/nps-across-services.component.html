@@ -158,18 +158,18 @@
                   [style.width]="100 / (maxBarCount * 2) + '%'"
                 >
                   <div class="status_box">
-                    <p class="journey">Checkin ></p>
-                    <p class="service">Effect of efficiency</p>
+                    <p class="journey">{{ data.label }} ></p>
+                    <p class="service">{{ progress.statistic.label }}</p>
                     <div class="details_box">
                       <div class="details">
                         <div class="dot"></div>
-                        <div class="details__label">Neutral</div>
-                        <div class="percentage">46%</div>
+                        <div class="details__label">{{ (progress.statistic.score <= 30 && progress.statistic.score >= -30) ? 'Neutral' : 'Positive' }}</div>
+                        <div class="percentage">{{ progress.statistic.score >= 0 ? progress.statistic.score : 100 + progress.statistic.score }}</div>
                       </div>
                       <div class="details">
                         <div class="dot"></div>
-                        <div class="details__label">Neutral</div>
-                        <div class="percentage">46%</div>
+                        <div class="details__label">Negative</div>
+                        <div class="percentage">{{ progress.statistic.score > 0 ? 100 - progress.statistic.score : progress.statistic.score }}</div>
                       </div>
                     </div>
                   </div>

@@ -95,7 +95,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           );
         }
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
-        this.updatePaymentStatus(journeyEnums.JOURNEY.checkin);
+        this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );

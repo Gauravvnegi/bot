@@ -24,6 +24,24 @@ export class GlobalNpsComponent implements OnInit {
     negative: 'Negative',
   };
 
+  defaultChart: any = {
+    Labels: ['No Data'],
+    Data: [[100]],
+    Type: 'doughnut',
+
+    Legend: false,
+    Colors: [
+      {
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
+      },
+    ],
+    Options: {
+      responsive: true,
+      cutoutPercentage: 0,
+    },
+  };
+
   chart: any = {
     Labels: ['No Data'],
     Data: [[100]],

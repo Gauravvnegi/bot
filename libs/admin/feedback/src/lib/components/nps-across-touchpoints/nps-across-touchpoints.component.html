@@ -97,21 +97,62 @@
         <div class="progress_bar_data" [style.width]="(100 / npsProgressData.values.length) + '%'">
           <div class="progess_bars">
             <div class="bar">
-              <div class="progress">
-                <div style="background: transparent;"
-                  [style.height]="(progress.statistic.score === 0 ? 100-1 : progress.statistic.score > 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
-                </div>
-                <div [style.background]="((progress.statistic.score >=0 && progress.statistic.score < 31) || progress.statistic.score < -69) ? '#4BA0F5' : '#3DB76B'"
-                  [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score > 0 ? progress.statistic.score : (100 + progress.statistic.score)) + '%'">
+              <div class="status_box">
+                <!-- <p class="journey">{{ data.label }} ></p> -->
+                <p class="service">{{ progress.statistic.label }}</p>
+                <div class="details_box">
+                  <div class="details">
+                    <div class="dot"></div>
+                    <div class="details__label">{{ (progress.statistic.score <= 30 && progress.statistic.score>=
+                        -30) ? 'Neutral' : 'Positive' }}</div>
+                    <div class="percentage">{{ progress.statistic.score >= 0 ? progress.statistic.score : 100 +
+                      progress.statistic.score }}</div>
+                  </div>
+                  <div class="details">
+                    <div class="dot"></div>
+                    <div class="details__label">Negative</div>
+                    <div class="percentage">{{ progress.statistic.score > 0 ? 100 - progress.statistic.score :
+                      progress.statistic.score }}</div>
+                  </div>
                 </div>
               </div>
               <div class="progress">
-                <div style="background: red;"
-                  [style.height]="(progress.statistic.score === 0 ? 1 : progress.statistic.score > 0 ? (100 - progress.statistic.score) : (progress.statistic.score* (-1))) + '%'">
-                </div>
-                <div style="background: transparent;"
-                  [style.height]="(progress.statistic.score === 0 ? 100-1 : progress.statistic.score > 0 ? progress.statistic.score : (100 + progress.statistic.score)) + '%'">
-                </div>
+                <div style="background: transparent;" [style.height]="
+                    (progress.statistic.score === 0
+                      ? 100 - 1
+                      : progress.statistic.score >= 0
+                      ? 100 - progress.statistic.score
+                      : progress.statistic.score * -1) + '%'
+                  "></div>
+                <div [style.background]="
+                    (progress.statistic.score >= 0 &&
+                      progress.statistic.score < 31) ||
+                    progress.statistic.score < -69
+                      ? '#4BA0F5'
+                      : '#3DB76B'
+                  " [style.height]="
+                    (progress.statistic.score === 0
+                      ? 1
+                      : progress.statistic.score >= 0
+                      ? progress.statistic.score
+                      : 100 + progress.statistic.score) + '%'
+                  "></div>
+              </div>
+              <div class="progress">
+                <div style="background: #ea0431;" [style.height]="
+                    (progress.statistic.score === 0
+                      ? 1
+                      : progress.statistic.score >= 0
+                      ? 100 - progress.statistic.score
+                      : progress.statistic.score * -1) + '%'
+                  "></div>
+                <div style="background: transparent;" [style.height]="
+                    (progress.statistic.score === 0
+                      ? 100 - 1
+                      : progress.statistic.score >= 0
+                      ? progress.statistic.score
+                      : 100 + progress.statistic.score) + '%'
+                  "></div>
               </div>
             </div>
           </div>

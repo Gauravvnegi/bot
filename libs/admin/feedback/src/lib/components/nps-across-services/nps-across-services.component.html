@@ -218,26 +218,40 @@
                     </div>
                     <div class="progress">
                       <div style="background: transparent;" [style.height]="
-                          progress.statistic.positive === 0
-                            ? '99%'
-                            : 100 - progress.statistic.positive + '%'
+                          (progress.statistic.score === 0
+                            ? 100 - 1
+                            : progress.statistic.score >= 0
+                            ? 100 - progress.statistic.score
+                            : progress.statistic.score * -1) + '%'
                         "></div>
-                      <div style="background: green;" [style.height]="
-                          progress.statistic.positive === 0
-                            ? '1%'
-                            : progress.statistic.positive + '%'
+                      <div [style.background]="
+                          (progress.statistic.score >= 0 &&
+                            progress.statistic.score < 31) ||
+                          progress.statistic.score < -69
+                            ? '#4BA0F5'
+                            : '#3DB76B'
+                        " [style.height]="
+                          (progress.statistic.score === 0
+                            ? 1
+                            : progress.statistic.score >= 0
+                            ? progress.statistic.score
+                            : 100 + progress.statistic.score) + '%'
                         "></div>
                     </div>
                     <div class="progress">
-                      <div style="background: red;" [style.height]="
-                          progress.statistic.negative === 0
-                            ? '1%'
-                            : progress.statistic.negative + '%'
+                      <div style="background: #ea0431;" [style.height]="
+                          (progress.statistic.score === 0
+                            ? 1
+                            : progress.statistic.score >= 0
+                            ? 100 - progress.statistic.score
+                            : progress.statistic.score * -1) + '%'
                         "></div>
                       <div style="background: transparent;" [style.height]="
-                          progress.statistic.negative === 0
-                            ? '99%'
-                            : 100 - progress.statistic.negative + '%'
+                          (progress.statistic.score === 0
+                            ? 100 - 1
+                            : progress.statistic.score >= 0
+                            ? progress.statistic.score
+                            : 100 + progress.statistic.score) + '%'
                         "></div>
                     </div>
                   </div>

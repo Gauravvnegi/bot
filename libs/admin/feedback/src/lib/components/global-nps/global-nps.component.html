@@ -5,12 +5,19 @@
 		</div>
 		<div class="stat-title">Global NPS</div>
 	</div>
-	<div class="graph-container" *ngIf="globalNps">
-		<div class="graph">
+	<div class="graph-container">
+		<div class="graph" *ngIf="chart.Data[0].length; else defaultGraph;">
 			<canvas baseChart style="height: 138px;" [data]="chart.Data" [labels]="chart.Labels" [chartType]="chart.Type"
 				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">
 			</canvas>
 		</div>
+		<ng-template #defaultGraph>
+			<div class="graph">
+				<canvas baseChart style="height: 138px;" [data]="defaultChart.Data" [labels]="defaultChart.Labels" [chartType]="defaultChart.Type"
+					[legend]="defaultChart.Legend" [colors]="defaultChart.Colors" [options]="defaultChart.Options">
+				</canvas>
+			</div>
+		</ng-template>
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 		<div class="detail-container">

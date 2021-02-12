@@ -1,4 +1,100 @@
 @import 'main';
+.export {
+  .p-dropdown .p-inputtext {
+    padding: 5px;
+    align-items: baseline;
+    display: flex;
+    font-size: 14px;
+
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .heading {
+    font-size: 16px;
+    margin: 0;
+  }
+  .selected {
+    font-size: 20px;
+    color: #7e7e7e;
+    font-style: italic;
+    margin-bottom: 0;
+    margin-left: 3%;
+  }
+  .options {
+    display: flex;
+    align-items: center;
+    padding: 0 17px;
+
+    .icons {
+      display: flex;
+      align-items: center;
+      .svg {
+        padding: 0 12px;
+        height: auto;
+        width: auto;
+        path {
+          fill: #959ea7;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .seperator {
+    height: 35px;
+    border: 1px solid lightgray;
+    margin: 0px 15px;
+  }
+
+  .dropdown--wrapper {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+
+    .divider {
+      height: 20px;
+      border: 1px solid #d9d9d9;
+      margin: 0px 15px;
+    }
+  }
+  .go {
+    outline: none;
+    color: $primary-purple;
+    background: #4b56c033;
+    border: none;
+    font-size: 10px;
+    padding: 5px;
+    display: flex;
+    margin-left: 10px;
+    &:hover {
+      background-color: $primary-purple;
+      color: white;
+      cursor: pointer;
+    }
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
+    }
+  }
+  .reset-link {
+    color: #5391d4;
+    font-size: 14px;
+    font-weight: 700;
+  }
+}
 
 .progress_data_wrapper {
   border-top: 2px solid rgba(168, 177, 255, 0.1);
@@ -72,7 +168,7 @@
           // height: 132px;
           background-color: white;
           display: none;
-          top: 35%;
+          top: 28%;
           right: -50px;
           z-index: 2;
           box-shadow: 3px 3px 6px #00000029;

@@ -1,9 +1,29 @@
 <div class="container" [formGroup]="npsFG">
-  <div class="title-container">
-    <div class="icon">
-      <img src="assets/svg/nps-touchpoint.svg" />
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/nps-touchpoint.svg" />
+      </div>
+      <div class="stat-title">NPS Across All Touchpoints</div>
     </div>
-    <div class="stat-title">NPS Across All Touchpoints</div>
+    <div class="dropdown--wrapper">
+      <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+        <ng-template let-documentActionItem pTemplate="selectedItem">
+          <img src="assets/svg/Export.svg" />
+          <span class="dropdown-label">{{ documentActionItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <div class="divider"></div>
+      <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
+        <ng-template let-documentTypeItem pTemplate="selectedItem">
+          <img src="assets/svg/CSV.svg" />
+          <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <button class="go" (click)="exportCSV()">
+        <mat-icon class="material-icons" matSuffix>east</mat-icon>
+      </button>
+    </div>
   </div>
   <div class="tab-group">
     <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx"
@@ -175,7 +195,7 @@
             <div class="label">{{ _adminUtilityService.convertTimestampToLabels(
               this.selectedInterval,
               data.value
-            ) }}</div>
+              ) }}</div>
           </div>
         </ng-container>
       </ng-container>

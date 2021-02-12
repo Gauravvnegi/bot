@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { FeedbackDistribution } from '../../data-models/statistics.model';
 import { StatisticsService } from '../../services/statistics.service';
@@ -63,7 +64,8 @@ export class FeedbackDistributionComponent implements OnInit {
   constructor(
     private statisticsService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _adminUtilityService: AdminUtilityService
+    private _adminUtilityService: AdminUtilityService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -111,11 +113,14 @@ export class FeedbackDistributionComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
-    this.statisticsService
-      .feedbackDistribution(config)
-      .subscribe((response) => {
+    this.statisticsService.feedbackDistribution(config).subscribe(
+      (response) => {
         this.distribution = new FeedbackDistribution().deserialize(response);
         this.initChartData();
-      });
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 }

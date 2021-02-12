@@ -5,6 +5,8 @@ import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { NPSTouchpoints } from '../../data-models/statistics.model';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-nps-across-touchpoints',
@@ -22,11 +24,23 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   npsProgressData: NPSTouchpoints;
   progresses: any = [];
   loading = false;
-
+  documentTypes = [
+    { label: 'CSV', value: 'csv' },
+    // { label: 'EXCEL', value: 'excel' },
+    // { label: 'PDF', value: 'pdf' },
+  ];
   progressValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   tabFilterIdx: number = 0;
 
+  documentActionTypes = [
+    {
+      label: `Export`,
+      value: 'export',
+      type: 'countType',
+      defaultLabel: 'Export',
+    },
+  ];
   tabFilterItems = [];
   globalQueries;
 
@@ -34,7 +48,8 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     private fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -44,26 +59,33 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
 
   listenForGlobalFilters() {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-        this.getNPSServices();
-      })
+      this._globalFilterService.globalFilter$.subscribe(
+        (data) => {
+          let calenderType = {
+            calenderType: this._adminUtilityService.getCalendarType(
+              data['dateRange'].queryValue[0].toDate,
+              data['dateRange'].queryValue[1].fromDate
+            ),
+          };
+          this.selectedInterval = calenderType.calenderType;
+          this.globalQueries = [
+            ...data['filter'].queryValue,
+            ...data['dateRange'].queryValue,
+            calenderType,
+          ];
+          this.getNPSServices();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
   initFG(): void {
     this.npsFG = this.fb.group({
+      documentType: ['csv'],
+      documentActionType: ['exportAll'],
       quickReplyActionFilters: [[]],
       time: [false],
     });
@@ -126,7 +148,8 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
         });
       });
     } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {
-      this.tabFilterItems[this.tabFilterIdx].chips = chips[this.tabFilterItems[this.tabFilterIdx].value];
+      this.tabFilterItems[this.tabFilterIdx].chips =
+        chips[this.tabFilterItems[this.tabFilterIdx].value];
     }
   }
 
@@ -155,21 +178,53 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       ]),
     };
     this.$subscription.add(
-      this._statisticService
-        .getTouchpointStatistics(config)
-        .subscribe((response) => {
+      this._statisticService.getTouchpointStatistics(config).subscribe(
+        (response) => {
           this.loading = false;
-          this.npsProgressData = new NPSTouchpoints().deserialize(response, this.time.value);
-          console.log(this.npsProgressData)
+          this.npsProgressData = new NPSTouchpoints().deserialize(
+            response,
+            this.time.value
+          );
+          console.log(this.npsProgressData);
           if (this.npsProgressData.departments) {
             this.initTabLabels(
               this.npsProgressData.departments,
               this.npsProgressData.chips
             );
           }
-        }, ({ error })=> {
+        },
+        ({ error }) => {
           this.loading = false;
-        })
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  exportCSV() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+        { time: this.time.value },
+        // ...this.getSelectedQuickReplyFilters(),
+      ]),
+    };
+    this.$subscription.add(
+      this._statisticService.exportOverallTouchpointsCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            'NPS_Across_Touchpoints_export_' + new Date().getTime() + '.csv'
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 

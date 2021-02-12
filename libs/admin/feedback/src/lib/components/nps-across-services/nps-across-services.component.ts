@@ -68,21 +68,26 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   listenForGlobalFilters() {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-        this.getNPSServices();
-      })
+      this._globalFilterService.globalFilter$.subscribe(
+        (data) => {
+          let calenderType = {
+            calenderType: this._adminUtilityService.getCalendarType(
+              data['dateRange'].queryValue[0].toDate,
+              data['dateRange'].queryValue[1].fromDate
+            ),
+          };
+          this.selectedInterval = calenderType.calenderType;
+          this.globalQueries = [
+            ...data['filter'].queryValue,
+            ...data['dateRange'].queryValue,
+            calenderType,
+          ];
+          this.getNPSServices();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -160,7 +165,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         ...entities,
       };
       this.maxBarCount = 0;
-      Object.keys(entities).forEach((data)=> {
+      Object.keys(entities).forEach((data) => {
         if (this.maxBarCount < entities[data].length) {
           this.maxBarCount = entities[data].length;
         }

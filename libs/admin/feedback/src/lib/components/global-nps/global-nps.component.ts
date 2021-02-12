@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import { GlobalNPS } from '../../data-models/statistics.model';
 import { StatisticsService } from '../../services/statistics.service';
@@ -66,7 +67,8 @@ export class GlobalNpsComponent implements OnInit {
   constructor(
     private statisticsService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _adminUtilityService: AdminUtilityService
+    private _adminUtilityService: AdminUtilityService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -106,10 +108,15 @@ export class GlobalNpsComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
-    this.statisticsService.getGlobalNPS(config).subscribe((response) => {
-      this.globalNps = new GlobalNPS().deserialize(response);
+    this.statisticsService.getGlobalNPS(config).subscribe(
+      (response) => {
+        this.globalNps = new GlobalNPS().deserialize(response);
 
-      this.initGraphData(this.globalNps);
-    });
+        this.initGraphData(this.globalNps);
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 }

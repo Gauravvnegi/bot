@@ -35,7 +35,7 @@
       margin: 7px 0;
       align-items: center;
       .label {
-        min-width: 138px;
+        width: 50%;
         margin-right: 10px;
         font: normal normal medium 12px/14px Roboto;
         // letter-spacing: 0.72px;
@@ -43,7 +43,7 @@
       }
       .progress {
         display: flex;
-        width: calc(100% - 150px);
+        width: 50%;
         position: relative;
         .value {
           position: absolute;

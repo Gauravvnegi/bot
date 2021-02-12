@@ -172,7 +172,10 @@
                 </div>
               </div>
             </div>
-            <div class="label">{{ data.value }}</div>
+            <div class="label">{{ _adminUtilityService.convertTimestampToLabels(
+              this.selectedInterval,
+              data.value
+            ) }}</div>
           </div>
         </ng-container>
       </ng-container>

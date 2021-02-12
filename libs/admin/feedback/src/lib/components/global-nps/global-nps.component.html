@@ -20,7 +20,7 @@
 		</ng-template>
 		<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
-		<div class="detail-container">
+		<div class="detail-container" *ngIf="globalNps">
 			<div class="val">{{ globalNps.score }}</div>
 			<div class="label">{{ globalNps.label }}</div>
 		</div>

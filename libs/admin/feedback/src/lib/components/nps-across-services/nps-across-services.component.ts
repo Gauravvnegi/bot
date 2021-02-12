@@ -175,7 +175,7 @@ export class NpsAcrossServicesComponent implements OnInit {
             ...this.progresses,
             [chip.value]: entities[chip.value],
           };
-          if (entities[chip.value] > this.maxBarCount) {
+          if (entities[chip.value].length > this.maxBarCount) {
             this.maxBarCount = entities[chip.value].length;
           }
         }

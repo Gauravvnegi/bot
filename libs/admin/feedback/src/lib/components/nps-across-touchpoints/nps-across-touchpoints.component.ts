@@ -21,6 +21,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   selectedInterval: string;
   npsProgressData: NPSTouchpoints;
   progresses: any = [];
+  loading = false;
 
   progressValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -64,6 +65,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   initFG(): void {
     this.npsFG = this.fb.group({
       quickReplyActionFilters: [[]],
+      time: [false],
     });
   }
 
@@ -79,11 +81,21 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected;
+    if (this.time.value) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((element, i) => {
+        if (i === quickReplyTypeIdx) {
+          element.isSelected = true;
+        } else {
+          element.isSelected = false;
+        }
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
     this.updateQuickReplyActionFilters();
   }
 
@@ -118,42 +130,6 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     }
   }
 
-  private initProgressData(Checkin, Checkout) {
-    this.progresses.length = 0;
-    this.progresses.push(this.mapCheckinData(Checkin));
-    this.progresses.push(this.mapCheckoutData(Checkout));
-  }
-
-  private mapCheckinData(Checkin): Object {
-    let obj = { label: 'Checkin' };
-    obj['progressValues'] = [];
-    obj['totalProgress'] = 0;
-    Object.keys(Checkin).forEach((key) => {
-      obj['progressValues'].push({
-        label: Checkin[key].label,
-        score: Checkin[key].score,
-        colorCode: Checkin[key].colorCode,
-      });
-      obj['totalProgress'] += Checkin[key].score;
-    });
-    return obj;
-  }
-
-  private mapCheckoutData(Checkout): Object {
-    let obj = { label: 'Checkout' };
-    obj['progressValues'] = [];
-    obj['totalProgress'] = 0;
-    Object.keys(Checkout).forEach((key) => {
-      obj['progressValues'].push({
-        label: Checkout[key].label,
-        score: Checkout[key].score,
-        colorCode: Checkout[key].colorCode,
-      });
-      obj['totalProgress'] += Checkout[key].score;
-    });
-    return obj;
-  }
-
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems.length
       ? this.tabFilterItems[this.tabFilterIdx].chips
@@ -165,6 +141,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   }
 
   private getNPSServices(): void {
+    this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -173,6 +150,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
             ? this.tabFilterItems[this.tabFilterIdx].value
             : 'FRONTOFFICE',
         },
+        { time: this.time.value },
         ...this.getSelectedQuickReplyFilters(),
       ]),
     };
@@ -180,15 +158,23 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       this._statisticService
         .getTouchpointStatistics(config)
         .subscribe((response) => {
-          this.npsProgressData = new NPSTouchpoints().deserialize(response);
+          this.loading = false;
+          this.npsProgressData = new NPSTouchpoints().deserialize(response, this.time.value);
+          console.log(this.npsProgressData)
           if (this.npsProgressData.departments) {
             this.initTabLabels(
               this.npsProgressData.departments,
               this.npsProgressData.chips
             );
           }
+        }, ({ error })=> {
+          this.loading = false;
         })
     );
+  }
+
+  switchFilter(value) {
+    this.getNPSServices();
   }
 
   ngOnDestroy(): void {
@@ -197,5 +183,9 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
 
   get quickReplyActionFilters(): FormControl {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;
+  }
+
+  get time() {
+    return this.npsFG.get('time') as FormControl;
   }
 }

@@ -203,7 +203,7 @@
                   width: 8px;
                   height: 8px;
                   border-radius: 50%;
-                  background-color: blue;
+                  background-color: #ea0431;
                 }
                 &__label {
                   font: normal normal normal 12px/14px Roboto;
@@ -223,6 +223,10 @@
             cursor: pointer;
             .status_box {
               display: block;
+              opacity: 1 !important;
+            }
+            .progress {
+              opacity: 0.5;
             }
           }
           .progress {

@@ -130,7 +130,13 @@
                     <p class="service">{{ progress.statistic.label }}</p>
                     <div class="details_box">
                       <div class="details">
-                        <div class="dot"></div>
+                        <div class="dot" [style.background]="
+                        (progress.statistic.score >= 0 &&
+                          progress.statistic.score < 31) ||
+                        progress.statistic.score < -69
+                          ? '#4BA0F5'
+                          : '#3DB76B'
+                      "></div>
                         <div class="details__label">{{ (progress.statistic.score <= 30 && progress.statistic.score>=
                             -30) ? 'Neutral' : 'Positive' }}</div>
                         <div class="percentage">{{ progress.statistic.score >= 0 ? progress.statistic.score : 100 +

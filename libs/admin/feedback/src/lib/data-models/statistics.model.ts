@@ -71,13 +71,16 @@ export class NPSAcrossServices {
         type: 'initiated',
       });
       this.entities[key] = [];
-      statistics.entities[key] && Object.keys(statistics.entities[key]).forEach((entity) => {
-        this.entities[key].push({
-          entity,
-          value: statistics.entities[key][entity],
-          statistic: statistics.npsStats[key][entity] ? statistics.npsStats[key][entity]: {},
-        })
-      });
+      statistics.entities[key] &&
+        Object.keys(statistics.entities[key]).forEach((entity) => {
+          this.entities[key].push({
+            entity,
+            value: statistics.entities[key][entity],
+            statistic: statistics.npsStats[key][entity]
+              ? statistics.npsStats[key][entity]
+              : {},
+          });
+        });
     });
     return this;
   }
@@ -87,11 +90,13 @@ export class NPSTouchpoints {
   departments;
   chips;
   values;
+  maxBarCount;
 
-  deserialize(statistics) {
+  deserialize(statistics, time) {
     this.departments = new Array<any>();
     this.values = new Array<any>();
     this.chips = {};
+    this.maxBarCount = 3;
     Object.keys(statistics.departments).forEach((key) => {
       this.departments.push({ key, value: statistics.departments[key] });
       if (statistics.entities[key]) {
@@ -113,10 +118,30 @@ export class NPSTouchpoints {
             isSelected: false,
             type: 'initiated',
           });
-          this.values.push({ key: touchpoint, value: statistics.entities[key][touchpoint], statistic: statistics.npsStats[touchpoint] });
+          if (!time) {
+            this.values.push({
+              key: touchpoint,
+              value: statistics.entities[key][touchpoint],
+              statistic: statistics.npsStats[touchpoint],
+            });
+          }
         });
       }
     });
+    if (time) {
+      Object.keys(statistics.npsStatsByTime).forEach((key, i) => {
+        this.values.push({ value: key, data: [] });
+        this.maxBarCount =
+          Object.keys(statistics.npsStatsByTime[key]).length > this.maxBarCount
+            ? Object.keys(statistics.npsStatsByTime[key]).length
+            : this.maxBarCount;
+        Object.keys(statistics.npsStatsByTime[key]).forEach((dataKey) => {
+          this.values[i].data.push({
+            statistic: statistics.npsStatsByTime[key][dataKey],
+          });
+        });
+      });
+    }
     return this;
   }
 }

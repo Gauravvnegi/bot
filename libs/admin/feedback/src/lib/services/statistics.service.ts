@@ -46,7 +46,7 @@ export class StatisticsService extends ApiService {
 
   exportOverallTouchpointsCSV(config): Observable<any> {
     return this.get(
-      `/api/v1/feedback-stats/services/export/${config.queryObj}`,
+      `/api/v1/feedback-stats/touchpoints/export/${config.queryObj}`,
       {
         responseType: 'blob',
       }

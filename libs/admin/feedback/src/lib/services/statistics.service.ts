@@ -17,7 +17,7 @@ export class StatisticsService extends ApiService {
   }
 
   getTouchpointStatistics(config): Observable<any> {
-    return this.get(`/api/v1/feedback-stats/touchpoint/${config.queryObj}`);
+    return this.get(`/api/v1/feedback-stats/touchpoints/${config.queryObj}`);
   }
 
   exportOverallNPSCSV(config): Observable<any> {
@@ -42,5 +42,26 @@ export class StatisticsService extends ApiService {
         responseType: 'blob',
       }
     );
+  }
+
+  exportOverallTouchpointsCSV(config): Observable<any> {
+    return this.get(
+      `/api/v1/feedback-stats/touchpoints/export/${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+  feedbackDistribution(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/distribution/${config.queryObj}`);
+  }
+
+  getGlobalNPS(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/nps/${config.queryObj}`);
+  }
+
+  getNPSPerformance(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/nps/performance/${config.queryObj}`);
   }
 }

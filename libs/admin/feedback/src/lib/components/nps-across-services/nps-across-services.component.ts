@@ -43,9 +43,11 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   isOpened = false;
   globalQueries = [];
-  progresses: any = [];
+  progresses = {};
+  progressLength = 0;
 
   progressValues = [-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100];
+  maxBarCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -66,21 +68,26 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   listenForGlobalFilters() {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-        this.getNPSServices();
-      })
+      this._globalFilterService.globalFilter$.subscribe(
+        (data) => {
+          let calenderType = {
+            calenderType: this._adminUtilityService.getCalendarType(
+              data['dateRange'].queryValue[0].toDate,
+              data['dateRange'].queryValue[1].fromDate
+            ),
+          };
+          this.selectedInterval = calenderType.calenderType;
+          this.globalQueries = [
+            ...data['filter'].queryValue,
+            ...data['dateRange'].queryValue,
+            calenderType,
+          ];
+          this.getNPSServices();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -114,7 +121,6 @@ export class NpsAcrossServicesComponent implements OnInit {
   }
 
   updateQuickReplyActionFilters(): void {
-    console.log(this.tabFilterItems);
     let value = [];
     this.tabFilterItems[this.tabFilterIdx].chips
       .filter((chip) => chip.isSelected)
@@ -127,40 +133,59 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   private initTabLabels(entities, departments): void {
     if (!this.tabFilterItems.length) {
-      if (!this.tabFilterItems.length) {
-        departments.forEach((data) =>
-          this.tabFilterItems.push({
-            label: data.value,
-            content: '',
-            value: data.key,
-            disabled: false,
-            total: 0,
-            chips: entities[data.key],
-          })
-        );
-      }
+      departments.forEach((data, i) => {
+        let chips = [];
+        if (data.key === 'FRONTOFFICE') {
+          chips = entities;
+          this.tabFilterIdx = i;
+        }
+        this.tabFilterItems.push({
+          label: data.value,
+          content: '',
+          value: data.key,
+          disabled: false,
+          total: 0,
+          chips,
+        });
+      });
+    } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {
+      this.tabFilterItems[this.tabFilterIdx].chips = entities;
     }
   }
 
-  private initProgressData(progresses) {
-    this.progresses.length = 0;
-    this.dividerHeight = 0;
-    Object.keys(progresses).forEach((key) => {
-      let mod = Math.floor(progresses[key].label.length / 20);
-      this.dividerHeight += 40 + mod * 13;
-      this.progresses.push({
-        label: progresses[key].label,
-        positive:
-          progresses[key].score < 0
-            ? 100 + progresses[key].score
-            : progresses[key].score,
-        negative: progresses[key].score
-          ? progresses[key].score < 0
-            ? progresses[key].score * -1
-            : Number((100 - progresses[key].score).toFixed(2))
-          : progresses[key].score,
+  private initProgressData(entities) {
+    this.progresses = {};
+    if (
+      this.tabFilterItems[this.tabFilterIdx].chips.filter(
+        (data) => data.value === 'ALL' && data.isSelected
+      ).length
+    ) {
+      this.progresses = {
+        ...this.progresses,
+        ...entities,
+      };
+      this.maxBarCount = 0;
+      Object.keys(entities).forEach((data) => {
+        if (this.maxBarCount < entities[data].length) {
+          this.maxBarCount = entities[data].length;
+        }
       });
-    });
+    } else {
+      this.maxBarCount = 0;
+      this.progressLength = 0;
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.isSelected) {
+          this.progressLength += 1;
+          this.progresses = {
+            ...this.progresses,
+            [chip.value]: entities[chip.value],
+          };
+          if (entities[chip.value].length > this.maxBarCount) {
+            this.maxBarCount = entities[chip.value].length;
+          }
+        }
+      });
+    }
   }
 
   getSelectedQuickReplyFilters() {
@@ -181,7 +206,7 @@ export class NpsAcrossServicesComponent implements OnInit {
           order: 'DESC',
           departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
-            : 'ALL',
+            : 'FRONTOFFICE',
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -190,13 +215,13 @@ export class NpsAcrossServicesComponent implements OnInit {
       this._statisticService.getServicesStatistics(config).subscribe(
         (response) => {
           this.npsProgressData = new NPSAcrossServices().deserialize(response);
-          if (this.npsProgressData.entities) {
+          if (this.npsProgressData.services) {
             this.initTabLabels(
-              this.npsProgressData.entities,
+              this.npsProgressData.services,
               this.npsProgressData.departments
             );
           }
-          this.initProgressData(this.npsProgressData.npsStats);
+          this.initProgressData(this.npsProgressData.entities);
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);

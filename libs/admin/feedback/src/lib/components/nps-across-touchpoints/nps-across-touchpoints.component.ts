@@ -5,6 +5,8 @@ import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { NPSTouchpoints } from '../../data-models/statistics.model';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-nps-across-touchpoints',
@@ -21,11 +23,24 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   selectedInterval: string;
   npsProgressData: NPSTouchpoints;
   progresses: any = [];
-
+  loading = false;
+  documentTypes = [
+    { label: 'CSV', value: 'csv' },
+    // { label: 'EXCEL', value: 'excel' },
+    // { label: 'PDF', value: 'pdf' },
+  ];
   progressValues = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   tabFilterIdx: number = 0;
 
+  documentActionTypes = [
+    {
+      label: `Export`,
+      value: 'export',
+      type: 'countType',
+      defaultLabel: 'Export',
+    },
+  ];
   tabFilterItems = [];
   globalQueries;
 
@@ -33,7 +48,8 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     private fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -43,27 +59,35 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
 
   listenForGlobalFilters() {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-        this.getNPSServices();
-      })
+      this._globalFilterService.globalFilter$.subscribe(
+        (data) => {
+          let calenderType = {
+            calenderType: this._adminUtilityService.getCalendarType(
+              data['dateRange'].queryValue[0].toDate,
+              data['dateRange'].queryValue[1].fromDate
+            ),
+          };
+          this.selectedInterval = calenderType.calenderType;
+          this.globalQueries = [
+            ...data['filter'].queryValue,
+            ...data['dateRange'].queryValue,
+            calenderType,
+          ];
+          this.getNPSServices();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
   initFG(): void {
     this.npsFG = this.fb.group({
+      documentType: ['csv'],
+      documentActionType: ['exportAll'],
       quickReplyActionFilters: [[]],
+      time: [false],
     });
   }
 
@@ -79,11 +103,21 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected;
+    if (this.time.value) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((element, i) => {
+        if (i === quickReplyTypeIdx) {
+          element.isSelected = true;
+        } else {
+          element.isSelected = false;
+        }
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
     this.updateQuickReplyActionFilters();
   }
 
@@ -98,55 +132,25 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     this.getNPSServices();
   }
 
-  private initTabLabels(entities, departments): void {
+  private initTabLabels(departments, chips): void {
     if (!this.tabFilterItems.length) {
-      departments.forEach((data) =>
+      departments.forEach((data, i) => {
+        if (data.key === 'FRONTOFFICE') {
+          this.tabFilterIdx = i;
+        }
         this.tabFilterItems.push({
           label: data.value,
           content: '',
           value: data.key,
           disabled: false,
           total: 0,
-          chips: entities[data.key],
-        })
-      );
+          chips: chips[data.key] || [],
+        });
+      });
+    } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {
+      this.tabFilterItems[this.tabFilterIdx].chips =
+        chips[this.tabFilterItems[this.tabFilterIdx].value];
     }
-  }
-
-  private initProgressData(Checkin, Checkout) {
-    this.progresses.length = 0;
-    this.progresses.push(this.mapCheckinData(Checkin));
-    this.progresses.push(this.mapCheckoutData(Checkout));
-  }
-
-  private mapCheckinData(Checkin): Object {
-    let obj = { label: 'Checkin' };
-    obj['progressValues'] = [];
-    obj['totalProgress'] = 0;
-    Object.keys(Checkin).forEach((key) => {
-      obj['progressValues'].push({
-        label: Checkin[key].label,
-        score: Checkin[key].score,
-        colorCode: Checkin[key].colorCode,
-      });
-      obj['totalProgress'] += Checkin[key].score;
-    });
-    return obj;
-  }
-
-  private mapCheckoutData(Checkout): Object {
-    let obj = { label: 'Checkout' };
-    obj['progressValues'] = [];
-    obj['totalProgress'] = 0;
-    Object.keys(Checkout).forEach((key) => {
-      obj['progressValues'].push({
-        label: Checkout[key].label,
-        score: Checkout[key].score,
-        colorCode: Checkout[key].colorCode,
-      });
-      obj['totalProgress'] += Checkout[key].score;
-    });
-    return obj;
   }
 
   getSelectedQuickReplyFilters() {
@@ -154,41 +158,78 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       ? this.tabFilterItems[this.tabFilterIdx].chips
           .filter((item) => item.isSelected == true)
           .map((item) => ({
-            sources: item.value,
+            touchpoints: item.value,
           }))
       : '';
   }
 
   private getNPSServices(): void {
+    this.loading = true;
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          departments: this.tabFilterItems.length
+            ? this.tabFilterItems[this.tabFilterIdx].value
+            : 'FRONTOFFICE',
+        },
+        { time: this.time.value },
+        ...this.getSelectedQuickReplyFilters(),
+      ]),
+    };
+    this.$subscription.add(
+      this._statisticService.getTouchpointStatistics(config).subscribe(
+        (response) => {
+          this.loading = false;
+          this.npsProgressData = new NPSTouchpoints().deserialize(
+            response,
+            this.time.value
+          );
+          console.log(this.npsProgressData);
+          if (this.npsProgressData.departments) {
+            this.initTabLabels(
+              this.npsProgressData.departments,
+              this.npsProgressData.chips
+            );
+          }
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  exportCSV() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           order: 'DESC',
-          departments: this.tabFilterItems.length
-            ? this.tabFilterItems[this.tabFilterIdx].value
-            : 'ALL',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        { time: this.time.value },
+        // ...this.getSelectedQuickReplyFilters(),
       ]),
     };
     this.$subscription.add(
-      this._statisticService
-        .getTouchpointStatistics(config)
-        .subscribe((response) => {
-          this.npsProgressData = new NPSTouchpoints().deserialize(response);
-          if (this.npsProgressData.entities) {
-            this.initTabLabels(
-              this.npsProgressData.entities,
-              this.npsProgressData.departments
-            );
-          }
-          this.initProgressData(
-            this.npsProgressData.CHECKIN,
-            this.npsProgressData.CHECKOUT
+      this._statisticService.exportOverallTouchpointsCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            'NPS_Across_Touchpoints_export_' + new Date().getTime() + '.csv'
           );
-        })
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
+  }
+
+  switchFilter(value) {
+    this.getNPSServices();
   }
 
   ngOnDestroy(): void {
@@ -197,5 +238,9 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
 
   get quickReplyActionFilters(): FormControl {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;
+  }
+
+  get time() {
+    return this.npsFG.get('time') as FormControl;
   }
 }

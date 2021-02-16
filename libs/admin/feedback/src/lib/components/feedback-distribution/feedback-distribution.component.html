@@ -5,7 +5,7 @@
 		</div>
 		<div class="stat-title">Feedback Distribution</div>
 	</div>
-	<div class="graph-container">
+	<div class="graph-container" *ngIf="!loading">
 		<div class="graph" *ngIf="totalDistribution; else defaultGraph;">
 			<canvas baseChart style="height: 125px;" [data]="chart.Data" [labels]="chart.Labels" [chartType]="chart.Type"
 				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">

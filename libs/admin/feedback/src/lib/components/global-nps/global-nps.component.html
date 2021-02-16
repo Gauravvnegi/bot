@@ -5,7 +5,7 @@
 		</div>
 		<div class="stat-title">Global NPS</div>
 	</div>
-	<div class="graph-container">
+	<div class="graph-container" *ngIf="!loading">
 		<div class="graph" *ngIf="chart.Data[0].length; else defaultGraph;">
 			<canvas baseChart style="height: 138px;" [data]="chart.Data" [labels]="chart.Labels" [chartType]="chart.Type"
 				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">

@@ -59,6 +59,7 @@ export class FeedbackDistributionComponent implements OnInit {
   };
 
   keyLabels = [];
+  loading: boolean = false;
 
   distribution: FeedbackDistribution;
   constructor(
@@ -110,15 +111,18 @@ export class FeedbackDistributionComponent implements OnInit {
   }
 
   getFeedbackDistribution() {
+    this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.statisticsService.feedbackDistribution(config).subscribe(
       (response) => {
+        this.loading = false;
         this.distribution = new FeedbackDistribution().deserialize(response);
         this.initChartData();
       },
       ({ error }) => {
+        this.loading = false;
         this._snackbarService.openSnackBarAsText(error.message);
       }
     );

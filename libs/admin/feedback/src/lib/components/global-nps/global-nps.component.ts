@@ -61,6 +61,8 @@ export class GlobalNpsComponent implements OnInit {
     },
   };
 
+  loading: boolean = false;
+
   private $subscription = new Subscription();
   globalQueries;
 
@@ -105,16 +107,19 @@ export class GlobalNpsComponent implements OnInit {
   }
 
   getGlobalNps(): void {
+    this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.statisticsService.getGlobalNPS(config).subscribe(
       (response) => {
+        this.loading = false;
         this.globalNps = new GlobalNPS().deserialize(response);
 
         this.initGraphData(this.globalNps);
       },
       ({ error }) => {
+        this.loading = false;
         this._snackbarService.openSnackBarAsText(error.message);
       }
     );

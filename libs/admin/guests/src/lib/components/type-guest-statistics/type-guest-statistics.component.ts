@@ -208,7 +208,15 @@ export class TypeGuestStatisticsComponent implements OnInit {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this.dateService.convertTimestampToLabels(this.selectedInterval, d)
+        this.dateService.convertTimestampToLabels(
+          this.selectedInterval,
+          d,
+          this.selectedInterval === 'date'
+            ? 'DD MMM'
+            : this.selectedInterval === 'month'
+            ? 'MMM YYYY'
+            : ''
+        )
       );
       this.chart.chartData[0].data.push(this.customerData.arrival[d]);
       this.chart.chartData[1].data.push(this.customerData.inHouse[d]);

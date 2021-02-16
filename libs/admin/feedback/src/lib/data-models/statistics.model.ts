@@ -142,6 +142,9 @@ export class NPSTouchpoints {
         });
       });
     }
+    this.values.sort(function(a, b) {
+      return parseInt(a.value) - parseInt(b.value);
+    });
     return this;
   }
 }

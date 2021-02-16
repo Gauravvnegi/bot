@@ -228,7 +228,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
-          d
+          d,
+          this.selectedInterval === 'date' ? 'DD MMM' : this.selectedInterval === 'month' ? 'MMM YYYY' : ''
         )
       );
       this.chart.chartData[0].data.push(this.guestStatusData.newGuestStats[d]);

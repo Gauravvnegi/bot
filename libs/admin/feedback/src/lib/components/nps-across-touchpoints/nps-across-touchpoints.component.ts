@@ -187,7 +187,6 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
             response,
             this.time.value
           );
-          console.log(this.npsProgressData);
           if (this.npsProgressData.departments) {
             this.initTabLabels(
               this.npsProgressData.departments,

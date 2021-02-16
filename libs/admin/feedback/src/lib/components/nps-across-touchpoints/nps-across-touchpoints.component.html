@@ -194,7 +194,8 @@
             </div>
             <div class="label">{{ dateService.convertTimestampToLabels(
               this.selectedInterval,
-              data.value
+              data.value,
+              this.selectedInterval === 'date' ? 'DD MMM' : this.selectedInterval === 'month' ? 'MMM YYYY' : ''
               ) }}</div>
           </div>
         </ng-container>

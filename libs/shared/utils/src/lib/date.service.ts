@@ -53,9 +53,9 @@ export class DateService {
     if (type === 'year') {
       returnData = timestamp;
     } else if (type === 'month') {
-      returnData = moment(+timestamp).format('MMM YYYY');
+      returnData = moment(+timestamp).format(format || 'MMM YYYY');
     } else if (type === 'date') {
-      returnData = moment(+timestamp).format('DD MMM');
+      returnData = moment(+timestamp).format(format || 'DD MMM');
     } else {
       returnData = `${timestamp > 12 ? timestamp - 12 : timestamp}:00 ${
         timestamp > 11 ? 'PM' : 'AM'

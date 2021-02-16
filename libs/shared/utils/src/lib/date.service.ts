@@ -48,18 +48,20 @@ export class DateService {
     return moment(inputTimeStamp).format(format);
   }
 
-  convertTimestampToLabels(type, data) {
+  convertTimestampToLabels(type, timestamp, format?) {
+    let returnData = '';
     if (type === 'year') {
-      return data;
+      returnData = timestamp;
     } else if (type === 'month') {
-      return DateService.getDateFromTimeStamp(data, 'MMM YYYY');
+      returnData = moment(+timestamp).format('MMM YYYY');
     } else if (type === 'date') {
-      return DateService.getDateFromTimeStamp(data, 'DD MMM');
+      returnData = moment(+timestamp).format('DD MMM');
     } else {
-      return `${data > 12 ? data - 12 : data}:00 ${
-        data > 11 ? 'PM' : 'AM'
+      returnData = `${timestamp > 12 ? timestamp - 12 : timestamp}:00 ${
+        timestamp > 11 ? 'PM' : 'AM'
       }`;
     }
+    return returnData;
   }
 
   getCalendarType(startDate, endDate) {

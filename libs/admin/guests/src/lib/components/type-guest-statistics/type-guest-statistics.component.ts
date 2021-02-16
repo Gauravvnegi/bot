@@ -159,6 +159,9 @@ export class TypeGuestStatisticsComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
+
+  globalQueries;
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
@@ -169,7 +172,27 @@ export class TypeGuestStatisticsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getVIPStatistics();
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getVIPStatistics();
+      })
+    );
   }
 
   legendOnClick = (index) => {
@@ -206,7 +229,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       d.data = [];
     });
     this.chart.chartLabels = [];
-    botKeys.forEach((d) => {
+    botKeys.forEach((d, i) => {
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
@@ -215,7 +238,10 @@ export class TypeGuestStatisticsComponent implements OnInit {
             ? 'DD MMM'
             : this.selectedInterval === 'month'
             ? 'MMM YYYY'
-            : ''
+            : '',
+            this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
         )
       );
       this.chart.chartData[0].data.push(this.customerData.arrival[d]);

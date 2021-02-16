@@ -155,7 +155,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       value: 'NEW',
       disabled: false,
       total: 0,
-      chips: this.chips
+      chips: this.chips,
     },
     {
       label: 'Precheckin',
@@ -163,7 +163,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       value: 'PRECHECKIN',
       disabled: false,
       total: 0,
-      chips: this.chips
+      chips: this.chips,
     },
     {
       label: 'Checkin',
@@ -171,7 +171,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       value: 'CHECKIN',
       disabled: false,
       total: 0,
-      chips: this.chips
+      chips: this.chips,
     },
     {
       label: 'Checkout',
@@ -179,9 +179,11 @@ export class GuestStatusStatisticsComponent implements OnInit {
       value: 'CHECKOUT',
       disabled: false,
       total: 0,
-      chips: this.chips
-    }
+      chips: this.chips,
+    },
   ];
+
+  globalQueries;
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -193,7 +195,27 @@ export class GuestStatusStatisticsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getGuestStatus();
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getGuestStatus();
+      })
+    );
   }
 
   legendOnClick = (index) => {
@@ -224,12 +246,19 @@ export class GuestStatusStatisticsComponent implements OnInit {
       d.data = [];
     });
     this.chart.chartLabels = [];
-    botKeys.forEach((d) => {
+    botKeys.forEach((d, i) => {
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
-          this.selectedInterval === 'date' ? 'DD MMM' : this.selectedInterval === 'month' ? 'MMM YYYY' : ''
+          this.selectedInterval === 'date'
+            ? 'DD MMM'
+            : this.selectedInterval === 'month'
+            ? 'MMM YYYY'
+            : '',
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
         )
       );
       this.chart.chartData[0].data.push(this.guestStatusData.newGuestStats[d]);
@@ -253,36 +282,19 @@ export class GuestStatusStatisticsComponent implements OnInit {
   }
 
   private getGuestStatus(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this.dateService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        const queries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-
-        const config = {
-          queryObj: this._adminUtilityService.makeQueryParams(queries),
-        };
-        this.$subscription.add(
-          this._statisticService.getGuestStatus(config).subscribe(
-            (response) => {
-              this.guestStatusData = new Status().deserialize(response);
-              this.initGraphData();
-            },
-            ({ error }) => {
-              this._snackbarService.openSnackBarAsText(error.message);
-            }
-          )
-        );
-      })
+      this._statisticService.getGuestStatus(config).subscribe(
+        (response) => {
+          this.guestStatusData = new Status().deserialize(response);
+          this.initGraphData();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 

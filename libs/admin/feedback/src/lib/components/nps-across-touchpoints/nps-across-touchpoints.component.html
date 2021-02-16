@@ -195,7 +195,8 @@
             <div class="label">{{ dateService.convertTimestampToLabels(
               this.selectedInterval,
               data.value,
-              this.selectedInterval === 'date' ? 'DD MMM' : this.selectedInterval === 'month' ? 'MMM YYYY' : ''
+              this.selectedInterval === 'date' ? 'DD MMM' : this.selectedInterval === 'month' ? 'MMM YYYY' : '',
+              selectedInterval === 'week' ? this._adminUtilityService.getToDate(this.globalQueries) : null
               ) }}</div>
           </div>
         </ng-container>

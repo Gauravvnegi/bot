@@ -30,8 +30,18 @@ export class NetPromoterScoreComponent implements OnInit {
   globalQueries = [];
 
   chartTypes = [
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg', backgroundColor: '#1AB99F' },
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg', backgroundColor: '#DEFFF3' },
+    {
+      name: 'Bar',
+      value: 'bar',
+      url: 'assets/svg/bar-graph.svg',
+      backgroundColor: '#1AB99F',
+    },
+    {
+      name: 'Line',
+      value: 'line',
+      url: 'assets/svg/line-graph.svg',
+      backgroundColor: '#DEFFF3',
+    },
   ];
 
   documentActionTypes = [
@@ -51,7 +61,7 @@ export class NetPromoterScoreComponent implements OnInit {
       },
     ],
     chartLabels: [],
-    chartOptions: { 
+    chartOptions: {
       responsive: true,
       elements: {
         line: {
@@ -155,12 +165,17 @@ export class NetPromoterScoreComponent implements OnInit {
     const botKeys = Object.keys(this.npsChartData.npsGraph);
     this.chart.chartData[0].data = [];
     this.chart.chartLabels = [];
-    botKeys.forEach((d) => {
+    botKeys.forEach((d, i) => {
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
-          this.selectedInterval === 'date' ? 'DD MMM' : this.selectedInterval === 'month' ? 'MMM YYYY' : ''
+          this.selectedInterval === 'date'
+            ? 'DD MMM'
+            : this.selectedInterval === 'month'
+            ? 'MMM YYYY'
+            : '',
+          this.selectedInterval === 'week' ? this._adminUtilityService.getToDate(this.globalQueries) : null
         )
       );
       this.chart.chartData[0].data.push(this.npsChartData.npsGraph[d]);
@@ -196,7 +211,10 @@ export class NetPromoterScoreComponent implements OnInit {
     this.$subscription.add(
       this._statisticService.exportOverallNPSCSV(config).subscribe(
         (response) => {
-          FileSaver.saveAs(response, 'NPS_export_' + new Date().getTime() + '.csv');
+          FileSaver.saveAs(
+            response,
+            'NPS_export_' + new Date().getTime() + '.csv'
+          );
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);

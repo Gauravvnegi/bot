@@ -35,4 +35,12 @@ export class AdminUtilityService {
     return `?${queryStr}`;
   }
 
+  getToDate(globalQueries) {
+    return globalQueries.map((data) => {
+      if (data.toDate) {
+        return data.toDate;
+      }
+    }).join('');
+  }
+
 }

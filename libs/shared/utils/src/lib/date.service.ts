@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { difference } from 'lodash';
 import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
@@ -48,7 +49,7 @@ export class DateService {
     return moment(inputTimeStamp).format(format);
   }
 
-  convertTimestampToLabels(type, timestamp, format?) {
+  convertTimestampToLabels(type, timestamp, format?, toDate?) {
     let returnData = '';
     if (type === 'year') {
       returnData = timestamp;
@@ -57,15 +58,18 @@ export class DateService {
     } else if (type === 'date') {
       returnData = moment(+timestamp).format(format || 'DD MMM');
     } else if (type === 'week') {
+      let difference = DateService.getDateDifference(+toDate, +timestamp);
+      difference = difference >= 0 && difference < 6 ? difference : 6;
       let monthDiff =
         DateService.getMonthFromDate(moment(+timestamp)) ===
         DateService.getMonthFromDate(moment(+timestamp).add(6, 'days'));
-      returnData =
-        moment(+timestamp).format(monthDiff ? 'D' : format || 'D MMM') +
-        '-' +
-        moment(+timestamp)
-          .add(6, 'days')
-          .format(format || 'DD MMM');
+      returnData = difference
+        ? moment(+timestamp).format(monthDiff ? 'D' : format || 'D MMM') +
+          '-' +
+          moment(+timestamp)
+            .add(difference, 'days')
+            .format(format || 'DD MMM')
+        : moment(+timestamp).format(format || 'D MMM');
     } else {
       returnData = `${timestamp > 12 ? timestamp - 12 : timestamp}:00 ${
         timestamp > 11 ? 'PM' : 'AM'

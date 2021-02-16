@@ -56,6 +56,16 @@ export class DateService {
       returnData = moment(+timestamp).format(format || 'MMM YYYY');
     } else if (type === 'date') {
       returnData = moment(+timestamp).format(format || 'DD MMM');
+    } else if (type === 'week') {
+      let monthDiff =
+        DateService.getMonthFromDate(moment(+timestamp)) ===
+        DateService.getMonthFromDate(moment(+timestamp).add(6, 'days'));
+      returnData =
+        moment(+timestamp).format(monthDiff ? 'D' : format || 'D MMM') +
+        '-' +
+        moment(+timestamp)
+          .add(6, 'days')
+          .format(format || 'DD MMM');
     } else {
       returnData = `${timestamp > 12 ? timestamp - 12 : timestamp}:00 ${
         timestamp > 11 ? 'PM' : 'AM'
@@ -68,14 +78,16 @@ export class DateService {
     const dateDiff = DateService.getDateDifference(startDate, endDate);
     if (dateDiff === 0) {
       return 'day';
-    } else if (dateDiff > 0 && dateDiff < 30) {
+    } else if (dateDiff > 0 && dateDiff <= 7) {
       return 'date';
+    } else if (dateDiff > 7 && dateDiff < 30) {
+      return 'week';
     } else if (dateDiff >= 30 && dateDiff <= 365) {
       if (
         DateService.getMonthFromDate(startDate) ===
         DateService.getMonthFromDate(endDate)
       ) {
-        return 'date';
+        return 'week';
       }
       return 'month';
     } else {

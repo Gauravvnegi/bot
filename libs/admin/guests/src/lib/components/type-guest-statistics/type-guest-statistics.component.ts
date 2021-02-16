@@ -9,6 +9,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { GuestDatatableModalComponent } from 'libs/admin/guests/src/lib/components/guest-datatable-modal/guest-datatable-modal.component';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-type-guest-statistics',
@@ -163,7 +164,8 @@ export class TypeGuestStatisticsComponent implements OnInit {
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -206,10 +208,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(
-          this.selectedInterval,
-          d
-        )
+        this.dateService.convertTimestampToLabels(this.selectedInterval, d)
       );
       this.chart.chartData[0].data.push(this.customerData.arrival[d]);
       this.chart.chartData[1].data.push(this.customerData.inHouse[d]);
@@ -222,7 +221,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
+          calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate
           ),

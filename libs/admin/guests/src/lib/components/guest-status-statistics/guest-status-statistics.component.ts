@@ -4,6 +4,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { Status } from '../../data-models/statistics.model';
@@ -187,7 +188,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -224,7 +226,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(
+        this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d
         )
@@ -253,7 +255,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
+          calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate
           ),

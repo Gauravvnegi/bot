@@ -35,44 +35,4 @@ export class AdminUtilityService {
     return `?${queryStr}`;
   }
 
-  convertTimestampToLabels(type, data) {
-    let returnTime;
-    if (type === 'year') {
-      returnTime = data;
-    } else if (type === 'month') {
-      returnTime = data.length === 10 ? moment.unix(data).format('MMM YYYY'): moment(data).format('MMM YYYY');
-    } else if (type === 'date') {
-      returnTime = data.length === 10 ? moment.unix(data).format('DD MMM'): moment(data).format('DD MMM');
-    } else {
-      returnTime = `${data > 12 ? data - 12 : data}:00 ${
-        data > 11 ? 'PM' : 'AM'
-      }`;
-    }
-    return returnTime;
-  }
-
-  getCalendarType(startDate, endDate) {
-    const dateDiff = DateService.getDateDifference(startDate, endDate);
-    if (dateDiff === 0) {
-      return 'day';
-    } else if (dateDiff > 0 && dateDiff < 30) {
-      return 'date';
-    } else if (dateDiff >= 30 && dateDiff <= 365) {
-      if (
-        DateService.getMonthFromDate(startDate) ===
-        DateService.getMonthFromDate(endDate)
-      ) {
-        return 'date';
-      }
-      return 'month';
-    } else {
-      if (
-        DateService.getYearFromDate(startDate) ===
-        DateService.getYearFromDate(endDate)
-      ) {
-        return 'month';
-      }
-      return 'year';
-    }
-  }
 }

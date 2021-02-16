@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GuestDatatableModalComponent } from '../guest-datatable-modal/guest-datatable-modal.component';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-guest-documents-statistics',
@@ -113,7 +114,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private dateService: DateService
   ) { }
 
   ngOnInit(): void {
@@ -143,7 +145,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
+          calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate
           ),

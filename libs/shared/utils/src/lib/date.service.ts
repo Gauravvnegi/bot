@@ -47,4 +47,43 @@ export class DateService {
   static getDateFromTimeStamp(inputTimeStamp, format = 'DD-MM-YYYY') {
     return moment(inputTimeStamp).format(format);
   }
+
+  convertTimestampToLabels(type, data) {
+    if (type === 'year') {
+      return data;
+    } else if (type === 'month') {
+      return DateService.getDateFromTimeStamp(data, 'MMM YYYY');
+    } else if (type === 'date') {
+      return DateService.getDateFromTimeStamp(data, 'DD MMM');
+    } else {
+      return `${data > 12 ? data - 12 : data}:00 ${
+        data > 11 ? 'PM' : 'AM'
+      }`;
+    }
+  }
+
+  getCalendarType(startDate, endDate) {
+    const dateDiff = DateService.getDateDifference(startDate, endDate);
+    if (dateDiff === 0) {
+      return 'day';
+    } else if (dateDiff > 0 && dateDiff < 30) {
+      return 'date';
+    } else if (dateDiff >= 30 && dateDiff <= 365) {
+      if (
+        DateService.getMonthFromDate(startDate) ===
+        DateService.getMonthFromDate(endDate)
+      ) {
+        return 'date';
+      }
+      return 'month';
+    } else {
+      if (
+        DateService.getYearFromDate(startDate) ===
+        DateService.getYearFromDate(endDate)
+      ) {
+        return 'month';
+      }
+      return 'year';
+    }
+  }
 }

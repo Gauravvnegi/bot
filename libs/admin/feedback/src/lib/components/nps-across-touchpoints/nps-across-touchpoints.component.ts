@@ -7,6 +7,7 @@ import { NPSTouchpoints } from '../../data-models/statistics.model';
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import * as FileSaver from 'file-saver';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-nps-across-touchpoints',
@@ -49,7 +50,8 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +64,7 @@ export class NpsAcrossTouchpointsComponent implements OnInit {
       this._globalFilterService.globalFilter$.subscribe(
         (data) => {
           let calenderType = {
-            calenderType: this._adminUtilityService.getCalendarType(
+            calenderType: this.dateService.getCalendarType(
               data['dateRange'].queryValue[0].toDate,
               data['dateRange'].queryValue[1].fromDate
             ),

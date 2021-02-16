@@ -13,6 +13,7 @@ import { StatisticsService } from '../../services/statistics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-customer-statistics',
@@ -129,9 +130,10 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   timeShow = false;
 
   constructor(
-    private _adminUtilityService: AdminUtilityService,
+    private dateService: DateService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _adminUtilityService: AdminUtilityService
   ) {}
 
   setChartType(option) {
@@ -173,7 +175,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     this.chart.chartLabels = [];
     botKeys.forEach((d) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(
+        this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d
         )
@@ -213,7 +215,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
+          calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate
           ),

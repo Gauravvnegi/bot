@@ -177,6 +177,10 @@ export class EditUserPermissionComponent implements OnInit {
   }
 
   savePermission() {
+    if (!this.userForm.valid) {
+      this._snackbarService.openSnackBarAsText('Invalid Form');
+      return;
+    }
     let formValue = this.userForm.getRawValue();
 
     formValue.permissionConfigs.forEach((config, configIndex) => {

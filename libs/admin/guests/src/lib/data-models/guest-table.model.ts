@@ -46,17 +46,16 @@ export class EntityTypeCounts {
 }
 
 export class EntityStateCounts {
-  'High Potential': number;
+  HIGHPOTENTIAL: number;
   VIP: number;
-  'High Risk': number;
+  HIGHRISK: number;
 
   deserialize(data) {
     Object.assign(
       this,
-      set({}, 'ARRIVAL', get(data, ['ARRIVAL'])),
-      set({}, 'OUTGUEST', get(data, ['OUTGUEST'])),
-      set({}, 'INHOUSE', get(data, ['INHOUSE'])),
-      set({}, 'DEPARTURE', get(data, ['DEPARTURE']))
+      set({}, 'HIGHPOTENTIAL', get(data, ['HIGHPOTENTIAL'])),
+      set({}, 'VIP', get(data, ['VIP'])),
+      set({}, 'HIGHRISK', get(data, ['HIGHRISK'])),
     );
     return this;
   }

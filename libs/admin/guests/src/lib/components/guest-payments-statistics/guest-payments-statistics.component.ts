@@ -63,25 +63,25 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
   chips = [
     { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
     {
-      label: 'VIP',
+      label: 'Fully Received',
       icon: '',
-      value: 'VIP',
+      value: 'FULLYRECEIVED',
       total: 0,
       isSelected: false,
       type: 'pending',
     },
     {
-      label: 'High Potential ',
+      label: 'Partially Received ',
       icon: '',
-      value: 'HIGHPOTENTIAL',
+      value: 'PARTIALLYRECEIVED',
       total: 0,
       isSelected: false,
       type: 'initiated',
     },
     {
-      label: 'High Risk ',
+      label: 'Not Received ',
       icon: '',
-      value: 'HIGHRISK',
+      value: 'NOTRECEIVED',
       total: 0,
       isSelected: false,
       type: 'completed',
@@ -90,29 +90,29 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
 
   tabFilterItems = [
     {
-      label: 'Fully Received',
+      label: 'All',
       content: '',
-      value: 'FULLYRECEIVED',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: this.chips
     },
     {
-      label: 'Partially Received',
+      label: 'VIP',
       content: '',
-      value: 'PARTIALLYRECEIVED',
+      value: 'VIP',
       disabled: false,
       total: 0,
       chips: this.chips
     },
     {
-      label: 'Not Received',
+      label: 'General',
       content: '',
-      value: 'NOTRECEIVED',
+      value: 'GENERAL',
       disabled: false,
       total: 0,
       chips: this.chips
-    }
+    },
   ];
 
   constructor(

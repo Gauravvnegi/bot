@@ -123,25 +123,33 @@ export class GuestStatusStatisticsComponent implements OnInit {
   chips = [
     { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
     {
-      label: 'VIP',
+      label: 'New',
       icon: '',
-      value: 'VIP',
+      value: 'NEW',
       total: 0,
       isSelected: false,
       type: 'pending',
     },
     {
-      label: 'High Potential ',
+      label: 'Precheckin ',
       icon: '',
-      value: 'HIGHPOTENTIAL',
+      value: 'PRECHECKIN',
       total: 0,
       isSelected: false,
       type: 'initiated',
     },
     {
-      label: 'High Risk ',
+      label: 'Checkin ',
       icon: '',
-      value: 'HIGHRISK',
+      value: 'CHECKIN',
+      total: 0,
+      isSelected: false,
+      type: 'completed',
+    },
+    {
+      label: 'Checkout ',
+      icon: '',
+      value: 'CHECKOUT',
       total: 0,
       isSelected: false,
       type: 'completed',
@@ -150,36 +158,28 @@ export class GuestStatusStatisticsComponent implements OnInit {
 
   tabFilterItems = [
     {
-      label: 'New',
+      label: 'All',
       content: '',
-      value: 'NEW',
+      value: 'ALL',
       disabled: false,
       total: 0,
-      chips: this.chips,
+      chips: this.chips
     },
     {
-      label: 'Precheckin',
+      label: 'VIP',
       content: '',
-      value: 'PRECHECKIN',
+      value: 'VIP',
       disabled: false,
       total: 0,
-      chips: this.chips,
+      chips: this.chips
     },
     {
-      label: 'Checkin',
+      label: 'General',
       content: '',
-      value: 'CHECKIN',
+      value: 'GENERAL',
       disabled: false,
       total: 0,
-      chips: this.chips,
-    },
-    {
-      label: 'Checkout',
-      content: '',
-      value: 'CHECKOUT',
-      disabled: false,
-      total: 0,
-      chips: this.chips,
+      chips: this.chips
     },
   ];
 

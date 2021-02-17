@@ -34,25 +34,33 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   chips = [
     { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
     {
-      label: 'VIP',
+      label: 'Initiated',
       icon: '',
-      value: 'VIP',
+      value: 'INITIATED',
       total: 0,
       isSelected: false,
       type: 'pending',
     },
     {
-      label: 'High Potential ',
+      label: 'Pending ',
       icon: '',
-      value: 'HIGHPOTENTIAL',
+      value: 'PENDING',
       total: 0,
       isSelected: false,
       type: 'initiated',
     },
     {
-      label: 'High Risk ',
+      label: 'Accepted ',
       icon: '',
-      value: 'HIGHRISK',
+      value: 'ACCEPTED',
+      total: 0,
+      isSelected: false,
+      type: 'completed',
+    },
+    {
+      label: 'Rejected ',
+      icon: '',
+      value: 'REJECTED',
       total: 0,
       isSelected: false,
       type: 'completed',
@@ -61,37 +69,29 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
 
   tabFilterItems = [
     {
-      label: 'Initiated',
+      label: 'All',
       content: '',
-      value: 'INITIATED',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: this.chips
     },
     {
-      label: 'Pending',
+      label: 'VIP',
       content: '',
-      value: 'PENDING',
+      value: 'VIP',
       disabled: false,
       total: 0,
       chips: this.chips
     },
     {
-      label: 'Accepted',
+      label: 'General',
       content: '',
-      value: 'ACCEPTED',
+      value: 'GENERAL',
       disabled: false,
       total: 0,
       chips: this.chips
     },
-    {
-      label: 'Rejected',
-      content: '',
-      value: 'REJECTED',
-      disabled: false,
-      total: 0,
-      chips: this.chips
-    }
   ];
 
   chart: any = {

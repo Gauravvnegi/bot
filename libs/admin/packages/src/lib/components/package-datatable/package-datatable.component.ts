@@ -196,7 +196,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   }
 
   openPackageDetails(amenity): void {
-    this.router.navigate([amenity.id], { relativeTo: this.route });
+    this.router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {

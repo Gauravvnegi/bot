@@ -218,7 +218,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
     );
   }
 
-  legendOnClick = (index) => {
+  legendOnClick = (index, event) => {
+    event.stopPropagation();
     let ci = this.baseChart.chart;
     let alreadyHidden =
       ci.getDatasetMeta(index).hidden === null
@@ -274,7 +275,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
     });
   }
 
-  setChartType(option): void {
+  setChartType(option, event): void {
+    event.stopPropagation();
     if (this.chart.chartType !== option) {
       this.chart.chartType = option.value;
       this.setChartColors();

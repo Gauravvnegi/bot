@@ -5,6 +5,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { GuestTable } from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
@@ -47,6 +48,31 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     this.registerListeners();
   }
 
+  loadInitialData(queries = [], loading = true) {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.values = new GuestTable().deserialize(data).records;
+          this.initialLoading = false;
+          //set pagination
+          this.totalRecords = data.total;
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
+
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+          this.closeModal();
+        }
+      )
+    );
+  }
+
   fetchDataFrom(
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
@@ -58,6 +84,38 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     };
 
     return this._guestTableService[this.callingMethod](config);
+  }
+
+  loadData(event: LazyLoadEvent) {
+    this.loading = true;
+    this.updatePaginations(event);
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ],
+        { offset: this.first, limit: this.rowsPerPage }
+      ).subscribe(
+        (data) => {
+          this.values = new GuestTable().deserialize(data).records;
+
+          //set pagination
+          this.totalRecords = data.total;
+          //check for update tabs and quick reply filters
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+          this.closeModal();
+        }
+      )
+    );
   }
 
   closeModal() {

@@ -8,7 +8,7 @@
     </div>
     <div class="stat-labels-container">
       <ng-container *ngFor="let legend of legendData; let legendIndex = index">
-        <div class="stat-label" (click)="legendOnClick(legendIndex)">
+        <div class="stat-label" (click)="legendOnClick(legendIndex, $event)">
           <input class="legends" type="checkbox" />
           <span
             [style.background-color]="legend.bubbleColor"
@@ -20,13 +20,13 @@
     </div>
     <form>
       <div class="pull-right">
-        <label class="labl" *ngFor="let option of chartTypes">
+        <label class="labl" *ngFor="let option of chartTypes" 
+        (click)="setChartType(option, $event)">
           <input
             name="method"
             type="radio"
             [checked]="chart.chartType === option.value"
             [value]="option.value"
-            (click)="setChartType(option)"
             [id]="option.value + '-type'"
           />
           <div class="image">

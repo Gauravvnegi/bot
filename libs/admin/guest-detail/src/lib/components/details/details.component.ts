@@ -117,6 +117,7 @@ export class DetailsComponent implements OnInit {
       },
       ({ error }) => {
         this._snackBarService.openSnackBarAsText(error.message);
+        this.closeDetails();
       }
     );
   }

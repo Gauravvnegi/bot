@@ -61,27 +61,27 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
   };
 
   chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true },
     {
-      label: 'Fully Received',
+      label: 'Fully Recieved',
       icon: '',
-      value: 'FULLYRECEIVED',
+      value: 'FULLYRECIEVED',
       total: 0,
       isSelected: false,
       type: 'pending',
     },
     {
-      label: 'Partially Received ',
+      label: 'Partially Recieved ',
       icon: '',
-      value: 'PARTIALLYRECEIVED',
+      value: 'PARTIALLYRECIEVED',
       total: 0,
       isSelected: false,
       type: 'initiated',
     },
     {
-      label: 'Not Received ',
+      label: 'Not Recieved ',
       icon: '',
-      value: 'NOTRECEIVED',
+      value: 'NOTRECIEVED',
       total: 0,
       isSelected: false,
       type: 'completed',
@@ -201,8 +201,10 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
 
     tableCompRef.componentInstance.tableName = 'Guest Payments';
     tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-    tableCompRef.componentInstance.callingMethod = 'getAllGuestPayments';
-
+    tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
+    tableCompRef.componentInstance.guestFilter = 'GUESTPAYMENTS';
+    tableCompRef.componentInstance.exportURL = 'exportCSVStat';
+    
     this.$subscription.add(
       tableCompRef.componentInstance.onModalClose.subscribe((res) => {
         tableCompRef.close();

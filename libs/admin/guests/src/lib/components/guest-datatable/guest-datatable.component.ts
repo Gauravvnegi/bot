@@ -50,7 +50,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   ];
 
   chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true },
     {
       label: 'VIP',
       icon: '',
@@ -212,10 +212,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL')
+        chip.total = countObj[chip.value];
       });
     }
   }

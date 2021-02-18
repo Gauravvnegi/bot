@@ -50,7 +50,7 @@ export class Package implements Deserializable {
     return this.paidPackages.length
       ? `${this.paidPackages[0].label}${
           this.paidPackages.length > 1
-            ? ' +' + (this.paidPackages.length - 1)
+            ? ` (+${this.paidPackages.length - 1})`
             : ''
         }`
       : '';

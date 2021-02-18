@@ -39,15 +39,13 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/cms/feedback-form`);
   }
 
-  getAllGuestStatus(config): Observable<any> {
-    return this.get(`/api/v1/guests/status/${config.queryObj}`);
+  getAllGuestStats(config): Observable<any> {
+    return this.get(`/api/v1/guests/stats/${config.queryObj}`);
   }
 
-  getAllGuestPayments(config): Observable<any> {
-    return this.get(`/api/v1/guests/payments/${config.queryObj}`);
-  }
-
-  getAllGuestDocuments(config): Observable<any> {
-    return this.get(`/api/v1/guests/documents/${config.queryObj}`);
+  exportCSVStat(config): Observable<any> {
+    return this.get(`/api/v1/guests/stats/export/${config.queryObj}`, {
+      responseType: 'blob',
+    });
   }
 }

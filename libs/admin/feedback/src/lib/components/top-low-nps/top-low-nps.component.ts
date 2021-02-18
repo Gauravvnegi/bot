@@ -24,7 +24,6 @@ export class TopLowNpsComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getPerformanceNps();
   }
 
   registerListeners(): void {
@@ -39,6 +38,7 @@ export class TopLowNpsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getPerformanceNps();
       })
     );
   }

@@ -121,7 +121,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
   };
 
   chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true },
     {
       label: 'New',
       icon: '',
@@ -350,8 +350,10 @@ export class GuestStatusStatisticsComponent implements OnInit {
 
     tableCompRef.componentInstance.tableName = 'Guest Status';
     tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-    tableCompRef.componentInstance.callingMethod = 'getAllGuestStatus';
-
+    tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
+    tableCompRef.componentInstance.guestFilter = 'GUESTSTATUS';
+    tableCompRef.componentInstance.exportURL = 'exportCSVStat';
+    
     this.$subscription.add(
       tableCompRef.componentInstance.onModalClose.subscribe((res) => {
         tableCompRef.close();

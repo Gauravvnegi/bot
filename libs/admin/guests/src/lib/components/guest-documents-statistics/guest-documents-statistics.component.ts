@@ -32,7 +32,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   selectedInterval: any;
 
   chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true },
     {
       label: 'Initiated',
       icon: '',
@@ -73,7 +73,6 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       content: '',
       value: 'ALL',
       disabled: false,
-      total: 0,
       chips: this.chips
     },
     {
@@ -195,8 +194,10 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
 
     tableCompRef.componentInstance.tableName = 'Guest Documents';
     tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-    tableCompRef.componentInstance.callingMethod = 'getAllGuestDocuments';
-
+    tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
+    tableCompRef.componentInstance.guestFilter = 'GUESTDOCUMENTS';
+    tableCompRef.componentInstance.exportURL = 'exportCSVStat';
+    
     this.$subscription.add(
       tableCompRef.componentInstance.onModalClose.subscribe((res) => {
         tableCompRef.close();

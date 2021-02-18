@@ -16,8 +16,8 @@
 						class="progress-value" [style.background]="item.colorCode"></div>
 					<div [fxFlex]="100 - (item.score < 0 ? item.score * (-1) : item.score)" class="progress-value"
 						[style.background]="'transparent'"></div>
-					<div class="value" [style.color]="item.score > 20 || item.score < -20 ? 'white' : 'black'"
-						[style.left]="10 + (item.score < 0 ? (item.score * (-1)) / 2 : item.score / 2) + 'px'">{{
+					<div class="value"
+						[style.left]="5 + (item.score < 0 ? (item.score * (-1)) / 2 : item.score / 2) + 'px'">{{
 						item.score }}</div>
 				</div>
 			</div>

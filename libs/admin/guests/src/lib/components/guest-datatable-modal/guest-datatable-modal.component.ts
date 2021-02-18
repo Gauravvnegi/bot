@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { GuestTable } from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestDatatableComponent } from '../guest-datatable/guest-datatable.component';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
@@ -23,6 +24,8 @@ import { GuestDatatableComponent } from '../guest-datatable/guest-datatable.comp
 export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit {
   @Input() callingMethod: string;
+  @Input() guestFilter: string;
+  @Input() exportURL: string;
   @Output() onModalClose = new EventEmitter();
   constructor(
     public fb: FormBuilder,
@@ -75,7 +78,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
 
   fetchDataFrom(
     queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+    defaultProps = {
+      offset: this.first,
+      limit: this.rowsPerPage,
+      guestFilter: this.guestFilter,
+    }
   ): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
@@ -99,7 +106,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
-        { offset: this.first, limit: this.rowsPerPage }
+        {
+          offset: this.first,
+          limit: this.rowsPerPage,
+          guestFilter: this.guestFilter,
+        }
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
@@ -113,6 +124,41 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           this.loading = false;
           this._snackbarService.openSnackBarAsText(error.message);
           this.closeModal();
+        }
+      )
+    );
+  }
+
+  exportCSV() {
+    this.loading = true;
+
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          guestFilter: this.guestFilter,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+      ]),
+    };
+    this.$subscription.add(
+      this._guestTableService[this.exportURL || 'exportCSV'](config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
         }
       )
     );

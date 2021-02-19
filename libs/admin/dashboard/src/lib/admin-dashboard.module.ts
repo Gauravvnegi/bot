@@ -18,6 +18,7 @@ import { StatisticsService } from './services/statistics.service';
 import { DepartureStatisticsComponent } from './components/departure-statistics/departure-statistics.component';
 import { ReservationDatatableComponent } from './components/reservation-datatable/reservation-datatable.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReservationDatatableModalComponent } from './components/reservation-datatable-modal/reservation-datatable-modal.component';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -50,6 +51,7 @@ export const adminDashboardRoutes: Route[] = [
     CustomerStatisticsComponent,
     DepartureStatisticsComponent,
     ReservationDatatableComponent,
+    ReservationDatatableModalComponent,
   ],
   exports: [DashboardComponent],
   providers: [StatisticsService],

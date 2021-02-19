@@ -18,7 +18,11 @@ export class AuthComponent implements OnInit {
     { label: 'Universal Search', url: 'assets/svg/search.svg' },
   ];
 
-  constructor(public dateService: DateService) {}
+  constructor() {}
 
   ngOnInit(): void {}
+
+  get currentDate() {
+    return DateService.getCurrentDateWithFormat('YYYY');
+  }
 }

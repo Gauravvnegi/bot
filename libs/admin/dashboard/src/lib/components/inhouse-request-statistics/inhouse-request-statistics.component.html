@@ -1,4 +1,5 @@
-<div class="container" style="position: relative;">
+<div class="container" style="position: relative;" [routerLink]="['/pages/request']"
+  [queryParams]="{ filter: 'INHOUSE', subFilter: 'ALL' }">
   <div class="title-container">
     <div class="icon">
       <img src="assets/svg/inhouse_request.svg" />
@@ -22,29 +23,12 @@
       </div>
     </div>
     <div class="progress--container">
-      <circle-progress
-        class="circle-progress"
-        [percent]="requestPendingPercent"
-        [backgroundPadding]="7"
-        [radius]="52"
-        [space]="-16"
-        [outerStrokeWidth]="16"
-        [outerStrokeColor]="'#f6b155'"
-        [outerStrokeLinecap]="'inherit'"
-        [innerStrokeColor]="'#2f1dce'"
-        [innerStrokeWidth]="16"
-        [title]="inhouseRequest.totalRequest"
-        [subtitle]="'Total Request'"
-        [titleFontSize]="20"
-        [titleFontWeight]="200"
-        [subtitleFontSize]="11"
-        [animation]="false"
-        [animationDuration]="0"
-        [animateTitle]="false"
-        [showUnits]="false"
-        [clockwise]="false"
-        [responsive]="false"
-      ></circle-progress>
+      <circle-progress class="circle-progress" [percent]="requestPendingPercent" [backgroundPadding]="7" [radius]="52"
+        [space]="-16" [outerStrokeWidth]="16" [outerStrokeColor]="'#f6b155'" [outerStrokeLinecap]="'inherit'"
+        [innerStrokeColor]="'#2f1dce'" [innerStrokeWidth]="16" [title]="inhouseRequest.totalRequest"
+        [subtitle]="'Total Request'" [titleFontSize]="20" [titleFontWeight]="200" [subtitleFontSize]="11"
+        [animation]="false" [animationDuration]="0" [animateTitle]="false" [showUnits]="false" [clockwise]="false"
+        [responsive]="false"></circle-progress>
     </div>
   </div>
 </div>

@@ -1,4 +1,15 @@
-import { Component, ComponentFactoryResolver, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { Country } from 'libs/web-user/shared/src/lib/data-models/countryCode';
@@ -6,9 +17,9 @@ import { FieldsetComponent } from 'libs/web-user/shared/src/lib/presentational/f
 import { FileUploadComponent } from 'libs/web-user/shared/src/lib/presentational/file-upload/file-upload.component';
 import { InputComponent } from 'libs/web-user/shared/src/lib/presentational/input/input.component';
 import { LabelComponent } from 'libs/web-user/shared/src/lib/presentational/label/label.component';
-import { RadioComponent } from 'libs/web-user/shared/src/lib/presentational/radio/radio.component';
+import { Temp000001RadioComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-radio/temp000001-radio.component';
 import { SelectBoxComponent } from 'libs/web-user/shared/src/lib/presentational/select-box/select-box.component';
-import { TextareaComponent } from 'libs/web-user/shared/src/lib/presentational/textarea/textarea.component';
+import { Temp000001TextareaComponent } from 'libs/web-user/templates/temp000001/src/lib/presentational/temp000001-textarea/temp000001-textarea.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -20,9 +31,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 
 const components = {
-  radio: RadioComponent,
+  radio: Temp000001RadioComponent,
   input: InputComponent,
-  textarea: TextareaComponent,
+  textarea: Temp000001TextareaComponent,
   label: LabelComponent,
   fieldset: FieldsetComponent,
   select: SelectBoxComponent,
@@ -36,6 +47,7 @@ const components = {
 })
 export class HealthDeclarationComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
+  protected healthComponents=components;
   @Output()
   addFGEvent = new EventEmitter();
 
@@ -56,15 +68,15 @@ export class HealthDeclarationComponent implements OnInit {
   signature: string = '';
 
   constructor(
-    private _resolver: ComponentFactoryResolver,
-    private fb: FormBuilder,
-    private _stepperService: StepperService,
-    private _healthDetailsService: HealthDetailsService,
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _translateService: TranslateService,
-    private _snackBarService:SnackBarService,
-    private _utilityService: UtilityService
+    protected _resolver: ComponentFactoryResolver,
+    protected fb: FormBuilder,
+    protected _stepperService: StepperService,
+    protected _healthDetailsService: HealthDetailsService,
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _translateService: TranslateService,
+    protected _snackBarService:SnackBarService,
+    protected _utilityService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -92,23 +104,20 @@ export class HealthDeclarationComponent implements OnInit {
             (response) => {
               this.signature = response.fileDownloadUrl;
               this._translateService
-              .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(
-                  translatedMsg,
-                  '',
-                  { panelClass: 'success' }
-                );
-              });
+                .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
+                });
               this._utilityService.$signatureUploaded.next(true);
             },
             ({ error }) => {
-              
               this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                });
               //   this._snackBarService.openSnackBarAsText(error.message);
               this._utilityService.$signatureUploaded.next(false);
             }
@@ -232,9 +241,9 @@ export class HealthDeclarationComponent implements OnInit {
     if (config.isDummy == false) {
       this.keysToBeUpdated.push(config.id);
     }
-    if (config && components[config.component.type]) {
+    if (config && this.healthComponents[config.component.type]) {
       const factoryComponent = this._resolver.resolveComponentFactory(
-        components[config.component.type]
+        this.healthComponents[config.component.type]
       );
       const componentObj = container.createComponent(factoryComponent) as any;
 
@@ -254,6 +263,14 @@ export class HealthDeclarationComponent implements OnInit {
           mediaQuery: config.component.mediaQuery,
           validation: config.component.validation,
         };
+        if (config.component.isOptionsOpenedChanged) {
+          componentObj.instance.settings = {
+            ...componentObj.instance.settings,
+            isOptionsOpenedChanged: config.component.isOptionsOpenedChanged,
+            optionsOpened: config.component.optionsOpened,
+            optionsClosed: config.component.optionsClosed,
+          };
+        }
         componentObj.instance.name = config.id;
         componentObj.instance.parentForm = formGroup;
       }
@@ -263,7 +280,11 @@ export class HealthDeclarationComponent implements OnInit {
 
   setConfigData(config) {
     if (config.component.label === 'Country') {
-      config.component.options = new Country().getCountryListWithDialCode([
+      config.component.isOptionsOpenedChanged = true;
+      config.component.optionsOpened = new Country().getCountryListWithDialCode(
+        [this._hotelService.hotelConfig.address.countryCode]
+      );
+      config.component.optionsClosed = new Country().getDialCodeList([
         this._hotelService.hotelConfig.address.countryCode,
       ]);
     } else if (config.component.label === 'Email ID') {

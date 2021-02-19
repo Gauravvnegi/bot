@@ -55,9 +55,10 @@ export class LayoutOneComponent implements OnInit {
     },
   };
 
+  isGlobalSearchVisible: boolean = true;
+
   constructor(
     private _router: Router,
-    public dateService: DateService,
     public filterService: FilterService,
     public dateRangeFilterService: DateRangeFilterService,
     public progressSpinnerService: ProgressSpinnerService,
@@ -66,7 +67,7 @@ export class LayoutOneComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
     private fb: FormBuilder,
-    private _modal: ModalService 
+    private _modal: ModalService
   ) {}
 
   ngOnInit() {
@@ -84,7 +85,7 @@ export class LayoutOneComponent implements OnInit {
 
   initLayoutConfigs() {
     this.backgroundColor = 'white';
-    this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
+    this.lastUpdatedAt = DateService.getCurrentDateWithFormat('h:mm A');
   }
 
   setInitialFilterValue() {
@@ -113,7 +114,7 @@ export class LayoutOneComponent implements OnInit {
 
     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this._router.navigate([currentUrl]);
-      this.lastUpdatedAt = this.dateService.getCurrentDateWithFormat('h:mm A');
+      this.lastUpdatedAt = DateService.getCurrentDateWithFormat('h:mm A');
       // this._router.routeReuseStrategy.shouldReuseRoute = () => true;
       // this._router.onSameUrlNavigation = 'reload';
     });
@@ -130,7 +131,22 @@ export class LayoutOneComponent implements OnInit {
   }
 
   toggleGlobalFilter() {
-    this.isGlobalFilterVisible = !this.isGlobalFilterVisible;
+    this.isGlobalFilterVisible = true;
+    this.isGlobalSearchVisible = false;
+  }
+
+  switchVisibility(){
+    this.isGlobalFilterVisible = false;
+    this.isGlobalSearchVisible = true;
+  }
+
+  noFilterNoSearch(){
+    this.isGlobalFilterVisible = false;
+    this.isGlobalSearchVisible = false;
+  }
+
+  closeGlobalFilter(){
+    this.isGlobalFilterVisible = false;
   }
 
   applyFilter(event) {
@@ -201,28 +217,5 @@ export class LayoutOneComponent implements OnInit {
   logoutUser() {
     this._authService.clearToken();
     this._router.navigate(['/auth']);
-  }
-
-  onSearchOptionSelected($event) {
-    if ($event.type === 'Booking') {
-      this.openDetailPage($event.bookingId, DetailsComponent);
-    }
-  }
-
-  openDetailPage(bookingId, component) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      component,
-      dialogConfig
-    );
-
-    detailCompRef.componentInstance.bookingId = bookingId;
-
-    detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-      this.isDetailPageVisible = false;
-      detailCompRef.close();
-    })
   }
 }

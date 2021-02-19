@@ -30,20 +30,21 @@ export class FooterComponent implements OnInit {
     privacyPolicy: '',
   };
 
-  constructor(private _hotelService: HotelService) {}
+  constructor(protected _hotelService: HotelService) {}
 
   ngOnInit(): void {
     this.getHotelConfigData();
   }
 
-  private getHotelConfigData(): void {
+  protected getHotelConfigData(): void {
     let {
       footerLogo,
       contactDetails,
       privacyPolicyUrl,
       socialPlatforms,
     } = this._hotelService.hotelConfig;
-    let { emailId, contactNumber, cc } = contactDetails;
+    // TO-DO: remove union when backend fixes the hotelConfig data
+    let { emailId, contactNumber, cc } = contactDetails || this._hotelService.hotelConfig;
     this.footerConfig.social = socialPlatforms;
     this.footerConfig.footerLogo = footerLogo;
     this.footerConfig.contactDetails.contactNo = cc + ' ' + contactNumber;

@@ -1,0 +1,62 @@
+<div class="material-body">
+	<div *ngIf="detailsData.documents && detailsData.documents.length; else documentsPending;">
+		<!-- Check if documents pending in any case ; then show pending template. If documents are initiated, completed or failed i can view docs-->
+		<div class="document-header">
+			<div class="heading">Doc Info</div>
+			<div class="download" (click)="downloadDocs(detailsData.documents)">Download</div>
+		</div>
+		<div class="wrapper">
+			<div class="document-name-nationality">
+				<mat-form-field class="nationality">
+					<mat-select [(value)]="detailsData.id" [disabled]="true">
+						<mat-option [value]="detailsData.id">
+							{{ detailsData.nameTitle }} {{ detailsData.firstName }}
+							{{ detailsData.lastName }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+				<div class="nationality-wrapper">
+					<span class="text">Nationality :</span>
+					<mat-form-field>
+						<mat-select [(value)]="detailsData.nationality" [disabled]="true">
+							<mat-option *ngFor="let country of countriesLOV" [value]="country.value">
+								{{ country.label }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+			<div *ngIf="detailsData.documents">
+				<ng-container *ngFor="let document of detailsData.documents; let i = index">
+					<div class="upload-image-wrapper">
+						<div class="upload-image">
+							<hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="document.frontUrl"
+								[pageType]="'front'" [documentType]="document.documentType" [isDisable]="true">
+							</hospitality-bot-upload-file>
+							<p class="text">
+								{{ document.documentType }} FIRST PAGE<b style="color: #f00d2a;">*</b>
+							</p>
+						</div>
+						<div class="upload-image" *ngIf="document.documentType != 'VISA'">
+							<hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="document.backUrl"
+								[pageType]="'back'" [documentType]="document.documentType" [isDisable]="true">
+							</hospitality-bot-upload-file>
+							<p class="text">
+								{{ document.documentType }} BACK PAGE<b style="color: #f00d2a;">*</b>
+							</p>
+						</div>
+					</div>
+				</ng-container>
+			</div>
+		</div>
+	</div>
+	<ng-template #documentsPending>
+		<div class="empty-view">
+			<div class="wrapper">
+				<img src="assets/Documents.png" />
+				<p class="label">Documents Pending!</p>
+				<p class="note">Seems like guest has not initiated Precheckin.</p>
+			</div>
+		</div>
+	</ng-template>
+</div>

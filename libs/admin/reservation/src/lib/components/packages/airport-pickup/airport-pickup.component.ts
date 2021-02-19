@@ -18,8 +18,7 @@ export class AirportPickupComponent extends DefaultPackageComponent
   constructor(
     private _fb: FormBuilder,
     protected snackBarService: SnackBarService,
-    protected reservationService: ReservationService,
-    private dateService: DateService
+    protected reservationService: ReservationService
   ) {
     super(snackBarService, reservationService);
   }
@@ -34,7 +33,7 @@ export class AirportPickupComponent extends DefaultPackageComponent
     this.paidAmenityFG.patchValue({
       metaData: {
         ...this.config.metaData,
-        pickupTime: this.dateService.getDateFromTimeStamp(
+        pickupTime: DateService.getDateFromTimeStamp(
           this.config.metaData.pickupTime * 1000,
           'DD-MM-YYYY hh:mm a'
         ),

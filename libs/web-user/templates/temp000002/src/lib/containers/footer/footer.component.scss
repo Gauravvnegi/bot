@@ -1,0 +1,90 @@
+@import 'temp000002';
+
+.footer__wrapper {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  align-items: center;
+  background-color: var(--footer-background-color, $footer-background-color);
+  padding: $padding-medium;
+  &--text {
+    font-size: $font-responsive-small;
+    @include flex-justify-center();
+    flex-direction: column;
+    margin: 0px $margin-small;
+    .footer-privacy-text {
+      text-align: center;
+      color: var(--footer-font-color, $footer-font-color);
+      a {
+        text-decoration: none;
+        color: var(--footer-font-color, $footer-font-color);
+        margin-bottom: 10px;
+        @media only screen and (max-width: $M) {
+          margin-bottom: 5px;
+        }
+      }
+    }
+
+    .social_icons {
+      @include flex-justify-center();
+
+      align-items: center;
+      margin-bottom: $margin-small;
+      .icon {
+        height: 30px;
+        width: 30px;
+        margin: 0px 5px;
+        img {
+          height: $full-width;
+          width: $full-width;
+        }
+      }
+    }
+    @media only screen and (max-width: $M) {
+      font-size: 9px;
+      text-align: center;
+      .social_icons {
+        margin-bottom: 5px;
+        .icon {
+          height: 25px;
+          width: 25px;
+          margin: 0px 2px;
+        }
+      }
+    }
+  }
+  &--contact-details {
+    display: flex;
+    justify-content: flex-end;
+
+    .wrap-details {
+      a {
+        text-decoration: none;
+      }
+      .text {
+        font-size: $font-responsive-small;
+        display: flex;
+        align-items: center;
+        color: var(--footer-font-color, $footer-font-color);
+      }
+      .material-icons {
+        height: 23px;
+        width: 22px;
+        font-size: $font-medium;
+        color: var(--footer-icon-color, $footer-icon-color);
+      }
+    }
+    @media only screen and (max-width: $M) {
+      justify-content: initial;
+      .text {
+        font-size: $font-responsive-smaller;
+      }
+      div {
+        font-size: $font-responsive-smaller;
+      }
+    }
+  }
+  @media only screen and (max-width: $M) {
+    padding: 5px;
+    margin-bottom: 15%;
+  }
+}

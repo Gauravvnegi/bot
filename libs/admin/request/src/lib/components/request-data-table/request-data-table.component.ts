@@ -1,18 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { Observable, Subscription } from 'rxjs';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import * as FileSaver from 'file-saver';
-import { RequestService } from '../../services/request.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
+import { Observable, Subscription } from 'rxjs';
 import { RequestTable } from '../../data-models/request-datatable.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { RequestService } from '../../services/request.service';
 
 @Component({
   selector: 'hospitality-bot-request-data-table',
@@ -175,7 +175,35 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   }
 
   registerListeners() {
-    this.listenForGlobalFilters();
+    this.listenForQueryParams();
+  }
+
+  listenForQueryParams() {
+    this.$subscription.add(
+      this.route.queryParams.subscribe((params) => {
+        if (params.filter) {
+          this.tabFilterIdx = this.tabFilterItems.findIndex(
+            (data) => data.value === params.filter
+          );
+          if (params.subFilter) {
+            this.tabFilterItems[this.tabFilterIdx].chips = this.tabFilterItems[
+              this.tabFilterIdx
+            ].chips.map((data) => {
+              return data.value === params.subFilter
+                ? {
+                    ...data,
+                    isSelected: true,
+                  }
+                : {
+                    ...data,
+                    isSelected: false,
+                  };
+            });
+          }
+        }
+        this.listenForGlobalFilters();
+      })
+    );
   }
 
   listenForGlobalFilters() {
@@ -378,11 +406,30 @@ export class RequestDataTableComponent extends BaseDatatableComponent
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
     //toggle isSelected
-    this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected;
+    // this.tabFilterItems[this.tabFilterIdx].chips[
+    //   quickReplyTypeIdx
+    // ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+    //   quickReplyTypeIdx
+    // ].isSelected;
+    if (quickReplyTypeIdx == 0) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL') {
+          chip.isSelected = false;
+        }
+      });
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
 
     this.loadInitialData([
       ...this.globalQueries,
@@ -456,9 +503,10 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   }
 
   openAddRequest() {
-    this.router.navigateByUrl(
-      `${this.route.snapshot['_routerState'].url}/add-request`
-    );
+    this.router.navigate(['add-request'], {
+      relativeTo: this.route,
+      queryParams: { hotelId: this.globalQueries[0].hotelId },
+    });
   }
 
   ngOnDestroy() {

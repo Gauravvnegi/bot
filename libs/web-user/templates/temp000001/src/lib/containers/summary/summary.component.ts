@@ -19,11 +19,11 @@ export class SummaryComponent implements OnInit {
   addFGEvent = new EventEmitter();
 
   constructor(
-    private _stepperService: StepperService,
-    private _fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private _reservationService: ReservationService
+    protected _stepperService: StepperService,
+    protected _fb: FormBuilder,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected _reservationService: ReservationService
   ) {
     this.context = this;
   }

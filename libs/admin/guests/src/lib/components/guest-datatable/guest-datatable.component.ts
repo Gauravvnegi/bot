@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -12,7 +12,8 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestTable } from '../../data-models/guest-table.model';
-import { DetailsComponent } from '../details/details.component';
+import { DetailsComponent } from '../../../../../guest-detail/src/lib/components/details/details.component';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -20,11 +21,11 @@ import { DetailsComponent } from '../details/details.component';
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './guest-datatable.component.scss',
-  ]
+  ],
 })
-export class GuestDatatableComponent  extends BaseDatatableComponent
+export class GuestDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Guest List';
+  @Input() tableName = 'Guest List';
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -32,20 +33,24 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
+  hotelId: string;
 
   cols = [
-    { field: 'guests.primaryGuest.firstName', header: 'Guest/ Company' },
+    { field: 'firstName', header: 'Guest/ Company' },
     { field: 'arrivalAndDepartureDate', header: 'Arrival/ Departure' },
     { field: 'booking.bookingNumber', header: 'Booking No./ Feedback' },
     { field: 'amountDueAndTotal', header: 'Amount Due/ Total Spend' },
     { field: 'guestAttributes.transactionUsage', header: 'Transaction Usage' },
     { field: 'guestAttributes.overAllNps', header: 'Overall NPS' },
-    { field: 'guestAttributes.churnProbalilty', header: 'Churn Prob/ Prediction' },
+    {
+      field: 'guestAttributes.churnProbalilty',
+      header: 'Churn Prob/ Prediction',
+    },
     { field: 'stageAndourney', header: 'Stage/ Channels' },
   ];
 
   chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true },
     {
       label: 'VIP',
       icon: '',
@@ -57,7 +62,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     {
       label: 'High Potential ',
       icon: '',
-      value: 'High Potential',
+      value: 'HIGHPOTENTIAL',
       total: 0,
       isSelected: false,
       type: 'initiated',
@@ -65,14 +70,14 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     {
       label: 'High Risk ',
       icon: '',
-      value: 'High Risk',
+      value: 'HIGHRISK',
       total: 0,
       isSelected: false,
       type: 'completed',
     },
   ];
 
-  tabFilterItems = [
+  @Input() tabFilterItems = [
     {
       label: 'Arrival',
       content: '',
@@ -112,11 +117,11 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _guestTableService: GuestTableService,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _modal: ModalService,
+    protected _guestTableService: GuestTableService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected _modal: ModalService,
     public feedbackService: FeedbackService
   ) {
     super(fb);
@@ -138,6 +143,7 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getHotelId(this.globalQueries);
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -152,12 +158,23 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     );
   }
 
+  getHotelId(globalQueries): void {
+    //todo 
+
+    globalQueries.forEach(element => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
   loadInitialData(queries = [], loading = true) {
     this.loading = loading && true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
+          this.initialLoading = false;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -195,21 +212,9 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      // this.tabFilterItems = this.tabFilterItems.map((tab) => {
-      //   return {
-      //     ...tab,
-      //     chips: tab.chips.map((chip) => {
-      //       return {
-      //         ...chip,
-      //         total: countObj[chip.value],
-      //       };
-      //     }),
-      //   };
-      // });
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL')
+        chip.total = countObj[chip.value];
       });
     }
   }
@@ -311,34 +316,53 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
-    this.loading = false;
-    // this.$subscription.add(
-    //   this._guestTableService.exportCSV(config).subscribe(
-    //     (res) => {
-    //       FileSaver.saveAs(
-    //         res,
-    //         this.tableName.toLowerCase() +
-    //           '_export_' +
-    //           new Date().getTime() +
-    //           '.csv'
-    //       );
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this._snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+    this.$subscription.add(
+      this._guestTableService.exportCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
     //toggle isSelected
-    this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected;
+    // this.tabFilterItems[this.tabFilterIdx].chips[
+    //   quickReplyTypeIdx
+    // ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+    //   quickReplyTypeIdx
+    // ].isSelected;
+
+    if (quickReplyTypeIdx == 0) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL') {
+          chip.isSelected = false;
+        }
+      });
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
 
     this.loadInitialData([
       ...this.globalQueries,
@@ -361,8 +385,8 @@ export class GuestDatatableComponent  extends BaseDatatableComponent
     );
 
     detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
-    detailCompRef.componentInstance.data = rowData;
+    detailCompRef.componentInstance.guestId = rowData.id;
+    detailCompRef.componentInstance.hotelId = this.hotelId;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

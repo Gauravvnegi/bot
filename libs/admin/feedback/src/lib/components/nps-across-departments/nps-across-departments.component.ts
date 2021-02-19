@@ -5,17 +5,19 @@ import { StatisticsService } from '../../services/statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { NPSDepartments, Department } from '../../data-models/statistics.model';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import * as FileSaver from 'file-saver';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-nps-across-departments',
   templateUrl: './nps-across-departments.component.html',
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './nps-across-departments.component.scss'
-  ]
+    './nps-across-departments.component.scss',
+  ],
 })
 export class NpsAcrossDepartmentsComponent implements OnInit {
-
   npsFG: FormGroup;
   documentTypes = [
     { label: 'CSV', value: 'csv' },
@@ -24,15 +26,11 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   ];
   npsChartData: NPSDepartments;
   $subscription: Subscription = new Subscription();
+  globalQueries = [];
   selectedInterval: string;
+  loading: boolean = false;
 
   documentActionTypes = [
-    {
-      label: 'Export All',
-      value: 'exportAll',
-      type: '',
-      defaultLabel: 'Export All',
-    },
     {
       label: `Export`,
       value: 'export',
@@ -41,68 +39,97 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     },
   ];
 
-  progressValues: any[] = [];
-
   constructor(
     private fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
-  ) { }
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService,
+    private dateService: DateService
+  ) {}
 
   ngOnInit(): void {
     this.initFG();
-    this.getNPSChartData();
+    this.registerListeners();
   }
 
-  initFG(): void {
-    this.npsFG = this.fb.group({
-      documentType: ['csv'],
-      documentActionType: ['Export All']
-    })
+  registerListeners() {
+    this.listenForGlobalFilters();
   }
 
-  private initGraphData(): void {
-    this.progressValues.length = 0;
-    Object.keys(this.npsChartData).forEach((key) => {
-      // let value: Department = this.npsChartData[key];
-      this.progressValues.push(this.npsChartData[key]);
-    });
-  }
-
-  private getNPSChartData(): void {
+  listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
+          calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate
           ),
         };
         this.selectedInterval = calenderType.calenderType;
-        const queries = [
+        this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-
-        const config = {
-          queryObj: this._adminUtilityService.makeQueryParams(queries),
-        };
-        this.$subscription.add(
-          this._statisticService
-            .getDepartmentsStatistics(config)
-            .subscribe((response) => {
-              this.npsChartData = new NPSDepartments().deserialize(response.npsStats);
-              this.initGraphData();
-            })
-        );
+        this.getNPSChartData();
       })
+    );
+  }
+
+  initFG(): void {
+    this.npsFG = this.fb.group({
+      documentType: ['csv'],
+      documentActionType: ['Export All'],
+    });
+  }
+
+  private getNPSChartData(): void {
+    this.loading = true;
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
+    this.$subscription.add(
+      this._statisticService.getDepartmentsStatistics(config).subscribe(
+        (response) => {
+          this.npsChartData = new NPSDepartments().deserialize(
+            response.npsStats
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  exportCSV() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this._statisticService.exportOverallDepartmentsCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            'NPS_Across_Departments_export_' + new Date().getTime() + '.csv'
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

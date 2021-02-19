@@ -1,4 +1,10 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
@@ -22,12 +28,12 @@ export class AddGstComponent implements OnInit {
   gstFieldConfig: GstConfigI;
   $subscription = new Subscription();
   constructor(
-    private fb: FormBuilder,
-    private gstService: GSTService,
-    private reservationService: ReservationService,
-    private translateService: TranslateService,
-    private snackbarService: SnackBarService,
-    private _buttonService: ButtonService,
+    protected fb: FormBuilder,
+    protected gstService: GSTService,
+    protected reservationService: ReservationService,
+    protected translateService: TranslateService,
+    protected snackbarService: SnackBarService,
+    protected _buttonService: ButtonService,
     public dialogRef: MatDialogRef<AddGstComponent>
   ) {}
 
@@ -36,21 +42,23 @@ export class AddGstComponent implements OnInit {
     this.initFG();
   }
 
-  private initFG(): void {
+  protected initFG(): void {
     this.gstFG = this.fb.group({
       customerName: [
         '',
         Validators.compose([
           Validators.required,
           // Validators.pattern('/^[a-zA-Z ]{2,30}$/')
-        ])
+        ]),
       ],
       customerGSTIn: [
         '',
         Validators.compose([
           Validators.required,
-          Validators.pattern('^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$')
-        ])
+          Validators.pattern(
+            '^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$'
+          ),
+        ]),
       ],
       address: [''],
     });
@@ -71,14 +79,13 @@ export class AddGstComponent implements OnInit {
         )
         .subscribe(
           (response) => {
-            this.translateService.get('MESSAGES.SUCCESS.GST_ADD_COMPLETE')
+            this.translateService
+              .get('MESSAGES.SUCCESS.GST_ADD_COMPLETE')
               .subscribe((translated_msg) => {
-                this.snackbarService.openSnackBarAsText(
-                  translated_msg,
-                  '',
-                  { panelClass: 'success' }
-                );
-              })
+                this.snackbarService.openSnackBarAsText(translated_msg, '', {
+                  panelClass: 'success',
+                });
+              });
             this._buttonService.buttonLoading$.next(this.saveButton);
             this.closeModal();
           },

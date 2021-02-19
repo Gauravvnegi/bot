@@ -52,6 +52,7 @@ export class BaseDatatableComponent implements OnInit {
   isResizableColumns = true;
   isAutoLayout = false;
   @Input() loading: boolean = false;
+  initialLoading: boolean = true;
 
   tabFilterItems = [
     { label: 'Inhouse', content: '', value: 'INHOUSE' },
@@ -122,6 +123,7 @@ export class BaseDatatableComponent implements OnInit {
 
   tempFirst;
   tempRowsPerPage;
+  isSearchSet = false;
 
   constructor(private _fb: FormBuilder) {
     this.initTableFG();
@@ -308,8 +310,8 @@ export class BaseDatatableComponent implements OnInit {
     event.stopPropagation();
   }
 
-  onDataFilter(event) {
-    this.first = this.tempFirst;
-    this.rowsPerPage = this.tempRowsPerPage;
+  onDataFilter(event?) {
+    // this.first = this.tempFirst;
+    // this.rowsPerPage = this.tempRowsPerPage;
   }
 }

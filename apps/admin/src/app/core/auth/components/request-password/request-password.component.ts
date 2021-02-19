@@ -51,6 +51,6 @@ export class RequestPasswordComponent implements OnInit {
   }
 
   navigateToLogin() {
-    this._router.navigate(['/auth/login']);
+    this._router.navigate(['/auth']);
   }
 }

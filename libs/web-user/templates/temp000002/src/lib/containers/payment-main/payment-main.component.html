@@ -1,0 +1,112 @@
+<div class="parent_block" *ngIf="isReservationData && paymentStatusData">
+    <hospitality-bot-header [headerName]="'Payment'"></hospitality-bot-header>
+    <div class="status-container" *ngIf="ispaymentStatusLoaded">
+      <div class="wrapper">
+        <div class="image">
+          <img [src]="paymentStatusData.image" />
+        </div>
+        <div class="text">
+          <p class="label">{{ paymentStatusData.label }}</p>
+          <p
+            class="note"
+            [ngStyle]="
+              status === 'SUCCESS' ? { display: 'block' } : { display: 'none' }
+            "
+          >
+            {{ paymentNote }}
+          </p>
+          <p
+            class="note"
+            [ngStyle]="
+              status === 'FAILED' ? { display: 'block' } : { display: 'none' }
+            "
+          >
+            {{ paymentNote }}
+          </p>
+          <p
+            class="error_code"
+            [ngStyle]="
+              status === 'FAILED' ? { display: 'block' } : { display: 'none' }
+            "
+          >
+            Error code : 309
+          </p>
+        </div>
+        <div class="detail-box-wrapper">
+          <div class="detail-box">
+            <div class="detail">
+              <p class="label">Confirmation No.</p>
+              <p class="value">{{ data.confirmationNumber }}</p>
+            </div>
+            <div class="seperator"></div>
+            <div class="detail">
+              <p class="label">Payment Mode</p>
+              <p class="value">{{ data.gateway }}</p>
+            </div>
+            <div class="seperator"></div>
+  
+            <div class="detail">
+              <p class="label">Total Payment</p>
+              <p class="value">
+                {{ data.currency }}
+                {{ data.amount }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="actions_wrapper" *ngIf="reservationData && reservationData.currentJourney === 'CHECKIN'">
+          <div class="actions_wrapper__icon_box">
+            <div
+              class="actions_wrapper__icon_box__icon"
+              (click)="downloadInvoice()"
+            >
+              <img src="assets/svg/Download.svg" />
+            </div>
+            <!-- <div class="seperator"></div>
+            <div
+              class="actions_wrapper__icon_box__icon"
+              (click)="downloadInvoice()"
+            >
+              <img src="assets/svg/Download.svg" />
+            </div>
+            <div class="seperator"></div>
+            <div
+              class="actions_wrapper__icon_box__icon"
+              (click)="downloadInvoice()"
+            >
+              <img src="assets/svg/Download.svg" />
+            </div> -->
+          </div>
+          <div class="actions_wrapper__title_box">
+            <p>Download Receipt</p>
+            <!-- <p>Download Receipt</p>
+            <p>Download Receipt</p> -->
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="main-template-button payment-button"
+      *ngIf="ispaymentStatusLoaded"
+    >
+      <hospitality-bot-temp000002-button
+        *ngIf="paymentStatusData.showBackButton"
+        (click)="redirect(paymentStatusData.backRedirectUrl)"
+        [settings]="{ label: paymentStatusData.back }"
+        [buttonClass]="'back-button'"
+        class="user-button"
+        style="margin-right: 20px;"
+      ></hospitality-bot-temp000002-button>
+      <hospitality-bot-temp000002-button
+        (click)="
+          redirect(status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl)
+        "
+        [settings]="{ label: paymentStatusData.next }"
+        [buttonClass]="'next-button'"
+        class="user-button"
+      ></hospitality-bot-temp000002-button>
+    </div>
+  </div>
+  <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>
+  

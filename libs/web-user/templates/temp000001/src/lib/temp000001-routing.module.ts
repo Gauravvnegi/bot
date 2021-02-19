@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { AddGstComponent } from './containers/add-gst/add-gst.component';
 import { AmenitiesComponent } from './containers/amenities/amenities.component';
 import { ApplicationStatusComponent } from './containers/application-status/application-status.component';
 import { BillSummaryDetailsWrapperComponent } from './containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
@@ -35,7 +36,11 @@ import { SummaryWrapperComponent } from './containers/summary-wrapper/summary-wr
 import { SummaryComponent } from './containers/summary/summary.component';
 import { Temp000001Component } from './containers/temp000001/temp000001.component';
 import { ThankYouMainComponent } from './containers/thank-you-main/thank-you-main.component';
-import { AddGstComponent } from './containers/add-gst/add-gst.component';
+import { Temp000001StepperComponent } from './presentational/temp000001-stepper/temp000001-stepper.component';
+import { Temp000001TextareaComponent } from './presentational/temp000001-textarea/temp000001-textarea.component';
+import { Temp000001RadioComponent } from './presentational/temp000001-radio/temp000001-radio.component';
+import { Temp000001InputPopupComponent } from './presentational/temp000001-input-popup/temp000001-input-popup.component';
+import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -45,6 +50,16 @@ export const sharedAuthRoutes: Route[] = [
       {
         path: '',
         component: MainComponent,
+      },
+    ],
+  },
+  {
+    path: 'booking-cancel',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: CancelBookingComponent,
       },
     ],
   },
@@ -133,5 +148,10 @@ export class Temp000001RoutingModule {
     ThankYouMainComponent,
     PaidAmenitiesComponent,
     AddGstComponent,
+    Temp000001StepperComponent,
+    Temp000001TextareaComponent,
+    Temp000001RadioComponent,
+    Temp000001InputPopupComponent,
+    CancelBookingComponent,
   ];
 }

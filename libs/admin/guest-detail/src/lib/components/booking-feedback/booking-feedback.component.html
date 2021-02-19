@@ -1,0 +1,179 @@
+<mat-accordion>
+	<mat-expansion-panel #depositPanel2 [expanded]="openedState">
+		<mat-expansion-panel-header class="accordian__header" (click)="loadFeedbackData(rowData.booking.bookingId)">
+			<mat-panel-title class="container__title">
+				<p>
+					{{ title }} - {{ rowData.booking.bookingNumber }}
+				</p>
+				<div class="header-seperator"></div>
+				<p>
+					{{ rowData.booking.getArrivalDate() }} - {{
+                        rowData.booking.getDepartureDate()
+                    }} ({{ rowData.booking.getDaysAndNights().nights }}N |
+					{{ rowData.booking.getDaysAndNights().days }}D)
+				</p>
+				<div class="header-seperator" *ngIf="['COMPLETED'].includes(rowData.feedback.status)"></div>
+				<div class="booking-id-wrapper">
+					<div *ngIf="['COMPLETED'].includes(rowData.feedback.status)" class="feedback">
+						<!-- <p class="label">Feedback :</p> -->
+						<div class="booking-feedback">
+							<p class="number" [ngClass]="{
+                                    'status-background-reject': rowData.feedback.rating < 5,
+                                    'status-background-success': rowData.feedback.rating >= 5
+                                }">
+								{{ rowData.feedback.rating }}
+							</p>
+							<ng-container *ngIf="rowData.feedback.suggestions">
+								<ng-container *ngFor="
+										let suggestion of rowData.feedback.suggestions.slice(
+											0,
+											2
+										)
+									">
+									<img class="feedback-icon" [ngClass]="{
+											'status-image-reject': rowData.feedback.rating < 5,
+											'status-image-success': rowData.feedback.rating >= 5
+										}" [src]="feedbackService.getServiceUrl(suggestion.id)" />
+								</ng-container>
+							</ng-container>
+
+							<div *ngIf="rowData.feedback.comments" [ngClass]="{
+                                    'feedback-msg': rowData.feedback.comments.length > 0
+                                }">
+								{{ rowData.feedback.comments }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded">add</mat-icon>
+				<mat-icon class="expand-icon" *ngIf="depositPanel2.expanded">remove</mat-icon>
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+		<div>
+			<ng-container>
+				<div class="feilds-wrapper">
+					<div class="feild width-quarter">
+						<mat-label class="label">Arrival Date</mat-label>
+						<div class="value">
+							{{ rowData.booking.getArrivalDate() }}
+						</div>
+					</div>
+					<div class="feild width-quarter">
+						<mat-label class="label">Departure Date</mat-label>
+						<div class="value">
+							{{ rowData.booking.getDepartureDate() }}
+						</div>
+					</div>
+					<div class="feild width-quarter">
+						<mat-label class="label">Expected Arrival Time</mat-label>
+						<div class="value">
+							{{ rowData.booking.getArrivalTime() }}
+						</div>
+					</div>
+				</div>
+				<div class="feilds-wrapper">
+					<div class="feild width-quarter">
+						<mat-label class="label">Duration</mat-label>
+						<div class="value">
+							{{ rowData.booking.getDaysAndNights().nights }}N |
+							{{ rowData.booking.getDaysAndNights().days }}D
+						</div>
+					</div>
+					<div class="feild width-quarter">
+						<mat-label class="label">Room Type</mat-label>
+						<div class="value">
+							{{ rowData.rooms.type }}
+						</div>
+					</div>
+					<div class="feild width-quarter">
+						<mat-label class="label">Room Number</mat-label>
+						<div class="value">
+							{{ rowData.rooms.roomNumber }}
+						</div>
+					</div>
+				</div>
+			</ng-container>
+		</div>
+		<hr class="data-seperator" *ngIf="feedbackData" />
+		<div *ngIf="feedbackData">
+			<div class="container__title"><p>Journey Feedback</p></div>
+			<div class="feilds-wrapper">
+				<div class="feild width-quarter">
+					<mat-label class="label">Date/Time</mat-label>
+					<div class="value">
+						{{ feedbackData.getFeedbackDate() }}, {{ feedbackData.getFeedbackTime() }}
+					</div>
+				</div>
+				<div class="feild width-quarter">
+					<mat-label class="label">Ratings</mat-label>
+					<div class="value" [style.color]="feedbackData.ratingColor.color">
+						{{ feedbackData.rating }} ({{ feedbackData.ratingColor.category }})
+					</div>
+				</div>
+				<div class="feild width-quarter" *ngIf="(feedbackData.suggestions && feedbackData.suggestions.length)">
+					<mat-label class="label">Facilities</mat-label>
+					<div class="value" style="display: flex;">
+						<ng-container *ngFor="
+                                    let suggestion of feedbackData.suggestions.slice(
+                                        0,
+                                        2
+                                    )
+                                ">
+							<img style="height: 20px; margin-right: 10px;"
+								[src]="feedbackService.getServiceUrl(suggestion.id)" />
+						</ng-container>
+					</div>
+				</div>
+			</div>
+			<div class="fields-wrapper" *ngIf="feedbackData.comments">
+				<div class="field">
+					<mat-label class="label">Comments</mat-label>
+					<div class="value">{{ feedbackData.comments }}</div>
+				</div>
+			</div>
+		</div>
+		<hr class="data-seperator" *ngIf="services && services.length" />
+		<div *ngIf="services && services.length" style="margin-bottom: 15px;">
+			<div class="container__title">
+				<p>Service Feedback</p>
+				<div *ngIf="showMore" (click)="toggleShowMore()" style="display: flex; align-items: center; cursor: pointer;font: normal normal medium 14px/19px Roboto;
+					letter-spacing: 0.56px;
+					color: #9EAEB8;">
+					<mat-icon>add</mat-icon>
+					<div> Read More</div>
+				</div>
+				<div *ngIf="!showMore" (click)="toggleShowMore()" style="display: flex; align-items: center; cursor: pointer;font: normal normal medium 14px/19px Roboto;
+					letter-spacing: 0.56px;
+					color: #9EAEB8;">
+					<mat-icon>remove</mat-icon>
+					<div> Read Less</div>
+				</div>
+			</div>
+			<div *ngIf="!showMore">
+				<div *ngFor="let service of services; let i=index;">
+					<div class="feilds-wrapper">
+						<div class="feild width-quarter">
+							<mat-label class="label">Name</mat-label>
+							<div class="value">
+								{{ service.name }}
+							</div>
+						</div>
+						<div class="feild width-quarter">
+							<mat-label class="label">Ratings</mat-label>
+							<div class="value" [style.color]="service.ratingColor.color">
+								{{ service.rating }} ({{ service.ratingColor.category }})
+							</div>
+						</div>
+					</div>
+					<div class="feilds-wrapper" *ngIf="service.comments">
+						<div class="field">
+							<mat-label class="label">Comments</mat-label>
+							<div class="value">{{ service.comments }}</div>
+						</div>
+					</div>
+					<hr class="data-seperator" *ngIf="i < (services.length-1)" />
+				</div>
+			</div>
+		</div>
+	</mat-expansion-panel>
+</mat-accordion>

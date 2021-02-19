@@ -7,10 +7,12 @@ import { NetPromoterScoreComponent } from './components/net-promoter-score/net-p
 import { NpsAcrossTouchpointsComponent } from './components/nps-across-touchpoints/nps-across-touchpoints.component';
 import { NpsAcrossServicesComponent } from './components/nps-across-services/nps-across-services.component';
 import { NpsAcrossDepartmentsComponent } from './components/nps-across-departments/nps-across-departments.component';
-import { TextAnalyticsExplorerComponent } from './components/text-analytics-explorer/text-analytics-explorer.component';
 import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
 import { MulticolorCircularProgressComponent } from './components/multicolor-circular-progress/multicolor-circular-progress.component';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { TopLowNpsComponent } from './components/top-low-nps/top-low-nps.component';
+import { GlobalNpsComponent } from './components/global-nps/global-nps.component';
+import { FeedbackDistributionComponent } from './components/feedback-distribution/feedback-distribution.component';
 
 const appRoutes: Route[] = [
   {
@@ -31,8 +33,10 @@ export class AdminFeedbackRoutingModule {
         NpsAcrossTouchpointsComponent,
         NpsAcrossServicesComponent,
         NpsAcrossDepartmentsComponent,
-        TextAnalyticsExplorerComponent,
         TwoWayProgressComponent,
-        MulticolorCircularProgressComponent
+        MulticolorCircularProgressComponent,
+        TopLowNpsComponent,
+        GlobalNpsComponent,
+        FeedbackDistributionComponent
     ];
   }

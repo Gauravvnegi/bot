@@ -1,0 +1,94 @@
+// Mixins
+
+@mixin half-circle() {
+  content: '';
+  width: 15px;
+  height: 20px;
+  position: absolute;
+  background-color: $white;
+  border: 2px solid $border-color;
+  top: 50%;
+  box-sizing: border-box;
+  transform: translateY(-50%);
+}
+
+@mixin primary-button() {
+  background: var(
+    --primary-button-background-color,
+    $primary-button-background-color
+  );
+  width: 200px;
+  height: 45px;
+  font-weight: $bolder;
+  box-shadow: 0px 3px 6px #4b56c059;
+  border-radius: 28px;
+  color: var(--primary-button-font-color, $primary-button-font-color);
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@mixin secondary-button() {
+  color: var(--secondary-button-font-color, $secondary-button-font-color);
+  width: 200px;
+  height: 45px;
+  font-weight: $bolder;
+  background: var(
+    --secondary-button-background-color,
+    $secondary-button-background-color
+  );
+  margin-right: 30px;
+  border: 1px solid $primary-blue;
+  border-radius: 28px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@mixin footer-next() {
+  @include primary-button();
+  box-shadow: 0px 3px 6px #4b56c059;
+  @media only screen and (max-width: $M) {
+    width: 50vw;
+    border-radius: 0px;
+  }
+}
+
+@mixin footer-back() {
+  @include secondary-button();
+  @media only screen and (max-width: $M) {
+    width: 50vw;
+    margin-right: 0px;
+    border-radius: 0px;
+  }
+}
+
+@mixin mat-icon() {
+  margin-right: $margin-small;
+  width: 20px;
+  height: 20px;
+  font-size: $font-medium;
+}
+
+@mixin template-footer-button() {
+  display: flex;
+  justify-content: center;
+  @media only screen and (max-width: $M) {
+    position: fixed;
+    bottom: 0px;
+    width: $full-width;
+    z-index: 222;
+  }
+}
+
+@mixin payment-body() {
+  content: '';
+  width: 15px;
+  height: 20px;
+  position: absolute;
+  background-color: $white;
+  border: 2px solid #e6e6e6;
+  top: 50%;
+  box-sizing: border-box;
+  transform: translateY(-50%);
+}

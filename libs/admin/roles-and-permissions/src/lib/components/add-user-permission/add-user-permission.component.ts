@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,6 +13,7 @@ import { Regex } from '../../../../../../shared/constants/regex';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Location } from '@angular/common';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'hospitality-bot-add-user-permission',
   templateUrl: './add-user-permission.component.html',
@@ -30,6 +31,11 @@ export class AddUserPermissionComponent implements OnInit {
     lastName: string;
     jobTitle: string;
   };
+  private _onOpenedChange = new Subject();
+  onOpenedChange = this._onOpenedChange.asObservable();
+  isOptionsOpenedChanged = true;
+  @Output()
+  optionChange = new EventEmitter();
 
   value;
   constructor(
@@ -41,6 +47,24 @@ export class AddUserPermissionComponent implements OnInit {
     private _location: Location
   ) {
     this.initUserForm();
+  }
+
+  openedChange(event) {
+    this._onOpenedChange.next(event);
+  }
+
+  trackByFn(index, item) {
+    return index;
+  }
+
+  change(event) {
+    const selectData = {
+      // index: this.index,
+      selectEvent: event,
+      formControlName: 'cc',
+      formGroup: this.userForm,
+    };
+    this.optionChange.emit(selectData);
   }
 
   initUserForm() {
@@ -136,6 +160,11 @@ export class AddUserPermissionComponent implements OnInit {
   }
 
   savePermission() {
+    if (!this.userForm.valid) {
+      this._snackbarService.openSnackBarAsText('Invalid Form');
+      return;
+    }
+
     let formValue = this.userForm.getRawValue();
 
     formValue.permissionConfigs.forEach((config, configIndex) => {

@@ -9,25 +9,43 @@ export class GuestTableService extends ApiService {
     return this.get(`/api/v1/guests${config.queryObj}`);
   }
 
+  getGuestById(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}`);
+  }
+
   getReservationFeedback(reservationId: string): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/feedback`);
   }
 
   getReservationDetail(bookingId: string): Observable<any> {
-    return this.get(`/api/v1/reservation/${bookingId}?raw=true`)
+    return this.get(`/api/v1/reservation/${bookingId}?raw=true`);
   }
 
   getGuestReservations(guestId: string): Observable<any> {
     return this.get(`/api/v1/guest/${guestId}/reservations`);
   }
 
+  getGuestReservationById(guestId: string, reservationId: string) {
+    return this.get(`/api/v1/guest/${guestId}/reservations/${reservationId}`);
+  }
+
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/guests/export/${config.queryObj}`, {
+    return this.get(`/api/v1/guest/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }
 
-  getFeedback(): Observable<FeedbackConfigI> {
+  getFeedback(hotelId): Observable<FeedbackConfigI> {
     return this.get(`/api/v1/cms/feedback-form`);
+  }
+
+  getAllGuestStats(config): Observable<any> {
+    return this.get(`/api/v1/guests/stats/${config.queryObj}`);
+  }
+
+  exportCSVStat(config): Observable<any> {
+    return this.get(`/api/v1/guests/stats/export/${config.queryObj}`, {
+      responseType: 'blob',
+    });
   }
 }

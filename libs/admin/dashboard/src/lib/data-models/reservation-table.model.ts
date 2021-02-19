@@ -46,7 +46,14 @@ export class Package implements Deserializable {
   }
 
   getPaidPackagesLabels() {
-    return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
+    // return this.paidPackages.map((paidPackage) => paidPackage.label).join(', ');
+    return this.paidPackages.length
+      ? `${this.paidPackages[0].label}${
+          this.paidPackages.length > 1
+            ? ` (+${this.paidPackages.length - 1})`
+            : ''
+        }`
+      : '';
   }
 }
 
@@ -76,11 +83,13 @@ export class Feedback implements Deserializable {
       set({}, 'status', get(input, ['statusMessage', 'status']))
     );
 
-    this.suggestions =
-      input.quickServices &&
-      input.quickServices.map((service) => {
-        return new FeedbackSuggestion().deserialize(service);
-      });
+    if (input.quickServices) {
+      this.suggestions =
+        input.quickServices &&
+        input.quickServices.map((service) => {
+          return new FeedbackSuggestion().deserialize(service);
+        });
+    }
     return this;
   }
 }

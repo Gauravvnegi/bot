@@ -1,0 +1,117 @@
+@import 'temp000002';
+
+
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: $primary-blue;
+}
+
+:host
+  ::ng-deep
+  .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
+  .mat-ripple-element {
+  background: $primary-blue;
+}
+
+:host ::ng-deep .checkbox--wrapper {
+  margin: 20px 0;
+}
+
+:host ::ng-deep .mat-checkbox-frame {
+  border: 1.5px solid #919191;
+}
+
+:host ::ng-deep .mat-checkbox {
+  display: block;
+}
+
+.whole-package-wrapper {
+  background-color: #f8f8f8;
+  padding: 30px 20px;
+  border-radius: 5px;
+  position: relative;
+  .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+  .checkbox-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    .checkbox {
+      display: flex;
+      flex: 1 0 30%;
+      margin-right: 2%;
+      margin-bottom: 5%;
+      .image {
+        margin: 0 12px;
+        height: 75px;
+        width: 75px;
+        border-radius: 3px;
+        img {
+          height: 100%;
+          width: 100%;
+        }
+      }
+      .text {
+        @media only screen and (max-width: $M) {
+          width: 60%;
+        }
+        .label {
+          font-weight: 600;
+          font-size: 16px;
+          @media only screen and (max-width: $M) {
+            font-size: 14px;
+          }
+        }
+        .rate {
+          margin-top: 5px;
+          color: $primary-blue;
+          font-weight: 600;
+          @media only screen and (max-width: $M) {
+            font-size: 12px;
+          }
+        }
+      }
+      @media only screen and (max-width: 800px) {
+        flex: inherit;
+        width: 48%;
+        margin-bottom: 3%;
+      }
+      @media only screen and (max-width: $M) {
+        flex: inherit;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+    }
+  }
+  @media only screen and (max-width: $M) {
+    padding: 10px;
+  }
+}
+
+:host ::ng-deep .checkbox-section {
+  height: auto !important;
+}
+
+.package-button {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .back-button {
+  @include secondary-button();
+}
+
+:host ::ng-deep .next-button {
+  @include primary-button();
+}
+
+.subPackage_img {
+  width: 50px;
+  height: 50px;
+}

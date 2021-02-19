@@ -13,6 +13,7 @@ import * as moment from 'moment';
 })
 export class DaterangeComponent implements OnInit {
   @Output() onDateRangeFilter = new EventEmitter();
+  @Output() removeVisibility = new EventEmitter();
 
   ranges: any = {
     Yesterday: [
@@ -60,5 +61,8 @@ export class DaterangeComponent implements OnInit {
 
   selectedDate(date) {
     this.onDateRangeFilter.next(date);
+  }
+  onFocus() {
+    this.removeVisibility.emit();
   }
 }

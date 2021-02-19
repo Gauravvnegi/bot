@@ -50,6 +50,7 @@ export class HotelBranch implements Deserializable {
   value;
   logoUrl;
   headerBgColor;
+  nationality;
   deserialize(input) {
     Object.assign(
       this,
@@ -59,7 +60,8 @@ export class HotelBranch implements Deserializable {
       set({}, 'value', get(input, ['id'])),
       set({}, 'label', get(input, ['name'])),
       set({}, 'logoUrl', get(input, ['logo'])),
-      set({}, 'headerBgColor', get(input, ['bgColor']))
+      set({}, 'headerBgColor', get(input, ['bgColor'])),
+      set({}, 'nationality', get(input, ['nationality']))
     );
 
     return this;

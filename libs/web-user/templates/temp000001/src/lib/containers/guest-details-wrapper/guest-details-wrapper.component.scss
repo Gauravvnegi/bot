@@ -16,9 +16,3 @@
   }
 }
 
-:host ::ng-deep .back-button {
-  @include footer-back();
-}
-:host ::ng-deep .next-button {
-  @include footer-next();
-}

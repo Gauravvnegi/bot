@@ -17,6 +17,7 @@
 
 .details-wrapper {
   background-color: white;
+  max-height: 85vh;
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
@@ -67,7 +68,6 @@
         display: flex;
         align-items: center;
         margin-top: $margin10;
-        // padding: 0 25px;
         .call,
         .email {
           display: flex;
@@ -117,7 +117,7 @@
           }
           .feedback-msg {
             position: absolute;
-            width: 100%;
+            width: auto;
             top: 50%;
             font-size: 12px;
             color: $dark-grey;
@@ -228,7 +228,7 @@
 }
 
 .data-seperator {
-  border: 2px solid #218af3;
+  border: 2px solid #e8f3fe;
   margin: $margin20 0px;
   opacity: 0.1;
 }
@@ -236,7 +236,6 @@
 .feilds-wrapper {
   display: flex;
   justify-content: space-between;
-  // align-items: center;
   margin: 30px 0px;
   padding: 0px 30px;
   .feild {
@@ -256,13 +255,6 @@
 
 .form-wrapper {
   display: flex;
-  // .left {
-  //   width: 80%;
-  //   margin: $margin20;
-  //   margin-right: 0;
-  //   min-height: 60vh;
-  //   border-right: 3px solid rgb(108, 108, 243, 0.1);
-  // }
 }
 .gap {
   margin-top: $margin15;
@@ -298,12 +290,6 @@
   font-size: 14px;
   color: #484848;
 }
-
-// :host ::ng-deep .mat-form-field-flex {
-//   padding: 5px $padding10;
-//   border-radius: 5px;
-//   border: 1px solid #d9d9d9;
-// }
 
 .health-status {
   letter-spacing: 0.84px;
@@ -343,10 +329,10 @@
 
 :host ::ng-deep .material-body {
   width: 80%;
-  margin: $margin20;
+  margin: $margin20 25px;
   margin-right: 0;
   min-height: 60vh;
-  border-right: 3px solid rgb(108, 108, 243, 0.1);
+  border-right: 2px solid #e8f3fe;
   padding-right: 15px;
   @media screen and (max-width: 1100px) {
     min-height: 35vh;
@@ -439,40 +425,43 @@
         background-color: $primary-purple;
         color: white;
       }
-     
     }
   }
   .right-bottom-icons {
     display: flex;
     align-items: center;
-    height: 7%;
+    flex-wrap: wrap;
+    justify-content: center;
     .social-icons {
-      width: 25%;
+      width: 30%;
+      align-items: center;
       display: flex;
+      min-height: 28px;
       justify-content: center;
       .icon {
         padding: 5px;
         background-color: #f3fafe;
         border-radius: 50%;
-        height: 20px;
-        width: 20px;
+        height: 23px;
+        width: 23px;
         display: flex;
         align-items: center;
         justify-content: center;
         img {
           filter: invert(96%) sepia(59%) saturate(2493%) hue-rotate(167deg)
             brightness(83%) contrast(80%);
-          height: 10px;
+          height: 13px;
         }
         &:hover {
           cursor: pointer;
           padding: 7px;
           background-color: $primary-purple;
-          height: 30px;
-          width: 30px;
+          height: 25px;
+          width: 25px;
           img {
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(191deg)
               brightness(108%) contrast(102%);
+              height: 13.5px;
           }
         }
       }
@@ -483,7 +472,7 @@
   }
 }
 
-.loader{
+.loader {
   margin: 20px auto;
 }
 

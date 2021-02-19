@@ -1,0 +1,18 @@
+<form [formGroup]="specialCommentsForm">
+  <mat-accordion>
+    <mat-expansion-panel #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="container__title">Special Requests</span>
+          <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+          <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <hospitality-bot-temp000002-textarea
+        [parentForm]="specialCommentsForm"
+        [name]="'comments'"
+        [settings]="commentsDetailsConfig.comments"
+      ></hospitality-bot-temp000002-textarea>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

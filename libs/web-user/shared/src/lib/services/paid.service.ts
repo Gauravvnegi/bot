@@ -14,7 +14,6 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Injectable()
 export class PaidService extends ApiService {
-  
   isComponentRendered$ = new Subject();
   _amenityForm: FormGroup;
   _uniqueData;
@@ -55,10 +54,7 @@ export class PaidService extends ApiService {
   }
 
   updateAmenity(reservationId, data) {
-    return this.put(
-      `/api/v1/reservation/${reservationId}/packages`,
-      data
-    );
+    return this.put(`/api/v1/reservation/${reservationId}/packages`, data);
   }
 
   mapDataForAminityAddition(amenityData) {
@@ -66,58 +62,68 @@ export class PaidService extends ApiService {
     data.packageId = amenityData.id;
     data.rate = 1000;
     data.metaData = new Metadata();
-    if(amenityData.metaData && Object.keys(amenityData.metaData).length > 0 && amenityData.metaData.hasOwnProperty('pickupTime')){
-      amenityData.metaData.pickupTime = this.mapAirportData(amenityData.metaData.pickupData, amenityData.metaData.pickupTime);
+    if (
+      amenityData.metaData &&
+      Object.keys(amenityData.metaData).length > 0 &&
+      amenityData.metaData.hasOwnProperty('pickupTime')
+    ) {
+      amenityData.metaData.pickupTime = this.mapAirportData(
+        amenityData.metaData.pickupData,
+        amenityData.metaData.pickupTime
+      );
     }
     data.metaData = amenityData.metaData;
     return data;
   }
 
-  updateDSForRemovedAmenity(papackageToBeRemove){
-    papackageToBeRemove.forEach(removedPackage => {
-      this._paidServiceDetailDS.paidService.forEach(paidService =>{
-        paidService.subPackages.forEach(subPackage =>{
-          if(subPackage.id === removedPackage.packageId){
+  updateDSForRemovedAmenity(papackageToBeRemove) {
+    papackageToBeRemove.forEach((removedPackage) => {
+      this._paidServiceDetailDS.paidService.forEach((paidService) => {
+        paidService.subPackages.forEach((subPackage) => {
+          if (subPackage.id === removedPackage.packageId) {
             subPackage.isSelected = false;
             subPackage.metaData = null;
           }
-        })
-      })
+        });
+      });
     });
   }
 
-  mapAirportData(date, time){
-    const pickUpDateTimestamp =  new DateService().convertDateToTimestamp(date);
-    const pickupDate = new Date(pickUpDateTimestamp*1000).toISOString();
-    const pickupTime =  this.modifyPickUpData(time,pickupDate);
+  mapAirportData(date, time) {
+    const pickUpDateTimestamp = DateService.convertDateToTimestamp(date);
+    const pickupDate = new Date(pickUpDateTimestamp * 1000).toISOString();
+    const pickupTime = this.modifyPickUpData(time, pickupDate);
     return pickupTime;
   }
 
-  modifyPickUpData(pickupTime, arrivalTime){
-    if(pickupTime){
+  modifyPickUpData(pickupTime, arrivalTime) {
+    if (pickupTime) {
       let arrivalDate = arrivalTime.split('T')[0];
       let time = moment(pickupTime, 'hh:mm').format('hh:mm');
-      return new DateService().convertDateToTimestamp(arrivalDate +'T'+ time);
+      return DateService.convertDateToTimestamp(arrivalDate + 'T' + time);
     }
   }
 
-  mapDataForAmenityRemoval(packageId){
-    return{packageId:packageId}
+  mapDataForAmenityRemoval(packageId) {
+    return { packageId: packageId };
   }
 
   validatePackageForm(packageForm: FormGroup) {
     let status = [];
-    let packageFA = packageForm.get('subPackages')as FormArray;
-    packageFA.controls.forEach(subPackageForm =>{
-       if (subPackageForm.get('isSelected').value === true && subPackageForm.invalid) {
-         status.push({
-           validity: false,
-           code: "INVALID_FORM",
-           msg: "Invalid form. Please fill all the fields.",
-         });
-       }
-    })
-   
+    let packageFA = packageForm.get('subPackages') as FormArray;
+    packageFA.controls.forEach((subPackageForm) => {
+      if (
+        subPackageForm.get('isSelected').value === true &&
+        subPackageForm.invalid
+      ) {
+        status.push({
+          validity: false,
+          code: 'INVALID_FORM',
+          msg: 'Invalid form. Please fill all the fields.',
+        });
+      }
+    });
+
     return status;
   }
 

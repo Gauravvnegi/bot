@@ -95,7 +95,7 @@
             class="call"
           >
             <mat-icon class="material-icons" matSuffix>call</mat-icon>
-            {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}
+            <u> {{ primaryGuest.countryCode }}{{ primaryGuest.phoneNumber }}</u>
           </a>
           <a
             href="mailto:{{ primaryGuest.email }}"
@@ -103,14 +103,14 @@
             class="email"
           >
             <mat-icon class="material-icons" matSuffix>email</mat-icon>
-            {{ primaryGuest.email }}
+            <u> {{ primaryGuest.email }}</u>
           </a>
         </div>
       </div>
       <div class="header-seperator"></div>
       <div class="booking-id-wrapper">
         <div class="booking-id">
-          {{ reservationDetailsFG.get('bookingNumber').value }}
+          <u>{{ reservationDetailsFG.get('bookingNumber').value }}</u>
         </div>
         <div
           *ngIf="['COMPLETED'].includes(details.feedbackDetails.status)"
@@ -189,19 +189,16 @@
         </ng-container>
         <p class="text">Reg card</p>
       </button>
-      <button (click)="downloadHealthcard(details.healDeclarationDetails.url)" class="check-button">
+      <button
+        (click)="downloadHealthcard(details.healDeclarationDetails.url)"
+        class="check-button"
+      >
         <ng-container [ngSwitch]="healthCardDetailsFG.get('status').value">
-          <mat-icon
-            *ngSwitchCase="'COMPLETED'"
-            class="material-icons"
-            matSuffix
+          <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix
             >check_circle</mat-icon
           >
 
-          <mat-icon
-            *ngSwitchCase="'FAILED'"
-            class="material-icons"
-            matSuffix
+          <mat-icon *ngSwitchCase="'FAILED'" class="material-icons" matSuffix
             >disabled_by_default</mat-icon
           >
 
@@ -209,10 +206,7 @@
             >help</mat-icon
           >
 
-          <mat-icon
-            *ngSwitchCase="'INITIATED'"
-            class="material-icons"
-            matSuffix
+          <mat-icon *ngSwitchCase="'INITIATED'" class="material-icons" matSuffix
             >help</mat-icon
           >
 
@@ -454,29 +448,22 @@
           </ng-container>
         </ng-template>
       </div>
-      <!-- <p class="contact">Contact Guest</p>
+      <p class="contact">Contact Guest</p>
       <div class="right-bottom-icons">
-        <div class="social-icons">
-          <div class="icon">
-            <img src="assets/svg/telegram.svg" />
+    
+        <ng-container *ngFor="let icon of shareIconList">
+          <div
+            class="social-icons"
+            (click)="openSendNotification(icon.value)"
+          >
+            <div class="icon">
+              <img [src]="icon.iconUrl" />
+            </div>
           </div>
-        </div>
-        <div class="social-icons">
-          <div class="icon">
-            <img src="assets/svg/whatsapp.svg" />
-          </div>
-        </div>
-        <div class="social-icons">
-          <div class="icon">
-            <img src="assets/svg/messenger.svg" />
-          </div>
-        </div>
-        <div class="social-icons">
-          <div class="icon">
-            <img src="assets/svg/share.svg" />
-          </div>
-        </div>
-      </div> -->
+        </ng-container>
+        
+      
+      </div>
     </div>
   </div>
 </div>

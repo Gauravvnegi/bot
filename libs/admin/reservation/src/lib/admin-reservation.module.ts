@@ -19,6 +19,7 @@ import { RequestsTableComponent } from './components/requests-table/requests-tab
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
+import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -31,6 +32,7 @@ export const adminReservationRoutes: Route[] = [];
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
+    AdminNotificationModule
   ],
   providers: [ReservationService, AdminDetailsService],
   declarations: [

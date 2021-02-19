@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -22,9 +22,9 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
     './reservation-datatable.component.scss',
   ],
 })
-export class ReservationDatatableComponent extends BaseDatatableComponent
+export class  ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Reservations';
+  @Input() tableName = 'Reservations';
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -44,7 +44,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     { field: 'stageAndourney', header: 'Stage/Journey' },
   ];
 
-  tabFilterItems = [
+  @Input() tabFilterItems = [
     {
       label: 'Inhouse',
       content: '',
@@ -61,7 +61,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       total: 0,
       chips: [
         { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        { label: 'New', icon: '', value: 'NEW', total: 0, isSelected: false },
+        { label: 'New', icon: '', value: 'NEW', total: 0, isSelected: false, type: 'new' },
         {
           label: 'Precheckin_Pending ',
           icon: '',
@@ -171,17 +171,17 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       ],
     },
   ];
-  tabFilterIdx: number = 1;
+  @Input() tabFilterIdx: number = 1;
 
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _reservationService: ReservationService,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _modal: ModalService,
+    protected _reservationService: ReservationService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected _modal: ModalService,
     public feedbackService: FeedbackService
   ) {
     super(fb);
@@ -217,12 +217,17 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  loadInitialData(queries = [], loading = true) {
+  loadInitialData(
+    queries = [],
+    loading = true,
+    props?: { offset: number; limit: number }
+  ) {
     this.loading = loading && true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
+      this.fetchDataFrom(queries, props).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
+          this.initialLoading = false;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -326,6 +331,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
+    this.tempFirst = this.first;
+    this.tempRowsPerPage = this.rowsPerPage;
   }
 
   customSort(event: SortEvent) {
@@ -358,8 +365,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
+    // this.tempFirst = this.first;
+    // this.tempRowsPerPage = this.rowsPerPage;
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
 
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
@@ -401,11 +418,25 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
     //toggle isSelected
-    this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-      quickReplyTypeIdx
-    ].isSelected;
+    if (quickReplyTypeIdx == 0) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL') {
+          chip.isSelected = false;
+        }
+      });
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
 
     this.loadInitialData([
       ...this.globalQueries,
@@ -442,7 +473,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
             },
             ...this.getSelectedQuickReplyFilters(),
           ],
-          false
+          false,
+          {
+            offset: this.tempFirst,
+            limit: this.tempRowsPerPage
+              ? this.tempRowsPerPage
+              : this.rowsPerPage,
+          }
         );
         detailCompRef.close();
       })

@@ -1,0 +1,35 @@
+<div class="container">
+	<div class="title-container">
+		<div class="icon">
+			<img src="assets/svg/feedback-distribution.svg" />
+		</div>
+		<div class="stat-title">Feedback Distribution</div>
+	</div>
+	<div class="graph-container" *ngIf="!loading">
+		<div class="graph" *ngIf="totalDistribution; else defaultGraph;">
+			<canvas baseChart style="height: 125px;" [data]="chart.Data" [labels]="chart.Labels" [chartType]="chart.Type"
+				[legend]="chart.Legend" [colors]="chart.Colors" [options]="chart.Options">
+			</canvas>
+		</div>
+		<ng-template #defaultGraph>
+			<div class="graph">
+				<canvas baseChart style="height: 125px;" [data]="defaultChart.Data" [labels]="defaultChart.Labels" [chartType]="chart.Type"
+					[legend]="defaultChart.Legend" [colors]="defaultChart.Colors" [options]="defaultChart.Options">
+				</canvas>
+			</div>
+		</ng-template>
+		<div class="labels" *ngIf="distribution">
+			<div class="val">{{ distribution.totalCount }}</div>
+			<div class="label">Total Responses</div>
+		</div>
+	</div>
+	<div *ngIf="keyLabels.length">
+		<div class="stat-val-container" *ngFor="let value of keyLabels; let i=index">
+			<div class="stat-lable-container">
+				<div class="icon" [style.background]="value.color"></div>
+				<div class="stat-lable">{{ value.label }} ({{ value.scale }})</div>
+			</div>
+			<div class="stat-val">{{ value.count }} ({{ value.percent }}%)</div>
+		</div>
+	</div>
+</div>

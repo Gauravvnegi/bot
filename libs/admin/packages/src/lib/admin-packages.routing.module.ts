@@ -8,21 +8,17 @@ import { PackageDatatableComponent } from './components/package-datatable/packag
 import { CategoriesDatatableComponent } from './components/categories-datatable/categories-datatable.component';
 
 export const adminPackagesRoutes: Route[] = [
-  // {
-  //   path: '',
-  //   component: ComingSoonComponent,
-  // },
   {
     path: '',
     component: AdminPackagesWrapperComponent,
     children: [],
   },
   {
-    path: 'amenity',
+    path: 'add',
     component: EditPackageComponent,
   },
   {
-    path: 'amenity/:id',
+    path: 'edit/:id',
     component: EditPackageComponent,
   },
   {

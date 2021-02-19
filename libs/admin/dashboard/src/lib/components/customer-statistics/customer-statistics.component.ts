@@ -8,12 +8,12 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Customer } from '../../data-models/statistics.model';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { StatisticsService } from '../../services/statistics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-customer-statistics',
@@ -128,12 +128,13 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
     chartType: 'line',
   };
   timeShow = false;
+  globalQueries;
 
   constructor(
-    private _dateService: DateService,
-    private _adminUtilityService: AdminUtilityService,
+    private dateService: DateService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _adminUtilityService: AdminUtilityService
   ) {}
 
   setChartType(option) {
@@ -164,7 +165,27 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getCustomerStatistics();
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getCustomerStatistics();
+      })
+    );
   }
 
   private initGraphData() {
@@ -173,9 +194,20 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       d.data = [];
     });
     this.chart.chartLabels = [];
-    botKeys.forEach((d) => {
+    botKeys.forEach((d, i) => {
       this.chart.chartLabels.push(
-        this._adminUtilityService.convertTimestampToLabels(this.selectedInterval, d)
+        this.dateService.convertTimestampToLabels(
+          this.selectedInterval,
+          d,
+          this.selectedInterval === 'date' && this.selectedInterval === 'week'
+            ? 'DD MMM'
+            : this.selectedInterval === 'month'
+            ? 'MMM YYYY'
+            : '',
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
+        )
       );
       this.chart.chartData[0].data.push(this.customerData.new[d]);
       this.chart.chartData[1].data.push(this.customerData.checkIn[d]);
@@ -209,32 +241,13 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   };
 
   getCustomerStatistics() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this._adminUtilityService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        const queries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-
-        const config = {
-          queryObj: this._adminUtilityService.makeQueryParams(queries),
-        };
-        this.$subscription.add(
-          this._statisticService
-            .getCustomerStatistics(config)
-            .subscribe((res) => {
-              this.customerData = new Customer().deserialize(res);
-              this.initGraphData();
-            })
-        );
+      this._statisticService.getCustomerStatistics(config).subscribe((res) => {
+        this.customerData = new Customer().deserialize(res);
+        this.initGraphData();
       })
     );
   }

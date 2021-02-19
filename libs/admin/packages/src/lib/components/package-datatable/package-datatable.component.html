@@ -246,7 +246,7 @@
           </div>
           <div class="text">
             <div>{{ rowData.name }}</div>
-            <p>{{ rowData.categoryName }}</p>
+            <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p>
           </div>
         </div>
         <!-- <div class="data">

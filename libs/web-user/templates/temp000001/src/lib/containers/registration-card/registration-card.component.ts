@@ -19,9 +19,9 @@ export class RegistrationCardComponent {
     fileName: '',
     src: '',
   };
-  private _settings;
-  private $subscription: Subscription = new Subscription();
-  private _defaultValue = {
+  protected _settings;
+  protected $subscription: Subscription = new Subscription();
+  protected _defaultValue = {
     label: 'Verify ',
     linkLabel: 'Registration Card',
     styles: {
@@ -58,14 +58,14 @@ export class RegistrationCardComponent {
   }
 
   constructor(
-    private _sanitizer: DomSanitizer,
-    private _reservation: ReservationService,
-    private _docService: DocumentDetailsService,
+    protected _sanitizer: DomSanitizer,
+    protected _reservation: ReservationService,
+    protected _docService: DocumentDetailsService,
     public dialogRef: MatDialogRef<RegistrationCardComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private _utilityService: UtilityService,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _utilityService: UtilityService,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {
     this.settings = data;
   }

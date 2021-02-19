@@ -124,13 +124,24 @@
         <div style="width: 40%;" class="feild">
           <mat-label class="mat-label">Phone No. :</mat-label>
           <mat-form-field class="phone-no-dropdown">
-            <mat-select formControlName="cc">
+            <mat-select formControlName="cc" (selectionChange)="change($event)" (openedChange)="openedChange($event)">
               <!-- <option value="" selected>None</option> -->
-              <mat-option
-                *ngFor="let country of countries"
-                [value]="country.value"
-                >{{ country.label }}</mat-option
-              >
+              <ng-container *ngIf="!isOptionsOpenedChanged; else optionsChanged">
+                <mat-option *ngFor="let country of countries; trackBy: trackByFn" [value]="country.value">{{
+                  country.value }}</mat-option>
+              </ng-container>
+
+              <ng-template #optionsChanged>
+                <ng-container *ngIf="!(onOpenedChange | async); else opendOptions">
+                  <mat-option *ngFor="let country of countries; trackBy: trackByFn" [value]="country.value">{{
+                    country.value }}</mat-option>
+                </ng-container>
+
+                <ng-template #opendOptions>
+                  <mat-option *ngFor="let country of countries; trackBy: trackByFn" [value]="country.value">{{
+                    country.label }}</mat-option>
+                </ng-template>
+              </ng-template>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="phone-no-feild">

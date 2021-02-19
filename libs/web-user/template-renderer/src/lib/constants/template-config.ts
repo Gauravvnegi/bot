@@ -12,6 +12,16 @@ export const templateConfig: Template = {
         '../../../../templates/temp000001/src/lib/containers/temp000001/temp000001.component'
       ),
   },
+  [TemplateCode.temp000002]: {
+    module: 'Temp000002Module',
+    component: 'Temp000002Component',
+    modulePath: async () =>
+      import('../../../../templates/temp000002/src/lib/temp000002.module'),
+    componentPath: async () =>
+      import(
+        '../../../../templates/temp000002/src/lib/containers/temp000002/temp000002.component'
+      ),
+  },
   [TemplateCode.tempCovid000001]: {
     module: 'TempCovid000001Module',
     component: 'TempCovid000001Component',

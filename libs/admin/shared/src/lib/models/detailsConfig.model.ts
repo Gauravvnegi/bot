@@ -12,6 +12,7 @@ export class Details implements Deserializable {
   stayDetails: StayDetailsConfig;
   amenitiesDetails: PackageDetailsConfig;
   paymentDetails: PaymentDetailsConfig;
+  shareIconsDetails: ShareIconConfig;
   regCardDetails: RegCardConfig;
   healDeclarationDetails: HealthDeclarationConfig;
   currentJourneyDetails: CurrentJourneyDetails;
@@ -210,6 +211,33 @@ export class GuestDetailsConfig implements Deserializable {
   }
 }
 
+export class ShareIconConfig implements Deserializable {
+  applications: ShareIcon[];
+
+  deserialize(input: any) {
+    this.applications = new Array<ShareIcon>();
+    this.applications = input.applications.map((data) => {
+      return new ShareIcon().deserialize(data);
+    });
+    return this;
+  }
+}
+
+export class ShareIcon implements Deserializable {
+  value;
+  label;
+  iconUrl;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'value', get(input, ['value'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'iconUrl', get(input, ['iconUrl']))
+    );
+    return this;
+  }
+}
+
 export class StayDetailsConfig implements Deserializable {
   code: string;
   arrivalDate: string;
@@ -220,12 +248,11 @@ export class StayDetailsConfig implements Deserializable {
   roomNumber: string;
   expectedArrivalTime;
   special_comments: string;
-  checkin_comments:string;
+  checkin_comments: string;
   arrivalTimeStamp;
   departureTimeStamp;
 
   deserialize(input: any) {
-    let service = new DateService();
     Object.assign(
       this,
       set({}, 'code', get(input, ['code'])),
@@ -234,7 +261,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'arrivalDate',
-        new DateService().convertTimestampToDate(
+        DateService.convertTimestampToDate(
           get(input, ['arrivalTime']),
           'DD/MM/YYYY'
         )
@@ -242,7 +269,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'departureDate',
-        new DateService().convertTimestampToDate(
+        DateService.convertTimestampToDate(
           get(input, ['departureTime']),
           'DD/MM/YYYY'
         )
@@ -250,9 +277,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'expectedArrivalTime',
-        get(input, ['expectedArrivalTime']) == 0
-          ? moment(get(input, ['arrivalTime'])).format('HH:mm')
-          : moment(get(input, ['expectedArrivalTime'])).format('HH:mm')
+        moment(get(input, ['expectedArrivalTime'])).format('HH:mm')
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),

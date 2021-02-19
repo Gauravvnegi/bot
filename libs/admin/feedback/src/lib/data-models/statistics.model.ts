@@ -1,44 +1,36 @@
 import { get, set } from 'lodash';
-import { Departments } from '../constants/departments';
 
 export class NPS {
   label: string;
   score: number;
-	npsGraph: any;
-	
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, 'label', get(statistics, ['label'])),
-			set({}, 'score', get(statistics, ['score'])),
-			set({}, 'npsGraph', get(statistics, ['npsGraph'])),
-		);
-		return this;
-	}
+  npsGraph: any;
+
+  deserialize(statistics) {
+    Object.assign(
+      this,
+      set({}, 'label', get(statistics, ['label'])),
+      set({}, 'score', get(statistics, ['score'])),
+      set({}, 'npsGraph', get(statistics, ['npsGraph']))
+    );
+    return this;
+  }
 }
 
 export class NPSDepartments {
-	[Departments.reservation]: Department;
-	[Departments.maintenace]: Department;
-	[Departments.houseKeeping]: Department;
-	[Departments.frontOffice]: Department;
-	[Departments.foodAndBeverages]: Department;
+  departments: Department[];
 
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, [Departments.reservation], get(statistics, [Departments.reservation])),
-			set({}, [Departments.maintenace], get(statistics, [Departments.maintenace])),
-			set({}, [Departments.houseKeeping], get(statistics, [Departments.houseKeeping])),
-			set({}, [Departments.frontOffice], get(statistics, [Departments.frontOffice])),
-			set({}, [Departments.foodAndBeverages], get(statistics, [Departments.foodAndBeverages])),
-		)
-		return this;
-	}
+  deserialize(statistics) {
+    const keys = Object.keys(statistics);
+    this.departments = new Array<Department>();
+    keys.forEach((key) => {
+      this.departments.push(statistics[key]);
+    });
+    return this;
+  }
 }
 
 export class Department {
-	label: string;
+  label: string;
   score: number;
   positive: number;
   negative: number;
@@ -49,126 +41,194 @@ export class Department {
 }
 
 export class NPSAcrossServices {
-	npsStats: Services;
-    entities: ServiceEntities;
-	
-	deserialize(statistics) {
-		this.npsStats = new Services().deserialize(statistics.npsStats);
-		this.entities = new ServiceEntities().deserialize(statistics.entities);
-		return this;
-	}
-}
+  npsStats;
+  entities;
+  departments;
+  services;
 
-export class Services {
-	'Valet Service': Department;
-	'Luggage Service': Department;
-	'Public area cleaning': Department;
-	'Room Cleaning': Department;
-	beverages: Department;
-
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, 'Valet Service', get(statistics, ['Valet Service'])),
-			set({}, 'Luggage Service', get(statistics, ['Luggage Service'])),
-			set({}, 'Public area cleaning', get(statistics, ['Public area cleaning'])),
-			set({}, 'Room Cleaning', get(statistics, ['Room Cleaning'])),
-			set({}, 'beverages', get(statistics, ['beverages'])),
-		)
-		return this;
-	}
-}
-
-export class ServiceEntities {
-	ALL: string[];
-    'Front Office': string[];
-    HouseKeeping: string[];
-    'Food & Beverage': string[];
-    Maintenance: string[];
-	'SPA & Salon': string[];
-	
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, 'ALL', get(statistics, ['ALL'])),
-			set({}, 'Front Office', get(statistics, ['Front Office'])),
-			set({}, 'HouseKeeping', get(statistics, ['HouseKeeping'])),
-			set({}, 'Maintenance', get(statistics, ['Maintenance'])),
-			set({}, 'SPA & Salon', get(statistics, ['SPA & Salon'])),
-		)
-
-		return this;
-	}
+  deserialize(statistics) {
+    this.departments = new Array<any>();
+    this.services = new Array<any>();
+    this.entities = {};
+    Object.keys(statistics.departments).forEach((key) =>
+      this.departments.push({ key, value: statistics.departments[key] })
+    );
+    this.services.push({
+      label: 'All',
+      icon: '',
+      value: 'ALL',
+      total: 0,
+      isSelected: true,
+      type: '',
+    });
+    Object.keys(statistics.services).forEach((key) => {
+      this.services.push({
+        label: statistics.services[key],
+        icon: '',
+        value: key,
+        total: 0,
+        isSelected: false,
+        type: 'initiated',
+      });
+      this.entities[key] = [];
+      statistics.entities[key] &&
+        Object.keys(statistics.entities[key]).forEach((entity) => {
+          this.entities[key].push({
+            entity,
+            value: statistics.entities[key][entity],
+            statistic: statistics.npsStats[key][entity]
+              ? statistics.npsStats[key][entity]
+              : {},
+          });
+        });
+    });
+    return this;
+  }
 }
 
 export class NPSTouchpoints {
-	CHECKIN: CheckoutTouchPoints;
-	CHECKOUT: CheckoutTouchPoints;
-    entities: TouchpointEntities;
-	source: string[];
-	
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			// set({}, 'CHECKIN', get(statistics, ['touchpoint', 'CHECKIN', 'npsStats'])),
-			// set({}, 'CHECKOUT', get(statistics, ['touchpoint', 'CHECKOUT', 'npsStats'])),
-			// set({}, 'entities', get(statistics, ['entities'])),
-			set({}, 'source', get(statistics, ['source'])),
-		)
-		this.entities = new TouchpointEntities().deserialize(statistics.entities);
-		this.CHECKIN = new CheckoutTouchPoints().deserialize(statistics.touchpoint.CHECKIN.npsStats);
-		this.CHECKOUT = new CheckoutTouchPoints().deserialize(statistics.touchpoint.CHECKOUT.npsStats);
-		return this;
-	}
-}
+  departments;
+  chips;
+  values;
+  maxBarCount;
 
-export class TouchpointEntities {
-	ALL: string;
-	'Front Office': string[];
-	HouseKeeping: string[];
-	'Food & Beverage': string[];
-	Maintenance: string[];
-	'SPA & Salon': string[];
-
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, 'ALL', get(statistics, ['ALL'])),
-			set({}, 'Front Office', get(statistics, ['Front Office'])),
-			set({}, 'HouseKeeping', get(statistics, ['HouseKeeping'])),
-			set({}, 'Maintenance', get(statistics, ['Maintenance'])),
-			set({}, 'SPA & Salon', get(statistics, ['SPA & Salon'])),
-		)
-
-		return this;
-	}
-}
-
-export class CheckoutTouchPoints {
-	'Room Cleaning': Touchpoint;
-	'Front Desk': Touchpoint;
-	'Luggage Service': Touchpoint;
-
-	deserialize(statistics) {
-		Object.assign(
-			this,
-			set({}, 'Room Cleaning', get(statistics, ['Room Cleaning'])),
-			set({}, 'Front Desk', get(statistics, ['Front Desk'])),
-			set({}, 'Luggage Service', get(statistics, ['Luggage Service'])),
-		)
-
-		return this;
-	}
+  deserialize(statistics, time) {
+    this.departments = new Array<any>();
+    this.values = new Array<any>();
+    this.chips = {};
+    this.maxBarCount = 3;
+    Object.keys(statistics.departments).forEach((key) => {
+      this.departments.push({ key, value: statistics.departments[key] });
+      if (statistics.entities[key]) {
+        this.chips[key] = [];
+        this.chips[key].push({
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+          type: '',
+        });
+        Object.keys(statistics.entities[key]).forEach((touchpoint) => {
+          this.chips[key].push({
+            label: statistics.entities[key][touchpoint],
+            icon: '',
+            value: touchpoint,
+            total: 0,
+            isSelected: false,
+            type: 'initiated',
+          });
+          if (!time) {
+            this.values.push({
+              key: touchpoint,
+              value: statistics.entities[key][touchpoint],
+              statistic: statistics.npsStats[touchpoint],
+            });
+          }
+        });
+      }
+    });
+    if (time) {
+      Object.keys(statistics.npsStatsByTime).forEach((key, i) => {
+        this.values.push({ value: key, data: [] });
+        this.maxBarCount =
+          Object.keys(statistics.npsStatsByTime[key]).length > this.maxBarCount
+            ? Object.keys(statistics.npsStatsByTime[key]).length
+            : this.maxBarCount;
+        Object.keys(statistics.npsStatsByTime[key]).forEach((dataKey) => {
+          this.values[i].data.push({
+            statistic: statistics.npsStatsByTime[key][dataKey],
+          });
+        });
+      });
+    }
+    this.values.sort(function(a, b) {
+      return parseInt(a.value) - parseInt(b.value);
+    });
+    return this;
+  }
 }
 
 export class Touchpoint {
-	label: string;
-	score: number;
-	positive: number;
-	negative: number;
-	neutral: number;
-	difference: number;
-	minScore: number;
-	maxScore: number;
-	colorCode: string;
+  label: string;
+  score: number;
+  positive: number;
+  negative: number;
+  neutral: number;
+  difference: number;
+  minScore: number;
+  maxScore: number;
+  colorCode: string;
+}
+
+export class FeedbackDistribution {
+  totalCount: number;
+  veryPoor: Distribution;
+  poor: Distribution;
+  adequate: Distribution;
+  good: Distribution;
+  veryGood: Distribution;
+  outstanding: Distribution;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'totalCount', get(input, ['totalResponse'])),
+      set({}, 'veryPoor', get(input, ['feedbacks', 'VERYPOOR'])),
+      set({}, 'poor', get(input, ['feedbacks', 'POOR'])),
+      set({}, 'adequate', get(input, ['feedbacks', 'ADEQUATE'])),
+      set({}, 'good', get(input, ['feedbacks', 'GOOD'])),
+      set({}, 'veryGood', get(input, ['feedbacks', 'VERYGOOD'])),
+      set({}, 'outstanding', get(input, ['feedbacks', 'OUTSTANDING']))
+    );
+    return this;
+  }
+}
+
+export class Distribution {
+  label: string;
+  scale: string;
+  count: number;
+  percent: number;
+  color: string;
+}
+
+export class GlobalNPS {
+  label: string;
+  score: number;
+  positive: number;
+  negative: number;
+  neutral: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'positive', get(input, ['positive'])),
+      set({}, 'negative', get(input, ['negative'])),
+      set({}, 'neutral', get(input, ['neutral']))
+    );
+    return this;
+  }
+}
+
+export class PerformanceNPS {
+  label: string;
+  performances: Touchpoint[];
+
+  deserialize(input) {
+    this.performances = new Array<Touchpoint>();
+    Object.assign(this, set({}, 'label', get(input, ['label'])));
+
+    input.npsPerformace.TOP_PERFORMING.forEach((data) =>
+      this.performances.push({ ...data, colorCode: '#1AB99F' })
+    );
+
+    input.npsPerformace.LOW_PERFORMING.forEach((data) =>
+      this.performances.push({ ...data, colorCode: '#EF1D45' })
+    );
+
+    return this;
+  }
 }

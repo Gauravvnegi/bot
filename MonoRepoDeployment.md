@@ -1,4 +1,5 @@
 # MonoRepo Botshot Development deployment procedure using GitLab Pipeline
+A scalable development (build) and deployement in CI/CD sense for monorepo (a single repository that stores all of your code and assets for every project).
 
 
 **Requirements:**

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Regex } from 'libs/shared/constants/regex';
@@ -15,6 +16,8 @@ import { PackageService } from '../../services/package.service';
   styleUrls: ['./edit-package.component.scss']
 })
 export class EditPackageComponent implements OnInit {
+
+  @Input() id: string;
 
   private $subscription: Subscription = new Subscription();
 
@@ -54,6 +57,7 @@ export class EditPackageComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private packageService: PackageService,
+    private _location: Location,
   ) {
     this.initAddPackageForm();
   }
@@ -127,6 +131,9 @@ export class EditPackageComponent implements OnInit {
         if (params['id']) {
           this.packageId = params['id'];
           this.getPackageDetails(this.packageId);
+        }else if(this.id){
+          this.packageId = this.id;
+          this.getPackageDetails(this.packageId);
         }
       })
     );
@@ -192,7 +199,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   redirectToPackages(){
-    this.router.navigate(['/pages/package']);
+    this._location.back();
   }
 
   uploadFile(event): void {

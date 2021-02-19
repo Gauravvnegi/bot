@@ -17,27 +17,27 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./payment-main.component.scss'],
 })
 export class PaymentMainComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
   paymentStatusData: PaymentMainStatus = new PaymentMainStatus();
 
   ispaymentStatusLoaded: boolean = false;
   isReservationData = false;
   reservationData: ReservationDetails;
   constructor(
-    private _reservationService: ReservationService,
-    private _hotelService: HotelService,
-    private _templateLoadingService: TemplateLoaderService,
-    private _paymentDetailService: PaymentDetailsService,
-    private router: Router,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _reservationService: ReservationService,
+    protected _hotelService: HotelService,
+    protected _templateLoadingService: TemplateLoaderService,
+    protected _paymentDetailService: PaymentDetailsService,
+    protected router: Router,
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.getReservationDetails();
   }
 
-  private getReservationDetails() {
+  protected getReservationDetails() {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
@@ -51,7 +51,7 @@ export class PaymentMainComponent implements OnInit {
     );
   }
 
-  private getPaymentStatus() {
+  protected getPaymentStatus() {
     this.$subscription.add(
       this._paymentDetailService
         .getPaymentStatus(this._reservationService.reservationId)

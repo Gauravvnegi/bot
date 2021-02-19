@@ -1,27 +1,38 @@
-import { Component, ComponentFactoryResolver, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { Subscription } from 'rxjs';
 import { PackageRendererComponent } from '../package-renderer/package-renderer.component';
 import { SlickCarouselComponent } from 'ngx-slick-carousel';
 
-
 @Component({
   selector: 'hospitality-bot-paid-amenities',
   templateUrl: './paid-amenities.component.html',
-  styleUrls: ['./paid-amenities.component.scss']
+  styleUrls: ['./paid-amenities.component.scss'],
 })
 export class PaidAmenitiesComponent implements OnInit, OnDestroy {
-
   @Input() parentForm: FormGroup;
 
-  @ViewChild('packageRenderer', { read: ViewContainerRef }) packageRendererContainer;
+  @ViewChild('packageRenderer', { read: ViewContainerRef })
+  packageRendererContainer;
   @ViewChild('slickModal') slickModal: SlickCarouselComponent;
 
-  private $subscription: Subscription = new Subscription();
+  protected $subscription: Subscription = new Subscription();
+
+  protected packageRenderComponent = PackageRendererComponent;
 
   selectedSlide;
   packageRendererComponentRefObj;
+  selectedService;
 
   slideConfig = {
     slidesToShow: 3,
@@ -42,9 +53,9 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private _fb: FormBuilder,
-    private _paidService: PaidService,
-    private _resolver: ComponentFactoryResolver,
+    protected _fb: FormBuilder,
+    protected _paidService: PaidService,
+    protected _resolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {
@@ -57,21 +68,19 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
 
   addAmenityToForm() {
     this.paidAmenities.forEach((slide) => {
-      this.parentForm.addControl(
-        slide.packageCode,
-        this.getAmenitiesFG()
-      );
-      if(slide.subPackages.length>0){
+      this.parentForm.addControl(slide.packageCode, this.getAmenitiesFG());
+      if (slide.subPackages.length > 0) {
         this.addSubPackageToAmenity(slide);
       }
       this.getAminityForm(slide.packageCode).patchValue(slide);
     });
   }
 
-  addSubPackageToAmenity(slide){
-    slide.subPackages.forEach(subPackage => {
-      let subPackageFA = 
-      this.parentForm.get(slide.packageCode).get('subPackages')as FormArray;
+  addSubPackageToAmenity(slide) {
+    slide.subPackages.forEach((subPackage) => {
+      let subPackageFA = this.parentForm
+        .get(slide.packageCode)
+        .get('subPackages') as FormArray;
       subPackageFA.push(this.getAmenitiesFG());
     });
   }
@@ -85,29 +94,38 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       imgUrl: [''],
       label: [''],
       isSelected: [''],
-      active:[''],
-      hasChild:[''],
-      description:[''],
-      autoAccept:[''],
-      unit:[''],
-      type:[''],
-      source:[''],
-      category:[''],
-      subPackages:new FormArray([])
+      active: [''],
+      hasChild: [''],
+      description: [''],
+      autoAccept: [''],
+      unit: [''],
+      type: [''],
+      source: [''],
+      category: [''],
+      subPackages: new FormArray([]),
     });
   }
 
-  openPackage(packageCode){
+  openPackage(packageCode) {
+    this.selectedService=packageCode;
     this.pauseSlickCarousel();
     this.clearPackageRendererContainer();
     let serviceFormGroup = this.getAminityForm(packageCode);
-    this.selectedSlide = this.paidAmenities.find(slideData =>slideData.packageCode === packageCode);
-    this.createComponent(PackageRendererComponent, serviceFormGroup, this.selectedSlide);
+    this.selectedSlide = this.paidAmenities.find(
+      (slideData) => slideData.packageCode === packageCode
+    );
+    this.createComponent(
+      this.packageRenderComponent,
+      serviceFormGroup,
+      this.selectedSlide
+    );
   }
 
   createComponent(component, serviceFormGroup, selectedSlide) {
     const factory = this._resolver.resolveComponentFactory(component);
-    this.packageRendererComponentRefObj = this.packageRendererContainer.createComponent(factory);
+    this.packageRendererComponentRefObj = this.packageRendererContainer.createComponent(
+      factory
+    );
     this.addPropsToComponentInstance(serviceFormGroup, selectedSlide);
   }
 
@@ -117,12 +135,14 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     this.listenForPackageUpdate();
   }
 
-  listenForPackageUpdate(){
+  listenForPackageUpdate() {
     this.$subscription.add(
-      this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(() => {
-        this.packageRendererComponentRefObj.destroy();
-        this.playSlickCarousel();
-      })
+      this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(
+        () => {
+          this.packageRendererComponentRefObj.destroy();
+          this.playSlickCarousel();
+        }
+      )
     );
   }
 
@@ -163,11 +183,11 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     return paidPackage['id'];
   }
 
-  pauseSlickCarousel(){
+  pauseSlickCarousel() {
     this.slickModal.slickPause();
   }
 
-  playSlickCarousel(){
+  playSlickCarousel() {
     this.slickModal.slickPlay();
   }
 

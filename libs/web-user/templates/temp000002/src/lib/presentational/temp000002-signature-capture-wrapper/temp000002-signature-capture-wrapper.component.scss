@@ -1,0 +1,20 @@
+@import 'temp000002';
+
+::ng-deep .temp000002-signature-button {
+  background: var(
+    --primary-button-background-color,
+    $primary-button-background-color
+  ) !important;
+  width: 200px;
+  height: 45px;
+  font-weight: $bolder;
+  box-shadow: 0px 3px 6px #4b56c059;
+  border-radius: 28px;
+  color: var(--primary-button-font-color, $primary-button-font-color) !important;
+  &:hover {
+    cursor: pointer;
+  }
+  @media only screen and (max-width: $M) {
+    width: 100px;
+  }
+}

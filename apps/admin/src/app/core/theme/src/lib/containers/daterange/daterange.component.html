@@ -10,6 +10,7 @@
       [options]="config"
       (selected)="selectedDate($event)"
       class="date-range-input"
+      (focus)="onFocus()"
     />
     <img src="assets/svg/calendar.svg" class="calendar-image">
   </mat-form-field>

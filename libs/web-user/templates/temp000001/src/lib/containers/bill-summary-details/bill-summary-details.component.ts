@@ -23,6 +23,8 @@ export class BillSummaryDetailsComponent implements OnInit {
   @Input() reservationData;
   @Input() stepperIndex;
 
+  protected addGstComponent=AddGstComponent;
+
   @ViewChild('nextButton') nextButton;
 
   requestForm: FormGroup;
@@ -47,15 +49,15 @@ export class BillSummaryDetailsComponent implements OnInit {
   ];
 
   constructor(
-    private _fb: FormBuilder,
-    private _summaryService: BillSummaryService,
-    private _stepperService: StepperService,
-    private _hotelService: HotelService,
-    private _reservationService: ReservationService,
-    private _utilityService: UtilityService,
+    protected _fb: FormBuilder,
+    protected _summaryService: BillSummaryService,
+    protected _stepperService: StepperService,
+    protected _hotelService: HotelService,
+    protected _reservationService: ReservationService,
+    protected _utilityService: UtilityService,
     public dialog: MatDialog,
-    private _snackBarService: SnackBarService,
-    private _translateService: TranslateService
+    protected _snackBarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {
     this.initRequestForm();
   }
@@ -99,35 +101,7 @@ export class BillSummaryDetailsComponent implements OnInit {
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.billSummaryDetails;
-    let {
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      taxAndFees,
-    } = paymentSummary.roomRates;
-
-    this.dataSource.push({
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      currency: paymentSummary.currency,
-      ...Object.assign(
-        {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
-      ),
-    });
-
-    this.billSummaryDetails.packages.forEach((amenity) => {
+    if (paymentSummary.roomRates) {
       let {
         label,
         description,
@@ -137,7 +111,7 @@ export class BillSummaryDetailsComponent implements OnInit {
         discount,
         totalAmount,
         taxAndFees,
-      } = amenity;
+      } = paymentSummary.roomRates;
 
       this.dataSource.push({
         label,
@@ -155,7 +129,39 @@ export class BillSummaryDetailsComponent implements OnInit {
           }))
         ),
       });
-    });
+    }
+
+    if (this.billSummaryDetails.packages && this.billSummaryDetails.packages.length) {
+      this.billSummaryDetails.packages.forEach((amenity) => {
+        let {
+          label,
+          description,
+          unit,
+          unitPrice,
+          amount,
+          discount,
+          totalAmount,
+          taxAndFees,
+        } = amenity;
+
+        this.dataSource.push({
+          label,
+          description,
+          unit,
+          unitPrice,
+          amount,
+          discount,
+          totalAmount,
+          currency: paymentSummary.currency,
+          ...Object.assign(
+            {},
+            ...taxAndFees.map((taxType) => ({
+              [taxType.type]: taxType.value,
+            }))
+          ),
+        });
+      });
+    }
   }
 
   openDialog() {
@@ -172,7 +178,8 @@ export class BillSummaryDetailsComponent implements OnInit {
           .uploadSignature(
             this._reservationService.reservationId,
             this._hotelService.hotelId,
-            this._reservationService.reservationData.guestDetails.primaryGuest.id,
+            this._reservationService.reservationData.guestDetails.primaryGuest
+              .id,
             formData
           )
           .subscribe(
@@ -183,22 +190,20 @@ export class BillSummaryDetailsComponent implements OnInit {
               this.signature = response['fileDownloadUri'];
               this._utilityService.$signatureUploaded.next(true);
               this._translateService
-              .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(
-                  translatedMsg,
-                  '',
-                  { panelClass: 'success' }
-                );
-              });
+                .get('MESSAGES.SUCCESS.SIGNATURE_UPLOAD_COMPLETE')
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
+                });
             },
             ({ error }) => {
               this._utilityService.$signatureUploaded.next(true);
               this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                });
             }
           )
       );
@@ -209,10 +214,7 @@ export class BillSummaryDetailsComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
-    const modalDialog = this.dialog.open(
-      AddGstComponent,
-      dialogConfig
-    );
+    const modalDialog = this.dialog.open(this.addGstComponent, dialogConfig);
 
     // this.$subscription.add(
     //   modalDialog.componentInstance.isRenderedEvent.subscribe((val) => {

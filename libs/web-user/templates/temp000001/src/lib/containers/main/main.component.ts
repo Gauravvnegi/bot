@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { TemplateCode } from 'libs/web-user/shared/src/lib/constants/template';
+import { Router } from '@angular/router';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
-import { StepperComponent } from 'libs/web-user/shared/src/lib/presentational/stepper/stepper.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
+import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { Subscription } from 'rxjs';
+import { Temp000001StepperComponent } from '../../presentational/temp000001-stepper/temp000001-stepper.component';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -16,8 +17,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  private $subscription: Subscription = new Subscription();
-  @ViewChild('stepperComponent') stepperComponent: StepperComponent;
+  protected $subscription: Subscription = new Subscription();
+  @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
 
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
@@ -25,11 +26,13 @@ export class MainComponent implements OnInit {
   isReservationData: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    protected fb: FormBuilder,
+    private router: Router,
     private _reservationService: ReservationService,
+    private _templateLoadingService: TemplateLoaderService,
     private _parentFormService: ParentFormService,
-    private _hotelService: HotelService,
-    private _templateService: TemplateService
+    protected _hotelService: HotelService,
+    protected _templateService: TemplateService
   ) {}
 
   ngOnInit(): void {
@@ -41,18 +44,25 @@ export class MainComponent implements OnInit {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
-        .subscribe((reservationData) => {
-          this._hotelService.hotelConfig = reservationData['hotel'];
-          this.isReservationData = true;
-          this.stepperData = this._templateService.templateData[
-            TemplateCode.temp000001
-          ];
-          // TO_DO: Remove function call
-          // this.stepperData = this.modifyStepperData(this._templateService.templateData);
-          this.getStepperData();
-          this.reservationData = reservationData;
-          this._reservationService.reservationData = reservationData;
-        })
+        .subscribe(
+          (reservationData) => {
+            this._hotelService.hotelConfig = reservationData['hotel'];
+            this.isReservationData = true;
+            this.stepperData = this._templateService.templateData[
+              this._templateService.templateId
+            ];
+            // TO_DO: Remove function call
+            // this.stepperData = this.modifyStepperData(this._templateService.templateData);
+            this.getStepperData();
+            this.reservationData = reservationData;
+            this._reservationService.reservationData = reservationData;
+          },
+          ({ error }) => {
+            if (error.type == 'BOOKING_CANCELED') {
+              this.getHotelDataById();
+            }
+          }
+        )
     );
   }
 
@@ -70,6 +80,22 @@ export class MainComponent implements OnInit {
           return element !== undefined;
         }),
     };
+  }
+
+  getHotelDataById() {
+    this._hotelService
+      .getHotelConfigById(this._hotelService.hotelId)
+      .subscribe(
+        (hotel) => {
+          this._hotelService.hotelConfig = hotel;
+          this.router.navigate(['booking-cancel'], {
+            preserveQueryParams: true,
+          });
+          this._templateLoadingService.isTemplateLoading$.next(false);
+
+        },
+        ({ error }) => {}
+      );
   }
 
   registerListeners() {

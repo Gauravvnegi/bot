@@ -61,14 +61,33 @@
 
 // to-do change classes for multiple pop-up
 
-.cdk-overlay-pane {
-  max-height: 85vh;
+// .cdk-overlay-pane {
+//   max-height: 85vh;
+//   @media screen and (max-width: 1100px) {
+//     max-height: 53vh;
+//   }
+// }
+
+.cdk-overlay-pane{
   @media screen and (max-width: 1100px) {
-    max-height: 53vh;
-  }
+        max-width: 85vw !important;
+      }
 }
 
 // text-color
+
+.status-opacity-new {
+  background-color: rgba(62, 142, 247, 0.1) !important;
+}
+
+.status-text-new {
+  color: #3E8EF7 !important;
+}
+
+.status-selected-new {
+  background-color: rgba(62, 142, 247, 1) !important;
+  color: white;
+}
 
 .status-text-pending {
   color: $pending !important;

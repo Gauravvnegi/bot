@@ -61,6 +61,13 @@ const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'subscription',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/subscription').then(
+            (m) => m.AdminSubscriptionModule
+          ),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

@@ -53,4 +53,10 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/virus.svg',
   },
+  {
+    path: 'subscription',
+    title: 'Subscription',
+    children: null,
+    url: 'assets/svg/box.svg'
+  }
 ];

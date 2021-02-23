@@ -62,6 +62,9 @@
       "@hospitality-bot/admin/packages": ["libs/admin/packages/src/index.ts"],
       "@hospitality-bot/admin/guest-detail": [
         "libs/admin/guest-detail/src/index.ts"
+      ],
+      "@hospitality-bot/admin/subscription": [
+        "libs/admin/subscription/src/index.ts"
       ]
     }
   },

@@ -173,10 +173,6 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     this.router.navigate(['add'], { relativeTo: this.route });
   }
 
-  // openPackageDetails(amenity): void {
-  //   this.router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
-  // }
-
   onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {
     value = value && value.trim();
     this.table.filter(value, field, matchMode);

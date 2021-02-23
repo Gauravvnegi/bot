@@ -41,9 +41,12 @@
       &_imgs {
         display: flex;
         img {
-          width: 27px;
-					height: 27px;
-					padding: 0 5px;
+          width: 25px;
+          height: 25px;
+          margin: 0 3px;
+          padding: 5px;
+          border-radius: 50%;
+          fill: white;
         }
       }
     }

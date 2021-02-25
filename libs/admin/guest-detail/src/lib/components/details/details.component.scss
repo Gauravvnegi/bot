@@ -97,6 +97,13 @@
       display: flex;
       align-items: center;
       cursor: pointer;
+      .pointer {
+        width: 5px;
+        height: 5px;
+        background-color: white;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
       .booking-id {
         text-align: center;
       }
@@ -168,6 +175,7 @@
     display: flex;
     align-items: baseline;
     color: white;
+    justify-content: space-between;
     font-size: $font16;
     padding-left: 25px;
     margin-bottom: 15px;

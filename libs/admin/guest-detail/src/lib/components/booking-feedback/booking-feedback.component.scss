@@ -53,6 +53,9 @@
   font-weight: 500;
   letter-spacing: 0.84px;
   margin-right: 0 !important;
+  .booking_number:hover {
+    color: rgb(75, 86, 192);
+  }
 }
 
 :host ::ng-deep .expand-icon {

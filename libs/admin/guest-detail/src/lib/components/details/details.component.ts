@@ -16,6 +16,7 @@ import {
   GuestReservation,
 } from '../../../../../guests/src/lib/data-models/guest-table.model';
 import { GuestDetailService } from '../../services/guest-detail.service';
+import { DetailsComponent as ReservationDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -173,6 +174,26 @@ export class DetailsComponent implements OnInit {
       this.closeDetails();
       this.router.navigateByUrl('/pages/request');
     }
+  }
+
+  openDetailPage(event, bookingId, tabKey?) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      ReservationDetailComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = bookingId;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   addFGEvent(data) {

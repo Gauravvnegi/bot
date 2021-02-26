@@ -22,6 +22,7 @@ export class InhouseStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: [],
+      lastPage:0
     }],
     type: 'reservation',
   };

@@ -52,6 +52,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: [],
+      lastPage:0
     },
     {
       label: 'Arrival',
@@ -127,6 +128,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
           type: 'failed',
         },
       ],
+      lastPage:0
     },
     {
       label: 'Departure',
@@ -169,6 +171,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
           type: 'failed',
         },
       ],
+      lastPage:0
     },
   ];
   @Input() tabFilterIdx: number = 1;
@@ -333,6 +336,14 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
     this.rowsPerPage = event.rows;
     this.tempFirst = this.first;
     this.tempRowsPerPage = this.rowsPerPage;
+
+    if(this.tabFilterItems.length){
+      this.updatePaginationForFilterItems(event.page)
+    }
+  }
+
+  updatePaginationForFilterItems(pageEvent){
+    this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
   customSort(event: SortEvent) {
@@ -354,6 +365,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.changePage(+this.tabFilterItems[event.index].lastPage);
     this.loadInitialData([
       ...this.globalQueries,
       {
@@ -437,6 +449,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
         quickReplyTypeIdx
       ].isSelected;
     }
+
 
     this.loadInitialData([
       ...this.globalQueries,

@@ -28,6 +28,7 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <!-- <div class="header--text"> -->
+              <!-- <pre>{{tabFilterItems | json}}</pre> -->
             <p class="heading">{{ tableName }}</p>
             <!-- <p class="selected">2 record(s) are selected</p> -->
             <div class="options">
@@ -623,6 +624,7 @@
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
     <p-paginator
+      #paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"

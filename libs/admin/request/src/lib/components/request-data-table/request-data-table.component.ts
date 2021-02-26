@@ -124,6 +124,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
           type: 'failed',
         },
       ],
+      lastPage:0
     },
     {
       label: 'In-House',
@@ -150,6 +151,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
           type: 'completed',
         },
       ],
+      lastPage:0
     },
   ];
   tabFilterIdx: number = 0;
@@ -334,6 +336,13 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
+    if(this.tabFilterItems.length){
+      this.updatePaginationForFilterItems(event.page)
+    }
+  }
+
+  updatePaginationForFilterItems(pageEvent){
+    this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
   customSort(event: SortEvent) {
@@ -355,6 +364,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.changePage(+this.tabFilterItems[event.index].lastPage);
     this.loadInitialData([
       ...this.globalQueries,
       {

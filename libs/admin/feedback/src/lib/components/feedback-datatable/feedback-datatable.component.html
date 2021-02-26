@@ -431,7 +431,7 @@
 	</ng-template>
 	<!-- *********************************FOOTER******************************* -->
 	<ng-template pTemplate="summary">
-		<p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
+		<p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
 			(onPageChange)="paginate($event)"></p-paginator>
 	</ng-template>
 </p-table>

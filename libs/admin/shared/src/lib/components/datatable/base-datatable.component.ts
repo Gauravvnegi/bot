@@ -6,6 +6,7 @@ import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import * as FileSaver from 'file-saver';
+import { Paginator } from 'primeng/paginator';
 interface Import {
   name: string;
   code: string;
@@ -124,6 +125,7 @@ export class BaseDatatableComponent implements OnInit {
   tempFirst;
   tempRowsPerPage;
   isSearchSet = false;
+  @ViewChild('paginator', {static: false}) paginator: Paginator;
 
   constructor(private _fb: FormBuilder) {
     this.initTableFG();
@@ -161,6 +163,7 @@ export class BaseDatatableComponent implements OnInit {
     //rows - Number of rows to display per page.
     //event.page: Index of the new page
     //event.pageCount: Total number of pages
+    debugger
     this.loadData(event);
   }
 
@@ -313,5 +316,9 @@ export class BaseDatatableComponent implements OnInit {
   onDataFilter(event?) {
     // this.first = this.tempFirst;
     // this.rowsPerPage = this.tempRowsPerPage;
+  }
+
+  changePage(pageNo?){
+    this.paginator.changePage(pageNo || 0);
   }
 }

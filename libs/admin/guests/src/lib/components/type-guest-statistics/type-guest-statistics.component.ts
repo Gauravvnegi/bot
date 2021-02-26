@@ -41,6 +41,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage:0
     },
     {
       label: 'Inhouse',
@@ -49,6 +50,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage:0
     },
     {
       label: 'Departure',
@@ -57,6 +59,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage:0
     },
     {
       label: 'Out-Guest',
@@ -65,6 +68,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage:0
     },
   ];
 

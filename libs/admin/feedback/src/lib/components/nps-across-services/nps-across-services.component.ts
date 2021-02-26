@@ -167,6 +167,7 @@ export class NpsAcrossServicesComponent implements OnInit {
           disabled: false,
           total: 0,
           chips,
+          lastPage:0
         });
       });
     } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {

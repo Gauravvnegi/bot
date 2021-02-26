@@ -2,38 +2,30 @@
 
 :host ::ng-deep .next-button {
   @include footer-next();
-}
-
-@media only screen and (max-width: $M) {
-  .user-button {
-    width: $full-width;
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
   }
 }
 
 .wrapper {
   padding: 20px;
   padding-top: 40px;
-  margin: 0 30px;
-  background-color: white;
   @media only screen and (max-width: 990px) {
     padding: 10px;
-    margin: 0;
   }
 }
 
 :host ::ng-deep .container {
   max-width: 1300px;
+  height: auto;
   margin: 0 auto;
   margin-bottom: 20px;
-  @media only screen and (max-width: 990px) {
-    height: calc(100vh - 156px);
-  }
 }
 
 .parent_block {
-  min-height: 86.3vh;
-  @media only screen and (max-width: 990px) {
-    min-height: 93.5vh;
+  min-height: 87.5vh;
+  @media only screen and (max-width: 1100px) {
+    min-height: 92.5vh;
   }
 }
 
@@ -43,19 +35,9 @@
   }
 }
 
-// :host ::ng-deep .mat-expansion-panel-header{
-//   border: 1px solid $primary-button-background-color;
-// }
-
 @media only screen and (max-width: 500px) {
   :host ::ng-deep .mat-expansion-panel-body {
     margin: 0px 5px 16px;
     padding: $padding-large $padding-medium !important;
-  }
-}
-
-:host ::ng-deep .next-button {
-  @media only screen and (max-width: $M) {
-    width: 100vw !important;
   }
 }

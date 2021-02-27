@@ -54,7 +54,10 @@
           </div>
         </div>
       </div>
-      <div class="actions_wrapper" *ngIf="reservationData && reservationData.currentJourney === 'CHECKIN'">
+      <div
+        class="actions_wrapper"
+        *ngIf="reservationData && reservationData.currentJourney === 'CHECKIN'"
+      >
         <div class="actions_wrapper__icon_box">
           <div
             class="actions_wrapper__icon_box__icon"
@@ -81,7 +84,6 @@
           <p>Download Receipt</p>
           <!-- <p>Download Receipt</p>
           <p>Download Receipt</p> -->
-
         </div>
       </div>
     </div>
@@ -96,7 +98,6 @@
       [settings]="{ label: paymentStatusData.back }"
       [buttonClass]="'back-button'"
       class="user-button"
-      style="margin-right: 20px;"
     ></hospitality-bot-temp000001-button>
     <hospitality-bot-temp000001-button
       (click)="
@@ -104,6 +105,7 @@
       "
       [settings]="{ label: paymentStatusData.next }"
       [buttonClass]="'next-button'"
+      [ngClass]="paymentStatusData.showBackButton ? 'button_style_modify' : ''"
       class="user-button"
     ></hospitality-bot-temp000001-button>
   </div>

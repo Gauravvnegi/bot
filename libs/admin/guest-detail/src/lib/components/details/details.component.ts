@@ -171,7 +171,7 @@ export class DetailsComponent implements OnInit {
         notificationCompRef.close();
       });
     } else {
-      this.closeDetails();
+      this._modal.close();
       this.router.navigateByUrl('/pages/request');
     }
   }

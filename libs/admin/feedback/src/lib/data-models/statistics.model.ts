@@ -224,6 +224,9 @@ export class PerformanceNPS {
     input.npsPerformace.TOP_PERFORMING.forEach((data) =>
       this.performances.push({ ...data, colorCode: '#1AB99F' })
     );
+    input.npsPerformace.LOW_PERFORMING.sort(function(a,b) {
+      return b.score - a.score;
+    })
 
     input.npsPerformace.LOW_PERFORMING.forEach((data) =>
       this.performances.push({ ...data, colorCode: '#EF1D45' })

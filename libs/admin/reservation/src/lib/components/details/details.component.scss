@@ -328,9 +328,11 @@
 }
 
 :host ::ng-deep .material-body {
-  width: 80%;
+  width: 79%;
   margin: $margin20 25px;
   margin-right: 0;
+  position: relative;
+  z-index: 23;
   min-height: 60vh;
   border-right: 2px solid #e8f3fe;
   padding-right: 15px;

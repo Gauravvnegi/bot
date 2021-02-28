@@ -440,6 +440,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
         quickReplyTypeIdx
       ].isSelected;
     }
+    this.changePage(0);
 
     this.loadInitialData([
       ...this.globalQueries,

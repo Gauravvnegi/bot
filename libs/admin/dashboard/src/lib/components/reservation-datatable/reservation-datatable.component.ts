@@ -22,7 +22,7 @@ import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.ser
     './reservation-datatable.component.scss',
   ],
 })
-export class  ReservationDatatableComponent extends BaseDatatableComponent
+export class ReservationDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() tableName = 'Reservations';
   actionButtons = true;
@@ -52,7 +52,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: [],
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'Arrival',
@@ -62,7 +62,14 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
       total: 0,
       chips: [
         { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        { label: 'New', icon: '', value: 'NEW', total: 0, isSelected: false, type: 'new' },
+        {
+          label: 'New',
+          icon: '',
+          value: 'NEW',
+          total: 0,
+          isSelected: false,
+          type: 'new',
+        },
         {
           label: 'Precheckin_Pending ',
           icon: '',
@@ -128,7 +135,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
           type: 'failed',
         },
       ],
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'Departure',
@@ -171,7 +178,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
           type: 'failed',
         },
       ],
-      lastPage:0
+      lastPage: 0,
     },
   ];
   @Input() tabFilterIdx: number = 1;
@@ -342,7 +349,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
     // }
   }
 
-  updatePaginationForFilterItems(pageEvent){
+  updatePaginationForFilterItems(pageEvent) {
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
@@ -450,6 +457,7 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
       ].isSelected;
     }
 
+    this.changePage(0);
 
     this.loadInitialData([
       ...this.globalQueries,

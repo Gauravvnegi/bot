@@ -96,7 +96,7 @@ export class ManagePermissionService extends ApiService {
 
   exportCSV(config): Observable<any> {
     return this.get(
-      `/api/v1/user/${config.loggedInUserId}/${config.queryObj}`,
+      `/api/v1/user/${config.loggedInUserId}/users/export/${config.queryObj ? config.queryObj : ''}`,
       {
         responseType: 'blob',
       }

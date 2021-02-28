@@ -73,7 +73,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       content: '',
       value: 'ALL',
       disabled: false,
-      chips: this.chips
+      chips: this.chips,
+      lastPage:0
     },
     {
       label: 'VIP',
@@ -81,7 +82,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       value: 'VIP',
       disabled: false,
       total: 0,
-      chips: this.chips
+      chips: this.chips,
+      lastPage:0
     },
     {
       label: 'General',
@@ -89,7 +91,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       value: 'GENERAL',
       disabled: false,
       total: 0,
-      chips: this.chips
+      chips: this.chips,
+      lastPage:0
     },
   ];
 

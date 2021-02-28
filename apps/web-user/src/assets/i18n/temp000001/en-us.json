@@ -65,7 +65,7 @@
       "CHECKIN_ALREADY_COMPLETED": "Checkin Already Completed.",
       "INVALID_PARAMETERS": "Error while processing. Recheck Parameters.",
       "SERVER_ERROR": "Server Issue. Try again in sometime.",
-      "DOCUMENT_NULL": "INVOICE is not present, null"
+      "DOCUMENT_NULL": "INVOICE is not present"
     }
   }
 }

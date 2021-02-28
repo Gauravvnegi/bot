@@ -10,11 +10,49 @@
   font-weight: $bolder;
   box-shadow: 0px 3px 6px #4b56c059;
   border-radius: 28px;
-  color: var(--primary-button-font-color, $primary-button-font-color) !important;
+  color: var(
+    --primary-button-font-color,
+    $primary-button-font-color
+  ) !important;
   &:hover {
     cursor: pointer;
   }
   @media only screen and (max-width: $M) {
     width: 100px;
+  }
+}
+
+.upload_file_wrapper {
+  position: relative;
+  .button_image_wrap {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+  }
+  .select_image_button {
+    outline: none;
+    border: none;
+    background: var(
+      --primary-button-background-color,
+      $primary-button-background-color
+    );
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+      0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+    width: 200px;
+    height: 50px;
+    font-weight: $bolder;
+    border-radius: 10px;
+    color: var(--primary-button-font-color, $primary-button-font-color);
+    &:hover {
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: $M) {
+      width: 150px;
+      height: 45px;
+    }
   }
 }

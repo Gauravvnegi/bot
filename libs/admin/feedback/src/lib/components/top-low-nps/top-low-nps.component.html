@@ -1,36 +1,65 @@
 <div class="container" *ngIf="performanceNPS">
-	<div class="title-container">
-		<div class="icon">
-			<img src="assets/svg/speedometer.svg" />
-		</div>
-		<div class="stat-title">{{ performanceNPS.label }}</div>
-	</div>
-	<div class="stat-body">
-		<hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx"
-			(selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
-		<div class="stat-body-container">
-			<div class="progress-container" *ngFor="let item of performanceNPS.performances">
-				<div class="label">{{ item.label }}</div>
-				<div class="progress">
-					<div [fxFlex]="item.score < 0 ? item.score * (-1) : item.score == 0 ? 1 : item.score"
-						class="progress-value" [style.background]="item.colorCode"></div>
-					<div [fxFlex]="100 - (item.score < 0 ? item.score * (-1) : item.score)" class="progress-value"
-						[style.background]="'transparent'"></div>
-					<div class="value"
-						[style.left]="5 + (item.score < 0 ? (item.score * (-1)) / 2 : item.score / 2) + 'px'">{{
-						item.score }}</div>
-				</div>
-			</div>
-		</div>
-		<div class="stat-body-key">
-			<div class="key-container">
-				<div class="icon" [style.background]="'#1AB99F'"></div>
-				<div class="stat-lable">Top Performing</div>
-			</div>
-			<div class="key-container">
-				<div class="icon" [style.background]="'#EF1D45'"></div>
-				<div class="stat-lable">Low Performing</div>
-			</div>
-		</div>
-	</div>
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/speedometer.svg" />
+    </div>
+    <div class="stat-title">{{ performanceNPS.label }}</div>
+  </div>
+  <div class="stat-body">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+    <div class="stat-body-container">
+      <div
+        class="progress-container"
+        *ngFor="let item of performanceNPS.performances"
+      >
+        <div class="label">{{ item.label }}</div>
+        <div class="progress">
+          <div
+            [fxFlex]="
+              item.score < 0
+                ? item.score * -1
+                : item.score == 0
+                ? 1
+                : item.score
+            "
+            class="progress-value"
+            [style.background]="item.colorCode"
+          ></div>
+          <div
+            [fxFlex]="100 - (item.score < 0 ? item.score * -1 : item.score)"
+            class="progress-value"
+            [style.background]="'transparent'"
+          ></div>
+          <div
+            class="value"
+            [style.left]="
+              5 +
+              (item.score < 0
+                ? (item.score * -1) / 2
+                : item.score < 6
+                ? 3
+                : item.score / 2) +
+              'px'
+            "
+          >
+            {{ item.score }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-body-key">
+      <div class="key-container">
+        <div class="icon" [style.background]="'#1AB99F'"></div>
+        <div class="stat-lable">Top Performing</div>
+      </div>
+      <div class="key-container">
+        <div class="icon" [style.background]="'#EF1D45'"></div>
+        <div class="stat-lable">Low Performing</div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -3,13 +3,15 @@
 		<mat-expansion-panel-header class="accordian__header" (click)="loadFeedbackData(rowData.booking.bookingId)">
 			<mat-panel-title class="container__title">
 				<p>
-					{{ title }} - {{ rowData.booking.bookingNumber }}
+					{{ title }} - <span class="booking_number"
+						(click)="openDetailPage($event, rowData.booking.bookingId)">{{ rowData.booking.bookingNumber
+						}}</span>
 				</p>
 				<div class="header-seperator"></div>
 				<p>
 					{{ rowData.booking.getArrivalDate() }} - {{
-                        rowData.booking.getDepartureDate()
-                    }} ({{ rowData.booking.getDaysAndNights().nights }}N |
+					rowData.booking.getDepartureDate()
+					}} ({{ rowData.booking.getDaysAndNights().nights }}N |
 					{{ rowData.booking.getDaysAndNights().days }}D)
 				</p>
 				<div class="header-seperator" *ngIf="['COMPLETED'].includes(rowData.feedback.status)"></div>
@@ -96,7 +98,9 @@
 		</div>
 		<hr class="data-seperator" *ngIf="feedbackData" />
 		<div *ngIf="feedbackData">
-			<div class="container__title"><p>Journey Feedback</p></div>
+			<div class="container__title">
+				<p>Journey Feedback</p>
+			</div>
 			<div class="feilds-wrapper">
 				<div class="feild width-quarter">
 					<mat-label class="label">Date/Time</mat-label>

@@ -81,7 +81,7 @@ export class User implements Deserializable {
       displayString:
         permissions.length > 0
           ? `${permissions[0]} (+${permissions.length})`
-          : `${permissions[0]}`,
+          : '',
       permissions,
     };
   }

@@ -2,6 +2,19 @@
 
 :host ::ng-deep .next-button {
   @include footer-next();
+  margin-bottom: 20px;
+  @media only screen and (max-width: $M) {
+    margin-bottom: 0;
+    width: 100vw !important;
+  }
+}
+
+:host ::ng-deep .button_style_modify {
+  .next-button {
+    @media only screen and (max-width: $M) {
+      width: 50vw !important;
+    }
+  }
 }
 
 .status-container {
@@ -95,15 +108,10 @@
       padding: 40px $padding-small;
     }
   }
-  @media only screen and (max-width: $M) {
-    min-height: auto;
+  @media only screen and (max-width: 1100px) {
+    min-height: 72.6vh;
   }
-}
-
-@media only screen and (max-width: $tab-size) {
-  .user-button {
-    width: $half-width;
-  }
+ 
 }
 
 .actions_wrapper {
@@ -133,7 +141,7 @@
         }
       }
       @media only screen and (max-width: $M) {
-        width: 23vw;        
+        width: 23vw;
       }
     }
     .seperator {
@@ -151,17 +159,11 @@
       margin: 0 13px;
       font-size: 14px;
       @media only screen and (max-width: $M) {
-       font-size: 8px;  
-       margin: 0 5px;   
+        font-size: 8px;
+        margin: 0 5px;
       }
     }
   }
-}
-
-.main-template-button {
-  margin-top: 10px;
-  margin-bottom: 20px;
-  display: flex;
 }
 
 .payment-button {

@@ -165,7 +165,7 @@
                         progress.statistic.score < 31) ||
                       progress.statistic.score < -69
                         ? '#4BA0F5'
-                        : '#3DB76B'
+                        : (progress.statistic.score === 0 ? '#d6d6d6' : '#3DB76B')
                     " [style.height]="
                       (progress.statistic.score === 0
                         ? 1
@@ -175,7 +175,7 @@
                     "></div>
                 </div>
                 <div class="progress">
-                  <div style="background: #ea0431;" [style.height]="
+                  <div [style.background]="progress.statistic.score === 0 ? '#d6d6d6' : '#ea0431'" [style.height]="
                       (progress.statistic.score === 0
                         ? 1
                         : progress.statistic.score >= 0
@@ -241,11 +241,11 @@
                           : progress.statistic.score * -1) + '%'
                       "></div>
                     <div [style.background]="
-                        (progress.statistic.score >= 0 &&
+                        (progress.statistic.score > 0 &&
                           progress.statistic.score < 31) ||
                         progress.statistic.score < -69
                           ? '#4BA0F5'
-                          : '#3DB76B'
+                          : (progress.statistic.score === 0 ? '#d6d6d6' : '#3DB76B')
                       " [style.height]="
                         (progress.statistic.score === 0
                           ? 1
@@ -255,7 +255,7 @@
                       "></div>
                   </div>
                   <div class="progress">
-                    <div style="background: #ea0431;" [style.height]="
+                    <div [style.background]="progress.statistic.score === 0 ? '#d6d6d6' : '#ea0431'" [style.height]="
                         (progress.statistic.score === 0
                           ? 1
                           : progress.statistic.score >= 0

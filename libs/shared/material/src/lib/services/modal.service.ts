@@ -11,4 +11,8 @@ export class ModalService {
 			data: config.data,
     });
   }
+
+  close() {
+    this._dialog.closeAll();
+  }
 }

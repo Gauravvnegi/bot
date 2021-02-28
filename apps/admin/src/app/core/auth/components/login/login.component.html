@@ -47,6 +47,7 @@
             <button
               mat-icon-button
               matSuffix
+              type="button"
               (click)="isPasswordVisible = !isPasswordVisible"
             >
               <mat-icon>{{
@@ -79,7 +80,12 @@
         >
       </div>
       <div class="card-footer">
-        <button class="login" mat-button (click)="login()">
+        <button
+          type="submit"
+          class="login"
+          mat-button
+          (click)="login()"
+        >
           <i *ngIf="isSigningIn" class="fa fa-spinner fa-spin"></i>
           Login
         </button>

@@ -52,9 +52,16 @@
             ></web-user-input>
           </div>
           <div
+            style="background: white;"
             [ngClass]="option.styles.container"
             *ngIf="option.type === 'file'"
+            class="upload_file_wrapper"
           >
+            <div class="button_image_wrap">
+              <button class="select_image_button">
+                Select Image
+              </button>
+            </div>
             <web-user-file-upload
               [parentForm]="signatureForm"
               [name]="'imageSignature'"

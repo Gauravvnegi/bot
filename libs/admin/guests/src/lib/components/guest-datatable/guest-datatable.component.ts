@@ -85,6 +85,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage: 0,
     },
     {
       label: 'Inhouse',
@@ -93,6 +94,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage: 0,
     },
     {
       label: 'Departure',
@@ -101,6 +103,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage: 0,
     },
     {
       label: 'Out-Guest',
@@ -109,6 +112,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: this.chips,
+      lastPage: 0,
     },
   ];
   tabFilterIdx: number = 0;
@@ -159,9 +163,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   getHotelId(globalQueries): void {
-    //todo 
+    //todo
 
-    globalQueries.forEach(element => {
+    globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
       }
@@ -213,8 +217,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL')
-        chip.total = countObj[chip.value];
+        if (chip.value !== 'ALL') chip.total = countObj[chip.value];
       });
     }
   }
@@ -266,6 +269,13 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
+    // if(this.tabFilterItems.length){
+    //   this.updatePaginationForFilterItems(event.page)
+    // }
+  }
+
+  updatePaginationForFilterItems(pageEvent) {
+    this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
   customSort(event: SortEvent) {
@@ -287,6 +297,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.changePage(+this.tabFilterItems[event.index].lastPage);
+
     this.loadInitialData([
       ...this.globalQueries,
       {
@@ -343,7 +355,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     // ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
     //   quickReplyTypeIdx
     // ].isSelected;
-
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -363,6 +374,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         quickReplyTypeIdx
       ].isSelected;
     }
+
+    this.changePage(0);
 
     this.loadInitialData([
       ...this.globalQueries,

@@ -99,7 +99,7 @@ export class GlobalNpsComponent implements OnInit {
     Object.keys(data).forEach((key) => {
       if (key !== 'label' && key !== 'score' && data[key]) {
         this.chart.Labels.push(this.labels[key]);
-        this.chart.Data[0].push(data[key]);
+        this.chart.Data[0].push(this.roundValue(data[key]));
         this.chart.Colors[0].backgroundColor.push(this.color[key]);
         this.chart.Colors[0].borderColor.push(this.color[key]);
       }
@@ -123,5 +123,9 @@ export class GlobalNpsComponent implements OnInit {
         this._snackbarService.openSnackBarAsText(error.message);
       }
     );
+  }
+
+  roundValue(data) {
+    return data % 1 >= 0.5 ? Math.ceil(data) : Math.floor(data);
   }
 }

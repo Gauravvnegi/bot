@@ -1,10 +1,10 @@
 @import 'main';
 
 .stat-title {
-	font: normal normal bold 16px/19px Roboto;
-	letter-spacing: 0.96px;
-	color: #002046;
-	opacity: 1;
+  font: normal normal bold 16px/19px Roboto;
+  letter-spacing: 0.96px;
+  color: #002046;
+  opacity: 1;
 }
 
 .stat-val-container {
@@ -29,7 +29,6 @@
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0.72px;
   color: #c6f0ef;
-  opacity: 1;
 }
 
 .stat-labels-container {
@@ -48,6 +47,11 @@
     display: flex;
     justify-content: space-between;
     position: relative;
+    @media only screen and (max-width: 1100px) {
+      margin: 0;
+      justify-content: initial;
+      height: auto;
+    }
     .stat-label-title {
       height: 16px;
       text-align: left;
@@ -57,16 +61,23 @@
       opacity: 1;
       padding-top: 2px;
       padding-left: 5px;
+      @media only screen and (max-width: 1100px) {
+        font-size: 7px;
+        height: auto;
+      }
     }
     .bubble {
       width: 14px;
       height: 14px;
       background: 0% 0% no-repeat padding-box;
       border-radius: 2px;
+      @media only screen and (max-width: 1100px) {
+        width: 5px;
+        height: 5px;
+      }
     }
   }
 }
-
 
 .stat-label-content {
   height: 16px;
@@ -83,7 +94,7 @@
   align-items: center;
 }
 
-.labl{
+.labl {
   margin: 0 1%;
 }
 

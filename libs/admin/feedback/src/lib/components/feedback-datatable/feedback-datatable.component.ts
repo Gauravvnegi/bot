@@ -84,7 +84,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       disabled: false,
       total: 0,
       chips: this.chips,
-    }
+      lastPage: 0,
+    },
   ];
   tabFilterIdx: number = 0;
 
@@ -241,6 +242,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
+    // if(this.tabFilterItems.length){
+    //   this.updatePaginationForFilterItems(event.page)
+    // }
+  }
+
+  updatePaginationForFilterItems(pageEvent) {
+    this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
   customSort(event: SortEvent) {
@@ -262,6 +270,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.changePage(+this.tabFilterItems[event.index].lastPage);
     this.loadInitialData([
       ...this.globalQueries,
       {
@@ -337,6 +346,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         quickReplyTypeIdx
       ].isSelected;
     }
+
+    this.changePage(0);
 
     this.loadInitialData([
       ...this.globalQueries,

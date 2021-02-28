@@ -73,7 +73,6 @@
         font-size: 12px;
         letter-spacing: 0.6px;
         color: #6d7580;
-        opacity: 1;
       }
     }
   }
@@ -82,4 +81,10 @@
 .progress-value {
   margin-left: 5px;
   min-height: 20px;
+}
+
+.progress{
+  .value{
+    font-size: 13px;
+  }
 }

@@ -55,10 +55,13 @@
             style="background: white;"
             [ngClass]="option.styles.container"
             *ngIf="option.type === 'file'"
+            class="upload_file_wrapper"
           >
-          <button class="select_image_button">
-            Select Image
-          </button>
+            <div class="button_image_wrap">
+              <button class="select_image_button">
+                Select Image
+              </button>
+            </div>
             <web-user-file-upload
               [parentForm]="signatureForm"
               [name]="'imageSignature'"

@@ -72,6 +72,9 @@
   .back-icon {
     cursor: pointer;
   }
+  @media screen and (max-width: 1100px) {
+    height: 85vh;
+  }
 }
 
 .request-body {
@@ -232,6 +235,9 @@
   height: 77vh;
   overflow-y: auto;
   overflow-x: hidden;
+  @media screen and (max-width: 1100px) {
+    height: auto;
+  }
 }
 
 .modal-header {

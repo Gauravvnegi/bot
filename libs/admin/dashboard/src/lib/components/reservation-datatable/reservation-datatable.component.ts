@@ -337,9 +337,9 @@ export class  ReservationDatatableComponent extends BaseDatatableComponent
     this.tempFirst = this.first;
     this.tempRowsPerPage = this.rowsPerPage;
 
-    if(this.tabFilterItems.length){
-      this.updatePaginationForFilterItems(event.page)
-    }
+    // if(this.tabFilterItems.length){
+    //   this.updatePaginationForFilterItems(event.page)
+    // }
   }
 
   updatePaginationForFilterItems(pageEvent){

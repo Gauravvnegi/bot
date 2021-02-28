@@ -242,9 +242,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    if(this.tabFilterItems.length){
-      this.updatePaginationForFilterItems(event.page)
-    }
+    // if(this.tabFilterItems.length){
+    //   this.updatePaginationForFilterItems(event.page)
+    // }
   }
 
   updatePaginationForFilterItems(pageEvent){

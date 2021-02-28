@@ -163,7 +163,6 @@ export class BaseDatatableComponent implements OnInit {
     //rows - Number of rows to display per page.
     //event.page: Index of the new page
     //event.pageCount: Total number of pages
-    debugger
     this.loadData(event);
   }
 

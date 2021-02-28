@@ -286,8 +286,8 @@
   }
 }
 
-:host ::ng-deep .p-checkbox .p-checkbox-box{
-  border-color: #D9D9D9;
+:host ::ng-deep .p-checkbox .p-checkbox-box {
+  border-color: #d9d9d9;
 }
 
 :host ::ng-deep .mat-chip-list-wrapper {
@@ -476,39 +476,9 @@ th {
   }
 }
 
-// @media screen and (max-width: 50rem) {
-//   :host ::ng-deep {
-//       .p-datatable {
-//           &.p-datatable-responsive-demo {
-//               .p-datatable-thead > tr > th,
-//               .p-datatable-tfoot > tr > td {
-//                   display: none !important;
-//               }
-
-//               .p-datatable-tbody > tr > td {
-//                   text-align: left;
-//                   display: block;
-//                   width: 100%;
-//                   float: left;
-//                   clear: left;
-//                   border: 0 none;
-
-//                   .p-column-title {
-//                       padding: .4rem;
-//                       min-width: 30%;
-//                       display: inline-block;
-//                       margin: -.4em 1em -.4em -.4rem;
-//                       font-weight: bold;
-//                   }
-
-//                   &:last-child {
-//                       border-bottom: 1px solid var(--surface-d);
-//                   }
-//               }
-//           }
-//       }
-//   }
-// }
+:host ::ng-deep .mat-standard-chip:focus::after {
+  display: none;
+}
 
 :host ::ng-deep .status-selected-pending {
   background-color: $pending !important;
@@ -528,8 +498,10 @@ th {
   background-color: $default;
 }
 
-
 :host ::ng-deep .details_wrapper {
   background-color: white;
   max-height: 85vh;
+  @media screen and (max-width: 1100px) {
+    height: 85vh;
+  }
 }

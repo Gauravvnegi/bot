@@ -1,5 +1,7 @@
 <div class="parent_block">
-  <hospitality-bot-header [headerName]="'Booking-Cancel'"></hospitality-bot-header>
+  <hospitality-bot-header
+    [headerName]="'Booking-Cancel'"
+  ></hospitality-bot-header>
   <div class="booking_cancel">
     <div class="booking_cancel__image">
       <img src="assets/booking-cancel.png" />
@@ -13,8 +15,12 @@
       </div>
     </div>
     <div class="main-template-button">
-      <hospitality-bot-temp000001-button (click)="explore()" [settings]="{ label: 'Explore More' }"
-        [buttonClass]="'next-button'" class="user-button"></hospitality-bot-temp000001-button>
+      <hospitality-bot-temp000001-button
+        (click)="explore()"
+        [settings]="{ label: 'Explore More' }"
+        [buttonClass]="'next-button'"
+        class="user-button"
+      ></hospitality-bot-temp000001-button>
     </div>
   </div>
 </div>

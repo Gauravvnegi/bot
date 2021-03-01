@@ -28,7 +28,7 @@
           <span>{{ bookingTitle }}</span>
         </div>
         <div class="booking-id-wrapper" (click)="openDetailPage($event, data.booking.bookingId)">
-          <div style="margin-right: 10px;">
+          <div class="booking-id">
             <u>{{ data.booking.bookingNumber }}</u>
           </div>
           <div class="pointer"></div>
@@ -64,7 +64,7 @@
             </div>
             <div class="pointer"></div>
           </ng-container>
-          <div style="margin-right: 10px;" (click)="openDetailPage($event, data.booking.bookingId)">
+          <div class="room-no" (click)="openDetailPage($event, data.booking.bookingId)">
             <u> {{ data.rooms.roomNumber }}-{{ data.rooms.type }}</u>
           </div>
         </div>

@@ -1,1 +1,30 @@
-<p>invoice-not-generated works!</p>
+<div class="parent_block">
+    <hospitality-bot-header
+      *ngIf="isReservationData"
+      [headerName]="'Check-Out'"
+    ></hospitality-bot-header>
+    <div class="invoice_not_generated">
+      <div class="image">
+        <img src="assets/invoices.png" />
+      </div>
+      <div class="invoice_not_generated__content">
+        <p class="heading">Invoice Not Generated!</p>
+        <p class="sub_heading">
+          Oops! your invoice may be handled by third party.
+        </p>
+        <div class="invoice_not_generated__content__note">
+          <p>Please contact admin for more details.</p>
+        </div>
+      </div>
+      <div class="main-template-button">
+        <hospitality-bot-temp000001-button
+          (click)="explore()"
+          [settings]="{ label: 'Explore More' }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+        ></hospitality-bot-temp000001-button>
+      </div>
+    </div>
+  </div>
+  <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>
+  

@@ -337,9 +337,9 @@
   min-height: 60vh;
   border-right: 2px solid #e8f3fe;
   padding-right: 15px;
-  // @media screen and (max-width: 1100px) {
-  //   min-height: 35vh;
-  // }
+  @media screen and (max-width: 1100px) {
+    min-height: 64vh;
+  }
 }
 
 :host ::ng-deep .mat-group {

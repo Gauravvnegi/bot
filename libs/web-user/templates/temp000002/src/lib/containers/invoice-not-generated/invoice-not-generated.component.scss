@@ -1,0 +1,73 @@
+@import 'temp000002';
+
+.parent_block {
+  min-height: 86.5vh;
+  @media only screen and (max-width: 1100px) {
+    min-height: 92vh;
+  }
+  @media only screen and (max-width: $M) {
+    min-height: 93vh;
+  }
+}
+
+.invoice_not_generated {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 8%;
+  min-height: calc(100vh - 25vh);
+  color: white;
+  @media only screen and (max-width: $T) {
+    min-height: calc(100vh - 17vh);
+  }
+  .image {
+    height: 88px;
+    img {
+      height: 100%;
+    }
+  }
+  &__content {
+    text-align: center;
+    padding-bottom: 5rem;
+    @media only screen and (max-width: $M) {
+      padding-bottom: 0;
+    }
+    .heading {
+      font-size: 35px;
+      font-weight: $bold;
+      margin: $margin-large 0;
+      @media only screen and (max-width: $M) {
+        font-size: 25px;
+      }
+    }
+    .sub_heading {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: $margin-large;
+      @media only screen and (max-width: $T) {
+        font-size: $font16;
+      }
+    }
+    &__note {
+      display: flex;
+      align-items: center;
+      min-width: 70%;
+      justify-content: center;
+      p {
+        margin-left: $margin-medium;
+        font-size: $font16;
+        @media only screen and (max-width: $T) {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .next-button {
+  @include footer-next();
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
+  }
+}

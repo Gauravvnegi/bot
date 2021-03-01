@@ -3,7 +3,7 @@ import { CancelBookingComponent as BaseCancelBookingComponent } from 'libs/web-u
 
 @Component({
   selector: 'hospitality-bot-cancel-booking',
-  templateUrl: '../../../../../temp000001/src/lib/containers/cancel-booking/cancel-booking.component.html',
+  templateUrl: './cancel-booking.component.html',
   styleUrls: ['./cancel-booking.component.scss']
 })
 export class CancelBookingComponent extends BaseCancelBookingComponent{

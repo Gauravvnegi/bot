@@ -40,6 +40,8 @@ import { DefaultAmenityComponent } from './containers/packages/default-amenity/d
 import { Temp000002TextareaComponent } from './presentational/temp000002-textarea/temp000002-textarea.component';
 import { Temp000002InputPopupComponent } from './presentational/temp000002-input-popup/temp000002-input-popup.component';
 import { Temp000002RadioComponent } from './presentational/temp000002-radio/temp000002-radio.component';
+import { InvoiceNotGeneratedComponent } from './containers/invoice-not-generated/invoice-not-generated.component';
+import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -49,6 +51,26 @@ export const sharedAuthRoutes: Route[] = [
       {
         path: '',
         component: MainComponent,
+      },
+    ],
+  },
+  {
+    path: 'invoice-not-generated',
+    component: Temp000002Component,
+    children: [
+      {
+        path: '',
+        component: InvoiceNotGeneratedComponent,
+      },
+    ],
+  },
+  {
+    path: 'booking-cancel',
+    component: Temp000002Component,
+    children: [
+      {
+        path: '',
+        component: CancelBookingComponent,
       },
     ],
   },
@@ -140,5 +162,7 @@ export class Temp000002RoutingModule {
     Temp000002TextareaComponent,
     Temp000002InputPopupComponent,
     Temp000002RadioComponent,
+    InvoiceNotGeneratedComponent,
+    CancelBookingComponent
   ];
 }

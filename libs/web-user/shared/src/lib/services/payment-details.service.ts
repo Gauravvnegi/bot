@@ -77,6 +77,10 @@ export class PaymentDetailsService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}/invoice`);
   }
 
+  sendInvoice(reservationId, email): Observable<any> {
+    return this.post(`/api/v1/reservation/${reservationId}/send-invoice?email=${email}`, {})
+  }
+
   set payAtDesk(paymentOption) {
     this._payAtDesk = paymentOption;
   }

@@ -68,11 +68,11 @@
           <!-- <div class="seperator"></div>
           <div
             class="actions_wrapper__icon_box__icon"
-            (click)="downloadInvoice()"
+            (click)="showFields = !showFields"
           >
-            <img src="assets/svg/Download.svg" />
-          </div>
-          <div class="seperator"></div>
+            <img src="assets/mail.png" />
+          </div> -->
+          <!-- <div class="seperator"></div>
           <div
             class="actions_wrapper__icon_box__icon"
             (click)="downloadInvoice()"
@@ -82,8 +82,11 @@
         </div>
         <div class="actions_wrapper__title_box">
           <p>Download Receipt</p>
-          <!-- <p>Download Receipt</p>
-          <p>Download Receipt</p> -->
+          <p>Send Invoice Email</p>
+          <!-- <p>Download Receipt</p> -->
+        </div>
+        <div style="display: flex; cursor: pointer;" *ngIf="showFields" (click)="sendMail('ompraka66143@gmail.com')">
+          ompraka66143@gmail.com
         </div>
       </div>
     </div>

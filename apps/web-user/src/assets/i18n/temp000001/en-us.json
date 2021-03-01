@@ -23,7 +23,8 @@
       "PRECHECKIN_COMPLETE": "Pre-Checkin Sucessfull",
       "PAYMENT_DETAILS_COMPLETE": "Payment details added successfully",
       "CHECKIN_COMPLETE": "Checkin successful",
-      "GST_ADD_COMPLETE": "GST details added successfully"
+      "GST_ADD_COMPLETE": "GST details added successfully",
+      "RECEIPT_SEND_COMPLETE": "Invoice sent on e-mail successfully"
     },
     "ERROR": {
       "STAY_DETAILS_COMPLETE": "Changes updated successfully.",

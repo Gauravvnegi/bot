@@ -23,6 +23,7 @@ export class PaymentMainComponent implements OnInit {
   ispaymentStatusLoaded: boolean = false;
   isReservationData = false;
   reservationData: ReservationDetails;
+  showFields: boolean = false;
   constructor(
     protected _reservationService: ReservationService,
     protected _hotelService: HotelService,
@@ -78,12 +79,10 @@ export class PaymentMainComponent implements OnInit {
               this._translateService
                 .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
                 .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(
-                    translatedMsg,
-                    '',
-                    { panelClass: 'success' }
-                    );
-                  })
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
+                });
             }
           },
           ({ error }) => {
@@ -138,6 +137,29 @@ export class PaymentMainComponent implements OnInit {
         }
       );
   }
+
+  // sendMail(email: string) {
+  //   this._paymentDetailService
+  //     .sendInvoice(this._reservationService.reservationId, email)
+  //     .subscribe(
+  //       (response) => {
+  //         this._translateService
+  //           .get(`MESSAGES.SUCCESS.RECEIPT_SEND_COMPLETE`)
+  //           .subscribe((translatedMsg) => {
+  //             this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+  //               panelClass: 'success',
+  //             });
+  //           });
+  //       },
+  //       ({ error }) => {
+  //         this._translateService
+  //           .get(`MESSAGES.ERROR.${error.type}`)
+  //           .subscribe((translatedMsg) => {
+  //             this._snackBarService.openSnackBarAsText(translatedMsg);
+  //           });
+  //       }
+  //     );
+  // }
 
   get status() {
     if (this.paymentStatusData && this.paymentStatusData.data) {

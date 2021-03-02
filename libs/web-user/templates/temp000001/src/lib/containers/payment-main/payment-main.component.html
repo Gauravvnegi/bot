@@ -56,16 +56,9 @@
       </div>
       <div
         class="actions_wrapper"
-        *ngIf="reservationData && reservationData.currentJourney === 'CHECKIN'"
+        *ngIf="reservationData && reservationData.currentJourney === 'CHECKOUT'"
       >
         <div class="actions_wrapper__icon_box">
-          <div
-            class="actions_wrapper__icon_box__icon"
-            (click)="downloadInvoice()"
-          >
-            <img src="assets/svg/Download.svg" />
-          </div>
-          <!-- <div class="seperator"></div>
           <div
             class="actions_wrapper__icon_box__icon"
             (click)="downloadInvoice()"
@@ -75,6 +68,14 @@
           <div class="seperator"></div>
           <div
             class="actions_wrapper__icon_box__icon"
+            (click)="showFields = !showFields"
+            [ngClass]="showFields ? 'selected_action' : ''"
+          >
+            <img src="assets/mail.png" />
+          </div>
+          <!-- <div class="seperator"></div>
+          <div
+            class="actions_wrapper__icon_box__icon"
             (click)="downloadInvoice()"
           >
             <img src="assets/svg/Download.svg" />
@@ -82,8 +83,20 @@
         </div>
         <div class="actions_wrapper__title_box">
           <p>Download Receipt</p>
-          <!-- <p>Download Receipt</p>
-          <p>Download Receipt</p> -->
+          <p [ngClass]="showFields ? 'selected_action_text' : ''">
+            Send Invoice Email
+          </p>
+          <!-- <p>Download Receipt</p> -->
+        </div>
+        <div class="email_feild" *ngIf="showFields">
+          <web-user-input
+            [parentForm]="emailFG"
+            [name]="'email'"
+            [settings]="emailControlSetting"
+          ></web-user-input>
+          <button class="email_button" (click)="sendMail()">
+            <img src="assets/right-arrow2.png" />
+          </button>
         </div>
       </div>
     </div>
@@ -107,7 +120,8 @@
       [buttonClass]="'next-button'"
       [ngClass]="paymentStatusData.showBackButton ? 'button_style_modify' : ''"
       class="user-button"
-    ></hospitality-bot-temp000001-button>
+    >
+    </hospitality-bot-temp000001-button>
   </div>
 </div>
 <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

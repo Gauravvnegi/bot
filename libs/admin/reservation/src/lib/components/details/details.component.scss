@@ -77,7 +77,9 @@
           align-items: center;
           text-decoration: none;
           color: white;
-
+          :hover {
+            color: rgb(75, 86, 192);
+          }
           .material-icons {
             font-size: $font12;
             height: auto;
@@ -88,6 +90,9 @@
         }
         .call {
           margin-right: 20px;
+          :hover {
+            color: rgb(75, 86, 192);
+          }
         }
       }
     }
@@ -334,13 +339,11 @@
   width: 79%;
   margin: $margin20 25px;
   margin-right: 0;
-  position: relative;
-  z-index: 23;
   min-height: 60vh;
   border-right: 2px solid #e8f3fe;
   padding-right: 15px;
   @media screen and (max-width: 1100px) {
-    min-height: 35vh;
+    min-height: 64vh;
   }
 }
 
@@ -466,7 +469,7 @@
           img {
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(191deg)
               brightness(108%) contrast(102%);
-              height: 13.5px;
+            height: 13.5px;
           }
         }
       }

@@ -6,6 +6,7 @@ import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.serv
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
   templateUrl:
@@ -19,7 +20,9 @@ export class BillSummaryDetailsWrapperComponent extends BaseBillSummaryDetailsWr
     stepperService: StepperService,
     buttonService: ButtonService,
     snackBarService: SnackBarService,
-    translateService: TranslateService
+    translateService: TranslateService,
+    router: Router,
+    route: ActivatedRoute
   ) {
     super(
       billSummaryService,
@@ -27,7 +30,9 @@ export class BillSummaryDetailsWrapperComponent extends BaseBillSummaryDetailsWr
       stepperService,
       buttonService,
       snackBarService,
-      translateService
+      translateService,
+      router,
+      route
     );
     this.self = this;
   }

@@ -6,6 +6,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-bill-summary-details-wrapper',
@@ -23,7 +24,9 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     protected _stepperService: StepperService,
     protected _buttonService: ButtonService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected router: Router,
+    protected route: ActivatedRoute
   ) {
     super();
     this.self = this;
@@ -60,13 +63,30 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
     this.$subscription.add(
       this._billSummaryService
         .getBillingSummary(this._reservationService.reservationId)
-        .subscribe((summary) => {
-          this.paymentSummary = summary;
-          this._billSummaryService.$signatureUrl.next(
-            this.paymentSummary.signatureUrl
-          );
-          this.initBillSummaryDetailsDS(this.paymentSummary);
-        })
+        .subscribe(
+          (summary) => {
+            this.paymentSummary = summary;
+            this._billSummaryService.$signatureUrl.next(
+              this.paymentSummary.signatureUrl
+            );
+            this.initBillSummaryDetailsDS(this.paymentSummary);
+          },
+          ({ error }) => {
+            if (error.type === 'DOCUMENT_NULL') {
+              this.router.navigateByUrl(
+                `/invoice-not-generated?token=${this.route.snapshot.queryParamMap.get(
+                  'token'
+                )}&entity=invoice-not-generated`
+              );
+            } else {
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                });
+            }
+          }
+        )
     );
   }
 
@@ -105,7 +125,6 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
               });
-            // this._snackBarService.openSnackBarAsText(error.message);
           }
         )
     );

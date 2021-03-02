@@ -145,6 +145,7 @@ export class PaymentMainComponent implements OnInit {
   }
 
   downloadInvoice() {
+    this.showFields = false;
     this._paymentDetailService
       .downloadInvoice(this._reservationService.reservationId)
       .subscribe(
@@ -172,11 +173,9 @@ export class PaymentMainComponent implements OnInit {
   sendMail() {
     let validation = this._paymentDetailService.validateEmail(this.emailFG);
     if (validation.status) {
-      this._translateService
-        .get(validation.code)
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        });
+      this._translateService.get(validation.code).subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
       return;
     }
 

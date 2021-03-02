@@ -111,7 +111,6 @@
   @media only screen and (max-width: 1100px) {
     min-height: 72.6vh;
   }
- 
 }
 
 .actions_wrapper {
@@ -122,11 +121,12 @@
   &__icon_box {
     border: 1px solid #dbdbdb;
     display: flex;
-    background-color: #f8fcff;
-    padding: 5px 0;
+    background-color: #f8fbfe;
+    padding: 3px 0;
+    height: 60px;
     &__icon {
-      width: 11vw;
-      height: 40px;
+      width: 173px;
+      height: 100%;
       @include flex-all-center();
       img {
         height: 25px;
@@ -135,17 +135,18 @@
       }
       &:hover {
         cursor: pointer;
+        background-color: #f1f1f1;
         img {
           filter: invert(52%) sepia(16%) saturate(2193%) hue-rotate(162deg)
             brightness(86%) contrast(81%);
         }
       }
       @media only screen and (max-width: $M) {
-        width: 23vw;
+        width: 153px;
       }
     }
     .seperator {
-      height: 35px;
+      height: 97%;
       border: 0.5px solid #dbdbdb;
     }
   }
@@ -155,7 +156,6 @@
     justify-content: space-between;
     p {
       color: #8e8e8e;
-      font-weight: 600;
       margin: 0 13px;
       font-size: 14px;
       @media only screen and (max-width: $M) {
@@ -166,9 +166,50 @@
   }
 }
 
+.email_feild {
+  display: flex;
+  align-items: center;
+  .email_button {
+    border: none;
+    outline: none;
+    padding: 0 12px;
+    height: 48px;
+    border-radius: 10px;
+    background: var(
+      --primary-button-background-color,
+      $primary-button-background-color
+    );
+    margin-bottom: 1.3em;
+    img {
+      height: 23px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  display: none;
+}
+
 .payment-button {
   @media only screen and (max-width: $M) {
     left: 0;
+  }
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  width: 275px;
+  input {
+    height: 48px;
+    background-color: #f8fbfe;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    padding-left: 10px;
+    &::placeholder {
+      font-size: 10px;
+    }
+  }
+  @media only screen and (max-width: $M) {
+    width: 234px;
   }
 }
 
@@ -177,4 +218,20 @@
   @media only screen and (max-width: $M) {
     width: 100px;
   }
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  padding-bottom: 1em;
+}
+
+.selected_action {
+  background-color: #ebf1f6;
+  img {
+    filter: invert(0%) sepia(93%) saturate(0%) hue-rotate(235deg)
+      brightness(107%) contrast(107%);
+  }
+}
+
+.selected_action_text {
+  font-weight: 700;
 }

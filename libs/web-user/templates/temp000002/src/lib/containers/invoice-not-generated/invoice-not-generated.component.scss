@@ -1,4 +1,4 @@
-@import 'temp000001';
+@import 'temp000002';
 
 .parent_block {
   min-height: 86.5vh;
@@ -10,7 +10,7 @@
   }
 }
 
-.booking_cancel {
+.invoice_not_generated {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -21,8 +21,18 @@
   @media only screen and (max-width: $T) {
     min-height: calc(100vh - 17vh);
   }
+  .image {
+    height: 88px;
+    img {
+      height: 100%;
+    }
+  }
   &__content {
     text-align: center;
+    padding-bottom: 5rem;
+    @media only screen and (max-width: $M) {
+      padding-bottom: 0;
+    }
     .heading {
       font-size: 35px;
       font-weight: $bold;
@@ -46,6 +56,10 @@
       justify-content: center;
       p {
         margin-left: $margin-medium;
+        font-size: $font16;
+        @media only screen and (max-width: $T) {
+          font-size: 12px;
+        }
       }
     }
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
@@ -20,9 +21,24 @@ export class PaymentMainComponent implements OnInit {
   protected $subscription: Subscription = new Subscription();
   paymentStatusData: PaymentMainStatus = new PaymentMainStatus();
 
+  emailFG: FormGroup;
+  emailControlSetting = {
+    options: [],
+    contentType: 'text',
+    required: false,
+    order: 0,
+    key: '7',
+    value: '',
+    placeholder: 'Enter email',
+    type: 'input',
+    icon: '',
+    label: '',
+    floatLabel: 'always',
+  };
   ispaymentStatusLoaded: boolean = false;
   isReservationData = false;
   reservationData: ReservationDetails;
+  showFields: boolean = false;
   constructor(
     protected _reservationService: ReservationService,
     protected _hotelService: HotelService,
@@ -30,24 +46,41 @@ export class PaymentMainComponent implements OnInit {
     protected _paymentDetailService: PaymentDetailsService,
     protected router: Router,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.getReservationDetails();
+    this.initFG();
+  }
+
+  initFG() {
+    this.emailFG = this.fb.group({
+      email: ['', [Validators.required]],
+    });
   }
 
   protected getReservationDetails() {
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
-        .subscribe((reservationData) => {
-          this._hotelService.hotelConfig = reservationData['hotel'];
-          this.isReservationData = true;
-          this.reservationData = reservationData;
-          this._reservationService.reservationData = reservationData;
-          this.getPaymentStatus();
-        })
+        .subscribe(
+          (reservationData) => {
+            this._hotelService.hotelConfig = reservationData['hotel'];
+            this.isReservationData = true;
+            this.reservationData = reservationData;
+            this._reservationService.reservationData = reservationData;
+            this.getPaymentStatus();
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+          }
+        )
     );
   }
 
@@ -78,12 +111,10 @@ export class PaymentMainComponent implements OnInit {
               this._translateService
                 .get('MESSAGES.SUCCESS.PRECHECKIN_COMPLETE')
                 .subscribe((translatedMsg) => {
-                    this._snackBarService.openSnackBarAsText(
-                    translatedMsg,
-                    '',
-                    { panelClass: 'success' }
-                    );
-                  })
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
+                });
             }
           },
           ({ error }) => {
@@ -92,7 +123,6 @@ export class PaymentMainComponent implements OnInit {
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
               });
-            // this._snackBarService.openSnackBarAsText(error.message);
           }
         )
     );
@@ -115,6 +145,7 @@ export class PaymentMainComponent implements OnInit {
   }
 
   downloadInvoice() {
+    this.showFields = false;
     this._paymentDetailService
       .downloadInvoice(this._reservationService.reservationId)
       .subscribe(
@@ -128,6 +159,40 @@ export class PaymentMainComponent implements OnInit {
                 '.pdf'
             );
           }
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+        }
+      );
+  }
+
+  sendMail() {
+    let validation = this._paymentDetailService.validateEmail(this.emailFG);
+    if (validation.status) {
+      this._translateService.get(validation.code).subscribe((translatedMsg) => {
+        this._snackBarService.openSnackBarAsText(translatedMsg);
+      });
+      return;
+    }
+
+    let values = this.emailFG.value;
+    this._paymentDetailService
+      .sendInvoice(this._reservationService.reservationId, values.email)
+      .subscribe(
+        (response) => {
+          this.showFields = false;
+          this.emailFG.reset();
+          this._translateService
+            .get(`MESSAGES.SUCCESS.RECEIPT_SEND_COMPLETE`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                panelClass: 'success',
+              });
+            });
         },
         ({ error }) => {
           this._translateService

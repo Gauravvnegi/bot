@@ -86,10 +86,11 @@ export class DateService {
       return 'date';
     } else if (dateDiff > 7 && dateDiff < 30) {
       return 'week';
-    } else if (dateDiff >= 30 && dateDiff <= 365) {
+    } else if (dateDiff >= 30 && dateDiff < 365) {
       if (
-        DateService.getMonthFromDate(startDate) ===
-        DateService.getMonthFromDate(endDate)
+        (DateService.getMonthFromDate(startDate) ===
+        DateService.getMonthFromDate(endDate)) && (DateService.getYearFromDate(startDate) ===
+        DateService.getYearFromDate(endDate))
       ) {
         return 'week';
       }

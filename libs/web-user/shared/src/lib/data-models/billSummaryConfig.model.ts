@@ -77,124 +77,51 @@ export class StaySummaryDetail implements Deserializable {
   }
 }
 
-// export class PaymentSummaryDetail implements Deserializable {
-
-//   subtotal: number;
-//   tax: number;
-//   unit: number;
-//   baseRate: number;
-//   totalRate: number;
-//   paidAmount: number;
-//   totalAmount: number;
-//   currencyCode: string;
-
-//   deserialize(rooms: any, billDetails: any) {
-//     /**
-//      * indexes are hardcoded as data from PMS is still not clear
-//      * structure needs to be modified once PMS data queries are answered
-//      */
-//     let subtotal;
-//     let baseRate;
-//     if(billDetails.dailyBreakdown.length > 0 && billDetails.dailyBreakdown[0].roomRatesAndPackage.length > 0){
-//       subtotal = rooms.unit *billDetails.dailyBreakdown[0].roomRatesAndPackage[0].amount.value;
-//       baseRate = billDetails.dailyBreakdown[0].roomRatesAndPackage[0].amount.value;
-//     }
-//     Object.assign(
-//       this,
-//       set({}, 'currencyCode', get(billDetails.grossTotal, ['currencyCode'])),
-//       set({}, 'unit', get(rooms, ['unit'])),
-//       set({}, 'baseRate', baseRate),
-//       set({}, 'totalRate', subtotal),
-//       set({}, 'tax', get(billDetails.totalTax, ['value'])),
-//       set({}, 'paidAmount', get(billDetails.paidAmount, ['value'])),
-//       set({}, 'totalAmount', get(billDetails.grossTotal, ['value'])),
-
-//     );
-//     return this;
-//   }
-// }
-
 export class PaymentSummaryDetail implements Deserializable {
   currency;
   dueAmount;
   paidAmount;
-  subtotal;
-  taxAmount;
   totalAmount;
-  totalDiscount;
-  roomRates;
   signatureUrl;
-  packages = new Array<PackageDetails>();
+  billItems: BillItem[];
   deserialize(input: any) {
+    this.billItems = new Array<BillItem>();
     Object.assign(
       this,
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'dueAmount', get(input, ['dueAmount'])),
-      set({}, 'paidAmount', get(input, ['paidAmount'])),
-      set({}, 'subtotal', get(input, ['subtotal'])),
-      set({}, 'taxAmount', get(input, ['taxAmount'])),
+      set({}, 'dueAmount', get(input, ['totalDueAmount'])),
       set({}, 'totalAmount', get(input, ['totalAmount'])),
-      set({}, 'totalDiscount', get(input, ['totalDiscount'])),
+      set({}, 'paidAmount', get(input, ['totalPaidAmount'])),
       set({}, 'signatureUrl', get(input, ['signatureUrl']))
     );
-    if (input.roomRates) {
-      this.roomRates = new RoomRateDetails().deserialize(input.roomRates);
-    }
-    input.packages.forEach((amenity) => {
-      this.packages.push(new PackageDetails().deserialize(amenity));
+    input.billItems.forEach((item) => {
+      this.billItems.push(new BillItem().deserialize(item));
     });
-
     return this;
   }
 }
 
-export class RoomRateDetails implements Deserializable {
-  amount;
-  unitPrice;
-  description;
-  discount;
-  totalAmount;
-  unit;
-  label;
-  taxAndFees;
+export class BillItem {
+  creditAmount: number;
+  currency: string;
+  date: number;
+  debitAmount: number;
+  description: string;
+  unit: number;
 
-  deserialize(input: any) {
+  deserialize(input) {
     Object.assign(
       this,
-      set({}, 'amount', get(input, ['amount'])),
-      set({}, 'unitPrice', get(input, ['base'])),
+      set(
+        {},
+        'date',
+        DateService.convertTimestampToDate(get(input, ['date']), 'DD-MM-YYYY')
+      ),
+      set({}, 'creditAmount', get(input, ['creditAmount'])),
+      set({}, 'currency', get(input, ['currency'])),
+      set({}, 'debitAmount', get(input, ['debitAmount'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'discount', get(input, ['discount'])),
-      set({}, 'totalAmount', get(input, ['totalAmount'])),
-      set({}, 'label', get(input, ['label'])),
-      set({}, 'taxAndFees', get(input, ['taxAndFees'])),
-      set({}, 'unit', get(input, ['unit']))
-    );
-    return this;
-  }
-}
-
-export class PackageDetails implements Deserializable {
-  amount;
-  unitPrice;
-  description;
-  discount;
-  totalAmount;
-  unit;
-  label;
-  taxAndFees;
-
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'amount', get(input, ['amount'])),
-      set({}, 'unitPrice', get(input, ['base'])),
-      set({}, 'description', get(input, ['description'])),
-      set({}, 'discount', get(input, ['discount'])),
-      set({}, 'totalAmount', get(input, ['totalAmount'])),
-      set({}, 'label', get(input, ['label'])),
-      set({}, 'taxAndFees', get(input, ['taxAndFees'])),
-      set({}, 'unit', get(input, ['unit']))
+      set({}, 'unit', get(input, ['unit'])),
     );
     return this;
   }

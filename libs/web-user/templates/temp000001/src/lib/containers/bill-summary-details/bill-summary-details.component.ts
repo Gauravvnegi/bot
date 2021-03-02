@@ -23,7 +23,7 @@ export class BillSummaryDetailsComponent implements OnInit {
   @Input() reservationData;
   @Input() stepperIndex;
 
-  protected addGstComponent=AddGstComponent;
+  protected addGstComponent = AddGstComponent;
 
   @ViewChild('nextButton') nextButton;
 
@@ -38,14 +38,11 @@ export class BillSummaryDetailsComponent implements OnInit {
   dataSource = [];
 
   displayedColumns: string[] = [
-    'label',
+    'date',
+    'description',
     'unit',
-    'unitPrice',
-    'amount',
-    'CGST',
-    'SGST',
-    'discount',
-    'totalAmount',
+    'debitAmount',
+    'creditAmount',
   ];
 
   constructor(
@@ -95,73 +92,16 @@ export class BillSummaryDetailsComponent implements OnInit {
     this.staySummaryDetails = this.staySummary;
     this.billSummaryDetails = this.billSummary;
     if (this.staySummaryDetails && this.billSummaryDetails) {
-      this.getModifiedPaymentSummary();
+      // this.getModifiedPaymentSummary();
+      this.dataSource = this.billSummaryDetails.billItems;
     }
   }
 
   getModifiedPaymentSummary() {
-    const paymentSummary = this.billSummaryDetails;
-    if (paymentSummary.roomRates) {
-      let {
-        label,
-        description,
-        unit,
-        unitPrice,
-        amount,
-        discount,
-        totalAmount,
-        taxAndFees,
-      } = paymentSummary.roomRates;
-
-      this.dataSource.push({
-        label,
-        description,
-        unit,
-        unitPrice,
-        amount,
-        discount,
-        totalAmount,
-        currency: paymentSummary.currency,
-        ...Object.assign(
-          {},
-          ...taxAndFees.map((taxType) => ({
-            [taxType.type]: taxType.value,
-          }))
-        ),
-      });
-    }
-
-    if (this.billSummaryDetails.packages && this.billSummaryDetails.packages.length) {
-      this.billSummaryDetails.packages.forEach((amenity) => {
-        let {
-          label,
-          description,
-          unit,
-          unitPrice,
-          amount,
-          discount,
-          totalAmount,
-          taxAndFees,
-        } = amenity;
-
-        this.dataSource.push({
-          label,
-          description,
-          unit,
-          unitPrice,
-          amount,
-          discount,
-          totalAmount,
-          currency: paymentSummary.currency,
-          ...Object.assign(
-            {},
-            ...taxAndFees.map((taxType) => ({
-              [taxType.type]: taxType.value,
-            }))
-          ),
-        });
-      });
-    }
+    this.billSummaryDetails.billItems.forEach((item) => {
+      let { date, description, unit, debitAmount, creditAmount } = item;
+      this.dataSource.push();
+    });
   }
 
   openDialog() {

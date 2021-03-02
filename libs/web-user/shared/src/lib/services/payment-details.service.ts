@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { Observable } from 'rxjs';
-import {
-  PaymentDetailDS,
-} from '../data-models/PaymentDetailsConfig.model';
+import { PaymentDetailDS } from '../data-models/PaymentDetailsConfig.model';
 
 @Injectable()
 export class PaymentDetailsService extends ApiService {
@@ -52,9 +51,11 @@ export class PaymentDetailsService extends ApiService {
 
   //   return paymentDetailsFieldSchema as PaymentDetailsConfigI;
   // }
-  
+
   getPaymentConfiguration(hotelId, journeyName): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/payment-configuration?journeyName=${journeyName}`);
+    return this.get(
+      `/api/v1/hotel/${hotelId}/payment-configuration?journeyName=${journeyName}`
+    );
   }
 
   initiatePayment(reservationId) {
@@ -62,7 +63,10 @@ export class PaymentDetailsService extends ApiService {
   }
 
   initiatePaymentCCAvenue(reservationId, data) {
-    return this.put(`/api/v1/reservation/${reservationId}/payment/webhook?`, data);
+    return this.put(
+      `/api/v1/reservation/${reservationId}/payment/webhook?`,
+      data
+    );
   }
 
   updatePaymentStatus(reservationId, data) {
@@ -75,6 +79,34 @@ export class PaymentDetailsService extends ApiService {
 
   downloadInvoice(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/invoice`);
+  }
+
+  sendInvoice(reservationId, email): Observable<any> {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/send-invoice?email=${email}`,
+      {}
+    );
+  }
+
+  validateEmail(emailFG: FormGroup) {
+    const regularExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailFG.invalid) {
+      return {
+        status: true,
+        code: 'VALIDATION.EMAIL_NOT_ENTERED',
+      };
+    } else if (
+      !regularExpression.test(String(emailFG.value.email).toLowerCase())
+    ) {
+      return {
+        status: true,
+        code: 'VALIDATION.INVALID_EMAIL',
+      };
+    } else {
+      return {
+        status: false,
+      };
+    }
   }
 
   set payAtDesk(paymentOption) {

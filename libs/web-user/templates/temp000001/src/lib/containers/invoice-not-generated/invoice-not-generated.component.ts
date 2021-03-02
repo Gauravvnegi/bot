@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './invoice-not-generated.component.html',
   styleUrls: ['./invoice-not-generated.component.scss'],
 })
+
 export class InvoiceNotGeneratedComponent implements OnInit {
   private $subscription = new Subscription();
   constructor(

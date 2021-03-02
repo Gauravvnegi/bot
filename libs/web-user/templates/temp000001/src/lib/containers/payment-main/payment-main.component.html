@@ -7,28 +7,19 @@
       </div>
       <div class="text">
         <p class="label">{{ paymentStatusData.label }}</p>
-        <p
-          class="note"
-          [ngStyle]="
+        <p class="note" [ngStyle]="
             status === 'SUCCESS' ? { display: 'block' } : { display: 'none' }
-          "
-        >
+          ">
           {{ paymentNote }}
         </p>
-        <p
-          class="note"
-          [ngStyle]="
+        <p class="note" [ngStyle]="
             status === 'FAILED' ? { display: 'block' } : { display: 'none' }
-          "
-        >
+          ">
           {{ paymentNote }}
         </p>
-        <p
-          class="error_code"
-          [ngStyle]="
+        <p class="error_code" [ngStyle]="
             status === 'FAILED' ? { display: 'block' } : { display: 'none' }
-          "
-        >
+          ">
           Error code : 309
         </p>
       </div>
@@ -54,24 +45,15 @@
           </div>
         </div>
       </div>
-      <div
-        class="actions_wrapper"
-        *ngIf="reservationData && reservationData.currentJourney === 'CHECKOUT'"
-      >
+      <div class="actions_wrapper" *ngIf="reservationData && reservationData.currentJourney === 'CHECKOUT'">
         <div class="actions_wrapper__icon_box">
-          <div
-            class="actions_wrapper__icon_box__icon"
-            (click)="downloadInvoice()"
-          >
+          <div class="actions_wrapper__icon_box__icon" (click)="downloadInvoice()">
             <img src="assets/svg/Download.svg" />
           </div>
-          <!-- <div class="seperator"></div>
-          <div
-            class="actions_wrapper__icon_box__icon"
-            (click)="showFields = !showFields"
-          >
+          <div class="seperator"></div>
+          <div class="actions_wrapper__icon_box__icon" (click)="showFields = !showFields">
             <img src="assets/mail.png" />
-          </div> -->
+          </div>
           <!-- <div class="seperator"></div>
           <div
             class="actions_wrapper__icon_box__icon"
@@ -85,32 +67,23 @@
           <p>Send Invoice Email</p>
           <!-- <p>Download Receipt</p> -->
         </div>
-        <div style="display: flex; cursor: pointer;" *ngIf="showFields" (click)="sendMail('ompraka66143@gmail.com')">
-          ompraka66143@gmail.com
+        <div style="display: flex; cursor: pointer;" *ngIf="showFields">
+          <web-user-input [parentForm]="emailFG" [name]="'email'"
+            [settings]="emailControlSetting"></web-user-input>
+          <button (click)="sendMail()">Send Email</button>
         </div>
       </div>
     </div>
   </div>
-  <div
-    class="main-template-button payment-button"
-    *ngIf="ispaymentStatusLoaded"
-  >
-    <hospitality-bot-temp000001-button
-      *ngIf="paymentStatusData.showBackButton"
-      (click)="redirect(paymentStatusData.backRedirectUrl)"
-      [settings]="{ label: paymentStatusData.back }"
-      [buttonClass]="'back-button'"
-      class="user-button"
-    ></hospitality-bot-temp000001-button>
-    <hospitality-bot-temp000001-button
-      (click)="
+  <div class="main-template-button payment-button" *ngIf="ispaymentStatusLoaded">
+    <hospitality-bot-temp000001-button *ngIf="paymentStatusData.showBackButton"
+      (click)="redirect(paymentStatusData.backRedirectUrl)" [settings]="{ label: paymentStatusData.back }"
+      [buttonClass]="'back-button'" class="user-button"></hospitality-bot-temp000001-button>
+    <hospitality-bot-temp000001-button (click)="
         redirect(status === 'SUCCESS' ? '' : paymentStatusData.nextRedirectUrl)
-      "
-      [settings]="{ label: paymentStatusData.next }"
-      [buttonClass]="'next-button'"
-      [ngClass]="paymentStatusData.showBackButton ? 'button_style_modify' : ''"
-      class="user-button"
-    ></hospitality-bot-temp000001-button>
+      " [settings]="{ label: paymentStatusData.next }" [buttonClass]="'next-button'"
+      [ngClass]="paymentStatusData.showBackButton ? 'button_style_modify' : ''" class="user-button">
+    </hospitality-bot-temp000001-button>
   </div>
 </div>
 <hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>

@@ -113,6 +113,7 @@ export class PaymentSummary {
 	subtotal: number;
 	paidAmount: number;
 	dueAmount: number;
+	payableAmount: number;
 
 	deserialize(summary) {
 		Object.assign(
@@ -124,6 +125,7 @@ export class PaymentSummary {
 			set({}, 'subtotal', get(summary, ['subtotal'])),
 			set({}, 'paidAmount', get(summary, ['paidAmount'])),
 			set({}, 'dueAmount', get(summary, ['dueAmount'])),
+			set({}, 'payableAmount', get(summary, ['payableAmount']))
 		)
 		return this;
 	}

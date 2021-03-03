@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
     }
     this.isSigningIn = true;
     const data = this.loginForm.value;
+    data.email = data.email.toLowerCase();
     this._authService.login(data).subscribe(
       (response) => {
         this._userDetailService.setLoggedInUserId(response.id);

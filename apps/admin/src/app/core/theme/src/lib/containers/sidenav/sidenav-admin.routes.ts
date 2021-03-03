@@ -5,12 +5,12 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/dashboard.svg',
   },
-  {
-    path: 'roles-permissions',
-    title: 'Roles & Permissions',
-    children: null,
-    url: 'assets/svg/Roles_&_Permission.svg',
-  },
+  // {
+  //   path: 'roles-permissions',
+  //   title: 'Roles & Permissions',
+  //   children: null,
+  //   url: 'assets/svg/Roles_&_Permission.svg',
+  // },
   {
     path: 'guest',
     title: 'Guest',

@@ -2,8 +2,10 @@
 
 .about__section--banner {
   height: 531px;
-  background: url('../../../../../../../../apps/web-user/src/assets/banner.png');
+  background-image: url('../../../../../../../../apps/web-user/src/assets/banner.png');
   background-repeat: no-repeat;
+  width: 100%;
+  background-size: 100% 100%;
   &--text {
     width: 53%;
     padding: 100px $padding30;

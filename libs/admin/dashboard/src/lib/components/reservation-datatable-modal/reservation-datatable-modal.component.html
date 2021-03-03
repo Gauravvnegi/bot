@@ -663,7 +663,7 @@
       </ng-template>
       <!-- *********************************FOOTER******************************* -->
       <ng-template pTemplate="summary">
-        <p-paginator
+        <p-paginator #paginator
           [rows]="rowsPerPage"
           [totalRecords]="totalRecords"
           [rowsPerPageOptions]="rowsPerPageOptions"

@@ -91,6 +91,7 @@ export class ArrivalsStatisticsComponent implements OnInit {
             type: 'failed',
           },
         ],
+        lastPage:0
       },
     ],
     type: 'reservation',

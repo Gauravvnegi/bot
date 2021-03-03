@@ -4,7 +4,10 @@ import { BookingFeedback, Service } from '../../../../../guests/src/lib/data-mod
 import { FeedBackDetail } from '../../../../../guests/src/lib/data-models/feedbackDetailsConfig.model';
 import { SnackBarService } from 'libs/shared/material/src';
 import { GuestDetailService } from '../../services/guest-detail.service';
-
+import { MatDialogConfig } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
+import { DetailsComponent as ReservationDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 @Component({
   selector: 'hospitality-bot-booking-feedback',
   templateUrl: './booking-feedback.component.html',
@@ -12,6 +15,7 @@ import { GuestDetailService } from '../../services/guest-detail.service';
 })
 export class BookingFeedbackComponent implements OnInit {
 
+  private $subscription = new Subscription();
   @Input() title;
   @Input() rowData;
   @Input() feedbackConfig: FeedBackDetail;
@@ -23,7 +27,8 @@ export class BookingFeedbackComponent implements OnInit {
   constructor(
     private feedbackService: FeedbackService,
     private guestDetailService: GuestDetailService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +50,26 @@ export class BookingFeedbackComponent implements OnInit {
           this._snackbarService.openSnackBarAsText(error.message);
         });
     }
+  }
+
+  openDetailPage(event, bookingId, tabKey?) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      ReservationDetailComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.bookingId = bookingId;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        detailCompRef.close();
+      })
+    );
   }
 
   setFeedbackData(feedback: BookingFeedback) {

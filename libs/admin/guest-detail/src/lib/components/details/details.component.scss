@@ -18,9 +18,6 @@
 .details-wrapper {
   background-color: white;
   height: 85vh;
-  @media screen and (max-width: 1100px) {
-    height: 53vh;
-  }
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
@@ -78,7 +75,9 @@
           align-items: center;
           text-decoration: none;
           color: white;
-
+          :hover {
+            color: rgb(75, 86, 192);
+          }
           .material-icons {
             font-size: $font12;
             height: auto;
@@ -89,6 +88,9 @@
         }
         .call {
           margin-right: 20px;
+          :hover {
+            color: rgb(75, 86, 192);
+          }
         }
       }
     }
@@ -97,8 +99,19 @@
       display: flex;
       align-items: center;
       cursor: pointer;
+      .pointer {
+        width: 5px;
+        height: 5px;
+        background-color: white;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
       .booking-id {
         text-align: center;
+        margin-right: 10px;
+        :hover {
+          color: rgb(75, 86, 192);
+        }
       }
       .feedback {
         color: white;
@@ -162,12 +175,19 @@
           }
         }
       }
+      .room-no {
+        margin-right: 10px;
+        :hover {
+          color: rgb(75, 86, 192);
+        }
+      }
     }
   }
   .guest_data {
     display: flex;
     align-items: baseline;
     color: white;
+    justify-content: space-between;
     font-size: $font16;
     padding-left: 25px;
     margin-bottom: 15px;
@@ -258,7 +278,7 @@
 }
 
 .data-seperator {
-  border: 2px solid #E8F3FE;
+  border: 2px solid #e8f3fe;
   margin: $margin20 0px;
   opacity: 0.1;
 }
@@ -285,7 +305,6 @@
 
 .form-wrapper {
   display: flex;
-  
 }
 .gap {
   margin-top: $margin15;
@@ -321,7 +340,6 @@
   font-size: 14px;
   color: #484848;
 }
-
 
 .health-status {
   letter-spacing: 0.84px;
@@ -360,14 +378,14 @@
 }
 
 :host ::ng-deep .material-body {
-  width: 80%;
+  width: 79%;
   margin: $margin20 25px;
   margin-right: 0;
   min-height: 60vh;
-  border-right: 3px solid #E8F3FE;
+  border-right: 3px solid #e8f3fe;
   padding-right: 15px;
   @media screen and (max-width: 1100px) {
-    min-height: 35vh;
+    min-height: 64vh;
   }
 }
 
@@ -494,7 +512,7 @@
           img {
             filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(191deg)
               brightness(108%) contrast(102%);
-              height: 13.5px;
+            height: 13.5px;
           }
         }
       }

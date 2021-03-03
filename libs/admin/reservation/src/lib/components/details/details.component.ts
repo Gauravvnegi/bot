@@ -519,7 +519,7 @@ export class DetailsComponent implements OnInit, OnChanges {
         notificationCompRef.close();
       });
     } else {
-      this.closeDetails();
+      this._modal.close();
       this.router.navigateByUrl('/pages/request');
     }
   }

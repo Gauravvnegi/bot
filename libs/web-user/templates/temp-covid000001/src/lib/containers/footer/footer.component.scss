@@ -2,10 +2,11 @@
 
 .footer--container {
   padding-top: 40px;
-  background: url('../../../../../../../../apps/web-user/src/assets/bgimages.png');
+  background-image: url('../../../../../../../../apps/web-user/src/assets/bgimages.png');
   background-repeat: no-repeat;
   height: 380px;
   position: relative;
+  background-size: 100% 100%;
   margin-bottom: 200px;
   .text {
     text-align: center;
@@ -155,4 +156,8 @@
 
 :host ::ng-deep .slick-dots {
   display: none !important;
+}
+
+:host ::ng-deep .slick-slide {
+  outline: none
 }

@@ -28,7 +28,7 @@
           </mat-form-field>
         </div>
         <div class="feild">
-          <mat-label class="mat-label">Packages:</mat-label>
+          <mat-label class="mat-label" *ngIf="subPackages">Packages:</mat-label>
           <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
           <mat-form-field *ngIf="subPackages && subPackages.length > 0">
             <mat-select formControlName="packages">

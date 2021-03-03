@@ -1,9 +1,12 @@
 @import 'temp000002';
 
 .parent_block {
-  min-height: 86.3vh;
-  @media only screen and (max-width: $T) {
-    min-height: 89.8vh;
+  min-height: 86.5vh;
+  @media only screen and (max-width: 1100px) {
+    min-height: 92vh;
+  }
+  @media only screen and (max-width: $M) {
+    min-height: 93vh;
   }
 }
 
@@ -46,11 +49,11 @@
       }
     }
   }
-  &__button {
-    @include primary-button();
-    outline: none;
-    border: none;
-    height: 35px;
-    margin-top: 5%;
+}
+
+:host ::ng-deep .next-button {
+  @include footer-next();
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
   }
 }

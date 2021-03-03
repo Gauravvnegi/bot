@@ -6,6 +6,7 @@ import { HotelUsageDatatableComponent } from './components/hotel-usage-datatable
 import { OcrUsageComponent } from './components/ocr-usage/ocr-usage.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SubscriptionComponent } from "./components/subscription/subscription.component";
+import { TopCardsComponent } from './components/top-cards/top-cards.component';
 import { UsersUsageComponent } from './components/users-usage/users-usage.component';
 
 const appRoutes: Route[] = [
@@ -27,6 +28,7 @@ export class AdminSubscriptionRoutingModule {
 		UsersUsageComponent,
 		OcrUsageComponent,
 		GuestUsageComponent,
-		ChannelUsageComponent
+    ChannelUsageComponent,
+    TopCardsComponent
   ];
 }

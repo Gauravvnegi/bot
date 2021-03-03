@@ -1,12 +1,31 @@
 <div class="container">
 	<div class="title">
-		<div class="title_img"></div>
 		<div class="title_label">Total Guests</div>
+		<div class="menu-container">
+			<div class="pull-right">
+				<label class="labl" *ngFor="let option of chartTypes">
+					<input name="method" type="radio" [checked]="chart.chartType === option.value" [value]="option.value"
+						(click)="setChartType(option, $event)" />
+					<div class="image">
+						<img [src]="option.url" />
+					</div>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="line-chart">
+		<canvas baseChart class="line-chart__canvas" [datasets]="chart.chartData.datasets" [labels]="chart.chartLabels"
+			[options]="chart.chartOptions" [colors]="chart.chartColors" [legend]="chart.chartLegend"
+			[chartType]="chart.chartType">
+		</canvas>
 	</div>
 	<div class="details">
 		<div class="details_stat">
-			<div class="details_stat_value"><span class="left">10k/</span>20k</div>
-			<div class="details_stat_diff">10% of Guests</div>
+			<div class="details_stat_value">10k/20k</div>
+			<div class="details_stat_diff">(25%)</div>
+		</div>
+		<div class="details_link">
+			in 30 days
 		</div>
 	</div>
 </div>

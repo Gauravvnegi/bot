@@ -7,6 +7,7 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { RouterModule } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { TableModule } from 'primeng/table';
     TableModule,
     SharedMaterialModule,
     DropdownModule,
+    ChartsModule
   ],
   declarations: [AdminSubscriptionRoutingModule.components],
 })

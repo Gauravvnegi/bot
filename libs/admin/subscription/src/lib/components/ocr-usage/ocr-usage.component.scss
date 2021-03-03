@@ -1,3 +1,4 @@
+@import 'main';
 .container {
   padding: 20px;
   display: flex;
@@ -6,6 +7,7 @@
   height: 100%;
   .title {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     &_img {
       width: 34px;
@@ -20,37 +22,82 @@
   }
   .details {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    height: 70px;
+    align-items: baseline;
     &_stat {
       display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+      align-items: baseline;
       &_value {
-        font: normal normal bold 20px/26px Roboto;
-        letter-spacing: 1.2px;
+        font: normal normal bold 25px/29px Roboto;
+        letter-spacing: 0px;
         color: #002046;
-        .left {
-          font: normal normal bold 25px/26px Roboto;
-          letter-spacing: 1.5px;
-          color: #002046;
-        }
       }
       &_diff {
         font: normal normal normal 12px/16px Roboto;
-        letter-spacing: 0.72px;
-        color: #6d7580;
-        opacity: 1;
+        letter-spacing: 0px;
+        color: #52b33f;
+        margin: 0 5px;
       }
     }
     &_link {
       font: normal normal normal 12px/16px Roboto;
-      letter-spacing: 0.72px;
-      color: #4b56c0;
-      opacity: 1;
-      cursor: pointer;
+      letter-spacing: 0.24px;
+      color: #6d7580;
     }
   }
+}
+
+.menu-container {
+  display: flex;
+}
+.pull-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // margin: 0 20px;
+}
+
+.labl {
+  margin: 0 1%;
+}
+
+.labl > .image {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid $primary-purple;
+}
+.labl > input {
+  /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.legends:checked ~ p {
+  text-decoration: line-through;
+}
+
+.labl > input + .image {
+  position: relative;
+  cursor: pointer;
+}
+
+.labl > input:checked + .image {
+  background-color: $primary-purple;
+  img {
+    filter: invert(1);
+  }
+}
+
+.pull-right {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.line-chart__canvas {
+  width: 100%;
 }

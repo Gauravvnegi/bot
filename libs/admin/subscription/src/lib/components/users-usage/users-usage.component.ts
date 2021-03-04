@@ -34,6 +34,16 @@ export class UsersUsageComponent implements OnInit {
     chartLabels: ['02 Feb', '09 Feb', '16 Feb', '23 Feb', '02 Mar'],
     chartOptions: {
       responsive: true,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
       elements: {
         line: {
           tension: 0,

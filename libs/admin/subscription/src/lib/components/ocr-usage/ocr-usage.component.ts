@@ -31,6 +31,16 @@ export class OcrUsageComponent implements OnInit {
     chartLabels: ['Visa', 'Passport', 'Adhaar Card'],
     chartOptions: {
       responsive: true,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 10,
+        xPadding: 10,
+        yPadding: 10,
+      },
       elements: {
         line: {
           tension: 0,

@@ -1,29 +1,45 @@
 <div class="container">
   <div class="card">
-		<div class="card_title">Subscription</div>
-		<div class="card_details">
-			<div class="card_details_label">Basic</div>
-			<button class="card_details_button">Upgrade</button>
-		</div>
-	</div>
-	<div class="card">
-		<div class="card_title">Deployment <img src="assets/svg/bell.svg"/></div>
-		<div class="card_details">
-			<div class="card_details_label">Dedicated</div>
-			<button class="card_details_button">Switch</button>
-		</div>
-	</div>
-	<div class="card">
-		<div class="card_title">Technical Support <img src="assets/svg/bell.svg" /></div>
-		<div class="card_details">
-			<div class="card_details_label">Silver</div>
-			<button class="card_details_button">Upgrade</button>
-		</div>
-	</div>
-	<div class="card">
-		<div class="card_title">Plan Due Date</div>
-		<div class="card_details">
-			<div class="card_details_label">22/03/2021</div>
-		</div>
-	</div>
+    <div class="card_title">Subscription</div>
+    <div class="card_details">
+      <div class="card_details_label">{{ data.plan.plan }}</div>
+      <button
+        class="card_details_button"
+        [disabled]="data.upgradable"
+        [style.opacity]="data.upgradable ? 1 : 0.5"
+      >
+        Upgrade
+      </button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card_title">
+      Deployment <img src="assets/svg/information-circle-outline.svg" />
+    </div>
+    <div class="card_details">
+      <div class="card_details_label">{{ data.deploymentType }}</div>
+      <button class="card_details_button">Switch</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card_title">
+      Technical Support <img src="assets/svg/information-circle-outline.svg" />
+    </div>
+    <div class="card_details">
+      <div class="card_details_label">{{ data.supportType }}</div>
+      <button
+        class="card_details_button"
+        [disabled]="data.upgradable"
+        [style.opacity]="data.upgradable ? 1 : 0.5"
+      >
+        Upgrade
+      </button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card_title">Plan Due Date</div>
+    <div class="card_details">
+      <div class="card_details_label">{{ data.plan.getEndDate() }}</div>
+    </div>
+  </div>
 </div>

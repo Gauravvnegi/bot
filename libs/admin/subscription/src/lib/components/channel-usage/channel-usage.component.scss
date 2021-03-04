@@ -5,50 +5,35 @@
   justify-content: space-between;
   height: 100%;
   .title {
+    font: normal normal normal 14px/19px Roboto;
+    letter-spacing: 0.28px;
+    color: #484848;
+    opacity: 1;
+  }
+  .channels {
     display: flex;
-    align-items: center;
-    &_img {
-      width: 34px;
-      height: 24px;
-    }
-    &_label {
-      font: normal normal bold 16px/21px Roboto;
-      letter-spacing: 0.96px;
-      color: #4b56c0;
-      opacity: 1;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    &_container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      img {
+        margin-bottom: 10px;
+        height: 50px;
+        width: 50px;
+      }
+      .label {
+        font: normal normal normal 10px/13px Roboto;
+        letter-spacing: 0.6px;
+        color: #6d7580;
+      }
     }
   }
   .details {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 70px;
-    &_stat {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      &_value {
-        font: normal normal bold 20px/26px Roboto;
-        letter-spacing: 1.2px;
-        color: #002046;
-        .left {
-          font: normal normal bold 25px/26px Roboto;
-          letter-spacing: 1.5px;
-          color: #002046;
-        }
-      }
-      &_imgs {
-        display: flex;
-        img {
-          width: 25px;
-          height: 25px;
-          margin: 0 3px;
-          padding: 5px;
-          border-radius: 50%;
-          fill: white;
-        }
-      }
-    }
+    font: normal normal bold 25px/29px Roboto;
+    letter-spacing: 0px;
+    color: #002046;
   }
 }

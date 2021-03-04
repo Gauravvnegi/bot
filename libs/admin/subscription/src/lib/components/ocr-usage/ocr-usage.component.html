@@ -1,31 +1,44 @@
 <div class="container">
-	<div class="title">
-		<div class="title_label">OCR Count</div>
-		<div class="menu-container">
-			<div class="pull-right">
-				<label class="labl" *ngFor="let option of chartTypes">
-					<input name="method" type="radio" [checked]="chart.chartType === option.value" [value]="option.value"
-						(click)="setChartType(option, $event)" />
-					<div class="image">
-						<img [src]="option.url" />
-					</div>
-				</label>
-			</div>
-		</div>
-	</div>
-	<div class="line-chart">
-		<canvas baseChart class="line-chart__canvas" [datasets]="chart.chartData" [labels]="chart.chartLabels"
-			[options]="chart.chartOptions" [colors]="chart.chartColors" [legend]="chart.chartLegend"
-			[chartType]="chart.chartType">
-		</canvas>
-	</div>
-	<div class="details">
-		<div class="details_stat">
-			<div class="details_stat_value">2.5k/1.5k</div>
-			<div class="details_stat_diff">(25%)</div>
-		</div>
-		<div class="details_link">
-			in 30 days
-		</div>
-	</div>
+  <div class="title">
+    <div class="title_label">OCR Count</div>
+    <div class="menu-container">
+      <div class="pull-right">
+        <label class="labl" *ngFor="let option of chartTypes">
+          <input
+            name="method"
+            type="radio"
+            [checked]="chart.chartType === option.value"
+            [value]="option.value"
+			(click)="setChartType(option, $event)"
+			[id]="option.value + '-ocr'"
+          />
+          <div class="image">
+            <img [src]="option.url" />
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="line-chart">
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+  </div>
+  <div class="details">
+    <div class="details_stat">
+      <div class="details_stat_value">2.5k/1.5k</div>
+      <div class="details_stat_diff">(25%)</div>
+    </div>
+    <div class="details_link">
+      in 30 days
+    </div>
+  </div>
 </div>

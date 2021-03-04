@@ -14,10 +14,21 @@
       height: 24px;
     }
     &_label {
-      font: normal normal bold 16px/21px Roboto;
-      letter-spacing: 0.96px;
-      color: #4b56c0;
+      font: normal normal normal 14px/19px Roboto;
+      letter-spacing: 0.28px;
+      color: #484848;
       opacity: 1;
+    }
+    &_button {
+      width: 116px;
+      height: 28px;
+      background: #e8eef5 0% 0% no-repeat padding-box;
+      border-radius: 100px;
+      outline: none;
+      font-size: 12px;
+      letter-spacing: 0.72px;
+      color: #4b56c0;
+      cursor: pointer;
     }
   }
   .details {
@@ -49,6 +60,7 @@
 
 .menu-container {
   display: flex;
+  flex-direction: row-reverse;
 }
 .pull-right {
   display: flex;

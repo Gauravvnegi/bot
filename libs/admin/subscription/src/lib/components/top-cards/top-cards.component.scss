@@ -41,15 +41,16 @@
         border-radius: 100px;
         border: 1px solid #e8eef5;
         outline: none;
+        cursor: pointer;
         // :focus {
         //   background: #4b56c0 0% 0% no-repeat padding-box;
         // 	border: 1px solid #4b56c0;
         //   color: white;
         // }
-        // :hover {
-        // 	background: #4b56c0 0% 0% no-repeat padding-box;
-        //   color: white;
-        // }
+        :hover {
+        	background: #4b56c0 0% 0% no-repeat padding-box;
+          color: white;
+        }
         &_text {
           text-align: center;
           font: normal normal medium 12px/14px Roboto;

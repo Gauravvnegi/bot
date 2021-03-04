@@ -61,7 +61,8 @@ export class UsersUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              max: 14,
+              max: 16,
+              stepSize: 4
             },
           },
         ],

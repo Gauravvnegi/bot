@@ -3,6 +3,9 @@ import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDetailsService } from '../../services/admin-details.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import * as JSZipUtils from 'jszip-utils';
+import * as JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-admin-documents-details',
@@ -269,19 +272,44 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
   }
 
-  // uploadFile(fileData) {
-  //   let formData = new FormData();
-  //   formData.append('file', fileData.file);
-  //   formData.append('doc_type', fileData.documentType);
-  //   formData.append('doc_page', fileData.pageType);
-  //   this._reservationService
-  //     .uploadDocumentFile(
-  //       '17b322c3-fa52-4e3d-9883-34132f6954cd',
-  //       this.selectedGuestGroup.get('id').value,
-  //       formData
-  //     )
-  //     .subscribe((response) => {});
-  // }
+  downloadDocs(documents) {
+    let urls = [];
+    let fileNames = [];
+    const guest = this.detailsData.guestDetails.filter(
+      (data) => data.id === this.selectedGuestId
+    )[0];
+    const name = `${guest.firstName}_${guest.lastName}`;
+    documents.forEach((doc) => {
+      urls.push(doc.frontUrl);
+      fileNames.push(`${name}_${doc.documentType}_frontURL`);
+      if (doc.documentType != 'VISA') {
+        urls.push(doc.backUrl);
+        fileNames.push(`${name}_${doc.documentType}_backURL`);
+      }
+    });
+    const zipFile = new JSZip();
+    let count = 0;
+    urls.forEach((url, i) => {
+      let fileName = urls[i];
+      const index = fileName.lastIndexOf('/');
+      fileName = fileName.slice(index + 1);
+      fileName = decodeURIComponent(fileName);
+      fileName = `${fileNames[i]}_${fileName}`;
+      JSZipUtils.getBinaryContent(url, (err, data) => {
+        if (err) {
+          this._snackBarService.openSnackBarAsText(err);
+          throw err;
+        }
+        zipFile.file(fileName, data, { binary: true });
+        count++;
+        if (count === urls.length) {
+          zipFile.generateAsync({ type: 'blob' }).then((content) => {
+            saveAs(content, `${guest.firstName}_${guest.lastName}.zip`);
+          });
+        }
+      });
+    });
+  }
 
   get guestsFA(): FormArray {
     return this.parentForm.get('guestInfoDetails').get('guests') as FormArray;

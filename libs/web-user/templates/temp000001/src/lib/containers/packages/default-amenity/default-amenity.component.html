@@ -13,13 +13,14 @@
           ></web-user-input>
         </div>
         <div class="wrapper__item">
-          <web-user-date-picker
+          <web-user-input
             [parentForm]="metaDataForm"
-            [name]="'pickupDate'"
-            [settings]="defaultAmenityConfig.pickupDate"
-            [minDate]="minDate"
-          ></web-user-date-picker>
+            [name]="'remarks'"
+            [settings]="defaultAmenityConfig.remark"
+          ></web-user-input>
         </div>
+      </div>
+      <div class="wrapper">
         <div class="wrapper__item">
           <web-user-time-picker
             [parentForm]="metaDataForm"
@@ -28,11 +29,12 @@
           ></web-user-time-picker>
         </div>
         <div class="wrapper__item">
-          <web-user-input
+          <web-user-date-picker
             [parentForm]="metaDataForm"
-            [name]="'remarks'"
-            [settings]="defaultAmenityConfig.remark"
-          ></web-user-input>
+            [name]="'pickupDate'"
+            [settings]="defaultAmenityConfig.pickupDate"
+            [minDate]="minDate"
+          ></web-user-date-picker>
         </div>
       </div>
     </div>

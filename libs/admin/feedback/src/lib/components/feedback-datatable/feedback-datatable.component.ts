@@ -13,6 +13,7 @@ import { GuestDetailService } from 'libs/admin/guest-detail/src/lib/services/gue
 import { GuestTable } from 'libs/admin/guests/src/lib/data-models/guest-table.model';
 import { Subscription, Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
+import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -35,15 +36,47 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   hotelId: string;
 
   cols = [
-    { field: 'firstName', header: 'Guest/ Company' },
-    { field: 'arrivalAndDepartureDate', header: 'Arrival/ Departure' },
-    { field: 'booking.bookingNumber', header: 'Booking No./ Feedback' },
-    { field: 'amountDueAndTotal', header: 'Amount Due/ Total Spend' },
-    { field: 'guestAttributes.transactionUsage', header: 'Transaction Usage' },
-    { field: 'guestAttributes.overAllNps', header: 'Overall NPS' },
+    {
+      field: 'getFullName()',
+      header: 'Guest/ Company',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: 'booking.arrivalTimeStamp',
+      header: 'Arrival/ Departure',
+      isSort: true,
+      sortType: 'date',
+    },
+    {
+      field: 'booking.bookingNumber',
+      header: 'Booking No./ Feedback',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'payment.totalAmount',
+      header: 'Amount Due/ Total Spend',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'guestAttributes.transactionUsage',
+      header: 'Transaction Usage',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: 'guestAttributes.overAllNps',
+      header: 'Overall NPS',
+      isSort: true,
+      sortType: 'number',
+    },
     {
       field: 'guestAttributes.churnProbalilty',
       header: 'Churn Prob/ Prediction',
+      isSort: true,
+      sortType: 'number',
     },
     { field: 'stageAndourney', header: 'Stage/ Channels' },
   ];
@@ -251,21 +284,32 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
+  // customSort(event: SortEvent) {
+  //   event.data.sort((data1, data2) => {
+  //     let value1 = data1[event.field];
+  //     let value2 = data2[event.field];
+  //     let result = null;
+
+  //     if (value1 == null && value2 != null) result = -1;
+  //     else if (value1 != null && value2 == null) result = 1;
+  //     else if (value1 == null && value2 == null) result = 0;
+  //     else if (typeof value1 === 'string' && typeof value2 === 'string') {
+  //       result = value1.localeCompare(value2);
+  //     } else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+  //     return event.order * result;
+  //   });
+  // }
+
   customSort(event: SortEvent) {
-    event.data.sort((data1, data2) => {
-      let value1 = data1[event.field];
-      let value2 = data2[event.field];
-      let result = null;
-
-      if (value1 == null && value2 != null) result = -1;
-      else if (value1 != null && value2 == null) result = 1;
-      else if (value1 == null && value2 == null) result = 0;
-      else if (typeof value1 === 'string' && typeof value2 === 'string') {
-        result = value1.localeCompare(value2);
-      } else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-      return event.order * result;
-    });
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
   }
 
   onSelectedTabFilterChange(event) {

@@ -1,12 +1,14 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { delay } from 'rxjs/operators';
 import { pipe, of, Observable } from 'rxjs';
-import { LazyLoadEvent } from 'primeng/api/public_api';
+import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import * as FileSaver from 'file-saver';
 import { Paginator } from 'primeng/paginator';
+import * as moment from 'moment';
+import { get } from 'lodash';
 interface Import {
   name: string;
   code: string;
@@ -125,7 +127,7 @@ export class BaseDatatableComponent implements OnInit {
   tempFirst;
   tempRowsPerPage;
   isSearchSet = false;
-  @ViewChild('paginator', {static: false}) paginator: Paginator;
+  @ViewChild('paginator', { static: false }) paginator: Paginator;
 
   constructor(private _fb: FormBuilder) {
     this.initTableFG();
@@ -303,6 +305,80 @@ export class BaseDatatableComponent implements OnInit {
     });
   }
 
+  sort(event: SortEvent, type: string) {
+    event.data.sort((data1, data2) => {
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      let result = null;
+
+      if (value1 == null && value2 != null) result = -1;
+      else if (value1 != null && value2 == null) result = 1;
+      else if (value1 == null && value2 == null) result = 0;
+      else if (
+        typeof value1 === 'string' &&
+        typeof value2 === 'string' &&
+        type === 'string'
+      ) {
+        result = value1.localeCompare(value2);
+      } else if (type === 'number') {
+        result =
+          Number(value1) < Number(value2)
+            ? -1
+            : Number(value1) > Number(value2)
+            ? 1
+            : 0;
+      } else if (type === 'date') {
+        result =
+          moment(+value1) < moment(+value2)
+            ? -1
+            : moment(+value1) > moment(+value2)
+            ? 1
+            : 0;
+      }
+
+      return event.order * result;
+    });
+  }
+
+  sortOrder(event, field, data1, data2, col) {
+    const order = event.order;
+    const rawData1 =
+      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+        ? field
+          ? get(data1, field)[
+              event.field.substring(
+                event.field.lastIndexOf('.') + 1,
+                event.field.lastIndexOf('(')
+              )
+            ]()
+          : data1[event.field.substring(0, event.field.lastIndexOf('('))]()
+        : get(data1, field);
+    const rawData2 =
+      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+        ? field
+          ? get(data2, field)[
+              event.field.substring(
+                event.field.lastIndexOf('.') + 1,
+                event.field.lastIndexOf('(')
+              )
+            ]()
+          : data2[event.field.substring(0, event.field.lastIndexOf('('))]()
+        : get(data2, field);
+
+    switch (col.sortType) {
+      case 'number':
+        return order * +rawData1 < +rawData2
+          ? -1
+          : +rawData1 > +rawData2
+          ? 1
+          : 0;
+      case 'date':
+        return order * moment(+rawData1).diff(moment(+rawData2));
+      case 'string':
+        return order * rawData1.localeCompare(rawData2);
+    }
+  }
+
   resetRowSelection() {
     this.selectedRows = [];
     this.onRowUnselect();
@@ -317,7 +393,7 @@ export class BaseDatatableComponent implements OnInit {
     // this.rowsPerPage = this.tempRowsPerPage;
   }
 
-  changePage(pageNo?){
+  changePage(pageNo?) {
     this.paginator.changePage(pageNo || 0);
   }
 }

@@ -13,6 +13,7 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
 import { RequestTable } from '../../data-models/request-datatable.model';
 import { RequestService } from '../../services/request.service';
+import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-request-data-table',
@@ -34,11 +35,31 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   triggerInitialData = false;
 
   cols = [
-    { field: 'rooms.roomNumber', header: 'Rooms' },
-    { field: 'booking.bookingNumber', header: 'Booking No.' },
-    { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
-    { field: 'journey', header: 'Category/Type' },
-    { field: 'remarks', header: 'Message' },
+    {
+      field: 'rooms.roomNumber',
+      header: 'Rooms',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'booking.bookingNumber',
+      header: 'Booking No.',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'guests.primaryGuest.getFullName()',
+      header: 'Guest/company',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: 'journey',
+      header: 'Category/Type',
+      isSort: true,
+      sortType: 'string',
+    },
+    { field: 'remarks', header: 'Message', isSort: true, sortType: 'string' },
   ];
 
   tabFilterItems = [
@@ -124,7 +145,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
           type: 'failed',
         },
       ],
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'In-House',
@@ -151,7 +172,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
           type: 'completed',
         },
       ],
-      lastPage:0
+      lastPage: 0,
     },
   ];
   tabFilterIdx: number = 0;
@@ -341,25 +362,36 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     // }
   }
 
-  updatePaginationForFilterItems(pageEvent){
+  updatePaginationForFilterItems(pageEvent) {
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
+  // customSort(event: SortEvent) {
+  //   event.data.sort((data1, data2) => {
+  //     let value1 = data1[event.field];
+  //     let value2 = data2[event.field];
+  //     let result = null;
+
+  //     if (value1 == null && value2 != null) result = -1;
+  //     else if (value1 != null && value2 == null) result = 1;
+  //     else if (value1 == null && value2 == null) result = 0;
+  //     else if (typeof value1 === 'string' && typeof value2 === 'string') {
+  //       result = value1.localeCompare(value2);
+  //     } else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
+
+  //     return event.order * result;
+  //   });
+  // }
+
   customSort(event: SortEvent) {
-    event.data.sort((data1, data2) => {
-      let value1 = data1[event.field];
-      let value2 = data2[event.field];
-      let result = null;
-
-      if (value1 == null && value2 != null) result = -1;
-      else if (value1 != null && value2 == null) result = 1;
-      else if (value1 == null && value2 == null) result = 0;
-      else if (typeof value1 === 'string' && typeof value2 === 'string') {
-        result = value1.localeCompare(value2);
-      } else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-      return event.order * result;
-    });
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
   }
 
   onSelectedTabFilterChange(event) {

@@ -37,8 +37,8 @@
       (onRowUnselect)="onRowUnselect($event)"
       (sortFunction)="customSort($event)"
       [customSort]="isCustomSort"
-	  (onFilter)="onDataFilter($event)"
-	  *ngIf="!initialLoading; else loader"
+      (onFilter)="onDataFilter($event)"
+      *ngIf="!initialLoading; else loader"
     >
       <ng-template pTemplate="caption">
         <div class="caption__wrapper">
@@ -190,7 +190,7 @@
           >
             <div>
               <p class="table-header-text">{{ col.header }}</p>
-              <p-sortIcon [field]="col.field"></p-sortIcon>
+              <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
             </div>
           </th>
         </tr>
@@ -656,7 +656,8 @@
       </ng-template>
       <!-- *********************************FOOTER******************************* -->
       <ng-template pTemplate="summary">
-        <p-paginator #paginator
+        <p-paginator
+          #paginator
           [rows]="rowsPerPage"
           [totalRecords]="totalRecords"
           [rowsPerPageOptions]="rowsPerPageOptions"

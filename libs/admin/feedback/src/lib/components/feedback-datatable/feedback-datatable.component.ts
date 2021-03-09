@@ -315,14 +315,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
     this.changePage(+this.tabFilterItems[event.index].lastPage);
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: 'DESC',
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
-      },
-      ...this.getSelectedQuickReplyFilters(),
-    ]);
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
@@ -392,15 +384,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
 
     this.changePage(0);
-
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: 'DESC',
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
-      },
-      ...this.getSelectedQuickReplyFilters(),
-    ]);
   }
 
   openDetailPage(event, rowData, tabKey?) {

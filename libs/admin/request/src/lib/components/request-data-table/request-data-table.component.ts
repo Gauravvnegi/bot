@@ -473,15 +473,6 @@ export class RequestDataTableComponent extends BaseDatatableComponent
       ].isSelected;
     }
     this.changePage(0);
-
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: 'DESC',
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
-      },
-      ...this.getSelectedQuickReplyFilters(),
-    ]);
   }
 
   openDetailPage(rowData) {

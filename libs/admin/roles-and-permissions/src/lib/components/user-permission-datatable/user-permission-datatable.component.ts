@@ -9,6 +9,7 @@ import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detai
 import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import * as FileSaver from 'file-saver';
+import { SortEvent } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -28,11 +29,30 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   isTabFilters = false;
 
   cols = [
-    { field: 'firstName', header: 'Name/Mobile & Email' },
-    { field: 'booking.bookingNumber', header: 'Hotel Name & Branch/Job title' },
-    { field: 'guests.primaryGuest.firstName', header: 'Permissions' },
-    { field: 'arrivalAndDepartureDate', header: 'Manages By' },
-    { field: 'package', header: 'Active' },
+    {
+      field: 'getFullName()',
+      header: 'Name/Mobile & Email',
+      sortType: 'string',
+      isSort: true,
+    },
+    {
+      field: 'getBrandAndBranchName()',
+      header: 'Hotel Name & Branch/Job title',
+      sortType: 'string',
+      isSort: true,
+    },
+    {
+      field: 'guests.primaryGuest.firstName',
+      header: 'Permissions',
+      isSort: false,
+    },
+    {
+      field: 'arrivalAndDepartureDate',
+      header: 'Manages By',
+      sortType: 'string',
+      isSort: false,
+    },
+    { field: 'package', header: 'Active', isSort: false },
   ];
 
   $subscription = new Subscription();
@@ -143,20 +163,36 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  updateRolesStatus(event, userData){
+  updateRolesStatus(event, userData) {
     const data = {
       id: userData.userId,
-      status: event.checked
+      status: event.checked,
     };
-    this._managePermissionService.updateRolesStatus(userData.parentId, data)
-    .subscribe(response =>{
-      this._snackbarService.openSnackBarAsText('Status updated successfully',
-      '',
-      { panelClass: 'success' }
+    this._managePermissionService
+      .updateRolesStatus(userData.parentId, data)
+      .subscribe(
+        (response) => {
+          this._snackbarService.openSnackBarAsText(
+            'Status updated successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
+
+  customSort(event: SortEvent) {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
     );
-    }, ({ error }) => {
-      this._snackbarService.openSnackBarAsText(error.message);
-    })
   }
 
   addUser() {

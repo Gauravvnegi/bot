@@ -35,7 +35,7 @@ export class RequestPasswordComponent implements OnInit {
     if (!this.requestPasswordForm.valid) {
       return;
     }
-    const email = this.requestPasswordForm.get('email').value;
+    const email = this.requestPasswordForm.get('email').value.trim();
     this._authService.forgotPassword(email).subscribe(
       (response) => {
         this.isEmailSent = response.status;

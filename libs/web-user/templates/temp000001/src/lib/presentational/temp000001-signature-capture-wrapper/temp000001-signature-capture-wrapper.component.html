@@ -38,19 +38,18 @@
             #signatuePadScribbleComponent
             [settings]="option.settings"
           ></hospitality-bot-signature-pad>
-          <div
+          <!-- <div
             [ngClass]="option.styles.container"
             *ngIf="option.type === 'text'"
           >
             <div [ngClass]="option.styles.signature"></div>
-            <!-- todo remove class from component after gettig the solution -->
             <web-user-input
               [parentForm]="signatureForm"
               class="signature-input"
               [name]="'textSignature'"
               [settings]="option.settings"
             ></web-user-input>
-          </div>
+          </div> -->
           <div
             style="background: white;"
             [ngClass]="option.styles.container"

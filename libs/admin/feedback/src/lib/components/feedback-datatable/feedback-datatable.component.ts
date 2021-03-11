@@ -43,7 +43,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       sortType: 'string',
     },
     {
-      field: 'booking.arrivalTimeStamp',
+      field: 'booking.getArrivalTimeStamp()',
       header: 'Arrival/ Departure',
       isSort: true,
       sortType: 'date',
@@ -285,27 +285,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
-  // customSort(event: SortEvent) {
-  //   event.data.sort((data1, data2) => {
-  //     let value1 = data1[event.field];
-  //     let value2 = data2[event.field];
-  //     let result = null;
-
-  //     if (value1 == null && value2 != null) result = -1;
-  //     else if (value1 != null && value2 == null) result = 1;
-  //     else if (value1 == null && value2 == null) result = 0;
-  //     else if (typeof value1 === 'string' && typeof value2 === 'string') {
-  //       result = value1.localeCompare(value2);
-  //     } else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-  //     return event.order * result;
-  //   });
-  // }
-
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
-      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+      event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
     event.data.sort((data1, data2) =>

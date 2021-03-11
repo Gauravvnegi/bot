@@ -343,7 +343,7 @@ export class BaseDatatableComponent implements OnInit {
   sortOrder(event, field, data1, data2, col) {
     const order = event.order;
     const rawData1 =
-      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+      event.field[event.field.length - 1] === ')'
         ? field
           ? get(data1, field)[
               event.field.substring(
@@ -354,7 +354,7 @@ export class BaseDatatableComponent implements OnInit {
           : data1[event.field.substring(0, event.field.lastIndexOf('('))]()
         : get(data1, field);
     const rawData2 =
-      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+      event.field[event.field.length - 1] === ')'
         ? field
           ? get(data2, field)[
               event.field.substring(

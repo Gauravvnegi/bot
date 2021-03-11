@@ -157,7 +157,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
-      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+      event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
     event.data.sort((data1, data2) =>

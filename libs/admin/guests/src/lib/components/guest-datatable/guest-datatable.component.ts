@@ -44,7 +44,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       sortType: 'string',
     },
     {
-      field: 'booking.arrivalTimeStamp',
+      field: 'booking.getArrivalTimeStamp()',
       header: 'Arrival/ Departure',
       isSort: true,
       sortType: 'date',
@@ -285,6 +285,9 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
+          this.values.forEach((data) =>
+            console.log(data.resords[0].booking.getArrivalTimeStamp())
+          );
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
@@ -332,7 +335,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
-      col.sortType === 'string' && event.field[event.field.length - 1] === ')'
+      event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
     event.data.sort((data1, data2) =>

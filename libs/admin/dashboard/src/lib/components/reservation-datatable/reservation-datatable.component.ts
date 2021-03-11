@@ -318,10 +318,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       //     }),
       //   };
       // });
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        chip.total = countObj[chip.value];
       });
     }
   }
@@ -356,7 +354,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
-          console.log('loadData', this.values);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters

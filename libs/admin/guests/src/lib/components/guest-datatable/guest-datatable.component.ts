@@ -285,7 +285,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
-
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters

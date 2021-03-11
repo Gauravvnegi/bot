@@ -302,10 +302,8 @@ export class RequestDataTableComponent extends BaseDatatableComponent
       //     }),
       //   };
       // });
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        chip.total = countObj[chip.value];
       });
     }
   }
@@ -340,7 +338,8 @@ export class RequestDataTableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new RequestTable().deserialize(data).records;
-
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters
@@ -397,14 +396,6 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
     this.changePage(+this.tabFilterItems[event.index].lastPage);
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: 'DESC',
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
-      },
-      ...this.getSelectedQuickReplyFilters(),
-    ]);
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

@@ -6,7 +6,7 @@ import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { LazyLoadEvent } from 'primeng/api/public_api';
+import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
 import { Categories } from '../../data-models/categoryConfig.model';
 import { CategoriesService } from '../../services/category.service';
@@ -16,11 +16,10 @@ import { CategoriesService } from '../../services/category.service';
   templateUrl: './categories-datatable.component.html',
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './categories-datatable.component.scss'
-  ]
+    './categories-datatable.component.scss',
+  ],
 })
 export class CategoriesDatatableComponent extends BaseDatatableComponent {
-
   tableName = 'Categories';
   isResizableColumns = true;
   isAutoLayout = false;
@@ -33,9 +32,24 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
   hotelId;
 
   cols = [
-    { field: 'name', header: 'Category Name' },
-    { field: 'description', header: 'Description' },
-    { field: 'subPackageNameList', header: 'Packages' },
+    {
+      field: 'name',
+      header: 'Category Name',
+      sortType: 'string',
+      isSort: true,
+    },
+    {
+      field: 'description',
+      header: 'Description',
+      sortType: 'string',
+      isSort: true,
+    },
+    {
+      field: 'subPackageNameList',
+      header: 'Packages',
+      sortType: 'string',
+      isSort: true,
+    },
   ];
 
   constructor(
@@ -45,7 +59,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private router: Router,
+    private router: Router
   ) {
     super(fb);
   }
@@ -73,11 +87,22 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
   }
 
   getHotelId(globalQueries): void {
-    globalQueries.forEach(element => {
+    globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
       }
     });
+  }
+
+  customSort(event: SortEvent) {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
   }
 
   loadInitialData(queries = [], loading = true): void {
@@ -114,13 +139,17 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
     this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
-        [...this.globalQueries,
+        [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+          },
+        ],
         {
-          order: 'DESC',
-        },], {
-        offset: this.first,
-        limit: this.rowsPerPage,
-      }).subscribe(
+          offset: this.first,
+          limit: this.rowsPerPage,
+        }
+      ).subscribe(
         (data) => {
           this.values = new Categories().deserialize(data).records;
 
@@ -158,7 +187,10 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
         (res) => {
           FileSaver.saveAs(
             res,
-            this.tableName.toLowerCase() + '_export_' + new Date().getTime() + '.csv'
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
           );
           this.loading = false;
         },
@@ -182,5 +214,4 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }
-
 }

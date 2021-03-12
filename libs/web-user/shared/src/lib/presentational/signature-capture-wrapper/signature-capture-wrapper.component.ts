@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
@@ -17,7 +26,8 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './signature-capture-wrapper.component.html',
   styleUrls: ['./signature-capture-wrapper.component.scss'],
 })
-export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewInit {
+export class SignatureCaptureWrapperComponent
+  implements OnChanges, AfterViewInit {
   private _dialogRef: MatDialogRef<any>;
   private _settings;
   private $subscription: Subscription = new Subscription();
@@ -50,34 +60,34 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
           clear: 'clearSign',
         },
       },
-      {
-        type: 'text',
-        label: 'Type',
-        settings: {
-          options: [],
-          contentType: 'text',
-          required: false,
-          order: 0,
-          key: '7',
-          value: '',
-          placeholder: 'Enter your name',
-          type: 'input',
-          icon: '',
-        },
-        styles: {
-          container: 'text-container',
-          signature: 'text-signature',
-        },
-      },
+      // {
+      //   type: 'text',
+      //   label: 'Type',
+      //   settings: {
+      //     options: [],
+      //     contentType: 'text',
+      //     required: false,
+      //     order: 0,
+      //     key: '7',
+      //     value: '',
+      //     placeholder: 'Enter your name',
+      //     type: 'input',
+      //     icon: '',
+      //   },
+      //   styles: {
+      //     container: 'text-container',
+      //     signature: 'text-signature',
+      //   },
+      // },
       {
         type: 'file',
         label: 'Upload',
         settings: {
-          fileConfig:{
+          fileConfig: {
             fileIcon: '',
             accept: '.pdf,.img,.png,.jpg,.jpeg',
             maxFileSize: 3145728,
-          }
+          },
         },
         styles: {
           container: 'text-container',
@@ -135,12 +145,11 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
   }
 
   listenForSignatureUpload() {
-    this._utilityService.$signatureUploaded
-      .subscribe((res) => {
-        if (res) {
-          this.onClose();
-        }
-      });
+    this._utilityService.$signatureUploaded.subscribe((res) => {
+      if (res) {
+        this.onClose();
+      }
+    });
   }
 
   ngOnChanges() {
@@ -165,7 +174,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
       textSignature: '',
       imageSignature: '',
     });
-    if(this._dialogRef){
+    if (this._dialogRef) {
       this._buttonService.buttonLoading$.next(this.saveButton);
       this._dialogRef.close();
     }
@@ -181,7 +190,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
           .get(`VALIDATION.SIGNATURE_PAD_PENDING`)
           .subscribe((translatedMsg) => {
             this._snackBarService.openSnackBarAsText(translatedMsg);
-        });
+          });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -197,7 +206,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
           .get(`VALIDATION.SIGNATURE_NAME_PENDING`)
           .subscribe((translatedMsg) => {
             this._snackBarService.openSnackBarAsText(translatedMsg);
-        });
+          });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -208,7 +217,7 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
           .get(`VALIDATION.SIGNATURE_FILE_PENDING`)
           .subscribe((translatedMsg) => {
             this._snackBarService.openSnackBarAsText(translatedMsg);
-        });
+          });
         this._buttonService.buttonLoading$.next(this.saveButton);
         return;
       }
@@ -239,16 +248,20 @@ export class SignatureCaptureWrapperComponent implements OnChanges, AfterViewIni
       lineSize: 10,
     };
     this.$subscription.add(
-      this._signatureService.convertTextToImage(data).subscribe((res) => {
-        this.signature.signatureImg = res['file_download_url'];
-        this.urlToFile(res.file_download_url, res.file_type);
-      }, ({ error }) => this.$subscription.add(
-        this._translateService
-          .get(`MESSAGES.ERROR.${error.type}`)
-          .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg);
-        })
-      ))
+      this._signatureService.convertTextToImage(data).subscribe(
+        (res) => {
+          this.signature.signatureImg = res['file_download_url'];
+          this.urlToFile(res.file_download_url, res.file_type);
+        },
+        ({ error }) =>
+          this.$subscription.add(
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              })
+          )
+      )
     );
   }
 

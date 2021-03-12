@@ -223,8 +223,22 @@ export class Booking implements Deserializable {
     } else {
       return moment(this.expectedArrivalTimeStamp).format('HH:mm');
     }
+  }
 
-    //return moment.utc(this.arrivalTimeStamp).format('H:mm');
+  getArrivalTimeStamp() {
+    if (this.expectedArrivalTimeStamp == 0) {
+      console.log(
+        moment(this.arrivalTimeStamp).format('DD/M/YY HH:mm'),
+        this.bookingNumber
+      );
+      return this.arrivalTimeStamp;
+    } else {
+      console.log(
+        moment(this.expectedArrivalTimeStamp).format('DD/M/YY HH:mm'),
+        this.bookingNumber
+      );
+      return this.expectedArrivalTimeStamp;
+    }
   }
 
   getDepartureTime() {
@@ -233,7 +247,6 @@ export class Booking implements Deserializable {
     } else {
       return moment(this.expectedDepartureTimeStamp).format('HH:mm');
     }
-    //return moment(this.departureTimeStamp).format('HH:mm');
   }
 
   getDaysAndNights() {

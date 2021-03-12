@@ -28,7 +28,7 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <!-- <div class="header--text"> -->
-              <!-- <pre>{{tabFilterItems | json}}</pre> -->
+            <!-- <pre>{{tabFilterItems | json}}</pre> -->
             <p class="heading">{{ tableName }}</p>
             <!-- <p class="selected">2 record(s) are selected</p> -->
             <div class="options">
@@ -101,9 +101,10 @@
                 [ngClass]="{
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
-                  'status-opacity-new status-text-new': quickReplyType.type == 'new',
-                  'status-selected-new': quickReplyType.type == 'new' &&
-                    quickReplyType.isSelected,
+                  'status-opacity-new status-text-new':
+                    quickReplyType.type == 'new',
+                  'status-selected-new':
+                    quickReplyType.type == 'new' && quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
                     quickReplyType.type == 'pending',
                   'status-opacity-initiated status-text-initiated':
@@ -132,7 +133,7 @@
               >
                 {{ quickReplyType.label }}
                 <span *ngIf="quickReplyType.value != 'ALL'"> (</span
-                >{{ quickReplyType.total
+                >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
@@ -180,7 +181,7 @@
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon [field]="col.field"></p-sortIcon>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
         </div>
       </th>
     </tr>

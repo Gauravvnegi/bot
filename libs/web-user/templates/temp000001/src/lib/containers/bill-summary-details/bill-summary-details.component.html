@@ -124,6 +124,19 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row>
+          <td colspan="3">
+            Total Amount
+          </td>
+          <td>
+            {{ billSummaryDetails.currency }}
+            {{ billSummaryDetails.totalAmount }}
+          </td>
+          <td>
+            {{ billSummaryDetails.currency }}
+            {{ billSummaryDetails.paidAmount }}
+          </td>
+        </tr>
       </table>
     </div>
     <div class="total__details" *ngIf="this.staySummaryDetails">
@@ -134,11 +147,11 @@
       <div class="total__details--amounts">
         <div class="total__details--amounts--wrapper">
           <p class="label">Total Amount</p>
-          <b class="amount"
+          <b class="total_debit"
             >{{ billSummaryDetails.currency }}
             {{ billSummaryDetails.totalAmount }}</b
           >
-          <b class="amount"
+          <b class="total_credit"
             >{{ billSummaryDetails.currency }}
             {{ billSummaryDetails.paidAmount }}</b
           >
@@ -152,7 +165,7 @@
         </div> -->
         <div class="total__details--amounts--wrapper">
           <p class="final__label">Due Amount</p>
-          <b class="final__amount"
+          <b class="final_debit"
             >{{ billSummaryDetails.currency }}
             {{ billSummaryDetails.dueAmount }}</b
           >

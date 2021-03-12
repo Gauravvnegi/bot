@@ -18,7 +18,7 @@ export class ManagePermissionService extends ApiService {
     // to be changed when multiple hotels
     // temp function
     return {
-      email: value.email,
+      email: value.email.trim(),
       firstName: value.firstName,
       lastName: value.lastName,
       title: value.jobTitle,
@@ -46,7 +46,7 @@ export class ManagePermissionService extends ApiService {
     // temp function
     return {
       id: value.id,
-      email: value.email,
+      email: value.email.trim(),
       firstName: value.firstName,
       lastName: value.lastName,
       title: value.jobTitle,
@@ -80,8 +80,8 @@ export class ManagePermissionService extends ApiService {
     return this.put(`/api/v1/user/${config.parentUserId}`, config.data);
   }
 
-  updateRolesStatus(userId, statusData){
-    return this.patch(`/api/v1/user/${userId}`,statusData);
+  updateRolesStatus(userId, statusData) {
+    return this.patch(`/api/v1/user/${userId}`, statusData);
   }
 
   getUserDetailsById(userId): Observable<any> {
@@ -96,7 +96,9 @@ export class ManagePermissionService extends ApiService {
 
   exportCSV(config): Observable<any> {
     return this.get(
-      `/api/v1/user/${config.loggedInUserId}/users/export/${config.queryObj ? config.queryObj : ''}`,
+      `/api/v1/user/${config.loggedInUserId}/users/export/${
+        config.queryObj ? config.queryObj : ''
+      }`,
       {
         responseType: 'blob',
       }

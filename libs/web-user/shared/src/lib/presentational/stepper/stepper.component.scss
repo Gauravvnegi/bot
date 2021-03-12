@@ -11,13 +11,13 @@
   border-top-width: 3px;
 }
 
-:host ::ng-deep .mat-step-optional{
-  color: var(--stepper-font-color,$stepper-font-color);
+:host ::ng-deep .mat-step-optional {
+  color: var(--stepper-font-color, $stepper-font-color);
 }
 
-::ng-deep .mat-horizontal-stepper-header{
-  pointer-events: none !important;
-}
+// ::ng-deep .mat-horizontal-stepper-header{
+//   pointer-events: none !important;
+// }
 
 :host ::ng-deep .mat-step-icon-selected > div > mat-icon {
   color: var(
@@ -107,7 +107,6 @@
     padding: $padding-large $padding-medium !important;
   }
 }
-
 
 /// custom-stepper styling implemented from here
 

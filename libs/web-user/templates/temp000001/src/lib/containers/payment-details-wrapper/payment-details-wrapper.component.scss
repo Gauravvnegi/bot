@@ -6,14 +6,12 @@
   }
 }
 
-
-
-:host ::ng-deep .svg-payment > svg{
+:host ::ng-deep .svg-payment > svg {
   height: 48px;
   width: 48px;
   @media only screen and (max-width: $M) {
-   height: 25px;
-   width: 25px;
+    height: 25px;
+    width: 25px;
   }
 }
 
@@ -32,6 +30,7 @@
 :host ::ng-deep .mat-tab-label {
   padding: $padding-large;
   height: auto;
+  width: 50%;
   opacity: 1;
   background-color: #fafafa;
   color: #979797;
@@ -62,6 +61,7 @@
 
 :host ::ng-deep .mat-tab-labels {
   padding-bottom: 10px;
+  width: 100%;
   @media only screen and (max-width: $M) {
     padding-bottom: 0;
   }
@@ -90,7 +90,7 @@
 }
 
 .custom-tab {
-  width: 44.7vw;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,7 +134,7 @@
   }
 }
 
-:host ::ng-deep .full_width{
+:host ::ng-deep .full_width {
   width: 92vw;
   @media only screen and (max-width: $M) {
     width: 85vw;
@@ -153,7 +153,6 @@
   background-color: $primary-blue !important;
 }
 
-
 :host ::ng-deep .method-style :focus {
   border-color: $primary-blue !important;
 }
@@ -165,4 +164,3 @@
 :host ::ng-deep .labl > input:checked + div {
   border: 1px solid $primary-blue !important;
 }
-

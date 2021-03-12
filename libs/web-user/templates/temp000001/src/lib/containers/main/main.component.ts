@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -32,7 +34,9 @@ export class MainComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService,
     private _parentFormService: ParentFormService,
     protected _hotelService: HotelService,
-    protected _templateService: TemplateService
+    protected _templateService: TemplateService,
+    private titleService: Title,
+    @Inject(DOCUMENT) private document: Document
   ) {}
 
   ngOnInit(): void {
@@ -41,12 +45,22 @@ export class MainComponent implements OnInit {
   }
 
   getReservationDetails(): void {
-    this.$subscription.add(
+    //dev.botshot.in/?token=cg1jak6Id623uiUNGb1UOnRgMUTycRJO0kxLT2ceycybrpFaG6hcVNDnzgWxMY3zI5Vog_Ln5puJFItGajebaImQdO2yQF0N6aKjHBQ_AFC6cIAIVLF3UzAnr9-kU3k6aASl32qp0DhLF22IC-DlhA==
+    https: this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
             this._hotelService.hotelConfig = reservationData['hotel'];
+            this.titleService.setTitle(
+              reservationData['hotel']
+                ? reservationData['hotel'].name
+                : 'Web-user'
+            );
+            let favicon = this.document.querySelector('#favicon');
+            favicon['href'] = reservationData['hotel']['favIcon']
+              ? reservationData['hotel']['favIcon'].trim()
+              : 'favicon.ico';
             this.isReservationData = true;
             this.stepperData = this._templateService.templateData[
               this._templateService.templateId
@@ -83,19 +97,16 @@ export class MainComponent implements OnInit {
   }
 
   getHotelDataById() {
-    this._hotelService
-      .getHotelConfigById(this._hotelService.hotelId)
-      .subscribe(
-        (hotel) => {
-          this._hotelService.hotelConfig = hotel;
-          this.router.navigate(['booking-cancel'], {
-            preserveQueryParams: true,
-          });
-          this._templateLoadingService.isTemplateLoading$.next(false);
-
-        },
-        ({ error }) => {}
-      );
+    this._hotelService.getHotelConfigById(this._hotelService.hotelId).subscribe(
+      (hotel) => {
+        this._hotelService.hotelConfig = hotel;
+        this.router.navigate(['booking-cancel'], {
+          preserveQueryParams: true,
+        });
+        this._templateLoadingService.isTemplateLoading$.next(false);
+      },
+      ({ error }) => {}
+    );
   }
 
   registerListeners() {

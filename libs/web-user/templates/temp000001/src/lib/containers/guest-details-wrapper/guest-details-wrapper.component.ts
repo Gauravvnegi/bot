@@ -87,24 +87,17 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
   private performActionIfNotValid(status: any[]) {
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
-
     this._translateService
       .get(`VALIDATION.${status[0].code}`)
       .subscribe((translatedMsg) => {
         this._snackBarService.openSnackBarAsText(translatedMsg);
       });
 
-    if (get(status[0], ['data', 'type']) == 'primary') {
-      this.guestDetailsComp.primaryGuestAccordian.openAll();
-      this.guestDetailsComp.secondaryGuestAccordian &&
-        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
-    } else {
-      this.guestDetailsComp.primaryGuestAccordian.closeAll();
-      this.guestDetailsComp.secondaryGuestAccordian &&
-        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
-      const allPanels = this.guestDetailsComp.secondaryGuestPanelList.toArray();
-      allPanels[status[0].data.index].open();
-    }
+    this.guestDetailsComp.guestAccordian.closeAll();
+    this.guestDetailsComp.guestAccordian &&
+      this.guestDetailsComp.guestAccordian.closeAll();
+    const allPanels = this.guestDetailsComp.guestPanelList.toArray();
+    allPanels[status[0].data.index].open();
     return;
   }
 

@@ -73,25 +73,39 @@ export class GuestDetailsService extends ApiService {
   }
 
   modifyGuestDetails(value) {
-    let data = new GuestDetails();
-    data.primaryGuest = new Guest();
-    data.secondaryGuest = new Array<Guest>();
+    let data = {};
+    data['primaryGuest'] = new Guest();
+    // data.secondaryGuest = new Array<Guest>();
+    data['accompanyGuests'] = new Array<Guest>();
+    data['sharerGuests'] = new Array<Guest>();
+    data['kids'] = new Array<Guest>();
 
-    data.primaryGuest = this.mapGuestDetailValues(
-      data.primaryGuest,
-      value.guestDetail.primaryGuest
-    );
-
-    if (
-      value.guestDetail.secondaryGuest &&
-      value.guestDetail.secondaryGuest.length
-    ) {
-      for (let i = 0; i < value.guestDetail.secondaryGuest.length; i++) {
-        data.secondaryGuest[i] = new Guest();
-        data.secondaryGuest[i] = this.mapGuestDetailValues(
-          data.secondaryGuest[i],
-          value.guestDetail.secondaryGuest[i]
-        );
+    if (value.guestDetail.guests && value.guestDetail.guests.length) {
+      for (let i = 0; i < value.guestDetail.guests.length; i++) {
+        if (value.guestDetail.guests[i].type === 'primary') {
+          data['primaryGuest'] = this.mapGuestDetailValues(
+            data['primaryGuest'],
+            value.guestDetail.guests[i]
+          );
+        } else if (value.guestDetail.guests[i].role === 'accompany') {
+          data['accompanyGuests'][i] = new Guest();
+          data['accompanyGuests'][i] = this.mapGuestDetailValues(
+            data['accompanyGuests'][i],
+            value.guestDetail.guests[i]
+          );
+        } else if (value.guestDetail.guests[i].role === 'kids') {
+          data['kids'][i] = new Guest();
+          data['kids'][i] = this.mapGuestDetailValues(
+            data['kids'][i],
+            value.guestDetail.guests[i]
+          );
+        } else if (value.guestDetail.guests[i].role === 'sharer') {
+          data['sharerGuests'][i] = new Guest();
+          data['sharerGuests'][i] = this.mapGuestDetailValues(
+            data['sharerGuests'][i],
+            value.guestDetail.guests[i]
+          );
+        }
       }
     }
     return data;
@@ -101,23 +115,10 @@ export class GuestDetailsService extends ApiService {
     let guestDetailFG = guestDetailForm.get('guestDetail') as FormGroup;
     let status = [];
     if (guestDetailFG.invalid) {
-      if (guestDetailFG.get('primaryGuest').invalid) {
-        status.push({
-          validity: false,
-          code: 'INVALID_FORM',
-          msg: 'Invalid form. Please fill all the fields.',
-          data: {
-            guestId: guestDetailFG.get('primaryGuest').get('id').value,
-            type: 'primary',
-            index: 0,
-          },
-        });
-      } else if (guestDetailFG.get('secondaryGuest').invalid) {
-        const secondaryGuestFA = guestDetailFG.get(
-          'secondaryGuest'
-        ) as FormArray;
+      if (guestDetailFG.get('guests').invalid) {
+        const guestFA = guestDetailFG.get('guests') as FormArray;
 
-        secondaryGuestFA.controls.forEach((control: FormGroup, index) => {
+        guestFA.controls.forEach((control: FormGroup, index) => {
           if (control.invalid) {
             status.push({
               validity: false,
@@ -126,7 +127,7 @@ export class GuestDetailsService extends ApiService {
               data: {
                 guestId: control.get('id').value,
                 index,
-                type: 'secondary',
+                type: control.get('type').value,
               },
             });
           }

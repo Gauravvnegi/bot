@@ -6,20 +6,45 @@ export interface Deserializable {
 }
 
 export class GuestDetailDS implements Deserializable {
-  primaryGuest: GuestDetail;
-  secondaryGuest: GuestDetail[];
+  guests: Guest[];
 
   deserialize(input: any) {
-    this.primaryGuest = new GuestDetail().deserialize(input.primaryGuest);
-    this.secondaryGuest = new Array<GuestDetail>();
-    input.secondaryGuest.forEach((guest) => {
-      this.secondaryGuest.push(new GuestDetail().deserialize(guest));
+    this.guests = new Array<Guest>();
+    this.guests.push(
+      new Guest().deserialize({
+        ...input.primaryGuest,
+        ...{ type: 'primary', label: 'Primary Guest' },
+      })
+    );
+    input.accompanyGuests.forEach((guest) => {
+      this.guests.push(
+        new Guest().deserialize({
+          ...guest,
+          ...{ type: 'secondary', label: 'Accompany Guest', role: 'accompany' },
+        })
+      );
+    });
+    input.sharerGuests.forEach((guest) => {
+      this.guests.push(
+        new Guest().deserialize({
+          ...guest,
+          ...{ type: 'secondary', label: 'Sharer Guest', role: 'sharer' },
+        })
+      );
+    });
+    input.kids.forEach((guest) => {
+      this.guests.push(
+        new Guest().deserialize({
+          ...guest,
+          ...{ type: 'secondary', label: 'Kids', role: 'kids' },
+        })
+      );
     });
     return this;
   }
 }
 
-export class GuestDetail implements Deserializable {
+export class Guest implements Deserializable {
   id: string;
   firstName: string;
   lastName: string;
@@ -27,6 +52,9 @@ export class GuestDetail implements Deserializable {
   nationality: string;
   email: string;
   nameTitle: string;
+  type: string;
+  label: string;
+  role: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -37,7 +65,10 @@ export class GuestDetail implements Deserializable {
       set({}, 'mobileNumber', get(input, ['contactDetails', 'contactNumber'])),
       set({}, 'nationality', get(input, ['contactDetails', 'cc'])),
       set({}, 'email', get(input, ['contactDetails', 'emailId'])),
-      set({}, 'nameTitle', get(input, ['nameTitle']))
+      set({}, 'nameTitle', get(input, ['nameTitle'])),
+      set({}, 'type', get(input, ['type'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'role', get(input, ['role']))
     );
     return this;
   }

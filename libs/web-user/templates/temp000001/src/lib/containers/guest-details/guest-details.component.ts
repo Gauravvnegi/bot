@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -15,11 +25,10 @@ import { GuestDetailsService } from './../../../../../../shared/src/lib/services
 })
 export class GuestDetailsComponent implements OnInit, OnChanges {
   protected $subscription: Subscription = new Subscription();
-  @ViewChild('primaryGuestAccordian') primaryGuestAccordian: MatAccordion;
-  @ViewChild('secondaryGuestAccordian') secondaryGuestAccordian: MatAccordion;
+  @ViewChild('guestAccordian') guestAccordian: MatAccordion;
 
-  @ViewChildren('secondaryGuestpanel')
-  secondaryGuestPanelList: QueryList<MatExpansionPanel>;
+  @ViewChildren('guestpanel')
+  guestPanelList: QueryList<MatExpansionPanel>;
 
   @Input() guestType: string;
   @Input() parentForm: FormGroup;
@@ -29,8 +38,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   addFGEvent = new EventEmitter();
 
   guestDetailsForm: FormGroup;
-  primaryGuestFieldConfig: GuestDetailsConfigI;
-  secondaryGuestFieldConfig: GuestDetailsConfigI[] = [];
+  guestFieldConfig: GuestDetailsConfigI[] = [];
 
   constructor(
     protected _fb: FormBuilder,
@@ -45,7 +53,6 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.primaryGuestFieldConfig = this.setFieldConfiguration();
     this.registerListeners();
   }
 
@@ -54,7 +61,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
    */
   initGuestDetailForm() {
     this.guestDetailsForm = this._fb.group({
-      primaryGuest: this.getGuestFG(),
+      guests: new FormArray([]),
     });
   }
 
@@ -86,6 +93,9 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       ],
       nameTitle: ['Mr.', [Validators.required]],
       nationality: ['', [Validators.required]],
+      label: [''],
+      type: [''],
+      role: [''],
     });
   }
 
@@ -97,8 +107,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
 
   setGuestDetails() {
     if (this.reservationData) {
-      if (this._guestDetailService.guestDetails.secondaryGuest.length) {
-        this.addSecondaryGuests();
+      if (this._guestDetailService.guestDetails.guests.length) {
+        this.addGuests();
       }
       this.addFGEvent.next({
         name: 'guestDetail',
@@ -109,18 +119,12 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  addSecondaryGuests() {
-    this.guestDetailsForm.addControl('secondaryGuest', new FormArray([]));
-
-    this._guestDetailService.guestDetails.secondaryGuest.forEach(
-      (guestDetail) => {
-        let controlFA = this.guestDetailsForm.get(
-          'secondaryGuest'
-        ) as FormArray;
-        controlFA.push(this.getGuestFG());
-        this.secondaryGuestFieldConfig.push(this.setFieldConfiguration());
-      }
-    );
+  addGuests() {
+    this._guestDetailService.guestDetails.guests.forEach((guestDetail) => {
+      let controlFA = this.guestDetailsForm.get('guests') as FormArray;
+      controlFA.push(this.getGuestFG());
+      this.guestFieldConfig.push(this.setFieldConfiguration());
+    });
   }
 
   registerListeners() {
@@ -135,8 +139,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     );
   }
 
-  get secondaryGuests(): FormArray {
-    return this.guestDetailsForm.get('secondaryGuest') as FormArray;
+  get guests(): FormArray {
+    return this.guestDetailsForm.get('guests') as FormArray;
   }
 
   ngOnDestroy(): void {

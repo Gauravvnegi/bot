@@ -11,52 +11,56 @@ export class GuestDetailDS implements Deserializable {
 
   deserialize(input: any) {
     this.guests = new Array<Guest>();
-    this.guests.push(
-      new Guest().deserialize({
-        ...input.primaryGuest,
-        ...{
-          type: GuestTypes.primary,
-          label: 'Primary Guest',
-          role: GuestRole.undefined,
-        },
-      })
-    );
-    input.sharerGuests.forEach((guest) => {
+    input.primaryGuest &&
       this.guests.push(
         new Guest().deserialize({
-          ...guest,
+          ...input.primaryGuest,
           ...{
-            type: GuestTypes.secondary,
-            label: 'Sharer',
-            role: GuestRole.sharer,
+            type: GuestTypes.primary,
+            label: 'Primary Guest',
+            role: GuestRole.undefined,
           },
         })
       );
-    });
-    input.accompanyGuests.forEach((guest) => {
-      this.guests.push(
-        new Guest().deserialize({
-          ...guest,
-          ...{
-            type: GuestTypes.secondary,
-            label: 'Accompanied / Kids',
-            role: GuestRole.accompany,
-          },
-        })
-      );
-    });
-    input.kids.forEach((guest) => {
-      this.guests.push(
-        new Guest().deserialize({
-          ...guest,
-          ...{
-            type: GuestTypes.secondary,
-            label: 'Accompanied/Kids',
-            role: GuestRole.kids,
-          },
-        })
-      );
-    });
+    input.sharerGuests &&
+      input.sharerGuests.forEach((guest) => {
+        this.guests.push(
+          new Guest().deserialize({
+            ...guest,
+            ...{
+              type: GuestTypes.secondary,
+              label: 'Sharer',
+              role: GuestRole.sharer,
+            },
+          })
+        );
+      });
+    input.accompanyGuests &&
+      input.accompanyGuests.forEach((guest) => {
+        this.guests.push(
+          new Guest().deserialize({
+            ...guest,
+            ...{
+              type: GuestTypes.secondary,
+              label: 'Accompanied / Kids',
+              role: GuestRole.accompany,
+            },
+          })
+        );
+      });
+    input.kids &&
+      input.kids.forEach((guest) => {
+        this.guests.push(
+          new Guest().deserialize({
+            ...guest,
+            ...{
+              type: GuestTypes.secondary,
+              label: 'Accompanied/Kids',
+              role: GuestRole.kids,
+            },
+          })
+        );
+      });
     return this;
   }
 }

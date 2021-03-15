@@ -4,77 +4,131 @@
       <ng-container
         *ngFor="let guestFormGroup of guests.controls; let i = index"
       >
-        <mat-accordion #guestAccordian="matAccordion" [multi]="true">
-          <mat-expansion-panel #guestpanel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="container__title">{{
-                  guestFormGroup.get('label').value
-                }}</span>
-                <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
-                  >add</mat-icon
-                >
-                <mat-icon class="expand-icon" *ngIf="guestpanel.expanded"
-                  >remove</mat-icon
-                >
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="container__body">
-              <div class="container__body--info">
-                <div class="container__body--info-primary">
-                  <div class="container__body--info-primary-prefix">
-                    <web-user-select-box
-                      [parentForm]="guestFormGroup"
-                      [name]="'nameTitle'"
-                      [settings]="guestFieldConfig[i].salutation"
-                    ></web-user-select-box>
+        <ng-container
+          *ngIf="guestFormGroup.get('type').value === 'primary'; else secondary"
+        >
+          <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+            <mat-expansion-panel #guestpanel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="container__title">{{
+                    guestFormGroup.get('label').value
+                  }}</span>
+                  <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
+                    >add</mat-icon
+                  >
+                  <mat-icon class="expand-icon" *ngIf="guestpanel.expanded"
+                    >remove</mat-icon
+                  >
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container__body">
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nameTitle'"
+                        [settings]="guestFieldConfig[i].salutation"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'firstName'"
+                        [settings]="guestFieldConfig[i].firstName"
+                      ></web-user-input>
+                    </div>
                   </div>
-                  <div class="container__body--info-primary-main">
+                  <div class="container__body--info-secondary">
                     <web-user-input
                       [parentForm]="guestFormGroup"
-                      [name]="'firstName'"
-                      [settings]="guestFieldConfig[i].firstName"
+                      [name]="'lastName'"
+                      [settings]="guestFieldConfig[i].lastName"
                     ></web-user-input>
                   </div>
                 </div>
-                <div class="container__body--info-secondary">
-                  <web-user-input
-                    [parentForm]="guestFormGroup"
-                    [name]="'lastName'"
-                    [settings]="guestFieldConfig[i].lastName"
-                  ></web-user-input>
-                </div>
-              </div>
-              <div class="container__body--info">
-                <div class="container__body--info-primary">
-                  <div class="container__body--info-primary-prefix">
-                    <web-user-select-box
-                      [parentForm]="guestFormGroup"
-                      [name]="'nationality'"
-                      [settings]="guestFieldConfig[i].country"
-                    ></web-user-select-box>
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nationality'"
+                        [settings]="guestFieldConfig[i].country"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'mobileNumber'"
+                        [settings]="guestFieldConfig[i].phone"
+                      >
+                      </web-user-input>
+                    </div>
                   </div>
-                  <div class="container__body--info-primary-main">
+                  <div class="container__body--info-secondary">
                     <web-user-input
                       [parentForm]="guestFormGroup"
-                      [name]="'mobileNumber'"
-                      [settings]="guestFieldConfig[i].phone"
+                      [name]="'email'"
+                      [settings]="guestFieldConfig[i].email"
                     >
                     </web-user-input>
                   </div>
                 </div>
-                <div class="container__body--info-secondary">
-                  <web-user-input
-                    [parentForm]="guestFormGroup"
-                    [name]="'email'"
-                    [settings]="guestFieldConfig[i].email"
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+        <ng-template #secondary>
+          <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+            <mat-expansion-panel #guestpanel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="container__title">{{
+                    guestFormGroup.get('label').value
+                  }}</span>
+                  <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
+                    >add</mat-icon
                   >
-                  </web-user-input>
+                  <mat-icon class="expand-icon" *ngIf="guestpanel.expanded"
+                    >remove</mat-icon
+                  >
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container__body">
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nameTitle'"
+                        [settings]="guestFieldConfig[i].salutation"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'firstName'"
+                        [settings]="guestFieldConfig[i].firstName"
+                      ></web-user-input>
+                    </div>
+                  </div>
+                  <div class="container__body--info-secondary">
+                    <web-user-input
+                      [parentForm]="guestFormGroup"
+                      [name]="'lastName'"
+                      [settings]="guestFieldConfig[i].lastName"
+                    ></web-user-input>
+                  </div>
+                  <ng-container [ngSwitch]="guestFormGroup.get('role').value">
+                    <ng-container *ngSwitchCase="'accompany'"> </ng-container>
+                    <ng-container *ngSwitchCase="'kids'"> </ng-container>
+                  </ng-container>
                 </div>
               </div>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-template>
       </ng-container>
     </ng-container>
   </form>

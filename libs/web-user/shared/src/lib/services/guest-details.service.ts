@@ -12,6 +12,7 @@ import {
   CountryCodes,
   Country,
 } from '../../../../shared/src/lib/data-models/countryCode';
+import { GuestRole, GuestTypes } from '../constants/guest';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   GuestDetailDS,
@@ -82,24 +83,24 @@ export class GuestDetailsService extends ApiService {
 
     if (value.guestDetail.guests && value.guestDetail.guests.length) {
       for (let i = 0; i < value.guestDetail.guests.length; i++) {
-        if (value.guestDetail.guests[i].type === 'primary') {
+        if (value.guestDetail.guests[i].type === GuestTypes.primary) {
           data['primaryGuest'] = this.mapGuestDetailValues(
             data['primaryGuest'],
             value.guestDetail.guests[i]
           );
-        } else if (value.guestDetail.guests[i].role === 'accompany') {
+        } else if (value.guestDetail.guests[i].role === GuestRole.accompany) {
           data['accompanyGuests'][i] = new Guest();
           data['accompanyGuests'][i] = this.mapGuestDetailValues(
             data['accompanyGuests'][i],
             value.guestDetail.guests[i]
           );
-        } else if (value.guestDetail.guests[i].role === 'kids') {
+        } else if (value.guestDetail.guests[i].role === GuestRole.kids) {
           data['kids'][i] = new Guest();
           data['kids'][i] = this.mapGuestDetailValues(
             data['kids'][i],
             value.guestDetail.guests[i]
           );
-        } else if (value.guestDetail.guests[i].role === 'sharer') {
+        } else if (value.guestDetail.guests[i].role === GuestRole.sharer) {
           data['sharerGuests'][i] = new Guest();
           data['sharerGuests'][i] = this.mapGuestDetailValues(
             data['sharerGuests'][i],

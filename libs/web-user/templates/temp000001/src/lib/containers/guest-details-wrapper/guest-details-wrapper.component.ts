@@ -4,7 +4,6 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { get } from 'lodash';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { GuestDetailsComponent } from '../guest-details/guest-details.component';
 import { SnackBarService } from 'libs/shared/material/src';

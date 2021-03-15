@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { GuestRole, GuestTypes } from '../constants/guest';
 import { FieldSchema } from './fieldSchema.model';
 
 export interface Deserializable {
@@ -13,14 +14,22 @@ export class GuestDetailDS implements Deserializable {
     this.guests.push(
       new Guest().deserialize({
         ...input.primaryGuest,
-        ...{ type: 'primary', label: 'Primary Guest' },
+        ...{
+          type: GuestTypes.primary,
+          label: 'Primary Guest',
+          role: GuestRole.undefined,
+        },
       })
     );
     input.accompanyGuests.forEach((guest) => {
       this.guests.push(
         new Guest().deserialize({
           ...guest,
-          ...{ type: 'secondary', label: 'Accompany Guest', role: 'accompany' },
+          ...{
+            type: GuestTypes.secondary,
+            label: 'Accompany Guest',
+            role: GuestRole.accompany,
+          },
         })
       );
     });
@@ -28,7 +37,11 @@ export class GuestDetailDS implements Deserializable {
       this.guests.push(
         new Guest().deserialize({
           ...guest,
-          ...{ type: 'secondary', label: 'Sharer Guest', role: 'sharer' },
+          ...{
+            type: GuestTypes.secondary,
+            label: 'Sharer Guest',
+            role: GuestRole.sharer,
+          },
         })
       );
     });
@@ -36,7 +49,11 @@ export class GuestDetailDS implements Deserializable {
       this.guests.push(
         new Guest().deserialize({
           ...guest,
-          ...{ type: 'secondary', label: 'Kids', role: 'kids' },
+          ...{
+            type: GuestTypes.secondary,
+            label: 'Kids',
+            role: GuestRole.kids,
+          },
         })
       );
     });

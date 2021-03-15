@@ -86,7 +86,8 @@ export class Guest implements Deserializable {
       set({}, 'nameTitle', get(input, ['nameTitle'])),
       set({}, 'type', get(input, ['type'])),
       set({}, 'label', get(input, ['label'])),
-      set({}, 'role', get(input, ['role']))
+      set({}, 'role', get(input, ['role'])),
+      set({}, 'age', get(input, ['age']))
     );
     return this;
   }

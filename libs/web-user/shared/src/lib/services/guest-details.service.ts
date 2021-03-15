@@ -13,6 +13,7 @@ import {
   Country,
 } from '../../../../shared/src/lib/data-models/countryCode';
 import { GuestRole, GuestTypes } from '../constants/guest';
+import { AgeList } from '../data-models/Age';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   GuestDetailDS,
@@ -68,6 +69,14 @@ export class GuestDetailsService extends ApiService {
         config.hotelNationality,
       ]),
       optionsClosed: new Country().getDialCodeList([config.hotelNationality]),
+    });
+
+    guestDetailsFieldSchema['age'] = new FieldSchema().deserialize({
+      label: 'Age',
+      disable: false,
+      isOptionsOpenedChanged: true,
+      optionsOpened: AgeList,
+      optionsClosed: AgeList,
     });
 
     return guestDetailsFieldSchema as GuestDetailsConfigI;
@@ -147,10 +156,17 @@ export class GuestDetailsService extends ApiService {
     data.firstName = value.firstName;
     data.lastName = value.lastName;
     data.nameTitle = value.nameTitle;
-    data.contactDetails = new ContactDetails();
-    data.contactDetails.cc = value.nationality;
-    data.contactDetails.emailId = value.email;
-    data.contactDetails.contactNumber = value.mobileNumber;
+    if (value.type === GuestTypes.primary) {
+      data.contactDetails = new ContactDetails();
+      data.contactDetails.cc = value.nationality;
+      data.contactDetails.emailId = value.email;
+      data.contactDetails.contactNumber = value.mobileNumber;
+    } else if (
+      value.role === GuestRole.kids ||
+      value.role === GuestRole.accompany
+    ) {
+      data.age = value.age;
+    }
     return data;
   }
 

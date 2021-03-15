@@ -120,11 +120,31 @@
                       [settings]="guestFieldConfig[i].lastName"
                     ></web-user-input>
                   </div>
-                  <ng-container [ngSwitch]="guestFormGroup.get('role').value">
-                    <ng-container *ngSwitchCase="'accompany'"> </ng-container>
-                    <ng-container *ngSwitchCase="'kids'"> </ng-container>
-                  </ng-container>
                 </div>
+                <ng-container [ngSwitch]="guestFormGroup.get('role').value">
+                  <ng-container *ngSwitchCase="'accompany'">
+                    <div class="container__body--info-primary">
+                      <div class="container__body--info-primary-prefix">
+                        <web-user-select-box
+                          [parentForm]="guestFormGroup"
+                          [name]="'age'"
+                          [settings]="guestFieldConfig[i].age"
+                        ></web-user-select-box>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'kids'">
+                    <div class="container__body--info-primary">
+                      <div class="container__body--info-primary-prefix">
+                        <web-user-select-box
+                          [parentForm]="guestFormGroup"
+                          [name]="'age'"
+                          [settings]="guestFieldConfig[i].age"
+                        ></web-user-select-box>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
               </div>
             </mat-expansion-panel>
           </mat-accordion>

@@ -11,6 +11,10 @@ import {
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
+import {
+  GuestRole,
+  GuestTypes,
+} from 'libs/web-user/shared/src/lib/constants/guest';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Subscription } from 'rxjs';
@@ -65,38 +69,57 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     });
   }
 
-  getGuestFG(): FormGroup {
-    return this._fb.group({
-      id: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', []],
-      mobileNumber: [
-        '',
-        [
-          Validators.required,
-          customPatternValid({
-            pattern: Regex.PHONE_REGEX,
-            msg: 'Please enter a valid mobile',
-          }),
-          Validators.minLength(10),
-        ],
-      ],
-      email: [
-        '',
-        [
-          Validators.required,
-          customPatternValid({
-            pattern: Regex.EMAIL_REGEX,
-            msg: 'Please enter a valid email',
-          }),
-        ],
-      ],
-      nameTitle: ['Mr.', [Validators.required]],
-      nationality: ['', [Validators.required]],
-      label: [''],
-      type: [''],
-      role: [''],
-    });
+  defaultFG = {
+    id: ['', [Validators.required]],
+    nameTitle: ['Mr.', [Validators.required]],
+    firstName: ['', [Validators.required]],
+    lastName: ['', []],
+    label: [''],
+    type: [''],
+    role: [''],
+  };
+
+  getGuestFG(type: string, role: string): FormGroup {
+    let fg;
+    if (type === GuestTypes.primary) {
+      fg = {
+        ...this.defaultFG,
+        ...{
+          mobileNumber: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: Regex.PHONE_REGEX,
+                msg: 'Please enter a valid mobile',
+              }),
+              Validators.minLength(10),
+            ],
+          ],
+          email: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: Regex.EMAIL_REGEX,
+                msg: 'Please enter a valid email',
+              }),
+            ],
+          ],
+          nationality: ['', [Validators.required]],
+        },
+      };
+    } else if (role === GuestRole.accompany || role === GuestRole.kids) {
+      fg = {
+        ...this.defaultFG,
+        ...{
+          age: ['', [Validators.required]],
+        },
+      };
+    } else {
+      fg = this.defaultFG;
+    }
+    return this._fb.group(fg);
   }
 
   setFieldConfiguration() {
@@ -122,7 +145,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   addGuests() {
     this._guestDetailService.guestDetails.guests.forEach((guestDetail) => {
       let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-      controlFA.push(this.getGuestFG());
+      controlFA.push(this.getGuestFG(guestDetail.type, guestDetail.role));
       this.guestFieldConfig.push(this.setFieldConfiguration());
     });
   }

@@ -21,26 +21,26 @@ export class GuestDetailDS implements Deserializable {
         },
       })
     );
-    input.accompanyGuests.forEach((guest) => {
-      this.guests.push(
-        new Guest().deserialize({
-          ...guest,
-          ...{
-            type: GuestTypes.secondary,
-            label: 'Accompany Guest',
-            role: GuestRole.accompany,
-          },
-        })
-      );
-    });
     input.sharerGuests.forEach((guest) => {
       this.guests.push(
         new Guest().deserialize({
           ...guest,
           ...{
             type: GuestTypes.secondary,
-            label: 'Sharer Guest',
+            label: 'Sharer',
             role: GuestRole.sharer,
+          },
+        })
+      );
+    });
+    input.accompanyGuests.forEach((guest) => {
+      this.guests.push(
+        new Guest().deserialize({
+          ...guest,
+          ...{
+            type: GuestTypes.secondary,
+            label: 'Accompanied / Kids',
+            role: GuestRole.accompany,
           },
         })
       );
@@ -51,7 +51,7 @@ export class GuestDetailDS implements Deserializable {
           ...guest,
           ...{
             type: GuestTypes.secondary,
-            label: 'Kids',
+            label: 'Accompanied/Kids',
             role: GuestRole.kids,
           },
         })
@@ -72,6 +72,7 @@ export class Guest implements Deserializable {
   type: string;
   label: string;
   role: string;
+  age: number;
 
   deserialize(input: any) {
     Object.assign(

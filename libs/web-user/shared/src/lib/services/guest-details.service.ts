@@ -98,22 +98,16 @@ export class GuestDetailsService extends ApiService {
             value.guestDetail.guests[i]
           );
         } else if (value.guestDetail.guests[i].role === GuestRole.accompany) {
-          data['accompanyGuests'][i] = new Guest();
-          data['accompanyGuests'][i] = this.mapGuestDetailValues(
-            data['accompanyGuests'][i],
-            value.guestDetail.guests[i]
+          data['accompanyGuests'].push(
+            this.mapGuestDetailValues({}, value.guestDetail.guests[i])
           );
         } else if (value.guestDetail.guests[i].role === GuestRole.kids) {
-          data['kids'][i] = new Guest();
-          data['kids'][i] = this.mapGuestDetailValues(
-            data['kids'][i],
-            value.guestDetail.guests[i]
+          data['kids'].push(
+            this.mapGuestDetailValues({}, value.guestDetail.guests[i])
           );
         } else if (value.guestDetail.guests[i].role === GuestRole.sharer) {
-          data['sharerGuests'][i] = new Guest();
-          data['sharerGuests'][i] = this.mapGuestDetailValues(
-            data['sharerGuests'][i],
-            value.guestDetail.guests[i]
+          data['sharerGuests'].push(
+            this.mapGuestDetailValues({}, value.guestDetail.guests[i])
           );
         }
       }

@@ -57,30 +57,30 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
     const formValue = this.parentForm.getRawValue();
     const data = this._guestDetailService.modifyGuestDetails(formValue);
 
-    // this.$subscription.add(
-    //   this._guestDetailService
-    //     .updateGuestDetails(this._reservationService.reservationId, data)
-    //     .subscribe(
-    //       (response) => {
-    //         this._guestDetailService.updateGuestDetailDS(response.guestDetails);
-    //         this._buttonService.buttonLoading$.next(
-    //           this.buttonRefs['nextButton']
-    //         );
-    //         this._stepperService.setIndex('next');
-    //       },
-    //       ({ error }) => {
-    //         this._translateService
-    //           .get(`MESSAGES.ERROR.${error.type}`)
-    //           .subscribe((translatedMsg) => {
-    //             this._snackBarService.openSnackBarAsText(translatedMsg);
-    //           });
-    //         //   this._snackBarService.openSnackBarAsText(error.message);
-    //         this._buttonService.buttonLoading$.next(
-    //           this.buttonRefs['nextButton']
-    //         );
-    //       }
-    //     )
-    // );
+    this.$subscription.add(
+      this._guestDetailService
+        .updateGuestDetails(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            this._guestDetailService.updateGuestDetailDS(response.guestDetails);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            //   this._snackBarService.openSnackBarAsText(error.message);
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+          }
+        )
+    );
   }
 
   private performActionIfNotValid(status: any[]) {

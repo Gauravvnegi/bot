@@ -18,6 +18,7 @@ import { DocumentDetailsConfigI } from './../../../../../../shared/src/lib/data-
 import { DocumentDetailsService } from './../../../../../../shared/src/lib/services/document-details.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { GuestRole } from 'libs/web-user/shared/src/lib/constants/guest';
 
 @Component({
   selector: 'hospitality-bot-documents-details',
@@ -341,13 +342,18 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       isPrimary: ['', [Validators.required]],
       isInternational: ['', Validators.required],
       documents: this._fb.array([]),
+      label: [''],
+      role: [''],
+      Optional: [false],
     });
   }
 
   setDocumentDetails() {
     if (this.reservationData) {
       this._documentDetailService.documentDetailDS.guests.forEach((guest) => {
-        this.addGuestFG();
+        guest.role === GuestRole.kids || guest.role === GuestRole.accompany
+          ? this.addOptionalGuestFG()
+          : this.addGuestFG();
       });
 
       this.addFGEvent.next({
@@ -363,6 +369,22 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   addGuestFG() {
     this.guestsFA.push(this.getDocumentFG());
+  }
+
+  addOptionalGuestFG() {
+    this.guestsFA.push(
+      this._fb.group({
+        id: [''],
+        nationality: [''],
+        selectedDocumentType: [''],
+        isPrimary: [''],
+        isInternational: [''],
+        documents: this._fb.array([]),
+        label: [''],
+        role: [''],
+        Optional: [true],
+      })
+    );
   }
 
   setFieldConfiguration(dropDownDocumentList?, documentsArray?) {

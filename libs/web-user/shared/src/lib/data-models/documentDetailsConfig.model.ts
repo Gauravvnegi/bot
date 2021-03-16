@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { GuestRole } from '../constants/guest';
 import { FieldSchema } from './fieldSchema.model';
 
 export interface Deserializable {
@@ -11,15 +12,51 @@ export class DocumentDetailDS implements Deserializable {
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
 
-    input.guestDetails.primaryGuest['isPrimary'] = true;
-    input.guestDetails.secondaryGuest.forEach((secondaryGuest) => {
-      secondaryGuest['isPrimary'] = false;
+    // input.guestDetails.primaryGuest['isPrimary'] = true;
+    // input.guestDetails.sharerGuests.forEach((secondaryGuest) => {
+    //   secondaryGuest['isPrimary'] = false;
+    // });
+
+    let guestData = [];
+
+    guestData.push({
+      ...input.guestDetails.primaryGuest,
+      ...{
+        role: GuestRole.undefined,
+        label: 'Primary Guest',
+        isPrimary: true,
+      },
     });
 
-    let guestData = [
-      input.guestDetails.primaryGuest,
-      ...input.guestDetails.secondaryGuest,
-    ];
+    input.guestDetails.sharerGuests &&
+      input.guestDetails.sharerGuests.forEach((guest) => {
+        guestData.push({
+          ...guest,
+          role: GuestRole.sharer,
+          label: 'Sharer',
+          isPrimary: false,
+        });
+      });
+
+    input.guestDetails.accompanyGuests &&
+      input.guestDetails.accompanyGuests.forEach((guest) => {
+        guestData.push({
+          ...guest,
+          role: GuestRole.accompany,
+          label: 'Accompany / Kids (Optional)',
+          isPrimary: false,
+        });
+      });
+
+    input.guestDetails.kids &&
+      input.guestDetails.kids.forEach((guest) => {
+        guestData.push({
+          ...guest,
+          role: GuestRole.kids,
+          label: 'Accompany / Kids (Optional)',
+          isPrimary: false,
+        });
+      });
 
     this.guests = new Array<DocumentDetail>();
 
@@ -38,9 +75,16 @@ export class DocumentDetail implements Deserializable {
   documents = new Array<Document>();
   isInternational: boolean;
   isPrimary: boolean;
+  label: string;
   id: string;
+  role: string;
 
   deserialize(input: any, hotelNationality: string) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'role', get(input, ['role']))
+    );
     this.nationality = input.nationality || hotelNationality;
     this.isInternational = this.nationality !== hotelNationality;
     this.id = input.id;

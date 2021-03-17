@@ -8,7 +8,7 @@
           *ngIf="guestFormGroup.get('type').value === 'primary'; else secondary"
         >
           <mat-accordion #guestAccordian="matAccordion" [multi]="true">
-            <mat-expansion-panel #guestpanel>
+            <mat-expansion-panel #guestpanel [expanded]="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <span class="container__title">{{

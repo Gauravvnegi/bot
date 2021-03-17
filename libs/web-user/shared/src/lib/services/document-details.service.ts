@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { isEmpty } from 'lodash';
 import { Observable, Subject } from 'rxjs';
+import { GuestRole } from '../constants/guest';
 import {
   DocumentDetailDS,
   DocumentDetailsConfigI,
@@ -106,11 +107,27 @@ export class DocumentDetailsService extends ApiService {
           id: guest.id,
           documents: guest.documents,
         };
-      } else {
-        if (!modifiedValue['secondaryGuest']) {
-          modifiedValue['secondaryGuest'] = [];
+      } else if (guest.role === GuestRole.accompany) {
+        if (!modifiedValue['accompanyGuests']) {
+          modifiedValue['accompanyGuests'] = [];
         }
-        modifiedValue['secondaryGuest'].push({
+        modifiedValue['accompanyGuests'].push({
+          id: guest.id,
+          documents: guest.documents,
+        });
+      } else if (guest.role === GuestRole.kids) {
+        if (!modifiedValue['kids']) {
+          modifiedValue['kids'] = [];
+        }
+        modifiedValue['kids'].push({
+          id: guest.id,
+          documents: guest.documents,
+        });
+      } else if (guest.role === GuestRole.sharer) {
+        if (!modifiedValue['sharerGuests']) {
+          modifiedValue['sharerGuests'] = [];
+        }
+        modifiedValue['sharerGuests'].push({
           id: guest.id,
           documents: guest.documents,
         });

@@ -77,7 +77,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       [
         Validators.required,
         customPatternValid({
-          pattern: '^[A-Za-z]*$',
+          pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
           msg: 'Spaces are not allowed',
         }),
       ],

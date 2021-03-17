@@ -72,7 +72,16 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   defaultFG = {
     id: ['', [Validators.required]],
     nameTitle: ['Mr.', [Validators.required]],
-    firstName: ['', [Validators.required]],
+    firstName: [
+      '',
+      [
+        Validators.required,
+        customPatternValid({
+          pattern: '^[A-Za-z]*$',
+          msg: 'Spaces are not allowed',
+        }),
+      ],
+    ],
     lastName: ['', []],
     label: [''],
     type: [''],
@@ -113,7 +122,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       fg = {
         ...this.defaultFG,
         ...{
-          age: ['', [Validators.required]],
+          age: ['', [Validators.required, Validators.min(1)]],
         },
       };
     } else {

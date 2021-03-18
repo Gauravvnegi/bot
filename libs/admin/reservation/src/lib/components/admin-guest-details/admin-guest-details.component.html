@@ -18,7 +18,11 @@
       </ng-container>
     </div>
     <form [formGroup]="guestDetailsForm">
-      <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+      <mat-accordion
+        #guestAccordian="matAccordion"
+        [multi]="true"
+        *ngIf="filteredGuestForm('').length"
+      >
         <mat-expansion-panel #guestpanel [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -72,7 +76,11 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+      <mat-accordion
+        #guestAccordian="matAccordion"
+        [multi]="true"
+        *ngIf="filteredGuestForm('sharer').length > 0"
+      >
         <mat-expansion-panel #sharerGuestpanel [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -126,7 +134,11 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+      <mat-accordion
+        #guestAccordian="matAccordion"
+        [multi]="true"
+        *ngIf="filteredGuestForm('accompany', 'kids').length > 0"
+      >
         <mat-expansion-panel #accompanyGuestAccordian [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>

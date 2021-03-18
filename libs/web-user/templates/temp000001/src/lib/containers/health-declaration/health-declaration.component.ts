@@ -47,7 +47,7 @@ const components = {
 })
 export class HealthDeclarationComponent implements OnInit {
   private $subscription: Subscription = new Subscription();
-  protected healthComponents=components;
+  protected healthComponents = components;
   @Output()
   addFGEvent = new EventEmitter();
 
@@ -65,7 +65,7 @@ export class HealthDeclarationComponent implements OnInit {
   containerStack = [];
   settings = [];
   keysToBeUpdated = [];
-  signature: string = '';
+  signature: string;
 
   constructor(
     protected _resolver: ComponentFactoryResolver,
@@ -75,7 +75,7 @@ export class HealthDeclarationComponent implements OnInit {
     protected _reservationService: ReservationService,
     protected _hotelService: HotelService,
     protected _translateService: TranslateService,
-    protected _snackBarService:SnackBarService,
+    protected _snackBarService: SnackBarService,
     protected _utilityService: UtilityService
   ) {}
 

@@ -54,7 +54,7 @@ export class AdminGuestDetailsComponent implements OnInit {
 
     this.guestDetailsForm
       .get('guests')
-      .patchValue(this.detailsData.guestDetails);
+      .patchValue(this.detailsData.guestDetails.guests);
     this.addFGEvent.next({
       name: 'guestInfoDetails',
       value: this.guestDetailsForm,
@@ -65,7 +65,7 @@ export class AdminGuestDetailsComponent implements OnInit {
 
   initGuestDetailsForm() {
     const guestFA = this.guestDetailsForm.get('guests') as FormArray;
-    this.detailsData.guestDetails.forEach((guest) => {
+    this.detailsData.guestDetails.guests.forEach((guest) => {
       guestFA.push(this.getGuestFG());
     });
 
@@ -91,7 +91,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       adultsCount: [''],
       roomNumber: [''],
       special_comments: [''],
-      checkin_comments:['']
+      checkin_comments: [''],
     });
   }
 

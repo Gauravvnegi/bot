@@ -32,6 +32,7 @@ export class GuestDetailsService extends ApiService {
 
   setFieldConfigForGuestDetails(config) {
     let guestDetailsFieldSchema = {};
+    let ageList = AgeList;
 
     guestDetailsFieldSchema['salutation'] = new FieldSchema().deserialize({
       label: ' ',
@@ -74,9 +75,8 @@ export class GuestDetailsService extends ApiService {
     guestDetailsFieldSchema['age'] = new FieldSchema().deserialize({
       label: 'Age',
       disable: false,
-      isOptionsOpenedChanged: true,
-      optionsOpened: AgeList,
-      optionsClosed: AgeList,
+      isOptionsOpenedChanged: false,
+      options: ageList,
     });
 
     return guestDetailsFieldSchema as GuestDetailsConfigI;

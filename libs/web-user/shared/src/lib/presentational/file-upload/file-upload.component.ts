@@ -56,9 +56,10 @@ export class FileUploadComponent extends BaseComponent {
             index: this.index,
             imageUrl: this.url,
           };
-          this.documentData.emit(data);
+          this.documentData.emit({ ...data, ...{ status: true } });
         };
       } else {
+        this.documentData.emit({ status: false });
         this.isValidDocument = false;
       }
     }

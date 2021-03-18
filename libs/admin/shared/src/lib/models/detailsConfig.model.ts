@@ -24,22 +24,6 @@ export class Details implements Deserializable {
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
 
-    // input.guestDetails.primaryGuest['isPrimary'] = true;
-    // input.guestDetails.secondaryGuest.forEach((secondaryGuest) => {
-    //   secondaryGuest['isPrimary'] = false;
-    // });
-
-    // let guestData = [
-    //   input.guestDetails.primaryGuest,
-    //   ...input.guestDetails.secondaryGuest,
-    // ];
-
-    // this.guestDetails = new Array<GuestDetailsConfig>();
-    // guestData.forEach((guest) => {
-    //   this.guestDetails.push(
-    //     new GuestDetailsConfig().deserialize(guest, hotelNationality)
-    //   );
-    // });
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
       hotelNationality
@@ -236,6 +220,7 @@ export class GuestDetailsConfig implements Deserializable {
   regcardUrl;
   regcardStatus;
   role: string;
+  label: string;
 
   deserialize(input: any, hotelNationality) {
     const contactDetails = new ContactDetailsConfig().deserialize(
@@ -260,6 +245,7 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'status', get(input.statusMessage, ['status'])),
       set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set({}, 'role', get(input, ['role'])),
+      set({}, 'label', get(input, ['label'])),
       set(
         {},
         'isInternational',

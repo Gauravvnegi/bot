@@ -35,7 +35,8 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
    */
   saveHealthDeclarationDetails(): void {
     const status = this._healthDetailsService.validateHealthDecForm(
-      this.parentForm
+      this.parentForm,
+      this.healthComponent.signature
     ) as Array<any>;
 
     if (status.length) {

@@ -1,6 +1,7 @@
 import { get, set } from 'lodash';
 import { DateService } from '../../../../../shared/utils/src/lib/date.service';
 import * as moment from 'moment';
+import { GuestTypes, GuestRole } from '../constants/guest';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -8,7 +9,7 @@ export interface Deserializable {
 
 export class Details implements Deserializable {
   reservationDetails: ReservationDetailsConfig; // bookingDetails
-  guestDetails: GuestDetailsConfig[];
+  guestDetails: GuestDetailDS;
   stayDetails: StayDetailsConfig;
   amenitiesDetails: PackageDetailsConfig;
   paymentDetails: PaymentDetailsConfig;
@@ -23,22 +24,10 @@ export class Details implements Deserializable {
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
 
-    input.guestDetails.primaryGuest['isPrimary'] = true;
-    input.guestDetails.secondaryGuest.forEach((secondaryGuest) => {
-      secondaryGuest['isPrimary'] = false;
-    });
-
-    let guestData = [
-      input.guestDetails.primaryGuest,
-      ...input.guestDetails.secondaryGuest,
-    ];
-
-    this.guestDetails = new Array<GuestDetailsConfig>();
-    guestData.forEach((guest) => {
-      this.guestDetails.push(
-        new GuestDetailsConfig().deserialize(guest, hotelNationality)
-      );
-    });
+    this.guestDetails = new GuestDetailDS().deserialize(
+      input.guestDetails,
+      hotelNationality
+    );
 
     this.reservationDetails = new ReservationDetailsConfig().deserialize(input);
     this.stayDetails = new StayDetailsConfig().deserialize(input.stayDetails);
@@ -139,6 +128,78 @@ export class CurrentJourneyDetails implements Deserializable {
   }
 }
 
+export class GuestDetailDS implements Deserializable {
+  guests: GuestDetailsConfig[];
+
+  deserialize(input: any, hotelNationality: string) {
+    this.guests = new Array<GuestDetailsConfig>();
+    input.primaryGuest &&
+      this.guests.push(
+        new GuestDetailsConfig().deserialize(
+          {
+            ...input.primaryGuest,
+            ...{
+              isPrimary: true,
+              label: 'Primary Guest',
+              role: GuestRole.undefined,
+            },
+          },
+          hotelNationality
+        )
+      );
+    input.sharerGuests &&
+      input.sharerGuests.forEach((guest) => {
+        this.guests.push(
+          new GuestDetailsConfig().deserialize(
+            {
+              ...guest,
+              ...{
+                isPrimary: false,
+                label: 'Sharer',
+                role: GuestRole.sharer,
+              },
+            },
+            hotelNationality
+          )
+        );
+      });
+    input.accompanyGuests &&
+      input.accompanyGuests.forEach((guest) => {
+        this.guests.push(
+          new GuestDetailsConfig().deserialize(
+            {
+              ...guest,
+              ...{
+                isPrimary: false,
+                label: 'Accompanied / Kids',
+                role: GuestRole.accompany,
+              },
+            },
+            hotelNationality
+          )
+        );
+      });
+    input.kids &&
+      input.kids.forEach((guest) => {
+        this.guests.push(
+          new GuestDetailsConfig().deserialize(
+            {
+              ...guest,
+              ...{
+                isPrimary: false,
+                label: 'Accompanied/Kids',
+                role: GuestRole.kids,
+              },
+            },
+            hotelNationality
+          )
+        );
+      });
+    console.log(this);
+    return this;
+  }
+}
+
 export class GuestDetailsConfig implements Deserializable {
   id: string;
   code: number;
@@ -158,6 +219,8 @@ export class GuestDetailsConfig implements Deserializable {
   documents: DocumentDetailsConfig;
   regcardUrl;
   regcardStatus;
+  role: string;
+  label: string;
 
   deserialize(input: any, hotelNationality) {
     const contactDetails = new ContactDetailsConfig().deserialize(
@@ -181,6 +244,8 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
       set({}, 'status', get(input.statusMessage, ['status'])),
       set({}, 'remarks', get(input.statusMessage, ['remarks'])),
+      set({}, 'role', get(input, ['role'])),
+      set({}, 'label', get(input, ['label'])),
       set(
         {},
         'isInternational',

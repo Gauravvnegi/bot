@@ -91,23 +91,21 @@ export class DetailsComponent implements OnInit {
         this.branchConfig = brandConfig.branches.find(
           (branch) => branch.id == branchId
         );
+        this._userDetailService
+          .getUserShareIconByNationality(this.branchConfig.nationality)
+          .subscribe(
+            (response) => {
+              this.shareIconList = new ShareIconConfig().deserialize(response);
+              this.shareIconList = this.shareIconList.applications.concat(
+                this.defaultIconList
+              );
+            },
+            ({ error }) => {
+              this._snackBarService.openSnackBarAsText(error.message);
+            }
+          );
       })
     );
-    this._userDetailService
-      .getUserShareIconByNationality(this.branchConfig.nationality)
-      .subscribe(
-        (response) => {
-          this.shareIconList =
-            new ShareIconConfig().deserialize(response);
-          this.shareIconList = this.shareIconList.applications.concat(
-            this.defaultIconList
-          );
-       
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
   }
 
   loadGuestInfo(): void {

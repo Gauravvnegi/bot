@@ -1,6 +1,13 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-import { Booking, CurrentJourney, Feedback, Payment, Room, Status } from '../../../../dashboard/src/lib/data-models/reservation-table.model';
+import {
+  Booking,
+  CurrentJourney,
+  Feedback,
+  Payment,
+  Room,
+  Status,
+} from '../../../../dashboard/src/lib/data-models/reservation-table.model';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -55,7 +62,7 @@ export class EntityStateCounts {
       this,
       set({}, 'HIGHPOTENTIAL', get(data, ['HIGHPOTENTIAL'])),
       set({}, 'VIP', get(data, ['VIP'])),
-      set({}, 'HIGHRISK', get(data, ['HIGHRISK'])),
+      set({}, 'HIGHRISK', get(data, ['HIGHRISK']))
     );
     return this;
   }
@@ -95,11 +102,9 @@ export class Guest implements Deserializable {
       set({}, 'nationality', get(input, ['nationality'])),
       set({}, 'countryCode', get(input, ['contactDetails', 'cc'])),
       set({}, 'phoneNumber', get(input, ['contactDetails', 'contactNumber'])),
-      set({}, 'email', get(input, ['contactDetails', 'emailId'])),
+      set({}, 'email', get(input, ['contactDetails', 'emailId']))
     );
-    this.guestAttributes = new GuestAttributes().deserialize(
-      input.attributes
-    );
+    this.guestAttributes = new GuestAttributes().deserialize(input.attributes);
     if (input.reservation[0]) {
       const reservation = input.reservation[0];
       this.booking = new Booking().deserialize(reservation);
@@ -112,12 +117,27 @@ export class Guest implements Deserializable {
       if (reservation.guestDetails.primaryGuest.id === input.id) {
         this.documents = reservation.guestDetails.primaryGuest.documents;
       } else {
-        for (let i = 0; i<reservation.guestDetails.secondaryGuest.length; i++) {
-          if (reservation.guestDetails.secondaryGuest[i].id === input.id) {
-            this.documents = reservation.guestDetails.secondaryGuest[i].documents;
-            break;
+        reservation.guestDetails.sharerGuests.forEach((guest) => {
+          if (guest.id === input.id) {
+            this.documents = guest.documents;
           }
-        }
+        });
+        reservation.guestDetails.accompanyGuests.forEach((guest) => {
+          if (guest.id === input.id) {
+            this.documents = guest.documents;
+          }
+        });
+        reservation.guestDetails.kids.forEach((guest) => {
+          if (guest.id === input.id) {
+            this.documents = guest.documents;
+          }
+        });
+        // for (let i = 0; i<reservation.guestDetails.secondaryGuest.length; i++) {
+        //   if (reservation.guestDetails.secondaryGuest[i].id === input.id) {
+        //     this.documents = reservation.guestDetails.secondaryGuest[i].documents;
+        //     break;
+        //   }
+        // }
       }
     }
     return this;
@@ -161,7 +181,9 @@ export class Reservation implements Deserializable {
     this.rooms = new Room().deserialize(input.stayDetails);
     this.feedback = new Feedback().deserialize(input.feedback);
     this.booking = new Booking().deserialize(input);
-    this.guestAttributes = new GuestAttributes().deserialize(input.guestAttributes);
+    this.guestAttributes = new GuestAttributes().deserialize(
+      input.guestAttributes
+    );
     return this;
   }
 }

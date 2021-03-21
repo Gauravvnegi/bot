@@ -130,6 +130,13 @@
                   </div>
                 </div>
               </div>
+              <hr
+                class="data-seperator"
+                *ngIf="
+                  i < filteredGuestForm('sharer').length - 1 &&
+                  filteredGuestForm('sharer').length > 1
+                "
+              />
             </ng-container>
           </div>
         </mat-expansion-panel>
@@ -192,6 +199,13 @@
                   </div>
                 </div>
               </div>
+              <hr
+                class="data-seperator"
+                *ngIf="
+                  i < filteredGuestForm('accompany', 'kids').length - 1 &&
+                  filteredGuestForm('accompany', 'kids').length > 1
+                "
+              />
             </ng-container>
           </div>
         </mat-expansion-panel>

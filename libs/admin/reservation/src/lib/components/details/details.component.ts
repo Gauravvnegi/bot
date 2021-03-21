@@ -15,7 +15,6 @@ import {
 } from '../../../../../shared/src/lib/models/detailsConfig.model';
 
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { AdminGuestDetailsComponent } from '../admin-guest-details/admin-guest-details.component';
 import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { AdminDetailsService } from '../../services/admin-details.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';

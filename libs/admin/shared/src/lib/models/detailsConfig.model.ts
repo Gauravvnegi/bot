@@ -18,8 +18,8 @@ export class Details implements Deserializable {
   healDeclarationDetails: HealthDeclarationConfig;
   currentJourneyDetails: CurrentJourneyDetails;
   stepStatusDetails: StepStatusDetails;
-  roomsDetails;
-  feedbackDetails;
+  roomsDetails: RoomsDetails;
+  feedbackDetails: FeedbackDetails;
 
   deserialize(input: any) {
     let hotelNationality = input.hotel.address.countryCode;
@@ -51,6 +51,7 @@ export class Details implements Deserializable {
     this.roomsDetails = new RoomsDetails().deserialize(input);
     this.feedbackDetails = new FeedbackDetails().deserialize(input.feedback);
 
+    console.log(this);
     return this;
   }
 }
@@ -77,9 +78,9 @@ export class FeedbackDetails implements Deserializable {
 }
 
 export class FeedbackSuggestion implements Deserializable {
-  id;
-  label;
-  url;
+  id: string;
+  label: string;
+  url: string;
   deserialize(input) {
     this.id = input.serviceId;
     return this;
@@ -88,7 +89,7 @@ export class FeedbackSuggestion implements Deserializable {
 
 export class RoomsDetails implements Deserializable {
   rooms;
-  totalRooms;
+  totalRooms: number;
   deserialize(input: any) {
     this.totalRooms = input.rooms.length;
     return this;
@@ -133,69 +134,51 @@ export class GuestDetailDS implements Deserializable {
 
   deserialize(input: any, hotelNationality: string) {
     this.guests = new Array<GuestDetailsConfig>();
-    input.primaryGuest &&
-      this.guests.push(
-        new GuestDetailsConfig().deserialize(
-          {
-            ...input.primaryGuest,
-            ...{
-              isPrimary: true,
-              label: 'Primary Guest',
-              role: GuestRole.undefined,
-            },
-          },
-          hotelNationality
-        )
-      );
-    input.sharerGuests &&
-      input.sharerGuests.forEach((guest) => {
-        this.guests.push(
-          new GuestDetailsConfig().deserialize(
-            {
-              ...guest,
-              ...{
-                isPrimary: false,
-                label: 'Sharer',
-                role: GuestRole.sharer,
+    let keys = Object.keys(input);
+
+    keys.forEach((key) => {
+      if (key !== 'allGuest' && key !== 'secondaryGuest') {
+        if (key === 'primaryGuest') {
+          this.guests.push(
+            new GuestDetailsConfig().deserialize(
+              {
+                ...input[key],
+                ...{
+                  isPrimary: true,
+                  label: 'Primary Guest',
+                  role: GuestRole.undefined,
+                },
               },
-            },
-            hotelNationality
-          )
-        );
-      });
-    input.accompanyGuests &&
-      input.accompanyGuests.forEach((guest) => {
-        this.guests.push(
-          new GuestDetailsConfig().deserialize(
-            {
-              ...guest,
-              ...{
-                isPrimary: false,
-                label: 'Accompanied / Kids',
-                role: GuestRole.accompany,
-              },
-            },
-            hotelNationality
-          )
-        );
-      });
-    input.kids &&
-      input.kids.forEach((guest) => {
-        this.guests.push(
-          new GuestDetailsConfig().deserialize(
-            {
-              ...guest,
-              ...{
-                isPrimary: false,
-                label: 'Accompanied/Kids',
-                role: GuestRole.kids,
-              },
-            },
-            hotelNationality
-          )
-        );
-      });
-    console.log(this);
+              hotelNationality
+            )
+          );
+        } else {
+          let role =
+            key === 'sharerGuests'
+              ? GuestRole.sharer
+              : key === 'accompanyGuests'
+              ? GuestRole.accompany
+              : GuestRole.kids;
+          let label = key === 'sharerGuests' ? 'Sharer' : 'Accomanied / Kids';
+          input[key] &&
+            input[key].forEach((guest) => {
+              this.guests.push(
+                new GuestDetailsConfig().deserialize(
+                  {
+                    ...guest,
+                    ...{
+                      isPrimary: false,
+                      label,
+                      role: role,
+                    },
+                  },
+                  hotelNationality
+                )
+              );
+            });
+        }
+      }
+    });
     return this;
   }
 }
@@ -214,11 +197,11 @@ export class GuestDetailsConfig implements Deserializable {
   phoneNumber: string;
   email: string;
   selectedDocumentType: string;
-  status;
+  status: string;
   remarks: string;
   documents: DocumentDetailsConfig;
-  regcardUrl;
-  regcardStatus;
+  regcardUrl: string;
+  regcardStatus: string;
   role: string;
   label: string;
 
@@ -289,9 +272,9 @@ export class ShareIconConfig implements Deserializable {
 }
 
 export class ShareIcon implements Deserializable {
-  value;
-  label;
-  iconUrl;
+  value: string;
+  label: string;
+  iconUrl: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -314,8 +297,8 @@ export class StayDetailsConfig implements Deserializable {
   expectedArrivalTime;
   special_comments: string;
   checkin_comments: string;
-  arrivalTimeStamp;
-  departureTimeStamp;
+  arrivalTimeStamp: number;
+  departureTimeStamp: number;
 
   deserialize(input: any) {
     Object.assign(
@@ -405,9 +388,9 @@ export class ContactDetailsConfig implements Deserializable {
 }
 
 export class HealthDeclarationConfig implements Deserializable {
-  status;
-  remarks;
-  url;
+  status: string;
+  remarks: string;
+  url: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -436,8 +419,8 @@ export class ReservationDetailsConfig implements Deserializable {
 }
 
 export class RegCardConfig implements Deserializable {
-  status;
-  url;
+  status: string;
+  url: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -465,15 +448,15 @@ export class PackageDetailsConfig implements Deserializable {
 }
 
 export class PaymentDetailsConfig implements Deserializable {
-  currency;
-  dueAmount;
-  paidAmount;
-  subtotal;
-  taxAmount;
-  totalAmount;
-  totalDiscount;
-  roomRates;
-  depositRules;
+  currency: string;
+  dueAmount: number;
+  paidAmount: number;
+  subtotal: number;
+  taxAmount: string;
+  totalAmount: number;
+  totalDiscount: number;
+  roomRates: RoomRateConfig;
+  depositRules: DepositRuleDetailsConfig;
 
   deserialize(input: any) {
     Object.assign(
@@ -496,11 +479,11 @@ export class PaymentDetailsConfig implements Deserializable {
 }
 
 export class DepositRuleDetailsConfig implements Deserializable {
-  payAtDesk;
-  amount;
-  depositNight;
-  guaranteeType;
-  amountType;
+  payAtDesk: boolean;
+  amount: number;
+  depositNight: number;
+  guaranteeType: string;
+  amountType: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -518,13 +501,13 @@ export class DepositRuleDetailsConfig implements Deserializable {
 }
 
 export class RoomRateConfig implements Deserializable {
-  amount;
-  base;
-  description;
-  discount;
-  totalAmount;
-  unit;
-  label;
+  amount: number;
+  base: number;
+  description: string;
+  discount: number;
+  totalAmount: number;
+  unit: number;
+  label: string;
   taxAndFees;
   deserialize(input: any) {
     Object.assign(
@@ -553,10 +536,10 @@ export class Package implements Deserializable {
   quantity: number;
   rate: number;
   type: number;
-  status;
-  remarks;
-  unit;
-  currency;
+  status: string;
+  remarks: string;
+  unit: number;
+  currency: number;
 
   deserialize(input: any) {
     Object.assign(

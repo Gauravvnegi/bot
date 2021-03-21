@@ -117,27 +117,12 @@ export class Guest implements Deserializable {
       if (reservation.guestDetails.primaryGuest.id === input.id) {
         this.documents = reservation.guestDetails.primaryGuest.documents;
       } else {
-        reservation.guestDetails.sharerGuests.forEach((guest) => {
-          if (guest.id === input.id) {
-            this.documents = guest.documents;
+        let keys = Object.keys(reservation.guestDetails.allGuest);
+        keys.forEach((key) => {
+          if (key === input.id) {
+            this.documents = reservation.guestDetails.allGuest[key].documents;
           }
         });
-        reservation.guestDetails.accompanyGuests.forEach((guest) => {
-          if (guest.id === input.id) {
-            this.documents = guest.documents;
-          }
-        });
-        reservation.guestDetails.kids.forEach((guest) => {
-          if (guest.id === input.id) {
-            this.documents = guest.documents;
-          }
-        });
-        // for (let i = 0; i<reservation.guestDetails.secondaryGuest.length; i++) {
-        //   if (reservation.guestDetails.secondaryGuest[i].id === input.id) {
-        //     this.documents = reservation.guestDetails.secondaryGuest[i].documents;
-        //     break;
-        //   }
-        // }
       }
     }
     return this;
@@ -173,9 +158,9 @@ export class GuestAttributes {
 }
 
 export class Reservation implements Deserializable {
-  rooms;
-  feedback;
-  booking;
+  rooms: Room;
+  feedback: Feedback;
+  booking: Booking;
   guestAttributes: GuestAttributes;
   deserialize(input: any) {
     this.rooms = new Room().deserialize(input.stayDetails);

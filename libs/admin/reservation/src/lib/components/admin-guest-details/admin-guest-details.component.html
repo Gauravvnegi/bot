@@ -110,25 +110,6 @@
                     {{ guestFormGroup.lastName }}
                   </div>
                 </div>
-                <div class="feild width-added">
-                  <mat-label class="label">Phone No.</mat-label>
-                  <div
-                    *ngIf="guestFormGroup.phoneNumber; else emptyCell"
-                    class="value"
-                  >
-                    {{ guestFormGroup.countryCode }}
-                    {{ guestFormGroup.phoneNumber }}
-                  </div>
-                </div>
-                <div class="feild width-added">
-                  <mat-label class="label">Email</mat-label>
-                  <div
-                    *ngIf="guestFormGroup.email; else emptyCell"
-                    class="value"
-                  >
-                    {{ guestFormGroup.email }}
-                  </div>
-                </div>
               </div>
               <hr
                 class="data-seperator"
@@ -180,22 +161,9 @@
                   </div>
                 </div>
                 <div class="feild width-added">
-                  <mat-label class="label">Phone No.</mat-label>
-                  <div
-                    *ngIf="guestFormGroup.phoneNumber; else emptyCell"
-                    class="value"
-                  >
-                    {{ guestFormGroup.countryCode }}
-                    {{ guestFormGroup.phoneNumber }}
-                  </div>
-                </div>
-                <div class="feild width-added">
-                  <mat-label class="label">Email</mat-label>
-                  <div
-                    *ngIf="guestFormGroup.email; else emptyCell"
-                    class="value"
-                  >
-                    {{ guestFormGroup.email }}
+                  <mat-label class="label">Age</mat-label>
+                  <div *ngIf="guestFormGroup.age; else emptyCell" class="value">
+                    {{ guestFormGroup.age }} Years
                   </div>
                 </div>
               </div>

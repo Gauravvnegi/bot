@@ -29,6 +29,7 @@ export class AdminGuestDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.addFormsControls();
     this.pushDataToForm();
+    console.log(this.detailsData);
   }
 
   addFormsControls() {
@@ -104,6 +105,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       nationality: [''],
       isInternational: [''],
       selectedDocumentType: [''],
+      age: [''],
       status: [''],
       remarks: [''],
       label: [''],

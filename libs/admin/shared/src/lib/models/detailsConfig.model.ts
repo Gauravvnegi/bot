@@ -204,6 +204,7 @@ export class GuestDetailsConfig implements Deserializable {
   regcardStatus: string;
   role: string;
   label: string;
+  age: number;
 
   deserialize(input: any, hotelNationality) {
     const contactDetails = new ContactDetailsConfig().deserialize(
@@ -229,6 +230,7 @@ export class GuestDetailsConfig implements Deserializable {
       set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set({}, 'role', get(input, ['role'])),
       set({}, 'label', get(input, ['label'])),
+      set({}, 'age', get(input, ['age'])),
       set(
         {},
         'isInternational',

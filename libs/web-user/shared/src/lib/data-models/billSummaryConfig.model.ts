@@ -89,9 +89,9 @@ export class PaymentSummaryDetail implements Deserializable {
     Object.assign(
       this,
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'dueAmount', get(input, ['totalDueAmount'])),
-      set({}, 'totalAmount', get(input, ['totalAmount'])),
-      set({}, 'paidAmount', get(input, ['totalPaidAmount'])),
+      set({}, 'dueAmount', get(input, ['totalDueAmount']).toFixed(2)),
+      set({}, 'totalAmount', get(input, ['totalAmount']).toFixed(2)),
+      set({}, 'paidAmount', get(input, ['totalPaidAmount']).toFixed(2)),
       set({}, 'signatureUrl', get(input, ['signatureUrl']))
     );
     input.billItems.forEach((item) => {
@@ -117,11 +117,11 @@ export class BillItem {
         'date',
         DateService.convertTimestampToDate(get(input, ['date']), 'DD-MM-YYYY')
       ),
-      set({}, 'creditAmount', get(input, ['creditAmount'])),
+      set({}, 'creditAmount', get(input, ['creditAmount']).toFixed(2)),
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'debitAmount', get(input, ['debitAmount'])),
+      set({}, 'debitAmount', get(input, ['debitAmount']).toFixed(2)),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'unit', get(input, ['unit'])),
+      set({}, 'unit', get(input, ['unit']))
     );
     return this;
   }

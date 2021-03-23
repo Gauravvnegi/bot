@@ -77,33 +77,34 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.detailsData.paymentDetails;
-    let {
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      taxAndFees,
-    } = paymentSummary.roomRates;
-
-    this.dataSource.push({
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      currency: paymentSummary.currency,
-      ...Object.assign(
-        {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
-      ),
-    });
+    if (paymentSummary.roomRates) {
+      let {
+        label,
+        description,
+        unit,
+        unitPrice,
+        amount,
+        discount,
+        totalAmount,
+        taxAndFees,
+      } = paymentSummary.roomRates;
+      this.dataSource.push({
+        label,
+        description,
+        unit,
+        unitPrice,
+        amount,
+        discount,
+        totalAmount,
+        currency: paymentSummary.currency,
+        ...Object.assign(
+          {},
+          ...taxAndFees.map((taxType) => ({
+            [taxType.type]: taxType.value,
+          }))
+        ),
+      });
+    }
   }
 
   getPrimaryGuest() {

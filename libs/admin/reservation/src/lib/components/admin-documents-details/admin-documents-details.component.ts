@@ -275,7 +275,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   downloadDocs(documents) {
     let urls = [];
     let fileNames = [];
-    const guest = this.detailsData.guestDetails.filter(
+    const guest = this.detailsData.guestDetails.guests.filter(
       (data) => data.id === this.selectedGuestId
     )[0];
     const name = `${guest.firstName}_${guest.lastName}`;

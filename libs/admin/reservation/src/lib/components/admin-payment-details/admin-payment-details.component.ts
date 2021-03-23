@@ -99,9 +99,10 @@ export class AdminPaymentDetailsComponent implements OnInit {
         currency: paymentSummary.currency,
         ...Object.assign(
           {},
-          ...taxAndFees.map((taxType) => ({
-            [taxType.type]: taxType.value,
-          }))
+          taxAndFees &&
+            taxAndFees.map((taxType) => ({
+              [taxType.type]: taxType.amount,
+            }))
         ),
       });
     }

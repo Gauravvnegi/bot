@@ -81,9 +81,10 @@ export class PaymentSummaryComponent implements OnInit {
       currency: this.paymentSummary.currencyCode,
       ...Object.assign(
         {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
+        taxAndFees &&
+          taxAndFees.map((taxType) => ({
+            [taxType.type]: taxType.amount,
+          }))
       ),
     });
     this.paymentSummary.packages.forEach((amenity) => {
@@ -107,9 +108,10 @@ export class PaymentSummaryComponent implements OnInit {
         currency: this.paymentSummary.currencyCode,
         ...Object.assign(
           {},
-          ...taxAndFees.map((taxType) => ({
-            [taxType.type]: taxType.value,
-          }))
+          taxAndFees &&
+            taxAndFees.map((taxType) => ({
+              [taxType.type]: taxType.amount,
+            }))
         ),
       });
     });

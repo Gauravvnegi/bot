@@ -411,7 +411,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   }
 
   saveDocument(event, { guestId, doc_page, doc_type, doc_issue_place }) {
-    debugger;
     if (event.status) {
       this.updateDocumentUploadingStatus(guestId, doc_page, doc_type, true);
       let formData = new FormData();

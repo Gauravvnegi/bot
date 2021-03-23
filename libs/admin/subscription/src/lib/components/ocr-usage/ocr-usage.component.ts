@@ -3,23 +3,23 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'hospitality-bot-ocr-usage',
   templateUrl: './ocr-usage.component.html',
-  styleUrls: ['./ocr-usage.component.scss']
+  styleUrls: ['./ocr-usage.component.scss'],
 })
 export class OcrUsageComponent implements OnInit {
-  chartTypes = [
-    {
-      name: 'Bar',
-      value: 'horizontalBar',
-      url: 'assets/svg/bar-graph.svg',
-      backgroundColor: '#4BA0F5',
-    },
-    {
-      name: 'Line',
-      value: 'line',
-      url: 'assets/svg/line-graph.svg',
-      backgroundColor: '#DEFFF3',
-    },
-  ];
+  // chartTypes = [
+  //   {
+  //     name: 'Bar',
+  //     value: 'horizontalBar',
+  //     url: 'assets/svg/bar-graph.svg',
+  //     backgroundColor: '#4BA0F5',
+  //   },
+  //   {
+  //     name: 'Line',
+  //     value: 'line',
+  //     url: 'assets/svg/line-graph.svg',
+  //     backgroundColor: '#DEFFF3',
+  //   },
+  // ];
 
   chart: any = {
     chartData: [

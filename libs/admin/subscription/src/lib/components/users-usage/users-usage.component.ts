@@ -9,20 +9,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class UsersUsageComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) {}
 
-  chartTypes = [
-    {
-      name: 'Bar',
-      value: 'bar',
-      url: 'assets/svg/bar-graph.svg',
-      backgroundColor: '#4BA0F5',
-    },
-    {
-      name: 'Line',
-      value: 'line',
-      url: 'assets/svg/line-graph.svg',
-      backgroundColor: '#DEFFF3',
-    },
-  ];
+  // chartTypes = [
+  //   {
+  //     name: 'Bar',
+  //     value: 'bar',
+  //     url: 'assets/svg/bar-graph.svg',
+  //     backgroundColor: '#4BA0F5',
+  //   },
+  //   {
+  //     name: 'Line',
+  //     value: 'line',
+  //     url: 'assets/svg/line-graph.svg',
+  //     backgroundColor: '#DEFFF3',
+  //   },
+  // ];
 
   chart: any = {
     chartData: [
@@ -72,7 +72,7 @@ export class UsersUsageComponent implements OnInit {
             ticks: {
               min: 0,
               max: 16,
-              stepSize: 4
+              stepSize: 4,
             },
           },
         ],

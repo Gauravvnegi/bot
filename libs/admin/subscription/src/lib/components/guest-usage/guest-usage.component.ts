@@ -3,24 +3,23 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'hospitality-bot-guest-usage',
   templateUrl: './guest-usage.component.html',
-  styleUrls: ['./guest-usage.component.scss']
+  styleUrls: ['./guest-usage.component.scss'],
 })
 export class GuestUsageComponent implements OnInit {
-
-  chartTypes = [
-    {
-      name: 'Bar',
-      value: 'bar',
-      url: 'assets/svg/bar-graph.svg',
-      backgroundColor: ['#FFBF04','#D7D9DB'],
-    },
-    {
-      name: 'Line',
-      value: 'line',
-      url: 'assets/svg/line-graph.svg',
-      backgroundColor: '#1AB99F',
-    },
-  ];
+  // chartTypes = [
+  //   {
+  //     name: 'Bar',
+  //     value: 'bar',
+  //     url: 'assets/svg/bar-graph.svg',
+  //     backgroundColor: ['#FFBF04','#D7D9DB'],
+  //   },
+  //   {
+  //     name: 'Line',
+  //     value: 'line',
+  //     url: 'assets/svg/line-graph.svg',
+  //     backgroundColor: '#1AB99F',
+  //   },
+  // ];
 
   chart: any = {
     chartData: {
@@ -99,10 +98,9 @@ export class GuestUsageComponent implements OnInit {
     chartType: 'bar',
   };
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   setChartType(option, event): void {
     event.stopPropagation();

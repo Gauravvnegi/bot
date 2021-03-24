@@ -77,35 +77,35 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.detailsData.paymentDetails;
-    if (paymentSummary.roomRates) {
-      let {
-        label,
-        description,
-        unit,
-        unitPrice,
-        amount,
-        discount,
-        totalAmount,
-        taxAndFees,
-      } = paymentSummary.roomRates;
-      this.dataSource.push({
-        label,
-        description,
-        unit,
-        unitPrice,
-        amount,
-        discount,
-        totalAmount,
-        currency: paymentSummary.currency,
-        ...Object.assign(
-          {},
-          taxAndFees &&
-            taxAndFees.map((taxType) => ({
-              [taxType.type]: taxType.amount,
-            }))
-        ),
-      });
-    }
+    // if (paymentSummary.roomRates) {
+    //   let {
+    //     label,
+    //     description,
+    //     unit,
+    //     unitPrice,
+    //     amount,
+    //     discount,
+    //     totalAmount,
+    //     taxAndFees,
+    //   } = paymentSummary.roomRates;
+    //   this.dataSource.push({
+    //     label,
+    //     description,
+    //     unit,
+    //     unitPrice,
+    //     amount,
+    //     discount,
+    //     totalAmount,
+    //     currency: paymentSummary.currency,
+    //     ...Object.assign(
+    //       {},
+    //       taxAndFees &&
+    //         taxAndFees.map((taxType) => ({
+    //           [taxType.type]: taxType.amount,
+    //         }))
+    //     ),
+    //   });
+    // }
     paymentSummary.packages.forEach((amenity) => {
       let {
         label,
@@ -114,7 +114,8 @@ export class AdminPaymentDetailsComponent implements OnInit {
         base,
         amount,
         totalAmount,
-        taxAndFees,
+        cgstAmount,
+        sgstAmount,
       } = amenity;
 
       this.dataSource.push({
@@ -125,13 +126,15 @@ export class AdminPaymentDetailsComponent implements OnInit {
         amount,
         totalAmount,
         currency: paymentSummary.currency,
-        ...Object.assign(
-          {},
-          taxAndFees &&
-            taxAndFees.map((taxType) => ({
-              [taxType.type]: taxType.amount,
-            }))
-        ),
+        cgstAmount,
+        sgstAmount,
+        // ...Object.assign(
+        //   {},
+        //   taxAndFees &&
+        //     taxAndFees.map((taxType) => ({
+        //       [taxType.type]: taxType.amount,
+        //     }))
+        // ),
       });
     });
   }

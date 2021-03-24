@@ -460,6 +460,7 @@ export class PaymentDetailsConfig implements Deserializable {
   roomRates: RoomRateConfig;
   packages: IPackage[];
   depositRules: DepositRuleDetailsConfig;
+  printRate: boolean;
 
   deserialize(input: any) {
     Object.assign(
@@ -512,7 +513,8 @@ export class RoomRateConfig implements Deserializable {
   totalAmount: number;
   unit: number;
   label: string;
-  taxAndFees;
+  cgstAmount: number;
+  sgstAmount: number;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -522,7 +524,8 @@ export class RoomRateConfig implements Deserializable {
       set({}, 'discount', get(input, ['discount'])),
       set({}, 'totalAmount', get(input, ['totalAmount'])),
       set({}, 'label', get(input, ['label'])),
-      set({}, 'taxAndFees', get(input, ['taxAndFees'])),
+      set({}, 'cgstAmount', get(input, ['cgstAmount'])),
+      set({}, 'sgstAmount', get(input, ['sgstAmount'])),
       set({}, 'unit', get(input, ['unit']))
     );
     return this;
@@ -575,7 +578,8 @@ export interface IPackage {
   description: string;
   label: string;
   unit: number;
-  taxAndFees: ITaxAndFees[];
+  cgstAmount: number;
+  sgstAmount: number;
 }
 export interface ITaxAndFees {
   amount: number;

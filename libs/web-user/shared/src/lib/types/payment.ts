@@ -12,7 +12,8 @@ export interface IRoomRates {
   description: string;
   label: string;
   unit: number;
-  taxAndFees: ITaxAndFees[];
+  cgstAmount: number;
+  sgstAmount: number;
 }
 
 // TO-DO: To come from packages
@@ -24,7 +25,8 @@ export interface IPackage {
   description: string;
   label: string;
   unit: number;
-  taxAndFees: ITaxAndFees[];
+  cgstAmount: number;
+  sgstAmount: number;
 }
 
 export interface IDepositRule {

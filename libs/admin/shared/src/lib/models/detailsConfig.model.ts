@@ -458,6 +458,7 @@ export class PaymentDetailsConfig implements Deserializable {
   totalAmount: number;
   totalDiscount: number;
   roomRates: RoomRateConfig;
+  packages: IPackage[];
   depositRules: DepositRuleDetailsConfig;
 
   deserialize(input: any) {
@@ -469,7 +470,8 @@ export class PaymentDetailsConfig implements Deserializable {
       set({}, 'subtotal', get(input, ['subtotal'])),
       set({}, 'taxAmount', get(input, ['taxAmount'])),
       set({}, 'totalAmount', get(input, ['totalAmount'])),
-      set({}, 'totalDiscount', get(input, ['totalDiscount']))
+      set({}, 'totalDiscount', get(input, ['totalDiscount'])),
+      set({}, 'packages', get(input, ['packages']))
     );
     this.depositRules = new DepositRuleDetailsConfig().deserialize(
       input.depositRules
@@ -563,6 +565,22 @@ export class Package implements Deserializable {
     );
     return this;
   }
+}
+
+export interface IPackage {
+  base: number;
+  totalAmount: number;
+  amount: number;
+  discount: number;
+  description: string;
+  label: string;
+  unit: number;
+  taxAndFees: ITaxAndFees[];
+}
+export interface ITaxAndFees {
+  amount: number;
+  type: string;
+  value: string;
 }
 
 export class AdminDetailStatus {

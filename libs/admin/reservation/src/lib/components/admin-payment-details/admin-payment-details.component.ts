@@ -106,6 +106,34 @@ export class AdminPaymentDetailsComponent implements OnInit {
         ),
       });
     }
+    paymentSummary.packages.forEach((amenity) => {
+      let {
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        totalAmount,
+        taxAndFees,
+      } = amenity;
+
+      this.dataSource.push({
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        totalAmount,
+        currency: paymentSummary.currency,
+        ...Object.assign(
+          {},
+          taxAndFees &&
+            taxAndFees.map((taxType) => ({
+              [taxType.type]: taxType.amount,
+            }))
+        ),
+      });
+    });
   }
 
   getPrimaryGuest() {

@@ -112,7 +112,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
     const guestFA = this.guestInfoDetailsFG.get('guests') as FormArray;
 
     guestFA.controls.forEach((guestControl: FormGroup) => {
-      if (guestControl.get('isPrimary')) {
+      if (guestControl.get('isPrimary').value) {
         this.primaryGuestFG = guestControl;
       }
     });

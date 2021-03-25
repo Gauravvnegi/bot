@@ -9,6 +9,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
+import { Subscriptions } from '../../data-models/subscription-plan-config.model';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -103,7 +104,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
           .getSubscriptionPlan(hotelId)
           .subscribe((response) => {
             this.subscriptionPlanService.setSubscription(
-              response.featuresIncludes
+              new Subscriptions().deserialize(response)
             );
             this.initSideNavConfigs(response, config);
           });
@@ -119,17 +120,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     //check if admin or super admin by using command pattern
-    ADMIN_ROUTES.forEach((data) => {
-      if (
-        subscription.featuresIncludes.filter(
-          (d) => d.featureName === data.title && d.isView
-        ).length
-      ) {
-        if (this.menuItems.filter((d) => d.title === data.title).length === 0) {
-          this.menuItems.push(data);
-        }
-      }
-    });
+    // ADMIN_ROUTES.forEach((data) => {
+    //   if (
+    //     subscription.featuresIncludes.filter(
+    //       (d) => d.featureName === data.title && d.isView
+    //     ).length
+    //   ) {
+    //     if (this.menuItems.filter((d) => d.title === data.title).length === 0) {
+    //       this.menuItems.push(data);
+    //     }
+    //   }
+    // });
   }
 
   toggleMenuButton() {

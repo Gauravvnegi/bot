@@ -1,22 +1,27 @@
-<hospitality-bot-top-cards
-  *ngIf="subscriptionPlan"
-  [data]="subscriptionPlan"
-></hospitality-bot-top-cards>
+<hospitality-bot-top-cards></hospitality-bot-top-cards>
 <div class="border"></div>
-<div class="usage-container">
+<div class="usage-container" *ngIf="subscriptionPlanUsage">
   <div class="title">Plan Usage</div>
   <div class="usages">
     <div class="usages_item">
-      <hospitality-bot-users-usage></hospitality-bot-users-usage>
+      <hospitality-bot-users-usage
+        [data]="subscriptionPlanUsage?.users"
+      ></hospitality-bot-users-usage>
     </div>
     <div class="usages_item">
-      <hospitality-bot-guest-usage></hospitality-bot-guest-usage>
+      <hospitality-bot-guest-usage
+        [data]="subscriptionPlanUsage?.guests"
+      ></hospitality-bot-guest-usage>
     </div>
     <div class="usages_item">
-      <hospitality-bot-ocr-usage></hospitality-bot-ocr-usage>
+      <hospitality-bot-ocr-usage
+        [data]="subscriptionPlanUsage?.ocr"
+      ></hospitality-bot-ocr-usage>
     </div>
     <div class="usages_item">
-      <hospitality-bot-channel-usage></hospitality-bot-channel-usage>
+      <hospitality-bot-channel-usage
+        [data]="subscriptionPlanUsage?.channels"
+      ></hospitality-bot-channel-usage>
     </div>
   </div>
 </div>

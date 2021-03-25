@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-guest-usage',
@@ -21,6 +21,7 @@ export class GuestUsageComponent implements OnInit {
   //   },
   // ];
 
+  @Input() data;
   chart: any = {
     chartData: {
       datasets: [

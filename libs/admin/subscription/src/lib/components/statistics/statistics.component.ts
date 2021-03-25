@@ -3,8 +3,11 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { SubscriptionPlan } from '../../data-models/subscription.model';
-import { SubscriptionService } from '../../services/subscription.service';
+import {
+  PlanUsage,
+  SubscriptionPlan,
+} from '../../data-models/subscription.model';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 
 @Component({
   selector: 'hospitality-bot-statistics',
@@ -13,13 +16,13 @@ import { SubscriptionService } from '../../services/subscription.service';
 })
 export class StatisticsComponent implements OnInit {
   $subscription = new Subscription();
-  subscriptionPlan;
+  subscriptionPlanUsage;
   globalQueries;
 
   constructor(
     private _globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private subscriptionService: SubscriptionService,
+    private subscriptionService: SubscriptionPlanService,
     private snackBarService: SnackBarService
   ) {}
 
@@ -29,6 +32,7 @@ export class StatisticsComponent implements OnInit {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForSubscriptionPlan();
   }
 
   listenForGlobalFilters(): void {
@@ -39,24 +43,16 @@ export class StatisticsComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ];
         console.log(this.globalQueries);
-        this.getSubscriptionPlan();
       })
     );
   }
 
-  getSubscriptionPlan(): void {
+  listenForSubscriptionPlan(): void {
     this.$subscription.add(
-      this.subscriptionService
-        .getSubscriptionPlan(this.globalQueries[0].hotelId)
-        .subscribe(
-          (response) => {
-            this.subscriptionPlan = new SubscriptionPlan().deserialize(response);
-            console.log(response);
-          },
-          ({ error }) => {
-            this.snackBarService.openSnackBarAsText(error.message);
-          }
-        )
+      this.subscriptionService.subscription$.subscribe((response) => {
+        this.subscriptionPlanUsage = new PlanUsage().deserialize(response);
+        console.log(new PlanUsage().deserialize(response));
+      })
     );
   }
 }

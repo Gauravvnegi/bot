@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container" *ngIf="data">
   <div class="card">
     <div class="card_title">Subscription</div>
     <div class="card_details">
-      <div class="card_details_label">{{ data.plan.plan }}</div>
+      <div class="card_details_label">{{ data.plan }}</div>
       <button
         class="card_details_button"
         [disabled]="data.upgradable"
@@ -39,7 +39,7 @@
   <div class="card">
     <div class="card_title">Plan Due Date</div>
     <div class="card_details">
-      <div class="card_details_label">{{ data.plan.getEndDate() }}</div>
+      <div class="card_details_label">{{ data.getEndDate() }}</div>
     </div>
   </div>
 </div>

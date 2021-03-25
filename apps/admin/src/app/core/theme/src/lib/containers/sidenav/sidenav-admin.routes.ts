@@ -30,8 +30,8 @@ export const ADMIN_ROUTES = [
   //   url: 'assets/svg/notification.svg',
   // },
   {
-    path: 'feedbacks',
-    title: 'Feedbacks',
+    path: 'feedback',
+    title: 'Feedback',
     children: null,
     url: 'assets/svg/feedback-tab.svg',
   },
@@ -57,6 +57,21 @@ export const ADMIN_ROUTES = [
     path: 'subscription',
     title: 'Subscription',
     children: null,
-    url: 'assets/svg/box.svg'
-  }
+    url: 'assets/svg/box.svg',
+  },
+];
+
+export const DEFAULT_ROUTES = [
+  {
+    path: 'dashboard',
+    title: 'Dashboard',
+    children: null,
+    url: 'assets/svg/dashboard.svg',
+  },
+  {
+    path: 'subscription',
+    title: 'Subscription',
+    children: null,
+    url: 'assets/svg/box.svg',
+  },
 ];

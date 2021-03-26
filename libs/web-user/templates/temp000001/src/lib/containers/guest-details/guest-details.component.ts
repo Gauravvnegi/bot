@@ -95,11 +95,13 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
         ...{
           lastName: [
             '',
-            [Validators.required],
-            customPatternValid({
-              pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
-              msg: 'Spaces are not allowed',
-            }),
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+                msg: 'Spaces are not allowed',
+              }),
+            ],
           ],
           mobileNumber: [
             '',
@@ -129,12 +131,17 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       fg = {
         ...this.defaultFG,
         ...{
-          lastName: ['', []],
           age: ['', [Validators.required, Validators.min(1)]],
+          lastName: ['', []],
         },
       };
     } else {
-      fg = { ...this.defaultFG, ...{ lastName: ['', []] } };
+      fg = {
+        ...this.defaultFG,
+        ...{
+          lastName: ['', []],
+        },
+      };
     }
     return this._fb.group(fg);
   }

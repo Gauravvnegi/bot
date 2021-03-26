@@ -139,7 +139,16 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       fg = {
         ...this.defaultFG,
         ...{
-          lastName: ['', []],
+          lastName: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+                msg: 'Spaces are not allowed',
+              }),
+            ],
+          ],
         },
       };
     }

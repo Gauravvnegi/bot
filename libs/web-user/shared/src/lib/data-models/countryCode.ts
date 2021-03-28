@@ -1070,7 +1070,7 @@ export const countryLists = [
     alpha_3_code: 'ALA',
     en_short_name: 'Åland Islands',
     nationality: 'Åland Island',
-    dial_code: '',
+    dial_code: '+358',
   },
   {
     num_code: '8',
@@ -1126,7 +1126,7 @@ export const countryLists = [
     alpha_3_code: 'ATA',
     en_short_name: 'Antarctica',
     nationality: 'Antarctic',
-    dial_code: null,
+    dial_code: '+672',
   },
   {
     num_code: '28',
@@ -1278,7 +1278,7 @@ export const countryLists = [
     alpha_3_code: 'BES',
     en_short_name: 'Bonaire, Sint Eustatius and Saba',
     nationality: 'Bonaire',
-    dial_code: '',
+    dial_code: '+599',
   },
   {
     num_code: '70',
@@ -1302,7 +1302,7 @@ export const countryLists = [
     alpha_3_code: 'BVT',
     en_short_name: 'Bouvet Island',
     nationality: 'Bouvet Island',
-    dial_code: '',
+    dial_code: '+47',
   },
   {
     num_code: '76',
@@ -1390,7 +1390,7 @@ export const countryLists = [
     alpha_3_code: 'CYM',
     en_short_name: 'Cayman Islands',
     nationality: 'Caymanian',
-    dial_code: '+ 345',
+    dial_code: '+1 345',
   },
   {
     num_code: '140',
@@ -1518,7 +1518,7 @@ export const countryLists = [
     alpha_3_code: 'CUW',
     en_short_name: 'Curaçao',
     nationality: 'Curaçaoan',
-    dial_code: '',
+    dial_code: '+599',
   },
   {
     num_code: '196',
@@ -1681,14 +1681,6 @@ export const countryLists = [
     dial_code: '+689',
   },
   {
-    num_code: '260',
-    alpha_2_code: 'TF',
-    alpha_3_code: 'ATF',
-    en_short_name: 'French Southern Territories',
-    nationality: 'French Southern Territories',
-    dial_code: '',
-  },
-  {
     num_code: '266',
     alpha_2_code: 'GA',
     alpha_3_code: 'GAB',
@@ -1830,7 +1822,7 @@ export const countryLists = [
     alpha_3_code: 'HMD',
     en_short_name: 'Heard Island and McDonald Islands',
     nationality: 'Heard Island or McDonald Islands',
-    dial_code: '',
+    dial_code: '+672',
   },
   {
     num_code: '336',
@@ -1974,7 +1966,7 @@ export const countryLists = [
     alpha_3_code: 'KAZ',
     en_short_name: 'Kazakhstan',
     nationality: 'Kazakhstani, Kazakh',
-    dial_code: '+7 7',
+    dial_code: '+7',
   },
   {
     num_code: '404',
@@ -2662,7 +2654,7 @@ export const countryLists = [
     alpha_3_code: 'SXM',
     en_short_name: 'Sint Maarten (Dutch part)',
     nationality: 'Sint Maarten',
-    dial_code: '',
+    dial_code: '+599',
   },
   {
     num_code: '703',
@@ -2718,7 +2710,7 @@ export const countryLists = [
     alpha_3_code: 'SSD',
     en_short_name: 'South Sudan',
     nationality: 'South Sudanese',
-    dial_code: '',
+    dial_code: '+211',
   },
   {
     num_code: '724',
@@ -2942,7 +2934,7 @@ export const countryLists = [
     alpha_3_code: 'UMI',
     en_short_name: 'United States Minor Outlying Islands',
     nationality: 'American',
-    dial_code: '',
+    dial_code: '+246',
   },
   {
     num_code: '840',
@@ -3022,7 +3014,7 @@ export const countryLists = [
     alpha_3_code: 'ESH',
     en_short_name: 'Western Sahara',
     nationality: 'Sahrawi, Sahrawian, Sahraouian',
-    dial_code: '',
+    dial_code: '+212',
   },
   {
     num_code: '887',

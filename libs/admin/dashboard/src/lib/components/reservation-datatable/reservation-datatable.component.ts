@@ -13,6 +13,8 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
+import * as moment from 'moment';
+import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -35,13 +37,43 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   rowsPerPageOptions = [5, 10, 25, 50, 200];
 
   cols = [
-    { field: 'rooms.roomNumber', header: 'Rooms' },
-    { field: 'booking.bookingNumber', header: 'Booking No./Feedback' },
-    { field: 'guests.primaryGuest.firstName', header: 'Guest/company' },
-    { field: 'arrivalAndDepartureDate', header: 'Arrival Date-Departure Date' },
-    { field: 'amountDueAndTotal', header: 'Amount Due/Total(INR)' },
-    { field: 'package', header: 'Package' },
-    { field: 'stageAndourney', header: 'Stage/Journey' },
+    {
+      field: 'rooms.roomNumber',
+      header: 'Rooms',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'booking.bookingNumber',
+      header: 'Booking No./Feedback',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: `guests.primaryGuest.getFullName()`,
+      header: 'Guest/company',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: 'booking.getArrivalTimeStamp()',
+      header: 'Arrival/ Departure',
+      isSort: true,
+      sortType: 'date',
+    },
+    {
+      field: 'payment.totalAmount',
+      header: 'Amount Due/Total(INR)',
+      isSort: true,
+      sortType: 'number',
+    },
+    { field: 'package', header: 'Package', isSort: false, sortType: 'number' },
+    {
+      field: 'stageAndourney',
+      header: 'Stage/Journey',
+      isSort: false,
+      sortType: 'number',
+    },
   ];
 
   @Input() tabFilterItems = [
@@ -286,10 +318,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       //     }),
       //   };
       // });
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        chip.total = countObj[chip.value];
       });
     }
   }
@@ -324,7 +354,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new ReservationTable().deserialize(data).records;
-          console.log('loadData', this.values);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters
@@ -354,33 +385,19 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   customSort(event: SortEvent) {
-    event.data.sort((data1, data2) => {
-      let value1 = data1[event.field];
-      let value2 = data2[event.field];
-      let result = null;
-
-      if (value1 == null && value2 != null) result = -1;
-      else if (value1 != null && value2 == null) result = 1;
-      else if (value1 == null && value2 == null) result = 0;
-      else if (typeof value1 === 'string' && typeof value2 === 'string') {
-        result = value1.localeCompare(value2);
-      } else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-      return event.order * result;
-    });
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
   }
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
     this.changePage(+this.tabFilterItems[event.index].lastPage);
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: 'DESC',
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
-      },
-      ...this.getSelectedQuickReplyFilters(),
-    ]);
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
@@ -458,15 +475,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     }
 
     this.changePage(0);
-
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: 'DESC',
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
-      },
-      ...this.getSelectedQuickReplyFilters(),
-    ]);
   }
 
   openDetailPage(event, rowData, tabKey?) {

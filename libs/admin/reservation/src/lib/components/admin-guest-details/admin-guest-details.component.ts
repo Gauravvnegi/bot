@@ -14,6 +14,7 @@ export class AdminGuestDetailsComponent implements OnInit {
   @Output()
   addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
+  roles: string[] = [];
 
   stayDetailsForm: FormGroup;
   healthCardDetailsForm: FormGroup;
@@ -28,6 +29,7 @@ export class AdminGuestDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.addFormsControls();
     this.pushDataToForm();
+    console.log(this.detailsData);
   }
 
   addFormsControls() {
@@ -35,9 +37,6 @@ export class AdminGuestDetailsComponent implements OnInit {
     this.stayDetailsForm = this.initStayDetailsForm();
     (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
       this.initGuestDetailsForm();
-
-    // this.parentForm.addControl('guestDetails', this.initGuestDetailForm());
-    // this.addGuests(this.guestDetails);
   }
 
   pushDataToForm() {
@@ -54,7 +53,7 @@ export class AdminGuestDetailsComponent implements OnInit {
 
     this.guestDetailsForm
       .get('guests')
-      .patchValue(this.detailsData.guestDetails);
+      .patchValue(this.detailsData.guestDetails.guests);
     this.addFGEvent.next({
       name: 'guestInfoDetails',
       value: this.guestDetailsForm,
@@ -65,12 +64,10 @@ export class AdminGuestDetailsComponent implements OnInit {
 
   initGuestDetailsForm() {
     const guestFA = this.guestDetailsForm.get('guests') as FormArray;
-    this.detailsData.guestDetails.forEach((guest) => {
+    this.detailsData.guestDetails.guests.forEach((guest) => {
+      this.roles.push(guest.role);
       guestFA.push(this.getGuestFG());
     });
-
-    //this.mapValuesInForm();
-    // this.extractPrimaryDetails();
   }
 
   initHealthCardDetailsForm() {
@@ -91,7 +88,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       adultsCount: [''],
       roomNumber: [''],
       special_comments: [''],
-      checkin_comments:['']
+      checkin_comments: [''],
     });
   }
 
@@ -108,37 +105,13 @@ export class AdminGuestDetailsComponent implements OnInit {
       nationality: [''],
       isInternational: [''],
       selectedDocumentType: [''],
+      age: [''],
       status: [''],
       remarks: [''],
+      label: [''],
+      role: [''],
     });
   }
-
-  // addGuests(guestDetail) {
-  //   this.guestDetailsForm.addControl('guests', new FormArray([]));
-  //   guestDetail.guestDetails.forEach((guest) => {
-  //     let controlFA = this.guestDetailsForm.get('guests') as FormArray;
-  //     controlFA.push(this.getGuestFG());
-  //   });
-
-  //   this.mapValuesInForm();
-  //   this.extractPrimaryDetails();
-  // }
-
-  // mapValuesInForm() {
-  //   this.guests.patchValue(this.guestDetails.guestDetails);
-  // }
-
-  // extractPrimaryDetails() {
-  //   this.guests.controls.forEach((guestFG) => {
-  //     if (guestFG.get('isPrimary').value === true) {
-  //       this.primaryGuest = guestFG;
-  //     }
-  //   });
-  // }
-
-  // editHealthStatus() {
-  //   this.isActionEdit = true;
-  // }
 
   updateHealthCardStatus(status) {
     let data = {
@@ -179,15 +152,9 @@ export class AdminGuestDetailsComponent implements OnInit {
       );
   }
 
-  // get guests(): FormArray {
-  //   return this.guestDetailsForm.get('guests') as FormArray;
-  // }
-
-  // get guestDetailsForm() {
-  //   return this.parentForm.get('guestDetails') as FormGroup;
-  // }
-
-  // get healDeclarationForm() {
-  //   return this.parentForm.get('healthDeclareForm') as FormGroup;
-  // }
+  filteredGuestForm(role1, role2?) {
+    return this.guestDetailsForm.controls.guests?.value.filter(
+      (guestFG) => guestFG.role === role1 || guestFG.role === role2
+    );
+  }
 }

@@ -1,6 +1,20 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
+import {
+  GuestRole,
+  GuestTypes,
+} from 'libs/web-user/shared/src/lib/constants/guest';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Subscription } from 'rxjs';
@@ -15,11 +29,10 @@ import { GuestDetailsService } from './../../../../../../shared/src/lib/services
 })
 export class GuestDetailsComponent implements OnInit, OnChanges {
   protected $subscription: Subscription = new Subscription();
-  @ViewChild('primaryGuestAccordian') primaryGuestAccordian: MatAccordion;
-  @ViewChild('secondaryGuestAccordian') secondaryGuestAccordian: MatAccordion;
+  @ViewChild('guestAccordian') guestAccordian: MatAccordion;
 
-  @ViewChildren('secondaryGuestpanel')
-  secondaryGuestPanelList: QueryList<MatExpansionPanel>;
+  @ViewChildren('guestpanel')
+  guestPanelList: QueryList<MatExpansionPanel>;
 
   @Input() guestType: string;
   @Input() parentForm: FormGroup;
@@ -29,8 +42,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   addFGEvent = new EventEmitter();
 
   guestDetailsForm: FormGroup;
-  primaryGuestFieldConfig: GuestDetailsConfigI;
-  secondaryGuestFieldConfig: GuestDetailsConfigI[] = [];
+  guestFieldConfig: GuestDetailsConfigI[] = [];
 
   constructor(
     protected _fb: FormBuilder,
@@ -45,7 +57,6 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.primaryGuestFieldConfig = this.setFieldConfiguration();
     this.registerListeners();
   }
 
@@ -54,39 +65,94 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
    */
   initGuestDetailForm() {
     this.guestDetailsForm = this._fb.group({
-      primaryGuest: this.getGuestFG(),
+      guests: new FormArray([]),
     });
   }
 
-  getGuestFG(): FormGroup {
-    return this._fb.group({
-      id: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', []],
-      mobileNumber: [
-        '',
-        [
-          Validators.required,
-          customPatternValid({
-            pattern: Regex.PHONE_REGEX,
-            msg: 'Please enter a valid mobile',
-          }),
-          Validators.minLength(10),
-        ],
+  defaultFG = {
+    id: ['', [Validators.required]],
+    nameTitle: ['Mr.', [Validators.required]],
+    firstName: [
+      '',
+      [
+        Validators.required,
+        customPatternValid({
+          pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+          msg: 'Spaces are not allowed',
+        }),
       ],
-      email: [
-        '',
-        [
-          Validators.required,
-          customPatternValid({
-            pattern: Regex.EMAIL_REGEX,
-            msg: 'Please enter a valid email',
-          }),
-        ],
-      ],
-      nameTitle: ['Mr.', [Validators.required]],
-      nationality: ['', [Validators.required]],
-    });
+    ],
+    label: [''],
+    type: [''],
+    role: [''],
+  };
+
+  getGuestFG(type: string, role: string): FormGroup {
+    let fg;
+    if (type === GuestTypes.primary) {
+      fg = {
+        ...this.defaultFG,
+        ...{
+          lastName: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+                msg: 'Spaces are not allowed',
+              }),
+            ],
+          ],
+          mobileNumber: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: Regex.PHONE_REGEX,
+                msg: 'Please enter a valid mobile',
+              }),
+              Validators.minLength(10),
+            ],
+          ],
+          email: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: Regex.EMAIL_REGEX,
+                msg: 'Please enter a valid email',
+              }),
+            ],
+          ],
+          nationality: ['', [Validators.required]],
+        },
+      };
+    } else if (role === GuestRole.accompany || role === GuestRole.kids) {
+      fg = {
+        ...this.defaultFG,
+        ...{
+          age: ['', [Validators.required, Validators.min(1)]],
+          lastName: ['', []],
+        },
+      };
+    } else {
+      fg = {
+        ...this.defaultFG,
+        ...{
+          lastName: [
+            '',
+            [
+              Validators.required,
+              customPatternValid({
+                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+                msg: 'Spaces are not allowed',
+              }),
+            ],
+          ],
+        },
+      };
+    }
+    return this._fb.group(fg);
   }
 
   setFieldConfiguration() {
@@ -97,8 +163,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
 
   setGuestDetails() {
     if (this.reservationData) {
-      if (this._guestDetailService.guestDetails.secondaryGuest.length) {
-        this.addSecondaryGuests();
+      if (this._guestDetailService.guestDetails.guests.length) {
+        this.addGuests();
       }
       this.addFGEvent.next({
         name: 'guestDetail',
@@ -109,18 +175,12 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  addSecondaryGuests() {
-    this.guestDetailsForm.addControl('secondaryGuest', new FormArray([]));
-
-    this._guestDetailService.guestDetails.secondaryGuest.forEach(
-      (guestDetail) => {
-        let controlFA = this.guestDetailsForm.get(
-          'secondaryGuest'
-        ) as FormArray;
-        controlFA.push(this.getGuestFG());
-        this.secondaryGuestFieldConfig.push(this.setFieldConfiguration());
-      }
-    );
+  addGuests() {
+    this._guestDetailService.guestDetails.guests.forEach((guestDetail) => {
+      let controlFA = this.guestDetailsForm.get('guests') as FormArray;
+      controlFA.push(this.getGuestFG(guestDetail.type, guestDetail.role));
+      this.guestFieldConfig.push(this.setFieldConfiguration());
+    });
   }
 
   registerListeners() {
@@ -135,8 +195,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     );
   }
 
-  get secondaryGuests(): FormArray {
-    return this.guestDetailsForm.get('secondaryGuest') as FormArray;
+  get guests(): FormArray {
+    return this.guestDetailsForm.get('guests') as FormArray;
   }
 
   ngOnDestroy(): void {

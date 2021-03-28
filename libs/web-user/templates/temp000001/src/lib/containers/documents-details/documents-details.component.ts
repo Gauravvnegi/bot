@@ -18,6 +18,7 @@ import { DocumentDetailsConfigI } from './../../../../../../shared/src/lib/data-
 import { DocumentDetailsService } from './../../../../../../shared/src/lib/services/document-details.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { GuestRole } from 'libs/web-user/shared/src/lib/constants/guest';
 
 @Component({
   selector: 'hospitality-bot-documents-details',
@@ -250,6 +251,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     let documentTypes = config.dropDownDocumentList; //hardcoded
 
     documentTypes.forEach((documentType, index) => {
+      debugger;
       let documentFA = guestFG.get('documents') as FormArray;
       documentFA.push(this.getFileFG());
 
@@ -341,13 +343,18 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       isPrimary: ['', [Validators.required]],
       isInternational: ['', Validators.required],
       documents: this._fb.array([]),
+      label: [''],
+      role: [''],
+      Optional: [false],
     });
   }
 
   setDocumentDetails() {
     if (this.reservationData) {
       this._documentDetailService.documentDetailDS.guests.forEach((guest) => {
-        this.addGuestFG();
+        guest.role === GuestRole.kids || guest.role === GuestRole.accompany
+          ? this.addOptionalGuestFG()
+          : this.addGuestFG();
       });
 
       this.addFGEvent.next({
@@ -363,6 +370,22 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   addGuestFG() {
     this.guestsFA.push(this.getDocumentFG());
+  }
+
+  addOptionalGuestFG() {
+    this.guestsFA.push(
+      this._fb.group({
+        id: [''],
+        nationality: [''],
+        selectedDocumentType: [''],
+        isPrimary: [''],
+        isInternational: [''],
+        documents: this._fb.array([]),
+        label: [''],
+        role: [''],
+        Optional: [true],
+      })
+    );
   }
 
   setFieldConfiguration(dropDownDocumentList?, documentsArray?) {
@@ -389,59 +412,68 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   }
 
   saveDocument(event, { guestId, doc_page, doc_type, doc_issue_place }) {
-    this.updateDocumentUploadingStatus(guestId, doc_page, doc_type, true);
-    let formData = new FormData();
-    formData.append('file', event.file);
-    formData.append('doc_type', doc_type);
-    formData.append('doc_page', doc_page);
-    formData.append('doc_issue_place', doc_issue_place);
+    if (event.status) {
+      this.updateDocumentUploadingStatus(guestId, doc_page, doc_type, true);
+      let formData = new FormData();
+      formData.append('file', event.file);
+      formData.append('doc_type', doc_type);
+      formData.append('doc_page', doc_page);
+      formData.append('doc_issue_place', doc_issue_place);
 
-    this.$subscription.add(
-      this._documentDetailService
-        .uploadDocumentFile(
-          this._reservationService.reservationId,
-          guestId,
-          formData
-        )
-        .subscribe(
-          (response) => {
-            let value = event.formGroup;
-            this.updateDocumentFG(
-              guestId,
-              doc_type,
-              doc_page,
-              response.fileDownloadUrl
-            );
-            this.updateDocumentUploadingStatus(
-              guestId,
-              doc_page,
-              doc_type,
-              false
-            );
-            this._translateService
-              .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg, '', {
-                  panelClass: 'success',
+      this.$subscription.add(
+        this._documentDetailService
+          .uploadDocumentFile(
+            this._reservationService.reservationId,
+            guestId,
+            formData
+          )
+          .subscribe(
+            (response) => {
+              let value = event.formGroup;
+              this.updateDocumentFG(
+                guestId,
+                doc_type,
+                doc_page,
+                response.fileDownloadUrl
+              );
+              this.updateDocumentUploadingStatus(
+                guestId,
+                doc_page,
+                doc_type,
+                false
+              );
+              this._translateService
+                .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                    panelClass: 'success',
+                  });
                 });
-              });
-          },
-          ({ error }) => {
-            this.updateDocumentFG(guestId, doc_type, doc_page, '');
-            this.updateDocumentUploadingStatus(
-              guestId,
-              doc_page,
-              doc_type,
-              false
-            );
-            this._translateService
-              .get(`MESSAGES.ERROR.${error.type}`)
-              .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
-          }
-        )
-    );
+            },
+            ({ error }) => {
+              this.updateDocumentFG(guestId, doc_type, doc_page, '');
+              this.updateDocumentUploadingStatus(
+                guestId,
+                doc_page,
+                doc_type,
+                false
+              );
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackBarService.openSnackBarAsText(translatedMsg);
+                });
+            }
+          )
+      );
+    } else {
+      this.updateDocumentFG(guestId, doc_type, doc_page, '');
+      this._translateService
+        .get('VALIDATION.INVALID_IMAGE')
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
+    }
   }
 
   updateDocumentUploadingStatus(guestId, doc_page, doc_type, isUploading) {

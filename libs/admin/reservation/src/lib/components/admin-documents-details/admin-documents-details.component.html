@@ -7,19 +7,32 @@
   >
     <!-- Check if documents pending in any case ; then show pending template. If documents are initiated, completed or failed i can view docs-->
     <div class="document-header">
-      <p class="heading">Guest Documents</p>
-      <ng-container [ngSwitch]="documentStatus.get('status').value">
-        <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
+      <div class="heading">
+        <p class="label">Guest Documents</p>
+        <ng-container [ngSwitch]="documentStatus.get('status').value">
+          <img
+            *ngSwitchCase="'COMPLETED'"
+            src="assets/svg/status/success.svg"
+          />
 
-        <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
+          <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
 
-        <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
+          <img *ngSwitchCase="'PENDING'" src="assets/svg/status/pending.svg" />
 
-        <img
-          *ngSwitchCase="'INITIATED'"
-          src="assets/svg/status/initiated.svg"
-        />
-      </ng-container>
+          <img
+            *ngSwitchCase="'INITIATED'"
+            src="assets/svg/status/initiated.svg"
+          />
+        </ng-container>
+      </div>
+
+      <div
+        class="download"
+        *ngIf="selectedGuestGroup"
+        (click)="downloadDocs(selectedGuestGroup.get('documents').value)"
+      >
+        Download
+      </div>
     </div>
     <ng-container *ngIf="selectedGuestGroup">
       <form [formGroup]="selectedGuestGroup">
@@ -31,7 +44,7 @@
                 (selectionChange)="onGuestChange($event.value)"
               >
                 <mat-option
-                  *ngFor="let guest of detailsData.guestDetails"
+                  *ngFor="let guest of detailsData.guestDetails.guests"
                   [value]="guest.id"
                 >
                   {{ guest.title }} {{ guest.firstName }} {{ guest.lastName }}

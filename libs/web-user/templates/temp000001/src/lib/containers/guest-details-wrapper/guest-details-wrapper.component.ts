@@ -4,7 +4,6 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
-import { get } from 'lodash';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { GuestDetailsComponent } from '../guest-details/guest-details.component';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -87,25 +86,26 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
   private performActionIfNotValid(status: any[]) {
     const guestDetailFG = this.parentForm.get('guestDetail') as FormGroup;
     guestDetailFG.markAllAsTouched();
-
     this._translateService
       .get(`VALIDATION.${status[0].code}`)
       .subscribe((translatedMsg) => {
         this._snackBarService.openSnackBarAsText(translatedMsg);
       });
 
-    if (get(status[0], ['data', 'type']) == 'primary') {
-      this.guestDetailsComp.primaryGuestAccordian.openAll();
-      this.guestDetailsComp.secondaryGuestAccordian &&
-        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
-    } else {
-      this.guestDetailsComp.primaryGuestAccordian.closeAll();
-      this.guestDetailsComp.secondaryGuestAccordian &&
-        this.guestDetailsComp.secondaryGuestAccordian.closeAll();
-      const allPanels = this.guestDetailsComp.secondaryGuestPanelList.toArray();
-      allPanels[status[0].data.index].open();
-    }
+    this.guestDetailsComp.guestAccordian.closeAll();
+    this.guestDetailsComp.guestAccordian &&
+      this.guestDetailsComp.guestAccordian.closeAll();
+    this.openInvalidPanels(
+      this.guestDetailsComp.guestPanelList.toArray(),
+      status
+    );
     return;
+  }
+
+  private openInvalidPanels(panels, status) {
+    status.reverse().forEach((s) => {
+      panels[s.data.index] && panels[s.data.index].open();
+    });
   }
 
   goBack() {

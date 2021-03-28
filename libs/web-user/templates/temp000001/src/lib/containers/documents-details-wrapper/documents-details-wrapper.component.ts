@@ -97,7 +97,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
     if (get(status[0], ['data', 'index']) >= 0) {
       this.documentDetailsComp.accordion.closeAll();
       const allPanels = this.documentDetailsComp.panelList.toArray();
-      status.forEach((s) => {
+      status.reverse().forEach((s) => {
         allPanels[s.data.index].open();
       });
     } else {

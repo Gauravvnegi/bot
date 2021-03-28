@@ -103,7 +103,7 @@ export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
   }
 
   private openInvalidPanels(panels, status) {
-    status.forEach((s) => {
+    status.reverse().forEach((s) => {
       panels[s.data.index] && panels[s.data.index].open();
     });
   }

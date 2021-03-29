@@ -9,6 +9,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
+import { Tabs } from '../../constants/tabConfig';
 import { Subscriptions } from '../../data-models/subscription-plan-config.model';
 
 @Component({
@@ -18,7 +19,7 @@ import { Subscriptions } from '../../data-models/subscription-plan-config.model'
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   public list_item_colour: string;
-  public menuItems = DEFAULT_ROUTES;
+  public menuItems = [];
   public activeFontColor: string;
   public normalFontColor: string;
   public dividerBgColor: string;
@@ -99,7 +100,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
   getSubscriptionPlan(config) {
     this.$subscription.add(
       this.subscriptionPlanService.subscription$.subscribe((response) => {
-        this.initSideNavConfigs(response, config);
+        if (Object.keys(response).length) {
+          this.initSideNavConfigs(response.features.MODULE, config);
+        }
       })
     );
     // this.subscriptionPlanService.getSubscription()
@@ -112,17 +115,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     //check if admin or super admin by using command pattern
-    // ADMIN_ROUTES.forEach((data) => {
-    //   if (
-    //     subscription.featuresIncludes.filter(
-    //       (d) => d.featureName === data.title && d.isView
-    //     ).length
-    //   ) {
-    //     if (this.menuItems.filter((d) => d.title === data.title).length === 0) {
-    //       this.menuItems.push(data);
-    //     }
-    //   }
-    // });
+    ADMIN_ROUTES.forEach((data, i) => {
+      if (
+        subscription.filter((d) => Tabs[d.name] === data.path && d.active)
+          .length
+      ) {
+        if (this.menuItems.filter((d) => d.path === data.path).length === 0) {
+          this.menuItems.push(data);
+        }
+      }
+      if (i === ADMIN_ROUTES.length - 2) {
+        this.menuItems = [...this.menuItems, ...DEFAULT_ROUTES];
+      }
+    });
   }
 
   toggleMenuButton() {

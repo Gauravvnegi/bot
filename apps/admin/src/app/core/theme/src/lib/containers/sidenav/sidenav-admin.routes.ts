@@ -63,12 +63,6 @@ export const ADMIN_ROUTES = [
 
 export const DEFAULT_ROUTES = [
   {
-    path: 'dashboard',
-    title: 'Dashboard',
-    children: null,
-    url: 'assets/svg/dashboard.svg',
-  },
-  {
     path: 'subscription',
     title: 'Subscription',
     children: null,

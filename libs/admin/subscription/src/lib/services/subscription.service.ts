@@ -4,8 +4,13 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class SubscriptionService extends ApiService {
-
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/current-plan`);
+  }
+
+  getSubscriptionUsage(hotelId: string, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
+    );
   }
 }

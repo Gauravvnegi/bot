@@ -29,6 +29,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { Subscriptions } from '../../../data-models/subscription-plan-config.model';
+import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -67,7 +69,8 @@ export class LayoutOneComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
     private fb: FormBuilder,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit() {
@@ -75,12 +78,26 @@ export class LayoutOneComponent implements OnInit {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.initSearchQueryForm();
+    this.getSubscriptionPlan();
   }
 
   initSearchQueryForm(): void {
     this.searchFG = this.fb.group({
       search: [''],
     });
+  }
+
+  getSubscriptionPlan() {
+    const hotelId = this._hotelDetailService.hotelDetails.hotelAccess.chains[0]
+      .hotels[0].id;
+    this.subscriptionPlanService
+      .getSubscriptionPlan(hotelId)
+      .subscribe((response) => {
+        this.subscriptionPlanService.setSubscription(
+          new Subscriptions().deserialize(response)
+        );
+      });
+    // this.subscriptionPlanService.getSubscription()
   }
 
   initLayoutConfigs() {

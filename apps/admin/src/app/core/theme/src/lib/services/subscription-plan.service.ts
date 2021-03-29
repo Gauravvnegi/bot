@@ -20,4 +20,10 @@ export class SubscriptionPlanService extends ApiService {
   getSubscription() {
     return this.subscriptions;
   }
+
+  getSubscriptionUsage(hotelId: string, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/subscriptions/usage/?from=1616406755000&to=1617097955000`
+    );
+  }
 }

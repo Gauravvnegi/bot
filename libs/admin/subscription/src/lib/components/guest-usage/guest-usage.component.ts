@@ -22,6 +22,7 @@ export class GuestUsageComponent implements OnInit {
   // ];
 
   @Input() data;
+  @Input() chartData;
   chart: any = {
     chartData: {
       datasets: [

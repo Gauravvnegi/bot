@@ -7,6 +7,8 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { TableData } from '../../data-models/subscription.model';
 
 @Component({
   selector: 'hospitality-bot-hotel-usage-datatable',
@@ -42,6 +44,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
+    private subscriptionService: SubscriptionPlanService,
     private router: Router
   ) {
     super(fb);
@@ -49,6 +52,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.listenForSubscriptionPlan();
   }
 
   listenForGlobalFilters(): void {
@@ -67,6 +71,14 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
         },
       ]);
     });
+  }
+
+  listenForSubscriptionPlan(): void {
+    this.$subscription.add(
+      this.subscriptionService.subscription$.subscribe((response) => {
+        new TableData().deserialize(response);
+      })
+    );
   }
 
   getHotelId(globalQueries): void {

@@ -61,3 +61,75 @@ export class PlanUsage {
     return this;
   }
 }
+
+export class PlanUsageCharts {
+  userCount: GraphData[];
+  guestCount: GraphData[];
+  ocrCount: GraphData[];
+
+  deserialize(input: any) {
+    this.userCount = new Array<GraphData>();
+    this.guestCount = new Array<GraphData>();
+    this.ocrCount = new Array<GraphData>();
+
+    Object.keys(input.userCount).forEach((key) => {
+      this.userCount.push(
+        new GraphData().deserialize({ label: key, data: input.userCount[key] })
+      );
+    });
+
+    Object.keys(input.guestCount).forEach((key) => {
+      this.guestCount.push(
+        new GraphData().deserialize({ label: key, data: input.guestCount[key] })
+      );
+    });
+
+    Object.keys(input.ocrCount).forEach((key) => {
+      this.ocrCount.push(
+        new GraphData().deserialize({ label: key, data: input.ocrCount[key] })
+      );
+    });
+
+    return this;
+  }
+}
+
+export class GraphData {
+  label: string;
+  value: number;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'value', get(input, ['data']))
+    );
+
+    return this;
+  }
+}
+
+export class TableData {
+  data: TableCell[];
+
+  deserialize(input: any) {
+    this.data = new Array<TableCell>();
+    Object.keys(input.features).forEach((key) => {
+      input.features[key].forEach((feature) => {
+        this.data.push(new TableCell().deserialize(feature));
+      });
+    });
+    return this;
+  }
+}
+
+export class TableCell {
+  serviceType: string;
+  name: string;
+  limit: string;
+  usage: string;
+
+  deserialize(input: any) {
+    return this;
+  }
+}

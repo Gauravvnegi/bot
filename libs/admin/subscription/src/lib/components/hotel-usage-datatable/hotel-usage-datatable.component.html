@@ -223,12 +223,8 @@
           <img src="assets/bg.png" />
         </div> -->
         <div class="package_image_wrapper">
-          <div class="image">
-            <img class="package-image" src="{{ rowData.imageUrl }}" />
-          </div>
           <div class="text">
-            <div>{{ rowData.name }}</div>
-            <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p>
+            <div>{{ rowData.serviceType }}</div>
           </div>
         </div>
         <!-- <div class="data">
@@ -239,12 +235,11 @@
       </td>
       <td>
         <div class="brand-name">
-          <div>{{ rowData.packageCode }}</div>
-          <p>{{ rowData.packageSource }}</p>
+          <div>{{ rowData.name }}</div>
         </div>
       </td>
       <td class="guest">
-        {{ rowData.description }}
+        {{ rowData.limit }}
         <!-- <div
           *ngIf="rowData.guests.secondaryGuest.length > 0"
           [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
@@ -260,7 +255,7 @@
         </div> -->
       </td>
       <td class="service-details">
-        {{ rowData.type }}
+        {{ rowData.usage }}
       </td>
     </tr>
   </ng-template>

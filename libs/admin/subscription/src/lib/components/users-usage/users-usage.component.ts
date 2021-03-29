@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-users-usage',
@@ -7,7 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./users-usage.component.scss'],
 })
 export class UsersUsageComponent implements OnInit {
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private dateService: DateService
+  ) {}
 
   // chartTypes = [
   //   {
@@ -25,6 +30,7 @@ export class UsersUsageComponent implements OnInit {
   // ];
 
   @Input() data;
+  @Input() chartData;
   chart: any = {
     chartData: [
       {
@@ -72,7 +78,6 @@ export class UsersUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              max: 16,
               stepSize: 4,
             },
           },
@@ -93,7 +98,22 @@ export class UsersUsageComponent implements OnInit {
     chartType: 'bar',
   };
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.chartData) {
+      this.initChart();
+    }
+  }
+
+  initChart() {
+    this.chart.chartData[0].data = [];
+    this.chart.chartLabels = [];
+    this.chartData.forEach((data) => {
+      this.chart.chartData[0].data.push(data.value);
+      this.chart.chartLabels.push(
+        this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
+      );
+    });
+  }
 
   setChartType(option, event): void {
     event.stopPropagation();

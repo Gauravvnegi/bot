@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-ocr-usage',
@@ -22,14 +23,15 @@ export class OcrUsageComponent implements OnInit {
   // ];
 
   @Input() data;
+  @Input() chartData;
   chart: any = {
     chartData: [
       {
-        data: [600, 750, 1000],
+        data: [],
         label: 'Total Users',
       },
     ],
-    chartLabels: ['Visa', 'Passport', 'Adhaar Card'],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       tooltips: {
@@ -62,7 +64,7 @@ export class OcrUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              max: 1500,
+              // max: 1,
             },
           },
         ],
@@ -89,7 +91,22 @@ export class OcrUsageComponent implements OnInit {
     chartType: 'horizontalBar',
   };
 
-  ngOnInit(): void {}
+  constructor(private dateService: DateService) {}
+
+  ngOnInit(): void {
+    if (this.chartData) {
+      this.initChart();
+    }
+  }
+
+  initChart() {
+    this.chart.chartData[0].data = [];
+    this.chart.chartLabels = [];
+    this.chartData.forEach((data) => {
+      this.chart.chartData[0].data.push(data.value);
+      this.chart.chartLabels.push(data.label);
+    });
+  }
 
   setChartType(option, event): void {
     event.stopPropagation();

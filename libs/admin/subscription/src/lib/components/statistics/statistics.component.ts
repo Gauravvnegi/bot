@@ -5,6 +5,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import {
   PlanUsage,
+  PlanUsageCharts,
   SubscriptionPlan,
 } from '../../data-models/subscription.model';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
@@ -18,6 +19,7 @@ export class StatisticsComponent implements OnInit {
   $subscription = new Subscription();
   subscriptionPlanUsage;
   globalQueries;
+  planUsageChartData: PlanUsageCharts;
 
   constructor(
     private _globalFilterService: GlobalFilterService,
@@ -38,11 +40,8 @@ export class StatisticsComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
-        console.log(this.globalQueries);
+        this.globalQueries = [...data['dateRange'].queryValue];
+        this.getSubscriptionUsage(data['filter'].queryValue[0].hotelId);
       })
     );
   }
@@ -51,8 +50,25 @@ export class StatisticsComponent implements OnInit {
     this.$subscription.add(
       this.subscriptionService.subscription$.subscribe((response) => {
         this.subscriptionPlanUsage = new PlanUsage().deserialize(response);
-        console.log(new PlanUsage().deserialize(response));
       })
+    );
+  }
+
+  getSubscriptionUsage(hotelId: string): void {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
+    };
+
+    this.$subscription.add(
+      this.subscriptionService.getSubscriptionUsage(hotelId, config).subscribe(
+        (response) => {
+          this.planUsageChartData = new PlanUsageCharts().deserialize(response);
+          console.log(new PlanUsageCharts().deserialize(response));
+        },
+        ({ error }) => {
+          this.snackBarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 }

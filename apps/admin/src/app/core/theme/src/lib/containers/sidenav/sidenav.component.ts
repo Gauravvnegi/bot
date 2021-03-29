@@ -98,16 +98,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   getSubscriptionPlan(config) {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        const { hotelId } = data['filter'].queryValue[0];
-        this.subscriptionPlanService
-          .getSubscriptionPlan(hotelId)
-          .subscribe((response) => {
-            this.subscriptionPlanService.setSubscription(
-              new Subscriptions().deserialize(response)
-            );
-            this.initSideNavConfigs(response, config);
-          });
+      this.subscriptionPlanService.subscription$.subscribe((response) => {
+        this.initSideNavConfigs(response, config);
       })
     );
     // this.subscriptionPlanService.getSubscription()

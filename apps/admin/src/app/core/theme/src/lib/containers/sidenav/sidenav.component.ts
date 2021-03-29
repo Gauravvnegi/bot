@@ -101,7 +101,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.subscriptionPlanService.subscription$.subscribe((response) => {
         if (Object.keys(response).length) {
-          this.initSideNavConfigs(response.features.MODULE, config);
+          this.initSideNavConfigs(response['features'].MODULE, config);
         }
       })
     );

@@ -1,4 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { FaqService } from 'libs/web-user/shared/src/lib/services/faq.service';
 import { HyperlinkElementService } from 'libs/web-user/shared/src/lib/services/hyperlink-element.service';
 import { Subscription } from 'rxjs';
@@ -9,17 +15,19 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./faq.component.scss'],
 })
 export class FaqComponent implements OnInit, OnDestroy {
-  @ViewChild("advisories") hyperlinkElement: ElementRef;
+  @ViewChild('advisories') hyperlinkElement: ElementRef;
   $subscription: Subscription = new Subscription();
   faqCategories = [];
   faqQuestions = [];
 
-  dropdown:boolean=true;
+  dropdown: boolean = true;
 
   selectingCategory: string;
 
-  constructor(private _faqService: FaqService,
-    public _hyperlink: HyperlinkElementService) {}
+  constructor(
+    private _faqService: FaqService,
+    public _hyperlink: HyperlinkElementService
+  ) {}
 
   ngOnInit(): void {
     this.setFaqConfiguration();
@@ -30,19 +38,23 @@ export class FaqComponent implements OnInit, OnDestroy {
   listenForElementClicked() {
     this.$subscription.add(
       this._hyperlink.$element.subscribe((res) => {
-        if(res && res['element'] && res['element'] === 'advisories') {
+        if (res && res['element'] && res['element'] === 'advisories') {
           this.scrollIntoView(this.hyperlinkElement.nativeElement);
         }
       })
     );
   }
 
-  categorySelection(){
-    this.dropdown=!this.dropdown;
+  categorySelection() {
+    this.dropdown = !this.dropdown;
   }
 
   scrollIntoView($element): void {
-    $element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    $element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
     this._hyperlink.setSelectedElement('');
   }
 
@@ -58,7 +70,7 @@ export class FaqComponent implements OnInit, OnDestroy {
 
   onCategorySelect(event) {
     this.selectingCategory = event;
-    this.dropdown=!this.dropdown;
+    this.dropdown = !this.dropdown;
     this.setCategoriesQuestions(event);
   }
 

@@ -20,10 +20,10 @@ export class SubscriptionPlan {
       set({}, 'endDate', get(input, ['endDate'])),
       set({}, 'startDate', get(input, ['startDate']))
     );
-    this.deploymentType = input.features.ESSENTIALS?.filter(
+    this.deploymentType = input.features?.ESSENTIALS?.filter(
       (data) => data.name === 'DEPLOYMENT'
     )[0]?.description;
-    this.supportType = input.features.COMMUNICATION?.filter(
+    this.supportType = input.features?.COMMUNICATION?.filter(
       (data) => data.name === 'TECHICAL_SUPPORT'
     )[0]?.description;
     return this;
@@ -45,13 +45,13 @@ export class PlanUsage {
   channels;
 
   deserialize(input: any) {
-    this.users = input.features.MODULE?.filter(
+    this.users = input.features?.MODULE?.filter(
       (data) => data.name === 'USERS'
     )[0];
-    this.guests = input.features.MODULE?.filter(
+    this.guests = input.features?.MODULE?.filter(
       (data) => data.name === 'GUESTS'
     )[0];
-    this.ocr = input.features.INTEGRATION?.filter(
+    this.ocr = input.features?.INTEGRATION?.filter(
       (data) => data.name === 'OCR'
     )[0];
     Object.assign(
@@ -72,23 +72,32 @@ export class PlanUsageCharts {
     this.guestCount = new Array<GraphData>();
     this.ocrCount = new Array<GraphData>();
 
-    Object.keys(input.userCount).forEach((key) => {
-      this.userCount.push(
-        new GraphData().deserialize({ label: key, data: input.userCount[key] })
-      );
-    });
+    input?.userCount &&
+      Object.keys(input.userCount).forEach((key) => {
+        this.userCount.push(
+          new GraphData().deserialize({
+            label: key,
+            data: input.userCount[key],
+          })
+        );
+      });
 
-    Object.keys(input.guestCount).forEach((key) => {
-      this.guestCount.push(
-        new GraphData().deserialize({ label: key, data: input.guestCount[key] })
-      );
-    });
+    input?.guestCount &&
+      Object.keys(input.guestCount).forEach((key) => {
+        this.guestCount.push(
+          new GraphData().deserialize({
+            label: key,
+            data: input.guestCount[key],
+          })
+        );
+      });
 
-    Object.keys(input.ocrCount).forEach((key) => {
-      this.ocrCount.push(
-        new GraphData().deserialize({ label: key, data: input.ocrCount[key] })
-      );
-    });
+    input?.ocrCount &&
+      Object.keys(input.ocrCount).forEach((key) => {
+        this.ocrCount.push(
+          new GraphData().deserialize({ label: key, data: input.ocrCount[key] })
+        );
+      });
 
     return this;
   }
@@ -114,11 +123,12 @@ export class TableData {
 
   deserialize(input: any) {
     this.data = new Array<TableCell>();
-    Object.keys(input.features).forEach((key) => {
-      input.features[key].forEach((feature) => {
-        this.data.push(new TableCell().deserialize(feature));
+    input?.features &&
+      Object.keys(input?.features).forEach((key) => {
+        input.features[key].forEach((feature) => {
+          this.data.push(new TableCell().deserialize(feature));
+        });
       });
-    });
     return this;
   }
 }

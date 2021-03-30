@@ -23,7 +23,7 @@ export class SubscriptionPlanService extends ApiService {
 
   getSubscriptionUsage(hotelId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/?from=1616406755000&to=1617097955000`
+      `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
     );
   }
 }

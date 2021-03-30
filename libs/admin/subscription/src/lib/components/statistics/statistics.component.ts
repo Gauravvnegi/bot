@@ -19,7 +19,9 @@ export class StatisticsComponent implements OnInit {
   $subscription = new Subscription();
   subscriptionPlanUsage;
   globalQueries;
+  hotelId: string;
   planUsageChartData: PlanUsageCharts;
+  subscriptionData;
 
   constructor(
     private _globalFilterService: GlobalFilterService,
@@ -40,8 +42,7 @@ export class StatisticsComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [...data['dateRange'].queryValue];
-        this.getSubscriptionUsage(data['filter'].queryValue[0].hotelId);
+        this.hotelId = data['filter'].queryValue[0].hotelId;
       })
     );
   }
@@ -49,21 +50,29 @@ export class StatisticsComponent implements OnInit {
   listenForSubscriptionPlan(): void {
     this.$subscription.add(
       this.subscriptionService.subscription$.subscribe((response) => {
-        this.subscriptionPlanUsage = new PlanUsage().deserialize(response);
+        if (Object.keys(response).length) {
+          this.subscriptionPlanUsage = new PlanUsage().deserialize(response);
+          this.subscriptionData = response;
+          this.getSubscriptionUsage(this.hotelId);
+        }
       })
     );
   }
 
   getSubscriptionUsage(hotelId: string): void {
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          from: this.subscriptionData.startDate,
+          to: this.subscriptionData.endDate,
+        },
+      ]),
     };
 
     this.$subscription.add(
       this.subscriptionService.getSubscriptionUsage(hotelId, config).subscribe(
         (response) => {
           this.planUsageChartData = new PlanUsageCharts().deserialize(response);
-          console.log(new PlanUsageCharts().deserialize(response));
         },
         ({ error }) => {
           this.snackBarService.openSnackBarAsText(error.message);

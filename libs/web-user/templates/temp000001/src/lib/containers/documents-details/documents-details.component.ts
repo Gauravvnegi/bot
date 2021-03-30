@@ -251,7 +251,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     let documentTypes = config.dropDownDocumentList; //hardcoded
 
     documentTypes.forEach((documentType, index) => {
-      debugger;
       let documentFA = guestFG.get('documents') as FormArray;
       documentFA.push(this.getFileFG());
 

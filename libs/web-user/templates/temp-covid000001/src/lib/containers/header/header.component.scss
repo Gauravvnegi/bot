@@ -10,7 +10,7 @@
   z-index: 22;
   @include flex-space-between();
   align-items: center;
-  .option__menu{
+  .option__menu {
     position: absolute;
     z-index: 11;
     top: 51px;
@@ -18,7 +18,7 @@
     display: none;
     border-radius: 5px;
     background-color: $primary-blue;
-    a{
+    a {
       text-decoration: none;
       font-size: $font-responsive-small;
       display: block;
@@ -27,10 +27,10 @@
       color: $white;
     }
   }
-  .show_option_menu{
+  .show_option_menu {
     display: block;
   }
-    .logo_and_menu {
+  .logo_and_menu {
     @include flex-item-center();
     .change .bar1 {
       transform: rotate(-45deg) translate(-8px, 7px);
@@ -91,6 +91,9 @@
         cursor: pointer;
         color: $primary-blue;
       }
+      @media only screen and (max-width: 800px) {
+        font-size: 12px;
+      }
     }
     @media only screen and (max-width: $M) {
       display: none;
@@ -111,10 +114,10 @@
       opacity: 1;
       cursor: pointer;
     }
-  @media only screen and (max-width: $M) {
-    padding: 12px $padding-medium;
-    font-size: $font-responsive-smaller;
-  }
+    @media only screen and (max-width: $M) {
+      padding: 12px $padding-medium;
+      font-size: $font-responsive-smaller;
+    }
   }
   @media only screen and (max-width: $M) {
     padding: $padding-small;

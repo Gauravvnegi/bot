@@ -30,15 +30,24 @@ export class HealthDetailsService extends ApiService {
     );
   }
 
-  validateHealthDecForm(healthDecForm: FormGroup) {
+  validateHealthDecForm(healthDecForm: FormGroup, signature: string) {
     let healthDecFG = healthDecForm.get('healthDeclarationForm') as FormGroup;
     let status = [];
-    if (healthDecFG.invalid) {
+    if (healthDecFG.invalid || signature === undefined) {
       if (healthDecFG.get('primary').invalid) {
         status.push({
           validity: false,
           code: 'INVALID_FORM',
           msg: 'Invalid form. Please fill all the fields.',
+          data: {
+            index: 0,
+          },
+        });
+      } else if (signature === undefined) {
+        status.push({
+          validity: false,
+          code: 'SIGNATURE_MISSING',
+          msg: 'Signature missing.',
           data: {
             index: 0,
           },

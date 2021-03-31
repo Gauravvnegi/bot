@@ -108,7 +108,7 @@ export class NotificationComponent implements OnInit {
         attachments: [[]],
         message: [''],
         emailIds: [this.isEmail ? [this.email] : []],
-        roomNumbers: [[this.roomNumber]],
+        roomNumbers: [this.roomNumber ? [this.roomNumber] : []],
       });
     } else {
       this.notificationForm = this._fb.group({

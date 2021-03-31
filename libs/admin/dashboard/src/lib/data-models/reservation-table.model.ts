@@ -266,8 +266,14 @@ export class GuestType implements Deserializable {
   secondaryGuest = [];
   deserialize(input) {
     this.primaryGuest = new Guest().deserialize(input.primaryGuest);
-    input.secondaryGuest.forEach((secondaryGuest) => {
-      this.secondaryGuest.push(new Guest().deserialize(secondaryGuest));
+    input.accompanyGuests.forEach((guest) => {
+      this.secondaryGuest.push(new Guest().deserialize(guest));
+    });
+    input.sharerGuests.forEach((guest) => {
+      this.secondaryGuest.push(new Guest().deserialize(guest));
+    });
+    input.kids.forEach((guest) => {
+      this.secondaryGuest.push(new Guest().deserialize(guest));
     });
     return this;
   }

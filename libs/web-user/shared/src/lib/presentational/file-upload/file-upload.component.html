@@ -25,7 +25,9 @@
     />
     <input type="hidden" [formControlName]="name" />
     <span *ngIf="!isValidDocument">{{ error }}</span>
-    <mat-label *ngIf="!settings">{{ documentType }}{{ settings.label }}</mat-label>
+    <mat-label *ngIf="settings"
+      >{{ documentType }}{{ settings.label }}</mat-label
+    >
   </div>
   <ng-container *ngIf="isUploading">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>

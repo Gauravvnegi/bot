@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import { isEmpty } from 'lodash';
 import { Observable, Subject } from 'rxjs';
+import { GuestRole } from '../constants/guest';
 import {
   DocumentDetailDS,
   DocumentDetailsConfigI,
@@ -106,11 +107,27 @@ export class DocumentDetailsService extends ApiService {
           id: guest.id,
           documents: guest.documents,
         };
-      } else {
-        if (!modifiedValue['secondaryGuest']) {
-          modifiedValue['secondaryGuest'] = [];
+      } else if (guest.role === GuestRole.accompany) {
+        if (!modifiedValue['accompanyGuests']) {
+          modifiedValue['accompanyGuests'] = [];
         }
-        modifiedValue['secondaryGuest'].push({
+        modifiedValue['accompanyGuests'].push({
+          id: guest.id,
+          documents: guest.documents,
+        });
+      } else if (guest.role === GuestRole.kids) {
+        if (!modifiedValue['kids']) {
+          modifiedValue['kids'] = [];
+        }
+        modifiedValue['kids'].push({
+          id: guest.id,
+          documents: guest.documents,
+        });
+      } else if (guest.role === GuestRole.sharer) {
+        if (!modifiedValue['sharerGuests']) {
+          modifiedValue['sharerGuests'] = [];
+        }
+        modifiedValue['sharerGuests'].push({
           id: guest.id,
           documents: guest.documents,
         });
@@ -193,59 +210,31 @@ export class DocumentDetailsService extends ApiService {
     if (documentForm.invalid) {
       status.push({
         validity: false,
-        code: "INVALID_FORM",
-        msg: "Invalid form. Please fill all the fields.",
+        code: 'INVALID_FORM',
+        msg: 'Invalid form. Please fill all the fields.',
       });
     }
 
     let documentFormValue = documentForm.getRawValue();
 
     documentFormValue.documentDetail.guests.forEach((guest, index) => {
-      let guestDocuments = guest.documents;
-      if (!guestDocuments.length) {
-        status.push({
-          validity: false,
-          msg: 'Please upload documents for guests.',
-          code: 'UPLOAD_GUEST_DOCUMENT_PENDING',
-          data: {
-            guestId: guest.id,
-            index,
-          },
-        });
-      }
+      if (!guest.Optional) {
+        let guestDocuments = guest.documents;
+        if (!guestDocuments.length) {
+          status.push({
+            validity: false,
+            msg: 'Please upload documents for guests.',
+            code: 'UPLOAD_GUEST_DOCUMENT_PENDING',
+            data: {
+              guestId: guest.id,
+              index,
+            },
+          });
+        }
 
-      if (guestDocuments.length) {
-        guestDocuments.forEach((document) => {
-          if (document.documentType && !guest.isInternational) {
-            if (isEmpty(document.documentFileFront.trim())) {
-              status.push({
-                validity: false,
-                msg: `Please upload front document for ${document.documentType}.`,
-                code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
-                type: document.documentType,
-                data: {
-                  guestId: guest.id,
-                  index,
-                },
-              });
-            }
-
-            if (isEmpty(document.documentFileBack.trim())) {
-              status.push({
-                validity: false,
-                msg: `Please upload back document for ${document.documentType}.`,
-                code: 'UPLOAD_BACK_DOCUMENT_PENDING',
-                type: document.documentType,
-                data: {
-                  guestId: guest.id,
-                  index,
-                },
-              });
-            }
-          }
-
-          if (guest.isInternational) {
-            if (document.documentType == 'PASSPORT') {
+        if (guestDocuments.length) {
+          guestDocuments.forEach((document) => {
+            if (document.documentType && !guest.isInternational) {
               if (isEmpty(document.documentFileFront.trim())) {
                 status.push({
                   validity: false,
@@ -273,32 +262,57 @@ export class DocumentDetailsService extends ApiService {
               }
             }
 
-            if (document.documentType == 'VISA' && journey == 'CHECKIN') {
-              if (isEmpty(document.documentFileFront.trim())) {
-                status.push({
-                  validity: false,
-                  msg: `Please upload front document for ${document.documentType}.`,
-                  code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
-                  type: document.documentType,
-                  data: {
-                    guestId: guest.id,
-                    index,
-                  },
-                });
+            if (guest.isInternational) {
+              if (document.documentType == 'PASSPORT') {
+                if (isEmpty(document.documentFileFront.trim())) {
+                  status.push({
+                    validity: false,
+                    msg: `Please upload front document for ${document.documentType}.`,
+                    code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                    type: document.documentType,
+                    data: {
+                      guestId: guest.id,
+                      index,
+                    },
+                  });
+                }
+
+                if (isEmpty(document.documentFileBack.trim())) {
+                  status.push({
+                    validity: false,
+                    msg: `Please upload back document for ${document.documentType}.`,
+                    code: 'UPLOAD_BACK_DOCUMENT_PENDING',
+                    type: document.documentType,
+                    data: {
+                      guestId: guest.id,
+                      index,
+                    },
+                  });
+                }
+              }
+
+              if (document.documentType == 'VISA' && journey == 'CHECKIN') {
+                if (isEmpty(document.documentFileFront.trim())) {
+                  status.push({
+                    validity: false,
+                    msg: `Please upload front document for ${document.documentType}.`,
+                    code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
+                    type: document.documentType,
+                    data: {
+                      guestId: guest.id,
+                      index,
+                    },
+                  });
+                }
               }
             }
-          }
-        });
+          });
+        }
       }
     });
 
     return status;
   }
-
-  // updateDocumentDetailDS(value) {
-  //   this._documnentDetailDS.deserialize(value);
-  //   this.documentDetailDS$.next(this._documnentDetailDS);
-  // }
 
   get documentDetailDS() {
     return this._documnentDetailDS;

@@ -1,151 +1,154 @@
 <div class="container">
   <form [formGroup]="guestDetailsForm">
-    <mat-accordion #primaryGuestAccordian="matAccordion" [multi]="true">
-      <mat-expansion-panel #primaryGuestPanel [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <span class="container__title">Primary Guest</span>
-            <mat-icon class="expand-icon" *ngIf="!primaryGuestPanel.expanded"
-              >add</mat-icon
-            >
-            <mat-icon class="expand-icon" *ngIf="primaryGuestPanel.expanded"
-              >remove</mat-icon
-            >
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="container__body">
-          <div class="container__body--info">
-            <div class="container__body--info-primary">
-              <div class="container__body--info-primary-prefix">
-                <web-user-select-box
-                  [parentForm]="guestDetailsForm.get('primaryGuest')"
-                  [name]="'nameTitle'"
-                  [settings]="primaryGuestFieldConfig.salutation"
-                ></web-user-select-box>
-              </div>
-              <div class="container__body--info-primary-main">
-                <web-user-input
-                  [parentForm]="guestDetailsForm.get('primaryGuest')"
-                  [name]="'firstName'"
-                  [settings]="primaryGuestFieldConfig.firstName"
-                ></web-user-input>
-              </div>
-            </div>
-            <div class="container__body--info-secondary">
-              <web-user-input
-                [parentForm]="guestDetailsForm.get('primaryGuest')"
-                [name]="'lastName'"
-                [settings]="primaryGuestFieldConfig.lastName"
-              ></web-user-input>
-            </div>
-          </div>
-          <div class="container__body--info">
-            <div class="container__body--info-primary">
-              <div class="container__body--info-primary-prefix">
-                <web-user-select-box
-                  [parentForm]="guestDetailsForm.get('primaryGuest')"
-                  [name]="'nationality'"
-                  [settings]="primaryGuestFieldConfig.country"
-                ></web-user-select-box>
-              </div>
-              <div class="container__body--info-primary-main">
-                <web-user-input
-                  [parentForm]="guestDetailsForm.get('primaryGuest')"
-                  [name]="'mobileNumber'"
-                  [settings]="primaryGuestFieldConfig.phone"
-                >
-                </web-user-input>
-              </div>
-            </div>
-            <div class="container__body--info-secondary">
-              <web-user-input
-                [parentForm]="guestDetailsForm.get('primaryGuest')"
-                [name]="'email'"
-                [settings]="primaryGuestFieldConfig.email"
-              >
-              </web-user-input>
-            </div>
-          </div>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <ng-container *ngIf="!!secondaryGuests">
+    <ng-container *ngIf="!!guests">
       <ng-container
-        *ngFor="let guestFormGroup of secondaryGuests.controls; let i = index"
+        *ngFor="let guestFormGroup of guests.controls; let i = index"
       >
-        <mat-accordion #secondaryGuestAccordian="matAccordion" [multi]="true">
-          <mat-expansion-panel #secondaryGuestpanel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="container__title">Secondary Guest</span>
-                <mat-icon
-                  class="expand-icon"
-                  *ngIf="!secondaryGuestpanel.expanded"
-                  >add</mat-icon
-                >
-                <mat-icon
-                  class="expand-icon"
-                  *ngIf="secondaryGuestpanel.expanded"
-                  >remove</mat-icon
-                >
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="container__body">
-              <div class="container__body--info">
-                <div class="container__body--info-primary">
-                  <div class="container__body--info-primary-prefix">
-                    <web-user-select-box
-                      [parentForm]="guestFormGroup"
-                      [name]="'nameTitle'"
-                      [settings]="secondaryGuestFieldConfig[i].salutation"
-                    ></web-user-select-box>
+        <ng-container
+          *ngIf="guestFormGroup.get('type').value === 'primary'; else secondary"
+        >
+          <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+            <mat-expansion-panel #guestpanel [expanded]="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="container__title">{{
+                    guestFormGroup.get('label').value
+                  }}</span>
+                  <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
+                    >add</mat-icon
+                  >
+                  <mat-icon class="expand-icon" *ngIf="guestpanel.expanded"
+                    >remove</mat-icon
+                  >
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container__body">
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nameTitle'"
+                        [settings]="guestFieldConfig[i].salutation"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'firstName'"
+                        [settings]="guestFieldConfig[i].firstName"
+                      ></web-user-input>
+                    </div>
                   </div>
-                  <div class="container__body--info-primary-main">
+                  <div class="container__body--info-secondary">
                     <web-user-input
                       [parentForm]="guestFormGroup"
-                      [name]="'firstName'"
-                      [settings]="secondaryGuestFieldConfig[i].firstName"
+                      [name]="'lastName'"
+                      [settings]="guestFieldConfig[i].lastName"
                     ></web-user-input>
                   </div>
                 </div>
-                <div class="container__body--info-secondary">
-                  <web-user-input
-                    [parentForm]="guestFormGroup"
-                    [name]="'lastName'"
-                    [settings]="secondaryGuestFieldConfig[i].lastName"
-                  ></web-user-input>
-                </div>
-              </div>
-              <div class="container__body--info">
-                <div class="container__body--info-primary">
-                  <div class="container__body--info-primary-prefix">
-                    <web-user-select-box
-                      [parentForm]="guestFormGroup"
-                      [name]="'nationality'"
-                      [settings]="secondaryGuestFieldConfig[i].country"
-                    ></web-user-select-box>
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nationality'"
+                        [settings]="guestFieldConfig[i].country"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'mobileNumber'"
+                        [settings]="guestFieldConfig[i].phone"
+                      >
+                      </web-user-input>
+                    </div>
                   </div>
-                  <div class="container__body--info-primary-main">
+                  <div class="container__body--info-secondary">
                     <web-user-input
                       [parentForm]="guestFormGroup"
-                      [name]="'mobileNumber'"
-                      [settings]="secondaryGuestFieldConfig[i].phone"
+                      [name]="'email'"
+                      [settings]="guestFieldConfig[i].email"
                     >
                     </web-user-input>
                   </div>
                 </div>
-                <div class="container__body--info-secondary">
-                  <web-user-input
-                    [parentForm]="guestFormGroup"
-                    [name]="'email'"
-                    [settings]="secondaryGuestFieldConfig[i].email"
-                  >
-                  </web-user-input>
-                </div>
               </div>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+        <ng-template #secondary>
+          <mat-accordion #guestAccordian="matAccordion" [multi]="true">
+            <mat-expansion-panel #guestpanel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="container__title">{{
+                    guestFormGroup.get('label').value
+                  }}</span>
+                  <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
+                    >add</mat-icon
+                  >
+                  <mat-icon class="expand-icon" *ngIf="guestpanel.expanded"
+                    >remove</mat-icon
+                  >
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="container__body">
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nameTitle'"
+                        [settings]="guestFieldConfig[i].salutation"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'firstName'"
+                        [settings]="guestFieldConfig[i].firstName"
+                      ></web-user-input>
+                    </div>
+                  </div>
+                  <div class="container__body--info-secondary">
+                    <web-user-input
+                      [parentForm]="guestFormGroup"
+                      [name]="'lastName'"
+                      [settings]="guestFieldConfig[i].lastName"
+                    ></web-user-input>
+                  </div>
+                </div>
+                <ng-container [ngSwitch]="guestFormGroup.get('role').value">
+                  <ng-container *ngSwitchCase="'accompany'">
+                    <div class="container__body--info-primary">
+                      <div class="container__body--info-primary-prefix">
+                        <web-user-select-box
+                          [parentForm]="guestFormGroup"
+                          [name]="'age'"
+                          [settings]="guestFieldConfig[i].age"
+                        ></web-user-select-box>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'kids'">
+                    <div class="container__body--info-primary">
+                      <div class="container__body--info-primary-prefix">
+                        <web-user-select-box
+                          [parentForm]="guestFormGroup"
+                          [name]="'age'"
+                          [settings]="guestFieldConfig[i].age"
+                        ></web-user-select-box>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-template>
       </ng-container>
     </ng-container>
   </form>

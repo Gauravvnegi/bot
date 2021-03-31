@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { GuestRole, GuestTypes } from '../constants/guest';
 import { FieldSchema } from './fieldSchema.model';
 
 export interface Deserializable {
@@ -6,20 +7,65 @@ export interface Deserializable {
 }
 
 export class GuestDetailDS implements Deserializable {
-  primaryGuest: GuestDetail;
-  secondaryGuest: GuestDetail[];
+  guests: Guest[];
 
   deserialize(input: any) {
-    this.primaryGuest = new GuestDetail().deserialize(input.primaryGuest);
-    this.secondaryGuest = new Array<GuestDetail>();
-    input.secondaryGuest.forEach((guest) => {
-      this.secondaryGuest.push(new GuestDetail().deserialize(guest));
-    });
+    this.guests = new Array<Guest>();
+    input.primaryGuest &&
+      this.guests.push(
+        new Guest().deserialize({
+          ...input.primaryGuest,
+          ...{
+            type: GuestTypes.primary,
+            label: 'Primary Guest',
+            role: GuestRole.undefined,
+          },
+        })
+      );
+    input.sharerGuests &&
+      input.sharerGuests.forEach((guest) => {
+        this.guests.push(
+          new Guest().deserialize({
+            ...guest,
+            ...{
+              type: GuestTypes.secondary,
+              label: 'Sharer',
+              role: GuestRole.sharer,
+            },
+          })
+        );
+      });
+    input.accompanyGuests &&
+      input.accompanyGuests.forEach((guest) => {
+        this.guests.push(
+          new Guest().deserialize({
+            ...guest,
+            ...{
+              type: GuestTypes.secondary,
+              label: 'Accompanied / Kids',
+              role: GuestRole.accompany,
+            },
+          })
+        );
+      });
+    input.kids &&
+      input.kids.forEach((guest) => {
+        this.guests.push(
+          new Guest().deserialize({
+            ...guest,
+            ...{
+              type: GuestTypes.secondary,
+              label: 'Accompanied/Kids',
+              role: GuestRole.kids,
+            },
+          })
+        );
+      });
     return this;
   }
 }
 
-export class GuestDetail implements Deserializable {
+export class Guest implements Deserializable {
   id: string;
   firstName: string;
   lastName: string;
@@ -27,6 +73,10 @@ export class GuestDetail implements Deserializable {
   nationality: string;
   email: string;
   nameTitle: string;
+  type: string;
+  label: string;
+  role: string;
+  age: number;
 
   deserialize(input: any) {
     Object.assign(
@@ -37,7 +87,11 @@ export class GuestDetail implements Deserializable {
       set({}, 'mobileNumber', get(input, ['contactDetails', 'contactNumber'])),
       set({}, 'nationality', get(input, ['contactDetails', 'cc'])),
       set({}, 'email', get(input, ['contactDetails', 'emailId'])),
-      set({}, 'nameTitle', get(input, ['nameTitle']))
+      set({}, 'nameTitle', get(input, ['nameTitle'])),
+      set({}, 'type', get(input, ['type'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'role', get(input, ['role'])),
+      set({}, 'age', get(input, ['age']))
     );
     return this;
   }

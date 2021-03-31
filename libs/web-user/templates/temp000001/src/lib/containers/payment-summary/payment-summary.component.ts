@@ -68,7 +68,8 @@ export class PaymentSummaryComponent implements OnInit {
       base,
       amount,
       totalAmount,
-      taxAndFees,
+      cgstAmount,
+      sgstAmount,
     } = this.paymentSummary.roomRates;
 
     this.dataSource.push({
@@ -79,12 +80,8 @@ export class PaymentSummaryComponent implements OnInit {
       amount,
       totalAmount,
       currency: this.paymentSummary.currencyCode,
-      ...Object.assign(
-        {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
-      ),
+      cgstAmount,
+      sgstAmount,
     });
     this.paymentSummary.packages.forEach((amenity) => {
       let {
@@ -94,7 +91,8 @@ export class PaymentSummaryComponent implements OnInit {
         base,
         amount,
         totalAmount,
-        taxAndFees,
+        cgstAmount,
+        sgstAmount,
       } = amenity;
 
       this.dataSource.push({
@@ -105,12 +103,8 @@ export class PaymentSummaryComponent implements OnInit {
         amount,
         totalAmount,
         currency: this.paymentSummary.currencyCode,
-        ...Object.assign(
-          {},
-          ...taxAndFees.map((taxType) => ({
-            [taxType.type]: taxType.value,
-          }))
-        ),
+        cgstAmount,
+        sgstAmount,
       });
     });
   }

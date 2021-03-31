@@ -8,6 +8,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Title } from '@angular/platform-browser';
 import { DEFAULT_LANG } from 'libs/web-user/shared/src/lib/constants/lang';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -31,6 +32,7 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
     protected templateService: TemplateService,
     protected reservationService: ReservationService,
     protected hotelService: HotelService,
+    protected titleService: Title,
     protected translateService: TranslateService
   ) {}
 
@@ -55,6 +57,46 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
     this.reservationService.reservationId = reservationId;
     this.hotelService.currentJourney = journey;
     this.hotelService.hotelId = hotelId;
+    this.getReservationDetails();
+  }
+
+  getReservationDetails(): void {
+    //dev.botshot.in/?token=cg1jak6Id623uiUNGb1UOnRgMUTycRJO0kxLT2ceycybrpFaG6hcVNDnzgWxMY3zI5Vog_Ln5puJFItGajebaImQdO2yQF0N6aKjHBQ_AFC6cIAIVLF3UzAnr9-kU3k6aASl32qp0DhLF22IC-DlhA==
+    this.$subscription.add(
+      this.reservationService
+        .getReservationDetails(this.reservationService.reservationId)
+        .subscribe(
+          (reservationData) => {
+            this.titleService.setTitle(
+              reservationData['hotel']
+                ? reservationData['hotel'].name
+                : 'Web-user'
+            );
+            let favicon = this.document.querySelector('#favicon');
+            favicon['href'] = reservationData['hotel']['favIcon']
+              ? reservationData['hotel']['favIcon'].trim()
+              : 'favicon.ico';
+          },
+          ({ error }) => {
+            if (error.type == 'BOOKING_CANCELED') {
+              this.getHotelDataById();
+            }
+          }
+        )
+    );
+  }
+
+  getHotelDataById() {
+    this.hotelService.getHotelConfigById(this.hotelService.hotelId).subscribe(
+      (hotel) => {
+        this.titleService.setTitle(hotel.name);
+        let favicon = this.document.querySelector('#favicon');
+        favicon['href'] = hotel['favIcon']
+          ? hotel['favIcon'].trim()
+          : 'favicon.ico';
+      },
+      ({ error }) => {}
+    );
   }
 
   protected initTranslationService(): void {

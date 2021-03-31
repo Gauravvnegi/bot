@@ -76,7 +76,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   patchGuestData() {
-    this.guestsFA.patchValue(this.detailsData.guestDetails);
+    this.guestsFA.patchValue(this.detailsData.guestDetails.guests);
   }
 
   // onNationalityChange(nationality) {
@@ -108,11 +108,11 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   setDefaultGuestForDocument() {
-    this.detailsData.guestDetails.forEach((guest) => {
+    this.detailsData.guestDetails.guests.forEach((guest) => {
       if (guest.isPrimary === true) {
         this.selectedGuestId = guest.id;
+        this.onGuestChange(guest.id);
       }
-      this.onGuestChange(guest.id);
     });
   }
 
@@ -156,7 +156,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         guestFG.addControl('documents', new FormArray([]));
         let controlFA = guestFG.get('documents') as FormArray;
         //improper check ? what if i manipulate the guest index
-        this.detailsData.guestDetails[index].documents.forEach((doc) => {
+        this.detailsData.guestDetails.guests[index].documents.forEach((doc) => {
           controlFA.push(this.getDocumentFG());
         });
       });
@@ -275,7 +275,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   downloadDocs(documents) {
     let urls = [];
     let fileNames = [];
-    const guest = this.detailsData.guestDetails.filter(
+    const guest = this.detailsData.guestDetails.guests.filter(
       (data) => data.id === this.selectedGuestId
     )[0];
     const name = `${guest.firstName}_${guest.lastName}`;

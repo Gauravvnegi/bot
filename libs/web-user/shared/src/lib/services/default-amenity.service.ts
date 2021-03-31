@@ -26,6 +26,23 @@ export class DefaultAmenityService extends ApiService {
       disable: false,
     });
 
+    defaultFormFieldSchema['pickupDate'] = new FieldSchema().deserialize({
+      label: 'Pickup Date',
+      disable: true,
+    });
+
+    defaultFormFieldSchema['pickupTime'] = new FieldSchema().deserialize({
+      label: 'Pickup Time',
+      disable: false,
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '13px',
+        },
+      },
+    });
+
     return defaultFormFieldSchema as DefaultAmenityConfigI;
   }
 

@@ -46,21 +46,12 @@ export class MainComponent implements OnInit {
 
   getReservationDetails(): void {
     //dev.botshot.in/?token=cg1jak6Id623uiUNGb1UOnRgMUTycRJO0kxLT2ceycybrpFaG6hcVNDnzgWxMY3zI5Vog_Ln5puJFItGajebaImQdO2yQF0N6aKjHBQ_AFC6cIAIVLF3UzAnr9-kU3k6aASl32qp0DhLF22IC-DlhA==
-    https: this.$subscription.add(
+    this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
             this._hotelService.hotelConfig = reservationData['hotel'];
-            this.titleService.setTitle(
-              reservationData['hotel']
-                ? reservationData['hotel'].name
-                : 'Web-user'
-            );
-            let favicon = this.document.querySelector('#favicon');
-            favicon['href'] = reservationData['hotel']['favIcon']
-              ? reservationData['hotel']['favIcon'].trim()
-              : 'favicon.ico';
             this.isReservationData = true;
             this.stepperData = this._templateService.templateData[
               this._templateService.templateId

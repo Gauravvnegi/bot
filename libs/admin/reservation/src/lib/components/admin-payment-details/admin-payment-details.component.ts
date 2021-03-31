@@ -77,32 +77,65 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.detailsData.paymentDetails;
-    let {
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      taxAndFees,
-    } = paymentSummary.roomRates;
+    // if (paymentSummary.roomRates) {
+    //   let {
+    //     label,
+    //     description,
+    //     unit,
+    //     unitPrice,
+    //     amount,
+    //     discount,
+    //     totalAmount,
+    //     taxAndFees,
+    //   } = paymentSummary.roomRates;
+    //   this.dataSource.push({
+    //     label,
+    //     description,
+    //     unit,
+    //     unitPrice,
+    //     amount,
+    //     discount,
+    //     totalAmount,
+    //     currency: paymentSummary.currency,
+    //     ...Object.assign(
+    //       {},
+    //       taxAndFees &&
+    //         taxAndFees.map((taxType) => ({
+    //           [taxType.type]: taxType.amount,
+    //         }))
+    //     ),
+    //   });
+    // }
+    paymentSummary.packages.forEach((amenity) => {
+      let {
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        totalAmount,
+        cgstAmount,
+        sgstAmount,
+      } = amenity;
 
-    this.dataSource.push({
-      label,
-      description,
-      unit,
-      unitPrice,
-      amount,
-      discount,
-      totalAmount,
-      currency: paymentSummary.currency,
-      ...Object.assign(
-        {},
-        ...taxAndFees.map((taxType) => ({
-          [taxType.type]: taxType.value,
-        }))
-      ),
+      this.dataSource.push({
+        label,
+        description,
+        unit,
+        base,
+        amount,
+        totalAmount,
+        currency: paymentSummary.currency,
+        cgstAmount,
+        sgstAmount,
+        // ...Object.assign(
+        //   {},
+        //   taxAndFees &&
+        //     taxAndFees.map((taxType) => ({
+        //       [taxType.type]: taxType.amount,
+        //     }))
+        // ),
+      });
     });
   }
 
@@ -110,7 +143,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
     const guestFA = this.guestInfoDetailsFG.get('guests') as FormArray;
 
     guestFA.controls.forEach((guestControl: FormGroup) => {
-      if (guestControl.get('isPrimary')) {
+      if (guestControl.get('isPrimary').value) {
         this.primaryGuestFG = guestControl;
       }
     });

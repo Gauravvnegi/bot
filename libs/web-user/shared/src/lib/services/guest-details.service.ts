@@ -12,6 +12,8 @@ import {
   CountryCodes,
   Country,
 } from '../../../../shared/src/lib/data-models/countryCode';
+import { GuestRole, GuestTypes } from '../constants/guest';
+import { AgeList } from '../data-models/Age';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import {
   GuestDetailDS,
@@ -30,6 +32,7 @@ export class GuestDetailsService extends ApiService {
 
   setFieldConfigForGuestDetails(config) {
     let guestDetailsFieldSchema = {};
+    let ageList = AgeList;
 
     guestDetailsFieldSchema['salutation'] = new FieldSchema().deserialize({
       label: ' ',
@@ -69,29 +72,44 @@ export class GuestDetailsService extends ApiService {
       optionsClosed: new Country().getDialCodeList([config.hotelNationality]),
     });
 
+    guestDetailsFieldSchema['age'] = new FieldSchema().deserialize({
+      label: 'Age',
+      disable: false,
+      isOptionsOpenedChanged: false,
+      options: ageList,
+    });
+
     return guestDetailsFieldSchema as GuestDetailsConfigI;
   }
 
   modifyGuestDetails(value) {
-    let data = new GuestDetails();
-    data.primaryGuest = new Guest();
-    data.secondaryGuest = new Array<Guest>();
+    let data = {};
+    data['primaryGuest'] = new Guest();
+    // data.secondaryGuest = new Array<Guest>();
+    data['accompanyGuests'] = new Array<Guest>();
+    data['sharerGuests'] = new Array<Guest>();
+    data['kids'] = new Array<Guest>();
 
-    data.primaryGuest = this.mapGuestDetailValues(
-      data.primaryGuest,
-      value.guestDetail.primaryGuest
-    );
-
-    if (
-      value.guestDetail.secondaryGuest &&
-      value.guestDetail.secondaryGuest.length
-    ) {
-      for (let i = 0; i < value.guestDetail.secondaryGuest.length; i++) {
-        data.secondaryGuest[i] = new Guest();
-        data.secondaryGuest[i] = this.mapGuestDetailValues(
-          data.secondaryGuest[i],
-          value.guestDetail.secondaryGuest[i]
-        );
+    if (value.guestDetail.guests && value.guestDetail.guests.length) {
+      for (let i = 0; i < value.guestDetail.guests.length; i++) {
+        if (value.guestDetail.guests[i].type === GuestTypes.primary) {
+          data['primaryGuest'] = this.mapGuestDetailValues(
+            data['primaryGuest'],
+            value.guestDetail.guests[i]
+          );
+        } else if (value.guestDetail.guests[i].role === GuestRole.accompany) {
+          data['accompanyGuests'].push(
+            this.mapGuestDetailValues({}, value.guestDetail.guests[i])
+          );
+        } else if (value.guestDetail.guests[i].role === GuestRole.kids) {
+          data['kids'].push(
+            this.mapGuestDetailValues({}, value.guestDetail.guests[i])
+          );
+        } else if (value.guestDetail.guests[i].role === GuestRole.sharer) {
+          data['sharerGuests'].push(
+            this.mapGuestDetailValues({}, value.guestDetail.guests[i])
+          );
+        }
       }
     }
     return data;
@@ -101,23 +119,10 @@ export class GuestDetailsService extends ApiService {
     let guestDetailFG = guestDetailForm.get('guestDetail') as FormGroup;
     let status = [];
     if (guestDetailFG.invalid) {
-      if (guestDetailFG.get('primaryGuest').invalid) {
-        status.push({
-          validity: false,
-          code: 'INVALID_FORM',
-          msg: 'Invalid form. Please fill all the fields.',
-          data: {
-            guestId: guestDetailFG.get('primaryGuest').get('id').value,
-            type: 'primary',
-            index: 0,
-          },
-        });
-      } else if (guestDetailFG.get('secondaryGuest').invalid) {
-        const secondaryGuestFA = guestDetailFG.get(
-          'secondaryGuest'
-        ) as FormArray;
+      if (guestDetailFG.get('guests').invalid) {
+        const guestFA = guestDetailFG.get('guests') as FormArray;
 
-        secondaryGuestFA.controls.forEach((control: FormGroup, index) => {
+        guestFA.controls.forEach((control: FormGroup, index) => {
           if (control.invalid) {
             status.push({
               validity: false,
@@ -126,7 +131,7 @@ export class GuestDetailsService extends ApiService {
               data: {
                 guestId: control.get('id').value,
                 index,
-                type: 'secondary',
+                type: control.get('type').value,
               },
             });
           }
@@ -145,10 +150,17 @@ export class GuestDetailsService extends ApiService {
     data.firstName = value.firstName;
     data.lastName = value.lastName;
     data.nameTitle = value.nameTitle;
-    data.contactDetails = new ContactDetails();
-    data.contactDetails.cc = value.nationality;
-    data.contactDetails.emailId = value.email;
-    data.contactDetails.contactNumber = value.mobileNumber;
+    if (value.type === GuestTypes.primary) {
+      data.contactDetails = new ContactDetails();
+      data.contactDetails.cc = value.nationality;
+      data.contactDetails.emailId = value.email;
+      data.contactDetails.contactNumber = value.mobileNumber;
+    } else if (
+      value.role === GuestRole.kids ||
+      value.role === GuestRole.accompany
+    ) {
+      data.age = value.age;
+    }
     return data;
   }
 

@@ -18,40 +18,166 @@
       </ng-container>
     </div>
     <form [formGroup]="guestDetailsForm">
-      <ng-container
-        formArrayName="guests"
-        *ngFor="
-          let guestFormGroup of guestDetailsForm.controls.guests?.value;
-          let i = index
-        "
+      <mat-accordion
+        #guestAccordian="matAccordion"
+        [multi]="true"
+        *ngIf="filteredGuestForm('').length"
       >
-        <div class="feilds-wrapper" [formGroupName]="i">
-          <div class="feild width-added">
-            <mat-label class="label">Full Name</mat-label>
-            <div class="value">
-              {{ guestFormGroup.title }}
-              {{ guestFormGroup.firstName }}
-              {{ guestFormGroup.lastName }}
-            </div>
-          </div>
-          <div class="feild width-added">
-            <mat-label class="label">Phone No.</mat-label>
-            <div
-              *ngIf="guestFormGroup.phoneNumber; else emptyCell"
-              class="value"
+        <mat-expansion-panel #guestpanel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="container__title">Primary Guest</span>
+              <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
+                >add</mat-icon
+              >
+              <mat-icon class="expand-icon" *ngIf="guestpanel.expanded"
+                >remove</mat-icon
+              >
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container__body">
+            <ng-container
+              formArrayName="guests"
+              *ngFor="
+                let guestFormGroup of filteredGuestForm('');
+                let i = index
+              "
             >
-              {{ guestFormGroup.countryCode }}
-              {{ guestFormGroup.phoneNumber }}
-            </div>
+              <div class="feilds-wrapper" [formGroupName]="i">
+                <div class="feild width-added">
+                  <mat-label class="label">Full Name</mat-label>
+                  <div class="value">
+                    {{ guestFormGroup.title }}
+                    {{ guestFormGroup.firstName }}
+                    {{ guestFormGroup.lastName }}
+                  </div>
+                </div>
+                <div class="feild width-added">
+                  <mat-label class="label">Phone No.</mat-label>
+                  <div
+                    *ngIf="guestFormGroup.phoneNumber; else emptyCell"
+                    class="value"
+                  >
+                    {{ guestFormGroup.countryCode }}
+                    {{ guestFormGroup.phoneNumber }}
+                  </div>
+                </div>
+                <div class="feild width-added">
+                  <mat-label class="label">Email</mat-label>
+                  <div
+                    *ngIf="guestFormGroup.email; else emptyCell"
+                    class="value"
+                  >
+                    {{ guestFormGroup.email }}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
-          <div class="feild width-added">
-            <mat-label class="label">Email</mat-label>
-            <div *ngIf="guestFormGroup.email; else emptyCell" class="value">
-              {{ guestFormGroup.email }}
-            </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion
+        #guestAccordian="matAccordion"
+        [multi]="true"
+        *ngIf="filteredGuestForm('sharer').length > 0"
+      >
+        <mat-expansion-panel #sharerGuestpanel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="container__title">Sharer</span>
+              <mat-icon class="expand-icon" *ngIf="!sharerGuestpanel.expanded"
+                >add</mat-icon
+              >
+              <mat-icon class="expand-icon" *ngIf="sharerGuestpanel.expanded"
+                >remove</mat-icon
+              >
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container__body">
+            <ng-container
+              formArrayName="guests"
+              *ngFor="
+                let guestFormGroup of filteredGuestForm('sharer');
+                let i = index
+              "
+            >
+              <div class="feilds-wrapper" [formGroupName]="i">
+                <div class="feild width-added">
+                  <mat-label class="label">Full Name</mat-label>
+                  <div class="value">
+                    {{ guestFormGroup.title }}
+                    {{ guestFormGroup.firstName }}
+                    {{ guestFormGroup.lastName }}
+                  </div>
+                </div>
+              </div>
+              <hr
+                class="data-seperator"
+                *ngIf="
+                  i < filteredGuestForm('sharer').length - 1 &&
+                  filteredGuestForm('sharer').length > 1
+                "
+              />
+            </ng-container>
           </div>
-        </div>
-      </ng-container>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion
+        #guestAccordian="matAccordion"
+        [multi]="true"
+        *ngIf="filteredGuestForm('accompany', 'kids').length > 0"
+      >
+        <mat-expansion-panel #accompanyGuestAccordian [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="container__title">Accompany / Kids</span>
+              <mat-icon
+                class="expand-icon"
+                *ngIf="!accompanyGuestAccordian.expanded"
+                >add</mat-icon
+              >
+              <mat-icon
+                class="expand-icon"
+                *ngIf="accompanyGuestAccordian.expanded"
+                >remove</mat-icon
+              >
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="container__body">
+            <ng-container
+              formArrayName="guests"
+              *ngFor="
+                let guestFormGroup of filteredGuestForm('accompany', 'kids');
+                let i = index
+              "
+            >
+              <div class="feilds-wrapper" [formGroupName]="i">
+                <div class="feild width-added">
+                  <mat-label class="label">Full Name</mat-label>
+                  <div class="value">
+                    {{ guestFormGroup.title }}
+                    {{ guestFormGroup.firstName }}
+                    {{ guestFormGroup.lastName }}
+                  </div>
+                </div>
+                <div class="feild width-added">
+                  <mat-label class="label">Age</mat-label>
+                  <div *ngIf="guestFormGroup.age; else emptyCell" class="value">
+                    {{ guestFormGroup.age }} Years
+                  </div>
+                </div>
+              </div>
+              <hr
+                class="data-seperator"
+                *ngIf="
+                  i < filteredGuestForm('accompany', 'kids').length - 1 &&
+                  filteredGuestForm('accompany', 'kids').length > 1
+                "
+              />
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
     </form>
     <hr class="data-seperator" />
     <mat-label class="mat-head">Stay Details</mat-label>
@@ -172,8 +298,3 @@
 <ng-template #emptyCell>
   <div class="emptyCell">--</div>
 </ng-template>
-
-<!-- !(
-  ['COMPLETED'].includes(healthCardDetailsForm.get('status').value) &&
-  !healthCardDetailsForm.get('remarks').value
-) -->

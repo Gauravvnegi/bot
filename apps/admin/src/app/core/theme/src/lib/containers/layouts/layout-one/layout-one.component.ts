@@ -12,15 +12,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { FilterService } from '../../../services/filter.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
-import { Observable, empty } from 'rxjs';
-import {
-  map,
-  filter,
-  tap,
-  debounceTime,
-  switchMap,
-  catchError,
-} from 'rxjs/operators';
+import { get } from 'lodash';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
 import { AuthService } from '../../../../../../auth/services/auth.service';
@@ -78,7 +70,6 @@ export class LayoutOneComponent implements OnInit {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.initSearchQueryForm();
-    this.getSubscriptionPlan();
   }
 
   initSearchQueryForm(): void {
@@ -87,32 +78,38 @@ export class LayoutOneComponent implements OnInit {
     });
   }
 
-  getSubscriptionPlan() {
-    const hotelId = this._hotelDetailService.hotelDetails.hotelAccess.chains[0]
-      .hotels[0].id;
-    this.subscriptionPlanService
-      .getSubscriptionPlan(hotelId)
-      .subscribe((response) => {
-        this.subscriptionPlanService.setSubscription(
-          new Subscriptions().deserialize(response)
-        );
-      });
-    // this.subscriptionPlanService.getSubscription()
-  }
-
   initLayoutConfigs() {
     this.backgroundColor = 'white';
     this.lastUpdatedAt = DateService.getCurrentDateWithFormat('h:mm A');
   }
 
   setInitialFilterValue() {
-    this.filterConfig.brandName = this._hotelDetailService.hotelDetails.brands[0].label;
-    this.filterConfig.branchName = this._hotelDetailService.hotelDetails.brands[0].branches[0].label;
+    this.filterConfig.brandName = get(this._hotelDetailService.hotelDetails, [
+      'brands',
+      '0',
+      'label',
+    ]);
+    this.filterConfig.branchName = get(this._hotelDetailService.hotelDetails, [
+      'brands',
+      '0',
+      'branches',
+      '0',
+      'label',
+    ]);
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
-        branchName: this._hotelDetailService.hotelDetails.brands[0].branches[0]
-          .id,
+        hotelName: get(this._hotelDetailService.hotelDetails, [
+          'brands',
+          '0',
+          'id',
+        ]),
+        branchName: get(this._hotelDetailService.hotelDetails, [
+          'brands',
+          '0',
+          'branches',
+          '0',
+          'id',
+        ]),
       },
     });
   }

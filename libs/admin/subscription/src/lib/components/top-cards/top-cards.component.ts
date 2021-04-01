@@ -15,17 +15,14 @@ export class TopCardsComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
+    this.initSubscriptionPlan();
   }
 
-  registerListeners(): void {
-    this.listenForSubscriptionPlan();
-  }
+  registerListeners(): void {}
 
-  listenForSubscriptionPlan(): void {
-    this.$subscription.add(
-      this.subscriptionService.subscription$.subscribe((response) => {
-        this.data = new SubscriptionPlan().deserialize(response);
-      })
+  initSubscriptionPlan(): void {
+    this.data = new SubscriptionPlan().deserialize(
+      this.subscriptionService.getSubscription()
     );
   }
 }

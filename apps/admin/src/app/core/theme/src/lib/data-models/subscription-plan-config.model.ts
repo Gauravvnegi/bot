@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { TabsConfig, ModuleConfig } from '../constants/tabConfig';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];
@@ -127,6 +128,43 @@ export class Features {
     });
     input.COMMUNICATION.forEach((communication) => {
       this.COMMUNICATION.push(new Feature().deserialize(communication));
+    });
+    return this;
+  }
+}
+
+export class ModuleSubscription {
+  features: any;
+  modules: any;
+
+  deserialize(input: any) {
+    this.modules = new Object();
+    this.features = get(input, ['features']);
+    this.features.MODULE?.forEach((module) => {
+      if (!this.modules[TabsConfig[module.name]] && TabsConfig[module.name]) {
+        let tempCards = new Object();
+        ModuleConfig[TabsConfig[module.name]].cards.forEach((card) => {
+          tempCards[card] = { active: module.active };
+        });
+        let tempTables = new Object();
+        ModuleConfig[TabsConfig[module.name]].tables.forEach((table) => {
+          let tempFilters = new Object();
+          ModuleConfig[TabsConfig[module.name]]?.filters[table]?.forEach(
+            (filter) => {
+              tempFilters[filter] = { active: module.active };
+            }
+          );
+          tempTables[table] = {
+            active: module.active,
+            tabFilters: tempFilters,
+          };
+        });
+        this.modules[TabsConfig[module.name]] = {
+          active: module.active,
+          cards: tempCards,
+          tables: tempTables,
+        };
+      }
     });
     return this;
   }

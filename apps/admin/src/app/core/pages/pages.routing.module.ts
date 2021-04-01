@@ -2,15 +2,16 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '../../../../../../libs/admin/dashboard/src/lib/components/dashboard/dashboard.component';
-import { UserDetailResolver } from './resolvers/user-detail.resolver';
+import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { FeedbackConfigResolver } from './resolvers/feedback-config.resolver';
+import { ModuleGuard } from '../guards/module.guard';
 
 const appRoutes: Route[] = [
   {
     path: '',
     component: PagesComponent,
     resolve: {
-      userDetails: UserDetailResolver,
+      adminDetails: AdminDetailResolver,
       feedbackConfig: FeedbackConfigResolver,
     },
     children: [
@@ -24,6 +25,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule
           ),
+        canActivate: [ModuleGuard],
       },
       {
         path: 'package',
@@ -31,6 +33,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/packages').then(
             (m) => m.AdminPackagesModule
           ),
+        canActivate: [ModuleGuard],
       },
       {
         path: 'covid',
@@ -38,6 +41,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/covid').then(
             (m) => m.AdminCovidModule
           ),
+        canActivate: [ModuleGuard],
       },
       {
         path: 'roles-permissions',
@@ -52,6 +56,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/feedback').then(
             (m) => m.AdminFeedbackModule
           ),
+        canActivate: [ModuleGuard],
       },
       {
         path: 'guest',
@@ -59,6 +64,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/guests').then(
             (m) => m.AdminGuestsModule
           ),
+        canActivate: [ModuleGuard],
       },
       {
         path: 'subscription',
@@ -71,6 +77,7 @@ const appRoutes: Route[] = [
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
+        canActivate: [ModuleGuard],
       },
     ],
   },

@@ -32,11 +32,11 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
+    this.initSubscriptionPlan();
   }
 
   registerListeners(): void {
     this.listenForGlobalFilters();
-    this.listenForSubscriptionPlan();
   }
 
   listenForGlobalFilters(): void {
@@ -47,16 +47,12 @@ export class StatisticsComponent implements OnInit {
     );
   }
 
-  listenForSubscriptionPlan(): void {
-    this.$subscription.add(
-      this.subscriptionService.subscription$.subscribe((response) => {
-        if (Object.keys(response).length) {
-          this.subscriptionPlanUsage = new PlanUsage().deserialize(response);
-          this.subscriptionData = response;
-          this.getSubscriptionUsage(this.hotelId);
-        }
-      })
+  initSubscriptionPlan(): void {
+    this.subscriptionPlanUsage = new PlanUsage().deserialize(
+      this.subscriptionService.getSubscription()
     );
+    this.subscriptionData = this.subscriptionService.getSubscription();
+    this.getSubscriptionUsage(this.hotelId);
   }
 
   getSubscriptionUsage(hotelId: string): void {

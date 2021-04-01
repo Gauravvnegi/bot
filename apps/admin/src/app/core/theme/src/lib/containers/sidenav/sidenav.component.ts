@@ -9,8 +9,11 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
-import { Tabs } from '../../constants/tabConfig';
-import { Subscriptions } from '../../data-models/subscription-plan-config.model';
+import { TabsConfig } from '../../constants/tabConfig';
+import {
+  ModuleSubscription,
+  Subscriptions,
+} from '../../data-models/subscription-plan-config.model';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -98,14 +101,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getSubscriptionPlan(config) {
-    this.$subscription.add(
-      this.subscriptionPlanService.subscription$.subscribe((response) => {
-        if (Object.keys(response).length) {
-          this.initSideNavConfigs(response['features'].MODULE, config);
-        }
-      })
+    this.initSideNavConfigs(
+      this.subscriptionPlanService.getSubscription()['features'].MODULE,
+      config
     );
-    // this.subscriptionPlanService.getSubscription()
   }
 
   private initSideNavConfigs(subscription, config = {}) {
@@ -117,7 +116,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     //check if admin or super admin by using command pattern
     ADMIN_ROUTES.forEach((data, i) => {
       if (
-        subscription.filter((d) => Tabs[d.name] === data.path && d.active)
+        subscription.filter((d) => TabsConfig[d.name] === data.path && d.active)
           .length
       ) {
         if (this.menuItems.filter((d) => d.path === data.path).length === 0) {

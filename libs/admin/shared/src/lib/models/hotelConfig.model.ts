@@ -11,10 +11,11 @@ export class HotelDetails implements Deserializable {
   deserialize(input) {
     Object.assign(this, set({}, 'hotelAccess', get(input, ['hotelAccess'])));
 
-    this.brands = this.hotelAccess.chains.map((brand) =>
-      new HotelBrand().deserialize(brand)
-    );
-
+    this.brands =
+      this.hotelAccess &&
+      this.hotelAccess?.chains?.map((brand) =>
+        new HotelBrand().deserialize(brand)
+      );
     return this;
   }
 }

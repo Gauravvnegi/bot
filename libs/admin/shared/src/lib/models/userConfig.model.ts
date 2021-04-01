@@ -29,8 +29,8 @@ export class UserConfig implements Deserializable {
       set({}, 'profileUrl', get(input, ['profileUrl'])),
       set({}, 'email', get(input, ['email']))
     );
-    this.brandName = input.hotelAccess.chains[0].id;
-    this.branchName = input.hotelAccess.chains[0].hotels[0].id;
+    this.brandName = input?.hotelAccess?.chains[0]?.id;
+    this.branchName = input?.hotelAccess?.chains[0]?.hotels[0]?.id;
     return this;
   }
 

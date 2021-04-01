@@ -1,5 +1,5 @@
 import { get, set } from 'lodash';
-import { TabsConfig, ModuleConfig } from '../constants/tabConfig';
+import { TabNames, ModuleConfig } from '../constants/tabConfig';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];
@@ -141,25 +141,20 @@ export class ModuleSubscription {
     this.modules = new Object();
     this.features = get(input, ['features']);
     this.features.MODULE?.forEach((module) => {
-      if (!this.modules[TabsConfig[module.name]] && TabsConfig[module.name]) {
+      if (!this.modules[TabNames[module.name]] && TabNames[module.name]) {
         let tempCards = new Object();
-        ModuleConfig[TabsConfig[module.name]].cards.forEach((card) => {
+        ModuleConfig[TabNames[module.name]].cards.forEach((card) => {
           tempCards[card] = { active: module.active };
         });
         let tempTables = new Object();
-        ModuleConfig[TabsConfig[module.name]].tables.forEach((table) => {
-          let tempFilters = new Object();
-          ModuleConfig[TabsConfig[module.name]]?.filters[table]?.forEach(
-            (filter) => {
-              tempFilters[filter] = { active: module.active };
-            }
-          );
+        ModuleConfig[TabNames[module.name]].tables.forEach((table) => {
           tempTables[table] = {
             active: module.active,
-            tabFilters: tempFilters,
+            tabFilters:
+              ModuleConfig[TabNames[module.name]]?.filters[table].tabFilters,
           };
         });
-        this.modules[TabsConfig[module.name]] = {
+        this.modules[TabNames[module.name]] = {
           active: module.active,
           cards: tempCards,
           tables: tempTables,

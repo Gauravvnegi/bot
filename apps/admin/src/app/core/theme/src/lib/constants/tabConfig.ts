@@ -1,31 +1,55 @@
-export const TabsConfig = {
-  GUESTS: 'guest',
-  NOTIFICATIONS: 'request',
-  FEEDBACK: 'feedback',
-  PACKAGES: 'package',
-  RESERVATION: 'dashboard',
-};
+export enum TabNames {
+  GUESTS = 'guest',
+  NOTIFICATIONS = 'request',
+  FEEDBACK = 'feedback',
+  PACKAGES = 'package',
+  RESERVATION = 'dashboard',
+}
+
+export enum TableNames {
+  RESERVATION = 'Reservations',
+  GUEST = 'Guest List',
+  FEEDBACK = 'Customers - Feedback',
+  PACKAGE = 'Packages',
+  CATEGORY = 'Categories',
+  REQUEST = 'Requests',
+}
 
 export const ModuleConfig = {
-  dashboard: {
+  [TabNames.RESERVATION]: {
     cards: ['ARRIVAL', 'INHOUSE', 'DEPARTURE'],
-    tables: ['Reservations'],
-    filters: { Reservations: ['ARRIVAL', 'INHOUSE', 'DEPARTURE'] },
+    tables: [TableNames.RESERVATION],
+    filters: {
+      [TableNames.RESERVATION]: {
+        tabFilters: ['ARRIVAL', 'INHOUSE', 'DEPARTURE'],
+      },
+    },
   },
-  guest: {
+  [TabNames.GUESTS]: {
     cards: ['VIP', 'STATUS', 'PAYMENT', 'DOCUMENT'],
-    tables: ['Guest List'],
-    filters: { 'Guest List': ['ARRIVAL', 'INHOUSE', 'DEPARTURE', 'Out-Guest'] },
+    tables: [TableNames.GUEST],
+    filters: {
+      [TableNames.GUEST]: {
+        tabFilters: ['ARRIVAL', 'INHOUSE', 'DEPARTURE', 'OUTGUEST'],
+      },
+    },
   },
-  feedback: {
+  [TabNames.FEEDBACK]: {
     cards: [],
-    tables: ['Customers - Feedback'],
-    filters: { 'Customers - Feedback': [] },
+    tables: [TableNames.FEEDBACK],
+    filters: { 'Customers - Feedback': { tabFilters: [] } },
   },
-  package: {
+  [TabNames.PACKAGES]: {
     cards: [],
-    tables: ['Packages', 'Categories'],
-    filters: { Packages: [], Categories: [] },
+    tables: [TableNames.PACKAGE, TableNames.CATEGORY],
+    filters: {
+      [TableNames.PACKAGE]: { tabFilters: [] },
+      [TableNames.CATEGORY]: { tabFilters: [] },
+    },
   },
-  request: { cards: [], tables: ['Requests'], filters: { Requests: [] } },
+  [TabNames.NOTIFICATIONS]: {
+    cards: [],
+    tables: [TableNames.REQUEST],
+    filters: { [TableNames.REQUEST]: { tabFilters: [] } },
+  },
 };

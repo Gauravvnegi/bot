@@ -4,7 +4,7 @@ import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '../../../../../../libs/admin/dashboard/src/lib/components/dashboard/dashboard.component';
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { FeedbackConfigResolver } from './resolvers/feedback-config.resolver';
-import { ModuleGuard } from '../guards/module.guard';
+import { LoadGuard } from '../guards/load-guard';
 
 const appRoutes: Route[] = [
   {
@@ -25,7 +25,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule
           ),
-        canActivate: [ModuleGuard],
+        canActivate: [LoadGuard],
       },
       {
         path: 'package',
@@ -33,7 +33,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/packages').then(
             (m) => m.AdminPackagesModule
           ),
-        canActivate: [ModuleGuard],
+        canActivate: [LoadGuard],
       },
       {
         path: 'covid',
@@ -41,7 +41,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/covid').then(
             (m) => m.AdminCovidModule
           ),
-        canActivate: [ModuleGuard],
+        canActivate: [LoadGuard],
       },
       {
         path: 'roles-permissions',
@@ -56,7 +56,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/feedback').then(
             (m) => m.AdminFeedbackModule
           ),
-        canActivate: [ModuleGuard],
+        canActivate: [LoadGuard],
       },
       {
         path: 'guest',
@@ -64,7 +64,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/guests').then(
             (m) => m.AdminGuestsModule
           ),
-        canActivate: [ModuleGuard],
+        canActivate: [LoadGuard],
       },
       {
         path: 'subscription',
@@ -77,7 +77,7 @@ const appRoutes: Route[] = [
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
-        canActivate: [ModuleGuard],
+        canActivate: [LoadGuard],
       },
     ],
   },

@@ -9,10 +9,9 @@ import {
 import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
 
 @Injectable({ providedIn: 'root' })
-export class ModuleGuard implements CanActivate {
+export class LoadGuard implements CanActivate {
   constructor(
     private subscriptionService: SubscriptionPlanService,
-    private router: Router,
     private location: Location
   ) {}
 

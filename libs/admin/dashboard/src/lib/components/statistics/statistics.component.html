@@ -1,15 +1,15 @@
 <div class="stats--wrapper" *ngIf="statistics">
-  <div class="stats">
+  <div class="stats" cardSubscribed [path]="'dashboard.cards.ARRIVAL'">
     <hospitality-bot-arrivals-statistics
       [arrivals]="statistics.arrivals"
     ></hospitality-bot-arrivals-statistics>
   </div>
-  <div class="stats">
+  <div class="stats" cardSubscribed [path]="'dashboard.cards.INHOUSE'">
     <hospitality-bot-inhouse-statistics
       [inhouse]="statistics.inhouse"
     ></hospitality-bot-inhouse-statistics>
   </div>
-  <div class="stats">
+  <div class="stats" cardSubscribed [path]="'dashboard.cards.DEPARTURE'">
     <hospitality-bot-departure-statistics
       [departures]="statistics.departures"
     ></hospitality-bot-departure-statistics>

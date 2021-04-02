@@ -1,5 +1,8 @@
 import { get, set } from 'lodash';
-import { TabNames, ModuleConfig } from '../constants/tabConfig';
+import {
+  TabNames,
+  ModuleConfig,
+} from 'libs/shared/constants/subscriptionConfig';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];
@@ -114,19 +117,19 @@ export class Features {
     this.CHANNELS = new Array<Feature>();
     this.COMMUNICATION = new Array<Feature>();
 
-    input.MODULE.forEach((module) => {
+    input.MODULE?.forEach((module) => {
       this.MODULE.push(new Feature().deserialize(module));
     });
-    input.ESSENTIALS.forEach((essential) => {
+    input.ESSENTIALS?.forEach((essential) => {
       this.ESSENTIALS.push(new Feature().deserialize(essential));
     });
-    input.INTEGRATION.forEach((integration) => {
+    input.INTEGRATION?.forEach((integration) => {
       this.INTEGRATION.push(new Feature().deserialize(integration));
     });
-    input.CHANNELS.forEach((channel) => {
+    input.CHANNELS?.forEach((channel) => {
       this.CHANNELS.push(new Feature().deserialize(channel));
     });
-    input.COMMUNICATION.forEach((communication) => {
+    input.COMMUNICATION?.forEach((communication) => {
       this.COMMUNICATION.push(new Feature().deserialize(communication));
     });
     return this;
@@ -140,7 +143,7 @@ export class ModuleSubscription {
   deserialize(input: any) {
     this.modules = new Object();
     this.features = get(input, ['features']);
-    this.features.MODULE?.forEach((module) => {
+    this.features?.MODULE?.forEach((module) => {
       if (!this.modules[TabNames[module.name]] && TabNames[module.name]) {
         let tempCards = new Object();
         ModuleConfig[TabNames[module.name]].cards.forEach((card) => {

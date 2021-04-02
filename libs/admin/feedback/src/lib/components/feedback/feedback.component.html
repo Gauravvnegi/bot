@@ -1,18 +1,42 @@
 <div class="feedback-container">
-	<div class="stats--wrapper">
-		<div class="stats">
-			<hospitality-bot-global-nps></hospitality-bot-global-nps>
-		</div>
-		<div class="stats">
-			<hospitality-bot-top-low-nps></hospitality-bot-top-low-nps>
-		</div>
-		<div class="stats">
-			<hospitality-bot-feedback-distribution></hospitality-bot-feedback-distribution>
-		</div>
-	</div>
-	<hospitality-bot-net-promoter-score></hospitality-bot-net-promoter-score>
-	<hospitality-bot-nps-across-departments></hospitality-bot-nps-across-departments>
-	<hospitality-bot-nps-across-services></hospitality-bot-nps-across-services>
-	<hospitality-bot-nps-across-touchpoints></hospitality-bot-nps-across-touchpoints>
-	<hospitality-bot-feedback-datatable></hospitality-bot-feedback-datatable>
+  <div class="stats--wrapper">
+    <div
+      class="stats"
+      cardSubscribed
+      [path]="'feedback.cards.' + cards.globalNps"
+    >
+      <hospitality-bot-global-nps></hospitality-bot-global-nps>
+    </div>
+    <div
+      class="stats"
+      cardSubscribed
+      [path]="'feedback.cards.' + cards.topLowNPS"
+    >
+      <hospitality-bot-top-low-nps></hospitality-bot-top-low-nps>
+    </div>
+    <div
+      class="stats"
+      cardSubscribed
+      [path]="'feedback.cards.' + cards.feedbackDistribution"
+    >
+      <hospitality-bot-feedback-distribution></hospitality-bot-feedback-distribution>
+    </div>
+  </div>
+  <hospitality-bot-net-promoter-score
+    cardSubscribed
+    [path]="'feedback.cards.' + cards.nps"
+  ></hospitality-bot-net-promoter-score>
+  <hospitality-bot-nps-across-departments
+    cardSubscribed
+    [path]="'feedback.cards.' + cards.npsAcrossDepartment"
+  ></hospitality-bot-nps-across-departments>
+  <hospitality-bot-nps-across-services
+    cardSubscribed
+    [path]="'feedback.cards.' + cards.npsAcrossServices"
+  ></hospitality-bot-nps-across-services>
+  <hospitality-bot-nps-across-touchpoints
+    cardSubscribed
+    [path]="'feedback.cards.' + cards.npsAcrossTouchpoint"
+  ></hospitality-bot-nps-across-touchpoints>
+  <hospitality-bot-feedback-datatable></hospitality-bot-feedback-datatable>
 </div>

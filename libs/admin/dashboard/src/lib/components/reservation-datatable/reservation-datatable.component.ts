@@ -35,6 +35,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
+  rowsPerPage = 200;
 
   cols = [
     {

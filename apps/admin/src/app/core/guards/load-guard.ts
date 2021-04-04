@@ -9,6 +9,8 @@ import {
 import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
+import { switchMap } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LoadGuard implements CanActivate {
@@ -21,15 +23,28 @@ export class LoadGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let subscription = this.subscriptionService.getModuleSubscription();
     if (subscription === undefined) {
-      debugger;
-    } else if (subscription && subscription.modules) {
-      if (!subscription.modules[route.routeConfig.path].active) {
-        this.location.back();
-      }
-      return subscription.modules[route.routeConfig.path].active;
+      return this._userDetailService
+        .getUserDetailsById(this._userDetailService.getLoggedInUserid())
+        .pipe(
+          switchMap((res) => {
+            return forkJoin({
+              userDetail: of(res),
+              subscription: this.subscriptionService.getSubscriptionPlan(
+                res.hotelAccess.chains[0].hotels[0].id
+              ),
+            });
+          }),
+          switchMap((response) => {
+            return of(
+              this.validate(
+                new ModuleSubscription().deserialize(response?.subscription),
+                route
+              )
+            );
+          })
+        );
     } else {
-      this.location.back();
-      return false;
+      return this.validate(subscription, route);
     }
   }
 
@@ -44,15 +59,4 @@ export class LoadGuard implements CanActivate {
       return false;
     }
   }
-}
-function switchMap(arg0: (res: any) => any): any {
-  throw new Error('Function not implemented.');
-}
-
-function forkJoin(arg0: { userDetail: any; subscription: any }) {
-  throw new Error('Function not implemented.');
-}
-
-function of(res: any) {
-  throw new Error('Function not implemented.');
 }

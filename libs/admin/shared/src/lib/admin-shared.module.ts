@@ -16,6 +16,7 @@ import { MultipleDropdownComponent } from './components/multiple-dropdown/multip
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CardDirective } from './directives/card.directive';
+import { TableDirective } from './directives/table.directive';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { CardDirective } from './directives/card.directive';
     NumberDirective,
     MultipleDropdownComponent,
     CardDirective,
+    TableDirective,
   ],
   exports: [
     DatatableComponent,
@@ -53,6 +55,7 @@ import { CardDirective } from './directives/card.directive';
     NumberDirective,
     MultipleDropdownComponent,
     CardDirective,
+    TableDirective,
   ],
 })
 export class AdminSharedModule {}

@@ -6,8 +6,8 @@ import { get } from 'lodash';
 export class CardDirective implements OnInit {
   @Input() path: string;
   constructor(
-    private subscriptionService: SubscriptionPlanService,
-    private elementRef: ElementRef
+    protected subscriptionService: SubscriptionPlanService,
+    protected elementRef: ElementRef
   ) {}
 
   ngOnInit() {

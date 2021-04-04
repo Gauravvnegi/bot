@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CardNames } from 'libs/shared/constants/subscriptionConfig';
+import {
+  CardNames,
+  TableNames,
+} from 'libs/shared/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -8,6 +11,7 @@ import { CardNames } from 'libs/shared/constants/subscriptionConfig';
 })
 export class FeedbackComponent implements OnInit {
   public cards = CardNames;
+  tables = TableNames;
   constructor() {}
 
   ngOnInit(): void {}

@@ -37,6 +37,7 @@ export enum Filters {
   inhouse = 'INHOUSE',
   departure = 'DEPARTURE',
   outguest = 'OUTGUEST',
+  reservation = 'RESERVATION',
 }
 
 export const ModuleConfig = {
@@ -45,7 +46,7 @@ export const ModuleConfig = {
     tables: [TableNames.RESERVATION],
     filters: {
       [TableNames.RESERVATION]: {
-        tabFilters: [Filters.arrival, Filters.inhouse, Filters.departure],
+        tabFilters: [Filters.inhouse, Filters.arrival, Filters.departure],
       },
     },
   },
@@ -92,6 +93,10 @@ export const ModuleConfig = {
   [TabNames.NOTIFICATIONS]: {
     cards: [],
     tables: [TableNames.REQUEST],
-    filters: { [TableNames.REQUEST]: { tabFilters: [] } },
+    filters: {
+      [TableNames.REQUEST]: {
+        tabFilters: [Filters.reservation, Filters.inhouse],
+      },
+    },
   },
 };

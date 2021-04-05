@@ -13,8 +13,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import * as moment from 'moment';
-import { get } from 'lodash';
+import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -224,13 +223,15 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    protected tabFilterService: TabFiltersService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters('dashboard', 'Reservations', this.tabFilterItems);
   }
 
   registerListeners() {

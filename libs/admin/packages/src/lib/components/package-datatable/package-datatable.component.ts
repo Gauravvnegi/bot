@@ -5,6 +5,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
@@ -57,9 +58,10 @@ export class PackageDatatableComponent extends BaseDatatableComponent {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    protected tabFilterService: TabFiltersService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {

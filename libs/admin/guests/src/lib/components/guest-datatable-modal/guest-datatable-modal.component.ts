@@ -11,6 +11,7 @@ import { GuestTable } from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestDatatableComponent } from '../guest-datatable/guest-datatable.component';
 import * as FileSaver from 'file-saver';
+import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
@@ -34,6 +35,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
+    protected tabFilterService: TabFiltersService,
     public feedbackService: FeedbackService
   ) {
     super(
@@ -43,6 +45,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       _globalFilterService,
       _snackbarService,
       _modal,
+      tabFilterService,
       feedbackService
     );
   }

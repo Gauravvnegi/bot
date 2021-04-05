@@ -11,6 +11,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import * as FileSaver from 'file-saver';
 import { SortEvent } from 'primeng/api';
+import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -67,8 +68,9 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     public userDetailService: UserDetailService,
     private _snackbarService: SnackBarService,
     private location: Location,
+    protected tabFilterService: TabFiltersService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {

@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { ReservationService } from '../../services/reservation.service';
@@ -29,7 +29,7 @@ export class ReservationDatatableModalComponent
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TabFiltersService,
+    protected tabFilterService: TableService,
     public feedbackService: FeedbackService
   ) {
     super(

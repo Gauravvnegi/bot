@@ -14,7 +14,7 @@ import { GuestTable } from 'libs/admin/guests/src/lib/data-models/guest-table.mo
 import { Subscription, Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
-import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -133,7 +133,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     private _snackbarService: SnackBarService,
     private _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TabFiltersService
+    protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
   }

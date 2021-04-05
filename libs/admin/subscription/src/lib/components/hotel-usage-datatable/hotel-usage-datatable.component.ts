@@ -9,7 +9,7 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { TableData } from '../../data-models/subscription.model';
-import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-hotel-usage-datatable',
@@ -47,7 +47,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     private snackbarService: SnackBarService,
     private subscriptionService: SubscriptionPlanService,
     private router: Router,
-    protected tabFilterService: TabFiltersService
+    protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
   }

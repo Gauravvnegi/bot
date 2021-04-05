@@ -14,7 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { RequestTable } from '../../data-models/request-datatable.model';
 import { RequestService } from '../../services/request.service';
 import { get } from 'lodash';
-import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-request-data-table',
@@ -190,7 +190,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     private _modal: ModalService,
     private router: Router,
     private route: ActivatedRoute,
-    protected tabFilterService: TabFiltersService
+    protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
   }

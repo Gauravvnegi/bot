@@ -13,7 +13,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -224,7 +224,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TabFiltersService
+    protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
   }

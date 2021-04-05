@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 import {
-  TabNames,
+  FeatureNames,
   ModuleConfig,
 } from 'libs/shared/constants/subscriptionConfig';
 
@@ -144,20 +144,24 @@ export class ModuleSubscription {
     this.modules = new Object();
     this.features = get(input, ['features']);
     this.features?.MODULE?.forEach((module) => {
-      if (!this.modules[TabNames[module.name]] && TabNames[module.name]) {
+      if (
+        !this.modules[FeatureNames[module.name]] &&
+        FeatureNames[module.name]
+      ) {
         let tempCards = new Object();
-        ModuleConfig[TabNames[module.name]].cards.forEach((card) => {
+        ModuleConfig[FeatureNames[module.name]].cards.forEach((card) => {
           tempCards[card] = { active: module.active };
         });
         let tempTables = new Object();
-        ModuleConfig[TabNames[module.name]].tables.forEach((table) => {
+        ModuleConfig[FeatureNames[module.name]].tables.forEach((table) => {
           tempTables[table] = {
             active: module.active,
             tabFilters:
-              ModuleConfig[TabNames[module.name]]?.filters[table].tabFilters,
+              ModuleConfig[FeatureNames[module.name]]?.filters[table]
+                .tabFilters,
           };
         });
-        this.modules[TabNames[module.name]] = {
+        this.modules[FeatureNames[module.name]] = {
           active: module.active,
           cards: tempCards,
           tables: tempTables,

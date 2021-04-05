@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { RequestTable } from '../../models/request-table.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TabFiltersService } from 'libs/admin/shared/src/lib/services/tab-filters.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -45,7 +45,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     private _snackbarService: SnackBarService,
     private _router: Router,
     private _route: ActivatedRoute,
-    protected tabFilterService: TabFiltersService
+    protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
   }

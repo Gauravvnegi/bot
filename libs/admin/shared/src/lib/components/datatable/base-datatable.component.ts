@@ -9,7 +9,7 @@ import * as FileSaver from 'file-saver';
 import { Paginator } from 'primeng/paginator';
 import * as moment from 'moment';
 import { get } from 'lodash';
-import { TabFiltersService } from '../../services/tab-filters.service';
+import { TableService } from '../../services/table.service';
 interface Import {
   name: string;
   code: string;
@@ -132,7 +132,7 @@ export class BaseDatatableComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    protected tabFilterService: TabFiltersService
+    protected tabFilterService: TableService
   ) {
     this.initTableFG();
   }

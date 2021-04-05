@@ -5,7 +5,7 @@ import { get } from 'lodash';
 @Injectable({
   providedIn: 'root',
 })
-export class TabFiltersService {
+export class TableService {
   constructor(protected subscriptionService: SubscriptionPlanService) {}
 
   getSubscribedFilters(module: string, table: string, filters: any[] = []) {
@@ -19,5 +19,6 @@ export class TabFiltersService {
           )
         : [];
     }
+    return filters;
   }
 }

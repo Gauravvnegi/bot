@@ -1,4 +1,4 @@
-export enum TabNames {
+export enum FeatureNames {
   GUESTS = 'guest',
   NOTIFICATIONS = 'request',
   FEEDBACK = 'feedback',
@@ -41,7 +41,7 @@ export enum Filters {
 }
 
 export const ModuleConfig = {
-  [TabNames.RESERVATION]: {
+  [FeatureNames.RESERVATION]: {
     cards: [CardNames.arrival, CardNames.inhouse, CardNames.departure],
     tables: [TableNames.RESERVATION],
     filters: {
@@ -50,7 +50,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [TabNames.GUESTS]: {
+  [FeatureNames.GUESTS]: {
     cards: [
       CardNames.vip,
       CardNames.status,
@@ -69,7 +69,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [TabNames.FEEDBACK]: {
+  [FeatureNames.FEEDBACK]: {
     cards: [
       CardNames.globalNps,
       CardNames.npsAcrossDepartment,
@@ -82,7 +82,7 @@ export const ModuleConfig = {
     tables: [TableNames.FEEDBACK],
     filters: { [TableNames.FEEDBACK]: { tabFilters: [] } },
   },
-  [TabNames.PACKAGES]: {
+  [FeatureNames.PACKAGES]: {
     cards: [],
     tables: [TableNames.PACKAGE, TableNames.CATEGORY],
     filters: {
@@ -90,7 +90,7 @@ export const ModuleConfig = {
       [TableNames.CATEGORY]: { tabFilters: [] },
     },
   },
-  [TabNames.NOTIFICATIONS]: {
+  [FeatureNames.NOTIFICATIONS]: {
     cards: [],
     tables: [TableNames.REQUEST],
     filters: {

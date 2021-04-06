@@ -12,6 +12,11 @@
   min-height: $full-width;
 }
 
+.background__wrapper-img {
+  min-width: $full-width;
+  min-height: $full-width;
+}
+
 :host ::ng-deep .main-template-button {
   @include template-footer-button();
   @media only screen and (max-width: $M) {

@@ -2,8 +2,16 @@
 <div [style]="isLoaderVisible ? { visibility: 'hidden' } : {}">
   <div class="background__wrapper">
     <picture>
-      <source type="image/webp" srcset="assets/bg.webp" />
-      <img src="assets/bg.png" alt="background image" />
+      <source
+        class="background__wrapper-img"
+        type="image/webp"
+        srcset="assets/bg.webp"
+      />
+      <img
+        class="background__wrapper-img"
+        src="assets/bg.png"
+        alt="background image"
+      />
     </picture>
   </div>
   <router-outlet></router-outlet>

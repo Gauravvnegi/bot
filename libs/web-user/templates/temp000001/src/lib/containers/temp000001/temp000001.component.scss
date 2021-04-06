@@ -3,7 +3,7 @@
 // Global CSS for Template
 
 .background__wrapper {
-  background-image: url($background-image);
+  //  background-image: url($background-image);
   position: fixed;
   top: 0;
   left: 0;
@@ -55,7 +55,7 @@
     box-shadow: var(--dropdown-shadow, $dropdown-shadow) !important;
   }
   &-step-header .mat-step-label.mat-step-label-active {
-    color: var(--stepper-font-color,$stepper-font-color);
+    color: var(--stepper-font-color, $stepper-font-color);
   }
   &-icon.expand-icon {
     margin-right: -16px;

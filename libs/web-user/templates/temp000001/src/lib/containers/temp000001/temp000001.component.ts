@@ -24,6 +24,7 @@ import { Subscription } from 'rxjs';
 export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   isLoaderVisible: boolean = true;
+  defaultBgColor = 'assets/bg.webp';
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,

@@ -1,6 +1,8 @@
 <ng-container template-loader [templateId]="templateId"></ng-container>
 <div [style]="isLoaderVisible ? { visibility: 'hidden' } : {}">
-  <div class="background__wrapper"></div>
+  <div class="background__wrapper">
+    <img *ngIf="defaultBgColor" [src]="defaultBgColor" />
+  </div>
   <router-outlet></router-outlet>
 </div>
 

@@ -140,6 +140,13 @@ export class TableCell {
   usage: string;
 
   deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'serviceType', get(input, ['type'])),
+      set({}, 'name', get(input, ['label'])),
+      set({}, 'limit', get(input, ['cost', 'usageLimit'])),
+      set({}, 'usage', get(input, ['currentUsage']))
+    );
     return this;
   }
 }

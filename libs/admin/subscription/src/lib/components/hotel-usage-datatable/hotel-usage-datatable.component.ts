@@ -31,6 +31,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
   tabFilterIdx: number = 1;
   $subscription = new Subscription();
   hotelId;
+  usageData;
 
   cols = [
     { field: 'serviceType', header: 'Type of Service' },
@@ -53,7 +54,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
+    // this.listenForGlobalFilters();
     this.listenForSubscriptionPlan();
   }
 
@@ -65,20 +66,16 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
         ...data['dateRange'].queryValue,
       ];
       this.getHotelId(this.globalQueries);
-      //fetch-api for records
-      this.loadInitialData([
-        ...this.globalQueries,
-        {
-          order: 'DESC',
-        },
-      ]);
     });
   }
 
   listenForSubscriptionPlan(): void {
     this.$subscription.add(
       this.subscriptionService.subscription$.subscribe((response) => {
-        new TableData().deserialize(response);
+        // console.log(new TableData().deserialize(response).data);
+        this.usageData = new TableData().deserialize(response).data;
+        this.totalRecords = this.usageData.length;
+        this.getFilteredData();
       })
     );
   }
@@ -93,60 +90,17 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     });
   }
 
-  loadInitialData(queries = [], loading = true): void {
-    // this.loading = loading && true;
-    // this.$subscription.add(
-    //   this.fetchDataFrom(queries).subscribe(
-    //     (data) => {
-    //       this.values = new Packages().deserialize(data).records;
-    //       //set pagination
-    //       this.totalRecords = data.total;
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this.snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+  getFilteredData(
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ) {
+    this.values = this.usageData.filter(
+      (data, i) => i >= this.first && i < this.first + this.rowsPerPage
+    );
   }
 
-  // fetchDataFrom(
-  //   queries,
-  //   defaultProps = { offset: this.first, limit: this.rowsPerPage }
-  // ): Observable<any> {
-  //   queries.push(defaultProps);
-  //   const config = {
-  //     queryObj: this.adminUtilityService.makeQueryParams(queries),
-  //   };
-  //   return this.packageService.getHotelPackages(config);
-  // }
-
   loadData(event: LazyLoadEvent): void {
-    // this.loading = true;
     this.updatePaginations(event);
-    // this.$subscription.add(
-    //   this.fetchDataFrom(
-    //     [...this.globalQueries,
-    //     {
-    //       order: 'DESC',
-    //     },], {
-    //     offset: this.first,
-    //     limit: this.rowsPerPage,
-    //   }).subscribe(
-    //     (data) => {
-    //       this.values = new Packages().deserialize(data).records;
-
-    //       //set pagination
-    //       this.totalRecords = data.total;
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this.snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+    this.getFilteredData();
   }
 
   updatePaginations(event): void {
@@ -166,21 +120,6 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
-    // this.$subscription.add(
-    //   this.packageService.exportCSV(config).subscribe(
-    //     (res) => {
-    //       FileSaver.saveAs(
-    //         res,
-    //         this.tableName.toLowerCase() + '_export_' + new Date().getTime() + '.csv'
-    //       );
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this.snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
   }
 
   redirectToAddPackage(): void {

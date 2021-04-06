@@ -78,7 +78,7 @@ export class UsersUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              stepSize: 4,
+              stepSize: 1,
             },
           },
         ],
@@ -109,6 +109,14 @@ export class UsersUsageComponent implements OnInit {
     this.chart.chartLabels = [];
     this.chartData.forEach((data) => {
       this.chart.chartData[0].data.push(data.value);
+      if (
+        this.chart.chartOptions.scales.yAxes[0].ticks.stepSize <
+        data.value / this.chartData.length
+      ) {
+        this.chart.chartOptions.scales.yAxes[0].ticks.stepSize = Number(
+          data.value / this.chartData.length
+        );
+      }
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
       );

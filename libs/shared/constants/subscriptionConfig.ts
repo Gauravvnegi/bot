@@ -5,6 +5,7 @@ export enum FeatureNames {
   PACKAGES = 'package',
   RESERVATION = 'dashboard',
   NOTIFICATIONS = 'notification',
+  USERS = 'roles-permissions',
 }
 
 export enum TableNames {
@@ -101,6 +102,11 @@ export const ModuleConfig = {
     },
   },
   [FeatureNames.NOTIFICATIONS]: {
+    cards: [],
+    tables: [],
+    filters: {},
+  },
+  [FeatureNames.USERS]: {
     cards: [],
     tables: [],
     filters: {},

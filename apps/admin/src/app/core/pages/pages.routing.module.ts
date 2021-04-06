@@ -18,6 +18,7 @@ const appRoutes: Route[] = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [LoadGuard],
       },
       {
         path: 'request',
@@ -49,6 +50,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/roles-and-permissions').then(
             (m) => m.AdminRolesAndPermissionsModule
           ),
+        canActivate: [LoadGuard],
       },
       {
         path: 'feedback',

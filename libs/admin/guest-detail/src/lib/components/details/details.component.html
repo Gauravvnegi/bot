@@ -1,4 +1,7 @@
-<div *ngIf="isReservationDetailFetched && data; else detailsLoader" class="details-wrapper">
+<div
+  *ngIf="isReservationDetailFetched && data; else detailsLoader"
+  class="details-wrapper"
+>
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -12,7 +15,11 @@
           </div>
         </div>
         <div class="contact-details">
-          <a href="tel:{{ data.countryCode }}{{ data.phoneNumber }}" *ngIf="data.phoneNumber" class="call">
+          <a
+            href="tel:{{ data.countryCode }}{{ data.phoneNumber }}"
+            *ngIf="data.phoneNumber"
+            class="call"
+          >
             <mat-icon class="material-icons" matSuffix>call</mat-icon>
             <u>{{ data.countryCode }} {{ data.phoneNumber }}</u>
           </a>
@@ -27,7 +34,10 @@
         <div class="name">
           <span>{{ bookingTitle }}</span>
         </div>
-        <div class="booking-id-wrapper" (click)="openDetailPage($event, data.booking.bookingId)">
+        <div
+          class="booking-id-wrapper"
+          (click)="openDetailPage($event, data.booking.bookingId)"
+        >
           <div class="booking-id">
             <u>{{ data.booking.bookingNumber }}</u>
           </div>
@@ -37,26 +47,38 @@
               <!-- <p class="label">Feedback :</p> -->
               <ng-container *ngIf="data.feedback">
                 <div class="booking-feedback">
-                  <p class="number" [ngClass]="{
+                  <p
+                    class="number"
+                    [ngClass]="{
                       'status-background-reject': data.feedback.rating < 5,
                       'status-background-success': data.feedback.rating >= 5
-                    }">
+                    }"
+                  >
                     {{ data.feedback.rating }}
                   </p>
                   <ng-container *ngIf="data.feedback.suggestions">
-                    <ng-container *ngFor="
+                    <ng-container
+                      *ngFor="
                         let suggestion of data.feedback.suggestions.slice(0, 2)
-                      ">
-                      <img class="feedback-icon" [ngClass]="{
+                      "
+                    >
+                      <img
+                        class="feedback-icon"
+                        [ngClass]="{
                           'status-image-reject': data.feedback.rating < 5,
                           'status-image-success': data.feedback.rating >= 5
-                        }" [src]="feedbackService.getServiceUrl(suggestion.id)" />
+                        }"
+                        [src]="feedbackService.getServiceUrl(suggestion.id)"
+                      />
                     </ng-container>
                   </ng-container>
-  
-                  <div *ngIf="data.feedback.comments" [ngClass]="{
+
+                  <div
+                    *ngIf="data.feedback.comments"
+                    [ngClass]="{
                       'feedback-msg': data.feedback.comments.length > 0
-                    }">
+                    }"
+                  >
                     {{ data.feedback.comments }}
                   </div>
                 </div>
@@ -64,7 +86,10 @@
             </div>
             <div class="pointer"></div>
           </ng-container>
-          <div class="room-no" (click)="openDetailPage($event, data.booking.bookingId)">
+          <div
+            class="room-no"
+            (click)="openDetailPage($event, data.booking.bookingId)"
+          >
             <u> {{ data.rooms.roomNumber }}-{{ data.rooms.type }}</u>
           </div>
         </div>
@@ -97,50 +122,51 @@
     <div class="mat-group">
       <mat-tab-group [selectedIndex]="tabIndex">
         <mat-tab label="Guest Details">
-          <hospitality-bot-guest-details *ngIf="isReservationDetailFetched" [parentForm]="detailsForm"
-            [data]="guestData" (addFGEvent)="addFGEvent($event)"></hospitality-bot-guest-details>
+          <hospitality-bot-guest-details
+            *ngIf="isReservationDetailFetched"
+            [parentForm]="detailsForm"
+            [data]="guestData"
+            (addFGEvent)="addFGEvent($event)"
+          ></hospitality-bot-guest-details>
         </mat-tab>
         <mat-tab label="Documents">
-          <hospitality-bot-documents *ngIf="isReservationDetailFetched" [parentForm]="detailsForm" [data]="data">
+          <hospitality-bot-documents
+            *ngIf="isReservationDetailFetched"
+            [parentForm]="detailsForm"
+            [data]="data"
+          >
           </hospitality-bot-documents>
         </mat-tab>
         <mat-tab label="Stay Details" *ngIf="details">
-          <hospitality-bot-stay-details *ngIf="isReservationDetailFetched" [hotelId]="hotelId"
-            [parentForm]="detailsForm" [data]="details" (addFGEvent)="addFGEvent($event)">
+          <hospitality-bot-stay-details
+            *ngIf="isReservationDetailFetched"
+            [hotelId]="hotelId"
+            [parentForm]="detailsForm"
+            [data]="details"
+            (addFGEvent)="addFGEvent($event)"
+          >
           </hospitality-bot-stay-details>
         </mat-tab>
       </mat-tab-group>
-      <div *ngIf="isReservationDetailFetched" class="tab-buttons">
+      <div
+        *ngIf="isReservationDetailFetched"
+        class="tab-buttons"
+        featureSubscribed
+        [feature]="'notification'"
+      >
         <div class="button-wrapper"></div>
         <p class="contact">Contact Guest</p>
         <div class="right-bottom-icons">
-          <!-- <div class="social-icons" (click)="openRequest()">
-            <div class="icon">
-              <img src="assets/svg/request.svg" />
-            </div>
-          </div> -->
           <ng-container *ngFor="let icon of shareIconList">
-            <div class="social-icons" (click)="openSendNotification(icon.value)">
+            <div
+              class="social-icons"
+              (click)="openSendNotification(icon.value)"
+            >
               <div class="icon">
                 <img [src]="icon.iconUrl" />
               </div>
             </div>
           </ng-container>
-          <!-- <div class="social-icons" (click)="openSendNotification('Whatsapp')">
-            <div class="icon">
-              <img src="assets/svg/whatsapp.svg" />
-            </div>
-          </div>
-          <div class="social-icons" (click)="openSendNotification('Messenger')">
-            <div class="icon">
-              <img src="assets/svg/messenger.svg" />
-            </div>
-          </div>
-          <div class="social-icons" (click)="openSendNotification('email')">
-            <div class="icon">
-              <img src="assets/svg/email.svg" />
-            </div>
-          </div> -->
         </div>
       </div>
     </div>

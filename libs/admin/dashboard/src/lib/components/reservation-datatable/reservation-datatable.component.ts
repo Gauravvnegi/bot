@@ -308,17 +308,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      // this.tabFilterItems = this.tabFilterItems.map((tab) => {
-      //   return {
-      //     ...tab,
-      //     chips: tab.chips.map((chip) => {
-      //       return {
-      //         ...chip,
-      //         total: countObj[chip.value],
-      //       };
-      //     }),
-      //   };
-      // });
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         chip.total = countObj[chip.value];
       });

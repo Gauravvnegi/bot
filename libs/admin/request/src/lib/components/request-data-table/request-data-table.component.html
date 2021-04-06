@@ -31,7 +31,14 @@
               <p class="heading">{{ tableName }}</p>
             </div>
             <div style="display: flex; align-items: center;">
-              <p class="link" (click)="openAddRequest()">+Send Message</p>
+              <div
+                class="link"
+                (click)="openAddRequest()"
+                featureSubscribed
+                [feature]="'notification'"
+              >
+                +Send Message
+              </div>
               <div class="options">
                 <div *ngIf="isActionButtons" class="icons">
                   <img src="assets/svg/Download.svg" class="svg" />

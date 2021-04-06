@@ -1,9 +1,10 @@
 export enum FeatureNames {
   GUESTS = 'guest',
-  NOTIFICATIONS = 'request',
+  REQUEST = 'request',
   FEEDBACK = 'feedback',
   PACKAGES = 'package',
   RESERVATION = 'dashboard',
+  NOTIFICATIONS = 'notification',
 }
 
 export enum TableNames {
@@ -90,7 +91,7 @@ export const ModuleConfig = {
       [TableNames.CATEGORY]: { tabFilters: [] },
     },
   },
-  [FeatureNames.NOTIFICATIONS]: {
+  [FeatureNames.REQUEST]: {
     cards: [],
     tables: [TableNames.REQUEST],
     filters: {
@@ -98,5 +99,10 @@ export const ModuleConfig = {
         tabFilters: [Filters.reservation, Filters.inhouse],
       },
     },
+  },
+  [FeatureNames.NOTIFICATIONS]: {
+    cards: [],
+    tables: [],
+    filters: {},
   },
 };

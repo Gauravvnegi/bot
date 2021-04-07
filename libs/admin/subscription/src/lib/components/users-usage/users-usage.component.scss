@@ -1,0 +1,109 @@
+@import 'main';
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &_img {
+      width: 34px;
+      height: 24px;
+    }
+    &_label {
+      font: normal normal normal 14px/19px Roboto;
+      letter-spacing: 0.28px;
+      color: #484848;
+      opacity: 1;
+    }
+    &_button {
+      width: 116px;
+      height: 28px;
+      background: #e8eef5 0% 0% no-repeat padding-box;
+      border-radius: 100px;
+      outline: none;
+      font-size: 12px;
+      letter-spacing: 0.72px;
+      color: #4b56c0;
+      cursor: pointer;
+    }
+  }
+  .details {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    &_stat {
+      display: flex;
+      align-items: baseline;
+      &_value {
+        font: normal normal bold 25px/29px Roboto;
+        letter-spacing: 0px;
+        color: #002046;
+      }
+      &_diff {
+        font: normal normal normal 12px/16px Roboto;
+        letter-spacing: 0px;
+        color: #52b33f;
+        margin: 0 5px;
+      }
+    }
+    &_link {
+      font: normal normal normal 12px/16px Roboto;
+      letter-spacing: 0.24px;
+      color: #6d7580;
+    }
+  }
+}
+
+.menu-container {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.pull-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  // margin: 0 20px;
+}
+
+.labl {
+  margin: 0 1%;
+}
+
+.labl > .image {
+  height: 25px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid $primary-purple;
+}
+.labl > input {
+  /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.legends:checked ~ p {
+  text-decoration: line-through;
+}
+
+.labl > input + .image {
+  position: relative;
+  cursor: pointer;
+}
+
+.labl > input:checked + .image {
+  background-color: $primary-purple;
+  img {
+    filter: invert(1);
+  }
+}
+
+.line-chart__canvas {
+  width: 100%;
+}

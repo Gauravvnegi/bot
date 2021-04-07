@@ -1,0 +1,271 @@
+<!-- <p (click)="redirectToAddPackage()">+Add Package</p> -->
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <form [formGroup]="tableFG">
+        <div class="caption__wrapper--tabmenu">
+          <div class="header">
+            <!-- <div class="header--text"> -->
+            <p class="heading">{{ tableName }}</p>
+            <!-- <p class="selected">2 record(s) are selected</p> -->
+
+            <div class="options">
+              <!-- <button class="add-user" (click)="redirectToAddPackage()">
+                +Add Package
+              </button> -->
+              <div *ngIf="isActionButtons" class="icons">
+                <img src="assets/svg/Download.svg" class="svg" />
+                <img src="assets/svg/google-docs.svg" class="svg" />
+                <img src="assets/svg/card.svg" class="svg" />
+              </div>
+              <div *ngIf="isActionButtons" class="seperator"></div>
+              <div formGroupName="documentActions" class="dropdown--wrapper">
+                <p-dropdown
+                  class="export"
+                  [options]="documentActionTypes"
+                  formControlName="documentActionType"
+                >
+                  <ng-template let-documentActionItem pTemplate="selectedItem">
+                    <img src="assets/svg/Export.svg" />
+                    <span
+                      style="
+                        vertical-align: middle;
+                        margin-left: 0.5em;
+                        font-weight: 500;
+                      "
+                      >{{ documentActionItem.label }}</span
+                    >
+                  </ng-template>
+                </p-dropdown>
+                <div class="divider"></div>
+                <p-dropdown
+                  class="export"
+                  [options]="documentTypes"
+                  formControlName="documentType"
+                >
+                  <ng-template let-documentTypeItem pTemplate="selectedItem">
+                    <img src="assets/svg/CSV.svg" />
+                    <span
+                      style="
+                        vertical-align: middle;
+                        margin-left: 0.5em;
+                        font-weight: 500;
+                      "
+                      >{{ documentTypeItem.label }}</span
+                    >
+                  </ng-template>
+                </p-dropdown>
+                <button class="go" (click)="onDocumentActions()">
+                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isTabFilters">
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
+          </div>
+        </div>
+        <div
+          *ngIf="isTabFilters && tabFilterItems[tabFilterIdx].chips.length"
+          class="caption__wrapper--buttons"
+        >
+          <!-- <button class="filter">
+            All
+          </button> -->
+          <div class="button__wrapper">
+            <mat-chip-list
+              multiple
+              #chipList
+              aria-label="Quick Reply selection"
+              formControlName="quickReplyActionFilters"
+            >
+              <mat-chip
+                *ngFor="
+                  let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+                  let quickReplyTypeIdx = index
+                "
+                selectable="true"
+                [ngClass]="{ chipSelected: quickReplyType.isSelected }"
+                [selected]="isQuickReplyFilterSelected(quickReplyType)"
+                (click)="
+                  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
+                "
+              >
+                {{ quickReplyType.label }}
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+
+          {{ selectedQuickReplyFilters | json }}
+          <!-- <div
+            class="button__wrapper"
+            *ngFor="let quickReplyType of quickReplyTypes"
+          >
+            <button
+              pButton
+              type="button"
+              [label]="quickReplyType.label"
+            ></button>
+          </div> -->
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <p class="no-data-found">No data available in table</p>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th
+        style="
+          width: 5%;
+          background-color: #eaf0f6;
+          border-top: 0 !important;
+          border-bottom: 0 !important;
+          text-align: center;
+        "
+        pResizableColumn
+      >
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+
+    <tr class="table-search-head">
+      <th class="table-search-head"></th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'serviceType')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'name')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'limit')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'usage')"
+          class="p-column-filter"
+        />
+      </th>
+    </tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="data-table-row">
+      <td class="table--checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td class="name">
+        <!-- <div class="profile">
+          <img src="assets/bg.png" />
+        </div> -->
+        <div class="package_image_wrapper">
+          <div class="text">
+            <div>{{ rowData.serviceType }}</div>
+          </div>
+        </div>
+        <!-- <div class="data">
+          {{ rowData.name }}
+          <p>{{ rowData.categoryName }}</p>
+          <img class="package-image" src="{{rowData.imageUrl}}" />
+        </div> -->
+      </td>
+      <td>
+        <div class="brand-name">
+          <div>{{ rowData.name }}</div>
+        </div>
+      </td>
+      <td class="guest">
+        {{ rowData.limit }}
+        <!-- <div
+          *ngIf="rowData.guests.secondaryGuest.length > 0"
+          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        >
+          <div
+            *ngFor="
+              let secondaryGuest of rowData.guests.secondaryGuest;
+              let guestIdx = index
+            "
+          >
+            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+          </div>
+        </div> -->
+      </td>
+      <td class="service-details">
+        {{ rowData.usage }}
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
+</p-table>

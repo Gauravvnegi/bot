@@ -14,6 +14,8 @@ import { Observable, Subscription } from 'rxjs';
 import { RequestTable } from '../../data-models/request-datatable.model';
 import { RequestService } from '../../services/request.service';
 import { get } from 'lodash';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { TableNames } from 'libs/shared/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-request-data-table',
@@ -33,6 +35,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
+  tables = TableNames;
 
   cols = [
     {
@@ -188,9 +191,10 @@ export class RequestDataTableComponent extends BaseDatatableComponent
     private _snackbarService: SnackBarService,
     private _modal: ModalService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    protected tabFilterService: TableService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {

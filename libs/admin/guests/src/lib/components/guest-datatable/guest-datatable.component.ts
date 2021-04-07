@@ -15,6 +15,7 @@ import { GuestTable } from '../../data-models/guest-table.model';
 import { DetailsComponent } from '../../../../../guest-detail/src/lib/components/details/details.component';
 import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -159,13 +160,15 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
+    protected tabFilterService: TableService,
     public feedbackService: FeedbackService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters('guest', 'Guest List', this.tabFilterItems);
   }
 
   registerListeners(): void {

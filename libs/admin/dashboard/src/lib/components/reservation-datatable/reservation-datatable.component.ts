@@ -13,8 +13,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import * as moment from 'moment';
-import { get } from 'lodash';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -225,13 +224,15 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    protected tabFilterService: TableService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters('dashboard', 'Reservations', this.tabFilterItems);
   }
 
   registerListeners() {
@@ -308,17 +309,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      // this.tabFilterItems = this.tabFilterItems.map((tab) => {
-      //   return {
-      //     ...tab,
-      //     chips: tab.chips.map((chip) => {
-      //       return {
-      //         ...chip,
-      //         total: countObj[chip.value],
-      //       };
-      //     }),
-      //   };
-      // });
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         chip.total = countObj[chip.value];
       });

@@ -1,4 +1,7 @@
 <hospitality-bot-statistics></hospitality-bot-statistics>
 <div class="table-container">
-    <hospitality-bot-guest-datatable></hospitality-bot-guest-datatable>
+  <hospitality-bot-guest-datatable
+    tableSubscribed
+    [path]="'guest.tables.' + tables.GUEST"
+  ></hospitality-bot-guest-datatable>
 </div>

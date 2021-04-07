@@ -43,6 +43,28 @@ export enum Filters {
   reservation = 'RESERVATION',
 }
 
+export enum Communication {
+  WHATSAPP = 'WHATSAPP_BOT',
+  FACEBOOK = 'FACEBOOK_BOT',
+  WEB = 'WEB_BOT',
+  MICRO = 'MICRO_SITES',
+}
+
+export const CommunicationConfig = {
+  [Communication.FACEBOOK]: {
+    imageUrl: 'assets/mm.png',
+  },
+  [Communication.WHATSAPP]: {
+    imageUrl: 'assets/whatsapp.png',
+  },
+  [Communication.WEB]: {
+    imageUrl: 'assets/TELEGRAMOR.png',
+  },
+  [Communication.MICRO]: {
+    imageUrl: 'assets/mm.png',
+  },
+};
+
 export const ModuleConfig = {
   [FeatureNames.RESERVATION]: {
     cards: [

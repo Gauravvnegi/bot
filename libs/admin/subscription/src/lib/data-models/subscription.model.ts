@@ -1,3 +1,4 @@
+import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 
@@ -149,6 +150,26 @@ export class TableCell {
       set({}, 'limit', get(input, ['cost', 'usageLimit'])),
       set({}, 'usage', get(input, ['currentUsage']))
     );
+    return this;
+  }
+}
+
+export class CommunicationChannels {
+  channels;
+
+  deserialize(input) {
+    this.channels = new Array<any>();
+
+    input.forEach((data) => {
+      this.channels.push({
+        ...{
+          active: data.active,
+          label: data.label,
+        },
+        ...CommunicationConfig[data.name],
+      });
+    });
+
     return this;
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TableNames } from 'libs/shared/constants/subscriptionConfig';
+import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+
 @Component({
   selector: 'hospitality-bot-guest',
   templateUrl: './guest.component.html',

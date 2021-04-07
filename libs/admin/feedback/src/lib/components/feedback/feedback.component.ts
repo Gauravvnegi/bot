@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   CardNames,
   TableNames,
-} from 'libs/shared/constants/subscriptionConfig';
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-feedback',

@@ -2,7 +2,7 @@ import { get, set } from 'lodash';
 import {
   FeatureNames,
   ModuleConfig,
-} from 'libs/shared/constants/subscriptionConfig';
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];

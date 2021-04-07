@@ -3,7 +3,7 @@ import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/s
 import {
   FeatureNames,
   TableNames,
-} from 'libs/shared/constants/subscriptionConfig';
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { SnackBarService } from 'libs/shared/material/src';
 import { get } from 'lodash';
 

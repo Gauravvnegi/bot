@@ -2,7 +2,7 @@
   <div class="title">
     Total Channels
   </div>
-  <div class="channels">
+  <div class="channels" *ngIf="communicationChannels">
     <div
       class="channels_container"
       *ngFor="let channel of communicationChannels"

@@ -9,7 +9,7 @@ import { CommunicationChannels } from '../../data-models/subscription.model';
 export class ChannelUsageComponent implements OnInit {
   @Input() data;
   activeChannels: number;
-  communicationChannels;
+  communicationChannels: CommunicationChannels;
   constructor() {}
 
   ngOnInit(): void {

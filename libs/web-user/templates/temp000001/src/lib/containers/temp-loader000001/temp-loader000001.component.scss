@@ -1,5 +1,5 @@
 .background__wrapper {
-  background: url('../../../../../../../../apps/web-user/src/assets/bg.png');
+  //background: url('../../../../../../../../apps/web-user/src/assets/bg.webp');
   position: fixed;
   top: 0;
   left: 0;
@@ -7,6 +7,12 @@
   min-width: 100%;
   min-height: 100%;
 }
+
+.background__wrapper-img {
+  min-width: 100%;
+  min-height: 100%;
+}
+
 @keyframes placeholderShimmer {
   0% {
     background-position: -468px 0;

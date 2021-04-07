@@ -141,7 +141,7 @@ export class SearchBarComponent implements OnInit {
 
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
-    this.router.navigateByUrl(`/pages/package/amenity/${id}`);
+    this.router.navigateByUrl(`/pages/package/edit/${id}`);
   }
 
   clearSearch() {

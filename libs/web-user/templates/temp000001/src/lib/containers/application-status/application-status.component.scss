@@ -173,7 +173,7 @@
         color: black;
       }
       @media only screen and (max-width: $T) {
-        font-size: $font-small
+        font-size: $font-small;
       }
     }
     &--value {
@@ -252,4 +252,10 @@
   @media screen and (max-width: $M) {
     height: 30px;
   }
+}
+
+:host ::ng-deep .error_message {
+  margin: 0 15px;
+  margin-top: 10px;
+  color: $snack-bar-red;
 }

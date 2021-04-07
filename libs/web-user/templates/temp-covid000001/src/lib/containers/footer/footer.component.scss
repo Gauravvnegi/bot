@@ -87,6 +87,11 @@
     transform: scale(1.2);
     cursor: pointer;
   }
+
+  @media only screen and (max-width: 800px) {
+    width: 250px;
+    height: 250px;
+  }
   @media only screen and (max-width: $M) {
     height: 100px;
     width: 100%;
@@ -107,13 +112,13 @@
   @media only screen and (max-width: 450px) {
     width: 104%;
     height: 100px;
-    .slick-current{
-      .slider__image{
+    .slick-current {
+      .slider__image {
         width: 90%;
       }
     }
-    .slick-current + .slick-active{
-      margin-right:15px;
+    .slick-current + .slick-active {
+      margin-right: 15px;
     }
   }
 }
@@ -142,7 +147,7 @@
   left: 4px;
   @media only screen and (max-width: $M) {
     left: 7px;
-    top:50%;
+    top: 50%;
   }
 }
 
@@ -150,7 +155,7 @@
   right: 32px;
   @media only screen and (max-width: $M) {
     right: 2px;
-    top:50%;
+    top: 50%;
   }
 }
 
@@ -159,5 +164,11 @@
 }
 
 :host ::ng-deep .slick-slide {
-  outline: none
+  outline: none;
+}
+
+:host ::ng-deep .slick-track {
+  @media only screen and (max-width: 800px) {
+    left: -25px;
+  }
 }

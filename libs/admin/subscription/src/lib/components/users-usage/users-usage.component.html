@@ -1,7 +1,7 @@
-<div class="container">
-  <div class="title">
-    <div class="title_label">Total Users</div>
-    <button class="title_button" (click)="openRolesPermission($event)">
+<!-- <div class="container"> -->
+  <div class="heading">
+    <div class="heading__label">Total Users</div>
+    <button class="heading__button" (click)="openRolesPermission($event)">
       Manage Users
     </button>
   </div>
@@ -22,6 +22,7 @@
       </label>
     </div>
   </div> -->
+  <div class="charts">
   <div class="line-chart">
     <ng-container *ngIf="chartData; else noData">
       <canvas
@@ -50,15 +51,16 @@
       </canvas>
     </ng-template>
   </div>
+  </div>
   <div class="details">
-    <div class="details_stat">
-      <div class="details_stat_value">
+    <div class="details__stat">
+      <div class="user-stat-value">
         {{ data?.currentUsage }}/{{ data?.cost.usageLimit }}
       </div>
-      <div class="details_stat_diff">(25%)</div>
+      <div class="details__stat__diff">(25%)</div>
     </div>
-    <div class="details_link">
+    <div class="details__link">
       in 30 days
     </div>
   </div>
-</div>
+<!-- </div> -->

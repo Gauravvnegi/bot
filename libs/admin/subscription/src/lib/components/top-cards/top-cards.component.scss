@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  // margin: 30px 20px;
   width: 100%;
   justify-content: space-between;
   .card {
@@ -10,53 +9,41 @@
     box-shadow: 0px 3px 6px #0000000d;
     border-radius: 5px;
     padding: 25px 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    .card_title {
+    &__title {
       font: normal normal normal 14px/19px Roboto;
       letter-spacing: 0.28px;
       color: #484848;
-      img {
-        width: 9px;
-				height: 9px;
-				margin: 0 5px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      &__image {
+        height: 11px;
+        width: 12px;
+        margin: 0 3px;
       }
     }
-    .card_details {
+    &__details {
       display: flex;
-      flex-direction: row;
       justify-content: space-between;
-      width: 100%;
-      &_label {
+      &__label {
         font: normal normal bold 25px/29px Roboto;
         letter-spacing: 0.5px;
         color: #002046;
       }
-      &_button {
+      &__button {
         width: 90px;
         height: 28px;
         background: #e8eef5 0% 0% no-repeat padding-box;
-        color: #4b56c0 0% 0% no-repeat padding-box;
-        border-radius: 100px;
+        border-radius: 24px;
         border: 1px solid #e8eef5;
-        outline: none;
+        color: #4b56c0;
+        font-weight: 600;
+        font-size: 12px;
         cursor: pointer;
-        // :focus {
-        //   background: #4b56c0 0% 0% no-repeat padding-box;
-        // 	border: 1px solid #4b56c0;
-        //   color: white;
-        // }
-        :hover {
-        	background: #4b56c0 0% 0% no-repeat padding-box;
+        &:hover {
+        	background: #4b56c0;
           color: white;
-        }
-        &_text {
-          text-align: center;
-          font: normal normal medium 12px/14px Roboto;
-          letter-spacing: 0.72px;
-        }
-      }
+        }   }
+     
     }
   }
 }

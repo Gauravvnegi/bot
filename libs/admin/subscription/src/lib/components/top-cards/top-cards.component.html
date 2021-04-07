@@ -1,10 +1,10 @@
 <div class="container" *ngIf="data">
   <div class="card">
-    <div class="card_title">Subscription</div>
-    <div class="card_details">
-      <div class="card_details_label">{{ data.plan }}</div>
+    <div class="card__title">Subscription</div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.plan }}</div>
       <button
-        class="card_details_button"
+        class="card__details__button"
         [disabled]="data.upgradable"
         [style.opacity]="data.upgradable ? 1 : 0.5"
       >
@@ -13,22 +13,22 @@
     </div>
   </div>
   <div class="card">
-    <div class="card_title">
-      Deployment <img src="assets/svg/information-circle-outline.svg" />
+    <div class="card__title">
+      Deployment <img class="card__title__image" src="assets/svg/information-circle-outline.svg" />
     </div>
-    <div class="card_details">
-      <div class="card_details_label">{{ data.deploymentType }}</div>
-      <button class="card_details_button">Switch</button>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.deploymentType }}</div>
+      <button class="card__details__button">Switch</button>
     </div>
   </div>
   <div class="card">
-    <div class="card_title">
-      Technical Support <img src="assets/svg/information-circle-outline.svg" />
+    <div class="card__title">
+      Technical Support <img class="card__title__image" src="assets/svg/information-circle-outline.svg" />
     </div>
-    <div class="card_details">
-      <div class="card_details_label">{{ data.supportType }}</div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.supportType }}</div>
       <button
-        class="card_details_button"
+        class="card__details__button"
         [disabled]="data.upgradable"
         [style.opacity]="data.upgradable ? 1 : 0.5"
       >
@@ -37,9 +37,9 @@
     </div>
   </div>
   <div class="card">
-    <div class="card_title">Plan Due Date</div>
-    <div class="card_details">
-      <div class="card_details_label">{{ data.getEndDate() }}</div>
+    <div class="card__title">Plan Due Date</div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.getEndDate() }}</div>
     </div>
   </div>
 </div>

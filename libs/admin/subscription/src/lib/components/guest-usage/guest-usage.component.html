@@ -1,6 +1,6 @@
-<div class="container">
-  <div class="title">
-    <div class="title_label">Total Guests</div>
+<!-- <div class="container"> -->
+  <div class="heading">
+    <div class="heading__label">Total Guests</div>
     <!-- <div class="menu-container">
       <div class="pull-right">
         <label class="labl" *ngFor="let option of chartTypes">
@@ -19,6 +19,7 @@
       </div>
     </div> -->
   </div>
+  <div class="charts">
   <div class="line-chart">
     <canvas
       baseChart
@@ -32,15 +33,16 @@
     >
     </canvas>
   </div>
+  </div>
   <div class="details">
-    <div class="details_stat">
-      <div class="details_stat_value">
+    <div class="details__stat">
+      <div class="details__stat__value">
         {{ data?.currentUsage }}/{{ data?.cost.usageLimit }}
       </div>
-      <div class="details_stat_diff">(25%)</div>
+      <div class="details__stat__diff">(25%)</div>
     </div>
-    <div class="details_link">
+    <div class="details__link">
       in 30 days
     </div>
   </div>
-</div>
+<!-- </div> -->

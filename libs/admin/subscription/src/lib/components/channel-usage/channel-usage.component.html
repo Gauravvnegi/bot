@@ -1,20 +1,61 @@
-<div class="container">
-  <div class="title">
-    Total Channels
+<!-- <div class="container"> -->
+  <div class="heading">
+    <div class="heading__label">Total Channels</div>
   </div>
-  <div class="channels">
-    <div class="channels_container">
-      <img src="assets/TELEGRAMOR.png" />
-      <div class="label">Telegram</div>
-    </div>
-    <div class="channels_container">
-      <img src="assets/whatsapp.png" />
-      <div class="label">WhatsApp</div>
-    </div>
-    <div class="channels_container">
-      <img src="assets/mm.png" />
-      <div class="label">Messenger</div>
-    </div>
-  </div>
-  <div class="details">{{ activeChannels }}/{{ data?.length }} Active</div>
+
+  <!-- <ngx-slick-carousel class="carousel" 
+  #slickModal="slick-carousel" 
+  [config]="slideConfig" 
+  >
+<div ngxSlickItem *ngFor="let slide of slides" class="slide">
+<img src="{{ slide.img }}" alt="" width="100%">
 </div>
+</ngx-slick-carousel> -->
+<ngx-slick-carousel class="carousel"
+
+[config]="slideConfig"
+responsive="breakpoints">
+<div ngxSlickItem class="slide">
+  <div class="channels">
+    <div class="channels__container">
+      <img class= "channels__container__image"src="assets/TELEGRAMOR.png" />
+      <div class="channels__container__label">Telegram</div>
+    </div>
+   
+  </div>
+  </div>
+  <div ngxSlickItem class="slide">
+    <div class="channels">
+      <div class="channels__container">
+        <img class= "channels__container__image"src="assets/whatsapp.png" />
+        <div class="channels__container__label">WhatsApp</div>
+      </div>
+     </div>
+    </div>
+    <div ngxSlickItem class="slide">
+      <div class="channels">
+        <div class="channels__container">
+          <img class= "channels__container__image"src="assets/mm.png" />
+          <div class="channels__container__label">Messenger</div>
+        </div>
+      </div>
+      </div><div ngxSlickItem class="slide">
+        <div class="channels">
+          <div class="channels__container">
+            <img class= "channels__container__image"src="assets/TELEGRAMOR.png" />
+            <div class="channels__container__label">Telegram</div>
+          </div>
+        </div>
+        </div>
+</ngx-slick-carousel>
+<!--  
+  <button (click)="addSlide()">Add</button>
+  <button (click)="removeSlide()">Remove</button>
+  <button (click)="slickModal.slickGoTo(2)">slickGoto 2</button>
+  <button (click)="slickModal.unslick()">unslick</button> -->
+  <div class="details">
+    <div class="details__stat">
+      <div class="channel-stat-value">
+    {{ activeChannels }}/{{ data?.length }} Active
+    </div></div></div>
+<!-- </div> -->

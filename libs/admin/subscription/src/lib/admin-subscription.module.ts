@@ -9,7 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { ChartsModule } from 'ng2-charts';
 import { SubscriptionService } from './services/subscription.service';
-
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +20,7 @@ import { SubscriptionService } from './services/subscription.service';
     RouterModule,
     TableModule,
     SharedMaterialModule,
+    SlickCarouselModule,
     DropdownModule,
     ChartsModule
   ],

@@ -13,4 +13,13 @@ export class SubscriptionService extends ApiService {
       `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
     );
   }
+
+  exportCSV(hotelId, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/subscriptions/exportcsv/${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
 }

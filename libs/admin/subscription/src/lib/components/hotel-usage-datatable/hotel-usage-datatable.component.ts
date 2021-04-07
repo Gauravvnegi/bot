@@ -6,10 +6,12 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { LazyLoadEvent } from 'primeng/api';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { TableData } from '../../data-models/subscription.model';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { SubscriptionService } from '../../services/subscription.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-hotel-usage-datatable',
@@ -45,16 +47,17 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     private route: ActivatedRoute,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
-    private subscriptionService: SubscriptionPlanService,
+    private subscriptionPlanService: SubscriptionPlanService,
+    private subscriptionService: SubscriptionService,
     private router: Router,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private _snackbarService: SnackBarService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    // this.listenForGlobalFilters();
+    this.listenForGlobalFilters();
     this.listenForSubscriptionPlan();
   }
 
@@ -71,7 +74,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
 
   listenForSubscriptionPlan(): void {
     this.$subscription.add(
-      this.subscriptionService.subscription$.subscribe((response) => {
+      this.subscriptionPlanService.subscription$.subscribe((response) => {
         // console.log(new TableData().deserialize(response).data);
         this.usageData = new TableData().deserialize(response).data;
         this.totalRecords = this.usageData.length;
@@ -120,6 +123,23 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
+
+    this.subscriptionService.exportCSV(this.hotelId, config).subscribe(
+      (res) => {
+        FileSaver.saveAs(
+          res,
+          this.tableName.toLowerCase() +
+            '_export_' +
+            new Date().getTime() +
+            '.csv'
+        );
+        this.loading = false;
+      },
+      ({ error }) => {
+        this.loading = false;
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 
   redirectToAddPackage(): void {

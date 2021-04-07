@@ -134,6 +134,7 @@ export class TableData {
 }
 
 export class TableCell {
+  id: string;
   serviceType: string;
   name: string;
   limit: string;
@@ -142,6 +143,7 @@ export class TableCell {
   deserialize(input: any) {
     Object.assign(
       this,
+      set({}, 'id', get(input, ['id'])),
       set({}, 'serviceType', get(input, ['type'])),
       set({}, 'name', get(input, ['label'])),
       set({}, 'limit', get(input, ['cost', 'usageLimit'])),

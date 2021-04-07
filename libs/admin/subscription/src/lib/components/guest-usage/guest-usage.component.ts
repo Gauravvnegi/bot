@@ -136,7 +136,7 @@ export class GuestUsageComponent implements OnInit {
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
       );
-      console.log(this.chart.chartData);
+      // console.log(this.chart.chartData);
     });
   }
 

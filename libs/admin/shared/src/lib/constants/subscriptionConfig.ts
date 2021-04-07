@@ -39,8 +39,9 @@ export enum Filters {
   ARRIVAL = 'ARRIVAL',
   INHOUSE = 'INHOUSE',
   DEPARTURE = 'DEPARTURE',
-  outguest = 'OUTGUEST',
-  reservation = 'RESERVATION',
+  OUTGUEST = 'OUTGUEST',
+  RESERVATION = 'RESERVATION',
+  JOURNEYRESERVATION = 'ALL',
 }
 
 export enum Communication {
@@ -94,7 +95,7 @@ export const ModuleConfig = {
           Filters.ARRIVAL,
           Filters.INHOUSE,
           Filters.DEPARTURE,
-          Filters.outguest,
+          Filters.OUTGUEST,
         ],
       },
     },
@@ -110,7 +111,9 @@ export const ModuleConfig = {
       CardNames.NPSAcrossServices,
     ],
     tables: [TableNames.FEEDBACK],
-    filters: { [TableNames.FEEDBACK]: { tabFilters: [] } },
+    filters: {
+      [TableNames.FEEDBACK]: { tabFilters: [Filters.JOURNEYRESERVATION] },
+    },
   },
   [FeatureNames.PACKAGES]: {
     cards: [],
@@ -125,7 +128,7 @@ export const ModuleConfig = {
     tables: [TableNames.REQUEST],
     filters: {
       [TableNames.REQUEST]: {
-        tabFilters: [Filters.reservation, Filters.INHOUSE],
+        tabFilters: [Filters.RESERVATION, Filters.INHOUSE],
       },
     },
   },

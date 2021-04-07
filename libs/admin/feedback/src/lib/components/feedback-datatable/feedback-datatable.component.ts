@@ -15,6 +15,10 @@ import { Subscription, Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import {
+  FeatureNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -140,6 +144,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters(
+      FeatureNames.FEEDBACK,
+      TableNames.FEEDBACK,
+      this.tabFilterItems
+    );
   }
 
   registerListeners(): void {

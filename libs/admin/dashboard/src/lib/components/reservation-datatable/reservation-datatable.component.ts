@@ -14,6 +14,10 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import {
+  FeatureNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -232,7 +236,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getSubscribedFilters('dashboard', 'Reservations', this.tabFilterItems);
+    this.getSubscribedFilters(
+      FeatureNames.RESERVATION,
+      TableNames.RESERVATION,
+      this.tabFilterItems
+    );
   }
 
   registerListeners() {

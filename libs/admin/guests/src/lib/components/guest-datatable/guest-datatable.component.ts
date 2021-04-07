@@ -16,6 +16,10 @@ import { DetailsComponent } from '../../../../../guest-detail/src/lib/components
 import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import {
+  FeatureNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -168,7 +172,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
-    this.getSubscribedFilters('guest', 'Guest List', this.tabFilterItems);
+    this.getSubscribedFilters(
+      FeatureNames.GUESTS,
+      TableNames.GUEST,
+      this.tabFilterItems
+    );
   }
 
   registerListeners(): void {

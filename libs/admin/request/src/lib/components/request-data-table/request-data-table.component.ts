@@ -15,7 +15,10 @@ import { RequestTable } from '../../data-models/request-datatable.model';
 import { RequestService } from '../../services/request.service';
 import { get } from 'lodash';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
-import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import {
+  FeatureNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-request-data-table',
@@ -199,6 +202,11 @@ export class RequestDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters(
+      FeatureNames.REQUEST,
+      TableNames.REQUEST,
+      this.tabFilterItems
+    );
   }
 
   registerListeners() {

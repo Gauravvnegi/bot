@@ -403,6 +403,19 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    // value = value && value.trim();
+    // this.table.filter(value, field, matchMode);
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
+
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }

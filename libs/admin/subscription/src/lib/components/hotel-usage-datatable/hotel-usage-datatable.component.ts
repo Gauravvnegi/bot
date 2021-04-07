@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
@@ -23,6 +23,8 @@ import * as FileSaver from 'file-saver';
 })
 export class HotelUsageDatatableComponent extends BaseDatatableComponent
   implements OnInit {
+  @Input() featureData;
+
   tableName = 'Usage of Hotel';
   isResizableColumns = true;
   isAutoLayout = false;
@@ -46,8 +48,6 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private route: ActivatedRoute,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
-    private subscriptionPlanService: SubscriptionPlanService,
     private subscriptionService: SubscriptionService,
     private router: Router,
     protected tabFilterService: TableService,
@@ -57,40 +57,15 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
-    this.listenForSubscriptionPlan();
+    this.initTableData();
   }
 
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      //set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-    });
-  }
-
-  listenForSubscriptionPlan(): void {
-    this.$subscription.add(
-      this.subscriptionPlanService.subscription$.subscribe((response) => {
-        // console.log(new TableData().deserialize(response).data);
-        this.usageData = new TableData().deserialize(response).data;
-        this.totalRecords = this.usageData.length;
-        this.getFilteredData();
-      })
-    );
-  }
-
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
+  initTableData(): void {
+    if (this.featureData) {
+      this.usageData = new TableData().deserialize(this.featureData).data;
+      this.totalRecords = this.usageData.length;
+      this.getFilteredData();
+    }
   }
 
   getFilteredData(

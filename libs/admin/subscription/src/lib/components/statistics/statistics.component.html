@@ -1,4 +1,8 @@
-<hospitality-bot-top-cards></hospitality-bot-top-cards>
+<ng-container *ngIf="featureData">
+  <hospitality-bot-top-cards
+    [featureData]="featureData"
+  ></hospitality-bot-top-cards>
+</ng-container>
 <div class="border"></div>
 <div
   class="usage-container"

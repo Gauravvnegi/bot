@@ -11,6 +11,10 @@ export class CardDirective implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.checkSubscription();
+  }
+
+  checkSubscription(): void {
     const subscription = this.subscriptionService.getModuleSubscription();
     let getPath = [...['modules'], ...this.path.split('.'), ...['active']];
     this.elementRef.nativeElement.style.display = get(

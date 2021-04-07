@@ -9,20 +9,15 @@ import { SubscriptionPlan } from '../../data-models/subscription.model';
   styleUrls: ['./top-cards.component.scss'],
 })
 export class TopCardsComponent implements OnInit {
-  private $subscription = new Subscription();
+  @Input() featureData;
   data: SubscriptionPlan;
   constructor(private subscriptionService: SubscriptionPlanService) {}
 
   ngOnInit(): void {
-    this.registerListeners();
     this.initSubscriptionPlan();
   }
 
-  registerListeners(): void {}
-
   initSubscriptionPlan(): void {
-    this.data = new SubscriptionPlan().deserialize(
-      this.subscriptionService.getSubscription()
-    );
+    this.data = new SubscriptionPlan().deserialize(this.featureData);
   }
 }

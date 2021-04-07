@@ -1,2 +1,23 @@
-<hospitality-bot-statistics></hospitality-bot-statistics>
-<hospitality-bot-hotel-usage-datatable></hospitality-bot-hotel-usage-datatable>
+<ng-container *ngIf="!loading; else loader">
+  <hospitality-bot-statistics
+    [subscriptionPlanUsage]="subscriptionPlanUsage"
+    [planUsageChartData]="planUsageChartData"
+    [featureData]="subscriptionData"
+  ></hospitality-bot-statistics>
+  <ng-container *ngIf="subscriptionData">
+    <hospitality-bot-hotel-usage-datatable
+      [featureData]="subscriptionData"
+    ></hospitality-bot-hotel-usage-datatable>
+  </ng-container>
+</ng-container>
+
+<ng-template #loader>
+  <div class="loader">
+    <p class="loading">Loading</p>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+  </div>
+</ng-template>

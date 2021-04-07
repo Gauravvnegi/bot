@@ -16,7 +16,11 @@ export class TableService {
     private snackBarService: SnackBarService
   ) {}
 
-  getSubscribedFilters(module: string, table: string, filters: any[] = []) {
+  getSubscribedFilters(
+    module: string,
+    table: string,
+    filters: any[] = []
+  ): any[] {
     const validityStatus = this.validateInputs(module, table);
     if (!validityStatus.status) {
       this.snackBarService.openSnackBarAsText(validityStatus.error);

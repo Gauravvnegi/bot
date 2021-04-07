@@ -11,6 +11,10 @@ export class FeatureDirective implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.checkSubscription();
+  }
+
+  checkSubscription(): void {
     const subscription = this.subscriptionService.getModuleSubscription();
     this.elementRef.nativeElement.style.display = get(
       subscription,

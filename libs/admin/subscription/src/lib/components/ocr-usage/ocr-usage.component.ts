@@ -7,21 +7,6 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
   styleUrls: ['./ocr-usage.component.scss'],
 })
 export class OcrUsageComponent implements OnInit {
-  // chartTypes = [
-  //   {
-  //     name: 'Bar',
-  //     value: 'horizontalBar',
-  //     url: 'assets/svg/bar-graph.svg',
-  //     backgroundColor: '#4BA0F5',
-  //   },
-  //   {
-  //     name: 'Line',
-  //     value: 'line',
-  //     url: 'assets/svg/line-graph.svg',
-  //     backgroundColor: '#DEFFF3',
-  //   },
-  // ];
-
   @Input() data;
   @Input() chartData;
   chart: any = {
@@ -64,8 +49,6 @@ export class OcrUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              // stepSize: 1,
-              // max: 1,
             },
           },
         ],
@@ -104,14 +87,6 @@ export class OcrUsageComponent implements OnInit {
     this.chart.chartData[0].data = [];
     this.chart.chartLabels = [];
     this.chartData.forEach((data) => {
-      // if (
-      //   this.chart.chartOptions.scales.xAxes[0].ticks.stepSize <
-      //   data.value / this.chartData.length
-      // ) {
-      //   this.chart.chartOptions.scales.xAxes[0].ticks.stepSize = Number(
-      //     data.value / this.chartData.length
-      //   );
-      // }
       this.chart.chartData[0].data.push(data.value);
       this.chart.chartLabels.push(data.label);
     });

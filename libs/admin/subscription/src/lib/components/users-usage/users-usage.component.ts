@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
@@ -8,27 +9,6 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
   styleUrls: ['./users-usage.component.scss'],
 })
 export class UsersUsageComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private dateService: DateService
-  ) {}
-
-  // chartTypes = [
-  //   {
-  //     name: 'Bar',
-  //     value: 'bar',
-  //     url: 'assets/svg/bar-graph.svg',
-  //     backgroundColor: '#4BA0F5',
-  //   },
-  //   {
-  //     name: 'Line',
-  //     value: 'line',
-  //     url: 'assets/svg/line-graph.svg',
-  //     backgroundColor: '#DEFFF3',
-  //   },
-  // ];
-
   @Input() data;
   @Input() chartData;
   chart: any = {
@@ -78,7 +58,9 @@ export class UsersUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              // stepSize: 1,
+              callback: function (value) {
+                return AdminUtilityService.valueFormatter(value, 2);
+              },
             },
           },
         ],
@@ -98,6 +80,8 @@ export class UsersUsageComponent implements OnInit {
     chartType: 'bar',
   };
 
+  constructor(private router: Router, private dateService: DateService) {}
+
   ngOnInit(): void {
     if (this.chartData) {
       this.initChart();
@@ -109,24 +93,10 @@ export class UsersUsageComponent implements OnInit {
     this.chart.chartLabels = [];
     this.chartData.forEach((data) => {
       this.chart.chartData[0].data.push(data.value);
-      // if (
-      //   this.chart.chartOptions.scales.yAxes[0].ticks.stepSize <
-      //   data.value / this.chartData.length
-      // ) {
-      //   this.chart.chartOptions.scales.yAxes[0].ticks.stepSize = Number(
-      //     data.value / this.chartData.length
-      //   );
-      // }
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
       );
     });
-  }
-
-  setChartType(option, event): void {
-    event.stopPropagation();
-    this.chart.chartType = option.value;
-    this.chart.chartColors[0].backgroundColor = option.backgroundColor;
   }
 
   openRolesPermission(event) {

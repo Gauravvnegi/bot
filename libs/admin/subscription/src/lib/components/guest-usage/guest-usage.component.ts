@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get } from 'lodash';
 
@@ -9,21 +10,6 @@ import { get } from 'lodash';
   styleUrls: ['./guest-usage.component.scss'],
 })
 export class GuestUsageComponent implements OnInit {
-  // chartTypes = [
-  //   {
-  //     name: 'Bar',
-  //     value: 'bar',
-  //     url: 'assets/svg/bar-graph.svg',
-  //     backgroundColor: ['#FFBF04','#D7D9DB'],
-  //   },
-  //   {
-  //     name: 'Line',
-  //     value: 'line',
-  //     url: 'assets/svg/line-graph.svg',
-  //     backgroundColor: '#1AB99F',
-  //   },
-  // ];
-
   @Input() data;
   @Input() chartData;
   subscriptionData;
@@ -77,6 +63,9 @@ export class GuestUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
+              callback: function (value) {
+                return AdminUtilityService.valueFormatter(value, 2);
+              },
             },
           },
         ],
@@ -125,25 +114,10 @@ export class GuestUsageComponent implements OnInit {
     this.chartData.forEach((data) => {
       this.chart.chartData.datasets[0].data.push(limit);
       this.chart.chartData.datasets[1].data.push(data.value);
-      // if (
-      //   this.chart.chartOptions.scales.yAxes[0].ticks.stepSize <
-      //   data.value / this.chartData.length
-      // ) {
-      //   this.chart.chartOptions.scales.yAxes[0].ticks.stepSize = Number(
-      //     data.value / this.chartData.datasets[0].length
-      //   );
-      // }
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
       );
       console.log(this.chart.chartData);
     });
-  }
-
-  setChartType(option, event): void {
-    event.stopPropagation();
-    this.chart.chartType = option.value;
-    this.chart.chartColors[0].backgroundColor = option.backgroundColor[0];
-    this.chart.chartColors[1].backgroundColor = option.backgroundColor[1];
   }
 }

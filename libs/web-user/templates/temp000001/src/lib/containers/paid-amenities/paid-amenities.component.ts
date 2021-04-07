@@ -38,7 +38,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     slidesToShow: 3,
     slidesToScroll: 1,
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 100,
     autoplay: true,
     method: {},
@@ -165,16 +165,17 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       );
 
       for (const element of elements) {
-        const slidePackageCode = (element.firstChild as HTMLElement).getAttribute(
-          'data-slidedata'
-        );
+        element.addEventListener('click', this.selectedSlide.bind(this));
+        // const slidePackageCode = (element.firstChild as HTMLElement).getAttribute(
+        //   'data-slidedata'
+        // );
 
-        if (slidePackageCode) {
-          element.addEventListener(
-            'click',
-            this.openPackage.bind(this, slidePackageCode)
-          );
-        }
+        // if (slidePackageCode) {
+        //   element.addEventListener(
+        //     'click',
+        //     this.openPackage.bind(this, slidePackageCode)
+        //   );
+        // }
       }
     }
   }

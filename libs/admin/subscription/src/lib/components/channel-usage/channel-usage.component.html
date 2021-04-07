@@ -1,40 +1,21 @@
 <!-- <div class="container"> -->
-  <div class="heading">
-    <div class="heading__label">Total Channels</div>
-  </div>
-
-  <!-- <ngx-slick-carousel class="carousel" 
-  #slickModal="slick-carousel" 
-  [config]="slideConfig" 
-  >
-<div ngxSlickItem *ngFor="let slide of slides" class="slide">
-<img src="{{ slide.img }}" alt="" width="100%">
+<div class="heading">
+  <div class="heading__label">Total Channels</div>
 </div>
-</ngx-slick-carousel> -->
-<ngx-slick-carousel class="carousel"
-
-[config]="slideConfig"
-responsive="breakpoints">
-<div ngxSlickItem class="slide">
-  <div class="channels" *ngIf="communicationChannels">
-    <div
-      class="channels_container"
-      *ngFor="let channel of communicationChannels"
-    >
-      <img [src]="channel.imageUrl" />
-      <div class="label">{{ channel.label }}</div>
+<ngx-slick-carousel class="carousel" *ngIf="communicationChannels" [config]="slideConfig" responsive="breakpoints">
+  <div ngxSlickItem class="slide" *ngFor="let channel of communicationChannels">
+    <div class="channels">
+      <div class="channels__container">
+        <img [src]="channel.imageUrl" class="channels__container__image" />
+        <div class="channels__container__label">{{ channel.label }}</div>
+      </div>
     </div>
-   
   </div>
 </ngx-slick-carousel>
-<!--  
-  <button (click)="addSlide()">Add</button>
-  <button (click)="removeSlide()">Remove</button>
-  <button (click)="slickModal.slickGoTo(2)">slickGoto 2</button>
-  <button (click)="slickModal.unslick()">unslick</button> -->
-  <div class="details">
-    <div class="details__stat">
-      <div class="channel-stat-value">
-    {{ activeChannels }}/{{ data?.length }} Active
-    </div></div></div>
-<!-- </div> -->
+<div class="details">
+  <div class="details__stat">
+    <div class="channel-stat-value">
+      {{ activeChannels }}/{{ data?.length }} Active
+    </div>
+  </div>
+</div>

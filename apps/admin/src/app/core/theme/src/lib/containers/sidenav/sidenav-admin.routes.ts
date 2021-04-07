@@ -53,12 +53,6 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/virus.svg',
   },
-  {
-    path: 'subscription',
-    title: 'Subscription',
-    children: null,
-    url: 'assets/svg/box.svg',
-  },
 ];
 
 export const DEFAULT_ROUTES = [
@@ -66,6 +60,6 @@ export const DEFAULT_ROUTES = [
     path: 'subscription',
     title: 'Subscription',
     children: null,
-    url: 'assets/svg/box.svg',
+    url: 'assets/svg/subscription.svg',
   },
 ];

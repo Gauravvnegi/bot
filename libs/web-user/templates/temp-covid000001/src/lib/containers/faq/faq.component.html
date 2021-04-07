@@ -23,10 +23,13 @@
           <p>{{ selectingCategory }}</p>
           <i class="fa fa-angle-down" aria-hidden="true"></i>
         </div>
-        <div class="options" [ngStyle]="dropdown?{'display':'block'}:{'display':'none'}">
+        <div
+          class="options"
+          [ngStyle]="dropdown ? { display: 'block' } : { display: 'none' }"
+        >
           <div
             *ngFor="let category of faqCategories"
-            class="button"
+            class="button__dropdown"
             (click)="onCategorySelect(category.button.label)"
           >
             <p class="advisories_tag">{{ category.button.label }}</p>

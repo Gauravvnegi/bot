@@ -1,5 +1,5 @@
 import { Component, OnInit, ComponentRef } from '@angular/core';
-import { TableNames } from 'libs/shared/constants/subscriptionConfig';
+import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-dashboard',

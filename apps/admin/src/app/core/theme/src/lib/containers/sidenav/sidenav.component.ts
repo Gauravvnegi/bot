@@ -9,7 +9,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
-import { FeatureNames } from '../../../../../../../../../../libs/shared/constants/subscriptionConfig';
+import { FeatureNames } from '../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-sidenav',

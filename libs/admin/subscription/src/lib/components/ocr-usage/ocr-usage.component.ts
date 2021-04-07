@@ -64,6 +64,7 @@ export class OcrUsageComponent implements OnInit {
             },
             ticks: {
               min: 0,
+              // stepSize: 1,
               // max: 1,
             },
           },
@@ -103,6 +104,14 @@ export class OcrUsageComponent implements OnInit {
     this.chart.chartData[0].data = [];
     this.chart.chartLabels = [];
     this.chartData.forEach((data) => {
+      // if (
+      //   this.chart.chartOptions.scales.xAxes[0].ticks.stepSize <
+      //   data.value / this.chartData.length
+      // ) {
+      //   this.chart.chartOptions.scales.xAxes[0].ticks.stepSize = Number(
+      //     data.value / this.chartData.length
+      //   );
+      // }
       this.chart.chartData[0].data.push(data.value);
       this.chart.chartLabels.push(data.label);
     });

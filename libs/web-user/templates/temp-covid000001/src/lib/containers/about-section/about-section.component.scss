@@ -6,10 +6,16 @@
   background-repeat: no-repeat;
   width: 100%;
   background-size: 100% 100%;
+  @media only screen and (max-width: 800px) {
+    height: 400px;
+  }
   &--text {
     width: 53%;
     padding: 100px $padding30;
     padding-right: 0px;
+    @media only screen and (max-width: 800px) {
+      padding: 50px $padding30;
+    }
     .title {
       font-size: $font-medium;
       font-weight: $bold;
@@ -23,6 +29,10 @@
       color: $white;
       line-height: 75px;
       letter-spacing: $small-spacing;
+      @media only screen and (max-width: 800px) {
+        font-size: 40px;
+        line-height: 60px;
+      }
     }
   }
   .blank {
@@ -80,17 +90,24 @@
       line-height: 38px;
       font-size: $font-large;
       color: $paragraph-color;
+      @media only screen and (max-width: 1100px) {
+        line-height: 25px;
+      }
     }
   }
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: 800px) {
     flex-direction: column;
     justify-content: initial;
-    padding: $padding-small;
     .image {
       width: auto;
     }
     .disease__text {
       width: auto;
+    }
+  }
+  @media only screen and (max-width: $M) {
+    padding: $padding-small;
+    .disease__text {
       text-align: center;
       .heading {
         font-size: $font-responsive-small;

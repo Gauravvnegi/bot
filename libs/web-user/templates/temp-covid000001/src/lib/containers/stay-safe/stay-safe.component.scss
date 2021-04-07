@@ -47,6 +47,9 @@
         font-weight: $bold;
         color: $heading-black;
       }
+      @media only screen and (max-width: 800px) {
+        width: $half-width;
+      }
     }
   }
   @media only screen and (max-width: $M) {
@@ -67,8 +70,6 @@
       padding: $padding-small;
 
       .image_with_text {
-        width: $half-width;
-
         .precuation__image {
           height: 100px;
           width: 100px;

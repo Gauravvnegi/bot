@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-guest-usage',
@@ -23,11 +26,12 @@ export class GuestUsageComponent implements OnInit {
 
   @Input() data;
   @Input() chartData;
+  subscriptionData;
   chart: any = {
     chartData: {
       datasets: [
-        { data: [5000, 5000, 7000, 9000, 12000], label: 'Bar 1' },
-        { data: [7000, 7000, 9000, 11000, 14000], label: 'Bar 2' },
+        { data: [5000, 5000, 7000, 9000, 12000], label: 'Limit' },
+        { data: [7000, 7000, 9000, 11000, 14000], label: 'Usage' },
       ],
       // data: [5, 5, 7, 9, 12],
       label: 'Total Users',
@@ -100,9 +104,41 @@ export class GuestUsageComponent implements OnInit {
     chartType: 'bar',
   };
 
-  constructor() {}
+  constructor(
+    private dateService: DateService,
+    private subscriptionService: SubscriptionPlanService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.subscriptionData = this.subscriptionService.getModuleSubscription();
+    this.initChart();
+  }
+
+  initChart() {
+    this.chart.chartData.datasets[0].data = [];
+    this.chart.chartData.datasets[1].data = [];
+    this.chart.chartLabels = [];
+    let limit =
+      get(this.subscriptionData, ['features', 'MODULE'])?.filter(
+        (data) => data.name === 'GUESTS'
+      )[0]?.cost.usageLimit || 0;
+    this.chartData.forEach((data) => {
+      this.chart.chartData.datasets[0].data.push(limit);
+      this.chart.chartData.datasets[1].data.push(data.value);
+      // if (
+      //   this.chart.chartOptions.scales.yAxes[0].ticks.stepSize <
+      //   data.value / this.chartData.length
+      // ) {
+      //   this.chart.chartOptions.scales.yAxes[0].ticks.stepSize = Number(
+      //     data.value / this.chartData.datasets[0].length
+      //   );
+      // }
+      this.chart.chartLabels.push(
+        this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
+      );
+      console.log(this.chart.chartData);
+    });
+  }
 
   setChartType(option, event): void {
     event.stopPropagation();

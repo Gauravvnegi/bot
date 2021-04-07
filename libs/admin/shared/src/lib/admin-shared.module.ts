@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CardDirective } from './directives/card.directive';
 import { TableDirective } from './directives/table.directive';
+import { FeatureDirective } from './directives/feature.directive';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { TableDirective } from './directives/table.directive';
     MultipleDropdownComponent,
     CardDirective,
     TableDirective,
+    FeatureDirective,
   ],
   exports: [
     DatatableComponent,
@@ -56,6 +58,7 @@ import { TableDirective } from './directives/table.directive';
     MultipleDropdownComponent,
     CardDirective,
     TableDirective,
+    FeatureDirective,
   ],
 })
 export class AdminSharedModule {}

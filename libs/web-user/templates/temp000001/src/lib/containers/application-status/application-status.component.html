@@ -115,7 +115,7 @@
         </div>
       </div>
       <div
-        class="section--content"
+        class="error_message"
         *ngIf="
           summaryDetails.guestDetails.primaryGuest.statusMessage.status ===
           'FAILED'
@@ -158,7 +158,7 @@
           </ng-container>
         </div>
         <div
-          class="section--content"
+          class="error_message"
           *ngIf="
             summaryDetails.healthDeclaration.statusMessage.status === 'FAILED'
           "

@@ -451,22 +451,21 @@
           </ng-container>
         </ng-template>
       </div>
-      <p class="contact">Contact Guest</p>
-      <div class="right-bottom-icons">
-    
-        <ng-container *ngFor="let icon of shareIconList">
-          <div
-            class="social-icons"
-            (click)="openSendNotification(icon.value)"
-          >
-            <div class="icon">
-              <img [src]="icon.iconUrl" />
+      <ng-container featureSubscribed [feature]="'notification'">
+        <p class="contact">Contact Guest</p>
+        <div class="right-bottom-icons">
+          <ng-container *ngFor="let icon of shareIconList">
+            <div
+              class="social-icons"
+              (click)="openSendNotification(icon.value)"
+            >
+              <div class="icon">
+                <img [src]="icon.iconUrl" />
+              </div>
             </div>
-          </div>
-        </ng-container>
-        
-      
-      </div>
+          </ng-container>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

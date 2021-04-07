@@ -21,17 +21,32 @@
   </div>
   <div class="charts">
   <div class="line-chart">
-    <canvas
-      baseChart
-      class="line-chart__canvas"
-      [datasets]="chart.chartData.datasets"
-      [labels]="chart.chartLabels"
-      [options]="chart.chartOptions"
-      [colors]="chart.chartColors"
-      [legend]="chart.chartLegend"
-      [chartType]="chart.chartType"
-    >
-    </canvas>
+    <ng-container *ngIf="chartData; else noData">
+      <canvas
+        baseChart
+        class="line-chart__canvas"
+        [datasets]="chart.chartData.datasets"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
+      </canvas>
+    </ng-container>
+    <ng-template #noData>
+      <canvas
+        baseChart
+        class="line-chart__canvas"
+        [datasets]="chart.chartData.datasets"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
+      </canvas>
+    </ng-template>
   </div>
   </div>
   <div class="details">

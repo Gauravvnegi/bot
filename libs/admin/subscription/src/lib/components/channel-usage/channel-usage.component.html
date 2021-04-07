@@ -16,37 +16,16 @@
 [config]="slideConfig"
 responsive="breakpoints">
 <div ngxSlickItem class="slide">
-  <div class="channels">
-    <div class="channels__container">
-      <img class= "channels__container__image"src="assets/TELEGRAMOR.png" />
-      <div class="channels__container__label">Telegram</div>
+  <div class="channels" *ngIf="communicationChannels">
+    <div
+      class="channels_container"
+      *ngFor="let channel of communicationChannels"
+    >
+      <img [src]="channel.imageUrl" />
+      <div class="label">{{ channel.label }}</div>
     </div>
    
   </div>
-  </div>
-  <div ngxSlickItem class="slide">
-    <div class="channels">
-      <div class="channels__container">
-        <img class= "channels__container__image"src="assets/whatsapp.png" />
-        <div class="channels__container__label">WhatsApp</div>
-      </div>
-     </div>
-    </div>
-    <div ngxSlickItem class="slide">
-      <div class="channels">
-        <div class="channels__container">
-          <img class= "channels__container__image"src="assets/mm.png" />
-          <div class="channels__container__label">Messenger</div>
-        </div>
-      </div>
-      </div><div ngxSlickItem class="slide">
-        <div class="channels">
-          <div class="channels__container">
-            <img class= "channels__container__image"src="assets/TELEGRAMOR.png" />
-            <div class="channels__container__label">Telegram</div>
-          </div>
-        </div>
-        </div>
 </ngx-slick-carousel>
 <!--  
   <button (click)="addSlide()">Add</button>

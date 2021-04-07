@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { SlickCarouselComponent } from 'ngx-slick-carousel';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommunicationChannels } from '../../data-models/subscription.model';
+
 @Component({
   selector: 'hospitality-bot-channel-usage',
   templateUrl: './channel-usage.component.html',
@@ -8,14 +9,7 @@ import { SlickCarouselComponent } from 'ngx-slick-carousel';
 export class ChannelUsageComponent implements OnInit {
   @Input() data;
   activeChannels: number;
-  // @ViewChild('slickModal') slickModal: SlickCarouselComponent;
-  // slides = [
-  //   {img: "https://via.placeholder.com/600.png/09f/fff"},
-  //   {img: "https://via.placeholder.com/600.png/021/fff"},
-  //   {img: "https://via.placeholder.com/600.png/321/fff"},
-  //   {img: "https://via.placeholder.com/600.png/422/fff"},
-  //   {img: "https://via.placeholder.com/600.png/654/fff"}
-  // ];
+  
   slideConfig = {
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -33,6 +27,7 @@ export class ChannelUsageComponent implements OnInit {
       },
     ],
   };
+  communicationChannels: CommunicationChannels;
   constructor() {}
   // pauseSlickCarousel() {
   //   this.slickModal.slickPause();
@@ -43,6 +38,9 @@ export class ChannelUsageComponent implements OnInit {
   // }
   ngOnInit(): void {
     if (this.data) {
+      this.communicationChannels = new CommunicationChannels().deserialize(
+        this.data
+      ).channels;
       this.activeChannels = this.data.length;
     }
   }

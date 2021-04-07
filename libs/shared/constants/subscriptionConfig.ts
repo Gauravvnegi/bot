@@ -18,54 +18,60 @@ export enum TableNames {
 }
 
 export enum CardNames {
-  arrival = 'ARRIVAL',
-  inhouse = 'INHOUSE',
-  departure = 'DEPARTURE',
-  vip = 'VIP',
-  status = 'STATUS',
-  payment = 'PAYMENT',
-  document = 'DOCUMENT',
-  globalNps = 'GlobalNPS',
-  feedbackDistribution = 'FeedbackDistribution',
-  nps = 'NetPromoterScore',
-  npsAcrossDepartment = 'NPSAcrossDepartments',
-  npsAcrossTouchpoint = 'NPSAcrossAllTouchpoints',
-  npsAcrossServices = 'NPSAcrossServices',
-  topLowNPS = 'Top/LowNPS',
+  ARRIVAL = 'ARRIVAL',
+  INHOUSE = 'INHOUSE',
+  DEPARTURE = 'DEPARTURE',
+  VIP = 'VIP',
+  RESERVATION = 'RESERVATION',
+  STATUS = 'STATUS',
+  PAYMENT = 'PAYMENT',
+  DOCUMENT = 'DOCUMENT',
+  GlobalNPS = 'GlobalNPS',
+  FeedbackDistribution = 'FeedbackDistribution',
+  NPS = 'NetPromoterScore',
+  NPSAcrossDepartment = 'NPSAcrossDepartments',
+  NPSAcrossTouchpoint = 'NPSAcrossAllTouchpoints',
+  NPSAcrossServices = 'NPSAcrossServices',
+  TopLowNPS = 'Top/LowNPS',
 }
 
 export enum Filters {
-  arrival = 'ARRIVAL',
-  inhouse = 'INHOUSE',
-  departure = 'DEPARTURE',
+  ARRIVAL = 'ARRIVAL',
+  INHOUSE = 'INHOUSE',
+  DEPARTURE = 'DEPARTURE',
   outguest = 'OUTGUEST',
   reservation = 'RESERVATION',
 }
 
 export const ModuleConfig = {
   [FeatureNames.RESERVATION]: {
-    cards: [CardNames.arrival, CardNames.inhouse, CardNames.departure],
+    cards: [
+      CardNames.ARRIVAL,
+      CardNames.INHOUSE,
+      CardNames.DEPARTURE,
+      CardNames.RESERVATION,
+    ],
     tables: [TableNames.RESERVATION],
     filters: {
       [TableNames.RESERVATION]: {
-        tabFilters: [Filters.inhouse, Filters.arrival, Filters.departure],
+        tabFilters: [Filters.INHOUSE, Filters.ARRIVAL, Filters.DEPARTURE],
       },
     },
   },
   [FeatureNames.GUESTS]: {
     cards: [
-      CardNames.vip,
-      CardNames.status,
-      CardNames.payment,
-      CardNames.document,
+      CardNames.VIP,
+      CardNames.STATUS,
+      CardNames.PAYMENT,
+      CardNames.DOCUMENT,
     ],
     tables: [TableNames.GUEST],
     filters: {
       [TableNames.GUEST]: {
         tabFilters: [
-          Filters.arrival,
-          Filters.inhouse,
-          Filters.departure,
+          Filters.ARRIVAL,
+          Filters.INHOUSE,
+          Filters.DEPARTURE,
           Filters.outguest,
         ],
       },
@@ -73,13 +79,13 @@ export const ModuleConfig = {
   },
   [FeatureNames.FEEDBACK]: {
     cards: [
-      CardNames.globalNps,
-      CardNames.npsAcrossDepartment,
-      CardNames.npsAcrossTouchpoint,
-      CardNames.feedbackDistribution,
-      CardNames.nps,
-      CardNames.topLowNPS,
-      CardNames.npsAcrossServices,
+      CardNames.GlobalNPS,
+      CardNames.NPSAcrossDepartment,
+      CardNames.NPSAcrossTouchpoint,
+      CardNames.FeedbackDistribution,
+      CardNames.NPS,
+      CardNames.TopLowNPS,
+      CardNames.NPSAcrossServices,
     ],
     tables: [TableNames.FEEDBACK],
     filters: { [TableNames.FEEDBACK]: { tabFilters: [] } },
@@ -97,7 +103,7 @@ export const ModuleConfig = {
     tables: [TableNames.REQUEST],
     filters: {
       [TableNames.REQUEST]: {
-        tabFilters: [Filters.reservation, Filters.inhouse],
+        tabFilters: [Filters.reservation, Filters.INHOUSE],
       },
     },
   },

@@ -20,6 +20,8 @@
   (onRowUnselect)="onRowUnselect($event)"
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
+  tableSubscribed
+  [path]="'request.tables.' + tables.REQUEST"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">

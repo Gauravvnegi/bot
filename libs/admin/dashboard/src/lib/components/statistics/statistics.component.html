@@ -14,7 +14,7 @@
       [departures]="statistics.departures"
     ></hospitality-bot-departure-statistics>
   </div>
-  <div class="stats">
+  <div class="stats" featureSubscribed [feature]="'request'">
     <hospitality-bot-inhouse-request-statistics
       [inhouseRequest]="statistics.inhouseRequest"
     ></hospitality-bot-inhouse-request-statistics>
@@ -24,7 +24,11 @@
       [expectedCheckIn]="statistics.expressCheckIn"
     ></hospitality-bot-checkin-statistics>
   </div> -->
-  <div class="stats change-width">
+  <div
+    class="stats change-width"
+    cardSubscribed
+    [path]="'dashboard.cards.RESERVATION'"
+  >
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
   </div>
   <!-- <div class="stats change-height">

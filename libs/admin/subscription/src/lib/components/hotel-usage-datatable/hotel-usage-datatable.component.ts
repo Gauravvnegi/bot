@@ -44,12 +44,21 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     { field: 'usage', header: 'Usage' },
   ];
 
+  documentActionTypes = [
+    {
+      label: 'Export All',
+      value: 'exportAll',
+      type: '',
+      defaultLabel: 'Export All',
+    },
+  ];
+
   constructor(
     public fb: FormBuilder,
     private route: ActivatedRoute,
     private adminUtilityService: AdminUtilityService,
     private subscriptionService: SubscriptionService,
-    private router: Router,
+    private globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
     private _snackbarService: SnackBarService
   ) {
@@ -58,6 +67,28 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.initTableData();
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      //set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getHotelId(this.globalQueries);
+    });
+  }
+
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   initTableData(): void {

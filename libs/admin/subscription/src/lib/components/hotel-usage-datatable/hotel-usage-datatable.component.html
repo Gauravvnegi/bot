@@ -25,14 +25,9 @@
       <form [formGroup]="tableFG">
         <div class="caption__wrapper--tabmenu">
           <div class="header">
-            <!-- <div class="header--text"> -->
             <p class="heading">{{ tableName }}</p>
-            <!-- <p class="selected">2 record(s) are selected</p> -->
 
             <div class="options">
-              <!-- <button class="add-user" (click)="redirectToAddPackage()">
-                +Add Package
-              </button> -->
               <div *ngIf="isActionButtons" class="icons">
                 <img src="assets/svg/Download.svg" class="svg" />
                 <img src="assets/svg/google-docs.svg" class="svg" />
@@ -93,9 +88,6 @@
           *ngIf="isTabFilters && tabFilterItems[tabFilterIdx].chips.length"
           class="caption__wrapper--buttons"
         >
-          <!-- <button class="filter">
-            All
-          </button> -->
           <div class="button__wrapper">
             <mat-chip-list
               multiple
@@ -119,18 +111,6 @@
               </mat-chip>
             </mat-chip-list>
           </div>
-
-          {{ selectedQuickReplyFilters | json }}
-          <!-- <div
-            class="button__wrapper"
-            *ngFor="let quickReplyType of quickReplyTypes"
-          >
-            <button
-              pButton
-              type="button"
-              [label]="quickReplyType.label"
-            ></button>
-          </div> -->
         </div>
       </form>
     </div>
@@ -219,19 +199,11 @@
         ></p-tableCheckbox>
       </td>
       <td class="name">
-        <!-- <div class="profile">
-          <img src="assets/bg.png" />
-        </div> -->
         <div class="package_image_wrapper">
           <div class="text">
             <div>{{ rowData.serviceType }}</div>
           </div>
         </div>
-        <!-- <div class="data">
-          {{ rowData.name }}
-          <p>{{ rowData.categoryName }}</p>
-          <img class="package-image" src="{{rowData.imageUrl}}" />
-        </div> -->
       </td>
       <td>
         <div class="brand-name">
@@ -240,19 +212,6 @@
       </td>
       <td class="guest">
         {{ rowData.limit }}
-        <!-- <div
-          *ngIf="rowData.guests.secondaryGuest.length > 0"
-          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
-        >
-          <div
-            *ngFor="
-              let secondaryGuest of rowData.guests.secondaryGuest;
-              let guestIdx = index
-            "
-          >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
-          </div>
-        </div> -->
       </td>
       <td class="service-details">
         {{ rowData.usage }}

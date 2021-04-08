@@ -1,9 +1,23 @@
-<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout"
-  [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginaton" [rows]="rowsPerPage"
-  [showCurrentPageReport]="showCurrentPageReport" [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(first)]="first"
-  [totalRecords]="totalRecords" [filterDelay]="0" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)"
-  (onRowUnselect)="onRowUnselect($event)">
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+>
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
       <form [formGroup]="tableFG">
@@ -11,7 +25,9 @@
           <div class="header">
             <!-- <div class="header--text"> -->
             <div style="display: flex; align-items: center;">
-              <mat-icon (click)="goBack()" class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+              <mat-icon (click)="goBack()" class="material-icons" matSuffix
+                >keyboard_backspace</mat-icon
+              >
               <p class="heading">{{ tableName }}</p>
             </div>
             <!-- <p class="selected">2 record(s) are selected</p> -->
@@ -25,25 +41,39 @@
               </div>
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+                <p-dropdown
+                  class="export"
+                  [options]="documentActionTypes"
+                  formControlName="documentActionType"
+                >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span style="
+                    <span
+                      style="
                         vertical-align: middle;
                         margin-left: 0.5em;
                         font-weight: 500;
-                      ">{{ documentActionItem.label }}</span>
+                      "
+                      >{{ documentActionItem.label }}</span
+                    >
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
-                <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
+                <p-dropdown
+                  class="export"
+                  [options]="documentTypes"
+                  formControlName="documentType"
+                >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span style="
+                    <span
+                      style="
                         vertical-align: middle;
                         margin-left: 0.5em;
                         font-weight: 500;
-                      ">{{ documentTypeItem.label }}</span>
+                      "
+                      >{{ documentTypeItem.label }}</span
+                    >
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -53,30 +83,45 @@
             </div>
           </div>
           <div *ngIf="isTabFilters">
-            <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx"
-              (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
           </div>
         </div>
-        <div *ngIf="isTabFilters && tabFilterItems[tabFilterIdx].chips.length" class="caption__wrapper--buttons">
+        <div
+          *ngIf="isTabFilters && tabFilterItems[tabFilterIdx].chips.length"
+          class="caption__wrapper--buttons"
+        >
           <!-- <button class="filter">
             All
           </button> -->
           <div class="button__wrapper">
-            <mat-chip-list multiple #chipList aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters">
-              <mat-chip *ngFor="
+            <mat-chip-list
+              multiple
+              #chipList
+              aria-label="Quick Reply selection"
+              formControlName="quickReplyActionFilters"
+            >
+              <mat-chip
+                *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
                   let quickReplyTypeIdx = index
-                " selectable="true" [ngClass]="{ chipSelected: quickReplyType.isSelected }"
-                [selected]="isQuickReplyFilterSelected(quickReplyType)" (click)="
+                "
+                selectable="true"
+                [ngClass]="{ chipSelected: quickReplyType.isSelected }"
+                [selected]="isQuickReplyFilterSelected(quickReplyType)"
+                (click)="
                   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                ">
+                "
+              >
                 {{ quickReplyType.label }}
               </mat-chip>
             </mat-chip-list>
           </div>
 
-          {{ selectedQuickReplyFilters | json }}
+          <!-- {{ selectedQuickReplyFilters | json }} -->
           <!-- <div
             class="button__wrapper"
             *ngFor="let quickReplyType of quickReplyTypes"
@@ -98,16 +143,24 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="
+      <th
+        style="
           width: 5%;
           background-color: #eaf0f6;
           border-top: 0 !important;
           border-bottom: 0 !important;
           text-align: center;
-        " pResizableColumn>
+        "
+        pResizableColumn
+      >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th class="table-data-head" pResizableColumn [pSortableColumn]="col.field" *ngFor="let col of columns">
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
           <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -118,37 +171,72 @@
     <tr class="table-search-head">
       <th class="table-search-head"></th>
       <th class="table-search-head">
-        <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
-          class="p-column-filter" />
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
+          class="p-column-filter"
+        />
       </th>
       <th class="table-search-head">
-        <input pInputText type="text" (input)="
+        <input
+          pInputText
+          type="text"
+          (input)="
             onFilterTypeTextChange($event.target.value, 'booking.bookingNumber')
-          " class="p-column-filter" disabled="true" />
+          "
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
       <th class="table-search-head">
-        <input pInputText type="text" (input)="
+        <input
+          pInputText
+          type="text"
+          (input)="
             onFilterTypeTextChange(
               $event.target.value,
               'guests.primaryGuest.firstName'
             )
-          " class="p-column-filter" disabled="true" />
+          "
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
       <th class="table-search-head">
-        <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-          class="p-column-filter" disabled="true" />
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
       <th class="table-search-head">
-        <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-          class="p-column-filter" disabled="true" />
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
       </th>
     </tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
-  <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
     <tr class="data-table-row" (click)="openUserDetails(rowData)">
       <td class="table--checkbox">
-        <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
       </td>
       <td class="name">
         <!-- <div class="profile">
@@ -189,7 +277,10 @@
       <td class="">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <input type="checkbox" [checked]="rowData.status" />
-          <mat-slide-toggle [checked]="rowData.status" (change)="updateRolesStatus($event, rowData )">
+          <mat-slide-toggle
+            [checked]="rowData.status"
+            (change)="updateRolesStatus($event, rowData)"
+          >
           </mat-slide-toggle>
         </label>
       </td>
@@ -197,7 +288,11 @@
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
-    <p-paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions"
-      (onPageChange)="paginate($event)"></p-paginator>
+    <p-paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
   </ng-template>
 </p-table>

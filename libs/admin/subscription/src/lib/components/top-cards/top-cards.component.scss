@@ -28,6 +28,9 @@
         font: normal normal bold 25px/29px Roboto;
         letter-spacing: 0.5px;
         color: #002046;
+        @media screen and (max-width: 1100px) {
+          font: normal normal bold 15px/29px Roboto;
+        }
       }
       &__button {
         outline: none;
@@ -37,25 +40,19 @@
         border-radius: 24px;
         border: 1px solid #e8eef5;
         color: #4b56c0;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        justify-content: center;
         font-weight: 600;
         font-size: 12px;
         cursor: pointer;
-        &__text {
-          color: #4b56c0;
-          text-decoration: none;
-        }
         &:hover {
           background: #4b56c0;
           color: white;
-          .card__details__button__text {
-            // background: #4b56c0;
-            color: white;
-          }
         }
       }
-      &__button[disabled] {
-        // opacity: 0.5 !important;
-        // color:red;
+      .isDisabled {
         &:hover {
           background: #e8eef5 0% 0% no-repeat padding-box;
           color: #4b56c0;

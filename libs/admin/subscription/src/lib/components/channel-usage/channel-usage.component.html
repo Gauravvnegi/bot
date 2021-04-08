@@ -2,11 +2,19 @@
 <div class="heading">
   <div class="heading__label">Total Channels</div>
 </div>
-<ngx-slick-carousel class="carousel" *ngIf="communicationChannels" [config]="slideConfig" responsive="breakpoints">
+<ngx-slick-carousel
+  class="carousel"
+  *ngIf="communicationChannels"
+  [config]="slideConfig"
+  responsive="breakpoints"
+>
   <div ngxSlickItem class="slide" *ngFor="let channel of communicationChannels">
     <div class="channels">
       <div class="channels__container">
-        <img [src]="channel.imageUrl" class="channels__container__image" />
+        <div class="channels__container__image">
+          <img *ngIf="channel.active" [src]="channel.imageUrl" />
+          <img *ngIf="!channel.active" [src]="channel.disabledImageUrl" />
+        </div>
         <div class="channels__container__label">{{ channel.label }}</div>
       </div>
     </div>

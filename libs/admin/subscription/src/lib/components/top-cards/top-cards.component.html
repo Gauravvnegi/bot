@@ -3,37 +3,60 @@
     <div class="card__title">Subscription</div>
     <div class="card__details">
       <div class="card__details__label">{{ data.plan }}</div>
-      <button
+      <a
         class="card__details__button"
-        [disabled]="data.upgradable"
+        href="https://www.botshot.in/"
+        target="_blank"
+        [ngClass]="{ isDisabled: data.upgradable }"
         [style.opacity]="data.upgradable ? 0.5 : 1"
+        ><p class="text">
+          Upgrade
+        </p></a
       >
-        Upgrade
-      </button>
     </div>
   </div>
   <div class="card">
     <div class="card__title">
-      Deployment <img class="card__title__image" src="assets/svg/information-circle-outline.svg" />
+      Deployment
+      <img
+        class="card__title__image"
+        src="assets/svg/information-circle-outline.svg"
+      />
     </div>
     <div class="card__details">
       <div class="card__details__label">{{ data.deploymentType }}</div>
-      <button class="card__details__button"><a class="card__details__button__text" href="https://www.botshot.in/" target="_blank">Switch</a></button>
+      <a
+        class="card__details__button"
+        href="https://www.botshot.in/"
+        target="_blank"
+      >
+        <p class="text">
+          Switch
+        </p>
+      </a>
     </div>
   </div>
   <div class="card">
     <div class="card__title">
-      Technical Support <img class="card__title__image" src="assets/svg/information-circle-outline.svg" />
+      Technical Support
+      <img
+        class="card__title__image"
+        src="assets/svg/information-circle-outline.svg"
+      />
     </div>
     <div class="card__details">
       <div class="card__details__label">{{ data.supportType }}</div>
-      <button
+      <a
         class="card__details__button"
-        [disabled]="data.upgradable"
+        href="https://www.botshot.in/"
+        target="_blank"
+        [ngClass]="{ isDisabled: data.upgradable }"
         [style.opacity]="data.upgradable ? 0.5 : 1"
       >
-        Upgrade
-      </button>
+        <p class="text">
+          Upgrade
+        </p>
+      </a>
     </div>
   </div>
   <div class="card">

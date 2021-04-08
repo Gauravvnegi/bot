@@ -51,6 +51,25 @@
 //     z-index: 100;
 // }
 
+:host ::ng-deep .channels__container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  &__image {
+    height: 50px;
+    width: 50px;
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  &__label {
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    color: #6d7580;
+  }
+}
+
 :host ::ng-deep .slick-next.slick-disabled:before {
   opacity: 0;
 }

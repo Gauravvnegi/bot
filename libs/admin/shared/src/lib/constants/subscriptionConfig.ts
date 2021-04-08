@@ -54,15 +54,19 @@ export enum Communication {
 export const CommunicationConfig = {
   [Communication.FACEBOOK]: {
     imageUrl: 'assets/mm.png',
+    disabledImageUrl: 'assets/messenger-disabled.png',
   },
   [Communication.WHATSAPP]: {
     imageUrl: 'assets/whatsapp.png',
+    disabledImageUrl: 'assets/whatsapp-disabled.png',
   },
   [Communication.WEB]: {
-    imageUrl: 'assets/TELEGRAMOR.png',
+    imageUrl: 'assets/telegram.png',
+    disabledImageUrl: 'assets/telegram-disabled.png',
   },
   [Communication.MICRO]: {
     imageUrl: 'assets/mm.png',
+    disabledImageUrl: 'assets/messenger-disabled.png',
   },
 };
 

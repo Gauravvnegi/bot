@@ -53,6 +53,8 @@
         }
       }
       .isDisabled {
+        pointer-events: none;
+        cursor: default;
         &:hover {
           background: #e8eef5 0% 0% no-repeat padding-box;
           color: #4b56c0;

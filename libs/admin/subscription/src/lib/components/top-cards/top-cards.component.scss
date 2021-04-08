@@ -39,11 +39,19 @@
         font-weight: 600;
         font-size: 12px;
         cursor: pointer;
+        &__text{
+          color: #4b56c0;
+          text-decoration:none;
+        }
         &:hover {
         	background: #4b56c0;
           color: white;
-        }   }
-     
+          .card__details__button__text{
+            // background: #4b56c0;
+            color: white;
+          }        
+        }   
+      }
     }
   }
 }

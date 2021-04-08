@@ -21,8 +21,7 @@
       height: 273px;
       background: #ffffff 0% 0% no-repeat padding-box;
       box-shadow: 0px 3px 6px #0000000d;
-      border-radius: 5px;
-      
+      border-radius: 5px;      
     }
   }
 }
@@ -65,7 +64,7 @@ font-size: 14px;
     justify-content: space-between;
   &__stat{
     display: flex;
-    width: 56%;
+    width: 68%;
     align-items: center;
     &__value{
       font-size: 25px;
@@ -83,13 +82,15 @@ font-size: 14px;
   }
 }
 :host ::ng-deep .channels{
-  width: 76%;
-  margin-left: auto;
   margin-top: 36px;
   &__container{
     &__image{
       margin:auto;
      margin-bottom: 10px !important;
+     @media only screen and (max-width: 1024px) {
+      height: 45px;
+      width: 45px;
+     }
     }
     &__label{   
       text-align: center;
@@ -104,27 +105,24 @@ font-size: 14px;
   width:67px;
 }
 :host ::ng-deep .channel-stat-value{
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 600;
   margin-right: 5.5px;
-  width:127px;
+  width:158px;
 }
 
-
 :host ::ng-deep .draggable {
-  width:97%;
+  width:100%;
   .slick-track {
     height: 154px;
-    min-width: 225px;
-    margin-left: 4.5%;
     display: inline-block;
-    width: 336px !important;
+    width: 134% !important;
     div:focus {
       border: none;
       outline: none;
     }
   .slick-slide{
-    width: 84px !important;
+    width: 25% !important;
   }
   }
 }
@@ -133,63 +131,13 @@ font-size: 14px;
   display: none !important;
 }
 
-:host ::ng-deep .paid__service__data {
-  width: 83%;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  box-shadow: 0px 0px 1px 0px lightgray;
-  .slider__image {
-    height: 200px;
-    // width: $full-width;
-    position: relative;
-    img {
-      height: 100%;
-      // width: $full-width;
-    }
-    .amount {
-      position: absolute;
-      right: 0px;
-      bottom: 0px;
-      background-color: rgb(12, 12, 12, 0.69);
-      color: white;
-      padding: 5px;
-    }
-  }
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0px 0px 15px 0px lightgray;
-  }
-}
-
-:host ::ng-deep .active {
-  // border: 2px solid $primary-blue !important;
-  position: relative;
-  .slider__text {
-    // background-color: $primary-blue !important;
-    color: white !important;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -26px;
-    right: 46%;
-    width: 0;
-    height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    // border-top: 27px solid $primary-blue;
-    clear: both;
-  }
-}
-
 :host ::ng-deep .slick-prev {
   z-index: 2;
   &::before {
     font-size: 28px;
     background: #00000033;
     border-radius: 25px;
-    box-shadow: rgb(0 0 0 / 14%) 0px 0px 14px;
-   
+    box-shadow: rgb(0 0 0 / 14%) 0px 0px 14px; 
   }
   &:hover {
     &::before {
@@ -197,7 +145,6 @@ font-size: 14px;
     }
   }
 }
-
 :host ::ng-deep .slick-next {
   z-index: 2;
   &::before {
@@ -205,9 +152,7 @@ font-size: 14px;
     background: #00000033;
     border-radius: 25px;
     box-shadow: rgb(0 0 0 / 14%) 0px 0px 14px;
-   
   }
-
 }
 
 :host ::ng-deep .slick-dotted.slick-slider{
@@ -219,10 +164,6 @@ font-size: 14px;
     top: 40%;
     height: 29px;
     width: 28px;
-  // @media only screen and (max-width: $M) {
-  //   left: -10px;
-  //   top: 50%;
-  // }
 }
 
 :host ::ng-deep .slick-next {
@@ -230,22 +171,4 @@ font-size: 14px;
   top: 40%;
   height: 29px;
   width: 28px;
-  // @media only screen and (max-width: $M) {
-  //   right: -10px;
-  //   top: 50%;
-  // }
-}
-
-:host ::ng-deep .activated{
- 
-  .slider__text {
- 
-    color: white !important;
-  }
-}
-
-:host ::ng-deep .tick{
-  position: absolute;
-  top: 8px;
-  right: 8px;
 }

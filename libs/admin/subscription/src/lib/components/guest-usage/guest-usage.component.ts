@@ -119,4 +119,8 @@ export class GuestUsageComponent implements OnInit {
       );
     });
   }
+
+  format(value) {
+    return AdminUtilityService.valueFormatter(value, 2);
+  }
 }

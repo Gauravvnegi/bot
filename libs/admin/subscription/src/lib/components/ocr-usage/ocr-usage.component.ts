@@ -93,9 +93,7 @@ export class OcrUsageComponent implements OnInit {
     });
   }
 
-  setChartType(option, event): void {
-    event.stopPropagation();
-    this.chart.chartType = option.value;
-    this.chart.chartColors[0].backgroundColor = option.backgroundColor;
+  format(value) {
+    return AdminUtilityService.valueFormatter(value, 2);
   }
 }

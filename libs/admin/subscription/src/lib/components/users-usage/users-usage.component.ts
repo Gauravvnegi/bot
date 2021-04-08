@@ -99,6 +99,10 @@ export class UsersUsageComponent implements OnInit {
     });
   }
 
+  format(value) {
+    return AdminUtilityService.valueFormatter(value, 2);
+  }
+
   openRolesPermission(event) {
     event.stopPropagation();
     this.router.navigate(['/pages/roles-permissions']);

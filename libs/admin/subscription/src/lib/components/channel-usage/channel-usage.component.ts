@@ -9,7 +9,7 @@ import { CommunicationChannels } from '../../data-models/subscription.model';
 export class ChannelUsageComponent implements OnInit {
   @Input() data;
   activeChannels: number;
-  
+
   slideConfig = {
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -29,13 +29,7 @@ export class ChannelUsageComponent implements OnInit {
   };
   communicationChannels: CommunicationChannels;
   constructor() {}
-  // pauseSlickCarousel() {
-  //   this.slickModal.slickPause();
-  // }
 
-  // playSlickCarousel() {
-  //   this.slickModal.slickPlay();
-  // }
   ngOnInit(): void {
     if (this.data) {
       this.communicationChannels = new CommunicationChannels().deserialize(
@@ -44,5 +38,4 @@ export class ChannelUsageComponent implements OnInit {
       this.activeChannels = this.data.length;
     }
   }
-
 }

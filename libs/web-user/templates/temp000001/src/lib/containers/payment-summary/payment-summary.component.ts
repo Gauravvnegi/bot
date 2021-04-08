@@ -57,7 +57,7 @@ export class PaymentSummaryComponent implements OnInit {
   }
 
   applyPromocode(event) {
-    console.log(event);
+    // console.log(event);
   }
 
   getModifiedCheckoutPaymentSummary(): void {

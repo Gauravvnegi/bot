@@ -227,16 +227,8 @@ export class Booking implements Deserializable {
 
   getArrivalTimeStamp() {
     if (this.expectedArrivalTimeStamp == 0) {
-      console.log(
-        moment(this.arrivalTimeStamp).format('DD/M/YY HH:mm'),
-        this.bookingNumber
-      );
       return this.arrivalTimeStamp;
     } else {
-      console.log(
-        moment(this.expectedArrivalTimeStamp).format('DD/M/YY HH:mm'),
-        this.bookingNumber
-      );
       return this.expectedArrivalTimeStamp;
     }
   }

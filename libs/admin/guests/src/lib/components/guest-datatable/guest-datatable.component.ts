@@ -296,9 +296,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
-          this.values.forEach((data) =>
-            console.log(data.resords[0].booking.getArrivalTimeStamp())
-          );
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination

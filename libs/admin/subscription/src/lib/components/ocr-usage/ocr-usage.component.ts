@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 
 @Component({
   selector: 'hospitality-bot-ocr-usage',

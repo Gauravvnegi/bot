@@ -3,7 +3,6 @@
   border: 1px solid #F4F5F7;
   opacity: 0.1;
 }
-
 .usage-container {
   margin-bottom: 15px;
   .title {
@@ -37,6 +36,7 @@ font-weight: 600;
 font-size: 14px;
 }
 &__button{
+  outline:none;
   width: 116px;
   height:28px;
   background: #e8eef5 0% 0% no-repeat padding-box;

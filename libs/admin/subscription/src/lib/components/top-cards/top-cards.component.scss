@@ -30,6 +30,7 @@
         color: #002046;
       }
       &__button {
+        outline:none;
         width: 90px;
         height: 28px;
         background: #e8eef5 0% 0% no-repeat padding-box;
@@ -52,6 +53,17 @@
           }        
         }   
       }
+      &__button[disabled]{
+        // opacity: 0.5 !important;
+        // color:red;
+        &:hover{
+          background: #e8eef5 0% 0% no-repeat padding-box;
+          color: #4b56c0;
+       
+        }
+        
+                }
+               
     }
   }
 }

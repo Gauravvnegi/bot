@@ -30,6 +30,7 @@
         color: #002046;
       }
       &__button {
+        outline: none;
         width: 90px;
         height: 28px;
         background: #e8eef5 0% 0% no-repeat padding-box;
@@ -39,18 +40,26 @@
         font-weight: 600;
         font-size: 12px;
         cursor: pointer;
-        &__text{
+        &__text {
           color: #4b56c0;
-          text-decoration:none;
+          text-decoration: none;
         }
         &:hover {
-        	background: #4b56c0;
+          background: #4b56c0;
           color: white;
-          .card__details__button__text{
+          .card__details__button__text {
             // background: #4b56c0;
             color: white;
-          }        
-        }   
+          }
+        }
+      }
+      &__button[disabled] {
+        // opacity: 0.5 !important;
+        // color:red;
+        &:hover {
+          background: #e8eef5 0% 0% no-repeat padding-box;
+          color: #4b56c0;
+        }
       }
     }
   }

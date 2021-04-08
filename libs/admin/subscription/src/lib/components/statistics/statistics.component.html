@@ -10,25 +10,25 @@
 >
   <div class="title">Plan Usage</div>
   <div class="usages">
-    <div class="usages_item">
+    <div class="usages__item">
       <hospitality-bot-users-usage
         [data]="subscriptionPlanUsage?.users"
         [chartData]="planUsageChartData.userCount"
       ></hospitality-bot-users-usage>
     </div>
-    <div class="usages_item">
+    <div class="usages__item">
       <hospitality-bot-guest-usage
         [data]="subscriptionPlanUsage?.guests"
         [chartData]="planUsageChartData.guestCount"
       ></hospitality-bot-guest-usage>
     </div>
-    <div class="usages_item">
+    <div class="usages__item">
       <hospitality-bot-ocr-usage
         [data]="subscriptionPlanUsage?.ocr"
         [chartData]="planUsageChartData.ocrCount"
       ></hospitality-bot-ocr-usage>
     </div>
-    <div class="usages_item">
+    <div class="usages__item">
       <hospitality-bot-channel-usage
         [data]="subscriptionPlanUsage?.channels"
       ></hospitality-bot-channel-usage>

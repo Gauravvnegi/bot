@@ -1,7 +1,7 @@
-<div class="container">
-  <div class="title">
-    <div class="title_label">OCR Count</div>
-    <!-- <div class="menu-container">
+<!-- <div class="container"> -->
+<div class="heading">
+  <div class="heading__label">OCR Count</div>
+  <!-- <div class="menu-container">
       <div class="pull-right">
         <label class="labl" *ngFor="let option of chartTypes">
           <input
@@ -18,7 +18,8 @@
         </label>
       </div>
     </div> -->
-  </div>
+</div>
+<div class="charts">
   <div class="line-chart">
     <canvas
       baseChart
@@ -32,15 +33,16 @@
     >
     </canvas>
   </div>
-  <div class="details">
-    <div class="details_stat">
-      <div class="details_stat_value">
-        {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
-      </div>
-      <div class="details_stat_diff">(25%)</div>
+</div>
+<div class="details">
+  <div class="details_stat">
+    <div class="details_stat_value">
+      {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
     </div>
-    <div class="details_link">
-      in 30 days
-    </div>
+    <div class="details__stat__diff">(25%)</div>
+  </div>
+  <div class="details__link">
+    in 30 days
   </div>
 </div>
+<!-- </div> -->

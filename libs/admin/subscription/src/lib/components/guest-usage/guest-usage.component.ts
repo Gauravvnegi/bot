@@ -16,8 +16,8 @@ export class GuestUsageComponent implements OnInit {
   chart: any = {
     chartData: {
       datasets: [
-        { data: [5000, 5000, 7000, 9000, 12000], label: 'Limit' },
         { data: [7000, 7000, 9000, 11000, 14000], label: 'Usage' },
+        { data: [5000, 5000, 7000, 9000, 12000], label: 'Limit' },
       ],
       // data: [5, 5, 7, 9, 12],
       label: 'Total Users',
@@ -112,8 +112,8 @@ export class GuestUsageComponent implements OnInit {
         (data) => data.name === 'GUESTS'
       )[0]?.cost.usageLimit || 0;
     this.chartData.forEach((data) => {
-      this.chart.chartData.datasets[0].data.push(limit);
-      this.chart.chartData.datasets[1].data.push(data.value);
+      this.chart.chartData.datasets[1].data.push(limit);
+      this.chart.chartData.datasets[0].data.push(data.value);
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels('date', data.label, 'DD MMM')
       );

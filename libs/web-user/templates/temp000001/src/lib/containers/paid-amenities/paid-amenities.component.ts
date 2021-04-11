@@ -38,7 +38,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     slidesToShow: 3,
     slidesToScroll: 1,
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 100,
     autoplay: true,
     method: {},
@@ -106,8 +106,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  openPackage(packageCode) {
-    this.selectedService=packageCode;
+  openPackage(packageCode, e) {
+    this.selectedService = packageCode;
     this.pauseSlickCarousel();
     this.clearPackageRendererContainer();
     let serviceFormGroup = this.getAminityForm(packageCode);
@@ -119,6 +119,11 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       serviceFormGroup,
       this.selectedSlide
     );
+    const classes = e.children[0].attributes[1].nodeValue.split(' ');
+    if (!classes.includes('active')) {
+      e.children[0].attributes[1].nodeValue =
+        e.children[0].attributes[1].nodeValue + ' active';
+    }
   }
 
   createComponent(component, serviceFormGroup, selectedSlide) {
@@ -165,17 +170,30 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       );
 
       for (const element of elements) {
-        element.addEventListener('click', this.selectedSlide.bind(this));
-        // const slidePackageCode = (element.firstChild as HTMLElement).getAttribute(
-        //   'data-slidedata'
-        // );
+        const slidePackageCode = (element.firstChild as HTMLElement).getAttribute(
+          'data-slidedata'
+        );
 
-        // if (slidePackageCode) {
-        //   element.addEventListener(
-        //     'click',
-        //     this.openPackage.bind(this, slidePackageCode)
-        //   );
-        // }
+        const classes = element.children[0].attributes[1].nodeValue.split(' ');
+        if (this.selectedService === slidePackageCode) {
+          if (!classes.includes('active')) {
+            element.children[0].attributes[1].nodeValue =
+              element.children[0].attributes[1].nodeValue + ' active';
+          }
+        } else {
+          if (classes.includes('active')) {
+            element.children[0].attributes[1].nodeValue = classes
+              .filter((value) => value !== 'active')
+              .join(' ');
+          }
+        }
+
+        if (slidePackageCode) {
+          element.addEventListener(
+            'click',
+            this.openPackage.bind(this, slidePackageCode, element)
+          );
+        }
       }
     }
   }

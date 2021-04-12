@@ -281,12 +281,14 @@ export class GuestType implements Deserializable {
   }
 
   getPhoneNumbers() {
-    let phoneNumbers =  this.primaryGuest.getPhoneNumber();
+    let phoneNumbers = this.primaryGuest.getPhoneNumber();
     this.secondaryGuest.forEach((guest) => {
-      if (guest.getPhoneNumber()) {
-        phoneNumbers += `,\n ${guest.getPhoneNumber()}`
+      if (guest.getPhoneNumber() && guest.getPhoneNumber() !== ' ') {
+        phoneNumbers += `,\n ${guest.getPhoneNumber()}`;
       }
-    })
+    });
+
+    return phoneNumbers;
   }
 }
 

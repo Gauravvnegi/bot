@@ -351,10 +351,10 @@
       <td class="package">
         <span
           *ngIf="
-            rowData.guests.primaryGuest.getPhoneNumber().length;
+            rowData.guests.getPhoneNumbers().length;
             else emptyCell
           "
-          >{{ rowData.guests.primaryGuest.getPhoneNumber() }}</span
+          >{{ rowData.guests.getPhoneNumbers() }}</span
         >
       </td>
       <td>

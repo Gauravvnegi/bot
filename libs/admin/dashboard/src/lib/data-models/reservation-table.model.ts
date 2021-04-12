@@ -279,6 +279,15 @@ export class GuestType implements Deserializable {
           : null,
     };
   }
+
+  getPhoneNumbers() {
+    let phoneNumbers =  this.primaryGuest.getPhoneNumber();
+    this.secondaryGuest.forEach((guest) => {
+      if (guest.getPhoneNumber()) {
+        phoneNumbers += `,\n ${guest.getPhoneNumber()}`
+      }
+    })
+  }
 }
 
 export class Guest implements Deserializable {

@@ -120,7 +120,9 @@
     <p class="no-data-found">No data available in table</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
+  
   <ng-template pTemplate="header" let-columns>
+    
     <tr>
       <th
         style="
@@ -141,15 +143,15 @@
         *ngFor="let col of columns"
       >
         <div>
-          <p class="table-header-text">{{ col.header }}</p>
+          <p class="table_header_text">{{ col.header }}</p>
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </div>
       </th>
     </tr>
 
     <tr class="table-search-head">
-      <th class="table-search-head"></th>
-      <th class="table-search-head">
+      <th class="table_search"></th>
+      <th class="table_search">
         <input
           pInputText
           type="text"
@@ -157,7 +159,7 @@
           class="p-column-filter"
         />
       </th>
-      <th class="table-search-head">
+      <th class="table_search">
         <input
           pInputText
           type="text"
@@ -165,15 +167,16 @@
           class="p-column-filter"
         />
       </th>
-      <th class="table-search-head">
+      <th class="table_search">
         <input
           pInputText
           type="text"
           (input)="onFilterTypeTextChange($event.target.value, 'limit')"
           class="p-column-filter"
+          
         />
       </th>
-      <th class="table-search-head">
+      <th class="table_search">
         <input
           pInputText
           type="text"
@@ -199,21 +202,15 @@
         ></p-tableCheckbox>
       </td>
       <td class="name">
-        <div class="package_image_wrapper">
-          <div class="text">
             <div>{{ rowData.serviceType }}</div>
-          </div>
-        </div>
       </td>
-      <td>
-        <div class="brand-name">
-          <div>{{ rowData.name }}</div>
-        </div>
+        <td class="name">
+          <div>{{ rowData.name }}</div>  
       </td>
-      <td class="guest">
+      <td class="name">
         {{ rowData.limit }}
       </td>
-      <td class="service-details">
+      <td class="name">
         {{ rowData.usage }}
       </td>
     </tr>

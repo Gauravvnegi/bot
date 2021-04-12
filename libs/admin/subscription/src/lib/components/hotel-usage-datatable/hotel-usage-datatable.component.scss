@@ -1,0 +1,33 @@
+.table_header_text{
+    font-size: 14px !important;
+    font-weight: 600;
+    margin: 8px 0px 12px 0px !important;
+}
+.name{
+    padding: 37px 13px !important;
+    font-size:14px;
+    color:#727272;
+    font-weight: 500;
+    border-width: 2px 3px 2px 0px !important;
+}
+.table-data-head{
+    border-width: 3px 3px 1px 1px !important;
+    }
+.table--checkbox{
+    border-width: 2px 3px 2px 2px !important;
+}
+.table_search{
+    border-width: 1px 3px 1px 1px !important;
+    padding-right: 14px !important;
+    border-top: none !important;
+    background: #EAF0F6 !important;
+}
+:ng ::host-deep .p-datatable-wrapper{
+    padding: 0px 20px;
+    background: white;
+}
+:ng ::host-deep .p-datatable-wrapper{
+    // border-width: 1px 3px 1px 1px !important;
+    padding: 21px 13px 0 13px !important;
+    // width: 4% !important;
+}

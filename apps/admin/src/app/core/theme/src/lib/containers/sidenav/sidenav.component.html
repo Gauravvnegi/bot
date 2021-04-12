@@ -40,7 +40,9 @@
           [style.padding]="'0px 15px'"
         >
           <!-- <mat-icon>{{ menuItem.icon }}</mat-icon> -->
-          <img [src]="menuItem.url" class="svg-icon" />
+          <div class="sidenav_logo">
+            <img [src]="menuItem.url" class="svg-icon" />
+          </div>
           <span class="icon-label" *ngIf="isExpanded">{{
             menuItem.title
           }}</span>

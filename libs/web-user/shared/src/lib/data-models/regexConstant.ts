@@ -5,4 +5,9 @@ export class Regex {
     public static ALPHANUMERIC_REGEX = /^[a-zA-Z0-9]*$/;
     public static CREDIT_CARD_REGEX = "\\b[0-9]{4}\\s[0-9]{4}\\s[0-9]{4}\\s[0-9]{4}\\b";
     public static CREDIT_CARD_MASK_REGEX = [/\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/];
+    public static FIRST_NAME = '[a-zA-Z]$';
+    public static LAST_NAME ='^[a-zA-Z ]+[a-zA-Z]$';
+
+
+
 }

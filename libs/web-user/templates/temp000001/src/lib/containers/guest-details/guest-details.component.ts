@@ -77,7 +77,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       [
         Validators.required,
         customPatternValid({
-          pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+          pattern: Regex.FIRST_NAME,
           msg: 'Spaces are not allowed',
         }),
       ],
@@ -98,7 +98,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             [
               Validators.required,
               customPatternValid({
-                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+                pattern: Regex.LAST_NAME,
                 msg: 'Spaces are not allowed',
               }),
             ],
@@ -144,7 +144,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             [
               Validators.required,
               customPatternValid({
-                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+                pattern: Regex.LAST_NAME,
                 msg: 'Spaces are not allowed',
               }),
             ],

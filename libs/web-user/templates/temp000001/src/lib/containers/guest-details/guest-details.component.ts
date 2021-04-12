@@ -77,7 +77,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       [
         Validators.required,
         customPatternValid({
-          pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
+          pattern: Regex.NAME,
           msg: 'Spaces are not allowed',
         }),
       ],
@@ -92,64 +92,58 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     if (type === GuestTypes.primary) {
       fg = {
         ...this.defaultFG,
-        ...{
-          lastName: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
-                msg: 'Spaces are not allowed',
-              }),
-            ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
           ],
-          mobileNumber: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: Regex.PHONE_REGEX,
-                msg: 'Please enter a valid mobile',
-              }),
-              Validators.minLength(10),
-            ],
+        ],
+        mobileNumber: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.PHONE_REGEX,
+              msg: 'Please enter a valid mobile',
+            }),
+            Validators.minLength(10),
           ],
-          email: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: Regex.EMAIL_REGEX,
-                msg: 'Please enter a valid email',
-              }),
-            ],
+        ],
+        email: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.EMAIL_REGEX,
+              msg: 'Please enter a valid email',
+            }),
           ],
-          nationality: ['', [Validators.required]],
-        },
+        ],
+        nationality: ['', [Validators.required]],
       };
     } else if (role === GuestRole.accompany || role === GuestRole.kids) {
       fg = {
         ...this.defaultFG,
-        ...{
-          age: ['', [Validators.required, Validators.min(1)]],
-          lastName: ['', []],
-        },
+        age: ['', [Validators.required, Validators.min(1)]],
+        lastName: ['', []],
       };
     } else {
       fg = {
         ...this.defaultFG,
-        ...{
-          lastName: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
-                msg: 'Spaces are not allowed',
-              }),
-            ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
           ],
-        },
+        ],
       };
     }
     return this._fb.group(fg);

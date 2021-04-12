@@ -119,8 +119,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       serviceFormGroup,
       this.selectedSlide
     );
-    const classes = e.children[0].attributes[1].nodeValue.split(' ');
-    if (!classes.includes('active')) {
+    const classes = e.children && e.children[0].attributes[1].nodeValue.split(' ');
+    if (classes && !classes.includes('active')) {
       e.children[0].attributes[1].nodeValue =
         e.children[0].attributes[1].nodeValue + ' active';
     }

@@ -61,6 +61,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       sortType: 'number',
     },
     {
+      field: `getPhoneNumber()`,
+      header: 'Phone No.',
+      isSort: false,
+      sortType: 'string',
+    },
+    {
       field: 'payment.totalAmount',
       header: 'Amount Due/ Total Spend',
       isSort: true,

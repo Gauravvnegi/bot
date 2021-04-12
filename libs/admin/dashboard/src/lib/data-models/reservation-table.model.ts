@@ -279,6 +279,17 @@ export class GuestType implements Deserializable {
           : null,
     };
   }
+
+  getPhoneNumbers() {
+    let phoneNumbers = this.primaryGuest.getPhoneNumber();
+    this.secondaryGuest.forEach((guest) => {
+      if (guest.getPhoneNumber() && guest.getPhoneNumber() !== ' ') {
+        phoneNumbers += `,\n${guest.getPhoneNumber()}`;
+      }
+    });
+
+    return phoneNumbers;
+  }
 }
 
 export class Guest implements Deserializable {
@@ -309,6 +320,12 @@ export class Guest implements Deserializable {
 
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
   }
 }
 

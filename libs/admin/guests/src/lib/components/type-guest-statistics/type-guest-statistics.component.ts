@@ -140,6 +140,16 @@ export class TypeGuestStatisticsComponent implements OnInit {
           },
         ],
       },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
       legendCallback: this.getLegendCallback,
     },
     chartColors: [

@@ -373,6 +373,15 @@
               </div>
             </div>
           </td>
+          <td class="package">
+            <span
+              *ngIf="
+                rowData.getPhoneNumber().trim().length;
+                else emptyCell
+              "
+              >{{ rowData.getPhoneNumber() }}</span
+            >
+          </td>
           <td class="amount">
             <span
               [ngClass]="{

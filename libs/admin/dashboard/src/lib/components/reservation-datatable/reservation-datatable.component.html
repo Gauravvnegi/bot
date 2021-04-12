@@ -348,6 +348,15 @@
           </div>
         </div>
       </td>
+      <td class="package">
+        <span
+          *ngIf="
+            rowData.guests.primaryGuest.getPhoneNumber().length;
+            else emptyCell
+          "
+          >{{ rowData.guests.primaryGuest.getPhoneNumber() }}</span
+        >
+      </td>
       <td>
         <p class="arrival-date">
           {{ rowData.booking.getArrivalDate() }}-{{

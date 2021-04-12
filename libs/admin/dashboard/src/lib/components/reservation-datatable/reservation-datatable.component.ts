@@ -60,6 +60,12 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       sortType: 'string',
     },
     {
+      field: `guests.primaryGuest.getPhoneNumber()`,
+      header: 'Phone No.',
+      isSort: false,
+      sortType: 'string',
+    },
+    {
       field: 'booking.getArrivalTimeStamp()',
       header: 'Arrival/ Departure',
       isSort: true,

@@ -310,6 +310,12 @@ export class Guest implements Deserializable {
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
   }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
+  }
 }
 
 export class Room implements Deserializable {

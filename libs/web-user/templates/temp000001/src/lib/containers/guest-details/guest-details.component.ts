@@ -77,7 +77,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       [
         Validators.required,
         customPatternValid({
-          pattern: Regex.FIRST_NAME,
+          pattern: Regex.NAME,
           msg: 'Spaces are not allowed',
         }),
       ],
@@ -98,7 +98,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             [
               Validators.required,
               customPatternValid({
-                pattern: Regex.LAST_NAME,
+                pattern: Regex.NAME,
                 msg: 'Spaces are not allowed',
               }),
             ],
@@ -138,18 +138,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     } else {
       fg = {
         ...this.defaultFG,
-        ...{
-          lastName: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: Regex.LAST_NAME,
-                msg: 'Spaces are not allowed',
-              }),
-            ],
-          ],
-        },
+        lastName: ['', []],
       };
     }
     return this._fb.group(fg);

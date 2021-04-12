@@ -16,7 +16,7 @@ export class ChannelUsageComponent implements OnInit {
     dots: true,
     infinite: false,
     speed: 100,
-    autoplay: true,
+    autoplay: false,
     method: {},
     responsive: [
       {

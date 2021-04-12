@@ -52,24 +52,32 @@ font-size: 14px;
   }
 }  
 }
-:host ::ng-deep .charts{
-    .line-chart{
+:host ::ng-deep .line-chart{
       height: 137px !important;
       margin-bottom: 22px !important;
+      // .canvas{
+      //   height: 100% !important;
+      // }
     }
-}
+    :host ::ng-deep canvas{
+      
+        height: 144px !important;
+      
+    }
 :host ::ng-deep .details {
   align-items: center;
     display: flex;
     justify-content: space-between;
   &__stat{
     display: flex;
-    width: 68%;
     align-items: center;
-    &__value{
+     &__value{
       font-size: 25px;
       font-weight: 600;
       margin-right: 5.5px;
+      @media only screen and (max-width: 1024px) {
+        font-size: 19px; 
+        }
     }
     &__diff{
       font-size: 12px;
@@ -109,6 +117,9 @@ font-size: 14px;
   font-weight: 600;
   margin-right: 5.5px;
   width:158px;
+  @media only screen and (max-width: 1024px) {
+    font-size: 19px; 
+    }
 }
 
 :host ::ng-deep .draggable {

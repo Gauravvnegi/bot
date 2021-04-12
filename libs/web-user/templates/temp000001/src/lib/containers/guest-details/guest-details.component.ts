@@ -138,7 +138,16 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     } else {
       fg = {
         ...this.defaultFG,
-        lastName: ['', []],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
+          ],
+        ],
       };
     }
     return this._fb.group(fg);

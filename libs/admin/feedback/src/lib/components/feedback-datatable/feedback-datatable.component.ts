@@ -400,38 +400,41 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openDetailPage(event, rowData, tabKey?) {
+  openDetailPage(event, rowData?, tabKey?) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
 
-    detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-    detailCompRef.componentInstance.guestId = rowData.id;
-    detailCompRef.componentInstance.hotelId = this.hotelId;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // remove loader for detail close
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
-            {
-              order: 'DESC',
-              entityType: this.tabFilterItems[this.tabFilterIdx].value,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false
-        );
-        detailCompRef.close();
-      })
-    );
+    if (rowData) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '100%';
+      const detailCompRef = this._modal.openDialog(
+        DetailsComponent,
+        dialogConfig
+      );
+  
+      detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
+      detailCompRef.componentInstance.guestId = rowData.id;
+      detailCompRef.componentInstance.hotelId = this.hotelId;
+      tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+  
+      this.$subscription.add(
+        detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+          // remove loader for detail close
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: 'DESC',
+                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false
+          );
+          detailCompRef.close();
+        })
+      );
+    }
   }
 
   ngOnDestroy() {

@@ -383,14 +383,28 @@
               </div>
             </div>
           </td>
-          <td class="package">
-            <span
-              *ngIf="
-                rowData.guests.getPhoneNumbers().length;
-                else emptyCell
-              "
-              >{{ rowData.guests.getPhoneNumbers() }}</span
-            >
+          <td class="package" (click)="openDetailPage($event)">
+            <span *ngIf="rowData.guests.getPhoneNumbers().length && rowData.guests.getPhoneNumbers() !== ' '; else emptyCell">
+              <ng-container
+                *ngIf="
+                  rowData.guests.getPhoneNumbers().includes(',');
+                  else singlePhone
+                "
+              >
+                <ng-container
+                  *ngFor="let link of rowData.guests.getPhoneNumbers().split(',\n')"
+                >
+                  <a href="tel:{{ link }}" *ngIf="link" class="email">
+                    <u> {{ link }}</u> </a
+                  ><br />
+                </ng-container>
+              </ng-container>
+              <ng-template #singlePhone>
+                <a href="tel:{{ rowData.guests.getPhoneNumbers() }}" class="email">
+                  <u> {{ rowData.guests.getPhoneNumbers() }}</u> </a
+                >
+              </ng-template>
+            </span>
           </td>
           <td>
             <p class="arrival-date">

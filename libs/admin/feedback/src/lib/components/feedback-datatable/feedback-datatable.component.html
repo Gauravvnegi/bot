@@ -332,14 +332,28 @@
           </div>
         </div>
       </td>
-      <td class="package">
-        <span
-          *ngIf="
-            rowData.getPhoneNumber().trim().length;
-            else emptyCell
-          "
-          >{{ rowData.getPhoneNumber() }}</span
-        >
+      <td class="package" (click)="openDetailPage($event)">
+        <span *ngIf="rowData.getPhoneNumber().length && rowData.getPhoneNumber() !== ' '; else emptyCell">
+          <ng-container
+            *ngIf="
+              rowData.getPhoneNumber().includes(',');
+              else singlePhone
+            "
+          >
+            <ng-container
+              *ngFor="let link of rowData.getPhoneNumber().split(',\n')"
+            >
+              <a href="tel:{{ link }}" *ngIf="link" class="email">
+                <u> {{ link }}</u> </a
+              ><br />
+            </ng-container>
+          </ng-container>
+          <ng-template #singlePhone>
+            <a href="tel:{{ rowData.getPhoneNumber() }}" class="email">
+              <u> {{ rowData.getPhoneNumber() }}</u> </a
+            >
+          </ng-template>
+        </span>
       </td>
       <td class="amount">
         <span

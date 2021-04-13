@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isEmpty } from 'lodash';
-import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
+import { AccessTokenService } from 'apps/web-user/src/app/core/services/access-token.service';
 @Injectable()
 export class TokenRetievalInterceptor implements HttpInterceptor {
   constructor(private _accessTokenService: AccessTokenService) {}

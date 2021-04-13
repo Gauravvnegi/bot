@@ -5,7 +5,7 @@ import {
   HttpEvent,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Injectable, Inject, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { isEmpty } from 'lodash';
 
 @Injectable()

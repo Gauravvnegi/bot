@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 
 @Component({
@@ -14,6 +16,8 @@ export class TempCovid000001Component implements OnInit {
   @Input() config;
 
   constructor(
+    @Inject(DOCUMENT) protected document: Document,
+    protected titleService: Title,
     private _templateService: TemplateService,
     private _hotelService: HotelService,
     private _translateService: TranslateService
@@ -46,6 +50,11 @@ export class TempCovid000001Component implements OnInit {
       .getHotelConfigById(this._hotelService.hotelId)
       .subscribe((hotel) => {
         this._hotelService.hotelConfig = hotel;
+        this.titleService.setTitle(hotel.name);
+        let favicon = this.document.querySelector('#favicon');
+        favicon['href'] = hotel['favIcon']
+          ? hotel['favIcon'].trim()
+          : 'favicon.ico';
       });
   }
 

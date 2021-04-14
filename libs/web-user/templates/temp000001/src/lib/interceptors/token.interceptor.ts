@@ -11,7 +11,7 @@ export class TokenInterceptor extends SharedTokenInterceptor {
   }
 
   registerListener() {
-    if(this._accessTokenService.getAccessToken()) {
+    if (this._accessTokenService.getAccessToken()) {
       this.setTokenValue(this._accessTokenService.getAccessToken());
     }
   }

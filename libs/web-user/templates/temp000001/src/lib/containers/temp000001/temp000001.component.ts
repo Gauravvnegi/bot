@@ -57,10 +57,10 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
     this.reservationService.reservationId = reservationId;
     this.hotelService.currentJourney = journey;
     this.hotelService.hotelId = hotelId;
-    this.getReservationDetails();
+    this.setWebUserTitle();
   }
 
-  getReservationDetails(): void {
+  setWebUserTitle(): void {
     //dev.botshot.in/?token=cg1jak6Id623uiUNGb1UOnRgMUTycRJO0kxLT2ceycybrpFaG6hcVNDnzgWxMY3zI5Vog_Ln5puJFItGajebaImQdO2yQF0N6aKjHBQ_AFC6cIAIVLF3UzAnr9-kU3k6aASl32qp0DhLF22IC-DlhA==
     this.$subscription.add(
       this.reservationService
@@ -79,24 +79,23 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
           },
           ({ error }) => {
             if (error.type == 'BOOKING_CANCELED') {
-              this.getHotelDataById();
+              this.getHotelData();
             }
           }
         )
     );
   }
 
-  getHotelDataById() {
-    this.hotelService.getHotelConfigById(this.hotelService.hotelId).subscribe(
-      (hotel) => {
+  getHotelData() {
+    this.hotelService
+      .getHotelConfigById(this.hotelService.hotelId)
+      .subscribe((hotel) => {
         this.titleService.setTitle(hotel.name);
         let favicon = this.document.querySelector('#favicon');
         favicon['href'] = hotel['favIcon']
           ? hotel['favIcon'].trim()
           : 'favicon.ico';
-      },
-      ({ error }) => {}
-    );
+      });
   }
 
   protected initTranslationService(): void {

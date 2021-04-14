@@ -257,6 +257,15 @@
           disabled="true"
         />
       </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
     </tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->

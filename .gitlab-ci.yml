@@ -12,7 +12,6 @@ deploy to Stage-web-user:
   stage: deploy
   environment: stage-web-user
   when: manual
-
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$web_user_work_dir"
@@ -25,7 +24,6 @@ deploy to Stage-admin:
   stage: deploy
   environment: stage-admin
   when: manual
-
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"

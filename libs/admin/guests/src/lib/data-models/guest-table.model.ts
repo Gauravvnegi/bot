@@ -1,5 +1,4 @@
 import { get, set } from 'lodash';
-import * as moment from 'moment';
 import {
   Booking,
   CurrentJourney,

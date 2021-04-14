@@ -168,12 +168,12 @@ export class Payment implements Deserializable {
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'totalAmount', get(input, ['totalAmount'])),
+      set({}, 'totalAmount', get(input, ['totalAmount']).toFixed(2)),
       set({}, 'taxAmount', get(input, ['taxAmount'])),
       set({}, 'totalDiscount', get(input, ['totalDiscount'])),
       set({}, 'subtotal', get(input, ['subtotal'])),
       set({}, 'paidAmount', get(input, ['paidAmount'])),
-      set({}, 'dueAmount', get(input, ['dueAmount'])),
+      set({}, 'dueAmount', get(input, ['dueAmount']).toFixed(2)),
       set({}, 'currency', get(input, ['currency']))
     );
     return this;

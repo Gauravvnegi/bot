@@ -319,7 +319,13 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   resetIfInternationalGuest(guestId, config?) {
     this.resetIfNationalityChanges(guestId);
-
+    let guestFG = this.guestsFA.at(
+      this.guestsFA.controls.findIndex(
+        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+      )
+    ) as FormGroup;
+    guestFG.get('uploadStatus').patchValue(false);
+    guestFG.get('validDocs').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,
@@ -330,7 +336,13 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   resetIfNotInternationalGuest(guestId, config?) {
     this.resetIfNationalityChanges(guestId);
-
+    let guestFG = this.guestsFA.at(
+      this.guestsFA.controls.findIndex(
+        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+      )
+    ) as FormGroup;
+    guestFG.get('uploadStatus').patchValue(false);
+    guestFG.get('validDocs').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,

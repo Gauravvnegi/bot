@@ -46,6 +46,10 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   validFileType = ['png', 'jpg', 'jpeg'];
   maxFileSize = '3145728';
   $subscription = new Subscription();
+  documentUpload = {
+    status: false,
+    validSize: false,
+  };
 
   constructor(
     protected _fb: FormBuilder,
@@ -77,9 +81,8 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   getCountriesList() {
     this.$subscription.add(
-      this._documentDetailService
-        .getCountryList()
-        .subscribe((countriesList) => {
+      this._documentDetailService.getCountryList().subscribe(
+        (countriesList) => {
           this.countries = countriesList.map((country) => {
             //@todo change key
             return {
@@ -92,7 +95,13 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
           this.setDocumentDetails();
           this.setDocumentDetailConfigs();
-        })
+        },
+        ({ error }) => {
+          this._translateService.get(error.code).subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        }
+      )
     );
   }
 
@@ -345,6 +354,8 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       label: [''],
       role: [''],
       Optional: [false],
+      uploadStatus: [false],
+      validDocs: [false],
     });
   }
 
@@ -383,6 +394,8 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         label: [''],
         role: [''],
         Optional: [true],
+        uploadStatus: [false],
+        validDocs: [false],
       })
     );
   }
@@ -441,6 +454,8 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                 doc_type,
                 false
               );
+
+              this.updateUploadStatus(guestId, true);
               this._translateService
                 .get('MESSAGES.SUCCESS.DOCUMENT_UPLOAD_COMPLETE')
                 .subscribe((translatedMsg) => {
@@ -466,12 +481,48 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           )
       );
     } else {
+      this.updateUploadStatus(guestId, false);
       this.updateDocumentFG(guestId, doc_type, doc_page, '');
       this._translateService
         .get('VALIDATION.INVALID_IMAGE')
         .subscribe((translatedMsg) => {
           this._snackBarService.openSnackBarAsText(translatedMsg);
         });
+    }
+  }
+
+  updateUploadStatus(guestId, status) {
+    let guestFG = this.guestsFA.at(
+      this.guestsFA.controls.findIndex(
+        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+      )
+    ) as FormGroup;
+    if (status) {
+      let documents = guestFG.getRawValue().documents;
+      for (let i = 0; i < documents.length; i++) {
+        if (
+          documents[i].documentType === 'VISA' &&
+          documents[i].documentFileFront === ' '
+        ) {
+          guestFG.get('uploadStatus').patchValue(!status);
+          guestFG.get('validDocs').patchValue(!status);
+          break;
+        } else if (
+          (documents[i].documentFileFront === ' ' ||
+          documents[i].documentFileBack === ' ') &&
+          documents[i].documentType !== 'VISA'
+        ) {
+          guestFG.get('uploadStatus').patchValue(!status);
+          guestFG.get('validDocs').patchValue(!status);
+          break;
+        } else if (i === documents.length - 1) {
+          guestFG.get('uploadStatus').patchValue(status);
+          guestFG.get('validDocs').patchValue(status);
+        }
+      }
+    } else {
+      guestFG.get('uploadStatus').patchValue(status);
+      guestFG.get('validDocs').patchValue(status);
     }
   }
 

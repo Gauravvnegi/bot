@@ -49,6 +49,8 @@ export enum Communication {
   FACEBOOK = 'FACEBOOK_BOT',
   WEB = 'WEB_BOT',
   MICRO = 'MICRO_SITES',
+  CALL_SUPPORT = 'CALL_SUPPORT',
+  WHATSAPP_LITE = 'WHATSAPP_LITE'
 }
 
 export const CommunicationConfig = {
@@ -67,6 +69,14 @@ export const CommunicationConfig = {
   [Communication.MICRO]: {
     imageUrl: 'assets/mm.png',
     disabledImageUrl: 'assets/messenger-disabled.png',
+  },
+  [Communication.CALL_SUPPORT]: {
+    imageUrl: 'assets/telegram.png',
+    disabledImageUrl: 'assets/telegram-disabled.png',
+  },
+  [Communication.WHATSAPP_LITE]: {
+    imageUrl: 'assets/whatsapp.png',
+    disabledImageUrl: 'assets/whatsapp-disabled.png',
   },
 };
 

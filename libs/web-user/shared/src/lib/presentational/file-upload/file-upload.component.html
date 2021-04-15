@@ -24,12 +24,12 @@
       (change)="onSelectFile($event)"
     />
     <input type="hidden" [formControlName]="name" />
-    <span *ngIf="!isValidDocument">{{ error }}</span>
     <mat-label *ngIf="settings"
-      >{{ documentType }}{{ settings.label }}</mat-label
+    >{{ documentType }}{{ settings.label }}</mat-label
     >
   </div>
   <ng-container *ngIf="isUploading">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </ng-container>
 </div>
+<mat-error *ngIf="!isValidDocument">{{ error }}</mat-error>

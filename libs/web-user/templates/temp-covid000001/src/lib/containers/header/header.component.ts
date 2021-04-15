@@ -8,43 +8,50 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
 @Component({
   selector: 'hospitality-bot-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  status: boolean = false;
 
-  status:boolean=false
-
-  toggleMenuButton(){
-     this.status=!this.status;
+  toggleMenuButton() {
+    this.status = !this.status;
   }
 
   constructor(
     public dialog: MatDialog,
     private _hotelService: HotelService,
     public _hyperlink: HyperlinkElementService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.hotelLogo;
   }
 
   openDialog() {
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    const dialogRef = this.dialog.open(RaiseRequestWrapperComponent, dialogConfig);
+    const dialogRef = this.dialog.open(
+      RaiseRequestWrapperComponent,
+      dialogConfig
+    );
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
   }
 
   setHyperLinkElement(element) {
-    this._hyperlink.setSelectedElement(element);
+    if (element) {
+      this._hyperlink.setSelectedElement(element);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }
 
-  get hotelLogo(){
-    return this._hotelService.hotelConfig && this._hotelService.hotelConfig.logo
+  get hotelLogo() {
+    return (
+      this._hotelService.hotelConfig && this._hotelService.hotelConfig.logo
+    );
   }
 }

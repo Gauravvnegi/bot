@@ -178,7 +178,7 @@
                 <span>Upload Complete</span>
               </p>
               <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Clearly Visible</span>
               </p>
             </div>
@@ -190,11 +190,11 @@
               "
             >
               <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Document in Valid Period</span>
               </p>
               <p>
-                <mat-icon matSuffix *ngIf="!guestGroup.get('validDocs').value; else success">error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>No larger than 3 MB in size</span>
               </p>
             </div>
@@ -210,15 +210,15 @@
                 <span>Upload Complete</span>
               </p>
               <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Clearly Visible</span>
               </p>
               <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Document in Valid Period</span>
               </p>
               <p>
-                <mat-icon matSuffix *ngIf="!guestGroup.get('validDocs').value; else success">error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>No larger than 3 MB in size</span>
               </p>
             </div>

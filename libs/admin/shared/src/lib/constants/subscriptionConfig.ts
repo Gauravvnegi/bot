@@ -67,8 +67,8 @@ export const CommunicationConfig = {
     disabledImageUrl: 'assets/web-botb.svg',
   },
   [Communication.MICRO]: {
-    imageUrl: 'assets/telegram.png',
-    disabledImageUrl: 'assets/telegram-disabled.png',
+    imageUrl: 'assets/Micro-Site.png',
+    disabledImageUrl: 'assets/Micro-Site-disabled.png',
   },
   [Communication.CALL_SUPPORT]: {
     imageUrl: 'assets/call-support.png',

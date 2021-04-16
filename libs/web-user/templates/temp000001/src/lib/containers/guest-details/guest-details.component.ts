@@ -72,16 +72,6 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   defaultFG = {
     id: ['', [Validators.required]],
     nameTitle: ['Mr.', [Validators.required]],
-    firstName: [
-      '',
-      [
-        Validators.required,
-        customPatternValid({
-          pattern: Regex.NAME,
-          msg: 'Spaces are not allowed',
-        }),
-      ],
-    ],
     label: [''],
     type: [''],
     role: [''],
@@ -92,6 +82,16 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     if (type === GuestTypes.primary) {
       fg = {
         ...this.defaultFG,
+        firstName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
+          ],
+        ],
         lastName: [
           '',
           [
@@ -128,12 +128,23 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     } else if (role === GuestRole.accompany || role === GuestRole.kids) {
       fg = {
         ...this.defaultFG,
-        age: ['', [Validators.required, Validators.min(1)]],
+        firstName: ['', []],
+        age: ['', []],
         lastName: ['', []],
       };
     } else {
       fg = {
         ...this.defaultFG,
+        firstName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
+          ],
+        ],
         lastName: [
           '',
           [

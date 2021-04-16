@@ -50,7 +50,7 @@ export enum Communication {
   WEB = 'WEB_BOT',
   MICRO = 'MICRO_SITES',
   CALL_SUPPORT = 'CALL_SUPPORT',
-  WHATSAPP_LITE = 'WHATSAPP_LITE'
+  WHATSAPP_LITE = 'WHATSAPP_LITE',
 }
 
 export const CommunicationConfig = {
@@ -63,16 +63,16 @@ export const CommunicationConfig = {
     disabledImageUrl: 'assets/whatsapp-disabled.png',
   },
   [Communication.WEB]: {
-    imageUrl: 'assets/telegram.png',
-    disabledImageUrl: 'assets/telegram-disabled.png',
+    imageUrl: 'assets/web-bot.svg',
+    disabledImageUrl: 'assets/web-botb.svg',
   },
   [Communication.MICRO]: {
-    imageUrl: 'assets/mm.png',
-    disabledImageUrl: 'assets/messenger-disabled.png',
+    imageUrl: 'assets/Micro-Site.png',
+    disabledImageUrl: 'assets/Micro-Site-disabled.png',
   },
   [Communication.CALL_SUPPORT]: {
-    imageUrl: 'assets/telegram.png',
-    disabledImageUrl: 'assets/telegram-disabled.png',
+    imageUrl: 'assets/call-support.png',
+    disabledImageUrl: 'assets/call-supprtb.png',
   },
   [Communication.WHATSAPP_LITE]: {
     imageUrl: 'assets/whatsapp.png',

@@ -325,7 +325,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       )
     ) as FormGroup;
     guestFG.get('uploadStatus').patchValue(false);
-    guestFG.get('validDocs').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,
@@ -342,7 +341,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       )
     ) as FormGroup;
     guestFG.get('uploadStatus').patchValue(false);
-    guestFG.get('validDocs').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,
@@ -367,7 +365,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       role: [''],
       Optional: [false],
       uploadStatus: [false],
-      validDocs: [false],
     });
   }
 
@@ -407,7 +404,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         role: [''],
         Optional: [true],
         uploadStatus: [false],
-        validDocs: [false],
       })
     );
   }
@@ -517,24 +513,20 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           documents[i].documentFileFront === ' '
         ) {
           guestFG.get('uploadStatus').patchValue(!status);
-          guestFG.get('validDocs').patchValue(!status);
           break;
         } else if (
           (documents[i].documentFileFront === ' ' ||
-          documents[i].documentFileBack === ' ') &&
+            documents[i].documentFileBack === ' ') &&
           documents[i].documentType !== 'VISA'
         ) {
           guestFG.get('uploadStatus').patchValue(!status);
-          guestFG.get('validDocs').patchValue(!status);
           break;
         } else if (i === documents.length - 1) {
           guestFG.get('uploadStatus').patchValue(status);
-          guestFG.get('validDocs').patchValue(status);
         }
       }
     } else {
       guestFG.get('uploadStatus').patchValue(status);
-      guestFG.get('validDocs').patchValue(status);
     }
   }
 

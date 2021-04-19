@@ -101,11 +101,11 @@ export class ApplicationStatusComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
-    if (this.summaryDetails.guestDetails.primaryGuest.regcardUrl) {
+    if (this.summaryDetails.guestDetails.guests[0].regcardUrl) {
       dialogConfig.data = {
-        regcardUrl: this.summaryDetails.guestDetails.primaryGuest.regcardUrl,
+        regcardUrl: this.summaryDetails.guestDetails.guests[0].regcardUrl,
         signatureImageUrl:
-          this.summaryDetails.guestDetails.primaryGuest.signatureUrl || '',
+          this.summaryDetails.guestDetails.guests[0].signatureUrl || '',
       };
       this._dialogRef = this._modal.openDialog(
         this.regCardComponent,
@@ -119,11 +119,10 @@ export class ApplicationStatusComponent implements OnInit {
             (res: FileData) => {
               dialogConfig.data = {
                 regcardUrl:
-                  this.summaryDetails.guestDetails.primaryGuest.regcardUrl ||
+                  this.summaryDetails.guestDetails.guests[0].regcardUrl ||
                   res.file_download_url,
                 signatureImageUrl:
-                  this.summaryDetails.guestDetails.primaryGuest.signatureUrl ||
-                  '',
+                  this.summaryDetails.guestDetails.guests[0].signatureUrl || '',
               };
               this._dialogRef = this._modal.openDialog(
                 this.regCardComponent,
@@ -175,7 +174,7 @@ export class ApplicationStatusComponent implements OnInit {
           (response) => {
             FileSaver.saveAs(
               response,
-              `${this.guestDetail.primaryGuest.firstName}_${this.guestDetail.primaryGuest.lastName}` +
+              `${this.guestDetail.guests[0].firstName}_${this.guestDetail.guests[0].lastName}` +
                 '_export_summary_' +
                 new Date().getTime() +
                 '.pdf'

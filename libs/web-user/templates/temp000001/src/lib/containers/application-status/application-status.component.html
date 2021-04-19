@@ -17,25 +17,27 @@
     </div>
   </div>
   <div #content>
-    <div *ngIf="guestDetail">
+    <div *ngIf="guestDetail && guestDetail.guests.length">
       <div class="section--heading">Guest Details</div>
-      <div class="section--content">
+      <div class="section--content" *ngFor="let guest of guestDetail.guests">
         <div class="section--content--container">
           <div class="section--content--container--title">
-            Full Name&nbsp;<b>(Primary)</b>
+            {{ guest.type === 'primary' ? 'Full Name (Primary)' : 'Full Name' }}
           </div>
           <div class="section--content--container--value">
-            {{ guestDetail.primaryGuest.nameTitle }}
-            {{ guestDetail.primaryGuest.firstName }}
-            {{ guestDetail.primaryGuest.lastName }}
+            {{ guest.nameTitle }}
+            {{ guest.firstName }}
+            {{ guest.lastName }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
             {{
-              contactDetails.mobileNumber
-                ? contactDetails.cc + ' ' + contactDetails.mobileNumber
+              guest.contactDetails.mobileNumber
+                ? guest.contactDetails.cc +
+                  ' ' +
+                  guest.contactDetails.mobileNumber
                 : '-'
             }}
           </div>
@@ -43,7 +45,7 @@
         <div class="section--content--container">
           <div class="section--content--container--title">Email ID</div>
           <div class="section--content--container--value">
-            {{ contactDetails.emailId || '-' }}
+            {{ guest.contactDetails.emailId || '-' }}
           </div>
         </div>
       </div>
@@ -84,7 +86,7 @@
         <div class="section--content--label">
           <ng-container
             [ngSwitch]="
-              summaryDetails.guestDetails.primaryGuest.statusMessage.status
+              summaryDetails.guestDetails.guests[0].statusMessage.status
             "
           >
             <ng-container *ngSwitchCase="'PENDING'">
@@ -117,11 +119,11 @@
       <div
         class="error_message"
         *ngIf="
-          summaryDetails.guestDetails.primaryGuest.statusMessage.status ===
+          summaryDetails.guestDetails.guests[0].statusMessage.status ===
           'FAILED'
         "
       >
-        {{ summaryDetails.guestDetails.primaryGuest.statusMessage.remarks }}
+        {{ summaryDetails.guestDetails.guests[0].statusMessage.remarks }}
       </div>
     </div>
     <div>
@@ -226,7 +228,7 @@
           <div>
             <img
               *ngIf="
-                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
+                summaryDetails.guestDetails.guests[0].signatureUrl !==
                   undefined;
                 else error
               "
@@ -236,21 +238,6 @@
             <ng-template #error>
               <img class="conditional-icon" src="assets/Info.png" />
             </ng-template>
-            <!-- <mat-icon
-              [ngClass]="
-                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
-                undefined
-                  ? 'completed'
-                  : 'alert'
-              "
-            >
-              {{
-                summaryDetails.guestDetails.primaryGuest.signatureUrl !==
-                undefined
-                  ? 'check_circle_outline'
-                  : 'error_outline'
-              }}</mat-icon
-            > -->
           </div>
           <div style="margin-left: 10px;">
             <label>

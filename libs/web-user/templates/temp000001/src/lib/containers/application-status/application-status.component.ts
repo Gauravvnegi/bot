@@ -200,10 +200,6 @@ export class ApplicationStatusComponent implements OnInit {
     return this.summaryDetails['guestDetails'];
   }
 
-  get contactDetails() {
-    return this.summaryDetails.guestDetails.primaryGuest.contactDetails;
-  }
-
   get currencyCode() {
     return this._paymentDetailsService.currencyCode;
   }

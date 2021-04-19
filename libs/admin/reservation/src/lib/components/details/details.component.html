@@ -173,11 +173,12 @@
     <div class="options-wrapper" *ngIf="isGuestInfoPatched">
       <button
         class="check-button"
-        (click)="downloadRegcard(details.guestDetails[0].regcardUrl)"
+        (click)="downloadRegcard(details.guestDetails.guests[0].regcardUrl)"
       >
         <ng-container
           [ngSwitch]="
-            details.guestDetails[0] && details.guestDetails[0].regcardStatus
+            details.guestDetails.guests[0] &&
+            details.guestDetails.guests[0].regcardStatus
           "
         >
           <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix

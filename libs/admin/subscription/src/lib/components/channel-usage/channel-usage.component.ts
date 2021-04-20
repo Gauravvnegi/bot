@@ -32,9 +32,11 @@ export class ChannelUsageComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data) {
-      this.communicationChannels = new CommunicationChannels().deserialize(
-        this.data
-      ).channels;
+      this.communicationChannels = new CommunicationChannels()
+        .deserialize(this.data)
+        .channels.sort((x, y) =>
+          x.active === y.active ? 0 : x.active ? -1 : 1
+        );
       this.activeChannels = this.data.filter((d) => d.active).length;
     }
   }

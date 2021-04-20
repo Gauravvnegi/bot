@@ -7,8 +7,8 @@
         class="card__details__button"
         href="https://www.botshot.in/"
         target="_blank"
-        [ngClass]="{ isDisabled: data.upgradable }"
-        [style.opacity]="data.upgradable ? 0.5 : 1"
+        [ngClass]="{ isDisabled: !data.upgradable }"
+        [style.opacity]="data.upgradable ? 1 : 0.5"
         ><p class="text">
           Upgrade
         </p></a
@@ -50,8 +50,8 @@
         class="card__details__button"
         href="https://www.botshot.in/"
         target="_blank"
-        [ngClass]="{ isDisabled: data.upgradable }"
-        [style.opacity]="data.upgradable ? 0.5 : 1"
+        [ngClass]="{ isDisabled: !data.upgradable }"
+        [style.opacity]="data.upgradable ? 1 : 0.5"
       >
         <p class="text">
           Upgrade

@@ -29,7 +29,6 @@ export class AdminGuestDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.addFormsControls();
     this.pushDataToForm();
-    // console.log(this.detailsData);
   }
 
   addFormsControls() {

@@ -15,7 +15,7 @@ import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/deta
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import {
-  FeatureNames,
+  ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
@@ -243,7 +243,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.registerListeners();
     this.getSubscribedFilters(
-      FeatureNames.RESERVATION,
+      ModuleNames.RESERVATION,
       TableNames.RESERVATION,
       this.tabFilterItems
     );
@@ -492,10 +492,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         DetailsComponent,
         dialogConfig
       );
-  
+
       detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
       tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-  
+
       this.$subscription.add(
         detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
           // remove loader for detail close

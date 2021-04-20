@@ -9,7 +9,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
-import { FeatureNames } from '../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -113,7 +113,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     ADMIN_ROUTES.forEach((data, i) => {
       if (
         subscription.filter(
-          (d) => FeatureNames[d.name] === data.path && d.active
+          (d) => ModuleNames[d.name] === data.path && d.active
         ).length
       ) {
         if (this.menuItems.filter((d) => d.path === data.path).length === 0) {

@@ -18,7 +18,6 @@ export class SubscriptionPlanService extends ApiService {
 
   initSubscriptionDetails(data) {
     this.setSubscription(data);
-    // console.log(new ModuleSubscription().deserialize(data));
     this.subscription$.next(new ModuleSubscription().deserialize(data));
   }
 

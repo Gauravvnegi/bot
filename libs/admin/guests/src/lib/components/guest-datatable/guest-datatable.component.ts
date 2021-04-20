@@ -17,7 +17,7 @@ import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import {
-  FeatureNames,
+  ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
@@ -179,7 +179,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.registerListeners();
     this.getSubscribedFilters(
-      FeatureNames.GUESTS,
+      ModuleNames.GUESTS,
       TableNames.GUEST,
       this.tabFilterItems
     );
@@ -455,12 +455,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         DetailsComponent,
         dialogConfig
       );
-  
+
       detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
       detailCompRef.componentInstance.guestId = rowData.id;
       detailCompRef.componentInstance.hotelId = this.hotelId;
       tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-  
+
       this.$subscription.add(
         detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
           // remove loader for detail close

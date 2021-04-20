@@ -51,7 +51,6 @@ export class Details implements Deserializable {
     this.roomsDetails = new RoomsDetails().deserialize(input);
     this.feedbackDetails = new FeedbackDetails().deserialize(input.feedback);
 
-    // console.log(this);
     return this;
   }
 }

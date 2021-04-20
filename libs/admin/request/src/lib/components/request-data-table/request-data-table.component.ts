@@ -16,7 +16,7 @@ import { RequestService } from '../../services/request.service';
 import { get } from 'lodash';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import {
-  FeatureNames,
+  ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
@@ -203,7 +203,7 @@ export class RequestDataTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.registerListeners();
     this.getSubscribedFilters(
-      FeatureNames.REQUEST,
+      ModuleNames.REQUEST,
       TableNames.REQUEST,
       this.tabFilterItems
     );

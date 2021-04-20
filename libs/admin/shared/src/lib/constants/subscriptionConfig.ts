@@ -1,4 +1,4 @@
-export enum FeatureNames {
+export enum ModuleNames {
   GUESTS = 'guest',
   REQUEST = 'request',
   FEEDBACK = 'feedback',
@@ -6,6 +6,10 @@ export enum FeatureNames {
   RESERVATION = 'dashboard',
   NOTIFICATIONS = 'notification',
   USERS = 'roles-permissions',
+}
+
+export enum Integrations {
+  OCR = 'ocr',
 }
 
 export enum TableNames {
@@ -81,7 +85,7 @@ export const CommunicationConfig = {
 };
 
 export const ModuleConfig = {
-  [FeatureNames.RESERVATION]: {
+  [ModuleNames.RESERVATION]: {
     cards: [
       CardNames.ARRIVAL,
       CardNames.INHOUSE,
@@ -95,7 +99,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [FeatureNames.GUESTS]: {
+  [ModuleNames.GUESTS]: {
     cards: [
       CardNames.VIP,
       CardNames.STATUS,
@@ -114,7 +118,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [FeatureNames.FEEDBACK]: {
+  [ModuleNames.FEEDBACK]: {
     cards: [
       CardNames.GlobalNPS,
       CardNames.NPSAcrossDepartment,
@@ -129,7 +133,7 @@ export const ModuleConfig = {
       [TableNames.FEEDBACK]: { tabFilters: [Filters.JOURNEYRESERVATION] },
     },
   },
-  [FeatureNames.PACKAGES]: {
+  [ModuleNames.PACKAGES]: {
     cards: [],
     tables: [TableNames.PACKAGE, TableNames.CATEGORY],
     filters: {
@@ -137,7 +141,7 @@ export const ModuleConfig = {
       [TableNames.CATEGORY]: { tabFilters: [] },
     },
   },
-  [FeatureNames.REQUEST]: {
+  [ModuleNames.REQUEST]: {
     cards: [],
     tables: [TableNames.REQUEST],
     filters: {
@@ -146,12 +150,12 @@ export const ModuleConfig = {
       },
     },
   },
-  [FeatureNames.NOTIFICATIONS]: {
+  [ModuleNames.NOTIFICATIONS]: {
     cards: [],
     tables: [],
     filters: {},
   },
-  [FeatureNames.USERS]: {
+  [ModuleNames.USERS]: {
     cards: [],
     tables: [],
     filters: {},

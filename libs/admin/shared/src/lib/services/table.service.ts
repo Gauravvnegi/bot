@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import {
-  FeatureNames,
+  ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -39,7 +39,7 @@ export class TableService {
   }
 
   validateInputs(module, table) {
-    if (!Object.values(FeatureNames).includes(module)) {
+    if (!Object.values(ModuleNames).includes(module)) {
       return {
         status: false,
         error: 'Module not found.',

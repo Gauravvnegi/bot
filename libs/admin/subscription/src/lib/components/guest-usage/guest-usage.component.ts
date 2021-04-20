@@ -101,7 +101,6 @@ export class GuestUsageComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptionData = this.subscriptionService.getModuleSubscription();
     this.initChart();
-    console.log(this.data);
   }
 
   initChart() {

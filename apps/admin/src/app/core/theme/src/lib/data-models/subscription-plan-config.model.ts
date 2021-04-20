@@ -1,7 +1,8 @@
 import { get, set } from 'lodash';
 import {
-  FeatureNames,
+  ModuleNames,
   ModuleConfig,
+  Integrations,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 export class SubscriptionPlan {
@@ -139,33 +140,39 @@ export class Features {
 export class ModuleSubscription {
   features: any;
   modules: any;
+  integrations: any;
 
   deserialize(input: any) {
     this.modules = new Object();
+    this.integrations = new Object();
     this.features = get(input, ['features']);
-    this.features?.MODULE?.forEach((module) => {
-      if (
-        !this.modules[FeatureNames[module.name]] &&
-        FeatureNames[module.name]
-      ) {
+    input.features?.MODULE?.forEach((module) => {
+      if (!this.modules[ModuleNames[module.name]] && ModuleNames[module.name]) {
         let tempCards = new Object();
-        ModuleConfig[FeatureNames[module.name]].cards.forEach((card) => {
+        ModuleConfig[ModuleNames[module.name]].cards.forEach((card) => {
           tempCards[card] = { active: module.active };
         });
         let tempTables = new Object();
-        ModuleConfig[FeatureNames[module.name]].tables.forEach((table) => {
+        ModuleConfig[ModuleNames[module.name]].tables.forEach((table) => {
           tempTables[table] = {
             active: module.active,
             tabFilters:
-              ModuleConfig[FeatureNames[module.name]]?.filters[table]
-                .tabFilters,
+              ModuleConfig[ModuleNames[module.name]]?.filters[table].tabFilters,
           };
         });
-        this.modules[FeatureNames[module.name]] = {
+        this.modules[ModuleNames[module.name]] = {
           active: module.active,
           cards: tempCards,
           tables: tempTables,
         };
+      }
+    });
+    input.features?.INTEGRATION?.forEach((data) => {
+      if (
+        !this.integrations[Integrations[data.name]] &&
+        Integrations[data.name]
+      ) {
+        this.integrations[Integrations[data.name]] = { active: data.active };
       }
     });
     return this;

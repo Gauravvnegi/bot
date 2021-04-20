@@ -20,39 +20,41 @@
     </div> -->
 </div>
 <!-- <div class="charts"> -->
-  <div class="line-chart">
-    <ng-container *ngIf="chartData; else noData">
-      <canvas
-        baseChart
-        class="line-chart__canvas"
-        [datasets]="chart.chartData.datasets"
-        [labels]="chart.chartLabels"
-        [options]="chart.chartOptions"
-        [colors]="chart.chartColors"
-        [legend]="chart.chartLegend"
-        [chartType]="chart.chartType"
-      >
-      </canvas>
-    </ng-container>
-    <ng-template #noData>
-      <canvas
-        baseChart
-        class="line-chart__canvas"
-        [datasets]="chart.chartData.datasets"
-        [labels]="chart.chartLabels"
-        [options]="chart.chartOptions"
-        [colors]="chart.chartColors"
-        [legend]="chart.chartLegend"
-        [chartType]="chart.chartType"
-      >
-      </canvas>
-    </ng-template>
-  </div>
+<div class="line-chart">
+  <ng-container *ngIf="chartData; else noData">
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.chartData.datasets"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+  </ng-container>
+  <ng-template #noData>
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.chartData.datasets"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+  </ng-template>
+</div>
 <!-- </div> -->
 <div class="details">
   <div class="details__stat">
     <div class="details__stat__value">
-      {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
+      {{ format(data ? data.currentUsage : 0) }}/{{
+        format(data ? data.cost?.usageLimit || 0 : 0)
+      }}
     </div>
     <div class="details__stat__diff">(25%)</div>
   </div>

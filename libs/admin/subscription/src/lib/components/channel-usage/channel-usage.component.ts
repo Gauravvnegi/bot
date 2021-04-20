@@ -35,7 +35,7 @@ export class ChannelUsageComponent implements OnInit {
       this.communicationChannels = new CommunicationChannels().deserialize(
         this.data
       ).channels;
-      this.activeChannels = this.data.length;
+      this.activeChannels = this.data.filter((d) => d.active).length;
     }
   }
 }

@@ -127,7 +127,9 @@ export class TableData {
     input?.features &&
       Object.keys(input?.features).forEach((key) => {
         input.features[key].forEach((feature) => {
-          this.data.push(new TableCell().deserialize(feature));
+          if (feature.active) {
+            this.data.push(new TableCell().deserialize(feature));
+          }
         });
       });
     return this;

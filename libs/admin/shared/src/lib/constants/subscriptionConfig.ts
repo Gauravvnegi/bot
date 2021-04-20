@@ -84,6 +84,12 @@ export const CommunicationConfig = {
   },
 };
 
+export const TechSupport = {
+  Gold: 'assets/svg/gold.svg',
+  Silver: 'assets/svg/silver.svg',
+  Platinum: 'assets/svg/platinum.svg',
+};
+
 export const ModuleConfig = {
   [ModuleNames.RESERVATION]: {
     cards: [

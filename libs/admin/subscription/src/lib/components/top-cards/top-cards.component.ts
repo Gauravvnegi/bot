@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
-import { Subscription } from 'rxjs';
+import { TechSupport } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { SubscriptionPlan } from '../../data-models/subscription.model';
 
 @Component({
@@ -10,8 +9,9 @@ import { SubscriptionPlan } from '../../data-models/subscription.model';
 })
 export class TopCardsComponent implements OnInit {
   @Input() featureData;
+  techSupport = TechSupport;
   data: SubscriptionPlan;
-  constructor(private subscriptionService: SubscriptionPlanService) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.initSubscriptionPlan();

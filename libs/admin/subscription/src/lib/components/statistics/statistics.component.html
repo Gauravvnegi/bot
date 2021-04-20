@@ -10,7 +10,11 @@
 >
   <div class="title">Plan Usage</div>
   <div class="usages">
-    <div class="usages__item">
+    <div
+      class="usages__item"
+      featureSubscribed
+      [feature]="'modules.roles-permissions'"
+    >
       <hospitality-bot-users-usage
         [data]="subscriptionPlanUsage?.users"
         [chartData]="planUsageChartData.userCount"

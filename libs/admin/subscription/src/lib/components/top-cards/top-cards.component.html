@@ -45,7 +45,9 @@
       />
     </div>
     <div class="card__details">
-      <div class="card__details__label">{{ data.supportType }}</div>
+      <div class="card__details__label">
+        {{ data.supportType }}<img [src]="techSupport[data.supportType]" />
+      </div>
       <a
         class="card__details__button"
         href="https://www.botshot.in/"

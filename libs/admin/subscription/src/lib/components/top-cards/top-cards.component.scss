@@ -28,8 +28,12 @@
         font: normal normal bold 25px/29px Roboto;
         letter-spacing: 0.5px;
         color: #002046;
+        align-items: center;
         @media screen and (max-width: 1100px) {
           font: normal normal bold 15px/29px Roboto;
+        }
+        img {
+          padding: 0 6px;
         }
       }
       &__button {

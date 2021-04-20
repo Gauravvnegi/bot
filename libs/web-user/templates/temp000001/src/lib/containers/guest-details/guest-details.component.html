@@ -86,7 +86,7 @@
                 <mat-panel-title>
                   <span class="container__title">{{
                     guestFormGroup.get('label').value
-                  }}</span>
+                  }}{{ guestFormGroup.get('label').value === 'Accompanied / Kids' ? ' (Optional)' : '' }}</span>
                   <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
                     >add</mat-icon
                   >

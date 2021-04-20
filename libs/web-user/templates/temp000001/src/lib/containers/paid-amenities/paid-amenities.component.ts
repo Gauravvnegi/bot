@@ -106,8 +106,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  openPackage(packageCode) {
-    this.selectedService=packageCode;
+  openPackage(packageCode, e) {
+    this.selectedService = packageCode;
     this.pauseSlickCarousel();
     this.clearPackageRendererContainer();
     let serviceFormGroup = this.getAminityForm(packageCode);
@@ -119,6 +119,11 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       serviceFormGroup,
       this.selectedSlide
     );
+    const classes = e.children && e.children[0].attributes[1].nodeValue.split(' ');
+    if (classes && !classes.includes('active')) {
+      e.children[0].attributes[1].nodeValue =
+        e.children[0].attributes[1].nodeValue + ' active';
+    }
   }
 
   createComponent(component, serviceFormGroup, selectedSlide) {
@@ -169,10 +174,24 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
           'data-slidedata'
         );
 
+        const classes = element.children[0].attributes[1].nodeValue.split(' ');
+        if (this.selectedService === slidePackageCode) {
+          if (!classes.includes('active')) {
+            element.children[0].attributes[1].nodeValue =
+              element.children[0].attributes[1].nodeValue + ' active';
+          }
+        } else {
+          if (classes.includes('active')) {
+            element.children[0].attributes[1].nodeValue = classes
+              .filter((value) => value !== 'active')
+              .join(' ');
+          }
+        }
+
         if (slidePackageCode) {
           element.addEventListener(
             'click',
-            this.openPackage.bind(this, slidePackageCode)
+            this.openPackage.bind(this, slidePackageCode, element)
           );
         }
       }

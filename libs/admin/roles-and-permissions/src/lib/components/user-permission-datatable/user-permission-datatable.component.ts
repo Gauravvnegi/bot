@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { FormBuilder } from '@angular/forms';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -10,6 +11,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import * as FileSaver from 'file-saver';
 import { SortEvent } from 'primeng/api';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -64,9 +66,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     private _adminUtilityService: AdminUtilityService,
     private _managePermissionService: ManagePermissionService,
     public userDetailService: UserDetailService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private location: Location,
+    protected tabFilterService: TableService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
@@ -204,8 +208,25 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    // value = value && value.trim();
+    // this.table.filter(value, field, matchMode);
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
+
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   ngOnDestroy() {

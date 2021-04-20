@@ -36,7 +36,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit, OnChanges {
+export class DetailsComponent implements OnInit {
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
@@ -103,13 +103,14 @@ export class DetailsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.getReservationDetails();
-    this.getShareIcon();
+    this.registerListeners();
   }
 
-  ngOnChanges() {}
+  registerListeners(): void {
+    this.listenForGlobalFilters();
+  }
 
-  getShareIcon() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         const { hotelName: brandId, branchName: branchId } = data[
@@ -121,28 +122,32 @@ export class DetailsComponent implements OnInit, OnChanges {
         this.branchConfig = brandConfig.branches.find(
           (branch) => branch.id == branchId
         );
-        this._userDetailService
-          .getUserShareIconByNationality(this.branchConfig.nationality)
-          .subscribe(
-            (response) => {
-              this.shareIconList = new ShareIconConfig().deserialize(response);
-              this.shareIconList = this.shareIconList.applications.concat(
-                this.defaultIconList
-              );
-            },
-            ({ error }) => {
-              this._snackBarService.openSnackBarAsText(error.message);
-            }
-          );
+        this.getShareIcon();
+        this.getReservationDetails();
       })
     );
+  }
+
+  getShareIcon() {
+    this._userDetailService
+      .getUserShareIconByNationality(this.branchConfig.nationality)
+      .subscribe(
+        (response) => {
+          this.shareIconList = new ShareIconConfig().deserialize(response);
+          this.shareIconList = this.shareIconList.applications.concat(
+            this.defaultIconList
+          );
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+        }
+      );
   }
 
   getReservationDetails() {
     this._reservationService.getReservationDetails(this.bookingId).subscribe(
       (response) => {
         this.details = new Details().deserialize(response);
-        console.log(this.details);
         this.mapValuesInForm();
         this.isReservationDetailFetched = true;
       },

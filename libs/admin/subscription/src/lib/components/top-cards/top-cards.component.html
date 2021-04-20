@@ -1,0 +1,68 @@
+<div class="container" *ngIf="data">
+  <div class="card">
+    <div class="card__title">Subscription</div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.plan }}</div>
+      <a
+        class="card__details__button"
+        href="https://www.botshot.in/"
+        target="_blank"
+        [ngClass]="{ isDisabled: data.upgradable }"
+        [style.opacity]="data.upgradable ? 0.5 : 1"
+        ><p class="text">
+          Upgrade
+        </p></a
+      >
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__title">
+      Deployment
+      <img
+        class="card__title__image"
+        src="assets/svg/information-circle-outline.svg"
+      />
+    </div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.deploymentType }}</div>
+      <a
+        class="card__details__button"
+        href="https://www.botshot.in/"
+        target="_blank"
+      >
+        <p class="text">
+          Switch
+        </p>
+      </a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__title">
+      Technical Support
+      <img
+        class="card__title__image"
+        src="assets/svg/information-circle-outline.svg"
+      />
+    </div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.supportType }}</div>
+      <a
+        class="card__details__button"
+        href="https://www.botshot.in/"
+        target="_blank"
+        [ngClass]="{ isDisabled: data.upgradable }"
+        [style.opacity]="data.upgradable ? 0.5 : 1"
+      >
+        <p class="text">
+          Upgrade
+        </p>
+      </a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__title">Plan Due Date</div>
+    <div class="card__details">
+      <div class="card__details__label">{{ data.getEndDate() }}</div>
+    </div>
+  </div>
+</div>

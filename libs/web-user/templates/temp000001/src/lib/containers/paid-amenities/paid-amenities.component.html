@@ -1,5 +1,5 @@
 <div>
-    <h3>What would you like to book for special amenities ?</h3>
+  <h3>What would you like to book for special amenities ?</h3>
   <ngx-slick-carousel
     class="carousel"
     #slickModal="slick-carousel"
@@ -14,7 +14,7 @@
     >
       <div
         class="paid__service__data"
-        (click)="openPackage(slide.packageCode)"
+        (click)="openPackage(slide.packageCode, $event)"
         [ngClass]="{
           active: selectedService === slide.packageCode,
           activated: slide.isSelected

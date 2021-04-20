@@ -6,6 +6,7 @@ import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 import { BaseDatatableComponent } from './base-datatable.component';
 import { FormBuilder } from '@angular/forms';
+import { TableService } from '../../services/table.service';
 
 interface Import {
   name: string;
@@ -19,7 +20,10 @@ interface Import {
 })
 export class DatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  constructor(public fb: FormBuilder) {
-    super(fb);
+  constructor(
+    public fb: FormBuilder,
+    protected tabFilterService: TableService
+  ) {
+    super(fb, tabFilterService);
   }
 }

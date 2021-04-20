@@ -1,6 +1,6 @@
 import { SharedTokenInterceptor } from 'libs/shared/interceptors/src';
 import { Injectable } from '@angular/core';
-import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
+import { AccessTokenService } from 'apps/web-user/src/app/core/services/access-token.service';
 
 @Injectable()
 export class TokenInterceptor extends SharedTokenInterceptor {
@@ -11,8 +11,8 @@ export class TokenInterceptor extends SharedTokenInterceptor {
   }
 
   registerListener() {
-    this._accessTokenService._accessToken$.subscribe((accessToken: string) => {
-      this.setTokenValue(accessToken);
-    });
+    if (this._accessTokenService.getAccessToken()) {
+      this.setTokenValue(this._accessTokenService.getAccessToken());
+    }
   }
 }

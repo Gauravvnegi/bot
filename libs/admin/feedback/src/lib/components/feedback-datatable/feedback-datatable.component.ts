@@ -14,6 +14,11 @@ import { GuestTable } from 'libs/admin/guests/src/lib/data-models/guest-table.mo
 import { Subscription, Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import {
+  ModuleNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -53,6 +58,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       header: 'Booking No./ Feedback',
       isSort: true,
       sortType: 'number',
+    },
+    {
+      field: `getPhoneNumber()`,
+      header: 'Phone No.',
+      isSort: false,
+      sortType: 'string',
     },
     {
       field: 'payment.totalAmount',
@@ -131,13 +142,19 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
     private _modal: ModalService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    protected tabFilterService: TableService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters(
+      ModuleNames.FEEDBACK,
+      TableNames.FEEDBACK,
+      this.tabFilterItems
+    );
   }
 
   registerListeners(): void {
@@ -302,6 +319,19 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    // value = value && value.trim();
+    // this.table.filter(value, field, matchMode);
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
+
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }
@@ -370,38 +400,41 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openDetailPage(event, rowData, tabKey?) {
+  openDetailPage(event, rowData?, tabKey?) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
 
-    detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-    detailCompRef.componentInstance.guestId = rowData.id;
-    detailCompRef.componentInstance.hotelId = this.hotelId;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+    if (rowData) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '100%';
+      const detailCompRef = this._modal.openDialog(
+        DetailsComponent,
+        dialogConfig
+      );
 
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // remove loader for detail close
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
-            {
-              order: 'DESC',
-              entityType: this.tabFilterItems[this.tabFilterIdx].value,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false
-        );
-        detailCompRef.close();
-      })
-    );
+      detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
+      detailCompRef.componentInstance.guestId = rowData.id;
+      detailCompRef.componentInstance.hotelId = this.hotelId;
+      tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+      this.$subscription.add(
+        detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+          // remove loader for detail close
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: 'DESC',
+                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false
+          );
+          detailCompRef.close();
+        })
+      );
+    }
   }
 
   ngOnDestroy() {

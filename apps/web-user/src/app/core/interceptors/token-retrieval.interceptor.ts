@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isEmpty } from 'lodash';
-import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
+import { AccessTokenService } from 'apps/web-user/src/app/core/services/access-token.service';
 @Injectable()
 export class TokenRetievalInterceptor implements HttpInterceptor {
   constructor(private _accessTokenService: AccessTokenService) {}
@@ -19,7 +19,7 @@ export class TokenRetievalInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
+        if (event instanceof HttpResponse && req.url.includes('decrypt')) {
           let accessToken = event.headers.get('x-access-token');
           if (!isEmpty(accessToken)) {
             this._accessTokenService.setAccessToken(accessToken);

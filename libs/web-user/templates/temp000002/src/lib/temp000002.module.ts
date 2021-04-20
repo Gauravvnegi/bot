@@ -6,7 +6,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
@@ -36,8 +35,6 @@ import { TemplateLoaderDirective } from './directives/template-loader.directive'
 import { Temp000002StepperComponent } from './presentational/temp000002-stepper/temp000002-stepper.component';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
-import { TokenRetrievalInterceptor } from './interceptors/token-retrieval.interceptor';
-import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ButtonDirective } from './directives/button-renderer.directive';
 import { Temp000002ButtonComponent } from './presentational/temp000002-button/temp000002-button.component';
 import { Temp000002InputPopupComponent } from './presentational/temp000002-input-popup/temp000002-input-popup.component';
@@ -45,6 +42,7 @@ import { ButtonTemplateSwitchDirective } from './directives/button-template-swit
 import { Temp000002SignatureCaptureWrapperComponent } from './presentational/temp000002-signature-capture-wrapper/temp000002-signature-capture-wrapper.component';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   imports: [
@@ -77,11 +75,6 @@ import { CancelBookingComponent } from './containers/cancel-booking/cancel-booki
       useClass: TimezoneInterceptor,
       multi: true,
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenRetrievalInterceptor,
-      multi: true,
-    },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     ReservationService,
     HotelService,
@@ -98,7 +91,6 @@ import { CancelBookingComponent } from './containers/cancel-booking/cancel-booki
     RegCardService,
     SummaryService,
     SignatureService,
-    AccessTokenService,
     AmenitiesService,
     ComplimentaryService,
     PaidService,

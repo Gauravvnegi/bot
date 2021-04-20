@@ -78,6 +78,8 @@ export class DocumentDetail implements Deserializable {
   label: string;
   id: string;
   role: string;
+  uploadStatus: boolean;
+  validDocs: boolean;
 
   deserialize(input: any, hotelNationality: string) {
     Object.assign(
@@ -85,6 +87,8 @@ export class DocumentDetail implements Deserializable {
       set({}, 'label', get(input, ['label'])),
       set({}, 'role', get(input, ['role']))
     );
+    this.uploadStatus = false;
+    this.validDocs = false;
     this.nationality = input.nationality || hotelNationality;
     this.isInternational = this.nationality !== hotelNationality;
     this.id = input.id;
@@ -97,8 +101,12 @@ export class DocumentDetail implements Deserializable {
           : null
         : null;
 
-    input.documents.forEach((document) => {
+    input.documents.forEach((document, i) => {
       this.documents.push(new Document().deserialize(document));
+      if (i === input.documents.length - 1) {
+        this.uploadStatus = true;
+        this.validDocs = true;
+      }
     });
     return this;
   }

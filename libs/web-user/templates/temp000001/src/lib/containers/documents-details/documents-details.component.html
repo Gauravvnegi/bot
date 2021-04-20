@@ -174,11 +174,11 @@
               "
             >
               <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Upload Complete</span>
               </p>
-              <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+              <p *ngIf="this.reservationData.hotel.ocrActive">
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Clearly Visible</span>
               </p>
             </div>
@@ -189,12 +189,12 @@
                 guestGroup.get('documents')['controls'].length
               "
             >
-              <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+              <p *ngIf="this.reservationData.hotel.ocrActive">
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Document in Valid Period</span>
               </p>
               <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>No larger than 3 MB in size</span>
               </p>
             </div>
@@ -206,19 +206,19 @@
               "
             >
               <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Upload Complete</span>
               </p>
-              <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+              <p *ngIf="this.reservationData.hotel.ocrActive">
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Clearly Visible</span>
               </p>
-              <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+              <p *ngIf="this.reservationData.hotel.ocrActive">
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Document in Valid Period</span>
               </p>
               <p>
-                <mat-icon matSuffix>error_outline</mat-icon>
+                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>No larger than 3 MB in size</span>
               </p>
             </div>
@@ -228,3 +228,7 @@
     </ng-container>
   </form>
 </div>
+
+<ng-template #success>
+  <img class="conditional-icon" src="assets/Right.png" />
+</ng-template>

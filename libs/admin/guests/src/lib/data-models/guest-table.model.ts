@@ -1,5 +1,4 @@
 import { get, set } from 'lodash';
-import * as moment from 'moment';
 import {
   Booking,
   CurrentJourney,
@@ -130,6 +129,12 @@ export class Guest implements Deserializable {
 
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
   }
 }
 

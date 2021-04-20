@@ -11,7 +11,8 @@ import { RaiseRequestService } from 'libs/web-user/shared/src/lib/services/raise
 import { HyperlinkElementService } from '../../../../shared/src/lib/services/hyperlink-element.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { FooterService } from 'libs/web-user/shared/src/lib/services/footer.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { HttpClientModule } from '@angular/common/http';
     RaiseRequestService,
     FooterService,
     HyperlinkElementService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
   ],
 })
 export class TempCovid000001Module {}

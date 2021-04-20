@@ -13,8 +13,11 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import * as moment from 'moment';
-import { get } from 'lodash';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import {
+  ModuleNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -54,6 +57,12 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       field: `guests.primaryGuest.getFullName()`,
       header: 'Guest/company',
       isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: `guests.getPhoneNumbers()`,
+      header: 'Phone No.',
+      isSort: false,
       sortType: 'string',
     },
     {
@@ -225,13 +234,19 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    protected tabFilterService: TableService
   ) {
-    super(fb);
+    super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getSubscribedFilters(
+      ModuleNames.RESERVATION,
+      TableNames.RESERVATION,
+      this.tabFilterItems
+    );
   }
 
   registerListeners() {
@@ -308,17 +323,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      // this.tabFilterItems = this.tabFilterItems.map((tab) => {
-      //   return {
-      //     ...tab,
-      //     chips: tab.chips.map((chip) => {
-      //       return {
-      //         ...chip,
-      //         total: countObj[chip.value],
-      //       };
-      //     }),
-      //   };
-      // });
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         chip.total = countObj[chip.value];
       });
@@ -478,42 +482,44 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openDetailPage(event, rowData, tabKey?) {
+  openDetailPage(event, rowData?, tabKey?) {
     event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
-      dialogConfig
-    );
+    if (rowData) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.width = '100%';
+      const detailCompRef = this._modal.openDialog(
+        DetailsComponent,
+        dialogConfig
+      );
 
-    detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+      detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
+      tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
-    this.$subscription.add(
-      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // remove loader for detail close
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
+      this.$subscription.add(
+        detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+          // remove loader for detail close
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: 'DESC',
+                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false,
             {
-              order: 'DESC',
-              entityType: this.tabFilterItems[this.tabFilterIdx].value,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
-        detailCompRef.close();
-      })
-    );
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+          detailCompRef.close();
+        })
+      );
+    }
   }
 
   ngOnDestroy() {

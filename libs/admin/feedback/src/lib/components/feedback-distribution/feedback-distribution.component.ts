@@ -38,6 +38,16 @@ export class FeedbackDistributionComponent implements OnInit {
     Options: {
       responsive: true,
       cutoutPercentage: 80,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
     },
   };
 
@@ -55,6 +65,16 @@ export class FeedbackDistributionComponent implements OnInit {
     Options: {
       responsive: true,
       cutoutPercentage: 80,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
     },
   };
 

@@ -72,16 +72,6 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
   defaultFG = {
     id: ['', [Validators.required]],
     nameTitle: ['Mr.', [Validators.required]],
-    firstName: [
-      '',
-      [
-        Validators.required,
-        customPatternValid({
-          pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
-          msg: 'Spaces are not allowed',
-        }),
-      ],
-    ],
     label: [''],
     type: [''],
     role: [''],
@@ -92,64 +82,79 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     if (type === GuestTypes.primary) {
       fg = {
         ...this.defaultFG,
-        ...{
-          lastName: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
-                msg: 'Spaces are not allowed',
-              }),
-            ],
+        firstName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
           ],
-          mobileNumber: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: Regex.PHONE_REGEX,
-                msg: 'Please enter a valid mobile',
-              }),
-              Validators.minLength(10),
-            ],
+        ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
           ],
-          email: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: Regex.EMAIL_REGEX,
-                msg: 'Please enter a valid email',
-              }),
-            ],
+        ],
+        mobileNumber: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.PHONE_REGEX,
+              msg: 'Please enter a valid mobile',
+            }),
+            Validators.minLength(10),
           ],
-          nationality: ['', [Validators.required]],
-        },
+        ],
+        email: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.EMAIL_REGEX,
+              msg: 'Please enter a valid email',
+            }),
+          ],
+        ],
+        nationality: ['', [Validators.required]],
       };
     } else if (role === GuestRole.accompany || role === GuestRole.kids) {
       fg = {
         ...this.defaultFG,
-        ...{
-          age: ['', [Validators.required, Validators.min(1)]],
-          lastName: ['', []],
-        },
+        firstName: ['', []],
+        age: ['', []],
+        lastName: ['', []],
       };
     } else {
       fg = {
         ...this.defaultFG,
-        ...{
-          lastName: [
-            '',
-            [
-              Validators.required,
-              customPatternValid({
-                pattern: '^[a-zA-Z][a-zA-Z ]+[a-zA-Z]$',
-                msg: 'Spaces are not allowed',
-              }),
-            ],
+        firstName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
           ],
-        },
+        ],
+        lastName: [
+          '',
+          [
+            Validators.required,
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Spaces are not allowed',
+            }),
+          ],
+        ],
       };
     }
     return this._fb.group(fg);

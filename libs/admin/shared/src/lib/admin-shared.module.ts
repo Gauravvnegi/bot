@@ -15,7 +15,9 @@ import { NumberDirective } from './directives/number.directive';
 import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ModalDirective } from './directives/modal.directive';
+import { CardDirective } from './directives/card.directive';
+import { TableDirective } from './directives/table.directive';
+import { FeatureDirective } from './directives/feature.directive';
 
 @NgModule({
   imports: [
@@ -29,7 +31,7 @@ import { ModalDirective } from './directives/modal.directive';
     TabMenuModule,
     DropdownModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ],
   declarations: [
     DatatableComponent,
@@ -38,7 +40,9 @@ import { ModalDirective } from './directives/modal.directive';
     ComingSoonComponent,
     NumberDirective,
     MultipleDropdownComponent,
-    ModalDirective,
+    CardDirective,
+    TableDirective,
+    FeatureDirective,
   ],
   exports: [
     DatatableComponent,
@@ -52,7 +56,9 @@ import { ModalDirective } from './directives/modal.directive';
     DropdownModule,
     NumberDirective,
     MultipleDropdownComponent,
-    ModalDirective,
+    CardDirective,
+    TableDirective,
+    FeatureDirective,
   ],
 })
 export class AdminSharedModule {}

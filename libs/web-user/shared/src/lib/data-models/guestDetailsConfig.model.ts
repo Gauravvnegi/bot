@@ -55,7 +55,7 @@ export class GuestDetailDS implements Deserializable {
             ...guest,
             ...{
               type: GuestTypes.secondary,
-              label: 'Accompanied/Kids',
+              label: 'Accompanied / Kids',
               role: GuestRole.kids,
             },
           })

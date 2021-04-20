@@ -6,7 +6,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SignaturePadModule } from 'angular2-signaturepad';
-import { AccessTokenService } from 'libs/web-user/shared/src/lib/services/access-token.service';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
@@ -34,8 +33,6 @@ import { ButtonDirective } from './directives/button-renderer.directive';
 import { StepperContentRendererDirective } from './directives/stepper-content-renderer.directive';
 import { TemplateLoaderDirective } from './directives/template-loader.directive';
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
-import { TokenRetievalInterceptor } from './interceptors/token-retrieval.interceptor';
-import { TokenInterceptor } from './interceptors/token.interceptor';
 import { Temp000001RoutingModule } from './temp000001-routing.module';
 import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
@@ -43,6 +40,7 @@ import { Temp000001ButtonComponent } from './presentational/temp000001-button/te
 import { Temp000001InputPopupComponent } from './presentational/temp000001-input-popup/temp000001-input-popup.component';
 import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
 import { Temp000001SignatureCaptureWrapperComponent } from './presentational/temp000001-signature-capture-wrapper/temp000001-signature-capture-wrapper.component';
+import { TokenInterceptor } from 'libs/web-user/templates/temp000001/src/lib/interceptors/token.interceptor';
 
 @NgModule({
   imports: [
@@ -73,11 +71,11 @@ import { Temp000001SignatureCaptureWrapperComponent } from './presentational/tem
       useClass: TimezoneInterceptor,
       multi: true,
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenRetievalInterceptor,
-      multi: true,
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: TokenRetievalInterceptor,
+    //   multi: true,
+    // },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     ReservationService,
     HotelService,
@@ -94,7 +92,7 @@ import { Temp000001SignatureCaptureWrapperComponent } from './presentational/tem
     RegCardService,
     SummaryService,
     SignatureService,
-    AccessTokenService,
+    // AccessTokenService,
     AmenitiesService,
     ComplimentaryService,
     PaidService,

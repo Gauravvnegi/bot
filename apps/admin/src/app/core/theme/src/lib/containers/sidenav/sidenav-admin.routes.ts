@@ -5,12 +5,12 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/dashboard.svg',
   },
-  {
-    path: 'roles-permissions',
-    title: 'Roles & Permissions',
-    children: null,
-    url: 'assets/svg/Roles_&_Permission.svg',
-  },
+  // {
+  //   path: 'roles-permissions',
+  //   title: 'Roles & Permissions',
+  //   children: null,
+  //   url: 'assets/svg/Roles_&_Permission.svg',
+  // },
   {
     path: 'guest',
     title: 'Guest',
@@ -30,8 +30,8 @@ export const ADMIN_ROUTES = [
   //   url: 'assets/svg/notification.svg',
   // },
   {
-    path: 'feedbacks',
-    title: 'Feedbacks',
+    path: 'feedback',
+    title: 'Feedback',
     children: null,
     url: 'assets/svg/feedback-tab.svg',
   },
@@ -52,5 +52,14 @@ export const ADMIN_ROUTES = [
     title: 'Covid-19',
     children: null,
     url: 'assets/svg/virus.svg',
+  },
+];
+
+export const DEFAULT_ROUTES = [
+  {
+    path: 'subscription',
+    title: 'Subscription',
+    children: null,
+    url: 'assets/svg/subscription.svg',
   },
 ];

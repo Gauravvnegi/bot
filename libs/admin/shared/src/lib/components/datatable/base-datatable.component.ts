@@ -9,6 +9,7 @@ import * as FileSaver from 'file-saver';
 import { Paginator } from 'primeng/paginator';
 import * as moment from 'moment';
 import { get } from 'lodash';
+import { TableService } from '../../services/table.service';
 interface Import {
   name: string;
   code: string;
@@ -129,7 +130,10 @@ export class BaseDatatableComponent implements OnInit {
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
 
-  constructor(private _fb: FormBuilder) {
+  constructor(
+    private _fb: FormBuilder,
+    protected tabFilterService: TableService
+  ) {
     this.initTableFG();
   }
 
@@ -158,6 +162,14 @@ export class BaseDatatableComponent implements OnInit {
       //setting pagination
       this.totalRecords = this.dataSource.length;
     });
+  }
+
+  getSubscribedFilters(module, table, tabFilters) {
+    this.tabFilterItems = this.tabFilterService.getSubscribedFilters(
+      module,
+      table,
+      tabFilters
+    );
   }
 
   private paginate(event) {

@@ -24,7 +24,12 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <!-- <div class="header--text"> -->
-            <p class="heading">{{ tableName }}</p>
+            <div style="display: flex; align-items: center;">
+              <mat-icon (click)="goBack()" class="material-icons" matSuffix
+                >keyboard_backspace</mat-icon
+              >
+              <p class="heading">{{ tableName }}</p>
+            </div>
             <!-- <p class="selected">2 record(s) are selected</p> -->
 
             <div class="options">
@@ -116,7 +121,7 @@
             </mat-chip-list>
           </div>
 
-          {{ selectedQuickReplyFilters | json }}
+          <!-- {{ selectedQuickReplyFilters | json }} -->
           <!-- <div
             class="button__wrapper"
             *ngFor="let quickReplyType of quickReplyTypes"
@@ -225,7 +230,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row"(click)="openUserDetails(rowData)">
+    <tr class="data-table-row" (click)="openUserDetails(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -273,9 +278,10 @@
         <label (click)="onCheckboxClicked($event)" class="switch">
           <input type="checkbox" [checked]="rowData.status" />
           <mat-slide-toggle
-          [checked]="rowData.status"
-          (change)="updateRolesStatus($event, rowData )"
-          ></mat-slide-toggle>
+            [checked]="rowData.status"
+            (change)="updateRolesStatus($event, rowData)"
+          >
+          </mat-slide-toggle>
         </label>
       </td>
     </tr>

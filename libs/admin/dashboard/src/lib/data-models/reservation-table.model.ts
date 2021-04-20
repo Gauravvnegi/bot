@@ -168,12 +168,12 @@ export class Payment implements Deserializable {
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'totalAmount', get(input, ['totalAmount'])),
+      set({}, 'totalAmount', get(input, ['totalAmount']).toFixed(2)),
       set({}, 'taxAmount', get(input, ['taxAmount'])),
       set({}, 'totalDiscount', get(input, ['totalDiscount'])),
       set({}, 'subtotal', get(input, ['subtotal'])),
       set({}, 'paidAmount', get(input, ['paidAmount'])),
-      set({}, 'dueAmount', get(input, ['dueAmount'])),
+      set({}, 'dueAmount', get(input, ['dueAmount']).toFixed(2)),
       set({}, 'currency', get(input, ['currency']))
     );
     return this;
@@ -227,16 +227,8 @@ export class Booking implements Deserializable {
 
   getArrivalTimeStamp() {
     if (this.expectedArrivalTimeStamp == 0) {
-      console.log(
-        moment(this.arrivalTimeStamp).format('DD/M/YY HH:mm'),
-        this.bookingNumber
-      );
       return this.arrivalTimeStamp;
     } else {
-      console.log(
-        moment(this.expectedArrivalTimeStamp).format('DD/M/YY HH:mm'),
-        this.bookingNumber
-      );
       return this.expectedArrivalTimeStamp;
     }
   }
@@ -287,6 +279,17 @@ export class GuestType implements Deserializable {
           : null,
     };
   }
+
+  getPhoneNumbers() {
+    let phoneNumbers = this.primaryGuest.getPhoneNumber();
+    this.secondaryGuest.forEach((guest) => {
+      if (guest.getPhoneNumber() && guest.getPhoneNumber() !== ' ') {
+        phoneNumbers += `,\n${guest.getPhoneNumber()}`;
+      }
+    });
+
+    return phoneNumbers;
+  }
 }
 
 export class Guest implements Deserializable {
@@ -317,6 +320,12 @@ export class Guest implements Deserializable {
 
   getFullName() {
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  getPhoneNumber() {
+    return `${this.countryCode ? this.countryCode : ''} ${
+      this.phoneNumber ? this.phoneNumber : ''
+    }`;
   }
 }
 

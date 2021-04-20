@@ -17,7 +17,6 @@ export class FeatureDirective implements OnInit {
   checkSubscription(): void {
     this.feature += '.active';
     const subscription = this.subscriptionService.getModuleSubscription();
-    console.log(get(subscription, this.feature.split('.')));
     this.elementRef.nativeElement.style.display = get(
       subscription,
       this.feature.split('.'),

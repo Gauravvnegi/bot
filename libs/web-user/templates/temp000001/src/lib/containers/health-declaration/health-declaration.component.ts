@@ -290,7 +290,7 @@ export class HealthDeclarationComponent implements OnInit {
     } else if (config.component.label === 'Email ID') {
       config = this.setConfigValidation(config, Regex.EMAIL_REGEX);
     } else if (config.component.label === 'Phone No.') {
-      config = this.setConfigValidation(config, Regex.PHONE_REGEX);
+      config = this.setConfigValidation(config, Regex.PHONE10_REGEX);
     }
     return config;
   }

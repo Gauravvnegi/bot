@@ -291,6 +291,11 @@ export class HealthDeclarationComponent implements OnInit {
       config = this.setConfigValidation(config, Regex.EMAIL_REGEX);
     } else if (config.component.label === 'Phone No.') {
       config = this.setConfigValidation(config, Regex.PHONE10_REGEX);
+    } else if (
+      config.component.label === 'First Name' ||
+      config.component.label === 'Last Name'
+    ) {
+      config = this.setConfigValidation(config, Regex.NAME);
     }
     return config;
   }

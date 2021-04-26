@@ -51,12 +51,16 @@ export class LoadGuard implements CanActivate {
   validate(subscription, route): boolean {
     if (subscription && subscription.modules) {
       if (!subscription.modules[route.routeConfig.path].active) {
-        this.location.back();
+        this.goBack(route.routeConfig.path);
       }
       return subscription.modules[route.routeConfig.path].active;
     } else {
-      this.location.back();
+      this.goBack(route.routeConfig.path);
       return false;
     }
+  }
+
+  goBack(path) {
+    if (path !== 'dashboard') this.location.back();
   }
 }

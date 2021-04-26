@@ -8,13 +8,10 @@ before_script:
   - ls -l
   - ls | wc -l
 
-deploy to Development-web-user:
+deploy to NDevelopment-web-user:
   stage: deploy
-  #  variables:
-  #    ENVIRONMENT_NAME: development
-  #    TYPE: web-user
   environment:
-    name: development-web-user
+    name: ndevelopment-web-user
   when: manual
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
@@ -22,12 +19,12 @@ deploy to Development-web-user:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; ls $web_user_work_dir && netstat -tnlp"
   only:
-    - development
+    - dev-deploy
 
-deploy to Development-admin:
+deploy to NDevelopment-admin:
   stage: deploy
   environment:
-    name: development-admin
+    name: ndevelopment-admin
   when: manual
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
@@ -35,7 +32,7 @@ deploy to Development-admin:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
   only:
-    - development
+    - dev-deploy
 #backend_build:
 #  stage: build
 #  when: manual

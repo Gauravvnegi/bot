@@ -88,7 +88,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid last name',
             }),
           ],
         ],
@@ -98,7 +98,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid last name',
             }),
           ],
         ],
@@ -141,7 +141,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid last name',
             }),
           ],
         ],
@@ -151,7 +151,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid last name',
             }),
           ],
         ],

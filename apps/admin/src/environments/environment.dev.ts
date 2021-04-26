@@ -4,5 +4,5 @@ export const environment = {
   ...defaultEnvironment,
   production: true,
   name: 'dev',
-  base_url: 'https://api.botshot.in:8443',
+  base_url: 'https://devapi.botshot.in:8443',
 };

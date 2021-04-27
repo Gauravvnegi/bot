@@ -15,10 +15,29 @@
       color: #484848;
       font-weight: 600;
       margin-bottom: 10px;
-      &__image {
-        height: 11px;
-        width: 12px;
-        margin: 0 3px;
+      &__tooltip {
+        position: relative;
+        display: inline-block;
+        &__image {
+          height: 11px;
+          width: 12px;
+          margin: 0 3px;
+        }
+        &__text {
+          visibility: hidden;
+          width: 220px;
+          font: normal normal normal 12px/17px Roboto;
+          font-weight: 200;
+          background-color: black;
+          color: #fff;
+          // text-align: center;
+          border-radius: 6px;
+          padding: 10px;
+
+          /* Position the tooltip */
+          position: absolute;
+          z-index: 1;
+        }
       }
     }
     &__details {
@@ -66,4 +85,8 @@
       }
     }
   }
+}
+
+.card__title__tooltip:hover .card__title__tooltip__text {
+  visibility: visible;
 }

@@ -124,22 +124,39 @@
         <div style="width: 40%;" class="feild">
           <mat-label class="mat-label">Phone No. :</mat-label>
           <mat-form-field class="phone-no-dropdown">
-            <mat-select formControlName="cc" (selectionChange)="change($event)" (openedChange)="openedChange($event)">
+            <mat-select
+              formControlName="cc"
+              (selectionChange)="change($event)"
+              (openedChange)="openedChange($event)"
+            >
               <!-- <option value="" selected>None</option> -->
-              <ng-container *ngIf="!isOptionsOpenedChanged; else optionsChanged">
-                <mat-option *ngFor="let country of countries; trackBy: trackByFn" [value]="country.value">{{
-                  country.value }}</mat-option>
+              <ng-container
+                *ngIf="!isOptionsOpenedChanged; else optionsChanged"
+              >
+                <mat-option
+                  *ngFor="let country of countries; trackBy: trackByFn"
+                  [value]="country.value"
+                  >{{ country.value }}</mat-option
+                >
               </ng-container>
 
               <ng-template #optionsChanged>
-                <ng-container *ngIf="!(onOpenedChange | async); else opendOptions">
-                  <mat-option *ngFor="let country of countries; trackBy: trackByFn" [value]="country.value">{{
-                    country.value }}</mat-option>
+                <ng-container
+                  *ngIf="!(onOpenedChange | async); else opendOptions"
+                >
+                  <mat-option
+                    *ngFor="let country of countries; trackBy: trackByFn"
+                    [value]="country.value"
+                    >{{ country.value }}</mat-option
+                  >
                 </ng-container>
 
                 <ng-template #opendOptions>
-                  <mat-option *ngFor="let country of countries; trackBy: trackByFn" [value]="country.value">{{
-                    country.label }}</mat-option>
+                  <mat-option
+                    *ngFor="let country of countries; trackBy: trackByFn"
+                    [value]="country.value"
+                    >{{ country.label }}</mat-option
+                  >
                 </ng-template>
               </ng-template>
             </mat-select>
@@ -251,7 +268,7 @@
                 <img src="assets/svg/Manage.svg" />
               </div>
             </div>
-            <div class="box">
+            <!-- <div class="box">
               <p class="label">Actions(User Submission)</p>
               <p class="paragraph">
                 Approve/Reject (By Default includes sensitive info)o
@@ -259,7 +276,7 @@
               <div class="float-box">
                 <img src="assets/svg/Action.svg" />
               </div>
-            </div>
+            </div> -->
           </div>
           <div formArrayName="permissionConfigs">
             <div
@@ -289,7 +306,7 @@
                         : false
                     "
                   ></mat-checkbox>
-                  <mat-checkbox
+                  <!-- <mat-checkbox
                     formControlName="action"
                     [checked]="
                       userPermissionFG.get('permissions').get('action').value ==
@@ -297,7 +314,7 @@
                         ? true
                         : false
                     "
-                  ></mat-checkbox>
+                  ></mat-checkbox> -->
                 </div>
               </div>
             </div>
@@ -312,7 +329,7 @@
       <div class="permission-button-wrapper">
         <button (click)="savePermission()">
           <i *ngIf="isSavingPermissions" class="fa fa-spinner fa-spin"></i>
-          {{isSavingPermissions ? "Saving User Permissions" : "Save"}}
+          {{ isSavingPermissions ? 'Saving User Permissions' : 'Save' }}
         </button>
       </div>
     </div>

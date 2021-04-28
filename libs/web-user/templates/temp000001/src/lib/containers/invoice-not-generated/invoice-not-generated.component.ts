@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs';
   templateUrl: './invoice-not-generated.component.html',
   styleUrls: ['./invoice-not-generated.component.scss'],
 })
-
 export class InvoiceNotGeneratedComponent implements OnInit {
   private $subscription = new Subscription();
   constructor(
@@ -33,6 +32,7 @@ export class InvoiceNotGeneratedComponent implements OnInit {
   }
 
   getReservationDetails() {
+    this._templateLoadingService.isTemplateLoading$.next(true);
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)

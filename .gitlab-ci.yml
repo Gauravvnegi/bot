@@ -8,10 +8,9 @@ before_script:
   - ls -l
   - ls | wc -l
 
-deploy to NDevelopment-web-user:
+deploy to Stage-web-user:
   stage: deploy
-  environment:
-    name: ndevelopment-web-user
+  environment: stage-web-user
   when: manual
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
@@ -19,12 +18,11 @@ deploy to NDevelopment-web-user:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; ls $web_user_work_dir && netstat -tnlp"
   only:
-    - dev-deploy
+    - stage
 
-deploy to NDevelopment-admin:
+deploy to Stage-admin:
   stage: deploy
-  environment:
-    name: ndevelopment-admin
+  environment: stage-admin
   when: manual
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
@@ -32,37 +30,29 @@ deploy to NDevelopment-admin:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
   only:
-    - dev-deploy
-#backend_build:
-#  stage: build
-#  when: manual
-#  only:
-#    changes:
-#      - "backend/**/*"
-#  script:
-#    - docker login -u $DOCKER_USER -p $ACCESS_TOKEN $CI_REGISTRY
-#    - cd backend
-#    - docker build -f Dockerfile --tag latest .
-#    - docker push latest
+    - stage
 
-#stages:
-#    - trigger-child-pipelines
-#when: manual
-#web-client:
-#    stage: trigger-child-pipeline
-#    trigger:
-#        include: web-client/.gitlab-ci.yml
-#        strategy: depend
-#    only:
-#        changes:
-#            - web-client/**/*
 
-#.backend-setup:
-#    before_script:
-#        - cd backend
+deploy to Production-web-user:
+  stage: deploy
+  environment: web-user-prod
+  when: manual
+  script:
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$web_user_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; ls $web_user_work_dir && netstat -tnlp"
+  only:
+    - stage
 
-#test:
-#    extends: .backend-setup
-#    stage: test
-#    script:
-#        - mvn test
+deploy to Production-admin:
+  stage: deploy
+  environment: admin-prod
+  when: manual
+  script:
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
+  only:
+    - stage

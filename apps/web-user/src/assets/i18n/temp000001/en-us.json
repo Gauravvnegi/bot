@@ -69,7 +69,8 @@
       "CHECKIN_ALREADY_COMPLETED": "Checkin Already Completed.",
       "INVALID_PARAMETERS": "Error while processing. Recheck Parameters.",
       "SERVER_ERROR": "Server Issue. Try again in sometime.",
-      "DOCUMENT_NULL": "INVOICE is not present"
+      "DOCUMENT_NULL": "INVOICE is not present",
+      "PMS_EXCEPTION": "We are experiencing technical difficulties regarding your request , would you like to try in sometime."
     }
   }
 }

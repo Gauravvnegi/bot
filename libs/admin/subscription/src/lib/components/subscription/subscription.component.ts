@@ -4,7 +4,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import {
   PlanUsage,
   PlanUsageCharts,
@@ -77,15 +77,27 @@ export class SubscriptionComponent implements OnInit {
     };
 
     this.$subscription.add(
-      this.subscriptionService.getSubscriptionUsage(hotelId, config).subscribe(
-        (response) => {
-          this.loading = false;
-          this.planUsageChartData = new PlanUsageCharts().deserialize(response);
-        },
-        ({ error }) => {
-          this.snackBarService.openSnackBarAsText(error.message);
-        }
-      )
+      forkJoin([
+        this.subscriptionService.getSubscriptionUsage(hotelId, config),
+        this.subscriptionService.getSubscriptionUsagePercentage(
+          hotelId,
+          config
+        ),
+      ]).subscribe((response) => {
+        this.loading = false;
+        this.planUsageChartData = new PlanUsageCharts().deserialize(
+          response[0]
+        );
+        console.log(response[1]);
+      })
+    );
+  }
+
+  getSubscriptionPlanUsagePercentage(hotelId, config) {
+    this.$subscription.add(
+      this.subscriptionService
+        .getSubscriptionUsagePercentage(hotelId, config)
+        .subscribe((response) => console.log(response))
     );
   }
 }

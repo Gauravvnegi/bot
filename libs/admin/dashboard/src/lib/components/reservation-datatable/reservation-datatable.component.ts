@@ -60,9 +60,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       sortType: 'string',
     },
     {
-      field: `guests.getPhoneNumbers()`,
+      field: `guests.primaryGuest.getPhoneNumber()`,
       header: 'Phone No.',
-      isSort: false,
+      isSort: true,
       sortType: 'string',
     },
     {

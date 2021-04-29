@@ -102,7 +102,7 @@
 //   width: 100%;
 // }
 
-.heading__tooltip {
+.heading__label__tooltip {
   position: relative;
   display: inline-block;
   &:hover {
@@ -133,6 +133,6 @@
   }
 }
 
-.heading__tooltip:hover .heading__tooltip__text {
+.heading__label__tooltip:hover .heading__label__tooltip__text {
   visibility: visible;
 }

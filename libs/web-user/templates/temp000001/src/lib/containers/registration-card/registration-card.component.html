@@ -8,19 +8,21 @@
         <h3>{{ settings.modal.title }}</h3>
       </div>
       <div class="close_wrapper">
-        <span aria-hidden="true" class="close" (click)="onClose()">&times;</span>
+        <span aria-hidden="true" class="close" (click)="onClose()"
+          >&times;</span
+        >
       </div>
     </div>
     <div [ngClass]="settings.modal.style.body">
-      <div [ngClass]="settings.modal.style.pdfHeader">
-        <!-- <img [src]="" /> -->
-        <div></div>
-        <a [href]="regCard.src" [download]="regCard.fileName">
+      <!-- <div [ngClass]="settings.modal.style.pdfHeader"> -->
+      <!-- <img [src]="" /> -->
+      <!-- <div></div> -->
+      <!-- <a [href]="regCard.src" [download]="regCard.fileName">
           <mat-icon style="margin-right: 10px;">
             {{ settings.modal.pdf.icon }}
           </mat-icon>
-        </a>
-      </div>
+        </a> -->
+      <!-- </div> -->
       <div [ngClass]="settings.styles.regCardContainer">
         <pdf-viewer
           [src]="settings.regcardUrl"

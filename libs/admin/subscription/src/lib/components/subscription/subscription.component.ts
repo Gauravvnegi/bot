@@ -79,16 +79,14 @@ export class SubscriptionComponent implements OnInit {
     this.$subscription.add(
       forkJoin([
         this.subscriptionService.getSubscriptionUsage(hotelId, config),
-        this.subscriptionService.getSubscriptionUsagePercentage(
-          hotelId,
-          config
-        ),
+        // this.subscriptionService.getSubscriptionUsagePercentage(
+        //   hotelId,
+        //   config
+        // ),
       ]).subscribe((response) => {
         this.loading = false;
-        this.planUsageChartData = new PlanUsageCharts().deserialize(
-          response[0]
-        );
-        console.log(response[1]);
+        this.planUsageChartData = new PlanUsageCharts().deserialize(response);
+        // console.log(response[1]);
       })
     );
   }

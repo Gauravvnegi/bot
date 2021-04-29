@@ -85,7 +85,10 @@ export class SubscriptionComponent implements OnInit {
         // ),
       ]).subscribe((response) => {
         this.loading = false;
-        this.planUsageChartData = new PlanUsageCharts().deserialize(response);
+        console.log(response);
+        this.planUsageChartData = new PlanUsageCharts().deserialize(
+          response[0]
+        );
         // console.log(response[1]);
       })
     );

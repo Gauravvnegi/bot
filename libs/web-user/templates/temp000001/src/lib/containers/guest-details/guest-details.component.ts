@@ -88,7 +88,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Please enter a valid last name',
+              msg: 'Please enter a valid first name',
             }),
           ],
         ],
@@ -141,7 +141,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Please enter a valid last name',
+              msg: 'Please enter a valid first name',
             }),
           ],
         ],

@@ -107,7 +107,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
           [
             Validators.required,
             customPatternValid({
-              pattern: Regex.PHONE_REGEX,
+              pattern: Regex.PHONE10_REGEX,
               msg: 'Please enter a valid mobile',
             }),
             Validators.minLength(10),

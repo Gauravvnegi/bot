@@ -88,8 +88,10 @@
     }
   }
   &__link {
-    font-size: 12px;
-    font-weight: 500;
+    text-align: left;
+    font: normal normal normal 12px/16px Roboto;
+    letter-spacing: 0.24px;
+    color: #6d7580;
   }
 }
 :host ::ng-deep .channels {

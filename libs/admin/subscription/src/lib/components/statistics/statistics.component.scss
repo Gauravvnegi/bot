@@ -80,6 +80,11 @@
     &__diff {
       font-size: 12px;
       font-weight: 500;
+      img {
+        width: 8px;
+        height: 10px;
+        margin: 0 5px;
+      }
     }
   }
   &__link {

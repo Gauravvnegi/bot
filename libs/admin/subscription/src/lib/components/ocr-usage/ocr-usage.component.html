@@ -33,8 +33,18 @@
     <div class="details__stat__value">
       {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
     </div>
-    <div class="details__stat__diff">
+    <div
+      class="details__stat__diff"
+      [style.color]="usage >= 0 ? '#52B33F' : '#CC052B'"
+    >
       ({{ usage < 0 ? usage * -1 : usage }}%)
+      <img
+        [src]="
+          usage >= 0
+            ? 'assets/svg/up-percentage.svg'
+            : 'assets/svg/down-percentage.svg'
+        "
+      />
     </div>
   </div>
   <div class="details__link">

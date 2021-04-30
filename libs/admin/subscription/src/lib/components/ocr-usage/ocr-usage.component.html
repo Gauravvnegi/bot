@@ -33,7 +33,9 @@
     <div class="details__stat__value">
       {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
     </div>
-    <div class="details__stat__diff">(25%)</div>
+    <div class="details__stat__diff">
+      ({{ usage < 0 ? usage * -1 : usage }}%)
+    </div>
   </div>
   <div class="details__link">
     in 30 days

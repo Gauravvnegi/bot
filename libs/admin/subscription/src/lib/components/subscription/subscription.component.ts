@@ -8,6 +8,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import {
   PlanUsage,
   PlanUsageCharts,
+  PlanUsagePercentage,
 } from '../../data-models/subscription.model';
 
 @Component({
@@ -23,6 +24,7 @@ export class SubscriptionComponent implements OnInit {
   hotelId: string;
   subscriptionData;
   planUsageChartData;
+  planUsagePercentage: PlanUsagePercentage;
 
   constructor(
     private _globalFilterService: GlobalFilterService,
@@ -79,17 +81,18 @@ export class SubscriptionComponent implements OnInit {
     this.$subscription.add(
       forkJoin([
         this.subscriptionService.getSubscriptionUsage(hotelId, config),
-        // this.subscriptionService.getSubscriptionUsagePercentage(
-        //   hotelId,
-        //   config
-        // ),
+        this.subscriptionService.getSubscriptionUsagePercentage(
+          hotelId,
+          config
+        ),
       ]).subscribe((response) => {
         this.loading = false;
-        console.log(response);
         this.planUsageChartData = new PlanUsageCharts().deserialize(
           response[0]
         );
-        // console.log(response[1]);
+        this.planUsagePercentage = new PlanUsagePercentage().deserialize(
+          response[1]
+        );
       })
     );
   }

@@ -104,6 +104,23 @@ export class PlanUsageCharts {
   }
 }
 
+export class PlanUsagePercentage {
+  guestUsagePercentage: number;
+  ocrUsagePercentage: number;
+  userUsagePercentage: number;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'guestUsagePercentage', get(input, ['guestUsagePercentage'])),
+      set({}, 'ocrUsagePercentage', get(input, ['ocrUsagePercentage'])),
+      set({}, 'userUsagePercentage', get(input, ['userUsagePercentage']))
+    );
+
+    return this;
+  }
+}
+
 export class GraphData {
   label: string;
   value: number;

@@ -23,41 +23,53 @@
     </div>
   </div> -->
 <!-- <div class="charts"> -->
-  <div class="line-chart">
-    <ng-container *ngIf="chartData; else noData">
-      <canvas
-        baseChart
-        class="line-chart__canvas"
-        [datasets]="chart.chartData"
-        [labels]="chart.chartLabels"
-        [options]="chart.chartOptions"
-        [colors]="chart.chartColors"
-        [legend]="chart.chartLegend"
-        [chartType]="chart.chartType"
-      >
-      </canvas>
-    </ng-container>
-    <ng-template #noData>
-      <canvas
-        baseChart
-        class="line-chart__canvas"
-        [datasets]="chart.chartData"
-        [labels]="chart.chartLabels"
-        [options]="chart.chartOptions"
-        [colors]="chart.chartColors"
-        [legend]="chart.chartLegend"
-        [chartType]="chart.chartType"
-      >
-      </canvas>
-    </ng-template>
-  </div>
+<div class="line-chart">
+  <ng-container *ngIf="chartData; else noData">
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+  </ng-container>
+  <ng-template #noData>
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+  </ng-template>
+</div>
 <!-- </div> -->
 <div class="details">
   <div class="details__stat">
     <div class="details__stat__value">
       {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
     </div>
-    <div class="details__stat__diff">(25%)</div>
+    <div
+      class="details__stat__diff"
+      [style.color]="usage >= 0 ? '#52B33F' : '#CC052B'"
+    >
+      ({{ usage < 0 ? usage * -1 : usage }}%)
+      <img
+        [src]="
+          usage >= 0
+            ? 'assets/svg/up-percentage.svg'
+            : 'assets/svg/down-percentage.svg'
+        "
+      />
+    </div>
   </div>
   <div class="details__link">
     in 30 days

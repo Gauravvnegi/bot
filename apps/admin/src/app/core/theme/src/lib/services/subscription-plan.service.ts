@@ -39,4 +39,10 @@ export class SubscriptionPlanService extends ApiService {
       `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
     );
   }
+
+  getSubscriptionUsagePercentage(hotelId: string, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/subscriptions/usage/percentage${config.queryObj}`
+    );
+  }
 }

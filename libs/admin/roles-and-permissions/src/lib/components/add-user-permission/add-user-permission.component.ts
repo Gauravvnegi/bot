@@ -147,12 +147,12 @@ export class AddUserPermissionComponent implements OnInit {
                 disabled: config.permissions.view == -1 ? true : false,
               },
             ],
-            action: [
-              {
-                value: config.permissions.action <= 0 ? 0 : 1,
-                disabled: config.permissions.action == -1 ? true : false,
-              },
-            ],
+            // action: [
+            //   {
+            //     value: config.permissions.action <= 0 ? 0 : 1,
+            //     disabled: config.permissions.action == -1 ? true : false,
+            //   },
+            // ],
           }),
         })
       );

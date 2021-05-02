@@ -15,10 +15,35 @@
       color: #484848;
       font-weight: 600;
       margin-bottom: 10px;
-      &__image {
-        height: 11px;
-        width: 12px;
-        margin: 0 3px;
+      &__tooltip {
+        position: relative;
+        display: inline-block;
+        &:hover {
+          .card__title__tooltip__text {
+            display: block;
+          }
+        }
+        &__image {
+          height: 11px;
+          width: 12px;
+          margin: 0 3px;
+        }
+        &__text {
+          font-size: 12px;
+          font-weight: 200;
+          background-color: white;
+          color: #484848;
+          border-radius: 6px;
+          min-width: 14vw;
+          padding: 10px;
+          position: absolute;
+          z-index: 3;
+          top: 27px;
+          left: -5vw;
+          display: none;
+          border: 1px solid rgba(158, 207, 250, 0.3);
+          box-shadow: 0px 3px 9px #0000000d;
+        }
       }
     }
     &__details {
@@ -66,4 +91,8 @@
       }
     }
   }
+}
+
+.card__title__tooltip:hover .card__title__tooltip__text {
+  visibility: visible;
 }

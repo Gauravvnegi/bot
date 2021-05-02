@@ -10,6 +10,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 export class OcrUsageComponent implements OnInit {
   @Input() data;
   @Input() chartData;
+  @Input() usage: number;
   chart: any = {
     chartData: [
       {

@@ -11,6 +11,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 export class UsersUsageComponent implements OnInit {
   @Input() data;
   @Input() chartData;
+  @Input() usage: number;
   chart: any = {
     chartData: [
       {

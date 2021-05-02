@@ -256,9 +256,13 @@
             <input
               pInputText
               type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+              (input)="
+                onFilterTypeTextChange(
+                  $event.target.value,
+                  'guests.primaryGuest.phoneNumber'
+                )
+              "
               class="p-column-filter"
-              disabled="true"
             />
           </th>
           <th class="table-search-head">
@@ -393,7 +397,13 @@
             </div>
           </td>
           <td class="package" (click)="openDetailPage($event)">
-            <span *ngIf="rowData.guests.getPhoneNumbers().length && rowData.guests.getPhoneNumbers() !== ' '; else emptyCell">
+            <span
+              *ngIf="
+                rowData.guests.getPhoneNumbers().length &&
+                  rowData.guests.getPhoneNumbers() !== ' ';
+                else emptyCell
+              "
+            >
               <ng-container
                 *ngIf="
                   rowData.guests.getPhoneNumbers().includes(',');
@@ -401,7 +411,9 @@
                 "
               >
                 <ng-container
-                  *ngFor="let link of rowData.guests.getPhoneNumbers().split(',\n')"
+                  *ngFor="
+                    let link of rowData.guests.getPhoneNumbers().split(',\n')
+                  "
                 >
                   <a href="tel:{{ link }}" *ngIf="link" class="email">
                     <u> {{ link }}</u> </a
@@ -409,9 +421,12 @@
                 </ng-container>
               </ng-container>
               <ng-template #singlePhone>
-                <a href="tel:{{ rowData.guests.getPhoneNumbers() }}" class="email">
-                  <u> {{ rowData.guests.getPhoneNumbers() }}</u> </a
+                <a
+                  href="tel:{{ rowData.guests.getPhoneNumbers() }}"
+                  class="email"
                 >
+                  <u> {{ rowData.guests.getPhoneNumbers() }}</u>
+                </a>
               </ng-template>
             </span>
           </td>

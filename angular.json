@@ -333,7 +333,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "36kb",
-                  "maximumError": "10kb"
+                  "maximumError": "36kb"
                 }
               ]
             }

@@ -88,7 +88,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid first name',
             }),
           ],
         ],
@@ -98,7 +98,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid last name',
             }),
           ],
         ],
@@ -107,7 +107,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
           [
             Validators.required,
             customPatternValid({
-              pattern: Regex.PHONE_REGEX,
+              pattern: Regex.PHONE10_REGEX,
               msg: 'Please enter a valid mobile',
             }),
             Validators.minLength(10),
@@ -141,7 +141,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid first name',
             }),
           ],
         ],
@@ -151,7 +151,7 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
             Validators.required,
             customPatternValid({
               pattern: Regex.NAME,
-              msg: 'Spaces are not allowed',
+              msg: 'Please enter a valid last name',
             }),
           ],
         ],
@@ -160,9 +160,10 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     return this._fb.group(fg);
   }
 
-  setFieldConfiguration() {
+  setFieldConfiguration(disable) {
     return this._guestDetailService.setFieldConfigForGuestDetails({
       hotelNationality: this._hotelService.hotelConfig.address.countryCode,
+      disable: disable,
     });
   }
 
@@ -184,7 +185,11 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     this._guestDetailService.guestDetails.guests.forEach((guestDetail) => {
       let controlFA = this.guestDetailsForm.get('guests') as FormArray;
       controlFA.push(this.getGuestFG(guestDetail.type, guestDetail.role));
-      this.guestFieldConfig.push(this.setFieldConfiguration());
+      this.guestFieldConfig.push(
+        this.setFieldConfiguration(
+          guestDetail.type === GuestTypes.primary ? true : false
+        )
+      );
     });
   }
 

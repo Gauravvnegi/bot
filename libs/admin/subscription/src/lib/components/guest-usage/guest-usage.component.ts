@@ -12,6 +12,7 @@ import { get } from 'lodash';
 export class GuestUsageComponent implements OnInit {
   @Input() data;
   @Input() chartData;
+  @Input() usage: number;
   subscriptionData;
   chart: any = {
     chartData: {

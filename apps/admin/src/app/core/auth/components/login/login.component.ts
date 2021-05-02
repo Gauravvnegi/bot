@@ -27,7 +27,11 @@ export class LoginComponent implements OnInit {
     this.initLoginForm();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this._authService.isAuthenticated()) {
+      this._router.navigate(['/pages/dashboard']);
+    }
+  }
 
   initLoginForm() {
     this.loginForm = this._fb.group({

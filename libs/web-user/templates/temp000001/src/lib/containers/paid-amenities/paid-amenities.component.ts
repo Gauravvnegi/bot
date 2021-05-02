@@ -38,7 +38,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     slidesToShow: 3,
     slidesToScroll: 1,
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 100,
     autoplay: true,
     method: {},
@@ -119,7 +119,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       serviceFormGroup,
       this.selectedSlide
     );
-    const classes = e.children && e.children[0].attributes[1].nodeValue.split(' ');
+    const classes =
+      e.children && e.children[0].attributes[1].nodeValue.split(' ');
     if (classes && !classes.includes('active')) {
       e.children[0].attributes[1].nodeValue =
         e.children[0].attributes[1].nodeValue + ' active';

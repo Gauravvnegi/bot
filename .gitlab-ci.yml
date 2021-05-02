@@ -43,7 +43,7 @@ deploy to Production-web-user:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; ls $web_user_work_dir && netstat -tnlp"
   only:
-    - stage
+    - prod-deploy
 
 deploy to Production-admin:
   stage: deploy
@@ -55,4 +55,4 @@ deploy to Production-admin:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
   only:
-    - stage
+    - prod-deploy

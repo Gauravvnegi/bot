@@ -4,5 +4,5 @@ export const environment = {
   ...defaultEnvironment,
   name: 'prod',
   production: true,
-  base_url: 'https://prodapi.botshot.in:8443',
+  base_url: 'https://api.botshot.in:8443',
 };

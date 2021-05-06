@@ -74,6 +74,8 @@
     "ngx-slick-carousel": "^0.5.1",
     "ngx-take-until-destroy": "^5.4.0",
     "ngx-translate-multi-http-loader": "^3.0.0",
+    "npx": "^10.2.2",
+    "nx": "^12.1.1",
     "primeicons": "^4.0.0",
     "primeng": "^10.0.0-rc.3",
     "rxjs": "^6.5.5",

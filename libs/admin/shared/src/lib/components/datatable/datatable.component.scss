@@ -293,9 +293,11 @@
 :host ::ng-deep .mat-chip-list-wrapper {
   overflow: auto;
   white-space: nowrap;
+
   overflow-x: scroll;
   width: 68vw;
   display: block;
+
   padding: 10px;
   &::-webkit-scrollbar {
     height: 6px;
@@ -451,6 +453,8 @@ th {
 }
 
 :host ::ng-deep .mat-chip {
+  border: 1px solid !important;
+  // background-color: white !important;
   display: inline-block;
   text-align: center;
   font-weight: 400;

@@ -36,7 +36,7 @@ export class GuestDetailsService extends ApiService {
 
     guestDetailsFieldSchema['salutation'] = new FieldSchema().deserialize({
       label: ' ',
-      disable: config.disable,
+      disable: config.isPrimary ? false : config.disable,
       options: [
         { key: 'Mr.', value: 'Mr.' },
         { key: 'Ms.', value: 'Ms.' },
@@ -54,18 +54,18 @@ export class GuestDetailsService extends ApiService {
     });
     guestDetailsFieldSchema['email'] = new FieldSchema().deserialize({
       label: 'Email ID',
-      disable: config.disable,
+      disable: config.isPrimary ? false : config.disable,
       icon: 'email',
     });
     guestDetailsFieldSchema['phone'] = new FieldSchema().deserialize({
       label: 'Phone No.',
-      disable: config.disable,
+      disable: config.isPrimary ? false : config.disable,
       icon: 'call',
     });
 
     guestDetailsFieldSchema['country'] = new FieldSchema().deserialize({
       label: ' ',
-      disable: config.disable,
+      disable: config.isPrimary ? false : config.disable,
       isOptionsOpenedChanged: true,
       optionsOpened: new Country().getCountryListWithDialCode([
         config.hotelNationality,

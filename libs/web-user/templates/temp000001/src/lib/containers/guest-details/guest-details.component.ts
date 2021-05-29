@@ -160,10 +160,11 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     return this._fb.group(fg);
   }
 
-  setFieldConfiguration(disable) {
+  setFieldConfiguration(disable,isPrimary) {
     return this._guestDetailService.setFieldConfigForGuestDetails({
       hotelNationality: this._hotelService.hotelConfig.address.countryCode,
       disable: disable,
+      isPrimary
     });
   }
 
@@ -187,7 +188,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
       controlFA.push(this.getGuestFG(guestDetail.type, guestDetail.role));
       this.guestFieldConfig.push(
         this.setFieldConfiguration(
-          guestDetail.type === GuestTypes.primary ? true : false
+          guestDetail.type === GuestTypes.primary ? true : false,
+          guestDetail.type === GuestTypes.primary ? true : false,
         )
       );
     });

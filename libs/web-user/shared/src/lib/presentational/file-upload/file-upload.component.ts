@@ -42,8 +42,9 @@ export class FileUploadComponent extends BaseComponent {
       const splitVal = file.name.split('.');
       const extension = splitVal[splitVal.length - 1];
       if (
-        this.checkFileType(extension) &&
-        fileSize <= +this.fileConfig.maxFileSize
+        this.checkFileType(extension)
+        // &&
+        // fileSize <= +this.fileConfig.maxFileSize
       ) {
         reader.onload = (_event) => {
           const result: string = reader.result as string;

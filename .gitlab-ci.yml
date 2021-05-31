@@ -32,8 +32,9 @@ deploy to NDevelopment-admin:
     - ls 
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
-    #- scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
-    #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
+    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h" 
+    #sh -x admin.sh"
     #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
   only:
     - dev-deploy

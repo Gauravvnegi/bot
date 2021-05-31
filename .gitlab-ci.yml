@@ -13,6 +13,8 @@ deploy to NDevelopment-web-user:
   environment:
     name: ndevelopment-web-user
   when: manual
+  before_script:
+    - ls 
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
     - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$web_user_work_dir"
@@ -26,11 +28,13 @@ deploy to NDevelopment-admin:
   environment:
     name: ndevelopment-admin
   when: manual
+  before_script:
+    - ls 
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
-    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
+    #- scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
+    #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"
+    #- ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; ls $admin_work_dir && netstat -tnlp"
   only:
     - dev-deploy
 #backend_build:

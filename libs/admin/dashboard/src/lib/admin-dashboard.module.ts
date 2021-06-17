@@ -19,6 +19,7 @@ import { DepartureStatisticsComponent } from './components/departure-statistics/
 import { ReservationDatatableComponent } from './components/reservation-datatable/reservation-datatable.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReservationDatatableModalComponent } from './components/reservation-datatable-modal/reservation-datatable-modal.component';
+import { BookingStatusComponent } from './components/booking-status/booking-status.component';
 
 export const adminDashboardRoutes: Route[] = [
   {
@@ -52,6 +53,7 @@ export const adminDashboardRoutes: Route[] = [
     DepartureStatisticsComponent,
     ReservationDatatableComponent,
     ReservationDatatableModalComponent,
+    BookingStatusComponent,
   ],
   exports: [DashboardComponent],
   providers: [StatisticsService],

@@ -14,26 +14,32 @@
       [departures]="statistics.departures"
     ></hospitality-bot-departure-statistics>
   </div>
-  <div class="stats" featureSubscribed [feature]="'modules.request'">
+  <!-- <div class="stats" featureSubscribed [feature]="'modules.request'">
     <hospitality-bot-inhouse-request-statistics
       [inhouseRequest]="statistics.inhouseRequest"
     ></hospitality-bot-inhouse-request-statistics>
-  </div>
+  </div> -->
   <!-- <div class="stats change-height">
     <hospitality-bot-checkin-statistics
       [expectedCheckIn]="statistics.expressCheckIn"
     ></hospitality-bot-checkin-statistics>
   </div> -->
-  <div
+  <!-- <div
     class="stats change-width"
     cardSubscribed
     [path]="'dashboard.cards.RESERVATION'"
   >
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
-  </div>
+  </div> -->
   <!-- <div class="stats change-height">
     <hospitality-bot-checkout-statistics
       [expectedCheckout]="statistics.expressCheckOut"
     ></hospitality-bot-checkout-statistics>
   </div> -->
+  <div class="stats inc-width-xl change-height">
+    <hospitality-bot-booking-status></hospitality-bot-booking-status>
+  </div>
+  <div class="stats inc-width-l change-height">
+    <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
+  </div>
 </div>

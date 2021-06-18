@@ -116,25 +116,29 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   }
 
   initCheckinChart() {
+    this.checkinChart.Labels = [];
+    this.checkinChart.Data[0] = [];
+    this.checkinChart.Colors = [];
     if (this.statData.checkin.totalCount) {
-      this.checkinChart.Labels = ['Check-In', 'Express Check-In'];
-      this.checkinChart.Data[0] = [
-        this.statData.checkin.checkIn,
-        this.statData.checkin.expressCheckIn,
-      ];
-      this.checkinChart.Colors = [
-        {
+      if (this.statData.checkin.checkIn) {
+        this.checkinChart.Labels.push('Check-In');
+        this.checkinChart.Data[0].push(this.statData.checkin.checkIn);
+        this.checkinChart.Colors.push({
           backgroundColor: ['#0ea47a'],
           borderColor: ['#0ea47a'],
-        },
-        {
+        });
+      }
+      if (this.statData.checkin.expressCheckIn) {
+        this.checkinChart.Labels.push('Express Check-In');
+        this.checkinChart.Data[0].push(this.statData.checkin.expressCheckIn);
+        this.checkinChart.Colors.push({
           backgroundColor: ['#15eda3'],
           borderColor: ['#15eda3'],
-        },
-      ];
+        });
+      }
     } else {
       this.checkinChart.Labels = ['No Data'];
-      this.checkinChart.Data = [[100]];
+      this.checkinChart.Data[0] = [100];
       this.checkinChart.Colors = [
         {
           backgroundColor: ['#D5D1D1'],
@@ -145,25 +149,29 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
   }
 
   initCheckoutChart() {
-    if (this.statData.checkin.totalCount) {
-      this.checkoutChart.Labels = ['Check-Out', 'Express Check-Out'];
-      this.checkoutChart.Data[0] = [
-        this.statData.checkin.checkout,
-        this.statData.checkin.expressCheckout,
-      ];
-      this.checkoutChart.Colors = [
-        {
-          backgroundColor: ['#ff4545'],
-          borderColor: ['#ff4545'],
-        },
-        {
-          backgroundColor: ['#ff9867'],
-          borderColor: ['#ff9867'],
-        },
-      ];
+    this.checkoutChart.Labels = [];
+    this.checkoutChart.Data[0] = [];
+    this.checkoutChart.Colors = [];
+    if (this.statData.checkout.totalCount) {
+      if (this.statData.checkout.checkout) {
+        this.checkoutChart.Labels.push('Check-Out');
+        this.checkoutChart.Data[0].push(this.statData.checkout.checkout);
+        this.checkoutChart.Colors.push({
+          backgroundColor: ['#FF4545'],
+          borderColor: ['#FF4545'],
+        });
+      }
+      if (this.statData.checkout.expressCheckout) {
+        this.checkoutChart.Labels.push('Express Check-Out');
+        this.checkoutChart.Data[0].push(this.statData.checkout.expressCheckout);
+        this.checkoutChart.Colors.push({
+          backgroundColor: ['#FF9867'],
+          borderColor: ['#FF9867'],
+        });
+      }
     } else {
       this.checkoutChart.Labels = ['No Data'];
-      this.checkoutChart.Data = [[100]];
+      this.checkoutChart.Data[0] = [100];
       this.checkoutChart.Colors = [
         {
           backgroundColor: ['#D5D1D1'],

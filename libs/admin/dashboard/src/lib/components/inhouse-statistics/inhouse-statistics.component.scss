@@ -95,3 +95,14 @@
   color: #6d7580;
   opacity: 1;
 }
+
+:host ::ng-deep .mat-tab-label {
+  width: 50%;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  font: normal normal normal 18px/24px Roboto;
+  letter-spacing: 1.08px;
+  color: #4b56c0;
+  opacity: 1;
+}

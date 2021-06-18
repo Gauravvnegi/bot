@@ -136,7 +136,7 @@ export class GuestDetailDS implements Deserializable {
     let keys = Object.keys(input);
 
     keys.forEach((key) => {
-      if (key !== 'allGuest' && key !== 'secondaryGuest') {
+      if (!['allGuest', 'secondaryGuest', 'pmsSharerGuest'].includes(key)) {
         if (key === 'primaryGuest') {
           this.guests.push(
             new GuestDetailsConfig().deserialize(

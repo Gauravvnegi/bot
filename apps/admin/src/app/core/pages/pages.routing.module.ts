@@ -29,6 +29,32 @@ const appRoutes: Route[] = [
         canActivate: [LoadGuard],
       },
       {
+        path: 'messages',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/messages').then(
+            (m) => m.AdminMessagesModule
+          ),
+      },
+      // {
+      //   path: 'conversation',
+      //   children: [
+      //     {
+      //       path: 'request',
+      //       loadChildren: () =>
+      //         import('@hospitality-bot/admin/request').then(
+      //           (m) => m.AdminRequestModule
+      //         ),
+      //     },
+      //     {
+      //       path: 'messages',
+      //       loadChildren: () =>
+      //         import('@hospitality-bot/admin/messages').then(
+      //           (m) => m.AdminMessagesModule
+      //         ),
+      //     },
+      //   ],
+      // },
+      {
         path: 'package',
         loadChildren: () =>
           import('@hospitality-bot/admin/packages').then(

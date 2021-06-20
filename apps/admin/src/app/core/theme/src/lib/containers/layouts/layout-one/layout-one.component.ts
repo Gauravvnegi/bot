@@ -1,28 +1,15 @@
-import { Component, OnInit, ComponentRef } from '@angular/core';
-import {
-  RouterOutlet,
-  Router,
-  NavigationStart,
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-} from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { FilterService } from '../../../services/filter.service';
-import { DateRangeFilterService } from '../../../services/daterange-filter.service';
-import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
-import { get } from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { GlobalFilterService } from '../../../services/global-filters.service';
-import { AuthService } from '../../../../../../auth/services/auth.service';
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { Subscriptions } from '../../../data-models/subscription-plan-config.model';
-import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { get, includes } from 'lodash';
+import { AuthService } from '../../../../../../auth/services/auth.service';
+import { DateRangeFilterService } from '../../../services/daterange-filter.service';
+import { FilterService } from '../../../services/filter.service';
+import { GlobalFilterService } from '../../../services/global-filters.service';
+import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -60,9 +47,7 @@ export class LayoutOneComponent implements OnInit {
     private _hotelDetailService: HotelDetailService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
-    private fb: FormBuilder,
-    private _modal: ModalService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -76,6 +61,10 @@ export class LayoutOneComponent implements OnInit {
     this.searchFG = this.fb.group({
       search: [''],
     });
+  }
+
+  checkForMessageRoute() {
+    return this._router.url.includes('messages');
   }
 
   initLayoutConfigs() {
@@ -121,27 +110,10 @@ export class LayoutOneComponent implements OnInit {
 
     this._router.onSameUrlNavigation = 'reload';
 
-    // this._router.navigate([currentUrl], {
-    //   queryParams: { refresh: 1 },
-    //   skipLocationChange: true,
-    // });
-
     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this._router.navigate([currentUrl]);
       this.lastUpdatedAt = DateService.getCurrentDateWithFormat('h:mm A');
-      // this._router.routeReuseStrategy.shouldReuseRoute = () => true;
-      // this._router.onSameUrlNavigation = 'reload';
     });
-
-    // this._router.onSameUrlNavigation = 'ignore';
-
-    //this.dashBoardComp.destroy();
-    // this.dashBoardComp;
-    // this._router.navigate(['/pages/dashboard'],{ queryParams: { 'refresh': 1 } });
-    //let currentUrl = this._router.url;
-    // this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-    //   this._router.navigate([currentUrl]);
-    // });
   }
 
   toggleGlobalFilter() {

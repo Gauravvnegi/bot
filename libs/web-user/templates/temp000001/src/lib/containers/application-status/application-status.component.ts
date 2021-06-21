@@ -30,6 +30,7 @@ export class ApplicationStatusComponent implements OnInit {
 
   $subscription = new Subscription();
   isLoaderVisible = true;
+  regCardLoading = false;
 
   constructor(
     protected _modal: ModalService,
@@ -112,11 +113,13 @@ export class ApplicationStatusComponent implements OnInit {
         dialogConfig
       );
     } else {
+      this.regCardLoading = true;
       this.$subscription.add(
         this._regCardService
           .getRegCard(this._reservationService.reservationId)
           .subscribe(
             (res: FileData) => {
+              this.regCardLoading = false;
               dialogConfig.data = {
                 regcardUrl:
                   this.summaryDetails.guestDetails.guests[0].regcardUrl ||
@@ -130,6 +133,7 @@ export class ApplicationStatusComponent implements OnInit {
               );
             },
             ({ error }) => {
+              this.regCardLoading = false;
               this._translateService
                 .get(`MESSAGES.ERROR.${error.type}`)
                 .subscribe((translatedMsg) => {

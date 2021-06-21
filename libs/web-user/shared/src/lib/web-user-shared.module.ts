@@ -40,6 +40,7 @@ import { SlideComponent } from './presentational/slide/slide.component';
 import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
 import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
+import { LoaderComponent } from './presentational/loader/loader.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   let { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -113,6 +114,7 @@ export interface IThemeConfig {
     NumberInputComponent,
     PaymentMethodComponent,
     PromocodeComponent,
+    LoaderComponent,
   ],
   exports: [
     SharedMaterialModule,
@@ -151,6 +153,7 @@ export interface IThemeConfig {
     PaymentMethodComponent,
     PromocodeComponent,
     TranslateModule,
+    LoaderComponent,
   ],
 })
 export class WebUserSharedModule {

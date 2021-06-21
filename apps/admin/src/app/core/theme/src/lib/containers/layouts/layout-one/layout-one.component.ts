@@ -23,6 +23,7 @@ import { DetailsComponent } from 'libs/admin/reservation/src/lib/components/deta
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscriptions } from '../../../data-models/subscription-plan-config.model';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { userInfo } from 'os';
 
 @Component({
   selector: 'admin-layout-one',
@@ -61,8 +62,7 @@ export class LayoutOneComponent implements OnInit {
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
     private fb: FormBuilder,
-    private _modal: ModalService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private _modal: ModalService
   ) {}
 
   ngOnInit() {
@@ -164,9 +164,17 @@ export class LayoutOneComponent implements OnInit {
   }
 
   applyFilter(event) {
-    this.filterService.emitFilterValue$.next(event);
+    // this.handleHotelChange(event.property.branchName);
+    const values = event.values;
+    if (event.token.key) {
+      this.filterConfig.branchName = this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+        (d) => d.id === values.property.branchName
+      )[0].name;
+      localStorage.setItem(event.token.key, event.token.value);
+    }
+    this.filterService.emitFilterValue$.next(values);
     this.resetFilterCount();
-    this.getFilterCount({ ...event });
+    this.getFilterCount({ ...values });
     this.toggleGlobalFilter();
   }
 

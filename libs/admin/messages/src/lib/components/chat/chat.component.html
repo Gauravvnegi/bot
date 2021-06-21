@@ -1,4 +1,4 @@
-<div style="border: 1px solid #f1f1f1; height: 100%;">
+<div style="height: 100%;">
   <div
     style="
       height: 62px;
@@ -6,8 +6,10 @@
       background: #ffffff;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #f1f1f1;
+      border-bottom: 1px solid #9eaeb8;
+      cursor: pointer;
     "
+    (click)="openGuestInfo()"
   >
     <div
       style="
@@ -16,9 +18,7 @@
         border-radius: 50%;
         background: chartreuse;
         margin: 0 20px;
-        cursor: pointer;
       "
-      (click)="openGuestInfo()"
     ></div>
     <div
       style="
@@ -32,12 +32,18 @@
     </div>
   </div>
   <div
-    style="
-      height: calc(100% - 124px);
-      background: #f1f1f1;
-      border-bottom: 1px solid #f1f1f1;
-      overflow-y: auto;
-    "
+    style="height: calc(100% - 124px); background: #f1f1f1; overflow-y: auto;"
   ></div>
-  <div style="height: 62px; width: 100%; background: #ffffff;"></div>
+  <div
+    style="height: 62px; width: 100%; background: #ffffff; padding: 10px 20px;"
+  >
+    <div style="height: 100%; width: calc(100% - 60px);">
+      <input
+        matInput
+        type="text"
+        class="message-field-input"
+        placeholder="Type Message"
+      />
+    </div>
+  </div>
 </div>

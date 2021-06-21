@@ -6,7 +6,32 @@
     <div class="stat-title">Arrivals</div>
   </div>
   <div class="stat-val-container">
-    <div class="stat-value">{{ arrivals.maxExpected }}</div>
+    <div style="display: flex; align-items: center;">
+      <div class="stat-value">{{ arrivals.maxExpected }}</div>
+      <div>
+        <div>
+          <div
+            style="
+              font: normal normal normal 12px/16px Roboto;
+              letter-spacing: 0px;
+              color: #52b33f;
+            "
+          >
+            ({{ arrivals.comparisonPercent }}%)
+          </div>
+          <div
+            style="
+              font: normal normal normal 10px/13px Roboto;
+              letter-spacing: 0px;
+              color: #c5c5c5;
+              opacity: 1;
+            "
+          >
+            In 30 Days
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="stat-val-title">Total Arrival</div>
   </div>
   <div>

@@ -10,4 +10,14 @@ export class StatisticsService extends ApiService {
   getCustomerStatistics(config) {
     return this.get(`/api/v1/dashboard-stats/customer/${config.queryObj}`);
   }
+
+  getBookingStatusStatistics(config) {
+    return this.get(
+      `/api/v1/dashboard-stats/reservations/status/${config.queryObj}`
+    );
+  }
+
+  getReservationStatistics(config) {
+    return this.get(`/api/v1/dashboard-stats/reservations/${config.queryObj}`);
+  }
 }

@@ -34,6 +34,7 @@ deploy to NDevelopment-admin:
   - cp deploy/* .
   - chmod +x *.sh
   - rm -rf deploy
+  - tar -cvf admin.tar *
   - ls -l
   - ls | wc -l
   script:

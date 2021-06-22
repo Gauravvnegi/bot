@@ -25,6 +25,7 @@ export enum CardNames {
   ARRIVAL = 'ARRIVAL',
   INHOUSE = 'INHOUSE',
   DEPARTURE = 'DEPARTURE',
+  BOOKINGSTATUS = 'BOOKINGSTATUS',
   VIP = 'VIP',
   RESERVATION = 'RESERVATION',
   STATUS = 'STATUS',
@@ -97,6 +98,7 @@ export const ModuleConfig = {
       CardNames.INHOUSE,
       CardNames.DEPARTURE,
       CardNames.RESERVATION,
+      CardNames.BOOKINGSTATUS,
     ],
     tables: [TableNames.RESERVATION],
     filters: {

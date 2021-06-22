@@ -37,10 +37,18 @@
       [expectedCheckout]="statistics.expressCheckOut"
     ></hospitality-bot-checkout-statistics>
   </div> -->
-  <div class="stats inc-width-xl change-height">
+  <div
+    class="stats inc-width-xl change-height"
+    cardSubscribed
+    [path]="'dashboard.cards.BOOKINGSTATUS"
+  >
     <hospitality-bot-booking-status></hospitality-bot-booking-status>
   </div>
-  <div class="stats inc-width-l change-height">
+  <div
+    class="stats inc-width-l change-height"
+    cardSubscribed
+    [path]="'dashboard.cards.RESERVATION'"
+  >
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
   </div>
 </div>

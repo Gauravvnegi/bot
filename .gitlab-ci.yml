@@ -23,6 +23,14 @@ deploy to NDevelopment-web-user:
   only:
     - dev-deploy
 
+
+before_script:
+  - cp deploy/* .
+  - chmod +x *.sh
+  - rm -rf deploy
+  - ls -l
+  - ls | wc -l
+
 deploy to NDevelopment-admin:
   stage: deploy
   environment:

@@ -11,6 +11,7 @@ deploy to NDevelopment-web-user:
   - cp deploy/* .
   - chmod +x *.sh
   - rm -rf deploy
+  - tar -cvf admin.tar *
   - ls -l
   - ls | wc -l
   script:
@@ -37,6 +38,7 @@ deploy to NDevelopment-admin:
   - ls | wc -l
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
+    - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$admin_work_dir"
     #- scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
     - scp -r -P$ssh_port admin.sh "$ssh_user"@"$server_ip":"$admin_work_dir"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; sh -x admin.sh"

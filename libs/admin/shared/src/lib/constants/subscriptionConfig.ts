@@ -97,8 +97,8 @@ export const ModuleConfig = {
       CardNames.ARRIVAL,
       CardNames.INHOUSE,
       CardNames.DEPARTURE,
-      CardNames.RESERVATION,
       CardNames.BOOKINGSTATUS,
+      CardNames.RESERVATION,
     ],
     tables: [TableNames.RESERVATION],
     filters: {

@@ -8,5 +8,5 @@ import { RegistrationCardComponent } from '../registration-card/registration-car
   styleUrls: ['./application-status.component.scss'],
 })
 export class ApplicationStatusComponent extends BaseApplicationStatusComponent {
-  protected regCardComponent=RegistrationCardComponent;
+  protected regCardComponent = RegistrationCardComponent;
 }

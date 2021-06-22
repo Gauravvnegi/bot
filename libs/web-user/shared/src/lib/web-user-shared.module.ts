@@ -41,6 +41,7 @@ import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
 import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
 import { LoaderComponent } from './presentational/loader/loader.component';
+import { CheckinDateAlertComponent } from './presentational/checkin-date-alert/checkin-date-alert.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   let { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -115,6 +116,7 @@ export interface IThemeConfig {
     PaymentMethodComponent,
     PromocodeComponent,
     LoaderComponent,
+    CheckinDateAlertComponent,
   ],
   exports: [
     SharedMaterialModule,
@@ -154,6 +156,7 @@ export interface IThemeConfig {
     PromocodeComponent,
     TranslateModule,
     LoaderComponent,
+    CheckinDateAlertComponent,
   ],
 })
 export class WebUserSharedModule {

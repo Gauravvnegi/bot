@@ -14,6 +14,8 @@ import { RegistrationCardComponent } from '../registration-card/registration-car
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -22,8 +24,10 @@ import * as FileSaver from 'file-saver';
 })
 export class ApplicationStatusComponent implements OnInit {
   protected _dialogRef: MatDialogRef<any>;
+  protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
   summaryDetails: SummaryDetails = new SummaryDetails();
   protected regCardComponent = RegistrationCardComponent;
+  protected checkInDateAlert = CheckinDateAlertComponent;
 
   @Input()
   context: any;
@@ -31,6 +35,7 @@ export class ApplicationStatusComponent implements OnInit {
   $subscription = new Subscription();
   isLoaderVisible = true;
   regCardLoading = false;
+  modalVisible = false;
 
   constructor(
     protected _modal: ModalService,
@@ -41,14 +46,12 @@ export class ApplicationStatusComponent implements OnInit {
     protected _templateService: TemplateService,
     protected _regCardService: RegCardService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected dateService: DateService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
-    // if (this._stepperService._selectedIndex) {
-    this.getSummaryDetails();
-    // }
   }
 
   ngOnChanges(): void {}
@@ -84,8 +87,29 @@ export class ApplicationStatusComponent implements OnInit {
         .subscribe((res) => {
           this.summaryDetails = new SummaryDetails().deserialize(res);
           this.isLoaderVisible = false;
+          this.checkForTodaysBooking();
         })
     );
+  }
+
+  checkForTodaysBooking() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'checkin-modal-component';
+    if (
+      DateService.getDateDifference(
+        this.stayDetail.arrivalTime,
+        this.dateService.getCurrentTimeStamp()
+      ) > 0 &&
+      !this.modalVisible
+    ) {
+      this.modalVisible = true;
+      this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
+        disableClose: true,
+        id: 'checkin-modal-component',
+      });
+      this.checkInDialogRef.disableClose = true;
+    }
   }
 
   ngOnDestroy() {

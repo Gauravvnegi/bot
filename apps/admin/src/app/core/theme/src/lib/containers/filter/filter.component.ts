@@ -1,13 +1,12 @@
 import {
   Component,
-  OnInit,
-  Output,
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
+  Output,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { FilterService } from '../../services/filter.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { TokenUpdateService } from '../../services/token-update.service';
 
@@ -71,13 +70,6 @@ export class FilterComponent implements OnChanges, OnInit {
   ngOnInit(): void {
     this.initLOV();
     this.registerListeners();
-    // this.initialFilterValue = {
-    //   property: {
-    //     hotelName: this._hotelDetailService.hotelDetails.brands[0].id,
-    //     branchName: this._hotelDetailService.hotelDetails.brands[0].branches[0]
-    //       .id,
-    //   },
-    // };
     this.setInitialFilterValue();
   }
 
@@ -95,10 +87,6 @@ export class FilterComponent implements OnChanges, OnInit {
         );
 
         this.branchList = branches;
-        // this.filterForm
-        //   .get('property')
-        //   .get('branchName')
-        //   .patchValue(this.branchList[0].id);
       });
   }
 

@@ -11,6 +11,11 @@
     @include flex-justify-center();
     flex-direction: column;
     margin: 0px $margin-small;
+       
+    @media only screen and (max-width:$S) {
+      margin: $margin-small 0;
+    }
+  
     .footer-privacy-text {
       text-align: center;
       color: var(--footer-font-color, $footer-font-color);
@@ -57,6 +62,7 @@
     justify-content: flex-end;
 
     .wrap-details {
+      width: 100%;
       a {
         text-decoration: none;
       }
@@ -65,6 +71,9 @@
         display: flex;
         align-items: center;
         color: var(--footer-font-color, $footer-font-color);
+        @media only screen and (max-width: $S) {
+          justify-content: center;
+        }
       }
       .material-icons {
         height: 23px;
@@ -83,8 +92,8 @@
       }
     }
   }
-  @media only screen and (max-width: $M) {
-    padding: 5px;
-    margin-bottom: 15%;
+  @media only screen and (max-width:$S) {
+    grid-template-columns: 100%;
+    text-align: center;
   }
 }

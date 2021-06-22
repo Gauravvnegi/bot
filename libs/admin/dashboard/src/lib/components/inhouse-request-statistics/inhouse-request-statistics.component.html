@@ -12,169 +12,62 @@
     >
     </canvas>
   </div>
-  <div style="height: 124px;">
+  <div class="inhouse--chart-rightblock">
     <div>
-      <div style="display: flex; align-items: center;">
+      <div class="inhouse--chart-rightblock--status">
+        <div class="inhouse--chart-rightblock--status--sqaure complete"></div>
         <div
-          style="
-            width: 14px;
-            height: 14px;
-            background: #52b33f 0% 0% no-repeat padding-box;
-            border-radius: 2px;
-            opacity: 1;
-          "
-        ></div>
-        <div
-          style="
-            font: normal normal bold 16px/21px Roboto;
-            letter-spacing: 0px;
-            color: #002046;
-            opacity: 1;
-            margin: 0 10px;
-          "
+          class="inhouse--chart-rightblock--status--normaltext"
         >
           {{ inhouseRequest.completed }}
         </div>
         <div
-          style="
-            font: normal normal normal 12px/16px Roboto;
-            letter-spacing: 0px;
-            color: #52b33f;
-            opacity: 1;
-          "
+          class="inhouse--chart-rightblock--status--completetext"
         >
           ({{ inhouseRequest.compareStats.COMPLETED }}%)
         </div>
-        <div
-          style="
-            font: normal normal normal 10px/13px Roboto;
-            letter-spacing: 0px;
-            color: #b4b4b4;
-            opacity: 1;
-            margin: 0 10px;
-          "
+        <div 
+          class="inhouse--chart-rightblock--status--normaltext-2"
         >
           in 30 days
         </div>
       </div>
-      <div
-        style="
-          font: normal normal normal 12px/16px Roboto;
-          letter-spacing: 0.72px;
-          color: #6d7580;
-          opacity: 1;
-        "
-      >
+      <div class="inhouse--chart-rightblock--normaltext2" >
         Completed
       </div>
     </div>
     <div style="margin: 5px 0;">
-      <div style="display: flex; align-items: center;">
-        <div
-          style="
-            width: 14px;
-            height: 14px;
-            background: #e0e0e0 0% 0% no-repeat padding-box;
-            border-radius: 2px;
-            opacity: 1;
-          "
-        ></div>
-        <div
-          style="
-            font: normal normal bold 16px/21px Roboto;
-            letter-spacing: 0px;
-            color: #002046;
-            opacity: 1;
-            margin: 0 10px;
-          "
-        >
+      <div class="inhouse--chart-rightblock--status">
+        <div class="inhouse--chart-rightblock--status--sqaure pending"></div>
+        <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.pending }}
         </div>
-        <div
-          style="
-            font: normal normal normal 12px/16px Roboto;
-            letter-spacing: 0px;
-            color: #52b33f;
-            opacity: 1;
-          "
-        >
+        <div class="inhouse--chart-rightblock--status--completetext">
           ({{ inhouseRequest.compareStats.PENDING }}%)
         </div>
-        <div
-          style="
-            font: normal normal normal 10px/13px Roboto;
-            letter-spacing: 0px;
-            color: #b4b4b4;
-            opacity: 1;
-            margin: 0 10px;
-          "
-        >
+        <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
         </div>
       </div>
       <div
-        style="
-          font: normal normal normal 12px/16px Roboto;
-          letter-spacing: 0.72px;
-          color: #6d7580;
-          opacity: 1;
-        "
-      >
+      class="inhouse--chart-rightblock--normaltext2">
         Pending
       </div>
     </div>
     <div>
-      <div style="display: flex; align-items: center;">
-        <div
-          style="
-            width: 14px;
-            height: 14px;
-            background: #cc052b 0% 0% no-repeat padding-box;
-            border-radius: 2px;
-            opacity: 1;
-          "
-        ></div>
-        <div
-          style="
-            font: normal normal bold 16px/21px Roboto;
-            letter-spacing: 0px;
-            color: #002046;
-            opacity: 1;
-            margin: 0 10px;
-          "
-        >
+      <div  class="inhouse--chart-rightblock--status">
+        <div class="inhouse--chart-rightblock--status--sqaure timeout"></div>
+        <div  class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.timeout }}
         </div>
-        <div
-          style="
-            font: normal normal normal 12px/16px Roboto;
-            letter-spacing: 0px;
-            color: #52b33f;
-            opacity: 1;
-          "
-        >
+        <div class="inhouse--chart-rightblock--status--completetext">
           ({{ inhouseRequest.compareStats.TIMEOUT }}%)
         </div>
-        <div
-          style="
-            font: normal normal normal 10px/13px Roboto;
-            letter-spacing: 0px;
-            color: #b4b4b4;
-            opacity: 1;
-            margin: 0 10px;
-          "
-        >
+        <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
         </div>
       </div>
-      <div
-        style="
-          font: normal normal normal 12px/16px Roboto;
-          letter-spacing: 0.72px;
-          color: #6d7580;
-          opacity: 1;
-        "
-      >
+      <div class="inhouse--chart-rightblock--normaltext2">
         Timeout
       </div>
     </div>

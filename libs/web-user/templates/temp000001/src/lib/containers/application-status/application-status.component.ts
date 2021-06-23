@@ -98,8 +98,8 @@ export class ApplicationStatusComponent implements OnInit {
     dialogConfig.id = 'checkin-modal-component';
     if (
       DateService.getDateDifference(
-        this.stayDetail.arrivalTime,
-        this.dateService.getCurrentTimeStamp()
+        +this.stayDetail.arrivalTime,
+        +this.dateService.getCurrentTimeStamp()
       ) > 0 &&
       !this.modalVisible
     ) {

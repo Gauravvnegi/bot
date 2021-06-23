@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Inhouse, InhouseRequest } from '../../data-models/statistics.model';
@@ -9,7 +9,7 @@ import { ReservationDatatableModalComponent } from '../reservation-datatable-mod
   templateUrl: './inhouse-statistics.component.html',
   styleUrls: ['./inhouse-statistics.component.scss'],
 })
-export class InhouseStatisticsComponent implements OnInit {
+export class InhouseStatisticsComponent implements OnChanges {
   @Input() inhouse: Inhouse;
   @Input() inhouseRequest: InhouseRequest;
 
@@ -70,8 +70,7 @@ export class InhouseStatisticsComponent implements OnInit {
 
   constructor(private modalService: ModalService) {}
 
-  ngOnInit(): void {
-    // this.setPercentageStyle();
+  ngOnChanges(): void {
     this.initGraphData();
   }
 

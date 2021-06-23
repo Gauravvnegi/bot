@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { InhouseRequest } from '../../data-models/statistics.model';
 
 @Component({
@@ -6,7 +6,7 @@ import { InhouseRequest } from '../../data-models/statistics.model';
   templateUrl: './inhouse-request-statistics.component.html',
   styleUrls: ['./inhouse-request-statistics.component.scss'],
 })
-export class InhouseRequestStatisticsComponent implements OnInit {
+export class InhouseRequestStatisticsComponent implements OnChanges {
   @Input() inhouseRequest: InhouseRequest;
   // totalRequest: number;
   requestPendingPercent: number;
@@ -51,9 +51,7 @@ export class InhouseRequestStatisticsComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    //   this.setTotal();
-    // this.setRequestPending();
+  ngOnChanges(): void {
     this.initGraphData();
   }
 

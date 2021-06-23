@@ -16,8 +16,8 @@ deploy to NDevelopment-web-user:
   - ls | wc -l
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
-    - scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$web_user_work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; sh -x web-user_dev.sh"
+    - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$web_user_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; tar -xvf *.tar; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; rm -rf $web_user_work_dir/*.tar; ls $web_user_work_dir && netstat -tnlp"
   only:
     - dev-deploy

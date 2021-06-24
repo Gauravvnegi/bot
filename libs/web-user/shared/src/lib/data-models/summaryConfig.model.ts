@@ -1,3 +1,4 @@
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set } from 'lodash';
 import { GuestTypes, GuestRole } from '../constants/guest';
 
@@ -76,6 +77,20 @@ export class StayDetails {
       set({}, 'roomNumber', get(summary, ['roomNumber']))
     );
     return this;
+  }
+
+  getArrivalTime() {
+    return DateService.getDateFromTimeStamp(
+      +this.arrivalTime,
+      'DD - MM - YYYY'
+    );
+  }
+
+  getDepartureTime() {
+    return DateService.getDateFromTimeStamp(
+      +this.departureTime,
+      'DD - MM - YYYY'
+    );
   }
 }
 

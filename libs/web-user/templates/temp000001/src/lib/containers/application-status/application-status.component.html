@@ -57,13 +57,13 @@
         <div class="section--content--container">
           <div class="section--content--container--title">Arrival Date</div>
           <div class="section--content--container--value">
-            {{ stayDetail.arrivalTime | date: 'dd - MM - yyyy' }}
+            {{ stayDetail.getArrivalTime() }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Departure Date</div>
           <div class="section--content--container--value">
-            {{ stayDetail.departureTime | date: 'dd - MM - yyyy' }}
+            {{ stayDetail.getDepartureTime() }}
           </div>
         </div>
         <div class="section--content--container">

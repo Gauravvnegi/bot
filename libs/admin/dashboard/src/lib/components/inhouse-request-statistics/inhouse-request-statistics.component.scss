@@ -1,4 +1,21 @@
+@import 'main';
+.chart__wrapper{
+  display: flex;
+  margin-top: 15px;
+    &--container{
+      width: 50%;
+      height: 100%;
+      transform: scale(1.5) translateY(17%);
 
+      @media only screen and (min-width:$XL) {
+        transform: unset;
+      }
+
+      @media only screen and (max-width:$L) {
+        transform: unset;
+      }
+    }
+}
 
 .stat-val-container {
   height: 180px;

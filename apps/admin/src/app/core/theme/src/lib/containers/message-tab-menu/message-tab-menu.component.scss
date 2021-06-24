@@ -1,0 +1,15 @@
+:host ::ng-deep .mat-tab-label {
+  min-width: 55px !important;
+  img {
+    width: 18.2px;
+    height: 18.2px;
+    margin-right: 6px;
+    filter: grayscale(100%);
+  }
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  img {
+    filter: sepia(100%) hue-rotate(190deg) saturate(500%);
+  }
+}

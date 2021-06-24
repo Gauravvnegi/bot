@@ -32,12 +32,24 @@
         >
           Conversation &gt; <span style="color: #002046;">Messages</span>
         </div>
-        <div></div>
-        <div class="dropdown-wrapper">
-          <admin-profile-dropdown
-            [items]="profile"
-            (onProfileAction)="profileAction($event)"
-          ></admin-profile-dropdown>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 75%;
+          "
+          *ngIf="checkForMessageRoute()"
+        >
+          <div style="margin-bottom: -6px;">
+            <admin-message-tab-menu></admin-message-tab-menu>
+          </div>
+          <div class="dropdown-wrapper">
+            <admin-profile-dropdown
+              [items]="profile"
+              (onProfileAction)="profileAction($event)"
+            ></admin-profile-dropdown>
+          </div>
         </div>
       </div>
       <div

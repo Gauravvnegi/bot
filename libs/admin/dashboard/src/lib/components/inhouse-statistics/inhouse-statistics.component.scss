@@ -1,3 +1,23 @@
+@import 'main';
+
+.chart__wrapper{
+  display: flex;
+  margin-top: 15px;
+    &--container{
+      width: 50%;
+      height: 100%;
+      transform: scale(1.5) translateY(17%);
+
+      @media only screen and (min-width:$XL) {
+        transform: unset;
+      }
+
+      @media only screen and (max-width:$L) {
+        transform: unset;
+      }
+    }
+}
+
 .stat-val-container {
   height: 180px;
   display: flex;
@@ -94,6 +114,62 @@
   letter-spacing: 0.72px;
   color: #6d7580;
   opacity: 1;
+}
+
+.info-icon{
+  position: relative;
+
+  img{
+    margin:3px 5px 0;
+    width: 14px;
+    height: 100%;
+  }
+  .tooltip{
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: #fff;
+    min-width: 160px; 
+    border: 1px solid #eee;
+    padding: 10px;
+    top: 120%;
+    left: -200%;
+    color:#484848;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px #eee;
+    display: none;
+    z-index: 99;
+
+    .arrow{
+        position: absolute;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 10px solid #eee;
+        left: 40%;
+        transform: translate(-50%);
+        
+        &::before{
+          content: "";
+          top: 1px;
+          width: 0;
+          height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-bottom: 9px solid #ffffff;
+          left: -6px;
+          z-index: 3;
+          position: absolute;
+        }
+    }
+  }
+
+  &:hover{
+    .tooltip{
+      display: block;
+    }
+  }
 }
 
 :host ::ng-deep .mat-tab-label {

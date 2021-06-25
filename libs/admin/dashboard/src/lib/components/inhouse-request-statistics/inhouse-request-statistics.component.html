@@ -1,5 +1,5 @@
-<div style="display: flex; margin-top: 15px;">
-  <div>
+<div class="chart__wrapper">
+  <div class="chart__wrapper--container">
     <canvas
       baseChart
       style="height: 117px;"
@@ -25,6 +25,7 @@
           class="inhouse--chart-rightblock--status--completetext"
         >
           ({{ inhouseRequest.compareStats.COMPLETED }}%)
+          <img src="assets/svg/uparrow.svg" alt="uparrow">
         </div>
         <div 
           class="inhouse--chart-rightblock--status--normaltext-2"
@@ -43,7 +44,8 @@
           {{ inhouseRequest.pending }}
         </div>
         <div class="inhouse--chart-rightblock--status--completetext">
-          ({{ inhouseRequest.compareStats.PENDING }}%)
+          ({{ inhouseRequest.compareStats.PENDING }}%) 
+          <img src="assets/svg/uparrow.svg" alt="uparrow">
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
@@ -62,6 +64,7 @@
         </div>
         <div class="inhouse--chart-rightblock--status--completetext">
           ({{ inhouseRequest.compareStats.TIMEOUT }}%)
+          <img src="assets/svg/uparrow.svg" alt="uparrow">
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days

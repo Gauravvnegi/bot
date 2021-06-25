@@ -4,6 +4,13 @@
       <img src="assets/svg/inhouse.svg" />
     </div>
     <div class="stat-title">In-House</div>
+    <div class="info-icon">
+      <img src="assets/svg/info.svg" alt="info-icon">
+      <div class="tooltip">
+        <span class="arrow"></span>
+        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+      </div>
+    </div>
   </div>
   <mat-tab-group>
     <mat-tab label="Request">
@@ -14,8 +21,8 @@
     ></mat-tab>
     <mat-tab label="Total">
       <ng-template matTabContent>
-        <div style="display: flex; margin-top: 15px;">
-          <div>
+        <div class="chart__wrapper">
+          <div class="chart__wrapper--container">
             <canvas
               baseChart
               style="height: 117px;"
@@ -59,6 +66,7 @@
                     "
                   >
                     ({{ inhouse.comparisonPercent }}%)
+                    <img src="assets/svg/uparrow.svg" alt="uparrow">
                   </div>
                   <div
                     style="

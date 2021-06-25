@@ -11,6 +11,60 @@
   display: flex;
   align-items: center;
 }
+.info-icon{
+  position: relative;
+
+  img{
+    margin:3px 5px 0;
+    width: 14px;
+    height: 100%;
+  }
+  .tooltip{
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: #fff;
+    min-width: 160px; 
+    border: 1px solid #eee;
+    padding: 10px;
+    top: 120%;
+    left: -200%;
+    color:#484848;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px #eee;
+    display: none;
+
+    .arrow{
+        position: absolute;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-bottom: 10px solid #eee;
+        left: 40%;
+        transform: translate(-50%);
+        
+        &::before{
+          content: "";
+          top: 1px;
+          width: 0;
+          height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-bottom: 9px solid #ffffff;
+          left: -6px;
+          z-index: 3;
+          position: absolute;
+        }
+    }
+  }
+
+  &:hover{
+    .tooltip{
+      display: block;
+    }
+  }
+}
 .stat-value {
   // height: 46px;
   font: normal normal bold 35px/46px Roboto;

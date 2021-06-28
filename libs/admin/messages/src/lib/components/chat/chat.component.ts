@@ -39,7 +39,8 @@ export class ChatComponent implements OnInit {
     private fb: FormBuilder,
     private snackBarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -114,7 +115,10 @@ export class ChatComponent implements OnInit {
           .subscribe(
             (response) => {
               this.chat = new Chats().deserialize(response);
-              this.chat.messages = this.sortByTimeStamp(this.chat.messages);
+              this.chat.messages = DateService.sortObjArrayByTimeStamp(
+                this.chat.messages,
+                'timestamp'
+              );
             },
             ({ error }) => {
               this.chat = new Chats();
@@ -171,15 +175,14 @@ export class ChatComponent implements OnInit {
               ...this.chat.messages,
               ...new Chats().deserialize(response).messages,
             ];
-            this.chat.messages = this.sortByTimeStamp(this.chat.messages);
+            this.chat.messages = DateService.sortObjArrayByTimeStamp(
+              this.chat.messages,
+              'timestamp'
+            );
           },
           ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
         )
     );
-  }
-
-  sortByTimeStamp(arr) {
-    return arr?.sort((a, b) => (a.timestamp > b.timestamp ? 1 : -1));
   }
 
   onUp() {

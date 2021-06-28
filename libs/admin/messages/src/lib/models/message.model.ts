@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 export class Chats {
   messages: IChat[];
   receiver: any;
@@ -51,6 +51,12 @@ export class ContactList {
 
     input?.forEach((item) =>
       this.contacts.push(new Contact().deserialize(item))
+    );
+
+    this.contacts = DateService.sortObjArrayByTimeStamp(
+      this.contacts,
+      'lastMessageAt',
+      'desc'
     );
 
     return this;

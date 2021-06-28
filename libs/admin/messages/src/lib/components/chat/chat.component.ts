@@ -13,6 +13,7 @@ import { Chats, IChats } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -105,7 +106,7 @@ export class ChatComponent implements OnInit {
                 ...{
                   hotelId: this.hotelId,
                   phone: this.selectedChat.phone,
-                  timestamp: 1624514285000,
+                  timestamp: DateService.getCurrentTimeStamp(),
                 },
               },
             ])
@@ -159,7 +160,7 @@ export class ChatComponent implements OnInit {
               ...{
                 hotelId: this.hotelId,
                 phone: this.selectedChat.phone,
-                timestamp: 1624514285000,
+                timestamp: 0,
               },
             },
           ])

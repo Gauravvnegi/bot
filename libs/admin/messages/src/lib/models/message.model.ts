@@ -83,6 +83,15 @@ export class Contact {
   }
 
   getTime() {
+    const diff = moment().diff(moment(+this.lastMessageAt), 'days');
+    const stayDetailDay = moment().format('DD');
+    const currentDay = moment.unix(+this.lastMessageAt / 1000).format('DD');
+
+    if (diff > 0) {
+      return moment(this.lastMessageAt).format('DD MMM');
+    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
+      return moment(this.lastMessageAt).format('Yesterday');
+    }
     return moment(this.lastMessageAt).format('h:mm a');
   }
 }

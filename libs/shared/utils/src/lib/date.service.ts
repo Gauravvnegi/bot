@@ -7,7 +7,7 @@ export class DateService {
   private constructor() {}
 
   static getCurrentTimeStamp() {
-    return moment().unix();
+    return moment().unix() * 1000;
   }
 
   static convertDateToTimestamp(inputDate) {

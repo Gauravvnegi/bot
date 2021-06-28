@@ -98,6 +98,9 @@
     },
     "admin-messages": {
       "tags": []
+    },
+    "admin-conversation": {
+      "tags": []
     }
   }
 }

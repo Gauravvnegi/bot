@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-guest-personal-info',
   templateUrl: './guest-personal-info.component.html',
-  styleUrls: ['./guest-personal-info.component.scss']
+  styleUrls: ['./guest-personal-info.component.scss'],
 })
 export class GuestPersonalInfoComponent implements OnInit {
+  @Input() data;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

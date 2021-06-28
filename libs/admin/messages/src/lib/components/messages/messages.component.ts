@@ -9,13 +9,10 @@ import { MessageTabService } from 'apps/admin/src/app/core/theme/src/lib/service
 export class MessagesComponent implements OnInit {
   tabList = [
     { imgSrc: 'assets/svg/whatsapp.svg', count: 1, dataLoaded: false },
-    { imgSrc: 'assets/svg/whatsapp.svg', count: 2, dataLoaded: false },
-    { imgSrc: 'assets/svg/whatsapp.svg', count: 3, dataLoaded: false },
-    { imgSrc: 'assets/svg/whatsapp.svg', count: 4, dataLoaded: false },
-    { imgSrc: 'assets/svg/whatsapp.svg', count: 5, dataLoaded: false },
-    { imgSrc: 'assets/svg/whatsapp.svg', count: 6, dataLoaded: false },
   ];
   guestInfoEnable = false;
+  refreshData = false;
+  selectedChat = null;
   constructor(private messageTabService: MessageTabService) {}
 
   ngOnInit(): void {
@@ -42,8 +39,13 @@ export class MessagesComponent implements OnInit {
   loadChatList(index) {
     if (!this.tabList[index].dataLoaded) {
       this.tabList[index].dataLoaded = true;
-      console.log(this.tabList[index]);
+      this.guestInfoEnable = false;
+      this.refreshData = true;
     }
+  }
+
+  setSelectedChat(event) {
+    this.selectedChat = event.value;
   }
 
   openGuestInfo(event) {

@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   ViewChild,
@@ -13,6 +14,8 @@ import { MatTabGroup } from '@angular/material/tabs';
   styleUrls: ['./guest-info.component.scss'],
 })
 export class GuestInfoComponent implements OnInit {
+  @Input() refreshData;
+  @Input() data;
   @Output() closeInfo = new EventEmitter();
   @ViewChild('matTab') matTab: MatTabGroup;
   selectedIndex = 0;

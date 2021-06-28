@@ -6,6 +6,7 @@
       border-bottom: 1px solid #9eaeb8;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     "
   >
     <div style="height: 100%; width: calc(100% - 50px);">
@@ -25,23 +26,100 @@
         padding: 12px 15px;
         border-bottom: 1px solid #f1f1f1;
         cursor: pointer;
-      "
-    ></div>
-    <div
-      style="
-        height: 80px;
-        padding: 12px 15px;
-        border-bottom: 1px solid #f1f1f1;
-        cursor: pointer;
+        display: flex;
+        align-items: center;
+        width: 100%;
       "
       [ngStyle]="
-        true
+        selected.receiverId === contact.receiverId
           ? {
               'pointer-events': 'none',
               background: '#f1f1f1 0% 0% no-repeat padding-box'
             }
           : {}
       "
-    ></div>
+      *ngFor="let contact of chatList?.contacts"
+      (click)="onChatSelect(contact)"
+    >
+      <div
+        style="
+          width: 55px;
+          height: 55px;
+          background: chartreuse;
+          border-radius: 50%;
+          margin-right: 15px;
+        "
+      >
+        <img [src]="contact.profileUrl" *ngIf="contact.profileUrl" />
+      </div>
+      <div style="width: calc(100% - 55px);">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            width: auto;
+          "
+        >
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 10px;
+              font-weight: bold;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.6px;
+              text-align: left;
+              color: #99a6b5;
+            "
+          >
+            {{ contact.roomNo || 'RNO: 204' }}
+          </div>
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 10px;
+              font-weight: normal;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.6px;
+              text-align: right;
+              color: #c7c7c7;
+            "
+          >
+            {{ contact.getTime() }}
+          </div>
+        </div>
+        <div
+          style="
+            margin-bottom: 5px;
+            font-family: Roboto;
+            font-size: 12px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.72px;
+          "
+        >
+          {{ contact.name || contact.phone }}
+        </div>
+        <div
+          style="
+            font-family: Roboto;
+            font-size: 12px;
+            font-weight: bold;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.72px;
+          "
+        >
+          Test message
+        </div>
+      </div>
+    </div>
   </div>
 </div>

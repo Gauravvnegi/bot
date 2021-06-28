@@ -33,7 +33,7 @@
         letter-spacing: 0.72px;
       "
     >
-      Unknown Person
+      {{ data.name || 'Unknown Person' }}
     </div>
   </div>
   <div style="border: solid 1px #e0e0e0;"></div>
@@ -80,7 +80,7 @@
       margin-top: 5px;
     "
   >
-    +91 9024940201
+    {{ data.phone }}
   </div>
   <div
     style="
@@ -111,6 +111,6 @@
       margin-top: 5px;
     "
   >
-    Unknown
+    {{ data.email || 'Unknown' }}
   </div>
 </div>

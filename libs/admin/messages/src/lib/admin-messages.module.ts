@@ -12,15 +12,20 @@ import { GuestPersonalInfoComponent } from './components/guest-personal-info/gue
 import { GuestBookingInfoComponent } from './components/guest-booking-info/guest-booking-info.component';
 import { GuestTicketsComponent } from './components/guest-tickets/guest-tickets.component';
 import { GuestRequestsComponent } from './components/guest-requests/guest-requests.component';
+import { MessageService } from './services/messages.service';
+import { SharedModule } from 'primeng/api';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   imports: [
     CommonModule,
     AdminMessagesRoutingModule,
     AdminSharedModule,
+    SharedModule,
     SharedMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    InfiniteScrollModule,
   ],
   declarations: [
     MessagesComponent,
@@ -32,5 +37,6 @@ import { GuestRequestsComponent } from './components/guest-requests/guest-reques
     GuestTicketsComponent,
     GuestRequestsComponent,
   ],
+  providers: [MessageService],
 })
 export class AdminMessagesModule {}

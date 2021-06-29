@@ -72,6 +72,7 @@ export class Contact {
   receiverId: string;
   reservationId: string;
   roomNo: string;
+  enableSend: boolean;
 
   deserialize(input) {
     Object.assign(
@@ -85,20 +86,24 @@ export class Contact {
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo']))
     );
+    this.enableSend = this.checkEnableSend();
     return this;
   }
 
   getTime() {
     const diff = moment().diff(moment(+this.lastMessageAt), 'days');
-    const stayDetailDay = moment().format('DD');
-    const currentDay = moment.unix(+this.lastMessageAt / 1000).format('DD');
-
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment.unix(+this.lastMessageAt / 1000).format('DD');
     if (diff > 0) {
       return moment(this.lastMessageAt).format('DD MMM');
-    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
-      return moment(this.lastMessageAt).format('Yesterday');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
     }
     return moment(this.lastMessageAt).format('h:mm a');
+  }
+
+  checkEnableSend() {
+    return +moment().diff(moment(+this.lastMessageAt), 'hours') <= 24;
   }
 }
 

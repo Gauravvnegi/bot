@@ -14,7 +14,6 @@ import { GuestTicketsComponent } from './components/guest-tickets/guest-tickets.
 import { GuestRequestsComponent } from './components/guest-requests/guest-requests.component';
 import { MessageService } from './services/messages.service';
 import { SharedModule } from 'primeng/api';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   imports: [
@@ -25,7 +24,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     SharedMaterialModule,
     ReactiveFormsModule,
     FormsModule,
-    InfiniteScrollModule,
   ],
   declarations: [
     MessagesComponent,

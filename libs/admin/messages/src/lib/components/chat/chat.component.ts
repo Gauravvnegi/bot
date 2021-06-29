@@ -2,7 +2,10 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
+  OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -21,7 +24,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnChanges, OnDestroy {
   @Input() refreshData;
   @Input() selectedChat;
   @Output() guestInfo = new EventEmitter();
@@ -29,18 +32,17 @@ export class ChatComponent implements OnInit {
   hotelId: string;
   chat: IChats;
   chatFG: FormGroup;
-  throttle = 300;
-  scrollDistance = 1;
-  scrollUpDistance = 2;
+  isLoading = false;
   offset = 0;
+  limit = 20;
   $subscription = new Subscription();
+  scrollBottom = false;
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
     private snackBarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private dateService: DateService
+    private _globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,14 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnChanges(): void {
-    this.getChat();
+    this.getChat({ offset: 0, limit: 20 });
+  }
+
+  ngAfterViewChecked() {
+    if (this.myScrollContainer && !this.scrollBottom) {
+      this.scrollBottom = true;
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    }
   }
 
   registerListeners(): void {
@@ -90,12 +99,8 @@ export class ChatComponent implements OnInit {
 
   getChat(config = { offset: 0, limit: 20 }): void {
     if (this.selectedChat) {
-      this.chatFG.patchValue({
-        message: '',
-        receiverId: this.selectedChat.phone,
-        channelType: 'whatsapp',
-        messageType: 'DATA_TEXT',
-      });
+      this.limit = config.limit;
+      this.isLoading = true;
       this.$subscription.add(
         this.messageService
           .getChat(
@@ -104,23 +109,24 @@ export class ChatComponent implements OnInit {
             this.adminUtilityService.makeQueryParams([
               {
                 ...config,
-                ...{
-                  hotelId: this.hotelId,
-                  phone: this.selectedChat.phone,
-                  timestamp: DateService.getCurrentTimeStamp(),
-                },
               },
             ])
           )
           .subscribe(
             (response) => {
+              response.messages.length < config.limit
+                ? (this.limit = response.messages.length)
+                : (this.limit = this.limit + 20);
               this.chat = new Chats().deserialize(response);
               this.chat.messages = DateService.sortObjArrayByTimeStamp(
                 this.chat.messages,
                 'timestamp'
               );
+              if (config.limit === 20) this.scrollBottom = false;
+              this.isLoading = false;
             },
             ({ error }) => {
+              this.isLoading = false;
               this.chat = new Chats();
               this.snackBarService.openSnackBarAsText(error.message);
             }
@@ -136,59 +142,21 @@ export class ChatComponent implements OnInit {
       return;
     }
 
-    this.$subscription.add(
-      this.messageService
-        .sendMessage(
-          'd63974e6-9d37-4eff-bf93-81b26f6751ee',
-          this.chatFG.getRawValue()
-        )
-        .subscribe(
-          (response) => {
-            this.chatFG.get('message').setValue('');
-            this.getChat();
-          },
-          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
-        )
-    );
-  }
+    const values = this.chatFG.getRawValue();
+    values.receiverId = this.selectedChat.phone;
 
-  loadMoreChat(config) {
     this.$subscription.add(
-      this.messageService
-        .getChat(
-          this.hotelId,
-          this.selectedChat.receiverId,
-          this.adminUtilityService.makeQueryParams([
-            {
-              ...config,
-              ...{
-                hotelId: this.hotelId,
-                phone: this.selectedChat.phone,
-                timestamp: 0,
-              },
-            },
-          ])
-        )
-        .subscribe(
-          (response) => {
-            this.chat.messages = [
-              ...this.chat.messages,
-              ...new Chats().deserialize(response).messages,
-            ];
-            this.chat.messages = DateService.sortObjArrayByTimeStamp(
-              this.chat.messages,
-              'timestamp'
-            );
-          },
-          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
-        )
+      this.messageService.sendMessage(this.hotelId, values).subscribe(
+        (response) => {
+          this.chatFG.get('message').setValue('');
+          this.getChat({
+            offset: 0,
+            limit: this.limit,
+          });
+        },
+        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+      )
     );
-  }
-
-  onUp() {
-    const start = this.offset;
-    this.offset += 20;
-    this.getChat({ offset: start, limit: this.offset });
   }
 
   checkForEnterKey(event) {
@@ -197,8 +165,17 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  ngAfterViewChecked() {
-    if (this.myScrollContainer)
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    if (
+      this.myScrollContainer &&
+      this.myScrollContainer.nativeElement.scrollTop === 0 &&
+      this.limit > this.chat?.messages?.length
+    )
+      this.getChat({ offset: this.offset, limit: this.limit });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -39,11 +39,12 @@
       padding: 20px;
       position: relative;
     "
+    (scroll)="onScroll($event)"
+    *ngIf="chat?.messages?.length; else noChat"
     #scrollMe
-    *ngIf="chat; else noChat"
   >
     <div
-      *ngFor="let message of chat.messages"
+      *ngFor="let message of chat?.messages"
       style="display: flex;"
       [ngStyle]="
         message.direction === 'OUTBOUND'
@@ -90,7 +91,7 @@
       justify-content: space-between;
       align-items: center;
     "
-    *ngIf="chatFG"
+    *ngIf="chatFG && selectedChat?.enableSend; else noSend"
   >
     <div style="height: 100%; width: calc(100% - 60px);" [formGroup]="chatFG">
       <input
@@ -106,4 +107,23 @@
       <img src="assets/svg/send-message.svg" />
     </div>
   </div>
+  <ng-template #noSend>
+    <div
+      style="
+        height: 62px;
+        width: 100%;
+        background: #ffffff;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font: normal normal normal 14px/19px Roboto;
+        letter-spacing: 0.84px;
+        color: #fb3d4e;
+      "
+    >
+      As per WhatsApp's rules, you can only respond to a user within 24 hours of
+      their messages.
+    </div>
+  </ng-template>
 </div>

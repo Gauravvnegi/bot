@@ -199,15 +199,17 @@ export class GlobalNPS {
   positive: number;
   negative: number;
   neutral: number;
+  comparisonPercent:number;
 
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'label', get(input, ['label'])),
+      set({}, 'label', get(input, ['globalNpsStats','label'])),
       set({}, 'score', get(input, ['score'])),
-      set({}, 'positive', get(input, ['positive'])),
-      set({}, 'negative', get(input, ['negative'])),
-      set({}, 'neutral', get(input, ['neutral']))
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set({}, 'positive', get(input, ['globalNpsStats','POSITIVE'])),
+      set({}, 'negative', get(input, ['globalNpsStats','NEGATIVE'])),
+      set({}, 'neutral', get(input, ['globalNpsStats','NEUTRAL']))
     );
     return this;
   }

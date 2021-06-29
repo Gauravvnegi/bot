@@ -15,12 +15,8 @@
 
 :host ::ng-deep .mat-tab-label {
   height: 35px;
-  min-width: 12vw;
+  min-width: 15vw;
   flex-grow: inherit !important;
-
-  @media (max-width:$L) {
-    min-width: 15vw;
-  }
 
   @media (max-width:$M) {
     min-width: 25vw;

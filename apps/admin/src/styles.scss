@@ -77,7 +77,8 @@
 // text-color
 
 .status-opacity-new {
-  background-color: rgba(62, 142, 247, 0.1) !important;
+  background-color: transparent !important;
+  opacity: 0.4;
 }
 
 .status-text-new {
@@ -87,6 +88,7 @@
 .status-selected-new {
   background-color: rgba(62, 142, 247, 1) !important;
   color: white;
+  opacity: 1;
 }
 
 .status-text-pending {
@@ -106,19 +108,23 @@
 }
 
 .status-opacity-pending {
-  background-color: #c2c2c226 !important;
+  background-color: transparent !important;
+  opacity: 0.4;
 }
 
 .status-opacity-initiated {
-  background-color: #6bacf826 !important;
+  background-color: transparent !important;
+  opacity: 0.4;
 }
 
 .status-opacity-reject {
-  background-color: #f00d2a26 !important;
+  background-color: transparent !important;
+  opacity: 0.4;
 }
 
 .status-opacity-success {
-  background-color: #53b33e26 !important;
+  background-color: transparent !important;
+  opacity: 0.4;
 }
 
 .status-background-pending {

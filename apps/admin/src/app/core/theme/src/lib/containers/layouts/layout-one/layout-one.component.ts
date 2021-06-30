@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { get, includes } from 'lodash';
+import { get } from 'lodash';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
@@ -136,9 +136,16 @@ export class LayoutOneComponent implements OnInit {
   }
 
   applyFilter(event) {
-    this.filterService.emitFilterValue$.next(event);
+    const values = event.values;
+    if (event.token.key) {
+      this.filterConfig.branchName = this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+        (d) => d.id === values.property.branchName
+      )[0].name;
+      localStorage.setItem(event.token.key, event.token.value);
+    }
+    this.filterService.emitFilterValue$.next(values);
     this.resetFilterCount();
-    this.getFilterCount({ ...event });
+    this.getFilterCount({ ...values });
     this.toggleGlobalFilter();
   }
 

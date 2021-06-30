@@ -63,7 +63,10 @@
             <div>
               <mat-form-field>
                 <mat-label>Hotel Name</mat-label>
-                <mat-select formControlName="branchName">
+                <mat-select
+                  formControlName="branchName"
+                  (selectionChange)="handleHotelChange($event.value)"
+                >
                   <!-- <mat-select-trigger>
                     {{ branchNameFC.value ? branchNameFC.value[0] : '' }}
                     <span

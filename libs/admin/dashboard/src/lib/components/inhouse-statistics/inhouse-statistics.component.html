@@ -1,38 +1,173 @@
-<div class="container" (click)="openModal()">
+<div class="container">
   <div class="title-container">
     <div class="icon">
       <img src="assets/svg/inhouse.svg" />
     </div>
     <div class="stat-title">In-House</div>
-  </div>
-  <div class="stat-val-container">
-    <div class="semi-donut margin" [style]="percentStyle">
-      <div class="progress-detail-container">
-        <div class="stat-value">{{ inhouse.roomOccupied }}</div>
-        <div class="stat-val-title">Room Occupied</div>
+    <div class="info-icon">
+      <img src="assets/svg/info.svg" alt="info-icon">
+      <div class="tooltip">
+        <span class="arrow"></span>
+        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
       </div>
     </div>
   </div>
-  <div class="progress-info-labels-container">
-    <div>
-      <!-- <div class="adult_icon"></div> -->
-      <div class="progress-info-labels">
-        <img class="stat-image" src="assets/svg/stat-adult.svg" />
-        <span style="letter-spacing: 0.72px; color: #6d7580; margin-right: 5px;"
-          >Adult</span
-        >
-        {{ inhouse.adultCount }}
-      </div>
-    </div>
-    <div>
-      <!-- <div class="child_icon"></div> -->
-      <div class="progress-info-labels">
-        <img class="stat-image" src="assets/svg/stat-child.svg" />
-        <span style="letter-spacing: 0.72px; color: #6d7580; margin-right: 5px;"
-          >Kid</span
-        >
-        {{ inhouse.kidsCount }}
-      </div>
-    </div>
-  </div>
+  <mat-tab-group>
+    <mat-tab label="Request">
+      <ng-template matTabContent>
+        <hospitality-bot-inhouse-request-statistics
+          [inhouseRequest]="inhouseRequest"
+        ></hospitality-bot-inhouse-request-statistics> </ng-template
+    ></mat-tab>
+    <mat-tab label="Total">
+      <ng-template matTabContent>
+        <div class="chart__wrapper">
+          <div class="chart__wrapper--container">
+            <canvas
+              baseChart
+              style="height: 117px;"
+              [data]="chart.Data"
+              [labels]="chart.Labels"
+              [chartType]="chart.Type"
+              [legend]="chart.Legend"
+              [colors]="chart.Colors"
+              [options]="chart.Options"
+            >
+            </canvas>
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 124px;
+            "
+          >
+            <div>
+              <div style="display: flex; align-items: center;">
+                <div
+                  style="
+                    font: normal normal bold 38px/46px Roboto;
+                    text-align: center;
+                    font: normal normal bold 35px/46px Roboto;
+                    letter-spacing: 2.1px;
+                    color: #002046;
+                    margin: 5px 10px 5px 0;
+                  "
+                >
+                  {{ inhouse.roomOccupied }}
+                </div>
+                <div>
+                  <div
+                    style="
+                      font: normal normal normal 12px/16px Roboto;
+                      letter-spacing: 0px;
+                      color: #52b33f;
+                    "
+                  >
+                    ({{ inhouse.comparisonPercent }}%)
+                    <img src="assets/svg/uparrow.svg" alt="uparrow">
+                  </div>
+                  <div
+                    style="
+                      font: normal normal normal 10px/13px Roboto;
+                      letter-spacing: 0px;
+                      color: #c5c5c5;
+                      opacity: 1;
+                    "
+                  >
+                    In 30 Days
+                  </div>
+                </div>
+              </div>
+              <div
+                style="
+                  font: normal normal bold 12px/16px Roboto;
+                  letter-spacing: 0.72px;
+                  color: #6d7580;
+                  opacity: 1;
+                "
+              >
+                Total Guest
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div
+                style="display: flex; align-items: center; margin-right: 25px;"
+              >
+                <div style="margin-right: 8px;">
+                  <img class="stat-image" src="assets/svg/stat-adult.svg" />
+                </div>
+                <div>
+                  <div
+                    style="
+                      width: 14px;
+                      height: 14px;
+                      background: #ffbf04 0% 0% no-repeat padding-box;
+                      border-radius: 2px;
+                      opacity: 1;
+                    "
+                  ></div>
+                  <div>
+                    <span
+                      style="
+                        font: normal normal normal 12px/16px Roboto;
+                        letter-spacing: 0.72px;
+                        color: #6d7580;
+                      "
+                      >Adult</span
+                    >
+                    <span
+                      style="
+                        font: normal normal bold 12px/16px Roboto;
+                        letter-spacing: 0.72px;
+                        color: #002046;
+                        margin-left: 5px;
+                      "
+                      >{{ inhouse.adultCount }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center;">
+                <div style="margin-right: 8px;">
+                  <img class="stat-image" src="assets/svg/stat-child.svg" />
+                </div>
+                <div>
+                  <div
+                    style="
+                      width: 14px;
+                      height: 14px;
+                      background: #4ba0f5 0% 0% no-repeat padding-box;
+                      border-radius: 2px;
+                      opacity: 1;
+                    "
+                  ></div>
+                  <div>
+                    <span
+                      style="
+                        font: normal normal normal 12px/16px Roboto;
+                        letter-spacing: 0.72px;
+                        color: #6d7580;
+                      "
+                      >Kid</span
+                    >
+                    <span
+                      style="
+                        font: normal normal bold 12px/16px Roboto;
+                        letter-spacing: 0.72px;
+                        color: #002046;
+                        margin-left: 5px;
+                      "
+                      >{{ inhouse.kidsCount }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template></mat-tab
+    >
+  </mat-tab-group>
 </div>

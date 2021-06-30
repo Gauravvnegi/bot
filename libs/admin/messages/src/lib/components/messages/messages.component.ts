@@ -8,8 +8,14 @@ import { MessageTabService } from 'apps/admin/src/app/core/theme/src/lib/service
 })
 export class MessagesComponent implements OnInit {
   tabList = [
-    { imgSrc: 'assets/svg/whatsapp.svg', count: 1, dataLoaded: false },
+    {
+      imgSrc: 'assets/svg/whatsapp.svg',
+      count: 1,
+      dataLoaded: false,
+      name: 'whatsapp',
+    },
   ];
+  selectedIndex = 0;
   guestInfoEnable = false;
   refreshData = false;
   selectedChat = null;
@@ -38,6 +44,7 @@ export class MessagesComponent implements OnInit {
 
   loadChatList(index) {
     if (!this.tabList[index].dataLoaded) {
+      this.selectedIndex = index;
       this.tabList[index].dataLoaded = true;
       this.guestInfoEnable = false;
       this.refreshData = true;

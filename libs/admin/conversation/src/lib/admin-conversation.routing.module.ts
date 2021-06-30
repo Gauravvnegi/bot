@@ -5,7 +5,7 @@ import { ConversationComponent } from './components/conversation/conversation.co
 const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'request',
+    redirectTo: 'messages',
   },
   {
     path: '',

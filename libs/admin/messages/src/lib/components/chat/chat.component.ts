@@ -1,4 +1,5 @@
 import {
+  AfterViewChecked,
   Component,
   ElementRef,
   EventEmitter,
@@ -24,7 +25,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit, OnChanges, OnDestroy {
+export class ChatComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() refreshData;
   @Input() selectedChat;
   @Output() guestInfo = new EventEmitter();

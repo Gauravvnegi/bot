@@ -19,7 +19,11 @@
     </div>
     <div></div>
   </div>
-  <div style="height: calc(100% - 62px); overflow: auto;">
+  <div
+    style="height: calc(100% - 62px); overflow: auto;"
+    #contactList
+    (scroll)="onScroll($event)"
+  >
     <div
       style="
         height: 80px;

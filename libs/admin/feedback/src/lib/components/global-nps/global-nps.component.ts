@@ -135,7 +135,7 @@ export class GlobalNpsComponent implements OnInit {
       (response) => {
         this.loading = false;
         this.globalNps = new GlobalNPS().deserialize(response);
-
+        console.log(this.globalNps);
         this.initGraphData(this.globalNps);
       },
       ({ error }) => {

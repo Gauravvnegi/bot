@@ -29,7 +29,10 @@
 				<div class="icon" [style.background]="value.color"></div>
 				<div class="stat-lable">{{ value.label }} ({{ value.scale }})</div>
 			</div>
-			<div class="stat-val">{{ value.count }} ({{ value.percent }}%)</div>
+			<div class="stat-val">{{ value.count }} <span class="positive"> ({{ value.percent }}%) <img src="./assets/svg/uparrow.svg" alt="uparrow"> </span></div>
 		</div>
+	</div>
+	<div class="thirty__days">
+		<span>In 30 Days</span>	
 	</div>
 </div>

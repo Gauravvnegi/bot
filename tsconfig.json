@@ -65,6 +65,10 @@
       ],
       "@hospitality-bot/admin/subscription": [
         "libs/admin/subscription/src/index.ts"
+      ],
+      "@hospitality-bot/admin/messages": ["libs/admin/messages/src/index.ts"],
+      "@hospitality-bot/admin/conversation": [
+        "libs/admin/conversation/src/index.ts"
       ]
     }
   },

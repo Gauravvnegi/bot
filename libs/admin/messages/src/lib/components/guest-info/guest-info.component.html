@@ -1,0 +1,106 @@
+<div
+  style="
+    height: 62px;
+    width: 100%;
+    border-bottom: 1px solid #9eaeb8;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  "
+>
+  <div
+    style="width: 16px; height: 16px; cursor: pointer; margin-right: 20px;"
+    (click)="closeGuestInfo()"
+  >
+    &#10006;
+  </div>
+  <div>Guest Info</div>
+</div>
+<div
+  style="height: calc(100% - 124px); width: 100%;"
+  [ngStyle]="{
+    'border-bottom': buttonConfig[selectedIndex].button
+      ? '1px solid #9eaeb8'
+      : ''
+  }"
+>
+  <mat-tab-group #matTab (selectedTabChange)="onTabChanged($event)">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div><img src="assets/svg/user.svg" alt="Personal Info" /></div>
+      </ng-template>
+      <ng-template matTabContent>
+        <hospitality-bot-guest-personal-info
+          [data]="data"
+        ></hospitality-bot-guest-personal-info>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div>
+          <img src="assets/svg/calendar-guest.svg" alt="Booking Info" />
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <hospitality-bot-guest-booking-info
+          [data]="data"
+        ></hospitality-bot-guest-booking-info>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div>
+          <img src="assets/svg/tickets.svg" alt="Tickets" />
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <hospitality-bot-guest-tickets></hospitality-bot-guest-tickets>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div>
+          <img src="assets/svg/requests.svg" alt="Requests" />
+        </div>
+      </ng-template>
+      <ng-template matTabContent>
+        <hospitality-bot-guest-requests></hospitality-bot-guest-requests>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div
+  style="
+    height: 62px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  "
+>
+  <div
+    style="
+      width: 138px;
+      height: 36px;
+      background: #f6f6fc 0% 0% no-repeat padding-box;
+      border: 1px solid #e1e1f2;
+      border-radius: 100px;
+      opacity: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    "
+    *ngIf="buttonConfig[selectedIndex].button"
+  >
+    <div
+      style="
+        font: normal normal normal 11px/15px Roboto;
+        letter-spacing: 0.66px;
+        color: #002046;
+        opacity: 1;
+      "
+    >
+      {{ buttonConfig[selectedIndex].label }}
+    </div>
+  </div>
+</div>

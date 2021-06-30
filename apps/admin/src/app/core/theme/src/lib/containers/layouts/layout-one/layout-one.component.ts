@@ -63,6 +63,10 @@ export class LayoutOneComponent implements OnInit {
     });
   }
 
+  checkForMessageRoute() {
+    return this._router.url.includes('messages');
+  }
+
   initLayoutConfigs() {
     this.backgroundColor = 'white';
     this.lastUpdatedAt = DateService.getCurrentDateWithFormat('h:mm A');

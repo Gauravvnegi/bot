@@ -1,0 +1,56 @@
+<div
+  style="
+    height: 100%;
+    display: flex;
+    width: 100%;
+    border-radius: 5px 5px 0px 0px;
+    height: calc(100vh - 124px);
+  "
+>
+  <div style="width: 25%; height: 100%; border-right: 1px solid #9eaeb8;">
+    <hospitality-bot-chat-list
+      [refreshData]="refreshData"
+      [selected]="selectedChat"
+      (selectedChat)="setSelectedChat($event)"
+    ></hospitality-bot-chat-list>
+  </div>
+  <ng-container *ngIf="selectedChat; else noSelectedGuest">
+    <div [style.width]="guestInfoEnable ? '55%' : '75%'" style="height: 100%;">
+      <hospitality-bot-chat
+        [refreshData]="refreshData"
+        [selectedChat]="selectedChat"
+        (guestInfo)="openGuestInfo($event)"
+      ></hospitality-bot-chat>
+    </div>
+    <div
+      style="
+        width: 20%;
+        height: 100%;
+        background: #ffffff;
+        border-left: 1px solid #9eaeb8;
+      "
+      *ngIf="guestInfoEnable"
+    >
+      <hospitality-bot-guest-info
+        [refreshData]="refreshData"
+        [data]="selectedChat"
+        (closeInfo)="closeGuestInfo($event)"
+      ></hospitality-bot-guest-info>
+    </div>
+  </ng-container>
+  <ng-template #noSelectedGuest>
+    <div
+      style="
+        height: 100%;
+        width: 75%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background: #ffffff;
+      "
+    >
+      <div>Please select a contact to chat</div>
+    </div>
+  </ng-template>
+</div>

@@ -21,12 +21,11 @@ const appRoutes: Route[] = [
         canActivate: [LoadGuard],
       },
       {
-        path: 'request',
+        path: 'conversation',
         loadChildren: () =>
-          import('@hospitality-bot/admin/request').then(
-            (m) => m.AdminRequestModule
+          import('@hospitality-bot/admin/conversation').then(
+            (m) => m.AdminConversationModule
           ),
-        canActivate: [LoadGuard],
       },
       {
         path: 'package',

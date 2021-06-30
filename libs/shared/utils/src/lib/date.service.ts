@@ -6,6 +6,10 @@ import * as moment from 'moment';
 export class DateService {
   private constructor() {}
 
+  static getCurrentTimeStamp() {
+    return moment().unix() * 1000;
+  }
+
   static convertDateToTimestamp(inputDate) {
     return moment(inputDate).unix();
   }
@@ -88,9 +92,10 @@ export class DateService {
       return 'week';
     } else if (dateDiff >= 30 && dateDiff < 365) {
       if (
-        (DateService.getMonthFromDate(startDate) ===
-        DateService.getMonthFromDate(endDate)) && (DateService.getYearFromDate(startDate) ===
-        DateService.getYearFromDate(endDate))
+        DateService.getMonthFromDate(startDate) ===
+          DateService.getMonthFromDate(endDate) &&
+        DateService.getYearFromDate(startDate) ===
+          DateService.getYearFromDate(endDate)
       ) {
         return 'week';
       }
@@ -104,5 +109,12 @@ export class DateService {
       }
       return 'year';
     }
+  }
+
+  static sortObjArrayByTimeStamp(arr, field, order = 'asc') {
+    if (order === 'asc') {
+      return arr?.sort((a, b) => (a[field] > b[field] ? 1 : -1));
+    }
+    return arr?.sort((a, b) => (a[field] < b[field] ? 1 : -1));
   }
 }

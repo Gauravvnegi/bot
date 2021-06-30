@@ -1,0 +1,97 @@
+<div style="height: 100%; width: 100%;" *ngIf="sortFilterFG">
+  <div
+    style="
+      height: calc(100% - 62px);
+      width: 100%;
+      border-bottom: 1px solid #9eaeb8;
+      padding: 15px;
+    "
+    [formGroup]="sortFilterFG"
+  >
+    <div
+      style="
+        font: normal normal bold 10px/13px Roboto;
+        letter-spacing: 0.6px;
+        color: #b8bbbe;
+        margin-bottom: 10px;
+      "
+    >
+      Sort By
+    </div>
+    <div style="display: flex; height: auto; width: 100%; flex-wrap: wrap;">
+      <div
+        [ngStyle]="
+          sortControl?.value === item.value
+            ? {
+                background: '#0020461a 0% 0% no-repeat padding-box',
+                border: '1px solid #0020464d'
+              }
+            : {
+                background: '#AEAEAE1A 0% 0% no-repeat padding-box',
+                border: '1px solid #AEAEAE1A'
+              }
+        "
+        style="
+          border-radius: 1000px;
+          opacity: 1;
+          margin: 0 10px 10px 0;
+          width: max-content;
+          padding: 8px 15px;
+          cursor: pointer;
+        "
+        *ngFor="let item of sortList"
+        (click)="setSortBy(item.value)"
+      >
+        <div
+          style="
+            font: normal normal normal 14px/19px Roboto;
+            letter-spacing: 0.84px;
+            color: #002046;
+          "
+        >
+          {{ item.label }}
+        </div>
+      </div>
+    </div>
+    <div style="border: solid 1px #e0e0e0; margin: 20px 0;"></div>
+    <div
+      style="
+        font: normal normal bold 10px/13px Roboto;
+        letter-spacing: 0.6px;
+        color: #b8bbbe;
+        margin-bottom: 10px;
+      "
+    >
+      Filter By
+    </div>
+  </div>
+  <div
+    style="
+      height: 62px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <div
+      style="
+        width: 138px;
+        height: 36px;
+        background: #4b56c0 0% 0% no-repeat padding-box;
+        border-radius: 100px;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+      [ngStyle]="
+        sortFilterFG && sortFilterFG.untouched
+          ? { opacity: '0.3', 'pointer-events': 'none' }
+          : { opacity: '1', cursor: 'pointer' }
+      "
+      (click)="applyFilter()"
+    >
+      <div>Apply</div>
+    </div>
+  </div>
+</div>

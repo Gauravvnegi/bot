@@ -12,7 +12,54 @@
   </div>
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
-      <div class="options">
+      <div
+        class="options"
+        [ngStyle]="
+          checkForMessageRoute()
+            ? { visibility: 'visible', width: '100%' }
+            : { visibility: 'hidden', height: '0px' }
+        "
+      >
+        <div
+          style="
+            width: 25%;
+            padding: 14.5px 20px;
+            font: normal normal medium 14px/19px Roboto;
+            letter-spacing: 0.84px;
+            color: #c5c5c5;
+            opacity: 1;
+          "
+        >
+          Conversation &gt; <span style="color: #002046;">Messages</span>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 75%;
+          "
+          *ngIf="checkForMessageRoute()"
+        >
+          <div style="margin-bottom: -6px;">
+            <admin-message-tab-menu></admin-message-tab-menu>
+          </div>
+          <div class="dropdown-wrapper">
+            <admin-profile-dropdown
+              [items]="profile"
+              (onProfileAction)="profileAction($event)"
+            ></admin-profile-dropdown>
+          </div>
+        </div>
+      </div>
+      <div
+        class="options"
+        [ngStyle]="
+          !checkForMessageRoute()
+            ? { visibility: 'visible' }
+            : { visibility: 'hidden', height: '0px' }
+        "
+      >
         <div class="global_search">
           <admin-search-bar
             [parentForm]="searchFG"
@@ -53,20 +100,6 @@
             (removeVisibility)="noFilterNoSearch()"
           ></hospitality-bot-daterange>
         </div>
-        <!-- <div
-        class="filter-wrapper"
-        *ngIf="
-          isGlobalFilterVisible &&
-          (filterService.emitFilterValue$ | async) as initialFilterValue
-        "
-      >
-        <admin-filter
-          [initialFilterValue]="initialFilterValue"
-          (onCloseFilter)="toggleGlobalFilter()"
-          (onApplyFilter)="applyFilter($event)"
-          (onResetFilter)="resetFilter($event)"
-        ></admin-filter>
-      </div> -->
         <div class="dropdown-wrapper">
           <admin-profile-dropdown
             [items]="profile"
@@ -74,16 +107,6 @@
           ></admin-profile-dropdown>
         </div>
       </div>
-      <!-- <div class="refresh__wrapper">
-        <p class="status">
-          Last updated at
-          {{ lastUpdatedAt }}
-        </p>
-        <div class="seperator"></div>
-        <div (click)="refreshDashboard()" class="refresh__wrapper--icon">
-          <mat-icon class="material-icons" matSuffix>refresh</mat-icon>
-        </div>
-      </div> -->
       <mat-progress-bar
         *ngIf="progressSpinnerService.isProgressSpinnerVisible"
         mode="query"

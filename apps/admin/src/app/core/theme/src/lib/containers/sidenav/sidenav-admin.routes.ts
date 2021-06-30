@@ -57,26 +57,26 @@ export const ADMIN_ROUTES = [
 
 export const DEFAULT_ROUTES = [
   {
-    path: 'subscription',
-    title: 'Subscription',
-    children: null,
-    url: 'assets/svg/subscription.svg',
-  },
-  {
     path: 'conversation',
     title: 'Conversations',
     url: 'assets/svg/request.svg',
     children: [
-      {
-        path: 'conversation/request',
-        title: 'Requests',
-        url: 'assets/svg/virus.svg',
-      },
+      // {
+      //   path: 'conversation/request',
+      //   title: 'Requests',
+      //   url: 'assets/svg/virus.svg',
+      // },
       {
         path: 'conversation/messages',
         title: 'Messages',
         url: 'assets/svg/request.svg',
       },
     ],
+  },
+  {
+    path: 'subscription',
+    title: 'Subscription',
+    children: null,
+    url: 'assets/svg/subscription.svg',
   },
 ];

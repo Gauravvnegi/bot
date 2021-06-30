@@ -72,6 +72,7 @@ export class Contact {
   receiverId: string;
   reservationId: string;
   roomNo: string;
+  descriptionMessage: string;
   enableSend: boolean;
 
   deserialize(input) {
@@ -84,7 +85,8 @@ export class Contact {
       set({}, 'profileUrl', get(input, ['profileUrl'])),
       set({}, 'receiverId', get(input, ['receiverId'])),
       set({}, 'reservationId', get(input, ['reservationId'])),
-      set({}, 'roomNo', get(input, ['roomNo']))
+      set({}, 'roomNo', get(input, ['roomNo'])),
+      set({}, 'descriptionMessage', get(input, ['descriptionMessage']))
     );
     this.enableSend = this.checkEnableSend();
     return this;

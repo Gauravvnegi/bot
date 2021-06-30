@@ -78,7 +78,7 @@
               color: #99a6b5;
             "
           >
-            {{ contact.roomNo || 'RNO: 204' }}
+            RNO: {{ contact.roomNo || '204' }}
           </div>
           <div
             style="
@@ -121,7 +121,7 @@
             letter-spacing: 0.72px;
           "
         >
-          Test message
+          {{ contact.descriptionMessage }}
         </div>
       </div>
     </div>

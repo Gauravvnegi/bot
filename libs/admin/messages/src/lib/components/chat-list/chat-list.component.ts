@@ -34,6 +34,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   $subscription = new Subscription();
   searchFG: FormGroup;
   scrollView;
+  showFilter = true;
   constructor(
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,

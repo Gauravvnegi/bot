@@ -15,6 +15,7 @@ import { GuestRequestsComponent } from './components/guest-requests/guest-reques
 import { MessageService } from './services/messages.service';
 import { SharedModule } from 'primeng/api';
 import { WhatsappMessageComponent } from './components/whatsapp-message/whatsapp-message.component';
+import { ContactSortFilterComponent } from './components/contact-sort-filter/contact-sort-filter.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { WhatsappMessageComponent } from './components/whatsapp-message/whatsapp
     GuestTicketsComponent,
     GuestRequestsComponent,
     WhatsappMessageComponent,
+    ContactSortFilterComponent,
   ],
   providers: [MessageService],
 })

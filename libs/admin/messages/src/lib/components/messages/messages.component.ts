@@ -16,9 +16,6 @@ export class MessagesComponent implements OnInit {
     },
   ];
   selectedIndex = 0;
-  guestInfoEnable = false;
-  refreshData = false;
-  selectedChat = null;
   constructor(private messageTabService: MessageTabService) {}
 
   ngOnInit(): void {
@@ -46,24 +43,6 @@ export class MessagesComponent implements OnInit {
     if (!this.tabList[index].dataLoaded) {
       this.selectedIndex = index;
       this.tabList[index].dataLoaded = true;
-      this.guestInfoEnable = false;
-      this.refreshData = true;
-    }
-  }
-
-  setSelectedChat(event) {
-    this.selectedChat = event.value;
-  }
-
-  openGuestInfo(event) {
-    if (event.openGuestInfo) {
-      this.guestInfoEnable = true;
-    }
-  }
-
-  closeGuestInfo(event) {
-    if (event.close) {
-      this.guestInfoEnable = false;
     }
   }
 }

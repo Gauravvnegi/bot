@@ -18,6 +18,7 @@ export class WhatsappMessageComponent implements OnInit {
 
   setSelectedChat(event) {
     this.selectedChat = event.value;
+    this.guestInfoEnable = false;
   }
 
   openGuestInfo(event) {

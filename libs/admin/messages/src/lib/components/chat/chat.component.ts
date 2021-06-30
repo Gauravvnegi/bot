@@ -18,7 +18,7 @@ import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -38,7 +38,8 @@ export class ChatComponent
   offset = 0;
   limit = 20;
   $subscription = new Subscription();
-  scrollBottom = false;
+  scrollBottom = true;
+  scrollView;
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
@@ -50,6 +51,13 @@ export class ChatComponent
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
+    // interval(10000).subscribe((val) => {
+    //   console.log(
+    //     this.myScrollContainer.nativeElement.scrollTop,
+    //     this.myScrollContainer.nativeElement.scrollHeight
+    //   );
+    //   // this.refreshChat();
+    // });
   }
 
   initFG(): void {
@@ -66,10 +74,7 @@ export class ChatComponent
   }
 
   ngAfterViewChecked() {
-    if (this.myScrollContainer && !this.scrollBottom) {
-      this.scrollBottom = true;
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    }
+    this.scrollChat();
   }
 
   registerListeners(): void {
@@ -99,7 +104,7 @@ export class ChatComponent
     this.guestInfo.emit({ openGuestInfo: true });
   }
 
-  getChat(config = { offset: 0, limit: 20 }): void {
+  getChat(config = { offset: 0, limit: 20 }, scrollHeight?: number): void {
     if (this.selectedChat) {
       this.limit = config.limit;
       this.isLoading = true;
@@ -124,7 +129,9 @@ export class ChatComponent
                 this.chat.messages,
                 'timestamp'
               );
-              if (config.limit === 20) this.scrollBottom = false;
+              scrollHeight
+                ? (this.scrollView = scrollHeight)
+                : (this.scrollBottom = true);
               this.isLoading = false;
             },
             ({ error }) => {
@@ -174,7 +181,31 @@ export class ChatComponent
       this.myScrollContainer.nativeElement.scrollTop === 0 &&
       this.limit > this.chat?.messages?.length
     )
-      this.getChat({ offset: this.offset, limit: this.limit });
+      this.getChat(
+        { offset: this.offset, limit: this.limit },
+        this.myScrollContainer.nativeElement.scrollHeight
+      );
+  }
+
+  scrollChat() {
+    if (this.myScrollContainer && this.scrollBottom) {
+      this.scrollBottom = false;
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } else if (this.myScrollContainer && this.scrollView) {
+      this.myScrollContainer.nativeElement.scrollTop =
+        this.myScrollContainer.nativeElement.scrollHeight - this.scrollView;
+      this.scrollView = undefined;
+    }
+  }
+
+  refreshChat() {
+    this.getChat(
+      {
+        offset: this.offset,
+        limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit + 1,
+      },
+      0
+    );
   }
 
   ngOnDestroy(): void {

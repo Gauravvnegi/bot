@@ -9,12 +9,13 @@
       align-items: center;
     "
   >
-    <div style="height: 100%; width: calc(100% - 50px);">
+    <div style="height: 100%; width: calc(100% - 50px);" [formGroup]="searchFG">
       <input
         matInput
         type="text"
         class="search-field-input"
         placeholder="Search Name, Number, Room No...."
+        formControlName="search"
       />
     </div>
     <div></div>
@@ -35,7 +36,7 @@
         width: 100%;
       "
       [ngStyle]="
-        selected.receiverId === contact.receiverId
+        selected && selected.receiverId === contact.receiverId
           ? {
               'pointer-events': 'none',
               background: '#f1f1f1 0% 0% no-repeat padding-box'

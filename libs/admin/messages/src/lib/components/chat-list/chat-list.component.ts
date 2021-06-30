@@ -14,6 +14,9 @@ import { Subscription } from 'rxjs';
 import { ContactList, IContactList } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { debounceTime, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -25,26 +28,39 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   @Input() selected;
   @Output() selectedChat = new EventEmitter();
   @ViewChild('contactList') private myScrollContainer: ElementRef;
+  limit = 20;
   hotelId: string;
   chatList: IContactList;
   $subscription = new Subscription();
-  scrollView = 0;
+  searchFG: FormGroup;
+  scrollView;
   constructor(
     private messageService: MessageService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
     this.registerListeners();
   }
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForSearchChanges();
+  }
+
+  initFG() {
+    this.searchFG = this.fb.group({
+      search: [''],
+    });
   }
 
   ngAfterViewChecked() {
-    if (this.myScrollContainer) {
+    if (this.myScrollContainer && this.scrollView) {
       this.myScrollContainer.nativeElement.scrollTop = this.scrollView;
+      this.scrollView = undefined;
     }
   }
 
@@ -70,10 +86,23 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   loadChatList() {
     this.$subscription.add(
-      this.messageService.getChatList(this.hotelId).subscribe((response) => {
-        this.chatList = new ContactList().deserialize(response);
-        this.selectedChat.emit({ value: this.chatList.contacts[0] });
-      })
+      this.messageService
+        .getChatList(
+          this.hotelId,
+          this.adminUtilityService.makeQueryParams([
+            {
+              hotelId: this.hotelId,
+              limit: this.limit,
+            },
+          ])
+        )
+        .subscribe((response) => {
+          response.length < this.limit
+            ? (this.limit = response.length)
+            : (this.limit = this.limit + 20);
+          this.chatList = new ContactList().deserialize(response);
+          // this.selectedChat.emit({ value: this.chatList.contacts[0] });
+        })
     );
   }
 
@@ -86,11 +115,53 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (
       this.myScrollContainer &&
       this.myScrollContainer.nativeElement.scrollTop ===
-        this.myScrollContainer.nativeElement.scrollHeight
+        this.myScrollContainer.nativeElement.scrollHeight &&
+      this.limit > this.chatList.contacts.length
     ) {
-      this.loadChatList();
-      this.scrollView = this.myScrollContainer.nativeElement.scrollHeight;
+      if ((this.searchFG.get('search').value.length = 0)) {
+        this.scrollView = this.myScrollContainer.nativeElement.scrollHeight;
+        this.loadChatList();
+      } else this.loadSearchList(this.searchFG.get('search').value);
     }
+  }
+
+  loadSearchList(searchKey) {
+    this.$subscription.add(
+      this.messageService
+        .searchChatList(
+          this.hotelId,
+          this.adminUtilityService.makeQueryParams([
+            {
+              limit: this.limit,
+              key: searchKey,
+            },
+          ])
+        )
+        .subscribe((response) => {
+          response.length < this.limit
+            ? (this.limit = response.length)
+            : (this.limit = this.limit + 20);
+          this.chatList = new ContactList().deserialize(response);
+          this.selectedChat.emit(null);
+        })
+    );
+  }
+
+  listenForSearchChanges() {
+    const formChanges$ = this.searchFG.valueChanges.pipe(
+      filter(() => !!(this.searchFG.get('search') as FormControl).value)
+    );
+
+    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
+      // setting minimum search character limit to 3
+      if (response?.search.length >= 3) {
+        this.limit = 20;
+        this.loadSearchList(response?.search);
+      } else {
+        if (this.limit < 20) this.limit = 20;
+        this.loadChatList();
+      }
+    });
   }
 
   ngOnDestroy(): void {

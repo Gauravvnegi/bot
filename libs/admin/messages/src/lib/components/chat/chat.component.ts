@@ -40,6 +40,7 @@ export class ChatComponent
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
+  chatList = {};
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
@@ -51,13 +52,6 @@ export class ChatComponent
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
-    // interval(10000).subscribe((val) => {
-    //   console.log(
-    //     this.myScrollContainer.nativeElement.scrollTop,
-    //     this.myScrollContainer.nativeElement.scrollHeight
-    //   );
-    //   // this.refreshChat();
-    // });
   }
 
   initFG(): void {
@@ -128,6 +122,9 @@ export class ChatComponent
               this.chat.messages = DateService.sortObjArrayByTimeStamp(
                 this.chat.messages,
                 'timestamp'
+              );
+              this.chatList = this.messageService.filterMessagesByDate(
+                this.chat.messages
               );
               scrollHeight
                 ? (this.scrollView = scrollHeight)
@@ -206,6 +203,10 @@ export class ChatComponent
       },
       0
     );
+  }
+
+  get chatDates() {
+    return Object.keys(this.chatList);
   }
 
   ngOnDestroy(): void {

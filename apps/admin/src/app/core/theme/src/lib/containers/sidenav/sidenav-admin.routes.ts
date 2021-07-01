@@ -59,7 +59,7 @@ export const DEFAULT_ROUTES = [
   {
     path: 'conversation',
     title: 'Conversations',
-    url: 'assets/svg/request.svg',
+    url: 'assets/svg/messenger.svg',
     children: [
       // {
       //   path: 'conversation/request',
@@ -69,7 +69,7 @@ export const DEFAULT_ROUTES = [
       {
         path: 'conversation/messages',
         title: 'Messages',
-        url: 'assets/svg/request.svg',
+        url: 'assets/svg/chatting.svg',
       },
     ],
   },

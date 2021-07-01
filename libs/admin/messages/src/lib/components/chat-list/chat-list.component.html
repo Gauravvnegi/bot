@@ -1,49 +1,27 @@
 <div
-  style="height: 100%; background: #ffffff;"
+  class="chatlist-wrapper"
   [ngStyle]="
     !showFilter
       ? { visibility: 'visible', width: '100%' }
       : { visibility: 'hidden', height: '0px' }
   "
 >
-  <div
-    style="
-      height: 62px;
-      padding: 10px 15px;
-      border-bottom: 1px solid #9eaeb8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    "
-  >
-    <div style="height: 100%; width: calc(100% - 50px);" [formGroup]="searchFG">
-      <input
-        matInput
-        type="text"
-        class="search-field-input"
-        placeholder="Search Name, Number, Room No...."
-        formControlName="search"
-      />
-    </div>
-    <div style="cursor: pointer;">
-      <img src="assets/svg/Filter-Icon.svg" (click)="showFilter = true" />
-    </div>
+<div class="search-filter-wrapper">
+  <div class="search-wrapper" [formGroup]="searchFG">
+    <input
+      matInput
+      type="text"
+      class="search-field-input"
+      placeholder="Search Name, Number, Room No...."
+      formControlName="search"
+    />
   </div>
-  <div
-    style="height: calc(100% - 62px); overflow: auto;"
-    #contactList
-    (scroll)="onScroll($event)"
-  >
-    <div
-      style="
-        height: 80px;
-        padding: 12px 15px;
-        border-bottom: 1px solid #f1f1f1;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        width: 100%;
-      "
+  <div style="cursor: pointer;">
+    <img src="assets/svg/Filter-Icon.svg" (click)="showFilter = true" />
+  </div>
+</div>
+  <div class="chatlist-contact" #contactList (scroll)="onScroll($event)" >
+    <div class="chatlist-item-wrapper"
       [ngStyle]="
         selected && selected.receiverId === contact.receiverId
           ? {
@@ -55,83 +33,25 @@
       *ngFor="let contact of chatList?.contacts"
       (click)="onChatSelect(contact)"
     >
-      <div
-        style="
-          width: 55px;
-          height: 55px;
-          background: chartreuse;
-          border-radius: 50%;
-          margin-right: 15px;
-        "
-      >
+      <div class="chatlist-item-wrapper-image" >
         <img [src]="contact.profileUrl" *ngIf="contact.profileUrl" />
       </div>
-      <div style="width: calc(100% - 55px);">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            width: auto;
-          "
-        >
-          <div
-            style="
-              font-family: Roboto;
-              font-size: 10px;
-              font-weight: bold;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
-              letter-spacing: 0.6px;
-              text-align: left;
-              color: #99a6b5;
-            "
-          >
+      <div class="chatlist-item-wrapper-content">
+        <div class="chatlist-item-wrapper-content-rnodate">
+          <div class="rno-number">
             RNO: {{ contact.roomNo || '204' }}
           </div>
-          <div
-            style="
-              font-family: Roboto;
-              font-size: 10px;
-              font-weight: normal;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
-              letter-spacing: 0.6px;
-              text-align: right;
-              color: #c7c7c7;
-            "
-          >
+          <div class="time">
             {{ contact.getTime() }}
           </div>
         </div>
-        <div
-          style="
-            margin-bottom: 5px;
-            font-family: Roboto;
-            font-size: 12px;
-            font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: 0.72px;
-          "
-        >
+        <div class="persons">
           {{ contact.name || contact.phone }}
         </div>
         <div
-          style="
-            font-family: Roboto;
-            font-size: 12px;
-            font-weight: bold;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: 0.72px;
-          "
+          class="description-message"
         >
-          {{ contact.descriptionMessage }}
+        {{ contact.descriptionMessage }}
         </div>
       </div>
     </div>

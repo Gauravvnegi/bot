@@ -123,6 +123,21 @@
           width: 20%;
         }
       }
+
+      // message headers
+      .breadcrums{
+        width: 25%;
+        padding: 14.5px 20px;
+        font: normal normal normal 14px/19px Roboto;
+        letter-spacing: 0.84px;
+        color: #c5c5c5;
+        opacity: 1;
+
+        span{
+          color:#002046;
+        }
+      }
+
     }
   }
   &--container {
@@ -197,4 +212,10 @@
   -ms-transition: all 500ms;
   -o-transition: all 500ms;
   transition: all 500ms;
+}
+:host::ng-deep .mat-tab-label img{
+  filter: grayscale(100);
+}
+:host::ng-deep .mat-tab-label-active img{
+  filter: grayscale(0) !important;
 }

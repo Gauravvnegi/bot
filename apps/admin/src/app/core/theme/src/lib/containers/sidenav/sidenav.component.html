@@ -56,7 +56,10 @@
             class="collapse-a collapsed"
             [style.color]="normalFontColor"
           >
-            <i class="material-icons">{{ menuItem.icon }}</i>
+            <!-- <i class="material-icons">{{ menuItem.icon }}</i> -->
+            <div class="sidenav_logo">
+              <img [src]="menuItem.url" class="svg-icon" />
+            </div>
             <span *ngIf="isExpanded">{{ menuItem.title }}</span>
             <b
               *ngIf="isExpanded"
@@ -82,9 +85,12 @@
                   "
                   style="height: 43px;"
                 >
-                  <span style="margin-left: 5px; width: 21px;">{{
-                    subItem.icon
-                  }}</span>
+                  <span style="margin-left: 5px; width: 21px;">
+                    <!-- {{subItem.icon }} -->
+                  <div class="sidenav_logo">
+                    <img [src]="subItem.url" class="svg-icon" />
+                  </div>
+                </span>
                   <span *ngIf="isExpanded">{{ subItem.title }}</span>
                 </a>
               </li>

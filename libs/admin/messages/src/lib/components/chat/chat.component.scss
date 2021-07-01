@@ -12,7 +12,8 @@
 .right-message {
   display: flex;
   margin: 10px 0;
-  max-width: 40%;
+  max-width: 50%;
+  height: auto;
   padding: 10px;
   border-radius: 10px 10px 0 10px;
   color: #ffffff;
@@ -34,7 +35,8 @@
 .left-message {
   display: flex;
   margin: 10px 0;
-  max-width: 40%;
+  max-width: 50%;
+  height: auto;
   padding: 10px;
   border-radius: 10px 10px 10px 0;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
@@ -63,4 +65,5 @@
   letter-spacing: 0.6px;
   color: #c7c7c7;
   margin-left: 10px;
+  width: 30%;
 }

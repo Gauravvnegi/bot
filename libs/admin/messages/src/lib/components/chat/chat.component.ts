@@ -35,7 +35,6 @@ export class ChatComponent
   chat: IChats;
   chatFG: FormGroup;
   isLoading = false;
-  offset = 0;
   limit = 20;
   $subscription = new Subscription();
   scrollBottom = true;
@@ -179,7 +178,7 @@ export class ChatComponent
       this.limit > this.chat?.messages?.length
     )
       this.getChat(
-        { offset: this.offset, limit: this.limit },
+        { offset: 0, limit: this.limit },
         this.myScrollContainer.nativeElement.scrollHeight
       );
   }
@@ -198,7 +197,7 @@ export class ChatComponent
   refreshChat() {
     this.getChat(
       {
-        offset: this.offset,
+        offset: 0,
         limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit + 1,
       },
       0

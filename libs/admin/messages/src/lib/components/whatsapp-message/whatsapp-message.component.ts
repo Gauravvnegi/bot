@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IContact } from '../../models/message.model';
 
 @Component({
   selector: 'hospitality-bot-whatsapp-message',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WhatsappMessageComponent implements OnInit {
   guestInfoEnable = false;
+  guestData: IContact;
   refreshData = false;
   selectedChat = null;
   constructor() {}
@@ -30,6 +32,11 @@ export class WhatsappMessageComponent implements OnInit {
   closeGuestInfo(event) {
     if (event.close) {
       this.guestInfoEnable = false;
+      this.guestData = event.data;
     }
+  }
+
+  updateReceiver() {
+    this.refreshData = true;
   }
 }

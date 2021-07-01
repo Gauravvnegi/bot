@@ -5,24 +5,33 @@ import { IChat } from '../models/message.model';
 
 @Injectable()
 export class MessageService extends ApiService {
-  getChatList(hotelId: string, config) {
-    return this.get(`/api/v1/hotel/${hotelId}/conversations/${config}`);
+  getChatList(hotelId: string, queryObj) {
+    return this.get(`/api/v1/hotel/${hotelId}/conversations/${queryObj}`);
   }
 
-  searchChatList(hotelId: string, config) {
-    return this.get(
-      `/api/v1/hotel/d63974e6-9d37-4eff-bf93-81b26f6751ee/conversations/search${config}`
-    );
+  searchChatList(hotelId: string, queryObj) {
+    return this.get(`/api/v1/hotel/${hotelId}/conversations/search${queryObj}`);
   }
 
-  getChat(hotelId, receiverId, config) {
+  getChat(hotelId, receiverId, queryObj) {
     return this.get(
-      `/api/v1/hotel/${hotelId}/conversations/${receiverId}${config}`
+      `/api/v1/hotel/${hotelId}/conversations/${receiverId}${queryObj}`
     );
   }
 
   sendMessage(hotelId: string, data) {
     return this.post(`/api/v1/hotel/${hotelId}/conversations/send`, data);
+  }
+
+  updateGuestDetail(hotelId: string, conversationId: string, data) {
+    return this.patch(
+      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/guest-associate`,
+      data
+    );
+  }
+
+  searchBooking(queryObj) {
+    return this.get(`/api/v1/search${queryObj}`);
   }
 
   filterMessagesByDate(messages: IChat[]) {

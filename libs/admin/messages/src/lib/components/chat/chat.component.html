@@ -28,7 +28,7 @@
         opacity: 1;
       "
     >
-      {{ selectedChat ? selectedChat.name : '' }}
+      {{ selectedChat ? selectedChat.name || selectedChat.phone : '' }}
     </div>
   </div>
   <div

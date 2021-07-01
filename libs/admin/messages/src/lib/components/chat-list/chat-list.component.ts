@@ -119,7 +119,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.myScrollContainer.nativeElement.scrollHeight &&
       this.limit > this.chatList.contacts.length
     ) {
-      if ((this.searchFG.get('search').value.length = 0)) {
+      if (this.searchFG.get('search').value.length < 3) {
         this.scrollView = this.myScrollContainer.nativeElement.scrollHeight;
         this.loadChatList();
       } else this.loadSearchList(this.searchFG.get('search').value);
@@ -143,7 +143,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             ? (this.limit = response.length)
             : (this.limit = this.limit + 20);
           this.chatList = new ContactList().deserialize(response);
-          this.selectedChat.emit(null);
         })
     );
   }

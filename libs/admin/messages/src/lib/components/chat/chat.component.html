@@ -9,7 +9,7 @@
       border-bottom: 1px solid #9eaeb8;
       cursor: pointer;
     "
-    (click)="openGuestInfo(chat.receiver)"
+    (click)="openGuestInfo()"
   >
     <div
       style="
@@ -28,7 +28,7 @@
         opacity: 1;
       "
     >
-      {{ selectedChat ? selectedChat.name || selectedChat.phone : '' }}
+      {{ chat ? chat.receiver?.name || chat.receiver?.phone : '' }}
     </div>
   </div>
   <div

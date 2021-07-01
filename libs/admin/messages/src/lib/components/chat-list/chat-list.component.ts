@@ -50,6 +50,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForSearchChanges();
+    this.listenForRefreshData();
   }
 
   initFG() {
@@ -77,6 +78,16 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
   }
 
+  listenForRefreshData() {
+    this.messageService.refreshData$.subscribe((response) => {
+      if (response) {
+        this.scrollView = this.myScrollContainer.nativeElement.scrollTop;
+        this.loadChatList();
+        this.messageService.refreshData$.next(false);
+      }
+    });
+  }
+
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -102,6 +113,12 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             ? (this.limit = response.length)
             : (this.limit = this.limit + 20);
           this.chatList = new ContactList().deserialize(response);
+          // if (this.selected?.receiverId)
+          //   this.selectedChat.emit({
+          //     value: this.chatList.contacts.filter(
+          //       (item) => item.receiverId === this.selected?.receiverId
+          //     )[0],
+          //   });
           // this.selectedChat.emit({ value: this.chatList.contacts[0] });
         })
     );

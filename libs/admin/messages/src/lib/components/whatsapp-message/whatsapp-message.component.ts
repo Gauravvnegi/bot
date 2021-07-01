@@ -35,8 +35,4 @@ export class WhatsappMessageComponent implements OnInit {
       this.guestData = event.data;
     }
   }
-
-  updateReceiver() {
-    this.refreshData = true;
-  }
 }

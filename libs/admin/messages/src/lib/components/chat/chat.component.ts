@@ -18,7 +18,7 @@ import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -72,6 +72,7 @@ export class ChatComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForRefreshData();
   }
 
   listenForGlobalFilters(): void {
@@ -85,6 +86,17 @@ export class ChatComponent
     );
   }
 
+  listenForRefreshData() {
+    this.messageService.refreshData$.subscribe((response) => {
+      if (response) {
+        this.scrollBottom = true;
+        this.guestInfo.emit(false);
+        this.getChat({ offset: 0, limit: 20 }, 0, true);
+        this.messageService.refreshData$.next(false);
+      }
+    });
+  }
+
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -93,11 +105,15 @@ export class ChatComponent
     });
   }
 
-  openGuestInfo(value): void {
-    this.guestInfo.emit({ openGuestInfo: true, data: value });
+  openGuestInfo(): void {
+    this.guestInfo.emit({ openGuestInfo: true, data: this.chat.receiver });
   }
 
-  getChat(config = { offset: 0, limit: 20 }, scrollHeight?: number): void {
+  getChat(
+    config = { offset: 0, limit: 20 },
+    scrollHeight?: number,
+    openGuest?
+  ): void {
     if (this.selectedChat) {
       this.limit = config.limit;
       this.isLoading = true;
@@ -129,6 +145,7 @@ export class ChatComponent
                 ? (this.scrollView = scrollHeight)
                 : (this.scrollBottom = true);
               this.isLoading = false;
+              if (openGuest) this.openGuestInfo();
             },
             ({ error }) => {
               this.isLoading = false;
@@ -157,7 +174,7 @@ export class ChatComponent
           this.chatFG.get('message').setValue('');
           this.getChat({
             offset: 0,
-            limit: this.limit,
+            limit: 20,
           });
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)

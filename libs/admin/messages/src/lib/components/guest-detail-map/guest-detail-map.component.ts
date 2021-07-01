@@ -59,15 +59,24 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
       guestPhone: [this.data.phone || ''],
       roomNo: [this.data.roomNo || ''],
       lastMessageAt: [this.data.lastMessageAt],
-      firstName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
-      lastName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      firstName: [
+        this.data.name?.split(' ')[0] || '',
+        [Validators.required, Validators.pattern(Regex.NAME)],
+      ],
+      lastName: [
+        this.data.name?.split(' ')[1] || '',
+        [Validators.required, Validators.pattern(Regex.NAME)],
+      ],
       channelType: ['Whatsapp'],
       channelValue: [''],
-      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
+      email: [
+        this.data.email || '',
+        [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
+      ],
       company: [],
     });
     this.searchFG = this.fb.group({
-      search: [''],
+      search: [this.data.reservationId || ''],
     });
   }
 
@@ -116,7 +125,8 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
         .updateGuestDetail(this.hotelId, this.data.receiverId, values)
         .subscribe(
           (response) => {
-            this.onModalClose.emit({ data: response });
+            this.messageService.refreshData$.next(true);
+            this.onModalClose.emit();
           },
           ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
         )
@@ -154,6 +164,9 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
               }
             })
         );
+      } else {
+        this.reservationIds = [];
+        this.showSearchResult = false;
       }
     });
   }

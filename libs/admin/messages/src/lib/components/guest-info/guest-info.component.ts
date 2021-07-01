@@ -9,7 +9,11 @@ import {
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { Subscription } from 'rxjs';
+import { Contact, IContact } from '../../models/message.model';
 
 @Component({
   selector: 'hospitality-bot-guest-info',
@@ -20,8 +24,10 @@ export class GuestInfoComponent implements OnInit {
   @Input() refreshData;
   @Input() data;
   @Output() closeInfo = new EventEmitter();
-  @Output() updateReceiver = new EventEmitter();
   @ViewChild('matTab') matTab: MatTabGroup;
+  $subscription = new Subscription();
+  guestData: IContact;
+  hotelId: string;
   selectedIndex = 0;
   buttonConfig = [
     {
@@ -37,9 +43,55 @@ export class GuestInfoComponent implements OnInit {
     { button: false, label: 'Edit Details', icon: 'assets/svg/user.svg' },
     { button: false, label: 'Map Details', icon: 'assets/svg/user.svg' },
   ];
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private messageService: MessageService,
+    private _globalFilterService: GlobalFilterService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.listenForRefreshData();
+    this.listenForGlobalFilters();
+    this.getGuestInfo();
+  }
+
+  getGuestInfo() {
+    this.$subscription.add(
+      this.messageService
+        .getChat(this.hotelId, this.data.receiverId, '')
+        .subscribe((response) => {
+          this.guestData = new Contact().deserialize(response.receiver);
+        })
+    );
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+      })
+    );
+  }
+
+  listenForRefreshData() {
+    this.messageService.refreshData$.subscribe((response) => {
+      if (response) {
+        this.getGuestInfo();
+        this.messageService.refreshData$.next(false);
+      }
+    });
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
 
   closeGuestInfo() {
     this.closeInfo.emit({ close: true });
@@ -53,6 +105,10 @@ export class GuestInfoComponent implements OnInit {
     switch (this.selectedIndex) {
       case 0:
         this.updateGuestDetails();
+        break;
+      case 1:
+        this.updateGuestDetails();
+        break;
     }
   }
 
@@ -67,9 +123,6 @@ export class GuestInfoComponent implements OnInit {
 
     detailCompRef.componentInstance.data = this.data;
     detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      if (res?.data) {
-        this.updateReceiver.emit(res.data);
-      }
       // remove loader for detail close
       detailCompRef.close();
     });

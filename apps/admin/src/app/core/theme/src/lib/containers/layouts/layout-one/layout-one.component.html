@@ -12,6 +12,7 @@
   </div>
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
+      <!-- message header -->
       <div
         class="options"
         [ngStyle]="
@@ -20,16 +21,7 @@
             : { visibility: 'hidden', height: '0px' }
         "
       >
-        <div
-          style="
-            width: 25%;
-            padding: 14.5px 20px;
-            font: normal normal medium 14px/19px Roboto;
-            letter-spacing: 0.84px;
-            color: #c5c5c5;
-            opacity: 1;
-          "
-        >
+        <div class="breadcrums">
           Conversation &gt; <span style="color: #002046;">Messages</span>
         </div>
         <div
@@ -52,6 +44,7 @@
           </div>
         </div>
       </div>
+      <!-- main-headers -->
       <div
         class="options"
         [ngStyle]="

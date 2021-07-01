@@ -111,15 +111,18 @@
     "
     *ngIf="chatFG && selectedChat?.enableSend; else noSend"
   >
-    <div style="height: 100%; width: calc(100% - 60px);" [formGroup]="chatFG">
-      <input
+    <div style="height: 100%; width: 100%;" [formGroup]="chatFG">
+      <div class="" style="position: relative;height: 100%; width: calc(100% - 60px);">
+        <input
         matInput
         type="text"
         class="message-field-input"
         placeholder="Type Message"
         formControlName="message"
-        (keyup)="checkForEnterKey($event)"
-      />
+        (keyup)="checkForEnterKey($event)"/>
+        <img src="assets/svg/smile.svg"
+        style="position:absolute; right:10px;top:48%;transform: translateY(-50%);"  />
+      </div>
     </div>
     <div style="cursor: pointer;" (click)="sendMessage()">
       <img src="assets/svg/send-message.svg" />

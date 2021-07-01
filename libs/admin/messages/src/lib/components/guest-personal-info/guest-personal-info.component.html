@@ -1,15 +1,5 @@
 <div style="padding: 15px;">
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 14px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.84px;
-    "
-  >
+  <div class="person-title">
     Personal Info
   </div>
   <div style="margin: 15px 0; display: flex; align-items: center;">
@@ -22,95 +12,27 @@
       "
     ></div>
     <div
-      style="
-        margin-left: 15px;
-        font-family: Roboto;
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.72px;
-      "
+    class="guest-name"
     >
       {{ data.name || 'Unknown Person' }}
     </div>
   </div>
   <div style="border: solid 1px #e0e0e0;"></div>
   <div
-    style="
-      margin-top: 15px;
-      font-family: Roboto;
-      font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.84px;
-    "
+  class="contact-detials"
   >
     Contact Details
   </div>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 10px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.6px;
-      text-align: left;
-      color: #99a6b5;
-      margin-top: 15px;
-    "
-  >
+  <div class="phone">
     Phone No.
   </div>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 12px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.72px;
-      text-align: left;
-      margin-top: 5px;
-    "
-  >
+  <div class="phone-text">
     {{ data.phone }}
   </div>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 10px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.6px;
-      text-align: left;
-      color: #99a6b5;
-      margin-top: 15px;
-    "
-  >
+  <div class="email">
     Email
   </div>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 12px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.72px;
-      text-align: left;
-      margin-top: 5px;
-    "
-  >
+  <div class="email-text" >
     {{ data.email || 'Unknown' }}
   </div>
 </div>

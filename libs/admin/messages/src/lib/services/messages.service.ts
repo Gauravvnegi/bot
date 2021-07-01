@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import * as moment from 'moment';
+import { BehaviorSubject } from 'rxjs';
 import { IChat } from '../models/message.model';
 
 @Injectable()
 export class MessageService extends ApiService {
+  refreshData$ = new BehaviorSubject(false);
   getChatList(hotelId: string, queryObj) {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/${queryObj}`);
   }

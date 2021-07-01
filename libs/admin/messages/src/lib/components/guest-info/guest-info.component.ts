@@ -53,6 +53,10 @@ export class GuestInfoComponent implements OnInit {
     switch (this.selectedIndex) {
       case 0:
         this.updateGuestDetails();
+        break;
+      case 1:
+        this.updateGuestDetails();
+        break;
     }
   }
 

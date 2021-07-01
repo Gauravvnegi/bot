@@ -157,7 +157,7 @@ export class ChatComponent
           this.chatFG.get('message').setValue('');
           this.getChat({
             offset: 0,
-            limit: this.limit,
+            limit: 20,
           });
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)

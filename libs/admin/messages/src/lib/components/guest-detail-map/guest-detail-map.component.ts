@@ -154,6 +154,9 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
               }
             })
         );
+      } else {
+        this.reservationIds = [];
+        this.showSearchResult = false;
       }
     });
   }

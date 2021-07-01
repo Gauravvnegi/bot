@@ -9,7 +9,7 @@
       border-bottom: 1px solid #9eaeb8;
       cursor: pointer;
     "
-    (click)="openGuestInfo()"
+    (click)="openGuestInfo(chat.receiver)"
   >
     <div
       style="
@@ -109,7 +109,7 @@
       justify-content: space-between;
       align-items: center;
     "
-    *ngIf="chatFG && selectedChat?.enableSend; else noSend"
+    *ngIf="chatFG && chat?.receiver?.enableSend; else noSend"
   >
     <div style="height: 100%; width: calc(100% - 60px);" [formGroup]="chatFG">
       <input

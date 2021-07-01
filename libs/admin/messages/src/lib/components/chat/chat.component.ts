@@ -93,8 +93,8 @@ export class ChatComponent
     });
   }
 
-  openGuestInfo(): void {
-    this.guestInfo.emit({ openGuestInfo: true });
+  openGuestInfo(value): void {
+    this.guestInfo.emit({ openGuestInfo: true, data: value });
   }
 
   getChat(config = { offset: 0, limit: 20 }, scrollHeight?: number): void {
@@ -133,6 +133,7 @@ export class ChatComponent
             ({ error }) => {
               this.isLoading = false;
               this.chat = new Chats();
+              this.chatList = {};
               this.snackBarService.openSnackBarAsText(error.message);
             }
           )

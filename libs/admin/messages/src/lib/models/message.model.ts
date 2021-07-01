@@ -3,11 +3,11 @@ import * as moment from 'moment';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 export class Chats {
   messages: IChat[];
-  receiver: any;
+  receiver: IContact;
 
   deserialize(input) {
     this.messages = new Array<IChat>();
-    Object.assign(this, set({}, 'receiver', get(input, ['receiver'])));
+    this.receiver = new Contact().deserialize(input.receiver);
 
     input.messages?.forEach((message) => {
       this.messages.push(new Chat().deserialize(message));
@@ -66,6 +66,7 @@ export class ContactList {
 export class Contact {
   email: string;
   lastMessageAt: number;
+  lastInboundMessageAt: number;
   name: string;
   phone: string;
   profileUrl: string;
@@ -86,7 +87,8 @@ export class Contact {
       set({}, 'receiverId', get(input, ['receiverId'])),
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo'])),
-      set({}, 'descriptionMessage', get(input, ['descriptionMessage']))
+      set({}, 'descriptionMessage', get(input, ['descriptionMessage'])),
+      set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt']))
     );
     this.enableSend = this.checkEnableSend();
     return this;
@@ -105,7 +107,7 @@ export class Contact {
   }
 
   checkEnableSend() {
-    return +moment().diff(moment(+this.lastMessageAt), 'hours') <= 24;
+    return +moment().diff(moment(+this.lastInboundMessageAt), 'hours') <= 24;
   }
 }
 

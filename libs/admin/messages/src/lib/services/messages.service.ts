@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import * as moment from 'moment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IChat } from '../models/message.model';
 
 @Injectable()
@@ -34,6 +34,10 @@ export class MessageService extends ApiService {
 
   searchBooking(queryObj) {
     return this.get(`/api/v1/search${queryObj}`);
+  }
+
+  getReservationDetails(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
   filterMessagesByDate(messages: IChat[]) {

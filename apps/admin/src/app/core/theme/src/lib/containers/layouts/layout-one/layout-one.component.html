@@ -101,7 +101,10 @@
         </div>
       </div>
       <mat-progress-bar
-        *ngIf="progressSpinnerService.isProgressSpinnerVisible"
+        *ngIf="
+          progressSpinnerService.isProgressSpinnerVisible &&
+          !checkForMessageRoute()
+        "
         mode="query"
       ></mat-progress-bar>
     </div>

@@ -37,6 +37,11 @@
         font-size: 5px;
       }
     }
+    &:hover {
+      .tooltip {
+        display: block;
+      }
+    }
   }
   .extra-width {
     width: 24%;
@@ -57,7 +62,7 @@
   }
 }
 
-.booking-title{
+.booking-title {
   font-family: Roboto;
   font-size: 14px;
   font-weight: bold;
@@ -66,7 +71,7 @@
   line-height: normal;
   letter-spacing: 0.84px;
 }
-.user-journey-title{
+.user-journey-title {
   margin-top: 20px;
   font-family: Roboto;
   font-size: 14px;
@@ -78,7 +83,7 @@
   text-align: left;
   color: #b5b5c3;
 }
-.text{
+.text {
   font-family: Roboto;
   font-size: 12px;
   font-weight: bold;
@@ -89,7 +94,7 @@
   text-align: left;
   margin-top: 5px;
 }
-.text-small{
+.text-small {
   font-family: Roboto;
   font-size: 10px;
   font-weight: bold;

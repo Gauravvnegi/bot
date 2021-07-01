@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   ViewChild,
@@ -20,7 +21,7 @@ import { Contact, IContact } from '../../models/message.model';
   templateUrl: './guest-info.component.html',
   styleUrls: ['./guest-info.component.scss'],
 })
-export class GuestInfoComponent implements OnInit {
+export class GuestInfoComponent implements OnInit, OnChanges {
   @Input() refreshData;
   @Input() data;
   @Output() closeInfo = new EventEmitter();
@@ -52,6 +53,9 @@ export class GuestInfoComponent implements OnInit {
   ngOnInit(): void {
     this.listenForRefreshData();
     this.listenForGlobalFilters();
+  }
+
+  ngOnChanges() {
     this.getGuestInfo();
   }
 

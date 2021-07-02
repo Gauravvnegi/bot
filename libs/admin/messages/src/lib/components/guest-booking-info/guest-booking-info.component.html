@@ -5,7 +5,7 @@
   <div class="user-journey-title">
     User Journey
   </div>
-  <div class="icon-wrapper">
+  <div class="icon-wrapper" *ngIf="reservationData; else noUserJourney">
     <div class="line first"></div>
     <div class="line second"></div>
     <div class="icon">
@@ -232,6 +232,9 @@
       </p>
     </div>
   </div>
+  <ng-template #noUserJourney
+    ><div class="text" style="margin-bottom: 15px;">Unknown</div></ng-template
+  >
   <div style="border: solid 1px #e0e0e0;"></div>
   <div class="text-small">
     Room No.

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/messages.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -11,7 +11,7 @@ import { SnackBarService } from 'libs/shared/material/src';
   templateUrl: './guest-booking-info.component.html',
   styleUrls: ['./guest-booking-info.component.scss'],
 })
-export class GuestBookingInfoComponent implements OnInit {
+export class GuestBookingInfoComponent implements OnInit, OnChanges {
   @Input() data;
   @Input() hotelId;
   $subscription = new Subscription();
@@ -22,9 +22,13 @@ export class GuestBookingInfoComponent implements OnInit {
     private _snackBarService: SnackBarService
   ) {}
 
-  ngOnInit(): void {
-    if (this.data.reservationId) {
+  ngOnInit(): void {}
+
+  ngOnChanges() {
+    if (this.data?.reservationId) {
       this.searchReservation();
+    } else {
+      this.reservationData = undefined;
     }
   }
 

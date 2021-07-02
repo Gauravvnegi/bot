@@ -119,7 +119,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   updateGuestDetails() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
+    dialogConfig.width = '50%';
     const detailCompRef = this.modalService.openDialog(
       GuestDetailMapComponent,
       dialogConfig

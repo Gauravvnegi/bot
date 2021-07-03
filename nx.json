@@ -101,6 +101,9 @@
     },
     "admin-conversation": {
       "tags": []
+    },
+    "shared-image-cropper": {
+      "tags": []
     }
   }
 }

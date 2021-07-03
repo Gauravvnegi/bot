@@ -16,7 +16,7 @@
 }
 
 ::ng-deep .mat-horizontal-stepper-header {
-  pointer-events: none !important;
+  // pointer-events: none !important;
 }
 
 :host ::ng-deep .mat-step-icon-selected > div > mat-icon {

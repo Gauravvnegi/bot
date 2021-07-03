@@ -1163,6 +1163,32 @@
           "style": "scss"
         }
       }
+    },
+    "shared-image-cropper": {
+      "root": "libs/shared/image-cropper",
+      "sourceRoot": "libs/shared/image-cropper/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/image-cropper/tsconfig.lib.json",
+              "libs/shared/image-cropper/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/image-cropper/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/image-cropper/jest.config.js",
+            "tsConfig": "libs/shared/image-cropper/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

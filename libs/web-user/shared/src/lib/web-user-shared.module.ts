@@ -40,6 +40,8 @@ import { SlideComponent } from './presentational/slide/slide.component';
 import { StepperComponent } from './presentational/stepper/stepper.component';
 import { TextareaComponent } from './presentational/textarea/textarea.component';
 import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
+import { ImageHandlingComponent } from './presentational/image-handling/image-handling.component';
+import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   let { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -73,6 +75,7 @@ export interface IThemeConfig {
     SignaturePadModule,
     MatTabsModule,
     NgxMaterialTimepickerModule,
+    SharedImageCropperModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -113,6 +116,7 @@ export interface IThemeConfig {
     NumberInputComponent,
     PaymentMethodComponent,
     PromocodeComponent,
+    ImageHandlingComponent,
   ],
   exports: [
     SharedMaterialModule,
@@ -151,6 +155,7 @@ export interface IThemeConfig {
     PaymentMethodComponent,
     PromocodeComponent,
     TranslateModule,
+    ImageHandlingComponent,
   ],
 })
 export class WebUserSharedModule {

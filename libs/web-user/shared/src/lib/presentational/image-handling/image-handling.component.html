@@ -1,0 +1,135 @@
+<div
+  style="display: flex; flex-direction: column; justify-content: space-between;"
+>
+  <div
+    style="
+      font: normal normal 600 25px/30px Montserrat;
+      letter-spacing: 0px;
+      color: #121212;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 20px;
+    "
+  >
+    Crop Image
+  </div>
+  <div
+    style="
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    "
+  >
+    <img
+      src="assets/svg/rotate-left.svg"
+      (click)="rotateLeft()"
+      style="height: 25px; cursor: pointer; margin: 0 10px;"
+      alt="Rotate right"
+    />
+    <img
+      src="assets/svg/rotate-right.svg"
+      (click)="rotateRight()"
+      style="height: 25px; cursor: pointer; margin: 0 10px;"
+      alt="Rotate right"
+    />
+    <img
+      src="assets/svg/horizontal-flip.svg"
+      (click)="flipHorizontal()"
+      style="height: 25px; cursor: pointer; margin: 0 10px;"
+      alt="Flip Horizintally"
+    />
+    <img
+      src="assets/svg/flip-vertical.svg"
+      (click)="flipVertical()"
+      style="height: 25px; cursor: pointer; margin: 0 10px;"
+      alt="Flip Vertically"
+    />
+    <img
+      src="assets/svg/zoom.svg"
+      (click)="zoomIn()"
+      style="height: 25px; cursor: pointer; margin: 0 10px;"
+      alt="Zoom In"
+    />
+    <img
+      src="assets/svg/zoom-out.svg"
+      (click)="zoomOut()"
+      style="height: 25px; cursor: pointer; margin: 0 10px;"
+      alt="Zoom Out"
+    />
+  </div>
+  <div style="height: 50vh; margin: 0 25%; width: 50%;">
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [containWithinAspectRatio]="containWithinAspectRatio"
+      [aspectRatio]="4 / 3"
+      [resizeToWidth]="256"
+      [cropperMinWidth]="128"
+      [onlyScaleDown]="true"
+      [roundCropper]="false"
+      [canvasRotation]="canvasRotation"
+      [transform]="transform"
+      [alignImage]="'left'"
+      [style.display]="showCropper ? null : 'none'"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady($event)"
+      (loadImageFailed)="loadImageFailed()"
+    ></image-cropper>
+  </div>
+  <div style="display: flex; justify-content: flex-end;">
+    <div
+      style="
+        cursor: pointer;
+        border-radius: 10px;
+        width: 150px;
+        height: 50px;
+        border: 2px solid #ff8008;
+        color: #ff8008;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+      (click)="onModalClose.emit({ status: false })"
+    >
+      <div
+        style="
+          font: normal normal 600 18px/30px Montserrat;
+          letter-spacing: 0px;
+          opacity: 1;
+        "
+      >
+        Close
+      </div>
+    </div>
+    <div
+      style="
+        cursor: pointer;
+        width: 150px;
+        height: 50px;
+        background: transparent linear-gradient(90deg, #ff8008 0%, #ffc837 100%)
+          0% 0% no-repeat padding-box;
+        color: #ffffff;
+        border-radius: 10px;
+        opacity: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+      (click)="sendCroppedImage()"
+    >
+      <div
+        style="
+          font: normal normal 600 18px/30px Montserrat;
+          letter-spacing: 0px;
+          opacity: 1;
+        "
+      >
+        Crop
+      </div>
+    </div>
+  </div>
+</div>

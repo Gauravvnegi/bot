@@ -43,17 +43,13 @@ export class FileUploadComponent extends BaseComponent {
   onSelectFile(event) {
     this.url = '';
     if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      // const reader = new FileReader();
+      // reader.readAsDataURL(event.target.files[0]); // read file as data url
       const file = event.target.files[0];
-      const fileSize = event.target.files[0].size;
+      // const fileSize = event.target.files[0].size;
       const splitVal = file.name.split('.');
       const extension = splitVal[splitVal.length - 1];
-      if (
-        this.checkFileType(extension) &&
-        fileSize <= +this.fileConfig.maxFileSize
-      ) {
-        this.isValidDocument = true;
+      if (this.checkFileType(extension)) {
         this.openCropperModal(event);
         // reader.onload = (_event) => {
         //   const result: string = reader.result as string;
@@ -95,14 +91,19 @@ export class FileUploadComponent extends BaseComponent {
 
     dialogRef.componentInstance.onModalClose.subscribe((response) => {
       if (response.status) {
-        const data = {
-          file: response.data.file,
-          formGroup: this.parentForm,
-          documentPage: this.settings.type,
-          index: this.index,
-          imageUrl: response.data.url,
-        };
-        this.documentData.emit({ ...data, ...{ status: true } });
+        if (response.data.file.size <= +this.fileConfig.maxFileSize) {
+          this.isValidDocument = true;
+          const data = {
+            file: response.data.file,
+            formGroup: this.parentForm,
+            documentPage: this.settings.type,
+            index: this.index,
+            imageUrl: response.data.url,
+          };
+          this.documentData.emit({ ...data, ...{ status: true } });
+        } else {
+          this.isValidDocument = false;
+        }
       }
       dialogRef.close();
     });

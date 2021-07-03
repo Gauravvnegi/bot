@@ -26,9 +26,10 @@ export class ImageHandlingComponent {
 
   imageCropped(event: ImageCroppedEvent) {
     const blob = base64ToFile(event.base64);
+    const fileName = this.imageChangedEvent?.target.files[0].name;
     const file: File = new File(
       [blob],
-      this.imageChangedEvent?.target.files[0].name,
+      `${fileName.substr(0, fileName.lastIndexOf('.')) + '.png'}`,
       {
         type: 'image/png',
       }

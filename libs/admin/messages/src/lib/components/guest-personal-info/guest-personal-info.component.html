@@ -1,34 +1,27 @@
-<div style="padding: 15px;" *ngIf="data">
+<div class="guest-person" *ngIf="data">
   <div class="person-title">
     Personal Info
   </div>
-  <div style="margin: 15px 0; display: flex; align-items: center;">
-    <div
-      style="
-        width: 40px;
-        height: 39.8px;
-        background: chartreuse;
-        border-radius: 50%;
-      "
-    ></div>
+  <div class="person-image">
+    <div class="default"></div>
     <div class="guest-name">
       {{ data.name || 'Unknown Person' }}
     </div>
   </div>
-  <div style="border: solid 1px #e0e0e0;"></div>
+  <div class="border-line"></div>
   <div class="contact-detials">
     Contact Details
   </div>
-  <div class="phone">
+  <div class="label">
     Phone No.
   </div>
-  <div class="phone-text">
+  <div class="label-text">
     {{ data.phone }}
   </div>
-  <div class="email">
+  <div class="label">
     Email
   </div>
-  <div class="email-text">
+  <div class="label-text">
     {{ data.email || 'Unknown' }}
   </div>
 </div>

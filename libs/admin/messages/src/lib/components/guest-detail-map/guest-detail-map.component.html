@@ -2,55 +2,38 @@
   <div class="modal__header">
     <div class="modal__header__title">Map Information</div>
     <div class="modal__header__close" (click)="closeModal()">
-      &#10006;
+      <img class="icon" src="assets/svg/icon-metro-cross.svg" alt="booking id">
     </div>
   </div>
   <div class="modal__body">
-    <div
-      style="position: relative; height: 48px; width: 100%; margin: 15px 0;"
-      [formGroup]="searchFG"
-    >
+    <div class="form-elements-groups" [formGroup]="searchFG" >
+      <div class="form-elements-container full-width">
+      <img class="icon" src="assets/svg/invoice.svg" alt="booking id">
       <input
         matInput
         type="text"
-        class="booking__field"
+        class="form-elements"
         placeholder="Booking ID"
         formControlName="search"
         (focus)="onFocus()"
         [readonly]="data.reservationId?.length"
       />
-      <div
-        style="
-          position: absolute;
-          z-index: 85759;
-          padding: 5px;
-          background-color: white;
-          border-radius: 3px;
-          width: 44vw;
-          left: 0;
-          top: 104%;
-          box-shadow: 0px 0px 5px 0px darkgray;
-          overflow-y: auto;
-        "
-        *ngIf="showSearchResult"
-      >
+      <div  class="showsearchresult"  *ngIf="showSearchResult" >
         <div
           *ngFor="let item of reservationIds"
           (click)="setReservationId(item.number)"
-          style="padding: 5px; cursor: pointer;"
+          class="search-item"
         >
           {{ item.number }}
         </div>
       </div>
     </div>
-    <div style="display: flex; flex-wrap: wrap;" [formGroup]="parentFG">
-      <div
-        style="width: 49%; height: 48px; margin-bottom: 15px; margin-right: 2%;"
-      >
-        <mat-form-field style="width: 100%; margin-bottom: 30px;">
-          <mat-label class="mat-label">First Name*</mat-label>
-          <input matInput formControlName="firstName" />
-          <mat-error
+    </div>
+    <div class="form-elements-groups" [formGroup]="parentFG">
+      <div class="form-elements-container" >
+          <img class="icon" src="assets/svg/user-01.svg" alt="firstName">
+          <input matInput class="form-elements" placeholder="First Name *" formControlName="firstName" />
+          <mat-error class="error"
             *ngIf="
               parentFG.get('firstName').touched &&
               parentFG.get('firstName').hasError('required')
@@ -58,12 +41,10 @@
           >
             First Name is required
           </mat-error>
-        </mat-form-field>
       </div>
-      <div style="width: 49%; height: 48px; margin-bottom: 15px;">
-        <mat-form-field style="width: 100%; margin-bottom: 30px;">
-          <mat-label class="mat-label">Last Name*</mat-label>
-          <input matInput formControlName="lastName" />
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/user-01.svg" alt="LastName">
+          <input matInput class="form-elements" placeholder="LastName *" formControlName="lastName" />
           <mat-error
             *ngIf="
               parentFG.get('lastName').touched &&
@@ -72,12 +53,10 @@
           >
             Last Name is required
           </mat-error>
-        </mat-form-field>
       </div>
-      <div style="width: 100%; height: 48px; margin-bottom: 15px;">
-        <mat-form-field style="width: 100%; margin-bottom: 30px;">
-          <mat-label class="mat-label">Email*</mat-label>
-          <input matInput formControlName="email" />
+      <div class="form-elements-container full-width">
+        <img class="icon" src="assets/svg/email-02.svg" alt="Email">
+          <input matInput class="form-elements" placeholder="Email *" formControlName="email" />
           <mat-error
             *ngIf="
               parentFG.get('email').touched &&
@@ -86,34 +65,25 @@
           >
             Email is required
           </mat-error>
-        </mat-form-field>
       </div>
-      <div
-        style="width: 49%; height: 48px; margin-bottom: 15px; margin-right: 2%;"
-      >
+      <div class="form-elements-container">
         <!-- Dropdown for channel-->
-        <mat-form-field style="width: 100%; margin-bottom: 30px;">
-          <mat-label class="mat-label">Channel Type</mat-label>
-          <mat-select formControlName="channelType">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel">
+          <mat-select class="form-elements" placeholder="Channel Type" formControlName="channelType">
             <mat-option
               *ngFor="let channel of channelList"
               [value]="channel.name"
               >{{ channel.label }}</mat-option
             >
           </mat-select>
-        </mat-form-field>
       </div>
-      <div style="width: 49%; height: 48px; margin-bottom: 15px;">
-        <mat-form-field style="width: 100%; margin-bottom: 30px;">
-          <mat-label class="mat-label">Guest Name</mat-label>
-          <input matInput formControlName="guestName" />
-        </mat-form-field>
+      <div class="form-elements-container">
+          <img class="icon" src="assets/svg/user-01.svg" alt="Guest">
+          <input matInput  class="form-elements" placeholder="Guest Name" formControlName="guestName" />
       </div>
-      <div style="width: 100%; height: 48px; margin-bottom: 15px;">
-        <mat-form-field style="width: 100%; margin-bottom: 30px;">
-          <mat-label class="mat-label">Company</mat-label>
-          <input matInput formControlName="company" />
-        </mat-form-field>
+      <div class="form-elements-container full-width">
+          <img class="icon" src="assets/svg/company.svg" alt="user">
+          <input matInput class="form-elements" placeholder="Company" formControlName="company" />
       </div>
     </div>
     <div class="button-container">

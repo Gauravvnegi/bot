@@ -53,11 +53,11 @@ export class FileUploadComponent extends BaseComponent {
         this.checkFileType(extension) &&
         fileSize <= +this.fileConfig.maxFileSize
       ) {
+        this.isValidDocument = true;
         this.openCropperModal(event);
         // reader.onload = (_event) => {
         //   const result: string = reader.result as string;
         //   this.url = result;
-        //   this.isValidDocument = true;
         //   const data = {
         //     file: file,
         //     formGroup: this.parentForm,

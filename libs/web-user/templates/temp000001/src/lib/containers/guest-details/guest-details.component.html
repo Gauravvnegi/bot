@@ -84,9 +84,14 @@
             <mat-expansion-panel #guestpanel>
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  <span class="container__title">{{
-                    guestFormGroup.get('label').value
-                  }}{{ guestFormGroup.get('label').value === 'Accompanied / Kids' ? ' (Optional)' : '' }}</span>
+                  <span class="container__title"
+                    >{{ guestFormGroup.get('label').value
+                    }}{{
+                      guestFormGroup.get('label').value === 'Accompanied / Kids'
+                        ? ' (Optional)'
+                        : ''
+                    }}</span
+                  >
                   <mat-icon class="expand-icon" *ngIf="!guestpanel.expanded"
                     >add</mat-icon
                   >
@@ -121,29 +126,21 @@
                     ></web-user-input>
                   </div>
                 </div>
-                <ng-container [ngSwitch]="guestFormGroup.get('role').value">
-                  <ng-container *ngSwitchCase="'accompany'">
-                    <div class="container__body--info-primary">
-                      <div class="container__body--info-primary-prefix">
-                        <web-user-select-box
-                          [parentForm]="guestFormGroup"
-                          [name]="'age'"
-                          [settings]="guestFieldConfig[i].age"
-                        ></web-user-select-box>
-                      </div>
+                <ng-container
+                  *ngIf="
+                    guestFormGroup.get('role').value === 'accompany' ||
+                    guestFormGroup.get('role').value === 'kids'
+                  "
+                >
+                  <div class="container__body--info-primary">
+                    <div class="container__body--info-primary-prefix">
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'age'"
+                        [settings]="guestFieldConfig[i].age"
+                      ></web-user-select-box>
                     </div>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'kids'">
-                    <div class="container__body--info-primary">
-                      <div class="container__body--info-primary-prefix">
-                        <web-user-select-box
-                          [parentForm]="guestFormGroup"
-                          [name]="'age'"
-                          [settings]="guestFieldConfig[i].age"
-                        ></web-user-select-box>
-                      </div>
-                    </div>
-                  </ng-container>
+                  </div>
                 </ng-container>
               </div>
             </mat-expansion-panel>

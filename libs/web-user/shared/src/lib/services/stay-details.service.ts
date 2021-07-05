@@ -27,11 +27,13 @@ export class StayDetailsService extends ApiService {
       label: 'Arrival Date',
       disable: true,
       isDatePickerDisable: true,
+      required: true,
     });
     stayDetailsFieldSchema['endDate'] = new FieldSchema().deserialize({
       label: 'Departure Date',
       disable: true,
       isDatePickerDisable: true,
+      required: true,
     });
     stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
       label: 'Expected Arrival Time',
@@ -62,6 +64,7 @@ export class StayDetailsService extends ApiService {
       label: '',
       disable: true,
       master_label: 'Adults',
+      required: true,
     });
     stayDetailsFieldSchema['kidsGuest'] = new FieldSchema().deserialize({
       label: '',
@@ -79,6 +82,7 @@ export class StayDetailsService extends ApiService {
       style: {
         fieldParentWrapperStyles: { width: '100%' },
       },
+      required: true,
     });
 
     return stayDetailsFieldSchema as StayDetailsConfigI;

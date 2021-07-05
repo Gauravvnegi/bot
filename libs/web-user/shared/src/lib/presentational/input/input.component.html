@@ -19,9 +19,10 @@
       [appearance]="settings.appearance"
       [floatLabel]="settings.floatLabel"
     >
-      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
-        settings.label
-      }}</mat-label>
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses"
+        >{{ settings.label
+        }}<span class="required" *ngIf="settings.required">*</span></mat-label
+      >
 
       <input
         [ngClass]="defaultClasses.fieldClasses"

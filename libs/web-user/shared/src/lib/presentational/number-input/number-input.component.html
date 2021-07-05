@@ -13,9 +13,10 @@
       [ngClass]="defaultClasses.fieldContainerWrapperClasses"
       [appearance]="settings.appearance"
     >
-      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
-        settings.label
-      }}</mat-label>
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses"
+        >{{ settings.label
+        }}<span class="required" *ngIf="settings.required">*</span></mat-label
+      >
 
       <input
         type="number"

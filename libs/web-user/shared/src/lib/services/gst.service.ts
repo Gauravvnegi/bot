@@ -15,16 +15,17 @@ export class GSTService extends ApiService {
     gstDetailsFieldSchema['customerName'] = new FieldSchema().deserialize({
       label: 'Name',
       disable: false,
+      required: true,
     });
     gstDetailsFieldSchema['customerGSTIn'] = new FieldSchema().deserialize({
       label: 'GST Number',
       disable: false,
+      required: true,
     });
     gstDetailsFieldSchema['address'] = new FieldSchema().deserialize({
       label: 'Address',
       type: 'textarea',
-      placeholder:
-        '',
+      placeholder: '',
     });
 
     return gstDetailsFieldSchema as GstConfigI;

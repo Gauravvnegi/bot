@@ -30,6 +30,7 @@ export class DocumentDetailsService extends ApiService {
   }
 
   setFieldConfigForDocumentDetails(
+    requiredList,
     countriesList = [],
     dropDownDocumentList = [],
     documentsArray = []
@@ -42,6 +43,7 @@ export class DocumentDetailsService extends ApiService {
       label: 'Nationality',
       disable: false,
       options: countriesList,
+      required: requiredList.includes('nationality'),
     });
 
     documentDetailsFieldSchema[
@@ -50,6 +52,7 @@ export class DocumentDetailsService extends ApiService {
       label: 'Document Type',
       disable: dropDownDocumentList.length ? false : true,
       options: dropDownDocumentList,
+      required: requiredList.includes('selectedDocumentType'),
     });
 
     // if (documentsArray.length > 0) {
@@ -62,7 +65,7 @@ export class DocumentDetailsService extends ApiService {
     return documentDetailsFieldSchema as DocumentDetailsConfigI;
   }
 
-  setDocumentFileConfig(documentTypeLabel?) {
+  setDocumentFileConfig(required, documentTypeLabel?) {
     let fileSchema = {};
     // fileSchema['documentType'] = new FieldSchema().deserialize({
     //   label: 'Document Type',
@@ -72,11 +75,13 @@ export class DocumentDetailsService extends ApiService {
       label: `${documentTypeLabel} FIRST PAGE`,
       type: 'front',
       disable: false,
+      required,
     });
     fileSchema['documentFileBack'] = new FieldSchema().deserialize({
       label: `${documentTypeLabel} BACK PAGE`,
       type: 'back',
       disable: false,
+      required,
     });
     return fileSchema as FileDetailConfigI;
   }

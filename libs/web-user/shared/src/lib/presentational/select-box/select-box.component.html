@@ -12,9 +12,10 @@
       [ngClass]="defaultClasses.fieldContainerWrapperClasses"
       [style]="settings.style"
     >
-      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses">{{
-        settings.label
-      }}</mat-label>
+      <mat-label [ngClass]="defaultClasses.fieldLabelContainerClasses"
+        >{{ settings.label
+        }}<span class="required" *ngIf="settings.required">*</span></mat-label
+      >
       <mat-select
         matNativeControl
         (selectionChange)="change($event)"

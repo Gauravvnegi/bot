@@ -4,9 +4,10 @@
   [style]="settings.style"
 >
   <div class="text-area-heading" *ngIf="!!settings.master_label">
-    <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
-      settings.master_label
-    }}</mat-label>
+    <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses"
+      >{{ settings.master_label
+      }}<span class="required" *ngIf="settings.required">*</span></mat-label
+    >
   </div>
   <mat-form-field
     [appearance]="settings.appearance"

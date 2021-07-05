@@ -115,7 +115,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
           this.$subscription.add(
             getDropDownDocType$.subscribe((response) => {
-              this.guestDetailsConfig[guest.id] = this.setFieldConfiguration();
+              this.guestDetailsConfig[guest.id] = this.setFieldConfiguration([
+                'nationality',
+              ]);
 
               this.guestDetailsConfig[guest.id]['documents'] = [];
 
@@ -129,6 +131,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
+                      guest.isPrimary || guest.role === GuestRole.sharer,
                       document.documentType
                     )
                   );
@@ -148,6 +151,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
+                      guest.isPrimary || guest.role === GuestRole.sharer,
                       document.documentType
                     )
                   );
@@ -168,6 +172,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
+                      guest.isPrimary || guest.role === GuestRole.sharer,
                       documentType
                     )
                   );
@@ -190,6 +195,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
                   this.guestDetailsConfig[guest.id]['documents'].push(
                     this._documentDetailService.setDocumentFileConfig(
+                      guest.isPrimary || guest.role === GuestRole.sharer,
                       documentType
                     )
                   );
@@ -220,6 +226,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                 );
 
                 this.guestDetailsConfig[guest.id] = this.setFieldConfiguration(
+                  guest.isPrimary || guest.role === GuestRole.sharer
+                    ? ['nationality', 'selectedDocumentType']
+                    : [],
                   documentsList
                 );
 
@@ -231,6 +240,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
                   this.guestDetailsConfig[guest.id]['documents'] = [
                     this._documentDetailService.setDocumentFileConfig(
+                      guest.isPrimary || guest.role === GuestRole.sharer,
                       guest.selectedDocumentType
                     ),
                   ];
@@ -258,13 +268,18 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     guestFG.get('isInternational').patchValue(true);
 
     let documentTypes = config.dropDownDocumentList; //hardcoded
-
+    const guest = this._documentDetailService.documentDetailDS.guests.filter(
+      (guest) => guest.id === guestId
+    )[0];
     documentTypes.forEach((documentType, index) => {
       let documentFA = guestFG.get('documents') as FormArray;
       documentFA.push(this.getFileFG());
 
       this.guestDetailsConfig[guestId]['documents'].push(
-        this._documentDetailService.setDocumentFileConfig(documentType)
+        this._documentDetailService.setDocumentFileConfig(
+          guest.isPrimary || guest.role === GuestRole.sharer,
+          documentType
+        )
       );
 
       documentFA.at(index).get('documentType').patchValue(documentType);
@@ -277,12 +292,16 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         (guestFG: FormGroup) => guestFG.get('id').value == guestId
       )
     ) as FormArray;
+    const guest = this._documentDetailService.documentDetailDS.guests.filter(
+      (guest) => guest.id === guestId
+    )[0];
 
     let documentFA = guestFG.get('documents') as FormArray;
     documentFA.push(this.getFileFG());
 
     this.guestDetailsConfig[guestId]['documents'].push(
       this._documentDetailService.setDocumentFileConfig(
+        guest.isPrimary || guest.role === GuestRole.sharer,
         config.selectedDocumentType
       )
     );
@@ -330,6 +349,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,
       disable: true,
       options: [],
+      required: false,
     };
   }
 
@@ -340,6 +360,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         (guestFG: FormGroup) => guestFG.get('id').value == guestId
       )
     ) as FormGroup;
+    const guest = this._documentDetailService.documentDetailDS.guests.filter(
+      (guest) => guest.id === guestId
+    )[0];
     guestFG.get('uploadStatus').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
@@ -348,6 +371,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       options: this._documentDetailService.setDocumentsList(
         config.dropDownDocumentList
       ),
+      required: guest.isPrimary || guest.role === GuestRole.sharer,
     };
   }
 
@@ -408,8 +432,13 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  setFieldConfiguration(dropDownDocumentList?, documentsArray?) {
+  setFieldConfiguration(
+    isInternational,
+    dropDownDocumentList?,
+    documentsArray?
+  ) {
     return this._documentDetailService.setFieldConfigForDocumentDetails(
+      isInternational,
       this.countries,
       dropDownDocumentList,
       documentsArray

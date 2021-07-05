@@ -4,7 +4,8 @@
     [ngClass]="defaultClasses && defaultClasses.fieldMasterLabelClasses"
     [ngStyle]="settings.style.detailLabelStyles"
   >
-    {{ settings.label }}</mat-label
+    {{ settings.label
+    }}<span class="required" *ngIf="settings.required">*</span></mat-label
   >
 
   <ng-container *ngIf="settings.status && settings.status.code">

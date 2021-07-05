@@ -29,7 +29,11 @@ export class Chat {
     Object.assign(
       this,
       set({}, 'direction', get(input, ['direction'])),
-      set({}, 'status', get(input, ['status'])),
+      set(
+        {},
+        'status',
+        get(input, ['status']) ? get(input, ['status']) : 'sent'
+      ),
       set({}, 'text', get(input, ['text'])),
       set({}, 'timestamp', get(input, ['timestamp'])),
       set({}, 'type', get(input, ['type'])),

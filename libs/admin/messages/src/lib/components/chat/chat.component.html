@@ -61,7 +61,7 @@
         {{ date }}
       </div>
       <div
-        *ngFor="let message of chatList[date]"
+        *ngFor="let message of chatList[selectedChat.receiverId][date]"
         style="display: flex;"
         [ngStyle]="
           message.direction === 'OUTBOUND'
@@ -112,16 +112,27 @@
     *ngIf="chatFG && chat?.receiver?.enableSend; else noSend"
   >
     <div style="height: 100%; width: 100%;" [formGroup]="chatFG">
-      <div class="" style="position: relative;height: 100%; width: calc(100% - 60px);">
+      <div
+        class=""
+        style="position: relative; height: 100%; width: calc(100% - 60px);"
+      >
         <input
-        matInput
-        type="text"
-        class="message-field-input"
-        placeholder="Type Message"
-        formControlName="message"
-        (keyup)="checkForEnterKey($event)"/>
-        <img src="assets/svg/smile.svg"
-        style="position:absolute; right:10px;top:48%;transform: translateY(-50%);"  />
+          matInput
+          type="text"
+          class="message-field-input"
+          placeholder="Type Message"
+          formControlName="message"
+          (keyup)="checkForEnterKey($event)"
+        />
+        <img
+          src="assets/svg/smile.svg"
+          style="
+            position: absolute;
+            right: 10px;
+            top: 48%;
+            transform: translateY(-50%);
+          "
+        />
       </div>
     </div>
     <div style="cursor: pointer;" (click)="sendMessage()">

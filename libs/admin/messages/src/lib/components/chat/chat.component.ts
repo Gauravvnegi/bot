@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Chats, IChats } from '../../models/message.model';
+import { Chat, Chats, IChat, IChats } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -31,6 +31,7 @@ export class ChatComponent
   @Input() selectedChat;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+  newMessages = {};
   hotelId: string;
   chat: IChats;
   chatFG: FormGroup;
@@ -60,10 +61,13 @@ export class ChatComponent
       channelType: ['whatsapp'],
       messageType: ['DATA_TEXT'],
     });
+    this.newMessages = new Array<IChat>();
   }
 
   ngOnChanges(): void {
-    this.getChat({ offset: 0, limit: 20 });
+    if (!this.chatList[this.selectedChat.receiverId])
+      this.getChat({ offset: 0, limit: 20 });
+    this.scrollBottom = true;
   }
 
   ngAfterViewChecked() {
@@ -138,9 +142,9 @@ export class ChatComponent
                 this.chat.messages,
                 'timestamp'
               );
-              this.chatList = this.messageService.filterMessagesByDate(
-                this.chat.messages
-              );
+              this.chatList[
+                this.selectedChat.receiverId
+              ] = this.messageService.filterMessagesByDate(this.chat.messages);
               scrollHeight
                 ? (this.scrollView = scrollHeight)
                 : (this.scrollBottom = true);
@@ -167,19 +171,58 @@ export class ChatComponent
 
     const values = this.chatFG.getRawValue();
     values.receiverId = this.selectedChat.phone;
+    const timestamp = DateService.getCurrentTimeStamp();
+    this.updateMessageToChatList(timestamp, 'unsend');
 
     this.$subscription.add(
       this.messageService.sendMessage(this.hotelId, values).subscribe(
         (response) => {
           this.chatFG.get('message').setValue('');
-          this.getChat({
-            offset: 0,
-            limit: 20,
-          });
+          this.updateMessageToChatList(timestamp, 'sent', true);
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  updateMessageToChatList(timestamp, status, update = false) {
+    let data;
+    let messages = this.getMessagesFromTimeList();
+    if (!update) {
+      data = new Chat().deserialize({
+        direction: 'OUTBOUND',
+        text: this.chatFG.get('message').value,
+        timestamp,
+        status,
+      });
+      if (this.newMessages[this.selectedChat.receiverId]) {
+        this.newMessages[this.selectedChat.receiverId].push(data);
+      } else {
+        this.newMessages[this.selectedChat.receiverId] = [data];
+      }
+    } else {
+      this.newMessages[this.selectedChat.receiverId].forEach((message) => {
+        if (message.timestamp === timestamp) {
+          message.status = status;
+        }
+      });
+    }
+    messages = [...messages, ...this.newMessages[this.selectedChat.receiverId]];
+    messages = DateService.sortObjArrayByTimeStamp(messages, 'timestamp');
+    this.chatList[
+      this.selectedChat.receiverId
+    ] = this.messageService.filterMessagesByDate(messages);
+  }
+
+  getMessagesFromTimeList() {
+    let messages = [];
+    Object.keys(this.chatList[this.selectedChat.receiverId]).forEach((key) => {
+      messages = [
+        ...messages,
+        ...this.chatList[this.selectedChat.receiverId][key],
+      ];
+    });
+    return messages;
   }
 
   checkForEnterKey(event) {
@@ -223,7 +266,10 @@ export class ChatComponent
   }
 
   get chatDates() {
-    return Object.keys(this.chatList);
+    if (this.chatList[this.selectedChat.receiverId]) {
+      return Object.keys(this.chatList[this.selectedChat.receiverId]);
+    }
+    return [];
   }
 
   ngOnDestroy(): void {

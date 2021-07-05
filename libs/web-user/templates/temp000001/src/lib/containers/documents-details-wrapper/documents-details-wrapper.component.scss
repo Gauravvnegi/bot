@@ -1,6 +1,5 @@
 @import 'temp000001';
 
-
 // .example-button-row {
 //   @include template-footer-button();
 // }
@@ -12,8 +11,14 @@
 //   @include footer-next();
 // }
 
-@media only screen and (max-width: $M) {
-  .user-button{
-    width: $half-width;
+// @media only screen and (max-width: $M) {
+//   .user-button{
+//     width: $half-width;
+//   }
+// }
+
+:host ::ng-deep .next-button {
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
   }
 }

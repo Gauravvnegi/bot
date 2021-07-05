@@ -3,3 +3,9 @@
 :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   background-color: #f1f1f1;
 }
+
+:host ::ng-deep .next-button {
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
+  }
+}

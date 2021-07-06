@@ -3,7 +3,7 @@
     <div class="feild">
       <mat-label class="mat-label">Type :</mat-label>
       <mat-form-field>
-        <mat-select formControlName="guaranteeType">
+        <mat-select formControlName="guaranteeType" [disabled]="true">
           <mat-option
             *ngFor="let guaranteeType of guaranteeTypes"
             [value]="guaranteeType.value"
@@ -80,6 +80,6 @@
 <div class="button-wrapper">
   <button (click)="updateDepositRule()" class="button">
     <i *ngIf="isUpdatingRule" class="fa fa-spinner fa-spin"></i>
-    {{isUpdatingRule ? "Updating Deposit Rule" : "Update Deposit Rule"}}
+    {{ isUpdatingRule ? 'Updating Deposit Rule' : 'Update Deposit Rule' }}
   </button>
 </div>

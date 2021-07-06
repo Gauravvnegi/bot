@@ -67,6 +67,10 @@ export class ChatComponent
   ngOnChanges(): void {
     if (!this.chatList[this.selectedChat.receiverId])
       this.getChat({ offset: 0, limit: 20 });
+    else {
+      const chatLength = this.getMessagesFromTimeList().length;
+      this.limit = chatLength % 20 > 0 ? chatLength : chatLength + 20;
+    }
     this.scrollBottom = true;
   }
 
@@ -144,7 +148,14 @@ export class ChatComponent
               );
               this.chatList[
                 this.selectedChat.receiverId
-              ] = this.messageService.filterMessagesByDate(this.chat.messages);
+              ] = this.messageService.filterMessagesByDate(
+                this.newMessages[this.selectedChat.receiverId]
+                  ? [
+                      ...this.chat.messages,
+                      ...this.newMessages[this.selectedChat.receiverId],
+                    ]
+                  : this.chat.messages
+              );
               scrollHeight
                 ? (this.scrollView = scrollHeight)
                 : (this.scrollBottom = true);

@@ -46,7 +46,8 @@ export class ChatComponent
     private fb: FormBuilder,
     private snackBarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -65,9 +66,9 @@ export class ChatComponent
   }
 
   ngOnChanges(): void {
-    if (!this.chatList[this.selectedChat.receiverId])
+    if (!this.chatList[this.selectedChat.receiverId]) {
       this.getChat({ offset: 0, limit: 20 });
-    else {
+    } else {
       const chatLength = this.getMessagesFromTimeList().length;
       this.limit = chatLength % 20 > 0 ? chatLength : chatLength + 20;
     }
@@ -186,7 +187,7 @@ export class ChatComponent
 
     const values = this.chatFG.getRawValue();
     values.receiverId = this.selectedChat.phone;
-    const timestamp = DateService.getCurrentTimeStamp();
+    const timestamp = this.dateService.getCurrentTimeStamp();
     this.updateMessageToChatList(timestamp, 'unsend');
 
     this.$subscription.add(
@@ -268,16 +269,6 @@ export class ChatComponent
         this.myScrollContainer.nativeElement.scrollHeight - this.scrollView;
       this.scrollView = undefined;
     }
-  }
-
-  refreshChat() {
-    this.getChat(
-      {
-        offset: 0,
-        limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit + 1,
-      },
-      0
-    );
   }
 
   get chatDates() {

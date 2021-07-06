@@ -113,6 +113,14 @@ export class Contact {
   checkEnableSend() {
     return +moment().diff(moment(+this.lastInboundMessageAt), 'hours') <= 24;
   }
+
+  getProfileNickName() {
+    return this.name
+      .split(' ')
+      .map((i) => i.charAt(0))
+      .join('')
+      .toUpperCase();
+  }
 }
 
 export type IChat = Omit<Chat, 'deserialize'>;

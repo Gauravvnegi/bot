@@ -18,8 +18,19 @@
         border-radius: 50%;
         background: chartreuse;
         margin: 0 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       "
-    ></div>
+    >
+      <img
+        [src]="chat?.receiver?.profileUrl"
+        *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
+      />
+      <ng-template #defaultAvatar
+        ><div>{{ chat?.receiver?.getProfileNickName() }}</div></ng-template
+      >
+    </div>
     <div
       style="
         font: normal normal medium 14px/19px Roboto;

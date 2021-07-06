@@ -6,7 +6,7 @@ import * as moment from 'moment';
 export class DateService {
   private constructor() {}
 
-  static getCurrentTimeStamp() {
+  getCurrentTimeStamp() {
     return moment().unix() * 1000;
   }
 

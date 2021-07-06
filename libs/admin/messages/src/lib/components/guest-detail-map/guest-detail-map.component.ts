@@ -18,8 +18,8 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { debounceTime, filter } from 'rxjs/operators';
-import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
-import { Subscriptions } from 'apps/admin/src/app/core/theme/src/lib/data-models/subscription-plan-config.model';
+// import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+// import { Subscriptions } from 'apps/admin/src/app/core/theme/src/lib/data-models/subscription-plan-config.model';
 import { Regex } from 'libs/shared/constants/regex';
 
 @Component({
@@ -42,14 +42,14 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
-    private snackBarService: SnackBarService,
-    private subscriptionPlanService: SubscriptionPlanService
-  ) {}
+    private snackBarService: SnackBarService
+  ) // private subscriptionPlanService: SubscriptionPlanService
+  {}
 
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
-    this.loadChannels();
+    // this.loadChannels();
   }
 
   initFG(): void {
@@ -67,7 +67,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
         this.data.name?.split(' ')[1] || '',
         [Validators.required, Validators.pattern(Regex.NAME)],
       ],
-      channelType: ['Whatsapp'],
+      // channelType: ['Whatsapp'],
       channelValue: [''],
       email: [
         this.data.email || '',
@@ -104,12 +104,12 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadChannels() {
-    const subscription: Subscriptions = this.subscriptionPlanService.getSubscription();
-    this.channelList = subscription.features.CHANNELS.filter(
-      (channel) => channel.active
-    );
-  }
+  // loadChannels() {
+  //   const subscription: Subscriptions = this.subscriptionPlanService.getSubscription();
+  //   this.channelList = subscription.features.CHANNELS.filter(
+  //     (channel) => channel.active
+  //   );
+  // }
 
   saveDetails() {
     if (this.parentFG.invalid) {

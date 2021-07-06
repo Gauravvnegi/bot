@@ -95,6 +95,15 @@
     },
     "admin-subscription": {
       "tags": []
+    },
+    "admin-messages": {
+      "tags": []
+    },
+    "admin-conversation": {
+      "tags": []
+    },
+    "shared-image-cropper": {
+      "tags": []
     }
   }
 }

@@ -147,6 +147,7 @@
     display: flex;
     font-size: $font-large;
     font-weight: 600;
+
     span {
       color: $primary-blue;
     }
@@ -161,6 +162,7 @@
   }
   &--container {
     font-weight: $bold;
+    // min-width: 21% !important;
     @media screen and (max-width: 700px) {
       width: 44%;
     }

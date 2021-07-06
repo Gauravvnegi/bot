@@ -15,7 +15,8 @@
       font-weight: $bolder;
       text-align: center;
       width: 33%;
-      @media screen and (max-width: $M) {
+      width: 100%;
+      @media screen and (max-width: $S) {
         font-size: $font-small;
       }
     }
@@ -42,11 +43,8 @@
         }
       }
     }
-    @media screen and (max-width: $M) {
-      display: none;
-    }
   }
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $M) {
     padding: $padding-small;
   }
 }

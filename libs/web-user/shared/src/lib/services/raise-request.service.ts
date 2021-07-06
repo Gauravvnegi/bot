@@ -28,13 +28,15 @@ export class RaiseRequestService extends ApiService {
       type: 'textarea',
       placeholder:
         'Request us for COVID-19 Policies, Required Documents, Hotel Sanitation Measures etc.',
+      required: true,
     });
 
     raiseRequestFieldSchema['emailId'] = new FieldSchema().deserialize({
       label: '',
       appearance: 'outline',
       placeholder: 'Enter Your Email',
-      floatLabel: 'always'
+      floatLabel: 'always',
+      required: true,
     });
 
     return raiseRequestFieldSchema as RaiseRequestConfigI;

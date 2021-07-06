@@ -41,26 +41,31 @@ export class GuestDetailsService extends ApiService {
         { key: 'Mr.', value: 'Mr.' },
         { key: 'Ms.', value: 'Ms.' },
       ],
+      required: config.requiredFields.includes('salutation'),
     });
     guestDetailsFieldSchema['firstName'] = new FieldSchema().deserialize({
       label: 'First Name',
       disable: config.disable,
       icon: 'person',
+      required: config.requiredFields.includes('firstName'),
     });
     guestDetailsFieldSchema['lastName'] = new FieldSchema().deserialize({
       label: 'Last Name',
       disable: config.disable,
       icon: 'person',
+      required: config.requiredFields.includes('lastName'),
     });
     guestDetailsFieldSchema['email'] = new FieldSchema().deserialize({
       label: 'Email ID',
       disable: config.isPrimary ? false : config.disable,
       icon: 'email',
+      required: config.requiredFields.includes('email'),
     });
     guestDetailsFieldSchema['phone'] = new FieldSchema().deserialize({
       label: 'Phone No.',
       disable: config.isPrimary ? false : config.disable,
       icon: 'call',
+      required: config.requiredFields.includes('phone'),
     });
 
     guestDetailsFieldSchema['country'] = new FieldSchema().deserialize({
@@ -71,6 +76,7 @@ export class GuestDetailsService extends ApiService {
         config.hotelNationality,
       ]),
       optionsClosed: new Country().getDialCodeList([config.hotelNationality]),
+      required: config.requiredFields.includes('country'),
     });
 
     guestDetailsFieldSchema['age'] = new FieldSchema().deserialize({
@@ -78,6 +84,7 @@ export class GuestDetailsService extends ApiService {
       disable: config.disable,
       isOptionsOpenedChanged: false,
       options: ageList,
+      required: config.requiredFields.includes('age'),
     });
 
     return guestDetailsFieldSchema as GuestDetailsConfigI;

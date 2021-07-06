@@ -95,6 +95,8 @@
   padding: 10px;
   .heading {
     font-size: 16px;
+    display: flex;
+    align-items: center;
     margin: 0;
   }
   .selected {
@@ -293,9 +295,11 @@
 :host ::ng-deep .mat-chip-list-wrapper {
   overflow: auto;
   white-space: nowrap;
+
   overflow-x: scroll;
   width: 68vw;
   display: block;
+
   padding: 10px;
   &::-webkit-scrollbar {
     height: 6px;
@@ -451,6 +455,8 @@ th {
 }
 
 :host ::ng-deep .mat-chip {
+  border: 1px solid !important;
+  // background-color: white !important;
   display: inline-block;
   text-align: center;
   font-weight: 400;
@@ -482,20 +488,25 @@ th {
 
 :host ::ng-deep .status-selected-pending {
   background-color: $pending !important;
+  opacity: 1;
 }
 :host ::ng-deep .status-selected-initiated {
   background-color: $initiated !important;
+  opacity: 1;
 }
 :host ::ng-deep .status-selected-completed {
   background-color: $completed !important;
+  opacity: 1;
 }
 
 :host ::ng-deep .status-selected-reject {
   background-color: $reject !important;
+  opacity: 1;
 }
 
 :host ::ng-deep .status-selected-default {
   background-color: $default;
+  opacity: 1;
 }
 
 :host ::ng-deep .details_wrapper {
@@ -505,3 +516,40 @@ th {
     height: 85vh;
   }
 }
+
+:host ::ng-deep .icon{
+  position: relative;
+
+  .tooltip{
+    position: absolute;
+    top:-160%;
+    right: -35%;
+    font-size: 12px;
+    background: #fff;
+    padding: 7px;
+    line-height: 1;
+    box-shadow: 0 0 8px 0 rgb(0 0 0 / 30%);
+    color: #727272;
+    z-index: 100;
+    display: none;
+    min-width: 100px;
+    text-align: center;
+
+    &::before{
+      content: '';
+      position: absolute;
+      bottom: -35%;
+      right: 20%;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 10px solid #ffffff;
+    }
+  }
+  &:hover{
+    .tooltip{
+      display: block;
+    } 
+  }
+} 

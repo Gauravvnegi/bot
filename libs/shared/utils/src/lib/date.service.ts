@@ -110,4 +110,11 @@ export class DateService {
       return 'year';
     }
   }
+
+  static sortObjArrayByTimeStamp(arr, field, order = 'asc') {
+    if (order === 'asc') {
+      return arr?.sort((a, b) => (a[field] > b[field] ? 1 : -1));
+    }
+    return arr?.sort((a, b) => (a[field] < b[field] ? 1 : -1));
+  }
 }

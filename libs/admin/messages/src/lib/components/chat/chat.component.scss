@@ -1,0 +1,69 @@
+.message-field-input {
+  padding-left: 20px;
+  background: #f2f6f8 0% 0% no-repeat padding-box;
+  border: 1px solid #d5e0e6;
+  border-radius: 20px;
+  opacity: 1;
+  height: 100%;
+  width: 100%;
+  outline: none;
+}
+
+.right-message {
+  display: flex;
+  margin: 10px 0;
+  max-width: 50%;
+  height: auto;
+  padding: 10px;
+  border-radius: 10px 10px 0 10px;
+  color: #ffffff;
+  box-shadow: 0 3px 6px 0 rgba(97, 115, 244, 0.05);
+  background-color: #6173f4;
+  &__text {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.72px;
+    text-align: left;
+    color: #ffffff;
+  }
+}
+
+.left-message {
+  display: flex;
+  margin: 10px 0;
+  max-width: 50%;
+  height: auto;
+  padding: 10px;
+  border-radius: 10px 10px 10px 0;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  &__text {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.72px;
+    text-align: left;
+    color: #002046;
+  }
+}
+
+.message__time {
+  font-family: Roboto;
+  align-self: flex-end;
+  font-size: 10px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.6px;
+  color: #c7c7c7;
+  margin-left: 10px;
+  width: 30%;
+}

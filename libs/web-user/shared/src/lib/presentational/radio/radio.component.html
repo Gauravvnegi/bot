@@ -3,9 +3,10 @@
   [ngClass]="defaultClasses.fieldMainWrapperClasses"
 >
   <!-- <mat-label>{{ settings.label }}</mat-label> -->
-  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
-    settings.master_label
-  }}</mat-label>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses"
+    >{{ settings.master_label
+    }}<span class="required" *ngIf="settings.required">*</span></mat-label
+  >
   <mat-radio-group
     [formControlName]="name"
     [ngClass]="defaultClasses.fieldClasses"

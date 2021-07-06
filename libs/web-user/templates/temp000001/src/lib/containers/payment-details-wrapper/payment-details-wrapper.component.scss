@@ -6,6 +6,12 @@
   }
 }
 
+// :host ::ng-deep .next-button {
+//   @media only screen and (max-width: $M) {
+//     width: 100vw !important;
+//   }
+// }
+
 :host ::ng-deep .svg-payment > svg {
   height: 48px;
   width: 48px;

@@ -25,8 +25,8 @@
     display: flex;
     align-items: center;
     .image {
-      height: 40px;
-      width: 27%;
+      height: 50px;
+      width: 50px;
       margin-right: 10px;
       img {
         width: 100%;
@@ -46,7 +46,7 @@
   }
 }
 
-.package-image{
+.package-image {
   width: 40%;
   height: 40%;
 }
@@ -60,16 +60,15 @@
     margin-top: 5px;
   }
 }
-.amount_wrapper{
+.amount_wrapper {
   font-size: 12px;
   color: #484848;
 }
 
-
 :host ::ng-deep .mat-slide-toggle-bar {
   width: 50px;
   height: 15px;
-  .mat-slide-toggle-thumb-container{
+  .mat-slide-toggle-thumb-container {
     left: -2px;
   }
 }

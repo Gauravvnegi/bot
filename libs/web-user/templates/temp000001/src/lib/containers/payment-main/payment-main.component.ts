@@ -25,7 +25,7 @@ export class PaymentMainComponent implements OnInit {
   emailControlSetting = {
     options: [],
     contentType: 'text',
-    required: false,
+    required: true,
     order: 0,
     key: '7',
     value: '',

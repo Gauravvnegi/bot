@@ -14,6 +14,7 @@ import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import {
   GuestRole,
   GuestTypes,
+  RequiredFields,
 } from 'libs/web-user/shared/src/lib/constants/guest';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
@@ -160,11 +161,12 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     return this._fb.group(fg);
   }
 
-  setFieldConfiguration(disable,isPrimary) {
+  setFieldConfiguration(disable, isPrimary, requiredFields) {
     return this._guestDetailService.setFieldConfigForGuestDetails({
       hotelNationality: this._hotelService.hotelConfig.address.countryCode,
       disable: disable,
-      isPrimary
+      isPrimary,
+      requiredFields,
     });
   }
 
@@ -190,6 +192,9 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
         this.setFieldConfiguration(
           guestDetail.type === GuestTypes.primary ? true : false,
           guestDetail.type === GuestTypes.primary ? true : false,
+          guestDetail.type === GuestTypes.primary
+            ? RequiredFields.primary
+            : RequiredFields[guestDetail.role]
         )
       );
     });

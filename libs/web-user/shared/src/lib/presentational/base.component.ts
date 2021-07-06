@@ -159,9 +159,9 @@ export class BaseComponent
   errorMsg: string = '';
 
   constructor(
-    private _utility: UtilityService,
-    private _breakpointObserver: BreakpointObserver,
-    private validatorService: ValidatorService
+    protected _utility: UtilityService,
+    protected _breakpointObserver: BreakpointObserver,
+    protected validatorService: ValidatorService
   ) {}
 
   ngOnChanges(): void {

@@ -20,6 +20,7 @@ export class DefaultAmenityService extends ApiService {
     defaultFormFieldSchema['quantity'] = new FieldSchema().deserialize({
       label: 'Quantity',
       disable: false,
+      required: true,
     });
     defaultFormFieldSchema['remark'] = new FieldSchema().deserialize({
       label: 'Remark',
@@ -29,11 +30,13 @@ export class DefaultAmenityService extends ApiService {
     defaultFormFieldSchema['pickupDate'] = new FieldSchema().deserialize({
       label: 'Pickup Date',
       disable: true,
+      required: true,
     });
 
     defaultFormFieldSchema['pickupTime'] = new FieldSchema().deserialize({
       label: 'Pickup Time',
       disable: false,
+      required: true,
       style: {
         childLabelStyles: {
           'font-weight': 700,

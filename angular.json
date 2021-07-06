@@ -1099,6 +1099,96 @@
           "style": "scss"
         }
       }
+    },
+    "admin-messages": {
+      "projectType": "library",
+      "root": "libs/admin/messages",
+      "sourceRoot": "libs/admin/messages/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/messages/tsconfig.lib.json",
+              "libs/admin/messages/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/messages/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/messages/jest.config.js",
+            "tsConfig": "libs/admin/messages/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/messages/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-conversation": {
+      "projectType": "library",
+      "root": "libs/admin/conversation",
+      "sourceRoot": "libs/admin/conversation/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/conversation/tsconfig.lib.json",
+              "libs/admin/conversation/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/conversation/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/conversation/jest.config.js",
+            "tsConfig": "libs/admin/conversation/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/conversation/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-image-cropper": {
+      "root": "libs/shared/image-cropper",
+      "sourceRoot": "libs/shared/image-cropper/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/image-cropper/tsconfig.lib.json",
+              "libs/shared/image-cropper/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/image-cropper/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/image-cropper/jest.config.js",
+            "tsConfig": "libs/shared/image-cropper/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

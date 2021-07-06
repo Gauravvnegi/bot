@@ -18,6 +18,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
 import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
+import { MessageTabMenuComponent } from './containers/message-tab-menu/message-tab-menu.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -29,7 +30,7 @@ import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-gu
     DropdownModule,
     SharedMaterialModule,
     TabViewModule,
-    AdminGuestDetailModule
+    AdminGuestDetailModule,
   ],
   declarations: [
     SidenavComponent,
@@ -41,6 +42,7 @@ import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-gu
     SearchBarComponent,
     FilterComponent,
     OrientationPopupComponent,
+    MessageTabMenuComponent,
   ],
   exports: [
     SidenavComponent,
@@ -51,6 +53,7 @@ import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-gu
     FooterComponent,
     SearchBarComponent,
     FilterComponent,
+    MessageTabMenuComponent,
   ],
 })
 export class ThemeModule {}

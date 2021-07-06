@@ -25,7 +25,8 @@
     />
     <input type="hidden" [formControlName]="name" />
     <mat-label *ngIf="settings"
-    >{{ documentType }}{{ settings.label }}</mat-label
+      >{{ documentType }}{{ settings.label
+      }}<span class="required" *ngIf="settings.required">*</span></mat-label
     >
   </div>
   <ng-container *ngIf="isUploading">

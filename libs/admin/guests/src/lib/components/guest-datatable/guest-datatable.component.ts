@@ -123,7 +123,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   @Input() tabFilterItems = [
     {
-      label: 'Arrival',
+      label: 'Arrival/Due-In',
       content: '',
       value: 'ARRIVAL',
       disabled: false,
@@ -132,7 +132,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       lastPage: 0,
     },
     {
-      label: 'Inhouse',
+      label: 'In-house/Stay-Over',
       content: '',
       value: 'INHOUSE',
       disabled: false,
@@ -141,7 +141,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       lastPage: 0,
     },
     {
-      label: 'Departure',
+      label: 'Departure/Due-out',
       content: '',
       value: 'DEPARTURE',
       disabled: false,

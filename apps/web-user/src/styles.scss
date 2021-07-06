@@ -42,6 +42,11 @@ body {
   background-color: var(--snack-bar-green, $snack-bar-green) !important;
 }
 
+.required {
+  margin-left: 5px;
+  color: #f44336;
+}
+
 // TODO = need to find the another approach to acheive below styling
 
 .mat-snack-bar-handset {

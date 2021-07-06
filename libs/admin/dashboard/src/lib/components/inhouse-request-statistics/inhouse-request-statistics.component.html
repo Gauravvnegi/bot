@@ -1,34 +1,78 @@
-<div class="container" style="position: relative;" [routerLink]="['/pages/request']"
-  [queryParams]="{ filter: 'INHOUSE', subFilter: 'ALL' }">
-  <div class="title-container">
-    <div class="icon">
-      <img src="assets/svg/inhouse_request.svg" />
-    </div>
-    <div class="stat-title">In-House Request</div>
+<div class="chart__wrapper">
+  <div class="chart__wrapper--container">
+    <canvas
+      baseChart
+      style="height: 117px;"
+      [data]="chart.Data"
+      [labels]="chart.Labels"
+      [chartType]="chart.Type"
+      [legend]="chart.Legend"
+      [colors]="chart.Colors"
+      [options]="chart.Options"
+    >
+    </canvas>
   </div>
-  <div class="stat-val-container">
-    <!-- <canvas baseChart
-      [data]="doughnutChartData"
-      [labels]="doughnutChartLabels"
-      [chartType]="doughnutChartType">
-		</canvas> -->
-    <div class="progress-info-labels-container">
-      <div>
-        <div class="approved-count">{{ inhouseRequest.requestApproved }}</div>
-        <div class="subtitle-label">Request Approved</div>
+  <div class="inhouse--chart-rightblock">
+    <div>
+      <div class="inhouse--chart-rightblock--status">
+        <div class="inhouse--chart-rightblock--status--sqaure complete"></div>
+        <div
+          class="inhouse--chart-rightblock--status--normaltext"
+        >
+          {{ inhouseRequest.completed }}
+        </div>
+        <div
+          class="inhouse--chart-rightblock--status--completetext"
+        >
+          ({{ inhouseRequest.compareStats.COMPLETED }}%)
+          <img src="assets/svg/uparrow.svg" alt="uparrow">
+        </div>
+        <div 
+          class="inhouse--chart-rightblock--status--normaltext-2"
+        >
+          in 30 days
+        </div>
       </div>
-      <div>
-        <div class="pending-count">{{ inhouseRequest.requestPending }}</div>
-        <div class="subtitle-label">Request Pending</div>
+      <div class="inhouse--chart-rightblock--normaltext2" >
+        Completed
       </div>
     </div>
-    <div class="progress--container">
-      <circle-progress class="circle-progress" [percent]="requestPendingPercent" [backgroundPadding]="7" [radius]="52"
-        [space]="-16" [outerStrokeWidth]="16" [outerStrokeColor]="'#f6b155'" [outerStrokeLinecap]="'inherit'"
-        [innerStrokeColor]="'#2f1dce'" [innerStrokeWidth]="16" [title]="inhouseRequest.totalRequest"
-        [subtitle]="'Total Request'" [titleFontSize]="20" [titleFontWeight]="200" [subtitleFontSize]="11"
-        [animation]="false" [animationDuration]="0" [animateTitle]="false" [showUnits]="false" [clockwise]="false"
-        [responsive]="false"></circle-progress>
+    <div style="margin: 5px 0;">
+      <div class="inhouse--chart-rightblock--status">
+        <div class="inhouse--chart-rightblock--status--sqaure pending"></div>
+        <div class="inhouse--chart-rightblock--status--normaltext">
+          {{ inhouseRequest.pending }}
+        </div>
+        <div class="inhouse--chart-rightblock--status--completetext">
+          ({{ inhouseRequest.compareStats.PENDING }}%) 
+          <img src="assets/svg/uparrow.svg" alt="uparrow">
+        </div>
+        <div class="inhouse--chart-rightblock--status--normaltext-2">
+          in 30 days
+        </div>
+      </div>
+      <div
+      class="inhouse--chart-rightblock--normaltext2">
+        Pending
+      </div>
+    </div>
+    <div>
+      <div  class="inhouse--chart-rightblock--status">
+        <div class="inhouse--chart-rightblock--status--sqaure timeout"></div>
+        <div  class="inhouse--chart-rightblock--status--normaltext">
+          {{ inhouseRequest.timeout }}
+        </div>
+        <div class="inhouse--chart-rightblock--status--completetext">
+          ({{ inhouseRequest.compareStats.TIMEOUT }}%)
+          <img src="assets/svg/uparrow.svg" alt="uparrow">
+        </div>
+        <div class="inhouse--chart-rightblock--status--normaltext-2">
+          in 30 days
+        </div>
+      </div>
+      <div class="inhouse--chart-rightblock--normaltext2">
+        Timeout
+      </div>
     </div>
   </div>
 </div>

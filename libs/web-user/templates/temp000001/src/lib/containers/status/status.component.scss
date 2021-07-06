@@ -109,6 +109,8 @@
 
 .section--content {
   @include flex-space-between();
+  margin-top: 15px !important;
+
   margin: 0 $margin-medium;
   &--health {
     flex-direction: column;
@@ -161,6 +163,7 @@
   }
   &--container {
     font-weight: $bold;
+    min-width: 22%;
     @media screen and (max-width: 700px) {
       width: 44%;
     }

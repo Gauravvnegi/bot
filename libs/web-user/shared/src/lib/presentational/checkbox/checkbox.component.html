@@ -2,9 +2,10 @@
   [formGroup]="parentForm"
   [ngClass]="defaultClasses.fieldMainWrapperClasses"
 >
-  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses">{{
-    settings.master_label
-  }}</mat-label>
+  <mat-label [ngClass]="defaultClasses.fieldMasterLabelClasses"
+    >{{ settings.master_label
+    }}<span class="required" *ngIf="settings.required">*</span></mat-label
+  >
 
   <section class="checkbox-section">
     <mat-checkbox

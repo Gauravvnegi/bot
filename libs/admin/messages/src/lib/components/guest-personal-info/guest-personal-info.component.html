@@ -1,0 +1,27 @@
+<div class="guest-person" *ngIf="data">
+  <div class="person-title">
+    Personal Info
+  </div>
+  <div class="person-image">
+    <div class="default"></div>
+    <div class="guest-name">
+      {{ data.name || 'Unknown Person' }}
+    </div>
+  </div>
+  <div class="border-line"></div>
+  <div class="contact-detials">
+    Contact Details
+  </div>
+  <div class="label">
+    Phone No.
+  </div>
+  <div class="label-text">
+    {{ data.phone }}
+  </div>
+  <div class="label">
+    Email
+  </div>
+  <div class="label-text">
+    {{ data.email || 'Unknown' }}
+  </div>
+</div>

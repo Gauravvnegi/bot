@@ -20,14 +20,13 @@ const appRoutes: Route[] = [
         component: DashboardComponent,
         canActivate: [LoadGuard],
       },
-      {
-        path: 'request',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/request').then(
-            (m) => m.AdminRequestModule
-          ),
-        canActivate: [LoadGuard],
-      },
+      // {
+      //   path: 'conversation',
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/conversation').then(
+      //       (m) => m.AdminConversationModule
+      //     ),
+      // },
       {
         path: 'package',
         loadChildren: () =>

@@ -176,3 +176,7 @@
 :host ::ng-deep input[disabled='true'] {
   opacity: 0.5;
 }
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 190px !important;
+}

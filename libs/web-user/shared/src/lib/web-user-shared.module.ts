@@ -42,6 +42,8 @@ import { TextareaComponent } from './presentational/textarea/textarea.component'
 import { TimePickerComponent } from './presentational/time-picker/time-picker.component';
 import { LoaderComponent } from './presentational/loader/loader.component';
 import { CheckinDateAlertComponent } from './presentational/checkin-date-alert/checkin-date-alert.component';
+import { ImageHandlingComponent } from './presentational/image-handling/image-handling.component';
+import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   let { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -75,6 +77,7 @@ export interface IThemeConfig {
     SignaturePadModule,
     MatTabsModule,
     NgxMaterialTimepickerModule,
+    SharedImageCropperModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -117,6 +120,7 @@ export interface IThemeConfig {
     PromocodeComponent,
     LoaderComponent,
     CheckinDateAlertComponent,
+    ImageHandlingComponent,
   ],
   exports: [
     SharedMaterialModule,
@@ -157,6 +161,7 @@ export interface IThemeConfig {
     TranslateModule,
     LoaderComponent,
     CheckinDateAlertComponent,
+    ImageHandlingComponent,
   ],
 })
 export class WebUserSharedModule {

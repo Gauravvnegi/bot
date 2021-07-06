@@ -1,0 +1,108 @@
+@import 'main';
+
+.icon-wrapper {
+  @include flex-space-between();
+  flex-wrap: wrap;
+
+  position: relative;
+  .icon {
+    width: 32%;
+    margin: 6% 0.5%;
+    @include flex-item-center();
+    flex-direction: column;
+    z-index: 2;
+    .table-body-journey-icon {
+      height: 20px;
+      width: 20px;
+      &:hover {
+        cursor: pointer;
+      }
+      @media screen and (max-width: 800px) {
+        height: 10px;
+        width: 10px;
+      }
+    }
+    .label {
+      font-family: Roboto;
+      font-size: 10px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.6px;
+      text-align: left;
+      color: #c2c2c2;
+      padding-top: 3px;
+      @media screen and (max-width: 800px) {
+        font-size: 5px;
+      }
+    }
+    &:hover {
+      .tooltip {
+        display: block;
+      }
+    }
+  }
+  .extra-width {
+    width: 24%;
+  }
+  .line {
+    position: absolute;
+    height: 2px;
+    background-color: #edf1f5;
+    right: 17px;
+    left: 0;
+    width: 100%;
+  }
+  .first {
+    top: 20%;
+  }
+  .second {
+    top: 70%;
+  }
+}
+
+.booking-title {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.84px;
+}
+.user-journey-title {
+  margin-top: 20px;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #b5b5c3;
+}
+.text {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  text-align: left;
+  margin-top: 5px;
+}
+.text-small {
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.6px;
+  text-align: left;
+  color: #99a6b5;
+  margin-top: 15px;
+}

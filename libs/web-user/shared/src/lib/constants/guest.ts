@@ -9,3 +9,10 @@ export enum GuestRole {
   kids = 'kids',
   undefined = '',
 }
+
+export const RequiredFields = {
+  primary: ['firstName', 'lastName', 'country', 'email', 'phone'],
+  sharer: ['firstName', 'lastName'],
+  accompany: [],
+  kids: [],
+};

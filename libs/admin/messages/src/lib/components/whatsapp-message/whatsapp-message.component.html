@@ -1,0 +1,30 @@
+<div class="whatsapp-wrapper">
+  <div class="whatsapp-wrapper-sidebar">
+    <hospitality-bot-chat-list
+      [refreshData]="refreshData"
+      [selected]="selectedChat"
+      (selectedChat)="setSelectedChat($event)"
+    ></hospitality-bot-chat-list>
+  </div>
+  <ng-container *ngIf="selectedChat; else noSelectedGuest">
+    <div [style.width]="guestInfoEnable ? '55%' : '75%'" style="height: 100%;">
+      <hospitality-bot-chat
+        [refreshData]="refreshData"
+        [selectedChat]="selectedChat"
+        (guestInfo)="openGuestInfo($event)"
+      ></hospitality-bot-chat>
+    </div>
+    <div class="guest-info-enable" *ngIf="guestInfoEnable" >
+      <hospitality-bot-guest-info
+        [refreshData]="refreshData"
+        [data]="selectedChat"
+        (closeInfo)="closeGuestInfo($event)"
+      ></hospitality-bot-guest-info>
+    </div>
+  </ng-container>
+  <ng-template #noSelectedGuest>
+    <div class="no-selected-guest">
+      <div>Please select a contact to chat</div>
+    </div>
+  </ng-template>
+</div>

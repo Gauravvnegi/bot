@@ -1,19 +1,10 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  OnDestroy,
-} from '@angular/core';
-import { Customer } from '../../data-models/statistics.model';
-import { BaseChartDirective } from 'ng2-charts';
-import { StatisticsService } from '../../services/statistics.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { Subscription } from 'rxjs';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { ReservationStat } from '../../data-models/statistics.model';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-customer-statistics',
@@ -21,90 +12,22 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
   styleUrls: ['./customer-statistics.component.scss'],
 })
 export class CustomerStatisticsComponent implements OnInit, OnDestroy {
-  @Input() customerData: Customer;
-  @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
-  $subscription = new Subscription();
+  private $subscription = new Subscription();
+  statData: ReservationStat;
+  globalQueries;
 
-  legendData = [
-    {
-      label: 'New',
-      borderColor: '#0749fc',
-      backgroundColor: '#0749fc',
-      dashed: false,
-    },
-    {
-      label: 'Check-In',
-      borderColor: '#0239cf',
-      backgroundColor: '#0239cf',
-      dashed: false,
-    },
-    {
-      label: 'Ex Check-In',
-      borderColor: '#0239cf',
-      backgroundColor: '#288ad6',
-      dashed: true,
-    },
-    {
-      label: 'Checkout',
-      borderColor: '#f2509b',
-      backgroundColor: '#f2509b',
-      dashed: false,
-    },
-    {
-      label: 'Ex Checkout',
-      borderColor: '#f2509b',
-      backgroundColor: '#f2809b',
-      dashed: true,
-    },
-  ];
-  chartTypes = [
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
-  ];
-
-  selectedInterval: any;
-
-  public getLegendCallback: any = ((self: this): any => {
-    function handle(chart: any): any {
-      return chart.legend.legendItems;
-    }
-
-    return function (chart: Chart): any {
-      return handle(chart);
-    };
-  })(this);
-
-  chart: any = {
-    chartData: [
-      { data: [], label: 'New', fill: false },
-      { data: [], label: 'Check-In', fill: false },
-      { data: [], label: 'Express Check-In', fill: false, borderDash: [10, 5] },
-      { data: [], label: 'Checkout', fill: false },
-      { data: [], label: 'Express Checkout', fill: false, borderDash: [10, 5] },
-    ],
-    chartLabels: [],
-    chartOptions: {
-      responsive: true,
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-            ticks: {
-              min: 0,
-              stepSize: 1,
-            },
-          },
-        ],
+  checkinChart: any = {
+    Labels: ['No Data'],
+    Data: [[100]],
+    Type: 'doughnut',
+    Legend: false,
+    Colors: [
+      {
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
       },
+    ],
+    Options: {
       tooltips: {
         backgroundColor: 'white',
         bodyFontColor: 'black',
@@ -115,66 +38,46 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
         xPadding: 10,
         yPadding: 10,
       },
-      legendCallback: this.getLegendCallback,
+      responsive: true,
+      cutoutPercentage: 75,
     },
-    chartColors: [
+  };
+
+  checkoutChart: any = {
+    Labels: ['No Data'],
+    Data: [[100]],
+    Type: 'doughnut',
+    Legend: false,
+    Colors: [
       {
-        borderColor: '#0749fc',
-      },
-      {
-        borderColor: '#0239CF',
-      },
-      {
-        borderColor: '#0239CF',
-      },
-      {
-        borderColor: '#F2509B',
-      },
-      {
-        borderColor: '#F2509B',
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
       },
     ],
-    chartLegend: false,
-    chartType: 'line',
+    Options: {
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+      responsive: true,
+      cutoutPercentage: 75,
+    },
   };
-  timeShow = false;
-  globalQueries;
 
   constructor(
-    private dateService: DateService,
-    private _statisticService: StatisticsService,
+    private statisticsService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _adminUtilityService: AdminUtilityService
+    private _adminUtilityService: AdminUtilityService,
+    private dateService: DateService
   ) {}
 
-  setChartType(option) {
-    this.chart.chartType = option.value;
-    this.setChartColors();
-  }
-
-  setChartColors() {
-    if (this.chart.chartType === 'bar') {
-      this.chart.chartColors = [
-        {
-          backgroundColor: '#0749fc',
-        },
-        {
-          backgroundColor: '#0239CF',
-        },
-        {
-          backgroundColor: '#288ad6',
-        },
-        {
-          backgroundColor: '#F2509B',
-        },
-        {
-          backgroundColor: '#F2809B',
-        },
-      ];
-    }
-  }
-
-  ngOnInit(): void {
+  ngOnInit() {
     this.listenForGlobalFilters();
   }
 
@@ -187,79 +90,95 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
             data['dateRange'].queryValue[1].fromDate
           ),
         };
-        this.selectedInterval = calenderType.calenderType;
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.getCustomerStatistics();
+        this.getReservationStatistics();
       })
     );
   }
 
-  private initGraphData() {
-    const botKeys = Object.keys(this.customerData.checkIn);
-    this.chart.chartData.forEach((d) => {
-      d.data = [];
-    });
-    this.chart.chartLabels = [];
-    botKeys.forEach((d, i) => {
-      this.chart.chartLabels.push(
-        this.dateService.convertTimestampToLabels(
-          this.selectedInterval,
-          d,
-          this.selectedInterval === 'date' && this.selectedInterval === 'week'
-            ? 'DD MMM'
-            : this.selectedInterval === 'month'
-            ? 'MMM YYYY'
-            : '',
-          this.selectedInterval === 'week'
-            ? this._adminUtilityService.getToDate(this.globalQueries)
-            : null
-        )
-      );
-      this.chart.chartData[0].data.push(this.customerData.new[d]);
-      this.chart.chartData[1].data.push(this.customerData.checkIn[d]);
-      this.chart.chartData[2].data.push(this.customerData.expressCheckIn[d]);
-      this.chart.chartData[3].data.push(this.customerData.checkout[d]);
-      this.chart.chartData[4].data.push(this.customerData.expressCheckout[d]);
-    });
-    this.setChartColors();
-  }
-
-  legendOnClick = (index) => {
-    let ci = this.baseChart.chart;
-    let alreadyHidden =
-      ci.getDatasetMeta(index).hidden === null
-        ? false
-        : ci.getDatasetMeta(index).hidden;
-
-    ci.data.datasets.forEach((e, i) => {
-      let meta = ci.getDatasetMeta(i);
-
-      if (i == index) {
-        if (!alreadyHidden) {
-          meta.hidden = true;
-        } else {
-          meta.hidden = false;
-        }
-      }
-    });
-
-    ci.update();
-  };
-
-  getCustomerStatistics() {
+  getReservationStatistics() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService.getCustomerStatistics(config).subscribe((res) => {
-        this.customerData = new Customer().deserialize(res);
-        this.initGraphData();
-      })
+      this.statisticsService
+        .getReservationStatistics(config)
+        .subscribe((response) => {
+          this.statData = new ReservationStat().deserialize(response);
+          this.initCheckinChart();
+          this.initCheckoutChart();
+        })
     );
+  }
+
+  initCheckinChart() {
+    this.checkinChart.Labels = [];
+    this.checkinChart.Data[0] = [];
+    this.checkinChart.Colors = [];
+    if (this.statData.checkin.totalCount) {
+      if (this.statData.checkin.checkIn) {
+        this.checkinChart.Labels.push('Check-In');
+        this.checkinChart.Data[0].push(this.statData.checkin.checkIn);
+        this.checkinChart.Colors.push({
+          backgroundColor: ['#0ea47a'],
+          borderColor: ['#0ea47a'],
+        });
+      }
+      if (this.statData.checkin.expressCheckIn) {
+        this.checkinChart.Labels.push('Express Check-In');
+        this.checkinChart.Data[0].push(this.statData.checkin.expressCheckIn);
+        this.checkinChart.Colors.push({
+          backgroundColor: ['#15eda3'],
+          borderColor: ['#15eda3'],
+        });
+      }
+    } else {
+      this.checkinChart.Labels = ['No Data'];
+      this.checkinChart.Data[0] = [100];
+      this.checkinChart.Colors = [
+        {
+          backgroundColor: ['#D5D1D1'],
+          borderColor: ['#D5D1D1'],
+        },
+      ];
+    }
+  }
+
+  initCheckoutChart() {
+    this.checkoutChart.Labels = [];
+    this.checkoutChart.Data[0] = [];
+    this.checkoutChart.Colors = [];
+    if (this.statData.checkout.totalCount) {
+      if (this.statData.checkout.checkout) {
+        this.checkoutChart.Labels.push('Check-Out');
+        this.checkoutChart.Data[0].push(this.statData.checkout.checkout);
+        this.checkoutChart.Colors.push({
+          backgroundColor: ['#FF4545'],
+          borderColor: ['#FF4545'],
+        });
+      }
+      if (this.statData.checkout.expressCheckout) {
+        this.checkoutChart.Labels.push('Express Check-Out');
+        this.checkoutChart.Data[0].push(this.statData.checkout.expressCheckout);
+        this.checkoutChart.Colors.push({
+          backgroundColor: ['#FF9867'],
+          borderColor: ['#FF9867'],
+        });
+      }
+    } else {
+      this.checkoutChart.Labels = ['No Data'];
+      this.checkoutChart.Data[0] = [100];
+      this.checkoutChart.Colors = [
+        {
+          backgroundColor: ['#D5D1D1'],
+          borderColor: ['#D5D1D1'],
+        },
+      ];
+    }
   }
 
   ngOnDestroy() {

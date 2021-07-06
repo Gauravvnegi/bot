@@ -141,21 +141,7 @@ export class ChatComponent
               response.messages.length < config.limit
                 ? (this.limit = response.messages.length)
                 : (this.limit = this.limit + 20);
-              this.chat = new Chats().deserialize(response);
-              this.chat.messages = DateService.sortObjArrayByTimeStamp(
-                this.chat.messages,
-                'timestamp'
-              );
-              this.chatList[
-                this.selectedChat.receiverId
-              ] = this.messageService.filterMessagesByDate(
-                this.newMessages[this.selectedChat.receiverId]
-                  ? [
-                      ...this.chat.messages,
-                      ...this.newMessages[this.selectedChat.receiverId],
-                    ]
-                  : this.chat.messages
-              );
+              this.handleChatResponse(response);
               scrollHeight
                 ? (this.scrollView = scrollHeight)
                 : (this.scrollBottom = true);
@@ -171,6 +157,24 @@ export class ChatComponent
           )
       );
     }
+  }
+
+  handleChatResponse(response) {
+    this.chat = new Chats().deserialize(response);
+    this.chat.messages = DateService.sortObjArrayByTimeStamp(
+      this.chat.messages,
+      'timestamp'
+    );
+    this.chatList[
+      this.selectedChat.receiverId
+    ] = this.messageService.filterMessagesByDate(
+      this.newMessages[this.selectedChat.receiverId]
+        ? [
+            ...this.chat.messages,
+            ...this.newMessages[this.selectedChat.receiverId],
+          ]
+        : this.chat.messages
+    );
   }
 
   sendMessage(): void {

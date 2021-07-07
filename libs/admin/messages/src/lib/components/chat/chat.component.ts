@@ -167,12 +167,12 @@ export class ChatComponent
       'timestamp'
     );
     this.chatList[
-      this.selectedChat.receiverId
+      response.receiver.receiverId
     ] = this.messageService.filterMessagesByDate(
-      this.newMessages[this.selectedChat.receiverId]
+      this.newMessages[response.receiver.receiverId]
         ? [
             ...this.chat.messages,
-            ...this.newMessages[this.selectedChat.receiverId],
+            ...this.newMessages[response.receiver.receiverId],
           ]
         : this.chat.messages
     );

@@ -72,7 +72,8 @@
       ],
       "@hospitality-bot/shared/image-cropper": [
         "libs/shared/image-cropper/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/analytics": ["libs/admin/analytics/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

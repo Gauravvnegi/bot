@@ -163,7 +163,7 @@ export class SourceStatisticsComponent implements OnInit {
     this.chart.Data = [[]];
     this.chart.Colors[0].backgroundColor = [];
     this.chart.Colors[0].borderColor = [];
-    this.chips = this.chips[0];
+    this.chips = [this.chips[0]];
     if (this.sourceGraphData) {
       Object.keys(this.sourceGraphData.sourceStats).forEach((key, i) => {
         if (this.sourceGraphData.sourceStats[key]) {

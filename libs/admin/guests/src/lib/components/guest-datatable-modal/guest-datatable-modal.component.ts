@@ -121,6 +121,10 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           //set pagination
           this.totalRecords = data.total;
           //check for update tabs and quick reply filters
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.loading = false;
         },
         ({ error }) => {

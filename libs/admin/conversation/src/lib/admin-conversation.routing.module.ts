@@ -11,13 +11,13 @@ const appRoutes: Route[] = [
     path: '',
     component: ConversationComponent,
     children: [
-      // {
-      //   path: 'request',
-      //   loadChildren: () =>
-      //     import('@hospitality-bot/admin/request').then(
-      //       (m) => m.AdminRequestModule
-      //     ),
-      // },
+      {
+        path: 'analytics',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/analytics').then(
+            (m) => m.AdminAnalyticsModule
+          ),
+      },
       {
         path: 'messages',
         loadChildren: () =>

@@ -27,24 +27,25 @@ export class ContactSortFilterComponent implements OnInit {
   initFG(): void {
     this.sortFilterFG = this.fb.group({
       sortBy: [[]],
-      filterBy: new FormArray([]),
+      filterBy: this.fb.array(this.filterData.map((x) => false)),
     });
-    this.addCheckBoxes();
-  }
-
-  addCheckBoxes() {
-    this.filterData.forEach((item) =>
-      this.filterFormArray.push(new FormControl(false))
-    );
   }
 
   applyFilter() {
-    console.log(this.sortFilterFG.getRawValue());
+    const values = this.sortFilterFG.getRawValue();
+    values.filterBy = this.convertFilterToValue();
+    console.log(values);
   }
 
   setSortBy(value) {
     this.sortControl.setValue(value);
     this.sortFilterFG.markAsTouched();
+  }
+
+  convertFilterToValue() {
+    return this.filterFormArray.value
+      .map((x, i) => x && this.filterData[i])
+      .filter((x) => !!x);
   }
 
   get sortControl(): FormControl {

@@ -1,29 +1,38 @@
-.whatsapp-wrapper{
-    height: 100%;
-    display: flex;
-    width: 100%;
-    border-radius: 5px 5px 0px 0px;
-    height: calc(100vh - 124px);
-    
-    &-sidebar{
-        width: 25%;
-        height: 100%;
-        border-right: 1px solid #9eaeb8;
-    }
+.whatsapp-wrapper {
+  height: 100%;
+  display: flex;
+  width: 100%;
+  border-radius: 5px 5px 0px 0px;
+  height: calc(100vh - 124px);
+  margin: -10px;
 
-    .no-selected-guest{
-        height: 100%;
-        width: 75%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        background: #ffffff;
-    }
-    .guest-info-enable{
-        width: 20%;
-        height: 100%;
-        background: #ffffff;
-        border-left: 1px solid #9eaeb8;
-    }
+  &-sidebar {
+    width: 25%;
+    height: 100%;
+    border-right: 1px solid #9eaeb8;
+  }
+
+  .no-selected-guest {
+    height: 100%;
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #ffffff;
+  }
+  .guest-info-enable {
+    width: 20%;
+    height: 100%;
+    background: #ffffff;
+    border-left: 1px solid #9eaeb8;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.visuallyhidden {
+  opacity: 0;
 }

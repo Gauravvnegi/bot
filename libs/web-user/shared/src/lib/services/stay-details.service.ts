@@ -118,8 +118,8 @@ export class StayDetailsService extends ApiService {
 
   getArrivalTimeTimestamp(stayDetails) {
     let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
-    let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm').format(
-      'hh:mm'
+    let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm A').format(
+      'HH:mm'
     );
     return DateService.convertDateToTimestamp(arrivalDate + 'T' + time);
   }

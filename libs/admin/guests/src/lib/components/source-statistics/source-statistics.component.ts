@@ -192,7 +192,12 @@ export class SourceStatisticsComponent implements OnInit {
     }
   }
 
+  updateTabChips() {
+    this.tabFilterItems.forEach((item) => (item.chips = this.chips));
+  }
+
   openTableModal() {
+    this.updateTabChips();
     // event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;

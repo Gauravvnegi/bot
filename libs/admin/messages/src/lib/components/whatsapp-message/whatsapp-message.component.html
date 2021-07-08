@@ -14,7 +14,12 @@
         (guestInfo)="openGuestInfo($event)"
       ></hospitality-bot-chat>
     </div>
-    <div class="guest-info-enable" *ngIf="guestInfoEnable" >
+    <div
+      class="guest-info-enable"
+      [ngClass]="{
+        'visuallyhidden hidden': !guestInfoEnable
+      }"
+    >
       <hospitality-bot-guest-info
         [refreshData]="refreshData"
         [data]="selectedChat"

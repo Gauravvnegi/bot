@@ -67,6 +67,11 @@ export const DEFAULT_ROUTES = [
       //   url: 'assets/svg/virus.svg',
       // },
       {
+        path: 'conversation/analytics',
+        title: 'Analytics',
+        url: 'assets/svg/chatting.svg',
+      },
+      {
         path: 'conversation/messages',
         title: 'Messages',
         url: 'assets/svg/chatting.svg',

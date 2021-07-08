@@ -18,8 +18,21 @@
         border-radius: 50%;
         background: chartreuse;
         margin: 0 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       "
-    ></div>
+    >
+      <img
+        [src]="chat?.receiver?.profileUrl"
+        *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
+      />
+      <ng-template #defaultAvatar
+        ><div>
+          {{ selectedChat?.getProfileNickName() }}
+        </div></ng-template
+      >
+    </div>
     <div
       style="
         font: normal normal medium 14px/19px Roboto;
@@ -28,7 +41,7 @@
         opacity: 1;
       "
     >
-      {{ chat ? chat.receiver?.name || chat.receiver?.phone : '' }}
+      {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
     </div>
   </div>
   <div
@@ -61,7 +74,7 @@
         {{ date }}
       </div>
       <div
-        *ngFor="let message of chatList[date]"
+        *ngFor="let message of chatList[selectedChat.receiverId][date]"
         style="display: flex;"
         [ngStyle]="
           message.direction === 'OUTBOUND'
@@ -72,6 +85,9 @@
         <div
           [ngClass]="
             message.direction === 'OUTBOUND' ? 'right-message' : 'left-message'
+          "
+          [ngStyle]="
+            message.status === 'sent' ? { opacity: '1' } : { opacity: '0.5' }
           "
         >
           <div
@@ -112,16 +128,27 @@
     *ngIf="chatFG && chat?.receiver?.enableSend; else noSend"
   >
     <div style="height: 100%; width: 100%;" [formGroup]="chatFG">
-      <div class="" style="position: relative;height: 100%; width: calc(100% - 60px);">
+      <div
+        class=""
+        style="position: relative; height: 100%; width: calc(100% - 60px);"
+      >
         <input
-        matInput
-        type="text"
-        class="message-field-input"
-        placeholder="Type Message"
-        formControlName="message"
-        (keyup)="checkForEnterKey($event)"/>
-        <img src="assets/svg/smile.svg"
-        style="position:absolute; right:10px;top:48%;transform: translateY(-50%);"  />
+          matInput
+          type="text"
+          class="message-field-input"
+          placeholder="Type Message"
+          formControlName="message"
+          (keyup)="checkForEnterKey($event)"
+        />
+        <img
+          src="assets/svg/smile.svg"
+          style="
+            position: absolute;
+            right: 10px;
+            top: 48%;
+            transform: translateY(-50%);
+          "
+        />
       </div>
     </div>
     <div style="cursor: pointer;" (click)="sendMessage()">

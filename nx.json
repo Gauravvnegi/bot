@@ -104,6 +104,9 @@
     },
     "shared-image-cropper": {
       "tags": []
+    },
+    "admin-analytics": {
+      "tags": []
     }
   }
 }

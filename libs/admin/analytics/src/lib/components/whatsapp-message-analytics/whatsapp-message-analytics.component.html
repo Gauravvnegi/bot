@@ -30,7 +30,7 @@
       <div style="position: relative; width: 173px; height: 173px;">
         <div
           class="center-circle-progress"
-          *ngFor="let item of messageOverallAnalytics"
+          *ngFor="let item of messageOverallAnalytics?.stat"
         >
           <div>
             <circle-progress
@@ -47,6 +47,7 @@
               [showTitle]="false"
               [showSubtitle]="false"
               [showUnits]="false"
+              [showZeroOuterStroke]="false"
             ></circle-progress>
           </div>
         </div>
@@ -89,7 +90,7 @@
       >
         <div
           style="display: flex; align-items: center; margin-bottom: 15px;"
-          *ngFor="let item of messageOverallAnalytics"
+          *ngFor="let item of messageOverallAnalytics?.stat"
         >
           <div style="margin-right: 10px;">
             <img src="assets/svg/Polygon.svg" alt="" />
@@ -109,6 +110,7 @@
                 text-align: left;
                 font: normal normal normal 10px/13px Roboto;
                 letter-spacing: 0px;
+                display: inline-block;
                 opacity: 1;
               "
               [ngStyle]="
@@ -136,7 +138,7 @@
     <div style="display: flex; flex-wrap: wrap;">
       <div
         style="display: flex; height: 70px; width: 50%;"
-        *ngFor="let item of messageOverallAnalytics; let i = index"
+        *ngFor="let item of messageOverallAnalytics?.stat; let i = index"
         [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }"
       >
         <div
@@ -197,13 +199,15 @@
     </div>
 
     <div class="stat-labels-container">
-      <ng-container *ngFor="let legend of legendData; let legendIndex = index">
-        <div class="stat-label" (click)="legendOnClick(legendIndex)">
-          <input class="legends" type="checkbox" />
-          <img src="assets/svg/Polygon.svg" />
-          <p class="stat-label-title">{{ legend.label }}</p>
-        </div>
-      </ng-container>
+      <div
+        class="stat-label"
+        (click)="legendOnClick(legendIndex)"
+        *ngFor="let legend of legendData; let legendIndex = index"
+      >
+        <input class="legends" type="checkbox" />
+        <img src="assets/svg/Polygon.svg" />
+        <p class="stat-label-title">{{ legend.label }}</p>
+      </div>
     </div>
   </div>
 </div>

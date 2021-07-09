@@ -6,4 +6,8 @@ export class AnalyticsService extends ApiService {
   getConversationStats(hotelId: string) {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/counts`);
   }
+
+  getSentReceivedStat(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/graph`);
+  }
 }

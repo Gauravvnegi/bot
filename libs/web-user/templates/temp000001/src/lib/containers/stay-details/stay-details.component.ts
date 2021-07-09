@@ -79,7 +79,8 @@ export class StayDetailsComponent implements OnInit, OnChanges {
     this.stayDetailsForm = this._fb.group({
       arrivalTime: ['', [Validators.required]],
       departureTime: ['', [Validators.required]],
-      expectedTime: [''],
+      expectedArrivalTime: [''],
+      expectedDepartureTime: [''],
       roomType: ['', [Validators.required]],
       adultsCount: ['', [Validators.required]],
       kidsCount: [''],

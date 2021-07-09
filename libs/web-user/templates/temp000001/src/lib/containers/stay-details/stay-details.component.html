@@ -33,17 +33,6 @@
             class="room-type-feild"
           ></web-user-input>
         </div>
-        <div class="wrapper__item">
-          <web-user-time-picker
-            [parentForm]="stayDetailsForm"
-            [name]="'expectedTime'"
-            [settings]="stayDetailsConfig.expectedTime"
-            class="time-picker"
-          >
-          </web-user-time-picker>
-        </div>
-      </div>
-      <div class="wrapper">
         <div class="wrapper__item travelling__info">
           <web-user-label
             [settings]="stayDetailsConfig.travellingWithLabel"
@@ -70,6 +59,32 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="wrapper">
+        <div class="wrapper__item">
+          <web-user-label
+            [settings]="stayDetailsConfig.expectedArrivalTimeLabel"
+          ></web-user-label>
+          <web-user-time-picker
+            [parentForm]="stayDetailsForm"
+            [name]="'expectedArrivalTime'"
+            [settings]="stayDetailsConfig.expectedArrivalTime"
+            class="time-picker"
+          >
+          </web-user-time-picker>
+        </div>
+        <div class="wrapper__item">
+          <web-user-label
+            [settings]="stayDetailsConfig.expectedDepartureTimeLabel"
+          ></web-user-label>
+          <web-user-time-picker
+            [parentForm]="stayDetailsForm"
+            [name]="'expectedDepartureTime'"
+            [settings]="stayDetailsConfig.expectedDepartureTime"
+            class="time-picker"
+          >
+          </web-user-time-picker>
         </div>
       </div>
     </mat-expansion-panel>

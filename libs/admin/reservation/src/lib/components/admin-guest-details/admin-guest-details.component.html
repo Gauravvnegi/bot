@@ -285,10 +285,18 @@
         "
       >
         <form [formGroup]="healthCardDetailsForm">
-          <span class="text">Remark :</span>
-          <mat-form-field class="remark">
-            <input matInput formControlName="remarks" />
-          </mat-form-field>
+          <div>
+            <span class="text">Remark :</span>
+            <mat-form-field class="remark">
+              <input matInput formControlName="remarks" />
+            </mat-form-field>
+          </div>
+          <div>
+            <span class="text">Temperature :</span>
+            <mat-form-field class="remark">
+              <input matInput formControlName="temperature" />
+            </mat-form-field>
+          </div>
         </form>
       </div>
     </ng-container>

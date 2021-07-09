@@ -74,6 +74,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       status: [''],
       remarks: [''],
       url: [''],
+      temperature: [''],
     });
   }
 
@@ -113,10 +114,12 @@ export class AdminGuestDetailsComponent implements OnInit {
   }
 
   updateHealthCardStatus(status) {
+    let formValues = this.healthCardDetailsForm.getRawValue();
     let data = {
       stepName: 'HEALTHDECLARATION',
       state: status,
-      remarks: this.healthCardDetailsForm.get('remarks').value,
+      remarks: formValues.remarks,
+      temperature: formValues.temperature,
     };
 
     if (status == 'REJECT' && isEmpty(data.remarks)) {

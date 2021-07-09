@@ -4,6 +4,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import {
   IMessageOverallAnalytic,
+  IMessageOverallAnalytics,
   ISentdeliveredChart,
   MessageOverallAnalytics,
   SentdeliveredChart,
@@ -17,7 +18,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 })
 export class WhatsappMessageAnalyticsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
-  messageOverallAnalytics: IMessageOverallAnalytic[];
+  messageOverallAnalytics: IMessageOverallAnalytics;
   sentReceivedChartData: ISentdeliveredChart;
   hotelId: string;
   $subscription = new Subscription();

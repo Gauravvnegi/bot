@@ -24,7 +24,7 @@ export class MessageOverallAnalytics {
           )
         );
     });
-    return this.stat;
+    return this;
   }
 }
 
@@ -101,6 +101,11 @@ export class SentdeliveredChart {
 
 export type IMessageOverallAnalytic = Omit<
   MessageOverallAnalytic,
+  'deserialize'
+>;
+
+export type IMessageOverallAnalytics = Omit<
+  MessageOverallAnalytics,
   'deserialize'
 >;
 

@@ -265,7 +265,7 @@ export class ShareIconConfig implements Deserializable {
 
   deserialize(input: any) {
     this.applications = new Array<ShareIcon>();
-    this.applications = input.applications.map((data) => {
+    this.applications = input?.map((data) => {
       return new ShareIcon().deserialize(data);
     });
     return this;

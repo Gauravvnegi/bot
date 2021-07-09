@@ -35,11 +35,7 @@
           <div>
             <circle-progress
               [radius]="item.radius"
-              [percent]="
-                item.comparisonPercentage < 0
-                  ? item.comparisonPercentage * -1
-                  : item.comparisonPercentage
-              "
+              [percent]="item.progress"
               [space]="-5"
               [outerStrokeWidth]="5"
               [innerStrokeWidth]="5"
@@ -51,7 +47,6 @@
               [showTitle]="false"
               [showSubtitle]="false"
               [showUnits]="false"
-              [clockwise]="item.comparisonPercentage >= 0"
             ></circle-progress>
           </div>
         </div>
@@ -73,7 +68,7 @@
                 opacity: 1;
               "
             >
-              56
+              {{ messageOverallAnalytics?.total || 0 }}
             </div>
             <div
               style="
@@ -172,6 +167,9 @@
       border-radius: 5px;
       padding: 20px;
       opacity: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     "
   >
     <div
@@ -183,6 +181,29 @@
       "
     >
       SENT v/s DELIVERED
+    </div>
+    <div class="line-chart">
+      <canvas
+        baseChart
+        style="max-height: 290px;"
+        [datasets]="chart.chartData"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
+      </canvas>
+    </div>
+
+    <div class="stat-labels-container">
+      <ng-container *ngFor="let legend of legendData; let legendIndex = index">
+        <div class="stat-label" (click)="legendOnClick(legendIndex)">
+          <input class="legends" type="checkbox" />
+          <img src="assets/svg/Polygon.svg" />
+          <p class="stat-label-title">{{ legend.label }}</p>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

@@ -28,11 +28,14 @@
       style="display: flex; margin-bottom: 20px; justify-content: space-around;"
     >
       <div style="position: relative; width: 173px; height: 173px;">
-        <div class="center-circle-progress" *ngFor="let item of responseData">
+        <div
+          class="center-circle-progress"
+          *ngFor="let item of messageOverallAnalytics?.stat"
+        >
           <div>
             <circle-progress
               [radius]="item.radius"
-              [percent]="item.graphvalue"
+              [percent]="item.progress"
               [space]="-5"
               [outerStrokeWidth]="5"
               [innerStrokeWidth]="5"
@@ -44,6 +47,7 @@
               [showTitle]="false"
               [showSubtitle]="false"
               [showUnits]="false"
+              [showZeroOuterStroke]="false"
             ></circle-progress>
           </div>
         </div>
@@ -65,7 +69,7 @@
                 opacity: 1;
               "
             >
-              56
+              {{ messageOverallAnalytics?.total || 0 }}
             </div>
             <div
               style="
@@ -86,7 +90,7 @@
       >
         <div
           style="display: flex; align-items: center; margin-bottom: 15px;"
-          *ngFor="let item of responseData"
+          *ngFor="let item of messageOverallAnalytics?.stat"
         >
           <div style="margin-right: 10px;">
             <img src="assets/svg/Polygon.svg" alt="" />
@@ -106,6 +110,7 @@
                 text-align: left;
                 font: normal normal normal 10px/13px Roboto;
                 letter-spacing: 0px;
+                display: inline-block;
                 opacity: 1;
               "
               [ngStyle]="
@@ -133,7 +138,7 @@
     <div style="display: flex; flex-wrap: wrap;">
       <div
         style="display: flex; height: 70px; width: 50%;"
-        *ngFor="let item of responseData; let i = index"
+        *ngFor="let item of messageOverallAnalytics?.stat; let i = index"
         [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }"
       >
         <div
@@ -164,6 +169,9 @@
       border-radius: 5px;
       padding: 20px;
       opacity: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     "
   >
     <div
@@ -175,6 +183,31 @@
       "
     >
       SENT v/s DELIVERED
+    </div>
+    <div class="line-chart">
+      <canvas
+        baseChart
+        style="max-height: 290px;"
+        [datasets]="chart.chartData"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
+      </canvas>
+    </div>
+
+    <div class="stat-labels-container">
+      <div
+        class="stat-label"
+        (click)="legendOnClick(legendIndex)"
+        *ngFor="let legend of legendData; let legendIndex = index"
+      >
+        <input class="legends" type="checkbox" />
+        <img src="assets/svg/Polygon.svg" />
+        <p class="stat-label-title">{{ legend.label }}</p>
+      </div>
     </div>
   </div>
 </div>

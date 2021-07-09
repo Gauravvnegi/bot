@@ -28,11 +28,18 @@
       style="display: flex; margin-bottom: 20px; justify-content: space-around;"
     >
       <div style="position: relative; width: 173px; height: 173px;">
-        <div class="center-circle-progress" *ngFor="let item of responseData">
+        <div
+          class="center-circle-progress"
+          *ngFor="let item of messageOverallAnalytics"
+        >
           <div>
             <circle-progress
               [radius]="item.radius"
-              [percent]="item.graphvalue"
+              [percent]="
+                item.comparisonPercentage < 0
+                  ? item.comparisonPercentage * -1
+                  : item.comparisonPercentage
+              "
               [space]="-5"
               [outerStrokeWidth]="5"
               [innerStrokeWidth]="5"
@@ -44,6 +51,7 @@
               [showTitle]="false"
               [showSubtitle]="false"
               [showUnits]="false"
+              [clockwise]="item.comparisonPercentage >= 0"
             ></circle-progress>
           </div>
         </div>
@@ -86,7 +94,7 @@
       >
         <div
           style="display: flex; align-items: center; margin-bottom: 15px;"
-          *ngFor="let item of responseData"
+          *ngFor="let item of messageOverallAnalytics"
         >
           <div style="margin-right: 10px;">
             <img src="assets/svg/Polygon.svg" alt="" />
@@ -133,7 +141,7 @@
     <div style="display: flex; flex-wrap: wrap;">
       <div
         style="display: flex; height: 70px; width: 50%;"
-        *ngFor="let item of responseData; let i = index"
+        *ngFor="let item of messageOverallAnalytics; let i = index"
         [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }"
       >
         <div

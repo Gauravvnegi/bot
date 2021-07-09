@@ -35,7 +35,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
       data: null,
     },
   };
-  responseData: IStat[];
+  messageOverallAnalytics: IStat[];
   hotelId: string;
   $subscription = new Subscription();
   constructor(
@@ -72,14 +72,16 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
   }
 
   getConversationStats() {
-    // this.$subscription.add(
-    //   this.analyticsService
-    //     .getConversationStats(this.hotelId)
-    //     .subscribe((response) => {
-    //       this.responseData = new MessageStat().deserialize(response.messageCounts);
-    //     })
-    // );
+    this.$subscription.add(
+      this.analyticsService
+        .getConversationStats(this.hotelId)
+        .subscribe((response) => {
+          this.messageOverallAnalytics = new MessageStat().deserialize(
+            response.messageCounts
+          );
+        })
+    );
 
-    this.responseData = new MessageStat().deserialize(this.data.messageCounts);
+    // this.messageOverallAnalytics = new MessageStat().deserialize(this.data.messageCounts);
   }
 }

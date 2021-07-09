@@ -22,6 +22,7 @@ export class SourceStatisticsComponent implements OnInit {
   globalQueries;
   // @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   colors = ['#745AF2', '#3E8EF7', '#0BB2D4', '#FAA700', '#389F99', '#3E8EF7'];
+  legends = [];
   chart: any = {
     Labels: ['No Data'],
     Data: [[100]],
@@ -164,6 +165,7 @@ export class SourceStatisticsComponent implements OnInit {
     this.chart.Colors[0].backgroundColor = [];
     this.chart.Colors[0].borderColor = [];
     this.chips = [this.chips[0]];
+    this.legends = [];
     if (this.sourceGraphData) {
       Object.keys(this.sourceGraphData.sourceStats).forEach((key, i) => {
         if (this.sourceGraphData.sourceStats[key]) {
@@ -174,6 +176,10 @@ export class SourceStatisticsComponent implements OnInit {
           this.chart.Colors[0].backgroundColor.push(this.colors[i]);
           this.chart.Colors[0].borderColor.push(this.colors[i]);
         }
+        this.legends.push({
+          label: key,
+          value: this.sourceGraphData.sourceStats[key],
+        });
         this.chips.push({
           label: key,
           icon: '',
@@ -182,14 +188,21 @@ export class SourceStatisticsComponent implements OnInit {
           type: 'pending',
         });
       });
-      this.chart.total = this.sourceGraphData.title;
+      if (!this.sourceGraphData.total) {
+        this.initDefaultGraph();
+      }
+      this.chart.total = this.sourceGraphData.total;
     } else {
-      this.chart.Labels.push('No Data');
-      this.chart.Data[0].push(100);
-      this.chart.Colors[0].backgroundColor.push('#D5D1D1');
-      this.chart.Colors[0].borderColor.push('#D5D1D1');
-      this.chart.total = 0;
+      this.initDefaultGraph();
     }
+  }
+
+  initDefaultGraph() {
+    this.chart.Labels.push('No Data');
+    this.chart.Data[0].push(100);
+    this.chart.Colors[0].backgroundColor.push('#D5D1D1');
+    this.chart.Colors[0].borderColor.push('#D5D1D1');
+    this.chart.total = 0;
   }
 
   updateTabChips() {

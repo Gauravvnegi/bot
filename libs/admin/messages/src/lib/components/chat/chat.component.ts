@@ -31,7 +31,6 @@ export class ChatComponent
   @Input() selectedChat;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-  newMessages = {};
   hotelId: string;
   chat: IChats;
   chatFG: FormGroup;
@@ -40,7 +39,10 @@ export class ChatComponent
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
-  chatList = {};
+  chatList = {
+    messages: {},
+    receiver: {},
+  };
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
@@ -62,11 +64,10 @@ export class ChatComponent
       channelType: ['whatsapp'],
       messageType: ['DATA_TEXT'],
     });
-    this.newMessages = new Array<IChat>();
   }
 
   ngOnChanges(): void {
-    if (!this.chatList[this.selectedChat.receiverId]) {
+    if (!this.chatList.messages[this.selectedChat.receiverId]) {
       this.getChat({ offset: 0, limit: 20 });
     } else {
       const chatLength = this.getMessagesFromTimeList().length;
@@ -152,7 +153,6 @@ export class ChatComponent
             ({ error }) => {
               this.isLoading = false;
               this.chat = new Chats();
-              this.chatList = {};
               this.snackBarService.openSnackBarAsText(error.message);
             }
           )
@@ -166,16 +166,10 @@ export class ChatComponent
       this.chat.messages,
       'timestamp'
     );
-    this.chatList[
+    this.chatList.messages[
       response.receiver.receiverId
-    ] = this.messageService.filterMessagesByDate(
-      this.newMessages[response.receiver.receiverId]
-        ? [
-            ...this.chat.messages,
-            ...this.newMessages[response.receiver.receiverId],
-          ]
-        : this.chat.messages
-    );
+    ] = this.messageService.filterMessagesByDate(this.chat.messages);
+    this.chatList.receiver[response.receiver.receiverId] = this.chat.receiver;
   }
 
   sendMessage(): void {
@@ -189,6 +183,7 @@ export class ChatComponent
     values.receiverId = this.selectedChat.phone;
     const timestamp = this.dateService.getCurrentTimeStamp();
     this.updateMessageToChatList(timestamp, 'unsend');
+    this.scrollToBottom();
 
     this.$subscription.add(
       this.messageService.sendMessage(this.hotelId, values).subscribe(
@@ -211,33 +206,30 @@ export class ChatComponent
         timestamp,
         status,
       });
-      if (this.newMessages[this.selectedChat.receiverId]) {
-        this.newMessages[this.selectedChat.receiverId].push(data);
-      } else {
-        this.newMessages[this.selectedChat.receiverId] = [data];
-      }
+      this.chatFG.get('message').setValue('');
+      messages.push(data);
     } else {
-      this.newMessages[this.selectedChat.receiverId].forEach((message) => {
-        if (message.timestamp === timestamp) {
-          message.status = status;
-        }
+      messages = messages.map((message) => {
+        if (message.timestamp === timestamp) message.status = status;
+        return message;
       });
     }
-    messages = [...messages, ...this.newMessages[this.selectedChat.receiverId]];
     messages = DateService.sortObjArrayByTimeStamp(messages, 'timestamp');
-    this.chatList[
+    this.chatList.messages[
       this.selectedChat.receiverId
     ] = this.messageService.filterMessagesByDate(messages);
   }
 
   getMessagesFromTimeList() {
     let messages = [];
-    Object.keys(this.chatList[this.selectedChat.receiverId]).forEach((key) => {
-      messages = [
-        ...messages,
-        ...this.chatList[this.selectedChat.receiverId][key],
-      ];
-    });
+    Object.keys(this.chatList.messages[this.selectedChat.receiverId]).forEach(
+      (key) => {
+        messages = [
+          ...messages,
+          ...this.chatList.messages[this.selectedChat.receiverId][key],
+        ];
+      }
+    );
     return messages;
   }
 
@@ -263,7 +255,7 @@ export class ChatComponent
   scrollChat() {
     if (this.myScrollContainer && this.scrollBottom) {
       this.scrollBottom = false;
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+      this.scrollToBottom();
     } else if (this.myScrollContainer && this.scrollView) {
       this.myScrollContainer.nativeElement.scrollTop =
         this.myScrollContainer.nativeElement.scrollHeight - this.scrollView;
@@ -272,10 +264,14 @@ export class ChatComponent
   }
 
   get chatDates() {
-    if (this.chatList[this.selectedChat.receiverId]) {
-      return Object.keys(this.chatList[this.selectedChat.receiverId]);
+    if (this.chatList.messages[this.selectedChat.receiverId]) {
+      return Object.keys(this.chatList.messages[this.selectedChat.receiverId]);
     }
     return [];
+  }
+
+  scrollToBottom() {
+    this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
   }
 
   ngOnDestroy(): void {

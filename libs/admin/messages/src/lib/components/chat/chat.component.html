@@ -51,6 +51,7 @@
       overflow-y: auto;
       padding: 20px;
       position: relative;
+      width: 100%;
     "
     (scroll)="onScroll($event)"
     *ngIf="chatDates.length; else noChat"
@@ -74,7 +75,7 @@
         {{ date }}
       </div>
       <div
-        *ngFor="let message of chatList[selectedChat.receiverId][date]"
+        *ngFor="let message of chatList.messages[selectedChat.receiverId][date]"
         style="display: flex;"
         [ngStyle]="
           message.direction === 'OUTBOUND'
@@ -125,12 +126,15 @@
       justify-content: space-between;
       align-items: center;
     "
-    *ngIf="chatFG && chat?.receiver?.enableSend; else noSend"
+    *ngIf="
+      chatFG && this.chatList.receiver[selectedChat.receiverId]?.enableSend;
+      else noSend
+    "
   >
     <div style="height: 100%; width: 100%;" [formGroup]="chatFG">
       <div
         class=""
-        style="position: relative; height: 100%; width: calc(100% - 60px);"
+        style="position: relative; height: 100%; width: calc(100% - 10px);"
       >
         <input
           matInput

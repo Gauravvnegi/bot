@@ -12,7 +12,7 @@
 .right-message {
   display: flex;
   margin: 10px 0;
-  max-width: 50%;
+  max-width: 60%;
   height: auto;
   padding: 10px;
   border-radius: 10px 10px 0 10px;
@@ -29,13 +29,15 @@
     letter-spacing: 0.72px;
     text-align: left;
     color: #ffffff;
+    word-wrap: break-word;
+    width: calc(100% - 60px);
   }
 }
 
 .left-message {
   display: flex;
   margin: 10px 0;
-  max-width: 50%;
+  max-width: 60%;
   height: auto;
   padding: 10px;
   border-radius: 10px 10px 10px 0;
@@ -51,6 +53,8 @@
     letter-spacing: 0.72px;
     text-align: left;
     color: #002046;
+    word-wrap: break-word;
+    width: calc(100% - 60px);
   }
 }
 
@@ -64,5 +68,6 @@
   line-height: normal;
   letter-spacing: 0.6px;
   color: #c7c7c7;
-  margin-left: 10px;
+  padding-left: 10px;
+  width: 60px;
 }

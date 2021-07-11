@@ -43,6 +43,7 @@ import { Temp000002SignatureCaptureWrapperComponent } from './presentational/tem
 import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     ButtonTemplateSwitchDirective,
     Temp000002SignatureCaptureWrapperComponent,
     CancelBookingComponent,
+    QuestionnaireComponent,
   ],
   providers: [
     {

@@ -41,6 +41,7 @@ import { Temp000001InputPopupComponent } from './presentational/temp000001-input
 import { ButtonTemplateSwitchDirective } from './directives/button-template-switch.directive';
 import { Temp000001SignatureCaptureWrapperComponent } from './presentational/temp000001-signature-capture-wrapper/temp000001-signature-capture-wrapper.component';
 import { TokenInterceptor } from 'libs/web-user/templates/temp000001/src/lib/interceptors/token.interceptor';
+import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { TokenInterceptor } from 'libs/web-user/templates/temp000001/src/lib/int
     Temp000001InputPopupComponent,
     ButtonTemplateSwitchDirective,
     Temp000001SignatureCaptureWrapperComponent,
+    QuestionnaireComponent,
   ],
   providers: [
     {

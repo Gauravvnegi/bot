@@ -35,8 +35,11 @@ export class StayDetailsService extends ApiService {
       isDatePickerDisable: true,
       required: true,
     });
-    stayDetailsFieldSchema['expectedTime'] = new FieldSchema().deserialize({
-      label: 'Expected Arrival Time',
+    stayDetailsFieldSchema[
+      'expectedArrivalTime'
+    ] = new FieldSchema().deserialize({
+      label:
+        'Early check-in are subject to availability, please mention in special request if required.',
       disable: false,
       style: {
         childLabelStyles: {
@@ -51,6 +54,47 @@ export class StayDetailsService extends ApiService {
       'travellingWithLabel'
     ] = new FieldSchema().deserialize({
       master_label: 'Travelling with',
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '13px',
+        },
+      },
+    });
+
+    stayDetailsFieldSchema[
+      'expectedArrivalTimeLabel'
+    ] = new FieldSchema().deserialize({
+      master_label: 'Expected Arrival Time',
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '16px',
+        },
+      },
+    });
+
+    stayDetailsFieldSchema[
+      'expectedDepartureTimeLabel'
+    ] = new FieldSchema().deserialize({
+      master_label: 'Expected Departure Time',
+      style: {
+        childLabelStyles: {
+          'font-weight': 700,
+          color: '#888888',
+          'font-size': '16px',
+        },
+      },
+    });
+
+    stayDetailsFieldSchema[
+      'expectedDepartureTime'
+    ] = new FieldSchema().deserialize({
+      label:
+        'Late checkout are subject to availability, please mention in special request if required.',
+      disable: false,
       style: {
         childLabelStyles: {
           'font-weight': 700,
@@ -107,21 +151,31 @@ export class StayDetailsService extends ApiService {
   }
 
   modifyStayDetails(stayDetails) {
-    let arrivalTime = this.getArrivalTimeTimestamp(stayDetails);
     return {
       stayDetails: {
         comments: stayDetails.special_comments.comments,
-        expectedArrivalTime: arrivalTime,
+        expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails),
+        expectedDepartureTime: this.getDepartureTimeTimestamp(stayDetails),
       },
     };
   }
 
   getArrivalTimeTimestamp(stayDetails) {
     let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
-    let time = moment(stayDetails.stayDetail.expectedTime, 'hh:mm A').format(
-      'HH:mm'
-    );
+    let time = moment(
+      stayDetails.stayDetail.expectedArrivalTime,
+      'hh:mm A'
+    ).format('HH:mm');
     return DateService.convertDateToTimestamp(arrivalDate + 'T' + time);
+  }
+
+  getDepartureTimeTimestamp(stayDetails) {
+    let departureDate = stayDetails.stayDetail.departureTime.split('T')[0];
+    let time = moment(
+      stayDetails.stayDetail.expectedDepartureTime,
+      'hh:mm A'
+    ).format('HH:mm');
+    return DateService.convertDateToTimestamp(departureDate + 'T' + time);
   }
 
   updateStayDetailDS(value) {

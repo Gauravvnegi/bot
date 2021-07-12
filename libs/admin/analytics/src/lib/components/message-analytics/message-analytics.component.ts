@@ -7,6 +7,9 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { WhatsappMessageAnalyticsComponent } from '../whatsapp-message-analytics/whatsapp-message-analytics.component';
 import { Tab } from '../../models/tab.model';
+import { AnalyticsService } from '../../services/analytics.service';
+import * as FileSaver from 'file-saver';
+
 @Component({
   selector: 'hospitality-bot-message-analytics',
   templateUrl: './message-analytics.component.html',
@@ -31,6 +34,7 @@ export class MessageAnalyticsComponent implements OnInit {
   ];
   selectedInterval;
   globalQueries;
+  hotelId: string;
   $subscription = new Subscription();
   analyticsFG: FormGroup;
   tabFilterIdx: number = 0;
@@ -47,7 +51,8 @@ export class MessageAnalyticsComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private dateService: DateService
+    private dateService: DateService,
+    private analyticService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -75,8 +80,17 @@ export class MessageAnalyticsComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
+        this.getHotelId(this.globalQueries);
       })
     );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   initFG(): void {
@@ -90,5 +104,19 @@ export class MessageAnalyticsComponent implements OnInit {
     this.tabFilterIdx = event.index;
   }
 
-  exportCSV() {}
+  exportCSV() {
+    this.$subscription.add(
+      this.analyticService.exportCSV(this.hotelId).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            'Message_Analytics_export_' + new Date().getTime() + '.csv'
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
 }

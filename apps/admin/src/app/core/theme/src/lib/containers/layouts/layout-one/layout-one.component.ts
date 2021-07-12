@@ -57,6 +57,7 @@ export class LayoutOneComponent implements OnInit {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.initSearchQueryForm();
+    this.initFirebaseMessaging();
   }
 
   initFirebaseMessaging() {

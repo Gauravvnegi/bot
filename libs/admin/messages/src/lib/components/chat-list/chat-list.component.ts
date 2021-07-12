@@ -32,9 +32,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   hotelId: string;
   chatList: IContactList;
   $subscription = new Subscription();
-  searchFG: FormGroup;
+  contactFG: FormGroup;
   scrollView;
   showFilter = false;
+  filterData = {};
   constructor(
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,
@@ -54,7 +55,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   initFG() {
-    this.searchFG = this.fb.group({
+    this.contactFG = this.fb.group({
       search: [''],
     });
   }
@@ -105,6 +106,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             {
               hotelId: this.hotelId,
               limit: this.limit,
+              ...this.filterData,
             },
           ])
         )
@@ -136,10 +138,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.myScrollContainer.nativeElement.scrollHeight &&
       this.limit > this.chatList.contacts.length
     ) {
-      if (this.searchFG.get('search').value.length < 3) {
+      if (this.contactFG.get('search').value.length < 3) {
         this.scrollView = this.myScrollContainer.nativeElement.scrollHeight;
         this.loadChatList();
-      } else this.loadSearchList(this.searchFG.get('search').value);
+      } else this.loadSearchList(this.contactFG.get('search').value);
     }
   }
 
@@ -152,6 +154,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             {
               limit: this.limit,
               key: searchKey,
+              ...this.filterData,
             },
           ])
         )
@@ -165,8 +168,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   listenForSearchChanges() {
-    const formChanges$ = this.searchFG.valueChanges.pipe(
-      filter(() => !!(this.searchFG.get('search') as FormControl).value)
+    const formChanges$ = this.contactFG.valueChanges.pipe(
+      filter(() => !!(this.contactFG.get('search') as FormControl).value)
     );
 
     formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
@@ -179,6 +182,17 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.loadChatList();
       }
     });
+  }
+
+  handleFilter(event) {
+    if (event.status) {
+      this.limit = this.limit < 20 ? 20 : this.limit;
+      this.filterData = event.data;
+      if (this.contactFG.get('search').value.length < 3) {
+        this.loadChatList();
+      } else this.loadSearchList(this.contactFG.get('search').value);
+      this.showFilter = false;
+    }
   }
 
   ngOnDestroy(): void {

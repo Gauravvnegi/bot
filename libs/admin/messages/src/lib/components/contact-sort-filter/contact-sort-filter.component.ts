@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -7,14 +7,13 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./contact-sort-filter.component.scss'],
 })
 export class ContactSortFilterComponent implements OnInit {
-  sortFilterFG: FormGroup;
+  @Input() parentFG: FormGroup;
+  @Output() filterApplied = new EventEmitter();
   sortList = [
-    { label: 'Latest', value: 'latest' },
-    { label: 'Room Ascending', value: 'room-asc' },
-    { label: 'Room Descending', value: 'room-desc' },
-    { label: 'Phone No.', value: 'phone' },
-    { label: 'Name A -> Z', value: 'name-asc' },
-    { label: 'Name Z -> A', value: 'name-desc' },
+    { label: 'Room Ascending', value: 'roomNo', order: 'asc' },
+    { label: 'Room Descending', value: 'roomNo', order: 'desc' },
+    { label: 'Name A -> Z', value: 'guestName', order: 'asc' },
+    { label: 'Name Z -> A', value: 'guestName', order: 'desc' },
   ];
 
   filterData = ['Unread', 'Failed', 'Tags', 'Attachments'];
@@ -25,21 +24,29 @@ export class ContactSortFilterComponent implements OnInit {
   }
 
   initFG(): void {
-    this.sortFilterFG = this.fb.group({
+    this.parentFG.addControl('sortBy', new FormControl([]));
+    this.parentFG.addControl(
+      'filterBy',
+      this.fb.array(this.filterData.map((x) => false))
+    );
+    this.parentFG = this.fb.group({
       sortBy: [[]],
       filterBy: this.fb.array(this.filterData.map((x) => false)),
     });
   }
 
   applyFilter() {
-    const values = this.sortFilterFG.getRawValue();
+    const values = this.parentFG.getRawValue();
     values.filterBy = this.convertFilterToValue();
-    console.log(values);
+    this.filterApplied.emit({
+      status: true,
+      data: { sort: values.sortBy.label, order: values.sortBy.order },
+    });
   }
 
-  setSortBy(value) {
-    this.sortControl.setValue(value);
-    this.sortFilterFG.markAsTouched();
+  setSortBy(item) {
+    this.sortControl.setValue({ label: item.value, order: item.order });
+    this.parentFG.markAsTouched();
   }
 
   convertFilterToValue() {
@@ -49,10 +56,10 @@ export class ContactSortFilterComponent implements OnInit {
   }
 
   get sortControl(): FormControl {
-    return this.sortFilterFG?.get('sortBy') as FormControl;
+    return this.parentFG?.get('sortBy') as FormControl;
   }
 
   get filterFormArray(): FormArray {
-    return this.sortFilterFG.controls.filterBy as FormArray;
+    return this.parentFG.controls.filterBy as FormArray;
   }
 }

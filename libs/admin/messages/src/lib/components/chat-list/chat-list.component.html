@@ -54,7 +54,11 @@
           {{ contact.name || contact.phone }}
         </div>
         <div class="description-message">
-          {{ contact.descriptionMessage }}
+          {{
+            contact.descriptionMessage.length > 41
+              ? (contact.descriptionMessage | slice: 0:40) + '...'
+              : contact.descriptionMessage
+          }}
         </div>
       </div>
     </div>

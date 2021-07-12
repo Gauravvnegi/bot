@@ -182,6 +182,10 @@
             "passWithNoTests": true,
             "setupFile": "apps/web-user/src/test-setup.ts"
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     },
@@ -232,7 +236,12 @@
             "polyfills": "apps/admin/src/polyfills.ts",
             "tsConfig": "apps/admin/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
+            "assets": [
+              "apps/admin/src/favicon.ico",
+              "apps/admin/src/assets",
+              "apps/admin/src/firebase-messaging-sw.js"
+              // "manifest.json"
+            ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/slick-carousel/slick/slick.scss",

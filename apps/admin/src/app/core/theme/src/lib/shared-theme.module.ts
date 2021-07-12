@@ -1,24 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SidenavComponent } from './containers/sidenav/sidenav.component';
-import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.component';
-import { SettingsComponent } from './containers/settings/settings.component';
-import { DaterangeComponent } from './containers/daterange/daterange.component';
+import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
+import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { DropdownModule } from 'primeng/dropdown';
 // import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
-import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-dropdown.component';
-import { FooterComponent } from './containers/footer/footer.component';
-import { SearchBarComponent } from './containers/search-bar/search-bar.component';
-import { FilterComponent } from './containers/filter/filter.component';
 import { TabViewModule } from 'primeng/tabview';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
-import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
+import { DaterangeComponent } from './containers/daterange/daterange.component';
+import { FilterComponent } from './containers/filter/filter.component';
+import { FooterComponent } from './containers/footer/footer.component';
+import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.component';
 import { MessageTabMenuComponent } from './containers/message-tab-menu/message-tab-menu.component';
+import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
+import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-dropdown.component';
+import { SearchBarComponent } from './containers/search-bar/search-bar.component';
+import { SettingsComponent } from './containers/settings/settings.component';
+import { SidenavComponent } from './containers/sidenav/sidenav.component';
+import { environment } from '../../../../../environments/environment';
 @NgModule({
   imports: [
     CommonModule,
@@ -31,6 +34,7 @@ import { MessageTabMenuComponent } from './containers/message-tab-menu/message-t
     SharedMaterialModule,
     TabViewModule,
     AdminGuestDetailModule,
+    AngularFireMessagingModule,
   ],
   declarations: [
     SidenavComponent,

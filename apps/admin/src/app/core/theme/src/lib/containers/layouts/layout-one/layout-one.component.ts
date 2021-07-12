@@ -9,6 +9,7 @@ import { AuthService } from '../../../../../../auth/services/auth.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
+import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 
 @Component({
@@ -47,7 +48,8 @@ export class LayoutOneComponent implements OnInit {
     private _hotelDetailService: HotelDetailService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit() {
@@ -55,6 +57,11 @@ export class LayoutOneComponent implements OnInit {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.initSearchQueryForm();
+  }
+
+  initFirebaseMessaging() {
+    this.firebaseMessagingService.requestPermission();
+    this.firebaseMessagingService.receiveMessage();
   }
 
   initSearchQueryForm(): void {

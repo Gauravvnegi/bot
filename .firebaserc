@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "push-notification-6455a": {
+      "hosting": {
+        "admin": [
+          "push-notification-6455a"
+        ]
+      }
+    }
+  }
+}

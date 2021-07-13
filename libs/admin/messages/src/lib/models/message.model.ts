@@ -57,11 +57,11 @@ export class ContactList {
       this.contacts.push(new Contact().deserialize(item))
     );
 
-    this.contacts = DateService.sortObjArrayByTimeStamp(
-      this.contacts,
-      'lastMessageAt',
-      'desc'
-    );
+    // this.contacts = DateService.sortObjArrayByTimeStamp(
+    //   this.contacts,
+    //   'lastMessageAt',
+    //   'desc'
+    // );
 
     return this;
   }

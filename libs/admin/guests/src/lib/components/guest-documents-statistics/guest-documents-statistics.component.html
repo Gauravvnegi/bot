@@ -4,56 +4,61 @@
       <img src="assets/svg/guest_documents.svg" />
     </div>
     <div class="stat-title">Guest Documents</div>
-	<div class="info-icon">
-		<img  src="assets/svg/info.svg" alt="info-icon">
-		<div class="tooltip"><span class="arrow">
-		</span> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </div>
-	</div>
-	</div>
-	<div class="graph-container">
-		<div class="graph">
-			<canvas baseChart style="height: 138px;"
-				[data]="chart.Data"
-				[labels]="chart.Labels"
-				[chartType]="chart.Type"
-				[legend]="chart.Legend"
-				[colors]="chart.Colors"
-				[options]="chart.Options">
-		  </canvas>
-		</div>
-		<div class="labels">
-			<div class="val">{{ document.totalCount }}</div>
-			<div class="label">Total Users</div>
-		</div>
-	</div>
-	<div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon initiated"></div>
-				<div class="stat-lable">Initiated</div>
-			</div>
-			<div class="stat-val">{{ document.INITIATED }}</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon pending"></div>
-				<div class="stat-lable">Pending</div>
-			</div>
-			<div class="stat-val">{{ document.PENDING }}</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon accepted"></div>
-				<div class="stat-lable">Accepted</div>
-			</div>
-			<div class="stat-val">{{ document.ACCEPTED }}</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon rejected"></div>
-				<div class="stat-lable">Rejected</div>
-			</div>
-			<div class="stat-val">{{ document.REJECTED }}</div>
-		</div>
-	</div>
+    <div class="info-icon">
+      <img src="assets/svg/info.svg" alt="info-icon" />
+      <div class="tooltip">
+        <span class="arrow"> </span> Total number of guest document status in a
+        selected time frame.
+      </div>
+    </div>
+  </div>
+  <div class="graph-container">
+    <div class="graph">
+      <canvas
+        baseChart
+        style="height: 138px;"
+        [data]="chart.Data"
+        [labels]="chart.Labels"
+        [chartType]="chart.Type"
+        [legend]="chart.Legend"
+        [colors]="chart.Colors"
+        [options]="chart.Options"
+      >
+      </canvas>
+    </div>
+    <div class="labels">
+      <div class="val">{{ document.totalCount }}</div>
+      <div class="label">Total Users</div>
+    </div>
+  </div>
+  <div>
+    <div class="stat-val-container">
+      <div class="stat-lable-container">
+        <div class="icon initiated"></div>
+        <div class="stat-lable">Initiated</div>
+      </div>
+      <div class="stat-val">{{ document.INITIATED }}</div>
+    </div>
+    <div class="stat-val-container">
+      <div class="stat-lable-container">
+        <div class="icon pending"></div>
+        <div class="stat-lable">Pending</div>
+      </div>
+      <div class="stat-val">{{ document.PENDING }}</div>
+    </div>
+    <div class="stat-val-container">
+      <div class="stat-lable-container">
+        <div class="icon accepted"></div>
+        <div class="stat-lable">Accepted</div>
+      </div>
+      <div class="stat-val">{{ document.ACCEPTED }}</div>
+    </div>
+    <div class="stat-val-container">
+      <div class="stat-lable-container">
+        <div class="icon rejected"></div>
+        <div class="stat-lable">Rejected</div>
+      </div>
+      <div class="stat-val">{{ document.REJECTED }}</div>
+    </div>
+  </div>
 </div>

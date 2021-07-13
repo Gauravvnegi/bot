@@ -287,14 +287,40 @@
         <form [formGroup]="healthCardDetailsForm">
           <div>
             <span class="text">Remark :</span>
-            <mat-form-field class="remark">
-              <input matInput formControlName="remarks" />
+            <mat-form-field
+              class="remark"
+              [style.opacity]="
+                healthCardDetailsForm.get('status').value === 'COMPLETED'
+                  ? 0.5
+                  : 1
+              "
+            >
+              <input
+                matInput
+                formControlName="remarks"
+                [readonly]="
+                  healthCardDetailsForm.get('status').value === 'COMPLETED'
+                "
+              />
             </mat-form-field>
           </div>
           <div>
             <span class="text">Temperature :</span>
-            <mat-form-field class="remark">
-              <input matInput formControlName="temperature" />
+            <mat-form-field
+              class="remark"
+              [style.opacity]="
+                healthCardDetailsForm.get('status').value === 'COMPLETED'
+                  ? 0.5
+                  : 1
+              "
+            >
+              <input
+                matInput
+                formControlName="temperature"
+                [readonly]="
+                  healthCardDetailsForm.get('status').value === 'COMPLETED'
+                "
+              />
             </mat-form-field>
           </div>
         </form>

@@ -10,10 +10,10 @@ export class ContactSortFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Output() filterApplied = new EventEmitter();
   sortList = [
-    { label: 'Room Ascending', value: 'roomNo', order: 'asc' },
-    { label: 'Room Descending', value: 'roomNo', order: 'desc' },
-    { label: 'Name A -> Z', value: 'guestName', order: 'asc' },
-    { label: 'Name Z -> A', value: 'guestName', order: 'desc' },
+    { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
+    { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
+    { label: 'Name A -> Z', value: 'guestName', order: 'ASC' },
+    { label: 'Name Z -> A', value: 'guestName', order: 'DESC' },
   ];
 
   filterData = ['Unread', 'Failed', 'Tags', 'Attachments'];

@@ -13,12 +13,13 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Chat, Chats, IChat, IChats } from '../../models/message.model';
+import { Chat, Chats, IChats } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -49,7 +50,8 @@ export class ChatComponent
     private snackBarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
-    private dateService: DateService
+    private dateService: DateService,
+    private _firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +85,7 @@ export class ChatComponent
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForRefreshData();
+    this.listenForMessageNotification();
   }
 
   listenForGlobalFilters(): void {
@@ -103,6 +106,15 @@ export class ChatComponent
         this.guestInfo.emit(false);
         this.getChat({ offset: 0, limit: 20 }, 0, true);
         this.messageService.refreshData$.next(false);
+      }
+    });
+  }
+
+  listenForMessageNotification() {
+    this._firebaseMessagingService.currentMessage.subscribe((response) => {
+      if (response && response.body.split(',')[0] === this.selectedChat.phone) {
+        this.scrollBottom = true;
+        this.getChat({ offset: 0, limit: 20 });
       }
     });
   }

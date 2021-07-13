@@ -60,8 +60,23 @@ export class LayoutOneComponent implements OnInit {
   }
 
   initFirebaseMessaging() {
-    this.firebaseMessagingService.requestPermission();
-    this.firebaseMessagingService.receiveMessage();
+    this.firebaseMessagingService.requestPermission({
+      hotelId: get(this._hotelDetailService.hotelDetails, [
+        'brands',
+        '0',
+        'branches',
+        '0',
+        'id',
+      ]),
+      userId: this._userDetailService.getLoggedInUserid(),
+    });
+    this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+      console.log('new message received. ', payload);
+      if (this.checkForMessageRoute())
+        this.firebaseMessagingService.currentMessage.next(payload);
+      else {
+      }
+    });
   }
 
   initSearchQueryForm(): void {
@@ -217,5 +232,9 @@ export class LayoutOneComponent implements OnInit {
   logoutUser() {
     this._authService.clearToken();
     this._router.navigate(['/auth']);
+  }
+
+  ngOnDestroy() {
+    this.firebaseMessagingService.destroySubscription();
   }
 }

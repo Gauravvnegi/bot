@@ -45,7 +45,9 @@
       </div>
       <div class="chatlist-item-wrapper-content">
         <div class="chatlist-item-wrapper-content-rnodate">
-          <div class="rno-number">RNO: {{ contact.roomNo || '204' }}</div>
+          <div class="rno-number" *ngIf="contact.roomNo">
+            RNO: {{ contact.roomNo }}
+          </div>
           <div class="time">
             {{ contact.getTime() }}
           </div>

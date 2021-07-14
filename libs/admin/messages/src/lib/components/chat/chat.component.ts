@@ -167,7 +167,7 @@ export class ChatComponent
           .subscribe(
             (response) => {
               response.messages.length < config.limit
-                ? (this.limit = response.messages.length)
+                ? this.limit
                 : (this.limit = this.limit + 20);
               this.handleChatResponse(response);
               scrollHeight

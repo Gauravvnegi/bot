@@ -17,6 +17,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -40,7 +41,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +54,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.listenForGlobalFilters();
     this.listenForSearchChanges();
     this.listenForRefreshData();
+    this.listenForMessageNotification();
   }
 
   initFG() {
@@ -89,6 +92,20 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
+  listenForMessageNotification() {
+    this._firebaseMessagingService.currentMessage.subscribe((response) => {
+      if (
+        response &&
+        (this.selected === null ||
+          this.selected?.phone !== response.notification.body.split(',')[0])
+      ) {
+        if (this.contactFG.get('search').value.length < 3) {
+          this.loadChatList();
+        } else this.loadSearchList(this.contactFG.get('search').value);
+      }
+    });
+  }
+
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -115,13 +132,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             ? (this.limit = response.length)
             : (this.limit = this.limit + 20);
           this.chatList = new ContactList().deserialize(response);
-          // if (this.selected?.receiverId)
-          //   this.selectedChat.emit({
-          //     value: this.chatList.contacts.filter(
-          //       (item) => item.receiverId === this.selected?.receiverId
-          //     )[0],
-          //   });
-          // this.selectedChat.emit({ value: this.chatList.contacts[0] });
         })
     );
   }

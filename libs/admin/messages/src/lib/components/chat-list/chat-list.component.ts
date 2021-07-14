@@ -94,11 +94,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   listenForMessageNotification() {
     this._firebaseMessagingService.currentMessage.subscribe((response) => {
-      if (
-        response &&
-        (this.selected === null ||
-          this.selected?.phone !== response.notification.body.split(',')[0])
-      ) {
+      if (response) {
         if (this.contactFG.get('search').value.length < 3) {
           this.loadChatList();
         } else this.loadSearchList(this.contactFG.get('search').value);

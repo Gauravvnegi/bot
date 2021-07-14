@@ -97,7 +97,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (
         response &&
         (this.selected === null ||
-          this.selected?.phone !== response.body.split(',')[0])
+          this.selected?.phone !== response.notification.body.split(',')[0])
       ) {
         if (this.contactFG.get('search').value.length < 3) {
           this.loadChatList();

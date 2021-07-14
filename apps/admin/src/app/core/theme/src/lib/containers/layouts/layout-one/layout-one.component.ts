@@ -62,13 +62,9 @@ export class LayoutOneComponent implements OnInit {
 
   initFirebaseMessaging() {
     this.firebaseMessagingService.requestPermission({
-      hotelId: get(this._hotelDetailService.hotelDetails, [
-        'brands',
-        '0',
-        'branches',
-        '0',
-        'id',
-      ]),
+      hotelId: this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+        (d) => d.name === this.filterConfig.branchName
+      )[0].id,
       userId: this._userDetailService.getLoggedInUserid(),
     });
     this.firebaseMessagingService.receiveMessage().subscribe((payload) => {

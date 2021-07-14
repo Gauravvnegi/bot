@@ -27,19 +27,24 @@ export class FirebaseMessagingService {
         (token) => {
           // Call API
 
-          this.messageTabService
-            .registerFirebaseMessage(config, {
-              token: token,
-              type: 'web',
-            })
-            .subscribe(
-              (response) => {
-                console.log('Token stored on server');
-              },
-              (err) => {
-                console.error('Unable to send token to server', err);
-              }
-            );
+          if (token) {
+            this.messageTabService
+              .registerFirebaseMessage(config, {
+                token: token,
+                type: 'web',
+              })
+              .subscribe(
+                (response) => {
+                  console.log('Token stored on server');
+                },
+                ({ err }) => {
+                  console.error(
+                    'Unable to store token on server ==> ',
+                    err.message
+                  );
+                }
+              );
+          }
         },
         (err) => {
           console.error('Unable to get permission to notify.', err);

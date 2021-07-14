@@ -86,6 +86,7 @@ export class ChatComponent
     this.listenForGlobalFilters();
     this.listenForRefreshData();
     this.listenForMessageNotification();
+    this.listenForApplicationActive();
   }
 
   listenForGlobalFilters(): void {
@@ -117,7 +118,17 @@ export class ChatComponent
         response.notification.body.split(',')[0] === this.selectedChat.phone
       ) {
         this.scrollBottom = true;
-        this.getChat({ offset: 0, limit: 20 });
+        this.getChat({ offset: 0, limit: this.limit });
+      }
+    });
+  }
+
+  listenForApplicationActive() {
+    this._firebaseMessagingService.tabActive.subscribe((response) => {
+      if (response) {
+        this.scrollBottom = true;
+        this.getChat({ offset: 0, limit: this.limit });
+        this._firebaseMessagingService.tabActive.next(false);
       }
     });
   }

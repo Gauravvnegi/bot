@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { IContact } from '../../models/message.model';
 
 @Component({
@@ -11,7 +12,7 @@ export class WhatsappMessageComponent implements OnInit {
   guestData: IContact;
   refreshData = false;
   selectedChat = null;
-  constructor() {}
+  constructor(private firebaseMessagingService: FirebaseMessagingService) {}
 
   ngOnInit(): void {
     this.guestInfoEnable = false;
@@ -33,6 +34,17 @@ export class WhatsappMessageComponent implements OnInit {
     if (event.close) {
       this.guestInfoEnable = false;
       this.guestData = event.data;
+    }
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  visibilitychange() {
+    if (document.hidden) {
+      this.firebaseMessagingService.tabActive.next(false);
+      console.log('Page is hidden');
+    } else {
+      this.firebaseMessagingService.tabActive.next(true);
+      console.log('Page is visible');
     }
   }
 }

@@ -10,6 +10,7 @@ import { MessageTabService } from './messages-tab.service';
 export class FirebaseMessagingService {
   currentMessage = new BehaviorSubject(null);
   private subscription: Subscription = new Subscription();
+  tabActive = new BehaviorSubject(false);
 
   constructor(
     private fireMessaging: AngularFireMessaging,

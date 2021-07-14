@@ -55,6 +55,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.listenForSearchChanges();
     this.listenForRefreshData();
     this.listenForMessageNotification();
+    this.listenForApplicationActive();
   }
 
   initFG() {
@@ -95,6 +96,18 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   listenForMessageNotification() {
     this._firebaseMessagingService.currentMessage.subscribe((response) => {
       if (response) {
+        this.limit = 20;
+        if (this.contactFG.get('search').value.length < 3) {
+          this.loadChatList();
+        } else this.loadSearchList(this.contactFG.get('search').value);
+      }
+    });
+  }
+
+  listenForApplicationActive() {
+    this._firebaseMessagingService.tabActive.subscribe((response) => {
+      if (response) {
+        this.limit = 20;
         if (this.contactFG.get('search').value.length < 3) {
           this.loadChatList();
         } else this.loadSearchList(this.contactFG.get('search').value);

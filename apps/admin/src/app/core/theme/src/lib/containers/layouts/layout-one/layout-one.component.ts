@@ -165,6 +165,7 @@ export class LayoutOneComponent implements OnInit {
     this.filterService.emitFilterValue$.next(values);
     this.resetFilterCount();
     this.getFilterCount({ ...values });
+    this.initFirebaseMessaging();
     this.toggleGlobalFilter();
   }
 

@@ -118,7 +118,7 @@ export class ChatComponent
         response.notification.body.split(',')[0] === this.selectedChat.phone
       ) {
         this.scrollBottom = true;
-        this.getChat({ offset: 0, limit: this.limit });
+        this.getChat({ offset: 0, limit: this.limit + 1 });
       }
     });
   }
@@ -168,7 +168,7 @@ export class ChatComponent
             (response) => {
               this.limit =
                 response.messages.length < config.limit
-                  ? this.limit
+                  ? response.messages.length
                   : this.limit + 20;
               this.handleChatResponse(response);
               scrollHeight

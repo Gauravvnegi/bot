@@ -196,7 +196,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.limit = 20;
         this.loadSearchList(response?.search);
       } else {
-        if (this.limit < 20) this.limit = 20;
         this.loadChatList();
       }
     });
@@ -204,7 +203,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   handleFilter(event) {
     if (event.status) {
-      this.limit = this.limit < 20 ? 20 : this.limit;
       this.filterData = event.data;
       if (this.contactFG.get('search').value.length < 3) {
         this.loadChatList();

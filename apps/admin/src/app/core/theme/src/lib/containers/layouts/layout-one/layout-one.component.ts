@@ -68,6 +68,7 @@ export class LayoutOneComponent implements OnInit {
       userId: this._userDetailService.getLoggedInUserid(),
     });
     this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+      this.firebaseMessagingService.playNotificationSound();
       console.log('new message received. ', payload);
       if (this.checkForMessageRoute())
         this.firebaseMessagingService.currentMessage.next(payload);

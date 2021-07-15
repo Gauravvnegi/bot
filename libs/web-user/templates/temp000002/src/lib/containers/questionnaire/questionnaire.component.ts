@@ -3,7 +3,8 @@ import { QuestionnaireComponent as BaseQuestionnaireComponent } from 'libs/web-u
 
 @Component({
   selector: 'hospitality-bot-questionnaire',
-  templateUrl: './questionnaire.component.html',
+  templateUrl:
+    '../../../../../temp000001/src/lib/containers/questionnaire/questionnaire.component.html',
   styleUrls: ['./questionnaire.component.scss'],
 })
 export class QuestionnaireComponent extends BaseQuestionnaireComponent {}

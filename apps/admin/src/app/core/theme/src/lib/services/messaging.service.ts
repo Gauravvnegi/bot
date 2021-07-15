@@ -4,6 +4,7 @@ import { AngularFireMessaging } from '@angular/fire/messaging';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { SnackBarService } from '../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
 import { MessageTabService } from './messages-tab.service';
+import { Howl } from 'howler';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +61,7 @@ export class FirebaseMessagingService {
     return this.fireMessaging.messages;
   }
 
-  showNotificationAsSnackBar(payload) {
+  showNotificationAsSnackBar(payload: any) {
     const title = payload.notification?.body.split(',')[0];
     this._snackbarService.openSnackBarAsText(
       `${
@@ -74,6 +75,14 @@ export class FirebaseMessagingService {
         horizontalPosition: 'center',
       }
     );
+  }
+
+  playNotificationSound() {
+    let sound = new Howl({
+      src: ['assets/audio/notification.mp3'],
+    });
+
+    sound.play();
   }
   //#endregion Public Methods
 

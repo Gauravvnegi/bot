@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 // import { HttpClient } from '@angular/common/http';
 import { Subscription, BehaviorSubject } from 'rxjs';
+import { SnackBarService } from '../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
 import { MessageTabService } from './messages-tab.service';
 
 @Injectable({
@@ -14,7 +15,8 @@ export class FirebaseMessagingService {
 
   constructor(
     private fireMessaging: AngularFireMessaging,
-    private messageTabService: MessageTabService
+    private messageTabService: MessageTabService,
+    private _snackbarService: SnackBarService
   ) {
     this.fireMessaging.tokenChanges.subscribe((response) => {
       console.log('Token Refreshed');
@@ -56,6 +58,22 @@ export class FirebaseMessagingService {
 
   receiveMessage() {
     return this.fireMessaging.messages;
+  }
+
+  showNotificationAsSnackBar(payload) {
+    const title = payload.notification?.body.split(',')[0];
+    this._snackbarService.openSnackBarAsText(
+      `${
+        payload.notification?.title
+      }(${title}): ${payload.notification?.body.substring(
+        payload.notification?.body.indexOf(',') + 1
+      )}`,
+      '',
+      {
+        panelClass: 'notification',
+        horizontalPosition: 'center',
+      }
+    );
   }
   //#endregion Public Methods
 

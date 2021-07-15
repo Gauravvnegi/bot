@@ -5,6 +5,7 @@ import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-det
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get } from 'lodash';
+import { SnackBarService } from '../../../../../../../../../../../libs/shared/material/src/index';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
@@ -47,6 +48,7 @@ export class LayoutOneComponent implements OnInit {
     public globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private _authService: AuthService,
+    private _snackbarService: SnackBarService,
     private _userDetailService: UserDetailService,
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService
@@ -72,6 +74,19 @@ export class LayoutOneComponent implements OnInit {
       if (this.checkForMessageRoute())
         this.firebaseMessagingService.currentMessage.next(payload);
       else {
+        const title = payload.notification.body.split(',')[0];
+        this._snackbarService.openSnackBarAsText(
+          `${
+            payload.notification.title
+          }(${title}): ${payload.notification.body.substring(
+            payload.notification.body.indexOf(',') + 1
+          )}`,
+          '',
+          {
+            panelClass: 'notification',
+            horizontalPosition: 'center',
+          }
+        );
       }
     });
   }

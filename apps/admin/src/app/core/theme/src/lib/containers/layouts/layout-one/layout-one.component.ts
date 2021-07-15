@@ -73,7 +73,7 @@ export class LayoutOneComponent implements OnInit {
       console.log('new message received. ', payload);
       if (this.checkForMessageRoute())
         this.firebaseMessagingService.currentMessage.next(payload);
-      else if (payload && payload.notification) {
+      else if (Object.keys(payload).length) {
         const title = payload.notification?.body.split(',')[0];
         this._snackbarService.openSnackBarAsText(
           `${

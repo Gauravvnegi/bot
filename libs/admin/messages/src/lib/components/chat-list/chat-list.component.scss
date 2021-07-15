@@ -89,6 +89,9 @@
           line-height: normal;
           letter-spacing: 0.72px;
           color: #002046;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
       }
     }

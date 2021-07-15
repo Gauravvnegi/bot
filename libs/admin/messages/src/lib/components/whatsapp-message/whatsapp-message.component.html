@@ -10,7 +10,11 @@
     ></hospitality-bot-chat-list>
   </div>
   <ng-container *ngIf="selectedChat; else noSelectedGuest">
-    <div [style.width]="guestInfoEnable ? '55%' : '70%'" style="height: 100%;">
+    <div
+      [style.width]="guestInfoEnable ? '55%' : '70%'"
+      style="height: 100%;"
+      [style.max-width]="guestInfoEnable ? '715px' : '910px'"
+    >
       <hospitality-bot-chat
         [refreshData]="refreshData"
         [selectedChat]="selectedChat"

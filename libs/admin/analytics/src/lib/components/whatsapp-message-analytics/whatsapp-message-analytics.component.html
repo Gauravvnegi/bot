@@ -153,9 +153,41 @@
             height: 70px;
           "
         >
-          <div>{{ item.label }}</div>
-          <div>{{ item.today }} Today</div>
-          <div>{{ item.yesterday }} Yesterday</div>
+          <div
+            style="
+              font-size: 14px;
+              line-height: 19px;
+              font-family: Roboto;
+              letter-spacing: 0.84px;
+              color: #6d7580;
+            "
+          >
+            {{ item.label }}
+          </div>
+          <div
+            style="
+              font-size: 12px;
+              font-weight: bold;
+              line-height: 16px;
+              font-family: Roboto;
+              letter-spacing: 0.72px;
+              color: #002046;
+            "
+          >
+            {{ item.today }} Today
+          </div>
+          <div
+            style="
+              font-size: 12px;
+              font-weight: bold;
+              line-height: 16px;
+              font-family: Roboto;
+              letter-spacing: 0.72px;
+              color: #002046;
+            "
+          >
+            {{ item.yesterday }} Yesterday
+          </div>
         </div>
       </div>
     </div>

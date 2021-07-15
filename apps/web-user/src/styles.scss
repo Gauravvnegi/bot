@@ -62,6 +62,7 @@ body {
 }
 
 .cdk-overlay-pane {
+  overflow-y: auto;
   @media only screen and (max-width: $M) {
     width: 80vw !important;
   }

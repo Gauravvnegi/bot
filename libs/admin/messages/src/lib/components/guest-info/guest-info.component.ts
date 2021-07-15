@@ -29,6 +29,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   $subscription = new Subscription();
   guestData: IContact;
   hotelId: string;
+  isLoading = false;
   selectedIndex = 0;
   buttonConfig = [
     {
@@ -60,11 +61,13 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   getGuestInfo() {
+    this.isLoading = true;
     this.$subscription.add(
       this.messageService
         .getChat(this.hotelId, this.data.receiverId, '')
         .subscribe((response) => {
           this.guestData = new Contact().deserialize(response.receiver);
+          this.isLoading = false;
         })
     );
   }

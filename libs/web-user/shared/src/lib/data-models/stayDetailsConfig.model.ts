@@ -24,10 +24,15 @@ export class StayDetail implements Deserializable {
   roomType: string;
   kidsCount: number;
   adultsCount: number;
-  expectedTime: string;
+  expectedArrivalTime: string;
+  expectedDepartureTime: string;
   deserialize(input: any) {
-    let expectedTime = DateService.getDateFromTimeStamp(
+    let expectedArrivalTime = DateService.getDateFromTimeStamp(
       get(input, ['expectedArrivalTime']),
+      'DD-MM-YYYY hh:mm a'
+    );
+    let expectedDepartureTime = DateService.getDateFromTimeStamp(
+      get(input, ['expectedDepartureTime']),
       'DD-MM-YYYY hh:mm a'
     );
     Object.assign(
@@ -47,9 +52,18 @@ export class StayDetail implements Deserializable {
       set({}, 'adultsCount', get(input, ['adultsCount'])),
       set(
         {},
-        'expectedTime',
+        'expectedArrivalTime',
         moment(
-          expectedTime.split(' ')[1] + expectedTime.split(' ')[2],
+          expectedArrivalTime.split(' ')[1] + expectedArrivalTime.split(' ')[2],
+          'h:mm a'
+        ).format('h:mm a')
+      ),
+      set(
+        {},
+        'expectedDepartureTime',
+        moment(
+          expectedDepartureTime.split(' ')[1] +
+            expectedDepartureTime.split(' ')[2],
           'h:mm a'
         ).format('h:mm a')
       )
@@ -73,7 +87,10 @@ export interface StayDetailsConfigI {
   roomType: FieldSchema;
   adultGuest: FieldSchema;
   kidsGuest: FieldSchema;
-  expectedTime: FieldSchema;
+  expectedArrivalTime: FieldSchema;
+  expectedDepartureTime: FieldSchema;
+  expectedArrivalTimeLabel: FieldSchema;
+  expectedDepartureTimeLabel: FieldSchema;
   travellingWithLabel: FieldSchema;
 }
 

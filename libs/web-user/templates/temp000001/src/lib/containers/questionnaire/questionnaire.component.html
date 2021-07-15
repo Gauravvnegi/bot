@@ -1,0 +1,16 @@
+<mat-accordion *ngIf="externalLink && externalLink.length">
+  <mat-expansion-panel #panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span class="container__title">Questionnaire (optional)</span>
+        <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+        <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="questionnaire__button" (click)="openQuestionnaire()">
+      <div class="questionnaire__button__text">
+        Please Fill The Personal Preference Menu Form
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

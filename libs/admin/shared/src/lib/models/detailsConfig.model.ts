@@ -265,7 +265,7 @@ export class ShareIconConfig implements Deserializable {
 
   deserialize(input: any) {
     this.applications = new Array<ShareIcon>();
-    this.applications = input.applications.map((data) => {
+    this.applications = input?.map((data) => {
       return new ShareIcon().deserialize(data);
     });
     return this;
@@ -391,13 +391,15 @@ export class ContactDetailsConfig implements Deserializable {
 export class HealthDeclarationConfig implements Deserializable {
   status: string;
   remarks: string;
+  temperatureDetails: string;
   url: string;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'status', get(input, ['statusMessage', 'status'])),
       set({}, 'remarks', get(input, ['statusMessage', 'remarks'])),
-      set({}, 'url', get(input, ['url']))
+      set({}, 'url', get(input, ['url'])),
+      set({}, 'temperature', get(input, ['temperatureDetails']))
     );
     return this;
   }

@@ -50,7 +50,6 @@
         <div [hidden]="menuItem.children === null" class="collapse-container">
           <a
             data-toggle="collapse"
-            [href]="[menuItem.path]"
             style="padding: 0 15px;"
             [ngClass]="rla.isActive ? 'parent-active' : ''"
             class="collapse-a collapsed"
@@ -87,10 +86,10 @@
                 >
                   <span style="margin-left: 5px; width: 21px;">
                     <!-- {{subItem.icon }} -->
-                  <div class="sidenav_logo">
-                    <img [src]="subItem.url" class="svg-icon" />
-                  </div>
-                </span>
+                    <div class="sidenav_logo">
+                      <img [src]="subItem.url" class="svg-icon" />
+                    </div>
+                  </span>
                   <span *ngIf="isExpanded">{{ subItem.title }}</span>
                 </a>
               </li>

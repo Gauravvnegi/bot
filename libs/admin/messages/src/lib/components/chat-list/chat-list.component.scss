@@ -1,24 +1,24 @@
-.chatlist-wrapper{
+.chatlist-wrapper {
   height: 100%;
   background: #ffffff;
-    .search-filter-wrapper{
-      height: 62px;
-      padding: 10px 15px;
-      border-bottom: 1px solid #9eaeb8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  .search-filter-wrapper {
+    height: 62px;
+    padding: 10px 15px;
+    border-bottom: 1px solid #9eaeb8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-      .search-wrapper{
-        height: 100%;
-        width: calc(100% - 30px);
-      }
+    .search-wrapper {
+      height: 100%;
+      width: calc(100% - 30px);
     }
-  .chatlist-contact{
+  }
+  .chatlist-contact {
     height: calc(100% - 62px);
     overflow: auto;
 
-    .chatlist-item-wrapper{
+    .chatlist-item-wrapper {
       height: 80px;
       padding: 12px 15px;
       border-bottom: 1px solid #ececec;
@@ -26,25 +26,28 @@
       display: flex;
       align-items: center;
       width: 100%;
-      
-      &-image{
+
+      &-image {
         width: 55px;
         height: 55px;
         background: chartreuse;
         border-radius: 50%;
         margin-right: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       &-content {
         width: calc(100% - 55px);
 
-        &-rnodate{
+        &-rnodate {
           display: flex;
           justify-content: space-between;
           margin-bottom: 5px;
           width: auto;
 
-          .rno-number{
+          .rno-number {
             font-family: Roboto;
             font-size: 10px;
             font-weight: bold;
@@ -55,7 +58,7 @@
             text-align: left;
             color: #99a6b5;
           }
-          .time{
+          .time {
             font-family: Roboto;
             font-size: 10px;
             font-weight: normal;
@@ -67,7 +70,7 @@
             color: #c7c7c7;
           }
         }
-        .persons{
+        .persons {
           margin-bottom: 5px;
           font-family: Roboto;
           font-size: 12px;
@@ -76,16 +79,19 @@
           font-style: normal;
           line-height: normal;
           letter-spacing: 0.72px;
-          color:#002046;
+          color: #002046;
         }
-        .description-message{
+        .description-message {
           font-family: Roboto;
           font-size: 12px;
           font-stretch: normal;
           font-style: normal;
           line-height: normal;
           letter-spacing: 0.72px;
-          color:#002046;
+          color: #002046;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
       }
     }

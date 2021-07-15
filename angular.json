@@ -182,6 +182,10 @@
             "passWithNoTests": true,
             "setupFile": "apps/web-user/src/test-setup.ts"
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     },
@@ -232,7 +236,12 @@
             "polyfills": "apps/admin/src/polyfills.ts",
             "tsConfig": "apps/admin/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/admin/src/favicon.ico", "apps/admin/src/assets"],
+            "assets": [
+              "apps/admin/src/favicon.ico",
+              "apps/admin/src/assets",
+              "apps/admin/src/firebase-messaging-sw.js"
+              // "manifest.json"
+            ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/slick-carousel/slick/slick.scss",
@@ -1187,6 +1196,38 @@
             "tsConfig": "libs/shared/image-cropper/tsconfig.spec.json",
             "passWithNoTests": true
           }
+        }
+      }
+    },
+    "admin-analytics": {
+      "projectType": "library",
+      "root": "libs/admin/analytics",
+      "sourceRoot": "libs/admin/analytics/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/analytics/tsconfig.lib.json",
+              "libs/admin/analytics/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/analytics/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/analytics/jest.config.js",
+            "tsConfig": "libs/admin/analytics/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/analytics/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
         }
       }
     }

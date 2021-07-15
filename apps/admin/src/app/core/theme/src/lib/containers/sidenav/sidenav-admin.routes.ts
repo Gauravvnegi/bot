@@ -56,23 +56,28 @@ export const ADMIN_ROUTES = [
 ];
 
 export const DEFAULT_ROUTES = [
-  // {
-  //   path: 'conversation',
-  //   title: 'Conversations',
-  //   url: 'assets/svg/messenger.svg',
-  //   children: [
-  //     // {
-  //     //   path: 'conversation/request',
-  //     //   title: 'Requests',
-  //     //   url: 'assets/svg/virus.svg',
-  //     // },
-  //     {
-  //       path: 'conversation/messages',
-  //       title: 'Messages',
-  //       url: 'assets/svg/chatting.svg',
-  //     },
-  //   ],
-  // },
+  {
+    path: 'conversation',
+    title: 'Conversations',
+    url: 'assets/svg/messenger.svg',
+    children: [
+      // {
+      //   path: 'conversation/request',
+      //   title: 'Requests',
+      //   url: 'assets/svg/virus.svg',
+      // },
+      {
+        path: 'conversation/analytics',
+        title: 'Analytics',
+        url: 'assets/svg/chatting.svg',
+      },
+      {
+        path: 'conversation/messages',
+        title: 'Messages',
+        url: 'assets/svg/chatting.svg',
+      },
+    ],
+  },
   {
     path: 'subscription',
     title: 'Subscription',

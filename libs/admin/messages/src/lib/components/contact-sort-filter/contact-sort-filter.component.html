@@ -1,4 +1,4 @@
-<div style="height: 100%; width: 100%;" *ngIf="sortFilterFG">
+<div style="height: 100%; width: 100%;" *ngIf="parentFG">
   <div
     style="
       height: calc(100% - 62px);
@@ -6,7 +6,7 @@
       border-bottom: 1px solid #9eaeb8;
       padding: 15px;
     "
-    [formGroup]="sortFilterFG"
+    [formGroup]="parentFG"
   >
     <div
       style="
@@ -21,7 +21,8 @@
     <div style="display: flex; height: auto; width: 100%; flex-wrap: wrap;">
       <div
         [ngStyle]="
-          sortControl?.value === item.value
+          sortControl?.value.label === item.value &&
+          sortControl?.value.order === item.order
             ? {
                 background: '#0020461a 0% 0% no-repeat padding-box',
                 border: '1px solid #0020464d'
@@ -40,7 +41,7 @@
           cursor: pointer;
         "
         *ngFor="let item of sortList"
-        (click)="setSortBy(item.value)"
+        (click)="setSortBy(item)"
       >
         <div
           style="
@@ -64,6 +65,29 @@
     >
       Filter By
     </div>
+    <div
+      *ngFor="let filter of filterData; let i = index"
+      formArrayName="filterBy"
+      style="margin: 8px 0; display: flex; align-items: center;"
+    >
+      <div>
+        <input
+          style="margin-right: 10px; height: 20px; width: 20px;"
+          type="checkbox"
+          [formControlName]="i"
+        />
+      </div>
+      <div
+        style="
+          font: normal normal normal 14px/19px Roboto;
+          letter-spacing: 0.84px;
+          color: #002046;
+          opacity: 1;
+        "
+      >
+        {{ filter }}
+      </div>
+    </div>
   </div>
   <div
     style="
@@ -85,7 +109,7 @@
         align-items: center;
       "
       [ngStyle]="
-        sortFilterFG && sortFilterFG.untouched
+        parentFG && parentFG.untouched
           ? { opacity: '0.3', 'pointer-events': 'none' }
           : { opacity: '1', cursor: 'pointer' }
       "

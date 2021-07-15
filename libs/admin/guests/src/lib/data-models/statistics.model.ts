@@ -89,3 +89,20 @@ export class Status {
     return this;
   }
 }
+
+export class Source {
+  title: string;
+  sourceStats: any;
+  total: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'title', get(input, ['label'])),
+      set({}, 'sourceStats', get(input, ['sourceStats'])),
+      set({}, 'total', get(input, ['totalCount']))
+    );
+
+    return this;
+  }
+}

@@ -9,6 +9,7 @@ import { AuthService } from '../../../../../../auth/services/auth.service';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
+import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 
 @Component({
@@ -47,7 +48,8 @@ export class LayoutOneComponent implements OnInit {
     private _hotelDetailService: HotelDetailService,
     private _authService: AuthService,
     private _userDetailService: UserDetailService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit() {
@@ -55,6 +57,25 @@ export class LayoutOneComponent implements OnInit {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.initSearchQueryForm();
+    this.initFirebaseMessaging();
+  }
+
+  initFirebaseMessaging() {
+    this.firebaseMessagingService.requestPermission({
+      hotelId: this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+        (d) => d.name === this.filterConfig.branchName
+      )[0].id,
+      userId: this._userDetailService.getLoggedInUserid(),
+    });
+    this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+      this.firebaseMessagingService.playNotificationSound();
+      console.log('new message received. ', payload);
+      if (this.checkForMessageRoute())
+        this.firebaseMessagingService.currentMessage.next(payload);
+      else if (Object.keys(payload).length) {
+        this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+      }
+    });
   }
 
   initSearchQueryForm(): void {
@@ -146,6 +167,7 @@ export class LayoutOneComponent implements OnInit {
     this.filterService.emitFilterValue$.next(values);
     this.resetFilterCount();
     this.getFilterCount({ ...values });
+    this.initFirebaseMessaging();
     this.toggleGlobalFilter();
   }
 
@@ -210,5 +232,9 @@ export class LayoutOneComponent implements OnInit {
   logoutUser() {
     this._authService.clearToken();
     this._router.navigate(['/auth']);
+  }
+
+  ngOnDestroy() {
+    this.firebaseMessagingService.destroySubscription();
   }
 }

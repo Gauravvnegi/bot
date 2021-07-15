@@ -14,6 +14,12 @@
     >
     </hospitality-bot-amenities>
 
+    <ng-container *ngIf="_hotelService.hotelConfig?.questionnaireUrl">
+      <hospitality-bot-questionnaire
+        [externalLink]="_hotelService.hotelConfig?.questionnaireUrl"
+      ></hospitality-bot-questionnaire>
+    </ng-container>
+
     <hospitality-bot-special-comments
       [parentForm]="parentForm"
       [reservationData]="reservationData"

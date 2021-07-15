@@ -1,59 +1,43 @@
-<div class="container">
+<div class="container" (click)="openTableModal()">
   <div class="title-container">
     <div class="icon">
       <img src="assets/svg/guest_source.svg" />
     </div>
     <div class="stat-title">Source</div>
-	<div class="info-icon">
-		<img  src="assets/svg/info.svg" alt="info-icon">
-		<div class="tooltip"><span class="arrow">
-		</span> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </div>
-	</div>
-	</div>
-	<div class="graph-container">
-		<div class="graph">
-			<canvas baseChart style="height: 138px;"
-				[data]="chart.Data"
-				[labels]="chart.Labels"
-				[chartType]="chart.Type"
-				[legend]="chart.Legend"
-				[colors]="chart.Colors"
-				[options]="chart.Options">
-			</canvas>
-		</div>
-		<div class="labels">
-			<div class="val">401</div>
-			<div class="label">Total Guests</div>
-		</div>
-	</div>
-	<div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon bot"></div>
-				<div class="stat-lable">Bot</div>
-			</div>
-			<div class="stat-val">161</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon website"></div>
-				<div class="stat-lable">Website</div>
-			</div>
-			<div class="stat-val">60</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon weblink"></div>
-				<div class="stat-lable">Weblink</div>
-			</div>
-			<div class="stat-val">180</div>
-		</div>
-		<div class="stat-val-container">
-			<div class="stat-lable-container">
-				<div class="icon others"></div>
-				<div class="stat-lable">Others</div>
-			</div>
-			<div class="stat-val">84</div>
-		</div>
-	</div>
+    <div class="info-icon">
+      <img src="assets/svg/info.svg" alt="info-icon" />
+      <div class="tooltip">
+        <span class="arrow"> </span> Total number of guest booking came from
+        different sources in a selected time frame.
+      </div>
+    </div>
+  </div>
+  <div class="graph-container">
+    <div class="graph">
+      <canvas
+        baseChart
+        style="height: 138px;"
+        [data]="chart.Data"
+        [labels]="chart.Labels"
+        [chartType]="chart.Type"
+        [legend]="chart.Legend"
+        [colors]="chart.Colors"
+        [options]="chart.Options"
+      >
+      </canvas>
+    </div>
+    <div class="labels">
+      <div class="val">{{ sourceGraphData?.total || 0 }}</div>
+      <div class="label">Total Guests</div>
+    </div>
+  </div>
+  <div>
+    <div class="stat-val-container" *ngFor="let item of legends; let i = index">
+      <div class="stat-lable-container">
+        <div class="icon" [style.background]="colors[i]"></div>
+        <div class="stat-lable">{{ item.label }}</div>
+      </div>
+      <div class="stat-val">{{ item.value }}</div>
+    </div>
+  </div>
 </div>

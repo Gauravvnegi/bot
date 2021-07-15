@@ -17,6 +17,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -32,14 +33,16 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   hotelId: string;
   chatList: IContactList;
   $subscription = new Subscription();
-  searchFG: FormGroup;
+  contactFG: FormGroup;
   scrollView;
   showFilter = false;
+  filterData = {};
   constructor(
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit(): void {
@@ -51,10 +54,12 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.listenForGlobalFilters();
     this.listenForSearchChanges();
     this.listenForRefreshData();
+    this.listenForMessageNotification();
+    this.listenForApplicationActive();
   }
 
   initFG() {
-    this.searchFG = this.fb.group({
+    this.contactFG = this.fb.group({
       search: [''],
     });
   }
@@ -88,6 +93,28 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
+  listenForMessageNotification() {
+    this._firebaseMessagingService.currentMessage.subscribe((response) => {
+      if (response) {
+        this.limit = 20;
+        if (this.contactFG.get('search').value.length < 3) {
+          this.loadChatList();
+        } else this.loadSearchList(this.contactFG.get('search').value);
+      }
+    });
+  }
+
+  listenForApplicationActive() {
+    this._firebaseMessagingService.tabActive.subscribe((response) => {
+      if (response) {
+        this.limit = 20;
+        if (this.contactFG.get('search').value.length < 3) {
+          this.loadChatList();
+        } else this.loadSearchList(this.contactFG.get('search').value);
+      }
+    });
+  }
+
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -105,6 +132,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             {
               hotelId: this.hotelId,
               limit: this.limit,
+              ...this.filterData,
             },
           ])
         )
@@ -113,13 +141,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             ? (this.limit = response.length)
             : (this.limit = this.limit + 20);
           this.chatList = new ContactList().deserialize(response);
-          // if (this.selected?.receiverId)
-          //   this.selectedChat.emit({
-          //     value: this.chatList.contacts.filter(
-          //       (item) => item.receiverId === this.selected?.receiverId
-          //     )[0],
-          //   });
-          // this.selectedChat.emit({ value: this.chatList.contacts[0] });
         })
     );
   }
@@ -136,10 +157,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.myScrollContainer.nativeElement.scrollHeight &&
       this.limit > this.chatList.contacts.length
     ) {
-      if (this.searchFG.get('search').value.length < 3) {
+      if (this.contactFG.get('search').value.length < 3) {
         this.scrollView = this.myScrollContainer.nativeElement.scrollHeight;
         this.loadChatList();
-      } else this.loadSearchList(this.searchFG.get('search').value);
+      } else this.loadSearchList(this.contactFG.get('search').value);
     }
   }
 
@@ -152,21 +173,21 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             {
               limit: this.limit,
               key: searchKey,
+              ...this.filterData,
             },
           ])
         )
         .subscribe((response) => {
-          response.length < this.limit
-            ? (this.limit = response.length)
-            : (this.limit = this.limit + 20);
+          this.limit =
+            response.length < this.limit ? this.limit : this.limit + 20;
           this.chatList = new ContactList().deserialize(response);
         })
     );
   }
 
   listenForSearchChanges() {
-    const formChanges$ = this.searchFG.valueChanges.pipe(
-      filter(() => !!(this.searchFG.get('search') as FormControl).value)
+    const formChanges$ = this.contactFG.valueChanges.pipe(
+      filter(() => !!(this.contactFG.get('search') as FormControl).value)
     );
 
     formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
@@ -175,10 +196,19 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.limit = 20;
         this.loadSearchList(response?.search);
       } else {
-        if (this.limit < 20) this.limit = 20;
         this.loadChatList();
       }
     });
+  }
+
+  handleFilter(event) {
+    if (event.status) {
+      this.filterData = event.data;
+      if (this.contactFG.get('search').value.length < 3) {
+        this.loadChatList();
+      } else this.loadSearchList(this.contactFG.get('search').value);
+      this.showFilter = false;
+    }
   }
 
   ngOnDestroy(): void {

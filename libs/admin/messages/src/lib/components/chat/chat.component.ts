@@ -13,12 +13,13 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Chats, IChats } from '../../models/message.model';
+import { Chat, Chats, IChats } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -39,13 +40,18 @@ export class ChatComponent
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
-  chatList = {};
+  chatList = {
+    messages: {},
+    receiver: {},
+  };
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
     private snackBarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private dateService: DateService,
+    private _firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +69,13 @@ export class ChatComponent
   }
 
   ngOnChanges(): void {
-    this.getChat({ offset: 0, limit: 20 });
+    if (!this.chatList.messages[this.selectedChat.receiverId]) {
+      this.getChat({ offset: 0, limit: 20 });
+    } else {
+      const chatLength = this.getMessagesFromTimeList().length;
+      this.limit = chatLength % 20 > 0 ? chatLength : chatLength + 20;
+    }
+    this.scrollBottom = true;
   }
 
   ngAfterViewChecked() {
@@ -73,6 +85,8 @@ export class ChatComponent
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForRefreshData();
+    this.listenForMessageNotification();
+    this.listenForApplicationActive();
   }
 
   listenForGlobalFilters(): void {
@@ -93,6 +107,28 @@ export class ChatComponent
         this.guestInfo.emit(false);
         this.getChat({ offset: 0, limit: 20 }, 0, true);
         this.messageService.refreshData$.next(false);
+      }
+    });
+  }
+
+  listenForMessageNotification() {
+    this._firebaseMessagingService.currentMessage.subscribe((response) => {
+      if (
+        response &&
+        response.notification.body.split(',')[0] === this.selectedChat.phone
+      ) {
+        this.scrollBottom = true;
+        this.getChat({ offset: 0, limit: this.limit + 1 });
+      }
+    });
+  }
+
+  listenForApplicationActive() {
+    this._firebaseMessagingService.tabActive.subscribe((response) => {
+      if (response) {
+        this.scrollBottom = true;
+        this.getChat({ offset: 0, limit: this.limit });
+        this._firebaseMessagingService.tabActive.next(false);
       }
     });
   }
@@ -130,17 +166,11 @@ export class ChatComponent
           )
           .subscribe(
             (response) => {
-              response.messages.length < config.limit
-                ? (this.limit = response.messages.length)
-                : (this.limit = this.limit + 20);
-              this.chat = new Chats().deserialize(response);
-              this.chat.messages = DateService.sortObjArrayByTimeStamp(
-                this.chat.messages,
-                'timestamp'
-              );
-              this.chatList = this.messageService.filterMessagesByDate(
-                this.chat.messages
-              );
+              this.limit =
+                response.messages.length < config.limit
+                  ? response.messages.length
+                  : this.limit + 20;
+              this.handleChatResponse(response);
               scrollHeight
                 ? (this.scrollView = scrollHeight)
                 : (this.scrollBottom = true);
@@ -150,12 +180,23 @@ export class ChatComponent
             ({ error }) => {
               this.isLoading = false;
               this.chat = new Chats();
-              this.chatList = {};
               this.snackBarService.openSnackBarAsText(error.message);
             }
           )
       );
     }
+  }
+
+  handleChatResponse(response) {
+    this.chat = new Chats().deserialize(response);
+    this.chat.messages = DateService.sortObjArrayByTimeStamp(
+      this.chat.messages,
+      'timestamp'
+    );
+    this.chatList.messages[
+      response.receiver.receiverId
+    ] = this.messageService.filterMessagesByDate(this.chat.messages);
+    this.chatList.receiver[response.receiver.receiverId] = this.chat.receiver;
   }
 
   sendMessage(): void {
@@ -167,19 +208,56 @@ export class ChatComponent
 
     const values = this.chatFG.getRawValue();
     values.receiverId = this.selectedChat.phone;
+    const timestamp = this.dateService.getCurrentTimeStamp();
+    this.updateMessageToChatList(timestamp, 'unsend');
+    this.scrollToBottom();
 
     this.$subscription.add(
       this.messageService.sendMessage(this.hotelId, values).subscribe(
         (response) => {
           this.chatFG.get('message').setValue('');
-          this.getChat({
-            offset: 0,
-            limit: 20,
-          });
+          this.updateMessageToChatList(timestamp, 'sent', true);
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  updateMessageToChatList(timestamp, status, update = false) {
+    let data;
+    let messages = this.getMessagesFromTimeList();
+    if (!update) {
+      data = new Chat().deserialize({
+        direction: 'OUTBOUND',
+        text: this.chatFG.get('message').value,
+        timestamp,
+        status,
+      });
+      this.chatFG.get('message').setValue('');
+      messages.push(data);
+    } else {
+      messages = messages.map((message) => {
+        if (message.timestamp === timestamp) message.status = status;
+        return message;
+      });
+    }
+    messages = DateService.sortObjArrayByTimeStamp(messages, 'timestamp');
+    this.chatList.messages[
+      this.selectedChat.receiverId
+    ] = this.messageService.filterMessagesByDate(messages);
+  }
+
+  getMessagesFromTimeList() {
+    let messages = [];
+    Object.keys(this.chatList.messages[this.selectedChat.receiverId]).forEach(
+      (key) => {
+        messages = [
+          ...messages,
+          ...this.chatList.messages[this.selectedChat.receiverId][key],
+        ];
+      }
+    );
+    return messages;
   }
 
   checkForEnterKey(event) {
@@ -204,7 +282,7 @@ export class ChatComponent
   scrollChat() {
     if (this.myScrollContainer && this.scrollBottom) {
       this.scrollBottom = false;
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+      this.scrollToBottom();
     } else if (this.myScrollContainer && this.scrollView) {
       this.myScrollContainer.nativeElement.scrollTop =
         this.myScrollContainer.nativeElement.scrollHeight - this.scrollView;
@@ -212,18 +290,15 @@ export class ChatComponent
     }
   }
 
-  refreshChat() {
-    this.getChat(
-      {
-        offset: 0,
-        limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit + 1,
-      },
-      0
-    );
+  get chatDates() {
+    if (this.chatList.messages[this.selectedChat.receiverId]) {
+      return Object.keys(this.chatList.messages[this.selectedChat.receiverId]);
+    }
+    return [];
   }
 
-  get chatDates() {
-    return Object.keys(this.chatList);
+  scrollToBottom() {
+    this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
   }
 
   ngOnDestroy(): void {

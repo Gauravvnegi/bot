@@ -16,12 +16,12 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: chartreuse;
         margin: 0 20px;
         display: flex;
         justify-content: center;
         align-items: center;
       "
+      [style.background]="selectedChat?.color"
     >
       <img
         [src]="chat?.receiver?.profileUrl"

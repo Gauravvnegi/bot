@@ -34,7 +34,10 @@
       *ngFor="let contact of chatList?.contacts"
       (click)="onChatSelect(contact)"
     >
-      <div class="chatlist-item-wrapper-image">
+      <div
+        class="chatlist-item-wrapper-image"
+        [style.background]="contact.color"
+      >
         <img
           [src]="contact.profileUrl"
           *ngIf="contact.profileUrl; else defaultAvatar"

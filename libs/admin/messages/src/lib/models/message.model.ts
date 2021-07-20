@@ -92,7 +92,7 @@ export class Contact {
       set({}, 'receiverId', get(input, ['receiverId'])),
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo'])),
-      set({}, 'descriptionMessage', get(input, ['descriptionMessage'])),
+      set({}, 'descriptionMessage', get(input, ['descriptionMessage']) || ''),
       set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt']))
     );
     this.color = colors[Math.floor(Math.random() * colors.length)];

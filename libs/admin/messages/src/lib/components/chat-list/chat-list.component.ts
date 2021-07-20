@@ -137,9 +137,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
           ])
         )
         .subscribe((response) => {
-          response.length < this.limit
-            ? (this.limit = response.length)
-            : (this.limit = this.limit + 20);
+          this.limit =
+            response.length < this.limit
+              ? this.limit
+              : (this.limit = this.limit + 20);
           this.chatList = new ContactList().deserialize(response);
         })
     );
@@ -153,7 +154,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   onScroll(event) {
     if (
       this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.scrollTop ===
+      this.myScrollContainer.nativeElement.offsetHeight +
+        this.myScrollContainer.nativeElement.scrollTop ===
         this.myScrollContainer.nativeElement.scrollHeight &&
       this.limit > this.chatList.contacts.length
     ) {

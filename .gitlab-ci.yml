@@ -1,11 +1,9 @@
 stages:
   - deploy
 
-
-deploy to NDevelopment-web-user:
+deploy to Production-web-user:
   stage: deploy
-  environment:
-    name: ndevelopment-web-user
+  environment: web-user-prod
   when: manual
   before_script:
   - cp deploy/* .
@@ -20,15 +18,11 @@ deploy to NDevelopment-web-user:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; tar -xvf *.tar; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; rm -rf $web_user_work_dir/*.tar; ls $web_user_work_dir && netstat -tnlp"
   only:
-    - dev-deploy
+    - prod-deploy
 
-
-
-
-deploy to NDevelopment-admin:
+deploy to Production-admin:
   stage: deploy
-  environment:
-    name: ndevelopment-admin
+  environment: admin-prod
   when: manual
   before_script:
   - cp deploy/* .
@@ -40,42 +34,7 @@ deploy to NDevelopment-admin:
   script:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
     - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$admin_work_dir"
-    #- scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
-    #- scp -r -P$ssh_port admin.sh "$ssh_user"@"$server_ip":"$admin_work_dir"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; tar -xvf *.tar; sh -x admin.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; rm -rf $admin_work_dir/*.tar; ls $admin_work_dir && netstat -tnlp"
   only:
-    - dev-deploy
-#backend_build:
-#  stage: build
-#  when: manual
-#  only:
-#    changes:
-#      - "backend/**/*"
-#  script:
-#    - docker login -u $DOCKER_USER -p $ACCESS_TOKEN $CI_REGISTRY
-#    - cd backend
-#    - docker build -f Dockerfile --tag latest .
-#    - docker push latest
-
-#stages:
-#    - trigger-child-pipelines
-#when: manual
-#web-client:
-#    stage: trigger-child-pipeline
-#    trigger:
-#        include: web-client/.gitlab-ci.yml
-#        strategy: depend
-#    only:
-#        changes:
-#            - web-client/**/*
-
-#.backend-setup:
-#    before_script:
-#        - cd backend
-
-#test:
-#    extends: .backend-setup
-#    stage: test
-#    script:
-#        - mvn test
+    - prod-deploy

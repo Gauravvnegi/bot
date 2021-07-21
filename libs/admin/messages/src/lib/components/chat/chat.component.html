@@ -98,7 +98,13 @@
                 : 'left-message__text'
             "
           >
-            {{ message.text }}
+            <ng-container *ngIf="message.text; else image">{{
+              message.text
+            }}</ng-container>
+            <ng-template #image
+              ><img style="max-width: 100%;" [src]="message.url" />
+              <div>{{ message.caption }}</div></ng-template
+            >
           </div>
           <div class="message__time">{{ message.getTime() }}</div>
         </div>

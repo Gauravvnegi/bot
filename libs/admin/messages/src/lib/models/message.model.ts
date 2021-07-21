@@ -24,6 +24,7 @@ export class Chat {
   timestamp: number;
   type: string;
   url: string;
+  caption: string;
 
   deserialize(input) {
     Object.assign(
@@ -37,7 +38,8 @@ export class Chat {
       set({}, 'text', get(input, ['text'])),
       set({}, 'timestamp', get(input, ['timestamp'])),
       set({}, 'type', get(input, ['type'])),
-      set({}, 'url', get(input, ['url']))
+      set({}, 'url', get(input, ['url'])),
+      set({}, 'caption', get(input, ['caption']))
     );
     return this;
   }

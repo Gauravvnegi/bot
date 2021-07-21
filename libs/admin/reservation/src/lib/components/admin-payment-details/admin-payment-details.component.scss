@@ -14,8 +14,13 @@
   // }
 }
 
-.deposit-box{
+.deposit-box {
   margin-top: 20px;
+}
+
+.adminPayDesc {
+  color: #9eaeb8;
+  font-size: 13px;
 }
 
 .feilds-wrapper {
@@ -41,10 +46,10 @@
       font-weight: 600;
     }
     @media screen and (max-width: 1100px) {
-      .label{
+      .label {
         font-size: 10px;
       }
-      .value{
+      .value {
         font-size: 10px;
       }
     }
@@ -68,7 +73,7 @@
   width: 100%;
 }
 
-.heading{
+.heading {
   font-size: $font16;
   margin-right: $margin20;
   font-weight: $bolder;
@@ -131,7 +136,7 @@ td {
       text-align: right;
     }
     @media screen and (max-width: 1100px) {
-      .label{
+      .label {
         width: 20%;
       }
     }

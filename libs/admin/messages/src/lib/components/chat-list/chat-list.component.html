@@ -60,26 +60,17 @@
     </div>
   </div>
 </div>
-<div
-  style="height: 100%; background: #ffffff;"
+<div  class="showFilter"
   [ngStyle]="
     showFilter
       ? { visibility: 'visible', width: '100%' }
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "
 >
-  <div
-    style="
-      height: 62px;
-      padding: 10px 15px;
-      border-bottom: 1px solid #9eaeb8;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    "
+  <div class="sortFilt"
   >
     <div>Sort & Filters</div>
-    <div style="font-size: 22px; cursor: pointer;" (click)="showFilter = false">
+    <div class="cross" (click)="showFilter = false">
       &#10006;
     </div>
   </div>

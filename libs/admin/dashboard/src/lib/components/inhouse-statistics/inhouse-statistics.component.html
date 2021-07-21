@@ -35,132 +35,50 @@
             >
             </canvas>
           </div>
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              height: 124px;
-            "
-          >
+          <div class="chartDetailsWrapper">
             <div>
-              <div style="display: flex; align-items: center;">
-                <div
-                  style="
-                    font: normal normal bold 38px/46px Roboto;
-                    text-align: center;
-                    font: normal normal bold 35px/46px Roboto;
-                    letter-spacing: 2.1px;
-                    color: #002046;
-                    margin: 5px 10px 5px 0;
-                  "
-                >
+              <div class="currentChart">
+                <div class="currentChartHeading">
                   {{ inhouse.roomOccupied }}
                 </div>
                 <div>
-                  <div
-                    style="
-                      font: normal normal normal 12px/16px Roboto;
-                      letter-spacing: 0px;
-                      color: #52b33f;
-                    "
-                  >
+                  <div class="chartPercent">
                     ({{ inhouse.comparisonPercent }}%)
                     <img src="assets/svg/uparrow.svg" alt="uparrow" />
                   </div>
-                  <div
-                    style="
-                      font: normal normal normal 10px/13px Roboto;
-                      letter-spacing: 0px;
-                      color: #c5c5c5;
-                      opacity: 1;
-                    "
-                  >
+                  <div class="chartDays">
                     In 30 Days
                   </div>
                 </div>
               </div>
-              <div
-                style="
-                  font: normal normal bold 12px/16px Roboto;
-                  letter-spacing: 0.72px;
-                  color: #6d7580;
-                  opacity: 1;
-                "
-              >
+              <div class="totalGuestsHeading">
                 Total Guest
               </div>
             </div>
-            <div style="display: flex;">
-              <div
-                style="display: flex; align-items: center; margin-right: 25px;"
-              >
-                <div style="margin-right: 8px;">
+            <div class="chartsubDetailsWrapper">
+              <div class="chartsubDetail">
+                <div class="chartsubDetail__logo">
                   <img class="stat-image" src="assets/svg/stat-adult.svg" />
                 </div>
                 <div>
-                  <div
-                    style="
-                      width: 14px;
-                      height: 14px;
-                      background: #ffbf04 0% 0% no-repeat padding-box;
-                      border-radius: 2px;
-                      opacity: 1;
-                    "
-                  ></div>
+                  <div class="chartDetailBlock"></div>
                   <div>
-                    <span
-                      style="
-                        font: normal normal normal 12px/16px Roboto;
-                        letter-spacing: 0.72px;
-                        color: #6d7580;
-                      "
-                      >Adult</span
-                    >
-                    <span
-                      style="
-                        font: normal normal bold 12px/16px Roboto;
-                        letter-spacing: 0.72px;
-                        color: #002046;
-                        margin-left: 5px;
-                      "
-                      >{{ inhouse.adultCount }}</span
-                    >
+                    <span class="chartDetailHeading">Adult</span>
+                    <span class="chartDetailText">{{
+                      inhouse.adultCount
+                    }}</span>
                   </div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center;">
-                <div style="margin-right: 8px;">
+              <div class="chartsubRightDetail">
+                <div class="chartsubDetail__logo">
                   <img class="stat-image" src="assets/svg/stat-child.svg" />
                 </div>
                 <div>
-                  <div
-                    style="
-                      width: 14px;
-                      height: 14px;
-                      background: #4ba0f5 0% 0% no-repeat padding-box;
-                      border-radius: 2px;
-                      opacity: 1;
-                    "
-                  ></div>
+                  <div class="chartDetailRightBlock"></div>
                   <div>
-                    <span
-                      style="
-                        font: normal normal normal 12px/16px Roboto;
-                        letter-spacing: 0.72px;
-                        color: #6d7580;
-                      "
-                      >Kid</span
-                    >
-                    <span
-                      style="
-                        font: normal normal bold 12px/16px Roboto;
-                        letter-spacing: 0.72px;
-                        color: #002046;
-                        margin-left: 5px;
-                      "
-                      >{{ inhouse.kidsCount }}</span
-                    >
+                    <span class="chartDetailHeading">Kid</span>
+                    <span class="chartDetailText">{{ inhouse.kidsCount }}</span>
                   </div>
                 </div>
               </div>

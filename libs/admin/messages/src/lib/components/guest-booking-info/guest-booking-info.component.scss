@@ -1,5 +1,9 @@
 @import 'main';
 
+.guestBoookingUnderline {
+  border: solid 1px #e0e0e0;
+}
+
 .icon-wrapper {
   @include flex-space-between();
   flex-wrap: wrap;

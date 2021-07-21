@@ -1,28 +1,6 @@
 <div style="height: 100%;">
-  <div
-    style="
-      height: 62px;
-      width: 100%;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #9eaeb8;
-      cursor: pointer;
-    "
-    (click)="openGuestInfo()"
-  >
-    <div
-      style="
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: chartreuse;
-        margin: 0 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      "
-    >
+  <div class="guestInfoOpen" (click)="openGuestInfo()">
+    <div class="guestInfoAvatar">
       <img
         [src]="chat?.receiver?.profileUrl"
         *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
@@ -33,45 +11,18 @@
         </div></ng-template
       >
     </div>
-    <div
-      style="
-        font: normal normal medium 14px/19px Roboto;
-        letter-spacing: 0.84px;
-        color: #002046;
-        opacity: 1;
-      "
-    >
+    <div class="selectedChat">
       {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
     </div>
   </div>
   <div
-    style="
-      height: calc(100% - 124px);
-      background: #f1f1f1;
-      overflow-y: auto;
-      padding: 20px;
-      position: relative;
-      width: 100%;
-    "
+    class="scrollChat"
     (scroll)="onScroll($event)"
     *ngIf="chatDates.length; else noChat"
     #scrollMe
   >
     <ng-container *ngFor="let date of chatDates">
-      <div
-        style="
-          text-align: center;
-          margin-bottom: 10px;
-          font-family: Roboto;
-          font-size: 12px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.72px;
-          color: #002046;
-        "
-      >
+      <div class="chatDate">
         {{ date }}
       </div>
       <div
@@ -106,36 +57,17 @@
     </ng-container>
   </div>
   <ng-template #noChat>
-    <div
-      style="
-        height: calc(100% - 124px);
-        background: #f1f1f1;
-        overflow-y: auto;
-        padding: 20px;
-        position: relative;
-      "
-    ></div>
+    <div class="noChat"></div>
   </ng-template>
   <div
-    style="
-      height: 62px;
-      width: 100%;
-      background: #ffffff;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    "
+    class="chatRecieve"
     *ngIf="
       chatFG && this.chatList.receiver[selectedChat.receiverId]?.enableSend;
       else noSend
     "
   >
-    <div style="height: 100%; width: 100%;" [formGroup]="chatFG">
-      <div
-        class=""
-        style="position: relative; height: 100%; width: calc(100% - 10px);"
-      >
+    <div class="chatFG" [formGroup]="chatFG">
+      <div class="textWrapper">
         <input
           matInput
           type="text"
@@ -144,15 +76,7 @@
           formControlName="message"
           (keyup)="checkForEnterKey($event)"
         />
-        <img
-          src="assets/svg/smile.svg"
-          style="
-            position: absolute;
-            right: 10px;
-            top: 48%;
-            transform: translateY(-50%);
-          "
-        />
+        <img src="assets/svg/smile.svg" class="smileImg" />
       </div>
     </div>
     <div style="cursor: pointer;" (click)="sendMessage()">
@@ -160,20 +84,7 @@
     </div>
   </div>
   <ng-template #noSend>
-    <div
-      style="
-        height: 62px;
-        width: 100%;
-        background: #ffffff;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font: normal normal normal 14px/19px Roboto;
-        letter-spacing: 0.84px;
-        color: #fb3d4e;
-      "
-    >
+    <div class="whatsAppRule">
       As per WhatsApp's rules, you can only respond to a user within 24 hours of
       their messages.
     </div>

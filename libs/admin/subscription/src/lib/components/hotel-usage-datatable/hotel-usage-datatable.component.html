@@ -42,12 +42,7 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span
-                      style="
-                        vertical-align: middle;
-                        margin-left: 0.5em;
-                        font-weight: 500;
-                      "
+                    <span class="hotelUsageActionLabel"
                       >{{ documentActionItem.label }}</span
                     >
                   </ng-template>
@@ -60,12 +55,7 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span
-                      style="
-                        vertical-align: middle;
-                        margin-left: 0.5em;
-                        font-weight: 500;
-                      "
+                    <span class="hotelUsageActionLabel"
                       >{{ documentTypeItem.label }}</span
                     >
                   </ng-template>
@@ -124,14 +114,7 @@
   <ng-template pTemplate="header" let-columns>
     
     <tr>
-      <th
-        style="
-          width: 5%;
-          background-color: #eaf0f6;
-          border-top: 0 !important;
-          border-bottom: 0 !important;
-          text-align: center;
-        "
+      <th class="hotelUsageTableHead"
         pResizableColumn
       >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>

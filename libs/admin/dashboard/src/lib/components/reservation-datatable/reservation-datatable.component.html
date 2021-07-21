@@ -46,7 +46,7 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 500;">{{
+                    <span class="documentActionItemLabel">{{
                       documentActionItem.label
                     }}</span>
                   </ng-template>
@@ -59,7 +59,7 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 500;">{{
+                    <span class="documentActionItemLabel">{{
                       documentTypeItem.label
                     }}</span>
                   </ng-template>
@@ -161,16 +161,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th
-        style="
-          width: 5%;
-          background-color: #eaf0f6;
-          border-top: 0 !important;
-          border-bottom: 0 !important;
-          text-align: center;
-        "
-        pResizableColumn
-      >
+      <th class="tableHeading" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -344,7 +335,7 @@
       </td>
       <td class="guest">
         <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
-        <b style="color: #4b56c0;">{{
+        <b class="rowData">{{
           rowData.guests.getSecGuestDisplayConfig().countString
         }}</b>
         <div

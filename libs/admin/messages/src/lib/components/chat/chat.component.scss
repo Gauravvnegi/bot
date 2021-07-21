@@ -1,3 +1,92 @@
+.guestInfoOpen {
+  height: 62px;
+  width: 100%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #9eaeb8;
+  cursor: pointer;
+}
+.guestInfoAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: chartreuse;
+  margin: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.selectedChat {
+  font: normal normal medium 14px/19px Roboto;
+  letter-spacing: 0.84px;
+  color: #002046;
+  opacity: 1;
+}
+.scrollChat {
+  height: calc(100% - 124px);
+  background: #f1f1f1;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+  width: 100%;
+}
+.chatDate {
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  color: #002046;
+}
+.noChat {
+  height: calc(100% - 124px);
+  background: #f1f1f1;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+}
+.chatRecieve {
+  height: 62px;
+  width: 100%;
+  background: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chatFG {
+  height: 100%;
+  width: 100%;
+}
+.textWrapper {
+  position: relative;
+  height: 100%;
+  width: calc(100% - 10px);
+}
+.smileImg {
+  position: absolute;
+  right: 10px;
+  top: 48%;
+  transform: translateY(-50%);
+}
+.whatsAppRule {
+  height: 62px;
+  width: 100%;
+  background: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: normal normal normal 14px/19px Roboto;
+  letter-spacing: 0.84px;
+  color: #fb3d4e;
+}
+
 .message-field-input {
   padding-left: 20px;
   background: #f2f6f8 0% 0% no-repeat padding-box;

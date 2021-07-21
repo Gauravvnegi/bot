@@ -47,14 +47,9 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span
-                      style="
-                        vertical-align: middle;
-                        margin-left: 0.5em;
-                        font-weight: 500;
-                      "
-                      >{{ documentActionItem.label }}</span
-                    >
+                    <span class="packageItemLabel">{{
+                      documentActionItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
@@ -65,14 +60,9 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span
-                      style="
-                        vertical-align: middle;
-                        margin-left: 0.5em;
-                        font-weight: 500;
-                      "
-                      >{{ documentTypeItem.label }}</span
-                    >
+                    <span class="packageItemLabel">{{
+                      documentTypeItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -142,16 +132,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th
-        style="
-          width: 5%;
-          background-color: #eaf0f6;
-          border-top: 0 !important;
-          border-bottom: 0 !important;
-          text-align: center;
-        "
-        pResizableColumn
-      >
+      <th class="packageTableHead" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th

@@ -219,9 +219,7 @@
       <!-- bind it to detailsForm -->
       <p-dropdown [options]="bookingList" [disabled]="true">
         <ng-template let-item pTemplate="selectedItem">
-          <span style="vertical-align: middle; margin-left: 5px;"
-            >Current Booking</span
-          >
+          <span class="detailComponentCurrent">Current Booking</span>
         </ng-template>
       </p-dropdown>
     </div>

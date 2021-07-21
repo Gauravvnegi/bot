@@ -28,7 +28,9 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <!-- <div class="header--text"> -->
-            <p class="heading"><img src="" style="margin-right: 10px;" alt=""> {{ tableName }}</p>
+            <p class="heading">
+              <img src="" alt="" class="headImg" /> {{ tableName }}
+            </p>
             <!-- <p class="selected">2 record(s) are selected</p> -->
             <div class="options">
               <div *ngIf="isActionButtons" class="icons">
@@ -45,7 +47,7 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 500;">{{
+                    <span class="documentActionItemLabel">{{
                       documentActionItem.label
                     }}</span>
                   </ng-template>
@@ -58,7 +60,7 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span style="margin-left: 0.5em; font-weight: 500;">{{
+                    <span class="documentActionItemLabel">{{
                       documentTypeItem.label
                     }}</span>
                   </ng-template>
@@ -142,16 +144,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th
-        style="
-          width: 5%;
-          background-color: #eaf0f6;
-          border-top: 0 !important;
-          border-bottom: 0 !important;
-          text-align: center;
-        "
-        pResizableColumn
-      >
+      <th class="tableHeading" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -342,12 +335,14 @@
         </div>
       </td>
       <td class="package" (click)="openDetailPage($event)">
-        <span *ngIf="rowData.getPhoneNumber().length && rowData.getPhoneNumber() !== ' '; else emptyCell">
+        <span
+          *ngIf="
+            rowData.getPhoneNumber().length && rowData.getPhoneNumber() !== ' ';
+            else emptyCell
+          "
+        >
           <ng-container
-            *ngIf="
-              rowData.getPhoneNumber().includes(',');
-              else singlePhone
-            "
+            *ngIf="rowData.getPhoneNumber().includes(','); else singlePhone"
           >
             <ng-container
               *ngFor="let link of rowData.getPhoneNumber().split(',\n')"
@@ -359,8 +354,8 @@
           </ng-container>
           <ng-template #singlePhone>
             <a href="tel:{{ rowData.getPhoneNumber() }}" class="email">
-              <u> {{ rowData.getPhoneNumber() }}</u> </a
-            >
+              <u> {{ rowData.getPhoneNumber() }}</u>
+            </a>
           </ng-template>
         </span>
       </td>

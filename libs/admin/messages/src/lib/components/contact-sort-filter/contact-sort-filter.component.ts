@@ -29,10 +29,6 @@ export class ContactSortFilterComponent implements OnInit {
       'filterBy',
       this.fb.array(this.filterData.map((x) => false))
     );
-    this.parentFG = this.fb.group({
-      sortBy: [[]],
-      filterBy: this.fb.array(this.filterData.map((x) => false)),
-    });
   }
 
   applyFilter() {

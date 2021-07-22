@@ -6,7 +6,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
 import * as paymentEnum from 'libs/web-user/shared/src/lib/constants/payment';
-import { PaymentCCAvenue, PaymentStatus, SelectedPaymentOption } from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
+import {
+  PaymentCCAvenue,
+  PaymentStatus,
+  SelectedPaymentOption,
+} from 'libs/web-user/shared/src/lib/data-models/PaymentDetailsConfig.model';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -81,9 +85,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config.gatewayType === paymentEnum.GatewayTypes.ccavenue
+          this.selectedPaymentOption.config.gatewayType ===
+            paymentEnum.GatewayTypes.ccavenue
         ) {
-          this.initiateCCAvenuePayment(data, 'submitButton');
+          this.initiateCCAvenuePayment(data, 'nextButton');
         } else {
           this._translateService
             .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
@@ -91,14 +96,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               this._snackBarService.openSnackBarAsText(translatedMsg);
             });
           this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
+            this.buttonRefs['nextButton']
           );
         }
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
         this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
-        this._buttonService.buttonLoading$.next(
-          this.buttonRefs['submitButton']
-        );
       }
     }
   }
@@ -113,7 +115,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
         if (
           this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config.gatewayType === paymentEnum.GatewayTypes.ccavenue
+          this.selectedPaymentOption.config.gatewayType ===
+            paymentEnum.GatewayTypes.ccavenue
         ) {
           this.initiateCCAvenuePayment(data, 'nextButton');
         } else {
@@ -135,10 +138,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   private initiateCCAvenuePayment(data, buttonRef): void {
     this.$subscription.add(
       this._paymentDetailsService
-        .initiatePaymentCCAvenue(
-          this._reservationService.reservationId,
-          data
-        )
+        .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
             window.location.href = response.billingUrl;
@@ -149,16 +149,43 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
               });
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs[buttonRef]
-            );
+            this._buttonService.buttonLoading$.next(this.buttonRefs[buttonRef]);
           }
         )
     );
   }
 
   onCheckoutSubmit() {
-    this.onPrecheckinSubmit();
+    if (this.reservationData.paymentSummary.payableAmount === 0) {
+      this.submitWithoutPayment(journeyEnums.JOURNEY.checkout);
+    } else {
+      const data = this.mapPaymentInitiationData();
+      const TAB_INDEX = this.matTab['_selectedIndex'];
+      const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
+      if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
+        if (
+          this.selectedPaymentOption.config &&
+          this.selectedPaymentOption.config.gatewayType ===
+            paymentEnum.GatewayTypes.ccavenue
+        ) {
+          this.initiateCCAvenuePayment(data, 'submitButton');
+        } else {
+          this._translateService
+            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+          this._buttonService.buttonLoading$.next(
+            this.buttonRefs['submitButton']
+          );
+        }
+      } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
+        this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
+        this._buttonService.buttonLoading$.next(
+          this.buttonRefs['submitButton']
+        );
+      }
+    }
   }
 
   openThankyouPage(state) {
@@ -190,43 +217,57 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     );
   }
 
-  private successAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
-    if (state === journeyEnums.JOURNEY.checkin) {
+  private successAction(
+    state:
+      | journeyEnums.JOURNEY.checkin
+      | journeyEnums.JOURNEY.checkout
+      | journeyEnums.JOURNEY.preCheckin
+  ): void {
+    if (
+      state === journeyEnums.JOURNEY.checkin ||
+      state === journeyEnums.JOURNEY.preCheckin
+    ) {
       this._translateService
         .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
         .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(
-          translatedMsg,
-          '',
-          { panelClass: 'success' }
-        );
-      });
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['nextButton']
-      );
+          this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+            panelClass: 'success',
+          });
+        });
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {
       this.openThankyouPage(state);
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['submitButton']
-      );
+      this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
     }
   }
 
-  private failureAction(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
-    if (state === journeyEnums.JOURNEY.checkin) {
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['nextButton']
-      );
+  private failureAction(
+    state:
+      | journeyEnums.JOURNEY.checkin
+      | journeyEnums.JOURNEY.checkout
+      | journeyEnums.JOURNEY.preCheckin
+  ): void {
+    if (
+      state === journeyEnums.JOURNEY.checkin ||
+      state === journeyEnums.JOURNEY.preCheckin
+    ) {
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
     } else {
-      this._buttonService.buttonLoading$.next(
-        this.buttonRefs['submitButton']
-      );
+      this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
     }
   }
 
-  private submitWithoutPayment(state: journeyEnums.JOURNEY.checkin | journeyEnums.JOURNEY.checkout | journeyEnums.JOURNEY.preCheckin): void {
-    if (state === journeyEnums.JOURNEY.checkin) {
+  private submitWithoutPayment(
+    state:
+      | journeyEnums.JOURNEY.checkin
+      | journeyEnums.JOURNEY.checkout
+      | journeyEnums.JOURNEY.preCheckin
+  ): void {
+    if (
+      state === journeyEnums.JOURNEY.checkin ||
+      state === journeyEnums.JOURNEY.preCheckin
+    ) {
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {
@@ -252,7 +293,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   mapPaymentInitiationData() {
     if (
       this.selectedPaymentOption.config &&
-      this.selectedPaymentOption.config['gatewayType'] === paymentEnum.GatewayTypes.ccavenue
+      this.selectedPaymentOption.config['gatewayType'] ===
+        paymentEnum.GatewayTypes.ccavenue
     ) {
       const paymentInitiationData = new PaymentCCAvenue().deserialize(
         this.selectedPaymentOption.config,

@@ -9,6 +9,9 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { HealthDeclarationComponent } from '../health-declaration/health-declaration.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
+import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -24,7 +27,10 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     protected _stepperService: StepperService,
     protected _buttonService: ButtonService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected templateService: TemplateService
   ) {
     super();
     this.self = this;
@@ -58,10 +64,20 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
             if (response && response.data) {
               // this.patchHealthData(response.data, response.signatureUrl);
             }
-            this._buttonService.buttonLoading$.next(
-              this.buttonRefs['nextButton']
-            );
-            this._stepperService.setIndex('next');
+            const { journey } = this.templateService.templateConfig;
+            if (
+              journey == journeyEnums.JOURNEY.preCheckin.toLocaleUpperCase()
+            ) {
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['submitButton']
+              );
+              this.openThankyouPage();
+            } else {
+              this._buttonService.buttonLoading$.next(
+                this.buttonRefs['nextButton']
+              );
+              this._stepperService.setIndex('next');
+            }
           },
           ({ error }) => {
             this._translateService
@@ -102,6 +118,14 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
 
   goBack() {
     this._stepperService.setIndex('back');
+  }
+
+  openThankyouPage() {
+    this.router.navigateByUrl(
+      `/thankyou?token=${this.route.snapshot.queryParamMap.get(
+        'token'
+      )}&entity=thankyou&state=PRECHECKIN`
+    );
   }
 
   ngOnDestroy(): void {

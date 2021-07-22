@@ -24,15 +24,7 @@
         <div class="breadcrums">
           Conversation &gt; <span style="color: #002046;">Messages</span>
         </div>
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 75%;
-          "
-          *ngIf="checkForMessageRoute()"
-        >
+        <div class="layoutMessageCheck" *ngIf="checkForMessageRoute()">
           <div style="margin-bottom: -6px;">
             <admin-message-tab-menu></admin-message-tab-menu>
           </div>
@@ -66,7 +58,7 @@
             <button (click)="toggleGlobalFilter()" class="header--button">
               <p class="filter-button--text">
                 {{ filterConfig.branchName }}&nbsp;<b
-                  style="color: #d9d9d9; font-size: 12px;"
+                  class="layoutFilterContent"
                   >{{ filterConfig.totalFilterContent() }}
                 </b>
               </p>

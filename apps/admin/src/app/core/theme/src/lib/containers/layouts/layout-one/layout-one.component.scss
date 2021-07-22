@@ -1,5 +1,16 @@
 @import 'main';
 
+.layoutMessageCheck {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 75%;
+}
+.layoutFilterContent {
+  color: #d9d9d9;
+  font-size: 12px;
+}
+
 .wrapper {
   // position: relative;
   height: 100vh;
@@ -25,7 +36,7 @@
   justify-content: space-between;
   .temp-width {
     width: 47%;
-    @media only screen and (max-width:800px) {
+    @media only screen and (max-width: 800px) {
       width: 100%;
     }
   }
@@ -125,7 +136,7 @@
       }
 
       // message headers
-      .breadcrums{
+      .breadcrums {
         width: 25%;
         padding: 14.5px 20px;
         font: normal normal normal 14px/19px Roboto;
@@ -133,11 +144,10 @@
         color: #c5c5c5;
         opacity: 1;
 
-        span{
-          color:#002046;
+        span {
+          color: #002046;
         }
       }
-
     }
   }
   &--container {
@@ -213,9 +223,9 @@
   -o-transition: all 500ms;
   transition: all 500ms;
 }
-:host::ng-deep .mat-tab-label img{
+:host::ng-deep .mat-tab-label img {
   filter: grayscale(100);
 }
-:host::ng-deep .mat-tab-label-active img{
+:host::ng-deep .mat-tab-label-active img {
   filter: grayscale(0) !important;
 }

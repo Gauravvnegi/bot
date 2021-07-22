@@ -1,13 +1,4 @@
-<div
-  style="
-    height: 626px;
-    background: #ffffff 0% 0% no-repeat padding-box;
-    box-shadow: 0px 3px 6px #0000000d;
-    padding: 20px;
-    border-radius: 5px;
-    opacity: 1;
-  "
->
+<div class="analyticsWrapper">
   <div class="header" [formGroup]="analyticsFG">
     <div class="title-container">
       <div class="icon">
@@ -47,7 +38,7 @@
       <ng-template mat-tab-label>{{ tab.title }} </ng-template>
     </mat-tab>
   </mat-tab-group>
-  <div style="margin-top: 20px; height: calc(100% - 125px);">
+  <div class="graphWrapper">
     <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx].title">
       <ng-container *ngSwitchCase="'WhatsApp'">
         <hospitality-bot-whatsapp-message-analytics></hospitality-bot-whatsapp-message-analytics>

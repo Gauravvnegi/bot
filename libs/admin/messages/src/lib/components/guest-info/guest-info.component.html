@@ -5,7 +5,7 @@
   <div>Guest Info</div>
 </div>
 <div
-  style="height: calc(100% - 124px); width: 100%;"
+  class="guestInfoWrapper"
   [ngStyle]="{
     'border-bottom': buttonConfig[selectedIndex].button
       ? '1px solid #9eaeb8'
@@ -58,38 +58,13 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<div
-  style="
-    height: 62px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  "
->
+<div class="guestInfoEditWrapper">
   <div
-    style="
-      width: 138px;
-      height: 36px;
-      background: #f6f6fc 0% 0% no-repeat padding-box;
-      border: 1px solid #e1e1f2;
-      border-radius: 100px;
-      opacity: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    "
+    class="guestInfoEditContainer"
     *ngIf="buttonConfig[selectedIndex].button"
     (click)="handleButtonCLick()"
   >
-    <div
-      style="
-        font: normal normal normal 11px/15px Roboto;
-        letter-spacing: 0.66px;
-        color: #002046;
-        opacity: 1;
-      "
-    >
+    <div class="guestInfoEditText">
       {{ buttonConfig[selectedIndex].label }}
     </div>
   </div>

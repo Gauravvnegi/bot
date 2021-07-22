@@ -32,7 +32,7 @@
             <div>
               <p class="heading">{{ tableName }}</p>
             </div>
-            <div style="display: flex; align-items: center;">
+            <div class="requestDataWrapper">
               <div
                 class="link"
                 (click)="openAddRequest()"
@@ -59,7 +59,7 @@
                       pTemplate="selectedItem"
                     >
                       <img src="assets/svg/Export.svg" />
-                      <span style="margin-left: 0.5em; font-weight: 500;">{{
+                      <span class="requestDataActionLabel">{{
                         documentActionItem.label
                       }}</span>
                     </ng-template>
@@ -72,7 +72,7 @@
                   >
                     <ng-template let-documentTypeItem pTemplate="selectedItem">
                       <img src="assets/svg/CSV.svg" />
-                      <span style="margin-left: 0.5em; font-weight: 500;">{{
+                      <span class="requestDataActionLabel">{{
                         documentTypeItem.label
                       }}</span>
                     </ng-template>
@@ -172,14 +172,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th
-        style="
-          width: 5%;
-          background-color: #eaf0f6;
-          border-top: 0 !important;
-          border-bottom: 0 !important;
-          text-align: center;
-        "
+      <th class="requestDataTableHead"
         pResizableColumn
       >
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>

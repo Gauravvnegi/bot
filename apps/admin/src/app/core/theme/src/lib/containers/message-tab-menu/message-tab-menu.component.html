@@ -5,7 +5,7 @@
 >
   <mat-tab *ngFor="let tab of tabList">
     <ng-template mat-tab-label>
-      <div style="display: flex; align-items: center;">
+      <div class="messageTabWrapper">
         <div><img [src]="tab.imgSrc" /></div>
         <div>{{ tab.count }}</div>
       </div>

@@ -14,18 +14,48 @@
     filter: sepia(100%) hue-rotate(190deg) saturate(500%);
   }
 }
-.guest-info{
-    height: 62px;
-    width: 100%;
-    border-bottom: 1px solid #9eaeb8;
-    display: flex;
-    align-items: center;
-    padding: 20px;
 
-    .close-icon{
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      margin-right: 20px;
-    }
+.guestInfoWrapper {
+  height: calc(100% - 124px);
+  width: 100%;
+}
+.guestInfoEditWrapper {
+  height: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.guestInfoEditContainer {
+  width: 138px;
+  height: 36px;
+  background: #f6f6fc 0% 0% no-repeat padding-box;
+  border: 1px solid #e1e1f2;
+  border-radius: 100px;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.guestInfoEditText {
+  font: normal normal normal 11px/15px Roboto;
+  letter-spacing: 0.66px;
+  color: #002046;
+  opacity: 1;
+}
+
+.guest-info {
+  height: 62px;
+  width: 100%;
+  border-bottom: 1px solid #9eaeb8;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+
+  .close-icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin-right: 20px;
+  }
 }

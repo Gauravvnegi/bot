@@ -1,5 +1,18 @@
 @import 'main';
 
+.categoriesItemLabel {
+  vertical-align: middle;
+  margin-left: 0.5em;
+  font-weight: 500;
+}
+.categorieTableHead {
+  width: 5%;
+  background-color: #eaf0f6;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
+}
+
 .add-user {
   background: transparent;
   border: none;
@@ -41,7 +54,7 @@
   }
 }
 
-.category-image{
+.category-image {
   width: 40%;
   height: 40%;
 }

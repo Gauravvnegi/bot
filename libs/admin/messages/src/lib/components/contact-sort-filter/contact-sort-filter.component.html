@@ -1,24 +1,9 @@
-<div style="height: 100%; width: 100%;" *ngIf="parentFG">
-  <div
-    style="
-      height: calc(100% - 62px);
-      width: 100%;
-      border-bottom: 1px solid #9eaeb8;
-      padding: 15px;
-    "
-    [formGroup]="parentFG"
-  >
-    <div
-      style="
-        font: normal normal bold 10px/13px Roboto;
-        letter-spacing: 0.6px;
-        color: #b8bbbe;
-        margin-bottom: 10px;
-      "
-    >
+<div class="sortFilterWrapper" *ngIf="parentFG">
+  <div class="sortFilterContainer" [formGroup]="parentFG">
+    <div class="sortBy">
       Sort By
     </div>
-    <div style="display: flex; height: auto; width: 100%; flex-wrap: wrap;">
+    <div class="sortTypes">
       <div
         [ngStyle]="
           sortControl?.value.label === item.value &&
@@ -32,82 +17,35 @@
                 border: '1px solid #AEAEAE1A'
               }
         "
-        style="
-          border-radius: 1000px;
-          opacity: 1;
-          margin: 0 10px 10px 0;
-          width: max-content;
-          padding: 8px 15px;
-          cursor: pointer;
-        "
+        class="sortItemWrapper"
         *ngFor="let item of sortList"
         (click)="setSortBy(item)"
       >
-        <div
-          style="
-            font: normal normal normal 14px/19px Roboto;
-            letter-spacing: 0.84px;
-            color: #002046;
-          "
-        >
+        <div class="sortItem">
           {{ item.label }}
         </div>
       </div>
     </div>
-    <div style="border: solid 1px #e0e0e0; margin: 20px 0;"></div>
-    <div
-      style="
-        font: normal normal bold 10px/13px Roboto;
-        letter-spacing: 0.6px;
-        color: #b8bbbe;
-        margin-bottom: 10px;
-      "
-    >
+    <div class="filterUnderline"></div>
+    <div class="filterBy">
       Filter By
     </div>
     <div
       *ngFor="let filter of filterData; let i = index"
       formArrayName="filterBy"
-      style="margin: 8px 0; display: flex; align-items: center;"
+      class="filterItemWrapper"
     >
       <div>
-        <input
-          style="margin-right: 10px; height: 20px; width: 20px;"
-          type="checkbox"
-          [formControlName]="i"
-        />
+        <input class="filterCheckbox" type="checkbox" [formControlName]="i" />
       </div>
-      <div
-        style="
-          font: normal normal normal 14px/19px Roboto;
-          letter-spacing: 0.84px;
-          color: #002046;
-          opacity: 1;
-        "
-      >
+      <div class="filterItem">
         {{ filter }}
       </div>
     </div>
   </div>
-  <div
-    style="
-      height: 62px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    "
-  >
+  <div class="applyBtnWrapper">
     <div
-      style="
-        width: 138px;
-        height: 36px;
-        background: #4b56c0 0% 0% no-repeat padding-box;
-        border-radius: 100px;
-        color: #ffffff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      "
+      class="applyBtn"
       [ngStyle]="
         parentFG && parentFG.untouched
           ? { opacity: '0.3', 'pointer-events': 'none' }

@@ -16,55 +16,48 @@
     <div>
       <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure complete"></div>
-        <div
-          class="inhouse--chart-rightblock--status--normaltext"
-        >
+        <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.completed }}
         </div>
-        <div
-          class="inhouse--chart-rightblock--status--completetext"
-        >
+        <div class="inhouse--chart-rightblock--status--completetext">
           ({{ inhouseRequest.compareStats.COMPLETED }}%)
-          <img src="assets/svg/uparrow.svg" alt="uparrow">
+          <img src="assets/svg/uparrow.svg" alt="uparrow" />
         </div>
-        <div 
-          class="inhouse--chart-rightblock--status--normaltext-2"
-        >
+        <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
         </div>
       </div>
-      <div class="inhouse--chart-rightblock--normaltext2" >
+      <div class="inhouse--chart-rightblock--normaltext2">
         Completed
       </div>
     </div>
-    <div style="margin: 5px 0;">
+    <div class="inhouseWrapper">
       <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure pending"></div>
         <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.pending }}
         </div>
         <div class="inhouse--chart-rightblock--status--completetext">
-          ({{ inhouseRequest.compareStats.PENDING }}%) 
-          <img src="assets/svg/uparrow.svg" alt="uparrow">
+          ({{ inhouseRequest.compareStats.PENDING }}%)
+          <img src="assets/svg/uparrow.svg" alt="uparrow" />
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
         </div>
       </div>
-      <div
-      class="inhouse--chart-rightblock--normaltext2">
+      <div class="inhouse--chart-rightblock--normaltext2">
         Pending
       </div>
     </div>
     <div>
-      <div  class="inhouse--chart-rightblock--status">
+      <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure timeout"></div>
-        <div  class="inhouse--chart-rightblock--status--normaltext">
+        <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.timeout }}
         </div>
         <div class="inhouse--chart-rightblock--status--completetext">
           ({{ inhouseRequest.compareStats.TIMEOUT }}%)
-          <img src="assets/svg/uparrow.svg" alt="uparrow">
+          <img src="assets/svg/uparrow.svg" alt="uparrow" />
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days

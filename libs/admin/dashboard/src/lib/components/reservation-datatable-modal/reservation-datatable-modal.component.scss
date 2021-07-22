@@ -1,14 +1,30 @@
 @import 'main';
+
+.documentActionItem {
+  margin-left: 0.5em;
+  font-weight: 500;
+}
+.tableHeading {
+  width: 5%;
+  background-color: #eaf0f6;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
+}
+.rowsData {
+  color: #4b56c0;
+}
+
 .close {
-	display: flex;
-	justify-content: flex-end;
-	width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
   // position: absolute;
   // top: 5px;
   // right: 10px;
   i {
-		color: gray;
-		margin: 0 10px;
+    color: gray;
+    margin: 0 10px;
   }
   &:hover {
     cursor: pointer;

@@ -4,6 +4,19 @@
   width: 33%;
 }
 
+.fieldImg {
+  height: 20px;
+  margin-right: 10px;
+}
+.showMore {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font: normal normal medium 14px/19px Roboto;
+  letter-spacing: 0.56px;
+  color: #9eaeb8;
+}
+
 .label-wrapper {
   display: flex;
   align-items: center;

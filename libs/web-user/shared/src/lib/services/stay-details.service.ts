@@ -140,7 +140,7 @@ export class StayDetailsService extends ApiService {
       appearance: 'outline',
       type: 'textarea',
       placeholder:
-        'Request us for anything. Like Airport Drop Off, Pickup at Airport, New Guest Towels,Go for Sightseeing.',
+        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests',
     });
 
     return specialCommentsFieldSchema as SpecialCommentsConfigI;

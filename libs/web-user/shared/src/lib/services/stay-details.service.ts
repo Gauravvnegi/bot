@@ -39,7 +39,7 @@ export class StayDetailsService extends ApiService {
       'expectedArrivalTime'
     ] = new FieldSchema().deserialize({
       label:
-        'Early check-in are subject to availability, please mention in special request if required.',
+        'Early check-in is subject to availability, please mention in special request if required.',
       disable: false,
       style: {
         childLabelStyles: {
@@ -93,7 +93,7 @@ export class StayDetailsService extends ApiService {
       'expectedDepartureTime'
     ] = new FieldSchema().deserialize({
       label:
-        'Late checkout are subject to availability, please mention in special request if required.',
+        'Late checkout is subject to availability, please mention in special request if required.',
       disable: false,
       style: {
         childLabelStyles: {
@@ -140,7 +140,7 @@ export class StayDetailsService extends ApiService {
       appearance: 'outline',
       type: 'textarea',
       placeholder:
-        'Request us for anything. Like Airport Drop Off, Pickup at Airport, New Guest Towels,Go for Sightseeing.',
+        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests',
     });
 
     return specialCommentsFieldSchema as SpecialCommentsConfigI;

@@ -18,7 +18,7 @@ export class SummaryService extends ApiService {
       appearance: 'outline',
       type: 'textarea',
       placeholder:
-        'Request us for anything like Airport Dropoff, Pickup at Airport, Go for sightseeing, etc.',
+        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests',
     });
 
     return summaryDetailsFieldSchema as SummaryDetailsConfigI;

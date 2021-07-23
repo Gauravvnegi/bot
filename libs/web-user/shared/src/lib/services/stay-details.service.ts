@@ -39,7 +39,7 @@ export class StayDetailsService extends ApiService {
       'expectedArrivalTime'
     ] = new FieldSchema().deserialize({
       label:
-        'Early check-in are subject to availability, please mention in special request if required.',
+        'Early check-in is subject to availability, please mention in special request if required.',
       disable: false,
       style: {
         childLabelStyles: {
@@ -93,7 +93,7 @@ export class StayDetailsService extends ApiService {
       'expectedDepartureTime'
     ] = new FieldSchema().deserialize({
       label:
-        'Late checkout are subject to availability, please mention in special request if required.',
+        'Late checkout is subject to availability, please mention in special request if required.',
       disable: false,
       style: {
         childLabelStyles: {

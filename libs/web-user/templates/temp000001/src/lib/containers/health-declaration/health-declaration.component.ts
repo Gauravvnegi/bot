@@ -262,6 +262,7 @@ export class HealthDeclarationComponent implements OnInit {
           style: config.component.style,
           mediaQuery: config.component.mediaQuery,
           validation: config.component.validation,
+          required: config.component.required,
         };
         if (config.component.isOptionsOpenedChanged) {
           componentObj.instance.settings = {

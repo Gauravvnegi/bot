@@ -40,6 +40,7 @@ export class GuestDetailsService extends ApiService {
       options: [
         { key: 'Mr.', value: 'Mr.' },
         { key: 'Ms.', value: 'Ms.' },
+        { key: 'Mrs.', value: 'Mrs.' },
       ],
       required: config.requiredFields.includes('salutation'),
     });

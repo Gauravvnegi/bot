@@ -4,14 +4,10 @@ import { ApiService } from 'libs/shared/utils/src/lib/api.service';
 import {
   ContactDetails,
   Guest,
-  GuestDetails,
   ReservationDetails,
 } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { Observable, Subject } from 'rxjs';
-import {
-  CountryCodes,
-  Country,
-} from '../../../../shared/src/lib/data-models/countryCode';
+import { Country } from '../../../../shared/src/lib/data-models/countryCode';
 import { GuestRole, GuestTypes } from '../constants/guest';
 import { AgeList } from '../data-models/Age';
 import { FieldSchema } from '../data-models/fieldSchema.model';
@@ -19,6 +15,7 @@ import {
   GuestDetailDS,
   GuestDetailsConfigI,
 } from '../data-models/guestDetailsConfig.model';
+import { Salutation } from '../data-models/salutation';
 
 @Injectable()
 export class GuestDetailsService extends ApiService {
@@ -37,11 +34,7 @@ export class GuestDetailsService extends ApiService {
     guestDetailsFieldSchema['salutation'] = new FieldSchema().deserialize({
       label: ' ',
       disable: config.isPrimary ? false : config.disable,
-      options: [
-        { key: 'Mr.', value: 'Mr.' },
-        { key: 'Ms.', value: 'Ms.' },
-        { key: 'Mrs.', value: 'Mrs.' },
-      ],
+      options: Salutation,
       required: config.requiredFields.includes('salutation'),
     });
     guestDetailsFieldSchema['firstName'] = new FieldSchema().deserialize({

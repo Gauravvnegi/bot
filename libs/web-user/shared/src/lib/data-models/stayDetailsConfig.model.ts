@@ -49,25 +49,24 @@ export class StayDetail implements Deserializable {
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
-      set({}, 'adultsCount', get(input, ['adultsCount'])),
-      set(
-        {},
-        'expectedArrivalTime',
-        moment(
-          expectedArrivalTime.split(' ')[1] + expectedArrivalTime.split(' ')[2],
-          'h:mm a'
-        ).format('h:mm a')
-      ),
-      set(
-        {},
-        'expectedDepartureTime',
-        moment(
-          expectedDepartureTime.split(' ')[1] +
-            expectedDepartureTime.split(' ')[2],
-          'h:mm a'
-        ).format('h:mm a')
-      )
+      set({}, 'adultsCount', get(input, ['adultsCount']))
     );
+    this.expectedArrivalTime =
+      input.expectedArrivalTime === 0
+        ? '12:00 pm'
+        : moment(
+            expectedArrivalTime.split(' ')[1] +
+              expectedArrivalTime.split(' ')[2],
+            'h:mm a'
+          ).format('h:mm a');
+    this.expectedDepartureTime =
+      input.expectedDepartureTime === 0
+        ? '02:00 pm'
+        : moment(
+            expectedDepartureTime.split(' ')[1] +
+              expectedDepartureTime.split(' ')[2],
+            'h:mm a'
+          ).format('h:mm a');
     return this;
   }
 }

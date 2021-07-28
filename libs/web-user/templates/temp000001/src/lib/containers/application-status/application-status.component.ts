@@ -63,15 +63,17 @@ export class ApplicationStatusComponent implements OnInit {
   listenForSummaryDetails() {
     this.$subscription.add(
       this._stepperService.stepperSelectedIndex$.subscribe((index) => {
-        if (this._templateService.templateData['temp000001']) {
+        if (
+          this._templateService.templateData[this._templateService.templateId]
+        ) {
           let data;
-          this._templateService.templateData['temp000001'].stepConfigs.find(
-            (item, ix) => {
-              if (item.stepperName === 'Summary') {
-                data = ix;
-              }
+          this._templateService.templateData[
+            this._templateService.templateId
+          ].stepConfigs.find((item, ix) => {
+            if (item.stepperName === 'Summary') {
+              data = ix;
             }
-          );
+          });
           if (data === index) {
             this.getSummaryDetails();
           }
@@ -87,41 +89,8 @@ export class ApplicationStatusComponent implements OnInit {
         .subscribe((res) => {
           this.summaryDetails = new SummaryDetails().deserialize(res);
           this.isLoaderVisible = false;
-          this.checkForTodaysBooking();
         })
     );
-  }
-
-  checkForTodaysBooking() {
-    const diff = DateService.getDateDifference(
-      +this.stayDetail.arrivalTime,
-      +this.dateService.getCurrentTimeStamp()
-    );
-    const stayDetailDay = DateService.convertTimestampToDate(
-      +this.stayDetail.arrivalTime,
-      'DD'
-    );
-    const currentDay = DateService.convertTimestampToDate(
-      +this.dateService.getCurrentTimeStamp(),
-      'DD'
-    );
-    if (diff > 0 && !this.modalVisible) {
-      this.openCheckinDateModal();
-    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
-      this.openCheckinDateModal();
-    }
-  }
-
-  openCheckinDateModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'checkin-modal-component';
-    this.modalVisible = true;
-    this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
-      disableClose: true,
-      id: 'checkin-modal-component',
-    });
-    this.checkInDialogRef.disableClose = true;
   }
 
   ngOnDestroy() {

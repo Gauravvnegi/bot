@@ -88,7 +88,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           this.selectedPaymentOption.config.gatewayType ===
             paymentEnum.GatewayTypes.ccavenue
         ) {
-          this.initiateCCAvenuePayment(data, 'nextButton');
+          this.initiateCCAvenuePayment(data, 'submitButton');
         } else {
           this._translateService
             .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
@@ -96,7 +96,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
               this._snackBarService.openSnackBarAsText(translatedMsg);
             });
           this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
+            this.buttonRefs['submitButton']
           );
         }
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
@@ -223,10 +223,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       | journeyEnums.JOURNEY.checkout
       | journeyEnums.JOURNEY.preCheckin
   ): void {
-    if (
-      state === journeyEnums.JOURNEY.checkin ||
-      state === journeyEnums.JOURNEY.preCheckin
-    ) {
+    if (state === journeyEnums.JOURNEY.checkin) {
       this._translateService
         .get('MESSAGES.SUCCESS.PAYMENT_DETAILS_COMPLETE')
         .subscribe((translatedMsg) => {
@@ -248,10 +245,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       | journeyEnums.JOURNEY.checkout
       | journeyEnums.JOURNEY.preCheckin
   ): void {
-    if (
-      state === journeyEnums.JOURNEY.checkin ||
-      state === journeyEnums.JOURNEY.preCheckin
-    ) {
+    if (state === journeyEnums.JOURNEY.checkin) {
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
     } else {
       this._buttonService.buttonLoading$.next(this.buttonRefs['submitButton']);
@@ -264,10 +258,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       | journeyEnums.JOURNEY.checkout
       | journeyEnums.JOURNEY.preCheckin
   ): void {
-    if (
-      state === journeyEnums.JOURNEY.checkin ||
-      state === journeyEnums.JOURNEY.preCheckin
-    ) {
+    if (state === journeyEnums.JOURNEY.checkin) {
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       this._stepperService.setIndex('next');
     } else {

@@ -11,7 +11,10 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
-import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -20,6 +23,10 @@ import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
 })
 export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
   @ViewChild('healthComponent') healthComponent: HealthDeclarationComponent;
+  protected _dialogRef: MatDialogRef<any>;
+  protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
+  protected checkInDateAlert = CheckinDateAlertComponent;
+  modalVisible = false;
 
   constructor(
     protected _reservationService: ReservationService,
@@ -30,10 +37,43 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     protected _translateService: TranslateService,
     protected router: Router,
     protected route: ActivatedRoute,
-    protected templateService: TemplateService
+    protected templateService: TemplateService,
+    protected _modal: ModalService,
+    protected dateService: DateService
   ) {
     super();
     this.self = this;
+  }
+
+  ngOnInit() {
+    this.registerListeners();
+  }
+  registerListeners() {
+    this.listenForSummaryDetails();
+  }
+
+  listenForSummaryDetails() {
+    this.$subscription.add(
+      this._stepperService.stepperSelectedIndex$.subscribe((index) => {
+        if (
+          this.templateService.templateData[this.templateService.templateId]
+        ) {
+          let data;
+          this.templateService.templateData[
+            this.templateService.templateId
+          ].stepConfigs.find((item, ix) => {
+            if (item.component.name === 'health-declaration-wrapper') {
+              data = ix;
+            }
+          });
+          if (data === index) {
+            this.checkForTodaysBooking(
+              this._reservationService.reservationData
+            );
+          }
+        }
+      })
+    );
   }
 
   /**
@@ -65,19 +105,10 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
               // this.patchHealthData(response.data, response.signatureUrl);
             }
             const { journey } = this.templateService.templateConfig;
-            if (
-              journey == journeyEnums.JOURNEY.preCheckin.toLocaleUpperCase()
-            ) {
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['submitButton']
-              );
-              this.openThankyouPage();
-            } else {
-              this._buttonService.buttonLoading$.next(
-                this.buttonRefs['nextButton']
-              );
-              this._stepperService.setIndex('next');
-            }
+            this._buttonService.buttonLoading$.next(
+              this.buttonRefs['nextButton']
+            );
+            this._stepperService.setIndex('next');
           },
           ({ error }) => {
             this._translateService
@@ -120,12 +151,36 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     this._stepperService.setIndex('back');
   }
 
-  openThankyouPage() {
-    this.router.navigateByUrl(
-      `/thankyou?token=${this.route.snapshot.queryParamMap.get(
-        'token'
-      )}&entity=thankyou&state=PRECHECKIN`
+  checkForTodaysBooking(data) {
+    const diff = DateService.getDateDifference(
+      +data.arrivalTime,
+      +this.dateService.getCurrentTimeStamp()
     );
+    const stayDetailDay = DateService.convertTimestampToDate(
+      +data.arrivalTime,
+      'DD'
+    );
+    const currentDay = DateService.convertTimestampToDate(
+      +this.dateService.getCurrentTimeStamp(),
+      'DD'
+    );
+    if (diff > 0 && !this.modalVisible) {
+      this.openCheckinDateModal();
+    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
+      this.openCheckinDateModal();
+    }
+  }
+
+  openCheckinDateModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'checkin-modal-component';
+    this.modalVisible = true;
+    this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
+      disableClose: true,
+      id: 'checkin-modal-component',
+    });
+    this.checkInDialogRef.disableClose = true;
   }
 
   ngOnDestroy(): void {

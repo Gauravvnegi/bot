@@ -147,6 +147,15 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   onChatSelect(value) {
+    const index = this.chatList.contacts.findIndex(
+      (obj) => obj.phone == value.phone
+    );
+    if (this.chatList.contacts[index].unreadCount)
+      this.messageService
+        .markAsRead(this.hotelId, value.receiverId, { unreadCount: 0 })
+        .subscribe((response) => {
+          this.chatList.contacts[index].unreadCount = response.unreadCount;
+        });
     this.selectedChat.emit({ value: value });
   }
 

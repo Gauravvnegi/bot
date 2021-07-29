@@ -82,6 +82,7 @@ export class Contact {
   descriptionMessage: string;
   enableSend: boolean;
   color: string;
+  unreadCount: number;
 
   deserialize(input) {
     Object.assign(
@@ -95,7 +96,8 @@ export class Contact {
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo'])),
       set({}, 'descriptionMessage', get(input, ['descriptionMessage']) || ''),
-      set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt']))
+      set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt'])),
+      set({}, 'unreadCount', get(input, ['unreadCount']))
     );
     this.color = colors[Math.floor(Math.random() * colors.length)];
     this.enableSend = this.checkEnableSend();

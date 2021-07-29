@@ -40,6 +40,13 @@ export class MessageService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
+  markAsRead(hotelId: string, contactId: string, data) {
+    return this.patch(
+      `/api/v1/hotel/${hotelId}/conversations/${contactId}/guest-associate`,
+      data
+    );
+  }
+
   filterMessagesByDate(messages: IChat[]) {
     const currentDate = moment();
     const filteredMsgObj = {};

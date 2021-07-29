@@ -110,6 +110,14 @@
           white-space: nowrap;
           overflow: hidden;
         }
+        .unread-count {
+          padding: 5px;
+          text-align: center;
+          min-width: 30px;
+          border-radius: 50%;
+          background: #00b7a8 0% 0% no-repeat padding-box;
+          opacity: 1;
+        }
       }
     }
   }

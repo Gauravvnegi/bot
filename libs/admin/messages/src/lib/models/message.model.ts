@@ -51,19 +51,20 @@ export class Chat {
 
 export class ContactList {
   contacts: IContact[];
+  unreadContacts: number;
 
   deserialize(input) {
     this.contacts = new Array<IContact>();
-
+    this.unreadContacts = 0;
     input?.forEach((item) =>
       this.contacts.push(new Contact().deserialize(item))
     );
 
-    // this.contacts = DateService.sortObjArrayByTimeStamp(
-    //   this.contacts,
-    //   'lastMessageAt',
-    //   'desc'
-    // );
+    this.contacts.forEach((contact) => {
+      if (contact.unreadCount) {
+        this.unreadContacts += 1;
+      }
+    });
 
     return this;
   }

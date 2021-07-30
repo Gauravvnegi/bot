@@ -49,9 +49,7 @@
             {{ guest.contactDetails.emailId || '-' }}
           </div>
         </div>
-        
       </div>
-      
     </div>
     <div *ngIf="stayDetail">
       <div class="section--heading">Stay Details</div>
@@ -248,6 +246,27 @@
               <span class="link" (click)="openRegCard()"
                 >Registration Card</span
               ></label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section--heading">Privacy Policy</div>
+      <div class="section--content">
+        <div
+          class="section--content--label"
+          *ngIf="summaryFG?.get('privacyPolicy')"
+        >
+          <web-user-checkbox
+            [parentForm]="summaryFG?.get('privacyPolicy')"
+            [name]="'accept'"
+            (onValueChange)="setPrivacyPolicy($event)"
+          >
+          </web-user-checkbox>
+          <div style="margin-left: 10px;">
+            <label>
+              I agree to receive promotions on my email and phone no</label
             >
           </div>
         </div>

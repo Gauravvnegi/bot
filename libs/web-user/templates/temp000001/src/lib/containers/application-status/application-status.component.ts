@@ -14,8 +14,7 @@ import { RegistrationCardComponent } from '../registration-card/registration-car
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -24,10 +23,9 @@ import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presenta
 })
 export class ApplicationStatusComponent implements OnInit {
   protected _dialogRef: MatDialogRef<any>;
-  protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
   summaryDetails: SummaryDetails = new SummaryDetails();
   protected regCardComponent = RegistrationCardComponent;
-  protected checkInDateAlert = CheckinDateAlertComponent;
+  summaryFG: FormGroup;
 
   @Input()
   context: any;
@@ -46,12 +44,17 @@ export class ApplicationStatusComponent implements OnInit {
     protected _templateService: TemplateService,
     protected _regCardService: RegCardService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService,
-    protected dateService: DateService
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    this.summaryFG = new FormGroup({
+      privacyPolicy: new FormGroup({
+        accept: new FormControl(false, Validators.required),
+      }),
+    });
+    // this._stepperService.stepperSelectedIndex$.next(2);
   }
 
   ngOnChanges(): void {}
@@ -88,6 +91,12 @@ export class ApplicationStatusComponent implements OnInit {
         .getSummaryStatus(this._reservationService.reservationId)
         .subscribe((res) => {
           this.summaryDetails = new SummaryDetails().deserialize(res);
+          console.log(res.guestDetails.primaryGuest);
+          if (res.guestDetails.primaryGuest !== undefined) {
+            this.privacyFG.patchValue({
+              accept: res.guestDetails.primaryGuest,
+            });
+          }
           this.isLoaderVisible = false;
         })
     );
@@ -200,6 +209,23 @@ export class ApplicationStatusComponent implements OnInit {
     );
   }
 
+  setPrivacyPolicy(event) {
+    if (this.privacyFG.invalid) return;
+    const values = {
+      privacy: this.privacyFG.getRawValue()['accept'],
+    };
+    console.log(this._reservationService.reservationData);
+    this._summaryService
+      .updatePrivacyPolicy(
+        this._reservationService.reservationData.guestDetails.primaryGuest.id,
+        values
+      )
+      .subscribe(
+        (response) => console.log('Privacy policy updated'),
+        ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+      );
+  }
+
   get stayDetail() {
     return this.summaryDetails.stayDetails;
   }
@@ -214,5 +240,9 @@ export class ApplicationStatusComponent implements OnInit {
 
   get paymentDetails() {
     return this.summaryDetails.paymentSummary;
+  }
+
+  get privacyFG(): FormGroup {
+    return this.summaryFG?.get('privacyPolicy') as FormGroup;
   }
 }

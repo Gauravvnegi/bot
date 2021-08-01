@@ -141,7 +141,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             response.length < this.limit
               ? this.limit
               : (this.limit = this.limit + 20);
-          this.chatList = new ContactList().deserialize(response);
+          this.chatList = new ContactList().deserialize(response, true);
         })
     );
   }

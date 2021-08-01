@@ -50,18 +50,20 @@ export class Chat {
 export class ContactList {
   contacts: IContact[];
 
-  deserialize(input) {
+  deserialize(input, sort = false) {
     this.contacts = new Array<IContact>();
 
     input?.forEach((item) =>
       this.contacts.push(new Contact().deserialize(item))
     );
 
-    // this.contacts = DateService.sortObjArrayByTimeStamp(
-    //   this.contacts,
-    //   'lastMessageAt',
-    //   'desc'
-    // );
+    if (sort) {
+      this.contacts = DateService.sortObjArrayByTimeStamp(
+        this.contacts,
+        'lastMessageAt',
+        'desc'
+      );
+    }
 
     return this;
   }

@@ -55,6 +55,10 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             })
           );
         } else {
+          if (!this._authService.isAuthenticated()) {
+            this.logoutUser();
+            return throwError(err);
+          }
           this.refreshTokenInProgress = true;
           console.log('call refresh token api to get new tokens');
           // Set the refreshTokenSubject to null so that subsequent API calls will wait until the new token has been retrieved

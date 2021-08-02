@@ -6,7 +6,7 @@
         *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
       />
       <ng-template #defaultAvatar
-        ><div>
+        ><div class="label">
           {{ selectedChat?.getProfileNickName() }}
         </div></ng-template
       >

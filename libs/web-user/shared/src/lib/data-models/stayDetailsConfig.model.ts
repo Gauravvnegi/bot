@@ -53,7 +53,7 @@ export class StayDetail implements Deserializable {
     );
     this.expectedArrivalTime =
       input.expectedArrivalTime === 0
-        ? '12:00 pm'
+        ? '02:00 pm'
         : moment(
             expectedArrivalTime.split(' ')[1] +
               expectedArrivalTime.split(' ')[2],
@@ -61,7 +61,7 @@ export class StayDetail implements Deserializable {
           ).format('h:mm a');
     this.expectedDepartureTime =
       input.expectedDepartureTime === 0
-        ? '02:00 pm'
+        ? '12:00 pm'
         : moment(
             expectedDepartureTime.split(' ')[1] +
               expectedDepartureTime.split(' ')[2],

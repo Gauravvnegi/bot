@@ -1,4 +1,171 @@
 @import 'main';
+
+.info-icon {
+  position: relative;
+
+  img {
+    margin: 3px 5px 0;
+    width: 14px;
+    height: 100%;
+  }
+  .tooltip {
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: #fff;
+    min-width: 160px;
+    border: 1px solid #eee;
+    padding: 10px;
+    top: 120%;
+    left: -200%;
+    color: #484848;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px #eee;
+    display: none;
+
+    .arrow {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid #eee;
+      left: 40%;
+      transform: translate(-50%);
+
+      &::before {
+        content: '';
+        top: 1px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 9px solid #ffffff;
+        left: -6px;
+        z-index: 3;
+        position: absolute;
+      }
+    }
+  }
+
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+}
+
+.graphContainer {
+  display: flex;
+  height: 100%;
+  .analyticsHeading {
+    font: normal normal bold 16px/21px Roboto;
+    letter-spacing: 0.96px;
+    color: #002046;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+  }
+  .messageAnalytics {
+    width: 40%;
+    height: 100%;
+    margin-right: 15px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    padding: 20px;
+    opacity: 1;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    .messageRequests {
+      display: flex;
+      margin-bottom: 20px;
+      justify-content: space-around;
+      .requestCircle {
+        position: relative;
+        width: 173px;
+        height: 173px;
+      }
+      .growth {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .growthCell {
+          display: flex;
+          align-items: center;
+          margin-bottom: 15px;
+          &__Img {
+            margin-right: 10px;
+          }
+          .upArrow {
+            margin-right: 5px;
+          }
+          .percentChange {
+            min-width: 24px;
+            text-align: left;
+            font: normal normal normal 10px/13px Roboto;
+            letter-spacing: 0px;
+            display: inline-block;
+            opacity: 1;
+          }
+          .day {
+            font: normal normal normal 10px/13px Roboto;
+            letter-spacing: 0px;
+            color: #c5c5c5;
+            opacity: 1;
+          }
+        }
+      }
+    }
+    .detailsWrapper {
+      display: flex;
+      flex-wrap: wrap;
+      .detail {
+        display: flex;
+        height: 70px;
+        width: 50%;
+        .divide {
+          height: 70px;
+          margin-right: 10px;
+        }
+        .compareLast {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 70px;
+          .detailHeading {
+            font-size: 14px;
+            line-height: 19px;
+            font-family: Roboto;
+            letter-spacing: 0.84px;
+            color: #6d7580;
+          }
+          .detailText {
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 16px;
+            font-family: Roboto;
+            letter-spacing: 0.72px;
+            color: #002046;
+          }
+        }
+      }
+    }
+  }
+  .sentAnalytics {
+    width: 60%;
+    height: 100%;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
+    padding: 20px;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
 .center-circle-progress {
   position: absolute;
   left: 0;
@@ -8,6 +175,26 @@
   height: 100%;
   justify-content: center;
   align-items: center;
+  &__total {
+    font: normal normal bold 25px/30px Roboto;
+    letter-spacing: 1.5px;
+    color: #002046;
+    margin-bottom: 10px;
+    opacity: 1;
+  }
+  &__text {
+    font: normal normal bold 12px/14px Roboto;
+    letter-spacing: 0.72px;
+    opacity: 1;
+    width: 70px;
+    text-align: center;
+  }
+  .centerText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .stat-val-container {

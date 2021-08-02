@@ -38,6 +38,10 @@ export class SummaryService extends ApiService {
     });
   }
 
+  updatePrivacyPolicy(guestId: string, data) {
+    return this.patch(`/api/v1/guest/${guestId}/privacy`, data);
+  }
+
   get SummaryDetails() {
     return this.summaryDetails;
   }

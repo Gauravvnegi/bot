@@ -14,8 +14,7 @@ import { RegistrationCardComponent } from '../registration-card/registration-car
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -24,10 +23,9 @@ import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presenta
 })
 export class ApplicationStatusComponent implements OnInit {
   protected _dialogRef: MatDialogRef<any>;
-  protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
   summaryDetails: SummaryDetails = new SummaryDetails();
   protected regCardComponent = RegistrationCardComponent;
-  protected checkInDateAlert = CheckinDateAlertComponent;
+  summaryFG: FormGroup;
 
   @Input()
   context: any;
@@ -46,12 +44,17 @@ export class ApplicationStatusComponent implements OnInit {
     protected _templateService: TemplateService,
     protected _regCardService: RegCardService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService,
-    protected dateService: DateService
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    this.summaryFG = new FormGroup({
+      privacyPolicy: new FormGroup({
+        accept: new FormControl(false, Validators.required),
+      }),
+    });
+    // this._stepperService.stepperSelectedIndex$.next(2);
   }
 
   ngOnChanges(): void {}
@@ -63,15 +66,17 @@ export class ApplicationStatusComponent implements OnInit {
   listenForSummaryDetails() {
     this.$subscription.add(
       this._stepperService.stepperSelectedIndex$.subscribe((index) => {
-        if (this._templateService.templateData['temp000001']) {
+        if (
+          this._templateService.templateData[this._templateService.templateId]
+        ) {
           let data;
-          this._templateService.templateData['temp000001'].stepConfigs.find(
-            (item, ix) => {
-              if (item.stepperName === 'Summary') {
-                data = ix;
-              }
+          this._templateService.templateData[
+            this._templateService.templateId
+          ].stepConfigs.find((item, ix) => {
+            if (item.stepperName === 'Summary') {
+              data = ix;
             }
-          );
+          });
           if (data === index) {
             this.getSummaryDetails();
           }
@@ -86,42 +91,14 @@ export class ApplicationStatusComponent implements OnInit {
         .getSummaryStatus(this._reservationService.reservationId)
         .subscribe((res) => {
           this.summaryDetails = new SummaryDetails().deserialize(res);
+          if (res.guestDetails.primaryGuest.privacy !== undefined) {
+            this.privacyFG.patchValue({
+              accept: res.guestDetails.primaryGuest.privacy,
+            });
+          }
           this.isLoaderVisible = false;
-          this.checkForTodaysBooking();
         })
     );
-  }
-
-  checkForTodaysBooking() {
-    const diff = DateService.getDateDifference(
-      +this.stayDetail.arrivalTime,
-      +this.dateService.getCurrentTimeStamp()
-    );
-    const stayDetailDay = DateService.convertTimestampToDate(
-      +this.stayDetail.arrivalTime,
-      'DD'
-    );
-    const currentDay = DateService.convertTimestampToDate(
-      +this.dateService.getCurrentTimeStamp(),
-      'DD'
-    );
-    if (diff > 0 && !this.modalVisible) {
-      this.openCheckinDateModal();
-    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
-      this.openCheckinDateModal();
-    }
-  }
-
-  openCheckinDateModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'checkin-modal-component';
-    this.modalVisible = true;
-    this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
-      disableClose: true,
-      id: 'checkin-modal-component',
-    });
-    this.checkInDialogRef.disableClose = true;
   }
 
   ngOnDestroy() {
@@ -231,6 +208,23 @@ export class ApplicationStatusComponent implements OnInit {
     );
   }
 
+  setPrivacyPolicy(event) {
+    if (this.privacyFG.invalid) return;
+    const values = {
+      privacy: this.privacyFG.getRawValue()['accept'],
+    };
+    console.log(this._reservationService.reservationData);
+    this._summaryService
+      .updatePrivacyPolicy(
+        this._reservationService.reservationData.guestDetails.primaryGuest.id,
+        values
+      )
+      .subscribe(
+        (response) => console.log('Privacy policy updated'),
+        ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+      );
+  }
+
   get stayDetail() {
     return this.summaryDetails.stayDetails;
   }
@@ -245,5 +239,9 @@ export class ApplicationStatusComponent implements OnInit {
 
   get paymentDetails() {
     return this.summaryDetails.paymentSummary;
+  }
+
+  get privacyFG(): FormGroup {
+    return this.summaryFG?.get('privacyPolicy') as FormGroup;
   }
 }

@@ -110,6 +110,7 @@ export class Guest {
   type: string;
   label: string;
   role: string;
+  privacy: boolean;
 
   deserialize(summary) {
     Object.assign(
@@ -123,7 +124,8 @@ export class Guest {
       set({}, 'type', get(summary, ['type'])),
       set({}, 'label', get(summary, ['label'])),
       set({}, 'role', get(summary, ['role'])),
-      set({}, 'signatureUrl', get(summary, ['signatureUrl']))
+      set({}, 'signatureUrl', get(summary, ['signatureUrl'])),
+      set({}, 'privacy', get(summary, ['privacy']))
     );
     this.contactDetails = new ContactDetails().deserialize(
       summary.contactDetails

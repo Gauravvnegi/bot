@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApplicationStatusComponent as BaseApplicationStatusComponent } from 'libs/web-user/templates/temp000001/src/lib/containers/application-status/application-status.component';
 import { RegistrationCardComponent } from '../registration-card/registration-card.component';
 @Component({

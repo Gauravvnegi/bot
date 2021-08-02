@@ -32,10 +32,7 @@
         <div class="row">
           <div class="row-title">Channel:</div>
           <div class="row-body">
-            <div
-              style="display: flex; align-items: center;"
-              *ngIf="config.channels.bot"
-            >
+            <div class="channelConfig" *ngIf="config.channels.bot">
               <mat-checkbox
                 formControlName="is_social_channel"
                 (change)="modifyControl($event.checked, 'social_channels')"
@@ -108,14 +105,8 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div style="display: flex; align-items: center;">
-              <div
-                style="
-                  width: 130px;
-                  color: rgb(199, 196, 196);
-                  font-size: 14px;
-                "
-              >
+            <div class="templateWrapper">
+              <div class="templateText">
                 Template:
               </div>
               <mat-form-field>

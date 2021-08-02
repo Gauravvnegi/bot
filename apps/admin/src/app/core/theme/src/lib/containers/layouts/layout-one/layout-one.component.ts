@@ -230,8 +230,13 @@ export class LayoutOneComponent implements OnInit {
   }
 
   logoutUser() {
-    this._authService.clearToken();
-    this._router.navigate(['/auth']);
+    this._authService
+      .logout(this._userDetailService.getLoggedInUserid())
+      .subscribe((response) => {
+        this._authService.clearToken();
+        location.reload();
+        this._router.navigate(['/auth']);
+      });
   }
 
   ngOnDestroy() {

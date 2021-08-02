@@ -24,6 +24,7 @@ export class Chat {
   timestamp: number;
   type: string;
   url: string;
+  caption: string;
 
   deserialize(input) {
     Object.assign(
@@ -37,7 +38,8 @@ export class Chat {
       set({}, 'text', get(input, ['text'])),
       set({}, 'timestamp', get(input, ['timestamp'])),
       set({}, 'type', get(input, ['type'])),
-      set({}, 'url', get(input, ['url']))
+      set({}, 'url', get(input, ['url'])),
+      set({}, 'caption', get(input, ['caption']))
     );
     return this;
   }
@@ -49,10 +51,11 @@ export class Chat {
 
 export class ContactList {
   contacts: IContact[];
+  unreadContacts: number;
 
   deserialize(input, sort = false) {
     this.contacts = new Array<IContact>();
-
+    this.unreadContacts = 0;
     input?.forEach((item) =>
       this.contacts.push(new Contact().deserialize(item))
     );
@@ -64,6 +67,11 @@ export class ContactList {
         'desc'
       );
     }
+    this.contacts.forEach((contact) => {
+      if (contact.unreadCount) {
+        this.unreadContacts += 1;
+      }
+    });
 
     return this;
   }
@@ -82,6 +90,7 @@ export class Contact {
   descriptionMessage: string;
   enableSend: boolean;
   color: string;
+  unreadCount: number;
 
   deserialize(input) {
     Object.assign(
@@ -95,7 +104,8 @@ export class Contact {
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo'])),
       set({}, 'descriptionMessage', get(input, ['descriptionMessage']) || ''),
-      set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt']))
+      set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt'])),
+      set({}, 'unreadCount', get(input, ['unreadCount']))
     );
     this.color = colors[Math.floor(Math.random() * colors.length)];
     this.enableSend = this.checkEnableSend();
@@ -119,9 +129,12 @@ export class Contact {
   }
 
   getProfileNickName() {
-    return this.name
-      .split(' ')
-      .map((i) => i.charAt(0))
+    const nameList = this.name.split(' ');
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
       .join('')
       .toUpperCase();
   }

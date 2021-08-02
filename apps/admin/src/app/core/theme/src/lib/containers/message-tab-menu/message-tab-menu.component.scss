@@ -7,6 +7,10 @@
     filter: grayscale(100%);
   }
 }
+.messageTabWrapper {
+  display: flex;
+  align-items: center;
+}
 
 :host ::ng-deep .mat-tab-label-active {
   img {

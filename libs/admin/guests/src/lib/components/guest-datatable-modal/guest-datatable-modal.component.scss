@@ -1,5 +1,17 @@
 @import 'main';
 
+.documentItemLabel {
+  margin-left: 0.5em;
+  font-weight: 500;
+}
+.tableHead {
+  width: 5%;
+  background-color: #eaf0f6;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
+}
+
 .table-container {
   max-height: 75vh;
   margin: 20px;

@@ -67,15 +67,17 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
         .getReservationDetails(this.reservationService.reservationId)
         .subscribe(
           (reservationData) => {
-            this.titleService.setTitle(
-              reservationData['hotel']
-                ? reservationData['hotel'].name
-                : 'Web-user'
-            );
-            let favicon = this.document.querySelector('#favicon');
-            favicon['href'] = reservationData['hotel']['favIcon']
-              ? reservationData['hotel']['favIcon'].trim()
-              : 'favicon.ico';
+            if (reservationData) {
+              this.titleService.setTitle(
+                reservationData['hotel']
+                  ? reservationData['hotel'].name
+                  : 'Web-user'
+              );
+              let favicon = this.document.querySelector('#favicon');
+              favicon['href'] = reservationData['hotel']['favIcon']
+                ? reservationData['hotel']['favIcon'].trim()
+                : 'favicon.ico';
+            }
           },
           ({ error }) => {
             if (error.type == 'BOOKING_CANCELED') {

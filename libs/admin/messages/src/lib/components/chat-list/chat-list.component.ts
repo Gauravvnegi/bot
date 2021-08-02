@@ -142,11 +142,28 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
               ? this.limit
               : (this.limit = this.limit + 20);
           this.chatList = new ContactList().deserialize(response, true);
+          this.messageService.setWhatsappUnreadContactCount(
+            this.chatList.unreadContacts
+          );
         })
     );
   }
 
   onChatSelect(value) {
+    const index = this.chatList.contacts.findIndex(
+      (obj) => obj.phone == value.phone
+    );
+    if (this.chatList.contacts[index].unreadCount) {
+      this.messageService
+        .markAsRead(this.hotelId, value.receiverId, { unreadCount: 0 })
+        .subscribe((response) => {
+          this.chatList.contacts[index].unreadCount = response.unreadCount;
+          this.chatList.unreadContacts -= 1;
+          this.messageService.setWhatsappUnreadContactCount(
+            this.chatList.unreadContacts
+          );
+        });
+    }
     this.selectedChat.emit({ value: value });
   }
 

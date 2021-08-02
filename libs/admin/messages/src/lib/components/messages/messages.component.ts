@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageTabService } from 'apps/admin/src/app/core/theme/src/lib/services/messages-tab.service';
+import { MessageService } from '../../services/messages.service';
 
 @Component({
   selector: 'hospitality-bot-messages',
@@ -10,13 +11,16 @@ export class MessagesComponent implements OnInit {
   tabList = [
     {
       imgSrc: 'assets/svg/whatsapp.svg',
-      count: 1,
+      count: 0,
       dataLoaded: false,
       name: 'whatsapp',
     },
   ];
   selectedIndex = 0;
-  constructor(private messageTabService: MessageTabService) {}
+  constructor(
+    private messageTabService: MessageTabService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.setTabList();
@@ -27,12 +31,23 @@ export class MessagesComponent implements OnInit {
 
   registerListeners() {
     this.listenForTabChange();
+    this.listenForWhatsappCount();
   }
 
   listenForTabChange() {
     this.messageTabService.selectedTabMenu$.subscribe((response) => {
       this.loadChatList(response);
     });
+  }
+
+  listenForWhatsappCount() {
+    this.messageService
+      .getWhatsappUnreadContactCount()
+      .subscribe((response) => {
+        const index = this.tabList.findIndex((x) => x.name === 'whatsapp');
+        this.tabList[index].count = response;
+        this.messageTabService.tabList$.next(this.tabList);
+      });
   }
 
   setTabList() {

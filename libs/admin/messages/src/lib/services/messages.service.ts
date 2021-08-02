@@ -7,6 +7,7 @@ import { IChat } from '../models/message.model';
 @Injectable()
 export class MessageService extends ApiService {
   refreshData$ = new BehaviorSubject(false);
+  private whatsappUnreadContacts$ = new BehaviorSubject(0);
   getChatList(hotelId: string, queryObj) {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/${queryObj}`);
   }
@@ -38,6 +39,13 @@ export class MessageService extends ApiService {
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
+  }
+
+  markAsRead(hotelId: string, contactId: string, data) {
+    return this.patch(
+      `/api/v1/hotel/${hotelId}/conversations/${contactId}/guest-associate`,
+      data
+    );
   }
 
   filterMessagesByDate(messages: IChat[]) {
@@ -78,5 +86,13 @@ export class MessageService extends ApiService {
       }
     });
     return filteredMsgObj;
+  }
+
+  getWhatsappUnreadContactCount() {
+    return this.whatsappUnreadContacts$.asObservable();
+  }
+
+  setWhatsappUnreadContactCount(value) {
+    this.whatsappUnreadContacts$.next(value);
   }
 }

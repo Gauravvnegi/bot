@@ -1,5 +1,19 @@
 @import 'main';
 
+.channelConfig {
+  display: flex;
+  align-items: center;
+}
+.templateWrapper {
+  display: flex;
+  align-items: center;
+}
+.templateText {
+  width: 130px;
+  color: rgb(199, 196, 196);
+  font-size: 14px;
+}
+
 .loader {
   margin: 20px auto;
 }
@@ -126,7 +140,6 @@
     cursor: pointer;
   }
 }
-
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
   background-color: $primary-gray;

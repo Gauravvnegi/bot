@@ -13,10 +13,7 @@ export class AuthService extends ApiService {
   }
 
   changePassword(data) {
-    return this.put(
-      `/api/v1/user/change-password`,
-      data
-    );
+    return this.put(`/api/v1/user/change-password`, data);
   }
 
   refreshAccessToken(config) {
@@ -63,5 +60,9 @@ export class AuthService extends ApiService {
 
   clearToken() {
     localStorage.clear();
+  }
+
+  logout(userId) {
+    return this.post(`/api/v1/user/${userId}/logout`, {});
   }
 }

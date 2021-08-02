@@ -41,10 +41,8 @@ export class WhatsappMessageComponent implements OnInit {
   visibilitychange() {
     if (document.hidden) {
       this.firebaseMessagingService.tabActive.next(false);
-      console.log('Page is hidden');
     } else {
       this.firebaseMessagingService.tabActive.next(true);
-      console.log('Page is visible');
     }
   }
 }

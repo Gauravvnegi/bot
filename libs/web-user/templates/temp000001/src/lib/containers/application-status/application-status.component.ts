@@ -91,10 +91,9 @@ export class ApplicationStatusComponent implements OnInit {
         .getSummaryStatus(this._reservationService.reservationId)
         .subscribe((res) => {
           this.summaryDetails = new SummaryDetails().deserialize(res);
-          console.log(res.guestDetails.primaryGuest);
-          if (res.guestDetails.primaryGuest !== undefined) {
+          if (res.guestDetails.primaryGuest.privacy !== undefined) {
             this.privacyFG.patchValue({
-              accept: res.guestDetails.primaryGuest,
+              accept: res.guestDetails.primaryGuest.privacy,
             });
           }
           this.isLoaderVisible = false;

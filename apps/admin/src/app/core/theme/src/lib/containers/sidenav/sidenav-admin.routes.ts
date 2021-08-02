@@ -69,7 +69,7 @@ export const DEFAULT_ROUTES = [
       {
         path: 'conversation/analytics',
         title: 'Analytics',
-        url: 'assets/svg/chatting.svg',
+        url: 'assets/svg/Analytics.svg',
       },
       {
         path: 'conversation/messages',

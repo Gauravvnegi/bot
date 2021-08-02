@@ -1,17 +1,14 @@
-import { SharedTokenInterceptor } from 'libs/shared/interceptors/src';
-import { Injectable } from '@angular/core';
 import {
+  HttpEvent,
+  HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpResponse,
 } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { isEmpty } from 'lodash';
-import { AuthService } from '../auth/services/auth.service';
-import { map, catchError, switchMap, filter, take } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
+import { AuthService } from '../auth/services/auth.service';
 
 @Injectable()
 export class RefreshTokenInterceptor implements HttpInterceptor {

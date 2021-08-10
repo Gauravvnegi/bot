@@ -17,6 +17,7 @@ import { SharedModule } from 'primeng/api';
 import { WhatsappMessageComponent } from './components/whatsapp-message/whatsapp-message.component';
 import { ContactSortFilterComponent } from './components/contact-sort-filter/contact-sort-filter.component';
 import { GuestDetailMapComponent } from './components/guest-detail-map/guest-detail-map.component';
+import { MediaChatComponent } from './components/media-chat/media-chat.component';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { GuestDetailMapComponent } from './components/guest-detail-map/guest-det
     WhatsappMessageComponent,
     ContactSortFilterComponent,
     GuestDetailMapComponent,
+    MediaChatComponent,
   ],
   providers: [MessageService],
 })

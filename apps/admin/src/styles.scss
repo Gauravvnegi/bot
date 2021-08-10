@@ -57,6 +57,25 @@
     brightness(99%) contrast(100%);
 }
 
+.image-popup {
+  .mat-dialog-container {
+    background: transparent !important;
+    box-shadow: none;
+    img {
+      max-height: 78vh;
+      max-width: 80vw;
+    }
+    // position: relative;
+    .close {
+      font-size: xx-large;
+      cursor: pointer;
+      position: absolute;
+      top: 70px;
+      right: 70px;
+    }
+  }
+}
+
 // dialouge - box
 
 // to-do change classes for multiple pop-up

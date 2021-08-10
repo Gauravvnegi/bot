@@ -23,6 +23,7 @@ export class Chat {
   text: string;
   timestamp: number;
   type: string;
+  mediaType: string;
   url: string;
   caption: string;
 
@@ -36,16 +37,26 @@ export class Chat {
         get(input, ['status']) ? get(input, ['status']) : 'sent'
       ),
       set({}, 'text', get(input, ['text'])),
+      set({}, 'mediaType', get(input, ['type'])),
       set({}, 'timestamp', get(input, ['timestamp'])),
-      set({}, 'type', get(input, ['type'])),
       set({}, 'url', get(input, ['url'])),
       set({}, 'caption', get(input, ['caption']))
     );
+    this.type = this.getType(input.type);
     return this;
   }
 
   getTime() {
     return moment(this.timestamp).format('h:mm a');
+  }
+
+  getType(type) {
+    if (type === undefined) return undefined;
+    else if (type.includes('image')) return 'image';
+    else if (type.includes('pdf')) return 'pdf';
+    else if (type.includes('video')) return 'video';
+    else if (type.includes('audio')) return 'audio';
+    else return type;
   }
 }
 

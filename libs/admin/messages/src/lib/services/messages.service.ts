@@ -95,4 +95,10 @@ export class MessageService extends ApiService {
   setWhatsappUnreadContactCount(value) {
     this.whatsappUnreadContacts$.next(value);
   }
+
+  downloadDocuments(url) {
+    return this.httpClient.get(url, {
+      responseType: 'blob',
+    });
+  }
 }

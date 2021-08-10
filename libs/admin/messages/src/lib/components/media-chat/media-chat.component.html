@@ -25,14 +25,34 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchDefault>
-    <div>
-      Documents
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid black;
+        background: #afabab;
+      "
+    >
+      <div *ngIf="message.caption">
+        {{ message.caption }}
+      </div>
+      <div
+        style="
+          padding: 10px;
+          border-radius: 50%;
+          background: cornsilk;
+          margin-left: 10px;
+          cursor: pointer;
+        "
+        (click)="downloadDoc()"
+      >
+        <img style="height: 20px;" src="assets/download-button.png" alt="" />
+      </div>
     </div>
   </ng-container>
 </ng-container>
-<div style="margin-top: 5px;" *ngIf="message.caption">
-  {{ message.caption }}
-</div>
 
 <ng-template #imageRef>
   <div class="close" (click)="closeModal()">&#10006;</div>

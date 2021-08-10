@@ -7,9 +7,13 @@ export class ModalService {
 
   openDialog(component, config?): MatDialogRef<any> {
     return this._dialog.open(component, {
-			width: config.width,
-			data: config.data,
+      width: config.width,
+      data: config.data,
     });
+  }
+
+  openDialogWithRef(templateRef, config?): MatDialogRef<any> {
+    return this._dialog.open(templateRef, config);
   }
 
   close() {

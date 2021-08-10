@@ -49,20 +49,14 @@
                 : 'left-message__text'
             "
           >
-            <ng-container *ngIf="message.text; else image">{{
+            <ng-container *ngIf="message.text; else media">{{
               message.text
             }}</ng-container>
-            <ng-template #image
-              ><div style="height: 280px;">
-                <img
-                  style="height: 100%; max-width: 100%;"
-                  [src]="message.url"
-                />
-              </div>
-              <div style="margin-top: 5px;" *ngIf="message.caption">
-                {{ message.caption }}
-              </div></ng-template
-            >
+            <ng-template #media>
+              <hospitality-bot-media-chat
+                [message]="message"
+              ></hospitality-bot-media-chat
+            ></ng-template>
           </div>
           <div class="message__time">{{ message.getTime() }}</div>
         </div>

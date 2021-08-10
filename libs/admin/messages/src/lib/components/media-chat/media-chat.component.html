@@ -1,0 +1,60 @@
+<ng-container [ngSwitch]="message.type">
+  <ng-container *ngSwitchCase="'image'">
+    <div style="height: 280px;">
+      <img
+        style="height: 100%; max-width: 100%; cursor: pointer;"
+        [src]="message.url"
+        (click)="openImage()"
+      />
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'video'">
+    <div style="height: 280px;">
+      <video style="height: 100%; max-width: 100%;" controls>
+        <source src="{{ message.url }}" [type]="message.mediaType" />
+        Your browser does not support HTML5 video.
+      </video>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'audio'">
+    <div>
+      <audio controls>
+        <source src="{{ message.url }}" [type]="message.mediaType" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid black;
+        background: #afabab;
+      "
+    >
+      <div *ngIf="message.caption">
+        {{ message.caption }}
+      </div>
+      <div
+        style="
+          padding: 10px;
+          border-radius: 50%;
+          background: cornsilk;
+          margin-left: 10px;
+          cursor: pointer;
+        "
+        (click)="downloadDoc()"
+      >
+        <img style="height: 20px;" src="assets/download-button.png" alt="" />
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #imageRef>
+  <div class="close" (click)="closeModal()">&#10006;</div>
+  <img style="height: 100%; max-width: 100%;" [src]="message.url" />
+</ng-template>

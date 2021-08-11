@@ -18,6 +18,7 @@ import { WhatsappMessageComponent } from './components/whatsapp-message/whatsapp
 import { ContactSortFilterComponent } from './components/contact-sort-filter/contact-sort-filter.component';
 import { GuestDetailMapComponent } from './components/guest-detail-map/guest-detail-map.component';
 import { MediaChatComponent } from './components/media-chat/media-chat.component';
+import { LinkDetector } from './pipes/linkDetector.pipe';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { MediaChatComponent } from './components/media-chat/media-chat.component
     ContactSortFilterComponent,
     GuestDetailMapComponent,
     MediaChatComponent,
+    LinkDetector,
   ],
   providers: [MessageService],
 })

@@ -126,10 +126,16 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   logoutUser() {
     this._authService
       .logout(this._userDetailService.getLoggedInUserid())
-      .subscribe((response) => {
-        this._authService.clearToken();
-        this._router.navigate(['/auth']);
-      });
+      .subscribe(
+        (response) => {
+          this._authService.clearToken();
+          this._router.navigate(['/auth']);
+        },
+        (error) => {
+          this._authService.clearToken();
+          this._router.navigate(['/auth']);
+        }
+      );
   }
 
   updateAccessToken(tokenConfig) {

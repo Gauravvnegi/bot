@@ -7,6 +7,27 @@
         (click)="openImage()"
       />
     </div>
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+      "
+    >
+      <div>{{ message.fileName }}</div>
+      <div
+        style="
+          padding: 10px;
+          border-radius: 50%;
+          background: cornsilk;
+          cursor: pointer;
+        "
+        (click)="downloadDoc()"
+      >
+        <img src="assets/svg/Download2.svg" alt="" />
+      </div>
+    </div>
   </ng-container>
   <ng-container *ngSwitchCase="'video'">
     <div style="height: 280px;">
@@ -19,6 +40,27 @@
         Your browser does not support HTML5 video.
       </video>
     </div>
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+      "
+    >
+      <div>{{ message.fileName }}</div>
+      <div
+        style="
+          padding: 10px;
+          border-radius: 50%;
+          background: cornsilk;
+          cursor: pointer;
+        "
+        (click)="downloadDoc()"
+      >
+        <img src="assets/svg/Download2.svg" alt="" />
+      </div>
+    </div>
   </ng-container>
   <ng-container *ngSwitchCase="'audio'">
     <div>
@@ -26,6 +68,27 @@
         <source src="{{ message.url }}" [type]="message.mediaType" />
         Your browser does not support the audio element.
       </audio>
+    </div>
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+      "
+    >
+      <div>{{ message.fileName }}</div>
+      <div
+        style="
+          padding: 10px;
+          border-radius: 50%;
+          background: cornsilk;
+          cursor: pointer;
+        "
+        (click)="downloadDoc()"
+      >
+        <img src="assets/svg/Download2.svg" alt="" />
+      </div>
     </div>
   </ng-container>
   <ng-container *ngSwitchDefault>
@@ -57,6 +120,11 @@
     </div>
   </ng-container>
 </ng-container>
+<mat-progress-bar
+  *ngIf="isDownloading"
+  mode="buffer"
+  style="margin-top: 5px;"
+></mat-progress-bar>
 
 <ng-template #imageRef>
   <div class="close" (click)="closeModal()">&#10006;</div>

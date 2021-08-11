@@ -26,6 +26,7 @@ export class Chat {
   mediaType: string;
   url: string;
   caption: string;
+  fileName: string;
 
   deserialize(input) {
     Object.assign(
@@ -43,6 +44,7 @@ export class Chat {
       set({}, 'caption', get(input, ['caption']))
     );
     this.type = this.getType(input.type);
+    this.fileName = this.getFileName(input.type);
     return this;
   }
 
@@ -57,6 +59,18 @@ export class Chat {
     else if (type.includes('video')) return 'video';
     else if (type.includes('audio')) return 'audio';
     else return type;
+  }
+
+  getFileName(type) {
+    if (type === undefined) return undefined;
+    else if (type.includes('image'))
+      return `image_${moment(this.timestamp)}.${type.split('/')[1]}`;
+    else if (type.includes('pdf'))
+      return `pdf_${moment(this.timestamp)}.${type.split('/')[1]}`;
+    else if (type.includes('video'))
+      return `video_${moment(this.timestamp)}.${type.split('/')[1]}`;
+    else if (type.includes('audio'))
+      return `audio_${moment(this.timestamp)}.${type.split('/')[1]}`;
   }
 }
 

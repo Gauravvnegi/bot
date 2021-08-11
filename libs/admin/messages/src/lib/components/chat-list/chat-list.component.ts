@@ -145,11 +145,17 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.messageService.setWhatsappUnreadContactCount(
             this.chatList.unreadContacts
           );
+          if (this.selected) this.markChatAsRead(this.selected);
         })
     );
   }
 
   onChatSelect(value) {
+    this.markChatAsRead(value);
+    this.selectedChat.emit({ value: value });
+  }
+
+  markChatAsRead(value) {
     const index = this.chatList.contacts.findIndex(
       (obj) => obj.phone == value.phone
     );
@@ -164,7 +170,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
           );
         });
     }
-    this.selectedChat.emit({ value: value });
   }
 
   @HostListener('window:scroll', ['$event'])

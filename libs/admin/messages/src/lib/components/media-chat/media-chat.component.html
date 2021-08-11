@@ -10,7 +10,11 @@
   </ng-container>
   <ng-container *ngSwitchCase="'video'">
     <div style="height: 280px;">
-      <video style="height: 100%; max-width: 100%;" controls>
+      <video
+        style="height: 100%; max-width: 100%;"
+        controls
+        controlsList="nodownload"
+      >
         <source src="{{ message.url }}" [type]="message.mediaType" />
         Your browser does not support HTML5 video.
       </video>
@@ -18,7 +22,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'audio'">
     <div>
-      <audio controls>
+      <audio controls controlsList="nodownload">
         <source src="{{ message.url }}" [type]="message.mediaType" />
         Your browser does not support the audio element.
       </audio>

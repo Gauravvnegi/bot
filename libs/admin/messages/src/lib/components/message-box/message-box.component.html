@@ -1,0 +1,30 @@
+<div
+  class="chatRecieve"
+  *ngIf="
+    chatFG && this.chatList.receiver[selectedChat.receiverId]?.enableSend;
+    else noSend
+  "
+>
+  <div class="chatFG" [formGroup]="chatFG">
+    <div class="textWrapper">
+      <input
+        matInput
+        type="text"
+        class="message-field-input"
+        placeholder="Type Message"
+        formControlName="message"
+        (keyup)="checkForEnterKey($event)"
+      />
+      <img src="assets/svg/smile.svg" class="smileImg" />
+    </div>
+  </div>
+  <div style="cursor: pointer;" (click)="sendMessage()">
+    <img src="assets/svg/send-message.svg" />
+  </div>
+</div>
+<ng-template #noSend>
+  <div class="whatsAppRule">
+    As per WhatsApp's rules, you can only respond to a user within 24 hours of
+    their messages.
+  </div>
+</ng-template>

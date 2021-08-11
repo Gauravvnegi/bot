@@ -50,7 +50,6 @@ export class ChatComponent
     private snackBarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
-    private dateService: DateService,
     private _firebaseMessagingService: FirebaseMessagingService
   ) {}
 
@@ -199,40 +198,17 @@ export class ChatComponent
     this.chatList.receiver[response.receiver.receiverId] = this.chat.receiver;
   }
 
-  sendMessage(): void {
-    if (this.chatFG.invalid) {
-      this.chatFG.markAsTouched();
-      this.snackBarService.openSnackBarAsText('Please enter a message');
-      return;
-    }
-
-    const values = this.chatFG.getRawValue();
-    values.receiverId = this.selectedChat.phone;
-    const timestamp = this.dateService.getCurrentTimeStamp();
-    this.updateMessageToChatList(timestamp, 'unsend');
-    this.scrollToBottom();
-
-    this.$subscription.add(
-      this.messageService.sendMessage(this.hotelId, values).subscribe(
-        (response) => {
-          this.chatFG.get('message').setValue('');
-          this.updateMessageToChatList(timestamp, 'sent', true);
-        },
-        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
-      )
-    );
-  }
-
-  updateMessageToChatList(timestamp, status, update = false) {
+  updateMessageToChatList(message, timestamp, status, update = false) {
     let data;
     let messages = this.getMessagesFromTimeList();
     if (!update) {
       data = new Chat().deserialize({
         direction: 'OUTBOUND',
-        text: this.chatFG.get('message').value,
+        text: message,
         timestamp,
         status,
       });
+      this.limit += 1;
       this.chatFG.get('message').setValue('');
       messages.push(data);
     } else {
@@ -245,6 +221,7 @@ export class ChatComponent
     this.chatList.messages[
       this.selectedChat.receiverId
     ] = this.messageService.filterMessagesByDate(messages);
+    this.scrollToBottom();
   }
 
   getMessagesFromTimeList() {
@@ -258,12 +235,6 @@ export class ChatComponent
       }
     );
     return messages;
-  }
-
-  checkForEnterKey(event) {
-    if (event.keyCode === 13) {
-      this.sendMessage();
-    }
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -303,5 +274,15 @@ export class ChatComponent
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  handleSentMessage(event) {
+    this.scrollToBottom();
+    this.updateMessageToChatList(
+      event.message,
+      event.timestamp,
+      event.status,
+      event.update
+    );
   }
 }

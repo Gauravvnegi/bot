@@ -7,7 +7,7 @@ export class LinkDetector implements PipeTransform {
   transform(value: string) {
     return value.replace(urlRegex, function (url) {
       var hyperlink = url;
-      if (!hyperlink.match('^https?://')) {
+      if (!(hyperlink.match('^https?://') || hyperlink.match('^http?://'))) {
         hyperlink = 'http://' + hyperlink;
       }
       return (

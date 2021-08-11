@@ -60,6 +60,10 @@
     border-radius: $border-radius-smaller;
     height: calc(100vh - 235px);
   }
+  @media only screen and (max-width: $S) {
+    overflow: inherit;
+    overflow-x: inherit;
+  }
 }
 
 ::ng-deep .mat {

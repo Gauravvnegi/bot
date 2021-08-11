@@ -1,5 +1,8 @@
 @import 'temp000001';
 
+:host ::ng-deep .container{
+  height: inherit;
+}
 :host ::ng-deep .mat-step-header .mat-step-icon {
   background: var(--stepper-background-color, $stepper-background-color);
 }

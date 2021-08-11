@@ -70,7 +70,22 @@ mat-icon {
 :host ::ng-deep .mat-form-field.mat-focused .material-icons{
   color: $primary-blue;
 }
+::ng-deep .country-id{
 
+      .required{
+        display: none;
+      }
+    
+}
+::ng-deep .travelling__info{
+  .travelling__info--block{
+    justify-content: end;
+    .travelling__info--block-item{
+      margin-right: 60px;
+    }
+  }
+
+}
 // :host ::ng-deep .mat-form-field.mat-form-field-invalid .material-icons{
 //   color: #f44336;
 // }

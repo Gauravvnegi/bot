@@ -1,5 +1,7 @@
 @import 'temp000001';
-
+.container{
+  height: inherit;
+}
 .documentDetaiBottomWrapper{
   min-height: 289px;
   display: flex;

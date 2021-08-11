@@ -49,9 +49,9 @@
                 : 'left-message__text'
             "
           >
-            <ng-container *ngIf="message.text; else media">{{
-              message.text
-            }}</ng-container>
+            <ng-container *ngIf="message.text; else media">
+              <p [innerHTML]="message.text | linkDetector"></p>
+            </ng-container>
             <ng-template #media>
               <hospitality-bot-media-chat
                 [message]="message"

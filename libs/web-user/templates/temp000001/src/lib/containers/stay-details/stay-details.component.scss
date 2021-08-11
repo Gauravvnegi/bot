@@ -121,6 +121,7 @@
 
 :host ::ng-deep .mat-button-wrapper > svg {
   width: 1.5em !important;
+  display: none;
 }
 
 :host ::ng-deep .mat-select-arrow {

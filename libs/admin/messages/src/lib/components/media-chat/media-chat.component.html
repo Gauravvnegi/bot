@@ -1,17 +1,17 @@
 <ng-container [ngSwitch]="message.type">
   <ng-container *ngSwitchCase="'image'">
-    <div style="height: 280px;">
+    <div class="media__chat">
       <img
-        style="height: 100%; max-width: 100%; cursor: pointer;"
+        class="media__chat__img"
         [src]="message.url"
         (click)="openImage()"
       />
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'video'">
-    <div style="height: 280px;">
+    <div class="media__chat__video__chat">
       <video
-        style="height: 100%; max-width: 100%;"
+        class="media__chat__video__chat__vid"
         controls
         controlsList="nodownload"
       >
@@ -29,30 +29,15 @@
     </div>
   </ng-container>
   <ng-container *ngSwitchDefault>
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid black;
-        background: #afabab;
-      "
-    >
+    <div class="media__chat__download">
       <div *ngIf="message.caption">
         {{ message.caption }}
       </div>
       <div
-        style="
-          padding: 10px;
-          border-radius: 50%;
-          background: cornsilk;
-          margin-left: 10px;
-          cursor: pointer;
-        "
+        class="media__chat__download__btn"
         (click)="downloadDoc()"
       >
-        <img style="height: 20px;" src="assets/download-button.png" alt="" />
+        <img src="assets/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -60,5 +45,5 @@
 
 <ng-template #imageRef>
   <div class="close" (click)="closeModal()">&#10006;</div>
-  <img style="height: 100%; max-width: 100%;" [src]="message.url" />
+  <img class="message-url" [src]="message.url" />
 </ng-template>

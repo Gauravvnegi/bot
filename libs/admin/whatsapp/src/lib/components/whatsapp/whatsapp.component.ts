@@ -3,11 +3,11 @@ import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/
 import { IContact } from '../../models/message.model';
 
 @Component({
-  selector: 'hospitality-bot-whatsapp-message',
-  templateUrl: './whatsapp-message.component.html',
-  styleUrls: ['./whatsapp-message.component.scss'],
+  selector: 'hospitality-bot-whatsapp',
+  templateUrl: './whatsapp.component.html',
+  styleUrls: ['./whatsapp.component.scss'],
 })
-export class WhatsappMessageComponent implements OnInit {
+export class WhatsappComponent implements OnInit {
   guestInfoEnable = false;
   guestData: IContact;
   refreshData = false;

@@ -14,7 +14,7 @@ import { GuestRequestsComponent } from './components/guest-requests/guest-reques
 import { GuestTicketsComponent } from './components/guest-tickets/guest-tickets.component';
 import { MediaChatComponent } from './components/media-chat/media-chat.component';
 import { MessageBoxComponent } from './components/message-box/message-box.component';
-import { WhatsappMessageComponent } from './components/whatsapp-message/whatsapp-message.component';
+import { WhatsappComponent } from './components/whatsapp/whatsapp.component';
 import { MessageService } from 'primeng/api';
 import { LinkDetector } from 'libs/shared/pipes/linkDetector.pipe';
 
@@ -34,7 +34,7 @@ import { LinkDetector } from 'libs/shared/pipes/linkDetector.pipe';
     GuestBookingInfoComponent,
     GuestTicketsComponent,
     GuestRequestsComponent,
-    WhatsappMessageComponent,
+    WhatsappComponent,
     ContactSortFilterComponent,
     GuestDetailMapComponent,
     MediaChatComponent,
@@ -49,7 +49,7 @@ import { LinkDetector } from 'libs/shared/pipes/linkDetector.pipe';
     GuestBookingInfoComponent,
     GuestTicketsComponent,
     GuestRequestsComponent,
-    WhatsappMessageComponent,
+    WhatsappComponent,
     ContactSortFilterComponent,
     GuestDetailMapComponent,
     MediaChatComponent,

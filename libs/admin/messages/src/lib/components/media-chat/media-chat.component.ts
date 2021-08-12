@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { IChat } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
@@ -19,10 +20,12 @@ export class MediaChatComponent implements OnInit {
   @ViewChild('imageRef') imageRef: TemplateRef<any>;
   @Input() message: IChat;
   dialogRef: MatDialogRef<any>;
+  isDownloading = false;
 
   constructor(
     private modalService: ModalService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {}
@@ -41,15 +44,21 @@ export class MediaChatComponent implements OnInit {
   }
 
   downloadDoc() {
-    this.messageService
-      .downloadDocuments(this.message.url)
-      .subscribe((blob) => {
+    this.isDownloading = true;
+    this.messageService.downloadDocuments(this.message.url).subscribe(
+      (blob) => {
         const a = document.createElement('a');
         const objectUrl = URL.createObjectURL(blob);
         a.href = objectUrl;
-        a.download = this.message.caption;
+        a.download = this.message.fileName || this.message.caption;
         a.click();
         URL.revokeObjectURL(objectUrl);
-      });
+        this.isDownloading = false;
+      },
+      (error) => {
+        this.snackbarService.openSnackBarAsText('Unable to download file');
+        this.isDownloading = false;
+      }
+    );
   }
 }

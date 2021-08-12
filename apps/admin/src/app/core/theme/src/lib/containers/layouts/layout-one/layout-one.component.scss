@@ -66,6 +66,7 @@
 .main-panel {
   width: $full;
   flex: 1;
+  overflow-x: hidden;
   &--header {
     padding: 6px $padding10;
     position: relative;

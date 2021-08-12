@@ -19,6 +19,7 @@ import { ContactSortFilterComponent } from './components/contact-sort-filter/con
 import { GuestDetailMapComponent } from './components/guest-detail-map/guest-detail-map.component';
 import { MediaChatComponent } from './components/media-chat/media-chat.component';
 import { LinkDetector } from './pipes/linkDetector.pipe';
+import { MessageBoxComponent } from './components/message-box/message-box.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
     GuestDetailMapComponent,
     MediaChatComponent,
     LinkDetector,
+    MessageBoxComponent,
   ],
   providers: [MessageService],
 })

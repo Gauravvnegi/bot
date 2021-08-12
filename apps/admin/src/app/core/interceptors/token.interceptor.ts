@@ -20,7 +20,11 @@ export class TokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (this._authService.isAuthenticated() && !req.url.includes('refresh')) {
+    if (
+      this._authService.isAuthenticated() &&
+      !req.url.includes('refresh') &&
+      req.url.includes(this._authService.getBaseUrl())
+    ) {
       console.log('authenticated user so adding token');
       const modifiedRequest = req.clone({
         setHeaders: {

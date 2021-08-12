@@ -240,7 +240,6 @@
               "apps/admin/src/favicon.ico",
               "apps/admin/src/assets",
               "apps/admin/src/firebase-messaging-sw.js"
-              // "manifest.json"
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
@@ -1222,6 +1221,38 @@
             "tsConfig": "libs/admin/analytics/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/analytics/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-whatsapp": {
+      "projectType": "library",
+      "root": "libs/admin/whatsapp",
+      "sourceRoot": "libs/admin/whatsapp/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/whatsapp/tsconfig.lib.json",
+              "libs/admin/whatsapp/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/whatsapp/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/whatsapp/jest.config.js",
+            "tsConfig": "libs/admin/whatsapp/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/whatsapp/src/test-setup.ts"
           }
         }
       },

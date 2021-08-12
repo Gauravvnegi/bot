@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageTabService } from 'apps/admin/src/app/core/theme/src/lib/services/messages-tab.service';
-import { MessageService } from '../../services/messages.service';
+import { MessageService } from 'libs/admin/whatsapp/src/lib/services/messages.service';
 
 @Component({
   selector: 'hospitality-bot-messages',

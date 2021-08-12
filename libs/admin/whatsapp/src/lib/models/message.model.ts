@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+
 export class Chats {
   messages: IChat[];
   receiver: IContact;

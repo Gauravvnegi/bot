@@ -107,6 +107,9 @@
     },
     "admin-analytics": {
       "tags": []
+    },
+    "admin-whatsapp": {
+      "tags": []
     }
   }
 }

@@ -1,0 +1,37 @@
+.media__chat{
+    height: 280px;
+    &__img{
+        height: 100%; 
+        max-width: 100%; 
+        cursor: pointer;
+    }
+    &__video__chat{
+        height: 280px;
+        &__vid{
+            height: 100%; 
+            max-width: 100%;
+        }
+    }
+    &__download{
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid black;
+        background: #afabab;
+        &__btn{
+            padding: 10px;
+          border-radius: 50%;
+          background: cornsilk;
+          margin-left: 10px;
+          cursor: pointer;
+          img{
+            height: 20px;
+          }
+        }
+    }
+}
+.message-url{
+    height: 100%; 
+    max-width: 100%;
+}

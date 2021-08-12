@@ -6,21 +6,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.chatFG {
-  height: 100%;
-  width: 100%;
-}
-.textWrapper {
-  position: relative;
-  height: 100%;
-  width: calc(100% - 10px);
-}
-.smileImg {
-  position: absolute;
-  right: 10px;
-  top: 48%;
-  transform: translateY(-50%);
+  .chatFG {
+    height: 100%;
+    width: 100%;
+    .textWrapper {
+      position: relative;
+      height: 100%;
+      width: calc(100% - 10px);
+      .message-field-input {
+        padding-left: 20px;
+        background: #f2f6f8 0% 0% no-repeat padding-box;
+        border: 1px solid #d5e0e6;
+        border-radius: 20px;
+        opacity: 1;
+        height: 100%;
+        width: 100%;
+        outline: none;
+      } 
+      .smileImg {
+        position: absolute;
+        right: 10px;
+        top: 48%;
+        transform: translateY(-50%);
+      }
+    }
+
+  }
+  .cursor{
+    cursor: pointer;
+  }
 }
 .whatsAppRule {
   height: 62px;
@@ -35,13 +49,3 @@
   color: #fb3d4e;
 }
 
-.message-field-input {
-  padding-left: 20px;
-  background: #f2f6f8 0% 0% no-repeat padding-box;
-  border: 1px solid #d5e0e6;
-  border-radius: 20px;
-  opacity: 1;
-  height: 100%;
-  width: 100%;
-  outline: none;
-}

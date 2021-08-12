@@ -64,13 +64,21 @@ export class Chat {
   getFileName(type) {
     if (type === undefined) return undefined;
     else if (type.includes('image'))
-      return `image_${moment(this.timestamp)}.${type.split('/')[1]}`;
+      return `image_${moment(this.timestamp)}.${
+        type.split('/')[1].split(';')[0]
+      }`;
     else if (type.includes('pdf'))
-      return `pdf_${moment(this.timestamp)}.${type.split('/')[1]}`;
+      return `pdf_${moment(this.timestamp)}.${
+        type.split('/')[1].split(';')[0]
+      }`;
     else if (type.includes('video'))
-      return `video_${moment(this.timestamp)}.${type.split('/')[1]}`;
+      return `video_${moment(this.timestamp)}.${
+        type.split('/')[1].split(';')[0]
+      }`;
     else if (type.includes('audio'))
-      return `audio_${moment(this.timestamp)}.${type.split('/')[1]}`;
+      return `audio_${moment(this.timestamp)}.${
+        type.split('/')[1].split(';')[0]
+      }`;
   }
 }
 

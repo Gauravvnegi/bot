@@ -1,4 +1,4 @@
-<div style="height: 100%;">
+<div class="chat-height">
   <div class="guestInfoOpen" (click)="openGuestInfo()">
     <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
       <img
@@ -27,7 +27,7 @@
       </div>
       <div
         *ngFor="let message of chatList.messages[selectedChat.receiverId][date]"
-        style="display: flex;"
+        class="d-flex"
         [ngStyle]="
           message.direction === 'OUTBOUND'
             ? { 'justify-content': 'flex-end' }

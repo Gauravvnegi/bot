@@ -7,25 +7,13 @@
         (click)="openImage()"
       />
     </div>
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-      "
-    >
-      <div style="margin-right: 5px;">{{ message.fileName }}</div>
+    <div class="media__chat__download__link" >
+      <div class="media__chat__download__link__filename">{{ message.fileName }}</div>
       <div
-        style="
-          padding: 5px;
-          border-radius: 50%;
-          background: cornsilk;
-          cursor: pointer;
-        "
+        class="media__chat__download__link__btn"
         (click)="downloadDoc()"
       >
-        <img style="height: 15px;" src="assets/download-button.png" alt="" />
+        <img src="assets/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -40,25 +28,13 @@
         Your browser does not support HTML5 video.
       </video>
     </div>
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-      "
-    >
-      <div style="margin-right: 5px;">{{ message.fileName }}</div>
-      <div
-        style="
-          padding: 5px;
-          border-radius: 50%;
-          background: cornsilk;
-          cursor: pointer;
-        "
+    <div class="media__chat__video__download">
+      <div class="media__chat__video__download__filename">{{ message.fileName }}</div>
+      <div 
+        class="media__chat__video__download__btn"
         (click)="downloadDoc()"
       >
-        <img style="height: 15px;" src="assets/download-button.png" alt="" />
+        <img src="assets/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -69,25 +45,13 @@
         Your browser does not support the audio element.
       </audio>
     </div>
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 10px 0;
-      "
-    >
-      <div style="margin-right: 5px;">{{ message.fileName }}</div>
+    <div class="media__chat__file">
+      <div class="media__chat__file__filename">{{ message.fileName }}</div>
       <div
-        style="
-          padding: 5px;
-          border-radius: 50%;
-          background: cornsilk;
-          cursor: pointer;
-        "
+        class="media__chat__file__download"
         (click)="downloadDoc()"
       >
-        <img style="height: 15px;" src="assets/download-button.png" alt="" />
+        <img src="assets/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -108,7 +72,7 @@
 <mat-progress-bar
   *ngIf="isDownloading"
   mode="buffer"
-  style="margin-top: 5px;"
+  class="prograsses"
 ></mat-progress-bar>
 
 <ng-template #imageRef>

@@ -12,6 +12,42 @@
             max-width: 100%;
         }
     }
+    &__video__download{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        &__filename{
+            margin-right: 5px;
+        }
+        &__btn{
+          padding: 5px;
+          border-radius: 50%;
+          background: cornsilk;
+          cursor: pointer;
+          img{
+            height: 15px;
+          }
+        }
+    }
+    &__file{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        &__filename{
+            margin-right: 5px;
+        }
+        &__download{
+            padding: 5px;
+          border-radius: 50%;
+          background: cornsilk;
+          cursor: pointer;
+          img{
+            height: 15px;
+          }
+        }
+    }
     &__download{
         display: flex;
         align-items: center;
@@ -31,7 +67,28 @@
         }
     }
 }
+.media__chat__download__link{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    &__filename{
+        margin-right: 5px;
+    }
+    &__btn{
+        padding: 5px;
+        border-radius: 50%;
+        background: cornsilk;
+        cursor: pointer;
+        img{
+            height: 15px;
+        }
+    }
+}
 .message-url{
     height: 100%; 
     max-width: 100%;
+}
+.prograsses{
+    margin-top: 5px;
 }

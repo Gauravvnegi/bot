@@ -30,6 +30,7 @@ import { Router } from '@angular/router';
 import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -418,27 +419,46 @@ export class DetailsComponent implements OnInit {
           this._snackBarService.openSnackBarAsText(error.message);
         }
       );
-    // let data = {
-    //   journey: 'CHECKIN',
-    //   state: status,
-    //   remarks: '',
-    // };
+  }
 
-    // this._reservationService
-    //   .updateJourneyStatus(
-    //     this.reservationDetailsFG.get('bookingId').value,
-    //     data
-    //   )
-    //   .subscribe(
-    //     (res) => {
-    //       this._snackBarService.openSnackBarAsText('Checkin completed', '', {
-    //         panelClass: 'success',
-    //       });
-    //     },
-    //     ({ error }) => {
-    //       this._snackBarService.openSnackBarAsText(error.message);
-    //     }
-    //   );
+  manualCheckin() {
+    const config = {
+      title: 'Manual Checkin',
+      description: '',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '450px';
+    const manualCheckinCompRef = this._modal.openDialog(
+      ManualCheckinComponent,
+      dialogConfig
+    );
+
+    manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
+    manualCheckinCompRef.componentInstance.config = config;
+
+    manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+      if (res?.status) {
+        this._reservationService
+          .manualCheckin(
+            this.reservationDetailsFG.get('bookingId').value,
+            res.data
+          )
+          .subscribe(
+            (response) => {
+              this._snackBarService.openSnackBarAsText(
+                'Guest Manually Checked In',
+                '',
+                { panelClass: 'success' }
+              );
+              manualCheckinCompRef.close();
+              this.closeDetails();
+            },
+            ({ error }) =>
+              this._snackBarService.openSnackBarAsText(error.message)
+          );
+      } else res && manualCheckinCompRef.close();
+    });
   }
 
   openJourneyDialog(config) {

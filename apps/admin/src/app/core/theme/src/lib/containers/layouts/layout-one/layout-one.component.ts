@@ -232,11 +232,18 @@ export class LayoutOneComponent implements OnInit {
   logoutUser() {
     this._authService
       .logout(this._userDetailService.getLoggedInUserid())
-      .subscribe((response) => {
-        location.reload();
-      });
-    this._authService.clearToken();
-    this._router.navigate(['/auth']);
+      .subscribe(
+        (response) => {
+          this._authService.clearToken();
+          this._router.navigate(['/auth']);
+          location.reload();
+        },
+        (error) => {
+          this._authService.clearToken();
+          this._router.navigate(['/auth']);
+          location.reload();
+        }
+      );
   }
 
   ngOnDestroy() {

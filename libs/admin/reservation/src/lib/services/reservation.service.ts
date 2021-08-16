@@ -71,4 +71,11 @@ export class ReservationService extends ApiService {
       config
     );
   }
+
+  manualCheckin(reservationId, data) {
+    return this.post(
+      `/api/v1/reservation/${reservationId}/manual-checkin`,
+      data
+    );
+  }
 }

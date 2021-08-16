@@ -1,0 +1,74 @@
+<div class="popup-wrapper">
+  <div class="header">
+    <div class="title-container">
+      <mat-icon class="warning">report_problem</mat-icon>
+      <h1 class="heading">{{ config.title }}</h1>
+    </div>
+    <!-- <mat-icon class="clear">clear</mat-icon> -->
+  </div>
+  <div class="content">
+    <p>{{ config.description }}</p>
+    <p>{{ config.question }}</p>
+
+    <div class="feild" [formGroup]="checkinFG">
+      <mat-label class="mat-label">Phone No. :</mat-label>
+      <mat-form-field class="phone-no-dropdown">
+        <mat-select
+          formControlName="cc"
+          (selectionChange)="change($event)"
+          (openedChange)="openedChange($event)"
+        >
+          <!-- <option value="" selected>None</option> -->
+          <ng-container *ngIf="!isOptionsOpenedChanged; else optionsChanged">
+            <mat-option
+              *ngFor="let country of countries; trackBy: trackByFn"
+              [value]="country.value"
+              >{{ country.value }}</mat-option
+            >
+          </ng-container>
+
+          <ng-template #optionsChanged>
+            <ng-container *ngIf="!(onOpenedChange | async); else opendOptions">
+              <mat-option
+                *ngFor="let country of countries; trackBy: trackByFn"
+                [value]="country.value"
+                >{{ country.value }}</mat-option
+              >
+            </ng-container>
+
+            <ng-template #opendOptions>
+              <mat-option
+                *ngFor="let country of countries; trackBy: trackByFn"
+                [value]="country.value"
+                >{{ country.label }}</mat-option
+              >
+            </ng-template>
+          </ng-template>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="phone-no-feild">
+        <input
+          formControlName="phoneNumber"
+          class="input-feild"
+          type="text"
+          placeholder=""
+          matInput
+          spellcheck="false"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- <mat-form-field>
+      <mat-label>Favorite Animal</mat-label>
+      <input matInput [(ngModel)]="data.animal">
+    </mat-form-field> -->
+    <div class="button-wrapper">
+      <button class="cancel" mat-button (click)="onCancel()">
+        {{ config.buttons.cancel.label }}
+      </button>
+      <button class="accept" mat-button cdkFocusInitial (click)="onAccept()">
+        {{ config.buttons.accept.label }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -20,6 +20,7 @@ import { ButtonDependencyDirective } from './directives/button-dependency.direct
 import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
 import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
+import { ManualCheckinComponent } from './components/manual-checkin/manual-checkin.component';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -32,7 +33,7 @@ export const adminReservationRoutes: Route[] = [];
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
-    AdminNotificationModule
+    AdminNotificationModule,
   ],
   providers: [ReservationService, AdminDetailsService],
   declarations: [
@@ -47,6 +48,7 @@ export const adminReservationRoutes: Route[] = [];
     JourneyDialogComponent,
     RequestsTableComponent,
     DepositRuleComponent,
+    ManualCheckinComponent,
   ],
   exports: [
     DetailsComponent,

@@ -4,10 +4,14 @@ import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IChat } from '../models/message.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MessageService extends ApiService {
   refreshData$ = new BehaviorSubject(false);
   private whatsappUnreadContacts$ = new BehaviorSubject(0);
+  chatList = {
+    messages: {},
+    receiver: {},
+  };
   getChatList(hotelId: string, queryObj) {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/${queryObj}`);
   }

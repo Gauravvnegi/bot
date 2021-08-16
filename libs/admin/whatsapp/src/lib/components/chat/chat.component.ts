@@ -40,10 +40,7 @@ export class ChatComponent
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
-  chatList = {
-    messages: {},
-    receiver: {},
-  };
+
   constructor(
     private messageService: MessageService,
     private fb: FormBuilder,
@@ -68,7 +65,10 @@ export class ChatComponent
   }
 
   ngOnChanges(): void {
-    if (!this.chatList.messages[this.selectedChat.receiverId]) {
+    if (
+      !this.chatList.messages[this.selectedChat.receiverId] ||
+      this.selectedChat.unreadCount
+    ) {
       this.getChat({ offset: 0, limit: 20 });
     } else {
       const chatLength = this.getMessagesFromTimeList().length;
@@ -141,7 +141,7 @@ export class ChatComponent
   }
 
   openGuestInfo(): void {
-    this.guestInfo.emit({ openGuestInfo: true, data: this.chat.receiver });
+    this.guestInfo.emit({ openGuestInfo: true });
   }
 
   getChat(
@@ -284,5 +284,9 @@ export class ChatComponent
       event.status,
       event.update
     );
+  }
+
+  get chatList() {
+    return this.messageService.chatList;
   }
 }

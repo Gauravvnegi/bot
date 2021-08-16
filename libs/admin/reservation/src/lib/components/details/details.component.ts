@@ -439,6 +439,7 @@ export class DetailsComponent implements OnInit {
 
     manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
       if (res?.status) {
+        if (res.data.phoneNumber.length === 0) res.data.cc = '';
         this._reservationService
           .manualCheckin(
             this.reservationDetailsFG.get('bookingId').value,

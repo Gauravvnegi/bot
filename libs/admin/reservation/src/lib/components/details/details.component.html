@@ -379,7 +379,11 @@
               </button>
             </ng-container>
           </ng-container>
-          <button (click)="manualCheckin()" class="button">
+          <button
+            (click)="manualCheckin()"
+            class="button"
+            *ngIf="details.currentJourneyDetails.status !== 'COMPLETED'"
+          >
             Manual Checkin
           </button>
         </ng-template>

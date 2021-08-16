@@ -141,7 +141,7 @@ export class ChatComponent
   }
 
   openGuestInfo(): void {
-    this.guestInfo.emit({ openGuestInfo: true, data: this.chat.receiver });
+    this.guestInfo.emit({ openGuestInfo: true });
   }
 
   getChat(

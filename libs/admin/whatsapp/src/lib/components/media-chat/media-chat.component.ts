@@ -52,6 +52,7 @@ export class MediaChatComponent implements OnInit {
         a.href = objectUrl;
         a.download = this.message.fileName || this.message.caption;
         a.click();
+        a.remove();
         URL.revokeObjectURL(objectUrl);
         this.isDownloading = false;
       },

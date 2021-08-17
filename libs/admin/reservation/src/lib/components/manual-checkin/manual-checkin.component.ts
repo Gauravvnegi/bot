@@ -58,9 +58,9 @@ export class ManualCheckinComponent implements OnInit {
 
   initForm() {
     this.checkinFG = this._fb.group({
-      cc: [this.guest.countryCode],
+      cc: [this.guest.countryCode || ''],
       phoneNumber: [
-        this.guest.phoneNumber,
+        this.guest.phoneNumber || '',
         Validators.pattern(Regex.NUMBER_REGEX),
       ],
     });

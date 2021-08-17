@@ -63,10 +63,22 @@
       <input matInput [(ngModel)]="data.animal">
     </mat-form-field> -->
     <div class="button-wrapper">
-      <button class="cancel" mat-button (click)="onCancel()">
+      <button
+        class="cancel"
+        mat-button
+        (click)="onCancel()"
+        [style.pointerEvents]="loading ? 'none' : 'auto'"
+      >
         {{ config.buttons.cancel.label }}
       </button>
-      <button class="accept" mat-button cdkFocusInitial (click)="onAccept()">
+      <button
+        class="accept"
+        mat-button
+        cdkFocusInitial
+        (click)="onAccept()"
+        [style.pointerEvents]="loading ? 'none' : 'auto'"
+      >
+        <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>
         {{ config.buttons.accept.label }}
       </button>
     </div>

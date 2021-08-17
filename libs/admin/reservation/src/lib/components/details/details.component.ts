@@ -436,10 +436,12 @@ export class DetailsComponent implements OnInit {
 
     manualCheckinCompRef.componentInstance.guest = this.primaryGuest;
     manualCheckinCompRef.componentInstance.config = config;
+    manualCheckinCompRef.componentInstance.loading = false;
 
     manualCheckinCompRef.componentInstance.onDetailsClose.subscribe((res) => {
       if (res?.status) {
         if (res.data.phoneNumber.length === 0) res.data.cc = '';
+        manualCheckinCompRef.componentInstance.loading = true;
         this._reservationService
           .manualCheckin(
             this.reservationDetailsFG.get('bookingId').value,
@@ -447,6 +449,7 @@ export class DetailsComponent implements OnInit {
           )
           .subscribe(
             (response) => {
+              manualCheckinCompRef.componentInstance.loading = false;
               this._snackBarService.openSnackBarAsText(
                 'Guest Manually Checked In',
                 '',
@@ -455,8 +458,10 @@ export class DetailsComponent implements OnInit {
               manualCheckinCompRef.close();
               this.closeDetails();
             },
-            ({ error }) =>
-              this._snackBarService.openSnackBarAsText(error.message)
+            ({ error }) => {
+              manualCheckinCompRef.componentInstance.loading = false;
+              this._snackBarService.openSnackBarAsText(error.message);
+            }
           );
       } else res && manualCheckinCompRef.close();
     });

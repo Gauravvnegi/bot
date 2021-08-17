@@ -28,6 +28,7 @@ export class ManualCheckinComponent implements OnInit {
     },
   };
   @Input() guest;
+  @Input() loading;
 
   private _onOpenedChange = new Subject();
   onOpenedChange = this._onOpenedChange.asObservable();

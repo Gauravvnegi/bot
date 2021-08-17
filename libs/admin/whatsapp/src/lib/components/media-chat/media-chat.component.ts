@@ -10,6 +10,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { IChat } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-media-chat',
@@ -47,13 +48,7 @@ export class MediaChatComponent implements OnInit {
     this.isDownloading = true;
     this.messageService.downloadDocuments(this.message.url).subscribe(
       (blob) => {
-        const a = document.createElement('a');
-        const objectUrl = URL.createObjectURL(blob);
-        a.href = objectUrl;
-        a.download = this.message.fileName || this.message.caption;
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(objectUrl);
+        FileSaver.saveAs(blob, this.message.fileName || this.message.caption);
         this.isDownloading = false;
       },
       (error) => {

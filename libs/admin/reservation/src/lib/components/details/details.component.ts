@@ -1,35 +1,32 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ChangeDetectorRef,
-  Input,
-  OnChanges,
-  EventEmitter,
-  Output,
-} from '@angular/core';
-import { ReservationService } from '../../services/reservation.service';
-import {
-  ShareIconConfig,
-  Details,
-} from '../../../../../shared/src/lib/models/detailsConfig.model';
-
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
-import { AdminDetailsService } from '../../services/admin-details.service';
-import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
-import { SnackBarService } from 'libs/shared/material/src';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
-import { Subject, Subscription } from 'rxjs';
-import * as FileSaver from 'file-saver';
 import { Router } from '@angular/router';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
+import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
+import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { Subscription } from 'rxjs';
+import {
+  Details,
+  ShareIconConfig,
+} from '../../../../../shared/src/lib/models/detailsConfig.model';
+import { ReservationService } from '../../services/reservation.service';
+import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
+import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
 
 @Component({
@@ -88,7 +85,6 @@ export class DetailsComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private _adminDetailsService: AdminDetailsService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _snackBarService: SnackBarService,
     private _clipboard: Clipboard,

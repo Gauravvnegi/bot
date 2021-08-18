@@ -68,14 +68,6 @@ export class ManualCheckinComponent implements OnInit {
   }
 
   onAccept() {
-    // const { accept: acceptButtonConfig } = this.config.buttons;
-
-    // if (acceptButtonConfig.context && acceptButtonConfig.handler) {
-    //   acceptButtonConfig.context[
-    //     acceptButtonConfig.handler.fn_name
-    //   ].apply(acceptButtonConfig.context, [...acceptButtonConfig.handler.args]);
-    // }
-
     this.onDetailsClose.next({
       status: true,
       data: this.checkinFG.getRawValue(),
@@ -83,13 +75,6 @@ export class ManualCheckinComponent implements OnInit {
   }
 
   onCancel() {
-    // const { cancel: cancelButtonConfig } = this.config.buttons;
-
-    // if (cancelButtonConfig.context && cancelButtonConfig.handler) {
-    //   cancelButtonConfig.context[
-    //     cancelButtonConfig.handler.fn_name
-    //   ].apply(cancelButtonConfig.context, [...cancelButtonConfig.handler.args]);
-    // }
     this.onDetailsClose.next({ status: false });
   }
 

@@ -65,6 +65,12 @@ export class ChatComponent
   }
 
   ngOnChanges(): void {
+    if (this.hotelId) {
+      this.loadChat();
+    }
+  }
+
+  loadChat() {
     if (
       !this.chatList.messages[this.selectedChat.receiverId] ||
       this.selectedChat.unreadCount
@@ -83,9 +89,9 @@ export class ChatComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForApplicationActive();
     this.listenForRefreshData();
     this.listenForMessageNotification();
-    this.listenForApplicationActive();
   }
 
   listenForGlobalFilters(): void {
@@ -136,6 +142,7 @@ export class ChatComponent
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
+        this.loadChat();
       }
     });
   }

@@ -57,7 +57,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.getGuestInfo();
+    if (this.hotelId) this.getGuestInfo();
   }
 
   getGuestInfo() {
@@ -96,6 +96,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
+        this.getGuestInfo();
       }
     });
   }

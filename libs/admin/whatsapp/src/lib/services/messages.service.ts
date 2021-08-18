@@ -101,7 +101,7 @@ export class MessageService extends ApiService {
   }
 
   downloadDocuments(url) {
-    return this.httpClient.get(url, {
+    return this.get(`/api/v1/download?url=${url}`, {
       responseType: 'blob',
     });
   }

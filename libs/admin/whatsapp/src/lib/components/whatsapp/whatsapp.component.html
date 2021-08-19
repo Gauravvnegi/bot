@@ -4,7 +4,6 @@
     [style.width]="guestInfoEnable ? '25%' : '30%'"
   >
     <hospitality-bot-chat-list
-      [refreshData]="refreshData"
       [selected]="selectedChat"
       (selectedChat)="setSelectedChat($event)"
     ></hospitality-bot-chat-list>
@@ -16,7 +15,6 @@
       [style.max-width]="guestInfoEnable ? '100%' : '100%'"
     >
       <hospitality-bot-chat
-        [refreshData]="refreshData"
         [selectedChat]="selectedChat"
         (guestInfo)="openGuestInfo($event)"
       ></hospitality-bot-chat>
@@ -28,7 +26,6 @@
       }"
     >
       <hospitality-bot-guest-info
-        [refreshData]="refreshData"
         [data]="selectedChat"
         (closeInfo)="closeGuestInfo($event)"
       ></hospitality-bot-guest-info>

@@ -22,7 +22,6 @@ import { Contact, IContact } from '../../models/message.model';
   styleUrls: ['./guest-info.component.scss'],
 })
 export class GuestInfoComponent implements OnInit, OnChanges {
-  @Input() refreshData;
   @Input() data;
   @Output() closeInfo = new EventEmitter();
   @ViewChild('matTab') matTab: MatTabGroup;

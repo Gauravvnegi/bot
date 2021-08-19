@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
@@ -243,6 +243,15 @@ export class LayoutOneComponent implements OnInit {
           location.reload();
         }
       );
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  visibilitychange() {
+    if (document.hidden) {
+      this.firebaseMessagingService.tabActive.next(false);
+    } else if (this._router.url.includes('messages')) {
+      this.firebaseMessagingService.tabActive.next(true);
+    }
   }
 
   ngOnDestroy() {

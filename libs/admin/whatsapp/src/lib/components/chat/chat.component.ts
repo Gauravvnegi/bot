@@ -109,7 +109,7 @@ export class ChatComponent
       if (response) {
         this.scrollBottom = true;
         this.guestInfo.emit(false);
-        this.getChat({ offset: 0, limit: this.limit }, 0);
+        this.getChat({ offset: 0, limit: this.limit }, false, 0);
         this.messageService.refreshData$.next(false);
       }
     });
@@ -131,7 +131,10 @@ export class ChatComponent
     this._firebaseMessagingService.tabActive.subscribe((response) => {
       if (response) {
         this.scrollBottom = true;
-        this.getChat({ offset: 0, limit: this.limit });
+        this.getChat({
+          offset: 0,
+          limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit,
+        });
         this._firebaseMessagingService.tabActive.next(false);
       }
     });
@@ -152,6 +155,7 @@ export class ChatComponent
 
   getChat(
     config = { offset: 0, limit: 20 },
+    updatePagination = true,
     scrollHeight?: number,
     openGuest?
   ): void {
@@ -171,10 +175,10 @@ export class ChatComponent
           )
           .subscribe(
             (response) => {
-              this.limit =
-                response.messages.length < config.limit
-                  ? response.messages.length
-                  : this.limit + 20;
+              if (updatePagination) {
+                this.updatePagination(response.messages.length, config.limit);
+              }
+
               this.handleChatResponse(response);
               scrollHeight
                 ? (this.scrollView = scrollHeight)
@@ -190,6 +194,10 @@ export class ChatComponent
           )
       );
     }
+  }
+
+  updatePagination(messageLength, limit) {
+    this.limit = messageLength < limit ? messageLength : this.limit + 20;
   }
 
   handleChatResponse(response) {

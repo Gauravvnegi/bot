@@ -106,9 +106,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   listenForApplicationActive() {
     this._firebaseMessagingService.tabActive.subscribe((response) => {
       if (response) {
-        this.limit = 20;
         if (this.contactFG.get('search').value.length < 3) {
-          this.loadChatList();
+          this.loadChatList(false);
         } else this.loadSearchList(this.contactFG.get('search').value);
       }
     });
@@ -122,7 +121,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
-  loadChatList() {
+  loadChatList(updatePagination = true) {
     this.$subscription.add(
       this.messageService
         .getChatList(
@@ -136,10 +135,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
           ])
         )
         .subscribe((response) => {
-          this.limit =
-            response.length < this.limit
-              ? this.limit
-              : (this.limit = this.limit + 20);
+          if (updatePagination) {
+            this.updatePagination(response.length);
+          }
+
           this.chatList = new ContactList().deserialize(response);
           this.messageService.setWhatsappUnreadContactCount(
             this.chatList.unreadContacts
@@ -147,6 +146,11 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
           if (this.selected) this.markChatAsRead(this.selected);
         })
     );
+  }
+
+  updatePagination(responseLength) {
+    this.limit =
+      responseLength < this.limit ? this.limit : (this.limit = this.limit + 20);
   }
 
   onChatSelect(value) {

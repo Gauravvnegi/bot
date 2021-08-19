@@ -25,7 +25,6 @@ import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/
   styleUrls: ['./chat-list.component.scss'],
 })
 export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
-  @Input() refreshData;
   @Input() selected;
   @Output() selectedChat = new EventEmitter();
   @ViewChild('contactList') private myScrollContainer: ElementRef;

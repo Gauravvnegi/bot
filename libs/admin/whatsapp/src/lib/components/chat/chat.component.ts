@@ -28,7 +28,6 @@ import { IChats, Chats, Chat } from '../../models/message.model';
 })
 export class ChatComponent
   implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
-  @Input() refreshData;
   @Input() selectedChat;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
@@ -110,7 +109,7 @@ export class ChatComponent
       if (response) {
         this.scrollBottom = true;
         this.guestInfo.emit(false);
-        this.getChat({ offset: 0, limit: 20 }, 0, true);
+        this.getChat({ offset: 0, limit: this.limit }, 0);
         this.messageService.refreshData$.next(false);
       }
     });
@@ -219,6 +218,7 @@ export class ChatComponent
       this.chatFG.get('message').setValue('');
       messages.push(data);
     } else {
+      this.messageService.refreshData$.next(true);
       messages = messages.map((message) => {
         if (message.timestamp === timestamp) message.status = status;
         return message;

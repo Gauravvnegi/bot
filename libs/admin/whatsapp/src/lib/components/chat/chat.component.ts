@@ -89,7 +89,6 @@ export class ChatComponent
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForApplicationActive();
-    this.listenForRefreshData();
     this.listenForMessageNotification();
   }
 
@@ -102,17 +101,6 @@ export class ChatComponent
         ]);
       })
     );
-  }
-
-  listenForRefreshData() {
-    this.messageService.refreshData$.subscribe((response) => {
-      if (response) {
-        this.scrollBottom = true;
-        this.guestInfo.emit(false);
-        this.getChat({ offset: 0, limit: this.limit }, false, 0);
-        this.messageService.refreshData$.next(false);
-      }
-    });
   }
 
   listenForMessageNotification() {
@@ -133,7 +121,7 @@ export class ChatComponent
         this.scrollBottom = true;
         this.getChat({
           offset: 0,
-          limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit,
+          limit: this.limit % 20 === 0 ? this.limit - 20 : 20,
         });
         this._firebaseMessagingService.tabActive.next(false);
       }

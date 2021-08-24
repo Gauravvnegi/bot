@@ -93,6 +93,7 @@ export class LayoutOneComponent implements OnInit {
   }
 
   setInitialFilterValue() {
+    const branches = this._hotelDetailService.hotelDetails?.brands[0]?.branches;
     this.filterConfig.brandName = get(this._hotelDetailService.hotelDetails, [
       'brands',
       '0',
@@ -102,7 +103,7 @@ export class LayoutOneComponent implements OnInit {
       'brands',
       '0',
       'branches',
-      '0',
+      branches.length - 1,
       'label',
     ]);
     this.filterService.emitFilterValue$.next({
@@ -116,7 +117,7 @@ export class LayoutOneComponent implements OnInit {
           'brands',
           '0',
           'branches',
-          '0',
+          branches.length - 1,
           'id',
         ]),
       },

@@ -8,6 +8,9 @@ import { ChartsModule } from 'ng2-charts';
 import { DynamicTabComponent } from './components/dynamic-tab/dynamic-tab.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AnalyticsService } from './services/analytics.service';
+import { InhouseSourceComponent } from './components/inhouse-source/inhouse-source.component';
+import { InhouseSentimentsComponent } from './components/inhouse-sentiments/inhouse-sentiments.component';
+import { InhouseComponent } from './components/inhouse/inhouse.component';
 
 @NgModule({
   imports: [
@@ -23,6 +26,9 @@ import { AnalyticsService } from './services/analytics.service';
   declarations: [
     ...AdminAnalyticsRoutingModule.components,
     DynamicTabComponent,
+    InhouseSourceComponent,
+    InhouseSentimentsComponent,
+    InhouseComponent,
   ],
   providers: [AnalyticsService],
 })

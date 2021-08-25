@@ -1,0 +1,58 @@
+<div class="graphContainer">
+  <div class="messageAnalytics">
+    <div class="analyticsHeading">
+      <div class="title">
+        <p>Request Sentiments</p>
+        <div class="info-icon">
+          <img src="assets/svg/info.svg" alt="info-icon" />
+          <div class="tooltip">
+            <span class="arrow"></span>
+            Total number of Request Sentiments in a selected time frame.
+          </div>
+        </div>
+      </div>
+      <div class="pull-right">
+        <label
+          class="labl"
+          *ngFor="let option of chartTypes"
+          (click)="setChartType(option, $event)"
+        >
+          <input
+            name="method"
+            type="radio"
+            [checked]="chart.chartType === option.value"
+            [value]="option.value"
+            [id]="option.value + '-type'"
+          />
+          <div class="image">
+            <img style="height: 12px;" [src]="option.url" />
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="body">
+      <div>
+        <canvas
+          baseChart
+          [datasets]="chart.chartData"
+          [labels]="chart.chartLabels"
+          [options]="chart.chartOptions"
+          [colors]="chart.chartColors"
+          [legend]="chart.chartLegend"
+          [chartType]="chart.chartType"
+        >
+        </canvas>
+      </div>
+      <div class="stat-vals-container">
+        <div class="stat-val" *ngFor="let legend of legendData">
+          <div class="label">
+            <img style="margin-right: 10px;" [src]="legend.img" alt="" />
+            <span>{{ legend.label }}</span>
+          </div>
+          <div class="value">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="days-label">In 30 Days</div>
+  </div>
+</div>

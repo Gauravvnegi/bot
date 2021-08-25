@@ -17,4 +17,16 @@ export class AnalyticsService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  getInhouseSourceStats(config) {
+    return this.get(
+      `/api/v1/live-request/inhouse/source-stats/count${config.queryObj}`
+    );
+  }
+
+  getInhouseSentimentsStats(config) {
+    return this.get(
+      `/api/v1/live-request/inhouse/sentiment-stats   /count${config.queryObj}`
+    );
+  }
 }

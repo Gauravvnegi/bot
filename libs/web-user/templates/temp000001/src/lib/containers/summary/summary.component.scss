@@ -5,6 +5,9 @@
   border-radius: $border-radius-small;
   padding: $padding-large;
   &-header {
+    @media screen and (max-width: $M) {
+      display: none;
+    }
     @include flex-space-between();
     align-items: center;
     &-equi-width {

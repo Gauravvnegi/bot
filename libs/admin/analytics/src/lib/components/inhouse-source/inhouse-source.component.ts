@@ -69,7 +69,7 @@ export class InhouseSourceComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        // this.getInhouseSourceData();
+        this.getInhouseSourceData();
       })
     );
   }

@@ -107,7 +107,7 @@ export class InhouseSentimentsComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              stepSize: 15,
+              stepSize: 17,
             },
           },
         ],
@@ -168,7 +168,7 @@ export class InhouseSentimentsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        // this.getInhouseSentimentsData();
+        this.getInhouseSentimentsData();
       })
     );
   }

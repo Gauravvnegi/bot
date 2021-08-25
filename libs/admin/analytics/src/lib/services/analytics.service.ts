@@ -26,7 +26,7 @@ export class AnalyticsService extends ApiService {
 
   getInhouseSentimentsStats(config) {
     return this.get(
-      `/api/v1/live-request/inhouse/sentiment-stats   /count${config.queryObj}`
+      `/api/v1/live-request/inhouse/sentiment-stats/count${config.queryObj}`
     );
   }
 }

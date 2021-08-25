@@ -71,9 +71,7 @@
       letter-spacing: 0.96px;
       color: #002046;
       opacity: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      @include flex-between-center;
       .title {
         display: flex;
         align-items: center;
@@ -82,9 +80,8 @@
     .body {
       margin: 15px 0;
       .stat-vals-container {
-        display: flex;
         width: 100%;
-        justify-content: center;
+        @include flex-justify-center;
         align-items: center;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -95,9 +92,7 @@
           background-color: #f9fafa;
           width: 49.25%;
           margin: 10px 0;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
+          @include flex-between-center;
           font-family: Roboto;
           font-size: 12px;
           font-stretch: normal;
@@ -107,6 +102,9 @@
           .label {
             font-weight: 500;
             color: #6d7580;
+            img{
+              margin-right: 10px;
+            }
           }
           .value {
             font-weight: bold;
@@ -184,9 +182,7 @@
 }
 
 .stat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between-center;
   margin-bottom: 10px;
 }
 
@@ -197,9 +193,8 @@
 .labl > .image {
   height: 38px;
   width: 38px;
-  display: flex;
+  @include flex-justify-center;
   align-items: center;
-  justify-content: center;
   border-radius: 50%;
   border: 2px solid $primary-purple;
 }
@@ -222,6 +217,7 @@
   background-color: $primary-purple;
   img {
     filter: invert(1);
+    height: 12px;
   }
 }
 

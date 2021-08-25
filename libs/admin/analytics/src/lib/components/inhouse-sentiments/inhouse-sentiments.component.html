@@ -25,7 +25,7 @@
             [id]="option.value + '-type'"
           />
           <div class="image">
-            <img style="height: 12px;" [src]="option.url" />
+            <img [src]="option.url" />
           </div>
         </label>
       </div>
@@ -46,7 +46,7 @@
       <div class="stat-vals-container">
         <div class="stat-val" *ngFor="let legend of legendData">
           <div class="label">
-            <img style="margin-right: 10px;" [src]="legend.img" alt="" />
+            <img [src]="legend.img" alt="" />
             <span>{{ legend.label }}</span>
           </div>
           <div class="value">0</div>

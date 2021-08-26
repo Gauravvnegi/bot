@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-inhouse-sentiments',
@@ -154,7 +157,8 @@ export class InhouseSentimentsComponent implements OnInit {
     private _globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private snackbarService: SnackBarService,
-    private dateService: DateService
+    private dateService: DateService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -272,5 +276,22 @@ export class InhouseSentimentsComponent implements OnInit {
   get stats() {
     if (this.graphData) return Object.keys(this.graphData);
     return [];
+  }
+
+  openModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      InhouseRequestDatatableComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.tableName = 'In-house Request';
+    detailCompRef.componentInstance.tabFilterIdx = 0;
+    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+      // remove loader for detail close
+      detailCompRef.close();
+    });
   }
 }

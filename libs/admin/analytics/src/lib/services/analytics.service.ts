@@ -29,4 +29,14 @@ export class AnalyticsService extends ApiService {
       `/api/v1/live-request/inhouse/sentiment-stats/count${config.queryObj}`
     );
   }
+
+  getInhouseRequest(config) {
+    return this.get(`/api/v1/live-request/inhouse${config.queryObj}`);
+  }
+
+  exportInhouseRequestCSV(config) {
+    return this.get(`/api/v1/live-request/inhouse/export${config.queryObj}`, {
+      responseType: 'blob',
+    });
+  }
 }

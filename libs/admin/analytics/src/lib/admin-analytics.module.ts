@@ -11,6 +11,7 @@ import { AnalyticsService } from './services/analytics.service';
 import { InhouseSourceComponent } from './components/inhouse-source/inhouse-source.component';
 import { InhouseSentimentsComponent } from './components/inhouse-sentiments/inhouse-sentiments.component';
 import { InhouseComponent } from './components/inhouse/inhouse.component';
+import { InhouseRequestDatatableComponent } from './components/inhouse-request-datatable/inhouse-request-datatable.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { InhouseComponent } from './components/inhouse/inhouse.component';
     InhouseSourceComponent,
     InhouseSentimentsComponent,
     InhouseComponent,
+    InhouseRequestDatatableComponent,
   ],
   providers: [AnalyticsService],
 })

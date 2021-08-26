@@ -2,8 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
+import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
@@ -15,6 +17,8 @@ export class InhouseSentimentsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
   globalFilters;
+  selectedInterval: any;
+  graphData;
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -107,7 +111,6 @@ export class InhouseSentimentsComponent implements OnInit {
             },
             ticks: {
               min: 0,
-              stepSize: 17,
             },
           },
         ],
@@ -150,7 +153,8 @@ export class InhouseSentimentsComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -164,9 +168,18 @@ export class InhouseSentimentsComponent implements OnInit {
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate
+          ),
+        };
+
+        this.selectedInterval = calenderType.calenderType;
         this.globalFilters = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
+          calenderType,
         ];
         this.getInhouseSentimentsData();
       })
@@ -181,7 +194,8 @@ export class InhouseSentimentsComponent implements OnInit {
     this.$subscription.add(
       this.analyticsService.getInhouseSentimentsStats(config).subscribe(
         (response) => {
-          console.log(response);
+          this.graphData = new InhouseSentiments().deserialize(response);
+          this.initGraphData();
         },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       )
@@ -215,5 +229,48 @@ export class InhouseSentimentsComponent implements OnInit {
     if (this.chart.chartType !== option) {
       this.chart.chartType = option.value;
     }
+  }
+
+  private initGraphData(): void {
+    const keys = Object.keys(this.graphData);
+    this.chart.chartData = [];
+    this.chart.chartLabels = [];
+    // this.chart.chartColors = [];
+    keys.forEach((key) => {
+      if (key !== 'label' && key !== 'totalCount') {
+        if (!this.chart.chartLabels.length)
+          this.initChartLabels(this.graphData[key].stats);
+        this.chart.chartData.push({
+          data: Object.values(this.graphData[key].stats),
+          label: this.graphData[key].label,
+          fill: false,
+        });
+      }
+    });
+  }
+
+  initChartLabels(stat) {
+    const keys = Object.keys(stat);
+    keys.forEach((d, i) => {
+      this.chart.chartLabels.push(
+        this.dateService.convertTimestampToLabels(
+          this.selectedInterval,
+          d,
+          this.selectedInterval === 'date'
+            ? 'DD MMM'
+            : this.selectedInterval === 'month'
+            ? 'MMM YYYY'
+            : '',
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalFilters)
+            : null
+        )
+      );
+    });
+  }
+
+  get stats() {
+    if (this.graphData) return Object.keys(this.graphData);
+    return [];
   }
 }

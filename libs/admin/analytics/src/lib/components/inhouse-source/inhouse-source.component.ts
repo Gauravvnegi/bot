@@ -3,6 +3,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
+import { InhouseSource } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
@@ -13,14 +14,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 export class InhouseSourceComponent implements OnInit {
   $subscription = new Subscription();
   globalFilters;
-  source = {
-    totalCount: 0,
-    stats: {
-      WhatsApp: { value: 0, color: '#2a8853' },
-      'Web Bot': { value: 0, color: '#f76b8a' },
-      Messenger: { value: 0, color: '#224bd5' },
-    },
-  };
+  graphData;
   chart: any = {
     Labels: ['No Data'],
     Data: [[100]],
@@ -82,7 +76,7 @@ export class InhouseSourceComponent implements OnInit {
     this.$subscription.add(
       this.analyticsService.getInhouseSourceStats(config).subscribe(
         (response) => {
-          console.log(response);
+          this.graphData = new InhouseSource().deserialize(response);
           this.initGraphData();
         },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
@@ -92,13 +86,26 @@ export class InhouseSourceComponent implements OnInit {
 
   private initGraphData(): void {
     this.chart.Data = [[]];
-    // this.chart.Data[0][0] = this.source.INITIATED;
-    // this.chart.Data[0][1] = this.source.PENDING;
-    // this.chart.Data[0][2] = this.source.ACCEPTED;
-    // this.chart.Data[0][3] = this.source.REJECTED;
+    this.chart.Labels = [];
+    this.chart.Colors[0].backgroundColor = [];
+    this.chart.Colors[0].borderColor = [];
+    const keys = Object.keys(this.graphData.inhouseRequestSourceStats);
+
+    keys.forEach((key, index) => {
+      this.chart.Data[0][index] = this.graphData.inhouseRequestSourceStats[
+        key
+      ].value;
+      this.chart.Labels.push(key);
+      this.chart.Colors[0].backgroundColor.push(
+        this.graphData.inhouseRequestSourceStats[key].color
+      );
+      this.chart.Colors[0].borderColor.push(
+        this.graphData.inhouseRequestSourceStats[key].color
+      );
+    });
 
     if (this.chart.Data[0].reduce((a, b) => a + b, 0)) {
-      this.setChartOptions();
+      // this.setChartOptions();
     } else {
       this.chart.Data = [[100]];
       this.chart.Colors = [
@@ -123,6 +130,8 @@ export class InhouseSourceComponent implements OnInit {
   }
 
   get stats() {
-    return Object.keys(this.source.stats);
+    if (this.graphData.inhouseRequestSourceStats)
+      return Object.keys(this.graphData.inhouseRequestSourceStats);
+    return [];
   }
 }

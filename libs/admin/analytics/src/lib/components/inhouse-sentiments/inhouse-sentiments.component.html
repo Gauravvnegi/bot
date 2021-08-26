@@ -31,26 +31,29 @@
       </div>
     </div>
     <div class="body">
-      <div>
-        <canvas
-          baseChart
-          [datasets]="chart.chartData"
-          [labels]="chart.chartLabels"
-          [options]="chart.chartOptions"
-          [colors]="chart.chartColors"
-          [legend]="chart.chartLegend"
-          [chartType]="chart.chartType"
-        >
-        </canvas>
-      </div>
+      <canvas
+        style="max-width: 100%;"
+        baseChart
+        [datasets]="chart.chartData"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
+      </canvas>
       <div class="stat-vals-container">
-        <div class="stat-val" *ngFor="let legend of legendData">
-          <div class="label">
-            <img [src]="legend.img" alt="" />
-            <span>{{ legend.label }}</span>
-          </div>
-          <div class="value">0</div>
-        </div>
+        <ng-container *ngFor="let key of stats">
+          <ng-container *ngIf="key !== 'label' && key !== 'totalCount'">
+            <div class="stat-val">
+              <div class="label">
+                <img [src]="graphData[key].img" alt="" />
+                <span>{{ graphData[key].label }}</span>
+              </div>
+              <div class="value">{{ graphData[key].totalCount }}</div>
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
     <div class="days-label">In 30 Days</div>

@@ -1,0 +1,11 @@
+<svg id="test" xmlns="http://www.w3.org/2000/svg" width="19.714" height="20">
+    <defs>
+        <style>
+            .cls-1{fill:#fb3d4e}.cls-2{fill:#fff}
+        </style>
+    </defs>
+    <path id="Path_3435" data-name="Path 3435" class="cls-1" d="M261.136 274a4.636 4.636 0 1 0 4.674 4.636 4.641 4.641 0 0 0-4.674-4.636z" transform="translate(-246.096 -263.271)"/>
+    <path id="Path_3436" data-name="Path 3436" class="cls-1" d="M30.233 3.339 27.862.88A2.936 2.936 0 0 0 25.775 0h-7.522A1.758 1.758 0 0 0 16.5 1.758v15.2a1.758 1.758 0 0 0 1.753 1.758h7.494a5.822 5.822 0 0 1 4.737-9.181q.3 0 .584.029V5.391a2.918 2.918 0 0 0-.836-2.052zm-7.539 9.75h-3.117a.586.586 0 0 1 0-1.172h3.116a.586.586 0 0 1 0 1.172zm0-3.126h-3.117a.586.586 0 0 1 0-1.172h3.116a.586.586 0 0 1 0 1.172zm0-3.126h-3.117a.586.586 0 0 1 0-1.172h3.116a.586.586 0 0 1 0 1.172zm3.74 3.126h-.624a.586.586 0 0 1 0-1.172h.623a.586.586 0 0 1 0 1.172zm0-3.126h-.624a.586.586 0 0 1 0-1.172h.623a.586.586 0 0 1 0 1.172z" transform="translate(-16.5)"/>
+    <rect id="Rectangle_4486" data-name="Rectangle 4486" class="cls-2" width="1.444" height="4.214" rx=".722" transform="rotate(40 -10.28 28.619)"/>
+    <rect id="Rectangle_4487" data-name="Rectangle 4487" class="cls-2" width="1.445" height="4.214" rx=".723" transform="rotate(140 5.54 11.377)"/>
+</svg>

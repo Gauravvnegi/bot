@@ -301,8 +301,18 @@
             <div>JD :- {{ rowData.jobDuration }}min</div>
           </div>
         </td>
-        <td><div>-</div></td>
-        <td></td>
+        <td><div class="emptyCell">&mdash;</div></td>
+        <td>
+          <mat-select
+            class="form-elements"
+            placeholder=""
+            [value]="rowData.action"
+          >
+            <mat-option value="Closed">Closed</mat-option>
+            <mat-option value="Immediate">Immediate</mat-option>
+            <mat-option value="Timeout">Timeout</mat-option>
+          </mat-select>
+        </td>
       </tr>
     </ng-template>
 

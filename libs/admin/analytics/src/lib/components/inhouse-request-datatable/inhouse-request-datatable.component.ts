@@ -136,7 +136,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries).subscribe(
         (data) => {
           this.values = new InhouseTable().deserialize(data).records;
-          console.log(this.values);
           //set pagination
           this.totalRecords = data.total;
           this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);

@@ -1,14 +1,13 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { delay } from 'rxjs/operators';
-import { pipe, of, Observable } from 'rxjs';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
-import { Table } from 'primeng/table';
-import { MenuItem } from 'primeng/api';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import * as FileSaver from 'file-saver';
-import { Paginator } from 'primeng/paginator';
-import * as moment from 'moment';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { get } from 'lodash';
+import * as moment from 'moment';
+import { MenuItem } from 'primeng/api';
+import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
+import { Paginator } from 'primeng/paginator';
+import { Table } from 'primeng/table';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { TableService } from '../../services/table.service';
 interface Import {
   name: string;
@@ -151,8 +150,6 @@ export class BaseDatatableComponent implements OnInit {
     this.loadInitialData();
     //this.values = [...this.dataSource];
   }
-
-  //SelectItem API with label-value pairs this.cities1 = [ {label:'Select City', value:null}, {label:'New York', value:{id:1, name: 'New York', code: 'NY'}}, {label:'Rome', value:{id:2, name: 'Rome', code: 'RM'}}, {label:'London', value:{id:3, name: 'London', code: 'LDN'}}, {label:'Istanbul', value:{id:4, name: 'Istanbul', code: 'IST'}}, {label:'Paris', value:{id:5, name: 'Paris', code: 'PRS'}} ]; //An array of cities this.cities2 = [ {name: 'New York', code: 'NY'}, {name: 'Rome', code: 'RM'}, {name: 'London', code: 'LDN'}, {name: 'Istanbul', code: 'IST'}, {name: 'Paris', code: 'PRS'} ]; } }
 
   loadInitialData() {
     this.loading = true;

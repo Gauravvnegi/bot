@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
@@ -9,7 +10,6 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -142,7 +142,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
             this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
           else this.updateQuickReplyFilterCount(data.entityStateCounts);
-
           this.loading = false;
         },
         ({ error }) => {
@@ -155,7 +154,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   addQuickReplyFilter(entityStateCounts, total) {
     this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
-    Object.keys(entityStateCounts).forEach((key) => {
+    Object.keys(entityStateCounts).forEach((key) =>
       this.tabFilterItems[this.tabFilterIdx].chips.push({
         label: key,
         icon: '',
@@ -163,8 +162,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         total: entityStateCounts[key],
         isSelected: false,
         type: 'pending',
-      });
-    });
+      })
+    );
   }
 
   getSelectedQuickReplyFilters() {
@@ -177,9 +176,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   updateTabFilterCount(countObj, currentTabCount) {
     if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
+      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
     } else {
       this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
     }
@@ -187,9 +184,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach(
+        (chip) => (chip.total = countObj[chip.value])
+      );
     }
   }
 
@@ -243,11 +240,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
-          chip.isSelected = false;
-        }
+        if (chip.value !== 'ALL') chip.isSelected = false;
       });
       this.tabFilterItems[this.tabFilterIdx].chips[
         quickReplyTypeIdx
@@ -282,7 +277,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   exportCSV() {
     this.loading = true;
-
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,

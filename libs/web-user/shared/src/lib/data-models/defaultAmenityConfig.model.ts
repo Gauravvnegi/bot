@@ -1,6 +1,5 @@
 import { FieldSchema } from './fieldSchema.model';
 import { get, set } from 'lodash';
-import * as moment from 'moment';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 export interface Deserializable {
@@ -29,13 +28,9 @@ export class defaultAmenity {
     if (input) {
       let pickTime = DateService.getDateFromTimeStamp(
         get(input, ['pickupTime']) * 1000,
-        'DD-MM-YYYY hh:mm a'
+        'hh:mm a'
       );
-      pickTimeFormatted =
-        moment(
-          pickTime.split(' ')[1] + pickTime.split(' ')[2],
-          'h:mm a'
-        ).format('h:mm a') || '12:00 pm';
+      pickTimeFormatted = pickTime || '12:00 pm';
       pickupDate = new Date(get(input, ['pickupTime']) * 1000).toISOString();
     }
     Object.assign(

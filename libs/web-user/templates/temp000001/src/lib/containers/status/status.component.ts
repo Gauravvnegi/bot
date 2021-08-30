@@ -18,7 +18,10 @@ export class StatusComponent extends ApplicationStatusComponent
       this._summaryService
         .getSummaryStatus(this._reservationService.reservationId)
         .subscribe((res) => {
-          this.summaryDetails = new SummaryDetails().deserialize(res);
+          this.summaryDetails = new SummaryDetails().deserialize(
+            res,
+            this._hotelService.hotelConfig.timestamp
+          );
           this.isLoaderVisible = false;
         })
     );

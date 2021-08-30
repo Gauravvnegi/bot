@@ -210,18 +210,22 @@ export class Booking implements Deserializable {
   }
 
   getArrivalDate() {
-    return moment(this.arrivalTimeStamp).format('DD/M/YY');
+    return moment(this.arrivalTimeStamp).utcOffset('+05:30').format('DD/M/YY');
   }
 
   getDepartureDate() {
-    return moment(this.departureTimeStamp).format('DD/M/YY');
+    return moment(this.departureTimeStamp)
+      .utcOffset('+05:30')
+      .format('DD/M/YY');
   }
 
   getArrivalTime() {
     if (this.expectedArrivalTimeStamp == 0) {
-      return moment(this.arrivalTimeStamp).format('HH:mm');
+      return moment(this.arrivalTimeStamp).utcOffset('+05:30').format('HH:mm');
     } else {
-      return moment(this.expectedArrivalTimeStamp).format('HH:mm');
+      return moment(this.expectedArrivalTimeStamp)
+        .utcOffset('+05:30')
+        .format('HH:mm');
     }
   }
 
@@ -235,9 +239,13 @@ export class Booking implements Deserializable {
 
   getDepartureTime() {
     if (this.expectedArrivalTimeStamp == 0) {
-      return moment(this.departureTimeStamp).format('HH:mm');
+      return moment(this.departureTimeStamp)
+        .utcOffset('+05:30')
+        .format('HH:mm');
     } else {
-      return moment(this.expectedDepartureTimeStamp).format('HH:mm');
+      return moment(this.expectedDepartureTimeStamp)
+        .utcOffset('+05:30')
+        .format('HH:mm');
     }
   }
 

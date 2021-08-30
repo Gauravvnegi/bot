@@ -16,8 +16,8 @@ export class StayDetailsService extends ApiService {
   private _stayDetailDS: StayDetailDS;
   stayDetailDS$ = new Subject();
 
-  initStayDetailDS({ stayDetails }) {
-    this._stayDetailDS = new StayDetailDS().deserialize(stayDetails);
+  initStayDetailDS({ stayDetails }, timezone) {
+    this._stayDetailDS = new StayDetailDS().deserialize(stayDetails, timezone);
   }
 
   setFieldConfigForStayDetails() {
@@ -178,8 +178,8 @@ export class StayDetailsService extends ApiService {
     return DateService.convertDateToTimestamp(departureDate + 'T' + time);
   }
 
-  updateStayDetailDS(value) {
-    this._stayDetailDS.deserialize(value);
+  updateStayDetailDS(value, timezone) {
+    this._stayDetailDS.deserialize(value, timezone);
     this.stayDetailDS$.next(this._stayDetailDS);
   }
 

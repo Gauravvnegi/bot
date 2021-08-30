@@ -1,7 +1,7 @@
 import { get, set } from 'lodash';
-import { DateService } from '../../../../../shared/utils/src/lib/date.service';
 import * as moment from 'moment';
-import { GuestTypes, GuestRole } from '../constants/guest';
+import { DateService } from '../../../../../shared/utils/src/lib/date.service';
+import { GuestRole } from '../constants/guest';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -310,7 +310,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'arrivalDate',
-        DateService.convertTimestampToDate(
+        DateService.getDateFromTimeStamp(
           get(input, ['arrivalTime']),
           'DD/MM/YYYY'
         )
@@ -318,7 +318,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'departureDate',
-        DateService.convertTimestampToDate(
+        DateService.getDateFromTimeStamp(
           get(input, ['departureTime']),
           'DD/MM/YYYY'
         )
@@ -326,7 +326,10 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'expectedArrivalTime',
-        moment(get(input, ['expectedArrivalTime'])).format('HH:mm')
+        DateService.getDateFromTimeStamp(
+          get(input, ['expectedArrivalTime']),
+          'HH:mm'
+        )
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
@@ -343,10 +346,9 @@ export class StayDetailsConfig implements Deserializable {
   }
 
   getDaysAndNights() {
-    const diffInDays = moment(this.departureTimeStamp).diff(
-      moment(this.arrivalTimeStamp),
-      'days'
-    );
+    const diffInDays = moment(this.departureTimeStamp)
+      .utcOffset('+05:30')
+      .diff(moment(this.arrivalTimeStamp).utcOffset('+05:30'), 'days');
     return {
       days: diffInDays + 1,
       nights: diffInDays,

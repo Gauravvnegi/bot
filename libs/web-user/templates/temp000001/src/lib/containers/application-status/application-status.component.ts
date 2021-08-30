@@ -15,6 +15,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -44,7 +45,8 @@ export class ApplicationStatusComponent implements OnInit {
     protected _templateService: TemplateService,
     protected _regCardService: RegCardService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected _hotelService: HotelService
   ) {}
 
   ngOnInit(): void {
@@ -90,7 +92,10 @@ export class ApplicationStatusComponent implements OnInit {
       this._summaryService
         .getSummaryStatus(this._reservationService.reservationId)
         .subscribe((res) => {
-          this.summaryDetails = new SummaryDetails().deserialize(res);
+          this.summaryDetails = new SummaryDetails().deserialize(
+            res,
+            this._hotelService.hotelConfig.timezone
+          );
           if (res.guestDetails.primaryGuest.privacy !== undefined) {
             this.privacyFG.patchValue({
               accept: res.guestDetails.primaryGuest.privacy,

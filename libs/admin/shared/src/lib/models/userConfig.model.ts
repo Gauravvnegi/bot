@@ -16,6 +16,7 @@ export class UserConfig implements Deserializable {
   email;
   profileUrl;
   id;
+  timezone;
   deserialize(input) {
     Object.assign(
       this,
@@ -29,8 +30,10 @@ export class UserConfig implements Deserializable {
       set({}, 'profileUrl', get(input, ['profileUrl'])),
       set({}, 'email', get(input, ['email']))
     );
+    const length = input?.hotelAccess?.chains[0]?.hotels.length;
     this.brandName = input?.hotelAccess?.chains[0]?.id;
-    this.branchName = input?.hotelAccess?.chains[0]?.hotels[0]?.id;
+    this.branchName = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.id;
+    this.timezone = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.timezone;
     return this;
   }
 

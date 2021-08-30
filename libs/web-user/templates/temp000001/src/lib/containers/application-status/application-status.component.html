@@ -57,13 +57,15 @@
         <div class="section--content--container">
           <div class="section--content--container--title">Arrival Date</div>
           <div class="section--content--container--value">
-            {{ stayDetail.getArrivalTime() }}
+            {{ stayDetail.getArrivalTime(_hotelService.hotelConfig.timezone) }}
           </div>
         </div>
         <div class="section--content--container">
           <div class="section--content--container--title">Departure Date</div>
           <div class="section--content--container--value">
-            {{ stayDetail.getDepartureTime() }}
+            {{
+              stayDetail.getDepartureTime(_hotelService.hotelConfig.timezone)
+            }}
           </div>
         </div>
         <div class="section--content--container">

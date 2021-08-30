@@ -122,6 +122,10 @@ export class LayoutOneComponent implements OnInit {
         ]),
       },
     });
+    this.globalFilterService.timezone = get(
+      this._hotelDetailService.hotelDetails,
+      ['brands', '0', 'branches', branches.length - 1, 'timezone']
+    );
   }
 
   refreshDashboard() {
@@ -159,9 +163,11 @@ export class LayoutOneComponent implements OnInit {
   applyFilter(event) {
     const values = event.values;
     if (event.token.key) {
-      this.filterConfig.branchName = this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+      const branch = this._hotelDetailService.hotelDetails.brands[0].branches.filter(
         (d) => d.id === values.property.branchName
-      )[0].name;
+      )[0];
+      this.filterConfig.branchName = branch.name;
+      this.globalFilterService.timezone = branch.timezone;
       localStorage.setItem(event.token.key, event.token.value);
     }
     this.filterService.emitFilterValue$.next(values);

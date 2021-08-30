@@ -18,3 +18,18 @@
     color: #9eaeb8;
   }
 }
+
+.inhouse-wrap {
+  margin: 20px;
+  &__close {
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 25px;
+  }
+}
+.row-data-action {
+  display: flex;
+  justify-content: space-between;
+}

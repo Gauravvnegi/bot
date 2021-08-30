@@ -1,16 +1,5 @@
-<div style="margin: 20px;">
-  <div
-    style="
-      display: flex;
-      justify-content: flex-end;
-      cursor: pointer;
-      margin-bottom: 10px;
-      font-size: 25px;
-    "
-    (click)="closeModal()"
-  >
-    &#10006;
-  </div>
+<div class="inhouse-wrap">
+  <div class="inhouse-wrap__close" (click)="closeModal()"></div>
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -296,7 +285,7 @@
         <td>
           <p>{{ rowData.itemName }}</p>
           <p>{{ rowData.remarks }}</p>
-          <div style="display: flex; justify-content: space-between;">
+          <div class="row-data-action">
             <div>{{ rowData.action }}</div>
             <div>JD :- {{ rowData.jobDuration }}min</div>
           </div>

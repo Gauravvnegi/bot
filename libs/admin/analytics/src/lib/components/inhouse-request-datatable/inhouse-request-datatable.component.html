@@ -1,16 +1,5 @@
-<div style="margin: 20px;">
-  <div
-    style="
-      display: flex;
-      justify-content: flex-end;
-      cursor: pointer;
-      margin-bottom: 10px;
-      font-size: 25px;
-    "
-    (click)="closeModal()"
-  >
-    &#10006;
-  </div>
+<div class="popup__wrap">
+  <div (click)="closeModal()" class="popup__wrap__close">&#10006;</div>
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -278,12 +267,16 @@
         </td>
         <td>
           <p>{{ rowData.itemCode }}</p>
-          <p>{{ rowData.priority }}</p>
+          <p class="{{ rowData.priority | lowercase }}">
+            {{ rowData.priority }}
+          </p>
           <p>{{ rowData.quantity }}</p>
         </td>
         <td>
           <p>{{ rowData.confirmationNumber }}</p>
-          <p>{{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}</p>
+          <p class="light">
+            {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
+          </p>
           <p>{{ rowData.quantity }}</p>
         </td>
         <td>
@@ -291,12 +284,12 @@
         </td>
         <td>
           <p>{{ rowData.guestDetails.primaryGuest.phoneNumber }}</p>
-          <p>{{ rowData.guestDetails.primaryGuest.email }}</p>
+          <p class="email">{{ rowData.guestDetails.primaryGuest.email }}</p>
         </td>
         <td>
-          <p>{{ rowData.itemName }}</p>
-          <p>{{ rowData.remarks }}</p>
-          <div style="display: flex; justify-content: space-between;">
+          <p class="item-name">{{ rowData.itemName }}</p>
+          <p class="light">{{ rowData.remarks }}</p>
+          <div class="job-duration">
             <div>{{ rowData.action }}</div>
             <div>JD :- {{ rowData.jobDuration }}min</div>
           </div>

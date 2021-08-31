@@ -1,17 +1,19 @@
 <div class="graphContainer" (click)="openModal()">
-  <div class="messageAnalytics">
-    <div class="analyticsHeading">
-      <div class="title">
+  <div class="graphContainer__messageAnalytics">
+    <div class="graphContainer__messageAnalytics__analyticsHeading">
+      <div class="graphContainer__messageAnalytics__analyticsHeading__title">
         <p>Request Sentiments</p>
         <div class="info-icon">
           <img src="assets/svg/info.svg" alt="info-icon" />
-          <div class="tooltip">
-            <span class="arrow"></span>
+          <div class="info-icon__tooltip">
+            <span class="info-icon__tooltip__arrow"></span>
             Total number of Request Sentiments in a selected time frame.
           </div>
         </div>
       </div>
-      <div class="pull-right">
+      <div
+        class="graphContainer__messageAnalytics__analyticsHeading__pull-right"
+      >
         <label
           class="labl"
           *ngFor="let option of chartTypes"

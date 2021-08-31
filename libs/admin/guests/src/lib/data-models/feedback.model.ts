@@ -38,12 +38,12 @@ export class BookingFeedback {
     return this;
   }
 
-  getFeedbackDate() {
-    return moment(this.created).format('DD/MM/YYYY');
+  getFeedbackDate(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
   }
 
-  getFeedbackTime() {
-    return moment(this.created).format('HH:mm');
+  getFeedbackTime(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('HH:mm');
   }
 }
 

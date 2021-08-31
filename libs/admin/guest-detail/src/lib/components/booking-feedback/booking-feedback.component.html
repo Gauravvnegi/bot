@@ -15,10 +15,18 @@
         </p>
         <div class="header-seperator"></div>
         <p>
-          {{ rowData.booking.getArrivalDate() }} -
-          {{ rowData.booking.getDepartureDate() }} ({{
-            rowData.booking.getDaysAndNights().nights
-          }}N | {{ rowData.booking.getDaysAndNights().days }}D)
+          {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }} -
+          {{
+            rowData.booking.getDepartureDate(_globalFilterService.timezone)
+          }}
+          ({{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .nights
+          }}N |
+          {{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .days
+          }}D)
         </p>
         <div
           class="header-seperator"
@@ -82,19 +90,25 @@
           <div class="feild width-quarter">
             <mat-label class="label">Arrival Date</mat-label>
             <div class="value">
-              {{ rowData.booking.getArrivalDate() }}
+              {{
+                rowData.booking.getArrivalDate(_globalFilterService.timezone)
+              }}
             </div>
           </div>
           <div class="feild width-quarter">
             <mat-label class="label">Departure Date</mat-label>
             <div class="value">
-              {{ rowData.booking.getDepartureDate() }}
+              {{
+                rowData.booking.getDepartureDate(_globalFilterService.timezone)
+              }}
             </div>
           </div>
           <div class="feild width-quarter">
             <mat-label class="label">Expected Arrival Time</mat-label>
             <div class="value">
-              {{ rowData.booking.getArrivalTime() }}
+              {{
+                rowData.booking.getArrivalTime(_globalFilterService.timezone)
+              }}
             </div>
           </div>
         </div>
@@ -102,8 +116,14 @@
           <div class="feild width-quarter">
             <mat-label class="label">Duration</mat-label>
             <div class="value">
-              {{ rowData.booking.getDaysAndNights().nights }}N |
-              {{ rowData.booking.getDaysAndNights().days }}D
+              {{
+                rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+                  .nights
+              }}N |
+              {{
+                rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+                  .days
+              }}D
             </div>
           </div>
           <div class="feild width-quarter">

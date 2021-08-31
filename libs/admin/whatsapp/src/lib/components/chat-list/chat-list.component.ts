@@ -139,7 +139,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             this.updatePagination(response.length);
           }
 
-          this.chatList = new ContactList().deserialize(response);
+          this.chatList = new ContactList().deserialize(
+            response,
+            this._globalFilterService.timezone
+          );
           this.messageService.setWhatsappUnreadContactCount(
             this.chatList.unreadContacts
           );
@@ -207,7 +210,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         .subscribe((response) => {
           this.limit =
             response.length < this.limit ? this.limit : this.limit + 20;
-          this.chatList = new ContactList().deserialize(response);
+          this.chatList = new ContactList().deserialize(
+            response,
+            this._globalFilterService.timezone
+          );
         })
     );
   }

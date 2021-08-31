@@ -345,10 +345,10 @@ export class StayDetailsConfig implements Deserializable {
     return this;
   }
 
-  getDaysAndNights() {
+  getDaysAndNights(timezone = '+05:30') {
     const diffInDays = moment(this.departureTimeStamp)
-      .utcOffset('+05:30')
-      .diff(moment(this.arrivalTimeStamp).utcOffset('+05:30'), 'days');
+      .utcOffset(timezone)
+      .diff(moment(this.arrivalTimeStamp).utcOffset(timezone), 'days');
     return {
       days: diffInDays + 1,
       nights: diffInDays,

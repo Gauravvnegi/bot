@@ -189,7 +189,10 @@ export class ChatComponent
   }
 
   handleChatResponse(response) {
-    this.chat = new Chats().deserialize(response);
+    this.chat = new Chats().deserialize(
+      response,
+      this._globalFilterService.timezone
+    );
     this.chat.messages = DateService.sortObjArrayByTimeStamp(
       this.chat.messages,
       'timestamp'

@@ -81,6 +81,7 @@
           </div>
           <hospitality-bot-daterange
             class="date-range temp-width"
+            [timezone]="timezone"
             (onDateRangeFilter)="applyDateRangeFilter($event)"
             (removeVisibility)="noFilterNoSearch()"
           ></hospitality-bot-daterange>

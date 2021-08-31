@@ -1,3 +1,4 @@
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 export interface Deserializable {
@@ -209,23 +210,35 @@ export class Booking implements Deserializable {
     return this;
   }
 
-  getArrivalDate() {
-    return moment(this.arrivalTimeStamp).utcOffset('+05:30').format('DD/M/YY');
+  getArrivalDate(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(
+      this.arrivalTimeStamp,
+      'DD/M/YY',
+      timezone
+    );
   }
 
-  getDepartureDate() {
-    return moment(this.departureTimeStamp)
-      .utcOffset('+05:30')
-      .format('DD/M/YY');
+  getDepartureDate(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(
+      this.departureTimeStamp,
+      'DD/M/YY',
+      timezone
+    );
   }
 
-  getArrivalTime() {
+  getArrivalTime(timezone = '+05:30') {
     if (this.expectedArrivalTimeStamp == 0) {
-      return moment(this.arrivalTimeStamp).utcOffset('+05:30').format('HH:mm');
+      return DateService.getDateFromTimeStamp(
+        this.arrivalTimeStamp,
+        'HH:mm',
+        timezone
+      );
     } else {
-      return moment(this.expectedArrivalTimeStamp)
-        .utcOffset('+05:30')
-        .format('HH:mm');
+      return DateService.getDateFromTimeStamp(
+        this.expectedArrivalTimeStamp,
+        'HH:mm',
+        timezone
+      );
     }
   }
 
@@ -237,23 +250,26 @@ export class Booking implements Deserializable {
     }
   }
 
-  getDepartureTime() {
+  getDepartureTime(timezone = '+05:30') {
     if (this.expectedArrivalTimeStamp == 0) {
-      return moment(this.departureTimeStamp)
-        .utcOffset('+05:30')
-        .format('HH:mm');
+      return DateService.getDateFromTimeStamp(
+        this.departureTimeStamp,
+        'HH:mm',
+        timezone
+      );
     } else {
-      return moment(this.expectedDepartureTimeStamp)
-        .utcOffset('+05:30')
-        .format('HH:mm');
+      return DateService.getDateFromTimeStamp(
+        this.expectedDepartureTimeStamp,
+        'HH:mm',
+        timezone
+      );
     }
   }
 
-  getDaysAndNights() {
-    const diffInDays = moment(this.departureTimeStamp).diff(
-      moment(this.arrivalTimeStamp),
-      'days'
-    );
+  getDaysAndNights(timezone = '+05:30') {
+    const diffInDays = moment(this.departureTimeStamp)
+      .utcOffset(timezone)
+      .diff(moment(this.arrivalTimeStamp).utcOffset(timezone), 'days');
     return {
       days: diffInDays + 1,
       nights: diffInDays,

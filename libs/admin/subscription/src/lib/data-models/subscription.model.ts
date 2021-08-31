@@ -1,4 +1,5 @@
 import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 
@@ -30,12 +31,16 @@ export class SubscriptionPlan {
     return this;
   }
 
-  getStartDate() {
-    return moment(this.startDate).format('DD/MM/YY');
+  getStartDate(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(
+      this.startDate,
+      'DD/MM/YY',
+      timezone
+    );
   }
 
-  getEndDate() {
-    return moment(this.endDate).format('DD/MM/YY');
+  getEndDate(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(this.endDate, 'DD/MM/YY', timezone);
   }
 }
 

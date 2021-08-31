@@ -69,8 +69,12 @@
       <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
       <tr class="data-table-row">
         <td class="date-time">
-          <p class="date">{{ rowData.getRequestDate() }}</p>
-          <p class="time">{{ rowData.getRequestTime() }}</p>
+          <p class="date">
+            {{ rowData.getRequestDate(_globalFilterService.timezone) }}
+          </p>
+          <p class="time">
+            {{ rowData.getRequestTime(_globalFilterService.timezone) }}
+          </p>
         </td>
         <td class="message">
           <p *ngIf="rowData.remarks; else emptyCell">{{ rowData.remarks }}</p>
@@ -111,7 +115,7 @@
             >
               {{ rowData.journey }}
               <b
-                *ngIf="rowData.getElapsedTime()"
+                *ngIf="rowData.getElapsedTime(_globalFilterService.timezone)"
                 [ngClass]="{
                   'status-opacity-initiated status-text-initiated':
                     rowData.status == 'INITIATED',
@@ -123,7 +127,7 @@
                     rowData.status == 'COMPLETED'
                 }"
               >
-                {{ rowData.getElapsedTime() }}
+                {{ rowData.getElapsedTime(_globalFilterService.timezone) }}
               </b>
             </p>
           </div>

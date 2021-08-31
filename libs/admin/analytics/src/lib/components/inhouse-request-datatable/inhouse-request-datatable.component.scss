@@ -1,3 +1,4 @@
+@import 'main';
 .form-elements {
   width: 75%;
   padding: 5px 10px;
@@ -18,9 +19,10 @@
     color: #9eaeb8;
   }
 }
-
-.inhouse-wrap {
+.popup__wrap {
   margin: 20px;
+  overflow-y: auto;
+  max-height: 100vh;
   &__close {
     display: flex;
     justify-content: flex-end;
@@ -28,8 +30,65 @@
     margin-bottom: 10px;
     font-size: 25px;
   }
+  ::ng-deep .p-inputtext {
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px;
+  }
+  .requestDataTableHead {
+    background-color: #eaf0f6 !important;
+    width: 50px;
+    text-align: center;
+  }
+  table {
+    thead {
+      th {
+        &:nth-child(6) {
+          @media (max-width: 1024px) {
+            width: 125px;
+          }
+        }
+      }
+    }
+  }
 }
-.row-data-action {
-  display: flex;
-  justify-content: space-between;
+td {
+  ::ng-deep p {
+    font-size: 12px;
+    color: #727272;
+    line-height: 16px;
+    @media (max-width: 992px) {
+      font-size: 10px;
+    }
+    &.high {
+      background-color: #f8b633;
+      @include inhouse-popup-status;
+    }
+    &.asap {
+      background-color: #cc052b;
+      @include inhouse-popup-status;
+    }
+    &.low {
+      background-color: #119e0c;
+      @include inhouse-popup-status;
+    }
+    &.light {
+      color: #b2b7bc;
+    }
+    &.item-name {
+      color: #002046;
+    }
+  }
+  .job-duration {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    @media (max-width: 1024px) {
+      font-size: 10px;
+    }
+  }
+  mat-select {
+    font-size: 12px;
+    color: #9eaeb8;
+  }
 }

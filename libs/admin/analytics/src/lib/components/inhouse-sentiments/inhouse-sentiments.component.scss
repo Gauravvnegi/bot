@@ -102,7 +102,7 @@
           .label {
             font-weight: 500;
             color: #6d7580;
-            img{
+            img {
               margin-right: 10px;
             }
           }
@@ -265,4 +265,7 @@
 
 .stat-label > input:checked + p {
   text-decoration: line-through;
+}
+.canvas {
+  max-width: 100%;
 }

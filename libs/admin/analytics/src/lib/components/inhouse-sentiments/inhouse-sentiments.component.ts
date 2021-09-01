@@ -62,36 +62,8 @@ export class InhouseSentimentsComponent implements OnInit {
   ];
 
   chart: any = {
-    chartData: [
-      { data: [8, 40, 5, 8, 13, 8, 40, 5, 8, 13], label: 'To Do', fill: false },
-      {
-        data: [10, 10, 7, 17, 28, 10, 10, 7, 17, 28],
-        label: 'Active',
-        fill: false,
-      },
-      {
-        data: [18, 25, 15, 20, 0, 18, 25, 15, 20, 0],
-        label: 'Closed',
-        fill: false,
-      },
-      {
-        data: [20, 35, 45, 25, 30, 20, 35, 45, 25, 30],
-        label: 'Timeout',
-        fill: false,
-      },
-    ],
-    chartLabels: [
-      '1 JUN',
-      '2 JUN',
-      '3 JUN',
-      '4 JUN',
-      '5 JUN',
-      '6 JUN',
-      '7 JUN',
-      '8 JUN',
-      '9 JUN',
-      '10 JUN',
-    ],
+    chartData: [{ data: [], label: 'No Data', fill: false }],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {

@@ -62,6 +62,7 @@ export class InhouseSourceComponent implements OnInit {
         this.globalFilters = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
+          { entityType: 'Inhouse' },
         ];
         this.getInhouseSourceData();
       })
@@ -74,8 +75,9 @@ export class InhouseSourceComponent implements OnInit {
     };
 
     this.$subscription.add(
-      this.analyticsService.getInhouseSourceStats(config).subscribe(
+      this.analyticsService.getSourceStats(config).subscribe(
         (response) => {
+          debugger;
           this.graphData = new InhouseSource().deserialize(response);
           this.initGraphData();
         },

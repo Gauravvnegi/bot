@@ -21,20 +21,20 @@ export class AnalyticsService extends ApiService {
     );
   }
 
-  getInhouseSourceStats(config) {
+  getSourceStats(config) {
     return this.get(
-      `/api/v1/live-request/inhouse/source-stats/count${config.queryObj}`
+      `/api/v1/live-request/source-stats/count${config.queryObj}`
     );
   }
 
-  getInhouseSentimentsStats(config) {
+  getSentimentsStats(config) {
     return this.get(
-      `/api/v1/live-request/inhouse/sentiment-stats/count${config.queryObj}`
+      `/api/v1/live-request/sentiment-stats/count${config.queryObj}`
     );
   }
 
   getInhouseRequest(config) {
-    return this.get(`/api/v1/live-request/inhouse${config.queryObj}`);
+    return this.get(`/api/v1/live-request/list${config.queryObj}`);
   }
 
   exportInhouseRequestCSV(config) {

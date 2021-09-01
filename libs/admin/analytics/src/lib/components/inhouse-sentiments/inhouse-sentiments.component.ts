@@ -184,6 +184,7 @@ export class InhouseSentimentsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
+          { entityType: 'Inhouse' },
         ];
         this.getInhouseSentimentsData();
       })
@@ -196,7 +197,7 @@ export class InhouseSentimentsComponent implements OnInit {
     };
 
     this.$subscription.add(
-      this.analyticsService.getInhouseSentimentsStats(config).subscribe(
+      this.analyticsService.getSentimentsStats(config).subscribe(
         (response) => {
           this.graphData = new InhouseSentiments().deserialize(response);
           this.initGraphData();

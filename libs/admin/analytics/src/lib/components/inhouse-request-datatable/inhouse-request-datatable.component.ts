@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -21,6 +21,11 @@ import { AnalyticsService } from '../../services/analytics.service';
 })
 export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   implements OnInit {
+  @Input() entityType = 'Inhouse';
+  @Output() onModalClose = new EventEmitter();
+  globalQueries;
+  $subscription = new Subscription();
+  tabFilterIdx = 0;
   constructor(
     public fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
@@ -31,10 +36,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   ) {
     super(fb, tabFilterService);
   }
-  @Output() onModalClose = new EventEmitter();
-  globalQueries;
-  $subscription = new Subscription();
-  tabFilterIdx = 0;
 
   cols = [
     {
@@ -122,7 +123,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: 'DESC',
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: 'Inhouse',
           },
           ...this.getSelectedQuickReplyFilters(),
         ]);
@@ -212,6 +213,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: 'DESC',
+            entityType: 'Inhouse',
           },
           ...this.getSelectedQuickReplyFilters(),
         ],

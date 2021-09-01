@@ -13,11 +13,11 @@ export class InhouseSource {
       set({}, 'totalCount', get(input, ['totalCount']))
     );
 
-    const keys = Object.keys(input.inhouseRequestSourceStats);
+    const keys = Object.keys(input.requestSourceStats);
 
     keys.forEach((key, index) => {
       this.inhouseRequestSourceStats[key] = {
-        value: input.inhouseRequestSourceStats[key],
+        value: input.requestSourceStats[key],
         color: colors[index],
       };
     });

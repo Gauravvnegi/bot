@@ -12,10 +12,13 @@ export class AnalyticsService extends ApiService {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/graph`);
   }
 
-  exportCSV(hotelId): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/export`, {
-      responseType: 'blob',
-    });
+  exportCSV(hotelId, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/stats/export${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
   }
 
   getInhouseSourceStats(config) {

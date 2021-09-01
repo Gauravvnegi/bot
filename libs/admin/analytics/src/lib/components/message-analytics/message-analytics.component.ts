@@ -78,7 +78,6 @@ export class MessageAnalyticsComponent implements OnInit {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
-          calenderType,
         ];
         this.getHotelId(this.globalQueries);
       })
@@ -105,17 +104,17 @@ export class MessageAnalyticsComponent implements OnInit {
   }
 
   exportCSV() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
     this.$subscription.add(
-      this.analyticService.exportCSV(this.hotelId).subscribe(
-        (res) => {
+      this.analyticService.exportCSV(this.hotelId, config).subscribe(
+        (res) =>
           FileSaver.saveAs(
             res,
             'Message_Analytics_export_' + new Date().getTime() + '.csv'
-          );
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+          ),
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
   }

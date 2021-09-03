@@ -22,6 +22,20 @@
       <hospitality-bot-feedback-distribution></hospitality-bot-feedback-distribution>
     </div>
   </div>
+  <div style="display: flex; margin-bottom: 15px;">
+    <div
+      style="
+        width: 49.5%;
+        margin-right: 1%;
+        background: #ffffff 0% 0% no-repeat padding-box;
+      "
+    >
+      <hospitality-bot-shared></hospitality-bot-shared>
+    </div>
+    <div style="width: 49.5%; background: #ffffff 0% 0% no-repeat padding-box;">
+      <hospitality-bot-overall-received-bifurcation></hospitality-bot-overall-received-bifurcation>
+    </div>
+  </div>
   <hospitality-bot-net-promoter-score
     cardSubscribed
     [path]="'feedback.cards.' + cards.NPS"

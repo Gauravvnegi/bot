@@ -77,7 +77,6 @@ export class InhouseSourceComponent implements OnInit {
     this.$subscription.add(
       this.analyticsService.getSourceStats(config).subscribe(
         (response) => {
-          debugger;
           this.graphData = new InhouseSource().deserialize(response);
           this.initGraphData();
         },

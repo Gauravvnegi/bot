@@ -9,6 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 import { StatisticsService } from './services/statistics.service';
 import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   imports: [
@@ -21,9 +22,10 @@ import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-gu
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
     SlickCarouselModule,
-    AdminGuestDetailModule
+    AdminGuestDetailModule,
+    NgCircleProgressModule.forRoot(),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
-  providers: [StatisticsService]
+  providers: [StatisticsService],
 })
 export class AdminFeedbackModule {}

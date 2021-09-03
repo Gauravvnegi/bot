@@ -13,6 +13,8 @@ import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming
 import { TopLowNpsComponent } from './components/top-low-nps/top-low-nps.component';
 import { GlobalNpsComponent } from './components/global-nps/global-nps.component';
 import { FeedbackDistributionComponent } from './components/feedback-distribution/feedback-distribution.component';
+import { OverallReceivedBifurcationComponent } from './components/overall-received-bifurcation/overall-received-bifurcation.component';
+import { SharedComponent } from './components/shared/shared.component';
 
 const appRoutes: Route[] = [
   {
@@ -26,17 +28,19 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminFeedbackRoutingModule {
-    static components = [
-        FeedbackComponent,
-        FeedbackDatatableComponent,
-        NetPromoterScoreComponent,
-        NpsAcrossTouchpointsComponent,
-        NpsAcrossServicesComponent,
-        NpsAcrossDepartmentsComponent,
-        TwoWayProgressComponent,
-        MulticolorCircularProgressComponent,
-        TopLowNpsComponent,
-        GlobalNpsComponent,
-        FeedbackDistributionComponent
-    ];
-  }
+  static components = [
+    FeedbackComponent,
+    FeedbackDatatableComponent,
+    NetPromoterScoreComponent,
+    NpsAcrossTouchpointsComponent,
+    NpsAcrossServicesComponent,
+    NpsAcrossDepartmentsComponent,
+    TwoWayProgressComponent,
+    MulticolorCircularProgressComponent,
+    TopLowNpsComponent,
+    GlobalNpsComponent,
+    FeedbackDistributionComponent,
+    OverallReceivedBifurcationComponent,
+    SharedComponent,
+  ];
+}

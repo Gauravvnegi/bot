@@ -1,0 +1,95 @@
+<div class="stats">
+  <div
+    style="
+      font: normal normal bold 16px/21px Roboto;
+      letter-spacing: 0.96px;
+      color: #002046;
+    "
+  >
+    Overall Received Bifurcation
+  </div>
+  <div style="display: flex; margin: 30px 0; justify-content: space-between;">
+    <div style="position: relative; width: 173px; height: 173px;">
+      <div
+        class="center-circle-progress"
+        *ngFor="let item of overallReceivedBifurcation.stat"
+      >
+        <circle-progress
+          [radius]="item.radius"
+          [percent]="item.progress"
+          [space]="item.strokeWidth * -1"
+          [outerStrokeWidth]="item.strokeWidth"
+          [innerStrokeWidth]="item.strokeWidth"
+          [outerStrokeColor]="item.color"
+          [innerStrokeColor]="'#e7e8ea'"
+          [outerStrokeLinecap]="'square'"
+          [animation]="true"
+          [animationDuration]="300"
+          [showTitle]="false"
+          [showSubtitle]="false"
+          [showUnits]="false"
+          [showZeroOuterStroke]="false"
+        ></circle-progress>
+      </div>
+      <div class="center-circle-progress">
+        <div class="centerText">
+          <div class="center-circle-progress__total">
+            {{ overallReceivedBifurcation.total || 0 }}
+          </div>
+          <div class="center-circle-progress__text">
+            Total Requests
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="detailsWrapper">
+      <div
+        class="detail"
+        *ngFor="let item of overallReceivedBifurcation.stat; let i = index"
+        [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }"
+      >
+        <div class="divide" [style.border]="'1px solid' + item.color"></div>
+        <div class="compareLast">
+          <div class="detailHeading">
+            {{ item.label }}
+          </div>
+          <div class="detailText">{{ item.today }} Today</div>
+          <div class="detailText">{{ item.yesterday }} Yesterday</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="growth">
+    <ng-container *ngFor="let item of overallReceivedBifurcation.stat">
+      <div>
+        <div class="growthCell">
+          <div class="growthCell__Img">
+            <img [src]="item.polygon" alt="" />
+          </div>
+          <div>
+            <img
+              class="upArrow"
+              [src]="
+                item.comparisonPercentage >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/down-percentage.svg'
+              "
+              alt="uparrow"
+            /><span
+              class="percentChange"
+              [ngStyle]="
+                item.comparisonPercentage >= 0
+                  ? {
+                      color: '#52b33f'
+                    }
+                  : { color: '#CC052B' }
+              "
+              >{{ item.comparisonPercentage }}%</span
+            >
+          </div>
+        </div>
+        <div class="day">than yesterday</div>
+      </div>
+    </ng-container>
+  </div>
+</div>

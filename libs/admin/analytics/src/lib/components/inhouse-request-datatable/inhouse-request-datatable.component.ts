@@ -284,6 +284,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: 'DESC',
+          entityType: this.entityType,
         },
         ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),

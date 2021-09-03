@@ -38,7 +38,7 @@ export class AnalyticsService extends ApiService {
   }
 
   exportInhouseRequestCSV(config) {
-    return this.get(`/api/v1/live-request/inhouse/export${config.queryObj}`, {
+    return this.get(`/api/v1/live-request/list/export${config.queryObj}`, {
       responseType: 'blob',
     });
   }

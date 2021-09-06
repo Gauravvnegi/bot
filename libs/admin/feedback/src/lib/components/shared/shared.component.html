@@ -1,29 +1,16 @@
 <div class="stats">
-  <div
-    style="
-      font: normal normal bold 16px/21px Roboto;
-      letter-spacing: 0.96px;
-      color: #002046;
-    "
-  >
+  <div class="stats__title">
     Feedback Shared
   </div>
-  <div
-    style="
-      font: normal normal medium 12px/16px Roboto;
-      letter-spacing: 0px;
-      color: #6d7580;
-      margin: 10px 0;
-    "
-  >
+  <div class="stats__subheading">
     Response Bifurcation as per feedback shared
   </div>
-  <div style="display: flex;">
-    <div class="graph-container">
-      <div class="graph">
+  <div class="stats__graphwraper">
+    <div class="graphcontainer">
+      <div class="graphcontainer__graph">
         <canvas
           baseChart
-          class="graph-canvas"
+          class="graphcontainer__graph-canvas"
           [data]="chart.Data"
           [labels]="chart.Labels"
           [chartType]="chart.Type"
@@ -34,50 +21,17 @@
         </canvas>
       </div>
     </div>
-    <div
-      style="
-        width: 50%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      "
-    >
-      <div
-        style="
-          font: normal normal bold 35px/46px Roboto;
-          letter-spacing: 2.1px;
-          color: #002046;
-        "
-      >
+    <div class="stats__graphwraper__detail">
+      <div class="stats__graphwraper__detail__shared">
         280
       </div>
-      <div
-        style="
-          font: normal normal bold 12px/16px Roboto;
-          letter-spacing: 0.72px;
-          color: #6d7580;
-        "
-      >
+      <div class="stats__graphwraper__detail__sharedtitle">
         Overall Shared
       </div>
-      <div style="margin-top: 20px;">
-        <div style="display: flex; align-items: center;">
-          <div
-            style="
-              width: 14px;
-              height: 14px;
-              background: #31bb92 0% 0% no-repeat padding-box;
-              border-radius: 2px;
-            "
-          ></div>
-          <div
-            style="
-              font: normal normal bold 16px/21px Roboto;
-              letter-spacing: 0px;
-              color: #002046;
-              margin: 0 5px;
-            "
-          >
+      <div class="received-wrap">
+        <div class="received-wrap__container">
+          <div class="received-wrap__container__dot"></div>
+          <div class="received-wrap__container__count">
             180
           </div>
           <div>
@@ -92,7 +46,7 @@
               "
               >({{ 100 }}%)</span
             ><img
-              style="margin-left: 5px;"
+              class="received-wrap__container__percentChange-img"
               [src]="
                 true
                   ? 'assets/svg/uparrow.svg'
@@ -101,24 +55,11 @@
               alt="uparrow"
             />
           </div>
-          <div
-            style="
-              font: normal normal medium 10px/13px Roboto;
-              letter-spacing: 0px;
-              color: #b4b4b4;
-              margin: 0 5px;
-            "
-          >
+          <div class="eceived-wrap__container__date">
             in 30 Days
           </div>
         </div>
-        <div
-          style="
-            font: normal normal normal 12px/16px Roboto;
-            letter-spacing: 0.72px;
-            color: #6d7580;
-          "
-        >
+        <div class="eceived-wrap__recived-title">
           Feedback Received
         </div>
       </div>

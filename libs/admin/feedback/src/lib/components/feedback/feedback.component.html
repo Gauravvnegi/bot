@@ -22,22 +22,11 @@
       <hospitality-bot-feedback-distribution></hospitality-bot-feedback-distribution>
     </div>
   </div>
-  <div style="display: flex; margin-bottom: 15px;">
-    <div
-      style="
-        width: calc(50% - 7.5px);
-        margin-right: 15px;
-        background: #ffffff 0% 0% no-repeat padding-box;
-      "
-    >
+  <div class="feedback">
+    <div class="feedback__shared">
       <hospitality-bot-shared></hospitality-bot-shared>
     </div>
-    <div
-      style="
-        width: calc(50% - 7.5px);
-        background: #ffffff 0% 0% no-repeat padding-box;
-      "
-    >
+    <div class="feedback__received-bifurcation">
       <hospitality-bot-overall-received-bifurcation></hospitality-bot-overall-received-bifurcation>
     </div>
   </div>
@@ -45,14 +34,7 @@
     cardSubscribed
     [path]="'feedback.cards.' + cards.NPS"
   ></hospitality-bot-net-promoter-score>
-  <div
-    style="
-      width: 100%;
-      margin: 15px 0;
-      background: #ffffff 0% 0% no-repeat padding-box;
-      padding: 20px;
-    "
-  >
+  <div class="point-of-sale">
     <hospitality-bot-point-of-sale></hospitality-bot-point-of-sale>
   </div>
   <!-- <hospitality-bot-nps-across-departments

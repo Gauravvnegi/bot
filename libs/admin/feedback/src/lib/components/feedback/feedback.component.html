@@ -40,18 +40,28 @@
     cardSubscribed
     [path]="'feedback.cards.' + cards.NPS"
   ></hospitality-bot-net-promoter-score>
-  <hospitality-bot-nps-across-departments
+  <div
+    style="
+      width: 100%;
+      margin: 15px 0;
+      background: #ffffff 0% 0% no-repeat padding-box;
+      padding: 20px;
+    "
+  >
+    <hospitality-bot-point-of-sale></hospitality-bot-point-of-sale>
+  </div>
+  <!-- <hospitality-bot-nps-across-departments
     cardSubscribed
     [path]="'feedback.cards.' + cards.NPSAcrossDepartment"
-  ></hospitality-bot-nps-across-departments>
+  ></hospitality-bot-nps-across-departments> -->
   <hospitality-bot-nps-across-services
     cardSubscribed
     [path]="'feedback.cards.' + cards.NPSAcrossServices"
   ></hospitality-bot-nps-across-services>
-  <hospitality-bot-nps-across-touchpoints
+  <!-- <hospitality-bot-nps-across-touchpoints
     cardSubscribed
     [path]="'feedback.cards.' + cards.NPSAcrossTouchpoint"
-  ></hospitality-bot-nps-across-touchpoints>
+  ></hospitality-bot-nps-across-touchpoints> -->
   <hospitality-bot-feedback-datatable
     tableSubscribed
     [path]="'feedback.tables.' + tables.FEEDBACK"

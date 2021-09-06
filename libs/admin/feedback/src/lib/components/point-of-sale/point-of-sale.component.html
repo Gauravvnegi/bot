@@ -1,0 +1,125 @@
+<div class="header">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/nps-services.svg" />
+    </div>
+    <div class="stat-title">NPS Across Point of Sale</div>
+  </div>
+  <div class="dropdown--wrapper">
+    <p-dropdown
+      class="export"
+      [options]="documentActionTypes"
+      formControlName="documentActionType"
+    >
+      <ng-template let-documentActionItem pTemplate="selectedItem">
+        <img src="assets/svg/Export.svg" />
+        <span class="dropdown-label">{{ documentActionItem.label }}</span>
+      </ng-template>
+    </p-dropdown>
+    <div class="divider"></div>
+    <p-dropdown
+      class="export"
+      [options]="documentTypes"
+      formControlName="documentType"
+    >
+      <ng-template let-documentTypeItem pTemplate="selectedItem">
+        <img src="assets/svg/CSV.svg" />
+        <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+      </ng-template>
+    </p-dropdown>
+    <button class="go" (click)="exportCSV()">
+      <mat-icon class="material-icons" matSuffix>east</mat-icon>
+    </button>
+  </div>
+</div>
+<div style="display: flex; width: 100%;">
+  <div
+    style="position: relative; width: 100%;"
+    [style.height]="saleData.length * 40 + 40 + 'px'"
+  >
+    <ng-container *ngFor="let item of saleData">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          align-items: center;
+          margin: 20px 0;
+        "
+      >
+        <div style="width: 200px;">{{ item.label }}</div>
+        <div class="progress-bar">
+          <ng-container *ngFor="let progress of item.data">
+            <div
+              [style.width]="progress.percentage + '%'"
+              [style.background]="progress.color"
+            ></div>
+          </ng-container>
+          <div class="stat-data">
+            <div>{{ item.label }}</div>
+            <div *ngFor="let progress of item.data" style="display: flex;">
+              <div>{{ progress.label }}</div>
+              <div>{{ progress.percentage }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div
+      style="
+        position: absolute;
+        left: 200px;
+        top: 0;
+        width: calc(100% - 200px);
+        z-index: 1;
+      "
+      [style.height]="saleData.length * 40 + 40 + 'px'"
+    >
+      <div style="display: flex; justify-content: space-between;">
+        <div
+          *ngFor="let percent of percentValue"
+          style="display: flex; align-items: center; flex-direction: column;"
+        >
+          <div
+            style="border: 1px solid #edeef9; width: 1px;"
+            [style.height]="saleData.length * 40 + 20 + 'px'"
+          ></div>
+          <div style="height: 20px;">{{ percent }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  "
+>
+  <div
+    *ngFor="let item of saleData[0]?.data"
+    style="display: flex; align-items: center; margin: 10px 15px;"
+  >
+    <div
+      style="width: 10px; height: 10px; border-radius: 50%; margin-right: 5px;"
+      [style.background]="item.color"
+    ></div>
+    <div
+      style="
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.84px;
+        text-align: left;
+        color: #6d7580;
+      "
+    >
+      {{ item.label }}
+    </div>
+  </div>
+</div>

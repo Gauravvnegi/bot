@@ -1,18 +1,4 @@
 @import 'main';
-.export {
-  .p-dropdown .p-inputtext {
-    padding: 5px;
-    align-items: baseline;
-    display: flex;
-    font-size: 14px;
-
-    .material-icons {
-      font-size: 16px;
-      height: auto;
-      width: auto;
-    }
-  }
-}
 
 .header {
   display: flex;
@@ -96,58 +82,42 @@
   }
 }
 
-.menu-container {
-  display: flex;
-}
-.pull-right {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 0 20px;
-}
-
-.labl {
-  margin: 0 1%;
-}
-
-.labl > .image {
-  height: 38px;
-  width: 38px;
+.title-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  img {
-    height: 15px;
+  .icon {
+    margin-right: 10px;
   }
-  // border: 2px solid $primary-purple;
-}
-.labl > input {
-  /* HIDE RADIO */
-  visibility: hidden; /* Makes input not-clickable */
-  position: absolute; /* Remove input from document flow */
-}
-
-.legends:checked ~ p {
-  text-decoration: line-through;
+  .stat-title {
+    letter-spacing: 0.96px;
+    color: black;
+    font-weight: 700;
+  }
 }
 
-.labl > input + .image {
+.progress-bar {
   position: relative;
+  width: calc(100% - 200px);
+  height: 20px;
+  display: flex;
+  margin-left: 5px;
+  margin-right: 13px;
   cursor: pointer;
-}
-
-.labl > input:checked + .image {
-  background-color: $primary-purple;
-  img {
-    filter: invert(1);
+  z-index: 2;
+  :hover {
+    .stat-data {
+      display: block;
+    }
   }
-}
-
-.line-chart__canvas {
-  max-width: calc(100% - 30px);
-  max-height: 65vh;
-  margin: 0 15px;
-  margin-bottom: 10px;
-  // max-height: 350px;
+  .stat-data {
+    position: absolute;
+    left: 25%;
+    top: 20px;
+    display: none;
+    width: 204px;
+    padding: 13px 20px 29px 15px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #fff;
+  }
 }

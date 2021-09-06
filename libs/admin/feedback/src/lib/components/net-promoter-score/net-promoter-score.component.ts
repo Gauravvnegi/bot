@@ -95,6 +95,16 @@ export class NetPromoterScoreComponent implements OnInit {
           },
         ],
       },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
     },
     chartColors: [
       {
@@ -175,7 +185,9 @@ export class NetPromoterScoreComponent implements OnInit {
             : this.selectedInterval === 'month'
             ? 'MMM YYYY'
             : '',
-          this.selectedInterval === 'week' ? this._adminUtilityService.getToDate(this.globalQueries) : null
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
         )
       );
       this.chart.chartData[0].data.push(this.npsChartData.npsGraph[d]);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-point-of-sale',
@@ -41,6 +41,61 @@ export class PointOfSaleComponent implements OnInit {
     },
   ];
 
+  chips = [
+    {
+      label: 'Overall',
+      icon: '',
+      value: 'ALL',
+      total: 0,
+      isSelected: true,
+    },
+    {
+      label: 'Staff',
+      icon: '',
+      value: 'STAFF',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'Cleanliness ',
+      icon: '',
+      value: 'CLEANLINESS',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'Pricing ',
+      icon: '',
+      value: 'PRICING',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'Quality ',
+      icon: '',
+      value: 'QUALITY',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+  ];
+
+  tabFilterIdx: number = 0;
+
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: this.chips,
+    },
+  ];
+
   percentValue = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   constructor(private fb: FormBuilder) {}
 
@@ -52,5 +107,52 @@ export class PointOfSaleComponent implements OnInit {
     });
   }
 
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+  }
+
+  isQuickReplyFilterSelected(quickReplyFilter) {
+    // const index = this.quickReplyTypes.indexOf(offer);
+    // return index >= 0;
+    return true;
+  }
+
+  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+    if (quickReplyTypeIdx == 0) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL') {
+          chip.isSelected = false;
+        }
+      });
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
+    this.updateQuickReplyActionFilters();
+  }
+
+  updateQuickReplyActionFilters(): void {
+    let value = [];
+    this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((chip) => chip.isSelected)
+      .forEach((d) => {
+        value.push(d.value);
+      });
+    this.quickReplyActionFilters.patchValue(value);
+  }
+
   exportCSV() {}
+
+  get quickReplyActionFilters(): FormControl {
+    return this.npsFG.get('quickReplyActionFilters') as FormControl;
+  }
 }

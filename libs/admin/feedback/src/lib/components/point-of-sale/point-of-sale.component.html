@@ -32,6 +32,39 @@
     </button>
   </div>
 </div>
+<hospitality-bot-tab-group
+  [listItems]="tabFilterItems"
+  [selectedIndex]="tabFilterIdx"
+  (selectedTabChange)="onSelectedTabFilterChange($event)"
+></hospitality-bot-tab-group>
+<div class="button__wrapper">
+  <mat-chip-list
+    multiple
+    #chipList
+    aria-label="Quick Reply selection"
+    formControlName="quickReplyActionFilters"
+    *ngIf="tabFilterItems.length"
+  >
+    <mat-chip
+      *ngFor="
+        let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+        let quickReplyTypeIdx = index
+      "
+      selectable="true"
+      [selected]="isQuickReplyFilterSelected(quickReplyType)"
+      (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
+      [ngClass]="{
+        'chipSelected status-selected-default': quickReplyType.isSelected,
+        'status-opacity-initiated status-text-initiated':
+          quickReplyType.type == 'initiated',
+        'status-selected-initiated':
+          quickReplyType.type == 'initiated' && quickReplyType.isSelected
+      }"
+    >
+      {{ quickReplyType.label }}
+    </mat-chip>
+  </mat-chip-list>
+</div>
 <div class="outlet-wrap">
   <div
     class="outlet-wrap__outlet"
@@ -48,10 +81,49 @@
             ></div>
           </ng-container>
           <div class="stat-data">
-            <div>{{ item.label }}</div>
-            <div *ngFor="let progress of item.data" style="display: flex;">
-              <div>{{ progress.label }}</div>
-              <div>{{ progress.percentage }}</div>
+            <div
+              style="
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 0.72px;
+                color: #002046;
+                margin-bottom: 10px;
+              "
+            >
+              {{ item.label }}
+            </div>
+            <div
+              *ngFor="let progress of item.data"
+              style="display: flex; align-items: center; margin: 5px 0;"
+            >
+              <div
+                style="
+                  width: 10px;
+                  height: 10px;
+                  border-radius: 50%;
+                  margin-right: 5px;
+                "
+                [style.background]="progress.color"
+              ></div>
+              <div
+                style="
+                  font-weight: normal;
+                  font-stretch: normal;
+                  font-style: normal;
+                  line-height: normal;
+                  letter-spacing: 0.72px;
+                  text-align: left;
+                  color: #6d7580;
+                  margin-right: 10px;
+                "
+              >
+                {{ progress.label }}
+              </div>
+              <div style="font-weight: bold; color: #002046;">
+                {{ progress.percentage }}
+              </div>
             </div>
           </div>
         </div>

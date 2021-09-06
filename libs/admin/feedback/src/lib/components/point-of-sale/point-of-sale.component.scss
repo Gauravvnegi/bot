@@ -84,6 +84,7 @@
 .outlet-wrap {
   display: flex;
   width: 100%;
+  margin: 10px 0 0 15px;
   &__outlet {
     position: relative;
     width: 100%;
@@ -144,21 +145,38 @@
   margin-right: 13px;
   cursor: pointer;
   z-index: 2;
+  font-family: Roboto;
+  font-size: 12px;
   .stat-data {
     position: absolute;
     left: 25%;
-    bottom: 20px;
+    bottom: 12px;
     display: none;
     width: 204px;
-    padding: 13px 20px 29px 15px;
+    padding: 13px 20px 15px;
     border-radius: 5px;
     box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.16);
     background-color: #fff;
+    border: solid 1px #e2e2e2;
     z-index: 3;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #fff transparent transparent transparent;
+    }
   }
   &:hover {
     .stat-data {
       display: block;
     }
   }
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 10vw !important;
 }

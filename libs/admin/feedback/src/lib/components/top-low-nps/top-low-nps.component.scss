@@ -83,8 +83,11 @@
   min-height: 20px;
 }
 
-.progress{
-  .value{
+.progress {
+  .value {
     font-size: 13px;
   }
+}
+:host ::ng-deep .mat-tab-label {
+  min-width: 10vw !important;
 }

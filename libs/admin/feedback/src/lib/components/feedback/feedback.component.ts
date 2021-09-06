@@ -12,7 +12,23 @@ import {
 export class FeedbackComponent implements OnInit {
   public cards = CardNames;
   tables = TableNames;
+
+  tabFilterIdx = 0;
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: [],
+    },
+  ];
   constructor() {}
 
   ngOnInit(): void {}
+
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+  }
 }

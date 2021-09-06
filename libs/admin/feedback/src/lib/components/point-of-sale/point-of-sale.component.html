@@ -32,22 +32,14 @@
     </button>
   </div>
 </div>
-<div style="display: flex; width: 100%;">
+<div class="outlet-wrap">
   <div
-    style="position: relative; width: 100%;"
+    class="outlet-wrap__outlet"
     [style.height]="saleData.length * 40 + 40 + 'px'"
   >
     <ng-container *ngFor="let item of saleData">
-      <div
-        style="
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-          align-items: center;
-          margin: 20px 0;
-        "
-      >
-        <div style="width: 200px;">{{ item.label }}</div>
+      <div class="outlet-wrap__outlet__outlets">
+        <div class="outlet-wrap__outlet__outlets__label">{{ item.label }}</div>
         <div class="progress-bar">
           <ng-container *ngFor="let progress of item.data">
             <div
@@ -66,25 +58,19 @@
       </div>
     </ng-container>
     <div
-      style="
-        position: absolute;
-        left: 200px;
-        top: 0;
-        width: calc(100% - 200px);
-        z-index: 1;
-      "
+      class="outlet-wrap__outlet__progress-back"
       [style.height]="saleData.length * 40 + 40 + 'px'"
     >
-      <div style="display: flex; justify-content: space-between;">
+      <div class="outlet-wrap__outlet__progress-backpercentbar">
         <div
           *ngFor="let percent of percentValue"
-          style="display: flex; align-items: center; flex-direction: column;"
+          class="outlet-wrap__outlet__progress-backpercentbar__percent-value"
         >
           <div
-            style="border: 1px solid #edeef9; width: 1px;"
+            class="outlet-wrap__outlet__progress-backpercentbar__percent-value__bar"
             [style.height]="saleData.length * 40 + 20 + 'px'"
           ></div>
-          <div style="height: 20px;">{{ percent }}</div>
+          <div class="percent">{{ percent }}</div>
         </div>
       </div>
     </div>

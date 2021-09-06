@@ -15,6 +15,21 @@
   @media screen and (max-width: 800px) {
     height: 185px;
   }
+  &__title {
+    font: normal normal bold 16px/21px Roboto;
+    letter-spacing: 0.96px;
+    color: #002046;
+  }
+  &__container {
+    display: flex;
+    margin: 30px 0;
+    justify-content: space-between;
+    &__graph {
+      position: relative;
+      width: 173px;
+      height: 173px;
+    }
+  }
 }
 
 .center-circle-progress {
@@ -40,7 +55,7 @@
     width: 70px;
     text-align: center;
   }
-  .centerText {
+  &__centerText {
     display: flex;
     flex-direction: column;
     justify-content: center;

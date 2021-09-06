@@ -78,6 +78,36 @@
     letter-spacing: 0.72px;
     color: #6d7580;
   }
+  &__no-recived {
+    margin-top: 20px;
+    &__container {
+      display: flex;
+      align-items: center;
+      &__dot {
+        width: 14px;
+        height: 14px;
+        background: #ffec8c 0% 0% no-repeat padding-box;
+        border-radius: 2px;
+      }
+      &__count {
+        font: normal normal bold 16px/21px Roboto;
+        letter-spacing: 0px;
+        color: #002046;
+        margin: 0 5px;
+      }
+      &__date {
+        font: normal normal medium 10px/13px Roboto;
+        letter-spacing: 0px;
+        color: #b4b4b4;
+        margin: 0 5px;
+      }
+    }
+    &__title {
+      font: normal normal normal 12px/16px Roboto;
+      letter-spacing: 0.72px;
+      color: #6d7580;
+    }
+  }
 }
 .graphcontainer {
   width: 50%;

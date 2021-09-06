@@ -59,28 +59,14 @@
             in 30 Days
           </div>
         </div>
-        <div class="eceived-wrap__recived-title">
+        <div class="received-wrap__recived-title">
           Feedback Received
         </div>
       </div>
-      <div style="margin-top: 20px;">
-        <div style="display: flex; align-items: center;">
-          <div
-            style="
-              width: 14px;
-              height: 14px;
-              background: #ffec8c 0% 0% no-repeat padding-box;
-              border-radius: 2px;
-            "
-          ></div>
-          <div
-            style="
-              font: normal normal bold 16px/21px Roboto;
-              letter-spacing: 0px;
-              color: #002046;
-              margin: 0 5px;
-            "
-          >
+      <div class="received-wrap__no-recived">
+        <div class="received-wrap__no-recived__container">
+          <div class="received-wrap__no-recived__container__dot"></div>
+          <div class="received-wrap__no-recived__container__count">
             100
           </div>
           <div>
@@ -95,7 +81,7 @@
               "
               >({{ 100 }}%)</span
             ><img
-              style="margin-left: 5px;"
+              class="received-wrap__container__percentChange-img"
               [src]="
                 true
                   ? 'assets/svg/uparrow.svg'
@@ -104,24 +90,11 @@
               alt="uparrow"
             />
           </div>
-          <div
-            style="
-              font: normal normal medium 10px/13px Roboto;
-              letter-spacing: 0px;
-              color: #b4b4b4;
-              margin: 0 5px;
-            "
-          >
+          <div class="received-wrap__no-recived__container__date">
             in 30 Days
           </div>
         </div>
-        <div
-          style="
-            font: normal normal normal 12px/16px Roboto;
-            letter-spacing: 0.72px;
-            color: #6d7580;
-          "
-        >
+        <div class="received-wrap__no-recived__title">
           Feedback Not Received
         </div>
       </div>

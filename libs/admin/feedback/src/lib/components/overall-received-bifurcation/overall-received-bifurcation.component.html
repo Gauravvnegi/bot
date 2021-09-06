@@ -1,15 +1,9 @@
 <div class="stats">
-  <div
-    style="
-      font: normal normal bold 16px/21px Roboto;
-      letter-spacing: 0.96px;
-      color: #002046;
-    "
-  >
+  <div class="stats__title">
     Overall Received Bifurcation
   </div>
-  <div style="display: flex; margin: 30px 0; justify-content: space-between;">
-    <div style="position: relative; width: 173px; height: 173px;">
+  <div class="stats__container">
+    <div class="stats__container__graph">
       <div
         class="center-circle-progress"
         *ngFor="let item of overallReceivedBifurcation.stat"
@@ -32,7 +26,7 @@
         ></circle-progress>
       </div>
       <div class="center-circle-progress">
-        <div class="centerText">
+        <div class="center-circle-progresscenter__Text">
           <div class="center-circle-progress__total">
             {{ overallReceivedBifurcation.total || 0 }}
           </div>

@@ -23,6 +23,7 @@ export class FilterComponent implements OnChanges, OnInit {
 
   hotelList = [];
   branchList = [];
+  feedbackType = [];
   hotelBasedToken = { key: null, value: null };
 
   filterForm: FormGroup;
@@ -55,6 +56,12 @@ export class FilterComponent implements OnChanges, OnInit {
           isMembership: [''],
           isGeneral: [''],
         }),
+      }),
+      feedback: this._fb.group({
+        feedbackType: [''],
+      }),
+      outlet: this._fb.group({
+        Spring_Cafe: [''],
       }),
     });
   }

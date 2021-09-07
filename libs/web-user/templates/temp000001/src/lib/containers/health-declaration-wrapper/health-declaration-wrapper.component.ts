@@ -66,7 +66,7 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
               data = ix;
             }
           });
-          if (data === index) {
+          if (data <= index) {
             this.checkForTodaysBooking(
               this._reservationService.reservationData
             );

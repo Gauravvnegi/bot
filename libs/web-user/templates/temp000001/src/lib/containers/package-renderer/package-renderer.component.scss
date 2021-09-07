@@ -38,7 +38,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    &:hover{
+    &:hover {
       cursor: pointer;
     }
   }
@@ -116,6 +116,7 @@
 
 :host ::ng-deep .next-button {
   @include primary-button();
+  width: 150px !important;
 }
 
 // :host ::ng-deep .draggable {

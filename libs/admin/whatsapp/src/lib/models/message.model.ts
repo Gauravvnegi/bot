@@ -129,6 +129,9 @@ export class Contact {
       set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt'])),
       set({}, 'unreadCount', get(input, ['unreadCount']))
     );
+    this.descriptionMessage = decodeURIComponent(
+      get(input, ['descriptionMessage']) || ''
+    );
     this.color = colors[Math.floor(Math.random() * colors.length)];
     this.enableSend = this.checkEnableSend(timezone);
     return this;

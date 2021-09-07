@@ -38,12 +38,17 @@ export class Chat {
         'status',
         get(input, ['status']) ? get(input, ['status']) : 'sent'
       ),
-      set({}, 'text', get(input, ['text'])),
       set({}, 'mediaType', get(input, ['type'])),
       set({}, 'timestamp', get(input, ['timestamp'])),
       set({}, 'url', get(input, ['url'])),
       set({}, 'caption', get(input, ['caption']))
     );
+    if (input.text) {
+      this.text = decodeURIComponent(get(input, ['text'])).replace(
+        /\n/g,
+        '<br/>'
+      );
+    }
     this.type = this.getType(input.type);
     this.fileName = this.getFileName(input.type);
     return this;

@@ -143,8 +143,8 @@ export class ChatComponent
 
   getChat(
     config = { offset: 0, limit: 20 },
-    updatePagination = true,
     scrollHeight?: number,
+    updatePagination = true,
     openGuest?
   ): void {
     if (this.selectedChat) {

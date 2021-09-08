@@ -97,6 +97,15 @@ export class PointOfSaleComponent implements OnInit {
     private dateService: DateService
   ) {}
 
+  ngOnInit(): void {
+    this.npsFG = this.fb.group({
+      documentType: ['csv'],
+      documentActionType: ['exportAll'],
+      quickReplyActionFilters: [[]],
+    });
+    this.listenForGlobalFilters();
+  }
+
   registerListeners() {
     this.listenForGlobalFilters();
   }
@@ -126,22 +135,13 @@ export class PointOfSaleComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.npsFG = this.fb.group({
-      documentType: ['csv'],
-      documentActionType: ['exportAll'],
-      quickReplyActionFilters: [[]],
-    });
-    this.listenForGlobalFilters();
-  }
-
   getStats() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
       this._statisticService.getPOSStats(config).subscribe((response) => {
-        this.stats = new NPOS().deserialize(response.nposCategory);
+        this.stats = new NPOS().deserialize(response);
         if (this.tabFilterItems.length === 1) {
           this.addFilterItems();
         }

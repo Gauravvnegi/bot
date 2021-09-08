@@ -3,5 +3,5 @@ export class Regex {
   public static NUMBER_REGEX = /^[0-9]*$/;
   public static DECIMAL_REGEX = /^(0|[1-9]\d*)(\.\d+)?$/;
   public static NAME = '^[A-Za-z]*$|^[A-Za-z][A-Za-z ]*[A-Za-z]$';
-  public static URL_REGEX = /(?:(?:https?|ftp):\/\/|\b(?:[a-z\d]+\.))(?:(?:[^\s()<>]+|\((?:[^\s()<>]+|(?:\([^\s()<>]+\)))?\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))?/gm;
+  public static URL_REGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 }

@@ -109,7 +109,7 @@ export class ChatComponent
       if (response) {
         this.scrollBottom = true;
         this.guestInfo.emit(false);
-        this.getChat({ offset: 0, limit: this.limit }, false, 0);
+        this.getChat({ offset: 0, limit: this.limit }, 0, false);
         this.messageService.refreshData$.next(false);
       }
     });
@@ -155,8 +155,8 @@ export class ChatComponent
 
   getChat(
     config = { offset: 0, limit: 20 },
-    updatePagination = true,
     scrollHeight?: number,
+    updatePagination = true,
     openGuest?
   ): void {
     if (this.selectedChat) {

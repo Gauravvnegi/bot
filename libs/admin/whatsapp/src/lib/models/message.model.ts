@@ -37,12 +37,17 @@ export class Chat {
         'status',
         get(input, ['status']) ? get(input, ['status']) : 'sent'
       ),
-      set({}, 'text', get(input, ['text'])),
       set({}, 'mediaType', get(input, ['type'])),
       set({}, 'timestamp', get(input, ['timestamp'])),
       set({}, 'url', get(input, ['url'])),
       set({}, 'caption', get(input, ['caption']))
     );
+    if (input.text) {
+      this.text = decodeURIComponent(get(input, ['text'])).replace(
+        /\n/g,
+        '<br/>'
+      );
+    }
     this.type = this.getType(input.type);
     this.fileName = this.getFileName(input.type);
     return this;
@@ -129,9 +134,11 @@ export class Contact {
       set({}, 'receiverId', get(input, ['receiverId'])),
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo'])),
-      set({}, 'descriptionMessage', get(input, ['descriptionMessage']) || ''),
       set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt'])),
       set({}, 'unreadCount', get(input, ['unreadCount']))
+    );
+    this.descriptionMessage = decodeURIComponent(
+      get(input, ['descriptionMessage'])
     );
     this.color = colors[Math.floor(Math.random() * colors.length)];
     this.enableSend = this.checkEnableSend();

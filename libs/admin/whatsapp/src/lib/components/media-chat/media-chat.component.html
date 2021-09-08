@@ -8,7 +8,9 @@
       />
     </div>
     <div class="media__chat__download__link" >
-      <div class="media__chat__download__link__filename">{{ message.fileName }}</div>
+      <div class="media__chat__download__link__filename">{{ message.fileName }}
+        <div *ngIf="message.caption">{{ message.caption }}</div>
+      </div>
       <div
         class="media__chat__download__link__btn"
         (click)="downloadDoc()"

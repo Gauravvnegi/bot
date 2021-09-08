@@ -6,57 +6,85 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./overall-received-bifurcation.component.scss'],
 })
 export class OverallReceivedBifurcationComponent implements OnInit {
-  overallReceivedBifurcation = {
-    stat: [
+  feedbackChart = {
+    Labels: ['No Data'],
+    Data: [[100]],
+    Type: 'doughnut',
+    Legend: false,
+    Colors: [
       {
-        radius: 55,
-        progress: 80,
-        color: '#52B33F',
-        label: 'Closed',
-        today: 0,
-        yesterday: 0,
-        comparisonPercentage: 100,
-        strokeWidth: 3,
-        polygon: 'assets/svg/Polygon_closed.svg',
-      },
-      {
-        radius: 65,
-        progress: 20,
-        color: '#4BA0F5',
-        label: 'Action Pending',
-        today: 0,
-        yesterday: 0,
-        comparisonPercentage: 100,
-        strokeWidth: 4,
-        polygon: 'assets/svg/Polygon_pending.svg',
-      },
-      {
-        radius: 75,
-        progress: 30,
-        color: '#CC052B',
-        label: 'Unread',
-        today: 0,
-        yesterday: 0,
-        comparisonPercentage: 100,
-        strokeWidth: 5,
-        polygon: 'assets/svg/Polygon_unread.svg',
-      },
-      {
-        radius: 85,
-        progress: 100,
-        color: '#FFBF04',
-        label: 'Received',
-        today: 0,
-        yesterday: 0,
-        comparisonPercentage: 100,
-        strokeWidth: 6,
-        polygon: 'assets/svg/Polygon.svg',
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
       },
     ],
-    total: 0,
+    Options: {
+      responsive: true,
+      cutoutPercentage: 75,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+    },
   };
 
+  negativeFeedbackChart: any = {
+    Labels: ['No Data'],
+    Data: [[100]],
+    Type: 'doughnut',
+    Legend: false,
+    Colors: [
+      {
+        backgroundColor: ['#D5D1D1'],
+        borderColor: ['#D5D1D1'],
+      },
+    ],
+    Options: {
+      responsive: true,
+      cutoutPercentage: 75,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+    },
+  };
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initFeedbackChart();
+    this.initNegativeFeedbackChart();
+  }
+
+  initFeedbackChart() {
+    this.feedbackChart.Data = [[54, 84]];
+    this.feedbackChart.Labels = ['Positive', 'Negative'];
+    this.feedbackChart.Colors = [
+      {
+        backgroundColor: ['#52b33f', '#cc052b'],
+        borderColor: ['#52b33f', '#cc052b'],
+      },
+    ];
+  }
+
+  initNegativeFeedbackChart() {
+    this.negativeFeedbackChart.Data = [[44, 73]];
+    this.negativeFeedbackChart.Labels = ['Action Pending', 'Closed'];
+    this.negativeFeedbackChart.Colors = [
+      {
+        backgroundColor: ['#ffbf04', '#4ba0f5'],
+        borderColor: ['#ffbf04', '#4ba0f5'],
+      },
+    ];
+  }
 }

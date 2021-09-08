@@ -4,84 +4,131 @@
   </div>
   <div class="stats__container">
     <div class="stats__container__graph">
-      <div
-        class="center-circle-progress"
-        *ngFor="let item of overallReceivedBifurcation.stat"
-      >
-        <circle-progress
-          [radius]="item.radius"
-          [percent]="item.progress"
-          [space]="item.strokeWidth * -1"
-          [outerStrokeWidth]="item.strokeWidth"
-          [innerStrokeWidth]="item.strokeWidth"
-          [outerStrokeColor]="item.color"
-          [innerStrokeColor]="'#e7e8ea'"
-          [outerStrokeLinecap]="'square'"
-          [animation]="true"
-          [animationDuration]="300"
-          [showTitle]="false"
-          [showSubtitle]="false"
-          [showUnits]="false"
-          [showZeroOuterStroke]="false"
-        ></circle-progress>
+      <div class="stats__container__graph__canvas">
+        <canvas
+          baseChart
+          max-height="176px"
+          z-index="2"
+          [data]="feedbackChart.Data"
+          [labels]="feedbackChart.Labels"
+          [chartType]="feedbackChart.Type"
+          [legend]="feedbackChart.Legend"
+          [colors]="feedbackChart.Colors"
+          [options]="feedbackChart.Options"
+        >
+        </canvas>
       </div>
-      <div class="center-circle-progress">
-        <div class="center-circle-progress__total">
-          {{ overallReceivedBifurcation.total || 0 }}
+      <div class="stats__container__graph__labels">
+        <div class="val">138</div>
+        <div class="label">Feedback Received</div>
+      </div>
+      <div style="margin-top: 20px;">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div style="display: flex; align-items: center;">
+            <div
+              style="
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                margin-right: 5px;
+              "
+              [style.background]="'#52b33f'"
+            ></div>
+            <div>Positive</div>
+          </div>
+          <div>54</div>
         </div>
-        <div class="center-circle-progress__text">
-          Total Requests
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div style="display: flex; align-items: center;">
+            <div
+              style="
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                margin-right: 5px;
+              "
+              [style.background]="'#cc052b'"
+            ></div>
+            <div>Negative</div>
+          </div>
+          <div>84</div>
         </div>
       </div>
     </div>
-    <div class="detailsWrapper">
-      <div
-        class="detail"
-        *ngFor="let item of overallReceivedBifurcation.stat; let i = index"
-        [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }"
-      >
-        <div class="divide" [style.border]="'1px solid' + item.color"></div>
-        <div class="compareLast">
-          <div class="detailHeading">
-            {{ item.label }}
+    <div class="stats__container__graph">
+      <div class="stats__container__graph__canvas">
+        <canvas
+          baseChart
+          max-height="176px"
+          [data]="negativeFeedbackChart.Data"
+          [labels]="negativeFeedbackChart.Labels"
+          [chartType]="negativeFeedbackChart.Type"
+          [legend]="negativeFeedbackChart.Legend"
+          [colors]="negativeFeedbackChart.Colors"
+          [options]="negativeFeedbackChart.Options"
+        >
+        </canvas>
+      </div>
+      <div class="stats__container__graph__labels">
+        <div class="val">84</div>
+        <div class="label">Negative Feedbacks</div>
+      </div>
+      <div style="margin-top: 20px;">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div style="display: flex; align-items: center;">
+            <div
+              style="
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                margin-right: 5px;
+              "
+              [style.background]="'#ffbf04'"
+            ></div>
+            <div>Action Pending</div>
           </div>
-          <div class="detailText">{{ item.today }} Today</div>
-          <div class="detailText">{{ item.yesterday }} Yesterday</div>
+          <div>44</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div style="display: flex; align-items: center;">
+            <div
+              style="
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                margin-right: 5px;
+              "
+              [style.background]="'#4ba0f5'"
+            ></div>
+            <div>Closed</div>
+          </div>
+          <div>73</div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="growth">
-    <ng-container *ngFor="let item of overallReceivedBifurcation.stat">
-      <div>
-        <div class="growthCell">
-          <div class="growthCell__Img">
-            <img [src]="item.polygon" alt="" />
-          </div>
-          <div>
-            <img
-              class="upArrow"
-              [src]="
-                item.comparisonPercentage >= 0
-                  ? 'assets/svg/uparrow.svg'
-                  : 'assets/svg/down-percentage.svg'
-              "
-              alt="uparrow"
-            /><span
-              class="percentChange"
-              [ngStyle]="
-                item.comparisonPercentage >= 0
-                  ? {
-                      color: '#52b33f'
-                    }
-                  : { color: '#CC052B' }
-              "
-              >{{ item.comparisonPercentage }}%</span
-            >
-          </div>
-        </div>
-        <div class="day">than yesterday</div>
-      </div>
-    </ng-container>
   </div>
 </div>

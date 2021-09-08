@@ -6,12 +6,6 @@
   border-radius: 5px;
   padding: 20px;
   height: 100%;
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0px 3px 20px #0368ff42;
-    border: 1px solid $primary-purple;
-    border-radius: 5px;
-  }
   @media screen and (max-width: 800px) {
     height: 185px;
   }

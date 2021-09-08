@@ -10,7 +10,6 @@ export class SharedComponent implements OnInit {
     Labels: ['Not Received', 'Received'],
     Data: [[100, 180]],
     Type: 'doughnut',
-
     Legend: false,
     Colors: [
       {

@@ -142,7 +142,7 @@ export class NPSTouchpoints {
         });
       });
     }
-    this.values.sort(function(a, b) {
+    this.values.sort(function (a, b) {
       return parseInt(a.value) - parseInt(b.value);
     });
     return this;
@@ -199,17 +199,17 @@ export class GlobalNPS {
   positive: number;
   negative: number;
   neutral: number;
-  comparisonPercent:number;
+  comparisonPercent: number;
 
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'label', get(input, ['globalNpsStats','label'])),
+      set({}, 'label', get(input, ['globalNpsStats', 'label'])),
       set({}, 'score', get(input, ['score'])),
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
-      set({}, 'positive', get(input, ['globalNpsStats','POSITIVE'])),
-      set({}, 'negative', get(input, ['globalNpsStats','NEGATIVE'])),
-      set({}, 'neutral', get(input, ['globalNpsStats','NEUTRAL']))
+      set({}, 'positive', get(input, ['globalNpsStats', 'POSITIVE'])),
+      set({}, 'negative', get(input, ['globalNpsStats', 'NEGATIVE'])),
+      set({}, 'neutral', get(input, ['globalNpsStats', 'NEUTRAL']))
     );
     return this;
   }
@@ -226,9 +226,9 @@ export class PerformanceNPS {
     input.npsPerformace.TOP_PERFORMING.forEach((data) =>
       this.performances.push({ ...data, colorCode: '#1AB99F' })
     );
-    input.npsPerformace.LOW_PERFORMING.sort(function(a,b) {
+    input.npsPerformace.LOW_PERFORMING.sort(function (a, b) {
       return b.score - a.score;
-    })
+    });
 
     input.npsPerformace.LOW_PERFORMING.forEach((data) =>
       this.performances.push({ ...data, colorCode: '#EF1D45' })
@@ -237,3 +237,104 @@ export class PerformanceNPS {
     return this;
   }
 }
+
+export class SharedStats {
+  totalResponse: number;
+  feedbacks: Data[];
+
+  deserialize(input) {
+    this.feedbacks = new Array<Data>();
+    Object.assign(
+      this,
+      set({}, 'totalResponse', get(input, ['totalResponse']))
+    );
+
+    Object.keys(input.feedbacks).forEach((key) =>
+      this.feedbacks.push(
+        new Data().deserialize(input.feedbacks[key], SharedColors[key])
+      )
+    );
+    return this;
+  }
+}
+
+export class Data {
+  label: string;
+  count: number;
+  percent: number;
+  comparePercent: number;
+  color: string;
+
+  deserialize(input, color?) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'count', get(input, ['count'])),
+      set({}, 'percent', get(input, ['percent'])),
+      set({}, 'comparePercent', get(input, ['comparePercent'])),
+      set({}, 'color', color)
+    );
+    return this;
+  }
+}
+
+export class NPOS {
+  data: Outlet[];
+
+  deserialize(input) {
+    this.data = new Array<Outlet>();
+    input.forEach((data) => this.data.push(new Outlet().deserialize(data)));
+    return this;
+  }
+}
+
+export class Outlet {
+  label: string;
+  services: Service[];
+
+  deserialize(input) {
+    this.services = new Array<Service>();
+    Object.assign(this, set({}, 'label', get(input, ['label'])));
+    Object.keys(input.services).forEach((key) => {
+      this.services.push(
+        new Service().deserialize({
+          label: key,
+          percentage: input.services[key],
+          color: SharedColors[key],
+        })
+      );
+    });
+
+    // this.services = new Services().deserialize(input.services);
+    return this;
+  }
+}
+
+export class Service {
+  color: string;
+  percentage: number;
+  label: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'color', get(input, ['color'])),
+      set({}, 'percentage', get(input, ['percentage'])),
+      set({}, 'label', get(input, ['label']))
+    );
+    return this;
+  }
+}
+
+export const SharedColors = {
+  Received: '#FFEC8C',
+  'Not Received': '#31BB92',
+  Negative: '#cc052b',
+  Positive: '#52b33f',
+  Closed: '#4ba0f5',
+  'Action Pending': '#ffbf04',
+  Staff: '#f18533',
+  Cleaniness: '#4974e0',
+  Pricing: '#3db76b',
+  Quality: '#ffbf04',
+};

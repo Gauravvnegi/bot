@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { NPOS } from '../../data-models/statistics.model';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-point-of-sale',
@@ -11,6 +18,10 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 })
 export class PointOfSaleComponent implements OnInit {
   npsFG: FormGroup;
+  $subscription = new Subscription();
+  selectedInterval;
+  globalQueries;
+  stats: NPOS;
   documentActionTypes = [
     {
       label: `Export`,
@@ -20,26 +31,6 @@ export class PointOfSaleComponent implements OnInit {
     },
   ];
   documentTypes = [{ label: 'CSV', value: 'csv' }];
-  saleData = [
-    {
-      label: 'Outlet 1',
-      data: [
-        { color: '#f18533', percentage: 25, label: 'Staff' },
-        { color: '#4974e0', percentage: 50, label: 'Cleanliness' },
-        { color: '#3db76b', percentage: 13, label: 'Pricing' },
-        { color: '#ffbf04', percentage: 12, label: 'Quality' },
-      ],
-    },
-    {
-      label: 'Outlet 2',
-      data: [
-        { color: '#f18533', percentage: 18, label: 'Staff' },
-        { color: '#4974e0', percentage: 12, label: 'Cleanliness' },
-        { color: '#3db76b', percentage: 40, label: 'Pricing' },
-        { color: '#ffbf04', percentage: 30, label: 'Quality' },
-      ],
-    },
-  ];
 
   chips = [
     {
@@ -97,7 +88,43 @@ export class PointOfSaleComponent implements OnInit {
   ];
 
   percentValue = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private _adminUtilityService: AdminUtilityService,
+    private _statisticService: StatisticsService,
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService,
+    private dateService: DateService
+  ) {}
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe(
+        (data) => {
+          let calenderType = {
+            calenderType: this.dateService.getCalendarType(
+              data['dateRange'].queryValue[0].toDate,
+              data['dateRange'].queryValue[1].fromDate
+            ),
+          };
+          this.selectedInterval = calenderType.calenderType;
+          this.globalQueries = [
+            ...data['filter'].queryValue,
+            ...data['dateRange'].queryValue,
+            calenderType,
+          ];
+          this.getStats();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
 
   ngOnInit(): void {
     this.npsFG = this.fb.group({
@@ -105,6 +132,34 @@ export class PointOfSaleComponent implements OnInit {
       documentActionType: ['exportAll'],
       quickReplyActionFilters: [[]],
     });
+    this.listenForGlobalFilters();
+  }
+
+  getStats() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
+    this.$subscription.add(
+      this._statisticService.getPOSStats(config).subscribe((response) => {
+        this.stats = new NPOS().deserialize(response.nposCategory);
+        if (this.tabFilterItems.length === 1) {
+          this.addFilterItems();
+        }
+      })
+    );
+  }
+
+  addFilterItems() {
+    this.stats.data.forEach((item) =>
+      this.tabFilterItems.push({
+        label: item.label,
+        content: '',
+        value: item.label,
+        disabled: false,
+        total: 0,
+        chips: this.chips,
+      })
+    );
   }
 
   onSelectedTabFilterChange(event) {

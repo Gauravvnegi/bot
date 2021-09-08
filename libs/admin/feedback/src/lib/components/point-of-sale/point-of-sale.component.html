@@ -76,16 +76,16 @@
 >
   Outlets
 </div>
-<div class="outlet-wrap">
+<div class="outlet-wrap" *ngIf="stats && stats.data">
   <div
     class="outlet-wrap__outlet"
-    [style.height]="saleData.length * 40 + 40 + 'px'"
+    [style.height]="stats.data.length * 40 + 40 + 'px'"
   >
-    <ng-container *ngFor="let item of saleData">
+    <ng-container *ngFor="let item of stats.data">
       <div class="outlet-wrap__outlet__outlets">
         <div class="outlet-wrap__outlet__outlets__label">{{ item.label }}</div>
         <div class="progress-bar">
-          <ng-container *ngFor="let progress of item.data">
+          <ng-container *ngFor="let progress of item.services">
             <div
               [style.width]="progress.percentage + '%'"
               [style.background]="progress.color"
@@ -106,7 +106,7 @@
               {{ item.label }}
             </div>
             <div
-              *ngFor="let progress of item.data"
+              *ngFor="let progress of item.services"
               style="display: flex; align-items: center; margin: 5px 0;"
             >
               <div
@@ -142,7 +142,7 @@
     </ng-container>
     <div
       class="outlet-wrap__outlet__progress-back"
-      [style.height]="saleData.length * 40 + 40 + 'px'"
+      [style.height]="stats.data.length * 40 + 40 + 'px'"
     >
       <div class="outlet-wrap__outlet__progress-backpercentbar">
         <div
@@ -151,7 +151,7 @@
         >
           <div
             class="outlet-wrap__outlet__progress-backpercentbar__percent-value__bar"
-            [style.height]="saleData.length * 40 + 20 + 'px'"
+            [style.height]="stats.data.length * 40 + 20 + 'px'"
           ></div>
           <div class="percent">{{ percent }}</div>
         </div>
@@ -168,7 +168,7 @@
   "
 >
   <div
-    *ngFor="let item of saleData[0]?.data"
+    *ngFor="let item of (stats?.data)[0]?.services"
     style="display: flex; align-items: center; margin: 10px 15px;"
   >
     <div

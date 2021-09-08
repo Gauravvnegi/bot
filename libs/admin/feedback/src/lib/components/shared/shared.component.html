@@ -23,81 +23,51 @@
     </div>
     <div class="stats__graphwraper__detail">
       <div class="stats__graphwraper__detail__shared">
-        280
+        {{ stats?.totalResponse }}
       </div>
       <div class="stats__graphwraper__detail__sharedtitle">
         Overall Shared
       </div>
-      <div class="received-wrap">
-        <div class="received-wrap__container">
-          <div class="received-wrap__container__dot"></div>
-          <div class="received-wrap__container__count">
-            180
+      <ng-container *ngIf="stats?.feedbacks">
+        <div class="received-wrap" *ngFor="let item of stats.feedbacks">
+          <div class="received-wrap__container">
+            <div
+              class="received-wrap__container__dot"
+              [style.background]="item.color"
+            ></div>
+            <div class="received-wrap__container__count">
+              {{ item.count }}
+            </div>
+            <div>
+              <span
+                class="percentChange"
+                [ngStyle]="
+                  item.comparePercent >= 0
+                    ? {
+                        color: '#52b33f'
+                      }
+                    : { color: '#CC052B' }
+                "
+                >({{ item.comparePercent }}%)</span
+              ><img
+                class="received-wrap__container__percentChange-img"
+                [src]="
+                  item.comparePercent >= 0
+                    ? 'assets/svg/uparrow.svg'
+                    : 'assets/svg/down-percentage.svg'
+                "
+                alt="uparrow"
+              />
+            </div>
+            <div class="received-wrap__container__date">
+              in 30 Days
+            </div>
           </div>
-          <div>
-            <span
-              class="percentChange"
-              [ngStyle]="
-                true
-                  ? {
-                      color: '#52b33f'
-                    }
-                  : { color: '#CC052B' }
-              "
-              >({{ 100 }}%)</span
-            ><img
-              class="received-wrap__container__percentChange-img"
-              [src]="
-                true
-                  ? 'assets/svg/uparrow.svg'
-                  : 'assets/svg/down-percentage.svg'
-              "
-              alt="uparrow"
-            />
-          </div>
-          <div class="received-wrap__container__date">
-            in 30 Days
-          </div>
-        </div>
-        <div class="received-wrap__recived-title">
-          Feedback Received
-        </div>
-      </div>
-      <div class="received-wrap__no-recived">
-        <div class="received-wrap__no-recived__container">
-          <div class="received-wrap__no-recived__container__dot"></div>
-          <div class="received-wrap__no-recived__container__count">
-            100
-          </div>
-          <div>
-            <span
-              class="percentChange"
-              [ngStyle]="
-                true
-                  ? {
-                      color: '#52b33f'
-                    }
-                  : { color: '#CC052B' }
-              "
-              >({{ 100 }}%)</span
-            ><img
-              class="received-wrap__container__percentChange-img"
-              [src]="
-                true
-                  ? 'assets/svg/uparrow.svg'
-                  : 'assets/svg/down-percentage.svg'
-              "
-              alt="uparrow"
-            />
-          </div>
-          <div class="received-wrap__no-recived__container__date">
-            in 30 Days
+          <div class="received-wrap__recived-title">
+            {{ item.label }}
           </div>
         </div>
-        <div class="received-wrap__no-recived__title">
-          Feedback Not Received
-        </div>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>

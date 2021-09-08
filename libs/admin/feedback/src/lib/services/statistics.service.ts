@@ -62,6 +62,16 @@ export class StatisticsService extends ApiService {
   }
 
   getNPSPerformance(config): Observable<any> {
-    return this.get(`/api/v1/feedback-stats/nps/performance/${config.queryObj}`);
+    return this.get(
+      `/api/v1/feedback-stats/nps/performance/${config.queryObj}`
+    );
+  }
+
+  getSharedStats(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/shared${config.queryObj}`);
+  }
+
+  getPOSStats(config): Observable<any> {
+    return this.get(`/api/v1/feedback-stats/npos${config.queryObj}`);
   }
 }

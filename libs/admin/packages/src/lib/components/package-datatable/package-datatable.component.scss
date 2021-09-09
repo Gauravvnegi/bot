@@ -51,6 +51,9 @@
       font-size: 12px;
       color: #484848;
       max-width: 60%;
+      @media (max-width: 992px) {
+        overflow: hidden;
+      }
       p {
         color: $primary-gray;
         margin-top: 5px;

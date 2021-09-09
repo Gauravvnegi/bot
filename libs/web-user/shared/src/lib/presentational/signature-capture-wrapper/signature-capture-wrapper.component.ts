@@ -52,7 +52,7 @@ export class SignatureCaptureWrapperComponent
         settings: {
           signaturePadOptions: {
             minWidth: 1.3,
-            canvasWidth: 700,
+            canvasWidth: (window.innerWidth * 73.5) / 100,
             canvasHeight: 250,
             maxWidth: 2,
           },

@@ -1,8 +1,13 @@
-<div [ngClass]='settings.scribbleContainer'>
-    <div>
-        <signature-pad #sPad [options]="settings.signaturePadOptions"></signature-pad>
-    </div>
-    <div [ngClass]='settings.clear'>
-        <span aria-hidden="true" class='close' (click)="clearSignature()">&times;</span>
-    </div>
+<div [ngClass]="settings.scribbleContainer">
+  <div>
+    <signature-pad
+      #sPad
+      [options]="settings.signaturePadOptions"
+    ></signature-pad>
+  </div>
+  <div [ngClass]="settings.clear">
+    <span aria-hidden="true" class="close" (click)="clearSignature()"
+      >&times;</span
+    >
+  </div>
 </div>

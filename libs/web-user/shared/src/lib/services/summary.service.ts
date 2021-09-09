@@ -24,8 +24,8 @@ export class SummaryService extends ApiService {
     return summaryDetailsFieldSchema as SummaryDetailsConfigI;
   }
 
-  initSummaryDS(summary) {
-    this.summaryDetails = new SummaryDetails().deserialize(summary);
+  initSummaryDS(summary, timezone) {
+    this.summaryDetails = new SummaryDetails().deserialize(summary, timezone);
   }
 
   getSummaryStatus(reservationId) {

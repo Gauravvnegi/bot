@@ -53,7 +53,7 @@
           </div>
           <ng-template #noRoom><div class="rno-number"></div></ng-template>
           <div class="time">
-            {{ contact.getTime() }}
+            {{ contact.getTime(_globalFilterService.timezone) }}
           </div>
         </div>
         <div class="persons">

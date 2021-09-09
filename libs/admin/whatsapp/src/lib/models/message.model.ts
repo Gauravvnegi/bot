@@ -1,3 +1,4 @@
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 
@@ -5,9 +6,9 @@ export class Chats {
   messages: IChat[];
   receiver: IContact;
 
-  deserialize(input) {
+  deserialize(input, timezone) {
     this.messages = new Array<IChat>();
-    this.receiver = new Contact().deserialize(input.receiver);
+    this.receiver = new Contact().deserialize(input.receiver, timezone);
 
     input.messages?.forEach((message) => {
       this.messages.push(new Chat().deserialize(message));
@@ -53,8 +54,8 @@ export class Chat {
     return this;
   }
 
-  getTime() {
-    return moment(this.timestamp).format('h:mm a');
+  getTime(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(this.timestamp, 'h:mm a', timezone);
   }
 
   getType(type) {
@@ -66,24 +67,14 @@ export class Chat {
     else return type;
   }
 
-  getFileName(type) {
+  getFileName(type, timezone = '+05:30') {
     if (type === undefined) return undefined;
-    else if (type.includes('image'))
-      return `${moment(this.timestamp).format('MMM_DD_YYYY_hh:mm:ss')}.${
-        type.split('/')[1].split(';')[0]
-      }`;
-    else if (type.includes('pdf'))
-      return `${moment(this.timestamp).format('MMM_DD_YYYY_hh:mm:ss')}.${
-        type.split('/')[1].split(';')[0]
-      }`;
-    else if (type.includes('video'))
-      return `${moment(this.timestamp).format('MMM_DD_YYYY_hh:mm:ss')}.${
-        type.split('/')[1].split(';')[0]
-      }`;
-    else if (type.includes('audio'))
-      return `${moment(this.timestamp).format('MMM_DD_YYYY_hh:mm:ss')}.${
-        type.split('/')[1].split(';')[0]
-      }`;
+    else
+      return `${DateService.getDateFromTimeStamp(
+        this.timestamp,
+        'MMM_DD_YYYY_hh:mm:ss',
+        timezone
+      )}.${type.split('/')[1].split(';')[0]}`;
   }
 }
 
@@ -91,11 +82,11 @@ export class ContactList {
   contacts: IContact[];
   unreadContacts: number;
 
-  deserialize(input) {
+  deserialize(input, timezone) {
     this.contacts = new Array<IContact>();
     this.unreadContacts = 0;
     input?.forEach((item) =>
-      this.contacts.push(new Contact().deserialize(item))
+      this.contacts.push(new Contact().deserialize(item, timezone))
     );
 
     this.contacts.forEach((contact) => {
@@ -123,7 +114,7 @@ export class Contact {
   color: string;
   unreadCount: number;
 
-  deserialize(input) {
+  deserialize(input, timezone) {
     Object.assign(
       this,
       set({}, 'email', get(input, ['email'])),
@@ -138,27 +129,39 @@ export class Contact {
       set({}, 'unreadCount', get(input, ['unreadCount']))
     );
     this.descriptionMessage = decodeURIComponent(
-      get(input, ['descriptionMessage'])
+      get(input, ['descriptionMessage']) || ''
     );
     this.color = colors[Math.floor(Math.random() * colors.length)];
-    this.enableSend = this.checkEnableSend();
+    this.enableSend = this.checkEnableSend(timezone);
     return this;
   }
 
-  getTime() {
-    const diff = moment().diff(moment(+this.lastMessageAt), 'days');
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.lastMessageAt).utcOffset(timezone), 'days');
     const currentDay = moment().format('DD');
-    const lastMessageDay = moment.unix(+this.lastMessageAt / 1000).format('DD');
+    const lastMessageDay = moment
+      .unix(+this.lastMessageAt / 1000)
+      .utcOffset(timezone)
+      .format('DD');
     if (diff > 0) {
-      return moment(this.lastMessageAt).format('DD MMM');
+      return moment(this.lastMessageAt).utcOffset(timezone).format('DD MMM');
     } else if (+diff === 0 && +currentDay > +lastMessageDay) {
       return 'Yesterday';
     }
-    return moment(this.lastMessageAt).format('h:mm a');
+    return moment(this.lastMessageAt).utcOffset(timezone).format('h:mm a');
   }
 
-  checkEnableSend() {
-    return +moment().diff(moment(+this.lastInboundMessageAt), 'hours') <= 24;
+  checkEnableSend(timezone = '+05:30') {
+    return (
+      +moment()
+        .utcOffset(timezone)
+        .diff(
+          moment(+this.lastInboundMessageAt).utcOffset(timezone),
+          'hours'
+        ) <= 24
+    );
   }
 
   getProfileNickName() {

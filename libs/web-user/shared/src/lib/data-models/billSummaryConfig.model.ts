@@ -7,7 +7,8 @@ export interface Deserializable {
     reservation: any,
     rooms: any,
     stayDetails: any,
-    primaryGuest
+    primaryGuest,
+    timezone: string
   ): this;
 }
 
@@ -15,7 +16,7 @@ export class BillSummaryDetailDS implements Deserializable {
   staySummary: StaySummaryDetail;
   billSummary: PaymentSummaryDetail;
 
-  deserialize(input: any, paymentData: any) {
+  deserialize(input: any, paymentData: any, timezone = '+05:30') {
     //Rooms index is hardcoded as we are not sure about the api response , it should either be not an array or the whole api response should be changed
     // It is submitted as query as this data comes from PMS . once api response is confirmed , structure would be changed
     if (input.rooms && paymentData) {
@@ -23,9 +24,13 @@ export class BillSummaryDetailDS implements Deserializable {
         input,
         input.rooms[0],
         input.stayDetails,
-        input.guestDetails.primaryGuest
+        input.guestDetails.primaryGuest,
+        timezone
       );
-      this.billSummary = new PaymentSummaryDetail().deserialize(paymentData);
+      this.billSummary = new PaymentSummaryDetail().deserialize(
+        paymentData,
+        timezone
+      );
     }
     return this;
   }
@@ -44,7 +49,13 @@ export class StaySummaryDetail implements Deserializable {
   firstname: string;
   lastname: string;
 
-  deserialize(reservation: any, rooms: any, stayDetails, primaryGuest) {
+  deserialize(
+    reservation: any,
+    rooms: any,
+    stayDetails,
+    primaryGuest,
+    timezone
+  ) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(reservation, ['number'])),
@@ -56,17 +67,19 @@ export class StaySummaryDetail implements Deserializable {
       set(
         {},
         'arrivalDate',
-        DateService.convertTimestampToDate(
+        DateService.getDateFromTimeStamp(
           get(stayDetails, ['arrivalTime']),
-          'DD-MM-YYYY'
+          'DD-MM-YYYY',
+          timezone
         )
       ),
       set(
         {},
         'departureDate',
-        DateService.convertTimestampToDate(
+        DateService.getDateFromTimeStamp(
           get(stayDetails, ['departureTime']),
-          'DD-MM-YYYY'
+          'DD-MM-YYYY',
+          timezone
         )
       ),
       set({}, 'currentDate', DateService.currentDate()),
@@ -84,7 +97,7 @@ export class PaymentSummaryDetail implements Deserializable {
   totalAmount;
   signatureUrl;
   billItems: BillItem[];
-  deserialize(input: any) {
+  deserialize(input: any, timezone) {
     this.billItems = new Array<BillItem>();
     Object.assign(
       this,
@@ -95,7 +108,7 @@ export class PaymentSummaryDetail implements Deserializable {
       set({}, 'signatureUrl', get(input, ['signatureUrl']))
     );
     input.billItems.forEach((item) => {
-      this.billItems.push(new BillItem().deserialize(item));
+      this.billItems.push(new BillItem().deserialize(item, timezone));
     });
     return this;
   }
@@ -109,13 +122,17 @@ export class BillItem {
   description: string;
   unit: number;
 
-  deserialize(input) {
+  deserialize(input, timezone) {
     Object.assign(
       this,
       set(
         {},
         'date',
-        DateService.convertTimestampToDate(get(input, ['date']), 'DD-MM-YYYY')
+        DateService.getDateFromTimeStamp(
+          get(input, ['date']),
+          'DD-MM-YYYY',
+          timezone
+        )
       ),
       set({}, 'creditAmount', get(input, ['creditAmount']).toFixed(2)),
       set({}, 'currency', get(input, ['currency'])),

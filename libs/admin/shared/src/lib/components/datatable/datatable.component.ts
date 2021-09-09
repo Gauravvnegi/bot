@@ -1,12 +1,7 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { delay } from 'rxjs/operators';
-import { pipe, of } from 'rxjs';
-import { LazyLoadEvent } from 'primeng/api/public_api';
-import { Table } from 'primeng/table';
-import { MenuItem } from 'primeng/api';
-import { BaseDatatableComponent } from './base-datatable.component';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { TableService } from '../../services/table.service';
+import { BaseDatatableComponent } from './base-datatable.component';
 
 interface Import {
   name: string;

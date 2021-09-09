@@ -30,7 +30,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     private _snackBarService: SnackBarService,
     private _translateService: TranslateService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService,
+    private _buttonService: ButtonService
   ) {
     super();
     this.self = this;
@@ -47,7 +47,10 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   initStayDetailsDS(): void {
-    this._stayDetailService.initStayDetailDS(this.reservationData);
+    this._stayDetailService.initStayDetailDS(
+      this.reservationData,
+      this._hotelService.hotelConfig.timezone
+    );
   }
 
   getHotelAmenities(): void {
@@ -76,7 +79,10 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
         .updateStayDetails(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
-            this._stayDetailService.updateStayDetailDS(response.stayDetails);
+            this._stayDetailService.updateStayDetailDS(
+              response.stayDetails,
+              this._hotelService.hotelConfig.timezone
+            );
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );
@@ -87,10 +93,10 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
               this.buttonRefs['nextButton']
             );
             this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
           }
         )
     );

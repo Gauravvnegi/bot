@@ -131,7 +131,6 @@
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
-            <img src="assets/svg/Filter-Icon.svg" />
           </div>
         </div>
       </form>
@@ -274,19 +273,25 @@
       </td>
       <td>
         <p class="arrival-date">
-          {{ rowData.booking.getArrivalDate() }}-{{
-            rowData.booking.getDepartureDate()
+          {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }}-{{
+            rowData.booking.getDepartureDate(_globalFilterService.timezone)
           }}
         </p>
 
         <p class="arrival-time">
-          {{ rowData.booking.getArrivalTime() }}-{{
-            rowData.booking.getDepartureTime()
+          {{ rowData.booking.getArrivalTime(_globalFilterService.timezone) }}-{{
+            rowData.booking.getDepartureTime(_globalFilterService.timezone)
           }}
         </p>
         <p class="arrival-time">
-          {{ rowData.booking.getDaysAndNights().nights }}N |
-          {{ rowData.booking.getDaysAndNights().days }}D
+          {{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .nights
+          }}N |
+          {{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .days
+          }}D
         </p>
       </td>
       <td>

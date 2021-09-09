@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IChat } from '../models/message.model';
@@ -52,15 +53,20 @@ export class MessageService extends ApiService {
     );
   }
 
-  filterMessagesByDate(messages: IChat[]) {
-    const currentDate = moment();
+  filterMessagesByDate(messages: IChat[], timezone = '+05:30') {
+    const currentDate = moment().utcOffset(timezone);
     const filteredMsgObj = {};
 
     messages.forEach((message: IChat) => {
-      const dateDiff = currentDate.diff(moment(message.timestamp), 'days');
+      const dateDiff = currentDate.diff(
+        moment(message.timestamp).utcOffset(timezone),
+        'days'
+      );
       if (dateDiff === 0) {
         const currentDay = currentDate.format('DD');
-        const messageDay = moment(message.timestamp).format('DD');
+        const messageDay = moment(message.timestamp)
+          .utcOffset(timezone)
+          .format('DD');
         if (currentDay === messageDay) {
           if (Object.keys(filteredMsgObj).includes('Today')) {
             filteredMsgObj['Today'].push(message);
@@ -81,7 +87,11 @@ export class MessageService extends ApiService {
           filteredMsgObj['Yesterday'] = [message];
         }
       } else {
-        const date = moment(message.timestamp).format('DD/MM/YYYY');
+        const date = DateService.getDateFromTimeStamp(
+          message.timestamp,
+          'DD/MM/YYYY',
+          timezone
+        );
         if (Object.keys(filteredMsgObj).includes(date)) {
           filteredMsgObj[date].push(message);
         } else {

@@ -14,7 +14,7 @@ export class DateService {
     return moment(inputDate).unix();
   }
 
-  static convertTimestampToDate(inputTimeStamp, format?) {
+  static convertTimestampToDate(inputTimeStamp, format?, timezone = '+05:30') {
     if (format) {
       return moment.unix(inputTimeStamp / 1000).format(format);
     }
@@ -25,32 +25,45 @@ export class DateService {
     return DateService.convertTimestampToDate(moment.now(), format);
   }
 
-  static getCurrentDateString() {
-    return moment().format();
+  static getCurrentDateString(timezone = '+05:30') {
+    return moment().utcOffset(timezone).format();
   }
 
-  static getCurrentDateWithFormat(format: string = 'DD-MM-YYYY') {
-    return moment().format(format);
+  static getCurrentDateWithFormat(
+    format: string = 'DD-MM-YYYY',
+    timezone = '+05:30'
+  ) {
+    return moment().utcOffset(timezone).format(format);
   }
 
-  static getDateDifference(date1, date2) {
-    return moment(date1).diff(moment(date2), 'days');
+  static getDateDifference(date1, date2, timezone = '+05:30') {
+    return moment(date1).utcOffset(timezone).diff(moment(date2), 'days');
   }
 
-  static getMonthFromDate(timestamp) {
-    return moment.unix(timestamp / 1000).month();
+  static getMonthFromDate(timestamp, timezone = '+05:30') {
+    return moment
+      .unix(timestamp / 1000)
+      .utcOffset(timezone)
+      .month();
   }
 
-  static getYearFromDate(timestamp) {
-    return moment.unix(timestamp / 1000).year();
+  static getYearFromDate(timestamp, timezone = '+05:30') {
+    return moment
+      .unix(timestamp / 1000)
+      .utcOffset(timezone)
+      .year();
   }
 
   static getCurrentTimeZone() {
     return moment().format('Z');
   }
 
-  static getDateFromTimeStamp(inputTimeStamp, format = 'DD-MM-YYYY') {
-    return moment(inputTimeStamp).format(format);
+  static getDateFromTimeStamp(
+    inputTimeStamp,
+    format = 'DD-MM-YYYY',
+    timezone = '+05:30'
+  ) {
+    return moment(inputTimeStamp).utcOffset(timezone).format(format);
   }
 
   convertTimestampToLabels(type, timestamp, format?, toDate?) {

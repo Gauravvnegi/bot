@@ -94,7 +94,6 @@ export class ChatComponent
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForApplicationActive();
-    this.listenForRefreshData();
     this.listenForMessageNotification();
   }
 
@@ -105,19 +104,9 @@ export class ChatComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
+        this.getLiveChat();
       })
     );
-  }
-
-  listenForRefreshData() {
-    this.messageService.refreshData$.subscribe((response) => {
-      if (response) {
-        this.scrollBottom = true;
-        this.guestInfo.emit(false);
-        this.getChat({ offset: 0, limit: this.limit }, 0, false);
-        this.messageService.refreshData$.next(false);
-      }
-    });
   }
 
   listenForMessageNotification() {
@@ -138,7 +127,7 @@ export class ChatComponent
         this.scrollBottom = true;
         this.getChat({
           offset: 0,
-          limit: this.limit % 20 === 0 ? this.limit - 20 : this.limit,
+          limit: this.limit % 20 === 0 ? this.limit - 20 : 20,
         });
         this._firebaseMessagingService.tabActive.next(false);
       }
@@ -206,7 +195,10 @@ export class ChatComponent
   }
 
   handleChatResponse(response) {
-    this.chat = new Chats().deserialize(response);
+    this.chat = new Chats().deserialize(
+      response,
+      this._globalFilterService.timezone
+    );
     this.chat.messages = DateService.sortObjArrayByTimeStamp(
       this.chat.messages,
       'timestamp'

@@ -65,7 +65,10 @@ export class GuestInfoComponent implements OnInit, OnChanges {
       this.messageService
         .getChat(this.hotelId, this.data.receiverId, '')
         .subscribe((response) => {
-          this.guestData = new Contact().deserialize(response.receiver);
+          this.guestData = new Contact().deserialize(
+            response.receiver,
+            this._globalFilterService.timezone
+          );
           this.isLoading = false;
         })
     );

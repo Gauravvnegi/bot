@@ -3,7 +3,7 @@ import { get, set } from 'lodash';
 import { GuestTypes, GuestRole } from '../constants/guest';
 
 export interface Deserializable {
-  deserialize(input: any): this;
+  deserialize(input: any, timezone): this;
 }
 
 export class SummaryDetails implements Deserializable {
@@ -16,7 +16,7 @@ export class SummaryDetails implements Deserializable {
   paymentSummary: PaymentSummary;
   healthDeclaration: Health;
 
-  deserialize(summary) {
+  deserialize(summary, timezone) {
     Object.assign(
       this,
       set({}, 'id', get(summary, ['id'])),
@@ -28,7 +28,10 @@ export class SummaryDetails implements Deserializable {
     this.healthDeclaration = new Health().deserialize(
       summary.healthDeclaration
     );
-    this.stayDetails = new StayDetails().deserialize(summary.stayDetails);
+    this.stayDetails = new StayDetails().deserialize(
+      summary.stayDetails,
+      timezone
+    );
     this.paymentSummary = new PaymentSummary().deserialize(
       summary.paymentSummary
     );
@@ -62,7 +65,7 @@ export class StayDetails {
   expectedDepartureTime: number;
   roomNumber: number;
 
-  deserialize(summary) {
+  deserialize(summary, timezone) {
     Object.assign(
       this,
       set({}, 'statusMessage', get(summary, ['statusMessage'])),
@@ -79,17 +82,19 @@ export class StayDetails {
     return this;
   }
 
-  getArrivalTime() {
+  getArrivalTime(timezone = '+05:30') {
     return DateService.getDateFromTimeStamp(
       +this.arrivalTime,
-      'DD - MM - YYYY'
+      'DD - MM - YYYY',
+      timezone
     );
   }
 
-  getDepartureTime() {
+  getDepartureTime(timezone = '+05:30') {
     return DateService.getDateFromTimeStamp(
       +this.departureTime,
-      'DD - MM - YYYY'
+      'DD - MM - YYYY',
+      timezone
     );
   }
 }

@@ -11,7 +11,7 @@ export class StayDetailDS implements Deserializable {
   stayDetail: StayDetail;
   special_comments: SpecialComments;
 
-  deserialize(input: any) {
+  deserialize(input: any, timezone = '+05:30') {
     this.stayDetail = new StayDetail().deserialize(input);
     this.special_comments = new SpecialComments().deserialize(input);
     return this;
@@ -26,26 +26,36 @@ export class StayDetail implements Deserializable {
   adultsCount: number;
   expectedArrivalTime: string;
   expectedDepartureTime: string;
-  deserialize(input: any) {
+  deserialize(input: any, timezone = '+05:30') {
     let expectedArrivalTime = DateService.getDateFromTimeStamp(
       get(input, ['expectedArrivalTime']),
-      'DD-MM-YYYY hh:mm a'
+      'DD-MM-YYYY hh:mm a',
+      timezone
     );
     let expectedDepartureTime = DateService.getDateFromTimeStamp(
       get(input, ['expectedDepartureTime']),
-      'DD-MM-YYYY hh:mm a'
+      'DD-MM-YYYY hh:mm a',
+      timezone
     );
     Object.assign(
       this,
       set(
         {},
         'arrivalTime',
-        new Date(get(input, ['arrivalTime'])).toISOString()
+        DateService.getDateFromTimeStamp(
+          get(input, ['arrivalTime']),
+          'DD-MM-YYYY hh:mm a',
+          timezone
+        )
       ),
       set(
         {},
         'departureTime',
-        new Date(get(input, ['departureTime'])).toISOString()
+        DateService.getDateFromTimeStamp(
+          get(input, ['departureTime']),
+          'DD-MM-YYYY hh:mm a',
+          timezone
+        )
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),
@@ -54,19 +64,11 @@ export class StayDetail implements Deserializable {
     this.expectedArrivalTime =
       input.expectedArrivalTime === 0
         ? '02:00 pm'
-        : moment(
-            expectedArrivalTime.split(' ')[1] +
-              expectedArrivalTime.split(' ')[2],
-            'h:mm a'
-          ).format('h:mm a');
+        : expectedArrivalTime.substr(expectedArrivalTime.indexOf(' ') + 1);
     this.expectedDepartureTime =
       input.expectedDepartureTime === 0
         ? '12:00 pm'
-        : moment(
-            expectedDepartureTime.split(' ')[1] +
-              expectedDepartureTime.split(' ')[2],
-            'h:mm a'
-          ).format('h:mm a');
+        : expectedDepartureTime.substr(expectedDepartureTime.indexOf(' ') + 1);
     return this;
   }
 }
@@ -96,5 +98,3 @@ export interface StayDetailsConfigI {
 export interface SpecialCommentsConfigI {
   comments: FieldSchema;
 }
-
-// set({},'',get(input,[''])),

@@ -8,6 +8,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { RequestTable } from '../../models/request-table.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -43,6 +44,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     private _reservationService: ReservationService,
     private _adminUtilityService: AdminUtilityService,
     private _snackbarService: SnackBarService,
+    private _globalFilterService: GlobalFilterService,
     private _router: Router,
     private _route: ActivatedRoute,
     protected tabFilterService: TableService

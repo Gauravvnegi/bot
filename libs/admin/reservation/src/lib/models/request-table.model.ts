@@ -1,3 +1,4 @@
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 export interface Deserializable {
@@ -32,32 +33,61 @@ export class Request implements Deserializable {
     return this;
   }
 
-  getRequestDate() {
-    return moment(this.requestTimeStamp).format('DD/M/YY');
+  getRequestDate(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(
+      this.requestTimeStamp,
+      'DD/M/YY',
+      timezone
+    );
   }
 
-  getRequestTime() {
-    return moment(this.requestTimeStamp).format('HH:mm');
+  getRequestTime(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(
+      this.requestTimeStamp,
+      'HH:mm',
+      timezone
+    );
   }
 
-  getElapsedTime() {
-    const diffInMins = moment().diff(moment(this.requestTimeStamp), 'minutes');
+  getElapsedTime(timezone = '+05:30') {
+    const diffInMins = moment()
+      .utcOffset(timezone)
+      .diff(moment(this.requestTimeStamp).utcOffset(timezone), 'minutes');
     if (diffInMins > 24 * 60 * 30 * 12) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'years')} year(s)`;
+      return `${moment()
+        .utcOffset(timezone)
+        .diff(
+          moment(this.requestTimeStamp).utcOffset(timezone),
+          'years'
+        )} year(s)`;
     } else if (diffInMins > 24 * 60 * 30) {
-      return `${moment().diff(
-        moment(this.requestTimeStamp),
-        'months'
-      )} month(s)`;
+      return `${moment()
+        .utcOffset(timezone)
+        .diff(
+          moment(this.requestTimeStamp).utcOffset(timezone),
+          'months'
+        )} month(s)`;
     } else if (diffInMins > 24 * 60) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'days')} day(s)`;
+      return `${moment()
+        .utcOffset(timezone)
+        .diff(
+          moment(this.requestTimeStamp).utcOffset(timezone),
+          'days'
+        )} day(s)`;
     } else if (diffInMins > 60) {
-      return `${moment().diff(moment(this.requestTimeStamp), 'hours')} hour(s)`;
+      return `${moment()
+        .utcOffset(timezone)
+        .diff(
+          moment(this.requestTimeStamp).utcOffset(timezone),
+          'hours'
+        )} hour(s)`;
     } else if (diffInMins > 0) {
-      return `${moment().diff(
-        moment(this.requestTimeStamp),
-        'minutes'
-      )} min(s)`;
+      return `${moment()
+        .utcOffset(timezone)
+        .diff(
+          moment(this.requestTimeStamp).utcOffset(timezone),
+          'minutes'
+        )} min(s)`;
     } else {
       return;
     }

@@ -12,8 +12,33 @@ export class AnalyticsService extends ApiService {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/graph`);
   }
 
-  exportCSV(hotelId): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/export`, {
+  exportCSV(hotelId, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/stats/export${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+  getSourceStats(config) {
+    return this.get(
+      `/api/v1/live-request/source-stats/count${config.queryObj}`
+    );
+  }
+
+  getSentimentsStats(config) {
+    return this.get(
+      `/api/v1/live-request/sentiment-stats/count${config.queryObj}`
+    );
+  }
+
+  getInhouseRequest(config) {
+    return this.get(`/api/v1/live-request/list${config.queryObj}`);
+  }
+
+  exportInhouseRequestCSV(config) {
+    return this.get(`/api/v1/live-request/list/export${config.queryObj}`, {
       responseType: 'blob',
     });
   }

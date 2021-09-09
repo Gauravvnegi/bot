@@ -7,6 +7,7 @@ import { FilterService } from './filter.service';
 @Injectable({ providedIn: 'root' })
 export class GlobalFilterService {
   globalFilter$ = new BehaviorSubject({});
+  timezone: string;
 
   globalFilterObj = {
     filter: {

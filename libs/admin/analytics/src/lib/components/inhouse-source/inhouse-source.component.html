@@ -1,0 +1,49 @@
+<div class="graphContainer">
+  <div class="messageAnalytics" *ngIf="graphData">
+    <div class="analyticsHeading">
+      <p>Top Request</p>
+      <div class="info-icon">
+        <img src="assets/svg/info.svg" alt="info-icon" />
+        <div class="tooltip">
+          <span class="arrow"></span>
+          Total number of requests in a selected time frame.
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="graph-container">
+        <div class="graph">
+          <canvas
+            baseChart
+            [data]="chart.Data"
+            [labels]="chart.Labels"
+            [chartType]="chart.Type"
+            [legend]="chart.Legend"
+            [colors]="chart.Colors"
+            [options]="chart.Options"
+          >
+          </canvas>
+        </div>
+        <div class="labels">
+          <div class="val">{{ graphData.totalCount }}</div>
+          <div class="label">Total Request</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div
+        class="stat-val"
+        *ngFor="let val of stats"
+        [style.border-left]="
+          '5px solid ' + graphData.inhouseRequestSourceStats[val].color
+        "
+      >
+        <div class="label">{{ val }}</div>
+        <div class="value">
+          {{ graphData.inhouseRequestSourceStats[val].value }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="days-label">In 30 Days</div>
+</div>

@@ -65,7 +65,9 @@
               ></hospitality-bot-media-chat
             ></ng-template>
           </div>
-          <div class="message__time">{{ message.getTime() }}</div>
+          <div class="message__time">
+            {{ message.getTime(_globalFilterService.timezone) }}
+          </div>
         </div>
       </div>
     </ng-container>

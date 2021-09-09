@@ -65,15 +65,7 @@
     </mat-chip>
   </mat-chip-list>
 </div>
-<div
-  style="
-    font: normal normal normal 16px Roboto;
-    letter-spacing: 0.84px;
-    text-align: left;
-    color: #6d7580;
-    margin: 10px 0;
-  "
->
+<div class="header__outlet-heading">
   Outlets
 </div>
 <div class="outlet-wrap" *ngIf="stats && stats.data">
@@ -92,47 +84,21 @@
             ></div>
           </ng-container>
           <div class="stat-data">
-            <div
-              style="
-                font-weight: bold;
-                font-stretch: normal;
-                font-style: normal;
-                line-height: normal;
-                letter-spacing: 0.72px;
-                color: #002046;
-                margin-bottom: 10px;
-              "
-            >
+            <div class="stat-data__label">
               {{ item.label }}
             </div>
             <div
+              class="stat-data__items"
               *ngFor="let progress of item.services"
-              style="display: flex; align-items: center; margin: 5px 0;"
             >
               <div
-                style="
-                  width: 10px;
-                  height: 10px;
-                  border-radius: 50%;
-                  margin-right: 5px;
-                "
+                class="stat-data__items__dot"
                 [style.background]="progress.color"
               ></div>
-              <div
-                style="
-                  font-weight: normal;
-                  font-stretch: normal;
-                  font-style: normal;
-                  line-height: normal;
-                  letter-spacing: 0.72px;
-                  text-align: left;
-                  color: #6d7580;
-                  margin-right: 10px;
-                "
-              >
+              <div class="stat-data__items__label">
                 {{ progress.label }}
               </div>
-              <div style="font-weight: bold; color: #002046;">
+              <div class="stat-data__items__count">
                 {{ progress.percentage }}
               </div>
             </div>
@@ -159,35 +125,10 @@
     </div>
   </div>
 </div>
-<div
-  style="
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-  "
->
-  <div
-    *ngFor="let item of (stats?.data)[0]?.services"
-    style="display: flex; align-items: center; margin: 10px 15px;"
-  >
-    <div
-      style="width: 10px; height: 10px; border-radius: 50%; margin-right: 5px;"
-      [style.background]="item.color"
-    ></div>
-    <div
-      style="
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.84px;
-        text-align: left;
-        color: #6d7580;
-      "
-    >
+<div class="footer">
+  <div class="footer__item" *ngFor="let item of (stats?.data)[0]?.services">
+    <div class="footer__item__dot" [style.background]="item.color"></div>
+    <div class="__label">
       {{ item.label }}
     </div>
   </div>

@@ -27,7 +27,7 @@ export class GlobalNpsComponent implements OnInit {
 
   defaultChart: any = {
     Labels: ['No Data'],
-    Data: [[100]],
+    Data: [[0]],
     Type: 'doughnut',
 
     Legend: false,
@@ -117,9 +117,9 @@ export class GlobalNpsComponent implements OnInit {
   initGraphData(data) {
     this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
     Object.keys(data).forEach((key) => {
-      if (key !== 'label' && key !== 'score' && data[key]) {
+      if (key !== 'label' && key !== 'score' && key!=='comparisonPercent' && data[key]) {
         this.chart.Labels.push(this.labels[key]);
-        this.chart.Data[0].push(this.roundValue(data[key]));
+        this.chart.Data[0].push(this.roundValue(data[key].score));
         this.chart.Colors[0].backgroundColor.push(this.color[key]);
         this.chart.Colors[0].borderColor.push(this.color[key]);
       }

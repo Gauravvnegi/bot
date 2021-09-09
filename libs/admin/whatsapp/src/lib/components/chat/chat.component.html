@@ -1,18 +1,25 @@
 <div class="chat-height">
-  <div class="guestInfoOpen" (click)="openGuestInfo()">
-    <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
-      <img
-        [src]="chat?.receiver?.profileUrl"
-        *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
-      />
-      <ng-template #defaultAvatar
-        ><div class="label">
-          {{ selectedChat?.getProfileNickName() }}
-        </div></ng-template
-      >
+  <div class="guestInfoOpen">
+    <div style="display: flex; align-items: center;" (click)="openGuestInfo()">
+      <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
+        <img
+          [src]="chat?.receiver?.profileUrl"
+          *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
+        />
+        <ng-template #defaultAvatar
+          ><div class="label">
+            {{ selectedChat?.getProfileNickName() }}
+          </div></ng-template
+        >
+      </div>
+      <div class="selectedChat">
+        {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
+      </div>
     </div>
-    <div class="selectedChat">
-      {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
+    <div style="margin-right: 10px;" [formGroup]="liveChatFG">
+      <mat-slide-toggle formControlName="status" (change)="onLiveChatChange()"
+        >Bot Reply</mat-slide-toggle
+      >
     </div>
   </div>
   <div

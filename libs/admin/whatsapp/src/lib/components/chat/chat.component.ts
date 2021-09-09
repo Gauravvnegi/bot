@@ -320,13 +320,15 @@ export class ChatComponent
           this.selectedChat.receiverId,
           this.liveChatFG.getRawValue()
         )
-        .subscribe((response) =>
-          this.liveChatFG.patchValue({ status: response })
-        )
+        .subscribe((response) => this.liveChatFG.patchValue(response))
     );
   }
 
   get chatList() {
     return this.messageService.chatList;
+  }
+
+  get liveChatStatus() {
+    return this.liveChatFG?.get('status');
   }
 }

@@ -17,10 +17,7 @@
       </div>
     </div>
     <div style="margin-right: 10px;" [formGroup]="liveChatFG">
-      <mat-slide-toggle
-        formControlName="status"
-        (change)="onLiveChatChange()"
-        [disabled]="!liveChatStatus?.value"
+      <mat-slide-toggle formControlName="status" (change)="onLiveChatChange()"
         >Live Chat</mat-slide-toggle
       >
     </div>

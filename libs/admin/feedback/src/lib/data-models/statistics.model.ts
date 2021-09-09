@@ -326,6 +326,45 @@ export class Service {
   }
 }
 
+export class Bifurcations {
+  data: Bifurcation[];
+
+  deserialize(input) {
+    this.data = new Array<Bifurcation>();
+    input.forEach((service) =>
+      this.data.push(new Bifurcation().deserialize(service))
+    );
+
+    return this;
+  }
+}
+
+export class Bifurcation {
+  feedbacks: Service[];
+  label: string;
+  totalCount: number;
+
+  deserialize(input) {
+    this.feedbacks = new Array<Service>();
+    Object.assign(
+      this,
+      set({}, 'totalCount', get(input, ['totalCount'])),
+      set({}, 'label', get(input, ['label']))
+    );
+    Object.keys(input.feedbacks).forEach((key) =>
+      this.feedbacks.push(
+        new Service().deserialize({
+          label: key,
+          percentage: input.feedbacks[key],
+          color: SharedColors[key],
+        })
+      )
+    );
+
+    return this;
+  }
+}
+
 export const SharedColors = {
   Received: '#FFEC8C',
   'Not Received': '#31BB92',

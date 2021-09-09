@@ -1,4 +1,4 @@
-<div class="stats">
+<div class="stats" *ngIf="stats">
   <div class="stats__title">
     Overall Received Bifurcation
   </div>
@@ -19,31 +19,8 @@
         </canvas>
       </div>
       <div class="stats__container__graph__labels">
-        <div class="val">138</div>
-        <div class="label">Feedback Received</div>
-      </div>
-      <div class="stats__container__graph__action">
-        <div class="stats__container__graph__action__items">
-          <div class="stats__container__graph__action__items__item">
-            <div
-              class="stats__container__graph__action__items__item__dot"
-              [style.background]="'#52b33f'"
-            ></div>
-            <div>Positive</div>
-          </div>
-          <div>54</div>
-        </div>
-        <div class="stats__container__graph__action__items">
-          <div class="stats__container__graph__action__items__item">
-            <div
-              div
-              class="stats__container__graph__action__items__item__dot"
-              [style.background]="'#cc052b'"
-            ></div>
-            <div>Negative</div>
-          </div>
-          <div>84</div>
-        </div>
+        <div class="val">{{ feedbackReceivedData.totalCount }}</div>
+        <div class="label">{{ feedbackReceivedData.label }}</div>
       </div>
     </div>
     <div class="stats__container__graph">
@@ -61,30 +38,25 @@
         </canvas>
       </div>
       <div class="stats__container__graph__labels">
-        <div class="val">84</div>
-        <div class="label">Negative Feedbacks</div>
+        <div class="val">{{ negativeFeedbackReceivedData.totalCount }}</div>
+        <div class="label">{{ negativeFeedbackReceivedData.label }}</div>
       </div>
-      <div class="stats__container__graph__action">
-        <div class="stats__container__graph__action__items">
-          <div class="stats__container__graph__action__items__item">
-            <div
-              class="stats__container__graph__action__items__item__dot"
-              [style.background]="'#ffbf04'"
-            ></div>
-            <div>Action Pending</div>
-          </div>
-          <div>44</div>
+    </div>
+  </div>
+  <div class="stats__actions" *ngIf="stats?.data">
+    <div class="stats__actions__action" *ngFor="let stat of stats.data">
+      <div
+        class="stats__actions__action__items"
+        *ngFor="let feedback of stat.feedbacks"
+      >
+        <div class="stats__actions__action__items__item">
+          <div
+            class="stats__actions__action__items__item__dot"
+            [style.background]="feedback.color"
+          ></div>
+          <div>{{ feedback.label }}</div>
         </div>
-        <div class="stats__container__graph__action__items">
-          <div class="stats__container__graph__action__items__item">
-            <div
-              class="stats__container__graph__action__items__item__dot"
-              [style.background]="'#4ba0f5'"
-            ></div>
-            <div>Closed</div>
-          </div>
-          <div>73</div>
-        </div>
+        <div>{{ feedback.percentage }}</div>
       </div>
     </div>
   </div>

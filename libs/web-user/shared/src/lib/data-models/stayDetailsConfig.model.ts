@@ -42,12 +42,16 @@ export class StayDetail implements Deserializable {
       set(
         {},
         'arrivalTime',
-        new Date(get(input, ['arrivalTime'])).toISOString()
+        moment(get(input, ['arrivalTime']))
+          .utcOffset(timezone)
+          .toISOString()
       ),
       set(
         {},
         'departureTime',
-        new Date(get(input, ['departureTime'])).toISOString()
+        moment(get(input, ['departureTime']))
+          .utcOffset(timezone)
+          .toISOString()
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),

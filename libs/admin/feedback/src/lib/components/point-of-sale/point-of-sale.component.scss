@@ -80,6 +80,13 @@
     font-size: 14px;
     font-weight: 700;
   }
+  &__outlet-heading {
+    font: normal normal normal 16px Roboto;
+    letter-spacing: 0.84px;
+    text-align: left;
+    color: #6d7580;
+    margin: 10px 0;
+  }
 }
 .outlet-wrap {
   display: flex;
@@ -175,6 +182,40 @@
       border-style: solid;
       border-color: #fff transparent transparent transparent;
     }
+    &__label {
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.72px;
+      color: #002046;
+      margin-bottom: 10px;
+    }
+    &__items {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+      &__dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      &__label {
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.72px;
+        text-align: left;
+        color: #6d7580;
+        margin-right: 10px;
+      }
+      &__count {
+        font-weight: bold;
+        color: #002046;
+      }
+    }
   }
   &:hover {
     &::before {
@@ -188,4 +229,32 @@
 
 :host ::ng-deep .mat-tab-label {
   min-width: 10vw !important;
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  &__item {
+    display: flex;
+    align-items: center;
+    margin: 10px 15px;
+    &__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    &__label {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.84px;
+      text-align: left;
+      color: #6d7580;
+    }
+  }
 }

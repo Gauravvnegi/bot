@@ -5,6 +5,15 @@
   border-radius: 5px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    align-items: center;
+    &__all {
+      max-width: calc(100% - 170px);
+    }
+  }
 }
 
 :host ::ng-deep .button__wrapper {
@@ -151,5 +160,16 @@
   cursor: pointer;
   &:active {
     transform: scale(0.95);
+  }
+  &__wrap {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.66px;
+    text-align: center;
+    color: #fff;
   }
 }

@@ -70,7 +70,7 @@
 			}}<span *ngIf="quickReplyType.value != 'ALL'">)</span> -->
       </mat-chip>
     </mat-chip-list>
-    <mat-form-field style="margin-left: 10px;">
+    <mat-form-field class="ml-10">
       <mat-select
         formControlName="time"
         (selectionChange)="switchFilter($event.value)"
@@ -204,7 +204,7 @@
               >
                 <div class="progress">
                   <div
-                    style="background: transparent;"
+                    class="progress__item-bg"
                     [style.height]="
                       (progress.statistic.score === 0
                         ? 100 - 1
@@ -252,7 +252,7 @@
                     "
                   ></div>
                   <div
-                    style="background: transparent;"
+                    class="tranparent-bg"
                     [style.height]="
                       (progress.statistic.score === 0
                         ? 100 - 1
@@ -344,7 +344,7 @@
                 >
                   <div class="progress">
                     <div
-                      style="background: transparent;"
+                      class="tranparent-bg"
                       [style.height]="
                         (progress.statistic.score === 0
                           ? 100 - 1
@@ -390,7 +390,7 @@
                       "
                     ></div>
                     <div
-                      style="background: transparent;"
+                      class="tranparent-bg"
                       [style.height]="
                         (progress.statistic.score === 0
                           ? 100 - 1

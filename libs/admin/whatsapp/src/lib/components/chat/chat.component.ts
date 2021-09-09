@@ -34,6 +34,7 @@ export class ChatComponent
   hotelId: string;
   chat: IChats;
   chatFG: FormGroup;
+  liveChatFG: FormGroup;
   isLoading = false;
   limit = 20;
   $subscription = new Subscription();
@@ -61,11 +62,15 @@ export class ChatComponent
       channelType: ['whatsapp'],
       messageType: ['DATA_TEXT'],
     });
+    this.liveChatFG = this.fb.group({
+      status: [false],
+    });
   }
 
   ngOnChanges(): void {
     if (this.hotelId) {
       this.loadChat();
+      this.getLiveChat();
     }
   }
 
@@ -301,7 +306,37 @@ export class ChatComponent
     );
   }
 
+  getLiveChat() {
+    this.$subscription.add(
+      this.messageService
+        .getLiveChat(
+          this.hotelId,
+          this.selectedChat.receiverId,
+          this.selectedChat.phone
+        )
+        .subscribe((response) =>
+          this.liveChatFG.patchValue({ status: response })
+        )
+    );
+  }
+
+  onLiveChatChange() {
+    this.$subscription.add(
+      this.messageService
+        .updateLiveChat(
+          this.hotelId,
+          this.selectedChat.receiverId,
+          this.liveChatFG.getRawValue()
+        )
+        .subscribe((response) => this.liveChatFG.patchValue(response))
+    );
+  }
+
   get chatList() {
     return this.messageService.chatList;
+  }
+
+  get liveChatStatus() {
+    return this.liveChatFG?.get('status');
   }
 }

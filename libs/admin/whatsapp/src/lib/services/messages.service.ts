@@ -105,4 +105,17 @@ export class MessageService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  getLiveChat(hotelId, conversationId, phone) {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/live-chat?phoneNumber=${phone}`
+    );
+  }
+
+  updateLiveChat(hotelId, conversationId, data) {
+    return this.put(
+      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/live-chat`,
+      data
+    );
+  }
 }

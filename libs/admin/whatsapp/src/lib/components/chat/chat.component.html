@@ -16,7 +16,11 @@
         {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
       </div>
     </div>
-    <div style="margin-right: 10px;" [formGroup]="liveChatFG">
+    <div
+      style="margin-right: 10px;"
+      [formGroup]="liveChatFG"
+      *ngIf="hotelId === '5ef958ce-39a7-421c-80e8-ee9973e27b99"
+    >
       <mat-slide-toggle
         formControlName="status"
         (change)="onLiveChatChange()"

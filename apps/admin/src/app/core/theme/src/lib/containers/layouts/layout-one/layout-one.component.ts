@@ -69,11 +69,23 @@ export class LayoutOneComponent implements OnInit {
       userId: this._userDetailService.getLoggedInUserid(),
     });
     this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+      const notificationPayload = payload;
       this.firebaseMessagingService.playNotificationSound();
-      if (this.checkForMessageRoute())
-        this.firebaseMessagingService.currentMessage.next(payload);
-      else if (Object.keys(payload).length) {
-        this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+      if (
+        notificationPayload &&
+        notificationPayload['data']?.notificationType &&
+        notificationPayload['data']?.notificationType === 'Live Request'
+      ) {
+        if (this.checkForMessageRoute())
+          this.firebaseMessagingService.liveRequestEnable.next(
+            notificationPayload
+          );
+      } else {
+        if (this.checkForMessageRoute())
+          this.firebaseMessagingService.currentMessage.next(payload);
+        else if (Object.keys(payload).length) {
+          this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+        }
       }
     });
   }

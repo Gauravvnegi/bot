@@ -95,6 +95,7 @@ export class ChatComponent
     this.listenForGlobalFilters();
     this.listenForApplicationActive();
     this.listenForMessageNotification();
+    this.listenForLiveRequestNotification();
   }
 
   listenForGlobalFilters(): void {
@@ -130,6 +131,19 @@ export class ChatComponent
           limit: this.limit % 20 === 0 ? this.limit - 20 : 20,
         });
         this._firebaseMessagingService.tabActive.next(false);
+      }
+    });
+  }
+
+  listenForLiveRequestNotification() {
+    this._firebaseMessagingService.liveRequestEnable.subscribe((response) => {
+      if (
+        response &&
+        response?.data?.phoneNumber &&
+        response?.data?.phoneNumber === this.selectedChat.phone
+      ) {
+        debugger;
+        this.getLiveChat();
       }
     });
   }
@@ -306,8 +320,9 @@ export class ChatComponent
           this.selectedChat.receiverId,
           this.selectedChat.phone
         )
-        .subscribe((response) =>
-          this.liveChatFG.patchValue({ status: response })
+        .subscribe(
+          (response) => this.liveChatFG.patchValue(response),
+          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
         )
     );
   }
@@ -320,7 +335,10 @@ export class ChatComponent
           this.selectedChat.receiverId,
           this.liveChatFG.getRawValue()
         )
-        .subscribe((response) => this.liveChatFG.patchValue(response))
+        .subscribe(
+          (response) => this.liveChatFG.patchValue(response),
+          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        )
     );
   }
 

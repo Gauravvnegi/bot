@@ -18,6 +18,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CardDirective } from './directives/card.directive';
 import { TableDirective } from './directives/table.directive';
 import { FeatureDirective } from './directives/feature.directive';
+import { ChannelDirective } from './directives/channel.directive';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { FeatureDirective } from './directives/feature.directive';
     CardDirective,
     TableDirective,
     FeatureDirective,
+    ChannelDirective,
   ],
   exports: [
     DatatableComponent,
@@ -59,6 +61,7 @@ import { FeatureDirective } from './directives/feature.directive';
     CardDirective,
     TableDirective,
     FeatureDirective,
+    ChannelDirective,
   ],
 })
 export class AdminSharedModule {}

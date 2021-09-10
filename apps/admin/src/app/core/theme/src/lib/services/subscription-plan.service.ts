@@ -45,4 +45,8 @@ export class SubscriptionPlanService extends ApiService {
       `/api/v1/hotel/${hotelId}/subscriptions/usage/percentage${config.queryObj}`
     );
   }
+
+  get ChannelSubscription() {
+    return this.subscriptions?.features?.CHANNELS || [];
+  }
 }

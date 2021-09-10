@@ -142,7 +142,6 @@ export class ChatComponent
         response?.data?.phoneNumber &&
         response?.data?.phoneNumber === this.selectedChat.phone
       ) {
-        debugger;
         this.getLiveChat();
       }
     });

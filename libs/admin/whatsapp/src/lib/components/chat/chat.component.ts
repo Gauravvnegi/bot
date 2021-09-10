@@ -264,7 +264,7 @@ export class ChatComponent
     if (
       this.myScrollContainer &&
       this.myScrollContainer.nativeElement.scrollTop === 0 &&
-      this.limit > this.chat?.messages?.length
+      this.limit > this.getMessagesFromTimeList().length
     )
       this.getChat(
         { offset: 0, limit: this.limit },

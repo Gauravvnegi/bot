@@ -72,8 +72,9 @@ export class LayoutOneComponent implements OnInit {
       const notificationPayload = payload;
       this.firebaseMessagingService.playNotificationSound();
       if (
-        notificationPayload?.data?.notificationType &&
-        notificationPayload?.data?.notificationType === 'Live Request'
+        notificationPayload &&
+        notificationPayload['data']?.notificationType &&
+        notificationPayload['data']?.notificationType === 'Live Request'
       ) {
         if (this.checkForMessageRoute())
           this.firebaseMessagingService.liveRequestEnable.next(

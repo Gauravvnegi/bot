@@ -11,6 +11,7 @@ import { Howl } from 'howler';
 })
 export class FirebaseMessagingService {
   currentMessage = new BehaviorSubject(null);
+  liveRequestEnable = new BehaviorSubject(null);
   private subscription: Subscription = new Subscription();
   tabActive = new BehaviorSubject(false);
 

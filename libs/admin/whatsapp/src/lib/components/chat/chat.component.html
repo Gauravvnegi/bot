@@ -16,18 +16,18 @@
         {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
       </div>
     </div>
-    <div
-      style="margin-right: 10px;"
-      [formGroup]="liveChatFG"
-      *ngIf="hotelId === '5ef958ce-39a7-421c-80e8-ee9973e27b99"
+    <ng-container
+      *ngIf="hotelId && hotelId === '5ef958ce-39a7-421c-80e8-ee9973e27b99'"
     >
-      <mat-slide-toggle
-        formControlName="status"
-        (change)="onLiveChatChange()"
-        [disabled]="liveChatStatus.value"
-        >Live Chat</mat-slide-toggle
-      >
-    </div>
+      <div style="margin-right: 10px;" [formGroup]="liveChatFG">
+        <mat-slide-toggle
+          formControlName="status"
+          (change)="onLiveChatChange()"
+          [disabled]="liveChatStatus.value"
+          >Live Chat</mat-slide-toggle
+        >
+      </div>
+    </ng-container>
   </div>
   <div
     class="scrollChat"

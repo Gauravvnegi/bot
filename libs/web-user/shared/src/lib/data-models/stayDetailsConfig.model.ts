@@ -42,20 +42,16 @@ export class StayDetail implements Deserializable {
       set(
         {},
         'arrivalTime',
-        DateService.getDateFromTimeStamp(
-          get(input, ['arrivalTime']),
-          'DD-MM-YYYY hh:mm a',
-          timezone
-        )
+        moment(get(input, ['arrivalTime']))
+          .utcOffset(timezone)
+          .toISOString()
       ),
       set(
         {},
         'departureTime',
-        DateService.getDateFromTimeStamp(
-          get(input, ['departureTime']),
-          'DD-MM-YYYY hh:mm a',
-          timezone
-        )
+        moment(get(input, ['departureTime']))
+          .utcOffset(timezone)
+          .toISOString()
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),

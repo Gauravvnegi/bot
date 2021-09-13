@@ -34,6 +34,7 @@ export class ChatComponent
   hotelId: string;
   chat: IChats;
   chatFG: FormGroup;
+  liveChatFG: FormGroup;
   isLoading = false;
   limit = 20;
   $subscription = new Subscription();
@@ -61,11 +62,15 @@ export class ChatComponent
       channelType: ['whatsapp'],
       messageType: ['DATA_TEXT'],
     });
+    this.liveChatFG = this.fb.group({
+      status: [false],
+    });
   }
 
   ngOnChanges(): void {
     if (this.hotelId) {
       this.loadChat();
+      this.getLiveChat();
     }
   }
 
@@ -90,6 +95,7 @@ export class ChatComponent
     this.listenForGlobalFilters();
     this.listenForApplicationActive();
     this.listenForMessageNotification();
+    this.listenForLiveRequestNotification();
   }
 
   listenForGlobalFilters(): void {
@@ -99,18 +105,16 @@ export class ChatComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
+        this.getLiveChat();
       })
     );
   }
 
   listenForMessageNotification() {
     this._firebaseMessagingService.currentMessage.subscribe((response) => {
-      if (
-        response &&
-        response.notification.body.split(',')[0] === this.selectedChat.phone
-      ) {
+      if (response && response.notification.body.split(',')[0]) {
         this.scrollBottom = true;
-        this.getChat({ offset: 0, limit: this.limit + 1 });
+        this.getChat({ offset: 0, limit: this.limit + 1 }, undefined, false);
       }
     });
   }
@@ -124,6 +128,18 @@ export class ChatComponent
           limit: this.limit % 20 === 0 ? this.limit - 20 : 20,
         });
         this._firebaseMessagingService.tabActive.next(false);
+      }
+    });
+  }
+
+  listenForLiveRequestNotification() {
+    this._firebaseMessagingService.liveRequestEnable.subscribe((response) => {
+      if (
+        response &&
+        response?.data?.phoneNumber &&
+        response?.data?.phoneNumber === this.selectedChat.phone
+      ) {
+        this.getLiveChat();
       }
     });
   }
@@ -248,7 +264,7 @@ export class ChatComponent
     if (
       this.myScrollContainer &&
       this.myScrollContainer.nativeElement.scrollTop === 0 &&
-      this.limit > this.chat?.messages?.length
+      this.limit > this.getMessagesFromTimeList().length
     )
       this.getChat(
         { offset: 0, limit: this.limit },
@@ -292,7 +308,41 @@ export class ChatComponent
     );
   }
 
+  getLiveChat() {
+    this.$subscription.add(
+      this.messageService
+        .getLiveChat(
+          this.hotelId,
+          this.selectedChat.receiverId,
+          this.selectedChat.phone
+        )
+        .subscribe(
+          (response) => this.liveChatFG.patchValue(response),
+          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
+  onLiveChatChange() {
+    this.$subscription.add(
+      this.messageService
+        .updateLiveChat(
+          this.hotelId,
+          this.selectedChat.receiverId,
+          this.liveChatFG.getRawValue()
+        )
+        .subscribe(
+          (response) => this.liveChatFG.patchValue(response),
+          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
   get chatList() {
     return this.messageService.chatList;
+  }
+
+  get liveChatStatus() {
+    return this.liveChatFG?.get('status');
   }
 }

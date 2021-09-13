@@ -43,7 +43,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     values.receiverId = this.selectedChat.phone;
     const timestamp = this.dateService.getCurrentTimeStamp();
     this.messageSent.emit({
-      message: this.chatFG.get('message').value,
+      message: encodeURIComponent(this.chatFG.get('message').value),
       timestamp,
       status: 'unsend',
       update: false,
@@ -54,7 +54,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
       this.messageService.sendMessage(this.hotelId, values).subscribe(
         (response) => {
           this.messageSent.emit({
-            message: this.chatFG.get('message').value,
+            message: encodeURIComponent(this.chatFG.get('message').value),
             timestamp,
             status: 'sent',
             update: true,

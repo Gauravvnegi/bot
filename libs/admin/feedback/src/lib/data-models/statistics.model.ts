@@ -366,8 +366,8 @@ export class Bifurcation {
 }
 
 export const SharedColors = {
-  Received: '#FFEC8C',
-  'Not Received': '#31BB92',
+  Received: '#31BB92',
+  'Not Received': '#FFEC8C',
   Negative: '#cc052b',
   Positive: '#52b33f',
   Closed: '#4ba0f5',

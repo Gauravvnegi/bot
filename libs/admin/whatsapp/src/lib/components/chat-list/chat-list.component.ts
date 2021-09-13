@@ -138,7 +138,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
           if (updatePagination) {
             this.updatePagination(response.length);
           }
-
           this.chatList = new ContactList().deserialize(
             response,
             this._globalFilterService.timezone

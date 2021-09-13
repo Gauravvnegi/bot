@@ -98,12 +98,16 @@ export class PointOfSaleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
+    this.registerListeners();
+  }
+
+  initFG() {
     this.npsFG = this.fb.group({
       documentType: ['csv'],
-      documentActionType: ['exportAll'],
+      documentActionType: ['export'],
       quickReplyActionFilters: [[]],
     });
-    this.listenForGlobalFilters();
   }
 
   registerListeners() {

@@ -5,8 +5,8 @@
   <div class="stats__subheading">
     Response Bifurcation as per feedback shared
   </div>
-  <div class="stats__graphwraper">
-    <div class="graphcontainer">
+  <div class="stats__body">
+    <div class="graph-container">
       <div class="graphcontainer__graph">
         <canvas
           baseChart
@@ -21,11 +21,11 @@
         </canvas>
       </div>
     </div>
-    <div class="stats__graphwraper__detail">
-      <div class="stats__graphwraper__detail__shared">
+    <div class="stats__body__detail">
+      <div class="stats__body__detail__shared">
         {{ stats?.totalResponse }}
       </div>
-      <div class="stats__graphwraper__detail__sharedtitle">
+      <div class="stats__body__detail__sharedtitle">
         Overall Shared
       </div>
       <ng-container *ngIf="stats?.feedbacks">

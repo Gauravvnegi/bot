@@ -37,7 +37,10 @@ export enum CardNames {
   NPSAcrossDepartment = 'NPSAcrossDepartments',
   NPSAcrossTouchpoint = 'NPSAcrossAllTouchpoints',
   NPSAcrossServices = 'NPSAcrossServices',
+  NPSAcrossPOS = 'NPSAcrossPOS',
   TopLowNPS = 'Top/LowNPS',
+  OverallReceivedBifurcation = 'OverallReceivedBifurcation',
+  Shared = 'Shared',
 }
 
 export enum Filters {
@@ -135,6 +138,9 @@ export const ModuleConfig = {
       CardNames.NPS,
       CardNames.TopLowNPS,
       CardNames.NPSAcrossServices,
+      CardNames.NPSAcrossPOS,
+      CardNames.OverallReceivedBifurcation,
+      CardNames.Shared,
     ],
     tables: [TableNames.FEEDBACK],
     filters: {

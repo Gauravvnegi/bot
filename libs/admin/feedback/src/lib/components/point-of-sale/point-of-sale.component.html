@@ -1,135 +1,139 @@
-<div class="header">
-  <div class="title-container">
-    <div class="icon">
-      <img src="assets/svg/nps-services.svg" />
+<div class="container" [formGroup]="npsFG">
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/nps-services.svg" />
+      </div>
+      <div class="stat-title">NPS Across Point of Sale</div>
     </div>
-    <div class="stat-title">NPS Across Point of Sale</div>
+    <div class="dropdown--wrapper">
+      <p-dropdown
+        class="export"
+        [options]="documentActionTypes"
+        formControlName="documentActionType"
+      >
+        <ng-template let-documentActionItem pTemplate="selectedItem">
+          <img src="assets/svg/Export.svg" />
+          <span class="dropdown-label">{{ documentActionItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <div class="divider"></div>
+      <p-dropdown
+        class="export"
+        [options]="documentTypes"
+        formControlName="documentType"
+      >
+        <ng-template let-documentTypeItem pTemplate="selectedItem">
+          <img src="assets/svg/CSV.svg" />
+          <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <button class="go" (click)="exportCSV()">
+        <mat-icon class="material-icons" matSuffix>east</mat-icon>
+      </button>
+    </div>
   </div>
-  <div class="dropdown--wrapper">
-    <p-dropdown
-      class="export"
-      [options]="documentActionTypes"
-      formControlName="documentActionType"
+  <hospitality-bot-tab-group
+    [listItems]="tabFilterItems"
+    [selectedIndex]="tabFilterIdx"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+  <div class="button__wrapper">
+    <mat-chip-list
+      multiple
+      #chipList
+      aria-label="Quick Reply selection"
+      formControlName="quickReplyActionFilters"
+      *ngIf="tabFilterItems.length"
     >
-      <ng-template let-documentActionItem pTemplate="selectedItem">
-        <img src="assets/svg/Export.svg" />
-        <span class="dropdown-label">{{ documentActionItem.label }}</span>
-      </ng-template>
-    </p-dropdown>
-    <div class="divider"></div>
-    <p-dropdown
-      class="export"
-      [options]="documentTypes"
-      formControlName="documentType"
-    >
-      <ng-template let-documentTypeItem pTemplate="selectedItem">
-        <img src="assets/svg/CSV.svg" />
-        <span class="dropdown-label">{{ documentTypeItem.label }}</span>
-      </ng-template>
-    </p-dropdown>
-    <button class="go" (click)="exportCSV()">
-      <mat-icon class="material-icons" matSuffix>east</mat-icon>
-    </button>
+      <mat-chip
+        *ngFor="
+          let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+          let quickReplyTypeIdx = index
+        "
+        selectable="true"
+        [selected]="isQuickReplyFilterSelected(quickReplyType)"
+        (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
+        [ngClass]="{
+          'chipSelected status-selected-default': quickReplyType.isSelected,
+          'status-opacity-initiated status-text-initiated':
+            quickReplyType.type == 'initiated',
+          'status-selected-initiated':
+            quickReplyType.type == 'initiated' && quickReplyType.isSelected
+        }"
+      >
+        {{ quickReplyType.label }}
+      </mat-chip>
+    </mat-chip-list>
   </div>
-</div>
-<hospitality-bot-tab-group
-  [listItems]="tabFilterItems"
-  [selectedIndex]="tabFilterIdx"
-  (selectedTabChange)="onSelectedTabFilterChange($event)"
-></hospitality-bot-tab-group>
-<div class="button__wrapper">
-  <mat-chip-list
-    multiple
-    #chipList
-    aria-label="Quick Reply selection"
-    formControlName="quickReplyActionFilters"
-    *ngIf="tabFilterItems.length"
-  >
-    <mat-chip
-      *ngFor="
-        let quickReplyType of tabFilterItems[tabFilterIdx].chips;
-        let quickReplyTypeIdx = index
-      "
-      selectable="true"
-      [selected]="isQuickReplyFilterSelected(quickReplyType)"
-      (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
-      [ngClass]="{
-        'chipSelected status-selected-default': quickReplyType.isSelected,
-        'status-opacity-initiated status-text-initiated':
-          quickReplyType.type == 'initiated',
-        'status-selected-initiated':
-          quickReplyType.type == 'initiated' && quickReplyType.isSelected
-      }"
+  <div class="header__outlet-heading">
+    Outlets
+  </div>
+  <div class="outlet-wrap" *ngIf="stats && stats.data">
+    <div
+      class="outlet-wrap__outlet"
+      [style.height]="stats.data.length * 40 + 40 + 'px'"
     >
-      {{ quickReplyType.label }}
-    </mat-chip>
-  </mat-chip-list>
-</div>
-<div class="header__outlet-heading">
-  Outlets
-</div>
-<div class="outlet-wrap" *ngIf="stats && stats.data">
-  <div
-    class="outlet-wrap__outlet"
-    [style.height]="stats.data.length * 40 + 40 + 'px'"
-  >
-    <ng-container *ngFor="let item of stats.data">
-      <div class="outlet-wrap__outlet__outlets">
-        <div class="outlet-wrap__outlet__outlets__label">{{ item.label }}</div>
-        <div class="progress-bar">
-          <ng-container *ngFor="let progress of item.services">
-            <div
-              [style.width]="progress.percentage + '%'"
-              [style.background]="progress.color"
-            ></div>
-          </ng-container>
-          <div class="stat-data">
-            <div class="stat-data__label">
-              {{ item.label }}
-            </div>
-            <div
-              class="stat-data__items"
-              *ngFor="let progress of item.services"
-            >
+      <ng-container *ngFor="let item of stats.data">
+        <div class="outlet-wrap__outlet__outlets">
+          <div class="outlet-wrap__outlet__outlets__label">
+            {{ item.label }}
+          </div>
+          <div class="progress-bar">
+            <ng-container *ngFor="let progress of item.services">
               <div
-                class="stat-data__items__dot"
+                [style.width]="progress.percentage + '%'"
                 [style.background]="progress.color"
               ></div>
-              <div class="stat-data__items__label">
-                {{ progress.label }}
+            </ng-container>
+            <div class="stat-data">
+              <div class="stat-data__label">
+                {{ item.label }}
               </div>
-              <div class="stat-data__items__count">
-                {{ progress.percentage }}
+              <div
+                class="stat-data__items"
+                *ngFor="let progress of item.services"
+              >
+                <div
+                  class="stat-data__items__dot"
+                  [style.background]="progress.color"
+                ></div>
+                <div class="stat-data__items__label">
+                  {{ progress.label }}
+                </div>
+                <div class="stat-data__items__count">
+                  {{ progress.percentage }}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </ng-container>
-    <div
-      class="outlet-wrap__outlet__progress-back"
-      [style.height]="stats.data.length * 40 + 40 + 'px'"
-    >
-      <div class="outlet-wrap__outlet__progress-backpercentbar">
-        <div
-          *ngFor="let percent of percentValue"
-          class="outlet-wrap__outlet__progress-backpercentbar__percent-value"
-        >
+      </ng-container>
+      <div
+        class="outlet-wrap__outlet__progress-back"
+        [style.height]="stats.data.length * 40 + 40 + 'px'"
+      >
+        <div class="outlet-wrap__outlet__progress-backpercentbar">
           <div
-            class="outlet-wrap__outlet__progress-backpercentbar__percent-value__bar"
-            [style.height]="stats.data.length * 40 + 20 + 'px'"
-          ></div>
-          <div class="percent">{{ percent }}</div>
+            *ngFor="let percent of percentValue"
+            class="outlet-wrap__outlet__progress-backpercentbar__percent-value"
+          >
+            <div
+              class="outlet-wrap__outlet__progress-backpercentbar__percent-value__bar"
+              [style.height]="stats.data.length * 40 + 20 + 'px'"
+            ></div>
+            <div class="percent">{{ percent }}</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<div class="footer">
-  <div class="footer__item" *ngFor="let item of (stats?.data)[0]?.services">
-    <div class="footer__item__dot" [style.background]="item.color"></div>
-    <div class="__label">
-      {{ item.label }}
+  <div class="footer">
+    <div class="footer__item" *ngFor="let item of (stats?.data)[0]?.services">
+      <div class="footer__item__dot" [style.background]="item.color"></div>
+      <div class="__label">
+        {{ item.label }}
+      </div>
     </div>
   </div>
 </div>

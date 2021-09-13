@@ -117,13 +117,22 @@ export class GlobalNpsComponent implements OnInit {
   initGraphData(data) {
     this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
     Object.keys(data).forEach((key) => {
-      if (key !== 'label' && key !== 'score' && key!=='comparisonPercent' && data[key]) {
+      if (
+        key !== 'label' &&
+        key !== 'score' &&
+        key !== 'comparisonPercent' &&
+        data[key].score
+      ) {
         this.chart.Labels.push(this.labels[key]);
         this.chart.Data[0].push(this.roundValue(data[key].score));
         this.chart.Colors[0].backgroundColor.push(this.color[key]);
         this.chart.Colors[0].borderColor.push(this.color[key]);
       }
     });
+    if (!this.chart.Data[0].length) {
+      this.chart.Labels = ['No Data'];
+      this.chart.Data = [[100]];
+    }
   }
 
   getGlobalNps(): void {

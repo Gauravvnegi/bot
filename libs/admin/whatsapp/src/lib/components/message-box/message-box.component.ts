@@ -48,6 +48,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
       status: 'unsend',
       update: false,
     });
+    values.message = encodeURIComponent(values.message);
 
     this.$subscription.add(
       this.messageService.sendMessage(this.hotelId, values).subscribe(

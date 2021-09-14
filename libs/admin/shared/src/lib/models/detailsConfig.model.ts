@@ -21,7 +21,7 @@ export class Details implements Deserializable {
   roomsDetails: RoomsDetails;
   feedbackDetails: FeedbackDetails;
 
-  deserialize(input: any) {
+  deserialize(input: any, timezone) {
     let hotelNationality = input.hotel.address.countryCode;
 
     this.guestDetails = new GuestDetailDS().deserialize(
@@ -30,7 +30,10 @@ export class Details implements Deserializable {
     );
 
     this.reservationDetails = new ReservationDetailsConfig().deserialize(input);
-    this.stayDetails = new StayDetailsConfig().deserialize(input.stayDetails);
+    this.stayDetails = new StayDetailsConfig().deserialize(
+      input.stayDetails,
+      timezone
+    );
     this.regCardDetails = new RegCardConfig().deserialize(
       input.guestDetails.primaryGuest
     );
@@ -301,7 +304,7 @@ export class StayDetailsConfig implements Deserializable {
   arrivalTimeStamp: number;
   departureTimeStamp: number;
 
-  deserialize(input: any) {
+  deserialize(input: any, timezone) {
     Object.assign(
       this,
       set({}, 'code', get(input, ['code'])),
@@ -312,7 +315,8 @@ export class StayDetailsConfig implements Deserializable {
         'arrivalDate',
         DateService.getDateFromTimeStamp(
           get(input, ['arrivalTime']),
-          'DD/MM/YYYY'
+          'DD/MM/YYYY',
+          timezone
         )
       ),
       set(
@@ -320,7 +324,8 @@ export class StayDetailsConfig implements Deserializable {
         'departureDate',
         DateService.getDateFromTimeStamp(
           get(input, ['departureTime']),
-          'DD/MM/YYYY'
+          'DD/MM/YYYY',
+          timezone
         )
       ),
       set(
@@ -328,7 +333,8 @@ export class StayDetailsConfig implements Deserializable {
         'expectedArrivalTime',
         DateService.getDateFromTimeStamp(
           get(input, ['expectedArrivalTime']),
-          'HH:mm'
+          'HH:mm',
+          timezone
         )
       ),
       set({}, 'roomType', get(input, ['roomType'])),

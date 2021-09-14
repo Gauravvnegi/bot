@@ -179,10 +179,8 @@ export class ChatComponent
           )
           .subscribe(
             (response) => {
-              if (updatePagination) {
+              if (updatePagination)
                 this.updatePagination(response.messages.length, config.limit);
-              }
-
               this.handleChatResponse(response);
               scrollHeight
                 ? (this.scrollView = scrollHeight)

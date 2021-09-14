@@ -1,7 +1,7 @@
 <div
   class="chatRecieve"
   *ngIf="
-    chatFG && this.chatList.receiver[selectedChat.receiverId]?.enableSend;
+    chatFG && chatList.receiver[selectedChat.receiverId]?.checkEnableSend();
     else noSend
   "
 >

@@ -30,8 +30,6 @@ export class FirebaseMessagingService {
     this.subscription.add(
       this.fireMessaging.requestToken.subscribe(
         (token) => {
-          // Call API
-
           if (token) {
             this.messageTabService
               .registerFirebaseMessage(config, {
@@ -49,6 +47,10 @@ export class FirebaseMessagingService {
                   );
                 }
               );
+          } else {
+            this._snackbarService.openSnackBarAsText(
+              `Please allow notification or else some of your features won't work properly.`
+            );
           }
         },
         (err) => {

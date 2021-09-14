@@ -15,36 +15,33 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 @Component({
   selector: 'hospitality-bot-guest-payments-statistics',
   templateUrl: './guest-payments-statistics.component.html',
-  styleUrls: ['./guest-payments-statistics.component.scss']
+  styleUrls: ['./guest-payments-statistics.component.scss'],
 })
 export class GuestPaymentsStatisticsComponent implements OnInit {
-
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   payment: Payment = new Payment().deserialize({
     totalCount: 0,
     guestPayment: {
       FULL: 0,
       PARTIAL: 0,
-      PENDING: 0
-    }
+      PENDING: 0,
+    },
   });
   $subscription = new Subscription();
   selectedInterval: any;
   chart: any = {
     Labels: ['No Data'],
-    Data:  [
-      [100]
-    ],
+    Data: [[100]],
     Type: 'doughnut',
-  
-    Legend : false,
-    Colors : [
+
+    Legend: false,
+    Colors: [
       {
         backgroundColor: ['#D5D1D1'],
         borderColor: ['#D5D1D1'],
-      }
+      },
     ],
-    Options : {
+    Options: {
       tooltips: {
         backgroundColor: 'white',
         bodyFontColor: 'black',
@@ -59,14 +56,14 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       elements: {
         center: {
           text: '401',
-          text3: "Total Users",
+          text3: 'Total Users',
           fontColor: '#000',
           fontFamily: "CalibreWeb, 'Helvetica Neue', Arial ",
           fontSize: 36,
-          fontStyle: 'normal'
-        }
+          fontStyle: 'normal',
+        },
       },
-      cutoutPercentage: 0
+      cutoutPercentage: 0,
     },
   };
 
@@ -106,7 +103,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'VIP',
@@ -115,7 +112,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'General',
@@ -124,7 +121,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
   ];
 
@@ -135,7 +132,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private _modal: ModalService,
     private dateService: DateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getPaymentStatistics();
@@ -151,10 +148,12 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       this.setChartOptions();
     } else {
       this.chart.Data = [[100]];
-      this.chart.Colors = [{
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      }];
+      this.chart.Colors = [
+        {
+          backgroundColor: ['#D5D1D1'],
+          borderColor: ['#D5D1D1'],
+        },
+      ];
       this.chart.Labels = ['No data'];
     }
   }
@@ -165,7 +164,8 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -179,14 +179,15 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
           queryObj: this._adminUtilityService.makeQueryParams(queries),
         };
         this.$subscription.add(
-          this._statisticService
-            .getPaymentStatistics(config)
-            .subscribe((res) => {
+          this._statisticService.getPaymentStatistics(config).subscribe(
+            (res) => {
               this.payment = new Payment().deserialize(res);
               this.initGraphData();
-            }, ({ error }) => {
+            },
+            ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);
-            })
+            }
+          )
         );
       })
     );
@@ -197,9 +198,13 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       {
         backgroundColor: ['#3E8EF7', '#FAA700', '#FF4C52'],
         borderColor: ['#3E8EF7', '#FAA700', '#FF4C52'],
-      }
+      },
     ];
-    this.chart.Labels = ['Fully Received', 'Partially Received', 'Not Received'];
+    this.chart.Labels = [
+      'Fully Received',
+      'Partially Received',
+      'Not Received',
+    ];
   }
 
   openTableModal() {
@@ -217,7 +222,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
     tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
     tableCompRef.componentInstance.guestFilter = 'GUESTPAYMENTS';
     tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-    
+
     this.$subscription.add(
       tableCompRef.componentInstance.onModalClose.subscribe((res) => {
         tableCompRef.close();

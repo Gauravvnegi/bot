@@ -135,7 +135,8 @@ export class NetPromoterScoreComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -170,12 +171,15 @@ export class NetPromoterScoreComponent implements OnInit {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
+          this._globalFilterService.timezone,
           this.selectedInterval === 'date'
             ? 'DD MMM'
             : this.selectedInterval === 'month'
             ? 'MMM YYYY'
             : '',
-          this.selectedInterval === 'week' ? this._adminUtilityService.getToDate(this.globalQueries) : null
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
         )
       );
       this.chart.chartData[0].data.push(this.npsChartData.npsGraph[d]);

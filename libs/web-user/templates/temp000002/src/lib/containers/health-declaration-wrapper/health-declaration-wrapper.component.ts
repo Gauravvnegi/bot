@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
   templateUrl:
@@ -28,7 +29,8 @@ export class HealthDeclarationWrapperComponent extends BaseHealthDeclarationWrap
     route: ActivatedRoute,
     protected templateService: TemplateService,
     protected _modal: ModalService,
-    protected dateService: DateService
+    protected dateService: DateService,
+    protected _hotelService: HotelService
   ) {
     super(
       reservationService,
@@ -41,7 +43,8 @@ export class HealthDeclarationWrapperComponent extends BaseHealthDeclarationWrap
       route,
       templateService,
       _modal,
-      dateService
+      dateService,
+      _hotelService
     );
     this.self = this;
   }

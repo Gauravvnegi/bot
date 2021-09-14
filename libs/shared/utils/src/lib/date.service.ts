@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
-import { difference } from 'lodash';
 import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
 export class DateService {
   private constructor() {}
 
-  getCurrentTimeStamp() {
-    return moment().unix() * 1000;
+  getCurrentTimeStamp(timezone = '+05:30') {
+    return moment().utcOffset(timezone).unix() * 1000;
   }
 
-  static convertDateToTimestamp(inputDate) {
-    return moment(inputDate).unix();
+  static convertDateToTimestamp(inputDate, timezone = '+05:30') {
+    return moment(inputDate).utcOffset(timezone).unix();
   }
 
   static convertTimestampToDate(inputTimeStamp, format?, timezone = '+05:30') {
     if (format) {
-      return moment.unix(inputTimeStamp / 1000).format(format);
+      return moment(inputTimeStamp).utcOffset(timezone).format(format);
     }
-    return moment.unix(inputTimeStamp / 1000).format('DD-MM-YYYY');
+    return moment(inputTimeStamp).utcOffset(timezone).format('DD-MM-YYYY');
   }
 
   static currentDate(format?) {
@@ -66,27 +65,48 @@ export class DateService {
     return moment(inputTimeStamp).utcOffset(timezone).format(format);
   }
 
-  convertTimestampToLabels(type, timestamp, format?, toDate?) {
+  convertTimestampToLabels(type, timestamp, timezone, format?, toDate?) {
     let returnData = '';
     if (type === 'year') {
       returnData = timestamp;
     } else if (type === 'month') {
-      returnData = moment(+timestamp).format(format || 'MMM YYYY');
+      returnData = moment(+timestamp)
+        .utcOffset(timezone)
+        .format(format || 'MMM YYYY');
     } else if (type === 'date') {
-      returnData = moment(+timestamp).format(format || 'DD MMM');
+      returnData = moment(+timestamp)
+        .utcOffset(timezone)
+        .format(format || 'DD MMM');
     } else if (type === 'week') {
-      let difference = DateService.getDateDifference(+toDate, +timestamp);
+      let difference = DateService.getDateDifference(
+        +toDate,
+        +timestamp,
+        timezone
+      );
       difference = difference >= 0 && difference < 6 ? difference : 6;
       let monthDiff =
-        DateService.getMonthFromDate(moment(+timestamp)) ===
-        DateService.getMonthFromDate(moment(+timestamp).add(6, 'days'));
+        DateService.getMonthFromDate(
+          moment(+timestamp).utcOffset(timezone),
+          timezone
+        ) ===
+        DateService.getMonthFromDate(
+          moment(+timestamp)
+            .utcOffset(timezone)
+            .add(6, 'days'),
+          timezone
+        );
       returnData = difference
-        ? moment(+timestamp).format(monthDiff ? 'D' : format || 'D MMM') +
+        ? moment(+timestamp)
+            .utcOffset(timezone)
+            .format(monthDiff ? 'D' : format || 'D MMM') +
           '-' +
           moment(+timestamp)
+            .utcOffset(timezone)
             .add(difference, 'days')
             .format(format || 'DD MMM')
-        : moment(+timestamp).format(format || 'D MMM');
+        : moment(+timestamp)
+            .utcOffset(timezone)
+            .format(format || 'D MMM');
     } else {
       returnData = `${timestamp > 12 ? timestamp - 12 : timestamp}:00 ${
         timestamp > 11 ? 'PM' : 'AM'
@@ -95,8 +115,12 @@ export class DateService {
     return returnData;
   }
 
-  getCalendarType(startDate, endDate) {
-    const dateDiff = DateService.getDateDifference(startDate, endDate);
+  getCalendarType(startDate, endDate, timezone) {
+    const dateDiff = DateService.getDateDifference(
+      startDate,
+      endDate,
+      timezone
+    );
     if (dateDiff === 0) {
       return 'day';
     } else if (dateDiff > 0 && dateDiff <= 7) {
@@ -105,18 +129,18 @@ export class DateService {
       return 'week';
     } else if (dateDiff >= 30 && dateDiff < 365) {
       if (
-        DateService.getMonthFromDate(startDate) ===
-          DateService.getMonthFromDate(endDate) &&
-        DateService.getYearFromDate(startDate) ===
-          DateService.getYearFromDate(endDate)
+        DateService.getMonthFromDate(startDate, timezone) ===
+          DateService.getMonthFromDate(endDate, timezone) &&
+        DateService.getYearFromDate(startDate, timezone) ===
+          DateService.getYearFromDate(endDate, timezone)
       ) {
         return 'week';
       }
       return 'month';
     } else {
       if (
-        DateService.getYearFromDate(startDate) ===
-        DateService.getYearFromDate(endDate)
+        DateService.getYearFromDate(startDate, timezone) ===
+        DateService.getYearFromDate(endDate, timezone)
       ) {
         return 'month';
       }

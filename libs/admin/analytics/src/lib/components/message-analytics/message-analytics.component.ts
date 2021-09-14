@@ -71,7 +71,8 @@ export class MessageAnalyticsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;

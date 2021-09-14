@@ -1,4 +1,16 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { SubPackageDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/paidServiceConfig.model';
@@ -10,6 +22,7 @@ import { AirportFacilitiesComponent } from '../packages/airport-facilities/airpo
 import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportFacilitiesComponent,
@@ -32,9 +45,9 @@ export class PackageRendererComponent
 
   protected $subscription: Subscription = new Subscription();
 
-  protected packageComponent=componentMapping;
+  protected packageComponent = componentMapping;
 
-  protected packageDefaultComponent=DefaultAmenityComponent;
+  protected packageDefaultComponent = DefaultAmenityComponent;
 
   subPackageFieldConfig: SubPackageDetailsConfigI[] = [];
   selectedSubPackageArray = [];
@@ -49,7 +62,8 @@ export class PackageRendererComponent
     protected _resolver: ComponentFactoryResolver,
     protected _buttonService: ButtonService,
     protected _snackBarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected _hotelService: HotelService
   ) {}
 
   ngOnInit(): void {
@@ -195,7 +209,10 @@ export class PackageRendererComponent
     this.subPackages.controls.forEach((subPackage) => {
       if (subPackage.get('isSelected').value === true) {
         packagesToBeAdd.push(
-          this._paidService.mapDataForAminityAddition(subPackage.value)
+          this._paidService.mapDataForAminityAddition(
+            subPackage.value,
+            this._hotelService.hotelConfig.timezone
+          )
         );
       } else {
         packagesToBeRemove.push(
@@ -226,11 +243,9 @@ export class PackageRendererComponent
             this._translateService
               .get('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE')
               .subscribe((translatedMsg) => {
-                this._snackBarService.openSnackBarAsText(
-                  translatedMsg,
-                  '',
-                  { panelClass: 'success' }
-                );
+                this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
               });
             this._buttonService.buttonLoading$.next(this.saveButton);
           },
@@ -258,7 +273,7 @@ export class PackageRendererComponent
     });
   }
 
-  closeCategory(){
+  closeCategory() {
     this.onPackageUpdate.emit(true);
   }
 

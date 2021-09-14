@@ -285,7 +285,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new ReservationTable().deserialize(data).records;
+          this.values = new ReservationTable().deserialize(
+            data,
+            this._globalFilterService.timezone
+          ).records;
           this.initialLoading = false;
           //set pagination
           this.totalRecords = data.total;
@@ -359,7 +362,10 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new ReservationTable().deserialize(data).records;
+          this.values = new ReservationTable().deserialize(
+            data,
+            this._globalFilterService.timezone
+          ).records;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination

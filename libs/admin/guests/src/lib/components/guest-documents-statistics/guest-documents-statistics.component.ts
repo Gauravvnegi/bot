@@ -13,7 +13,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 @Component({
   selector: 'hospitality-bot-guest-documents-statistics',
   templateUrl: './guest-documents-statistics.component.html',
-  styleUrls: ['./guest-documents-statistics.component.scss']
+  styleUrls: ['./guest-documents-statistics.component.scss'],
 })
 export class GuestDocumentsStatisticsComponent implements OnInit {
   document: Document = new Document().deserialize({
@@ -22,8 +22,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       INITIATED: 0,
       FAILED: 0,
       PENDING: 0,
-      COMPLETED: 0
-    }
+      COMPLETED: 0,
+    },
   });
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
@@ -74,7 +74,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       value: 'ALL',
       disabled: false,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'VIP',
@@ -83,7 +83,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'General',
@@ -92,7 +92,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
   ];
 
@@ -100,14 +100,14 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     Labels: ['No Data'],
     Data: [[100]],
     Type: 'doughnut',
-    Legend : false,
-    Colors : [
+    Legend: false,
+    Colors: [
       {
         backgroundColor: ['#D5D1D1'],
         borderColor: ['#D5D1D1'],
-      }
+      },
     ],
-    Options : {
+    Options: {
       tooltips: {
         backgroundColor: 'white',
         bodyFontColor: 'black',
@@ -119,7 +119,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
         yPadding: 10,
       },
       responsive: true,
-      cutoutPercentage: 75
+      cutoutPercentage: 75,
     },
   };
   constructor(
@@ -128,7 +128,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     private _globalFilterService: GlobalFilterService,
     private _modal: ModalService,
     private dateService: DateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getDocumentStatistics();
@@ -145,10 +145,12 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       this.setChartOptions();
     } else {
       this.chart.Data = [[100]];
-      this.chart.Colors = [{
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      }];
+      this.chart.Colors = [
+        {
+          backgroundColor: ['#D5D1D1'],
+          borderColor: ['#D5D1D1'],
+        },
+      ];
       this.chart.Labels = ['No data'];
     }
   }
@@ -159,7 +161,8 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
 
@@ -189,10 +192,12 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   setChartOptions() {
     this.chart.Labels = ['Initiated', 'Pending', 'Accepted', 'Rejected'];
 
-    this.chart.Colors = [{
-      backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-      borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-    }];
+    this.chart.Colors = [
+      {
+        backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+        borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
+      },
+    ];
   }
 
   openTableModal() {
@@ -210,7 +215,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
     tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
     tableCompRef.componentInstance.guestFilter = 'GUESTDOCUMENTS';
     tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-    
+
     this.$subscription.add(
       tableCompRef.componentInstance.onModalClose.subscribe((res) => {
         tableCompRef.close();
@@ -221,5 +226,4 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

@@ -5,6 +5,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { Details } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
 import { Reservation } from 'libs/admin/dashboard/src/lib/data-models/reservation-table.model';
 import { SnackBarService } from 'libs/shared/material/src';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-guest-booking-info',
@@ -19,6 +20,7 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
   constructor(
     private messageService: MessageService,
     private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
     private _snackBarService: SnackBarService
   ) {}
 
@@ -54,7 +56,10 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
   getReservationDetail(id) {
     this.messageService.getReservationDetails(id).subscribe(
       (response) => {
-        this.reservationData = new Reservation().deserialize(response);
+        this.reservationData = new Reservation().deserialize(
+          response,
+          this.globalFilterService.timezone
+        );
         console.log(this.reservationData);
       },
       ({ error }) => {

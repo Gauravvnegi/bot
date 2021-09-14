@@ -7,9 +7,9 @@ export interface Deserializable {
 
 export class ReservationTable implements Deserializable {
   records: Reservation[];
-  deserialize(input: any) {
+  deserialize(input: any, timezone) {
     this.records = input.records.map((record) =>
-      new Reservation().deserialize(record)
+      new Reservation().deserialize(record, timezone)
     );
     return this;
   }
@@ -24,7 +24,7 @@ export class Reservation implements Deserializable {
   feedback;
   packages;
   currentJourney;
-  deserialize(input: any) {
+  deserialize(input: any, timezone) {
     this.booking = new Booking().deserialize(input);
     this.rooms = new Room().deserialize(input.stayDetails);
     this.guests = new GuestType().deserialize(input.guestDetails);

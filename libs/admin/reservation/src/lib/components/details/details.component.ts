@@ -144,7 +144,10 @@ export class DetailsComponent implements OnInit {
   getReservationDetails() {
     this._reservationService.getReservationDetails(this.bookingId).subscribe(
       (response) => {
-        this.details = new Details().deserialize(response);
+        this.details = new Details().deserialize(
+          response,
+          this._globalFilterService.timezone
+        );
         this.mapValuesInForm();
         this.isReservationDetailFetched = true;
       },

@@ -49,6 +49,10 @@ export class FirebaseMessagingService {
                   );
                 }
               );
+          } else {
+            this._snackbarService.openSnackBarAsText(
+              `Please allow notification or else some of your features won't work properly.`
+            );
           }
         },
         (err) => {

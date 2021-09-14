@@ -41,7 +41,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'Inhouse',
@@ -50,7 +50,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'Departure',
@@ -59,7 +59,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'Out-Guest',
@@ -68,7 +68,7 @@ export class TypeGuestStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
   ];
 
@@ -195,7 +195,8 @@ export class TypeGuestStatisticsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -250,12 +251,13 @@ export class TypeGuestStatisticsComponent implements OnInit {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
+          this._globalFilterService.timezone,
           this.selectedInterval === 'date'
             ? 'DD MMM'
             : this.selectedInterval === 'month'
             ? 'MMM YYYY'
             : '',
-            this.selectedInterval === 'week'
+          this.selectedInterval === 'week'
             ? this._adminUtilityService.getToDate(this.globalQueries)
             : null
         )
@@ -268,36 +270,21 @@ export class TypeGuestStatisticsComponent implements OnInit {
   }
 
   private getVIPStatistics(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this.dateService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        const queries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-
-        const config = {
-          queryObj: this._adminUtilityService.makeQueryParams(queries),
-        };
-        this.$subscription.add(
-          this._statisticService.getVIPStatistics(config).subscribe(
-            (response) => {
-              this.customerData = new VIP().deserialize(response);
-              this.initGraphData();
-            },
-            ({ error }) => {
-              this._snackbarService.openSnackBarAsText(error.message);
-            }
-          )
-        );
-      })
+      this.$subscription.add(
+        this._statisticService.getVIPStatistics(config).subscribe(
+          (response) => {
+            this.customerData = new VIP().deserialize(response);
+            this.initGraphData();
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
+        )
+      )
     );
   }
 

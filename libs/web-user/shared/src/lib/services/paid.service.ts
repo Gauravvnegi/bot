@@ -57,7 +57,7 @@ export class PaidService extends ApiService {
     return this.put(`/api/v1/reservation/${reservationId}/packages`, data);
   }
 
-  mapDataForAminityAddition(amenityData) {
+  mapDataForAminityAddition(amenityData, timezone) {
     let data = new Amenity();
     data.packageId = amenityData.id;
     data.rate = 1000;
@@ -69,7 +69,8 @@ export class PaidService extends ApiService {
     ) {
       amenityData.metaData.pickupTime = this.mapAirportData(
         amenityData.metaData.pickupData,
-        amenityData.metaData.pickupTime
+        amenityData.metaData.pickupTime,
+        timezone
       );
     }
     data.metaData = amenityData.metaData;
@@ -89,14 +90,14 @@ export class PaidService extends ApiService {
     });
   }
 
-  mapAirportData(date, time) {
+  mapAirportData(date, time, timezone) {
     const pickUpDateTimestamp = DateService.convertDateToTimestamp(date);
     const pickupDate = new Date(pickUpDateTimestamp * 1000).toISOString();
-    const pickupTime = this.modifyPickUpData(time, pickupDate);
+    const pickupTime = this.modifyPickUpData(time, pickupDate, timezone);
     return pickupTime;
   }
 
-  modifyPickUpData(pickupTime, arrivalTime) {
+  modifyPickUpData(pickupTime, arrivalTime, timezone) {
     if (pickupTime) {
       let arrivalDate = arrivalTime.split('T')[0];
       let time = moment(pickupTime, 'hh:mm').format('hh:mm');

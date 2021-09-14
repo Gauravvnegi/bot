@@ -111,7 +111,8 @@ export class SourceStatisticsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -126,36 +127,21 @@ export class SourceStatisticsComponent implements OnInit {
   }
 
   getSourceGraphData() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
-          calenderType: this.dateService.getCalendarType(
-            data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
-          ),
-        };
-        this.selectedInterval = calenderType.calenderType;
-        const queries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-          calenderType,
-        ];
-
-        const config = {
-          queryObj: this._adminUtilityService.makeQueryParams(queries),
-        };
-        this.$subscription.add(
-          this._statisticService.getSourceStatistics(config).subscribe(
-            (response) => {
-              this.sourceGraphData = new Source().deserialize(response);
-              this.initGraphData();
-            },
-            ({ error }) => {
-              this._snackbarService.openSnackBarAsText(error.message);
-            }
-          )
-        );
-      })
+      this.$subscription.add(
+        this._statisticService.getSourceStatistics(config).subscribe(
+          (response) => {
+            this.sourceGraphData = new Source().deserialize(response);
+            this.initGraphData();
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
+        )
+      )
     );
   }
 

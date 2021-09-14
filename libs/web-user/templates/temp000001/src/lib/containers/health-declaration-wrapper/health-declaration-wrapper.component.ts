@@ -15,6 +15,7 @@ import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',
@@ -39,7 +40,8 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
     protected route: ActivatedRoute,
     protected templateService: TemplateService,
     protected _modal: ModalService,
-    protected dateService: DateService
+    protected dateService: DateService,
+    protected _hotelService: HotelService
   ) {
     super();
     this.self = this;
@@ -154,15 +156,22 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
   checkForTodaysBooking(data) {
     const diff = DateService.getDateDifference(
       +data.arrivalTime,
-      +this.dateService.getCurrentTimeStamp()
+      +this.dateService.getCurrentTimeStamp(
+        this._hotelService.hotelConfig.timezone
+      ),
+      this._hotelService.hotelConfig.timezone
     );
     const stayDetailDay = DateService.convertTimestampToDate(
       +data.arrivalTime,
-      'DD'
+      'DD',
+      this._hotelService.hotelConfig.timezone
     );
     const currentDay = DateService.convertTimestampToDate(
-      +this.dateService.getCurrentTimeStamp(),
-      'DD'
+      +this.dateService.getCurrentTimeStamp(
+        this._hotelService.hotelConfig.timezone
+      ),
+      'DD',
+      this._hotelService.hotelConfig.timezone
     );
     if (diff > 0 && !this.modalVisible) {
       this.openCheckinDateModal();

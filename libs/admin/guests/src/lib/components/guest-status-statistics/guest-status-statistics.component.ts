@@ -174,7 +174,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'VIP',
@@ -183,7 +183,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
     {
       label: 'General',
@@ -192,7 +192,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
       disabled: false,
       total: 0,
       chips: this.chips,
-      lastPage:0
+      lastPage: 0,
     },
   ];
 
@@ -217,7 +217,8 @@ export class GuestStatusStatisticsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -265,6 +266,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
+          this._globalFilterService.timezone,
           this.selectedInterval === 'date'
             ? 'DD MMM'
             : this.selectedInterval === 'month'
@@ -366,7 +368,7 @@ export class GuestStatusStatisticsComponent implements OnInit {
     tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
     tableCompRef.componentInstance.guestFilter = 'GUESTSTATUS';
     tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-    
+
     this.$subscription.add(
       tableCompRef.componentInstance.onModalClose.subscribe((res) => {
         tableCompRef.close();

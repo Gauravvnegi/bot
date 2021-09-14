@@ -147,7 +147,8 @@ export class InhouseSentimentsComponent implements OnInit {
         let calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
-            data['dateRange'].queryValue[1].fromDate
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
           ),
         };
 
@@ -233,6 +234,7 @@ export class InhouseSentimentsComponent implements OnInit {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
+          this._globalFilterService.timezone,
           this.selectedInterval === 'date'
             ? 'DD MMM'
             : this.selectedInterval === 'month'

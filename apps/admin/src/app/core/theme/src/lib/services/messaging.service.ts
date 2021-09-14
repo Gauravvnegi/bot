@@ -53,6 +53,7 @@ export class FirebaseMessagingService {
               '',
               {
                 panelClass: 'notification',
+                duration: 60000,
               }
             );
           }

@@ -75,7 +75,8 @@ export class NpsAcrossServicesComponent implements OnInit {
           let calenderType = {
             calenderType: this.dateService.getCalendarType(
               data['dateRange'].queryValue[0].toDate,
-              data['dateRange'].queryValue[1].fromDate
+              data['dateRange'].queryValue[1].fromDate,
+              this._globalFilterService.timezone
             ),
           };
           this.selectedInterval = calenderType.calenderType;
@@ -167,7 +168,7 @@ export class NpsAcrossServicesComponent implements OnInit {
           disabled: false,
           total: 0,
           chips,
-          lastPage:0
+          lastPage: 0,
         });
       });
     } else if (!this.tabFilterItems[this.tabFilterIdx].chips.length) {

@@ -85,7 +85,11 @@ export class Guest implements Deserializable {
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'mobileNumber', get(input, ['contactDetails', 'contactNumber'])),
-      set({}, 'nationality', get(input, ['contactDetails', 'cc'])),
+      set(
+        {},
+        'nationality',
+        this.getNationality(get(input, ['contactDetails', 'cc']))
+      ),
       set({}, 'email', get(input, ['contactDetails', 'emailId'])),
       set({}, 'nameTitle', get(input, ['nameTitle'])),
       set({}, 'type', get(input, ['type'])),
@@ -94,6 +98,13 @@ export class Guest implements Deserializable {
       set({}, 'age', get(input, ['age']))
     );
     return this;
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
   }
 }
 

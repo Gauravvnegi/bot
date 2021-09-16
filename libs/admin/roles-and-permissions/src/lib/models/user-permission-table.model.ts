@@ -35,7 +35,7 @@ export class User implements Deserializable {
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'jobTitle', get(input, ['title'])),
-      set({}, 'cc', get(input, ['cc'])),
+      set({}, 'cc', this.getNationality(get(input, ['cc']))),
       set({}, 'phoneNumber', get(input, ['phoneNumber'])),
       set({}, 'profileUrl', get(input, ['profileUrl'])),
       set({}, 'email', get(input, ['email'])),
@@ -84,6 +84,13 @@ export class User implements Deserializable {
           : '',
       permissions,
     };
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
   }
 }
 

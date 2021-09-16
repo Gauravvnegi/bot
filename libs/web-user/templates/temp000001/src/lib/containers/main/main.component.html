@@ -7,4 +7,7 @@
     [dataToPopulate]="reservationData"
   ></ng-container>
 </div>
-<hospitality-bot-footer *ngIf="isReservationData"></hospitality-bot-footer>
+<hospitality-bot-footer
+  [showSocialIcons]="showFooterSocialIcons"
+  *ngIf="isReservationData"
+></hospitality-bot-footer>

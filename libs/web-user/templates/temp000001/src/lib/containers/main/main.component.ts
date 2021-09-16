@@ -1,12 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
@@ -21,7 +25,10 @@ import { Temp000001StepperComponent } from '../../presentational/temp000001-step
 export class MainComponent implements OnInit {
   protected $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
-
+  protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
+  protected checkInDateAlert = CheckinDateAlertComponent;
+  modalVisible = false;
+  showFooterSocialIcons = true;
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
   reservationData: ReservationDetails;
@@ -35,7 +42,9 @@ export class MainComponent implements OnInit {
     private _parentFormService: ParentFormService,
     protected _hotelService: HotelService,
     protected _templateService: TemplateService,
-    private titleService: Title,
+    protected _stepperService: StepperService,
+    protected _modal: ModalService,
+    protected dateService: DateService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -59,6 +68,7 @@ export class MainComponent implements OnInit {
             // TO_DO: Remove function call
             // this.stepperData = this.modifyStepperData(this._templateService.templateData);
             this.getStepperData();
+            this.listenForStepperChange();
             this.reservationData = reservationData;
             this._reservationService.reservationData = reservationData;
           },
@@ -69,6 +79,70 @@ export class MainComponent implements OnInit {
           }
         )
     );
+  }
+
+  listenForStepperChange() {
+    this.$subscription.add(
+      this._stepperService.stepperSelectedIndex$.subscribe((index) => {
+        const templateData = this._templateService.templateData[
+          this._templateService.templateId
+        ];
+        if (templateData) {
+          let data;
+          templateData.stepConfigs.find((item, ix) => {
+            if (item.component.name === 'payment-details-wrapper') {
+              data = ix;
+            }
+          });
+          if (index > data) {
+            this.checkForTodaysBooking(
+              this._reservationService.reservationData
+            );
+          }
+          this.showFooterSocialIcons =
+            index === templateData.stepConfigs.length - 1;
+        }
+      })
+    );
+  }
+
+  checkForTodaysBooking(data) {
+    const diff = DateService.getDateDifference(
+      +data.arrivalTime,
+      +this.dateService.getCurrentTimeStamp(
+        this._hotelService.hotelConfig.timezone
+      ),
+      this._hotelService.hotelConfig.timezone
+    );
+    const stayDetailDay = DateService.convertTimestampToDate(
+      +data.arrivalTime,
+      'DD',
+      this._hotelService.hotelConfig.timezone
+    );
+    const currentDay = DateService.convertTimestampToDate(
+      +this.dateService.getCurrentTimeStamp(
+        this._hotelService.hotelConfig.timezone
+      ),
+      'DD',
+      this._hotelService.hotelConfig.timezone
+    );
+    if (diff > 0 && !this.modalVisible) {
+      this.openCheckinDateModal();
+    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
+      this.openCheckinDateModal();
+    }
+  }
+
+  openCheckinDateModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'checkin-modal-component';
+    this.modalVisible = true;
+    this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
+      disableClose: true,
+      id: 'checkin-modal-component',
+    });
+    this.checkInDialogRef.disableClose = true;
   }
 
   // TO-DO: Remove this function
@@ -111,211 +185,6 @@ export class MainComponent implements OnInit {
   }
 
   getStepperData() {
-    // const data = {
-    //   component: 'stepper',
-    //   labelPosition: 'bottom',
-    //   isLinear: false,
-    //   position: 'horizontal',
-    //   layout_variables: {
-    //     '--stepper-dynamic-background-image':
-    //       'linear-gradient(to left,#ffc837 , #ff8008)',
-    //   },
-    //   stepConfigs: [
-    //     {
-    //       stepperName: 'Stay Details',
-    //       required: true,
-    //       component: {
-    //         name: 'stay-details-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [
-    //         {
-    //           settings: {
-    //             label: 'Next',
-    //             isClickedTemplateSwitch: true,
-    //           },
-    //           name: 'next',
-    //           buttonClass: 'next-button',
-    //           click: {
-    //             fn_name: ' ',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       stepperName: 'Guest Details',
-    //       required: true,
-    //       component: {
-    //         name: 'guest-details-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [
-    //         {
-    //           settings: {
-    //             label: 'Back',
-    //             isClickedTemplateSwitch: false,
-    //           },
-    //           name: 'back',
-    //           buttonClass: 'back-button',
-    //           click: {
-    //             fn_name: 'goBack',
-    //           },
-    //         },
-    //         {
-    //           settings: {
-    //             label: 'Next',
-    //             isClickedTemplateSwitch: true,
-    //           },
-    //           name: 'next',
-    //           buttonClass: 'next-button',
-    //           click: {
-    //             fn_name: 'saveGuestDetails',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       stepperName: 'Documentation',
-    //       required: true,
-    //       component: {
-    //         name: 'document-details-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [
-    //         {
-    //           settings: {
-    //             label: 'Back',
-    //             isClickedTemplateSwitch: false,
-    //           },
-    //           name: 'back',
-    //           buttonClass: 'back-button',
-    //           click: {
-    //             fn_name: 'goBack',
-    //           },
-    //         },
-    //         {
-    //           settings: {
-    //             label: 'Next',
-    //             isClickedTemplateSwitch: true,
-    //           },
-    //           name: 'next',
-    //           buttonClass: 'next-button',
-    //           click: {
-    //             fn_name: 'saveDocumentDetails',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       stepperName: 'Health Declaration Form',
-    //       required: false,
-    //       component: {
-    //         name: 'health-declaration-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [
-    //         {
-    //           settings: {
-    //             label: 'Back',
-    //             isClickedTemplateSwitch: false,
-    //           },
-    //           name: 'back',
-    //           buttonClass: 'back-button',
-    //           click: {
-    //             fn_name: 'goBack',
-    //           },
-    //         },
-    //         {
-    //           settings: {
-    //             label: 'Next',
-    //             isClickedTemplateSwitch: true,
-    //           },
-    //           name: 'next',
-    //           buttonClass: 'next-button',
-    //           click: {
-    //             fn_name: 'saveHealthDeclarationDetails',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       stepperName: 'Feedback',
-    //       required: true,
-    //       component: {
-    //         name: 'feedback-details-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [],
-    //     },
-    //     {
-    //       stepperName: 'Payment',
-    //       required: true,
-    //       component: {
-    //         name: 'payment-details-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [
-    //         {
-    //           settings: {
-    //             label: 'Back',
-    //             isClickedTemplateSwitch: false,
-    //           },
-    //           name: 'back',
-    //           buttonClass: 'back-button',
-    //           click: {
-    //             fn_name: 'goBack',
-    //           },
-    //         },
-    //         {
-    //           settings: {
-    //             label: 'Submit',
-    //             isClickedTemplateSwitch: true,
-    //           },
-    //           name: 'submit',
-    //           buttonClass: 'next-button',
-    //           click: {
-    //             fn_name: 'onSubmit',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       stepperName: 'Bill Summary',
-    //       required: true,
-    //       component: {
-    //         name: 'bill-summary-details-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [],
-    //     },
-    //     {
-    //       stepperName: 'Summary',
-    //       required: true,
-    //       component: {
-    //         name: 'summary-wrapper',
-    //       },
-    //       events: [],
-    //       layout: {},
-    //       editable: true,
-    //       buttons: [],
-    //     },
-    //   ],
-    // };
-    // this.stepperData = data;
     this.initStepperParentFG();
     return true;
   }

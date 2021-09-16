@@ -40,8 +40,8 @@ export class PaymentSummaryComponent implements OnInit {
         'unit',
         'base',
         'amount',
-        'CGST',
-        'SGST',
+        // 'CGST',
+        // 'SGST',
         'totalAmount',
       ];
       this.getModifiedCheckoutPaymentSummary();
@@ -68,8 +68,8 @@ export class PaymentSummaryComponent implements OnInit {
       base,
       amount,
       totalAmount,
-      cgstAmount,
-      sgstAmount,
+      // cgstAmount,
+      // sgstAmount,
     } = this.paymentSummary.roomRates;
 
     this.dataSource.push({
@@ -80,8 +80,8 @@ export class PaymentSummaryComponent implements OnInit {
       amount,
       totalAmount,
       currency: this.paymentSummary.currencyCode,
-      cgstAmount,
-      sgstAmount,
+      // cgstAmount,
+      // sgstAmount,
     });
     this.paymentSummary.packages.forEach((amenity) => {
       let {
@@ -91,8 +91,8 @@ export class PaymentSummaryComponent implements OnInit {
         base,
         amount,
         totalAmount,
-        cgstAmount,
-        sgstAmount,
+        // cgstAmount,
+        // sgstAmount,
       } = amenity;
 
       this.dataSource.push({
@@ -103,8 +103,7 @@ export class PaymentSummaryComponent implements OnInit {
         amount,
         totalAmount,
         currency: this.paymentSummary.currencyCode,
-        cgstAmount,
-        sgstAmount,
+        // cgstAmount,s
       });
     });
   }

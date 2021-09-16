@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 export interface IFooterConfig {
   footerLogo: string;
@@ -29,6 +29,7 @@ export class FooterComponent implements OnInit {
     social: [],
     privacyPolicy: '',
   };
+  @Input() showSocialIcons = true;
 
   constructor(protected _hotelService: HotelService) {}
 
@@ -44,7 +45,8 @@ export class FooterComponent implements OnInit {
       socialPlatforms,
     } = this._hotelService.hotelConfig;
     // TO-DO: remove union when backend fixes the hotelConfig data
-    let { emailId, contactNumber, cc } = contactDetails || this._hotelService.hotelConfig;
+    let { emailId, contactNumber, cc } =
+      contactDetails || this._hotelService.hotelConfig;
     this.footerConfig.social = socialPlatforms;
     this.footerConfig.footerLogo = footerLogo;
     this.footerConfig.contactDetails.contactNo = cc + ' ' + contactNumber;

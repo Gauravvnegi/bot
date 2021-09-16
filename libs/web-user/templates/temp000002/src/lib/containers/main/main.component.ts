@@ -7,6 +7,4 @@ import { MainComponent as BaseMainComponent } from 'libs/web-user/templates/temp
     '../../../../../temp000001/src/lib/containers/main/main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent extends BaseMainComponent {
- 
-}
+export class MainComponent extends BaseMainComponent {}

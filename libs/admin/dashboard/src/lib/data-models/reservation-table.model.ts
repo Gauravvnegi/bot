@@ -333,7 +333,11 @@ export class Guest implements Deserializable {
       set({}, 'nameTitle', get(input, ['nameTitle'])),
       set({}, 'firstName', trim(get(input, ['firstName']))),
       set({}, 'lastName', trim(get(input, ['lastName']))),
-      set({}, 'countryCode', get(input, ['contactDetails', 'cc'])),
+      set(
+        {},
+        'countryCode',
+        this.getNationality(get(input, ['contactDetails', 'cc']))
+      ),
       set({}, 'phoneNumber', get(input, ['contactDetails', 'contactNumber'])),
       set({}, 'email', get(input, ['contactDetails', 'emailId'])),
       set({}, 'documents', get(input, ['documents'])),
@@ -350,6 +354,13 @@ export class Guest implements Deserializable {
     return `${this.countryCode ? this.countryCode : ''} ${
       this.phoneNumber ? this.phoneNumber : ''
     }`;
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
   }
 }
 

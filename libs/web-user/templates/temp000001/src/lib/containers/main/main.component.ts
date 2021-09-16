@@ -1,12 +1,17 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
+import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { ParentFormService } from 'libs/web-user/shared/src/lib/services/parentForm.service';
+import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/template-loader.service';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
@@ -21,6 +26,9 @@ import { Temp000001StepperComponent } from '../../presentational/temp000001-step
 export class MainComponent implements OnInit {
   protected $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
+  protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
+  protected checkInDateAlert = CheckinDateAlertComponent;
+  modalVisible = false;
 
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
@@ -35,7 +43,9 @@ export class MainComponent implements OnInit {
     private _parentFormService: ParentFormService,
     protected _hotelService: HotelService,
     protected _templateService: TemplateService,
-    private titleService: Title,
+    protected _stepperService: StepperService,
+    protected _modal: ModalService,
+    protected dateService: DateService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -59,6 +69,7 @@ export class MainComponent implements OnInit {
             // TO_DO: Remove function call
             // this.stepperData = this.modifyStepperData(this._templateService.templateData);
             this.getStepperData();
+            this.listenForStepperChange();
             this.reservationData = reservationData;
             this._reservationService.reservationData = reservationData;
           },
@@ -69,6 +80,69 @@ export class MainComponent implements OnInit {
           }
         )
     );
+  }
+
+  listenForStepperChange() {
+    this.$subscription.add(
+      this._stepperService.stepperSelectedIndex$.subscribe((index) => {
+        if (
+          this._templateService.templateData[this._templateService.templateId]
+        ) {
+          let data;
+          this._templateService.templateData[
+            this._templateService.templateId
+          ].stepConfigs.find((item, ix) => {
+            if (item.component.name === 'payment-details-wrapper') {
+              data = ix;
+            }
+          });
+          if (index > data) {
+            this.checkForTodaysBooking(
+              this._reservationService.reservationData
+            );
+          }
+        }
+      })
+    );
+  }
+
+  checkForTodaysBooking(data) {
+    const diff = DateService.getDateDifference(
+      +data.arrivalTime,
+      +this.dateService.getCurrentTimeStamp(
+        this._hotelService.hotelConfig.timezone
+      ),
+      this._hotelService.hotelConfig.timezone
+    );
+    const stayDetailDay = DateService.convertTimestampToDate(
+      +data.arrivalTime,
+      'DD',
+      this._hotelService.hotelConfig.timezone
+    );
+    const currentDay = DateService.convertTimestampToDate(
+      +this.dateService.getCurrentTimeStamp(
+        this._hotelService.hotelConfig.timezone
+      ),
+      'DD',
+      this._hotelService.hotelConfig.timezone
+    );
+    if (diff > 0 && !this.modalVisible) {
+      this.openCheckinDateModal();
+    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
+      this.openCheckinDateModal();
+    }
+  }
+
+  openCheckinDateModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'checkin-modal-component';
+    this.modalVisible = true;
+    this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
+      disableClose: true,
+      id: 'checkin-modal-component',
+    });
+    this.checkInDialogRef.disableClose = true;
   }
 
   // TO-DO: Remove this function

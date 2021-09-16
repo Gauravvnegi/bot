@@ -29,7 +29,7 @@ export class MainComponent implements OnInit {
   protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
   protected checkInDateAlert = CheckinDateAlertComponent;
   modalVisible = false;
-
+  showFooterSocialIcons = true;
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
   reservationData: ReservationDetails;
@@ -85,13 +85,12 @@ export class MainComponent implements OnInit {
   listenForStepperChange() {
     this.$subscription.add(
       this._stepperService.stepperSelectedIndex$.subscribe((index) => {
-        if (
-          this._templateService.templateData[this._templateService.templateId]
-        ) {
+        const templateData = this._templateService.templateData[
+          this._templateService.templateId
+        ];
+        if (templateData) {
           let data;
-          this._templateService.templateData[
-            this._templateService.templateId
-          ].stepConfigs.find((item, ix) => {
+          templateData.stepConfigs.find((item, ix) => {
             if (item.component.name === 'payment-details-wrapper') {
               data = ix;
             }
@@ -101,6 +100,8 @@ export class MainComponent implements OnInit {
               this._reservationService.reservationData
             );
           }
+          this.showFooterSocialIcons =
+            index === templateData.stepConfigs.length - 1;
         }
       })
     );

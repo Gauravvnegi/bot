@@ -12,6 +12,7 @@
     "SIGNATURE_PAD_PENDING": "Please enter signature on the signature pad",
     "SIGNATURE_NAME_PENDING": "Please enter your name",
     "SIGNATURE_FILE_PENDING": "Please upload an image file",
+    "SIGNATURE_MISSING": "We request you to sign the document",
     "EMAIL_NOT_ENTERED": "Please enter an email",
     "INVALID_EMAIL": "Please enter a correct email address",
     "INVALID_IMAGE": "Invalid File"
@@ -52,6 +53,7 @@
       "HEALTH_DECLARATION_COMPLETE": "Health Declaration Formalities Completed.",
       "HEALTH_DECLARATION_PENDING": "Signature missing in Health Declaration.",
       "SIGNATURE_MISSING": "We request you to sign the document",
+      "SIGNATURE_MISSING_REGCARD": "We request you to sign the Reg-card",
       "HEALTH_DECLARARTION_NOT_FOUND": "Health Declaration Missing. Fill required details to continue.",
       "PAYMENT_STATUS_COMPLETE": "Payment Successful.",
       "PAYMENT_STATUS_PENDING": "Payment Pending",

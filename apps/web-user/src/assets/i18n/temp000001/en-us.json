@@ -8,6 +8,7 @@
     "UPLOAD_GUEST_DOCUMENT_PENDING": "Please upload documents for guests.",
     "UPLOAD_FRONT_DOCUMENT_PENDING": "Please upload front document for {{documentType}}.",
     "UPLOAD_BACK_DOCUMENT_PENDING": "Please upload back document for {{documentType}}.",
+    "UPLOAD_IN_PROGRESS": "Please wait for document to be uploaded.",
     "SIGNATURE_PAD_PENDING": "Please enter signature on the signature pad",
     "SIGNATURE_NAME_PENDING": "Please enter your name",
     "SIGNATURE_FILE_PENDING": "Please upload an image file",

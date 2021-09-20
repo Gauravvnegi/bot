@@ -1,6 +1,5 @@
 @import 'main';
 
-
 .upload-btn-wrapper {
   position: relative;
 }
@@ -15,7 +14,7 @@
   height: $full-width;
 }
 
-.upload__box__child{
+.upload__box__child {
   position: absolute;
   height: 160px;
   z-index: 3;
@@ -25,6 +24,9 @@
   border: 2px dotted #e6e6e6;
   height: 200px;
   width: $full-width;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 mat-label {
   position: absolute;

@@ -1,3 +1,4 @@
+@import 'main';
 .container {
   justify-content: flex-start;
 }
@@ -83,8 +84,16 @@
   min-height: 20px;
 }
 
-.progress{
-  .value{
+.progress {
+  .value {
     font-size: 13px;
+  }
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 9vw !important;
+  flex-grow: inherit !important;
+  @media (max-width: $L) {
+    min-width: 15vw !important;
   }
 }

@@ -17,9 +17,25 @@
       <div class="stat-value">{{ arrivals.maxExpected }}</div>
       <div>
         <div>
-          <div class="stat-value-comparisonPercent">
+          <div
+            class="stat-value-comparisonPercent"
+            [ngStyle]="
+              arrivals.comparisonPercent >= 0
+                ? {
+                    color: '#52b33f'
+                  }
+                : { color: '#CC052B' }
+            "
+          >
             ({{ arrivals.comparisonPercent }}%)
-            <img src="assets/svg/uparrow.svg" alt="uparrow" />
+            <img
+              [src]="
+                arrivals.comparisonPercent >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/down-percentage.svg'
+              "
+              alt="uparrow"
+            />
           </div>
           <div class="stat-value-comparisonPercent-day">
             In 30 Days

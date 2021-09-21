@@ -55,9 +55,25 @@
         {{ this.roundValue(globalNps.negative.score) }}%
       </div>
       <div class="stat-lable">Negative</div>
-      <div class="stat-comparisonPercent">
+      <div
+        class="stat-comparisonPercent"
+        [ngStyle]="
+          globalNps.negative.comparisonPercent >= 0
+            ? {
+                color: '#52b33f'
+              }
+            : { color: '#CC052B' }
+        "
+      >
         ({{ this.roundValue(globalNps.negative.comparisonPercent) }}%)
-        <img src="assets/svg/uparrow.svg" alt="uparrow" />
+        <img
+          [src]="
+            globalNps.negative.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
       </div>
     </div>
     <div class="stat-val-container">
@@ -66,9 +82,25 @@
         {{ this.roundValue(globalNps.neutral.score) }}%
       </div>
       <div class="stat-lable">Neutral</div>
-      <div class="stat-comparisonPercent">
+      <div
+        class="stat-comparisonPercent"
+        [ngStyle]="
+          globalNps.neutral.comparisonPercent >= 0
+            ? {
+                color: '#52b33f'
+              }
+            : { color: '#CC052B' }
+        "
+      >
         ({{ this.roundValue(globalNps.neutral.comparisonPercent) }}%)
-        <img src="assets/svg/uparrow.svg" alt="uparrow" />
+        <img
+          [src]="
+            globalNps.neutral.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
       </div>
     </div>
     <div class="stat-val-container">
@@ -77,9 +109,25 @@
         {{ this.roundValue(globalNps.positive.score) }}%
       </div>
       <div class="stat-lable">Positive</div>
-      <div class="stat-comparisonPercent">
+      <div
+        class="stat-comparisonPercent"
+        [ngStyle]="
+          globalNps.positive.comparisonPercent >= 0
+            ? {
+                color: '#52b33f'
+              }
+            : { color: '#CC052B' }
+        "
+      >
         ({{ this.roundValue(globalNps.positive.comparisonPercent) }}%)
-        <img src="assets/svg/uparrow.svg" alt="uparrow" />
+        <img
+          [src]="
+            globalNps.positive.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
       </div>
     </div>
   </div>

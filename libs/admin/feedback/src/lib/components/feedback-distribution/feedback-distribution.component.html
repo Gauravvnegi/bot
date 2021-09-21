@@ -50,9 +50,26 @@
       </div>
       <div class="stat-val">
         {{ value.count }}
-        <span class="positive">
+        <span
+          class="positive"
+          [ngStyle]="
+            value.percent >= 0
+              ? {
+                  color: '#52b33f'
+                }
+              : { color: '#CC052B' }
+          "
+        >
           ({{ value.percent }}%)
-          <img src="./assets/svg/uparrow.svg" alt="uparrow" />
+          <img
+            class="upArrow"
+            [src]="
+              value.percent >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
         </span>
       </div>
     </div>

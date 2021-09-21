@@ -233,11 +233,18 @@ export class ContactDetails {
   deserialize(summary) {
     Object.assign(
       this,
-      set({}, 'cc', get(summary, ['cc'])),
+      set({}, 'cc', this.getNationality(get(summary, ['cc']))),
       set({}, 'mobileNumber', get(summary, ['contactNumber'])),
       set({}, 'emailId', get(summary, ['emailId']))
     );
     return this;
+  }
+
+  getNationality(cc) {
+    if (cc && cc.length) {
+      return cc.includes('+') ? cc : `+${cc}`;
+    }
+    return cc;
   }
 }
 

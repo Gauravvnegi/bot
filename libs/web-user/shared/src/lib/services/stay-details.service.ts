@@ -41,6 +41,7 @@ export class StayDetailsService extends ApiService {
       label:
         'Early check-in is subject to availability, please mention in special request if required.',
       disable: false,
+      format: 24,
       style: {
         childLabelStyles: {
           'font-weight': 700,
@@ -95,6 +96,7 @@ export class StayDetailsService extends ApiService {
       label:
         'Late checkout is subject to availability, please mention in special request if required.',
       disable: false,
+      format: 24,
       style: {
         childLabelStyles: {
           'font-weight': 700,

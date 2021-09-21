@@ -27,10 +27,7 @@ export class HealthDeclarationWrapperComponent extends BaseHealthDeclarationWrap
     translateService: TranslateService,
     router: Router,
     route: ActivatedRoute,
-    protected templateService: TemplateService,
-    protected _modal: ModalService,
-    protected dateService: DateService,
-    protected _hotelService: HotelService
+    templateService: TemplateService
   ) {
     super(
       reservationService,
@@ -41,10 +38,7 @@ export class HealthDeclarationWrapperComponent extends BaseHealthDeclarationWrap
       translateService,
       router,
       route,
-      templateService,
-      _modal,
-      dateService,
-      _hotelService
+      templateService
     );
     this.self = this;
   }

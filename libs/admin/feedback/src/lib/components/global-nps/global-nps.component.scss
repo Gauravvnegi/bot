@@ -8,8 +8,9 @@
 .graph-container {
   position: relative;
   display: flex;
+  height: 173px;
   @media only screen and (max-width: 1100px) {
-    height: 47%;
+    height: 138px;
   }
   .graph {
     @media only screen and (max-width: 1100px) {
@@ -144,7 +145,4 @@
     transform: translateY(-50%);
     z-index: -1;
   }
-}
-.height-138 {
-  height: 138px;
 }

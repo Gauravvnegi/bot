@@ -34,12 +34,11 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
 
   sendMessage(): void {
     if (
-      this.chatList.receiver[this.selectedChat.receiverId]?.checkEnableSend()
+      !this.chatList.receiver[this.selectedChat.receiverId]?.checkEnableSend()
     ) {
       this.snackBarService
         .openSnackBarAsText(`As per WhatsApp's rules, you can only respond to a user within 24 hours of
       their messages.`);
-      return;
     }
     if (this.chatFG.invalid) {
       this.chatFG.markAsTouched();

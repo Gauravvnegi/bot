@@ -1,3 +1,4 @@
+@import 'main';
 .container {
   justify-content: flex-start;
 }
@@ -88,6 +89,11 @@
     font-size: 13px;
   }
 }
+
 :host ::ng-deep .mat-tab-label {
-  min-width: 10vw !important;
+  min-width: 9vw !important;
+  flex-grow: inherit !important;
+  @media (max-width: $L) {
+    min-width: 15vw !important;
+  }
 }

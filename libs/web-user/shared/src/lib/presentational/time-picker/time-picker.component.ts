@@ -11,6 +11,7 @@ import { ValidatorService } from '../../services/validator.service';
 export class TimePickerComponent extends BaseComponent {
   // @ViewChild('timePickerRef') timePicker;
   @Input() defaultTime = '11:00 am';
+  @Input() format = 24;
 
   // ngAfterViewInit(){
   //   this.timePicker.timepickerTime = this.defaultTime;

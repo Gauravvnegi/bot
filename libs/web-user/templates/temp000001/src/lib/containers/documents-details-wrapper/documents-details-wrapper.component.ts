@@ -18,6 +18,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   implements OnInit {
   @ViewChild('documentDetailsComp')
   documentDetailsComp: DocumentsDetailsComponent;
+  isUploading = false;
 
   constructor(
     protected _documentDetailService: DocumentDetailsService,
@@ -53,6 +54,16 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
 
     if (status.length) {
       this.performActionIfNotValid(status);
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+      return;
+    }
+
+    if (this.isUploading) {
+      this._translateService
+        .get(`VALIDATION.UPLOAD_IN_PROGRESS`)
+        .subscribe((translatedMsg) => {
+          this._snackBarService.openSnackBarAsText(translatedMsg);
+        });
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;
     }
@@ -104,6 +115,10 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
       this.documentDetailsComp.accordion.openAll();
     }
     return;
+  }
+
+  setIsUploading(event) {
+    this.isUploading = event.value;
   }
 
   goBack() {

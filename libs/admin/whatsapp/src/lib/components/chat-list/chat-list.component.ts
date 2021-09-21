@@ -18,6 +18,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, filter } from 'rxjs/operators';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -41,7 +42,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     private _globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
-    private _firebaseMessagingService: FirebaseMessagingService
+    private _firebaseMessagingService: FirebaseMessagingService,
+    private _snackBarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -134,17 +136,20 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             },
           ])
         )
-        .subscribe((response) => {
-          if (updatePagination) this.updatePagination(response.length);
-          this.chatList = new ContactList().deserialize(
-            response,
-            this._globalFilterService.timezone
-          );
-          this.messageService.setWhatsappUnreadContactCount(
-            this.chatList.unreadContacts
-          );
-          if (this.selected) this.markChatAsRead(this.selected);
-        })
+        .subscribe(
+          (response) => {
+            if (updatePagination) this.updatePagination(response.length);
+            this.chatList = new ContactList().deserialize(
+              response,
+              this._globalFilterService.timezone
+            );
+            this.messageService.setWhatsappUnreadContactCount(
+              this.chatList.unreadContacts
+            );
+            if (this.selected) this.markChatAsRead(this.selected);
+          },
+          ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+        )
     );
   }
 
@@ -165,13 +170,16 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     if (this.chatList.contacts[index].unreadCount) {
       this.messageService
         .markAsRead(this.hotelId, value.receiverId, { unreadCount: 0 })
-        .subscribe((response) => {
-          this.chatList.contacts[index].unreadCount = response.unreadCount;
-          this.chatList.unreadContacts -= 1;
-          this.messageService.setWhatsappUnreadContactCount(
-            this.chatList.unreadContacts
-          );
-        });
+        .subscribe(
+          (response) => {
+            this.chatList.contacts[index].unreadCount = response.unreadCount;
+            this.chatList.unreadContacts -= 1;
+            this.messageService.setWhatsappUnreadContactCount(
+              this.chatList.unreadContacts
+            );
+          },
+          ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+        );
     }
   }
 
@@ -204,14 +212,29 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             },
           ])
         )
-        .subscribe((response) => {
-          this.limit =
-            response.length < this.limit ? this.limit : this.limit + 20;
-          this.chatList = new ContactList().deserialize(
-            response,
-            this._globalFilterService.timezone
-          );
-        })
+        .subscribe(
+          (response) => {
+            if (response) {
+              this.limit =
+                response.length < this.limit ? this.limit : this.limit + 20;
+              this.chatList = new ContactList().deserialize(
+                response,
+                this._globalFilterService.timezone
+              );
+            } else {
+              this.chatList = new ContactList().deserialize(
+                [],
+                this._globalFilterService.timezone
+              );
+              this._snackBarService.openSnackBarAsText(
+                `No contact found with search key: ${searchKey}!`,
+                '',
+                { panelClass: 'success' }
+              );
+            }
+          },
+          ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+        )
     );
   }
 
@@ -223,7 +246,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
       // setting minimum search character limit to 3
       if (response?.search.length >= 3) {
-        this.limit = 20;
         this.loadSearchList(response?.search);
       } else {
         this.loadChatList();

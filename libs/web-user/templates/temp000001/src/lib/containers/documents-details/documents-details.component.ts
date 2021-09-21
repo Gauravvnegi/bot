@@ -36,6 +36,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('accordian') accordion: MatAccordion;
   @ViewChildren('panel')
   panelList: QueryList<MatExpansionPanel>;
+  @Output() isUploading = new EventEmitter();
 
   documentDetailsForm: FormGroup;
 
@@ -77,6 +78,10 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   getLovs() {
     this.getCountriesList();
+  }
+
+  setIsUploading(event) {
+    this.isUploading.next(event);
   }
 
   getCountriesList() {
@@ -468,7 +473,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       formData.append('doc_type', doc_type);
       formData.append('doc_page', doc_page);
       formData.append('doc_issue_place', doc_issue_place);
-
+      this.setIsUploading({ value: true });
       this.$subscription.add(
         this._documentDetailService
           .uploadDocumentFile(
@@ -478,6 +483,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           )
           .subscribe(
             (response) => {
+              this.setIsUploading({ value: false });
               let value = event.formGroup;
               this.updateDocumentFG(
                 guestId,

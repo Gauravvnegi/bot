@@ -112,7 +112,7 @@ export class ChatComponent
 
   listenForMessageNotification() {
     this._firebaseMessagingService.currentMessage.subscribe((response) => {
-      if (response && response.notification.body.split(',')[0]) {
+      if (response) {
         this.scrollBottom = true;
         this.getChat({ offset: 0, limit: this.limit + 1 }, undefined, false);
       }

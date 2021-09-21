@@ -69,6 +69,7 @@
           <web-user-time-picker
             [parentForm]="stayDetailsForm"
             [name]="'expectedArrivalTime'"
+            [format]="24"
             [settings]="stayDetailsConfig.expectedArrivalTime"
             class="time-picker"
           >
@@ -81,6 +82,7 @@
           <web-user-time-picker
             [parentForm]="stayDetailsForm"
             [name]="'expectedDepartureTime'"
+            [format]="24"
             [settings]="stayDetailsConfig.expectedDepartureTime"
             class="time-picker"
           >

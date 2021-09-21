@@ -51,8 +51,8 @@ export class AdminPaymentDetailsComponent implements OnInit {
     'unit',
     'unitPrice',
     'amount',
-    'CGST',
-    'SGST',
+    // 'CGST',
+    // 'SGST',
     'discount',
     'totalAmount',
   ];
@@ -114,8 +114,9 @@ export class AdminPaymentDetailsComponent implements OnInit {
         base,
         amount,
         totalAmount,
-        cgstAmount,
-        sgstAmount,
+        discount,
+        // cgstAmount,
+        // sgstAmount,
       } = amenity;
 
       this.dataSource.push({
@@ -125,9 +126,10 @@ export class AdminPaymentDetailsComponent implements OnInit {
         base,
         amount,
         totalAmount,
+        discount,
         currency: paymentSummary.currency,
-        cgstAmount,
-        sgstAmount,
+        // cgstAmount,
+        // sgstAmount,
         // ...Object.assign(
         //   {},
         //   taxAndFees &&

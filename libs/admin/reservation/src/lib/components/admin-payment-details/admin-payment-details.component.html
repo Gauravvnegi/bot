@@ -106,7 +106,7 @@
             <th mat-header-cell *matHeaderCellDef>Unit Price</th>
             <td mat-cell *matCellDef="let element">
               {{ element.currency }}
-              {{ element.unitPrice }}
+              {{ element.base }}
             </td>
           </ng-container>
 
@@ -119,7 +119,7 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="CGST">
+          <!-- <ng-container matColumnDef="CGST">
             <th mat-header-cell *matHeaderCellDef>CGST</th>
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="element.cgstAmount >= 0; else emptyCell">
@@ -135,7 +135,7 @@
                 {{ element.currency }} {{ element.sgstAmount }}
               </ng-container>
             </td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="discount">
             <th mat-header-cell *matHeaderCellDef>Discount</th>

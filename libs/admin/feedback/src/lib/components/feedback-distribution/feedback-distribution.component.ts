@@ -117,7 +117,7 @@ export class FeedbackDistributionComponent implements OnInit {
       if (key !== 'totalCount') {
         if (this.distribution[key].count) {
           this.chart.Labels.push(this.distribution[key].label);
-          this.chart.Data[0].push(this.distribution[key].percent);
+          this.chart.Data[0].push(this.distribution[key].count);
           this.chart.Colors[0].backgroundColor.push(this.color[key]);
           this.chart.Colors[0].borderColor.push(this.color[key]);
         }

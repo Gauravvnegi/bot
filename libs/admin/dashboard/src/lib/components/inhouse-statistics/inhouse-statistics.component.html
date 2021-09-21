@@ -42,9 +42,25 @@
                   {{ inhouse.roomOccupied }}
                 </div>
                 <div>
-                  <div class="chartPercent">
+                  <div
+                    class="chartPercent"
+                    [ngStyle]="
+                      inhouse.comparisonPercent >= 0
+                        ? {
+                            color: '#52b33f'
+                          }
+                        : { color: '#CC052B' }
+                    "
+                  >
                     ({{ inhouse.comparisonPercent }}%)
-                    <img src="assets/svg/uparrow.svg" alt="uparrow" />
+                    <img
+                      [src]="
+                        inhouse.comparisonPercent >= 0
+                          ? 'assets/svg/uparrow.svg'
+                          : 'assets/svg/down-percentage.svg'
+                      "
+                      alt="uparrow"
+                    />
                   </div>
                   <div class="chartDays">
                     In 30 Days

@@ -19,9 +19,25 @@
         <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.completed }}
         </div>
-        <div class="inhouse--chart-rightblock--status--completetext">
+        <div
+          class="inhouse--chart-rightblock--status--completetext"
+          [ngStyle]="
+            inhouseRequest.compareStats.COMPLETED >= 0
+              ? {
+                  color: '#52b33f'
+                }
+              : { color: '#CC052B' }
+          "
+        >
           ({{ inhouseRequest.compareStats.COMPLETED }}%)
-          <img src="assets/svg/uparrow.svg" alt="uparrow" />
+          <img
+            [src]="
+              inhouseRequest.compareStats.COMPLETED >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
@@ -37,9 +53,25 @@
         <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.pending }}
         </div>
-        <div class="inhouse--chart-rightblock--status--completetext">
+        <div
+          class="inhouse--chart-rightblock--status--completetext"
+          [ngStyle]="
+            inhouseRequest.compareStats.PENDING >= 0
+              ? {
+                  color: '#52b33f'
+                }
+              : { color: '#CC052B' }
+          "
+        >
           ({{ inhouseRequest.compareStats.PENDING }}%)
-          <img src="assets/svg/uparrow.svg" alt="uparrow" />
+          <img
+            [src]="
+              inhouseRequest.compareStats.PENDING >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days
@@ -55,9 +87,25 @@
         <div class="inhouse--chart-rightblock--status--normaltext">
           {{ inhouseRequest.timeout }}
         </div>
-        <div class="inhouse--chart-rightblock--status--completetext">
+        <div
+          class="inhouse--chart-rightblock--status--completetext"
+          [ngStyle]="
+            inhouseRequest.compareStats.TIMEOUT >= 0
+              ? {
+                  color: '#52b33f'
+                }
+              : { color: '#CC052B' }
+          "
+        >
           ({{ inhouseRequest.compareStats.TIMEOUT }}%)
-          <img src="assets/svg/uparrow.svg" alt="uparrow" />
+          <img
+            [src]="
+              inhouseRequest.compareStats.TIMEOUT >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
         </div>
         <div class="inhouse--chart-rightblock--status--normaltext-2">
           in 30 days

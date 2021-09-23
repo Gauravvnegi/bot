@@ -64,8 +64,10 @@
       //   overflow: hidden;
       // }
       div {
-        text-overflow: ellipsis;
-        overflow: hidden;
+        @media (max-width: 1024px) {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
       p {
         color: $primary-gray;

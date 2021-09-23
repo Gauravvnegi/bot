@@ -47,6 +47,7 @@ export class FeedbackComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
+        console.log(data);
         this.getHotelId([
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,

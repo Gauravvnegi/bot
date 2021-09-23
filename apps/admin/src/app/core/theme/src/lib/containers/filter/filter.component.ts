@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
 import { TokenUpdateService } from '../../services/token-update.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class FilterComponent implements OnChanges, OnInit {
 
   hotelList = [];
   branchList = [];
-  feedbackType = [];
+  feedbackType;
+  outlets = [];
   hotelBasedToken = { key: null, value: null };
 
   filterForm: FormGroup;
@@ -31,7 +33,8 @@ export class FilterComponent implements OnChanges, OnInit {
   constructor(
     private _fb: FormBuilder,
     private _hotelDetailService: HotelDetailService,
-    private tokenUpdateService: TokenUpdateService
+    private tokenUpdateService: TokenUpdateService,
+    private snackbarService: SnackBarService
   ) {
     this.initFilterForm();
   }
@@ -58,11 +61,9 @@ export class FilterComponent implements OnChanges, OnInit {
         }),
       }),
       feedback: this._fb.group({
-        feedbackType: [''],
+        feedbackType: ['Transactional'],
       }),
-      outlet: this._fb.group({
-        Spring_Cafe: [''],
-      }),
+      outlets: this._fb.group({}),
     });
   }
 
@@ -82,6 +83,7 @@ export class FilterComponent implements OnChanges, OnInit {
 
   registerListeners() {
     this.listenForBrandChanges();
+    this.listenForBranchChanges();
   }
 
   listenForBrandChanges() {
@@ -95,6 +97,41 @@ export class FilterComponent implements OnChanges, OnInit {
 
         this.branchList = branches;
       });
+  }
+
+  listenForBranchChanges() {
+    this.filterForm
+      .get('property')
+      .get('branchName')
+      .valueChanges.subscribe((id) => {
+        const { outlets } = this.branchList.find(
+          (branch) => branch['id'] == id
+        );
+
+        this.outlets = outlets;
+        this.updateOutletsFormControls(outlets);
+      });
+  }
+
+  updateOutletsFormControls(outlets) {
+    let outletFG: FormGroup = this.filterForm.get('outlets') as FormGroup;
+    if (Object.keys(outletFG.controls).length) outletFG = this._fb.group({});
+
+    outlets.forEach((outlet) => {
+      outletFG.addControl(
+        outlet.id,
+        new FormControl(
+          this.filterForm.get('feedback').controls['feedbackType'].value ===
+            'Transactional'
+        )
+      );
+    });
+  }
+
+  updateOutletsValue(value) {
+    Object.keys(this.outletFG.controls).forEach((id) => {
+      this.outletFG.get(id).setValue(value);
+    });
   }
 
   initLOV() {
@@ -119,7 +156,7 @@ export class FilterComponent implements OnChanges, OnInit {
         this.hotelBasedToken = { key, value: response[key] };
       },
       ({ error }) => {
-        console.log(error.message);
+        this.snackbarService.openSnackBarAsText(error.message);
       }
     );
   }
@@ -131,8 +168,27 @@ export class FilterComponent implements OnChanges, OnInit {
     this.hotelBasedToken = { key: null, value: null };
   }
 
+  onOutletSelect(event) {
+    if (
+      event.checked &&
+      this.filterForm.get('feedback').controls['feedbackType'].value !==
+        'Transactional'
+    ) {
+      const feedbackFG = this.filterForm.get('feedback') as FormGroup;
+      feedbackFG.patchValue({ feedbackType: 'Transactional' });
+    }
+  }
+
+  handleFeedbackTypeChange(event) {
+    this.updateOutletsValue(event.value === 'Transactional');
+  }
+
   get propertyFG() {
     return this.filterForm.get('property') as FormGroup;
+  }
+
+  get outletFG() {
+    return this.filterForm.get('outlets') as FormGroup;
   }
 
   get guestFG() {

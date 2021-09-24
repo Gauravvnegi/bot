@@ -121,8 +121,7 @@ export class FilterComponent implements OnChanges, OnInit {
       outletFG.addControl(
         outlet.id,
         new FormControl(
-          (this.filterForm.get('feedback') as FormGroup).get('feedbackType')
-            .value === 'Transactional'
+          this.feedbackFG.get('feedbackType').value === 'Transactional'
         )
       );
     });
@@ -171,11 +170,9 @@ export class FilterComponent implements OnChanges, OnInit {
   onOutletSelect(event) {
     if (
       event.checked &&
-      this.filterForm.get('feedback').controls['feedbackType'].value !==
-        'Transactional'
+      this.feedbackFG.get('feedbackType').value !== 'Transactional'
     ) {
-      const feedbackFG = this.filterForm.get('feedback') as FormGroup;
-      feedbackFG.patchValue({ feedbackType: 'Transactional' });
+      this.feedbackFG.patchValue({ feedbackType: 'Transactional' });
     }
   }
 
@@ -189,6 +186,10 @@ export class FilterComponent implements OnChanges, OnInit {
 
   get outletFG() {
     return this.filterForm.get('outlets') as FormGroup;
+  }
+
+  get feedbackFG() {
+    return this.filterForm.get('feedback') as FormGroup;
   }
 
   get guestFG() {

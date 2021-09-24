@@ -39,7 +39,7 @@ export class FeedbackComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.moduleLoad =
-          data['feedback'].value.feedbackType === 'Transactional';
+          data['filter'].value.feedback.feedbackType === 'Transactional';
         this.loadModules();
       })
     );

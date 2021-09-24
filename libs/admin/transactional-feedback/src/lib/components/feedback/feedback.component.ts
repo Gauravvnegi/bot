@@ -51,13 +51,12 @@ export class FeedbackComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        console.log(data);
         this.getHotelId([
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
         this.getOutletsSelected([...data['feedback'].queryValue]);
-        if (data['feedback'].value.feedbackType === 'Transactional')
+        if (data['filter'].value.feedback.feedbackType === 'Transactional')
           this.getOutlets(data['filter'].value.property.branchName);
       })
     );

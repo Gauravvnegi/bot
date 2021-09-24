@@ -56,7 +56,7 @@ export class FeedbackComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.getOutletsSelected([...data['feedback'].queryValue]);
-        if (data['feedback'].value.feedbackType === 'Transactional')
+        if (data['filter'].value.feedback.feedbackType === 'Transactional')
           this.getOutlets(data['filter'].value.property.branchName);
       })
     );

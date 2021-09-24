@@ -80,10 +80,6 @@ export class GlobalFilterService {
               : null,
           },
         ];
-        this.globalFilterObj.feedback.value = {
-          ...data?.feedback,
-          ...data?.outlets,
-        };
         this.globalFilterObj.feedback.queryValue = [
           {
             type: get(data, ['feedback', 'feedbackType']),

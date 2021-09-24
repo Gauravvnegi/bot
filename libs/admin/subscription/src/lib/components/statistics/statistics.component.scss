@@ -34,6 +34,10 @@
     color: #484848;
     font-weight: 600;
     font-size: 14px;
+    @media (max-width: 992px) {
+      font-size: 12px;
+      white-space: nowrap;
+    }
   }
   &__button {
     outline: none;
@@ -49,6 +53,10 @@
     &:hover {
       background: #4b56c0;
       color: white;
+    }
+    @media (max-width: 992px) {
+      width: 72px;
+      font-size: 11px;
     }
   }
 }
@@ -73,13 +81,21 @@
       font-size: 25px;
       font-weight: 600;
       margin-right: 5.5px;
-      @media only screen and (max-width: 1024px) {
+      @media (max-width: 1024px) {
         font-size: 19px;
+      }
+      @media (max-width: 992px) {
+        font-size: 11px;
+        white-space: nowrap;
       }
     }
     &__diff {
       font-size: 12px;
       font-weight: 500;
+      @media (max-width: 992px) {
+        font-size: 11px;
+        white-space: nowrap;
+      }
       img {
         width: 8px;
         height: 10px;
@@ -92,6 +108,10 @@
     font: normal normal normal 12px/16px Roboto;
     letter-spacing: 0.24px;
     color: #6d7580;
+    @media (max-width: 992px) {
+      text-align: right;
+      white-space: nowrap;
+    }
   }
 }
 :host ::ng-deep .channels {
@@ -125,6 +145,11 @@
   width: 158px;
   @media only screen and (max-width: 1024px) {
     font-size: 19px;
+    margin-top: 13px;
+  }
+  @media (max-width: 992px) {
+    font-size: 11px;
+    margin-top: 13px;
   }
 }
 

@@ -1,0 +1,35 @@
+.progress-bars {
+	position: relative;
+	width: 174px;
+	height: 174px;
+	transform: rotate(-90deg);
+	.positive-bar {
+		position: absolute;
+	}
+	.negative-bar {
+		position: absolute;
+	}
+	.no-bar {
+		position: absolute;
+	}
+	.mixed-bar {
+		position: absolute;
+	}
+}
+
+.label {
+	border-radius: 50%;
+	position: absolute;
+	transform: rotate(90deg);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 174px;
+	width: 174px;
+	div {
+		font: normal normal normal 10px/13px Roboto;
+		letter-spacing: 0.6px;
+		color: #002046;
+		opacity: 1;
+	}
+}

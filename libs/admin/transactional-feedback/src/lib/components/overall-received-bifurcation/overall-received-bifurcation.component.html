@@ -1,0 +1,63 @@
+<div class="stats" *ngIf="stats">
+  <div class="stats__title">
+    Overall Received Bifurcation
+  </div>
+  <div class="stats__container">
+    <div class="stats__container__graph">
+      <div class="stats__container__graph__canvas">
+        <canvas
+          baseChart
+          max-height="176px"
+          z-index="2"
+          [data]="feedbackChart.Data"
+          [labels]="feedbackChart.Labels"
+          [chartType]="feedbackChart.Type"
+          [legend]="feedbackChart.Legend"
+          [colors]="feedbackChart.Colors"
+          [options]="feedbackChart.Options"
+        >
+        </canvas>
+      </div>
+      <div class="stats__container__graph__labels">
+        <div class="val">{{ feedbackReceivedData.totalCount }}</div>
+        <div class="label">{{ feedbackReceivedData.label }}</div>
+      </div>
+    </div>
+    <div class="stats__container__graph">
+      <div class="stats__container__graph__canvas">
+        <canvas
+          baseChart
+          max-height="176px"
+          [data]="negativeFeedbackChart.Data"
+          [labels]="negativeFeedbackChart.Labels"
+          [chartType]="negativeFeedbackChart.Type"
+          [legend]="negativeFeedbackChart.Legend"
+          [colors]="negativeFeedbackChart.Colors"
+          [options]="negativeFeedbackChart.Options"
+        >
+        </canvas>
+      </div>
+      <div class="stats__container__graph__labels">
+        <div class="val">{{ negativeFeedbackReceivedData.totalCount }}</div>
+        <div class="label">{{ negativeFeedbackReceivedData.label }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="stats__actions" *ngIf="stats?.data">
+    <div class="stats__actions__action" *ngFor="let stat of stats.data">
+      <div
+        class="stats__actions__action__items"
+        *ngFor="let feedback of stat.feedbacks"
+      >
+        <div class="stats__actions__action__items__item">
+          <div
+            class="stats__actions__action__items__item__dot"
+            [style.background]="feedback.color"
+          ></div>
+          <div>{{ feedback.label }}</div>
+        </div>
+        <div>{{ feedback.percentage }}</div>
+      </div>
+    </div>
+  </div>
+</div>

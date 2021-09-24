@@ -1261,6 +1261,73 @@
           "style": "scss"
         }
       }
+    },
+    "admin-transactional-feedback": {
+      "projectType": "library",
+      "root": "libs/admin/transactional-feedback",
+      "sourceRoot": "libs/admin/transactional-feedback/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/transactional-feedback/tsconfig.lib.json",
+              "libs/admin/transactional-feedback/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/transactional-feedback/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/transactional-feedback/jest.config.js",
+            "tsConfig": "libs/admin/transactional-feedback/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/transactional-feedback/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-stay-feedback": {
+      "projectType": "library",
+      "root": "libs/admin/stay-feedback",
+      "sourceRoot": "libs/admin/stay-feedback/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/stay-feedback/tsconfig.lib.json",
+              "libs/admin/stay-feedback/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/stay-feedback/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/stay-feedback/jest.config.js",
+            "tsConfig": "libs/admin/stay-feedback/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/stay-feedback/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

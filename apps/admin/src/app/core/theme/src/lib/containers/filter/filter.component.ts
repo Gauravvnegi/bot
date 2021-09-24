@@ -121,8 +121,8 @@ export class FilterComponent implements OnChanges, OnInit {
       outletFG.addControl(
         outlet.id,
         new FormControl(
-          this.filterForm.get('feedback').controls['feedbackType'].value ===
-            'Transactional'
+          (this.filterForm.get('feedback') as FormGroup).get('feedbackType')
+            .value === 'Transactional'
         )
       );
     });

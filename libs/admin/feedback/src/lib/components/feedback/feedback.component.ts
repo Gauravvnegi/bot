@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import {
-  CardNames,
-  TableNames,
-} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+  Component,
+  OnInit,
+  Compiler,
+  Injector,
+  ViewChild,
+  ViewContainerRef,
+  Type,
+} from '@angular/core';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,28 +16,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./feedback.component.scss'],
 })
 export class FeedbackComponent implements OnInit {
-  public cards = CardNames;
-  tables = TableNames;
-  hotelId: string;
+  @ViewChild('container', { read: ViewContainerRef })
+  container: ViewContainerRef;
   $subscription = new Subscription();
+  moduleLoad = false;
 
-  tabFilterIdx = 0;
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ];
   constructor(
-    private _modal: ModalService,
+    private compiler: Compiler,
+    private injector: Injector,
     private _globalFilterService: GlobalFilterService
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit() {
     this.registerListeners();
   }
 
@@ -47,43 +38,44 @@ export class FeedbackComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        console.log(data);
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.moduleLoad =
+          data['feedback'].value.feedbackType === 'Transactional';
+        this.loadModules();
       })
     );
   }
 
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
+  async loadModules() {
+    if (this.moduleLoad) {
+      this.loadModule(
+        await import(
+          'libs/admin/transactional-feedback/src/lib/admin-transactional-feedback.module'
+        ).then((m) => m.AdminTransactionalFeedbackModule)
+      );
+    } else {
+      this.loadModule(
+        await import(
+          'libs/admin/stay-feedback/src/lib/admin-stay-feedback.module'
+        ).then((m) => m.AdminStayFeedbackModule)
+      );
+    }
   }
 
-  onSelectedTabFilterChange(event) {
-    this.tabFilterIdx = event.index;
-  }
-
-  openRequestFeedbackForm() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const notificationCompRef = this._modal.openDialog(
-      NotificationComponent,
-      dialogConfig
-    );
-    notificationCompRef.componentInstance.hotelId = this.hotelId;
-    notificationCompRef.componentInstance.isEmail = true;
-    notificationCompRef.componentInstance.isModal = true;
-    notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
-      notificationCompRef.close();
-    });
+  async loadModule(module: Type<any>) {
+    let ref;
+    try {
+      this.container.clear();
+      const moduleFactory = await this.compiler.compileModuleAsync(module);
+      const moduleRef: any = moduleFactory.create(this.injector);
+      const componentFactory = moduleRef.instance.resolveComponent(); // ASSERTION ERROR
+      ref = this.container.createComponent(
+        componentFactory,
+        null,
+        moduleRef.injector
+      );
+    } catch (e) {
+      console.error(e);
+    }
+    return ref;
   }
 }

@@ -1,0 +1,137 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img src="assets/svg/global_nps.svg" />
+    </div>
+    <div class="stat-title">Global NPS</div>
+  </div>
+  <div class="graph-container" *ngIf="!loading">
+    <div class="graph" *ngIf="chart.Data[0].length; else defaultGraph">
+      <canvas
+        class="height-138"
+        baseChart
+        [data]="chart.Data"
+        [labels]="chart.Labels"
+        [chartType]="chart.Type"
+        [legend]="chart.Legend"
+        [colors]="chart.Colors"
+        [options]="chart.Options"
+      >
+      </canvas>
+    </div>
+    <ng-template #defaultGraph>
+      <div class="graph">
+        <canvas
+          baseChart
+          class="height-138"
+          [data]="defaultChart.Data"
+          [labels]="defaultChart.Labels"
+          [chartType]="defaultChart.Type"
+          [legend]="defaultChart.Legend"
+          [colors]="defaultChart.Colors"
+          [options]="defaultChart.Options"
+        >
+        </canvas>
+      </div>
+    </ng-template>
+    <div class="detail-container" *ngIf="globalNps">
+      <div class="wrapper-stats">
+        <div class="val">{{ this.roundValue(globalNps.score) }}</div>
+        <div class="comparisonPercent">
+          ({{ this.roundValue(globalNps.comparisonPercent) }}%)
+          <span>In 30 Days</span>
+        </div>
+      </div>
+      <div class="label">
+        Global Nps
+        <!-- {{ globalNps.label }} -->
+      </div>
+    </div>
+  </div>
+  <div class="stat-vals-container" *ngIf="globalNps">
+    <div class="stat-val-container">
+      <div class="icon" [style.background]="'#EF1D45'"></div>
+      <div class="stat-val">
+        {{ this.roundValue(globalNps.negative.score) }}%
+      </div>
+      <div class="stat-lable">Negative</div>
+      <div
+        class="stat-comparisonPercent"
+        [ngStyle]="
+          globalNps.negative.comparisonPercent >= 0
+            ? {
+                color: '#52b33f'
+              }
+            : { color: '#CC052B' }
+        "
+      >
+        ({{ this.roundValue(globalNps.negative.comparisonPercent) }}%)
+        <img
+          [src]="
+            globalNps.negative.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div class="icon" [style.background]="'#4BA0F5'"></div>
+      <div class="stat-val">
+        {{ this.roundValue(globalNps.neutral.score) }}%
+      </div>
+      <div class="stat-lable">Neutral</div>
+      <div
+        class="stat-comparisonPercent"
+        [ngStyle]="
+          globalNps.neutral.comparisonPercent >= 0
+            ? {
+                color: '#52b33f'
+              }
+            : { color: '#CC052B' }
+        "
+      >
+        ({{ this.roundValue(globalNps.neutral.comparisonPercent) }}%)
+        <img
+          [src]="
+            globalNps.neutral.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div class="icon" [style.background]="'#1AB99F'"></div>
+      <div class="stat-val">
+        {{ this.roundValue(globalNps.positive.score) }}%
+      </div>
+      <div class="stat-lable">Positive</div>
+      <div
+        class="stat-comparisonPercent"
+        [ngStyle]="
+          globalNps.positive.comparisonPercent >= 0
+            ? {
+                color: '#52b33f'
+              }
+            : { color: '#CC052B' }
+        "
+      >
+        ({{ this.roundValue(globalNps.positive.comparisonPercent) }}%)
+        <img
+          [src]="
+            globalNps.positive.comparisonPercent >= 0
+              ? 'assets/svg/uparrow.svg'
+              : 'assets/svg/down-percentage.svg'
+          "
+          alt="uparrow"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="thirty__days">
+    <span>In 30 Days</span>
+  </div>
+</div>

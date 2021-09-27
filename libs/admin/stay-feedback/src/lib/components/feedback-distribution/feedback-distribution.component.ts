@@ -83,10 +83,10 @@ export class FeedbackDistributionComponent implements OnInit {
 
   distribution: FeedbackDistribution;
   constructor(
-    private statisticsService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService
+    protected statisticsService: StatisticsService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {

@@ -39,6 +39,14 @@
         <div class="val">{{ this.roundValue(globalNps.score) }}</div>
         <div class="comparisonPercent">
           ({{ this.roundValue(globalNps.comparisonPercent) }}%)
+          <img
+            [src]="
+              globalNps.comparisonPercent >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
           <span>In 30 Days</span>
         </div>
       </div>

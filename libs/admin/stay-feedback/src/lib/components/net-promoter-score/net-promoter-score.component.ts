@@ -121,12 +121,12 @@ export class NetPromoterScoreComponent implements OnInit {
   };
 
   constructor(
-    private fb: FormBuilder,
-    private _adminUtilityService: AdminUtilityService,
-    private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private dateService: DateService
+    protected fb: FormBuilder,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _statisticService: StatisticsService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -172,7 +172,7 @@ export class NetPromoterScoreComponent implements OnInit {
     this.chart.chartColors[0].backgroundColor = option.backgroundColor;
   }
 
-  private initGraphData(): void {
+  protected initGraphData(): void {
     const botKeys = Object.keys(this.npsChartData.npsGraph);
     this.chart.chartData[0].data = [];
     this.chart.chartLabels = [];
@@ -196,7 +196,7 @@ export class NetPromoterScoreComponent implements OnInit {
     });
   }
 
-  private getNPSChartData(): void {
+  protected getNPSChartData(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };

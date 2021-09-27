@@ -35,9 +35,9 @@ export class FeedbackComponent implements OnInit {
     },
   ];
   constructor(
-    private _modal: ModalService,
-    private _globalFilterService: GlobalFilterService,
-    private _hotelDetailService: HotelDetailService
+    protected _modal: ModalService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _hotelDetailService: HotelDetailService
   ) {}
 
   ngOnInit(): void {

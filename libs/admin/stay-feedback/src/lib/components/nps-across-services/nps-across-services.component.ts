@@ -51,12 +51,12 @@ export class NpsAcrossServicesComponent implements OnInit {
   maxBarCount: number = 0;
 
   constructor(
-    private fb: FormBuilder,
-    private _adminUtilityService: AdminUtilityService,
-    private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private dateService: DateService
+    protected fb: FormBuilder,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _statisticService: StatisticsService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -153,7 +153,7 @@ export class NpsAcrossServicesComponent implements OnInit {
     this.getNPSServices();
   }
 
-  private initTabLabels(entities, departments): void {
+  protected initTabLabels(entities, departments): void {
     if (!this.tabFilterItems.length) {
       departments.forEach((data, i) => {
         let chips = [];
@@ -176,7 +176,7 @@ export class NpsAcrossServicesComponent implements OnInit {
     }
   }
 
-  private initProgressData(entities) {
+  protected initProgressData(entities) {
     this.progresses = {};
     if (
       this.tabFilterItems[this.tabFilterIdx].chips.filter(
@@ -221,7 +221,7 @@ export class NpsAcrossServicesComponent implements OnInit {
       : '';
   }
 
-  private getNPSServices(): void {
+  protected getNPSServices(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,

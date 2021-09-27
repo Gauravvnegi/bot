@@ -71,11 +71,11 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     },
   };
   constructor(
-    private _adminUtilityService: AdminUtilityService,
-    private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private dateService: DateService
+    protected _adminUtilityService: AdminUtilityService,
+    protected _statisticService: StatisticsService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected dateService: DateService
   ) {}
 
   ngOnInit(): void {

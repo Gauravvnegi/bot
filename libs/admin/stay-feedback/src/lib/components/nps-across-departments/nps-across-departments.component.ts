@@ -40,12 +40,12 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private _adminUtilityService: AdminUtilityService,
-    private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private dateService: DateService
+    protected fb: FormBuilder,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _statisticService: StatisticsService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +85,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     });
   }
 
-  private getNPSChartData(): void {
+  protected getNPSChartData(): void {
     this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),

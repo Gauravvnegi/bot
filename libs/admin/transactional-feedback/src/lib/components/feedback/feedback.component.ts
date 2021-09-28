@@ -93,5 +93,7 @@ export class FeedbackComponent extends BaseFeedbackComponent implements OnInit {
       event.index === 0
         ? this.outlets.map((outlet) => outlet.id)
         : [this.outlets[event.index - 1].id];
+
+    this.statisticsService.outletChange.next(true);
   }
 }

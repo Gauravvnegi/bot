@@ -37,4 +37,34 @@ export class NetPromoterScoreComponent extends BaseNetPromoterScoreComponent
       dateService
     );
   }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+    this.listenForOutletChanged();
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        //set-global query everytime global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          { outletsIds: this._statisticService.outletIds },
+        ];
+        this.getNPSChartData();
+      })
+    );
+  }
+
+  listenForOutletChanged() {
+    this._statisticService.outletChange.subscribe((response) => {
+      if (response) {
+        this.globalQueries[this.globalQueries.length - 1] = {
+          outletsIds: this._statisticService.outletIds,
+        };
+        this.getNPSChartData();
+      }
+    });
+  }
 }

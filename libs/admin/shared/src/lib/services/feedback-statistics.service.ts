@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class StatisticsService extends ApiService {
   outletIds = [];
+  outletChange = new BehaviorSubject(false);
   getOverallNPSStatistics(config): Observable<any> {
     return this.get(`/api/v1/feedback-stats/${config.queryObj}`);
   }

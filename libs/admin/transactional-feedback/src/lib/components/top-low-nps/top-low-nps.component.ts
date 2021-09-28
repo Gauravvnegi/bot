@@ -28,6 +28,11 @@ export class TopLowNpsComponent extends BaseTopLowNpsComponent
     );
   }
 
+  registerListeners() {
+    this.listenForGlobalFilters();
+    this.listenForOutletChanged();
+  }
+
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
@@ -40,5 +45,16 @@ export class TopLowNpsComponent extends BaseTopLowNpsComponent
         this.getPerformanceNps();
       })
     );
+  }
+
+  listenForOutletChanged() {
+    this.statisticsService.outletChange.subscribe((response) => {
+      if (response) {
+        this.globalQueries[this.globalQueries.length - 1] = {
+          outletsIds: this.statisticsService.outletIds,
+        };
+        this.getPerformanceNps();
+      }
+    });
   }
 }

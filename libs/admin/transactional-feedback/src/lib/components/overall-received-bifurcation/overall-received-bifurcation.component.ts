@@ -32,6 +32,11 @@ export class OverallReceivedBifurcationComponent
     );
   }
 
+  registerListeners() {
+    this.listenForGlobalFilters();
+    this.listenForOutletChanged();
+  }
+
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe(
@@ -57,5 +62,16 @@ export class OverallReceivedBifurcationComponent
         }
       )
     );
+  }
+
+  listenForOutletChanged() {
+    this._statisticService.outletChange.subscribe((response) => {
+      if (response) {
+        this.globalQueries[this.globalQueries.length - 1] = {
+          outletsIds: this._statisticService.outletIds,
+        };
+        this.getStats();
+      }
+    });
   }
 }

@@ -112,6 +112,7 @@ export class PointOfSaleComponent implements OnInit {
 
   registerListeners() {
     this.listenForGlobalFilters();
+    this.listenForOutletChanged();
   }
 
   listenForGlobalFilters() {
@@ -138,6 +139,17 @@ export class PointOfSaleComponent implements OnInit {
         }
       )
     );
+  }
+
+  listenForOutletChanged() {
+    this._statisticService.outletChange.subscribe((response) => {
+      if (response) {
+        this.globalQueries[this.globalQueries.length - 1] = {
+          outletsIds: this._statisticService.outletIds,
+        };
+        this.getStats();
+      }
+    });
   }
 
   getStats() {
@@ -169,6 +181,21 @@ export class PointOfSaleComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.handleLocalTabChange();
+  }
+
+  handleLocalTabChange() {
+    if (this.tabFilterIdx === 0) {
+      this.globalQueries[this.globalQueries.length - 1] = {
+        outletsIds: this._statisticService.outletIds,
+      };
+      this.getStats();
+    } else {
+      this.globalQueries[this.globalQueries.length - 1] = {
+        outletsIds: [this._statisticService.outletIds[this.tabFilterIdx - 1]],
+      };
+      this.getStats();
+    }
   }
 
   isQuickReplyFilterSelected(quickReplyFilter) {

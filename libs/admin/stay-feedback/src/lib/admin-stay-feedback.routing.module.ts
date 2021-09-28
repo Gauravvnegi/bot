@@ -14,7 +14,6 @@ import { GlobalNpsComponent } from './components/global-nps/global-nps.component
 import { FeedbackDistributionComponent } from './components/feedback-distribution/feedback-distribution.component';
 import { OverallReceivedBifurcationComponent } from './components/overall-received-bifurcation/overall-received-bifurcation.component';
 import { SharedComponent } from './components/shared/shared.component';
-import { PointOfSaleComponent } from './components/point-of-sale/point-of-sale.component';
 
 const appRoutes: Route[] = [
   {
@@ -42,6 +41,5 @@ export class AdminStayFeedbackRoutingModule {
     FeedbackDistributionComponent,
     OverallReceivedBifurcationComponent,
     SharedComponent,
-    PointOfSaleComponent,
   ];
 }

@@ -6,6 +6,7 @@ export enum ModuleNames {
   RESERVATION = 'dashboard',
   NOTIFICATIONS = 'notification',
   USERS = 'roles-permissions',
+  FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
 }
 
 export enum Integrations {
@@ -19,6 +20,7 @@ export enum TableNames {
   PACKAGE = 'Packages',
   CATEGORY = 'Categories',
   REQUEST = 'Requests',
+  FEEDBACK_TRANSACTIONAL = 'Guest - Feedback',
 }
 
 export enum CardNames {
@@ -50,6 +52,7 @@ export enum Filters {
   OUTGUEST = 'OUTGUEST',
   RESERVATION = 'RESERVATION',
   JOURNEYRESERVATION = 'ALL',
+  Transactional = 'Transactional',
 }
 
 export enum Communication {
@@ -138,13 +141,33 @@ export const ModuleConfig = {
       CardNames.NPS,
       CardNames.TopLowNPS,
       CardNames.NPSAcrossServices,
-      CardNames.NPSAcrossPOS,
+      // CardNames.NPSAcrossPOS,
       CardNames.OverallReceivedBifurcation,
       CardNames.Shared,
     ],
     tables: [TableNames.FEEDBACK],
     filters: {
       [TableNames.FEEDBACK]: { tabFilters: [Filters.JOURNEYRESERVATION] },
+    },
+  },
+  [ModuleNames.FEEDBACK_TRANSACTIONAL]: {
+    cards: [
+      CardNames.GlobalNPS,
+      // CardNames.NPSAcrossDepartment,
+      // CardNames.NPSAcrossTouchpoint,
+      CardNames.FeedbackDistribution,
+      CardNames.NPS,
+      CardNames.TopLowNPS,
+      // CardNames.NPSAcrossServices,
+      CardNames.NPSAcrossPOS,
+      CardNames.OverallReceivedBifurcation,
+      CardNames.Shared,
+    ],
+    tables: [TableNames.FEEDBACK_TRANSACTIONAL],
+    filters: {
+      [TableNames.FEEDBACK_TRANSACTIONAL]: {
+        tabFilters: [Filters.Transactional],
+      },
     },
   },
   [ModuleNames.PACKAGES]: {

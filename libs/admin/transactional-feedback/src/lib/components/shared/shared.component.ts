@@ -5,7 +5,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 import { SharedStats } from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { SharedComponent as BaseSharedComponent } from 'libs/admin/stay-feedback/src/lib/components/shared/shared.component';
 
 @Component({
@@ -27,6 +27,33 @@ export class SharedComponent extends BaseSharedComponent implements OnInit {
       _globalFilterService,
       _snackbarService,
       dateService
+    );
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe(
+        (data) => {
+          let calenderType = {
+            calenderType: this.dateService.getCalendarType(
+              data['dateRange'].queryValue[0].toDate,
+              data['dateRange'].queryValue[1].fromDate,
+              this._globalFilterService.timezone
+            ),
+          };
+          this.selectedInterval = calenderType.calenderType;
+          this.globalQueries = [
+            ...data['filter'].queryValue,
+            ...data['dateRange'].queryValue,
+            { outletsIds: this._statisticService.outletIds },
+            calenderType,
+          ];
+          this.getStats();
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 }

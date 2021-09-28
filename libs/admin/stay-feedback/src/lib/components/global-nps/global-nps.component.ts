@@ -4,7 +4,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import { GlobalNPS } from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-global-nps',
@@ -83,14 +83,14 @@ export class GlobalNpsComponent implements OnInit {
 
   loading: boolean = false;
 
-  private $subscription = new Subscription();
+  $subscription = new Subscription();
   globalQueries;
 
   constructor(
-    private statisticsService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService
+    protected statisticsService: StatisticsService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {

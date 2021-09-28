@@ -53,18 +53,18 @@
         <span
           class="positive"
           [ngStyle]="
-            value.percent >= 0
+            value.comparePercent >= 0
               ? {
                   color: '#52b33f'
                 }
               : { color: '#CC052B' }
           "
         >
-          ({{ value.percent }}%)
+          ({{ value.comparePercent }}%)
           <img
             class="upArrow"
             [src]="
-              value.percent >= 0
+              value.comparePercent >= 0
                 ? 'assets/svg/uparrow.svg'
                 : 'assets/svg/down-percentage.svg'
             "

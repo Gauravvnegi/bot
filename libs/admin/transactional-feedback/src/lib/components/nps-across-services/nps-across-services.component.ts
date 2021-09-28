@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from '../../services/statistics.service';
+import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { NPSAcrossServices } from '../../data-models/statistics.model';
 import { Subscription } from 'rxjs';

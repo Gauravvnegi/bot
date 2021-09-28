@@ -21,7 +21,6 @@ import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-
 import { SearchBarComponent } from './containers/search-bar/search-bar.component';
 import { SettingsComponent } from './containers/settings/settings.component';
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
-import { environment } from '../../../../../environments/environment';
 @NgModule({
   imports: [
     CommonModule,

@@ -190,6 +190,7 @@ export class Distribution {
   scale: string;
   count: number;
   percent: number;
+  comparePercent: number;
   color: string;
 }
 

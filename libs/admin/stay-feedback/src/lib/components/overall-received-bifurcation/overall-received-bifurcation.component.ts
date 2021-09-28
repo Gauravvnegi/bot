@@ -5,7 +5,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 import { Bifurcations } from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-overall-received-bifurcation',

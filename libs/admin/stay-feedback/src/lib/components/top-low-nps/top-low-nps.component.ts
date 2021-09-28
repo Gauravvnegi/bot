@@ -4,7 +4,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { PerformanceNPS } from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-top-low-nps',

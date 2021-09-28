@@ -17,21 +17,21 @@
     <div
       class="stats"
       cardSubscribed
-      [path]="'feedback.cards.' + cards.GlobalNPS"
+      [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.GlobalNPS"
     >
       <hospitality-bot-global-nps></hospitality-bot-global-nps>
     </div>
     <div
       class="stats"
       cardSubscribed
-      [path]="'feedback.cards.' + cards.TopLowNPS"
+      [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.TopLowNPS"
     >
       <hospitality-bot-top-low-nps></hospitality-bot-top-low-nps>
     </div>
     <div
       class="stats"
       cardSubscribed
-      [path]="'feedback.cards.' + cards.FeedbackDistribution"
+      [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.FeedbackDistribution"
     >
       <hospitality-bot-feedback-distribution></hospitality-bot-feedback-distribution>
     </div>
@@ -40,40 +40,42 @@
     <div
       class="feedback__shared"
       cardSubscribed
-      [path]="'feedback.cards.' + cards.Shared"
+      [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.Shared"
     >
       <hospitality-bot-shared></hospitality-bot-shared>
     </div>
     <div
       class="feedback__received-bifurcation"
       cardSubscribed
-      [path]="'feedback.cards.' + cards.OverallReceivedBifurcation"
+      [path]="
+        'FEEDBACK_TRANSACTIONAL.cards.' + cards.OverallReceivedBifurcation
+      "
     >
       <hospitality-bot-overall-received-bifurcation></hospitality-bot-overall-received-bifurcation>
     </div>
   </div>
   <hospitality-bot-net-promoter-score
     cardSubscribed
-    [path]="'feedback.cards.' + cards.NPS"
+    [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPS"
   ></hospitality-bot-net-promoter-score>
   <hospitality-bot-point-of-sale
     cardSubscribed
-    [path]="'feedback.cards.' + cards.NPSAcrossPOS"
+    [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossPOS"
   ></hospitality-bot-point-of-sale>
   <hospitality-bot-nps-across-departments
     cardSubscribed
-    [path]="'feedback.cards.' + cards.NPSAcrossDepartment"
+    [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossDepartment"
   ></hospitality-bot-nps-across-departments>
   <hospitality-bot-nps-across-services
     cardSubscribed
-    [path]="'feedback.cards.' + cards.NPSAcrossServices"
+    [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossServices"
   ></hospitality-bot-nps-across-services>
   <!-- <hospitality-bot-nps-across-touchpoints
     cardSubscribed
-    [path]="'feedback.cards.' + cards.NPSAcrossTouchpoint"
+    [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossTouchpoint"
   ></hospitality-bot-nps-across-touchpoints> -->
   <hospitality-bot-feedback-datatable
     tableSubscribed
-    [path]="'feedback.tables.' + tables.FEEDBACK"
+    [path]="'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL"
   ></hospitality-bot-feedback-datatable>
 </div>

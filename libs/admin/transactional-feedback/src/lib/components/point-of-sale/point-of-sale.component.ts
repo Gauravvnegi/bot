@@ -185,17 +185,13 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   handleLocalTabChange() {
-    if (this.tabFilterIdx === 0) {
-      this.globalQueries[this.globalQueries.length - 1] = {
-        outletsIds: this._statisticService.outletIds,
-      };
-      this.getStats();
-    } else {
-      this.globalQueries[this.globalQueries.length - 1] = {
-        outletsIds: [this._statisticService.outletIds[this.tabFilterIdx - 1]],
-      };
-      this.getStats();
-    }
+    this.globalQueries[this.globalQueries.length - 1] = {
+      outletsIds:
+        this.tabFilterIdx === 0
+          ? this._statisticService.outletIds
+          : [this._statisticService.outletIds[this.tabFilterIdx - 1]],
+    };
+    this.getStats();
   }
 
   isQuickReplyFilterSelected(quickReplyFilter) {

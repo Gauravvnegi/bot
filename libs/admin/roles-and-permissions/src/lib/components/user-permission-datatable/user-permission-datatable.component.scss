@@ -22,6 +22,11 @@
     p {
       color: $primary-gray;
       margin-top: 5px;
+      @media (max-width: 1024px) {
+        max-width: 125px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
     }
   }
   .profile {
@@ -164,4 +169,7 @@
 .material-icons {
   margin-right: 10px;
   cursor: pointer;
+}
+tr > td {
+  border-bottom: none;
 }

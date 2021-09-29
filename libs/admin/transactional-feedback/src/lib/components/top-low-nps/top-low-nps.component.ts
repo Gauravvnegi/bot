@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { Subscription } from 'rxjs';
-import { PerformanceNPS } from '../../data-models/statistics.model';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { TopLowNpsComponent as BaseTopLowNpsComponent } from 'libs/admin/stay-feedback/src/lib/components/top-low-nps/top-low-nps.component';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
   selector: 'hospitality-bot-top-low-nps',

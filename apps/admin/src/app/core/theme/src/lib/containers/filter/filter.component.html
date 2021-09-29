@@ -67,7 +67,7 @@
         </div>
       </mat-tab>
 
-      <mat-tab>
+      <mat-tab *ngIf="checkForTransactionFeedbackSubscribed()">
         <ng-template mat-tab-label>
           <svg
             class="svg"
@@ -146,7 +146,12 @@
           </div>
         </div>
       </mat-tab>
-      <mat-tab>
+      <mat-tab
+        *ngIf="
+          checkForStayFeedbackSubscribed() ||
+          checkForTransactionFeedbackSubscribed()
+        "
+      >
         <ng-template mat-tab-label>
           <svg
             class="svg"
@@ -170,11 +175,13 @@
           </div>
           <mat-radio-group formControlName="feedbackType">
             <mat-radio-button
+              *ngIf="checkForStayFeedbackSubscribed()"
               value="Stay Experience"
               (change)="handleFeedbackTypeChange($event)"
               >Stay Experience</mat-radio-button
             >
             <mat-radio-button
+              *ngIf="checkForTransactionFeedbackSubscribed()"
               value="Transactional"
               (change)="handleFeedbackTypeChange($event)"
               >Transactional</mat-radio-button

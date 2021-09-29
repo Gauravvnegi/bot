@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { get } from 'lodash';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
+import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { TokenUpdateService } from '../../services/token-update.service';
 
 @Component({
@@ -34,7 +36,8 @@ export class FilterComponent implements OnChanges, OnInit {
     private _fb: FormBuilder,
     private _hotelDetailService: HotelDetailService,
     private tokenUpdateService: TokenUpdateService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    protected subscriptionService: SubscriptionPlanService
   ) {
     this.initFilterForm();
   }
@@ -61,7 +64,11 @@ export class FilterComponent implements OnChanges, OnInit {
         }),
       }),
       feedback: this._fb.group({
-        feedbackType: ['Transactional'],
+        feedbackType: [
+          this.checkForTransactionFeedbackSubscribed()
+            ? 'Transactional'
+            : 'Stay Experience',
+        ],
       }),
       outlets: this._fb.group({}),
     });
@@ -178,6 +185,16 @@ export class FilterComponent implements OnChanges, OnInit {
 
   handleFeedbackTypeChange(event) {
     this.updateOutletsValue(event.value === 'Transactional');
+  }
+
+  checkForTransactionFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+  }
+
+  checkForStayFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'feedback', 'active']);
   }
 
   get propertyFG() {

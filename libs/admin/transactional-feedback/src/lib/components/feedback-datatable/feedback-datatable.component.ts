@@ -10,7 +10,6 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { GuestDetailService } from 'libs/admin/guest-detail/src/lib/services/guest-detail.service';
-import { GuestTable } from 'libs/admin/guests/src/lib/data-models/guest-table.model';
 import { Subscription, Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
@@ -18,6 +17,10 @@ import {
   ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { FeedbackTableService } from '../../services/table.service';
+import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
+import { FeedbackTable } from '../../data-models/feedback-datatable.model';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -30,6 +33,7 @@ import {
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = 'Customers - Feedback';
+  outlets = [];
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -42,25 +46,25 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   cols = [
     {
       field: 'getFullName()',
-      header: 'Guest/ Company',
+      header: 'Booking No./ Outlet',
       isSort: true,
       sortType: 'string',
     },
     {
       field: 'booking.getArrivalTimeStamp()',
-      header: 'Arrival/ Departure',
+      header: 'Service/ Feedback',
       isSort: true,
       sortType: 'date',
     },
     {
       field: 'booking.bookingNumber',
-      header: 'Booking No./ Feedback',
+      header: 'Name/Phone No./ Email',
       isSort: true,
       sortType: 'number',
     },
     {
       field: `getPhoneNumber()`,
-      header: 'Phone No.',
+      header: 'Date/Time/ Guests',
       isSort: false,
       sortType: 'string',
     },
@@ -69,12 +73,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       header: 'Amount Due/ Total Spend',
       isSort: true,
       sortType: 'number',
-    },
-    {
-      field: 'guestAttributes.transactionUsage',
-      header: 'Transaction Usage',
-      isSort: true,
-      sortType: 'string',
     },
     {
       field: 'guestAttributes.overAllNps',
@@ -88,19 +86,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       isSort: true,
       sortType: 'number',
     },
-    { field: 'stageAndourney', header: 'Stage/ Channels' },
+    { field: 'stageAndourney', header: 'Actions' },
   ];
 
   chips = [
     { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-    {
-      label: 'VIP',
-      icon: '',
-      value: 'VIP',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
     {
       label: 'High Potential ',
       icon: '',
@@ -113,6 +103,30 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       label: 'High Risk ',
       icon: '',
       value: 'HIGHRISK',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'Read ',
+      icon: '',
+      value: 'READ',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'Unread ',
+      icon: '',
+      value: 'UNREAD',
+      total: 0,
+      isSelected: false,
+      type: 'initiated',
+    },
+    {
+      label: 'Actioned ',
+      icon: '',
+      value: 'ACTIONED',
       total: 0,
       isSelected: false,
       type: 'initiated',
@@ -142,7 +156,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     private _snackbarService: SnackBarService,
     private _modal: ModalService,
     public feedbackService: FeedbackService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected tableService: FeedbackTableService,
+    protected statisticService: StatisticsService,
+    protected _hotelDetailService: HotelDetailService
   ) {
     super(fb, tabFilterService);
   }
@@ -156,6 +173,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  getOutlets(branchId) {
+    this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
+      (branch) => branch['id'] == branchId
+    ).outlets;
+  }
+
   registerListeners(): void {
     this.listenForGlobalFilters();
   }
@@ -167,8 +190,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
+          { outletsIds: this.statisticService.outletIds },
         ];
         this.getHotelId(this.globalQueries);
+        this.getOutlets(data['filter'].value.property.branchName);
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -181,6 +206,25 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
+  }
+
+  listenForOutletChanged() {
+    this.statisticService.outletChange.subscribe((response) => {
+      if (response) {
+        this.globalQueries[this.globalQueries.length - 1] = {
+          outletsIds: this.statisticService.outletIds,
+        };
+        this.loadInitialData([
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+          // { offset: this.first, limit: this.rowsPerPage },
+        ]);
+      }
+    });
   }
 
   getHotelId(globalQueries): void {
@@ -198,7 +242,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new GuestTable().deserialize(data).records;
+          console.log(new FeedbackTable().deserialize(data));
+          this.values = new FeedbackTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -254,7 +299,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
 
-    return this._guestTableService.getGuestList(config);
+    return this.tableService.getGuestFeedbacks(config);
   }
 
   loadData(event: LazyLoadEvent) {
@@ -273,7 +318,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new GuestTable().deserialize(data).records;
+          this.values = new FeedbackTable().deserialize(data).records;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
@@ -434,6 +479,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         })
       );
     }
+  }
+
+  getFeedbackOutlet(id) {
+    return this.outlets.filter((outlet) => outlet.id === id);
   }
 
   ngOnDestroy() {

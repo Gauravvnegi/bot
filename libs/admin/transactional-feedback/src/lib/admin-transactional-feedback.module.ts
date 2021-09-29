@@ -15,6 +15,7 @@ import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-gu
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AdminTransactionalFeedbackRoutingModule } from './admin-transactional-feedback.routing.module';
 import { FeedbackComponent } from './components/feedback/feedback.component';
+import { FeedbackTableService } from './services/table.service';
 
 @NgModule({
   imports: [
@@ -31,7 +32,7 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
     NgCircleProgressModule.forRoot(),
   ],
   declarations: [...AdminTransactionalFeedbackRoutingModule.components],
-  providers: [StatisticsService],
+  providers: [StatisticsService, FeedbackTableService],
 })
 export class AdminTransactionalFeedbackModule {
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {}

@@ -44,9 +44,18 @@ export class NetPromoterScoreComponent extends BaseNetPromoterScoreComponent
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
+          calenderType,
           { outletsIds: this._statisticService.outletIds },
         ];
         this.getNPSChartData();

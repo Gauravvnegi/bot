@@ -31,31 +31,32 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  .stats-row{
+  .stats-row {
     display: flex;
     width: 100%;
     flex-wrap: wrap;
     justify-content: space-between;
-  
-  .stats {
-    height: 360px;
-    width: 48.5%;
-    margin: 0.5%;
-    &:hover {
-			cursor: pointer;
-      box-shadow: 0px 3px 20px #0368ff42;
-      border: 1px solid $primary-purple;
-      border-radius: 5px;
-    }
-    @media screen and (max-width: 800px) {
-      height: 185px;
+
+    .stats {
+      // height: 360px;
+      width: 32.33%;
+      margin: 0.5%;
+      margin: 0.5%;
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0px 3px 20px #0368ff42;
+        border: 1px solid $primary-purple;
+        border-radius: 5px;
+      }
+      // @media screen and (max-width: 800px) {
+      //   height: 185px;
+      // }
     }
   }
-  }
-  .full-width{
+  .full-width {
     width: 100%;
   }
-  .one-third{
+  .one-third {
     width: 32% !important;
   }
   .change-height {
@@ -63,11 +64,11 @@
   }
   .inc-width-xl {
     width: 59%;
-	}
-	.inc-width-l {
-		width: 37.85%;
-	}
-  .mr-top{
+  }
+  .inc-width-l {
+    width: 37.85%;
+  }
+  .mr-top {
     margin: 15px 0 0 0 !important;
   }
 }

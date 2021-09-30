@@ -105,6 +105,14 @@
   @media screen and (max-width: 800px) {
     font-size: 10px;
   }
+  span {
+    @media screen and (max-width: 540px) {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 46px;
+    }
+  }
 }
 
 :host ::ng-deep .amount {

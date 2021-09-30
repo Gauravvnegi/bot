@@ -142,6 +142,7 @@ export class PointOfSaleComponent implements OnInit {
       (branch) => branch['id'] == branchId
     ).outlets;
     this.tabFilterItems = [];
+    this.tabFilterIdx = 0;
     outlets.forEach((outlet) => {
       if (this._statisticService.outletIds.find((d) => d === outlet.id)) {
         this.tabFilterItems.push({
@@ -159,7 +160,6 @@ export class PointOfSaleComponent implements OnInit {
   listenForOutletChanged() {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {
-        debugger;
         this.setTabFilterItems(this.branchId);
         this.getStats();
       }

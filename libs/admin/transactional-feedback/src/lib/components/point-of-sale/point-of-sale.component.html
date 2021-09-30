@@ -45,7 +45,7 @@
       #chipList
       aria-label="Quick Reply selection"
       formControlName="quickReplyActionFilters"
-      *ngIf="tabFilterItems.length"
+      *ngIf="tabFilterItems.length && tabFilterItems[tabFilterIdx].chips"
     >
       <mat-chip
         *ngFor="

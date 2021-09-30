@@ -165,7 +165,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
+          (input)="onFilterTypeTextChange($event.target.value, 'outlet')"
           class="p-column-filter"
         />
       </th>
@@ -173,9 +173,10 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'guest.firstName')
+          "
           class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">
@@ -192,36 +193,16 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="onFilterTypeTextChange($event.target.value, 'guest.place')"
           class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="onFilterTypeTextChange($event.target.value, 'comments')"
           class="p-column-filter"
-          disabled="true"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-          class="p-column-filter"
-          disabled="true"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-          class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">
@@ -243,10 +224,7 @@
     let-rowIndex="rowIndex"
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-    <tr
-      class="data-table-row"
-      (click)="openDetailPage($event, rowData, 'stay_details')"
-    >
+    <tr class="data-table-row">
       <!-- <tr class="data-table-row"> -->
       <td class="table--checkbox">
         <p-tableCheckbox
@@ -257,11 +235,11 @@
         </p-tableCheckbox>
       </td>
       <td class="guest">
-        {{
-          getFeedbackOutlet(rowData.outletId).length
-            ? getFeedbackOutlet(rowData.outletId)[0].name
-            : ''
-        }}
+        {{ rowData.outlet }}
+      </td>
+      <td class="guest">
+        <div>{{ rowData.guest.getFullName() }}</div>
+        <div>{{ rowData.guest.getPhoneNumber() }}</div>
       </td>
       <td>
         <div></div>
@@ -311,58 +289,52 @@
               {{ rowData.comments }}
             </div>
           </div>
+          <div class="amount">
+            {{ rowData.getServiceTypeAndTime() }}
+          </div>
           <div><img src="assets/svg/pdf.svg" alt="pdf" /></div>
         </div>
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+          "
+        >
+          <div *ngFor="let data of rowData.services.services" class="amount">
+            {{ data.serviceName }}: {{ data.rating }}
+          </div>
+        </div>
       </td>
-      <td class="guest">
-        <div>{{ rowData.guest.getFullName() }}</div>
-        <div>{{ rowData.guest.getPhoneNumber() }}</div>
-        <div>{{ rowData.guest.emailId }}</div>
+      <td class="package">
+        <div>
+          {{ rowData.guest.getCreatedDate(_globalFilterService.timezone) }}
+        </div>
+        <div>{{ rowData.guest.place }}</div>
       </td>
-      <td class="package"></td>
       <td class="amount">
-        <!-- <span
-          [ngClass]="{
-            'status-text-reject':
-              rowData.payment.dueAmount > 0 &&
-              rowData.payment.dueAmount <= rowData.payment.totalAmount,
-            'status-text-success': rowData.payment.dueAmount == 0
-          }"
-          >{{ rowData.payment.dueAmount }}</span
-        >/ {{ rowData.payment.totalAmount }} -->
-      </td>
-
-      <td class="package">
-        <!-- <span
-          [ngClass]="{
-            'status-text-initiated':
-              rowData.guestAttributes.overAllNps > 40 &&
-              rowData.guestAttributes.overAllNps <= 60,
-            'status-text-reject':
-              rowData.guestAttributes.overAllNps >= -100 &&
-              rowData.guestAttributes.overAllNps <= 40,
-            'status-text-success': rowData.guestAttributes.overAllNps > 60
-          }"
-          >{{ rowData.guestAttributes.overAllNps }}
-        </span> -->
-      </td>
-
-      <td class="package">
-        <!-- <span
-          >{{ rowData.guestAttributes.churnProbalilty }}/<span
-            [ngClass]="{
-              'status-text-success':
-                rowData.guestAttributes.churnPrediction === 'No',
-              'status-text-reject':
-                rowData.guestAttributes.churnPrediction === 'Yes'
-            }"
-            >{{ rowData.guestAttributes.churnPrediction }}</span
-          >
-        </span> -->
+        {{ rowData.comments }}
       </td>
 
       <!-- status-image-initiated -->
-      <td class="status-image"></td>
+      <td class="status-image">
+        <ng-container *ngIf="rowData.remark.id; else addNote"
+          ><div
+            class="view-notes"
+            (click)="openEditNotes($event, rowData, rowData.remark)"
+          >
+            View Notes
+          </div></ng-container
+        >
+        <ng-template #addNote
+          ><div
+            class="add-notes"
+            (click)="openEditNotes($event, rowData, rowData.remark)"
+          >
+            +Notes
+          </div></ng-template
+        >
+      </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->

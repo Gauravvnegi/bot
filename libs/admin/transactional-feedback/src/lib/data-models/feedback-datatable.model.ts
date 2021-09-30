@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import * as moment from 'moment';
 
 export class FeedbackTable {
   total: number;
@@ -6,13 +7,13 @@ export class FeedbackTable {
   entityStateCounts: EntityStateCounts;
   records: Feedback[];
 
-  deserialize(input) {
+  deserialize(input, outlets) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
     this.records = input.records.map((record) =>
-      new Feedback().deserialize(record)
+      new Feedback().deserialize(record, outlets)
     );
     return this;
   }
@@ -26,7 +27,7 @@ export class Feedback {
   guest: Guest;
   hotelId: string;
   id: string;
-  outletId: string;
+  outlet: string;
   ratings: number;
   read: boolean;
   serviceType: string;
@@ -36,7 +37,7 @@ export class Feedback {
   updated: number;
   remark: Remark;
 
-  deserialize(input) {
+  deserialize(input, outlets) {
     Object.assign(
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
@@ -44,7 +45,6 @@ export class Feedback {
       set({}, 'created', get(input, ['created'])),
       set({}, 'feedback', JSON.parse(get(input, ['feedback']))),
       set({}, 'hotelId', get(input, ['hotelId'])),
-      set({}, 'outletId', get(input, ['outletId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'ratings', get(input, ['ratings'])),
       set({}, 'read', get(input, ['read'])),
@@ -54,9 +54,16 @@ export class Feedback {
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated']))
     );
+    this.outlet = outlets.filter(
+      (outlet) => outlet.id === input.outletId
+    )[0].name;
     this.remark = new Remark().deserialize(input.remark);
     this.guest = new Guest().deserialize(input.guestId);
     return this;
+  }
+
+  getServiceTypeAndTime() {
+    return `${this.bookingDetails['serviceType']}: ${this.bookingDetails['session']}`;
   }
 }
 
@@ -106,6 +113,10 @@ export class Guest {
       this.phoneNumber
     }`;
   }
+
+  getCreatedDate(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
+  }
 }
 
 export class Remark {
@@ -125,6 +136,14 @@ export class Remark {
       set({}, 'updated', get(input, ['updated']))
     );
     return this;
+  }
+
+  getUpdatedDate(timezone) {
+    return moment(this.updated).utcOffset(timezone).format('dd/MM/YYYY');
+  }
+
+  getUpdatedTime(timezone) {
+    return moment(this.updated).utcOffset(timezone).format('hh:mm A');
   }
 }
 

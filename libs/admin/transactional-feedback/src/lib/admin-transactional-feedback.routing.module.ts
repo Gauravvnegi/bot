@@ -15,6 +15,7 @@ import { FeedbackDistributionComponent } from './components/feedback-distributio
 import { OverallReceivedBifurcationComponent } from './components/overall-received-bifurcation/overall-received-bifurcation.component';
 import { SharedComponent } from './components/shared/shared.component';
 import { PointOfSaleComponent } from './components/point-of-sale/point-of-sale.component';
+import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 
 const appRoutes: Route[] = [
   {
@@ -43,5 +44,6 @@ export class AdminTransactionalFeedbackRoutingModule {
     OverallReceivedBifurcationComponent,
     SharedComponent,
     PointOfSaleComponent,
+    FeedbackNotesComponent,
   ];
 }

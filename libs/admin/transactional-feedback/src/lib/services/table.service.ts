@@ -6,4 +6,8 @@ export class FeedbackTableService extends ApiService {
   getGuestFeedbacks(config) {
     return this.get(`/api/v1/transactional-feedback/guests${config.queryObj}`);
   }
+
+  updateNotes(id, data) {
+    return this.patch(`/api/v1/transactional-feedback/${id}/remarks`, data);
+  }
 }

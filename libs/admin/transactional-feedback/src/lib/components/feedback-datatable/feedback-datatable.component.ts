@@ -21,6 +21,7 @@ import { FeedbackTableService } from '../../services/table.service';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { FeedbackTable } from '../../data-models/feedback-datatable.model';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { FeedbackNotesComponent } from '../feedback-notes/feedback-notes.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -45,46 +46,34 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   cols = [
     {
-      field: 'getFullName()',
-      header: 'Booking No./ Outlet',
+      field: 'outlet',
+      header: 'Outlet',
       isSort: true,
       sortType: 'string',
     },
     {
-      field: 'booking.getArrivalTimeStamp()',
+      field: 'guest.getFullName()',
+      header: 'Name/Phone No.',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: 'getServiceTypeAndTime()',
       header: 'Service/ Feedback',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: `guest.getCreatedDate()`,
+      header: 'Visit Date/ curr. Living In',
       isSort: true,
       sortType: 'date',
     },
     {
-      field: 'booking.bookingNumber',
-      header: 'Name/Phone No./ Email',
+      field: 'comments',
+      header: 'Comment',
       isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: `getPhoneNumber()`,
-      header: 'Date/Time/ Guests',
-      isSort: false,
       sortType: 'string',
-    },
-    {
-      field: 'payment.totalAmount',
-      header: 'Amount Due/ Total Spend',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestAttributes.overAllNps',
-      header: 'Overall NPS',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestAttributes.churnProbalilty',
-      header: 'Churn Prob/ Prediction',
-      isSort: true,
-      sortType: 'number',
     },
     { field: 'stageAndourney', header: 'Actions' },
   ];
@@ -242,8 +231,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          console.log(new FeedbackTable().deserialize(data));
-          this.values = new FeedbackTable().deserialize(data).records;
+          console.log(new FeedbackTable().deserialize(data, this.outlets));
+          this.values = new FeedbackTable().deserialize(
+            data,
+            this.outlets
+          ).records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -318,7 +310,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new FeedbackTable().deserialize(data).records;
+          this.values = new FeedbackTable().deserialize(
+            data,
+            this.outlets
+          ).records;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination
@@ -415,12 +410,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    //toggle isSelected
-    // this.tabFilterItems[this.tabFilterIdx].chips[
-    //   quickReplyTypeIdx
-    // ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-    //   quickReplyTypeIdx
-    // ].isSelected;
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -444,41 +433,48 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openDetailPage(event, rowData?, tabKey?) {
+  openEditNotes(event, data, remark) {
     event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '550';
+    const detailCompRef = this._modal.openDialog(
+      FeedbackNotesComponent,
+      dialogConfig
+    );
 
-    if (rowData) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
-      dialogConfig.width = '100%';
-      const detailCompRef = this._modal.openDialog(
-        DetailsComponent,
-        dialogConfig
-      );
+    detailCompRef.componentInstance.feedback = data;
+    detailCompRef.componentInstance.remark = remark;
+    detailCompRef.componentInstance.timezone = this._globalFilterService.timezone;
 
-      detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
-      detailCompRef.componentInstance.guestId = rowData.id;
-      detailCompRef.componentInstance.hotelId = this.hotelId;
-      tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
-      this.$subscription.add(
-        detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-          // remove loader for detail close
-          this.loadInitialData(
-            [
-              ...this.globalQueries,
-              {
-                order: 'DESC',
-                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+    this.$subscription.add(
+      detailCompRef.componentInstance.onNotesClosed.subscribe((res) => {
+        // remove loader for detail close
+        if (res.status) {
+          this.$subscription.add(
+            this.tableService.updateNotes(res.id, res.data).subscribe(
+              (response) => {
+                detailCompRef.close();
+                this.loadInitialData(
+                  [
+                    ...this.globalQueries,
+                    {
+                      order: 'DESC',
+                      entityType: this.tabFilterItems[this.tabFilterIdx].value,
+                    },
+                    ...this.getSelectedQuickReplyFilters(),
+                    // { offset: this.first, limit: this.rowsPerPage },
+                  ],
+                  false
+                );
               },
-              ...this.getSelectedQuickReplyFilters(),
-            ],
-            false
+              ({ error }) =>
+                this._snackbarService.openSnackBarAsText(error.message)
+            )
           );
-          detailCompRef.close();
-        })
-      );
-    }
+        } else detailCompRef.close();
+      })
+    );
   }
 
   getFeedbackOutlet(id) {

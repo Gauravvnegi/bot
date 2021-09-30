@@ -180,7 +180,17 @@ export class FilterComponent implements OnChanges, OnInit {
       this.feedbackFG.get('feedbackType').value !== 'Transactional'
     ) {
       this.feedbackFG.patchValue({ feedbackType: 'Transactional' });
+    } else if (!this.checkForNoOutletSelected(this.outletFG.value)) {
+      this.feedbackFG.patchValue({ feedbackType: 'Stay Experience' });
     }
+  }
+
+  checkForNoOutletSelected(outlets) {
+    let returnValue = false;
+    Object.keys(outlets).forEach((outlet) => {
+      if (outlets[outlet]) returnValue = true;
+    });
+    return returnValue;
   }
 
   handleFeedbackTypeChange(event) {

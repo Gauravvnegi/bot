@@ -32,7 +32,7 @@ import { FeedbackNotesComponent } from '../feedback-notes/feedback-notes.compone
 })
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Customers - Feedback';
+  tableName = 'Guest - Feedback';
   outlets = [];
   actionButtons = true;
   isQuickFilters = true;
@@ -123,7 +123,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   tabFilterItems = [
     {
-      label: 'Journey/ Reservation',
+      label: 'Transactional ',
       content: '',
       value: 'ALL',
       disabled: false,
@@ -236,8 +236,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           ).records;
           //set pagination
           this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          this.tabFilterItems[this.tabFilterIdx].total = data.total;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
 
@@ -312,6 +311,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             data,
             this.outlets
           ).records;
+          this.tabFilterItems[this.tabFilterIdx].total = data.total;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination

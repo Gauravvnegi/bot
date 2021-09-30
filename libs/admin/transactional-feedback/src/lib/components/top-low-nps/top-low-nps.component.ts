@@ -12,6 +12,22 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 })
 export class TopLowNpsComponent extends BaseTopLowNpsComponent
   implements OnInit {
+  tabFilterItems = [
+    {
+      label: 'Department',
+      icon: '',
+      value: 'DEPARTMENT',
+      total: 0,
+      isSelected: true,
+    },
+    {
+      label: 'Experience',
+      icon: '',
+      value: 'EXPERIENCE',
+      total: 0,
+      isSelected: false,
+    },
+  ];
   constructor(
     statisticsService: StatisticsService,
     _globalFilterService: GlobalFilterService,

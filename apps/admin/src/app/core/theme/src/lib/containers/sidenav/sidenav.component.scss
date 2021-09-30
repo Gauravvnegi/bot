@@ -27,7 +27,93 @@
   }
 }
 
-.nav {
+.sidebar {
+  padding-top: 15px;
+  &__container {
+    // padding-top: 40px;
+    .main_heading {
+      margin-bottom: 9px;
+      &_anchor {
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.8);
+        border: none;
+        -webkit-transition: all 400ms;
+        -moz-transition: all 400ms;
+        -ms-transition: all 400ms;
+        -o-transition: all 400ms;
+        transition: all 400ms;
+        height: 50px;
+        text-decoration: none;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+        span {
+          margin-left: 20px;
+          font-weight: 500;
+        }
+      }
+      &:hover {
+        background-color: rgba(232, 238, 245, 0.25);
+      }
+      .sidenav_logo {
+        width: 18px;
+        height: 18px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    
+    }
+
+    .subitems {
+      visibility: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: visibility 1.5s, max-height 1.5s, opacity 1.5s linear;
+     
+    }
+  }
+}
+
+.child-active {
+  visibility: visible !important;
+  opacity: 1 !important;
+  max-height: 500px !important;
+  transition: visibility 1.5s, max-height 1.5s, opacity 1.5s linear !important;
+  .subitems_heading {
+    // display: block !important;
+    display: flex !important;
+    align-items: center;
+  }
+}
+
+.subitems_heading {
+  margin-bottom: 9px;
+  &_anchor {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    border: none;
+    -webkit-transition: all 400ms;
+    -moz-transition: all 400ms;
+    -ms-transition: all 400ms;
+    -o-transition: all 400ms;
+    transition: all 400ms;
+    height: 50px;
+    text-decoration: none;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    span {
+      margin-left: 20px;
+      font-weight: 500;
+    }
+  }
+  &:hover {
+    background-color: rgba(232, 238, 245, 0.25);
+  }
   .sidenav_logo {
     width: 18px;
     height: 18px;
@@ -36,6 +122,10 @@
       height: 100%;
     }
   }
+}
+
+.parent-active {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .change .bar2 {
@@ -80,60 +170,7 @@
 
 .sidebar-wrapper {
   overflow-y: auto;
-  /* padding-bottom: 30px; */
-  /* width: 260px; */
   position: relative;
-  /* height: 100%; */
-}
-
-.nav-container {
-  position: relative;
-}
-
-.nav {
-  padding-top: 15px;
-}
-
-ul {
-  list-style-type: none;
-  margin-block-start: 0px;
-  margin-block-end: 0px;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  padding-inline-start: 0px;
-}
-
-.nav li {
-  margin-bottom: 9px;
-  &:hover {
-    background-color: rgba(232, 238, 245, 0.25);
-  }
-}
-
-.nav li a {
-  display: flex;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.8);
-  // margin: 0 15px;
-  // border-radius: 3px;
-  border: none;
-  -webkit-transition: all 400ms;
-  -moz-transition: all 400ms;
-  -ms-transition: all 400ms;
-  -o-transition: all 400ms;
-  transition: all 400ms;
-  height: 50px;
-  text-decoration: none;
-}
-
-.nav li a:hover,
-.parent-active {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.nav li a span {
-  margin-left: 20px;
-  font-weight: 500;
 }
 
 .active a,

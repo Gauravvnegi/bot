@@ -2,25 +2,24 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { DetailsComponent } from 'libs/admin/guest-detail/src/lib/components/details/details.component';
-import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { GuestDetailService } from 'libs/admin/guest-detail/src/lib/services/guest-detail.service';
-import { Subscription, Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { GuestDetailService } from 'libs/admin/guest-detail/src/lib/services/guest-detail.service';
+import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import {
   ModuleNames,
   TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
-import { FeedbackTableService } from '../../services/table.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { FeedbackTable } from '../../data-models/feedback-datatable.model';
+import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { FeedbackTable } from '../../data-models/feedback-datatable.model';
+import { FeedbackTableService } from '../../services/table.service';
 import { FeedbackNotesComponent } from '../feedback-notes/feedback-notes.component';
 
 @Component({
@@ -231,7 +230,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          console.log(new FeedbackTable().deserialize(data, this.outlets));
           this.values = new FeedbackTable().deserialize(
             data,
             this.outlets

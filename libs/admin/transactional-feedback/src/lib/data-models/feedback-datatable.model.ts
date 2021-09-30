@@ -34,6 +34,7 @@ export class Feedback {
   session: string;
   tableNo: string;
   updated: number;
+  remark: Remark;
 
   deserialize(input) {
     Object.assign(
@@ -53,6 +54,7 @@ export class Feedback {
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated']))
     );
+    this.remark = new Remark().deserialize(input.remark);
     this.guest = new Guest().deserialize(input.guestId);
     return this;
   }
@@ -103,6 +105,26 @@ export class Guest {
     return `${this.countryCode ? this.countryCode + ' ' : ''}${
       this.phoneNumber
     }`;
+  }
+}
+
+export class Remark {
+  adminName: string;
+  created: number;
+  id: string;
+  remarks: string;
+  updated: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'adminName', get(input, ['adminName'])),
+      set({}, 'created', get(input, ['created'])),
+      set({}, 'id', get(input, ['id'])),
+      set({}, 'remarks', get(input, ['remarks'])),
+      set({}, 'updated', get(input, ['updated']))
+    );
+    return this;
   }
 }
 

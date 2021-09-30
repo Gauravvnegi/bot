@@ -34,6 +34,7 @@
     </div>
   </div>
   <hospitality-bot-tab-group
+    *ngIf="tabFilterItems.length"
     [listItems]="tabFilterItems"
     [selectedIndex]="tabFilterIdx"
     (selectedTabChange)="onSelectedTabFilterChange($event)"

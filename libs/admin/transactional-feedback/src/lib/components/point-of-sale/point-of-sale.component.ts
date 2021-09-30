@@ -7,6 +7,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 import { NPOS } from '../../data-models/statistics.model';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 
 @Component({
   selector: 'hospitality-bot-point-of-sale',
@@ -22,6 +23,7 @@ export class PointOfSaleComponent implements OnInit {
   selectedInterval;
   globalQueries;
   stats: NPOS;
+  branchId: string;
   documentActionTypes = [
     {
       label: `Export`,
@@ -76,16 +78,7 @@ export class PointOfSaleComponent implements OnInit {
 
   tabFilterIdx: number = 0;
 
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: this.chips,
-    },
-  ];
+  tabFilterItems = [];
 
   percentValue = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   constructor(
@@ -94,7 +87,8 @@ export class PointOfSaleComponent implements OnInit {
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private dateService: DateService
+    private dateService: DateService,
+    private _hotelDetailService: HotelDetailService
   ) {}
 
   ngOnInit(): void {
@@ -132,6 +126,8 @@ export class PointOfSaleComponent implements OnInit {
             ...data['dateRange'].queryValue,
             calenderType,
           ];
+          this.branchId = data['filter'].value.property.branchName;
+          this.setTabFilterItems(this.branchId);
           this.getStats();
         },
         ({ error }) => {
@@ -141,27 +137,63 @@ export class PointOfSaleComponent implements OnInit {
     );
   }
 
+  setTabFilterItems(branchId) {
+    const outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
+      (branch) => branch['id'] == branchId
+    ).outlets;
+    this.tabFilterItems = [];
+    outlets.forEach((outlet) => {
+      if (this._statisticService.outletIds.find((d) => d === outlet.id)) {
+        this.tabFilterItems.push({
+          label: outlet.name,
+          content: '',
+          value: outlet.id,
+          disabled: false,
+          total: 0,
+          chips: this.chips,
+        });
+      }
+    });
+  }
+
   listenForOutletChanged() {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {
-        this.globalQueries[this.globalQueries.length - 1] = {
-          outletsIds: this._statisticService.outletIds,
-        };
+        debugger;
+        this.setTabFilterItems(this.branchId);
         this.getStats();
       }
     });
   }
 
+  getSelectedQuickReplyFilters() {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityState: item.value,
+      }));
+  }
+
   getStats() {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams(
+        this.tabFilterItems.length
+          ? [
+              ...this.globalQueries,
+              {
+                outletsIds: [this.tabFilterItems[this.tabFilterIdx].value],
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ]
+          : this.globalQueries
+      ),
     };
     this.$subscription.add(
       this._statisticService.getPOSStats(config).subscribe((response) => {
         this.stats = new NPOS().deserialize(response);
-        if (this.tabFilterItems.length === 1) {
-          this.addFilterItems();
-        }
+        // if (this.tabFilterItems.length === 1) {
+        //   this.addFilterItems();
+        // }
       })
     );
   }
@@ -181,16 +213,6 @@ export class PointOfSaleComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-    this.handleLocalTabChange();
-  }
-
-  handleLocalTabChange() {
-    this.globalQueries[this.globalQueries.length - 1] = {
-      outletsIds:
-        this.tabFilterIdx === 0
-          ? this._statisticService.outletIds
-          : [this._statisticService.outletIds[this.tabFilterIdx - 1]],
-    };
     this.getStats();
   }
 
@@ -221,6 +243,7 @@ export class PointOfSaleComponent implements OnInit {
       ].isSelected;
     }
     this.updateQuickReplyActionFilters();
+    this.getStats();
   }
 
   updateQuickReplyActionFilters(): void {

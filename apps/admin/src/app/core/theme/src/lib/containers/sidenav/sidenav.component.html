@@ -18,7 +18,76 @@
   </div>
 </div>
 <div class="divider" [style.background-color]="dividerBgColor"></div>
-<div class="sidebar-wrapper">
+<div class="sidebar__container">
+  <!-- {{ menuItems | json}} -->
+  <div *ngFor="let menuItem of menuItems">
+    <div
+      class="main_heading"
+      routerLinkActive
+      #rla="routerLinkActive"
+      [routerLinkActiveOptions]="{ exact: false }"
+      [ngClass]="
+        rla.isActive ? (menuItem.children === null ? 'active' : '') : ''
+      "
+    >
+      <a 
+      class="main_heading_anchor"
+        [routerLink]="[menuItem.path]"
+        [style.display]="'flex'"
+        [style.background-color]="
+          rla.isActive ? list_item_colour : 'transparent'
+        "
+        [style.color]="
+          rla.isActive
+            ? menuItem.children === null
+              ? activeFontColor
+              : normalFontColor
+            : normalFontColor
+        "
+        [style.padding]="'0px 15px'"
+        ><div class="sidenav_logo">
+          <img [src]="menuItem.url" class="svg-icon" />
+        </div>
+        <span class="icon-label" *ngIf="isExpanded">{{
+          menuItem.title
+        }}</span></a
+      >
+    </div>
+
+    <div
+      [ngClass]="
+        rla.isActive ? (menuItem.children !== null ? 'child-active' : '') : ''
+      "
+      class="subitems"
+    >
+      <div
+        *ngFor="let subItem of menuItem.children"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="subitems_heading"
+        [ngClass]="rla.isActive ? 'parent-active active' : ''"
+        [routerLink]="[subItem.path]"
+      >
+        <a
+        class="subitems_heading_anchor"
+          [style.display]="'flex'"
+          [style.background-color]="
+            rla.isActive ? list_item_colour : 'transparent'
+          "
+          [style.color]="rla.isActive ? activeFontColor : normalFontColor"
+          [style.padding]="'0px 15px'"
+          [style.width]="'100%'"
+          ><div class="sidenav_logo">
+            <img [src]="subItem.url" class="svg-icon" />
+          </div>
+          <span class="icon-label" *ngIf="isExpanded">{{ subItem.title }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="sidebar-wrapper">
   <div class="nav-container">
     <ul class="nav">
       <li
@@ -31,21 +100,10 @@
         [routerLinkActiveOptions]="{ exact: false }"
       >
         <a
-          [style.display]="menuItem.children === null ? 'flex' : 'none'"
-          [routerLink]="[menuItem.path]"
-          [style.background-color]="
-            rla.isActive ? list_item_colour : 'transparent'
-          "
-          [style.color]="rla.isActive ? activeFontColor : normalFontColor"
-          [style.padding]="'0px 15px'"
+         
         >
-          <!-- <mat-icon>{{ menuItem.icon }}</mat-icon> -->
-          <div class="sidenav_logo">
-            <img [src]="menuItem.url" class="svg-icon" />
-          </div>
-          <span class="icon-label" *ngIf="isExpanded">{{
-            menuItem.title
-          }}</span>
+
+          
         </a>
         <div [hidden]="menuItem.children === null" class="collapse-container">
           <a
@@ -55,7 +113,7 @@
             class="collapse-a collapsed"
             [style.color]="normalFontColor"
           >
-            <!-- <i class="material-icons">{{ menuItem.icon }}</i> -->
+           
             <div class="sidenav_logo">
               <img [src]="menuItem.url" class="svg-icon" />
             </div>
@@ -85,7 +143,7 @@
                   style="height: 43px;"
                 >
                   <span style="margin-left: 5px; width: 21px;">
-                    <!-- {{subItem.icon }} -->
+            
                     <div class="sidenav_logo">
                       <img [src]="subItem.url" class="svg-icon" />
                     </div>
@@ -99,4 +157,4 @@
       </li>
     </ul>
   </div>
-</div>
+</div> -->

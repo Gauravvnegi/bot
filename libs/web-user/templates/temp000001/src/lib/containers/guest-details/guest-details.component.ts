@@ -111,7 +111,8 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
               pattern: Regex.PHONE10_REGEX,
               msg: 'Please enter a valid mobile',
             }),
-            Validators.minLength(10),
+            Validators.minLength(6),
+            Validators.maxLength(16),
           ],
         ],
         email: [

@@ -63,7 +63,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       value: 'REJECTED',
       total: 0,
       isSelected: false,
-      type: 'completed',
+      type: 'failed',
     },
   ];
 

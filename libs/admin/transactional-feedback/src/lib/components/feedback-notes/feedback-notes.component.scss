@@ -1,6 +1,12 @@
 .header {
   padding: 15px;
   background-color: #f4f5f7;
+  &-items {
+    display: flex;
+    &-note {
+      margin-right: 15px;
+    }
+  }
 }
 
 .close-btn {
@@ -43,4 +49,65 @@
   text-align: center;
   color: #fff;
   cursor: pointer;
+}
+.editForm-header {
+  &-items {
+    display: flex;
+    justify-content: space-between;
+    &-note {
+      margin-right: 15px;
+    }
+  }
+}
+.editForm-popup-body {
+  padding: 10px 30px;
+  &-title {
+    margin-bottom: 10px;
+  }
+  &-textarea {
+    border-radius: 5px;
+    border: solid 1px #ced5d9;
+    padding: 15px;
+  }
+}
+.header {
+  &-items {
+    display: flex;
+    &-closed-admin {
+      margin-right: 15px;
+    }
+    &-closed-data {
+      margin-right: 15px;
+    }
+    &-closed-time {
+      margin-right: 15px;
+    }
+  }
+}
+.view-body {
+  padding: 10px 30px;
+  &-items {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    &-title {
+    }
+    &-btn {
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.78px;
+      text-align: right;
+      color: #4b56c0;
+      cursor: pointer;
+    }
+  }
+  &-textarea {
+    border-radius: 5px;
+    border: solid 1px #ced5d9;
+    padding: 15px;
+  }
 }

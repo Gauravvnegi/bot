@@ -23,6 +23,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .dropdown-label {
+      margin-left: 8px;
+    }
     .title-container {
       display: flex;
       align-items: center;
@@ -117,7 +120,8 @@
       font-weight: 700;
     }
   }
-  .graphWrapper{
-    margin-top: 20px; height: calc(100% - 125px);
+  .graphWrapper {
+    margin-top: 20px;
+    height: calc(100% - 125px);
   }
 }

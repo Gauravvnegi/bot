@@ -387,24 +387,24 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
-    this.$subscription.add(
-      this._guestTableService.exportCSV(config).subscribe(
-        (response) => {
-          FileSaver.saveAs(
-            response,
-            this.tableName.toLowerCase() +
-              '_export_' +
-              new Date().getTime() +
-              '.csv'
-          );
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
+    // this.$subscription.add(
+    //   this._guestTableService.exportCSV(config).subscribe(
+    //     (response) => {
+    //       FileSaver.saveAs(
+    //         response,
+    //         this.tableName.toLowerCase() +
+    //           '_export_' +
+    //           new Date().getTime() +
+    //           '.csv'
+    //       );
+    //       this.loading = false;
+    //     },
+    //     ({ error }) => {
+    //       this.loading = false;
+    //       this._snackbarService.openSnackBarAsText(error.message);
+    //     }
+    //   )
+    // );
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
@@ -453,6 +453,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             this.tableService.updateNotes(res.id, res.data).subscribe(
               (response) => {
                 detailCompRef.close();
+                this._snackbarService.openSnackBarAsText('Notes updated', '', {
+                  panelClass: 'success',
+                });
                 this.loadInitialData(
                   [
                     ...this.globalQueries,

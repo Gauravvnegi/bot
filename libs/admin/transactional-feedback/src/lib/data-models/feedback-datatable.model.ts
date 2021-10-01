@@ -139,7 +139,7 @@ export class Remark {
   }
 
   getUpdatedDate(timezone) {
-    return moment(this.updated).utcOffset(timezone).format('dd/MM/YYYY');
+    return moment(this.updated).utcOffset(timezone).format('DD/MM/YYYY');
   }
 
   getUpdatedTime(timezone) {

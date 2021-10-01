@@ -3,15 +3,15 @@
     <div style="display: flex;">
       <div style="margin-right: 15px;">
         <div>Closed by Admin</div>
-        <div>{{ remark.adminName }}</div>
+        <div>{{ notes.adminName }}</div>
       </div>
       <div style="margin-right: 15px;">
         <div>Closed Date</div>
-        <div>{{ remark.getUpdatedDate(timezone) }}</div>
+        <div>{{ notes.getUpdatedDate(timezone) }}</div>
       </div>
       <div style="margin-right: 15px;">
         <div>Closed Time</div>
-        <div>{{ remark.getUpdatedTime(timezone) }}</div>
+        <div>{{ notes.getUpdatedTime(timezone) }}</div>
       </div>
     </div>
   </div>
@@ -42,11 +42,11 @@
         Edit
       </div>
     </div>
-    <div [formGroup]="remarkFG">
+    <div [formGroup]="notesFG">
       <textarea
         matInput
         style="border-radius: 5px; border: solid 1px #ced5d9; padding: 15px;"
-        formControlName="remarks"
+        formControlName="notes"
       ></textarea>
     </div>
     <div class="close-btn" (click)="closeNotes()">Close</div>
@@ -65,11 +65,11 @@
   </div>
   <div style="padding: 10px 30px;">
     <div style="margin-bottom: 10px;">Add Notes</div>
-    <div [formGroup]="remarkFG">
+    <div [formGroup]="notesFG">
       <textarea
         matInput
         style="border-radius: 5px; border: solid 1px #ced5d9; padding: 15px;"
-        formControlName="remarks"
+        formControlName="notes"
       ></textarea>
     </div>
     <div class="submit-btn" (click)="submit()">Submit</div>

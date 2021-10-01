@@ -324,10 +324,10 @@
 
       <!-- status-image-initiated -->
       <td class="status-image">
-        <ng-container *ngIf="rowData.remark.id; else addNote"
-          ><div
+        <ng-container *ngIf="rowData.notes.remarks; else addNote">
+          <div
             class="view-notes"
-            (click)="openEditNotes($event, rowData, rowData.remark)"
+            (click)="openEditNotes($event, rowData, rowData.notes)"
           >
             View Notes
           </div></ng-container
@@ -335,7 +335,7 @@
         <ng-template #addNote
           ><div
             class="add-notes"
-            (click)="openEditNotes($event, rowData, rowData.remark)"
+            (click)="openEditNotes($event, rowData, rowData.notes)"
           >
             +Notes
           </div></ng-template

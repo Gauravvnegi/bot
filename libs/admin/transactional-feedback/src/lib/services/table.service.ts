@@ -8,7 +8,7 @@ export class FeedbackTableService extends ApiService {
   }
 
   updateNotes(id, data) {
-    return this.patch(`/api/v1/transactional-feedback/${id}/remarks`, data);
+    return this.patch(`/api/v1/transactional-feedback/${id}/notes`, data);
   }
 
   getFeedbackPdf(id) {

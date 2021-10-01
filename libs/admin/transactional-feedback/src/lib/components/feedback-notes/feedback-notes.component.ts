@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
-import { Feedback, Remark } from '../../data-models/feedback-datatable.model';
+import { Feedback, Notes } from '../../data-models/feedback-datatable.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-notes',
@@ -10,11 +10,11 @@ import { Feedback, Remark } from '../../data-models/feedback-datatable.model';
 })
 export class FeedbackNotesComponent implements OnInit {
   @Input() feedback: Feedback;
-  @Input() remark: Remark;
+  @Input() notes: Notes;
   @Input() timezone: string;
   @Output() onNotesClosed = new EventEmitter();
   viewOnly = false;
-  remarkFG: FormGroup;
+  notesFG: FormGroup;
   constructor(
     private fb: FormBuilder,
     private snackbarService: SnackBarService
@@ -22,15 +22,15 @@ export class FeedbackNotesComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFG();
-    if (this.remark.id) {
+    if (this.notes.remarks) {
       this.viewOnly = true;
-      this.remarkFG.get('remarks')?.disable();
+      this.notesFG.get('remarks')?.disable();
     }
   }
 
   initFG() {
-    this.remarkFG = this.fb.group({
-      remarks: [this.remark.remarks || '', Validators.required],
+    this.notesFG = this.fb.group({
+      notes: [this.notes.remarks || '', Validators.required],
     });
   }
 
@@ -40,17 +40,17 @@ export class FeedbackNotesComponent implements OnInit {
 
   openEditForm() {
     this.viewOnly = false;
-    this.remarkFG.get('remarks')?.enable();
+    this.notesFG.get('remarks')?.enable();
   }
 
   submit() {
-    if (this.remarkFG.invalid) {
+    if (this.notesFG.invalid) {
       this.snackbarService.openSnackBarAsText('Please add remarks.');
       return;
     }
     this.onNotesClosed.emit({
       status: true,
-      data: this.remarkFG.getRawValue(),
+      data: this.notesFG.getRawValue(),
       id: this.feedback.id,
     });
   }

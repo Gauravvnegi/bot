@@ -431,7 +431,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openEditNotes(event, data, remark) {
+  openEditNotes(event, data, notes) {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -442,7 +442,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
 
     detailCompRef.componentInstance.feedback = data;
-    detailCompRef.componentInstance.remark = remark;
+    detailCompRef.componentInstance.notes = notes;
     detailCompRef.componentInstance.timezone = this._globalFilterService.timezone;
 
     this.$subscription.add(

@@ -35,7 +35,7 @@ export class Feedback {
   session: string;
   tableNo: string;
   updated: number;
-  remark: Remark;
+  notes: Notes;
 
   deserialize(input, outlets) {
     Object.assign(
@@ -57,7 +57,7 @@ export class Feedback {
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.outletId
     )[0].name;
-    this.remark = new Remark().deserialize(input.remark);
+    this.notes = new Notes().deserialize(input.notes);
     this.guest = new Guest().deserialize(input.guestId);
     return this;
   }
@@ -119,7 +119,7 @@ export class Guest {
   }
 }
 
-export class Remark {
+export class Notes {
   adminName: string;
   created: number;
   id: string;

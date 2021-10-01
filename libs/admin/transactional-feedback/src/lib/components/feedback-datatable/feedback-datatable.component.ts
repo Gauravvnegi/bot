@@ -478,6 +478,24 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  downloadFeedbackPdf(event, id) {
+    event.stopPropagation();
+
+    this.$subscription.add(
+      this.tableService.getFeedbackPdf(id).subscribe(
+        (response) => {
+          const link = document.createElement('a');
+          link.href = response.fileDownloadUri;
+          link.target = '_blank';
+          link.download = response.fileName;
+          link.click();
+          link.remove();
+        },
+        (error) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
   getFeedbackOutlet(id) {
     return this.outlets.filter((outlet) => outlet.id === id);
   }

@@ -10,4 +10,10 @@ export class FeedbackTableService extends ApiService {
   updateNotes(id, data) {
     return this.patch(`/api/v1/transactional-feedback/${id}/remarks`, data);
   }
+
+  getFeedbackPdf(id) {
+    return this.get(
+      `/api/v1/transactional-feedback/${id}/download-feedback-form`
+    );
+  }
 }

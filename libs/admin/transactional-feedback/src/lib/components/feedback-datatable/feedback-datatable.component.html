@@ -238,18 +238,12 @@
         {{ rowData.outlet }}
       </td>
       <td class="guest">
-        <div>{{ rowData.guest.getFullName() }}</div>
-        <div>{{ rowData.guest.getPhoneNumber() }}</div>
+        <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+        <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
       </td>
-      <td>
+      <td class="service-feedback">
         <div></div>
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          "
-        >
+        <div class="service-feedback-service">
           <div
             class="booking-feedback"
             [ngClass]="{
@@ -294,25 +288,22 @@
           </div>
           <div><img src="assets/svg/pdf.svg" alt="pdf" /></div>
         </div>
-        <div
-          style="
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-          "
-        >
-          <div *ngFor="let data of rowData.services.services" class="amount">
+        <div class="service-feedback-amount-wrapper">
+          <div
+            *ngFor="let data of rowData.services.services"
+            class="service-feedback-amount-wrapper-amount"
+          >
             {{ data.serviceName }}: {{ data.rating }}
           </div>
         </div>
       </td>
       <td class="package">
-        <div>
+        <div class="package-date">
           {{ rowData.guest.getCreatedDate(_globalFilterService.timezone) }}
         </div>
-        <div>{{ rowData.guest.place }}</div>
+        <div class="package-city">{{ rowData.guest.place }}</div>
       </td>
-      <td class="amount">
+      <td class="comments">
         {{ rowData.comments }}
       </td>
 

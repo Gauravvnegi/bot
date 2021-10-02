@@ -202,8 +202,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.values = new GuestTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          this.tabFilterItems[this.tabFilterIdx].total = data.total;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
 
@@ -275,6 +274,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
+          this.tabFilterItems[this.tabFilterIdx].total = data.total;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
           //set pagination

@@ -19,7 +19,6 @@
 </div>
 <div class="divider" [style.background-color]="dividerBgColor"></div>
 <div class="sidebar__container">
-  <!-- {{ menuItems | json}} -->
   <div *ngFor="let menuItem of menuItems">
     <div
       class="main_heading"
@@ -30,8 +29,8 @@
         rla.isActive ? (menuItem.children === null ? 'active' : '') : ''
       "
     >
-      <a 
-      class="main_heading_anchor"
+      <a
+        class="main_heading_anchor"
         [routerLink]="[menuItem.path]"
         [style.display]="'flex'"
         [style.background-color]="
@@ -48,10 +47,13 @@
         ><div class="sidenav_logo">
           <img [src]="menuItem.url" class="svg-icon" />
         </div>
-        <span class="icon-label" *ngIf="isExpanded">{{
-          menuItem.title
-        }}</span></a
-      >
+        <span class="icon-label" *ngIf="isExpanded">{{ menuItem.title }}</span>
+        <mat-icon
+          *ngIf="menuItem.children !== null"
+          [style.transform]="rla.isActive ? 'rotate(90deg)' : ''"
+          >keyboard_arrow_right</mat-icon
+        >
+      </a>
     </div>
 
     <div
@@ -70,7 +72,7 @@
         [routerLink]="[subItem.path]"
       >
         <a
-        class="subitems_heading_anchor"
+          class="subitems_heading_anchor"
           [style.display]="'flex'"
           [style.background-color]="
             rla.isActive ? list_item_colour : 'transparent'

@@ -406,6 +406,58 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  updateFeedbackStatus(status: boolean) {
+    if (!this.selectedRows.length) {
+      this._snackbarService.openSnackBarAsText(
+        `Please select a record to be marked as ${status ? 'read' : 'unread'}`
+      );
+      return;
+    }
+    this.loading = true;
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]),
+    };
+
+    const reqData = {
+      status,
+      feedbackId: this.selectedRows.map((data) => data.id),
+    };
+
+    this.$subscription.add(
+      this.tableService.updateFeedbackStatus(config, reqData).subscribe(
+        (response) => {
+          this._snackbarService.openSnackBarAsText('Status updated', '', {
+            panelClass: 'success',
+          });
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: 'DESC',
+                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+              // { offset: this.first, limit: this.rowsPerPage },
+            ],
+            false
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {

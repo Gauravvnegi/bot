@@ -22,4 +22,11 @@ export class FeedbackTableService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  updateFeedbackStatus(config, data) {
+    return this.patch(
+      `/api/v1/transactional-feedback/status${config.queryObj}`,
+      data
+    );
+  }
 }

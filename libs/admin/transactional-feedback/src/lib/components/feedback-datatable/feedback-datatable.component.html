@@ -31,7 +31,24 @@
             <p class="heading">
               <img src="" alt="" class="headImg" /> {{ tableName }}
             </p>
+
             <!-- <p class="selected">2 record(s) are selected</p> -->
+            <div style="display: flex; align-items: center;">
+              <div style="margin-right: 10px; cursor: pointer;">
+                <img
+                  src="assets/svg/mark-read.svg"
+                  alt="read"
+                  (click)="updateFeedbackStatus(true)"
+                />
+              </div>
+              <div style="cursor: pointer;">
+                <img
+                  src="assets/svg/mark-unread.svg"
+                  alt="unread"
+                  (click)="this.updateFeedbackStatus(false)"
+                />
+              </div>
+            </div>
             <div class="options">
               <div *ngIf="isActionButtons" class="icons">
                 <img src="assets/svg/Download.svg" class="svg" />
@@ -226,7 +243,7 @@
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
     <tr
       class="data-table-row"
-      [style.background]="rowData.notes ? '' : '#4ba0f5'"
+      [style.background]="rowData.read ? '' : '#aed1fb'"
     >
       <!-- <tr class="data-table-row"> -->
       <td class="table--checkbox">

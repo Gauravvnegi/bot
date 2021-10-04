@@ -426,7 +426,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     };
 
     const reqData = {
-      status,
+      read: status,
       feedbackId: this.selectedRows.map((data) => data.id),
     };
 

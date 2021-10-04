@@ -76,7 +76,7 @@
       [style.height]="stats.data.length * 40 + 40 + 'px'"
     >
       <ng-container *ngFor="let item of stats.data">
-        <div class="outlet-wrap__outlet__outlets">
+        <div class="outlet-wrap__outlet__outlets" *ngIf="item.services?.length">
           <div class="outlet-wrap__outlet__outlets__label">
             {{ item.label }}
           </div>

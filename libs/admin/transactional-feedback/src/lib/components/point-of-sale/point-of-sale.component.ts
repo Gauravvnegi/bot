@@ -127,7 +127,7 @@ export class PointOfSaleComponent implements OnInit {
             calenderType,
           ];
           this.branchId = data['filter'].value.property.branchName;
-          this.setTabFilterItems(this.branchId);
+          // this.setTabFilterItems(this.branchId);
           this.getStats();
         },
         ({ error }) => {
@@ -142,7 +142,6 @@ export class PointOfSaleComponent implements OnInit {
       (branch) => branch['id'] == branchId
     ).outlets;
     this.tabFilterItems = [];
-    this.tabFilterIdx = 0;
     outlets.forEach((outlet) => {
       if (this._statisticService.outletIds.find((d) => d === outlet.id)) {
         this.tabFilterItems.push({
@@ -191,11 +190,37 @@ export class PointOfSaleComponent implements OnInit {
     this.$subscription.add(
       this._statisticService.getPOSStats(config).subscribe((response) => {
         this.stats = new NPOS().deserialize(response);
+        if (this.tabFilterItems.length === 0 || this.chips.length === 0)
+          this.addChipsToFilters();
         // if (this.tabFilterItems.length === 1) {
         //   this.addFilterItems();
         // }
       })
     );
+  }
+
+  addChipsToFilters() {
+    this.chips = [];
+    if (this.stats.data.length > 1) {
+      this.chips.push({
+        label: 'Overall',
+        icon: '',
+        value: 'ALL',
+        total: 0,
+        isSelected: true,
+      });
+      this.stats.data.forEach((item) => {
+        this.chips.push({
+          label: item.label,
+          icon: '',
+          value: item.label,
+          total: 0,
+          isSelected: false,
+          type: 'initiated',
+        });
+      });
+    }
+    this.setTabFilterItems(this.branchId);
   }
 
   addFilterItems() {
@@ -213,6 +238,7 @@ export class PointOfSaleComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.chips = [];
     this.getStats();
   }
 

@@ -295,15 +295,16 @@ export class Outlet {
   deserialize(input) {
     this.services = new Array<Service>();
     Object.assign(this, set({}, 'label', get(input, ['label'])));
-    Object.keys(input.services).forEach((key) => {
-      this.services.push(
-        new Service().deserialize({
-          label: key,
-          percentage: input.services[key],
-          color: SharedColors[key],
-        })
-      );
-    });
+    input.services &&
+      Object.keys(input.services).forEach((key) => {
+        this.services.push(
+          new Service().deserialize({
+            label: key,
+            percentage: input.services[key],
+            color: SharedColors[key],
+          })
+        );
+      });
 
     // this.services = new Services().deserialize(input.services);
     return this;
@@ -372,8 +373,8 @@ export const SharedColors = {
   Positive: '#52b33f',
   Closed: '#4ba0f5',
   'Action Pending': '#ffbf04',
-  Staff: '#f18533',
-  Cleaniness: '#4974e0',
-  Pricing: '#3db76b',
+  Lunch: '#f18533',
+  Breakfast: '#4974e0',
+  Dinner: '#3db76b',
   Quality: '#ffbf04',
 };

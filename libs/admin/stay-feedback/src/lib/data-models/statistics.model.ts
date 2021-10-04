@@ -327,41 +327,45 @@ export class Service {
   }
 }
 
-export class Bifurcations {
-  data: Bifurcation[];
+export class Bifurcation {
+  feedbacks: Status[];
+  label: string;
+  totalCount: number;
 
   deserialize(input) {
-    this.data = new Array<Bifurcation>();
-    input.forEach((service) =>
-      this.data.push(new Bifurcation().deserialize(service))
+    this.feedbacks = new Array<Status>();
+    Object.assign(
+      this,
+      set({}, 'totalCount', get(input, ['totalCount'])),
+      set({}, 'label', get(input, ['label']))
+    );
+    Object.keys(input.stats).forEach((key) =>
+      this.feedbacks.push(
+        new Status().deserialize({
+          ...input.stats[key],
+          color: SharedColors[key],
+        })
+      )
     );
 
     return this;
   }
 }
 
-export class Bifurcation {
-  feedbacks: Service[];
+export class Status {
   label: string;
-  totalCount: number;
+  score: number;
+  comparisonPercent: number;
+  color: string;
 
   deserialize(input) {
-    this.feedbacks = new Array<Service>();
     Object.assign(
       this,
-      set({}, 'totalCount', get(input, ['totalCount'])),
+      set({}, 'color', get(input, ['color'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
       set({}, 'label', get(input, ['label']))
     );
-    Object.keys(input.feedbacks).forEach((key) =>
-      this.feedbacks.push(
-        new Service().deserialize({
-          label: key,
-          percentage: input.feedbacks[key],
-          color: SharedColors[key],
-        })
-      )
-    );
-
     return this;
   }
 }
@@ -377,4 +381,7 @@ export const SharedColors = {
   Cleaniness: '#4974e0',
   Pricing: '#3db76b',
   Quality: '#ffbf04',
+  READ: '#ffbf04',
+  UNREAD: '#4ba0f5',
+  ACTIONED: '#31bb92',
 };

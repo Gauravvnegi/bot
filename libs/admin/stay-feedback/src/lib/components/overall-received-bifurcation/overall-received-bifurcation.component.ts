@@ -4,7 +4,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
-import { Bifurcations } from '../../data-models/statistics.model';
+import { Bifurcation } from '../../data-models/statistics.model';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  stats: Bifurcations;
+  stats: Bifurcation;
   feedbackChart = {
     Labels: ['No Data'],
     Data: [[100]],
@@ -44,32 +44,6 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     },
   };
 
-  negativeFeedbackChart: any = {
-    Labels: ['No Data'],
-    Data: [[100]],
-    Type: 'doughnut',
-    Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 75,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
-  };
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
@@ -120,9 +94,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       this._statisticService
         .getBifurcationStats(config)
         .subscribe((response) => {
-          this.stats = new Bifurcations().deserialize(response);
+          this.stats = new Bifurcation().deserialize(response);
           this.initFeedbackChart();
-          this.initNegativeFeedbackChart();
         })
     );
   }
@@ -136,44 +109,16 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         borderColor: [],
       },
     ];
-    const data = this.stats.data.filter(
-      (d) => d.label === 'Feedback Received'
-    )[0];
-    data.feedbacks.forEach((feedback) => {
-      this.feedbackChart.Data[0].push(feedback.percentage);
+    const data = this.stats.feedbacks;
+    data.forEach((feedback) => {
+      this.feedbackChart.Data[0].push(feedback.score);
       this.feedbackChart.Labels.push(feedback.label);
       this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
       this.feedbackChart.Colors[0].borderColor.push(feedback.color);
     });
   }
 
-  initNegativeFeedbackChart() {
-    this.negativeFeedbackChart.Data = [[]];
-    this.negativeFeedbackChart.Labels = [];
-    this.negativeFeedbackChart.Colors = [
-      {
-        backgroundColor: [],
-        borderColor: [],
-      },
-    ];
-    const data = this.stats.data.filter(
-      (d) => d.label === 'Feedback Not Received'
-    )[0];
-    data.feedbacks.forEach((feedback) => {
-      this.negativeFeedbackChart.Data[0].push(feedback.percentage);
-      this.negativeFeedbackChart.Labels.push(feedback.label);
-      this.negativeFeedbackChart.Colors[0].backgroundColor.push(feedback.color);
-      this.negativeFeedbackChart.Colors[0].borderColor.push(feedback.color);
-    });
-  }
-
   get feedbackReceivedData() {
-    return this.stats.data.filter((d) => d.label === 'Feedback Received')[0];
-  }
-
-  get negativeFeedbackReceivedData() {
-    return this.stats.data.filter(
-      (d) => d.label === 'Feedback Not Received'
-    )[0];
+    return this.stats;
   }
 }

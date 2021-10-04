@@ -23,40 +23,46 @@
         <div class="label">{{ feedbackReceivedData.label }}</div>
       </div>
     </div>
-    <div class="stats__container__graph">
-      <div class="stats__container__graph__canvas">
-        <canvas
-          baseChart
-          max-height="176px"
-          [data]="negativeFeedbackChart.Data"
-          [labels]="negativeFeedbackChart.Labels"
-          [chartType]="negativeFeedbackChart.Type"
-          [legend]="negativeFeedbackChart.Legend"
-          [colors]="negativeFeedbackChart.Colors"
-          [options]="negativeFeedbackChart.Options"
-        >
-        </canvas>
-      </div>
-      <div class="stats__container__graph__labels">
-        <div class="val">{{ negativeFeedbackReceivedData.totalCount }}</div>
-        <div class="label">{{ negativeFeedbackReceivedData.label }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="stats__actions" *ngIf="stats?.data">
-    <div class="stats__actions__action" *ngFor="let stat of stats.data">
+    <div class="stats__container__actions">
       <div
-        class="stats__actions__action__items"
-        *ngFor="let feedback of stat.feedbacks"
+        *ngFor="let action of stats.feedbacks"
+        class="stats__container__actions__action"
       >
-        <div class="stats__actions__action__items__item">
+        <div class="stats__container__actions__action__record">
           <div
-            class="stats__actions__action__items__item__dot"
-            [style.background]="feedback.color"
+            class="stats__container__actions__action__record__dot"
+            [style.background]="action.color"
           ></div>
-          <div>{{ feedback.label }}</div>
+          <div class="stats__container__actions__action__record__stat">
+            {{ action.score }}
+          </div>
+          <div
+            class="stats__container__actions__action__record__compare"
+            [ngStyle]="
+              action.comparisonPercent >= 0
+                ? {
+                    color: '#52b33f'
+                  }
+                : { color: '#CC052B' }
+            "
+          >
+            ({{ action.comparisonPercent }}%)<img
+              class="upArrow"
+              [src]="
+                action.comparisonPercent >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/down-percentage.svg'
+              "
+              alt="uparrow"
+            />
+          </div>
+          <div class="stats__container__actions__action__record__days">
+            in 30 Days
+          </div>
         </div>
-        <div>{{ feedback.percentage }}</div>
+        <div class="stats__container__actions__action__label">
+          {{ action.label }}
+        </div>
       </div>
     </div>
   </div>

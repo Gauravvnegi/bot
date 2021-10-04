@@ -224,7 +224,10 @@
     let-rowIndex="rowIndex"
   >
     <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-    <tr class="data-table-row">
+    <tr
+      class="data-table-row"
+      [style.background]="rowData.notes ? '' : '#4ba0f5'"
+    >
       <!-- <tr class="data-table-row"> -->
       <td class="table--checkbox">
         <p-tableCheckbox

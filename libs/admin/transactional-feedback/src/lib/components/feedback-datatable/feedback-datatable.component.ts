@@ -375,7 +375,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   exportCSV() {
     this.loading = true;
-
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -384,27 +383,27 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
-    // this.$subscription.add(
-    //   this._guestTableService.exportCSV(config).subscribe(
-    //     (response) => {
-    //       FileSaver.saveAs(
-    //         response,
-    //         this.tableName.toLowerCase() +
-    //           '_export_' +
-    //           new Date().getTime() +
-    //           '.csv'
-    //       );
-    //       this.loading = false;
-    //     },
-    //     ({ error }) => {
-    //       this.loading = false;
-    //       this._snackbarService.openSnackBarAsText(error.message);
-    //     }
-    //   )
-    // );
+    this.$subscription.add(
+      this.tableService.exportCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {

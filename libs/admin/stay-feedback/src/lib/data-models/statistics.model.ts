@@ -163,24 +163,16 @@ export class Touchpoint {
 
 export class FeedbackDistribution {
   totalCount: number;
-  veryPoor: Distribution;
-  poor: Distribution;
-  adequate: Distribution;
-  good: Distribution;
-  veryGood: Distribution;
-  outstanding: Distribution;
+  data: Distribution[];
 
   deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'totalCount', get(input, ['totalResponse'])),
-      set({}, 'veryPoor', get(input, ['feedbacks', 'VERYPOOR'])),
-      set({}, 'poor', get(input, ['feedbacks', 'POOR'])),
-      set({}, 'adequate', get(input, ['feedbacks', 'ADEQUATE'])),
-      set({}, 'good', get(input, ['feedbacks', 'GOOD'])),
-      set({}, 'veryGood', get(input, ['feedbacks', 'VERYGOOD'])),
-      set({}, 'outstanding', get(input, ['feedbacks', 'OUTSTANDING']))
-    );
+    this.data = new Array<Distribution>();
+    Object.keys(input.feedbacks).forEach((key) => {
+      this.data.push(
+        new Distribution().deserialize({ ...input.feedbacks[key], key })
+      );
+    });
+    Object.assign(this, set({}, 'totalCount', get(input, ['totalResponse'])));
     return this;
   }
 }
@@ -192,6 +184,22 @@ export class Distribution {
   percent: number;
   comparePercent: number;
   color: string;
+  key: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'scale', get(input, ['scale'])),
+      set({}, 'count', get(input, ['count'])),
+      set({}, 'percent', get(input, ['percent'])),
+      set({}, 'comparePercent', get(input, ['comparePercent'])),
+      set({}, 'color', get(input, ['color'])),
+      set({}, 'key', get(input, ['key']))
+    );
+
+    return this;
+  }
 }
 
 export class GlobalNPS {

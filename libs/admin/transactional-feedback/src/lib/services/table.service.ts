@@ -16,4 +16,10 @@ export class FeedbackTableService extends ApiService {
       `/api/v1/transactional-feedback/${id}/download-feedback-form`
     );
   }
+
+  exportCSV(config) {
+    return this.get(`/api/v1/transactional-feedback/export${config.queryObj}`, {
+      responseType: 'blob',
+    });
+  }
 }

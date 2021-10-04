@@ -16,12 +16,12 @@ export class FeedbackDistributionComponent implements OnInit {
   $subscription = new Subscription();
   totalDistribution = 0;
   color = {
-    veryPoor: '#CC052B',
-    poor: '#EF1D45',
-    adequate: '#FF8F00',
-    good: '#4BA0F5',
-    veryGood: '#224BD5',
-    outstanding: '#508919',
+    VERYPOOR: '#CC052B',
+    POOR: '#EF1D45',
+    ADEQUATE: '#FF8F00',
+    GOOD: '#4BA0F5',
+    VERYGOOD: '#224BD5',
+    OUTSTANDING: '#508919',
   };
 
   defaultChart: any = {
@@ -113,20 +113,18 @@ export class FeedbackDistributionComponent implements OnInit {
   initChartData(): void {
     this.totalDistribution = 0;
     this.keyLabels.length = this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
-    Object.keys(this.distribution).forEach((key) => {
-      if (key !== 'totalCount') {
-        if (this.distribution[key].count) {
-          this.chart.Labels.push(this.distribution[key].label);
-          this.chart.Data[0].push(this.distribution[key].count);
-          this.chart.Colors[0].backgroundColor.push(this.color[key]);
-          this.chart.Colors[0].borderColor.push(this.color[key]);
-        }
-        this.totalDistribution += this.distribution[key].count;
-        this.keyLabels.push({
-          ...this.distribution[key],
-          color: this.color[key],
-        });
+    this.distribution.data.forEach((data) => {
+      if (data.count) {
+        this.chart.Labels.push(data.label);
+        this.chart.Data[0].push(data.count);
+        this.chart.Colors[0].backgroundColor.push(this.color[data.key]);
+        this.chart.Colors[0].borderColor.push(this.color[data.key]);
       }
+      this.totalDistribution += data.count;
+      this.keyLabels.push({
+        ...data,
+        color: this.color[data.key],
+      });
     });
   }
 

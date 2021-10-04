@@ -34,47 +34,7 @@ export class PointOfSaleComponent implements OnInit {
   ];
   documentTypes = [{ label: 'CSV', value: 'csv' }];
 
-  chips = [
-    {
-      label: 'Overall',
-      icon: '',
-      value: 'ALL',
-      total: 0,
-      isSelected: true,
-    },
-    {
-      label: 'Staff',
-      icon: '',
-      value: 'STAFF',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'Cleanliness ',
-      icon: '',
-      value: 'CLEANLINESS',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'Pricing ',
-      icon: '',
-      value: 'PRICING',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'Quality ',
-      icon: '',
-      value: 'QUALITY',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-  ];
+  chips = [];
 
   tabFilterIdx: number = 0;
 
@@ -127,7 +87,7 @@ export class PointOfSaleComponent implements OnInit {
             calenderType,
           ];
           this.branchId = data['filter'].value.property.branchName;
-          // this.setTabFilterItems(this.branchId);
+          this.setTabFilterItems(this.branchId);
           this.getStats();
         },
         ({ error }) => {
@@ -201,6 +161,7 @@ export class PointOfSaleComponent implements OnInit {
 
   addChipsToFilters() {
     this.chips = [];
+    this.tabFilterItems = [];
     if (this.stats.data.length > 1) {
       this.chips.push({
         label: 'Overall',

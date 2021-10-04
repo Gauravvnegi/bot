@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { NPOS } from '../../data-models/statistics.model';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-point-of-sale',
@@ -243,7 +244,28 @@ export class PointOfSaleComponent implements OnInit {
     this.quickReplyActionFilters.patchValue(value);
   }
 
-  exportCSV() {}
+  exportCSV() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          outletId: [this.tabFilterItems[this.tabFilterIdx].value],
+        },
+      ]),
+    };
+
+    this.$subscription.add(
+      this._statisticService.exportPOSCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            'NPOS_export_' + new Date().getTime() + '.csv'
+          );
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
 
   get quickReplyActionFilters(): FormControl {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;

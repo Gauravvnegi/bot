@@ -80,4 +80,10 @@ export class StatisticsService extends ApiService {
   getBifurcationStats(config): Observable<any> {
     return this.get(`/api/v1/feedback-stats/bifurcations${config.queryObj}`);
   }
+
+  exportPOSCSV(config) {
+    return this.get(`/api/v1/feedback-stats/npos/export${config.queryObj}`, {
+      responseType: 'blob',
+    });
+  }
 }

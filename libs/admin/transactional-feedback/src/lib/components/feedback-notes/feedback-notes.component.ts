@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Feedback, Notes } from '../../data-models/feedback-datatable.model';
 
@@ -22,16 +27,16 @@ export class FeedbackNotesComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFG();
-    if (this.notes.remarks) {
-      this.viewOnly = true;
-      this.notesFG.get('remarks')?.disable();
-    }
   }
 
   initFG() {
     this.notesFG = this.fb.group({
-      notes: [this.notes.remarks || '', Validators.required],
+      notes: [this.notes?.remarks || '', Validators.required],
     });
+    if (this.notes?.remarks) {
+      this.viewOnly = true;
+      this.remarks?.disable();
+    }
   }
 
   closeNotes() {
@@ -40,7 +45,7 @@ export class FeedbackNotesComponent implements OnInit {
 
   openEditForm() {
     this.viewOnly = false;
-    this.notesFG.get('remarks')?.enable();
+    this.remarks?.enable();
   }
 
   submit() {
@@ -53,5 +58,9 @@ export class FeedbackNotesComponent implements OnInit {
       data: this.notesFG.getRawValue(),
       id: this.feedback.id,
     });
+  }
+
+  get remarks() {
+    return this.notesFG.get('notes') as FormControl;
   }
 }

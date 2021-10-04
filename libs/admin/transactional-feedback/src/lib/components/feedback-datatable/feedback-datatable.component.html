@@ -315,7 +315,7 @@
 
       <!-- status-image-initiated -->
       <td class="status-image">
-        <ng-container *ngIf="rowData.notes.remarks; else addNote">
+        <ng-container *ngIf="rowData.notes?.remarks; else addNote">
           <div
             class="view-notes"
             (click)="openEditNotes($event, rowData, rowData.notes)"

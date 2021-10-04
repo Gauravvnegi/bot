@@ -33,20 +33,22 @@
             </p>
 
             <!-- <p class="selected">2 record(s) are selected</p> -->
-            <div style="display: flex; align-items: center;">
-              <div style="margin-right: 10px; cursor: pointer;">
+            <div class="mark-btn-container">
+              <div class="btn read">
                 <img
                   src="assets/svg/mark-read.svg"
                   alt="Mark Read"
                   (click)="updateFeedbackStatus(true)"
                 />
+                <!-- <span>Mark as Read</span> -->
               </div>
-              <div style="cursor: pointer;">
+              <div class="btn">
                 <img
                   src="assets/svg/mark-unread.svg"
                   alt="Mark Unread"
                   (click)="this.updateFeedbackStatus(false)"
                 />
+                <!-- <span>Mark as Unread</span> -->
               </div>
             </div>
             <div class="options">

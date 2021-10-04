@@ -453,9 +453,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             this.tableService.updateNotes(res.id, res.data).subscribe(
               (response) => {
                 detailCompRef.close();
-                this._snackbarService.openSnackBarAsText('Notes updated', '', {
-                  panelClass: 'success',
-                });
+                this._snackbarService.openSnackBarAsText(
+                  'Feedback Closed successfully',
+                  '',
+                  {
+                    panelClass: 'success',
+                  }
+                );
                 this.loadInitialData(
                   [
                     ...this.globalQueries,

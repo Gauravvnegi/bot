@@ -75,7 +75,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       value: 'FULLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'MICROSITE',
     },
     {
       label: 'Partially Recieved ',
@@ -83,7 +83,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       value: 'PARTIALLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'initiated',
+      type: 'EMAIL',
     },
     {
       label: 'Not Recieved ',
@@ -91,7 +91,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit {
       value: 'NOTRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'completed',
+      type: 'failed',
     },
   ];
 

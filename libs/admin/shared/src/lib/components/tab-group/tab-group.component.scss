@@ -17,7 +17,9 @@
   height: 35px;
   min-width: 12vw;
   flex-grow: inherit !important;
-
+  @media (max-width: 1024px) {
+    min-width: 15vw;
+  }
   @media (max-width: $M) {
     min-width: 25vw;
   }

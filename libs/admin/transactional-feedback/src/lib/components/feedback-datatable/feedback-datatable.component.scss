@@ -296,26 +296,115 @@
 .mark-btn-container {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  @media (max-width: 992px) {
+    min-width: 193px;
+    overflow-x: auto;
+    height: 75px;
+  }
   .btn {
     cursor: pointer;
     position: relative;
-    span {
-      display: none;
+    display: inline-block;
+    .btn_text {
+      visibility: hidden;
+      width: 120px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      color: #000;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
       position: absolute;
-      bottom: 0;
-      left: 0;
-      min-width: 120px;
-      padding: 10px;
-      background: #333;
-      color: #fff;
+      z-index: 1;
+      bottom: 150%;
+      left: 50%;
+      margin-left: -60px;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #ccc transparent transparent transparent;
+      }
     }
+    // span {
+    //   display: none;
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 0;
+    //   min-width: 120px;
+    //   padding: 10px;
+    //   background: #333;
+    //   color: #fff;
+    // }
 
-    &:hover span {
-      display: block;
+    &:hover .btn_text {
+      // display: block;
+      visibility: visible;
     }
   }
 
   .read {
     margin-right: 10px;
+  }
+}
+.request-btn {
+  width: 148px;
+  height: 36px;
+  padding: 11px 0 10px;
+  border-radius: 100px;
+  background-color: #4b56c0;
+  cursor: pointer;
+  margin-right: 10px;
+  &:active {
+    transform: scale(0.95);
+  }
+  &__wrap {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.66px;
+    text-align: center;
+    color: #fff;
+  }
+}
+.import-guests-btn {
+  width: 124px;
+  height: 36px;
+  border-radius: 100px;
+  border: solid 1px #e1e1f2;
+  background-color: #f6f6fc;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-right: 10px;
+  cursor: pointer;
+  img {
+    margin-right: 4px;
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+  &__wrap {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.66px;
+    text-align: center;
+    color: #002046;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

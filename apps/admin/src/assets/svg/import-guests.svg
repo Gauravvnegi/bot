@@ -1,0 +1,9 @@
+<svg id="share" xmlns="http://www.w3.org/2000/svg" width="14.835" height="19.78">
+    <defs>
+        <style>
+            .cls-1{fill:#9eaeb8}
+        </style>
+    </defs>
+    <path id="Path_2038" data-name="Path 2038" class="cls-1" d="M83.108 172.228h-1.854v1.236h1.236v11.126H70.127v-11.126h1.236v-1.236h-1.854a.618.618 0 0 0-.618.618v12.363a.618.618 0 0 0 .618.618h13.6a.618.618 0 0 0 .618-.618v-12.363a.618.618 0 0 0-.619-.618z" transform="translate(-68.891 -166.047)"/>
+    <path id="Path_2039" data-name="Path 2039" class="cls-1" d="M3.528 2.366v8.76h1.236v-8.76L7.418 5.02l.874-.874L4.146 0 0 4.146l.874.874z" transform="rotate(180 5.782 5.563)"/>
+</svg>

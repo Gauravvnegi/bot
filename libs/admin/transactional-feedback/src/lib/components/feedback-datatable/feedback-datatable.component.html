@@ -33,7 +33,19 @@
             </p>
 
             <!-- <p class="selected">2 record(s) are selected</p> -->
+
             <div class="mark-btn-container">
+              <div class="import-guests-btn">
+                <div class="import-guests-btn__wrap">
+                  <img src="assets/svg/import-guests.svg" alt="import guest" />
+                  Import Guests
+                </div>
+              </div>
+              <div class="request-btn">
+                <div class="request-btn__wrap">
+                  Request Feedback
+                </div>
+              </div>
               <div class="btn read">
                 <img
                   src="assets/svg/mark-read.svg"
@@ -41,6 +53,9 @@
                   (click)="updateFeedbackStatus(true)"
                 />
                 <!-- <span>Mark as Read</span> -->
+                <span class="btn_text">
+                  Mark as Read
+                </span>
               </div>
               <div class="btn">
                 <img
@@ -48,6 +63,9 @@
                   alt="Mark Unread"
                   (click)="this.updateFeedbackStatus(false)"
                 />
+                <span class="btn_text">
+                  Mark as Unread
+                </span>
                 <!-- <span>Mark as Unread</span> -->
               </div>
             </div>

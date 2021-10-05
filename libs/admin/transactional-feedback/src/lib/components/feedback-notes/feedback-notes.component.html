@@ -13,6 +13,9 @@
         <div>Closed Time</div>
         <div>{{ notes.getUpdatedTime(timezone) }}</div>
       </div>
+      <div (click)="closeNotes()" class="close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
     </div>
   </div>
   <div class="view-body">

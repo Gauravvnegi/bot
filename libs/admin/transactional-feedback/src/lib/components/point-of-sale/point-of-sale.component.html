@@ -6,6 +6,14 @@
       </div>
       <div class="stat-title">NPS Across Point of Sale</div>
     </div>
+    <div class="menu-container">
+      <label class="labl" *ngFor="let option of chartTypes">
+        <input name="method" type="radio" [value]="option.value" />
+        <div class="image">
+          <img [src]="option.url" />
+        </div>
+      </label>
+    </div>
     <div class="dropdown--wrapper">
       <p-dropdown
         class="export"

@@ -25,6 +25,20 @@ export class PointOfSaleComponent implements OnInit {
   globalQueries;
   stats: NPOS;
   branchId: string;
+  chartTypes = [
+    {
+      name: 'Line',
+      value: 'line',
+      url: 'assets/svg/net-promoter-score-bar.svg',
+      backgroundColor: '#DEFFF3',
+    },
+    {
+      name: 'Bar',
+      value: 'bar',
+      url: 'assets/svg/bar-graph.svg',
+      backgroundColor: '#1AB99F',
+    },
+  ];
   documentActionTypes = [
     {
       label: `Export`,

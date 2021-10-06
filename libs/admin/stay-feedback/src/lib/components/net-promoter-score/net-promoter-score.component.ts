@@ -33,6 +33,12 @@ export class NetPromoterScoreComponent implements OnInit {
     {
       name: 'Bar',
       value: 'bar',
+      url: 'assets/svg/net-promoter-score-bar.svg',
+      backgroundColor: '#1AB99F',
+    },
+    {
+      name: 'Bar',
+      value: 'bar',
       url: 'assets/svg/bar-graph.svg',
       backgroundColor: '#1AB99F',
     },

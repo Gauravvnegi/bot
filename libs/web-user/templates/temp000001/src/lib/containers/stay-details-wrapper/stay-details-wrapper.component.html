@@ -6,6 +6,12 @@
       (addFGEvent)="addFGEvent($event)"
     ></hospitality-bot-stay-details>
 
+    <hospitality-bot-address
+      [parentForm]="parentForm"
+      [reservationData]="reservationData"
+      (addFGEvent)="addFGEvent($event)"
+    ></hospitality-bot-address>
+
     <hospitality-bot-amenities
       *ngIf="isAmenityDataAvl"
       [parentForm]="parentForm"

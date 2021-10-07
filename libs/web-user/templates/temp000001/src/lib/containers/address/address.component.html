@@ -1,0 +1,18 @@
+<form [formGroup]="addressForm">
+  <mat-accordion>
+    <mat-expansion-panel #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="container__title">Address</span>
+          <mat-icon class="expand-icon" *ngIf="!panel.expanded">add</mat-icon>
+          <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <hospitality-bot-temp000001-textarea
+        [parentForm]="addressForm"
+        [name]="'address'"
+        [settings]="addressDetailsConfig.address"
+      ></hospitality-bot-temp000001-textarea>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>

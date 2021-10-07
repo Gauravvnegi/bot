@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import { ReservationDetails } from '../data-models/reservationDetails';
 import {
+  AddressConfigI,
   SpecialCommentsConfigI,
   StayDetailDS,
   StayDetailsConfigI,
@@ -142,10 +143,23 @@ export class StayDetailsService extends ApiService {
       appearance: 'outline',
       type: 'textarea',
       placeholder:
-        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests',
+        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests. You may add your GST number as well',
     });
 
     return specialCommentsFieldSchema as SpecialCommentsConfigI;
+  }
+
+  setFieldForAddress() {
+    let addressFieldSchema = {};
+
+    addressFieldSchema['address'] = new FieldSchema().deserialize({
+      label: 'address',
+      appearance: 'outline',
+      type: 'textarea',
+      placeholder: 'Please enter address',
+    });
+
+    return addressFieldSchema as AddressConfigI;
   }
 
   updateStayDetails(reservationId, data): Observable<ReservationDetails> {
@@ -155,6 +169,7 @@ export class StayDetailsService extends ApiService {
   modifyStayDetails(stayDetails) {
     return {
       stayDetails: {
+        address: stayDetails.address.address,
         comments: stayDetails.special_comments.comments,
         expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails),
         expectedDepartureTime: this.getDepartureTimeTimestamp(stayDetails),
@@ -195,5 +210,9 @@ export class StayDetailsService extends ApiService {
 
   get stayDetails() {
     return this._stayDetailDS;
+  }
+
+  get address() {
+    return this._stayDetailDS && this._stayDetailDS.address;
   }
 }

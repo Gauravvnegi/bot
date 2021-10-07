@@ -18,7 +18,7 @@ export class SummaryService extends ApiService {
       appearance: 'outline',
       type: 'textarea',
       placeholder:
-        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests',
+        'In case of any special requests like dinner reservations, Spa Relaxation Appointments, Rooms Appointment preferences and Transportation Requests. You may add your GST number as well',
     });
 
     return summaryDetailsFieldSchema as SummaryDetailsConfigI;

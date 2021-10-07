@@ -10,10 +10,12 @@ export interface Deserializable {
 export class StayDetailDS implements Deserializable {
   stayDetail: StayDetail;
   special_comments: SpecialComments;
+  address: string;
 
   deserialize(input: any, timezone = '+05:30') {
     this.stayDetail = new StayDetail().deserialize(input);
     this.special_comments = new SpecialComments().deserialize(input);
+    Object.assign(this, set({}, 'address', get(input, ['address'], '')));
     return this;
   }
 }
@@ -93,4 +95,8 @@ export interface StayDetailsConfigI {
 
 export interface SpecialCommentsConfigI {
   comments: FieldSchema;
+}
+
+export interface AddressConfigI {
+  address: FieldSchema;
 }

@@ -212,6 +212,7 @@ export class LayoutOneComponent implements OnInit {
     this.getFilterCount({ ...values });
     this.initFirebaseMessaging();
     this.toggleGlobalFilter();
+    this.isGlobalFilterVisible = false;
   }
 
   resetFilterCount() {

@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
-import { GuestDetailService } from 'libs/admin/guest-detail/src/lib/services/guest-detail.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import {
   ModuleNames,
@@ -138,7 +137,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _guestTableService: GuestDetailService,
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,

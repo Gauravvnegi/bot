@@ -15,7 +15,10 @@
         <p>Feedback :</p>
       </div>
     </div>
-    <hospitality-bot-application-status [context]="context">
+    <hospitality-bot-application-status
+      (termsStatus)="emitTermsStatus($event)"
+      [context]="context"
+    >
     </hospitality-bot-application-status>
   </div>
 </div>

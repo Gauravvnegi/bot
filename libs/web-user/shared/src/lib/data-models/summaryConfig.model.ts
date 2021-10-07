@@ -15,6 +15,7 @@ export class SummaryDetails implements Deserializable {
   guestDetails: GuestDetails;
   paymentSummary: PaymentSummary;
   healthDeclaration: Health;
+  termsStatus: boolean;
 
   deserialize(summary, timezone) {
     Object.assign(
@@ -22,7 +23,8 @@ export class SummaryDetails implements Deserializable {
       set({}, 'id', get(summary, ['id'])),
       set({}, 'arrivalTime', get(summary, ['arrivalTime'])),
       set({}, 'departureTime', get(summary, ['departureTime'])),
-      set({}, 'stateCompletedSteps', get(summary, ['stateCompletedSteps']))
+      set({}, 'stateCompletedSteps', get(summary, ['stateCompletedSteps'])),
+      set({}, 'termsStatus', get(summary, ['termsStatus'], false))
     );
     this.guestDetails = new GuestDetails().deserialize(summary.guestDetails);
     this.healthDeclaration = new Health().deserialize(

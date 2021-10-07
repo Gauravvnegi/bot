@@ -2,6 +2,7 @@
   <hospitality-bot-summary
     [stepperIndex]="stepperIndex"
     (addFGEvent)="addFGEvent($event)"
+    (termsStatus)="setTermsStatus($event)"
     *ngIf="reservationData"
   ></hospitality-bot-summary>
 

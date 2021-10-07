@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class InputPopupComponent implements OnInit {
   dialaogData: any;
+  termsStatus: boolean;
   requestForm: FormGroup;
   button;
   @ViewChild('saveButton') saveButton;
@@ -29,6 +30,7 @@ export class InputPopupComponent implements OnInit {
     private _translateService: TranslateService
   ) {
     this.dialaogData = data.pageValue;
+    this.termsStatus = data.termsStatus;
   }
 
   ngOnInit(): void {
@@ -45,17 +47,19 @@ export class InputPopupComponent implements OnInit {
   checkIn() {
     const data = {
       special_remarks: this.requestForm.get('request').value,
+      termsStatus: this.termsStatus,
     };
     this._reservationService
       .checkIn(this._reservationService.reservationData.id, data)
       .subscribe(
         (res) => {
           this._translateService
-          .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
-          .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg,'',
-            { panelClass: 'success' });
-          });
+            .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                panelClass: 'success',
+              });
+            });
           this.close('success');
         },
         ({ error }) => {

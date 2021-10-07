@@ -7,6 +7,7 @@ import { Temp000001InputPopupComponent } from 'libs/web-user/templates/temp00000
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-summary-wrapper',
@@ -18,15 +19,17 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   requestForm: FormGroup;
   summaryConfig: SummaryDetailsConfigI;
   summaryDetails;
+  termsStatus: boolean;
 
-  protected inputPopupComponent=Temp000001InputPopupComponent;
+  protected inputPopupComponent = Temp000001InputPopupComponent;
 
   constructor(
     public dialog: MatDialog,
     protected _summaryService: SummaryService,
     protected _stepperService: StepperService,
     protected router: Router,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected _snackbarService: SnackBarService
   ) {
     super();
     this.self = this;
@@ -55,10 +58,16 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   }
 
   onCheckinSubmit() {
+    if (!this.termsStatus) {
+      this._snackbarService.openSnackBarAsText(
+        'Please accept terms & condition'
+      );
+      return;
+    }
     const dialogRef = this.dialog.open(this.inputPopupComponent, {
       disableClose: true,
       autoFocus: true,
-      data: { pageValue: this.summaryDetails },
+      data: { pageValue: this.summaryDetails, termsStatus: this.termsStatus },
     });
 
     this.$subscription.add(
@@ -79,6 +88,10 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
         'token'
       )}&entity=thankyou&state=${state}`
     );
+  }
+
+  setTermsStatus(event) {
+    this.termsStatus = event;
   }
 
   goBack() {

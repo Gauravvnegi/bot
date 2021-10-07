@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
@@ -30,6 +30,7 @@ export class ApplicationStatusComponent implements OnInit {
 
   @Input()
   context: any;
+  @Output() termsStatus = new EventEmitter();
 
   $subscription = new Subscription();
   isLoaderVisible = true;
@@ -55,6 +56,7 @@ export class ApplicationStatusComponent implements OnInit {
       privacyPolicy: new FormGroup({
         accept: new FormControl(false, Validators.required),
       }),
+      termsStatus: new FormControl(false),
     });
     // this._stepperService.stepperSelectedIndex$.next(2);
   }
@@ -100,6 +102,8 @@ export class ApplicationStatusComponent implements OnInit {
             this.privacyFG.patchValue({
               accept: res.guestDetails.primaryGuest.privacy,
             });
+            this.summaryFG.get('termsStatus').setValue(res.termsStatus);
+            this.termsStatus.emit(res.termsStatus);
           }
           this.isLoaderVisible = false;
         })
@@ -218,7 +222,6 @@ export class ApplicationStatusComponent implements OnInit {
     const values = {
       privacy: this.privacyFG.getRawValue()['accept'],
     };
-    console.log(this._reservationService.reservationData);
     this._summaryService
       .updatePrivacyPolicy(
         this._reservationService.reservationData.guestDetails.primaryGuest.id,
@@ -228,6 +231,10 @@ export class ApplicationStatusComponent implements OnInit {
         (response) => console.log('Privacy policy updated'),
         ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
       );
+  }
+
+  setTermsStatus(event) {
+    this.termsStatus.emit(event.currentValue);
   }
 
   get stayDetail() {

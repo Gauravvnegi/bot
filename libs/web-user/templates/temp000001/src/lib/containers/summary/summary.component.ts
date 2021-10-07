@@ -17,6 +17,7 @@ export class SummaryComponent implements OnInit {
   context: any;
   @Output()
   addFGEvent = new EventEmitter();
+  @Output() termsStatus = new EventEmitter();
 
   constructor(
     protected _stepperService: StepperService,
@@ -43,5 +44,9 @@ export class SummaryComponent implements OnInit {
 
   goToDocumentsStep(event: any, ...args: any) {
     this._stepperService.jumpToStep(3);
+  }
+
+  emitTermsStatus(event) {
+    this.termsStatus.emit(event);
   }
 }

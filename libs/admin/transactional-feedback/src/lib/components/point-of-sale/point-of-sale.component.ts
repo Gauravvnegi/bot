@@ -76,6 +76,7 @@ export class PointOfSaleComponent implements OnInit {
       documentType: ['csv'],
       documentActionType: ['export'],
       quickReplyActionFilters: [[]],
+      chartType: ['line'],
     });
   }
 
@@ -273,7 +274,11 @@ export class PointOfSaleComponent implements OnInit {
         (response) => {
           FileSaver.saveAs(
             response,
-            'NPOS_export_' + new Date().getTime() + '.csv'
+            'NPOS_' +
+              this.tabFilterItems[this.tabFilterIdx].label +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
           );
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)

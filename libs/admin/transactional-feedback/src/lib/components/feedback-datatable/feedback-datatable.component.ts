@@ -433,6 +433,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.tableService.updateFeedbackStatus(config, reqData).subscribe(
         (response) => {
+          this.statisticService.markReadStatusChanged.next(true);
           this._snackbarService.openSnackBarAsText('Status updated', '', {
             panelClass: 'success',
           });

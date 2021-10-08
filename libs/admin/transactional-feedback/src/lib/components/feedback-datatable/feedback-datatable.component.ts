@@ -132,7 +132,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     },
   ];
   tabFilterIdx: number = 0;
-
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
@@ -157,6 +156,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       TableNames.FEEDBACK,
       this.tabFilterItems
     );
+    this.documentActionTypes.push({
+      label: `Export Summary`,
+      value: 'summary',
+      type: '',
+      defaultLabel: 'Export Summary',
+    });
   }
 
   getOutlets(branchId) {
@@ -373,16 +378,23 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   exportCSV() {
     this.loading = true;
+    const queries = [
+      ...this.globalQueries,
+      {
+        order: 'DESC',
+        entityType: this.tabFilterItems[this.tabFilterIdx].value,
+      },
+      ...this.getSelectedQuickReplyFilters(),
+      ...this.selectedRows.map((item) => ({ ids: item.id })),
+    ];
+    if (
+      this.tableFG.get('documentActions').get('documentActionType').value ===
+      'summary'
+    ) {
+      queries.push({ type: 'summary' });
+    }
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
-        {
-          order: 'DESC',
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
-        },
-        ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.id })),
-      ]),
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
     this.$subscription.add(
       this.tableService.exportCSV(config).subscribe(

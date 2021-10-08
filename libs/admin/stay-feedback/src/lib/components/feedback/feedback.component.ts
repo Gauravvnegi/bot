@@ -10,6 +10,7 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { Subscription } from 'rxjs';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
+import { FeedbackNotificationComponent } from 'libs/admin/notification/src/lib/components/feedback-notification/feedback-notification.component';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -71,20 +72,21 @@ export class FeedbackComponent implements OnInit {
     });
   }
 
-  openRequestFeedbackForm() {
+  openFeedbackRequestPage(event) {
+    event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const notificationCompRef = this._modal.openDialog(
-      NotificationComponent,
+    const detailCompRef = this._modal.openDialog(
+      FeedbackNotificationComponent,
       dialogConfig
     );
-    notificationCompRef.componentInstance.hotelId = this.hotelId;
-    notificationCompRef.componentInstance.isEmail = true;
-    notificationCompRef.componentInstance.isModal = true;
-    notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
-      notificationCompRef.close();
-    });
+    detailCompRef.componentInstance.hotelId = this.hotelId;
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+        // remove loader for detail close
+        detailCompRef.close();
+      })
+    );
   }
 }

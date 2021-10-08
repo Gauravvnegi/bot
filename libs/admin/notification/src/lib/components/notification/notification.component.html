@@ -178,7 +178,7 @@
             <div class="row-title">Room# :</div>
             <div class="row-body">
               <mat-form-field class="chip-list" appearance="outline">
-                <mat-chip-list #chipList aria-label="Room selection">
+                <mat-chip-list #roomChipList aria-label="Room selection">
                   <mat-chip
                     *ngFor="let room of roomNumbers.value"
                     selectable="true"
@@ -188,7 +188,7 @@
                   </mat-chip>
                   <input
                     placeholder="Room"
-                    [matChipInputFor]="chipList"
+                    [matChipInputFor]="roomChipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     matChipInputAddOnBlur="true"
                     (matChipInputTokenEnd)="addChipElement($event, roomNumbers)"

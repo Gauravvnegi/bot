@@ -4,6 +4,8 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { FeedbackComponent as BaseFeedbackComponent } from 'libs/admin/stay-feedback/src/lib/components/feedback/feedback.component';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
+import { FeedbackNotificationComponent } from 'libs/admin/notification/src/lib/components/feedback-notification/feedback-notification.component';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -95,5 +97,23 @@ export class FeedbackComponent extends BaseFeedbackComponent implements OnInit {
         : [this.outlets[event.index - 1].id];
 
     this.statisticsService.outletChange.next(true);
+  }
+
+  openFeedbackRequestPage(event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const detailCompRef = this._modal.openDialog(
+      FeedbackNotificationComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.hotelId = this.hotelId;
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+        // remove loader for detail close
+        detailCompRef.close();
+      })
+    );
   }
 }

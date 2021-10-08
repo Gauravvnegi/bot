@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
+import { FeedbackNotificationComponent } from 'libs/admin/notification/src/lib/components/feedback-notification/feedback-notification.component';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import {
   ModuleNames,
@@ -564,6 +565,24 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   getFeedbackOutlet(id) {
     return this.outlets.filter((outlet) => outlet.id === id);
+  }
+
+  openFeedbackRequestPage(event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const detailCompRef = this._modal.openDialog(
+      FeedbackNotificationComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.hotelId = this.hotelId;
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+        // remove loader for detail close
+        detailCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy() {

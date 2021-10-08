@@ -23,7 +23,7 @@ export class RequestService extends ApiService {
     );
   }
 
-  createRequestData(hotelId: string, data: RequestData): Observable<any> {
+  createRequestData(hotelId: string, data): Observable<any> {
     return this.post(`/api/v1/hotel/${hotelId}/notifications`, data);
   }
 
@@ -34,13 +34,9 @@ export class RequestService extends ApiService {
     );
   }
 
-  getTemplate(
-    hotelId: string,
-    templateId: string,
-    journey: string
-  ): Observable<any> {
+  getTemplate(hotelId: string, templateId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/templates/${templateId}?journey=${journey}`
+      `/api/v1/hotel/${hotelId}/templates/${templateId}${config.queryObj}`
     );
   }
 

@@ -1,0 +1,304 @@
+@import 'main';
+
+.container {
+  width: 80vw;
+  height: 75vh;
+}
+
+.channelConfig {
+  display: flex;
+  align-items: center;
+}
+.templateWrapper {
+  display: flex;
+  align-items: center;
+}
+.templateText {
+  width: 130px;
+  color: rgb(199, 196, 196);
+  font-size: 14px;
+}
+
+.loader {
+  margin: 20px auto;
+}
+
+.loading {
+  // margin: 20px auto;
+  text-align: center;
+  font-size: 25px;
+  font-weight: $bolder;
+  color: $primary-purple;
+}
+
+.spinner {
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: $primary-purple;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 15px 10px;
+  background-color: white;
+  border-radius: 3px;
+  padding-bottom: 0;
+  .back-icon {
+    cursor: pointer;
+  }
+  @media screen and (max-width: 1100px) {
+    height: 85vh;
+  }
+}
+
+.request-body {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &-title {
+      width: 15%;
+      color: rgb(199, 196, 196);
+      font-size: 14px;
+    }
+    &-body {
+      display: flex;
+      justify-content: space-between;
+      width: 85%;
+      align-items: center;
+    }
+  }
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.base-align {
+  align-self: baseline;
+}
+
+.button {
+  @include admin-panel-button();
+  // outline: none;
+  // border: none;
+  // width: 250px;
+  // height: 46px;
+  // background: #4b56c0 0% 0% no-repeat padding-box;
+  // border-radius: 23px;
+  // opacity: 1;
+  // font: normal normal medium 16px/19px Roboto;
+  // letter-spacing: 0.96px;
+  // color: #ffffff;
+  // opacity: 1;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: $primary-gray;
+}
+
+:host ::ng-deep .mat-select-arrow {
+  border-top-color: $primary-gray;
+}
+
+.file-input {
+  width: 100%;
+}
+
+:host ::ng-deep .file-input > span {
+  display: none !important;
+}
+
+.request-header {
+  display: flex;
+  align-items: center;
+}
+
+.additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+
+.chip-list {
+  width: 100%;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  // display: inline-block;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -10px;
+  .import {
+    cursor: pointer;
+    color: #4b56c0;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    div {
+      font: normal normal medium 14px/15px Roboto;
+    }
+    img {
+      width: 12px;
+      height: 16px;
+      margin-right: 5px;
+    }
+  }
+}
+
+.upload-btn-wrapper input[type='file'] {
+  font-size: 18px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  width: 80px;
+}
+
+.upload-attachment-wrapper {
+  margin: 30px 0;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-bottom: 1px solid $primary-gray;
+  .attachment {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    mat-icon {
+      color: rgb(223, 217, 217);
+    }
+  }
+}
+
+.upload-attachment-wrapper input[type='file'] {
+  font-size: 30px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+}
+
+.close {
+  display: flex;
+  justify-content: flex-end;
+  // position: absolute;
+  // top: 5px;
+  // right: 10px;
+  i {
+    color: gray;
+    margin: 0 10px;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fixedheight {
+  height: 77vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @media screen and (max-width: 1100px) {
+    height: auto;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+}
+:host ::ng-deep .mat-checkbox {
+  display: block;
+  margin: 10px 0px;
+}
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: $primary-purple;
+}
+
+:host
+  ::ng-deep
+  .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
+  .mat-ripple-element {
+  background: $primary-purple;
+}
+
+:host ::ng-deep .mat-checkbox-frame {
+  border: 1.5px solid #e8eef5;
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-outline
+  .mat-form-field-flex:hover
+  > .mat-form-field-outline-thick
+  > .mat-form-field-outline-start {
+  border-color: $primary-purple;
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-outline
+  .mat-form-field-flex:hover
+  > .mat-form-field-outline-thick
+  > .mat-form-field-outline-end {
+  border-color: $primary-purple;
+}

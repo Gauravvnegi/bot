@@ -58,12 +58,12 @@ export class SummaryWrapperComponent extends BaseWrapperComponent {
   }
 
   onCheckinSubmit() {
-    if (!this.termsStatus) {
-      this._snackbarService.openSnackBarAsText(
-        'Please accept terms & condition'
-      );
-      return;
-    }
+    // if (!this.termsStatus) {
+    //   this._snackbarService.openSnackBarAsText(
+    //     'Please accept terms & condition'
+    //   );
+    //   return;
+    // }
     const dialogRef = this.dialog.open(this.inputPopupComponent, {
       disableClose: true,
       autoFocus: true,

@@ -47,7 +47,7 @@ export class InputPopupComponent implements OnInit {
   checkIn() {
     const data = {
       special_remarks: this.requestForm.get('request').value,
-      termsStatus: this.termsStatus,
+      // termsStatus: this.termsStatus,
     };
     this._reservationService
       .checkIn(this._reservationService.reservationData.id, data)

@@ -84,7 +84,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
       channel: ['', Validators.required],
       templateId: ['', Validators.required],
       message: ['', Validators.required],
-      emailIds: [[]],
+      emailIds: [this.email || []],
       roomNumbers: [[]],
     });
   }

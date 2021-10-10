@@ -576,6 +576,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       dialogConfig
     );
     detailCompRef.componentInstance.hotelId = this.hotelId;
+    detailCompRef.componentInstance.email = [
+      ...new Set(this.selectedRows.map((item) => item.guest.emailId)),
+    ];
 
     this.$subscription.add(
       detailCompRef.componentInstance.onModalClose.subscribe((res) => {

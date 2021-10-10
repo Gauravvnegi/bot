@@ -85,9 +85,9 @@ export class FeedbackNotificationConfig {
 
   deserialize(input) {
     this.channels = new Array<IOption>();
-    this.templateIds = input.messageTypes.filter(
-      (type) => type.value === 'FEEDBACK'
-    )[0].templateIds;
+    this.templateIds =
+      input.messageTypes.filter((type) => type.value === 'FEEDBACK')[0]
+        ?.templateIds || [];
     Object.keys(input.channels).forEach((key) => {
       this.channels.push({
         value: key,

@@ -169,7 +169,9 @@ export class NotificationComponent implements OnInit {
     control.patchValue(controlValues);
     control === this.roomNumbers
       ? (this.roomCsvReader.nativeElement.value = '')
-      : (this.emailCsvReader.nativeElement.value = '');
+      : this.emailCsvReader
+      ? (this.emailCsvReader.nativeElement.value = '')
+      : '';
   }
 
   readDataFromCSV($event: any, control: FormControl): void {

@@ -264,7 +264,7 @@ export class PointOfSaleComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          outletId: [this.tabFilterItems[this.tabFilterIdx].value],
+          outletsIds: [this.tabFilterItems[this.tabFilterIdx].value],
         },
       ]),
     };

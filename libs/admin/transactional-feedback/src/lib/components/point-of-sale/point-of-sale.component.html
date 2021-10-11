@@ -143,7 +143,7 @@
     </div>
   </div>
   <div class="footer">
-    <div class="footer__item" *ngFor="let item of (stats?.data)[0]?.services">
+    <div class="footer__item" *ngFor="let item of services">
       <div class="footer__item__dot" [style.background]="item.color"></div>
       <div class="__label">
         {{ item.label }}

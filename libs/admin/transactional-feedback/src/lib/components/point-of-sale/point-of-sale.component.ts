@@ -289,4 +289,17 @@ export class PointOfSaleComponent implements OnInit {
   get quickReplyActionFilters(): FormControl {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;
   }
+
+  get services() {
+    if (this.stats?.data) {
+      return [
+        ...new Map(
+          []
+            .concat(...this.stats.data.map((d) => d.services))
+            .map((item) => [item.label, item])
+        ).values(),
+      ];
+    }
+    return [];
+  }
 }

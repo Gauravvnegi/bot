@@ -30,12 +30,12 @@ export class NetPromoterScoreComponent implements OnInit {
   globalQueries = [];
 
   chartTypes = [
-    {
-      name: 'Bar',
-      value: 'bar',
-      url: 'assets/svg/net-promoter-score-bar.svg',
-      backgroundColor: '#1AB99F',
-    },
+    // {
+    //   name: 'Bar',
+    //   value: 'compare',
+    //   url: 'assets/svg/net-promoter-score-bar.svg',
+    //   backgroundColor: '#1AB99F',
+    // },
     {
       name: 'Bar',
       value: 'bar',
@@ -170,6 +170,7 @@ export class NetPromoterScoreComponent implements OnInit {
     this.npsFG = this.fb.group({
       documentType: ['csv'],
       documentActionType: ['Export All'],
+      npsChartType: ['line'],
     });
   }
 

@@ -196,6 +196,17 @@ export class PointOfSaleComponent implements OnInit {
           type: 'initiated',
         });
       });
+    } else {
+      this.stats.data.forEach((item) => {
+        this.chips.push({
+          label: item.label,
+          icon: '',
+          value: item.label,
+          total: 0,
+          isSelected: true,
+          type: 'initiated',
+        });
+      });
     }
     this.setTabFilterItems(this.branchId);
   }
@@ -215,6 +226,7 @@ export class PointOfSaleComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.tabFilterItems[this.tabFilterIdx].chips = [];
     this.chips = [];
     this.getStats();
   }

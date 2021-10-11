@@ -2,7 +2,7 @@
   <div class="request-header">
     <div class="modal-header">
       <div></div>
-      <div>Send Feedback Form</div>
+      <div class="modal-header__heading">Send Feedback Form</div>
       <div (click)="closeModal()" class="close">
         <i class="fa fa-times" aria-hidden="true"></i>
       </div>
@@ -25,7 +25,7 @@
           <div class="row-title">Channel:</div>
           <div class="row-body">
             <div class="channelConfig">
-              <mat-form-field style="margin-left: 10px;">
+              <mat-form-field class="channelConfig__select">
                 <mat-select
                   formControlName="channel"
                   placeholder="Select Channel"
@@ -42,7 +42,7 @@
               <div class="templateText">
                 Template:
               </div>
-              <mat-form-field>
+              <mat-form-field class="templateWrapper__select">
                 <mat-select
                   formControlName="templateId"
                   placeholder="Select Template"
@@ -72,7 +72,7 @@
           <div class="row">
             <div class="row-title">Room# :</div>
             <div class="row-body">
-              <mat-form-field class="chip-list" appearance="outline">
+              <mat-form-field class="chip-list" appearance="legacy">
                 <mat-chip-list #roomChipList aria-label="Room selection">
                   <mat-chip
                     *ngFor="let room of roomNumbers.value"
@@ -107,11 +107,11 @@
           </div>
         </div>
 
-        <div class="col">
+        <div class="col mb-56">
           <div class="row">
             <div class="row-title">Email :</div>
             <div class="row-body">
-              <mat-form-field class="chip-list" appearance="outline">
+              <mat-form-field class="chip-list" appearance="legacy">
                 <mat-chip-list #chipList aria-label="Email selection">
                   <mat-chip
                     *ngFor="let email of emailIds.value"
@@ -136,13 +136,13 @@
           <div class="row-title base-align">Input Message:</div>
           <div class="row-body">
             <ckeditor
+              class="ckeditor"
               [editor]="Editor"
-              style="width: 100%;"
               formControlName="message"
             ></ckeditor>
           </div>
         </div>
-        <div style="align-self: center;">
+        <div class="send-btn">
           <button class="button" (click)="sendMessage()">
             <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
             {{ isSending ? 'Sending' : 'Send' }}

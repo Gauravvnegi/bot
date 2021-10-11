@@ -194,7 +194,7 @@ export class Distribution {
       set({}, 'count', get(input, ['count'])),
       set({}, 'percent', get(input, ['percent'])),
       set({}, 'comparePercent', get(input, ['comparePercent'])),
-      set({}, 'color', get(input, ['color'])),
+      set({}, 'color', get(input, ['colorCode'])),
       set({}, 'key', get(input, ['key']))
     );
 

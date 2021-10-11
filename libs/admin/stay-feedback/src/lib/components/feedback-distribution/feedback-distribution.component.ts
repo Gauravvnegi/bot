@@ -117,13 +117,13 @@ export class FeedbackDistributionComponent implements OnInit {
       if (data.count) {
         this.chart.Labels.push(data.label);
         this.chart.Data[0].push(data.count);
-        this.chart.Colors[0].backgroundColor.push(this.color[data.key]);
-        this.chart.Colors[0].borderColor.push(this.color[data.key]);
+        this.chart.Colors[0].backgroundColor.push(data.color);
+        this.chart.Colors[0].borderColor.push(data.color);
       }
       this.totalDistribution += data.count;
       this.keyLabels.push({
         ...data,
-        color: this.color[data.key],
+        color: data.color,
       });
     });
   }

@@ -2,19 +2,33 @@
 
 .container {
   width: 80vw;
-  height: 75vh;
+  height: 85vh;
+  overflow: hidden;
 }
 
 .channelConfig {
   display: flex;
   align-items: center;
+  &__select {
+    margin-left: 10px;
+    width: 313px;
+  }
+}
+.ckeditor {
+  width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .templateWrapper {
   display: flex;
   align-items: center;
+  &__select {
+    width: 313px;
+  }
 }
 .templateText {
-  width: 130px;
+  width: 100px;
   color: rgb(199, 196, 196);
   font-size: 14px;
 }
@@ -100,6 +114,8 @@
   display: flex;
   flex-direction: column;
   padding: 15px;
+  max-height: 75vh;
+  overflow: auto;
   .row {
     display: flex;
     flex-direction: row;
@@ -175,7 +191,20 @@
 .chip-list {
   width: 100%;
 }
-
+.mb-56 {
+  margin-bottom: 56px;
+}
+.width-100 {
+  width: 100%;
+}
+.send-btn {
+  align-self: center;
+  margin-top: 35px;
+  margin-left: 15%;
+  .button {
+    width: 125px;
+  }
+}
 .upload-btn-wrapper {
   position: relative;
   overflow: hidden;
@@ -264,6 +293,13 @@
   align-items: center;
   width: 100%;
   margin: 10px 0;
+  &__heading {
+    font-size: 20px;
+    color: #002046;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-align: center;
+  }
 }
 :host ::ng-deep .mat-checkbox {
   display: block;

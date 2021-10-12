@@ -28,7 +28,7 @@ export class PointOfSaleComponent implements OnInit {
   chartTypes = [
     {
       name: 'Line',
-      value: 'line',
+      value: 'compare',
       url: 'assets/svg/net-promoter-score-bar.svg',
       backgroundColor: '#DEFFF3',
     },
@@ -47,6 +47,7 @@ export class PointOfSaleComponent implements OnInit {
       defaultLabel: 'Export',
     },
   ];
+  chartType = 'compare';
   documentTypes = [{ label: 'CSV', value: 'csv' }];
 
   chips = [];

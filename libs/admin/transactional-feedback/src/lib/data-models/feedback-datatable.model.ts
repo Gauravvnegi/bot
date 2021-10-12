@@ -43,7 +43,11 @@ export class Feedback {
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'created', get(input, ['created'])),
-      set({}, 'feedback', JSON.parse(get(input, ['feedback']))),
+      set(
+        {},
+        'feedback',
+        input.feedback ? JSON.parse(get(input, ['feedback'])) : {}
+      ),
       set({}, 'hotelId', get(input, ['hotelId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'ratings', get(input, ['ratings'])),

@@ -300,23 +300,10 @@
                 'status-background-reject': rowData.ratings < 5,
                 'status-background-success': rowData.ratings >= 5
               }"
+              *ngIf="rowData.ratings"
             >
-              {{ rowData.feedback.rating }}
+              {{ rowData.ratings }}
             </p>
-            <ng-container *ngIf="rowData.services">
-              <ng-container
-                *ngFor="let suggestion of rowData.services.services.slice(0, 2)"
-              >
-                <img
-                  class="feedback-icon"
-                  [ngClass]="{
-                    'status-image-reject': rowData.ratings < 5,
-                    'status-image-success': rowData.ratings >= 5
-                  }"
-                  [src]="feedbackService.getServiceUrl(suggestion.id)"
-                />
-              </ng-container>
-            </ng-container>
             <div
               *ngIf="rowData.comments"
               [ngClass]="{

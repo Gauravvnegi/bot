@@ -11,6 +11,7 @@ import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detai
 import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
+import { get } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class LoadGuard implements CanActivate {
@@ -51,6 +52,13 @@ export class LoadGuard implements CanActivate {
   validate(subscription, route): boolean {
     if (subscription && subscription.modules) {
       if (!subscription.modules[route.routeConfig.path].active) {
+        if (route.routeConfig.path === 'feedback') {
+          return get(subscription, [
+            'modules',
+            'FEEDBACK_TRANSACTIONAL',
+            'active',
+          ]);
+        }
         this.goBack(route.routeConfig.path);
       }
       return subscription.modules[route.routeConfig.path].active;

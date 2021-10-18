@@ -6,6 +6,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { NotificationComponent } from './components/notification/notification.component';
 import { RequestService } from './services/request.service';
+import { FeedbackNotificationComponent } from './components/feedback-notification/feedback-notification.component';
 
 @NgModule({
   imports: [
@@ -16,8 +17,8 @@ import { RequestService } from './services/request.service';
     SharedMaterialModule,
     CKEditorModule,
   ],
-  declarations: [NotificationComponent],
+  declarations: [NotificationComponent, FeedbackNotificationComponent],
   exports: [NotificationComponent],
-  providers: [RequestService]
+  providers: [RequestService],
 })
 export class AdminNotificationModule {}

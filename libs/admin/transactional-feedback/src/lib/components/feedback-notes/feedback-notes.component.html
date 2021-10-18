@@ -1,0 +1,60 @@
+<ng-container *ngIf="viewOnly; else editForm">
+  <div class="header">
+    <div class="header-items">
+      <div class="header-items-closed-admin">
+        <div>Closed by Admin</div>
+        <div>{{ notes.adminName }}</div>
+      </div>
+      <div class="header-items-closed-data">
+        <div>Closed Date</div>
+        <div>{{ notes.getUpdatedDate(timezone) }}</div>
+      </div>
+      <div class="header-items-closed-time">
+        <div>Closed Time</div>
+        <div>{{ notes.getUpdatedTime(timezone) }}</div>
+      </div>
+      <div (click)="closeNotes()" class="close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="view-body">
+    <div class="view-body-items">
+      <div class="view-body-items-title">Add Notes</div>
+      <div class="view-body-items-btn" (click)="openEditForm()">
+        Edit
+      </div>
+    </div>
+    <div [formGroup]="notesFG">
+      <textarea
+        class="view-body-textarea"
+        matInput
+        formControlName="notes"
+      ></textarea>
+    </div>
+    <div class="close-btn" (click)="closeNotes()">Close</div>
+  </div>
+</ng-container>
+<ng-template #editForm>
+  <div class="editForm-header header">
+    <div class="editForm-header-items">
+      <div class="editForm-header-items-note">
+        Please add notes in order to close this feedback
+      </div>
+      <div (click)="closeNotes()" class="close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="editForm-popup-body">
+    <div class="editForm-popup-body-title">Add Notes</div>
+    <div [formGroup]="notesFG">
+      <textarea
+        class="editForm-popup-body-textarea"
+        matInput
+        formControlName="notes"
+      ></textarea>
+    </div>
+    <div class="submit-btn" (click)="submit()">Submit</div>
+  </div>
+</ng-template>

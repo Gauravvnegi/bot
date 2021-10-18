@@ -40,18 +40,6 @@
               <mat-form-field>
                 <mat-label>Brand</mat-label>
                 <mat-select formControlName="hotelName">
-                  <!-- <mat-select-trigger>
-                    {{ hotelNameFC.value ? hotelNameFC.value[0] : '' }}
-                    <span
-                      *ngIf="hotelNameFC.value?.length > 1"
-                      class="additional-selection"
-                    >
-                      (+{{ hotelNameFC.value.length - 1 }}
-                      {{
-                        hotelNameFC.value?.length === 2 ? 'other' : 'others'
-                      }})
-                    </span>
-                  </mat-select-trigger> -->
                   <mat-option
                     *ngFor="let hotel of hotelList"
                     [value]="hotel.value"
@@ -67,18 +55,6 @@
                   formControlName="branchName"
                   (selectionChange)="handleHotelChange($event.value)"
                 >
-                  <!-- <mat-select-trigger>
-                    {{ branchNameFC.value ? branchNameFC.value[0] : '' }}
-                    <span
-                      *ngIf="branchNameFC.value?.length > 1"
-                      class="additional-selection"
-                    >
-                      (+{{ branchNameFC.value.length - 1 }}
-                      {{
-                        branchNameFC.value?.length === 2 ? 'other' : 'others'
-                      }})
-                    </span>
-                  </mat-select-trigger> -->
                   <mat-option
                     *ngFor="let branch of branchList"
                     [value]="branch.value"
@@ -87,6 +63,39 @@
                 </mat-select>
               </mat-form-field>
             </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab *ngIf="checkForTransactionFeedbackSubscribed()">
+        <ng-template mat-tab-label>
+          <svg
+            class="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="19.35"
+            height="17.2"
+            viewBox="0 0 19.35 17.2"
+          >
+            <path
+              id="Icon_awesome-hotel"
+              data-name="Icon awesome-hotel"
+              d="M18.813,2.15a.537.537,0,0,0,.538-.538V.538A.537.537,0,0,0,18.813,0H.538A.537.537,0,0,0,0,.538V1.613a.537.537,0,0,0,.538.538h.537v12.9H.538A.537.537,0,0,0,0,15.588v1.075a.537.537,0,0,0,.538.538H8.6V14.513a.539.539,0,0,1,.538-.538h1.075a.539.539,0,0,1,.538.538V17.2h8.063a.537.537,0,0,0,.538-.538V15.588a.537.537,0,0,0-.538-.538h-.538V2.15ZM8.6,3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V3.655Zm0,3.225a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43V8.17a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V6.88ZM4.3,3.655a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H4.73a.462.462,0,0,1-.43-.43ZM6.02,8.6H4.73a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43V8.17A.462.462,0,0,1,6.02,8.6Zm.43,4.3a3.225,3.225,0,0,1,6.45,0Zm8.6-4.73a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Zm0-3.225a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Z"
+            />
+          </svg>
+          Outlet
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </ng-template>
+        <div formGroupName="outlets" *ngIf="outletFG">
+          <div class="hotel-branch">
+            Select Outlet
+          </div>
+          <div class="checkbox--wrapper" *ngFor="let outlet of outlets">
+            <mat-checkbox
+              *ngIf="outletFG.controls[outlet.id]"
+              [formControlName]="outlet.id"
+              (change)="onOutletSelect($event)"
+              >{{ outlet.name }}</mat-checkbox
+            >
           </div>
         </div>
       </mat-tab>
@@ -135,6 +144,50 @@
               <mat-checkbox formControlName="isGeneral">General</mat-checkbox>
             </div>
           </div>
+        </div>
+      </mat-tab>
+      <mat-tab
+        *ngIf="
+          checkForStayFeedbackSubscribed() ||
+          checkForTransactionFeedbackSubscribed()
+        "
+      >
+        <ng-template mat-tab-label>
+          <svg
+            class="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="19.35"
+            height="17.2"
+            viewBox="0 0 19.35 17.2"
+          >
+            <path
+              id="Icon_awesome-hotel"
+              data-name="Icon awesome-hotel"
+              d="M18.813,2.15a.537.537,0,0,0,.538-.538V.538A.537.537,0,0,0,18.813,0H.538A.537.537,0,0,0,0,.538V1.613a.537.537,0,0,0,.538.538h.537v12.9H.538A.537.537,0,0,0,0,15.588v1.075a.537.537,0,0,0,.538.538H8.6V14.513a.539.539,0,0,1,.538-.538h1.075a.539.539,0,0,1,.538.538V17.2h8.063a.537.537,0,0,0,.538-.538V15.588a.537.537,0,0,0-.538-.538h-.538V2.15ZM8.6,3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V3.655Zm0,3.225a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43V8.17a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V6.88ZM4.3,3.655a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H4.73a.462.462,0,0,1-.43-.43ZM6.02,8.6H4.73a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43V8.17A.462.462,0,0,1,6.02,8.6Zm.43,4.3a3.225,3.225,0,0,1,6.45,0Zm8.6-4.73a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Zm0-3.225a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Z"
+            />
+          </svg>
+          Feedback Type
+          <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </ng-template>
+        <div formGroupName="feedback">
+          <div class="hotel-branch">
+            Select Feedback Type
+          </div>
+          <mat-radio-group formControlName="feedbackType">
+            <mat-radio-button
+              *ngIf="checkForStayFeedbackSubscribed()"
+              value="Stay Experience"
+              (change)="handleFeedbackTypeChange($event)"
+              >Stay Experience</mat-radio-button
+            >
+            <mat-radio-button
+              *ngIf="checkForTransactionFeedbackSubscribed()"
+              value="Transactional"
+              (change)="handleFeedbackTypeChange($event)"
+              >Transactional</mat-radio-button
+            >
+            <!-- <mat-radio-button value="Both">Both</mat-radio-button> -->
+          </mat-radio-group>
         </div>
       </mat-tab>
     </mat-tab-group>

@@ -15,9 +15,8 @@ export class ChannelDirective implements OnInit {
 
   checkSubscription(): void {
     const subscription = this.subscriptionService.ChannelSubscription;
-    let channel = subscription.filter((d) => d.name === this.path)[0];
-    this.elementRef.nativeElement.style.display = channel.active
-      ? 'block'
-      : 'none';
+    let channel = subscription.filter((d) => d.name === this.path);
+    this.elementRef.nativeElement.style.display =
+      channel.length && channel[0].active ? 'block' : 'none';
   }
 }

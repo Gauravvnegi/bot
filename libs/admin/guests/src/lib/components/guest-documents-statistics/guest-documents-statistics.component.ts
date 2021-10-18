@@ -39,7 +39,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit {
       value: 'INITIATED',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'EMAIL',
     },
     {
       label: 'Pending ',

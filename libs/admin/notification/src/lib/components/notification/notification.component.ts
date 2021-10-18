@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
 import { RequestConfig, RequestData } from '../../data-models/request.model.js';
 import { RequestService } from '../../services/request.service.js';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 
 @Component({
   selector: 'hospitality-bot-notification',
@@ -38,7 +39,7 @@ export class NotificationComponent implements OnInit {
   @Input() isEmail;
   @Input() email;
   @Input() roomNumber;
-  config: RequestConfig;
+  config;
   @Input() isModal = false;
   @Output() onModalClose = new EventEmitter();
   isSending: boolean = false;
@@ -58,18 +59,19 @@ export class NotificationComponent implements OnInit {
   @ViewChild('attachmentUpload') attachmentUpload: any;
 
   constructor(
-    private _fb: FormBuilder,
-    private _location: Location,
-    private requestService: RequestService,
-    private _snackbarService: SnackBarService,
-    private route: ActivatedRoute
+    protected _fb: FormBuilder,
+    protected _location: Location,
+    protected requestService: RequestService,
+    protected _snackbarService: SnackBarService,
+    protected route: ActivatedRoute,
+    protected _adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
   }
 
-  private registerListeners(): void {
+  registerListeners(): void {
     this.listenForRouteParams();
   }
 
@@ -96,7 +98,7 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  private initNotificationForm(): void {
+  protected initNotificationForm(): void {
     if (this.isModal) {
       this.notificationForm = this._fb.group({
         social_channels: [this.channel ? [this.channel] : []],
@@ -126,7 +128,7 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-  private getConfigData(hotelId): void {
+  getConfigData(hotelId): void {
     this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
       this.config = new RequestConfig().deserialize(response);
       this.initNotificationForm();
@@ -167,7 +169,9 @@ export class NotificationComponent implements OnInit {
     control.patchValue(controlValues);
     control === this.roomNumbers
       ? (this.roomCsvReader.nativeElement.value = '')
-      : (this.emailCsvReader.nativeElement.value = '');
+      : this.emailCsvReader
+      ? (this.emailCsvReader.nativeElement.value = '')
+      : '';
   }
 
   readDataFromCSV($event: any, control: FormControl): void {
@@ -274,15 +278,19 @@ export class NotificationComponent implements OnInit {
   }
 
   fetchTemplate(templateId) {
-    let journey = this.notificationForm.get('messageType').value;
     if (templateId) {
+      const config = {
+        queryObj: this._adminUtilityService.makeQueryParams([
+          {
+            journey: this.notificationForm
+              .get('messageType')
+              .value.toUpperCase(),
+          },
+        ]),
+      };
       this.$subscription.add(
         this.requestService
-          .getTemplate(
-            this.templates.hotelId,
-            templateId,
-            journey.toUpperCase()
-          )
+          .getTemplate(this.templates.hotelId, templateId, config)
           .subscribe(
             (response) => {
               this.notificationForm

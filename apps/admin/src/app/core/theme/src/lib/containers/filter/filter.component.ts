@@ -8,6 +8,9 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { get } from 'lodash';
+import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
+import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { TokenUpdateService } from '../../services/token-update.service';
 
 @Component({
@@ -23,6 +26,8 @@ export class FilterComponent implements OnChanges, OnInit {
 
   hotelList = [];
   branchList = [];
+  feedbackType;
+  outlets = [];
   hotelBasedToken = { key: null, value: null };
 
   filterForm: FormGroup;
@@ -30,7 +35,9 @@ export class FilterComponent implements OnChanges, OnInit {
   constructor(
     private _fb: FormBuilder,
     private _hotelDetailService: HotelDetailService,
-    private tokenUpdateService: TokenUpdateService
+    private tokenUpdateService: TokenUpdateService,
+    private snackbarService: SnackBarService,
+    protected subscriptionService: SubscriptionPlanService
   ) {
     this.initFilterForm();
   }
@@ -56,6 +63,14 @@ export class FilterComponent implements OnChanges, OnInit {
           isGeneral: [''],
         }),
       }),
+      feedback: this._fb.group({
+        feedbackType: [
+          this.checkForTransactionFeedbackSubscribed()
+            ? 'Transactional'
+            : 'Stay Experience',
+        ],
+      }),
+      outlets: this._fb.group({}),
     });
   }
 
@@ -75,6 +90,7 @@ export class FilterComponent implements OnChanges, OnInit {
 
   registerListeners() {
     this.listenForBrandChanges();
+    this.listenForBranchChanges();
   }
 
   listenForBrandChanges() {
@@ -88,6 +104,40 @@ export class FilterComponent implements OnChanges, OnInit {
 
         this.branchList = branches;
       });
+  }
+
+  listenForBranchChanges() {
+    this.filterForm
+      .get('property')
+      .get('branchName')
+      .valueChanges.subscribe((id) => {
+        const { outlets } = this.branchList.find(
+          (branch) => branch['id'] == id
+        );
+
+        this.outlets = outlets;
+        this.updateOutletsFormControls(outlets);
+      });
+  }
+
+  updateOutletsFormControls(outlets) {
+    let outletFG: FormGroup = this.filterForm.get('outlets') as FormGroup;
+    if (Object.keys(outletFG.controls).length) outletFG = this._fb.group({});
+
+    outlets.forEach((outlet) => {
+      outletFG.addControl(
+        outlet.id,
+        new FormControl(
+          this.feedbackFG.get('feedbackType').value === 'Transactional'
+        )
+      );
+    });
+  }
+
+  updateOutletsValue(value) {
+    Object.keys(this.outletFG.controls).forEach((id) => {
+      this.outletFG.get(id).setValue(value);
+    });
   }
 
   initLOV() {
@@ -112,7 +162,7 @@ export class FilterComponent implements OnChanges, OnInit {
         this.hotelBasedToken = { key, value: response[key] };
       },
       ({ error }) => {
-        console.log(error.message);
+        this.snackbarService.openSnackBarAsText(error.message);
       }
     );
   }
@@ -124,8 +174,49 @@ export class FilterComponent implements OnChanges, OnInit {
     this.hotelBasedToken = { key: null, value: null };
   }
 
+  onOutletSelect(event) {
+    if (
+      event.checked &&
+      this.feedbackFG.get('feedbackType').value !== 'Transactional'
+    ) {
+      this.feedbackFG.patchValue({ feedbackType: 'Transactional' });
+    } else if (!this.checkForNoOutletSelected(this.outletFG.value)) {
+      this.feedbackFG.patchValue({ feedbackType: 'Stay Experience' });
+    }
+  }
+
+  checkForNoOutletSelected(outlets) {
+    let returnValue = false;
+    Object.keys(outlets).forEach((outlet) => {
+      if (outlets[outlet]) returnValue = true;
+    });
+    return returnValue;
+  }
+
+  handleFeedbackTypeChange(event) {
+    this.updateOutletsValue(event.value === 'Transactional');
+  }
+
+  checkForTransactionFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+  }
+
+  checkForStayFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'feedback', 'active']);
+  }
+
   get propertyFG() {
     return this.filterForm.get('property') as FormGroup;
+  }
+
+  get outletFG() {
+    return this.filterForm.get('outlets') as FormGroup;
+  }
+
+  get feedbackFG() {
+    return this.filterForm.get('feedback') as FormGroup;
   }
 
   get guestFG() {

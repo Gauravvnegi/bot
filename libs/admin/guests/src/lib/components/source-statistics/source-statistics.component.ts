@@ -171,7 +171,7 @@ export class SourceStatisticsComponent implements OnInit {
           icon: '',
           value: key,
           isSelected: false,
-          type: 'pending',
+          type: key,
         });
       });
       if (!this.sourceGraphData.total) {

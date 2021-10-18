@@ -110,6 +110,12 @@
     },
     "admin-whatsapp": {
       "tags": []
+    },
+    "admin-transactional-feedback": {
+      "tags": []
+    },
+    "admin-stay-feedback": {
+      "tags": []
     }
   }
 }

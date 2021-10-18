@@ -78,3 +78,23 @@ export interface ITemplateId {
   id: string;
   name: string;
 }
+
+export class FeedbackNotificationConfig {
+  channels: IOption[];
+  templateIds: ITemplateId[];
+
+  deserialize(input) {
+    this.channels = new Array<IOption>();
+    this.templateIds =
+      input.messageTypes.filter((type) => type.value === 'FEEDBACK')[0]
+        ?.templateIds || [];
+    Object.keys(input.channels).forEach((key) => {
+      this.channels.push({
+        value: key,
+        label: input.channels[key].title,
+      });
+    });
+
+    return this;
+  }
+}

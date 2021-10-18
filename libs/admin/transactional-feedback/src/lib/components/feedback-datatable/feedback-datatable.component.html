@@ -1,0 +1,381 @@
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter($event)"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <form [formGroup]="tableFG">
+        <div class="caption__wrapper--tabmenu">
+          <div class="header">
+            <!-- <div class="header--text"> -->
+            <p class="heading">
+              <img src="" alt="" class="headImg" /> {{ tableName }}
+            </p>
+
+            <!-- <p class="selected">2 record(s) are selected</p> -->
+
+            <div class="mark-btn-container">
+              <!-- <div class="import-guests-btn">
+                <div class="import-guests-btn__wrap">
+                  <img src="assets/svg/import-guests.svg" alt="import guest" />
+                  Import Guests
+                </div>
+              </div> -->
+              <div
+                class="request-btn"
+                (click)="openFeedbackRequestPage($event)"
+              >
+                <div class="request-btn__wrap">
+                  Request Feedback
+                </div>
+              </div>
+              <div class="btn read">
+                <img
+                  src="assets/svg/mark-read.svg"
+                  alt="Mark Read"
+                  (click)="updateFeedbackStatus(true)"
+                />
+                <!-- <span>Mark as Read</span> -->
+                <span class="btn_text">
+                  Mark as Read
+                </span>
+              </div>
+              <div class="btn">
+                <img
+                  src="assets/svg/mark-unread.svg"
+                  alt="Mark Unread"
+                  (click)="this.updateFeedbackStatus(false)"
+                />
+                <span class="btn_text">
+                  Mark as Unread
+                </span>
+                <!-- <span>Mark as Unread</span> -->
+              </div>
+            </div>
+            <div class="options">
+              <div *ngIf="isActionButtons" class="icons">
+                <img src="assets/svg/Download.svg" class="svg" />
+                <img src="assets/svg/google-docs.svg" class="svg" />
+                <img src="assets/svg/card.svg" class="svg" />
+              </div>
+              <div *ngIf="isActionButtons" class="seperator"></div>
+              <div formGroupName="documentActions" class="dropdown--wrapper">
+                <p-dropdown
+                  class="export"
+                  [options]="documentActionTypes"
+                  formControlName="documentActionType"
+                >
+                  <ng-template let-documentActionItem pTemplate="selectedItem">
+                    <img src="assets/svg/Export.svg" />
+                    <span class="documentActionItemLabel">{{
+                      documentActionItem.label
+                    }}</span>
+                  </ng-template>
+                </p-dropdown>
+                <div class="divider"></div>
+                <p-dropdown
+                  class="export"
+                  [options]="documentTypes"
+                  formControlName="documentType"
+                >
+                  <ng-template let-documentTypeItem pTemplate="selectedItem">
+                    <img src="assets/svg/CSV.svg" />
+                    <span class="documentActionItemLabel">{{
+                      documentTypeItem.label
+                    }}</span>
+                  </ng-template>
+                </p-dropdown>
+                <button class="go" (click)="onDocumentActions()">
+                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isTabFilters">
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
+          </div>
+        </div>
+        <div
+          *ngIf="tabFilterItems[tabFilterIdx].chips.length"
+          class="caption__wrapper--buttons"
+        >
+          <div class="button__wrapper">
+            <mat-chip-list
+              multiple
+              #chipList
+              aria-label="Quick Reply selection"
+              formControlName="quickReplyActionFilters"
+            >
+              <mat-chip
+                *ngFor="
+                  let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+                  let quickReplyTypeIdx = index
+                "
+                selectable="true"
+                [ngClass]="{
+                  'chipSelected status-selected-default':
+                    quickReplyType.isSelected,
+                  'status-opacity-pending status-text-pending':
+                    quickReplyType.type == 'pending',
+                  'status-opacity-initiated status-text-initiated':
+                    quickReplyType.type == 'initiated',
+                  'status-opacity-success status-text-success':
+                    quickReplyType.type == 'completed',
+                  'status-opacity-reject status-text-reject':
+                    quickReplyType.type == 'failed',
+                  'status-default': quickReplyType.type == '',
+                  'status-selected-pending':
+                    quickReplyType.type == 'pending' &&
+                    quickReplyType.isSelected,
+                  'status-selected-initiated':
+                    quickReplyType.type == 'initiated' &&
+                    quickReplyType.isSelected,
+                  'status-selected-completed':
+                    quickReplyType.type == 'completed' &&
+                    quickReplyType.isSelected,
+                  'status-selected-reject':
+                    quickReplyType.type == 'failed' && quickReplyType.isSelected
+                }"
+                [selected]="isQuickReplyFilterSelected(quickReplyType)"
+                (click)="
+                  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
+                "
+              >
+                {{ quickReplyType.label }}
+                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                >{{ quickReplyType.total
+                }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <p class="no-data-found">No data available in table</p>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th class="tableHeading" pResizableColumn>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+
+    <tr class="table-search-head">
+      <th class="table-search-head"></th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'outlet')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'guest.firstName')
+          "
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="
+            onFilterTypeTextChange($event.target.value, 'booking.bookingNumber')
+          "
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'guest.place')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'comments')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
+    </tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
+    <tr
+      class="data-table-row"
+      [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+    >
+      <!-- <tr class="data-table-row"> -->
+      <td class="table--checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        >
+        </p-tableCheckbox>
+      </td>
+      <td class="guest">
+        {{ rowData.outlet }}
+      </td>
+      <td class="guest">
+        <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+        <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
+      </td>
+      <td class="service-feedback">
+        <div></div>
+        <div class="service-feedback-service">
+          <div
+            class="booking-feedback"
+            [ngClass]="{
+              'status-opacity-reject': rowData.ratings < 5,
+              'status-opacity-success': rowData.ratings >= 5
+            }"
+          >
+            <p
+              class="number"
+              [ngClass]="{
+                'status-background-reject': rowData.ratings < 5,
+                'status-background-success': rowData.ratings >= 5
+              }"
+              *ngIf="rowData.ratings"
+            >
+              {{ rowData.ratings }}
+            </p>
+            <div
+              *ngIf="rowData.comments"
+              [ngClass]="{
+                'feedback-msg': rowData.comments.length > 0
+              }"
+            >
+              {{ rowData.comments }}
+            </div>
+          </div>
+          <div class="amount">
+            {{ rowData.getServiceTypeAndTime() }}
+          </div>
+          <div>
+            <img
+              src="assets/svg/pdf.svg"
+              alt="pdf"
+              (click)="downloadFeedbackPdf($event, rowData.id)"
+            />
+          </div>
+        </div>
+        <div class="service-feedback-amount-wrapper">
+          <div
+            *ngFor="let data of rowData.services.services"
+            class="service-feedback-amount-wrapper-amount"
+          >
+            {{ data.serviceName }}: {{ data.rating }}
+          </div>
+        </div>
+      </td>
+      <td class="package">
+        <div class="package-date">
+          {{ rowData.guest.getCreatedDate(_globalFilterService.timezone) }}
+        </div>
+        <div class="package-city">{{ rowData.guest.place }}</div>
+      </td>
+      <td class="comments">
+        {{ rowData.comments }}
+      </td>
+
+      <!-- status-image-initiated -->
+      <td class="status-image">
+        <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+          <div
+            class="view-notes"
+            (click)="openEditNotes($event, rowData, rowData.notes)"
+          >
+            View Notes
+          </div></ng-container
+        >
+        <ng-template #addNote
+          ><div
+            class="add-notes"
+            (click)="openEditNotes($event, rowData, rowData.notes)"
+          >
+            +Notes
+          </div></ng-template
+        >
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>

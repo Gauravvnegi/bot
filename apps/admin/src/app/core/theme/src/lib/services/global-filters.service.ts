@@ -18,6 +18,10 @@ export class GlobalFilterService {
       value: {},
       queryValue: [],
     },
+    feedback: {
+      value: {},
+      queryValue: [],
+    },
   };
 
   constructor(
@@ -74,6 +78,14 @@ export class GlobalFilterService {
             guestCategory: get(data, ['guest', 'guestCategory', 'isNewGuest'])
               ? 'NEWGUEST'
               : null,
+          },
+        ];
+        this.globalFilterObj.feedback.queryValue = [
+          {
+            type: get(data, ['feedback', 'feedbackType']),
+          },
+          {
+            outlets: get(data, ['outlets']),
           },
         ];
         this.globalFilter$.next(this.globalFilterObj);

@@ -90,3 +90,78 @@
     cursor: pointer;
   }
 }
+
+.status-opacity-bot {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-text-bot {
+  color: #745af2 !important;
+}
+
+.status-selected-bot {
+  background-color: #745af2 !important;
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+.status-opacity-micro {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-text-micro {
+  color: #3e8ef7 !important;
+}
+
+.status-selected-micro {
+  background-color: #3e8ef7 !important;
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+.status-opacity-others {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-text-others {
+  color: #0bb2d4 !important;
+}
+
+.status-selected-others {
+  background-color: #0bb2d4 !important;
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+.status-opacity-email {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-text-email {
+  color: #faa700 !important;
+}
+
+.status-selected-email {
+  background-color: #faa700 !important;
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+.status-opacity-whatsapp {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-text-whatsapp {
+  color: #389f99 !important;
+}
+
+.status-selected-whatsapp {
+  background-color: #389f99 !important;
+  color: #ffffff !important;
+  opacity: 1;
+}

@@ -183,3 +183,19 @@
   display: flex;
   justify-content: space-between;
 }
+
+:host ::ng-deep {
+  .mat-radio-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .mat-radio-button {
+    margin: 5px 0;
+  }
+  .mat-radio-checked .mat-radio-outer-circle {
+    border-color: #4b56c0 !important;
+  }
+  .mat-radio-checked .mat-radio-inner-circle {
+    background-color: #4b56c0;
+  }
+}

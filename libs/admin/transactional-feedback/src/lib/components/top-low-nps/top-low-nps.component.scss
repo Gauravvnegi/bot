@@ -1,0 +1,99 @@
+@import 'main';
+.container {
+  justify-content: flex-start;
+}
+
+.key-container {
+  display: flex;
+  margin: 0 10px;
+  align-items: center;
+  .icon {
+    width: 14px;
+    height: 14px;
+    opacity: 1;
+  }
+  .stat-lable {
+    text-align: center;
+    font: normal normal medium 9px/11px Roboto;
+    letter-spacing: 0.6px;
+    color: #6d7580;
+    opacity: 1;
+  }
+}
+
+.stat-body {
+  height: 310px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  &-container {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    .progress-container {
+      display: flex;
+      flex-direction: row;
+      margin: 7px 0;
+      align-items: center;
+      .label {
+        width: 50%;
+        margin-right: 10px;
+        font-size: 12px;
+        // font: normal normal medium 10px Roboto;
+        letter-spacing: 0.72px;
+        color: #6d7580;
+      }
+      .progress {
+        display: flex;
+        width: 50%;
+        position: relative;
+        align-items: center;
+        .value {
+          position: absolute;
+          font-size: 12px;
+          letter-spacing: 0.72px;
+        }
+      }
+    }
+  }
+  &-key {
+    display: flex;
+    justify-content: space-around;
+    .key-container {
+      display: flex;
+      margin: 0 10px;
+      align-items: center;
+      .icon {
+        width: 14px;
+        height: 14px;
+        opacity: 1;
+        margin-right: 5px;
+      }
+      .stat-lable {
+        text-align: center;
+        font-size: 12px;
+        letter-spacing: 0.6px;
+        color: #6d7580;
+      }
+    }
+  }
+}
+
+.progress-value {
+  margin-left: 5px;
+  min-height: 20px;
+}
+
+.progress {
+  .value {
+    font-size: 13px;
+  }
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 9vw !important;
+  flex-grow: inherit !important;
+  @media (max-width: $L) {
+    min-width: 15vw !important;
+  }
+}

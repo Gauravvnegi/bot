@@ -74,7 +74,13 @@
         "libs/shared/image-cropper/src/index.ts"
       ],
       "@hospitality-bot/admin/analytics": ["libs/admin/analytics/src/index.ts"],
-      "@hospitality-bot/admin/whatsapp": ["libs/admin/whatsapp/src/index.ts"]
+      "@hospitality-bot/admin/whatsapp": ["libs/admin/whatsapp/src/index.ts"],
+      "@hospitality-bot/admin/transactional-feedback": [
+        "libs/admin/transactional-feedback/src/index.ts"
+      ],
+      "@hospitality-bot/admin/stay-feedback": [
+        "libs/admin/stay-feedback/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

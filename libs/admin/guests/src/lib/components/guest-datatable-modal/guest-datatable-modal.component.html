@@ -126,6 +126,16 @@
                         quickReplyType.isSelected,
                       'status-opacity-pending status-text-pending':
                         quickReplyType.type == 'pending',
+                      'status-opacity-bot status-text-bot':
+                        quickReplyType.type == 'BOT',
+                      'status-opacity-micro status-text-micro':
+                        quickReplyType.type == 'MICROSITE',
+                      'status-opacity-others status-text-others':
+                        quickReplyType.type == 'OTHERS',
+                      'status-opacity-email status-text-email':
+                        quickReplyType.type == 'EMAIL',
+                      'status-opacity-whatsapp status-text-whatsapp':
+                        quickReplyType.type == 'WHATSAPP',
                       'status-opacity-initiated status-text-initiated':
                         quickReplyType.type == 'initiated',
                       'status-opacity-success status-text-success':
@@ -138,6 +148,21 @@
                         quickReplyType.isSelected,
                       'status-selected-initiated':
                         quickReplyType.type == 'initiated' &&
+                        quickReplyType.isSelected,
+                      'status-selected-bot':
+                        quickReplyType.type == 'BOT' &&
+                        quickReplyType.isSelected,
+                      'status-selected-micro':
+                        quickReplyType.type == 'MICROSITE' &&
+                        quickReplyType.isSelected,
+                      'status-selected-others':
+                        quickReplyType.type == 'OTHERS' &&
+                        quickReplyType.isSelected,
+                      'status-selected-email':
+                        quickReplyType.type == 'EMAIL' &&
+                        quickReplyType.isSelected,
+                      'status-selected-whatsapp':
+                        quickReplyType.type == 'WHATSAPP' &&
                         quickReplyType.isSelected,
                       'status-selected-completed':
                         quickReplyType.type == 'completed' &&

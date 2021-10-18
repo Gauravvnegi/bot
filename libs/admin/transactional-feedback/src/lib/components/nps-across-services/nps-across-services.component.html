@@ -1,0 +1,377 @@
+<div [formGroup]="npsFG" class="container" *ngIf="npsProgressData">
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/nps-services.svg" />
+      </div>
+      <div class="stat-title">NPS Across Services</div>
+    </div>
+    <div class="dropdown--wrapper">
+      <p-dropdown
+        class="export"
+        [options]="documentActionTypes"
+        formControlName="documentActionType"
+      >
+        <ng-template let-documentActionItem pTemplate="selectedItem">
+          <img src="assets/svg/Export.svg" />
+          <span class="dropdown-label">{{ documentActionItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <div class="divider"></div>
+      <p-dropdown
+        class="export"
+        [options]="documentTypes"
+        formControlName="documentType"
+      >
+        <ng-template let-documentTypeItem pTemplate="selectedItem">
+          <img src="assets/svg/CSV.svg" />
+          <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <button class="go" (click)="exportCSV()">
+        <mat-icon class="material-icons" matSuffix>east</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="tab-group">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="button__wrapper">
+    <mat-chip-list
+      multiple
+      #chipList
+      aria-label="Quick Reply selection"
+      formControlName="quickReplyActionFilters"
+      *ngIf="tabFilterItems.length"
+    >
+      <mat-chip
+        *ngFor="
+          let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+          let quickReplyTypeIdx = index
+        "
+        selectable="true"
+        [selected]="isQuickReplyFilterSelected(quickReplyType)"
+        (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
+        [ngClass]="{
+          'chipSelected status-selected-default': quickReplyType.isSelected,
+          'status-opacity-initiated status-text-initiated':
+            quickReplyType.type == 'initiated',
+          'status-selected-initiated':
+            quickReplyType.type == 'initiated' && quickReplyType.isSelected
+        }"
+      >
+        {{ quickReplyType.label }}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+
+  <!-- Graph container -->
+  <div class="progress_data_wrapper">
+    <div class="progress_data_wrapper__graph_pointer_wrapper">
+      <div class="pointer">
+        <p class="label">100</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">80</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">60</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">40</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">20</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">0</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">-20</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">-40</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">-60</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">-80</p>
+        <p class="bar">-</p>
+      </div>
+      <div class="pointer">
+        <p class="label">-100</p>
+        <p class="bar">-</p>
+      </div>
+    </div>
+
+    <div class="progress_data_wrapper__back_bars">
+      <div class="seperator"></div>
+      <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+        <div
+          *ngIf="data.value !== 'ALL' && progresses[data.value]"
+          class="dotted_seperator"
+        ></div>
+      </ng-container>
+      <!-- <div class="dotted_seperator"></div>
+      <div class="dotted_seperator"></div>
+      <div class="dotted_seperator"></div>
+      <div class="dotted_seperator"></div> -->
+      <div class="horizontal_seperator"></div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="progress_data_wrapper__progress_services_bars_wrapper">
+      <ng-container
+        *ngIf="
+          tabFilterItems[tabFilterIdx].chips[0] &&
+            tabFilterItems[tabFilterIdx].chips[0].isSelected;
+          else noALL
+        "
+      >
+        <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+          <ng-container *ngIf="data.value !== 'ALL'">
+            <div
+              class="progress_bar_data"
+              [style.width]="
+                100 / (tabFilterItems[tabFilterIdx].chips.length - 1) + '%'
+              "
+            >
+              <div class="progess_bars">
+                <div
+                  class="bar"
+                  *ngFor="let progress of progresses[data.value]"
+                  [style.width]="100 / (maxBarCount * 2) + '%'"
+                >
+                  <div class="status_box">
+                    <p class="journey">{{ data.label }} ></p>
+                    <p class="service">{{ progress.statistic.label }}</p>
+                    <div class="details_box">
+                      <div class="details">
+                        <div
+                          class="dot"
+                          [style.background]="
+                            (progress.statistic.score >= 0 &&
+                              progress.statistic.score < 31) ||
+                            progress.statistic.score < -69
+                              ? '#4BA0F5'
+                              : '#3DB76B'
+                          "
+                        ></div>
+                        <div class="details__label">
+                          {{
+                            progress.statistic.score <= 30 &&
+                            progress.statistic.score >= -30
+                              ? 'Neutral'
+                              : 'Positive'
+                          }}
+                        </div>
+                        <div class="percentage">
+                          {{
+                            progress.statistic.score >= 0
+                              ? progress.statistic.score
+                              : 100 + progress.statistic.score
+                          }}
+                        </div>
+                      </div>
+                      <div class="details">
+                        <div class="dot"></div>
+                        <div class="details__label">Negative</div>
+                        <div class="percentage">
+                          {{
+                            progress.statistic.score > 0
+                              ? 100 - progress.statistic.score
+                              : progress.statistic.score
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="tranparent-bg"
+                      [style.height]="
+                        (progress.statistic.score === 0
+                          ? 100 - 1
+                          : progress.statistic.score >= 0
+                          ? 100 - progress.statistic.score
+                          : progress.statistic.score * -1) + '%'
+                      "
+                    ></div>
+                    <div
+                      [style.background]="
+                        (progress.statistic.score > 0 &&
+                          progress.statistic.score < 31) ||
+                        progress.statistic.score < -69
+                          ? '#4BA0F5'
+                          : progress.statistic.score === 0
+                          ? '#d6d6d6'
+                          : '#3DB76B'
+                      "
+                      [style.height]="
+                        (progress.statistic.score === 0
+                          ? 1
+                          : progress.statistic.score >= 0
+                          ? progress.statistic.score
+                          : 100 + progress.statistic.score) + '%'
+                      "
+                    ></div>
+                  </div>
+                  <div class="progress">
+                    <div
+                      [style.background]="
+                        progress.statistic.score === 0 ? '#d6d6d6' : '#ea0431'
+                      "
+                      [style.height]="
+                        (progress.statistic.score === 0
+                          ? 1
+                          : progress.statistic.score >= 0
+                          ? 100 - progress.statistic.score
+                          : progress.statistic.score * -1) + '%'
+                      "
+                    ></div>
+                    <div
+                      class="tranparent-bg"
+                      [style.height]="
+                        (progress.statistic.score === 0
+                          ? 100 - 1
+                          : progress.statistic.score >= 0
+                          ? progress.statistic.score
+                          : 100 + progress.statistic.score) + '%'
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              <div class="label">{{ data.label }}</div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-template #noALL>
+        <ng-container *ngFor="let data of tabFilterItems[tabFilterIdx].chips">
+          <ng-container *ngIf="data.value !== 'ALL' && progresses[data.value]">
+            <div
+              class="progress_bar_data"
+              [style.width]="100 / progressLength + '%'"
+            >
+              <div class="progess_bars">
+                <ng-container *ngIf="data.isSelected">
+                  <div
+                    class="bar"
+                    *ngFor="let progress of progresses[data.value]"
+                    [style.width]="100 / (maxBarCount * 2) + '%'"
+                  >
+                    <div class="status_box">
+                      <p class="journey">{{ data.label }} ></p>
+                      <p class="service">{{ progress.statistic.label }}</p>
+                      <div class="details_box">
+                        <div class="details">
+                          <div class="dot"></div>
+                          <div class="details__label">
+                            {{
+                              progress.statistic.score <= 30 &&
+                              progress.statistic.score >= -30
+                                ? 'Neutral'
+                                : 'Positive'
+                            }}
+                          </div>
+                          <div class="percentage">
+                            {{
+                              progress.statistic.score >= 0
+                                ? progress.statistic.score
+                                : 100 + progress.statistic.score
+                            }}
+                          </div>
+                        </div>
+                        <div class="details">
+                          <div class="dot"></div>
+                          <div class="details__label">Negative</div>
+                          <div class="percentage">
+                            {{
+                              progress.statistic.score > 0
+                                ? 100 - progress.statistic.score
+                                : progress.statistic.score
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="progress">
+                      <div
+                        class="tranparent-bg"
+                        [style.height]="
+                          (progress.statistic.score === 0
+                            ? 100 - 1
+                            : progress.statistic.score >= 0
+                            ? 100 - progress.statistic.score
+                            : progress.statistic.score * -1) + '%'
+                        "
+                      ></div>
+                      <div
+                        [style.background]="
+                          (progress.statistic.score >= 0 &&
+                            progress.statistic.score < 31) ||
+                          progress.statistic.score < -69
+                            ? '#4BA0F5'
+                            : progress.statistic.score === 0
+                            ? '#d6d6d6'
+                            : '#3DB76B'
+                        "
+                        [style.height]="
+                          (progress.statistic.score === 0
+                            ? 1
+                            : progress.statistic.score >= 0
+                            ? progress.statistic.score
+                            : 100 + progress.statistic.score) + '%'
+                        "
+                      ></div>
+                    </div>
+                    <div class="progress">
+                      <div
+                        [style.background]="
+                          progress.statistic.score === 0 ? '#d6d6d6' : '#ea0431'
+                        "
+                        [style.height]="
+                          (progress.statistic.score === 0
+                            ? 1
+                            : progress.statistic.score >= 0
+                            ? 100 - progress.statistic.score
+                            : progress.statistic.score * -1) + '%'
+                        "
+                      ></div>
+                      <div
+                        class="tranparent-bg"
+                        [style.height]="
+                          (progress.statistic.score === 0
+                            ? 100 - 1
+                            : progress.statistic.score >= 0
+                            ? progress.statistic.score
+                            : 100 + progress.statistic.score) + '%'
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="label">{{ data.label }}</div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </div>
+  </div>
+</div>

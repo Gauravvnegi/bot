@@ -24,6 +24,7 @@ export class LayoutOneComponent implements OnInit {
     { label: 'Profile', value: 'profile' },
     { label: 'Logout', value: 'logout' },
   ];
+  outlets = [];
   lastUpdatedAt: string;
   isGlobalFilterVisible: boolean = false;
   isDetailPageVisible: boolean = false;
@@ -107,6 +108,14 @@ export class LayoutOneComponent implements OnInit {
 
   setInitialFilterValue() {
     const branches = this._hotelDetailService.hotelDetails?.brands[0]?.branches;
+    this.outlets = get(this._hotelDetailService.hotelDetails, [
+      'brands',
+      '0',
+      'branches',
+      branches.length - 1,
+      'outlets',
+    ]);
+    // console.log(outlets);
     this.filterConfig.brandName = get(this._hotelDetailService.hotelDetails, [
       'brands',
       '0',
@@ -134,6 +143,10 @@ export class LayoutOneComponent implements OnInit {
           'id',
         ]),
       },
+      feedback: {
+        feedbackType: 'Transactional',
+      },
+      outlets: this.getOutletIds(),
     });
     this.timezone = get(this._hotelDetailService.hotelDetails, [
       'brands',
@@ -143,6 +156,12 @@ export class LayoutOneComponent implements OnInit {
       'timezone',
     ]);
     this.globalFilterService.timezone = this.timezone;
+  }
+
+  getOutletIds() {
+    const outlets = {};
+    this.outlets.forEach((d) => (outlets[d.id] = true));
+    return outlets;
   }
 
   refreshDashboard() {
@@ -193,6 +212,7 @@ export class LayoutOneComponent implements OnInit {
     this.getFilterCount({ ...values });
     this.initFirebaseMessaging();
     this.toggleGlobalFilter();
+    this.isGlobalFilterVisible = false;
   }
 
   resetFilterCount() {

@@ -16,6 +16,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AdminTransactionalFeedbackRoutingModule } from './admin-transactional-feedback.routing.module';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackTableService } from './services/table.service';
+import { StackedBarGraphComponent } from './components/stacked-bar-graph/stacked-bar-graph.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,10 @@ import { FeedbackTableService } from './services/table.service';
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
   ],
-  declarations: [...AdminTransactionalFeedbackRoutingModule.components],
+  declarations: [
+    ...AdminTransactionalFeedbackRoutingModule.components,
+    StackedBarGraphComponent,
+  ],
   providers: [StatisticsService, FeedbackTableService],
 })
 export class AdminTransactionalFeedbackModule {

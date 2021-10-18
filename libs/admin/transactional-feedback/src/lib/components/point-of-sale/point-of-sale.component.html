@@ -148,15 +148,20 @@
           </div>
         </div>
       </div>
-    </ng-container>
-    <ng-container *ngSwitchCase="'bar'"></ng-container>
-  </ng-container>
-  <div class="footer">
-    <div class="footer__item" *ngFor="let item of services">
-      <div class="footer__item__dot" [style.background]="item.color"></div>
-      <div class="__label">
-        {{ item.label }}
+      <div class="footer">
+        <div class="footer__item" *ngFor="let item of services">
+          <div class="footer__item__dot" [style.background]="item.color"></div>
+          <div class="__label">
+            {{ item.label }}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'bar'">
+      <hospitality-bot-stacked-bar-graph
+        [tabFilterItems]="tabFilterItems"
+        [tabFilterIdx]="tabFilterIdx"
+      ></hospitality-bot-stacked-bar-graph>
+    </ng-container>
+  </ng-container>
 </div>

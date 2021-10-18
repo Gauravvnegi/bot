@@ -27,13 +27,13 @@ export class PointOfSaleComponent implements OnInit {
   branchId: string;
   chartTypes = [
     {
-      name: 'Line',
+      name: 'POSLine',
       value: 'compare',
       url: 'assets/svg/net-promoter-score-bar.svg',
       backgroundColor: '#DEFFF3',
     },
     {
-      name: 'Bar',
+      name: 'POSBar',
       value: 'bar',
       url: 'assets/svg/bar-graph.svg',
       backgroundColor: '#1AB99F',
@@ -104,7 +104,8 @@ export class PointOfSaleComponent implements OnInit {
             calenderType,
           ];
           this.branchId = data['filter'].value.property.branchName;
-          this.setTabFilterItems(this.branchId);
+          if (this.tabFilterItems.length === 0)
+            this.setTabFilterItems(this.branchId);
           this.getStats();
         },
         ({ error }) => {
@@ -178,7 +179,6 @@ export class PointOfSaleComponent implements OnInit {
 
   addChipsToFilters() {
     this.chips = [];
-    this.tabFilterItems = [];
     if (this.stats.data.length > 1) {
       this.chips.push({
         label: 'Overall',
@@ -209,7 +209,8 @@ export class PointOfSaleComponent implements OnInit {
         });
       });
     }
-    this.setTabFilterItems(this.branchId);
+    if (this.tabFilterItems.length === 0) this.setTabFilterItems(this.branchId);
+    else this.tabFilterItems[this.tabFilterIdx].chips = this.chips;
   }
 
   addFilterItems() {

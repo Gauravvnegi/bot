@@ -5,7 +5,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
-import { NPOS } from '../../data-models/statistics.model';
+import { NPOS, NPOSVertical } from '../../data-models/statistics.model';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import * as FileSaver from 'file-saver';
@@ -23,7 +23,7 @@ export class PointOfSaleComponent implements OnInit {
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  stats: NPOS;
+  stats;
   branchId: string;
   chartTypes = [
     {
@@ -159,6 +159,7 @@ export class PointOfSaleComponent implements OnInit {
               ...this.globalQueries,
               {
                 outletsIds: [this.tabFilterItems[this.tabFilterIdx].value],
+                graphType: this.chartType === 'bar' ? 'vertical' : '',
               },
               ...this.getSelectedQuickReplyFilters(),
             ]
@@ -167,7 +168,12 @@ export class PointOfSaleComponent implements OnInit {
     };
     this.$subscription.add(
       this._statisticService.getPOSStats(config).subscribe((response) => {
-        this.stats = new NPOS().deserialize(response);
+        if (this.chartType === 'bar') {
+          this.stats = new NPOSVertical().deserialize(response);
+        } else {
+          this.stats = new NPOS().deserialize(response);
+        }
+        console.log(this.stats);
         if (this.tabFilterItems.length === 0 || this.chips.length === 0)
           this.addChipsToFilters();
         // if (this.tabFilterItems.length === 1) {
@@ -179,7 +185,7 @@ export class PointOfSaleComponent implements OnInit {
 
   addChipsToFilters() {
     this.chips = [];
-    if (this.stats.data.length > 1) {
+    if (this.stats.chipLabels.length > 1) {
       this.chips.push({
         label: 'Overall',
         icon: '',
@@ -187,22 +193,22 @@ export class PointOfSaleComponent implements OnInit {
         total: 0,
         isSelected: true,
       });
-      this.stats.data.forEach((item) => {
+      this.stats.chipLabels.forEach((item) => {
         this.chips.push({
-          label: item.label,
+          label: item,
           icon: '',
-          value: item.label,
+          value: item,
           total: 0,
           isSelected: false,
           type: 'initiated',
         });
       });
     } else {
-      this.stats.data.forEach((item) => {
+      this.stats.chipLabels.forEach((item) => {
         this.chips.push({
-          label: item.label,
+          label: item,
           icon: '',
-          value: item.label,
+          value: item,
           total: 0,
           isSelected: true,
           type: 'initiated',
@@ -298,6 +304,11 @@ export class PointOfSaleComponent implements OnInit {
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  setChartType(chartType) {
+    this.chartType = chartType;
+    this.getStats();
   }
 
   get quickReplyActionFilters(): FormControl {

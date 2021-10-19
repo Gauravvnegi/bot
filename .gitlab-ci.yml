@@ -2,10 +2,10 @@ stages:
   - deploy
 
 
-deploy to Production-web-user:
+deploy to NDevelopment-web-user:
   stage: deploy
   environment:
-    name: web-user-prod
+    name: ndevelopment-web-user
   when: manual
   before_script:
   - cp deploy/* .
@@ -20,15 +20,15 @@ deploy to Production-web-user:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; tar -xvf *.tar; sh -x web-user_dev.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; rm -rf $web_user_work_dir/*.tar; ls $web_user_work_dir && netstat -tnlp"
   only:
-    - prod-deploy
+    - dev-deploy
 
 
 
 
-deploy to Production-admin:
+deploy to NDevelopment-admin:
   stage: deploy
   environment:
-    name: admin-prod
+    name: ndevelopment-admin
   when: manual
   before_script:
   - cp deploy/* .
@@ -45,4 +45,4 @@ deploy to Production-admin:
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; tar -xvf *.tar; sh -x admin.sh"
     - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; rm -rf $admin_work_dir/*.tar; ls $admin_work_dir && netstat -tnlp"
   only:
-    - prod-deploy
+    - dev-deploy

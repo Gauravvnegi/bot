@@ -10,40 +10,31 @@ import { Label } from 'ng2-charts';
 export class StackedBarGraphComponent implements OnInit {
   @Input() tabFilterItems = [];
   @Input() tabFilterIdx = 0;
-  progresses = [
-    {
-      label: 'Breakfast',
-      data: [
-        { label: 'À la carte', score: 60 },
-        { label: 'Buffet', score: 50 },
-      ],
-    },
-    {
-      label: 'Lunch',
-      data: [
-        { label: 'À la carte', score: 60 },
-        { label: 'Buffet', score: 50 },
-      ],
-    },
-    {
-      label: 'Dinner',
-      data: [
-        { label: 'À la carte', score: 25 },
-        { label: 'Buffet', score: 50 },
-      ],
-    },
-  ];
+  @Input() data;
+  progresses = [];
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  get maxBarCount() {
-    if (this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected) {
-      return this.tabFilterItems[this.tabFilterIdx].chips.length - 1;
+  ngOnChanges() {
+    this.setProgresses();
+  }
+
+  setProgresses() {
+    this.progresses = [];
+    if (this.data.verticalData) {
+      Object.keys(this.data.verticalData).forEach((key) => {
+        if (this.data.verticalData[key].length)
+          this.progresses.push({
+            label: key,
+            data: this.data.verticalData[key],
+          });
+      });
     }
-    return this.tabFilterItems[this.tabFilterIdx].chips.filter(
-      (d) => d.isSelected
-    ).length;
+  }
+
+  get maxBarCount() {
+    return this.data?.chipLabels.length || 1;
   }
 }

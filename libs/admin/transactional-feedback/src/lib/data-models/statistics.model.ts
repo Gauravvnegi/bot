@@ -280,10 +280,15 @@ export class Data {
 
 export class NPOS {
   data: Outlet[];
+  chipLabels: string[];
 
   deserialize(input) {
     this.data = new Array<Outlet>();
-    input.forEach((data) => this.data.push(new Outlet().deserialize(data)));
+    this.chipLabels = new Array<string>();
+    input.forEach((data) => {
+      this.data.push(new Outlet().deserialize(data));
+      this.chipLabels.push(data.label);
+    });
     return this;
   }
 }
@@ -307,6 +312,71 @@ export class Outlet {
       });
 
     // this.services = new Services().deserialize(input.services);
+    return this;
+  }
+}
+
+export class NPOSVertical {
+  Breakfast: ServiceStat[];
+  Lunch: ServiceStat[];
+  Dinner: ServiceStat[];
+
+  deserialize(input) {
+    let chipLabels = [];
+    this.Breakfast = new Array<ServiceStat>();
+    this.Lunch = new Array<ServiceStat>();
+    this.Dinner = new Array<ServiceStat>();
+    chipLabels = new Array<string>();
+
+    input.forEach((data) => {
+      chipLabels.push(data.label);
+      if (data.npsStats.Breakfast)
+        this.Breakfast.push(
+          new ServiceStat().deserialize({
+            ...data.npsStats.Breakfast,
+            label: data.label,
+          })
+        );
+      if (data.npsStats.Lunch)
+        this.Lunch.push(
+          new ServiceStat().deserialize({
+            ...data.npsStats.Lunch,
+            label: data.label,
+          })
+        );
+      if (data.npsStats.Dinner)
+        this.Dinner.push(
+          new ServiceStat().deserialize({
+            ...data.npsStats.Dinner,
+            label: data.label,
+          })
+        );
+    });
+
+    return { verticalData: this, chipLabels };
+  }
+}
+
+export class ServiceStat {
+  label: string;
+  maxScore: number;
+  minScore: number;
+  negative: number;
+  neutral: number;
+  positive: number;
+  score: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'maxScore', get(input, ['maxScore'])),
+      set({}, 'negative', get(input, ['negative'])),
+      set({}, 'neutral', get(input, ['neutral'])),
+      set({}, 'positive', get(input, ['positive'])),
+      set({}, 'score', get(input, ['score']))
+    );
+
     return this;
   }
 }

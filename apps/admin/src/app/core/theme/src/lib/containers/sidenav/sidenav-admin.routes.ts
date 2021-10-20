@@ -5,30 +5,12 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/dashboard.svg',
   },
-  // {
-  //   path: 'roles-permissions',
-  //   title: 'Roles & Permissions',
-  //   children: null,
-  //   url: 'assets/svg/Roles_&_Permission.svg',
-  // },
   {
     path: 'guest',
     title: 'Guest',
     children: null,
     url: 'assets/svg/guest-tab.svg',
   },
-  // {
-  //   path: 'reservation',
-  //   title: 'Reservations',
-  //   children: null,
-  //   url: 'assets/svg/chair.svg',
-  // },
-  // {
-  //   path: 'notification',
-  //   title: 'Notifications',
-  //   children: null,
-  //   url: 'assets/svg/notification.svg',
-  // },
   {
     path: 'feedback',
     title: 'Feedback',
@@ -61,11 +43,6 @@ export const DEFAULT_ROUTES = [
     title: 'Conversations',
     url: 'assets/svg/messenger.svg',
     children: [
-      // {
-      //   path: 'conversation/request',
-      //   title: 'Requests',
-      //   url: 'assets/svg/virus.svg',
-      // },
       {
         path: 'conversation/analytics',
         title: 'Analytics',

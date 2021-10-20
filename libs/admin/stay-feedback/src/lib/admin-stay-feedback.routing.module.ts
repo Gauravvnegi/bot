@@ -8,7 +8,6 @@ import { NpsAcrossTouchpointsComponent } from './components/nps-across-touchpoin
 import { NpsAcrossServicesComponent } from './components/nps-across-services/nps-across-services.component';
 import { NpsAcrossDepartmentsComponent } from './components/nps-across-departments/nps-across-departments.component';
 import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
-import { MulticolorCircularProgressComponent } from './components/multicolor-circular-progress/multicolor-circular-progress.component';
 import { TopLowNpsComponent } from './components/top-low-nps/top-low-nps.component';
 import { GlobalNpsComponent } from './components/global-nps/global-nps.component';
 import { FeedbackDistributionComponent } from './components/feedback-distribution/feedback-distribution.component';
@@ -35,7 +34,6 @@ export class AdminStayFeedbackRoutingModule {
     NpsAcrossServicesComponent,
     NpsAcrossDepartmentsComponent,
     TwoWayProgressComponent,
-    MulticolorCircularProgressComponent,
     TopLowNpsComponent,
     GlobalNpsComponent,
     FeedbackDistributionComponent,

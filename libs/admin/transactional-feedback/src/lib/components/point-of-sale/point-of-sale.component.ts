@@ -77,7 +77,7 @@ export class PointOfSaleComponent implements OnInit {
       documentType: ['csv'],
       documentActionType: ['export'],
       quickReplyActionFilters: [[]],
-      chartType: ['line'],
+      chartType: ['compare'],
     });
   }
 
@@ -173,12 +173,8 @@ export class PointOfSaleComponent implements OnInit {
         } else {
           this.stats = new NPOS().deserialize(response);
         }
-        console.log(this.stats);
         if (this.tabFilterItems.length === 0 || this.chips.length === 0)
           this.addChipsToFilters();
-        // if (this.tabFilterItems.length === 1) {
-        //   this.addFilterItems();
-        // }
       })
     );
   }

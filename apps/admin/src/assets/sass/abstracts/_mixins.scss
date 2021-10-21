@@ -69,3 +69,27 @@
   align-items: center;
   justify-content: center;
 }
+@for $i from 1 through 20 {
+  $i: $i * 5;
+  .mt-#{$i} {
+    margin-top: 1px * $i !important;
+  }
+}
+@for $i from 1 through 20 {
+  $i: $i * 5;
+  .mb-#{$i} {
+    margin-bottom: 1px * $i !important;
+  }
+}
+@for $i from 1 through 20 {
+  $i: $i * 5;
+  .ml-#{$i} {
+    margin-left: 1px * $i !important;
+  }
+}
+@for $i from 1 through 20 {
+  $i: $i * 5;
+  .mr-#{$i} {
+    margin-right: 1px * $i !important;
+  }
+}

@@ -34,10 +34,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: 1024px) {
+    justify-content: flex-start;
+  }
   .temp-width {
     width: 47%;
     @media only screen and (max-width: 800px) {
       width: 100%;
+    }
+    @media (max-width: 1024px) {
+      width: 44%;
+      display: flex;
+      justify-content: flex-start;
     }
   }
 }
@@ -81,6 +89,9 @@
         width: 23%;
         @media screen and (max-width: 800px) {
           width: 31%;
+        }
+        @media (max-width: 1024px) {
+          width: 25%;
         }
       }
 

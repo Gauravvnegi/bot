@@ -63,7 +63,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       sortType: 'string',
     },
     {
-      field: `guest.getCreatedDate()`,
+      field: `getCreatedDate()`,
       header: 'Visit Date/ curr. Living In',
       isSort: true,
       sortType: 'date',

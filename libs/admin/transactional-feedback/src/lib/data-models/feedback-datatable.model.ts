@@ -69,6 +69,10 @@ export class Feedback {
   getServiceTypeAndTime() {
     return `${this.bookingDetails['serviceType']}: ${this.bookingDetails['session']}`;
   }
+
+  getCreatedDate(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
+  }
 }
 
 export class Guest {

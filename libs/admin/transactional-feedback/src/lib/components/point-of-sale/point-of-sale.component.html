@@ -9,7 +9,6 @@
     <div class="menu-container" *ngIf="npsFG?.get('chartType')">
       <label class="labl" *ngFor="let option of chartTypes">
         <input
-          name="method"
           type="radio"
           formControlName="chartType"
           [value]="option.value"

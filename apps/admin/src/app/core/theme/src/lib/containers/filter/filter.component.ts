@@ -169,7 +169,10 @@ export class FilterComponent implements OnChanges, OnInit {
 
   resetFilter() {
     const propertyValue = this.filterForm.get('property').value;
-    this.filterForm.reset({ property: propertyValue });
+    const feedback = this.filterForm.get('feedback').value;
+    const outlets = this.filterForm.get('outlets').value;
+    Object.keys(outlets).forEach((key) => (outlets[key] = true));
+    this.filterForm.reset({ property: propertyValue, feedback, outlets });
     this.onResetFilter.next(this.filterForm.getRawValue());
     this.hotelBasedToken = { key: null, value: null };
   }

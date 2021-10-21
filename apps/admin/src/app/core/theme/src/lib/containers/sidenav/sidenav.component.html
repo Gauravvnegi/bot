@@ -78,7 +78,7 @@
             rla.isActive ? list_item_colour : 'transparent'
           "
           [style.color]="rla.isActive ? activeFontColor : normalFontColor"
-          [style.padding]="'0px 15px'"
+          [style.padding]="'0px 25px'"
           [style.width]="'100%'"
           ><div class="sidenav_logo">
             <img [src]="subItem.url" class="svg-icon" />
@@ -89,74 +89,3 @@
     </div>
   </div>
 </div>
-<!-- <div class="sidebar-wrapper">
-  <div class="nav-container">
-    <ul class="nav">
-      <li
-        *ngFor="let menuItem of menuItems"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [ngClass]="
-          rla.isActive ? (menuItem.children === null ? 'active' : '') : ''
-        "
-        [routerLinkActiveOptions]="{ exact: false }"
-      >
-        <a
-         
-        >
-
-          
-        </a>
-        <div [hidden]="menuItem.children === null" class="collapse-container">
-          <a
-            data-toggle="collapse"
-            style="padding: 0 15px;"
-            [ngClass]="rla.isActive ? 'parent-active' : ''"
-            class="collapse-a collapsed"
-            [style.color]="normalFontColor"
-          >
-           
-            <div class="sidenav_logo">
-              <img [src]="menuItem.url" class="svg-icon" />
-            </div>
-            <span *ngIf="isExpanded">{{ menuItem.title }}</span>
-            <b
-              *ngIf="isExpanded"
-              class="caret"
-              [style.color]="normalFontColor"
-            ></b>
-          </a>
-          <div id="component" class="collapse" [id]="[menuItem.id]">
-            <ul class="nav">
-              <li
-                *ngFor="let subItem of menuItem.children"
-                routerLinkActive
-                #subrla="routerLinkActive"
-                [ngClass]="subrla.isActive ? 'active' : ''"
-              >
-                <a
-                  [routerLink]="[subItem.path]"
-                  [style.background-color]="
-                    subrla.isActive ? list_item_colour : 'transparent'
-                  "
-                  [style.color]="
-                    subrla.isActive ? activeFontColor : normalFontColor
-                  "
-                  style="height: 43px;"
-                >
-                  <span style="margin-left: 5px; width: 21px;">
-            
-                    <div class="sidenav_logo">
-                      <img [src]="subItem.url" class="svg-icon" />
-                    </div>
-                  </span>
-                  <span *ngIf="isExpanded">{{ subItem.title }}</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div> -->

@@ -1,7 +1,7 @@
 .header {
   padding: 15px;
   background-color: #f4f5f7;
-  width: 450px;
+  width: 100%;
   &-items {
     display: flex;
     justify-content: space-between;
@@ -65,11 +65,20 @@
   padding: 10px 30px;
   &-title {
     margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.63;
+    letter-spacing: 0.96px;
+    color: #484848;
   }
   &-textarea {
     border-radius: 5px;
     border: solid 1px #ced5d9;
     padding: 15px;
+    width: 490px;
+    height: 140px;
   }
 }
 .header {
@@ -77,12 +86,35 @@
     display: flex;
     &-closed-admin {
       margin-right: 15px;
-    }
-    &-closed-data {
-      margin-right: 15px;
-    }
-    &-closed-time {
-      margin-right: 15px;
+      display: flex;
+      &-icon {
+        width: 14px;
+        margin-right: 5px;
+        img {
+          width: 100%;
+        }
+      }
+      &-item {
+        &-title {
+          font-size: 12px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.72px;
+          text-align: left;
+          color: #002046;
+        }
+        &-name {
+          font-size: 12px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.72px;
+          color: #727272;
+        }
+      }
     }
   }
 }
@@ -93,6 +125,13 @@
     justify-content: space-between;
     margin-bottom: 10px;
     &-title {
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.63;
+      letter-spacing: 0.96px;
+      color: #484848;
     }
     &-btn {
       font-family: Roboto;
@@ -111,5 +150,7 @@
     border-radius: 5px;
     border: solid 1px #ced5d9;
     padding: 15px;
+    width: 490px;
+    height: 140px;
   }
 }

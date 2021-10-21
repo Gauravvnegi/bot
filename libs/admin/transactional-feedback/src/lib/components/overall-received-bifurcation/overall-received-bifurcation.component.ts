@@ -5,7 +5,6 @@ import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-s
 import { OverallReceivedBifurcationComponent as BaseOverallReceivedBifurcationComponent } from 'libs/admin/stay-feedback/src/lib/components/overall-received-bifurcation/overall-received-bifurcation.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { FeedbackTableService } from '../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-overall-received-bifurcation',

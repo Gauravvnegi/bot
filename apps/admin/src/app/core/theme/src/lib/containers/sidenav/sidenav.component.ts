@@ -111,25 +111,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     //check if admin or super admin by using command pattern
     ADMIN_ROUTES.forEach((data, i) => {
-      const subscriptionCheck =
-        data.path === 'feedback'
-          ? subscription.filter(
-              (d) =>
-                (ModuleNames[d.name] === data.path && d.active) ||
-                (ModuleNames.FEEDBACK_TRANSACTIONAL === d.name && d.active)
-            ).length
-          : subscription.filter(
-              (d) => ModuleNames[d.name] === data.path && d.active
-            ).length;
-      if (subscriptionCheck) {
-        if (this.menuItems.filter((d) => d.path === data.path).length === 0) {
-          this.menuItems.push(data);
-        }
-      }
-      if (i === ADMIN_ROUTES.length - 2) {
-        this.menuItems = [...this.menuItems, ...DEFAULT_ROUTES];
+      if (this.subscriptionCheck(data, subscription).length) {
+        this.menuItems.push(data);
       }
     });
+    this.menuItems = [
+      ...new Map(
+        [...this.menuItems, ...DEFAULT_ROUTES].map((item) => [item.path, item])
+      ).values(),
+    ];
   }
 
   toggleMenuButton() {
@@ -139,5 +129,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+  }
+
+  subscriptionCheck(data, subscription) {
+    if (data.path === 'feedback')
+      return subscription.filter(
+        (d) =>
+          (ModuleNames[d.name] === data.path && d.active) ||
+          (ModuleNames.FEEDBACK_TRANSACTIONAL === d.name && d.active)
+      );
+    return subscription.filter(
+      (d) => ModuleNames[d.name] === data.path && d.active
+    );
   }
 }

@@ -95,12 +95,28 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         .getBifurcationStats(config)
         .subscribe((response) => {
           this.stats = new Bifurcation().deserialize(response);
-          this.initFeedbackChart();
+          this.initFeedbackChart(
+            this.stats.feedbacks.reduce(
+              (accumulator, current) => accumulator + current.score,
+              0
+            ) === 0
+          );
         })
     );
   }
 
-  initFeedbackChart() {
+  initFeedbackChart(defaultGraph) {
+    if (defaultGraph) {
+      this.feedbackChart.Labels = ['No Data'];
+      this.feedbackChart.Data = [[100]];
+      this.feedbackChart.Colors = [
+        {
+          backgroundColor: ['#D5D1D1'],
+          borderColor: ['#D5D1D1'],
+        },
+      ];
+      return;
+    }
     this.feedbackChart.Data = [[]];
     this.feedbackChart.Labels = [];
     this.feedbackChart.Colors = [
@@ -111,10 +127,12 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     ];
     const data = this.stats.feedbacks;
     data.forEach((feedback) => {
-      this.feedbackChart.Data[0].push(feedback.score);
-      this.feedbackChart.Labels.push(feedback.label);
-      this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
-      this.feedbackChart.Colors[0].borderColor.push(feedback.color);
+      if (feedback.score) {
+        this.feedbackChart.Data[0].push(feedback.score);
+        this.feedbackChart.Labels.push(feedback.label);
+        this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
+        this.feedbackChart.Colors[0].borderColor.push(feedback.color);
+      }
     });
   }
 

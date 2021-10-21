@@ -19,7 +19,7 @@ export class FeedbackComponent implements OnInit {
   @ViewChild('container', { read: ViewContainerRef })
   container: ViewContainerRef;
   $subscription = new Subscription();
-  moduleLoad = false;
+  trasactionalModuleLoad = false;
 
   constructor(
     private compiler: Compiler,
@@ -38,7 +38,7 @@ export class FeedbackComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.moduleLoad =
+        this.trasactionalModuleLoad =
           data['filter'].value.feedback.feedbackType === 'Transactional';
         this.loadModules();
       })
@@ -46,7 +46,7 @@ export class FeedbackComponent implements OnInit {
   }
 
   async loadModules() {
-    if (this.moduleLoad) {
+    if (this.trasactionalModuleLoad) {
       this.loadModule(
         await import(
           'libs/admin/transactional-feedback/src/lib/admin-transactional-feedback.module'

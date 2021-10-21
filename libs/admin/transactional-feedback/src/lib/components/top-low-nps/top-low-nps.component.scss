@@ -35,6 +35,9 @@
       flex-direction: row;
       margin: 7px 0;
       align-items: center;
+      @media (max-width: 1024px) {
+        margin: 3px 0;
+      }
       .label {
         width: 50%;
         margin-right: 10px;
@@ -42,6 +45,9 @@
         // font: normal normal medium 10px Roboto;
         letter-spacing: 0.72px;
         color: #6d7580;
+        @media (max-width: 1024px) {
+          font-size: 10px;
+        }
       }
       .progress {
         display: flex;
@@ -52,6 +58,9 @@
           position: absolute;
           font-size: 12px;
           letter-spacing: 0.72px;
+          @media (max-width: 1024px) {
+            font-size: 10px;
+          }
         }
       }
     }
@@ -74,6 +83,9 @@
         font-size: 12px;
         letter-spacing: 0.6px;
         color: #6d7580;
+        @media (max-width: 1024px) {
+          font-size: 10px;
+        }
       }
     }
   }
@@ -95,5 +107,21 @@
   flex-grow: inherit !important;
   @media (max-width: $L) {
     min-width: 15vw !important;
+  }
+}
+::ng-deep .mat-tab-list {
+  @media (max-width: 1024px) {
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+}
+::ng-deep .mat-tab-label-content {
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
+}
+::ng-deep .stat-title {
+  @media (max-width: 1024px) {
+    font-size: 12px;
   }
 }

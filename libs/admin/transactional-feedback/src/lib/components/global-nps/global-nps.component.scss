@@ -3,6 +3,9 @@
   letter-spacing: 0.96px;
   color: #002046;
   opacity: 1;
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 }
 
 .graph-container {
@@ -101,12 +104,18 @@
       letter-spacing: 0.72px;
       color: #6d7580;
       opacity: 1;
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
     }
     .stat-comparisonPercent {
       font: normal normal normal 12px/14px Roboto;
       letter-spacing: 0.72px;
       color: #52b33f;
       margin: 10px 0;
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
     }
     .stat-val {
       text-align: right;
@@ -115,6 +124,9 @@
       font: normal normal bold 20px/30px Roboto;
       letter-spacing: 1.5px;
       color: #4b56c0;
+      @media (max-width: 1024px) {
+        font-size: 15px;
+      }
     }
   }
 }

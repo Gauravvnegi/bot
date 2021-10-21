@@ -3,6 +3,9 @@
   letter-spacing: 0.96px;
   color: #002046;
   opacity: 1;
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 }
 
 .graph-container {
@@ -74,6 +77,9 @@
       letter-spacing: 0.72px;
       color: #6d7580;
       opacity: 1;
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
     }
   }
   .stat-val {

@@ -14,6 +14,9 @@
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
     color: #002046;
+    @media (max-width: 1024px) {
+      font-size: 12px;
+    }
   }
   &__container {
     display: flex;

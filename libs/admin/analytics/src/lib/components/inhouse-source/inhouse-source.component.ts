@@ -91,23 +91,21 @@ export class InhouseSourceComponent implements OnInit {
     this.chart.Colors[0].backgroundColor = [];
     this.chart.Colors[0].borderColor = [];
     const keys = Object.keys(this.graphData.inhouseRequestSourceStats);
-
     keys.forEach((key, index) => {
-      this.chart.Data[0][index] = this.graphData.inhouseRequestSourceStats[
-        key
-      ].value;
-      this.chart.Labels.push(key);
-      this.chart.Colors[0].backgroundColor.push(
-        this.graphData.inhouseRequestSourceStats[key].color
-      );
-      this.chart.Colors[0].borderColor.push(
-        this.graphData.inhouseRequestSourceStats[key].color
-      );
+      if (this.graphData.inhouseRequestSourceStats[key].value) {
+        this.chart.Data[0].push(
+          this.graphData.inhouseRequestSourceStats[key].value
+        );
+        this.chart.Labels.push(key);
+        this.chart.Colors[0].backgroundColor.push(
+          this.graphData.inhouseRequestSourceStats[key].color
+        );
+        this.chart.Colors[0].borderColor.push(
+          this.graphData.inhouseRequestSourceStats[key].color
+        );
+      }
     });
-
-    if (this.chart.Data[0].reduce((a, b) => a + b, 0)) {
-      // this.setChartOptions();
-    } else {
+    if (!this.chart.Data[0].reduce((a, b) => a + b, 0)) {
       this.chart.Data = [[100]];
       this.chart.Colors = [
         {

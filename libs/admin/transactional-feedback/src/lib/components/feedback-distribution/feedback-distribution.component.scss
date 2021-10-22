@@ -3,6 +3,9 @@
   letter-spacing: 0.96px;
   color: #002046;
   opacity: 1;
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 }
 
 .graph-container {
@@ -74,6 +77,9 @@
       letter-spacing: 0.72px;
       color: #6d7580;
       opacity: 1;
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
     }
   }
   .stat-val {
@@ -86,6 +92,9 @@
     span {
       font-weight: normal;
       color: #52b33f;
+      @media (max-width: 1024px) {
+        font-size: 10px;
+      }
     }
   }
 }
@@ -116,5 +125,8 @@
     z-index: -1;
   }
 }
-.height-125 {
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  @media (max-width: 1024px) {
+    width: 140px;
+  }
 }

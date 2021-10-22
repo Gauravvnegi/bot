@@ -35,6 +35,9 @@
       flex-direction: row;
       margin: 7px 0;
       align-items: center;
+      @media (max-width: 1024px) {
+        margin: 4px 0;
+      }
       .label {
         width: 50%;
         margin-right: 10px;
@@ -42,6 +45,9 @@
         // font: normal normal medium 10px Roboto;
         letter-spacing: 0.72px;
         color: #6d7580;
+        @media (max-width: 1024px) {
+          font-size: 10px;
+        }
       }
       .progress {
         display: flex;
@@ -74,6 +80,9 @@
         font-size: 12px;
         letter-spacing: 0.6px;
         color: #6d7580;
+        @media (max-width: 1024px) {
+          font-size: 10px;
+        }
       }
     }
   }

@@ -1,48 +1,56 @@
+variables:
+  IMAGE_TAG: $CI_COMMIT_SHA
+  BRANCH: $CI_COMMIT_REF_NAME
+ # DOCKER_DRIVER: overlay2
+  #DOCKER_HOST: tcp://docker:2375
+  #DOCKER_TLS_CERTDIR: ""
+
+
+
 stages:
+  - build
+#  - test
   - deploy
 
 
-deploy to NDevelopment-web-user:
+build_project:
+  stage: build
+  environment:
+    name: k8s
+  before_script:
+    - echo $(git rev-parse HEAD) | cut -c 1-7
+    - cat "$APP_KEY" > src/main/resources/application.properties
+    - mvn clean install
+    - ls -l
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+    - docker build -t $CI_IMAGE_NAME .
+    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
+    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
+    - docker push $CI_REGISTRY_IMAGE_URL:latest
+    - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+  tags:
+    - k8s
+
+#test_project:
+#    stage: test
+#    script:
+#        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+#        - docker pull $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+#        - docker run --name=$BRANCH -p 3002:3002 -i $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG npm run ci
+#    tags:
+#     - k8s
+
+deploy_project:
   stage: deploy
   environment:
-    name: ndevelopment-web-user
-  when: manual
+    name: k8s
   before_script:
-  - cp deploy/* .
-  - chmod +x *.sh
-  - rm -rf deploy
-  - tar -cvf admin.tar *
-  - ls -l
-  - ls | wc -l
+    - cat "$DEPLOYMENT_FILE" > deployment.yaml
+    - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
   script:
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
-    - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$web_user_work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; tar -xvf *.tar; sh -x web-user_dev.sh"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; rm -rf $web_user_work_dir/*.tar; ls $web_user_work_dir && netstat -tnlp"
-  only:
-    - dev-deploy
-
-
-
-
-deploy to NDevelopment-admin:
-  stage: deploy
-  environment:
-    name: ndevelopment-admin
-  when: manual
-  before_script:
-  - cp deploy/* .
-  - chmod +x *.sh
-  - rm -rf deploy
-  - tar -cvf admin.tar *
-  - ls -l
-  - ls | wc -l
-  script:
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
-    - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$admin_work_dir"
-    #- scp -r -P$ssh_port * "$ssh_user"@"$server_ip":"$admin_work_dir"
-    #- scp -r -P$ssh_port admin.sh "$ssh_user"@"$server_ip":"$admin_work_dir"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; tar -xvf *.tar; sh -x admin.sh"
-    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; rm -rf $admin_work_dir/*.tar; ls $admin_work_dir && netstat -tnlp"
-  only:
-    - dev-deploy
+    - export KUBECONFIG=k8s-config.yaml
+    - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
+    - kubectl apply -f deployment.yaml --validate=false
+  tags:
+    - k8s

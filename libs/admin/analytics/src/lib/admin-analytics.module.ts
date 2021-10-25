@@ -12,6 +12,8 @@ import { InhouseSourceComponent } from './components/inhouse-source/inhouse-sour
 import { InhouseSentimentsComponent } from './components/inhouse-sentiments/inhouse-sentiments.component';
 import { InhouseComponent } from './components/inhouse/inhouse.component';
 import { InhouseRequestDatatableComponent } from './components/inhouse-request-datatable/inhouse-request-datatable.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
   imports: [
@@ -31,6 +33,8 @@ import { InhouseRequestDatatableComponent } from './components/inhouse-request-d
     InhouseSentimentsComponent,
     InhouseComponent,
     InhouseRequestDatatableComponent,
+    ConversationComponent,
+    NotificationComponent,
   ],
   providers: [AnalyticsService],
 })

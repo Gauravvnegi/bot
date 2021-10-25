@@ -17,6 +17,7 @@ build_project:
   stage: build
   environment:
     name: k8s
+  when: manual
   before_script:
     - echo $(git rev-parse HEAD) | cut -c 1-7
     - cat "$APP_KEY" > src/main/resources/application.properties
@@ -29,6 +30,9 @@ build_project:
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+  only:
+    variables:
+      - $admin == "true"
   tags:
     - k8s
 
@@ -45,6 +49,7 @@ deploy_project:
   stage: deploy
   environment:
     name: k8s
+  when: manual
   before_script:
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
@@ -54,6 +59,6 @@ deploy_project:
     - kubectl apply -f deployment.yaml --validate=false
   only:
     variables:
-      - $ADMIN == "true"
+      - $admin == "true"
   tags:
     - k8s

@@ -22,6 +22,8 @@
   }
   &__body {
     display: flex;
+    align-items: center;
+    margin: 15px 0;
     @media screen and (max-width: 1024px) {
       flex-direction: column;
       justify-content: center;
@@ -29,7 +31,6 @@
     .graph-container {
       width: 50%;
       height: 200px;
-      margin: 10px 0;
       position: relative;
       @media screen and (max-width: 1024px) {
         width: auto;

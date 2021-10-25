@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -12,6 +12,7 @@ import { AnalyticsService } from '../../services/analytics.service';
   styleUrls: ['./inhouse-source.component.scss'],
 })
 export class InhouseSourceComponent implements OnInit {
+  @Input() entityType = 'Inhouse';
   $subscription = new Subscription();
   globalFilters;
   graphData;
@@ -62,7 +63,7 @@ export class InhouseSourceComponent implements OnInit {
         this.globalFilters = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
-          { entityType: 'Inhouse' },
+          { entityType: this.entityType },
         ];
         this.getInhouseSourceData();
       })

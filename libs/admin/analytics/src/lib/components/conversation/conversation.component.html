@@ -21,7 +21,7 @@
         </canvas>
       </div>
     </div>
-    <div class="stats__body__detail">
+    <div class="stats__body__detail" *ngIf="stats">
       <div class="stats__body__detail__shared">
         <div>{{ stats?.totalResponse }}</div>
         <div>
@@ -64,8 +64,8 @@
       <div class="stats__body__detail__sharedtitle">
         Overall
       </div>
-      <ng-container *ngIf="stats?.data">
-        <div class="received-wrap" *ngFor="let item of stats.data">
+      <ng-container *ngIf="stats?.statistics">
+        <div class="received-wrap" *ngFor="let item of stats.statistics">
           <div class="received-wrap__container">
             <div
               class="received-wrap__container__dot"

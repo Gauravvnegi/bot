@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { Subscription } from 'rxjs';
+import { Conversation } from '../../models/whatsapp-analytics.model';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'hospitality-bot-conversation',
@@ -6,6 +12,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./conversation.component.scss'],
 })
 export class ConversationComponent implements OnInit {
+  $subscription = new Subscription();
+  globalFilters;
+  hotelId: string;
   chart: any = {
     Labels: ['No Data'],
     Data: [[100]],
@@ -32,28 +41,66 @@ export class ConversationComponent implements OnInit {
       },
     },
   };
-  stats = {
-    totalResponse: 370,
-    comparePercent: 10,
-    data: [
-      {
-        label: 'Incoming',
-        count: 146,
-        color: '#ffec8c',
-        comparePercent: 10,
-      },
-      {
-        label: 'Outgoing',
-        count: 255,
-        color: '#31bb92',
-        comparePercent: 10,
-      },
-    ],
-  };
-  constructor() {}
+  stats: Conversation;
+  constructor(
+    private _adminUtilityService: AdminUtilityService,
+    private _globalFilterService: GlobalFilterService,
+    private analyticsService: AnalyticsService,
+    private snackbarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
-    this.initGraphData();
+    this.registerListeners();
+  }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalFilters = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.getHotelId(this.globalFilters);
+        this.getConversationData();
+      })
+    );
+  }
+
+  getConversationData() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalFilters),
+    };
+
+    this.$subscription.add(
+      this.analyticsService
+        .getConversationMessageStats(this.hotelId, config)
+        .subscribe(
+          (response) => {
+            this.stats = new Conversation().deserialize(response);
+            this.initGraphData(
+              this.stats.statistics.reduce(
+                (accumulator, current) => accumulator + current.count,
+                0
+              ) === 0
+            );
+          },
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   initGraphData(defaultGraph = false) {
@@ -73,7 +120,7 @@ export class ConversationComponent implements OnInit {
     this.chart.Colors[0].backgroundColor = [];
     this.chart.Colors[0].borderColor = [];
 
-    this.stats.data.forEach((data) => {
+    this.stats.statistics.forEach((data) => {
       if (data.count) {
         this.chart.Labels.push(data.label);
         this.chart.Data[0].push(data.count);

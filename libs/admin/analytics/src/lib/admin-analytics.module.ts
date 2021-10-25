@@ -14,6 +14,7 @@ import { InhouseComponent } from './components/inhouse/inhouse.component';
 import { InhouseRequestDatatableComponent } from './components/inhouse-request-datatable/inhouse-request-datatable.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { PreArrivalComponent } from './components/pre-arrival/pre-arrival.component';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { NotificationComponent } from './components/notification/notification.co
     InhouseRequestDatatableComponent,
     ConversationComponent,
     NotificationComponent,
+    PreArrivalComponent,
   ],
   providers: [AnalyticsService],
 })

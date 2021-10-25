@@ -1,5 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { BaseChartDirective } from 'ng2-charts';
+import { Subscription } from 'rxjs';
+import {
+  Conversation,
+  Notification,
+} from '../../models/whatsapp-analytics.model';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'hospitality-bot-notification',
@@ -7,12 +16,18 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrls: ['./notification.component.scss'],
 })
 export class NotificationComponent implements OnInit {
+  $subscription = new Subscription();
+  globalFilters;
+  hotelId: string;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   chart: any = {
     chartData: [
+      // { data: [80], label: 'Pre-Check-In', fill: false },
+      // { data: [160], label: 'Post Check-In', fill: false },
+      // { data: [78], label: 'Post Check-Out', fill: false },
       {
-        data: [80, 160, 78],
+        data: [0, 0, 0],
         label: '',
       },
     ],
@@ -62,27 +77,88 @@ export class NotificationComponent implements OnInit {
     chartLegend: false,
     chartType: 'horizontalBar',
   };
-  constructor() {}
+  stats: Notification;
+  constructor(
+    private _adminUtilityService: AdminUtilityService,
+    private _globalFilterService: GlobalFilterService,
+    private analyticsService: AnalyticsService,
+    private snackbarService: SnackBarService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.registerListeners();
+  }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalFilters = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.getHotelId(this.globalFilters);
+        this.getConversationData();
+      })
+    );
+  }
+
+  getConversationData() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalFilters),
+    };
+
+    this.$subscription.add(
+      this.analyticsService
+        .getConversationTemplateStats(this.hotelId, config)
+        .subscribe(
+          (response) => {
+            this.stats = new Notification().deserialize(response);
+            this.initGraphData();
+          },
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  initGraphData() {
+    this.chart.chartLabels = [];
+    this.chart.chartData[0].data = [[]];
+    this.chart.chartColors[0].backgroundColor = [];
+    this.chart.chartColors[0].borderColor = [];
+
+    this.stats.statistics.forEach((data) => {
+      // if (data.count) {
+      this.chart.chartLabels.push(data.label);
+      this.chart.chartData[0].data.push(data.count);
+      this.chart.chartColors[0].backgroundColor.push(data.color);
+      this.chart.chartColors[0].borderColor.push(data.color);
+      // }
+    });
+  }
 
   legendOnClick = (index, event) => {
     event.stopPropagation();
     let ci = this.baseChart.chart;
-    let alreadyHidden =
-      ci.getDatasetMeta(index).hidden === null
-        ? false
-        : ci.getDatasetMeta(index).hidden;
-
-    ci.data.datasets[0].data.forEach((e, i) => {
-      let meta = ci.getDatasetMeta(i);
-      if (!meta.data[i].hidden) {
-        meta.data[i].hidden = true;
-      } else {
-        meta.data[i].hidden = false;
-      }
-      return;
-    });
+    let meta = ci.getDatasetMeta(0);
+    if (!meta.data[index].hidden) {
+      meta.data[index].hidden = true;
+    } else {
+      meta.data[index].hidden = false;
+    }
 
     ci.update();
   };

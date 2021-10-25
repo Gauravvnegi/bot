@@ -53,6 +53,7 @@
     <div
       *ngFor="let label of labels; let i = index"
       style="display: flex; align-items: center; cursor: pointer;"
+      (click)="legendOnClick(i, $event)"
     >
       <div
         style="

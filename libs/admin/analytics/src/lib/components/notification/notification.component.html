@@ -1,46 +1,13 @@
-<div
-  style="
-    width: 100%;
-    border-radius: 5px;
-    border: solid 1px #e2e2e2;
-    height: 100%;
-    padding: 20px;
-  "
->
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
-      color: #002046;
-    "
-  >
+<div class="notification">
+  <div class="notification-title">
     Notification
   </div>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 12px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: normal;
-      text-align: left;
-      color: #6d7580;
-      margin: 20px 0;
-    "
-  >
+  <div class="notification-subtitle">
     Bifurcation as per Journey
   </div>
   <canvas
     baseChart
-    style="max-height: 220px; max-width: 100%;"
+    class="notification-baseChart"
     [datasets]="chart.chartData"
     [labels]="chart.chartLabels"
     [options]="chart.chartOptions"
@@ -49,88 +16,31 @@
     [chartType]="chart.chartType"
   >
   </canvas>
-  <div style="display: flex; justify-content: space-around; margin: 15px 0;">
+  <div class="notification-check-wrap">
     <div
+      class="notification-check-wrap-items"
       *ngFor="let label of labels; let i = index"
-      style="display: flex; align-items: center; cursor: pointer;"
       (click)="legendOnClick(i, $event)"
     >
       <div
-        style="
-          height: 10px;
-          width: 10px;
-          border-radius: 50%;
-          margin-right: 10px;
-        "
+        class="notification-check-wrap-items-dot"
         [style.backgroundColor]="colors[i]"
       ></div>
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 12px;
-          font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.72px;
-          text-align: left;
-          color: #6d7580;
-        "
-      >
+      <div class="notification-check-wrap-items-label">
         {{ label }}
       </div>
     </div>
   </div>
-  <div
-    style="display: flex; justify-content: space-between; align-items: center;"
-  >
-    <div
-      style="
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.84px;
-        text-align: left;
-        color: #6d7580;
-        max-width: 113px;
-      "
-    >
+  <div class="notification-footer">
+    <div class="notification-footer-title">
       Total Templates Sent
     </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-end;">
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 25px;
-          font-weight: bold;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: normal;
-          text-align: left;
-          color: #002046;
-        "
-      >
+    <div class="notification-footer-values">
+      <div class="notification-footer-values-t-value">
         224
       </div>
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 12px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: normal;
-          text-align: left;
-          display: flex;
-          align-items: center;
-        "
-      >
-        <div style="color: #52b33f;">
+      <div class="notification-footer-values-sent">
+        <div class="notification-footer-values-sent-num">
           (10%)<img
             [src]="
               true ? 'assets/svg/uparrow.svg' : 'assets/svg/down-percentage.svg'
@@ -138,7 +48,7 @@
             alt="uparrow"
           />
         </div>
-        <div style="color: #b4b4b4;">In 30 Days</div>
+        <div class="notification-footer-values-sent-day">In 30 Days</div>
       </div>
     </div>
   </div>

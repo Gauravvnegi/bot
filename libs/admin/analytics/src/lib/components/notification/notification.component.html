@@ -37,13 +37,24 @@
     </div>
     <div class="notification-footer-values">
       <div class="notification-footer-values-t-value">
-        224
+        {{ stats?.total }}
       </div>
       <div class="notification-footer-values-sent">
-        <div class="notification-footer-values-sent-num">
-          (10%)<img
+        <div
+          class="notification-footer-values-sent-num"
+          [ngStyle]="
+            stats?.comparisonPercentage >= 0
+              ? {
+                  color: '#52b33f'
+                }
+              : { color: '#CC052B' }
+          "
+        >
+          ({{ stats?.comparisonPercentage }}%)<img
             [src]="
-              true ? 'assets/svg/uparrow.svg' : 'assets/svg/down-percentage.svg'
+              stats?.comparisonPercentage >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
             "
             alt="uparrow"
           />

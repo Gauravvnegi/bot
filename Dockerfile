@@ -4,7 +4,7 @@ RUN mkdir -p /app
 WORKDIR /app
 #COPY package.json /app
 COPY . /app
-RUN npm install -g @angular/cli@9.1.0
+RUN npm install -g @angular/cli@10.0.0
 RUN npm install
 RUN ng run admin:build --configuration=development
 # Stage 2

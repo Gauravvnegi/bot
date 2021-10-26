@@ -30,9 +30,6 @@ build_project:
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-  only:
-    variables:
-      - $admin == "true"
   tags:
     - k8s
 
@@ -57,8 +54,5 @@ deploy_project:
     - export KUBECONFIG=k8s-config.yaml
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
-  only:
-    variables:
-      - $admin == "true"
   tags:
     - k8s

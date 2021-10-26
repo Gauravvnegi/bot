@@ -23,12 +23,12 @@ build_project:
    # - cat "$APP_KEY" > src/main/resources/application.properties
    # - mvn clean install
     - ls -l
-  script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+  script:
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
-    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
-    - docker push $CI_REGISTRY_IMAGE_URL:latest
+    #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
+    #- docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
   tags:
     - k8s

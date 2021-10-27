@@ -9,5 +9,6 @@ RUN npm ci
 RUN ng run admin:build --configuration=development
 # Stage 2
 FROM nginx:1.21.3-alpine
-COPY --from=build-step /app/dist /usr/share/nginx/html
+COPY --from=build-step /app/dist/apps/admin /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

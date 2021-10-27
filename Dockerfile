@@ -3,7 +3,7 @@ FROM node:14-alpine as build-step
 RUN mkdir -p /app
 WORKDIR /app
 COPY . /app
-RUN npm install @angular/cli10.0.0
+RUN npm install -g @angular/cli10.0.0
 RUN npm install
 RUN ng run admin:build --configuration=development
 # Stage 2

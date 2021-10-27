@@ -9,7 +9,7 @@ ENV NODE_ENV $NODE_ENV
 #COPY package.json /usr/src/app/
 #RUN npm install
 COPY . /app
-RUN npm install -g @angular/cli@10.0.0
+RUN npm install -g @angular/cli
 RUN npm install
 RUN ng run admin:build --configuration=development
 # Stage 2

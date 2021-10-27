@@ -6,12 +6,10 @@ variables:
   #DOCKER_TLS_CERTDIR: ""
 
 stages:
-  - build
-#  - test
-#  - deploy
+  - deploy
 
-build_project:
-  stage: build
+Deploy_Admin:
+  stage: deploy
   environment:
     name: k8s
   when: manual
@@ -20,6 +18,31 @@ build_project:
     - ls -l
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
   script:
+    - docker build -t $CI_IMAGE_NAME .
+    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
+    #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
+    #- docker push $CI_REGISTRY_IMAGE_URL:latest
+    - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+
+    - cat "$DEPLOYMENT_FILE" > deployment.yaml
+    - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
+    - export KUBECONFIG=k8s-config.yaml
+    - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
+    - kubectl apply -f deployment.yaml --validate=false
+  tags:
+    - k8s
+
+Deploy_Web:
+  stage: deploy
+  environment:
+    name: k8s_web
+  when: manual
+  before_script:
+    - echo $(git rev-parse HEAD) | cut -c 1-7
+    - ls -l
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+  script:
+    - 
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
     #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest

@@ -41,8 +41,8 @@ Deploy_Web:
     - echo $(git rev-parse HEAD) | cut -c 1-7
     - ls -l
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+    - sed -i "s/admin:build/web-user:build/g" Dockerfile
   script:
-    - 
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
     #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest

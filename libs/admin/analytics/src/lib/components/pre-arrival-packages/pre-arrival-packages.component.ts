@@ -259,7 +259,7 @@ export class PreArrivalPackagesComponent implements OnInit {
 
   initChartLabels(stat) {
     const keys = Object.keys(stat);
-    keys.forEach((d, i) => {
+    keys.forEach((d, i) =>
       this.chart.chartLabels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
@@ -274,8 +274,8 @@ export class PreArrivalPackagesComponent implements OnInit {
             ? this._adminUtilityService.getToDate(this.globalFilters)
             : null
         )
-      );
-    });
+      )
+    );
   }
 
   onSelectedTabFilterChange(event) {}

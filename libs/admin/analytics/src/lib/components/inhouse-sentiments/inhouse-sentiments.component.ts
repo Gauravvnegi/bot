@@ -225,7 +225,6 @@ export class InhouseSentimentsComponent implements OnInit {
         });
       }
     });
-    console.log(this.chart);
   }
 
   initChartLabels(stat) {

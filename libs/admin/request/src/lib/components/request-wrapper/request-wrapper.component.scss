@@ -1,0 +1,9 @@
+@import 'main';
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 7vw !important;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: black !important;
+}

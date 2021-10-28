@@ -1,0 +1,127 @@
+<div style="width: 33%; height: 100%;">
+  <div
+    style="
+      height: 65px;
+      display: flex;
+      border: solid 1px #e0e0e0;
+      align-items: center;
+      max-width: 100%;
+    "
+  >
+    <div style="overflow-x: auto;">
+      <hospitality-bot-tab-group
+        [listItems]="tabFilterItems"
+        [selectedIndex]="tabFilterIdx"
+        (selectedTabChange)="onSelectedTabFilterChange($event)"
+      ></hospitality-bot-tab-group>
+    </div>
+    <div style="cursor: pointer; margin: 0 10px;">
+      <img src="assets/svg/Filter-Icon.svg" alt="filter" />
+    </div>
+  </div>
+  <div
+    style="
+      height: calc(100% - 65px);
+      overflow-y: auto;
+      border-right: solid 1px #e0e0e0;
+    "
+    #requestList
+    (scroll)="onScroll($event)"
+  >
+    <ng-container *ngFor="let item of listData">
+      <div
+        style="
+          height: 138px;
+          padding: 10px;
+          display: flex;
+          border-bottom: solid 1px #e0e0e0;
+        "
+        (click)="setSelectedRequest(item)"
+      >
+        <div
+          style="
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            background-color: olivedrab;
+          "
+        ></div>
+        <div style="margin: 0 10px;">
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 10px;
+              font-weight: bold;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.6px;
+              text-align: left;
+              color: #99a6b5;
+              margin-top: 3px;
+              margin-bottom: 13px;
+            "
+          >
+            RNO: {{ item.rooms[0]?.roomNumber }}
+          </div>
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 12px;
+              font-weight: bold;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.72px;
+              text-align: left;
+              color: #002046;
+              margin-bottom: 5px;
+            "
+          >
+            {{ item.guestDetails.primaryGuest.firstName + ' ' }}
+            {{ item.guestDetails.primaryGuest.lastName }}
+          </div>
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 12px;
+              font-weight: normal;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.72px;
+              text-align: left;
+              color: #909090;
+              margin-bottom: 5px;
+            "
+          >
+            {{ item.remarks }}
+          </div>
+          <div
+            style="
+              display: flex;
+              font-family: Roboto;
+              font-size: 12px;
+              font-weight: 500;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.72px;
+              text-align: left;
+            "
+          >
+            <div>{{ item.priority }}</div>
+            <div
+              style="height: 15px; border: 1px solid #e0e0e0; margin: 0 10px;"
+            ></div>
+            <div>SLA: -{{ item.jobDuration }}min</div>
+            <div
+              style="height: 15px; border: 1px solid #e0e0e0; margin: 0 10px;"
+            ></div>
+            <div>JD:-</div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

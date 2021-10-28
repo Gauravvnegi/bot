@@ -130,7 +130,6 @@ export class Conversation {
         color: '#31bb92',
       })
     );
-    console.log(this);
     return this;
   }
 }

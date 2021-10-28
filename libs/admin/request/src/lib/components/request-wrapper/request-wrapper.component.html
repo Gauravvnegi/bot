@@ -1,0 +1,67 @@
+<div
+  style="
+    height: 65px;
+    padding: 10px 15px;
+    background-color: #fff;
+    margin: -20px -24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  "
+>
+  <div>
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div style="display: flex;">
+    <div
+      style="
+        width: 142px;
+        height: 36px;
+        padding: 8px 18px 8.2px 18.3px;
+        border-radius: 100px;
+        border: solid 1px #e1e1f2;
+        background-color: #f6f6fc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      "
+      (click)="openRaiseRequest()"
+    >
+      <img src="assets/svg/request-add-btn.svg" alt="" />
+      <div
+        style="
+          font-family: Roboto;
+          font-size: 11px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.66px;
+          text-align: left;
+          color: #002046;
+        "
+      >
+        Raise Request
+      </div>
+    </div>
+  </div>
+</div>
+<ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
+  <ng-container *ngSwitchCase="'INHOUSE'">
+    <div
+      style="
+        margin: 25px 0 -15px -20px;
+        background-color: #fff;
+        height: calc(100vh - 190px);
+      "
+    >
+      <hospitality-bot-request-list></hospitality-bot-request-list>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'PREARRIVAL'"></ng-container>
+</ng-container>

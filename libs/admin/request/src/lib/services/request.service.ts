@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
+  selectedRequest = new BehaviorSubject(null);
   getAllRequests(config): Observable<any> {
     return this.get(`/api/v1/live-request/${config.queryObj}`);
+  }
+
+  getAllLiveRequest(config) {
+    return this.get(`/api/v1/live-request/list/${config.queryObj}`);
   }
 
   exportCSV(config): Observable<any> {
@@ -46,6 +51,10 @@ export class RequestService extends ApiService {
 
   getNotificationConfig(hotelId: string): Observable<any> {
     return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
+  }
+
+  getCMSServices(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/cms-services`);
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {

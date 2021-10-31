@@ -9,6 +9,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
+import { InhouseTable } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class RequestListComponent implements OnInit {
   $subscription = new Subscription();
   entityType = 'Inhouse';
   globalQueries = [];
-  listData = [];
+  listData;
   offset = 0;
   limit = 10;
   totalData;
@@ -71,6 +72,7 @@ export class RequestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this._requestService.selectedRequest.next(null);
   }
 
   listenForGlobalFilters() {
@@ -88,7 +90,10 @@ export class RequestListComponent implements OnInit {
             entityType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
             offset: 0,
-            limit: 10,
+            limit:
+              this.listData && this.listData.length > 10
+                ? this.listData.length
+                : 10,
           },
         ]);
       })
@@ -99,7 +104,7 @@ export class RequestListComponent implements OnInit {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {
-          this.listData = response.records;
+          this.listData = new InhouseTable().deserialize(response).records;
           this.updateTabFilterCount(response.entityStateCounts);
           this.totalData = response.total;
         },
@@ -128,14 +133,15 @@ export class RequestListComponent implements OnInit {
         },
       ]).subscribe(
         (response) => {
-          if (offset === 0) this.listData = response.records;
+          if (offset === 0)
+            this.listData = new InhouseTable().deserialize(response).records;
           else
             this.listData = [
               ...new Map(
-                [...this.listData, ...response.records].map((item) => [
-                  item.id,
-                  item,
-                ])
+                [
+                  ...this.listData,
+                  ...new InhouseTable().deserialize(response).records,
+                ].map((item) => [item.id, item])
               ).values(),
             ];
           this.totalData = response.total;
@@ -155,6 +161,7 @@ export class RequestListComponent implements OnInit {
   }
 
   onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
     this.loadData(0, 10);
   }
 

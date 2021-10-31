@@ -17,6 +17,12 @@ export class RaiseRequestComponent implements OnInit {
   hotelId: string;
   $subscription = new Subscription();
   cmsServices = [];
+  priorityList = [
+    { label: 'Low', value: 'LOW' },
+    { label: 'Medium', value: 'MEDIUM' },
+    { label: 'High', value: 'HIGH' },
+    { label: 'Urgent', value: 'URGENT' },
+  ];
   constructor(
     private fb: FormBuilder,
     private _globalFilterService: GlobalFilterService,
@@ -60,7 +66,7 @@ export class RaiseRequestComponent implements OnInit {
       itemName: ['', Validators.required],
       itemCode: ['', Validators.required],
       priorityCode: ['', Validators.required],
-      jobDuration: ['', Validators.required],
+      jobDuration: [''],
       description: [''],
     });
   }
@@ -77,11 +83,11 @@ export class RaiseRequestComponent implements OnInit {
   }
 
   handleItemNameChange(event) {
-    this.requestFG
-      .get('itemCode')
-      .setValue(
-        this.cmsServices.filter((d) => d.itemName === event.value)[0].itemCode
-      );
+    const service = this.cmsServices.filter(
+      (d) => d.itemName === event.value
+    )[0];
+    this.requestFG.get('itemCode').setValue(service.itemCode);
+    this.requestFG.get('jobDuration').setValue(parseInt(service.duration));
   }
 
   close() {

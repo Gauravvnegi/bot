@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 
 @Component({
@@ -7,20 +9,44 @@ import { RequestService } from '../../services/request.service';
   styleUrls: ['./request-detail.component.scss'],
 })
 export class RequestDetailComponent implements OnInit {
-  data = {};
+  data: InhouseData;
   status = false;
-  constructor(private _requestService: RequestService) {}
+  statusList = [
+    { label: 'To-Do', value: 'Immediate' },
+    { label: 'Timeout', value: 'Timeout' },
+    { label: 'Closed', value: 'Closed' },
+  ];
 
-  ngOnInit(): void {}
+  requestFG: FormGroup;
+  constructor(
+    private _requestService: RequestService,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.listenForSelectedRequest();
+    this.initFG();
+  }
 
   listenForSelectedRequest() {
     this._requestService.selectedRequest.subscribe((response) => {
       if (response) {
         this.data = response;
+        this.requestFG.patchValue({ status: response.action });
         this.status = true;
       } else {
         this.status = false;
       }
     });
+  }
+
+  initFG() {
+    this.requestFG = this.fb.group({
+      status: [''],
+    });
+  }
+
+  checkForData() {
+    return this.data && Object.keys(this.data).length;
   }
 }

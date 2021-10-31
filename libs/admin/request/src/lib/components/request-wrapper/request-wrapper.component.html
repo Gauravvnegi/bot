@@ -56,11 +56,18 @@
     <div
       style="
         margin: 25px 0 -15px -20px;
+        width: calc(100% + 40px);
         background-color: #fff;
         height: calc(100vh - 190px);
+        display: flex;
       "
     >
-      <hospitality-bot-request-list></hospitality-bot-request-list>
+      <div style="width: 337px;">
+        <hospitality-bot-request-list></hospitality-bot-request-list>
+      </div>
+      <div style="width: calc(100% - 337px);">
+        <hospitality-bot-request-detail></hospitality-bot-request-detail>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'PREARRIVAL'"></ng-container>

@@ -21,7 +21,7 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
-  <div style="margin: 20px 30px;">
+  <div style="margin: 30px;">
     <div class="form-elements-groups" [formGroup]="requestFG">
       <div class="form-elements-container full-width">
         <img class="icon" src="assets/svg/room.svg" alt="room" />
@@ -105,8 +105,45 @@
           >
         </mat-select>
       </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <mat-select
+          class="form-elements"
+          placeholder="Priority Code*"
+          formControlName="priorityCode"
+        >
+          <mat-option
+            *ngFor="let priority of priorityList"
+            [value]="priority.value"
+            >{{ priority.label }}</mat-option
+          >
+        </mat-select>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <mat-select
+          class="form-elements"
+          placeholder="Job Duration"
+          formControlName="jobDuration"
+        >
+          <mat-option
+            *ngFor="let item of [].constructor(60); let i = index"
+            [value]="i + 1"
+            >{{ i + 1 }} minute</mat-option
+          >
+        </mat-select>
+      </div>
+      <div class="form-elements-container full-width">
+        <img class="icon" src="assets/svg/comments.svg" alt="description" />
+        <input
+          matInput
+          class="form-elements"
+          placeholder="Desription"
+          formControlName="description"
+        />
+      </div>
     </div>
-    <div style="display: flex; justify-content: flex-end;">
+    <div style="display: flex; justify-content: flex-end; margin-top: 25px;">
       <div
         class="button"
         style="

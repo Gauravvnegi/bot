@@ -43,7 +43,7 @@ export class RequestWrapperComponent implements OnInit {
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
+    dialogConfig.width = '50%';
     const raiseRequestCompRef = this._modal.openDialog(
       RaiseRequestComponent,
       dialogConfig

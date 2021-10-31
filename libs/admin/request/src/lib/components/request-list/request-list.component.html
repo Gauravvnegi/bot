@@ -1,4 +1,4 @@
-<div style="width: 33%; height: 100%;">
+<div style="height: 100%;">
   <div
     style="
       height: 65px;
@@ -35,8 +35,13 @@
           padding: 10px;
           display: flex;
           border-bottom: solid 1px #e0e0e0;
+          cursor: pointer;
         "
         (click)="setSelectedRequest(item)"
+        [ngStyle]="
+          selectedRequest &&
+          selectedRequest.id === item.id && { background: '#f1f1f1' }
+        "
       >
         <div
           style="
@@ -46,34 +51,53 @@
             background-color: olivedrab;
           "
         ></div>
-        <div style="margin: 0 10px;">
+        <div
+          style="
+            margin: 0 10px;
+            font-family: Roboto;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+          "
+        >
           <div
             style="
-              font-family: Roboto;
               font-size: 10px;
               font-weight: bold;
               font-stretch: normal;
               font-style: normal;
               line-height: normal;
               letter-spacing: 0.6px;
-              text-align: left;
               color: #99a6b5;
               margin-top: 3px;
               margin-bottom: 13px;
+              display: flex;
+              align-items: center;
             "
           >
-            RNO: {{ item.rooms[0]?.roomNumber }}
+            <div>RNO: {{ item.rooms[0]?.roomNumber }}</div>
+            <div
+              style="
+                padding: 2px 5px 3px;
+                border-radius: 5px;
+                color: #fff;
+                margin-left: 10px;
+              "
+              [ngClass]="{
+                'priority-low': item.priority === 'Low',
+                'priority-medium': item.priority === 'Medium',
+                'priority-high': item.priority === 'High',
+                'priority-urgent': item.priority === 'Urgent'
+              }"
+            >
+              {{ item.priority }}
+            </div>
           </div>
           <div
             style="
-              font-family: Roboto;
               font-size: 12px;
               font-weight: bold;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
               letter-spacing: 0.72px;
-              text-align: left;
               color: #002046;
               margin-bottom: 5px;
             "
@@ -83,14 +107,9 @@
           </div>
           <div
             style="
-              font-family: Roboto;
               font-size: 12px;
               font-weight: normal;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
               letter-spacing: 0.72px;
-              text-align: left;
               color: #909090;
               margin-bottom: 5px;
             "
@@ -100,25 +119,20 @@
           <div
             style="
               display: flex;
-              font-family: Roboto;
               font-size: 12px;
               font-weight: 500;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
               letter-spacing: 0.72px;
-              text-align: left;
             "
           >
             <div>{{ item.priority }}</div>
             <div
               style="height: 15px; border: 1px solid #e0e0e0; margin: 0 10px;"
             ></div>
-            <div>SLA: -{{ item.jobDuration }}min</div>
+            <div>-----</div>
             <div
               style="height: 15px; border: 1px solid #e0e0e0; margin: 0 10px;"
             ></div>
-            <div>JD:-</div>
+            <div>JD:- {{ item.jobDuration }}m</div>
           </div>
         </div>
       </div>

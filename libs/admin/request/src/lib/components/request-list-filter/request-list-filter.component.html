@@ -1,0 +1,72 @@
+<div class="sortFilterWrapper" *ngIf="parentFG">
+  <div class="sortFilterContainer" [formGroup]="parentFG">
+    <div class="sortBy">
+      Sort By
+    </div>
+    <div class="sortTypes">
+      <div
+        [ngStyle]="
+          sortControl?.value.label === item.value &&
+          sortControl?.value.order === item.order
+            ? {
+                background: '#0020461a 0% 0% no-repeat padding-box',
+                border: '1px solid #0020464d'
+              }
+            : {
+                background: '#AEAEAE1A 0% 0% no-repeat padding-box',
+                border: '1px solid #AEAEAE1A'
+              }
+        "
+        class="sortItemWrapper"
+        *ngFor="let item of sortList"
+        (click)="setSortBy(item)"
+      >
+        <div class="sortItem">
+          {{ item.label }}
+        </div>
+      </div>
+    </div>
+    <div class="filterUnderline"></div>
+    <div class="filterBy">
+      Filter By
+    </div>
+    <div
+      style="
+        font: normal normal bold 14px/19px Roboto;
+        letter-spacing: 0.84px;
+        color: #002046;
+        opacity: 1;
+      "
+    >
+      Priority
+    </div>
+    <div
+      *ngFor="let filter of filterData; let i = index"
+      formArrayName="filterBy"
+      class="filterItemWrapper"
+    >
+      <div>
+        <input class="filterCheckbox" type="checkbox" [formControlName]="i" />
+      </div>
+      <div class="filterItem">
+        {{ filter }}
+      </div>
+    </div>
+  </div>
+  <div class="applyBtnWrapper">
+    <!-- <div
+      class="applyBtn"
+      [ngStyle]="
+        parentFG && parentFG.untouched
+          ? { opacity: '0.3', 'pointer-events': 'none' }
+          : { opacity: '1', cursor: 'pointer' }
+      "
+      (click)="applyFilter()"
+    >
+      <div>Apply</div>
+    </div> -->
+    <div class="applyBtn" style="cursor: pointer;" (click)="applyFilter()">
+      <div>Apply</div>
+    </div>
+  </div>
+</div>

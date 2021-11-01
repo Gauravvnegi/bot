@@ -71,6 +71,7 @@
       max-height: 0;
       opacity: 0;
       transition: visibility 1.5s, max-height 1.5s, opacity 1.5s linear;
+      cursor: pointer;
     }
   }
 }

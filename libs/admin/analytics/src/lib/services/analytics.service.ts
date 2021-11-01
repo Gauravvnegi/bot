@@ -8,6 +8,18 @@ export class AnalyticsService extends ApiService {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/counts`);
   }
 
+  getConversationMessageStats(hotelId: string, config) {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/message/stats/counts${config.queryObj}`
+    );
+  }
+
+  getConversationTemplateStats(hotelId: string, config) {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/template/stats/counts${config.queryObj}`
+    );
+  }
+
   getSentReceivedStat(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/graph`);
   }

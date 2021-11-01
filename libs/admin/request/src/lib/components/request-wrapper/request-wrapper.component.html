@@ -1,0 +1,34 @@
+<div class="request-wrapper-header">
+  <div>
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="request-wrapper-header-btnwrap">
+    <div
+      class="request-wrapper-header-btnwrap-btn"
+      (click)="openRaiseRequest()"
+    >
+      <img src="assets/svg/request-add-btn.svg" alt="" />
+      <div class="request-wrapper-header-btnwrap-btn-name">
+        Raise Request
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
+  <ng-container *ngSwitchCase="'INHOUSE'">
+    <div class="request-body">
+      <div class="request-body-left">
+        <hospitality-bot-request-list></hospitality-bot-request-list>
+      </div>
+      <div class="request-body-right">
+        <hospitality-bot-request-detail></hospitality-bot-request-detail>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'PREARRIVAL'"></ng-container>
+</ng-container>

@@ -1,0 +1,52 @@
+@import 'main';
+
+.labl {
+  margin: 0 1%;
+}
+
+.labl > .image {
+  height: 38px;
+  width: 38px;
+  @include flex-justify-center;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid $primary-purple;
+}
+.labl > input {
+  /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.legends:checked ~ div {
+  text-decoration: line-through;
+}
+
+.labl > input + .image {
+  position: relative;
+  cursor: pointer;
+}
+
+.labl > input:checked + .image {
+  background-color: $primary-purple;
+  img {
+    filter: invert(1);
+    height: 12px;
+  }
+}
+
+.days-label {
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #b4b4b4;
+  align-self: flex-start;
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 9vw !important;
+}

@@ -25,6 +25,13 @@ const appRoutes: Route[] = [
             (m) => m.AdminMessagesModule
           ),
       },
+      {
+        path: 'request',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/request').then(
+            (m) => m.AdminRequestModule
+          ),
+      },
     ],
   },
 ];

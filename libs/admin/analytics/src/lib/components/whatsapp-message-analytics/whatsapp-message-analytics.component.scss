@@ -68,7 +68,6 @@
   }
   .messageAnalytics {
     width: 40%;
-    height: 100%;
     margin-right: 15px;
     background: #ffffff 0% 0% no-repeat padding-box;
     border: 1px solid #e2e2e2;
@@ -155,7 +154,6 @@
   }
   .sentAnalytics {
     width: 60%;
-    height: 100%;
     background: #ffffff 0% 0% no-repeat padding-box;
     border: 1px solid #e2e2e2;
     border-radius: 5px;
@@ -289,7 +287,7 @@
   padding: 0 10px;
   // padding: 5px 10px;
   // max-width: 100%;
-  .canvas{
+  .canvas {
     max-height: 290px;
   }
 }

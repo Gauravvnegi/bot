@@ -1,14 +1,4 @@
-<div
-  style="
-    height: 65px;
-    padding: 10px 15px;
-    background-color: #fff;
-    margin: -20px -24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  "
->
+<div class="request-wrapper-header">
   <div>
     <hospitality-bot-tab-group
       [listItems]="tabFilterItems"
@@ -16,56 +6,26 @@
       (selectedTabChange)="onSelectedTabFilterChange($event)"
     ></hospitality-bot-tab-group>
   </div>
-  <div style="display: flex;">
+  <div class="request-wrapper-header-btnwrap">
     <div
-      style="
-        width: 142px;
-        height: 36px;
-        padding: 8px 18px 8.2px 18.3px;
-        border-radius: 100px;
-        border: solid 1px #e1e1f2;
-        background-color: #f6f6fc;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-      "
+      class="request-wrapper-header-btnwrap-btn"
       (click)="openRaiseRequest()"
     >
       <img src="assets/svg/request-add-btn.svg" alt="" />
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 11px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.66px;
-          text-align: left;
-          color: #002046;
-        "
-      >
+      <div class="request-wrapper-header-btnwrap-btn-name">
         Raise Request
       </div>
     </div>
   </div>
 </div>
+
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">
-    <div
-      style="
-        margin: 25px 0 -15px -20px;
-        width: calc(100% + 40px);
-        background-color: #fff;
-        height: calc(100vh - 190px);
-        display: flex;
-      "
-    >
-      <div style="width: 337px;">
+    <div class="request-body">
+      <div class="request-body-left">
         <hospitality-bot-request-list></hospitality-bot-request-list>
       </div>
-      <div style="width: calc(100% - 337px);">
+      <div class="request-body-right">
         <hospitality-bot-request-detail></hospitality-bot-request-detail>
       </div>
     </div>

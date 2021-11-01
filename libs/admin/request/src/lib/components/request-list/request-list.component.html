@@ -1,88 +1,32 @@
-<div style="height: 100%;">
-  <div
-    style="
-      height: 65px;
-      display: flex;
-      border: solid 1px #e0e0e0;
-      align-items: center;
-      max-width: 100%;
-    "
-  >
-    <div style="overflow-x: auto;">
+<div class="right-side">
+  <div class="right-side-header">
+    <div class="right-side-header-nav">
       <hospitality-bot-tab-group
         [listItems]="tabFilterItems"
         [selectedIndex]="tabFilterIdx"
         (selectedTabChange)="onSelectedTabFilterChange($event)"
       ></hospitality-bot-tab-group>
     </div>
-    <div style="cursor: pointer; margin: 0 10px;">
+    <div class="right-side-header-filter">
       <img src="assets/svg/Filter-Icon.svg" alt="filter" />
     </div>
   </div>
-  <div
-    style="
-      height: calc(100% - 65px);
-      overflow-y: auto;
-      border-right: solid 1px #e0e0e0;
-    "
-    #requestList
-    (scroll)="onScroll($event)"
-  >
+  <div class="right-side-body" #requestList (scroll)="onScroll($event)">
     <ng-container *ngFor="let item of listData">
       <div
-        style="
-          height: 138px;
-          padding: 10px;
-          display: flex;
-          border-bottom: solid 1px #e0e0e0;
-          cursor: pointer;
-        "
+        class="right-side-body-card"
         (click)="setSelectedRequest(item)"
         [ngStyle]="
           selectedRequest &&
           selectedRequest.id === item.id && { background: '#f1f1f1' }
         "
       >
-        <div
-          style="
-            height: 45px;
-            width: 45px;
-            border-radius: 50%;
-            background-color: olivedrab;
-          "
-        ></div>
-        <div
-          style="
-            margin: 0 10px;
-            font-family: Roboto;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-          "
-        >
-          <div
-            style="
-              font-size: 10px;
-              font-weight: bold;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
-              letter-spacing: 0.6px;
-              color: #99a6b5;
-              margin-top: 3px;
-              margin-bottom: 13px;
-              display: flex;
-              align-items: center;
-            "
-          >
+        <div class="right-side-body-card-avt"></div>
+        <div class="content-wrap">
+          <div class="content-wrap-r1">
             <div>RNO: {{ item.rooms[0]?.roomNumber }}</div>
             <div
-              style="
-                padding: 2px 5px 3px;
-                border-radius: 5px;
-                color: #fff;
-                margin-left: 10px;
-              "
+              class="content-wrap-r1-status"
               [ngClass]="{
                 'priority-low': item.priority === 'Low',
                 'priority-medium': item.priority === 'Medium',
@@ -93,45 +37,18 @@
               {{ item.priority }}
             </div>
           </div>
-          <div
-            style="
-              font-size: 12px;
-              font-weight: bold;
-              letter-spacing: 0.72px;
-              color: #002046;
-              margin-bottom: 5px;
-            "
-          >
+          <div class="content-wrap-title">
             {{ item.guestDetails.primaryGuest.firstName + ' ' }}
             {{ item.guestDetails.primaryGuest.lastName }}
           </div>
-          <div
-            style="
-              font-size: 12px;
-              font-weight: normal;
-              letter-spacing: 0.72px;
-              color: #909090;
-              margin-bottom: 5px;
-            "
-          >
+          <div class="content-wrap-subtitle">
             {{ item.remarks }}
           </div>
-          <div
-            style="
-              display: flex;
-              font-size: 12px;
-              font-weight: 500;
-              letter-spacing: 0.72px;
-            "
-          >
+          <div class="content-wrap-r2">
             <div>{{ item.priority }}</div>
-            <div
-              style="height: 15px; border: 1px solid #e0e0e0; margin: 0 10px;"
-            ></div>
+            <div class="content-wrap-r2-divider"></div>
             <div>-----</div>
-            <div
-              style="height: 15px; border: 1px solid #e0e0e0; margin: 0 10px;"
-            ></div>
+            <div class="content-wrap-r2-divider"></div>
             <div>JD:- {{ item.jobDuration }}m</div>
           </div>
         </div>

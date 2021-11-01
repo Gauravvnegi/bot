@@ -251,7 +251,6 @@ export class RequestListComponent implements OnInit {
   }
 
   handleFilter(event) {
-    console.log(event);
     if (event.status) {
       this.filterData = event.data;
       this.loadData(0, 10);

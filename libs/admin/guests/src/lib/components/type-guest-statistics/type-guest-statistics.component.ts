@@ -217,7 +217,6 @@ export class TypeGuestStatisticsComponent implements OnInit {
       ci.getDatasetMeta(index).hidden === null
         ? false
         : ci.getDatasetMeta(index).hidden;
-    debugger;
     ci.data.datasets.forEach((e, i) => {
       let meta = ci.getDatasetMeta(i);
 

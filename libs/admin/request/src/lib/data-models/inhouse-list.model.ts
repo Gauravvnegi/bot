@@ -95,6 +95,20 @@ export class InhouseData {
       timezone
     )}`;
   }
+
+  getClosedTime(timezone = '+05:30') {
+    if (this.closedTime)
+      return `${DateService.getDateFromTimeStamp(
+        this.closedTime,
+        'd-M-yy',
+        timezone
+      )} at ${DateService.getDateFromTimeStamp(
+        this.closedTime,
+        'h:mm a',
+        timezone
+      )}`;
+    else '------';
+  }
 }
 
 export class Room {

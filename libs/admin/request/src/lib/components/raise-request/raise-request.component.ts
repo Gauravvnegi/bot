@@ -90,7 +90,34 @@ export class RaiseRequestComponent implements OnInit {
     this.requestFG.get('jobDuration').setValue(parseInt(service.duration));
   }
 
-  close() {
-    this.onRaiseRequestClose.emit();
+  raiseRequest() {
+    if (this.requestFG.invalid) {
+      this._snackbarService.openSnackBarAsText('Please fill all details.');
+      this.requestFG.markAllAsTouched();
+      return;
+    }
+
+    const data = {
+      ...this.requestFG.getRawValue(),
+      systemDateTime: '05-AUG-2021 10:47:07',
+      sender: 'KIOSK',
+      propertyID: '1',
+    };
+
+    this.$subscription.add(
+      this._requestService.createRequest(this.hotelId, data).subscribe(
+        (response) => {
+          this._snackbarService.openSnackBarAsText('Request created.', '', {
+            panelClass: 'success',
+          });
+          this.close(true);
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
+  close(status = false) {
+    this.onRaiseRequestClose.emit(status);
   }
 }

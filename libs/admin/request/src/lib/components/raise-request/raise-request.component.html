@@ -75,6 +75,14 @@
             >{{ service.itemName }}</mat-option
           >
         </mat-select>
+        <mat-error
+          *ngIf="
+            requestFG.get('itemName').touched &&
+            requestFG.get('itemName').hasError('required')
+          "
+        >
+          Item Name is required
+        </mat-error>
       </div>
       <div class="form-elements-container">
         <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
@@ -90,6 +98,14 @@
             >{{ service.itemCode }}</mat-option
           >
         </mat-select>
+        <mat-error
+          *ngIf="
+            requestFG.get('itemCode').touched &&
+            requestFG.get('itemName').hasError('required')
+          "
+        >
+          Item Code is required
+        </mat-error>
       </div>
       <div class="form-elements-container">
         <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
@@ -104,6 +120,14 @@
             >{{ priority.label }}</mat-option
           >
         </mat-select>
+        <mat-error
+          *ngIf="
+            requestFG.get('priorityCode').touched &&
+            requestFG.get('priorityCode').hasError('required')
+          "
+        >
+          Priority Code is required
+        </mat-error>
       </div>
       <div class="form-elements-container">
         <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
@@ -159,6 +183,7 @@
           color: white;
           cursor: pointer;
         "
+        (click)="raiseRequest()"
       >
         Save
       </div>

@@ -6,6 +6,8 @@ import { RequestWrapperComponent } from './components/request-wrapper/request-wr
 import { RequestListComponent } from './components/request-list/request-list.component';
 import { RequestDetailComponent } from './components/request-detail/request-detail.component';
 import { RaiseRequestComponent } from './components/raise-request/raise-request.component';
+import { RequestListFilterComponent } from './components/request-list-filter/request-list-filter.component';
+import { SearchComponent } from './components/search/search.component';
 
 const appRoutes: Route[] = [
   {
@@ -33,5 +35,7 @@ export class AdminRequestRoutingModule {
     RequestListComponent,
     RequestDetailComponent,
     RaiseRequestComponent,
+    RequestListFilterComponent,
+    SearchComponent,
   ];
 }

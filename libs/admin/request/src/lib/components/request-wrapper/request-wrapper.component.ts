@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
+import { RequestService } from '../../services/request.service';
 import { RaiseRequestComponent } from '../raise-request/raise-request.component';
 
 @Component({
@@ -32,7 +33,10 @@ export class RequestWrapperComponent implements OnInit {
 
   tabFilterIdx: number = 0;
 
-  constructor(private _modal: ModalService) {}
+  constructor(
+    private _modal: ModalService,
+    private _requestService: RequestService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -52,6 +56,7 @@ export class RequestWrapperComponent implements OnInit {
     this.$subscription.add(
       raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
         (res) => {
+          if (res) this._requestService.refreshData.next(res);
           raiseRequestCompRef.close();
         }
       )

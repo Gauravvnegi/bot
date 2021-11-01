@@ -1,17 +1,54 @@
 <div class="right-side">
   <div class="right-side-header">
-    <div class="right-side-header-nav">
-      <hospitality-bot-tab-group
-        [listItems]="tabFilterItems"
-        [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
+    <div
+      *ngIf="enableSearchField; else tabGroup"
+      style="width: calc(100% - 26px); margin-left: 10px;"
+    >
+      <hospitality-bot-search
+        [parentFG]="parentFG"
+        [hotelId]="hotelId"
+        [globalQueries]="globalQueries"
+        [entityType]="entityType"
+        (clear)="clearSearch()"
+        (search)="getSearchValue($event)"
+      ></hospitality-bot-search>
+    </div>
+    <ng-template #tabGroup>
+      <div class="right-side-header-nav">
+        <hospitality-bot-tab-group
+          [listItems]="tabFilterItems"
+          [selectedIndex]="tabFilterIdx"
+          (selectedTabChange)="onSelectedTabFilterChange($event)"
+        ></hospitality-bot-tab-group>
+      </div>
+    </ng-template>
+    <div
+      class="right-side-header-filter"
+      (click)="enableSearch()"
+      *ngIf="!enableSearchField"
+    >
+      <img src="assets/svg/Search.svg" alt="filter" />
     </div>
     <div class="right-side-header-filter">
       <img src="assets/svg/Filter-Icon.svg" alt="filter" />
     </div>
   </div>
-  <div class="right-side-body" #requestList (scroll)="onScroll($event)">
+  <ng-template #loader>
+    <div class="loader">
+      <!-- <p class="loading">Loading</p> -->
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </ng-template>
+  <div
+    class="right-side-body"
+    #requestList
+    (scroll)="onScroll($event)"
+    *ngIf="!loading; else loader"
+  >
     <ng-container *ngFor="let item of listData">
       <div
         class="right-side-body-card"
@@ -38,8 +75,13 @@
             </div>
           </div>
           <div class="content-wrap-title">
-            {{ item.guestDetails.primaryGuest.firstName + ' ' }}
-            {{ item.guestDetails.primaryGuest.lastName }}
+            {{ item.guestDetails.primaryGuest.getFullName() }}
+          </div>
+          <div
+            class="content-wrap-subtitle"
+            style="color: #002046; font-weight: 500;"
+          >
+            {{ item.itemName }}
           </div>
           <div class="content-wrap-subtitle">
             {{ item.remarks }}

@@ -24,7 +24,7 @@
   </div>
   <div class="request-items-body">
     <div class="request-items-body-title">
-      Chatbot DM
+      {{ data.itemName }}
     </div>
     <div class="request-items-body-subtitle">
       {{ data.remarks }}
@@ -85,7 +85,7 @@
           <td>--------</td>
           <td>JD: {{ data.jobDuration }}m</td>
           <td>-</td>
-          <td>{{ data.quantity }}</td>
+          <td>{{ data.quantity || 'None' }}</td>
         </tr>
       </table>
     </div>

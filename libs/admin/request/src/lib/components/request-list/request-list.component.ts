@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -21,12 +22,15 @@ export class RequestListComponent implements OnInit {
   @ViewChild('requestList') private myScrollContainer: ElementRef;
   $subscription = new Subscription();
   entityType = 'Inhouse';
+  enableSearchField = false;
+  loading = false;
   globalQueries = [];
   listData;
   offset = 0;
   limit = 10;
   totalData;
   selectedRequest;
+  parentFG: FormGroup;
   tabFilterItems = [
     {
       label: 'All',
@@ -53,7 +57,7 @@ export class RequestListComponent implements OnInit {
       chips: [],
     },
     {
-      label: 'Closed',
+      label: 'Close',
       content: '',
       value: 'Closed',
       disabled: false,
@@ -63,16 +67,25 @@ export class RequestListComponent implements OnInit {
   ];
 
   tabFilterIdx: number = 0;
+  hotelId: string;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
     private _requestService: RequestService,
-    private _adminUtilityService: AdminUtilityService
+    private _adminUtilityService: AdminUtilityService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
     this.listenForGlobalFilters();
     this._requestService.selectedRequest.next(null);
+  }
+
+  initFG() {
+    this.parentFG = this.fb.group({
+      search: ['', Validators.minLength(3)],
+    });
   }
 
   listenForGlobalFilters() {
@@ -83,6 +96,10 @@ export class RequestListComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
         this.loadInitialRequestList([
           ...this.globalQueries,
           {
@@ -100,13 +117,36 @@ export class RequestListComponent implements OnInit {
     );
   }
 
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  listenForRefreshData() {
+    this.$subscription.add(
+      this._requestService.refreshData.subscribe((response) => {
+        if (response) {
+          this.loading = true;
+          this.loadData(0, this.listData?.length || 10);
+        }
+      })
+    );
+  }
+
   loadInitialRequestList(queries = []) {
+    this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {
           this.listData = new InhouseTable().deserialize(response).records;
           this.updateTabFilterCount(response.entityStateCounts);
           this.totalData = response.total;
+          this.loading = false;
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
@@ -146,6 +186,7 @@ export class RequestListComponent implements OnInit {
             ];
           this.totalData = response.total;
           this.updateTabFilterCount(response.entityStateCounts);
+          this.loading = false;
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
@@ -167,24 +208,41 @@ export class RequestListComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
-    if (
-      this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.offsetHeight +
-        this.myScrollContainer.nativeElement.scrollTop ===
-        this.myScrollContainer.nativeElement.scrollHeight
-    ) {
-      if (this.totalData > this.listData.length) {
-        this.offset = this.listData.length;
+    if (!this.enableSearchField)
+      if (
+        this.myScrollContainer &&
+        this.myScrollContainer.nativeElement.offsetHeight +
+          this.myScrollContainer.nativeElement.scrollTop ===
+          this.myScrollContainer.nativeElement.scrollHeight
+      ) {
+        if (this.totalData > this.listData.length) {
+          this.offset = this.listData.length;
+          this.loadData(this.offset, this.limit);
+        }
+      } else if (this.myScrollContainer.nativeElement.scrollTop === 0) {
+        this.offset = 0;
         this.loadData(this.offset, this.limit);
       }
-    } else if (this.myScrollContainer.nativeElement.scrollTop === 0) {
-      this.offset = 0;
-      this.loadData(this.offset, this.limit);
-    }
   }
 
   setSelectedRequest(item) {
     this.selectedRequest = item;
     this._requestService.selectedRequest.next(item);
+  }
+
+  enableSearch() {
+    this.enableSearchField = true;
+  }
+
+  clearSearch() {
+    this.enableSearchField = false;
+    this.loading = true;
+    this.loadData(0, 10);
+  }
+
+  getSearchValue(event) {
+    this.listData = new InhouseTable().deserialize({
+      records: event.response,
+    }).records;
   }
 }

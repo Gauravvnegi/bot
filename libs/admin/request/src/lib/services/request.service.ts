@@ -7,6 +7,7 @@ import { RequestData } from '../../../../notification/src/lib/data-models/reques
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
+  refreshData = new BehaviorSubject(false);
   getAllRequests(config): Observable<any> {
     return this.get(`/api/v1/live-request/${config.queryObj}`);
   }
@@ -30,6 +31,10 @@ export class RequestService extends ApiService {
 
   createRequestData(hotelId: string, data: RequestData): Observable<any> {
     return this.post(`/api/v1/hotel/${hotelId}/notifications`, data);
+  }
+
+  searchRequest(hotelId: string, config) {
+    return this.get(`/api/v1/live-request/${hotelId}/search${config.queryObj}`);
   }
 
   uploadAttachments(hotelId, formData): Observable<any> {
@@ -78,5 +83,12 @@ export class RequestService extends ApiService {
       });
     }
     return status;
+  }
+
+  createRequest(hotelId, data) {
+    return this.post(
+      `/api/v1/reservation/cms-create-job?cmsUserType=Bot&hotelId=${hotelId}`,
+      data
+    );
   }
 }

@@ -162,3 +162,16 @@
     transform: scale(1);
   }
 }
+
+.sortFilt {
+  height: 62px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #9eaeb8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cross {
+  font-size: 22px;
+  cursor: pointer;
+}

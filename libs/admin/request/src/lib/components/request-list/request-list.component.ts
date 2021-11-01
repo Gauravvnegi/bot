@@ -23,6 +23,8 @@ export class RequestListComponent implements OnInit {
   $subscription = new Subscription();
   entityType = 'Inhouse';
   enableSearchField = false;
+  showFilter = false;
+  filterData = {};
   loading = false;
   globalQueries = [];
   listData;
@@ -103,6 +105,7 @@ export class RequestListComponent implements OnInit {
         this.loadInitialRequestList([
           ...this.globalQueries,
           {
+            ...this.filterData,
             order: 'DESC',
             entityType: this.entityType,
             actionType: this.tabFilterItems[this.tabFilterIdx].value,
@@ -165,6 +168,7 @@ export class RequestListComponent implements OnInit {
       this.fetchDataFrom([
         ...this.globalQueries,
         {
+          ...this.filterData,
           offset,
           limit,
           order: 'DESC',
@@ -244,5 +248,14 @@ export class RequestListComponent implements OnInit {
     this.listData = new InhouseTable().deserialize({
       records: event.response,
     }).records;
+  }
+
+  handleFilter(event) {
+    console.log(event);
+    if (event.status) {
+      this.filterData = event.data;
+      this.loadData(0, 10);
+    }
+    this.showFilter = false;
   }
 }

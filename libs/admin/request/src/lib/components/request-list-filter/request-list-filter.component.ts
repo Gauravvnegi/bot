@@ -10,13 +10,14 @@ export class RequestListFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Output() filterApplied = new EventEmitter();
   sortList = [
+    { label: 'Latest', value: '', order: '' },
     { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
     { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
-    { label: 'Name A -> Z', value: 'guestName', order: 'ASC' },
-    { label: 'Name Z -> A', value: 'guestName', order: 'DESC' },
+    { label: 'Function Code', value: 'functionCode', order: 'ASC' },
+    { label: 'SLA Low -> High', value: 'sla', order: 'ASC' },
   ];
 
-  filterData = ['Unread', 'Failed', 'Tags', 'Attachments'];
+  filterData = ['ASAP', 'High', 'Medium'];
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -24,7 +25,7 @@ export class RequestListFilterComponent implements OnInit {
   }
 
   initFG(): void {
-    this.parentFG.addControl('sort', new FormControl([]));
+    this.parentFG.addControl('sortBy', new FormControl([]));
     this.parentFG.addControl(
       'filterBy',
       this.fb.array(this.filterData.map((x) => false))
@@ -36,7 +37,11 @@ export class RequestListFilterComponent implements OnInit {
     values.filterBy = this.convertFilterToValue();
     this.filterApplied.emit({
       status: true,
-      data: { sort: values.sortBy.label, order: values.sortBy.order },
+      data: {
+        sort: values.sortBy.label,
+        order: values.sortBy.order,
+        priorityType: values.filterBy,
+      },
     });
   }
 

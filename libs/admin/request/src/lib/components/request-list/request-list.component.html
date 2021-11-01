@@ -1,4 +1,11 @@
-<div class="right-side">
+<div
+  class="right-side"
+  [ngStyle]="
+    !showFilter
+      ? { display: 'block', width: '100%' }
+      : { display: 'none', height: '0px' }
+  "
+>
   <div class="right-side-header">
     <div
       *ngIf="enableSearchField; else tabGroup"
@@ -30,7 +37,11 @@
       <img src="assets/svg/Search.svg" alt="filter" />
     </div>
     <div class="right-side-header-filter">
-      <img src="assets/svg/Filter-Icon.svg" alt="filter" />
+      <img
+        src="assets/svg/Filter-Icon.svg"
+        alt="filter"
+        (click)="showFilter = true"
+      />
     </div>
   </div>
   <ng-template #loader>
@@ -96,5 +107,40 @@
         </div>
       </div>
     </ng-container>
+  </div>
+</div>
+<div
+  class="right-side"
+  style="margin-right: 1px solid #9eaeb8;"
+  [ngStyle]="
+    showFilter
+      ? {
+          visibility: 'visible',
+          width: '100%',
+          marginRight: '1px solid #9eaeb8'
+        }
+      : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
+  "
+>
+  <div class="sortFilt">
+    <div
+      style="
+        font: normal normal medium 16px/21px Roboto;
+        letter-spacing: 0.64px;
+        color: #002046;
+        opacity: 1;
+      "
+    >
+      Sort & Filters
+    </div>
+    <div class="cross" (click)="showFilter = false">
+      &#10006;
+    </div>
+  </div>
+  <div style="height: calc(100% - 62px);">
+    <hospitality-bot-request-list-filter
+      [parentFG]="parentFG"
+      (filterApplied)="handleFilter($event)"
+    ></hospitality-bot-request-list-filter>
   </div>
 </div>

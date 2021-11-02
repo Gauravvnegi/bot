@@ -52,26 +52,56 @@
           *ngFor="let item of messageOverallAnalytics?.stat"
         >
           <div class="growthCell__Img">
-            <img src="assets/svg/Polygon.svg" alt="" />
+            <img
+              *ngIf="item.label == 'Delivered'"
+              src="assets/svg/delivered.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Sent'"
+              src="assets/svg/sent.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Read'"
+              src="assets/svg/read.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Failed'"
+              src="assets/svg/failed.svg"
+              alt="{{ item.label }}"
+            />
           </div>
           <div>
             <img
-              class="upArrow"
-              [src]="
-                item.comparisonPercentage >= 0
-                  ? 'assets/svg/uparrow.svg'
-                  : 'assets/svg/down-percentage.svg'
-              "
-              alt="uparrow"
-            /><span
+              *ngIf="item.label == 'Delivered'"
+              src="assets/svg/uparrow.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Sent'"
+              src="assets/svg/uparrow.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Read'"
+              src="assets/svg/uparrow.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Failed'"
+              src="assets/svg/downarrow.svg"
+              alt="{{ item.label }}"
+            />
+            <span
               class="percentChange"
-              [ngStyle]="
-                item.comparisonPercentage >= 0
-                  ? {
-                      color: '#52b33f'
-                    }
-                  : { color: '#CC052B' }
-              "
+              [ngClass]="{
+                percentGreen: item.label == 'Delivered',
+                percentGreen: item.label == 'Sent',
+                percentGreen: item.label == 'Read',
+                percentRed: item.label == 'Failed'
+              }"
               >{{ item.comparisonPercentage }}%</span
             >
             <span class="day">than yesterday</span>
@@ -128,7 +158,8 @@
         *ngFor="let legend of legendData; let legendIndex = index"
       >
         <input class="legends" type="checkbox" />
-        <img src="assets/svg/Polygon.svg" />
+        <img src="assets/svg/{{ legend.src }}.svg" />
+
         <p class="stat-label-title">{{ legend.label }}</p>
       </div>
     </div>

@@ -107,6 +107,7 @@
             letter-spacing: 0px;
             display: inline-block;
             opacity: 1;
+            padding-left: 3px;
           }
           .day {
             font: normal normal normal 10px/13px Roboto;
@@ -378,4 +379,10 @@
 
 .stat-label > input:checked + p {
   text-decoration: line-through;
+}
+.percentGreen {
+  color: #52b33f;
+}
+.percentRed {
+  color: #cc052b;
 }

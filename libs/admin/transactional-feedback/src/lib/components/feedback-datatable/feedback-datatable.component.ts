@@ -42,6 +42,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   hotelId: string;
+  rowsPerPage: number = 25;
 
   cols = [
     {

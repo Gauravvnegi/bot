@@ -15,6 +15,7 @@ export class SearchComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Input() hotelId: string;
   @Input() globalQueries;
+  @Input() filterData;
   @Input() entityType: string;
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
@@ -36,6 +37,7 @@ export class SearchComponent implements OnInit {
         queryObj: this._adminUtilityService.makeQueryParams([
           ...this.globalQueries,
           {
+            ...this.filterData,
             key: search,
             entityType: this.entityType,
           },

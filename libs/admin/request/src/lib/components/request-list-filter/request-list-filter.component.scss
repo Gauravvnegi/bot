@@ -75,5 +75,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
   }
+}
+.priority {
+  font: normal normal bold 14px/19px Roboto;
+  letter-spacing: 0.84px;
+  color: #002046;
+  opacity: 1;
 }

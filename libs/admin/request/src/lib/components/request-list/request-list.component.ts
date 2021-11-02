@@ -235,6 +235,7 @@ export class RequestListComponent implements OnInit {
   }
 
   enableSearch() {
+    this.parentFG.patchValue({ search: '' });
     this.enableSearchField = true;
   }
 

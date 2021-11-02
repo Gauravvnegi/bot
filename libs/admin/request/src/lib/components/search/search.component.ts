@@ -47,22 +47,12 @@ export class SearchComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         switchMap((formValue) =>
-          findSearch$(formValue).pipe(
-            catchError((err) => {
-              return empty();
-            })
-          )
+          findSearch$(formValue).pipe(catchError((err) => empty()))
         )
       )
       .subscribe(
-        (response) => {
-          this.search.emit({ response });
-        },
-        ({ error }) => {
-          if (error) {
-            this.snackbarService.openSnackBarAsText(error.message);
-          }
-        }
+        (response) => this.search.emit({ response }),
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       );
   }
 

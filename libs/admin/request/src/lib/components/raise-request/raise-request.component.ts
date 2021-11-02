@@ -18,7 +18,7 @@ export class RaiseRequestComponent implements OnInit {
   $subscription = new Subscription();
   cmsServices = [];
   priorityList = [
-    { label: 'Low', value: 'LOW' },
+    // { label: 'Low', value: 'LOW' },
     { label: 'Medium', value: 'MEDIUM' },
     { label: 'High', value: 'HIGH' },
     { label: 'Urgent', value: 'URGENT' },

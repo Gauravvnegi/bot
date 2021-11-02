@@ -12,6 +12,7 @@
           class="form-elements"
           placeholder="Status"
           formControlName="status"
+          [disabled]="requestFG.get('status').value === 'Closed'"
         >
           <mat-option
             *ngFor="let status of statusList"

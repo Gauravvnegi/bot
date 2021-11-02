@@ -21,7 +21,7 @@ export class RaiseRequestComponent implements OnInit {
     // { label: 'Low', value: 'LOW' },
     { label: 'Medium', value: 'MEDIUM' },
     { label: 'High', value: 'HIGH' },
-    { label: 'Urgent', value: 'URGENT' },
+    { label: 'ASAP', value: 'ASAP' },
   ];
   constructor(
     private fb: FormBuilder,

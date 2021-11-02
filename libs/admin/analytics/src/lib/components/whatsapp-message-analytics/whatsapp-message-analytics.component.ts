@@ -29,12 +29,14 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
       borderColor: '#0749fc',
       backgroundColor: '#0749fc',
       dashed: true,
+      src: 'delivered',
     },
     {
       label: 'Delivered',
       borderColor: '#f2509b',
       backgroundColor: '#f2509b',
       dashed: false,
+      src: 'sent',
     },
   ];
 

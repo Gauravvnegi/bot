@@ -77,3 +77,32 @@
   text-align: left;
   color: #fff;
 }
+.request-popup-btnwrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
+  &-cancel {
+    width: 113px;
+    height: 35px;
+    margin: 0 15px 0 0;
+    padding: 8px 35px 9px 34px;
+    border-radius: 18px;
+    border: solid 1px #4b56c0;
+    background-color: white;
+    color: #4b56c0;
+    cursor: pointer;
+  }
+  &-save {
+    width: 113px;
+    height: 35px;
+    margin: 0 0 0 15px;
+    padding: 8px 41px 9px 42px;
+    border-radius: 18px;
+    background-color: #4b56c0;
+    color: white;
+    cursor: pointer;
+  }
+}
+.mar-30 {
+  margin: 30px;
+}

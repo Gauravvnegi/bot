@@ -75,34 +75,20 @@
           </div>
           <div>
             <img
-              *ngIf="item.label == 'Delivered'"
-              src="assets/svg/uparrow.svg"
-              alt="{{ item.label }}"
-            />
-            <img
-              *ngIf="item.label == 'Sent'"
-              src="assets/svg/uparrow.svg"
-              alt="{{ item.label }}"
-            />
-            <img
-              *ngIf="item.label == 'Read'"
-              src="assets/svg/uparrow.svg"
-              alt="{{ item.label }}"
-            />
-            <img
-              *ngIf="item.label == 'Failed'"
-              src="assets/svg/downarrow.svg"
+              [src]="
+                item.comparisonPercentage >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/downarrow.svg'
+              "
               alt="{{ item.label }}"
             />
             <span
               class="percentChange"
               [ngClass]="{
-                percentGreen: item.label == 'Delivered',
-                percentGreen: item.label == 'Sent',
-                percentGreen: item.label == 'Read',
-                percentRed: item.label == 'Failed'
+                percentGreen: item.comparisonPercentage >= 0,
+                percentRed: item.comparisonPercentage < 0
               }"
-              >{{ item.comparisonPercentage }}%</span
+              >{{ item?.comparisonPercentage }}%</span
             >
             <span class="day">than yesterday</span>
           </div>

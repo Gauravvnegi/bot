@@ -91,4 +91,11 @@ export class RequestService extends ApiService {
       data
     );
   }
+
+  closeRequest(config, data) {
+    return this.post(
+      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+      data
+    );
+  }
 }

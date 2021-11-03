@@ -300,10 +300,16 @@
             class="form-elements"
             placeholder=""
             [value]="rowData.action"
+            [disabled]="
+              rowData.action === 'Closed' ||
+              rowData.action === 'Timeout' ||
+              rowData.action === 'Reject'
+            "
+            (selectionChange)="handleStatusChange(rowData)"
           >
-            <mat-option value="Closed">Closed</mat-option>
-            <mat-option value="Immediate">Immediate</mat-option>
-            <mat-option value="Timeout">Timeout</mat-option>
+            <mat-option [value]="item" *ngFor="let item of optionLabels">{{
+              item
+            }}</mat-option>
           </mat-select>
         </td>
       </tr>

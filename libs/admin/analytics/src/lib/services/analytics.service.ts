@@ -54,4 +54,11 @@ export class AnalyticsService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  closeRequest(config, data) {
+    return this.post(
+      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+      data
+    );
+  }
 }

@@ -22,6 +22,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   @Input() entityType = 'Inhouse';
+  @Input() optionLabels = [];
   @Output() onModalClose = new EventEmitter();
   globalQueries;
   $subscription = new Subscription();
@@ -101,6 +102,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       ],
     },
   ];
+  hotelId: string;
 
   ngOnInit(): void {
     this.registerListeners();
@@ -118,12 +120,16 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
           {
             order: 'DESC',
-            entityType: 'Inhouse',
+            entityType: this.entityType,
           },
           ...this.getSelectedQuickReplyFilters(),
         ]);
@@ -131,10 +137,24 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  loadInitialData(queries = [], loading = true) {
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  loadInitialData(
+    queries = [],
+    loading = true,
+    props?: { offset: number; limit: number }
+  ) {
     this.loading = loading && true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
+      this.fetchDataFrom(queries, props).subscribe(
         (data) => {
           this.values = new InhouseTable().deserialize(data).records;
           //set pagination
@@ -213,7 +233,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: 'DESC',
-            entityType: 'Inhouse',
+            entityType: this.entityType,
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
@@ -307,6 +327,52 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           this._snackbarService.openSnackBarAsText(error.message);
         }
       )
+    );
+  }
+
+  handleStatusChange(data) {
+    const requestData = {
+      jobID: data.jobID,
+      roomNo: data.rooms[0].roomNumber,
+      lastName: data.guestDetails.primaryGuest.lastName,
+    };
+
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        {
+          cmsUserType: 'Bot',
+          hotelId: this.hotelId,
+        },
+      ]),
+    };
+    this.analyticsService.closeRequest(config, requestData).subscribe(
+      (response) => {
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
+            {
+              order: 'DESC',
+              entityType: this.entityType,
+            },
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false,
+          {
+            offset: this.tempFirst,
+            limit: this.tempRowsPerPage
+              ? this.tempRowsPerPage
+              : this.rowsPerPage,
+          }
+        );
+        this._snackbarService.openSnackBarAsText(
+          `Job: ${data.jobID} closed`,
+          '',
+          { panelClass: 'success' }
+        );
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
     );
   }
 }

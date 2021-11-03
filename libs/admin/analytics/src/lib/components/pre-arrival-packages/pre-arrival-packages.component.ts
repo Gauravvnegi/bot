@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -7,7 +8,9 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
+import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-packages',
@@ -21,6 +24,7 @@ export class PreArrivalPackagesComponent implements OnInit {
   selectedInterval: any;
   graphData;
   packageFG: FormGroup;
+  entityType = 'pre arrival';
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -204,9 +208,31 @@ export class PreArrivalPackagesComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
-          { entityType: 'Inhouse' },
         ];
+        this.getInhouseSentimentsData();
       })
+    );
+  }
+
+  getInhouseSentimentsData() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalFilters,
+        {
+          entityType: this.entityType,
+          packageId: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+      ]),
+    };
+
+    this.$subscription.add(
+      this.analyticsService.getSentimentsStats(config).subscribe(
+        (response) => {
+          this.graphData = new InhouseSentiments().deserialize(response);
+          this.initGraphData();
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+      )
     );
   }
 
@@ -278,5 +304,39 @@ export class PreArrivalPackagesComponent implements OnInit {
     );
   }
 
-  onSelectedTabFilterChange(event) {}
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+    this.getInhouseSentimentsData();
+  }
+
+  get stats() {
+    if (this.graphData)
+      return Object.keys(this.graphData).filter(
+        (d) => d !== 'label' && d !== 'totalCount'
+      );
+    return [];
+  }
+
+  openModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this.modalService.openDialog(
+      InhouseRequestDatatableComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
+    detailCompRef.componentInstance.entityType = 'pre arrival';
+    detailCompRef.componentInstance.optionLabels = [
+      'Immediate',
+      'Reject',
+      'Closed',
+    ];
+    detailCompRef.componentInstance.tabFilterIdx = 0;
+    detailCompRef.componentInstance.onModalClose.subscribe((res) =>
+      // remove loader for detail close
+      detailCompRef.close()
+    );
+  }
 }

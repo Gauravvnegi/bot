@@ -310,7 +310,7 @@
             <mat-option
               [value]="item"
               *ngFor="let item of optionLabels"
-              [disabled]="key === 'Timeout'"
+              [disabled]="item === 'Timeout'"
               >{{ item }}</mat-option
             >
           </mat-select>

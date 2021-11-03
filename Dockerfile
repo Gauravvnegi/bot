@@ -6,7 +6,8 @@ COPY . .
 RUN npm config set maxsockets 10 
 RUN npm install -g @angular/cli@10.0.0
 RUN npm ci
-RUN ng run admin:build --configuration=development --baseHref=.
+#RUN ng run admin:build --configuration=development --baseHref=.
+RUN ng run admin:build --configuration=development
 # Stage 2
 FROM nginx:1.21.3-alpine
 COPY --from=build-step /app/dist/apps/admin /usr/share/nginx/html

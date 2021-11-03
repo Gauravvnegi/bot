@@ -6,11 +6,16 @@
 
 :host ::ng-deep .mat-tab-label .mat-tab-label-content {
   font-size: $font14;
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 }
-
 :host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
   color: $primary-purple;
   font-size: $font18;
+  @media (max-width: 1024px) {
+    font-size: 12px;
+  }
 }
 
 :host ::ng-deep .mat-tab-label {
@@ -31,4 +36,10 @@
 
 :host ::ng-deep .mat-tab-header {
   border-bottom: 1px solid lightblue;
+}
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none;
 }

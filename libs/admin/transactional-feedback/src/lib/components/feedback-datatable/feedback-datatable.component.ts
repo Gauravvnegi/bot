@@ -42,6 +42,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   hotelId: string;
+  rowsPerPage: number = 25;
 
   cols = [
     {
@@ -63,7 +64,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       sortType: 'string',
     },
     {
-      field: `guest.getCreatedDate()`,
+      field: `getCreatedDate()`,
       header: 'Visit Date/ curr. Living In',
       isSort: true,
       sortType: 'date',

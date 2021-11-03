@@ -7,7 +7,7 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
-  <div style="margin: 30px;">
+  <div class="mar-30">
     <div class="form-elements-groups" [formGroup]="requestFG">
       <div class="form-elements-container full-width">
         <img class="icon" src="assets/svg/room.svg" alt="room" />
@@ -153,38 +153,11 @@
         />
       </div>
     </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 25px;">
-      <div
-        class="button"
-        style="
-          width: 113px;
-          height: 35px;
-          margin: 0 15px 0 0;
-          padding: 8px 35px 9px 34px;
-          border-radius: 18px;
-          border: solid 1px #4b56c0;
-          background-color: white;
-          color: #4b56c0;
-          cursor: pointer;
-        "
-        (click)="close()"
-      >
+    <div class="request-popup-btnwrap">
+      <div class="button request-popup-btnwrap-cancel" (click)="close()">
         Cancel
       </div>
-      <div
-        class="button"
-        style="
-          width: 113px;
-          height: 35px;
-          margin: 0 0 0 15px;
-          padding: 8px 41px 9px 42px;
-          border-radius: 18px;
-          background-color: #4b56c0;
-          color: white;
-          cursor: pointer;
-        "
-        (click)="raiseRequest()"
-      >
+      <div class="button request-popup-btnwrap-save" (click)="raiseRequest()">
         Save
       </div>
     </div>

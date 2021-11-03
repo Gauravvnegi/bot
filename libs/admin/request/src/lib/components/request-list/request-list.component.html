@@ -9,13 +9,14 @@
   <div class="right-side-header">
     <div
       *ngIf="enableSearchField; else tabGroup"
-      style="width: calc(100% - 26px); margin-left: 10px;"
+      class="right-side-header-loop"
     >
       <hospitality-bot-search
         [parentFG]="parentFG"
         [hotelId]="hotelId"
         [globalQueries]="globalQueries"
         [entityType]="entityType"
+        [filterData]="filterData"
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
       ></hospitality-bot-search>
@@ -79,7 +80,7 @@
                 'priority-low': item.priority === 'Low',
                 'priority-medium': item.priority === 'Medium',
                 'priority-high': item.priority === 'High',
-                'priority-urgent': item.priority === 'Urgent'
+                'priority-asap': item.priority === 'ASAP'
               }"
             >
               {{ item.priority }}
@@ -88,17 +89,14 @@
           <div class="content-wrap-title">
             {{ item.guestDetails.primaryGuest.getFullName() }}
           </div>
-          <div
-            class="content-wrap-subtitle"
-            style="color: #002046; font-weight: 500;"
-          >
+          <div class="content-wrap-subtitle">
             {{ item.itemName }}
           </div>
-          <div class="content-wrap-subtitle">
+          <div class="content-wrap-rank">
             {{ item.remarks }}
           </div>
           <div class="content-wrap-r2">
-            <div>{{ item.priority }}</div>
+            <div>{{ item.priority || '------' }}</div>
             <div class="content-wrap-r2-divider"></div>
             <div>-----</div>
             <div class="content-wrap-r2-divider"></div>
@@ -111,7 +109,6 @@
 </div>
 <div
   class="right-side"
-  style="margin-right: 1px solid #9eaeb8;"
   [ngStyle]="
     showFilter
       ? {
@@ -123,21 +120,14 @@
   "
 >
   <div class="sortFilt">
-    <div
-      style="
-        font: normal normal medium 16px/21px Roboto;
-        letter-spacing: 0.64px;
-        color: #002046;
-        opacity: 1;
-      "
-    >
+    <div class="sortFilt-text">
       Sort & Filters
     </div>
     <div class="cross" (click)="showFilter = false">
       &#10006;
     </div>
   </div>
-  <div style="height: calc(100% - 62px);">
+  <div class="right-side-list-filter">
     <hospitality-bot-request-list-filter
       [parentFG]="parentFG"
       (filterApplied)="handleFilter($event)"

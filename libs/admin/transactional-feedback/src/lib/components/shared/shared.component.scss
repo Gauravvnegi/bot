@@ -13,12 +13,18 @@
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
     color: $dark-blue;
+    @media (max-width: 1024px) {
+      font-size: 12px;
+    }
   }
   &__subheading {
     font: normal normal medium 12px/16px Roboto;
     letter-spacing: 0px;
     color: #6d7580;
     margin: 10px 0;
+    @media (max-width: 1024px) {
+      font-size: 11px;
+    }
   }
   &__body {
     display: flex;

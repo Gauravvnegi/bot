@@ -36,6 +36,7 @@
   justify-content: space-between;
   @media (max-width: 1024px) {
     justify-content: flex-start;
+    gap: 24px;
   }
   .temp-width {
     width: 47%;
@@ -43,7 +44,7 @@
       width: 100%;
     }
     @media (max-width: 1024px) {
-      width: 44%;
+      width: 60%;
       display: flex;
       justify-content: flex-start;
     }

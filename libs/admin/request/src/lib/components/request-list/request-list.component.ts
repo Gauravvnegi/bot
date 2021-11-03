@@ -223,9 +223,6 @@ export class RequestListComponent implements OnInit {
           this.offset = this.listData.length;
           this.loadData(this.offset, this.limit);
         }
-      } else if (this.myScrollContainer.nativeElement.scrollTop === 0) {
-        this.offset = 0;
-        this.loadData(this.offset, this.limit);
       }
   }
 
@@ -235,6 +232,7 @@ export class RequestListComponent implements OnInit {
   }
 
   enableSearch() {
+    this.parentFG.patchValue({ search: '' });
     this.enableSearchField = true;
   }
 

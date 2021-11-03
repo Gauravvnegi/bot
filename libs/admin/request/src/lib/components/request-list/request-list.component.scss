@@ -12,7 +12,7 @@
   background-color: #f8b633;
 }
 
-.priority-urgent {
+.priority-asap {
   background-color: #ce0c0c;
 }
 .right-side {
@@ -23,6 +23,10 @@
     border: solid 1px #e0e0e0;
     align-items: center;
     max-width: 100%;
+    &-loop {
+      width: calc(100% - 26px);
+      margin-left: 10px;
+    }
     &-nav {
       overflow-x: auto;
     }
@@ -80,6 +84,11 @@
           margin-bottom: 5px;
         }
         &-subtitle {
+          color: #909090;
+          font-weight: 500;
+          font-size: 12px;
+        }
+        &-rank {
           font-size: 12px;
           font-weight: normal;
           letter-spacing: 0.72px;
@@ -99,6 +108,9 @@
         }
       }
     }
+  }
+  &-list-filter {
+    height: calc(100% - 62px);
   }
 }
 
@@ -170,8 +182,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  &-text {
+    font: normal normal medium 16px/21px Roboto;
+    letter-spacing: 0.64px;
+    color: #002046;
+    opacity: 1;
+  }
 }
 .cross {
   font-size: 22px;
   cursor: pointer;
+}
+.content-wrap-subtitle {
+  color: #002046;
+  font-weight: 500;
 }

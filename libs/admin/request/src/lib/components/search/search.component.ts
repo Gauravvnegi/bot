@@ -15,6 +15,7 @@ export class SearchComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Input() hotelId: string;
   @Input() globalQueries;
+  @Input() filterData;
   @Input() entityType: string;
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
@@ -36,6 +37,7 @@ export class SearchComponent implements OnInit {
         queryObj: this._adminUtilityService.makeQueryParams([
           ...this.globalQueries,
           {
+            ...this.filterData,
             key: search,
             entityType: this.entityType,
           },
@@ -45,22 +47,12 @@ export class SearchComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         switchMap((formValue) =>
-          findSearch$(formValue).pipe(
-            catchError((err) => {
-              return empty();
-            })
-          )
+          findSearch$(formValue).pipe(catchError((err) => empty()))
         )
       )
       .subscribe(
-        (response) => {
-          this.search.emit({ response });
-        },
-        ({ error }) => {
-          if (error) {
-            this.snackbarService.openSnackBarAsText(error.message);
-          }
-        }
+        (response) => this.search.emit({ response }),
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       );
   }
 

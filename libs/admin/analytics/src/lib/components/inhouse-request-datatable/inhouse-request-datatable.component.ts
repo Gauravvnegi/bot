@@ -330,7 +330,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  handleStatusChange(data) {
+  handleStatusChange(data, event) {
+    if (event.value !== 'Closed') return;
     const requestData = {
       jobID: data.jobID,
       roomNo: data.rooms[0].roomNumber,

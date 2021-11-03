@@ -305,11 +305,14 @@
               rowData.action === 'Timeout' ||
               rowData.action === 'Reject'
             "
-            (selectionChange)="handleStatusChange(rowData)"
+            (selectionChange)="handleStatusChange(rowData, $event)"
           >
-            <mat-option [value]="item" *ngFor="let item of optionLabels">{{
-              item
-            }}</mat-option>
+            <mat-option
+              [value]="item"
+              *ngFor="let item of optionLabels"
+              [disabled]="key === 'Timeout'"
+              >{{ item }}</mat-option
+            >
           </mat-select>
         </td>
       </tr>

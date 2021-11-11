@@ -196,9 +196,8 @@ export class PreArrivalPackagesComponent implements OnInit {
 
   getPackageList() {
     this.$subscription.add(
-      this.analyticsService
-        .getPackageList(this.hotelId)
-        .subscribe((response) => {
+      this.analyticsService.getPackageList(this.hotelId).subscribe(
+        (response) => {
           const packages = [
             ...response.complimentryPackages,
             ...response.paidPackages,
@@ -214,7 +213,9 @@ export class PreArrivalPackagesComponent implements OnInit {
                 total: 0,
               });
           });
-        })
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+      )
     );
   }
 
@@ -342,5 +343,9 @@ export class PreArrivalPackagesComponent implements OnInit {
       // remove loader for detail close
       detailCompRef.close()
     );
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -103,17 +103,19 @@ export class RequestDetailComponent implements OnInit {
         },
       ]),
     };
-    this._requestService.closeRequest(config, requestData).subscribe(
-      (response) =>
-        this._snackbarService.openSnackBarAsText(
-          `Job: ${this.data.jobID} closed`,
-          '',
-          { panelClass: 'success' }
-        ),
-      ({ error }) => {
-        this.requestFG.patchValue({ status: this.data.action });
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
+    this.$subscription.add(
+      this._requestService.closeRequest(config, requestData).subscribe(
+        (response) =>
+          this._snackbarService.openSnackBarAsText(
+            `Job: ${this.data.jobID} closed`,
+            '',
+            { panelClass: 'success' }
+          ),
+        ({ error }) => {
+          this.requestFG.patchValue({ status: this.data.action });
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 }

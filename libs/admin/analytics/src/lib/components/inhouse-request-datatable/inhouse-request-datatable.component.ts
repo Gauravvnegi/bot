@@ -371,9 +371,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           { panelClass: 'success' }
         );
       },
-      ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
+      ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
     );
   }
 }

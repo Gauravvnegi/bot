@@ -4,7 +4,7 @@ export const environment = {
   ...defaultEnvironment,
   production: true,
   name: 'dev',
-  base_url: 'https://devapi.botshot.in:8443',
+  base_url: 'https://testapi.botshot.in:32313',
   firebase: {
     apiKey: 'AIzaSyBVotX7FRNCpG7WakjyDnxnUmgYDerLyHI',
     authDomain: 'push-notification-6455a.firebaseapp.com',

@@ -12,12 +12,27 @@
     </div>
     <div class="messageRequests">
       <div class="requestCircle">
-        <div class="center-circle-progress" *ngFor="let item of messageOverallAnalytics?.stat">
+        <div
+          class="center-circle-progress"
+          *ngFor="let item of messageOverallAnalytics?.stat"
+        >
           <div>
-            <circle-progress [radius]="item.radius" [percent]="item.progress" [space]="-5" [outerStrokeWidth]="5"
-              [innerStrokeWidth]="5" [outerStrokeColor]="item.color" [innerStrokeColor]="'#e7e8ea'"
-              [outerStrokeLinecap]="'square'" [animation]="true" [animationDuration]="300" [showTitle]="false"
-              [showSubtitle]="false" [showUnits]="false" [showZeroOuterStroke]="false"></circle-progress>
+            <circle-progress
+              [radius]="item.radius"
+              [percent]="item.progress"
+              [space]="-5"
+              [outerStrokeWidth]="5"
+              [innerStrokeWidth]="5"
+              [outerStrokeColor]="item.color"
+              [innerStrokeColor]="'#e7e8ea'"
+              [outerStrokeLinecap]="'square'"
+              [animation]="true"
+              [animationDuration]="300"
+              [showTitle]="false"
+              [showSubtitle]="false"
+              [showUnits]="false"
+              [showZeroOuterStroke]="false"
+            ></circle-progress>
           </div>
         </div>
         <div class="center-circle-progress">
@@ -32,30 +47,60 @@
         </div>
       </div>
       <div class="growth">
-        <div class="growthCell" *ngFor="let item of messageOverallAnalytics?.stat">
+        <div
+          class="growthCell"
+          *ngFor="let item of messageOverallAnalytics?.stat"
+        >
           <div class="growthCell__Img">
-            <img src="assets/svg/Polygon.svg" alt="" />
+            <img
+              *ngIf="item.label == 'Delivered'"
+              src="assets/svg/delivered.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Sent'"
+              src="assets/svg/sent.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Read'"
+              src="assets/svg/read.svg"
+              alt="{{ item.label }}"
+            />
+            <img
+              *ngIf="item.label == 'Failed'"
+              src="assets/svg/failed.svg"
+              alt="{{ item.label }}"
+            />
           </div>
           <div>
-            <img class="upArrow" [src]="
+            <img
+              [src]="
                 item.comparisonPercentage >= 0
                   ? 'assets/svg/uparrow.svg'
-                  : 'assets/svg/down-percentage.svg'
-              " alt="uparrow" /><span class="percentChange" [ngStyle]="
-                item.comparisonPercentage >= 0
-                  ? {
-                      color: '#52b33f'
-                    }
-                  : { color: '#CC052B' }
-              ">{{ item.comparisonPercentage }}%</span>
+                  : 'assets/svg/downarrow.svg'
+              "
+              alt="{{ item.label }}"
+            />
+            <span
+              class="percentChange"
+              [ngClass]="{
+                percentGreen: item.comparisonPercentage >= 0,
+                percentRed: item.comparisonPercentage < 0
+              }"
+              >{{ item?.comparisonPercentage }}%</span
+            >
             <span class="day">than yesterday</span>
           </div>
         </div>
       </div>
     </div>
     <div class="detailsWrapper">
-      <div class="detail" *ngFor="let item of messageOverallAnalytics?.stat; let i = index"
-        [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }">
+      <div
+        class="detail"
+        *ngFor="let item of messageOverallAnalytics?.stat; let i = index"
+        [ngStyle]="{ 'margin-bottom': i <= 1 ? '20px' : '0' }"
+      >
         <div class="divide" [style.border]="'1px solid' + item.color"></div>
         <div class="compareLast">
           <div class="detailHeading">
@@ -79,19 +124,46 @@
       </div>
     </div>
     <div class="line-chart">
-      <canvas baseChart class="canvas" [datasets]="chart.chartData" [labels]="chart.chartLabels"
-        [options]="chart.chartOptions" [colors]="chart.chartColors" [legend]="chart.chartLegend"
-        [chartType]="chart.chartType">
+      <canvas
+        baseChart
+        class="canvas"
+        [datasets]="chart.chartData"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
+      >
       </canvas>
     </div>
 
     <div class="stat-labels-container">
-      <div class="stat-label" (click)="legendOnClick(legendIndex)"
-        *ngFor="let legend of legendData; let legendIndex = index">
+      <div
+        class="stat-label"
+        (click)="legendOnClick(legendIndex)"
+        *ngFor="let legend of legendData; let legendIndex = index"
+      >
         <input class="legends" type="checkbox" />
-        <img src="assets/svg/Polygon.svg" />
+        <img src="assets/svg/{{ legend.src }}.svg" />
+
         <p class="stat-label-title">{{ legend.label }}</p>
       </div>
     </div>
+  </div>
+</div>
+<div style="display: flex; margin-top: 15px;">
+  <div
+    style="
+      width: 60%;
+      border: solid 1px #e2e2e2;
+      border-radius: 5px;
+      background: #ffffff 0% 0% no-repeat padding-box;
+      margin-right: 15px;
+    "
+  >
+    <hospitality-bot-conversation></hospitality-bot-conversation>
+  </div>
+  <div style="width: 40%;">
+    <hospitality-bot-notification></hospitality-bot-notification>
   </div>
 </div>

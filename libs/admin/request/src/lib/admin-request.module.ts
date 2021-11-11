@@ -3,12 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { AdminRequestRoutingModule } from './admin-request.routing.module';
-import { RequestDataTableComponent } from './components/request-data-table/request-data-table.component';
-import { RequestComponent } from './components/request/request.component';
 import { RequestService } from './services/request.service';
-import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
 
 @NgModule({
   imports: [
@@ -19,9 +17,9 @@ import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-n
     SharedMaterialModule,
     AdminRequestRoutingModule,
     CKEditorModule,
-    AdminNotificationModule
+    AdminNotificationModule,
   ],
-  declarations: [RequestComponent, RequestDataTableComponent],
-  providers: [RequestService]
+  declarations: [...AdminRequestRoutingModule.components],
+  providers: [RequestService],
 })
 export class AdminRequestModule {}

@@ -1,0 +1,136 @@
+<div
+  class="right-side"
+  [ngStyle]="
+    !showFilter
+      ? { display: 'block', width: '100%' }
+      : { display: 'none', height: '0px' }
+  "
+>
+  <div class="right-side-header">
+    <div
+      *ngIf="enableSearchField; else tabGroup"
+      class="right-side-header-loop"
+    >
+      <hospitality-bot-search
+        [parentFG]="parentFG"
+        [hotelId]="hotelId"
+        [globalQueries]="globalQueries"
+        [entityType]="entityType"
+        [filterData]="filterData"
+        (clear)="clearSearch()"
+        (search)="getSearchValue($event)"
+      ></hospitality-bot-search>
+    </div>
+    <ng-template #tabGroup>
+      <div class="right-side-header-nav">
+        <hospitality-bot-tab-group
+          [listItems]="tabFilterItems"
+          [selectedIndex]="tabFilterIdx"
+          (selectedTabChange)="onSelectedTabFilterChange($event)"
+        ></hospitality-bot-tab-group>
+      </div>
+    </ng-template>
+    <div
+      class="right-side-header-filter"
+      (click)="enableSearch()"
+      *ngIf="!enableSearchField"
+    >
+      <img src="assets/svg/Search.svg" alt="filter" />
+    </div>
+    <div class="right-side-header-filter">
+      <img
+        src="assets/svg/Filter-Icon.svg"
+        alt="filter"
+        (click)="showFilter = true"
+      />
+    </div>
+  </div>
+  <ng-template #loader>
+    <div class="loader">
+      <!-- <p class="loading">Loading</p> -->
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
+  </ng-template>
+  <div
+    class="right-side-body"
+    #requestList
+    (scroll)="onScroll($event)"
+    *ngIf="!loading; else loader"
+  >
+    <ng-container *ngFor="let item of listData">
+      <div
+        class="right-side-body-card"
+        (click)="setSelectedRequest(item)"
+        [ngStyle]="
+          selectedRequest &&
+          selectedRequest.id === item.id && { background: '#f1f1f1' }
+        "
+      >
+        <div class="right-side-body-card-avt"></div>
+        <div class="content-wrap">
+          <div class="content-wrap-r1">
+            <div>RNO: {{ item.rooms[0]?.roomNumber }}</div>
+            <div
+              class="content-wrap-r1-status"
+              [ngClass]="{
+                'priority-low': item.priority === 'Low',
+                'priority-medium': item.priority === 'Medium',
+                'priority-high': item.priority === 'High',
+                'priority-asap': item.priority === 'ASAP'
+              }"
+            >
+              {{ item.priority }}
+            </div>
+          </div>
+          <div class="content-wrap-title">
+            {{ item.guestDetails.primaryGuest.getFullName() }}
+          </div>
+          <div class="content-wrap-subtitle">
+            {{ item.itemName }}
+          </div>
+          <div class="content-wrap-rank">
+            {{ item.remarks }}
+          </div>
+          <div class="content-wrap-r2">
+            <div>{{ item.priority || '------' }}</div>
+            <div class="content-wrap-r2-divider"></div>
+            <div>-----</div>
+            <div class="content-wrap-r2-divider"></div>
+            <div>JD:- {{ item.jobDuration }}m</div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div
+  class="right-side"
+  [ngStyle]="
+    showFilter
+      ? {
+          visibility: 'visible',
+          width: '100%',
+          marginRight: '1px solid #9eaeb8'
+        }
+      : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
+  "
+>
+  <div class="sortFilt">
+    <div class="sortFilt-text">
+      Sort & Filters
+    </div>
+    <div class="cross" (click)="showFilter = false">
+      &#10006;
+    </div>
+  </div>
+  <div class="right-side-list-filter">
+    <hospitality-bot-request-list-filter
+      [parentFG]="parentFG"
+      (filterApplied)="handleFilter($event)"
+    ></hospitality-bot-request-list-filter>
+  </div>
+</div>

@@ -99,6 +99,101 @@ export class SentdeliveredChart {
   }
 }
 
+export class Conversation {
+  statistics: Stat[];
+  totalResponse: number;
+  comparePercent: number;
+  deserialize(input) {
+    this.statistics = new Array<Stat>();
+    Object.assign(
+      this,
+      set({}, 'totalResponse', get(input, ['totalMessage', 'overall'])),
+      set(
+        {},
+        'comparePercent',
+        get(input, ['totalMessage', 'comparisonPercentage'])
+      )
+    );
+    this.statistics.push(
+      new Stat().deserialize({
+        label: 'Incoming',
+        count: input.incoming.inBound,
+        comparisonPercentage: input.incoming.comparisonPercentage,
+        color: '#ffec8c',
+      })
+    );
+    this.statistics.push(
+      new Stat().deserialize({
+        label: 'Outgoing',
+        count: input.outgoing.outBound,
+        comparisonPercentage: input.outgoing.comparisonPercentage,
+        color: '#31bb92',
+      })
+    );
+    return this;
+  }
+}
+
+export class Notification {
+  statistics: Stat[];
+  total: number;
+  comparisonPercentage: number;
+
+  deserialize(input) {
+    this.statistics = new Array<Stat>();
+    Object.assign(
+      this,
+      set({}, 'total', get(input, ['totaltemplates', 'total'])),
+      set(
+        {},
+        'comparisonPercentage',
+        get(input, ['totaltemplates', 'comparisonPercentage'])
+      )
+    );
+    this.statistics.push(
+      new Stat().deserialize({
+        label: 'Pre-Check-In',
+        count: input.preCheckInCounts,
+        color: '#3270eb',
+      })
+    );
+    this.statistics.push(
+      new Stat().deserialize({
+        label: 'Post Check-In',
+        count: input.checkInCounts,
+        color: '#15eda3',
+      })
+    );
+    this.statistics.push(
+      new Stat().deserialize({
+        label: 'Post Check-Out',
+        count: input.checkOutCounts,
+        color: '#ff9867',
+      })
+    );
+
+    return this;
+  }
+}
+
+export class Stat {
+  label: string;
+  count: number;
+  color: string;
+  comparePercent: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'count', get(input, ['count'])),
+      set({}, 'comparePercent', get(input, ['comparisonPercentage'])),
+      set({}, 'color', get(input, ['color']))
+    );
+    return this;
+  }
+}
+
 export type IMessageOverallAnalytic = Omit<
   MessageOverallAnalytic,
   'deserialize'

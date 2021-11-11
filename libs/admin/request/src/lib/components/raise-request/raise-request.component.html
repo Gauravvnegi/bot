@@ -1,0 +1,165 @@
+<div>
+  <div class="header">
+    <div class="button raise-request-btn">
+      Raise Request
+    </div>
+    <div (click)="close()" class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="mar-30">
+    <div class="form-elements-groups" [formGroup]="requestFG">
+      <div class="form-elements-container full-width">
+        <img class="icon" src="assets/svg/room.svg" alt="room" />
+        <input
+          matInput
+          class="form-elements"
+          placeholder="Room *"
+          formControlName="roomNo"
+        />
+        <mat-error
+          *ngIf="
+            requestFG.get('roomNo').touched &&
+            requestFG.get('roomNo').hasError('required')
+          "
+        >
+          Room No is required
+        </mat-error>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/user-01.svg" alt="firstName" />
+        <input
+          matInput
+          class="form-elements"
+          placeholder="First Name *"
+          formControlName="firstName"
+        />
+        <mat-error
+          class="error"
+          *ngIf="
+            requestFG.get('firstName').touched &&
+            requestFG.get('firstName').hasError('required')
+          "
+        >
+          First Name is required
+        </mat-error>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/user-01.svg" alt="LastName" />
+        <input
+          matInput
+          class="form-elements"
+          placeholder="LastName *"
+          formControlName="lastName"
+        />
+        <mat-error
+          *ngIf="
+            requestFG.get('lastName').touched &&
+            requestFG.get('lastName').hasError('required')
+          "
+        >
+          Last Name is required
+        </mat-error>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <mat-select
+          class="form-elements"
+          placeholder="Item Name*"
+          formControlName="itemName"
+          (selectionChange)="handleItemNameChange($event)"
+        >
+          <mat-option
+            *ngFor="let service of cmsServices"
+            [value]="service.itemName"
+            >{{ service.itemName }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            requestFG.get('itemName').touched &&
+            requestFG.get('itemName').hasError('required')
+          "
+        >
+          Item Name is required
+        </mat-error>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <mat-select
+          class="form-elements"
+          placeholder="Item Code*"
+          formControlName="itemCode"
+          disabled
+        >
+          <mat-option
+            *ngFor="let service of cmsServices"
+            [value]="service.itemCode"
+            >{{ service.itemCode }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            requestFG.get('itemCode').touched &&
+            requestFG.get('itemName').hasError('required')
+          "
+        >
+          Item Code is required
+        </mat-error>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <mat-select
+          class="form-elements"
+          placeholder="Priority Code*"
+          formControlName="priority"
+        >
+          <mat-option
+            *ngFor="let priority of priorityList"
+            [value]="priority.value"
+            >{{ priority.label }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            requestFG.get('priority').touched &&
+            requestFG.get('priority').hasError('required')
+          "
+        >
+          Priority Code is required
+        </mat-error>
+      </div>
+      <div class="form-elements-container">
+        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <mat-select
+          class="form-elements"
+          placeholder="Job Duration"
+          formControlName="jobDuration"
+        >
+          <mat-option
+            *ngFor="let item of [].constructor(60); let i = index"
+            [value]="i + 1"
+            >{{ i + 1 }} minute</mat-option
+          >
+        </mat-select>
+      </div>
+      <div class="form-elements-container full-width">
+        <img class="icon" src="assets/svg/comments.svg" alt="description" />
+        <input
+          matInput
+          class="form-elements"
+          placeholder="Desription"
+          formControlName="remarks"
+        />
+      </div>
+    </div>
+    <div class="request-popup-btnwrap">
+      <div class="button request-popup-btnwrap-cancel" (click)="close()">
+        Cancel
+      </div>
+      <div class="button request-popup-btnwrap-save" (click)="raiseRequest()">
+        Save
+      </div>
+    </div>
+  </div>
+</div>

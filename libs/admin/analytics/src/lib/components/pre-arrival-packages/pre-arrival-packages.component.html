@@ -1,0 +1,71 @@
+<div style="padding: 20px; height: 100%;">
+  <div
+    style="display: flex; justify-content: space-between; align-items: center;"
+  >
+    <div
+      style="
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: #002046;
+      "
+    >
+      Pre-Arrival Packages
+    </div>
+    <div style="display: flex; align-items: center;" [formGroup]="packageFG">
+      <label
+        class="labl"
+        *ngFor="let option of chartTypes"
+        (click)="setChartType(option, $event)"
+      >
+        <input
+          type="radio"
+          formControlName="chartType"
+          [value]="option.value"
+          [id]="option.value + '-type'"
+        />
+        <div class="image">
+          <img [src]="option.url" />
+        </div>
+      </label>
+    </div>
+  </div>
+  <div style="margin: 10px 0; overflow-x: auto;">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div style="margin: 10px;" (click)="openModal()">
+    <canvas
+      baseChart
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+    <div class="stat-vals-container">
+      <div
+        class="stat-val"
+        *ngFor="let key of stats; let i = index"
+        (click)="legendOnClick(i, $event)"
+      >
+        <div class="label">
+          <img [src]="graphData[key].img" alt="" />
+          <span>{{ graphData[key].label }}</span>
+        </div>
+        <div class="value">{{ graphData[key].totalCount }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="days-label">In 30 Days</div>
+</div>

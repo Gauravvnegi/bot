@@ -1,0 +1,99 @@
+<div class="request-items" *ngIf="checkForData()">
+  <div class="request-items-header">
+    <div class="request-items-header-left">
+      <div class="request-items-header-left-avt"></div>
+      <div class="request-items-header-left-title">
+        {{ data.guestDetails.primaryGuest.getFullName() }}
+      </div>
+    </div>
+    <div class="request-items-header-right" [formGroup]="requestFG">
+      <div class="form-elements-container">
+        <mat-select
+          class="form-elements"
+          placeholder="Status"
+          formControlName="status"
+          [disabled]="
+            requestFG?.get('status').value === 'Closed' ||
+            requestFG?.get('status').value === 'Timeout'
+          "
+          (selectionChange)="handleStatusChange($event)"
+        >
+          <mat-option
+            *ngFor="let status of statusList"
+            [value]="status.value"
+            [disabled]="status.value === 'Timeout'"
+            >{{ status.label }}</mat-option
+          >
+        </mat-select>
+      </div>
+    </div>
+  </div>
+  <div class="request-items-body">
+    <div class="request-items-body-title">
+      {{ data.itemName }}
+    </div>
+    <div class="request-items-body-subtitle">
+      {{ data.remarks }}
+    </div>
+    <div class="request-items-body-card">
+      <table>
+        <tr class="tr">
+          <th>Item / Priority Code</th>
+          <th>Booking / Rooms No.</th>
+          <th>Company</th>
+          <th>Source / Phone No. / Email</th>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              {{ data.itemCode }}
+            </div>
+            <div
+              class="request-items-body-card-status"
+              [ngClass]="{
+                'priority-low': data.priority === 'Low',
+                'priority-medium': data.priority === 'Medium',
+                'priority-high': data.priority === 'High',
+                'priority-asap': data.priority === 'ASAP'
+              }"
+            >
+              {{ data.priority }}
+            </div>
+          </td>
+          <td>
+            <div>{{ data.confirmationNumber }}</div>
+            <div class="request-items-body-card-booking">
+              {{ data.rooms[0]?.getRoomNumberAndType() }}
+            </div>
+          </td>
+          <td>-</td>
+          <td>
+            <div>
+              {{ data.guestDetails.getPhoneNumbers() }}
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="request-items-body-card">
+      <table>
+        <tr class="tr">
+          <th>Open - Date & Time</th>
+          <th>Close - Date & Time</th>
+          <th>Job Duration</th>
+          <th>SLA</th>
+          <th>Quantity</th>
+        </tr>
+        <tr>
+          <td>
+            {{ data.getRequestDateTime() }}
+          </td>
+          <td>--------</td>
+          <td>JD: {{ data.jobDuration }}m</td>
+          <td>-</td>
+          <td>{{ data.quantity || 'None' }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

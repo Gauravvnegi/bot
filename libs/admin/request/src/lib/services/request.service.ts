@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
+  selectedRequest = new BehaviorSubject(null);
+  refreshData = new BehaviorSubject(false);
   getAllRequests(config): Observable<any> {
     return this.get(`/api/v1/live-request/${config.queryObj}`);
+  }
+
+  getAllLiveRequest(config) {
+    return this.get(`/api/v1/live-request/list/${config.queryObj}`);
   }
 
   exportCSV(config): Observable<any> {
@@ -25,6 +31,10 @@ export class RequestService extends ApiService {
 
   createRequestData(hotelId: string, data: RequestData): Observable<any> {
     return this.post(`/api/v1/hotel/${hotelId}/notifications`, data);
+  }
+
+  searchRequest(hotelId: string, config) {
+    return this.get(`/api/v1/live-request/${hotelId}/search${config.queryObj}`);
   }
 
   uploadAttachments(hotelId, formData): Observable<any> {
@@ -48,6 +58,10 @@ export class RequestService extends ApiService {
     return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
   }
 
+  getCMSServices(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/cms-services`);
+  }
+
   validateRequestData(fg: FormGroup, channelSelection) {
     let status = [];
 
@@ -69,5 +83,19 @@ export class RequestService extends ApiService {
       });
     }
     return status;
+  }
+
+  createRequest(hotelId, data) {
+    return this.post(
+      `/api/v1/reservation/cms-create-job?cmsUserType=Bot&hotelId=${hotelId}`,
+      data
+    );
+  }
+
+  closeRequest(config, data) {
+    return this.post(
+      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+      data
+    );
   }
 }

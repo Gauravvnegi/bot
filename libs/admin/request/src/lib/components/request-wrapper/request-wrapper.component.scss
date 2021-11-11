@@ -1,0 +1,57 @@
+@import 'main';
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 7vw !important;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: black !important;
+}
+.request-wrapper-header {
+  height: 65px;
+  padding: 10px 15px;
+  background-color: #fff;
+  margin: -20px -24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-btnwrap {
+    display: flex;
+    &-btn {
+      width: 142px;
+      height: 36px;
+      padding: 8px 18px 8.2px 18.3px;
+      border-radius: 100px;
+      border: solid 1px #e1e1f2;
+      background-color: #f6f6fc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      &-name {
+        font-family: Roboto;
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.66px;
+        text-align: left;
+        color: #002046;
+      }
+    }
+  }
+}
+.request-body {
+  margin: 25px 0 -15px -20px;
+  width: calc(100% + 40px);
+  background-color: #fff;
+  height: calc(100vh - 190px);
+  display: flex;
+  &-left {
+    width: 337px;
+  }
+  &-right {
+    width: calc(100% - 337px);
+  }
+}

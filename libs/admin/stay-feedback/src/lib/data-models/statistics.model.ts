@@ -82,7 +82,6 @@ export class NPSAcrossServices {
           });
         });
     });
-    console.log(this);
     return this;
   }
 }

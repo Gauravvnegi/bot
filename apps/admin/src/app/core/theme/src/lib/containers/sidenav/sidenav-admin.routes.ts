@@ -18,12 +18,6 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/feedback-tab.svg',
   },
   {
-    path: 'request',
-    title: 'Requests',
-    children: null,
-    url: 'assets/svg/request.svg',
-  },
-  {
     path: 'package',
     title: 'Packages',
     children: null,
@@ -47,6 +41,12 @@ export const DEFAULT_ROUTES = [
         path: 'conversation/analytics',
         title: 'Analytics',
         url: 'assets/svg/Analytics.svg',
+      },
+      {
+        path: 'conversation/request',
+        title: 'Requests',
+        children: null,
+        url: 'assets/svg/request.svg',
       },
       {
         path: 'conversation/messages',

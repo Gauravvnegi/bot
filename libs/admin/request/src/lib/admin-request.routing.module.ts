@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { RequestDataTableComponent } from './components/request-data-table/request-data-table.component';
-import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { RequestComponent } from './components/request/request.component';
+import { RequestWrapperComponent } from './components/request-wrapper/request-wrapper.component';
+import { RequestListComponent } from './components/request-list/request-list.component';
+import { RequestDetailComponent } from './components/request-detail/request-detail.component';
+import { RaiseRequestComponent } from './components/raise-request/raise-request.component';
+import { RequestListFilterComponent } from './components/request-list-filter/request-list-filter.component';
+import { SearchComponent } from './components/search/search.component';
 
 const appRoutes: Route[] = [
   {
@@ -11,14 +16,10 @@ const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: RequestDataTableComponent,
+        component: RequestWrapperComponent,
       },
-      {
-        path: 'add-request',
-        component: NotificationComponent,
-      }
-    ]
-  }
+    ],
+  },
 ];
 
 @NgModule({
@@ -26,5 +27,15 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminRequestRoutingModule {
-  static components = [RequestDataTableComponent, NotificationComponent];
+  static components = [
+    RequestComponent,
+    RequestDataTableComponent,
+    RequestDataTableComponent,
+    RequestWrapperComponent,
+    RequestListComponent,
+    RequestDetailComponent,
+    RaiseRequestComponent,
+    RequestListFilterComponent,
+    SearchComponent,
+  ];
 }

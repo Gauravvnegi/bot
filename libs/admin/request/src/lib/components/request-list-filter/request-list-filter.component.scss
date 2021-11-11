@@ -1,0 +1,86 @@
+@import 'main';
+
+.sortFilterWrapper {
+  height: 100%;
+  width: 100%;
+  .sortFilterContainer {
+    height: calc(100% - 62px);
+    width: 100%;
+    border-bottom: 1px solid #9eaeb8;
+    padding: 15px;
+    .sortBy {
+      font: normal normal bold 10px/13px Roboto;
+      letter-spacing: 0.6px;
+      color: #b8bbbe;
+      margin-bottom: 10px;
+    }
+    .sortTypes {
+      display: flex;
+      height: auto;
+      width: 100%;
+      flex-wrap: wrap;
+      .sortItemWrapper {
+        border-radius: 1000px;
+        opacity: 1;
+        margin: 0 10px 10px 0;
+        width: max-content;
+        padding: 8px 15px;
+        cursor: pointer;
+        .sortItem {
+          font: normal normal normal 14px/19px Roboto;
+          letter-spacing: 0.84px;
+          color: #002046;
+        }
+      }
+    }
+    .filterUnderline {
+      border: solid 1px #e0e0e0;
+      margin: 20px 0;
+    }
+    .filterBy {
+      font: normal normal bold 10px/13px Roboto;
+      letter-spacing: 0.6px;
+      color: #b8bbbe;
+      margin-bottom: 10px;
+    }
+    .filterItemWrapper {
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+    }
+    .filterCheckbox {
+      margin-right: 10px;
+      height: 20px;
+      width: 20px;
+    }
+    .filterItem {
+      font: normal normal normal 14px/19px Roboto;
+      letter-spacing: 0.84px;
+      color: #002046;
+      opacity: 1;
+    }
+  }
+  .applyBtnWrapper {
+    height: 62px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .applyBtn {
+    width: 138px;
+    height: 36px;
+    background: #4b56c0 0% 0% no-repeat padding-box;
+    border-radius: 100px;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+}
+.priority {
+  font: normal normal bold 14px/19px Roboto;
+  letter-spacing: 0.84px;
+  color: #002046;
+  opacity: 1;
+}

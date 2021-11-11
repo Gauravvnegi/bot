@@ -1,0 +1,11 @@
+<span class="p-input-icon-right">
+  <mat-icon (click)="clearSearch()" class="cross_icon">cancel</mat-icon>
+  <form [formGroup]="parentFG">
+    <input
+      type="text"
+      pInputText
+      formControlName="search"
+      placeholder="Search by Name, Number..."
+    />
+  </form>
+</span>

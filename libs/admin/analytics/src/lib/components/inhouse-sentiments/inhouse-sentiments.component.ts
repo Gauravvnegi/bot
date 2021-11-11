@@ -108,16 +108,16 @@ export class InhouseSentimentsComponent implements OnInit {
         backgroundColor: '#fb3d4e',
       },
       {
-        borderColor: '#FF9F67',
-        backgroundColor: '#FF9F67',
-      },
-      {
         borderColor: '#2a8853',
         backgroundColor: '#2a8853',
       },
       {
         borderColor: '#0bb2d4',
         backgroundColor: '#0bb2d4',
+      },
+      {
+        borderColor: '#FF9F67',
+        backgroundColor: '#FF9F67',
       },
     ],
     chartLegend: false,
@@ -249,7 +249,10 @@ export class InhouseSentimentsComponent implements OnInit {
   }
 
   get stats() {
-    if (this.graphData) return Object.keys(this.graphData);
+    if (this.graphData)
+      return Object.keys(this.graphData).filter(
+        (d) => d !== 'label' && d !== 'totalCount'
+      );
     return [];
   }
 
@@ -264,6 +267,11 @@ export class InhouseSentimentsComponent implements OnInit {
 
     detailCompRef.componentInstance.tableName = 'In-house Request';
     detailCompRef.componentInstance.tabFilterIdx = 0;
+    detailCompRef.componentInstance.optionLabels = [
+      'Immediate',
+      'Timeout',
+      'Closed',
+    ];
     detailCompRef.componentInstance.onModalClose.subscribe((res) =>
       // remove loader for detail close
       detailCompRef.close()

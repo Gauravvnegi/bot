@@ -1,0 +1,22 @@
+<div class="analyticsWrapper">
+  <div class="analyticsWrapper__header">
+    <div class="analyticsWrapper__header__title__container">
+      <div class="analyticsWrapper__header__title__container__icon">
+        <img src="assets/svg/analytics-stat-icon.svg" />
+      </div>
+      <div class="analyticsWrapper__header__title__container__title">
+        Pre-Arrival
+      </div>
+    </div>
+  </div>
+  <div class="analyticsWrapper__graphContainer">
+    <div class="analyticsWrapper__graphContainer__request">
+      <hospitality-bot-inhouse-source
+        [entityType]="'pre arrival'"
+      ></hospitality-bot-inhouse-source>
+    </div>
+    <div class="analyticsWrapper__graphContainer__Sentiments">
+      <hospitality-bot-pre-arrival-packages></hospitality-bot-pre-arrival-packages>
+    </div>
+  </div>
+</div>

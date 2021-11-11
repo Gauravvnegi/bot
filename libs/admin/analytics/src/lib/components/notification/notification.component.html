@@ -1,0 +1,66 @@
+<div class="notification">
+  <div class="notification-title">
+    Notification
+  </div>
+  <div class="notification-subtitle">
+    Bifurcation as per Journey
+  </div>
+  <canvas
+    baseChart
+    class="notification-baseChart"
+    [datasets]="chart.chartData"
+    [labels]="chart.chartLabels"
+    [options]="chart.chartOptions"
+    [colors]="chart.chartColors"
+    [legend]="chart.chartLegend"
+    [chartType]="chart.chartType"
+  >
+  </canvas>
+  <div class="notification-check-wrap">
+    <div
+      class="notification-check-wrap-items"
+      *ngFor="let label of labels; let i = index"
+      (click)="legendOnClick(i, $event)"
+    >
+      <div
+        class="notification-check-wrap-items-dot"
+        [style.backgroundColor]="colors[i]"
+      ></div>
+      <div class="notification-check-wrap-items-label">
+        {{ label }}
+      </div>
+    </div>
+  </div>
+  <div class="notification-footer">
+    <div class="notification-footer-title">
+      Total Templates Sent
+    </div>
+    <div class="notification-footer-values">
+      <div class="notification-footer-values-t-value">
+        {{ stats?.total }}
+      </div>
+      <div class="notification-footer-values-sent">
+        <div
+          class="notification-footer-values-sent-num"
+          [ngStyle]="
+            stats?.comparisonPercentage >= 0
+              ? {
+                  color: '#52b33f'
+                }
+              : { color: '#CC052B' }
+          "
+        >
+          ({{ stats?.comparisonPercentage }}%)<img
+            [src]="
+              stats?.comparisonPercentage >= 0
+                ? 'assets/svg/uparrow.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+            alt="uparrow"
+          />
+        </div>
+        <div class="notification-footer-values-sent-day">In 30 Days</div>
+      </div>
+    </div>
+  </div>
+</div>

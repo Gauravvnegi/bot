@@ -1,0 +1,87 @@
+@import 'main';
+
+.labl {
+  margin: 0 1%;
+}
+
+.labl > .image {
+  height: 38px;
+  width: 38px;
+  @include flex-justify-center;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid $primary-purple;
+}
+.labl > input {
+  /* HIDE RADIO */
+  visibility: hidden; /* Makes input not-clickable */
+  position: absolute; /* Remove input from document flow */
+}
+
+.legends:checked ~ div {
+  text-decoration: line-through;
+}
+
+.labl > input + .image {
+  position: relative;
+  cursor: pointer;
+}
+
+.labl > input:checked + .image {
+  background-color: $primary-purple;
+  img {
+    filter: invert(1);
+    height: 12px;
+  }
+}
+
+.days-label {
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #b4b4b4;
+  align-self: flex-start;
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 9vw !important;
+}
+
+.stat-vals-container {
+  width: 100%;
+  @include flex-justify-center;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .stat-val {
+    cursor: pointer;
+    height: 60px;
+    padding: 20px 15px;
+    border-radius: 5px;
+    background-color: #f9fafa;
+    width: 49.25%;
+    margin: 10px 0;
+    @include flex-between-center;
+    font-family: Roboto;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.17;
+    letter-spacing: 0.72px;
+    .label {
+      font-weight: 500;
+      color: #6d7580;
+      img {
+        margin-right: 10px;
+      }
+    }
+    .value {
+      font-weight: bold;
+      color: #002046;
+    }
+  }
+}

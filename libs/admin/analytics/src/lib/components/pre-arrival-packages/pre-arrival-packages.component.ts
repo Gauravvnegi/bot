@@ -225,7 +225,7 @@ export class PreArrivalPackagesComponent implements OnInit {
         ...this.globalFilters,
         {
           entityType: this.entityType,
-          packageId: this.tabFilterItems[this.tabFilterIdx].value,
+          packageId: this.tabFilterItems[this.tabFilterIdx]?.value,
         },
       ]),
     };

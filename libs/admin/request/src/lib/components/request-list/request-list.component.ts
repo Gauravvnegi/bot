@@ -45,7 +45,7 @@ export class RequestListComponent implements OnInit {
     {
       label: 'To-Do',
       content: '',
-      value: 'Immediate',
+      value: 'Todo',
       disabled: false,
       total: 0,
       chips: [],

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -24,7 +24,7 @@ export class PreArrivalPackagesComponent implements OnInit {
   selectedInterval: any;
   graphData;
   packageFG: FormGroup;
-  entityType = 'pre arrival';
+  @Input() entityType = 'pre arrival';
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {

@@ -108,7 +108,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
     const data = {
       ...this.requestFG.getRawValue(),
-      systemDateTime: DateService.currentDate('DD-MMM-YYYY hh:mm:ss'),
+      systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: 'KIOSK',
       propertyID: '1',
     };

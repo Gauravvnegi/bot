@@ -82,6 +82,7 @@ export class RequestListComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFG();
+    this.registerListeners();
     this._requestService.selectedRequest.next(null);
   }
 

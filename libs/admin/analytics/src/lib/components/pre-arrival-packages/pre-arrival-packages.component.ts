@@ -127,45 +127,10 @@ export class PreArrivalPackagesComponent implements OnInit {
     chartType: 'line',
   };
 
-  tabFilterItems = [
-    {
-      label: 'Airport Pick-up',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 2',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 3',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 4',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 5',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-  ];
+  tabFilterItems = [];
 
   tabFilterIdx = 0;
+  hotelId: string;
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -209,8 +174,47 @@ export class PreArrivalPackagesComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        if (!this.tabFilterItems.length) this.getPackageList();
         this.getInhouseSentimentsData();
       })
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  getPackageList() {
+    this.$subscription.add(
+      this.analyticsService
+        .getPackageList(this.hotelId)
+        .subscribe((response) => {
+          const packages = [
+            ...response.complimentryPackages,
+            ...response.paidPackages,
+          ];
+
+          packages.forEach((item) => {
+            if (item.active && item.packageCode)
+              this.tabFilterItems.push({
+                label: item.name,
+                content: '',
+                value: item.id,
+                disabled: false,
+                total: 0,
+              });
+          });
+        })
     );
   }
 

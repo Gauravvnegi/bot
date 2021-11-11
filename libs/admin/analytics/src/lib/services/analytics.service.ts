@@ -61,4 +61,8 @@ export class AnalyticsService extends ApiService {
       data
     );
   }
+
+  getPackageList(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/packages`);
+  }
 }

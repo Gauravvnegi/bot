@@ -55,6 +55,9 @@
 
     .graph-canvas {
       z-index: 2;
+      &-base-chart {
+        height: 176px;
+      }
     }
     .labels {
       z-index: 1;

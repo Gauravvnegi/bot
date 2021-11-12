@@ -16,9 +16,7 @@
         <div class="header-seperator"></div>
         <p>
           {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }} -
-          {{
-            rowData.booking.getDepartureDate(_globalFilterService.timezone)
-          }}
+          {{ rowData.booking.getDepartureDate(_globalFilterService.timezone) }}
           ({{
             rowData.booking.getDaysAndNights(_globalFilterService.timezone)
               .nights
@@ -165,7 +163,7 @@
           *ngIf="feedbackData.suggestions && feedbackData.suggestions.length"
         >
           <mat-label class="label">Facilities</mat-label>
-          <div class="value" style="display: flex;">
+          <div class="value d-flex">
             <ng-container
               *ngFor="let suggestion of feedbackData.suggestions.slice(0, 2)"
             >
@@ -185,7 +183,7 @@
       </div>
     </div>
     <hr class="data-seperator" *ngIf="services && services.length" />
-    <div *ngIf="services && services.length" style="margin-bottom: 15px;">
+    <div *ngIf="services && services.length" class="mb-15">
       <div class="container__title">
         <p>Service Feedback</p>
         <div *ngIf="showMore" (click)="toggleShowMore()" class="showMore">

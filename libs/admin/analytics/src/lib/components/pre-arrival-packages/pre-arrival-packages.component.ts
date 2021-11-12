@@ -65,8 +65,8 @@ export class PreArrivalPackagesComponent implements OnInit {
   ];
 
   chart: any = {
-    chartData: [{ data: [7, 43, 5, 8, 0], label: 'To Do', fill: false }],
-    chartLabels: ['1 Jun', '2 Jun', '3 Jun', '4 Jun', '5 Jun'],
+    chartData: [{ data: [], label: 'To Do', fill: false }],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {
@@ -199,8 +199,8 @@ export class PreArrivalPackagesComponent implements OnInit {
       this.analyticsService.getPackageList(this.hotelId).subscribe(
         (response) => {
           const packages = [
-            ...response.complimentryPackages,
-            ...response.paidPackages,
+            ...(response.complimentryPackages || []),
+            ...(response.paidPackages || []),
           ];
 
           packages.forEach((item) => {

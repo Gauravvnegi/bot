@@ -198,13 +198,18 @@ export class ApplicationStatusComponent implements OnInit {
         .summaryDownload(this._reservationService.reservationId)
         .subscribe(
           (response) => {
-            FileSaver.saveAs(
-              response,
+            var blob = new Blob([response], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.target = '_blank';
+            link.download =
               `${this.guestDetail.guests[0].firstName}_${this.guestDetail.guests[0].lastName}` +
-                '_export_summary_' +
-                new Date().getTime() +
-                '.pdf'
-            );
+              '_export_summary_' +
+              new Date().getTime() +
+              '.pdf';
+            link.click();
+            link.remove();
           },
           ({ error }) => {
             this._translateService

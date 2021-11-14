@@ -181,13 +181,12 @@ export class ApplicationStatusComponent implements OnInit {
             document.body.appendChild(iframe);
             iframe.contentWindow.print();
           },
-          ({ error }) => {
+          ({ error }) =>
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
-          }
+              })
         )
     );
   }
@@ -203,21 +202,24 @@ export class ApplicationStatusComponent implements OnInit {
             const link = document.createElement('a');
             link.href = blobUrl;
             link.target = '_blank';
-            link.download =
-              `${this.guestDetail.guests[0].firstName}_${this.guestDetail.guests[0].lastName}` +
-              '_export_summary_' +
-              new Date().getTime() +
-              '.pdf';
-            link.click();
+            link.download = `${this.guestDetail.guests[0].firstName}_${
+              this.guestDetail.guests[0].lastName
+            }_export_summary_${new Date().getTime()}.pdf`;
+            link.dispatchEvent(
+              new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+              })
+            );
             link.remove();
           },
-          ({ error }) => {
+          ({ error }) =>
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
-              });
-          }
+              })
         )
     );
   }

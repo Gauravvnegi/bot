@@ -8,12 +8,12 @@
       </div>
     </div>
     <ng-template #default>
-      <div style="padding: 5px;">
+      <div class="p-5">
         <mat-icon class="back-icon" (click)="goBack()"
           >keyboard_backspace</mat-icon
         >
       </div>
-      <div style="padding-left: 10px;">Send Message</div>
+      <div class="pl-10">Send Message</div>
     </ng-template>
   </div>
   <ng-template #loader>
@@ -37,7 +37,7 @@
                 formControlName="is_social_channel"
                 (change)="modifyControl($event.checked, 'social_channels')"
               ></mat-checkbox>
-              <mat-form-field style="margin-left: 10px;">
+              <mat-form-field class="ml-10">
                 <mat-select
                   multiple
                   formControlName="social_channels"
@@ -216,7 +216,7 @@
           <div class="row-body">
             <ckeditor
               [editor]="Editor"
-              style="width: 100%;"
+              class="row-body-editor"
               formControlName="message"
             ></ckeditor>
           </div>
@@ -240,7 +240,7 @@
             </div>
           </div>
         </div>
-        <div style="align-self: center;">
+        <div class="request-body-button-wrap">
           <button class="button" (click)="sendMessage()">
             <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
             {{ isSending ? 'Sending' : 'Send' }}

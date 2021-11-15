@@ -30,7 +30,7 @@
   letter-spacing: 0.72px;
   color: #c6f0ef;
 }
-.status-right{
+.status-right {
   display: flex;
 }
 .stat-labels-container {
@@ -198,3 +198,7 @@
 //     display: none;
 //   }
 // }
+.line-chart-base-chart {
+  max-width: 100%;
+  max-height: 350px;
+}

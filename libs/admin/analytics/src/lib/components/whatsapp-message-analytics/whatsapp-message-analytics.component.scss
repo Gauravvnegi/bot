@@ -386,3 +386,17 @@
 .percentRed {
   color: #cc052b;
 }
+.conversation-notification {
+  display: flex;
+  margin-top: 15px;
+  &-conversation {
+    width: 60%;
+    border: solid 1px #e2e2e2;
+    border-radius: 5px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    margin-right: 15px;
+  }
+  &-notification {
+    width: 40%;
+  }
+}

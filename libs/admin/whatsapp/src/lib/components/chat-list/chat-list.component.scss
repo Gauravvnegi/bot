@@ -97,6 +97,11 @@
           line-height: normal;
           letter-spacing: 0.72px;
           color: #002046;
+          &-about {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
         }
         .description-message {
           font-family: Roboto;
@@ -159,4 +164,10 @@
     color: #9eaeb8;
     opacity: 1;
   }
+}
+.sort-filter {
+  height: calc(100% - 62px);
+}
+.cursor-pointer {
+  cursor: pointer;
 }

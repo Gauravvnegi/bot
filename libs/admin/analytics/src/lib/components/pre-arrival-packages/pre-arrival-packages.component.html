@@ -31,6 +31,7 @@
   <div class="m-10">
     <canvas
       baseChart
+      (click)="openModal()"
       [datasets]="chart.chartData"
       [labels]="chart.chartLabels"
       [options]="chart.chartOptions"

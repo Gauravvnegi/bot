@@ -33,7 +33,7 @@ export class InhouseData {
   action: string;
   closedTime: number;
   confirmationNumber: string;
-  elaspedTime: number;
+  elapsedTime: number;
   guestDetails: GuestType;
   hotelId: string;
   id: string;
@@ -63,7 +63,7 @@ export class InhouseData {
       set({}, 'action', get(input, ['action'])),
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
-      set({}, 'elaspedTime', get(input, ['elaspedTime'])),
+      set({}, 'elapsedTime', get(input, ['elapsedTime'])),
       set({}, 'hotelId', get(input, ['hotelId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'itemCode', get(input, ['itemCode'])),
@@ -108,6 +108,23 @@ export class InhouseData {
         timezone
       )}`;
     else '------';
+  }
+
+  getSLA() {
+    if (this.elapsedTime)
+      return `${Math.round(
+        ((this.elapsedTime % 86400000) % 3600000) / 60000
+      )}m`;
+    else '------';
+  }
+
+  getAction() {
+    switch (this.action) {
+      case 'Immediate':
+        return 'To-Do';
+      default:
+        return this.action;
+    }
   }
 }
 

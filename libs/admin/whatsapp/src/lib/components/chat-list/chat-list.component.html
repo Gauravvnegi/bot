@@ -16,7 +16,7 @@
         formControlName="search"
       />
     </div>
-    <div style="cursor: pointer;">
+    <div class="cursor-pointer">
       <img src="assets/svg/Filter-Icon.svg" (click)="showFilter = true" />
     </div>
   </div>
@@ -60,13 +60,7 @@
           <div class="persons">
             {{ contact.name || contact.phone }}
           </div>
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            "
-          >
+          <div class="persons-about">
             <div class="description-message">
               {{
                 contact.descriptionMessage &&
@@ -103,7 +97,7 @@
       &#10006;
     </div>
   </div>
-  <div style="height: calc(100% - 62px);">
+  <div class="sort-filter">
     <hospitality-bot-contact-sort-filter
       [parentFG]="contactFG"
       (filterApplied)="handleFilter($event)"

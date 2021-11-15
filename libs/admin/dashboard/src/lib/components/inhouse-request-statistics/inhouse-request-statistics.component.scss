@@ -19,6 +19,9 @@
     @media only screen and (max-width: $L) {
       transform: unset;
     }
+    &-base-chart {
+      height: 117px;
+    }
   }
 }
 

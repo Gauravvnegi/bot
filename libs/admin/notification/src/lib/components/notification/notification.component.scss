@@ -109,7 +109,13 @@
       justify-content: space-between;
       width: 85%;
       align-items: center;
+      &-editor {
+        width: 100%;
+      }
     }
+  }
+  &-button-wrap {
+    align-self: center;
   }
 }
 

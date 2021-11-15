@@ -48,7 +48,49 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  min-width: 9vw !important;
+  min-width: 12vw !important;
+  height: auto !important;
+}
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: flex !important;
+}
+:host ::ng-deep .mat-tab-label .mat-tab-label-content {
+  font-size: 10px !important;
+  white-space: pre-wrap;
+}
+:host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
+  font-size: 12px !important;
+}
+.pap-wraper {
+  padding: 20px;
+  height: 100%;
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-title {
+      font-family: Roboto;
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: #002046;
+    }
+    &-chart-type {
+      display: flex;
+      align-items: center;
+    }
+  }
+  &-filter {
+    margin: 10px 0;
+    overflow-x: auto;
+  }
 }
 
 .stat-vals-container {

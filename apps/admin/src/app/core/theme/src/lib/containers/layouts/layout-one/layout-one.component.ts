@@ -72,20 +72,27 @@ export class LayoutOneComponent implements OnInit {
     this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
       const notificationPayload = payload;
       this.firebaseMessagingService.playNotificationSound();
-      if (
-        notificationPayload &&
-        notificationPayload['data']?.notificationType &&
-        notificationPayload['data']?.notificationType === 'Live Request'
-      ) {
-        if (this.checkForMessageRoute())
-          this.firebaseMessagingService.liveRequestEnable.next(
-            notificationPayload
-          );
-      } else {
-        if (this.checkForMessageRoute())
-          this.firebaseMessagingService.currentMessage.next(payload);
-        else if (Object.keys(payload).length) {
-          this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+      if (notificationPayload) {
+        switch (notificationPayload['data']?.notificationType) {
+          case 'Live Request':
+            if (this.checkForMessageRoute())
+              this.firebaseMessagingService.liveRequestEnable.next(
+                notificationPayload
+              );
+            break;
+          case 'In-house Request':
+            if (this._router.url.includes('request'))
+              this.firebaseMessagingService.newInhouseRequest.next(
+                notificationPayload
+              );
+            break;
+          default:
+            if (this.checkForMessageRoute())
+              this.firebaseMessagingService.currentMessage.next(payload);
+            else if (Object.keys(payload).length) {
+              this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+            }
+            break;
         }
       }
     });

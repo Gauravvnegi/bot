@@ -96,9 +96,17 @@
             {{ item.remarks }}
           </div>
           <div class="content-wrap-r2">
-            <div>{{ item.priority || '------' }}</div>
+            <div
+              [ngClass]="{
+                'status-text-initiated': item.action == 'Timeout',
+                'status-text-reject': item.action == 'Immediate',
+                'status-text-success': item.action == 'Closed'
+              }"
+            >
+              {{ item.getAction() || '------' }}
+            </div>
             <div class="content-wrap-r2-divider"></div>
-            <div>-----</div>
+            <div>SLA: {{ item.getSLA() }}</div>
             <div class="content-wrap-r2-divider"></div>
             <div>JD:- {{ item.jobDuration }}m</div>
           </div>

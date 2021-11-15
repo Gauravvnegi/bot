@@ -54,4 +54,19 @@ export class AnalyticsService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  closeRequest(config, data) {
+    return this.post(
+      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+      data
+    );
+  }
+
+  getPackageList(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/packages`);
+  }
+
+  updatePreArrivalRequest(id, data) {
+    return this.patch(`/api/v1/live-request/pre-arrival/${id}`, data);
+  }
 }

@@ -12,11 +12,16 @@
           class="form-elements"
           placeholder="Status"
           formControlName="status"
-          [disabled]="requestFG.get('status').value === 'Closed'"
+          [disabled]="
+            requestFG?.get('status').value === 'Closed' ||
+            requestFG?.get('status').value === 'Timeout'
+          "
+          (selectionChange)="handleStatusChange($event)"
         >
           <mat-option
             *ngFor="let status of statusList"
             [value]="status.value"
+            [disabled]="status.value === 'Timeout'"
             >{{ status.label }}</mat-option
           >
         </mat-select>
@@ -83,9 +88,9 @@
           <td>
             {{ data.getRequestDateTime() }}
           </td>
-          <td>--------</td>
+          <td>{{ data.getClosedTime() || '------' }}</td>
           <td>JD: {{ data.jobDuration }}m</td>
-          <td>-</td>
+          <td>{{ data.getSLA() }}</td>
           <td>{{ data.quantity || 'None' }}</td>
         </tr>
       </table>

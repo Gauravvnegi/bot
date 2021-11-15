@@ -1,4 +1,4 @@
-<div class="analyticsWrapper">
+<div class="analyticsWrapper" featureSubscribed [feature]="'modules.request'">
   <div class="analyticsWrapper__header">
     <div class="analyticsWrapper__header__title__container">
       <div class="analyticsWrapper__header__title__container__icon">
@@ -11,10 +11,14 @@
   </div>
   <div class="analyticsWrapper__graphContainer">
     <div class="analyticsWrapper__graphContainer__request">
-      <hospitality-bot-inhouse-source></hospitality-bot-inhouse-source>
+      <hospitality-bot-inhouse-source
+        [entityType]="'pre arrival'"
+      ></hospitality-bot-inhouse-source>
     </div>
     <div class="analyticsWrapper__graphContainer__Sentiments">
-      <hospitality-bot-pre-arrival-packages></hospitality-bot-pre-arrival-packages>
+      <hospitality-bot-pre-arrival-packages
+        [entityType]="'pre arrival'"
+      ></hospitality-bot-pre-arrival-packages>
     </div>
   </div>
 </div>

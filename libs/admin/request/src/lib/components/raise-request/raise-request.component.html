@@ -112,7 +112,7 @@
         <mat-select
           class="form-elements"
           placeholder="Priority Code*"
-          formControlName="priorityCode"
+          formControlName="priority"
         >
           <mat-option
             *ngFor="let priority of priorityList"
@@ -122,8 +122,8 @@
         </mat-select>
         <mat-error
           *ngIf="
-            requestFG.get('priorityCode').touched &&
-            requestFG.get('priorityCode').hasError('required')
+            requestFG.get('priority').touched &&
+            requestFG.get('priority').hasError('required')
           "
         >
           Priority Code is required
@@ -149,7 +149,7 @@
           matInput
           class="form-elements"
           placeholder="Desription"
-          formControlName="description"
+          formControlName="remarks"
         />
       </div>
     </div>

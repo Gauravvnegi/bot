@@ -1,8 +1,14 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 
@@ -11,7 +17,7 @@ import { RequestService } from '../../services/request.service';
   templateUrl: './raise-request.component.html',
   styleUrls: ['./raise-request.component.scss'],
 })
-export class RaiseRequestComponent implements OnInit {
+export class RaiseRequestComponent implements OnInit, OnDestroy {
   @Output() onRaiseRequestClose = new EventEmitter();
   requestFG: FormGroup;
   hotelId: string;
@@ -65,20 +71,23 @@ export class RaiseRequestComponent implements OnInit {
       lastName: ['', Validators.required],
       itemName: ['', Validators.required],
       itemCode: ['', Validators.required],
-      priorityCode: ['', Validators.required],
+      priority: ['', Validators.required],
       jobDuration: [''],
-      description: [''],
+      remarks: [''],
+      quantity: [1],
     });
   }
 
   initItemList() {
-    this._requestService.getCMSServices(this.hotelId).subscribe(
-      (response) => {
-        this.cmsServices = response.cms_services;
-      },
-      ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
+    this.$subscription.add(
+      this._requestService.getCMSServices(this.hotelId).subscribe(
+        (response) => {
+          this.cmsServices = response.cms_services;
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -99,7 +108,7 @@ export class RaiseRequestComponent implements OnInit {
 
     const data = {
       ...this.requestFG.getRawValue(),
-      systemDateTime: '05-AUG-2021 10:47:07',
+      systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: 'KIOSK',
       propertyID: '1',
     };
@@ -119,5 +128,9 @@ export class RaiseRequestComponent implements OnInit {
 
   close(status = false) {
     this.onRaiseRequestClose.emit(status);
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

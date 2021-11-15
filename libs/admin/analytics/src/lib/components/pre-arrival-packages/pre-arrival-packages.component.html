@@ -39,9 +39,10 @@
       [chartType]="chart.chartType"
     >
     </canvas>
-    <!-- <div class="stat-vals-container">
+    <div class="stat-vals-container">
       <div
         class="stat-val"
+        *ngFor="let key of stats; let i = index"
         (click)="legendOnClick(i, $event)"
       >
         <div class="label">
@@ -50,7 +51,7 @@
         </div>
         <div class="value">{{ graphData[key].totalCount }}</div>
       </div>
-    </div> -->
+    </div>
   </div>
   <div class="days-label">In 30 Days</div>
 </div>

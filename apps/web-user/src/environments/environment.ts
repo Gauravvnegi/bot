@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   name: 'default',
-  base_url: 'https://devapi.botshot.in:8443',
+  base_url: 'https://testapi.botshot.in:32313',
 };
 
 /*

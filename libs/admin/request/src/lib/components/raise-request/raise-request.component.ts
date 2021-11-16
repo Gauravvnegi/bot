@@ -155,6 +155,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
     formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
       // setting minimum search character limit to 3
+      this.requestFG.patchValue({
+        roomNo: response.search,
+      });
       if (response?.search.length >= 3) {
         this.$subscription.add(
           this._requestService
@@ -169,7 +172,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
               if (res) {
                 this.reservation = res;
                 this.requestFG.patchValue({
-                  roomNo: response.search,
                   firstName: res.guestDetails.primaryGuest.firstName,
                   lastName: res.guestDetails.primaryGuest.lastName,
                 });

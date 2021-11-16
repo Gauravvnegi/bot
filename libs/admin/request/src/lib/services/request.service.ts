@@ -9,15 +9,15 @@ export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
   refreshData = new BehaviorSubject(false);
   getAllRequests(config): Observable<any> {
-    return this.get(`/api/v1/live-request/${config.queryObj}`);
+    return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
   getAllLiveRequest(config) {
-    return this.get(`/api/v1/live-request/list/${config.queryObj}`);
+    return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/live-request/export/${config.queryObj}`, {
+    return this.get(`/api/v1/request/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }
@@ -34,7 +34,7 @@ export class RequestService extends ApiService {
   }
 
   searchRequest(hotelId: string, config) {
-    return this.get(`/api/v1/live-request/${hotelId}/search${config.queryObj}`);
+    return this.get(`/api/v1/request/${hotelId}/search${config.queryObj}`);
   }
 
   uploadAttachments(hotelId, formData): Observable<any> {
@@ -97,5 +97,9 @@ export class RequestService extends ApiService {
       `/api/v1/reservation/cms-close-job${config.queryObj}`,
       data
     );
+  }
+
+  searchBooking(config) {
+    return this.get(`/api/v1/reservation/room${config}`);
   }
 }

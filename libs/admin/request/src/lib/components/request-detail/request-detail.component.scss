@@ -71,6 +71,9 @@ td {
         border-radius: 50%;
         background-color: chocolate;
         margin-right: 15px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
       }
       &-title {
         font-family: Roboto;

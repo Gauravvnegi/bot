@@ -109,6 +109,7 @@ export class RequestListComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
+        this._requestService.selectedRequest.next(null);
         this.loadInitialRequestList([
           ...this.globalQueries,
           {

@@ -7,11 +7,11 @@ import { RequestData } from '../../../../notification/src/lib/data-models/reques
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
   getAllRequests(config): Observable<any> {
-    return this.get(`/api/v1/live-request/${config.queryObj}`);
+    return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/live-request/export/${config.queryObj}`, {
+    return this.get(`/api/v1/request/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }

@@ -246,6 +246,17 @@ export class Guest {
     }
     return cc;
   }
+
+  getProfileNickName() {
+    const nameList = [this.firstName, this.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
+  }
 }
 
 export class StayDetails {

@@ -21,14 +21,6 @@ export class RequestWrapperComponent implements OnInit {
       total: 0,
       chips: [],
     },
-    {
-      label: 'Pre-Arrival',
-      content: '',
-      value: 'PREARRIVAL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
   ];
 
   tabFilterIdx: number = 0;

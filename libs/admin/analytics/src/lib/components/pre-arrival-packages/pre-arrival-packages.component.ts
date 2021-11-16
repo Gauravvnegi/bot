@@ -24,7 +24,7 @@ export class PreArrivalPackagesComponent implements OnInit {
   selectedInterval: any;
   graphData;
   packageFG: FormGroup;
-  @Input() entityType = 'pre arrival';
+  @Input() entityType = 'pre-arrival';
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -198,10 +198,7 @@ export class PreArrivalPackagesComponent implements OnInit {
     this.$subscription.add(
       this.analyticsService.getPackageList(this.hotelId).subscribe(
         (response) => {
-          const packages = [
-            ...(response.complimentryPackages || []),
-            ...(response.paidPackages || []),
-          ];
+          const packages = response.paidPackages || [];
 
           packages.forEach((item) => {
             if (item.active && item.packageCode)
@@ -332,7 +329,7 @@ export class PreArrivalPackagesComponent implements OnInit {
     );
 
     detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
-    detailCompRef.componentInstance.entityType = 'pre arrival';
+    detailCompRef.componentInstance.entityType = 'pre-arrival';
     detailCompRef.componentInstance.optionLabels = [
       'Immediate',
       'Reject',

@@ -14,6 +14,7 @@ export const authConstants = {
     analytics: 'assets/svg/Analytics.svg',
     liveRequest: 'assets/svg/live-help.svg',
     search: 'assets/svg/search.svg',
+    botshotLogo: 'assets/botshotlogo.png',
   },
   managingOptions: [
     { id: 1, label: 'Live Dashboard', url: 'assets/svg/dashboard-white.svg' },

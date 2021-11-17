@@ -49,7 +49,6 @@
 
 :host ::ng-deep .mat-tab-label {
   min-width: 12vw !important;
-  height: auto !important;
 }
 :host
   ::ng-deep
@@ -59,7 +58,6 @@
 }
 :host ::ng-deep .mat-tab-label .mat-tab-label-content {
   font-size: 10px !important;
-  white-space: pre-wrap;
 }
 :host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
   font-size: 12px !important;

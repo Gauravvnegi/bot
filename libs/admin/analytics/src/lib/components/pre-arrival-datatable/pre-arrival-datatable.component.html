@@ -301,12 +301,13 @@
           <p class="date-time">
             {{
               rowData.getRequestDateTime(_globalFilterService.timezone) ||
-                '-----'
+                '- - - - -'
             }}
           </p>
           <p class="date-time">
             {{
-              rowData.getClosedTime(_globalFilterService.timezone) || '-----'
+              rowData.getClosedTime(_globalFilterService.timezone) ||
+                '- - - - -'
             }}
           </p>
         </td>

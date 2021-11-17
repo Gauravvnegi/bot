@@ -1,26 +1,26 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import * as FileSaver from 'file-saver';
 
 @Component({
-  selector: 'hospitality-bot-inhouse-request-datatable',
-  templateUrl: './inhouse-request-datatable.component.html',
+  selector: 'hospitality-bot-pre-arrival-datatable',
+  templateUrl: './pre-arrival-datatable.component.html',
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './inhouse-request-datatable.component.scss',
+    './pre-arrival-datatable.component.scss',
   ],
 })
-export class InhouseRequestDatatableComponent extends BaseDatatableComponent
+export class PreArrivalDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
@@ -72,7 +72,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     },
     {
       field: 'remarks',
-      header: 'Assigned To/ Op & Cl - Dt & Tm',
+      header: 'Open & Close- Date & Time',
       isSort: false,
       sortType: 'string',
     },
@@ -103,7 +103,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       ],
     },
   ];
-
   hotelId: string;
 
   ngOnInit(): void {

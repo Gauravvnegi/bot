@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
+import { PreArrivalDatatableComponent } from '../pre-arrival-datatable/pre-arrival-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-packages',
@@ -324,7 +325,7 @@ export class PreArrivalPackagesComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     const detailCompRef = this.modalService.openDialog(
-      InhouseRequestDatatableComponent,
+      PreArrivalDatatableComponent,
       dialogConfig
     );
 

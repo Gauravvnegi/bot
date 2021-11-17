@@ -1,3 +1,4 @@
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set, trim } from 'lodash';
 
 export class InhouseTable {
@@ -80,6 +81,32 @@ export class InhouseData {
     );
 
     return this;
+  }
+
+  getRequestDateTime(timezone = '+05:30') {
+    return `${DateService.getDateFromTimeStamp(
+      this.requestTime,
+      'd-M-yy',
+      timezone
+    )} at ${DateService.getDateFromTimeStamp(
+      this.requestTime,
+      'h:mm a',
+      timezone
+    )}`;
+  }
+
+  getClosedTime(timezone = '+05:30') {
+    if (this.closedTime)
+      return `${DateService.getDateFromTimeStamp(
+        this.closedTime,
+        'd-M-yy',
+        timezone
+      )} at ${DateService.getDateFromTimeStamp(
+        this.closedTime,
+        'h:mm a',
+        timezone
+      )}`;
+    else '------';
   }
 }
 

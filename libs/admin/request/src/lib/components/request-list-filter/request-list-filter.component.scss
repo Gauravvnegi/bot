@@ -84,3 +84,8 @@
   color: #002046;
   opacity: 1;
 }
+::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: flex !important;
+}

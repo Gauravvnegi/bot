@@ -2,7 +2,7 @@
 
 .material-icons {
   margin-right: $margin15;
-  color: darkgray;
+  color: $dark-grey;
 }
 
 .card {
@@ -13,34 +13,6 @@
     @include auth-quote();
   }
 }
-
-// .card {
-//   position: absolute;
-//   margin-top: 12%;
-//   width: 50%;
-//   left: 25%;
-//   background-color: white;
-//   padding: 20px;
-//   padding-top: 7%;
-//   border-radius: 10px;
-//   box-shadow: 0px 0px 5px 0px darkgrey;
-//   height: 55vh;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   -webkit-animation-name: card;
-//   -moz-animation-name: card;
-//   -o-animation-name: card;
-//   animation-name: card;
-//   -webkit-animation-duration: 600ms;
-//   -moz-animation-duration: 600ms;
-//   -o-animation-duration: 600ms;
-//   animation-duration: 600ms;
-//   -webkit-animation-fill-mode: forwards;
-//   -moz-animation-fill-mode: forwards;
-//   -o-animation-fill-mode: forwards;
-//   animation-fill-mode: forwards;
-// }
 
 @-webkit-keyframes card {
   from {
@@ -60,21 +32,9 @@
   }
 }
 
-// .card-header {
-//   position: absolute;
-//   height: 16vh;
-//   top: -14%;
-//   width: 63%;
-//   border-radius: 10px;
-//   background-color: $login-color;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// }
-
 .social-btns i {
   font-size: 21px;
-  color: #fff;
+  color: $white;
 }
 
 .social-btns button {
@@ -95,26 +55,6 @@
     }
   }
 }
-
-// .footer {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   position: absolute;
-//   bottom: 0px;
-//   width: 100%;
-//   padding: 20px;
-//   color: white;
-//   .links {
-//     display: flex;
-//     align-items: center;
-//     a {
-//       color: white;
-//       margin-right: 20px;
-//       text-decoration: none;
-//     }
-//   }
-// }
 
 .tip {
   margin-top: -20px;
@@ -148,7 +88,7 @@
 }
 
 .card-footer button {
-  color: white;
+  color: $white;
   font-size: $font14;
   font-weight: 400;
   background-color: $auth-color;
@@ -157,6 +97,6 @@
   opacity: 1;
   &:hover {
     cursor: pointer;
-    box-shadow: 0px 4px 4px #4B56C04D;
+    box-shadow: 0px 4px 4px #4b56c04d;
   }
 }

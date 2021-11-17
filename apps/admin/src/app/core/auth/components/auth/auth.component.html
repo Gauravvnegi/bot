@@ -8,35 +8,38 @@
     </div>
     <footer class="wrapper--left-footer">
       I hereby agree to&nbsp;<a
-        href="https://www.botshot.in/terms-of-uses/"
+        [href]="authConstants.linkUrl.termsAndCondition"
         target="_blank"
         >Terms and Conditions</a
       >
     </footer>
     <div class="wrapper--left-svg-icons first">
-      <img src="assets/svg/bell.svg" />
+      <img [src]="authConstants.imgUrl.bell" />
     </div>
     <div class="wrapper--left-svg-icons second">
-      <img src="assets/svg/hotel.svg" />
+      <img [src]="authConstants.imgUrl.hotel" />
     </div>
     <div class="wrapper--left-svg-icons third">
-      <img src="assets/svg/luggage.svg" />
+      <img [src]="authConstants.imgUrl.luggage" />
     </div>
     <div class="wrapper--left-svg-icons fourth">
-      <img src="assets/svg/metro-hotel.svg" />
+      <img [src]="authConstants.imgUrl.metroHotel" />
     </div>
   </div>
   <div class="wrapper--right">
     <header class="wrapper--right-header">
-      <a href="https://www.botshot.in/about-us/" target="_blank">About Us</a>
-      <a href="https://www.botshot.in/privacy-policy/" target="_blank"
+      <a [href]="authConstants.linkUrl.aboutUs" target="_blank">About Us</a>
+      <a [href]="authConstants.linkUrl.privacyPolicy" target="_blank"
         >Privacy Policy</a
       >
     </header>
     <div class="wrapper--right-managing-hotel">
       <p class="heading">Managing Hotel is Now Easy</p>
       <div class="wrapper--right-managing-hotel-option-box">
-        <div *ngFor="let option of managingOptions" class="option">
+        <div
+          *ngFor="let option of managingOptions; trackBy: trackById"
+          class="option"
+        >
           <img class="material-icons" [src]="option.url" />
           <p class="option-label">{{ option.label }}</p>
         </div>

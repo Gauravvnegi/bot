@@ -26,6 +26,7 @@ export class PreArrivalPackagesComponent implements OnInit {
   graphData;
   packageFG: FormGroup;
   @Input() entityType = 'pre-arrival';
+  @Input() requestConfiguration;
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -106,24 +107,7 @@ export class PreArrivalPackagesComponent implements OnInit {
       },
       legendCallback: this.getLegendCallback,
     },
-    chartColors: [
-      {
-        borderColor: '#fb3d4e',
-        backgroundColor: '#fb3d4e',
-      },
-      {
-        borderColor: '#FF9F67',
-        backgroundColor: '#FF9F67',
-      },
-      {
-        borderColor: '#2a8853',
-        backgroundColor: '#2a8853',
-      },
-      {
-        borderColor: '#0bb2d4',
-        backgroundColor: '#0bb2d4',
-      },
-    ],
+    chartColors: [],
     chartLegend: false,
     chartType: 'line',
   };
@@ -272,7 +256,7 @@ export class PreArrivalPackagesComponent implements OnInit {
     const keys = Object.keys(this.graphData);
     this.chart.chartData = [];
     this.chart.chartLabels = [];
-    // this.chart.chartColors = [];
+    this.chart.chartColors = [];
     keys.forEach((key) => {
       if (key !== 'label' && key !== 'totalCount') {
         if (!this.chart.chartLabels.length)
@@ -281,6 +265,11 @@ export class PreArrivalPackagesComponent implements OnInit {
           data: Object.values(this.graphData[key].stats),
           label: this.graphData[key].label,
           fill: false,
+        });
+        this.chart.chartColors.push({
+          borderColor: this.getFilteredConfig(this.graphData[key].label).color,
+          backgroundColor: this.getFilteredConfig(this.graphData[key].label)
+            .color,
         });
       }
     });
@@ -341,6 +330,10 @@ export class PreArrivalPackagesComponent implements OnInit {
       // remove loader for detail close
       detailCompRef.close()
     );
+  }
+
+  getFilteredConfig(label) {
+    return this.requestConfiguration?.filter((d) => d.label === label)[0] || {};
   }
 
   ngOnDestroy() {

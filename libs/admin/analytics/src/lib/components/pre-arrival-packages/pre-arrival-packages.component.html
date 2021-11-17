@@ -47,7 +47,10 @@
         (click)="legendOnClick(i, $event)"
       >
         <div class="label">
-          <img [src]="graphData[key].img" alt="" />
+          <img
+            [src]="getFilteredConfig(graphData[key].label)?.icon"
+            [alt]="graphData[key].label"
+          />
           <span>{{ graphData[key].label }}</span>
         </div>
         <div class="value">{{ graphData[key].totalCount }}</div>

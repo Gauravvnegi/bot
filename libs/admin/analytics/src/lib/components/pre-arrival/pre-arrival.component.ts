@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pre-arrival.component.scss'],
 })
 export class PreArrivalComponent implements OnInit {
+  @Input() requestConfiguration;
   constructor() {}
 
   ngOnInit(): void {}

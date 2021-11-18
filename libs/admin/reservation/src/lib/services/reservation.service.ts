@@ -58,7 +58,7 @@ export class ReservationService extends ApiService {
   }
 
   getRequestsByReservationId(reservationId, config): Observable<any> {
-    return this.get(`/api/v1/reservation/${reservationId}/request`);
+    return this.get(`/api/v1/reservation/${reservationId}/live-request`);
   }
 
   updateDepositRule(reservationId, data) {

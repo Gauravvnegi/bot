@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { authConstants } from '../../constants/auth-constants';
 
 @Component({
   selector: 'admin-auth',
@@ -7,16 +8,8 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
-  managingOptions = [
-    { label: 'Live Dashboard', url: 'assets/svg/dashboard-white.svg' },
-    { label: 'Filters as per Journeys', url: 'assets/svg/Filter.svg' },
-    { label: 'Analytics', url: 'assets/svg/analytics.svg' },
-    {
-      label: 'Live Request Handling',
-      url: 'assets/svg/live-help.svg',
-    },
-    { label: 'Universal Search', url: 'assets/svg/search.svg' },
-  ];
+  authConstants = authConstants;
+  managingOptions = authConstants.managingOptions;
 
   constructor() {}
 
@@ -24,5 +17,9 @@ export class AuthComponent implements OnInit {
 
   get currentDate() {
     return DateService.getCurrentDateWithFormat('YYYY');
+  }
+
+  trackById(index, managingOptions) {
+    return managingOptions.id;
   }
 }

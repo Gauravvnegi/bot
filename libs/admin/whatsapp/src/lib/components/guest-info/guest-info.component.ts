@@ -16,7 +16,8 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { Subscription } from 'rxjs';
 import { Contact, IContact } from '../../models/message.model';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
-import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-guest-info',
@@ -32,6 +33,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   hotelId: string;
   isLoading = false;
   selectedIndex = 0;
+  requestList;
   buttonConfig = [
     {
       button: true,
@@ -49,7 +51,8 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     private modalService: ModalService,
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,
-    private _requestService: RequestService
+    private snackBarService: SnackBarService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +61,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.hotelId) this.getGuestInfo();
+    if (this.hotelId) {
+      this.getGuestInfo();
+    }
   }
 
   getGuestInfo() {
@@ -71,6 +76,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
             response.receiver,
             this._globalFilterService.timezone
           );
+          if (this.guestData.reservationId) this.getRequestList();
           this.isLoading = false;
         })
     );
@@ -103,6 +109,25 @@ export class GuestInfoComponent implements OnInit, OnChanges {
         this.getGuestInfo();
       }
     });
+  }
+
+  getRequestList() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          hotelId: this.hotelId,
+          confirmationNumber: this.data.reservationId,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.messageService.getRequestByConfNo(config).subscribe(
+        (response) => {
+          this.requestList = response;
+        },
+        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+      )
+    );
   }
 
   closeGuestInfo() {
@@ -155,7 +180,23 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.$subscription.add(
       raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
         (res) => {
-          if (res) this.messageService.refreshRequestList$.next(true);
+          if (res.status) {
+            this.getRequestList();
+            const values = {
+              reservationId: res.data.number,
+            };
+            this.$subscription.add(
+              this.messageService
+                .updateGuestDetail(this.hotelId, this.data.receiverId, values)
+                .subscribe(
+                  (response) => {
+                    this.messageService.refreshData$.next(true);
+                  },
+                  ({ error }) =>
+                    this.snackBarService.openSnackBarAsText(error.message)
+                )
+            );
+          }
           raiseRequestCompRef.close();
         }
       )

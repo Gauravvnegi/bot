@@ -43,7 +43,9 @@
         </div>
       </ng-template>
       <ng-template matTabContent>
-        <hospitality-bot-guest-requests></hospitality-bot-guest-requests>
+        <hospitality-bot-guest-requests
+          [requestList]="requestList"
+        ></hospitality-bot-guest-requests>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

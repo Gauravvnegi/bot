@@ -87,7 +87,7 @@ export class RequestService extends ApiService {
 
   createRequest(hotelId, data) {
     return this.post(
-      `/api/v1/reservation/cms-create-job?cmsUserType=Bot&hotelId=${hotelId}`,
+      `/api/v1/request?cmsUserType=Bot&hotelId=${hotelId}`,
       data
     );
   }

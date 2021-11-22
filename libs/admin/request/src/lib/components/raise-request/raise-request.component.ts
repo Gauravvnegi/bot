@@ -137,15 +137,15 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           this._snackbarService.openSnackBarAsText('Request created.', '', {
             panelClass: 'success',
           });
-          this.close(true);
+          this.close({ status: true, data: this.reservation });
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
   }
 
-  close(status = false) {
-    this.onRaiseRequestClose.emit(status);
+  close(closeData) {
+    this.onRaiseRequestClose.emit(closeData);
   }
 
   listenForRoomNumberChanges() {

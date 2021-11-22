@@ -73,8 +73,8 @@ export class MessageService extends ApiService {
     );
   }
 
-  getLiveRequests(config) {
-    return this.get(`/api/v1/request${config.queryObj}`);
+  getRequestByConfNo(config) {
+    return this.get(`/api/v1/request/created-jobs${config.queryObj}`);
   }
 
   filterMessagesByDate(messages: IChat[], timezone = '+05:30') {

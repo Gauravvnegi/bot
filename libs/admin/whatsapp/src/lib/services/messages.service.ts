@@ -8,6 +8,7 @@ import { IChat } from '../models/message.model';
 @Injectable({ providedIn: 'root' })
 export class MessageService extends ApiService {
   refreshData$ = new BehaviorSubject(false);
+  refreshRequestList$ = new BehaviorSubject(false);
   private whatsappUnreadContacts$ = new BehaviorSubject(0);
   chatList = {
     messages: {},
@@ -51,6 +52,29 @@ export class MessageService extends ApiService {
       `/api/v1/hotel/${hotelId}/conversations/${contactId}/guest-associate`,
       data
     );
+  }
+
+  downloadDocuments(url) {
+    return this.get(`/api/v1/download?url=${url}`, {
+      responseType: 'blob',
+    });
+  }
+
+  getLiveChat(hotelId, conversationId, phone) {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/live-chat?phoneNumber=${phone}`
+    );
+  }
+
+  updateLiveChat(hotelId, conversationId, data) {
+    return this.put(
+      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/live-chat`,
+      data
+    );
+  }
+
+  getLiveRequests(config) {
+    return this.get(`/api/v1/request${config.queryObj}`);
   }
 
   filterMessagesByDate(messages: IChat[], timezone = '+05:30') {
@@ -108,24 +132,5 @@ export class MessageService extends ApiService {
 
   setWhatsappUnreadContactCount(value) {
     this.whatsappUnreadContacts$.next(value);
-  }
-
-  downloadDocuments(url) {
-    return this.get(`/api/v1/download?url=${url}`, {
-      responseType: 'blob',
-    });
-  }
-
-  getLiveChat(hotelId, conversationId, phone) {
-    return this.get(
-      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/live-chat?phoneNumber=${phone}`
-    );
-  }
-
-  updateLiveChat(hotelId, conversationId, data) {
-    return this.put(
-      `/api/v1/hotel/${hotelId}/conversations/${conversationId}/live-chat`,
-      data
-    );
   }
 }

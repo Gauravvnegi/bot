@@ -39,16 +39,6 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div>
-          <img src="assets/svg/tickets.svg" alt="Tickets" />
-        </div>
-      </ng-template>
-      <ng-template matTabContent>
-        <hospitality-bot-guest-tickets></hospitality-bot-guest-tickets>
-      </ng-template>
-    </mat-tab>
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <div>
           <img src="assets/svg/requests.svg" alt="Requests" />
         </div>
       </ng-template>
@@ -64,6 +54,7 @@
     *ngIf="buttonConfig[selectedIndex].button"
     (click)="handleButtonCLick()"
   >
+    <img [src]="buttonConfig[selectedIndex].icon" alt="" />
     <div class="guestInfoEditText">
       {{ buttonConfig[selectedIndex].label }}
     </div>

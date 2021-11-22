@@ -10,7 +10,6 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
 import { PreArrivalDatatableComponent } from '../pre-arrival-datatable/pre-arrival-datatable.component';
 
 @Component({
@@ -326,6 +325,9 @@ export class PreArrivalPackagesComponent implements OnInit {
       'Closed',
     ];
     detailCompRef.componentInstance.tabFilterIdx = 0;
+    detailCompRef.componentInstance.packageId = this.tabFilterItems[
+      this.tabFilterIdx
+    ]?.value;
     detailCompRef.componentInstance.onModalClose.subscribe((res) =>
       // remove loader for detail close
       detailCompRef.close()

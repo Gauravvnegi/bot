@@ -20,7 +20,7 @@
           placeholder="Booking ID"
           formControlName="search"
           (focus)="onFocus()"
-          [readonly]="data.reservationId?.length"
+          [readonly]="data.reservationId && data.roomNo > 0"
         />
         <div class="showsearchresult" *ngIf="showSearchResult">
           <div
@@ -86,17 +86,6 @@
           Email is required
         </mat-error>
       </div>
-      <!-- <div class="form-elements-container"> -->
-      <!-- Dropdown for channel-->
-      <!-- <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel">
-          <mat-select class="form-elements" placeholder="Channel Type" formControlName="channelType">
-            <mat-option
-              *ngFor="let channel of channelList"
-              [value]="channel.name"
-              >{{ channel.label }}</mat-option
-            >
-          </mat-select>
-      </div> -->
       <div class="form-elements-container full-width">
         <img class="icon" src="assets/svg/user-01.svg" alt="Guest" />
         <input

@@ -333,47 +333,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   }
 
   handleStatusChange(data, event) {
-    if (this.entityType == 'Inhouse') this.inHouseStatusChange(data, event);
-    else {
-      const requestData = {
-        systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
-        action: event.value,
-      };
-      this.analyticsService
-        .updatePreArrivalRequest(data.id, requestData)
-        .subscribe(
-          (response) => {
-            this.loadInitialData(
-              [
-                ...this.globalQueries,
-                {
-                  order: 'DESC',
-                  entityType: this.entityType,
-                },
-                ...this.getSelectedQuickReplyFilters(),
-              ],
-              false,
-              {
-                offset: this.tempFirst,
-                limit: this.tempRowsPerPage
-                  ? this.tempRowsPerPage
-                  : this.rowsPerPage,
-              }
-            );
-            this._snackbarService.openSnackBarAsText(
-              `Request status updated`,
-              '',
-              {
-                panelClass: 'success',
-              }
-            );
-          },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-        );
-    }
-  }
-
-  inHouseStatusChange(data, event) {
     if (event.value !== 'Closed') return;
     const requestData = {
       jobID: data.jobID,

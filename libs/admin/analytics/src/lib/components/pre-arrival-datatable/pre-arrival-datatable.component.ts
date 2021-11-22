@@ -24,6 +24,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
+  @Input() packageId: string;
   @Output() onModalClose = new EventEmitter();
   globalQueries;
   $subscription = new Subscription();
@@ -131,6 +132,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           {
             order: 'DESC',
             entityType: this.entityType,
+            packageId: this.packageId,
           },
           ...this.getSelectedQuickReplyFilters(),
         ]);
@@ -235,6 +237,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           {
             order: 'DESC',
             entityType: this.entityType,
+            packageId: this.packageId,
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
@@ -306,6 +309,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
         {
           order: 'DESC',
           entityType: this.entityType,
+          packageId: this.packageId,
         },
         ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
@@ -332,87 +336,41 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   handleStatusChange(data, event) {
-    if (this.entityType == 'Inhouse') this.inHouseStatusChange(data, event);
-    else {
-      const requestData = {
-        systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
-        action: event.value,
-      };
-      this.analyticsService
-        .updatePreArrivalRequest(data.id, requestData)
-        .subscribe(
-          (response) => {
-            this.loadInitialData(
-              [
-                ...this.globalQueries,
-                {
-                  order: 'DESC',
-                  entityType: this.entityType,
-                },
-                ...this.getSelectedQuickReplyFilters(),
-              ],
-              false,
-              {
-                offset: this.tempFirst,
-                limit: this.tempRowsPerPage
-                  ? this.tempRowsPerPage
-                  : this.rowsPerPage,
-              }
-            );
-            this._snackbarService.openSnackBarAsText(
-              `Request status updated`,
-              '',
-              {
-                panelClass: 'success',
-              }
-            );
-          },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-        );
-    }
-  }
-
-  inHouseStatusChange(data, event) {
-    if (event.value !== 'Closed') return;
     const requestData = {
-      jobID: data.jobID,
-      roomNo: data.rooms[0].roomNumber,
-      lastName: data.guestDetails.primaryGuest.lastName,
+      systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
+      action: event.value,
     };
-
-    const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
-        {
-          cmsUserType: 'Bot',
-          hotelId: this.hotelId,
-        },
-      ]),
-    };
-    this.analyticsService.closeRequest(config, requestData).subscribe(
-      (response) => {
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
+    this.analyticsService
+      .updatePreArrivalRequest(data.id, requestData)
+      .subscribe(
+        (response) => {
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: 'DESC',
+                entityType: this.entityType,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false,
             {
-              order: 'DESC',
-              entityType: this.entityType,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
-        this._snackbarService.openSnackBarAsText(`Request status updated`, '', {
-          panelClass: 'success',
-        });
-      },
-      ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-    );
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+          this._snackbarService.openSnackBarAsText(
+            `Request status updated`,
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      );
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

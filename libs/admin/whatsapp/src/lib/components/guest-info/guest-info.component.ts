@@ -15,6 +15,8 @@ import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.co
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { Contact, IContact } from '../../models/message.model';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 
 @Component({
   selector: 'hospitality-bot-guest-info',
@@ -41,13 +43,13 @@ export class GuestInfoComponent implements OnInit, OnChanges {
       label: 'Map Details',
       icon: 'assets/svg/user.svg',
     },
-    { button: false, label: 'Edit Details', icon: 'assets/svg/user.svg' },
-    { button: false, label: 'Map Details', icon: 'assets/svg/user.svg' },
+    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
   ];
   constructor(
     private modalService: ModalService,
     private messageService: MessageService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private _requestService: RequestService
   ) {}
 
   ngOnInit(): void {
@@ -119,6 +121,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
       case 1:
         this.updateGuestDetails();
         break;
+      case 2:
+        this.openRaiseRequest();
+        break;
     }
   }
 
@@ -136,5 +141,24 @@ export class GuestInfoComponent implements OnInit, OnChanges {
       // remove loader for detail close
       detailCompRef.close();
     });
+  }
+
+  openRaiseRequest() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '50%';
+    const raiseRequestCompRef = this.modalService.openDialog(
+      RaiseRequestComponent,
+      dialogConfig
+    );
+
+    this.$subscription.add(
+      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
+        (res) => {
+          if (res) this.messageService.refreshRequestList$.next(true);
+          raiseRequestCompRef.close();
+        }
+      )
+    );
   }
 }

@@ -174,7 +174,10 @@
       </div>
     </div>
     <div class="request-popup-btnwrap">
-      <div class="button request-popup-btnwrap-cancel" (click)="close()">
+      <div
+        class="button request-popup-btnwrap-cancel"
+        (click)="close({ status: false })"
+      >
         Cancel
       </div>
       <div class="button request-popup-btnwrap-save" (click)="raiseRequest()">

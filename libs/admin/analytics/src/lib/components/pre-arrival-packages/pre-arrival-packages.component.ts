@@ -215,11 +215,18 @@ export class PreArrivalPackagesComponent implements OnInit {
       this.analyticsService.getSentimentsStats(config).subscribe(
         (response) => {
           this.graphData = new InhouseSentiments().deserialize(response);
+          this.updatePackageCount(response.packageTotalCounts);
           this.initGraphData();
         },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  updatePackageCount(countObj) {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
+    }
   }
 
   legendOnClick = (index, event) => {
@@ -257,7 +264,7 @@ export class PreArrivalPackagesComponent implements OnInit {
     this.chart.chartLabels = [];
     this.chart.chartColors = [];
     keys.forEach((key) => {
-      if (key !== 'label' && key !== 'totalCount') {
+      if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
         if (!this.chart.chartLabels.length)
           this.initChartLabels(this.graphData[key].stats);
         this.chart.chartData.push({

@@ -38,7 +38,7 @@ export class InhouseSentiments {
     );
     const keys = Object.keys(input);
     keys.forEach((key) => {
-      if (key !== 'label' && key !== 'totalCount') {
+      if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
         this[key] = new Sentiment().deserialize(input[key]);
       }
     });

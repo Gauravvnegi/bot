@@ -9,17 +9,25 @@ import { authConstants } from '../../constants/auth-constants';
 })
 export class AuthComponent implements OnInit {
   authConstants = authConstants;
-  managingOptions = authConstants.managingOptions;
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  get currentDate() {
-    return DateService.getCurrentDateWithFormat('YYYY');
-  }
-
+  /**
+   * Tracker for managing options
+   * @param index
+   * @param managingOptions
+   * @returns id
+   */
   trackById(index, managingOptions) {
     return managingOptions.id;
+  }
+
+  /**
+   * Returns current year
+   */
+  get currentDate() {
+    return DateService.getCurrentDateWithFormat('YYYY');
   }
 }

@@ -1,8 +1,5 @@
 <div class="wrapper">
   <div class="wrapper--left">
-    <!-- <div class="wrapper--left-logo">
-      <img src="assets/hilltop-logo.png" />
-    </div> -->
     <div class="wrapper--left-auth-panel">
       <router-outlet></router-outlet>
     </div>
@@ -10,26 +7,32 @@
       I hereby agree to&nbsp;<a
         [href]="authConstants.linkUrl.termsAndCondition"
         target="_blank"
+        rel="noopener"
         >Terms and Conditions</a
       >
     </footer>
     <div class="wrapper--left-svg-icons first">
-      <img [src]="authConstants.imgUrl.bell" />
+      <img [src]="authConstants.imgUrl.bell" alt="bell" />
     </div>
     <div class="wrapper--left-svg-icons second">
-      <img [src]="authConstants.imgUrl.hotel" />
+      <img [src]="authConstants.imgUrl.hotel" alt="hotel" />
     </div>
     <div class="wrapper--left-svg-icons third">
-      <img [src]="authConstants.imgUrl.luggage" />
+      <img [src]="authConstants.imgUrl.luggage" alt="luggage" />
     </div>
     <div class="wrapper--left-svg-icons fourth">
-      <img [src]="authConstants.imgUrl.metroHotel" />
+      <img [src]="authConstants.imgUrl.metroHotel" alt="metro hotel" />
     </div>
   </div>
   <div class="wrapper--right">
     <header class="wrapper--right-header">
-      <a [href]="authConstants.linkUrl.aboutUs" target="_blank">About Us</a>
-      <a [href]="authConstants.linkUrl.privacyPolicy" target="_blank"
+      <a [href]="authConstants.linkUrl.aboutUs" target="_blank" rel="noopener"
+        >About Us</a
+      >
+      <a
+        [href]="authConstants.linkUrl.privacyPolicy"
+        target="_blank"
+        rel="noopener"
         >Privacy Policy</a
       >
     </header>
@@ -37,17 +40,20 @@
       <p class="heading">Managing Hotel is Now Easy</p>
       <div class="wrapper--right-managing-hotel-option-box">
         <div
-          *ngFor="let option of managingOptions; trackBy: trackById"
+          *ngFor="
+            let option of authConstants.managingOptions;
+            trackBy: trackById
+          "
           class="option"
         >
-          <img class="material-icons" [src]="option.url" />
+          <img class="material-icons" [src]="option.url" [alt]="option.label" />
           <p class="option-label">{{ option.label }}</p>
         </div>
       </div>
     </div>
     <div class="wrapper--right-footer">
       <div class="image">
-        <img [src]="authConstants.imgUrl.botshotLogo" />
+        <img [src]="authConstants.imgUrl.botshotLogo" alt="Botshot" />
       </div>
       ©&nbsp;{{ currentDate }}, Botshot. All Right Reserved
     </div>

@@ -48,7 +48,7 @@ export class RequestWrapperComponent implements OnInit {
     this.$subscription.add(
       raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
         (res) => {
-          if (res) this._requestService.refreshData.next(res);
+          if (res.status) this._requestService.refreshData.next(res);
           raiseRequestCompRef.close();
         }
       )

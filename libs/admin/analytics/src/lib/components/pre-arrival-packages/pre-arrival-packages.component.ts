@@ -327,7 +327,7 @@ export class PreArrivalPackagesComponent implements OnInit {
     detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
     detailCompRef.componentInstance.entityType = 'pre-arrival';
     detailCompRef.componentInstance.optionLabels = [
-      'Immediate',
+      'Pending',
       'Reject',
       'Closed',
     ];

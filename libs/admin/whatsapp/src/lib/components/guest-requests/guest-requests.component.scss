@@ -1,13 +1,56 @@
-.guest-request{
-    padding: 15px;
+@import 'main';
+.guest-request {
+  padding: 15px 0;
 
-    &-title{
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.84px;
-    }
+  &-title {
+    padding: 0 15px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.84px;
+  }
+}
+
+.priority-low {
+  background-color: #119e0c;
+}
+
+.priority-medium {
+  background-color: #25a2e2;
+}
+
+.priority-high {
+  background-color: #f8b633;
+}
+
+.priority-asap {
+  background-color: #ce0c0c;
+}
+
+.priority {
+  font-size: 10px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.6px;
+  color: #99a6b5;
+  margin-top: 3px;
+  margin-bottom: 13px;
+  display: flex;
+  align-items: center;
+  &-status {
+    padding: 2px 5px 3px;
+    border-radius: 5px;
+    color: #fff;
+    margin-left: 10px;
+  }
+}
+
+.row {
+  @include flex-space-between();
+  align-items: center;
 }

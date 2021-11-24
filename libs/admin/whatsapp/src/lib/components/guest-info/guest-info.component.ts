@@ -14,7 +14,7 @@ import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
-import { Contact, IContact } from '../../models/message.model';
+import { Contact, IContact, RequestList } from '../../models/message.model';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -77,6 +77,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
             this._globalFilterService.timezone
           );
           if (this.guestData.reservationId) this.getRequestList();
+          else this.requestList = [];
           this.isLoading = false;
         })
     );
@@ -123,7 +124,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.$subscription.add(
       this.messageService.getRequestByConfNo(config).subscribe(
         (response) => {
-          this.requestList = response;
+          this.requestList = new RequestList().deserialize(response).data;
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
       )

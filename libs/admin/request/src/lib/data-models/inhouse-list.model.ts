@@ -1,6 +1,5 @@
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set, trim } from 'lodash';
-import * as moment from 'moment';
 
 export class InhouseTable {
   entityStateCounts: any;

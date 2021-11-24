@@ -1,6 +1,7 @@
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
+import { InhouseData } from 'libs/admin/request/src/lib/data-models/inhouse-list.model';
 
 export class Chats {
   messages: IChat[];
@@ -173,6 +174,19 @@ export class Contact {
       })
       .join('')
       .toUpperCase();
+  }
+}
+
+export class RequestList {
+  data: InhouseData[];
+
+  deserialize(input) {
+    this.data = new Array<InhouseData>();
+    input.forEach((request) => {
+      this.data.push(new InhouseData().deserialize(request));
+    });
+
+    return this;
   }
 }
 

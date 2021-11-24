@@ -1,7 +1,8 @@
 @import 'main';
 .guest-request {
   padding: 15px 0;
-
+  max-height: 355px;
+  overflow-y: auto;
   &-title {
     padding: 0 15px;
     font-family: Roboto;
@@ -11,6 +12,79 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: 0.84px;
+  }
+  &-items-wrap {
+    overflow-y: auto;
+    &-item {
+      padding: 0 15px;
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      &-row {
+        margin: 15px 0;
+        .item-code {
+          font-size: 14px;
+          font-weight: bold;
+          letter-spacing: 0.84px;
+          text-align: left;
+          color: #b5b5c3;
+        }
+      }
+      .intiated-row {
+        font-weight: 500;
+        letter-spacing: 0.72px;
+      }
+      .nail-utter-row {
+        margin-top: 10px;
+        font-weight: 500;
+        letter-spacing: 0.72px;
+        color: #002046;
+      }
+      .gsb-row {
+        margin-top: 5px;
+        line-height: 1.17;
+        letter-spacing: 0.72px;
+        color: #b2b7bc;
+      }
+      .date-time-row {
+        display: flex;
+        margin-top: 10px;
+        line-height: normal;
+        letter-spacing: 0.72px;
+        color: #002046;
+        &-img {
+          width: 13px;
+          height: 13px;
+        }
+      }
+      &-under-line {
+        margin: 15px -15px;
+        border: solid 1px #e0e0e0;
+      }
+    }
+  }
+}
+.no-request {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &-msg {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.72px;
+    color: #727272;
+    margin-top: 15px;
+  }
+  &-underline {
+    margin: 20px 15px;
+    border: solid 1px #e0e0e0;
+    width: 100%;
   }
 }
 

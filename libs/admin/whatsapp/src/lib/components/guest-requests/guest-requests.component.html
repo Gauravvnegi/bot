@@ -4,31 +4,14 @@
   </div>
   <div
     *ngIf="requestList && requestList.length; else noRequest"
-    style="overflow-y: auto;"
+    class="guest-request-items-wrap"
   >
     <div
       *ngFor="let request of requestList"
-      style="
-        padding: 0 15px;
-        font-family: Roboto;
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-      "
+      class="guest-request-items-wrap-item"
     >
-      <div style="margin: 15px 0;" class="row">
-        <div
-          style="
-            font-size: 14px;
-            font-weight: bold;
-            letter-spacing: 0.84px;
-            text-align: left;
-            color: #b5b5c3;
-          "
-        >
-          Item Code : {{ request.itemCode }}
-        </div>
+      <div class="row guest-request-items-wrap-item-row">
+        <div class="item-code">Item Code : {{ request.itemCode }}</div>
         <div
           class="priority-status"
           [ngClass]="{
@@ -41,83 +24,45 @@
           {{ request.priority }}
         </div>
       </div>
-      <div class="row" style="font-weight: 500; letter-spacing: 0.72px;">
+      <div class="row intiated-row">
         <div>{{ request.status }}</div>
         <div>JD:-{{ request.jobDuration }}m</div>
       </div>
-      <div
-        class="row"
-        style="
-          margin-top: 10px;
-          font-weight: 500;
-          letter-spacing: 0.72px;
-          color: #002046;
-        "
-      >
+      <div class="row nail-utter-row">
         {{ request.itemName }}
       </div>
-      <div
-        class="row"
-        style="
-          margin-top: 5px;
-          line-height: 1.17;
-          letter-spacing: 0.72px;
-          color: #b2b7bc;
-        "
-      >
+      <div class="row gsb-row">
         {{ request.remarks }}
       </div>
-      <div
-        style="
-          display: flex;
-          margin-top: 10px;
-          line-height: normal;
-          letter-spacing: 0.72px;
-          color: #002046;
-        "
-      >
-        <div style="margin-right: 10px;">
+      <div class="date-time-row">
+        <div class="mr-10">
           <img
             src="assets/svg/calendar.svg"
             alt="calendar"
-            style="width: 13px; height: 13px;"
+            class="date-time-row-img"
           />
         </div>
         <div>
           <div>
             {{ request.getRequestDateTime() }}
           </div>
-          <div style="margin-top: 5px;">
+          <div class="mt-5">
             {{ request.getClosedTime() }}
           </div>
         </div>
       </div>
-      <div style="margin: 15px -15px; border: solid 1px #e0e0e0;"></div>
+      <div class="guest-request-items-wrap-item-under-line"></div>
     </div>
   </div>
   <ng-template #noRequest>
-    <div style="display: flex; flex-direction: column; align-items: center;">
-      <div style="margin-top: 45px;">
+    <div class="no-request">
+      <div class="mt-45">
         <img src="assets/svg/conversation-no-request.svg" alt="No Request" />
       </div>
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 12px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.72px;
-          color: #727272;
-          margin-top: 15px;
-        "
-      >
+      <div class="no-request-msg">
         No request found
       </div>
-      <div
-        style="margin: 20px 15px; border: solid 1px #e0e0e0; width: 100%;"
-      ></div>
+      <div class="no-request-underline"></div>
     </div>
   </ng-template>
 </div>

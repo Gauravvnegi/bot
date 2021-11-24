@@ -126,8 +126,6 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
-    this.getConversationStats();
-    this.getSentReceivedChartData();
   }
 
   registerListeners(): void {
@@ -141,6 +139,8 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
+        this.getConversationStats();
+        this.getSentReceivedChartData();
       })
     );
   }

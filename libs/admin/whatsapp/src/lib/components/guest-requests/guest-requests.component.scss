@@ -1,7 +1,7 @@
 @import 'main';
 .guest-request {
   padding: 15px 0;
-  max-height: 355px;
+  max-height: calc(100vh - 310px);
   overflow-y: auto;
   &-title {
     padding: 0 15px;

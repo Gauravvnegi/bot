@@ -27,7 +27,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="feild" *ngIf="categoryId; else packageCodeField">
           <mat-label class="mat-label" *ngIf="subPackages">Packages:</mat-label>
           <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
           <mat-form-field *ngIf="subPackages && subPackages.length > 0">
@@ -40,6 +40,22 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <ng-template #packageCodeField>
+          <div class="feild">
+            <mat-label class="mat-label">Category Code:</mat-label>
+            <mat-form-field>
+              <input matInput formControlName="packageCode" />
+              <mat-error
+                *ngIf="
+                  categoryForm.get('packageCode').touched &&
+                  categoryForm.get('packageCode').hasError('required')
+                "
+              >
+                Category Code is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </ng-template>
       </div>
       <div class="feilds">
         <div class="feild full-width">
@@ -89,7 +105,7 @@
     <div class="footer_button">
       <button mat-button (click)="saveDetails()">
         <i *ngIf="isSavingCategory" class="fa fa-spinner fa-spin"></i>
-          {{isSavingCategory ? "Saving Category" : "Save"}}
+        {{ isSavingCategory ? 'Saving Category' : 'Save' }}
       </button>
     </div>
   </form>

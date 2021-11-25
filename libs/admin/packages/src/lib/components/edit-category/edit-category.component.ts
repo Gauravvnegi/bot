@@ -4,7 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
-import { CategoryDetail, IPackage } from '../../data-models/categoryConfig.model';
+import {
+  CategoryDetail,
+  IPackage,
+} from '../../data-models/categoryConfig.model';
 import { Package } from '../../data-models/packageConfig.model';
 import { CategoriesService } from '../../services/category.service';
 import { PackageService } from '../../services/package.service';
@@ -12,25 +15,24 @@ import { PackageService } from '../../services/package.service';
 @Component({
   selector: 'hospitality-bot-edit-category',
   templateUrl: './edit-category.component.html',
-  styleUrls: ['./edit-category.component.scss']
+  styleUrls: ['./edit-category.component.scss'],
 })
 export class EditCategoryComponent implements OnInit {
-
   private $subscription: Subscription = new Subscription();
 
   fileUploadData = {
     fileSize: 3145728,
-    fileType: ['png','jpg','jpeg','gif','eps']
-  }
+    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
+  };
 
   categoryForm: FormGroup;
   hotelCategory: CategoryDetail;
   categoryId: string;
   hotelId: string;
   isSavingCategory = false;
-  subPackages : IPackage[];
+  subPackages: IPackage[];
   globalQueries = [];
-  
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -50,13 +52,14 @@ export class EditCategoryComponent implements OnInit {
   initAddCategoryForm(): void {
     this.categoryForm = this.fb.group({
       id: [''],
+      packageCode: ['', [Validators.required]],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       imageUrl: ['', [Validators.required]],
       imageName: [''],
       packages: [''],
-      active: ['']
-    })
+      active: [''],
+    });
   }
 
   listenForGlobalFilters(): void {
@@ -71,11 +74,11 @@ export class EditCategoryComponent implements OnInit {
         this.getHotelId(this.globalQueries);
         this.getCategoryId();
       })
-    )
+    );
   }
 
   getHotelId(globalQueries): void {
-    globalQueries.forEach(element => {
+    globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
       }
@@ -84,7 +87,7 @@ export class EditCategoryComponent implements OnInit {
 
   getCategoryId(): void {
     this.$subscription.add(
-      this.activatedRoute.params.subscribe(params => {
+      this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.categoryId = params['id'];
           this.getCategoryDetails(this.categoryId);
@@ -95,12 +98,19 @@ export class EditCategoryComponent implements OnInit {
 
   getCategoryDetails(categoryId): void {
     this.$subscription.add(
-      this.categoriesService.getCategoryDetails(this.hotelId, categoryId)
-        .subscribe(response => {
+      this.categoriesService
+        .getCategoryDetails(this.hotelId, categoryId)
+        .subscribe((response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory.category);
           this.subPackages = this.hotelCategory.category.subpackages;
-          this.categoryForm.get('packages').patchValue(this.subPackages && this.subPackages.length > 0 && this.subPackages[0].id);
+          this.categoryForm
+            .get('packages')
+            .patchValue(
+              this.subPackages &&
+                this.subPackages.length > 0 &&
+                this.subPackages[0].id
+            );
         })
     );
   }
@@ -123,22 +133,30 @@ export class EditCategoryComponent implements OnInit {
       return;
     }
     this.isSavingCategory = true;
-    let data = this.categoriesService.mapCategoryData(this.categoryForm.getRawValue());
+    let data = this.categoriesService.mapCategoryData(
+      this.categoryForm.getRawValue()
+    );
     this.$subscription.add(
-      this.categoriesService.addCategory(this.hotelId, data)
-        .subscribe(response => {
+      this.categoriesService.addCategory(this.hotelId, data).subscribe(
+        (response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory);
-          this.snackbarService.openSnackBarAsText('Category added successfully',
+          this.snackbarService.openSnackBarAsText(
+            'Category added successfully',
             '',
             { panelClass: 'success' }
           );
-          this.router.navigate(['/pages/package/category', this.hotelCategory.category.id]);
+          this.router.navigate([
+            '/pages/package/category',
+            this.hotelCategory.category.id,
+          ]);
           this.isSavingCategory = false;
-        }, ({ error }) => {
+        },
+        ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
           this.isSavingCategory = false;
-        })
+        }
+      )
     );
   }
 
@@ -153,20 +171,31 @@ export class EditCategoryComponent implements OnInit {
     }
 
     this.isSavingCategory = true;
-    const data = this.categoriesService.mapCategoryData(this.categoryForm.getRawValue(), this.hotelCategory.category.id);
+    const data = this.categoriesService.mapCategoryData(
+      this.categoryForm.getRawValue(),
+      this.hotelCategory.category.id
+    );
     this.$subscription.add(
-      this.categoriesService.updateCategory(this.hotelId, this.hotelCategory.category.id, data)
-        .subscribe(response => {
-          this.snackbarService.openSnackBarAsText('Category updated successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this.router.navigate(['/pages/package/category', this.hotelCategory.category.id]);
-          this.isSavingCategory = false;
-        }, ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
-          this.isSavingCategory = false;
-        })
+      this.categoriesService
+        .updateCategory(this.hotelId, this.hotelCategory.category.id, data)
+        .subscribe(
+          (response) => {
+            this.snackbarService.openSnackBarAsText(
+              'Category updated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.router.navigate([
+              '/pages/package/category',
+              this.hotelCategory.category.id,
+            ]);
+            this.isSavingCategory = false;
+          },
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+            this.isSavingCategory = false;
+          }
+        )
     );
   }
 
@@ -178,21 +207,26 @@ export class EditCategoryComponent implements OnInit {
     let formData = new FormData();
     formData.append('files', event.file);
     this.$subscription.add(
-      this.packageService.uploadImage(this.hotelId, formData)
-        .subscribe(response => {
-          this.categoryForm.get('imageUrl').patchValue(response.fileDownloadUri);
+      this.packageService.uploadImage(this.hotelId, formData).subscribe(
+        (response) => {
+          this.categoryForm
+            .get('imageUrl')
+            .patchValue(response.fileDownloadUri);
           this.categoryForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService.openSnackBarAsText('Category image uploaded successfully',
+          this.snackbarService.openSnackBarAsText(
+            'Category image uploaded successfully',
             '',
             { panelClass: 'success' }
           );
-        }, ({ error }) => {
+        },
+        ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
-        })
+        }
+      )
     );
   }
 
-  redirectToCategories(){
+  redirectToCategories() {
     this.router.navigate(['/pages/package/']);
   }
 
@@ -204,5 +238,4 @@ export class EditCategoryComponent implements OnInit {
   get categoryImageUrl(): string {
     return this.categoryForm.get('imageUrl').value;
   }
-
 }

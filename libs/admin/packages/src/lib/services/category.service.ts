@@ -5,31 +5,33 @@ import { Category } from '../data-models/categoryConfig.model';
 
 @Injectable()
 export class CategoriesService extends ApiService {
-
   _categoriesList;
 
-  exportCategoryCSV(config){
+  exportCategoryCSV(config) {
     return this.get(`/api/v1/packages/categories/export${config.queryObj}`, {
       responseType: 'blob',
-    })
+    });
   }
 
   getHotelCategories(config) {
-    return this.get(
-      `/api/v1/packages/categories${config.queryObj}`
-    );
+    return this.get(`/api/v1/packages/categories${config.queryObj}`);
   }
 
   getCategoryDetails(hotelId, categoryId) {
-    return this.get(`/api/v1/hotel/${hotelId}/packages/categories/${categoryId}`);
+    return this.get(
+      `/api/v1/hotel/${hotelId}/packages/categories/${categoryId}`
+    );
   }
 
   updateCategory(hotelId, categoryId, data) {
-    return this.patch(`/api/v1/hotel/${hotelId}/packages/categories/${categoryId}`, data);
+    return this.patch(
+      `/api/v1/hotel/${hotelId}/packages/categories/${categoryId}`,
+      data
+    );
   }
 
-  addCategory(hotelId, data){
-    return this.post(`/api/v1/hotel/${hotelId}/packages/categories`,data);
+  addCategory(hotelId, data) {
+    return this.post(`/api/v1/hotel/${hotelId}/packages/categories`, data);
   }
 
   mapCategoryData(formValue, id?) {
@@ -39,6 +41,7 @@ export class CategoriesService extends ApiService {
     categoryData.imageUrl = formValue.imageUrl;
     categoryData.active = true;
     categoryData.id = id || '';
+    categoryData.packageCode = formValue.packageCode;
     return categoryData;
   }
 

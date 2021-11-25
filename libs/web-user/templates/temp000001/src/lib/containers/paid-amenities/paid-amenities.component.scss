@@ -63,6 +63,7 @@
   }
   .slider__text {
     padding: $padding-small;
+    min-height: 86px;
     .label {
       font-size: $font-medium;
       font-weight: $bolder;
@@ -71,6 +72,8 @@
     .description {
       font-size: $font-responsive-small;
       font-weight: $medium;
+      max-height: 55px;
+      overflow-y: auto;
     }
   }
   &:hover {

@@ -1,5 +1,5 @@
 .chatRecieve {
-  height: 62px;
+  height: 124px;
   width: 100%;
   background: #ffffff;
   padding: 10px 20px;
@@ -22,17 +22,16 @@
         height: 100%;
         width: 100%;
         outline: none;
-      } 
+      }
       .smileImg {
         position: absolute;
-        right: 10px;
+        right: 20px;
         top: 48%;
         transform: translateY(-50%);
       }
     }
-
   }
-  .cursor{
+  .cursor {
     cursor: pointer;
   }
 }
@@ -48,4 +47,3 @@
   letter-spacing: 0.84px;
   color: #fb3d4e;
 }
-

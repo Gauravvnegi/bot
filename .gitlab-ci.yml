@@ -1,84 +1,40 @@
-variables:
-  IMAGE_TAG: $CI_COMMIT_SHA
-  BRANCH: $CI_COMMIT_REF_NAME
- # DOCKER_DRIVER: overlay2
-  #DOCKER_HOST: tcp://docker:2375
-  #DOCKER_TLS_CERTDIR: ""
-
 stages:
   - deploy
 
-Deploy_Admin:
+deploy to Production-web-user:
   stage: deploy
-  environment:
-    name: k8s
+  environment: web-user-prod
   when: manual
   before_script:
-    - echo $(git rev-parse HEAD) | cut -c 1-7
-    - ls -l
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
+  - cp deploy/* .
+  - chmod +x *.sh
+  - rm -rf deploy
+  - tar -cvf admin.tar *
+  - ls -l
+  - ls | wc -l
   script:
-    - docker build -t $CI_IMAGE_NAME .
-    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
-    #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
-    #- docker push $CI_REGISTRY_IMAGE_URL:latest
-    - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; pwd; ls;"
+    - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$web_user_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $web_user_work_dir; free -h; tar -xvf *.tar; sh -x web-user_dev.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; rm -rf $web_user_work_dir/*.tar; ls $web_user_work_dir && netstat -tnlp"
+  only:
+    - prod-deploy
 
-    - cat "$DEPLOYMENT_FILE" > deployment.yaml
-    - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
-    - export KUBECONFIG=k8s-config.yaml
-    - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
-    - kubectl apply -f deployment.yaml --validate=false
-  tags:
-    - k8s
-
-Deploy_Web:
+deploy to Production-admin:
   stage: deploy
-  environment:
-    name: k8s_web
+  environment: admin-prod
   when: manual
   before_script:
-    - echo $(git rev-parse HEAD) | cut -c 1-7
-    - ls -l
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
-    #- sed -i "s/admin:build/web-user:build/g" Dockerfile
-    - sed -i "s/admin/web-user/g" Dockerfile
-    - sed -i "s/admin/web/g" deploy/nginx.conf
+  - cp deploy/* .
+  - chmod +x *.sh
+  - rm -rf deploy
+  - tar -cvf admin.tar *
+  - ls -l
+  - ls | wc -l
   script:
-    - docker build -t $CI_IMAGE_NAME .
-    - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
-    #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
-    #- docker push $CI_REGISTRY_IMAGE_URL:latest
-    - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-
-    - cat "$DEPLOYMENT_FILE" > deployment.yaml
-    - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
-    - export KUBECONFIG=k8s-config.yaml
-    - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
-    - kubectl apply -f deployment.yaml --validate=false
-  tags:
-    - k8s
-
-#test_project:
-#    stage: test
-#    script:
-#        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
-#        - docker pull $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-#        - docker run --name=$BRANCH -p 3002:3002 -i $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG npm run ci
-#    tags:
-#     - k8s
-
-#deploy_project:
-#  stage: deploy
-#  environment:
-#    name: k8s
-#  when: manual
-#  before_script:
-#    - cat "$DEPLOYMENT_FILE" > deployment.yaml
-#    - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
-#  script:
-#    - export KUBECONFIG=k8s-config.yaml
-#    - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
-#    - kubectl apply -f deployment.yaml --validate=false
-#  tags:
-#    - k8s
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; pwd; ls"
+    - scp -r -P$ssh_port *.tar "$ssh_user"@"$server_ip":"$admin_work_dir"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "cd $admin_work_dir; free -h; tar -xvf *.tar; sh -x admin.sh"
+    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $admin_work_dir/*.sh; rm -rf $admin_work_dir/*.tar; ls $admin_work_dir && netstat -tnlp"
+  only:
+    - prod-deploy

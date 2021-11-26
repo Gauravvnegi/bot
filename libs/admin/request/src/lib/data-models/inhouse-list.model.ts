@@ -119,7 +119,7 @@ export class InhouseData {
 
   getAction() {
     switch (this.action) {
-      case 'Immediate':
+      case 'Pending':
         return 'To-Do';
       default:
         return this.action;

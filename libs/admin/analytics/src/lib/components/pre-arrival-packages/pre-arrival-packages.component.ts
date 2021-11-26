@@ -327,9 +327,10 @@ export class PreArrivalPackagesComponent implements OnInit {
     detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
     detailCompRef.componentInstance.entityType = 'pre-arrival';
     detailCompRef.componentInstance.optionLabels = [
-      'Pending',
+      'Accept',
       'Reject',
       'Closed',
+      'Pending',
     ];
     detailCompRef.componentInstance.tabFilterIdx = 0;
     detailCompRef.componentInstance.packageId = this.tabFilterItems[

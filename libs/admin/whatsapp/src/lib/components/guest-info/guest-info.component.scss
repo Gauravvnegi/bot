@@ -1,3 +1,4 @@
+@import 'main';
 :host ::ng-deep .mat-tab-labels {
   justify-content: space-around;
 }
@@ -28,7 +29,7 @@
 .guestInfoEditContainer {
   width: 138px;
   height: 36px;
-  background: #f6f6fc 0% 0% no-repeat padding-box;
+  background: $button-blue 0% 0% no-repeat padding-box;
   border: 1px solid #e1e1f2;
   border-radius: 100px;
   opacity: 1;
@@ -36,11 +37,14 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  img {
+    filter: brightness(0) invert(1);
+  }
 }
 .guestInfoEditText {
   font: normal normal normal 11px/15px Roboto;
   letter-spacing: 0.66px;
-  color: #002046;
+  color: $white;
   opacity: 1;
 }
 

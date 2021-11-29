@@ -43,10 +43,12 @@
     <div class="stat-vals-container">
       <div
         class="stat-val"
+        [class.text-decoration]="textCut"
         *ngFor="let key of stats; let i = index"
         (click)="legendOnClick(i, $event)"
       >
         <div class="label">
+          <input class="legends" type="checkbox" />
           <img
             [src]="getFilteredConfig(graphData[key].label)?.icon"
             [alt]="graphData[key].label"

@@ -33,12 +33,13 @@
 }
 
 .social-btns i {
-  font-size: 21px;
+  // font-size: 21px;
+  @include font-size(21);
   color: $white;
 }
 
 .social-btns button {
-  margin: 0 8px;
+  @include margin(0px 8px);
 }
 
 .forgot__block {
@@ -57,7 +58,7 @@
 }
 
 .tip {
-  margin-top: -20px;
+  @include margin-top(-20px);
 }
 
 .form-row,
@@ -67,24 +68,24 @@
 }
 
 .card-form {
-  padding: 5px;
+  @include padding(5px);
 }
 
 .form-row {
   position: relative;
   @include flex-item-center();
-  margin-top: 30px;
+  @include margin-top(30px);
 }
 
 .form-row i {
   position: relative;
   top: -5px;
-  margin-right: $margin15;
-  color: #555;
+  @include margin-right(15px);
+  color: $auth-gray;
 }
 
 .card-footer {
-  margin-top: 2rem;
+  @include margin-top(2rem);
 }
 
 .card-footer button {

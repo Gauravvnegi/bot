@@ -184,7 +184,9 @@ export class StayDetailsService extends ApiService {
   }
 
   getArrivalTimeTimestamp(stayDetails, timezone) {
-    let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
+    let arrivalDate = moment(stayDetails.stayDetail.arrivalTime)
+      .utcOffset(timezone)
+      .format('YYYY-MM-DD');
     let time = moment(stayDetails.stayDetail.expectedArrivalTime, 'hh:mm A')
       .utcOffset(timezone)
       .format('HH:mm');
@@ -195,7 +197,9 @@ export class StayDetailsService extends ApiService {
   }
 
   getDepartureTimeTimestamp(stayDetails, timezone) {
-    let departureDate = stayDetails.stayDetail.departureTime.split('T')[0];
+    let departureDate = moment(stayDetails.stayDetail.departureTime)
+      .utcOffset(timezone)
+      .format('YYYY-MM-DD');
     let time = moment(stayDetails.stayDetail.expectedDepartureTime, 'hh:mm A')
       .utcOffset(timezone)
       .format('HH:mm');

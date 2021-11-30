@@ -140,42 +140,17 @@
     // padding: $padding/10 + rem;
   }
   @if length($padding) == 2 {
-    padding: nth($padding, 1) + px nth($padding, 2) + px;
+    padding: nth($padding, 1) nth($padding, 2);
     // padding: nth($padding, 1) * 0.1 + rem nth($padding, 2) * 0.1 + rem;
   }
   @if length($padding) == 3 {
-    padding: nth($padding, 1) + px nth($padding, 2) + px nth($padding, 3) + px;
-    padding: nth($padding, 1) *
-      0.1 +
-      rem
-      nth($padding, 2) *
-      0.1 +
-      rem
-      nth($padding, 3) *
-      0.1 +
-      rem;
+    padding: nth($padding, 1) nth($padding, 2) nth($padding, 3);
   }
   @if length($padding) == 4 {
-    padding: nth($padding, 1) +
-      px
-      nth($padding, 2) +
-      px
-      nth($padding, 3) +
-      px
-      nth($padding, 4) +
-      px;
-    padding: nth($padding, 1) *
-      0.1 +
-      rem
-      nth($padding, 2) *
-      0.1 +
-      rem
-      nth($padding, 3) *
-      0.1 +
-      rem
-      nth($padding, 4) *
-      0.1 +
-      rem;
+    padding: nth($padding, 1)
+      nth($padding, 2)
+      nth($padding, 3)
+      nth($padding, 4);
   }
 }
 @mixin padding-top($padding) {
@@ -195,31 +170,23 @@
   height: $size + px;
   height: ($size/10) + rem;
 }
-@mixin height-percentage($size) {
-  height: $size + '%';
-}
 @mixin min-height($size) {
-  min-height: $size + px;
-  min-height: ($size/10) + rem;
+  min-height: $size;
 }
 @mixin max-height($size) {
-  max-height: $size + px;
-  max-height: ($size/10) + rem;
+  max-height: $size;
 }
 @mixin width($size) {
-  width: $size + px;
-  width: ($size/10) + rem;
+  width: $size;
 }
 @mixin width-percentage($size) {
   width: $size;
 }
 @mixin min-width($size) {
-  min-width: $size + px;
-  min-width: ($size/10) + rem;
+  min-width: $size;
 }
 @mixin max-width($size) {
-  max-width: $size + px;
-  max-width: ($size/10) + rem;
+  max-width: $size;
 }
 //margin variables
 @mixin margin($margin) {
@@ -227,10 +194,10 @@
     margin: $margin;
   }
   @if length($margin) == 2 {
-    margin: nth($margin, 1) + px nth($margin, 2) + px;
+    margin: nth($margin, 1) nth($margin, 2);
   }
   @if length($margin) == 3 {
-    margin: nth($margin, 1) + px nth($margin, 2) + px nth($margin, 3) + px;
+    margin: nth($margin, 1) nth($margin, 2) nth($margin, 3);
   }
   @if length($margin) == 4 {
     margin: nth($margin, 1) +

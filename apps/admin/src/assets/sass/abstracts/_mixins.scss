@@ -130,3 +130,133 @@
     padding-right: 1px * $i !important;
   }
 }
+//Padding variables
+@mixin padding-percentage($padding) {
+  padding: $padding;
+}
+@mixin padding($padding) {
+  @if length($padding) == 1 {
+    padding: $padding;
+    // padding: $padding/10 + rem;
+  }
+  @if length($padding) == 2 {
+    padding: nth($padding, 1) + px nth($padding, 2) + px;
+    // padding: nth($padding, 1) * 0.1 + rem nth($padding, 2) * 0.1 + rem;
+  }
+  @if length($padding) == 3 {
+    padding: nth($padding, 1) + px nth($padding, 2) + px nth($padding, 3) + px;
+    padding: nth($padding, 1) *
+      0.1 +
+      rem
+      nth($padding, 2) *
+      0.1 +
+      rem
+      nth($padding, 3) *
+      0.1 +
+      rem;
+  }
+  @if length($padding) == 4 {
+    padding: nth($padding, 1) +
+      px
+      nth($padding, 2) +
+      px
+      nth($padding, 3) +
+      px
+      nth($padding, 4) +
+      px;
+    padding: nth($padding, 1) *
+      0.1 +
+      rem
+      nth($padding, 2) *
+      0.1 +
+      rem
+      nth($padding, 3) *
+      0.1 +
+      rem
+      nth($padding, 4) *
+      0.1 +
+      rem;
+  }
+}
+@mixin padding-top($padding) {
+  padding-top: $padding;
+}
+@mixin padding-right($padding) {
+  padding-right: $padding;
+}
+@mixin padding-bottom($padding) {
+  padding-bottom: $padding;
+}
+@mixin padding-left($padding) {
+  padding-left: $padding;
+}
+//Height and width
+@mixin height($size) {
+  height: $size + px;
+  height: ($size/10) + rem;
+}
+@mixin height-percentage($size) {
+  height: $size + '%';
+}
+@mixin min-height($size) {
+  min-height: $size + px;
+  min-height: ($size/10) + rem;
+}
+@mixin max-height($size) {
+  max-height: $size + px;
+  max-height: ($size/10) + rem;
+}
+@mixin width($size) {
+  width: $size + px;
+  width: ($size/10) + rem;
+}
+@mixin width-percentage($size) {
+  width: $size;
+}
+@mixin min-width($size) {
+  min-width: $size + px;
+  min-width: ($size/10) + rem;
+}
+@mixin max-width($size) {
+  max-width: $size + px;
+  max-width: ($size/10) + rem;
+}
+//margin variables
+@mixin margin($margin) {
+  @if length($margin) == 1 {
+    margin: $margin;
+  }
+  @if length($margin) == 2 {
+    margin: nth($margin, 1) + px nth($margin, 2) + px;
+  }
+  @if length($margin) == 3 {
+    margin: nth($margin, 1) + px nth($margin, 2) + px nth($margin, 3) + px;
+  }
+  @if length($margin) == 4 {
+    margin: nth($margin, 1) +
+      px
+      nth($margin, 2) +
+      px
+      nth($margin, 3) +
+      px
+      nth($margin, 4) +
+      px;
+  }
+}
+@mixin margin-top($margin) {
+  margin-top: $margin;
+}
+@mixin margin-right($margin) {
+  margin-right: $margin;
+}
+@mixin margin-bottom($margin) {
+  margin-bottom: $margin;
+}
+@mixin margin-left($margin) {
+  margin-left: $margin;
+}
+
+//font size
+@mixin font-size($size) {
+  font-size: $size + px;
+}

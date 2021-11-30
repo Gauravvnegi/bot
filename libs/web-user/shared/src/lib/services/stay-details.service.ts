@@ -166,33 +166,43 @@ export class StayDetailsService extends ApiService {
     return this.patch(`/api/v1/reservation/${reservationId}`, data);
   }
 
-  modifyStayDetails(stayDetails) {
+  modifyStayDetails(stayDetails, timezone) {
     return {
       stayDetails: {
         address: stayDetails.address.address,
         comments: stayDetails.special_comments.comments,
-        expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails),
-        expectedDepartureTime: this.getDepartureTimeTimestamp(stayDetails),
+        expectedArrivalTime: this.getArrivalTimeTimestamp(
+          stayDetails,
+          timezone
+        ),
+        expectedDepartureTime: this.getDepartureTimeTimestamp(
+          stayDetails,
+          timezone
+        ),
       },
     };
   }
 
-  getArrivalTimeTimestamp(stayDetails) {
+  getArrivalTimeTimestamp(stayDetails, timezone) {
     let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
-    let time = moment(
-      stayDetails.stayDetail.expectedArrivalTime,
-      'hh:mm A'
-    ).format('HH:mm');
-    return DateService.convertDateToTimestamp(arrivalDate + 'T' + time);
+    let time = moment(stayDetails.stayDetail.expectedArrivalTime, 'hh:mm A')
+      .utcOffset(timezone)
+      .format('HH:mm');
+    return DateService.convertDateToTimestamp(
+      arrivalDate + 'T' + time,
+      timezone
+    );
   }
 
-  getDepartureTimeTimestamp(stayDetails) {
+  getDepartureTimeTimestamp(stayDetails, timezone) {
     let departureDate = stayDetails.stayDetail.departureTime.split('T')[0];
-    let time = moment(
-      stayDetails.stayDetail.expectedDepartureTime,
-      'hh:mm A'
-    ).format('HH:mm');
-    return DateService.convertDateToTimestamp(departureDate + 'T' + time);
+    let time = moment(stayDetails.stayDetail.expectedDepartureTime, 'hh:mm A')
+      .utcOffset(timezone)
+      .format('HH:mm');
+    return DateService.convertDateToTimestamp(
+      departureDate + 'T' + time,
+      timezone
+    );
   }
 
   updateStayDetailDS(value, timezone) {

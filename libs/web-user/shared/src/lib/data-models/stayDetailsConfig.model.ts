@@ -13,7 +13,7 @@ export class StayDetailDS implements Deserializable {
   address: string;
 
   deserialize(input: any, timezone = '+05:30') {
-    this.stayDetail = new StayDetail().deserialize(input);
+    this.stayDetail = new StayDetail().deserialize(input, timezone);
     this.special_comments = new SpecialComments().deserialize(input);
     Object.assign(this, set({}, 'address', get(input, ['address'], '')));
     return this;
@@ -44,16 +44,12 @@ export class StayDetail implements Deserializable {
       set(
         {},
         'arrivalTime',
-        moment(get(input, ['arrivalTime']))
-          .utcOffset(timezone)
-          .toISOString()
+        moment(get(input, ['arrivalTime'])).utcOffset(timezone)
       ),
       set(
         {},
         'departureTime',
-        moment(get(input, ['departureTime']))
-          .utcOffset(timezone)
-          .toISOString()
+        moment(get(input, ['departureTime'])).utcOffset(timezone)
       ),
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'kidsCount', get(input, ['kidsCount'])),

@@ -94,7 +94,9 @@
           <td>JD: {{ data.jobDuration }}m</td>
           <td
             [ngClass]="{
-              'sla-timeout': data.getSLAvalue() < 0
+              'sla-timeout': data.getSLAvalue() < 0,
+              'sla-pending': data.getSLAvalue() <= 5 && data.getSLAvalue() >= 0,
+              'sla-new': data.getSLAvalue() > 5
             }"
           >
             {{ data.getSLA() }}

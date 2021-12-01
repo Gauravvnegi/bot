@@ -110,7 +110,10 @@
             <div class="content-wrap-r2-divider"></div>
             <div
               [ngClass]="{
-                'sla-timeout': item.getSLAvalue() < 0
+                'sla-timeout': item.getSLAvalue() < 0,
+                'sla-pending':
+                  item.getSLAvalue() <= 5 && item.getSLAvalue() >= 0,
+                'sla-new': item.getSLAvalue() > 5
               }"
             >
               SLA: {{ item.getSLA() }}

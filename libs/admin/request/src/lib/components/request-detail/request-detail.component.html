@@ -92,7 +92,13 @@
           </td>
           <td>{{ data.getClosedTime() || '------' }}</td>
           <td>JD: {{ data.jobDuration }}m</td>
-          <td>{{ data.getSLA() }}</td>
+          <td
+            [ngClass]="{
+              'sla-timeout': data.getSLAvalue() < 0
+            }"
+          >
+            {{ data.getSLA() }}
+          </td>
           <td>{{ data.quantity || 'None' }}</td>
         </tr>
       </table>

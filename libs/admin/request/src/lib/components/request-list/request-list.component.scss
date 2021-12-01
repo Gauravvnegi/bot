@@ -15,6 +15,19 @@
 .priority-asap {
   background-color: #ce0c0c;
 }
+
+.sla-new {
+  color: #119e0c;
+}
+
+.sla-pending {
+  color: #f8b633;
+}
+
+.sla-timeout {
+  color: #ce0c0c;
+}
+
 .right-side {
   height: 100%;
   &-header {

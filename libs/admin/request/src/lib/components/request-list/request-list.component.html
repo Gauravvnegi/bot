@@ -108,7 +108,13 @@
               {{ item.getAction() || '------' }}
             </div>
             <div class="content-wrap-r2-divider"></div>
-            <div>SLA: {{ item.getSLA() }}</div>
+            <div
+              [ngClass]="{
+                'sla-timeout': item.getSLAvalue() < 0
+              }"
+            >
+              SLA: {{ item.getSLA() }}
+            </div>
             <div class="content-wrap-r2-divider"></div>
             <div>JD:- {{ item.jobDuration }}m</div>
           </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -10,7 +10,7 @@ import { MessageService } from '../../services/messages.service';
   templateUrl: './guest-requests.component.html',
   styleUrls: ['./guest-requests.component.scss'],
 })
-export class GuestRequestsComponent implements OnInit {
+export class GuestRequestsComponent implements OnChanges {
   @Input() requestList;
   @Input() hotelId;
   requestFG: FormGroup;
@@ -24,7 +24,7 @@ export class GuestRequestsComponent implements OnInit {
 
   preArrivalOptions = ['Accept', 'Reject', 'Closed', 'Pending'];
 
-  ngOnInit(): void {
+  ngOnChanges() {
     this.initFG();
   }
 
@@ -33,6 +33,7 @@ export class GuestRequestsComponent implements OnInit {
     this.requestList.forEach((item) => {
       this.requestFG.addControl(item.id, new FormControl(item.action));
     });
+    console.log(this.requestFG);
   }
 
   handleStatusChange(request, event) {

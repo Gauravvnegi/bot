@@ -88,61 +88,22 @@ export class MainComponent implements OnInit {
           this._templateService.templateId
         ];
         if (templateData) {
-          let data;
-          templateData.stepConfigs.find((item, ix) => {
-            if (item.component.name === 'payment-details-wrapper') {
-              data = ix;
-            }
-          });
-          if (index > data) {
-            this.checkForTodaysBooking(
-              this._reservationService.reservationData
-            );
-          }
+          // let data;
+          // templateData.stepConfigs.find((item, ix) => {
+          //   if (item.component.name === 'payment-details-wrapper') {
+          //     data = ix;
+          //   }
+          // });
+          // if (index > data) {
+          //   this.checkForTodaysBooking(
+          //     this._reservationService.reservationData
+          //   );
+          // }
           this.showFooterSocialIcons =
             index === templateData.stepConfigs.length - 1;
         }
       })
     );
-  }
-
-  checkForTodaysBooking(data) {
-    const diff = DateService.getDateDifference(
-      +data.arrivalTime,
-      +this.dateService.getCurrentTimeStamp(
-        this._hotelService.hotelConfig.timezone
-      ),
-      this._hotelService.hotelConfig.timezone
-    );
-    const stayDetailDay = DateService.convertTimestampToDate(
-      +data.arrivalTime,
-      'DD',
-      this._hotelService.hotelConfig.timezone
-    );
-    const currentDay = DateService.convertTimestampToDate(
-      +this.dateService.getCurrentTimeStamp(
-        this._hotelService.hotelConfig.timezone
-      ),
-      'DD',
-      this._hotelService.hotelConfig.timezone
-    );
-    if (diff > 0 && !this.modalVisible) {
-      this.openCheckinDateModal();
-    } else if (+diff === 0 && +stayDetailDay > +currentDay) {
-      this.openCheckinDateModal();
-    }
-  }
-
-  openCheckinDateModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.id = 'checkin-modal-component';
-    this.modalVisible = true;
-    this.checkInDialogRef = this._modal.openDialog(this.checkInDateAlert, {
-      disableClose: true,
-      id: 'checkin-modal-component',
-    });
-    this.checkInDialogRef.disableClose = true;
   }
 
   // TO-DO: Remove this function

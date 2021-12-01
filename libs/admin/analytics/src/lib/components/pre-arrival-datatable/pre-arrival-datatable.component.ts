@@ -350,6 +350,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
               {
                 order: 'DESC',
                 entityType: this.entityType,
+                packageId: this.packageId,
               },
               ...this.getSelectedQuickReplyFilters(),
             ],

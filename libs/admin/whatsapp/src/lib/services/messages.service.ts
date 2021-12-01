@@ -77,6 +77,17 @@ export class MessageService extends ApiService {
     return this.get(`/api/v1/request/created-jobs${config.queryObj}`);
   }
 
+  updatePreArrivalRequest(id, data) {
+    return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
+  }
+
+  closeRequest(config, data) {
+    return this.post(
+      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+      data
+    );
+  }
+
   filterMessagesByDate(messages: IChat[], timezone = '+05:30') {
     const currentDate = moment().utcOffset(timezone);
     const filteredMsgObj = {};

@@ -8,9 +8,17 @@
 .card {
   &--heading {
     @include auth-heading();
+    @media (max-width: 1024px) {
+      font-size: $font30;
+      font-weight: bold;
+      @include margin-bottom(20px);
+    }
   }
   &--quote {
     @include auth-quote();
+    @media (max-width: 1024px) {
+      @include margin-bottom(0);
+    }
   }
 }
 
@@ -33,12 +41,13 @@
 }
 
 .social-btns i {
-  font-size: 21px;
+  // font-size: 21px;
+  @include font-size(21);
   color: $white;
 }
 
 .social-btns button {
-  margin: 0 8px;
+  @include margin(0px 8px);
 }
 
 .forgot__block {
@@ -57,7 +66,7 @@
 }
 
 .tip {
-  margin-top: -20px;
+  @include margin-top(-20px);
 }
 
 .form-row,
@@ -67,24 +76,30 @@
 }
 
 .card-form {
-  padding: 5px;
+  @include padding(5px);
 }
 
 .form-row {
   position: relative;
   @include flex-item-center();
-  margin-top: 30px;
+  @include margin-top(30px);
+  @media (max-width: 1024px) {
+    @include margin-top(45px);
+  }
 }
 
 .form-row i {
   position: relative;
   top: -5px;
-  margin-right: $margin15;
-  color: #555;
+  @include margin-right(15px);
+  color: $auth-gray;
 }
 
 .card-footer {
-  margin-top: 2rem;
+  @include margin-top(2rem);
+  @media (max-width: 1024px) {
+    @include margin-top(50px);
+  }
 }
 
 .card-footer button {
@@ -98,5 +113,11 @@
   &:hover {
     cursor: pointer;
     box-shadow: 0px 4px 4px #4b56c04d;
+  }
+}
+::ng-deep .mat-form-field-label {
+  @media (max-width: 1024px) {
+    font-size: $font14 !important;
+    @include margin-bottom(33px);
   }
 }

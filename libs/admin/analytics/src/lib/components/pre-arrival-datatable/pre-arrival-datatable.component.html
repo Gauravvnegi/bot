@@ -143,7 +143,7 @@
                 >
                   {{ quickReplyType.label }}
                   <span *ngIf="quickReplyType.value != 'ALL'"> (</span
-                  >{{ quickReplyType.total
+                  >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''
                   }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
                 </mat-chip>
               </mat-chip-list>

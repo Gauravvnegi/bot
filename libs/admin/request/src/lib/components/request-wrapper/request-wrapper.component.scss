@@ -10,7 +10,7 @@
 .request-wrapper-header {
   height: 65px;
   padding: 10px 15px;
-  background-color: #fff;
+  background-color: $white;
   margin: -20px -24px;
   display: flex;
   justify-content: space-between;
@@ -23,7 +23,7 @@
       padding: 8px 18px 8.2px 18.3px;
       border-radius: 100px;
       border: solid 1px #e1e1f2;
-      background-color: #f6f6fc;
+      background-color: $button-blue;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -37,7 +37,10 @@
         line-height: normal;
         letter-spacing: 0.66px;
         text-align: left;
-        color: #002046;
+        color: $white;
+      }
+      img {
+        filter: brightness(0) invert(1);
       }
     }
   }
@@ -45,7 +48,7 @@
 .request-body {
   margin: 25px 0 -15px -20px;
   width: calc(100% + 40px);
-  background-color: #fff;
+  background-color: $white;
   height: calc(100vh - 182px);
   display: flex;
   &-left {

@@ -51,6 +51,7 @@
           (click)="legendOnClick(i, $event)"
         >
           <div class="label">
+            <input class="legends" type="checkbox" />
             <img
               [src]="getFilteredConfig(graphData[key].label)?.icon"
               [alt]="graphData[key].label"

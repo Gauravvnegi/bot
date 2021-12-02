@@ -1,9 +1,9 @@
-<div class="guest-request">
+<div class="guest-request" [formGroup]="requestFG">
   <div class="guest-request-title">
     Requests
   </div>
   <div
-    *ngIf="requestList && requestList.length; else noRequest"
+    *ngIf="requestList && requestList.length && requestFG; else noRequest"
     class="guest-request-items-wrap"
   >
     <div
@@ -51,6 +51,35 @@
           </div>
         </div>
       </div>
+      <mat-select
+        class="status"
+        placeholder=""
+        [formControlName]="request.id"
+        [disabled]="
+          request.action === 'Closed' ||
+          request.action === 'Timeout' ||
+          request.action === 'Reject'
+        "
+        (selectionChange)="handleStatusChange(request, $event)"
+      >
+        <ng-container
+          *ngIf="request.journey === 'INHOUSE'; else prearrivaloptions"
+          ><mat-option
+            [value]="item"
+            *ngFor="let item of optionLabels"
+            [disabled]="item === 'Timeout'"
+            >{{ item }}</mat-option
+          ></ng-container
+        >
+        <ng-template #prearrivaloptions
+          ><mat-option
+            [value]="item"
+            *ngFor="let item of preArrivalOptions"
+            [disabled]="item === 'Timeout'"
+            >{{ item }}</mat-option
+          ></ng-template
+        >
+      </mat-select>
       <div class="guest-request-items-wrap-item-under-line"></div>
     </div>
   </div>

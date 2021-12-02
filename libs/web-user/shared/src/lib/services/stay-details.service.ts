@@ -166,33 +166,47 @@ export class StayDetailsService extends ApiService {
     return this.patch(`/api/v1/reservation/${reservationId}`, data);
   }
 
-  modifyStayDetails(stayDetails) {
+  modifyStayDetails(stayDetails, timezone) {
+    const data = {
+      comments: stayDetails.special_comments.comments,
+      expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails, timezone),
+      expectedDepartureTime: this.getDepartureTimeTimestamp(
+        stayDetails,
+        timezone
+      ),
+    };
+    if (stayDetails.address) {
+      data['address'] = stayDetails.address.address;
+    }
     return {
-      stayDetails: {
-        address: stayDetails.address.address,
-        comments: stayDetails.special_comments.comments,
-        expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails),
-        expectedDepartureTime: this.getDepartureTimeTimestamp(stayDetails),
-      },
+      stayDetails: data,
     };
   }
 
-  getArrivalTimeTimestamp(stayDetails) {
-    let arrivalDate = stayDetails.stayDetail.arrivalTime.split('T')[0];
-    let time = moment(
-      stayDetails.stayDetail.expectedArrivalTime,
-      'hh:mm A'
-    ).format('HH:mm');
-    return DateService.convertDateToTimestamp(arrivalDate + 'T' + time);
+  getArrivalTimeTimestamp(stayDetails, timezone) {
+    let arrivalDate = moment(stayDetails.stayDetail.arrivalTime)
+      .utcOffset(timezone)
+      .format('YYYY-MM-DD');
+    let time = moment(stayDetails.stayDetail.expectedArrivalTime, 'hh:mm A')
+      .utcOffset(timezone)
+      .format('HH:mm');
+    return DateService.convertDateToTimestamp(
+      arrivalDate + 'T' + time,
+      timezone
+    );
   }
 
-  getDepartureTimeTimestamp(stayDetails) {
-    let departureDate = stayDetails.stayDetail.departureTime.split('T')[0];
-    let time = moment(
-      stayDetails.stayDetail.expectedDepartureTime,
-      'hh:mm A'
-    ).format('HH:mm');
-    return DateService.convertDateToTimestamp(departureDate + 'T' + time);
+  getDepartureTimeTimestamp(stayDetails, timezone) {
+    let departureDate = moment(stayDetails.stayDetail.departureTime)
+      .utcOffset(timezone)
+      .format('YYYY-MM-DD');
+    let time = moment(stayDetails.stayDetail.expectedDepartureTime, 'hh:mm A')
+      .utcOffset(timezone)
+      .format('HH:mm');
+    return DateService.convertDateToTimestamp(
+      departureDate + 'T' + time,
+      timezone
+    );
   }
 
   updateStayDetailDS(value, timezone) {

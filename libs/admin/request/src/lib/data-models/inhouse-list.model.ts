@@ -117,6 +117,12 @@ export class InhouseData {
     else '------';
   }
 
+  getSLAvalue() {
+    if (this.elapsedTime)
+      return Math.round(((this.elapsedTime % 86400000) % 3600000) / 60000);
+    else 0;
+  }
+
   getAction() {
     switch (this.action) {
       case 'Pending':

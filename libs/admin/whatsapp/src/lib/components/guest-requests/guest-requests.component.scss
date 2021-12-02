@@ -128,3 +128,10 @@
   @include flex-space-between();
   align-items: center;
 }
+
+.status {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: solid 1px #d9d9d9;
+}

@@ -72,7 +72,7 @@ export class DaterangeComponent implements OnInit {
   }
 
   getCurrentTime() {
-    return moment().utcOffset(this.timezone);
+    return moment.utc().utcOffset(this.timezone);
   }
 
   selectedDate(date) {

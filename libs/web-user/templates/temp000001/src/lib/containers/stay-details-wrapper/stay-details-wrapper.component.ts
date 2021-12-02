@@ -72,7 +72,10 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
    */
   saveStayDetails(): void {
     const formValue = this.parentForm.getRawValue();
-    const data = this._stayDetailService.modifyStayDetails(formValue);
+    const data = this._stayDetailService.modifyStayDetails(
+      formValue,
+      this._hotelService.hotelConfig.timezone
+    );
 
     this.$subscription.add(
       this._stayDetailService

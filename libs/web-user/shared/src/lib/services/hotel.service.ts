@@ -9,7 +9,12 @@ export class HotelService extends ApiService {
   private _hotelId: string;
 
   getCurrentJourneyConfig() {
-    return (this.hotelConfig && this.hotelConfig.journeys && this.hotelConfig.journeys[this.currentJourney]) || {};
+    return (
+      (this.hotelConfig &&
+        this.hotelConfig.journeys &&
+        this.hotelConfig.journeys[this.currentJourney]) ||
+      {}
+    );
   }
 
   getHotelConfigById(hotelId): Observable<any> {

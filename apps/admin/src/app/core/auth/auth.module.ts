@@ -7,10 +7,14 @@ import { RequestPasswordComponent } from './components/request-password/request-
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { RouterModule } from '@angular/router';
-import { SharedMaterialModule, SnackBarService } from 'libs/shared/material/src';
+import {
+  SharedMaterialModule,
+  SnackBarService,
+} from 'libs/shared/material/src';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ResendPasswordComponent } from './components/resend-password/resend-password.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -23,11 +27,13 @@ import { ResendPasswordComponent } from './components/resend-password/resend-pas
     ResendPasswordComponent,
   ],
   imports: [
-    CommonModule, 
+    CommonModule,
     FormsModule,
+    TranslateModule.forChild(),
     ReactiveFormsModule,
-    SharedMaterialModule, 
-    RouterModule.forRoot([])],
+    SharedMaterialModule,
+    RouterModule.forRoot([]),
+  ],
   exports: [
     AuthComponent,
     LoginComponent,
@@ -36,9 +42,6 @@ import { ResendPasswordComponent } from './components/resend-password/resend-pas
     ResetPasswordComponent,
     LogoutComponent,
   ],
-  providers: [
-    AuthService,
-    SnackBarService
-  ]
+  providers: [AuthService, SnackBarService],
 })
 export class AuthModule {}

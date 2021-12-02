@@ -1,9 +1,9 @@
 <div class="filter--header">
   <div class="close--wrapper">
-    <p class="filter">Filter</p>
+    <p class="filter">{{ 'filters.label' | translate }}</p>
   </div>
   <div (click)="resetFilter()" class="reset-wrapper">
-    <p class="filter">Reset All</p>
+    <p class="filter">{{ 'filters.reset_all' | translate }}</p>
     <mat-icon class="material-icon" matSuffix>undo</mat-icon>
     <mat-icon (click)="closePopup()" class="material-icon" matSuffix
       >cancel</mat-icon
@@ -28,17 +28,17 @@
               d="M18.813,2.15a.537.537,0,0,0,.538-.538V.538A.537.537,0,0,0,18.813,0H.538A.537.537,0,0,0,0,.538V1.613a.537.537,0,0,0,.538.538h.537v12.9H.538A.537.537,0,0,0,0,15.588v1.075a.537.537,0,0,0,.538.538H8.6V14.513a.539.539,0,0,1,.538-.538h1.075a.539.539,0,0,1,.538.538V17.2h8.063a.537.537,0,0,0,.538-.538V15.588a.537.537,0,0,0-.538-.538h-.538V2.15ZM8.6,3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V3.655Zm0,3.225a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43V8.17a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V6.88ZM4.3,3.655a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H4.73a.462.462,0,0,1-.43-.43ZM6.02,8.6H4.73a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43V8.17A.462.462,0,0,1,6.02,8.6Zm.43,4.3a3.225,3.225,0,0,1,6.45,0Zm8.6-4.73a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Zm0-3.225a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Z"
             />
           </svg>
-          Property
+          {{ 'filters.property' | translate }}
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </ng-template>
         <div formGroupName="property">
           <div class="hotel-branch">
-            Choose Brand or Hotel
+            {{ 'filters.choose_title' | translate }}
           </div>
           <div>
             <div>
               <mat-form-field>
-                <mat-label>Brand</mat-label>
+                <mat-label>{{ 'filters.brand' | translate }}</mat-label>
                 <mat-select formControlName="hotelName">
                   <mat-option
                     *ngFor="let hotel of hotelList"
@@ -50,7 +50,7 @@
             </div>
             <div>
               <mat-form-field>
-                <mat-label>Hotel Name</mat-label>
+                <mat-label>{{ 'filters.hotel_name' | translate }}</mat-label>
                 <mat-select
                   formControlName="branchName"
                   (selectionChange)="handleHotelChange($event.value)"
@@ -82,12 +82,12 @@
               d="M18.813,2.15a.537.537,0,0,0,.538-.538V.538A.537.537,0,0,0,18.813,0H.538A.537.537,0,0,0,0,.538V1.613a.537.537,0,0,0,.538.538h.537v12.9H.538A.537.537,0,0,0,0,15.588v1.075a.537.537,0,0,0,.538.538H8.6V14.513a.539.539,0,0,1,.538-.538h1.075a.539.539,0,0,1,.538.538V17.2h8.063a.537.537,0,0,0,.538-.538V15.588a.537.537,0,0,0-.538-.538h-.538V2.15ZM8.6,3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V3.655Zm0,3.225a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43V8.17a.462.462,0,0,1-.43.43H9.03a.462.462,0,0,1-.43-.43V6.88ZM4.3,3.655a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43v1.29a.462.462,0,0,1-.43.43H4.73a.462.462,0,0,1-.43-.43ZM6.02,8.6H4.73a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43H6.02a.462.462,0,0,1,.43.43V8.17A.462.462,0,0,1,6.02,8.6Zm.43,4.3a3.225,3.225,0,0,1,6.45,0Zm8.6-4.73a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V6.88a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Zm0-3.225a.462.462,0,0,1-.43.43H13.33a.462.462,0,0,1-.43-.43V3.655a.462.462,0,0,1,.43-.43h1.29a.462.462,0,0,1,.43.43Z"
             />
           </svg>
-          Outlet
+          {{ 'filters.outlet' | translate }}
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </ng-template>
         <div formGroupName="outlets" *ngIf="outletFG">
           <div class="hotel-branch">
-            Select Outlet
+            {{ 'filters.select_outlet' | translate }}
           </div>
           <div class="checkbox--wrapper" *ngFor="let outlet of outlets">
             <mat-checkbox
@@ -119,29 +119,35 @@
             />
           </svg>
           <!-- <img src="assets/Guest.svg" class="svg" /> -->
-          Guest
+          {{ 'filters.guest' | translate }}
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </ng-template>
         <div formGroupName="guest">
           <div formGroupName="guestCategory">
-            <p class="guest-title">Select Guest Category</p>
+            <p class="guest-title">
+              {{ 'filters.guest_category' | translate }}
+            </p>
             <div class="checkbox--wrapper">
-              <mat-checkbox formControlName="isRepeatedGuest"
-                >Repeat Guest</mat-checkbox
-              >
-              <mat-checkbox formControlName="isNewGuest"
-                >New Guest</mat-checkbox
-              >
+              <mat-checkbox formControlName="isRepeatedGuest">{{
+                'filters.repeat_guest' | translate
+              }}</mat-checkbox>
+              <mat-checkbox formControlName="isNewGuest">{{
+                'filters.new_guest' | translate
+              }}</mat-checkbox>
             </div>
           </div>
           <div formGroupName="guestType">
-            <p class="guest-title">Select Guest Type</p>
+            <p class="guest-title">{{ 'filters.guest_type' | translate }}</p>
             <div class="checkbox--wrapper">
-              <mat-checkbox formControlName="isVip">VIP</mat-checkbox>
-              <mat-checkbox formControlName="isMembership"
-                >Membership</mat-checkbox
-              >
-              <mat-checkbox formControlName="isGeneral">General</mat-checkbox>
+              <mat-checkbox formControlName="isVip">{{
+                'filters.vip' | translate
+              }}</mat-checkbox>
+              <mat-checkbox formControlName="isMembership">{{
+                'filters.membership' | translate
+              }}</mat-checkbox>
+              <mat-checkbox formControlName="isGeneral">{{
+                'filters.general' | translate
+              }}</mat-checkbox>
             </div>
           </div>
         </div>
@@ -175,33 +181,33 @@
               />
             </g>
           </svg>
-          Feedback
+          {{ 'filters.feedback' | translate }}
           <i class="fa fa-angle-right" aria-hidden="true"></i>
         </ng-template>
         <div formGroupName="feedback">
           <div class="hotel-branch">
-            Select Feedback Type
+            {{ 'filters.feedback_type' | translate }}
           </div>
           <mat-radio-group formControlName="feedbackType">
             <mat-radio-button
               *ngIf="checkForStayFeedbackSubscribed()"
               value="Stay Experience"
               (change)="handleFeedbackTypeChange($event)"
-              >Stay Experience</mat-radio-button
+              >{{ 'filters.experience' | translate }}</mat-radio-button
             >
             <mat-radio-button
               *ngIf="checkForTransactionFeedbackSubscribed()"
               value="Transactional"
               (change)="handleFeedbackTypeChange($event)"
-              >Transactional</mat-radio-button
+              >{{ 'filters.transactional' | translate }}</mat-radio-button
             >
             <!-- <mat-radio-button value="Both">Both</mat-radio-button> -->
           </mat-radio-group>
         </div>
       </mat-tab>
     </mat-tab-group>
-    <button (click)="applyFilter()" class="apply-button">Apply</button>
+    <button (click)="applyFilter()" class="apply-button">
+      {{ 'filters.apply' | translate }}
+    </button>
   </form>
 </div>
-
-<!-- {{ filterForm.value | json }} -->

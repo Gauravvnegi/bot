@@ -3,7 +3,7 @@
     <div class="icon">
       <img src="assets/svg/feedback-distribution.svg" />
     </div>
-    <div class="stat-title">Feedback Distribution</div>
+    <div class="stat-title">{{ 'feedback.distribution' | translate }}</div>
   </div>
   <div class="graph-container" *ngIf="!loading">
     <div class="graph" *ngIf="totalDistribution; else defaultGraph">
@@ -36,7 +36,7 @@
     </ng-template>
     <div class="labels" *ngIf="distribution">
       <div class="val">{{ distribution.totalCount }}</div>
-      <div class="label">Total Responses</div>
+      <div class="label">{{ 'feedback.total_response' | translate }}</div>
     </div>
   </div>
   <div *ngIf="keyLabels.length" class="mt-20">
@@ -75,6 +75,6 @@
     </div>
   </div>
   <div class="thirty__days">
-    <span>In 30 Days</span>
+    <span>{{ 'feedback.in_30_days' | translate }}</span>
   </div>
 </div>

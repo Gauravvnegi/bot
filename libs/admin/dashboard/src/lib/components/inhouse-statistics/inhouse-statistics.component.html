@@ -3,12 +3,14 @@
     <div class="icon">
       <img src="assets/svg/inhouse.svg" />
     </div>
-    <div class="stat-title">In-House</div>
+    <div class="stat-title">
+      {{ 'dashboard.cards.inHouse.label' | translate }}
+    </div>
     <div class="info-icon">
       <img src="assets/svg/info.svg" alt="info-icon" />
       <div class="tooltip">
         <span class="arrow"></span>
-        Total number of Inhouse guests in a selected time frame.
+        {{ 'dashboard.cards.inHouse.tooltip' | translate }}
       </div>
     </div>
   </div>
@@ -63,12 +65,12 @@
                     />
                   </div>
                   <div class="chartDays">
-                    In 30 Days
+                    {{ 'dashboard.cards.inHouse.total_days' | translate }}
                   </div>
                 </div>
               </div>
               <div class="totalGuestsHeading">
-                Total Guest
+                {{ 'dashboard.cards.inHouse.total_guest' | translate }}
               </div>
             </div>
             <div class="chartsubDetailsWrapper">
@@ -79,10 +81,12 @@
                 <div>
                   <div class="chartDetailBlock"></div>
                   <div>
-                    <span class="chartDetailHeading">Adult</span>
-                    <span class="chartDetailText">{{
-                      inhouse.adultCount
+                    <span class="chartDetailHeading">{{
+                      'dashboard.cards.inHouse.adult' | translate
                     }}</span>
+                    <span class="chartDetailText">
+                      {{ inhouse.adultCount }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -93,7 +97,9 @@
                 <div>
                   <div class="chartDetailRightBlock"></div>
                   <div>
-                    <span class="chartDetailHeading">Kid</span>
+                    <span class="chartDetailHeading">
+                      {{ 'dashboard.cards.inHouse.kid' | translate }}
+                    </span>
                     <span class="chartDetailText">{{ inhouse.kidsCount }}</span>
                   </div>
                 </div>

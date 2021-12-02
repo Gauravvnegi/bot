@@ -42,9 +42,9 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span class="hotelUsageActionLabel"
-                      >{{ documentActionItem.label }}</span
-                    >
+                    <span class="hotelUsageActionLabel">{{
+                      documentActionItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
@@ -55,9 +55,9 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span class="hotelUsageActionLabel"
-                      >{{ documentTypeItem.label }}</span
-                    >
+                    <span class="hotelUsageActionLabel">{{
+                      documentTypeItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -107,16 +107,13 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data available in table</p>
+    <p class="no-data-found">{{ 'no_data' | translate }}</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
-  
+
   <ng-template pTemplate="header" let-columns>
-    
     <tr>
-      <th class="hotelUsageTableHead"
-        pResizableColumn
-      >
+      <th class="hotelUsageTableHead" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -156,7 +153,6 @@
           type="text"
           (input)="onFilterTypeTextChange($event.target.value, 'limit')"
           class="p-column-filter"
-          
         />
       </th>
       <th class="table_search">
@@ -185,10 +181,10 @@
         ></p-tableCheckbox>
       </td>
       <td class="name">
-            <div>{{ rowData.serviceType }}</div>
+        <div>{{ rowData.serviceType }}</div>
       </td>
-        <td class="name">
-          <div>{{ rowData.name }}</div>  
+      <td class="name">
+        <div>{{ rowData.name }}</div>
       </td>
       <td class="name">
         {{ rowData.limit }}

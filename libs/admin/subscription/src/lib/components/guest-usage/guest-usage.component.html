@@ -1,23 +1,8 @@
 <!-- <div class="container"> -->
 <div class="heading">
-  <div class="heading__label">Total Guests</div>
-  <!-- <div class="menu-container">
-      <div class="pull-right">
-        <label class="labl" *ngFor="let option of chartTypes">
-          <input
-            name="method"
-            type="radio"
-            [checked]="chart.chartType === option.value"
-            [value]="option.value"
-            (click)="setChartType(option, $event)"
-            [id]="option.value + '-guest'"
-          />
-          <div class="image">
-            <img [src]="option.url" />
-          </div>
-        </label>
-      </div>
-    </div> -->
+  <div class="heading__label">
+    {{ 'subscription.total_guests' | translate }}
+  </div>
 </div>
 <!-- <div class="charts"> -->
 <div class="line-chart">
@@ -71,7 +56,7 @@
     </div>
   </div>
   <div class="details__link">
-    in 30 days
+    {{ 'subscription.in_30_days' | translate }}
   </div>
 </div>
 <!-- </div> -->

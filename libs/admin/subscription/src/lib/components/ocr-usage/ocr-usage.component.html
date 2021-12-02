@@ -1,16 +1,15 @@
 <!-- <div class="container"> -->
 <div class="heading">
   <div class="heading__label">
-    OCR Count
+    {{ 'subscription.ocr' | translate }}
     <div class="tooltip">
       <img
         class="tooltip__image"
         src="assets/svg/information-circle-outline.svg"
       />
-      <span class="tooltip__text"
-        >Optical card reading technology is deployed to negate fake identity
-        cards being given during verification.</span
-      >
+      <span class="tooltip__text">
+        {{ 'subscription.ocr_tooltip' | translate }}
+      </span>
     </div>
   </div>
 </div>
@@ -47,6 +46,6 @@
     </div>
   </div>
   <div class="details__link">
-    in 30 days
+    {{ 'subscription.in_30_days' | translate }}
   </div>
 </div>

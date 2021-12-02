@@ -33,7 +33,6 @@ export class GuestRequestsComponent implements OnChanges {
     this.requestList.forEach((item) => {
       this.requestFG.addControl(item.id, new FormControl(item.action));
     });
-    console.log(this.requestFG);
   }
 
   handleStatusChange(request, event) {

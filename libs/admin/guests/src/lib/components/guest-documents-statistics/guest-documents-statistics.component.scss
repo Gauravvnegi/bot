@@ -1,3 +1,4 @@
+@import 'main';
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
@@ -75,6 +76,9 @@
       letter-spacing: 0.72px;
       color: #6d7580;
       opacity: 1;
+      @media (max-width: $tablet) {
+        @include padding-left(19px);
+      }
     }
   }
   .stat-val {

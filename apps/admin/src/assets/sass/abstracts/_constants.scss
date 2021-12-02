@@ -15,14 +15,13 @@ $padding15: 15px;
 $padding20: 20px;
 $padding30: 30px;
 
-
-
 // Breakpoint variables
 
-$S:     480px;   
-$M:     768px;     
-$L:     1170px;  
-$XL:    1500px;
+$S: 480px;
+$M: 768px;
+$L: 1170px;
+$XL: 1500px;
+$tablet: 1024px;
 
 // letter-spacing
 
@@ -31,3 +30,7 @@ $spacing2: 2px;
 $spacing4: 4px;
 $spacing6: 6px;
 
+// Border radius
+$borderRadius5: 5px;
+$borderRadius10: 10px;
+$borderRadius50P: 50%;

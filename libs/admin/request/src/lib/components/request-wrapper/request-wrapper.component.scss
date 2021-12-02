@@ -15,6 +15,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: $tablet) {
+    @include margin(0);
+  }
   &-btnwrap {
     display: flex;
     &-btn {
@@ -51,10 +54,27 @@
   background-color: $white;
   height: calc(100vh - 182px);
   display: flex;
+  @media (max-width: $tablet) {
+    @include width(100%);
+    @include margin-left(0);
+    @include margin-top(15px);
+  }
   &-left {
     width: 337px;
+    @media (max-width: $tablet) {
+      @include width(30.3%);
+    }
   }
   &-right {
     width: calc(100% - 337px);
+    @media (max-width: $tablet) {
+      @include width(100%);
+    }
+  }
+}
+::ng-deep .mat-tab-labels {
+  @media (max-width: $tablet) {
+    @include height(63px);
+    align-items: center;
   }
 }

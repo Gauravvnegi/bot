@@ -2,13 +2,11 @@
 
 .profile__dropdown {
   position: relative;
-  display: flex;
-  align-items: center;
-  height: 42px;
+  @include flex-item-center();
+  @include height(42px);
   &:hover {
     cursor: pointer;
-    // border: 1.5px solid $primary-purple;
-    border-radius: 5px;
+    border-radius: $borderRadius5;
     .dropdown-list {
       display: block;
     }
@@ -19,55 +17,57 @@
 }
 
 :host ::ng-deep .profile__dropdown__image {
-  height: 33px;
-  width: 33px;
+  @include width(33px);
+  @include height(33px);
   background-color: $primary-purple;
-  display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-  .profile-initial{
-    font-size: 12px;
-    color: white;
+  align-items: center;
+  border-radius: $borderRadius50P;
+  @include flex-justify-center();
+  @media (max-width: $tablet) {
+    @include width(42px);
+  }
+  .profile-initial {
+    font-size: $font12;
+    color: $white;
   }
 }
 
 .material-icons {
-  color: #d9d9d9;
+  color: $light-grey;
 }
 
 .dropdown-list {
   position: absolute;
-  width: 90%;
+  @include width(90%);
   left: 10px;
   top: 95%;
   display: none;
-  background-color: white;
+  background-color: $white;
   z-index: 999;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px 0px lightgray;
+  border-radius: $borderRadius5;
+  box-shadow: 0px 0px 5px 0px $light-grey;
   .list-item {
     text-decoration: none;
-    padding: 10px;
-    font-size: 14px;
-    width: 100%;
-    color: #002046;
+    @include padding(10px);
+    font-size: $font14;
+    @include width(100%);
+    color: $dark-blue;
     font-weight: 500;
     &:hover {
-      background-color: rgba(232, 238, 245, 0.25);;
+      background-color: rgba(232, 238, 245, 0.25);
       // color: $primary-purple;
     }
   }
 }
 
 .dropdown-text {
-  font-size: 14px;
-  margin: 0 15px;
+  font-size: $font14;
+  @include margin(0 15px);
   font-weight: 500;
   @media only screen and (max-width: 1200px) {
-    font-size: 12px;
+    font-size: $font12;
   }
   @media only screen and (max-width: 1000px) {
-    font-size: 10px;
+    font-size: $font10;
   }
 }

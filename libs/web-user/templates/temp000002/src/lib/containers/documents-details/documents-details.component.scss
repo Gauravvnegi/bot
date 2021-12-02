@@ -1,4 +1,41 @@
 @import 'temp000002';
+.container{
+  height: inherit;
+}
+.documentDetaiBottomWrapper{
+  min-height: 289px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  .doWrapper{
+    min-height: 289px;
+  }
+  .doHeading{
+    font: normal normal 600 20px/24px Montserrat;
+    letter-spacing: 0px;
+    color: #121212;
+    opacity: 1;
+    margin-bottom: 10px;
+  }
+  .doText{
+    
+    font: normal normal normal 14px/20px Montserrat;
+    letter-spacing: 0px;
+    color: #121212;
+    opacity: 0.6;
+    margin: 5px 0;
+  }
+  .doImg{
+    margin-right: 10px; height: 16px; margin-top: 7px;
+  }
+  .referenceDoc{
+    max-height: 289px;
+    .referenceImg{
+      max-height: 289px;
+    }
+  }
+}
 
 
 .expand-icon {
@@ -65,5 +102,12 @@ mat-icon {
   }
   .doc__warning_section {
     flex-direction: column !important;
+  }
+}
+
+:host ::ng-deep .conditional-icon {
+  height: 30px;
+  @media screen and (max-width: $M) {
+    height: 20px;
   }
 }

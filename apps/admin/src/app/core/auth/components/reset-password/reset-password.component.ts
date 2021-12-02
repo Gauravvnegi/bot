@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { authConstants } from '../../constants/auth-constants';
+import { ValidatorService } from '../../services/validator-service';
 
 @Component({
   selector: 'admin-reset-password',
@@ -11,7 +13,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 })
 export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
-  isPasswordVisible: boolean = false;
+  isPasswordVisible = false;
   changePasswordToken: string;
 
   constructor(
@@ -19,7 +21,8 @@ export class ResetPasswordComponent implements OnInit {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _snackbarService: SnackBarService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _validatorService: ValidatorService
   ) {
     this.initResetForm();
   }
@@ -28,6 +31,10 @@ export class ResetPasswordComponent implements OnInit {
     this.getChangePasswordToken();
   }
 
+  /**
+   * Reset form initialization
+   * @author Amit Singh
+   */
   initResetForm() {
     this.resetPasswordForm = this._fb.group(
       {
@@ -35,14 +42,14 @@ export class ResetPasswordComponent implements OnInit {
           '',
           [
             Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(10),
+            Validators.minLength(authConstants.passwordMinLength),
+            Validators.maxLength(authConstants.passwordMaxLength),
           ],
         ],
         resetPassword: ['', [Validators.required]],
       },
       {
-        validator: this._authService.matchPasswords(
+        validator: this._validatorService.matchPasswords(
           'password',
           'resetPassword'
         ),
@@ -50,37 +57,48 @@ export class ResetPasswordComponent implements OnInit {
     );
   }
 
+  /**
+   * Gets the value of change password token
+   * @author Amit Singh
+   */
   getChangePasswordToken() {
     this._activatedRoute.queryParams.subscribe((params) => {
-      this.changePasswordToken = params['token'];
+      if (params['token']) this.changePasswordToken = params['token'];
     });
   }
 
+  /**
+   * Reset password
+   * @returns null
+   * @author Amit Singh
+   */
   resetPassword() {
     if (!this.resetPasswordForm.valid) {
       return;
     }
-    const data= {
+    const data = {
       token: this.changePasswordToken,
-      password: this.resetPasswordForm.get('password').value
-    }
-    this._authService
-      .changePassword(data)
-      .subscribe(
-        () => {
-          this._snackbarService.openSnackBarAsText(
-            'Reset password successful',
-            '',
-            { panelClass: 'success' }
-          );
-          this.navigateToLogin();
-        },
-        (error) => {
-          this._snackbarService.openSnackBarAsText(error.error.message);
-        }
-      );
+      password: this.resetPasswordForm.get('password').value,
+    };
+    this._authService.changePassword(data).subscribe(
+      () => {
+        this._snackbarService.openSnackBarAsText(
+          'Reset password successful',
+          '',
+          { panelClass: 'success' }
+        );
+        this.navigateToLogin();
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message ?? '');
+      }
+    );
   }
 
+  /**
+   * Navigate to login page
+   * @author Amit Singh
+   */
   navigateToLogin() {
     this._router.navigate(['/auth/login']);
   }

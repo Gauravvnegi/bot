@@ -27,4 +27,6 @@ export const authConstants = {
     },
     { id: 5, label: 'Universal Search', url: 'assets/svg/search.svg' },
   ],
+  passwordMinLength: 6,
+  passwordMaxLength: 10,
 };

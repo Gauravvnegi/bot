@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +14,7 @@ import { SubscriptionPlanService } from '../../../theme/src/lib/services/subscri
 })
 export class PagesComponent implements OnInit {
   constructor(
-    private _userDetailService: UserDetailService,
+    private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _feedbackService: FeedbackService,
     private _route: ActivatedRoute,
@@ -23,7 +23,7 @@ export class PagesComponent implements OnInit {
 
   ngOnInit(): void {
     const adminDetails = this._route.snapshot.data['adminDetails'];
-    this._userDetailService.initUserDetails(get(adminDetails, ['userDetail']));
+    this._userService.initUserDetails(get(adminDetails, ['userDetail']));
     this._hotelDetailService.initHotelDetails(
       get(adminDetails, ['userDetail'])
     );

@@ -7,7 +7,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
@@ -16,7 +16,7 @@ import { get } from 'lodash';
 @Injectable({ providedIn: 'root' })
 export class LoadGuard implements CanActivate {
   constructor(
-    private _userDetailService: UserDetailService,
+    private _userService: UserService,
     private subscriptionService: SubscriptionPlanService,
     private location: Location
   ) {}
@@ -24,8 +24,8 @@ export class LoadGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let subscription = this.subscriptionService.getModuleSubscription();
     if (subscription === undefined) {
-      return this._userDetailService
-        .getUserDetailsById(this._userDetailService.getLoggedInUserid())
+      return this._userService
+        .getUserDetailsById(this._userService.getLoggedInUserid())
         .pipe(
           switchMap((res) => {
             return forkJoin({

@@ -48,9 +48,9 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span class="userActionLabel"
-                      >{{ documentActionItem.label }}</span
-                    >
+                    <span class="userActionLabel">{{
+                      documentActionItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
@@ -61,9 +61,9 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span class="userActionLabel"
-                      >{{ documentTypeItem.label }}</span
-                    >
+                    <span class="userActionLabel">{{
+                      documentTypeItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -133,9 +133,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th class="userTableHead"
-        pResizableColumn
-      >
+      <th class="userTableHead" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -254,7 +252,7 @@
         </div> -->
       </td>
       <td class="service-details">
-        {{ userDetailService.userDetails.getFullName() }}
+        {{ userService.userDetails.getFullName() }}
         <p>Admin</p>
       </td>
       <td class="">

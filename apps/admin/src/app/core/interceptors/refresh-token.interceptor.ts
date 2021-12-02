@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
@@ -19,7 +19,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   private refreshTokenSubject = new BehaviorSubject<any>(null);
   constructor(
     private _authService: AuthService,
-    private _userDetailService: UserDetailService,
+    private _userService: UserService,
     private _router: Router
   ) {}
   intercept(
@@ -124,18 +124,16 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   logoutUser() {
-    this._authService
-      .logout(this._userDetailService.getLoggedInUserid())
-      .subscribe(
-        (response) => {
-          this._authService.clearToken();
-          this._router.navigate(['/auth']);
-        },
-        (error) => {
-          this._authService.clearToken();
-          this._router.navigate(['/auth']);
-        }
-      );
+    this._authService.logout(this._userService.getLoggedInUserid()).subscribe(
+      (response) => {
+        this._authService.clearToken();
+        this._router.navigate(['/auth']);
+      },
+      (error) => {
+        this._authService.clearToken();
+        this._router.navigate(['/auth']);
+      }
+    );
   }
 
   updateAccessToken(tokenConfig) {

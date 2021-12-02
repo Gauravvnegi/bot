@@ -1,4 +1,4 @@
-<div class="login_container">
+<div>
   <div class="row">
     <!-- Here header will come -->
   </div>
@@ -40,6 +40,8 @@
           <mat-form-field>
             <input
               [type]="!isPasswordVisible ? 'password' : 'text'"
+              autocomplete="current-password"
+              id="current-password"
               matInput
               formControlName="password"
               placeholder="{{ 'auth.password_placeholder' | translate }}"

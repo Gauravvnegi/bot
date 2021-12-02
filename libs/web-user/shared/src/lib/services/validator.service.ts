@@ -19,7 +19,6 @@ export const defaultErrors = {
 };
 
 export const customPatternValid = (config: any): ValidatorFn => {
-
   return (control: FormControl) => {
     let urlRegEx: RegExp = config.pattern;
     // need to remove toString
@@ -46,7 +45,7 @@ export const FORM_ERRORS = new InjectionToken('FORM_ERRORS', {
 @Injectable({ providedIn: 'root' })
 export class ValidatorService {
   errorMessageEvent = new Subject();
-  constructor(@Inject(FORM_ERRORS) private errors) { }
+  constructor(@Inject(FORM_ERRORS) private errors) {}
 
   attachValidators(fieldComponent) {
     let control = fieldComponent.parentForm.get(

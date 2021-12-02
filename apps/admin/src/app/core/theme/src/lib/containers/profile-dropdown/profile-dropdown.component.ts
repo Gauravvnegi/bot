@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'admin-profile-dropdown',
@@ -9,7 +9,7 @@ import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detai
 export class ProfileDropdownComponent implements OnInit {
   @Input() items = [];
   @Output() onProfileAction = new EventEmitter();
-  constructor(public userDetailService: UserDetailService) {}
+  constructor(public userService: UserService) {}
 
   ngOnInit(): void {}
 

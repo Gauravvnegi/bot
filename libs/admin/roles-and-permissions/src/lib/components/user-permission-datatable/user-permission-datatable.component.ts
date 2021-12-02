@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { ManagePermissionService } from '../../services/manage-permission.service';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import * as FileSaver from 'file-saver';
@@ -65,7 +65,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     private _route: ActivatedRoute,
     private _adminUtilityService: AdminUtilityService,
     private _managePermissionService: ManagePermissionService,
-    public userDetailService: UserDetailService,
+    public userService: UserService,
     private _snackbarService: SnackBarService,
     private location: Location,
     protected tabFilterService: TableService
@@ -103,7 +103,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     queries.push(defaultProps);
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
-      loggedInUserId: this.userDetailService.getLoggedInUserid(),
+      loggedInUserId: this.userService.getLoggedInUserid(),
     };
 
     return this._managePermissionService.getManagedUsers(config);
@@ -144,7 +144,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
       ]),
-      loggedInUserId: this.userDetailService.getLoggedInUserid(),
+      loggedInUserId: this.userService.getLoggedInUserid(),
     };
 
     this.$subscription.add(

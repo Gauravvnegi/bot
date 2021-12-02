@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Regex } from 'libs/shared/constants/regex';
 import { Router } from '@angular/router';
@@ -25,32 +30,52 @@ export class RequestPasswordComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Request Password Form Initialization
+   * @author Amit Singh
+   */
   initRequestForm() {
     this.requestPasswordForm = this._fb.group({
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
     });
   }
 
+  /**
+   * Request Password
+   * @returns null
+   * @author Amit Singh
+   */
   requestPassword() {
     if (!this.requestPasswordForm.valid) {
       return;
     }
-    const email = this.requestPasswordForm.get('email').value.trim();
+    const email = this.emailFC.value ?? ''.trim();
     this._authService.forgotPassword(email).subscribe(
       (response) => {
-        this.isEmailSent = response.status;
+        this.isEmailSent = response.status ?? false;
         this._snackbarService.openSnackBarAsText(response.message, '', {
           panelClass: 'success',
         });
         this._router.navigate(['/auth/resend-password']);
       },
-      (error) => {
-        this._snackbarService.openSnackBarAsText(error.error.message);
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message ?? '');
       }
     );
   }
 
+  /**
+   * Navigate to Login Page
+   * @author Amit Singh
+   */
   navigateToLogin() {
     this._router.navigate(['/auth']);
+  }
+
+  /**
+   * Returns email form-control
+   */
+  get emailFC(): FormControl {
+    return this.requestPasswordForm.get('email') as FormControl;
   }
 }

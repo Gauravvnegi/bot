@@ -1,40 +1,28 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { Observable } from 'rxjs';
 
 @Injectable()
+/**
+ * Manages all the api call for authentication
+ * @author Amit Singh
+ */
 export class AuthService extends ApiService {
-  login(loginData) {
+  login(loginData): Observable<any> {
     return this.post(`/api/v1/user/login`, loginData);
   }
 
-  forgotPassword(email) {
+  forgotPassword(email): Observable<any> {
     return this.put(`/api/v1/user/forgot-password`, { email });
   }
 
-  changePassword(data) {
+  changePassword(data): Observable<any> {
     return this.put(`/api/v1/user/change-password`, data);
   }
 
-  refreshAccessToken(config) {
+  refreshAccessToken(config): Observable<any> {
     return this.post(`/api/v1/user/tokens/refresh`, config);
-  }
-
-  matchPasswords(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-
-      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-        return;
-      }
-
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ passwordMatch: true });
-      } else {
-        matchingControl.setErrors(null);
-      }
-    };
   }
 
   getTokenByName(tokenName: string) {
@@ -42,16 +30,11 @@ export class AuthService extends ApiService {
   }
 
   isAuthenticated(): boolean {
-    // get the token
     const xAuthToken = this.getTokenByName('x-authorization');
     const xAccessToken = this.getTokenByName('x-access-token');
     const xUserIdToken = this.getTokenByName('x-userId');
 
     return !!xAuthToken && !!xAccessToken && !!xUserIdToken;
-
-    // return a boolean reflecting
-    // whether or not the token is expired
-    // return tokenNotExpired(null, token);
   }
 
   setTokenByName(tokenName: string, value: string) {
@@ -62,7 +45,7 @@ export class AuthService extends ApiService {
     localStorage.clear();
   }
 
-  logout(userId) {
+  logout(userId): Observable<any> {
     return this.post(`/api/v1/user/${userId}/logout`, {});
   }
 }

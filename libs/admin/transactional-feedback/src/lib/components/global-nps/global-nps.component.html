@@ -3,7 +3,7 @@
     <div class="icon">
       <img src="assets/svg/global_nps.svg" />
     </div>
-    <div class="stat-title">Global NPS</div>
+    <div class="stat-title">{{ 'feedback.global_nps' | translate }}</div>
   </div>
   <div class="graph-container" *ngIf="!loading">
     <div class="graph" *ngIf="chart.Data[0].length; else defaultGraph">
@@ -56,11 +56,11 @@
             "
             alt="uparrow"
           />
-          <span>In 30 Days</span>
+          <span>{{ 'feedback.in_30_days' | translate }}</span>
         </div>
       </div>
       <div class="label">
-        Global NPS
+        {{ 'feedback.global_nps' | translate }}
         <!-- {{ globalNps.label }} -->
       </div>
     </div>
@@ -71,7 +71,7 @@
       <div class="stat-val">
         {{ this.roundValue(globalNps.negative.score) }}%
       </div>
-      <div class="stat-lable">Negative</div>
+      <div class="stat-lable">{{ 'feedback.negative' | translate }}</div>
       <div
         class="stat-comparisonPercent"
         [ngStyle]="
@@ -98,7 +98,7 @@
       <div class="stat-val">
         {{ this.roundValue(globalNps.neutral.score) }}%
       </div>
-      <div class="stat-lable">Neutral</div>
+      <div class="stat-lable">{{ 'feedback.neutral' | translate }}</div>
       <div
         class="stat-comparisonPercent"
         [ngStyle]="
@@ -125,7 +125,7 @@
       <div class="stat-val">
         {{ this.roundValue(globalNps.positive.score) }}%
       </div>
-      <div class="stat-lable">Positive</div>
+      <div class="stat-lable">{{ 'feedback.positive' | translate }}</div>
       <div
         class="stat-comparisonPercent"
         [ngStyle]="
@@ -149,6 +149,6 @@
     </div>
   </div>
   <div class="thirty__days">
-    <span>In 30 Days</span>
+    <span>{{ 'feedback.in_30_days' | translate }}</span>
   </div>
 </div>

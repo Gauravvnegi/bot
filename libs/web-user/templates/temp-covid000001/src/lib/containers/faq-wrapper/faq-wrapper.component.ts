@@ -11,7 +11,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./faq-wrapper.component.scss'],
 })
 export class FaqWrapperComponent implements OnInit, OnDestroy {
-  
   faq: boolean;
   $subscription: Subscription = new Subscription();
 
@@ -32,18 +31,19 @@ export class FaqWrapperComponent implements OnInit, OnDestroy {
 
   getFaqs() {
     this.$subscription.add(
-    this._faqService
-      .getFaqs(this._hotelService.hotelId)
-      .subscribe((faqResponse) => {
-        this.faq = true;
-        this.initFaqDetailsDs(faqResponse);
-      },({error})=>{
-        this._translateService
-        .get(`MESSAGES.ERROR.${error.type}`)
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        });
-      })
+      this._faqService.getFaqs(this._hotelService.hotelId).subscribe(
+        (faqResponse) => {
+          this.faq = true;
+          this.initFaqDetailsDs(faqResponse);
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+        }
+      )
     );
   }
 

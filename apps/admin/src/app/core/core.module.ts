@@ -44,6 +44,7 @@ import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
       multi: true,
     },
   ],
+  exports: [],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

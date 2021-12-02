@@ -1,7 +1,11 @@
 <div class="footer">
   <div class="links">
-    <a href="https://www.botshot.in/about-us/" target="_blank">About Us</a>
-    <a href="https://www.botshot.in/privacy-policy/" target="_blank">Privacy</a>
+    <a href="https://www.botshot.in/about-us/" target="_blank">{{
+      'about_us' | translate
+    }}</a>
+    <a href="https://www.botshot.in/privacy-policy/" target="_blank">{{
+      'privacy_policy' | translate
+    }}</a>
   </div>
-  <p>&copy;&nbsp;{{ currentDate }},Botshot. All Rights Reserved</p>
+  <p>&copy;&nbsp;{{ currentDate }},{{ 'footer.copyright_text' | translate }}</p>
 </div>

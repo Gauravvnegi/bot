@@ -3,12 +3,14 @@
     <div class="icon">
       <img src="assets/svg/arrivals_icon.svg" />
     </div>
-    <div class="stat-title">Arrivals</div>
+    <div class="stat-title">
+      {{ 'dashboard.cards.arrivals.label' | translate }}
+    </div>
     <div class="info-icon">
       <img src="assets/svg/info.svg" alt="info-icon" />
       <div class="tooltip">
         <span class="arrow"></span>
-        Total number of guest arrivals in a selected time frame.
+        {{ 'dashboard.cards.arrivals.tooltip' | translate }}
       </div>
     </div>
   </div>
@@ -38,12 +40,14 @@
             />
           </div>
           <div class="stat-value-comparisonPercent-day">
-            In 30 Days
+            {{ 'dashboard.cards.arrivals.percent_day' | translate }}
           </div>
         </div>
       </div>
     </div>
-    <div class="stat-val-title">Total Arrival</div>
+    <div class="stat-val-title">
+      {{ 'dashboard.cards.arrivals.total_arrival' | translate }}
+    </div>
   </div>
   <div>
     <div class="progress progress-bar-height">
@@ -58,14 +62,16 @@
     </div>
     <div class="progress-info">
       <div class="progress-info-labels">
-        <span class="label"
-          >Arrived&nbsp;<b>{{ arrivals.currentlyArrived }}</b></span
-        >
+        <span class="label">
+          {{ 'dashboard.cards.arrivals.arrived' | translate }}
+          &nbsp;<b>{{ arrivals.currentlyArrived }}</b>
+        </span>
       </div>
       <div class="progress-info-labels">
-        <span class="label"
-          >Remaining&nbsp;<b>{{ arrivals.currentlyExpected }}</b></span
-        >
+        <span class="label">
+          {{ 'dashboard.cards.arrivals.remaining' | translate }}&nbsp;
+          <b>{{ arrivals.currentlyExpected }}</b>
+        </span>
       </div>
     </div>
   </div>

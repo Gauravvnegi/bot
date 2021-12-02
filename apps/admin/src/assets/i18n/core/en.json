@@ -1,0 +1,208 @@
+{
+  "loading": "Loading",
+  "about_us": "About Us",
+  "privacy_policy": "Privacy Policy",
+  "conversation": "Conversation",
+  "messages": "Messages",
+  "turn_landscape": "For better user experience. Please turn on landscape mode.",
+  "close": "Close",
+  "no_data": "No data available in table",
+  "footer": {
+    "agreement_text": "I hereby agree to",
+    "terms_text": "Terms and Conditions",
+    "copyright_text": "Botshot. All Right Reserved"
+  },
+  "auth": {
+    "login": "Login",
+    "request": "Request",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "heading": "Managing Hotel is Now Easy",
+    "welcome_text": "Welcome to BOTSHOT Admin Panel",
+    "email_placeholder": "Email Address",
+    "email_required": "Email is required",
+    "valid_email": "Please enter the valid Email",
+    "password_placeholder": "Password",
+    "password_required": "Password is required",
+    "valid_password": "Please enter valid Password",
+    "forgot_password": "Forgot Password?",
+    "forgot_your_password": "Forgot Your Password?",
+    "reset_password_message": "Don't worry! Just fill in your email and we'll send you a link to reset your password.",
+    "confirm_mail_message": "Note: Confirmation mail is usually present in spam.",
+    "resend_password_email": "We've Mailed You!",
+    "resend_password_message": "We’ve sent you an email that contains a link to reset your password.",
+    "resend_password_confirmation_message": "Please check your spam inbox if you can’t find the mail. If you still can’t find it, we can resend it.",
+    "resend_mail": "Resend Mail",
+    "reset_password": "Reset Your Password",
+    "reset_password_info": "Enter below details to reset password.",
+    "confirm_password": "Please confirm the password",
+    "different_password": "Passwords did not match"
+  },
+  "search": {
+    "placeholder": "Search by Name, Number,Conf no...",
+    "no_results": "No results found",
+    "all_results": "See all results for"
+  },
+  "settings": {
+    "sidebar_filters": "Sidebar Filters",
+    "sidebar_bg": "Sidebar Background",
+    "sidebar_bg_img": "SideBar Background Image"
+  },
+  "filters": {
+    "label": "Filter",
+    "reset_all": "Reset All",
+    "property": "Property",
+    "choose_date": "Choose a date",
+    "choose_title": "Choose Brand or Hotel",
+    "brand": "Brand",
+    "hotel_name": "Hotel Name",
+    "outlet": "Outlet",
+    "select_outlet": "Select Outlet",
+    "guest": "Guest",
+    "guest_category": "Select Guest Category",
+    "repeat_guest": "Repeat Guest",
+    "new_guest": "New Guest",
+    "guest_type": "Select Guest Type",
+    "vip": "VIP",
+    "membership": "Membership",
+    "general": "General",
+    "feedback": "Feedback",
+    "feedback_type": "Select Feedback Type",
+    "experience": "Stay Experience",
+    "transactional": "Transactional",
+    "apply": "Apply"
+  },
+  "dashboard": {
+    "cards": {
+      "arrivals": {
+        "label": "Arrivals",
+        "tooltip": "Total number of guest arrivals in a selected time frame.",
+        "percent_day": "In 30 Days",
+        "total_arrival": "Total Arrival",
+        "arrived": "Arrived",
+        "remaining": "Remaining"
+      },
+      "bookingStatus": {
+        "label": "Booking Status"
+      },
+      "departures": {
+        "label": "Departures",
+        "tooltip": "Total number of guest departures in a selected time frame.",
+        "expected_checkout": "Expected Check Out",
+        "adult": "Adult",
+        "children": "Children",
+        "already_checkedout": "Already Checked Out"
+      },
+      "inHouse": {
+        "label": "In-House",
+        "tooltip": "Total number of Inhouse guests in a selected time frame.",
+        "total_days": "In 30 Days",
+        "total_guest": "Total Guest",
+        "adult": "Adult",
+        "kid": "Kid",
+        "completed": "Completed",
+        "pending": "Pending",
+        "timeout": "Timeout"
+      },
+      "reservations": {
+        "label": "Reservations",
+        "total_users": "Total Users"
+      }
+    },
+    "table": {
+      "reservations": {
+        "label": "Reservations",
+        "nodata": "No data available in table",
+        "document": "Document",
+        "payment": "Payment",
+        "feedback": "Feedback",
+        "new": "New",
+        "precheck_in": "PreCheck-in",
+        "check_in": "Check-In",
+        "check_out": "Check-Out"
+      }
+    }
+  },
+  "analytics": {
+    "title": "Analytics Across Messages",
+    "in_30_days": "In 30 Days",
+    "messages": {
+      "title": "Messages",
+      "tooltip": "Total number of guest arrivals in a selected time frame.",
+      "total_requests": "Total Requests",
+      "than_yesterday": "than yesterday",
+      "sent_delivered": "SENT v/s DELIVERED",
+      "sent_delivered_tooltip": "Total number of guest arrivals in a selected time frame."
+    },
+    "conversation": {
+      "title": "Conversation",
+      "message": "Bifurcation as per messages",
+      "in_days": "in 30 Days",
+      "overall": "Overall"
+    },
+    "notification": {
+      "title": "Notification",
+      "subtitle": "Bifurcation as per Journey",
+      "total_templates": "Total Templates Sent",
+      "in_30_days": "In 30 Days"
+    },
+    "preArrival": {
+      "title": "Pre-Arrival",
+      "packages": "Pre-Arrival Packages"
+    },
+    "inHouse": {
+      "title": "In-House",
+      "request_sentiments": "Request Sentiments",
+      "request_sentiments_message": "Total number of Request Sentiments in a selected time frame.",
+      "in_days": "In 30 Days",
+      "top_request": "Top Request",
+      "request_tooltip": "Total number of requests in a selected time frame.",
+      "total_request": "Total Request"
+    }
+  },
+  "subscription": {
+    "title": "Subscription",
+    "upgrade": "Upgrade",
+    "deployment": "Deployment",
+    "deployment_tooltip1": "We offer multiple deployment channels to our customers.",
+    "deployment_tooltip2": "Ex. For hotel chains having more than 10 hotels on board, they may want to opt for dedicated plan.",
+    "switch": "Switch",
+    "technical_support": "Technical Support",
+    "technical_support_tooltip": "If you like being served without a delay choose our premium level service.If you are happy to wait and want to save some cost, select our basic service.",
+    "due_date": "Plan Due Date",
+    "total_users": "Total Users",
+    "manage_users": "Manage Users",
+    "total_channels": "Total Channels",
+    "total_guests": "Total Guests",
+    "in_30_days": "in 30 days",
+    "ocr": "OCR Count",
+    "ocr_tooltip": "Optical card reading technology is deployed to negate fake identity cards being given during verification.",
+    "plan_usage": "Plan Usage"
+  },
+  "feedback": {
+    "request_feedback": "Request Feedback",
+    "mark_read": "Mark as Read",
+    "mark_unread": "Mark as Unread",
+    "view_notes": "View Notes",
+    "notes": "+Notes",
+    "distribution": "Feedback Distribution",
+    "total_response": "Total Responses",
+    "in_30_days": "In 30 Days",
+    "closed_admin": "Closed by Admin",
+    "closed_date": "Closed Date",
+    "closed_time": "Closed Time",
+    "add_notes": "Add Notes",
+    "edit": "Edit",
+    "feedback_notes": "Please add notes in order to close this feedback",
+    "submit": "Submit",
+    "global_nps": "Global NPS",
+    "negative": "Negative",
+    "neutral": "Neutral",
+    "positive": "Positive",
+    "promote_score": "Net Promoter Score",
+    "bifurcations": "Bifurcations",
+    "nps_across_point_sale": "NPS Across Point of Sale",
+    "outlets": "Outlets"
+  }
+}

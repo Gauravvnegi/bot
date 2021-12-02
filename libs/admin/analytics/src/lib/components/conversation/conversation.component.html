@@ -1,9 +1,9 @@
 <div class="stats">
   <div class="stats__title">
-    Conversation
+    {{ 'analytics.conversation.title' | translate }}
   </div>
   <div class="stats__subheading">
-    Bifurcation as per messages
+    {{ 'analytics.conversation.message' | translate }}
   </div>
   <div class="stats__body">
     <div class="graph-container">
@@ -48,12 +48,12 @@
             />
           </div>
           <div class="received-wrap__container__date">
-            in 30 Days
+            {{ 'analytics.conversation.in_days' | translate }}
           </div>
         </div>
       </div>
       <div class="stats__body__detail__sharedtitle">
-        Overall
+        {{ 'analytics.conversation.overall' | translate }}
       </div>
       <ng-container *ngIf="stats?.statistics">
         <div class="received-wrap" *ngFor="let item of stats.statistics">
@@ -87,7 +87,7 @@
               />
             </div>
             <div class="received-wrap__container__date">
-              in 30 Days
+              {{ 'analytics.conversation.in_days' | translate }}
             </div>
           </div>
           <div class="received-wrap__recived-title">

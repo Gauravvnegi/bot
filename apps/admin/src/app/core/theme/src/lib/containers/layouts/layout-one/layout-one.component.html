@@ -22,7 +22,8 @@
         "
       >
         <div class="breadcrums">
-          Conversation &gt; <span style="color: #002046;">Messages</span>
+          {{ 'conversation' | translate }} &gt;
+          <span style="color: #002046;">{{ 'messages' | translate }}</span>
         </div>
         <div class="layoutMessageCheck" *ngIf="checkForMessageRoute()">
           <div style="margin-bottom: -6px;">
@@ -93,11 +94,9 @@
           ></admin-profile-dropdown>
         </div>
       </div>
+
       <mat-progress-bar
-        *ngIf="
-          progressSpinnerService.isProgressSpinnerVisible &&
-          !checkForMessageRoute()
-        "
+        *ngIf="isProgressSpinner && !checkForMessageRoute()"
         mode="query"
       ></mat-progress-bar>
     </div>

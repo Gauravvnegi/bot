@@ -69,7 +69,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   addAmenityToForm() {
     this.paidAmenities.forEach((slide) => {
       this.parentForm.addControl(slide.packageCode, this.getAmenitiesFG());
-      if (slide.subPackages.length > 0) {
+      if (slide.subPackages?.length > 0) {
         this.addSubPackageToAmenity(slide);
       }
       this.getAminityForm(slide.packageCode).patchValue(slide);

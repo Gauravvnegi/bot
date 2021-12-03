@@ -306,13 +306,13 @@ export class PackageRendererComponent
 
   get checkForUpdatePossibility() {
     let isUpdatePossible = false;
-    this.slideData.subPackages.forEach((subPackage) => {
+    this.slideData.subPackages?.forEach((subPackage) => {
       if (subPackage.isSelected === true) {
         isUpdatePossible = true;
       }
     });
 
-    this.subPackages.controls.forEach((subPackage) => {
+    this.subPackages?.controls?.forEach((subPackage) => {
       if (subPackage.get('isSelected').value === true) {
         isUpdatePossible = true;
       }

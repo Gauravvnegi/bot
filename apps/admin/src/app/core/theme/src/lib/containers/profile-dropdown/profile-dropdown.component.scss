@@ -23,12 +23,13 @@
   align-items: center;
   border-radius: $borderRadius50P;
   @include flex-justify-center();
-  @media (max-width: $tablet) {
-    @include width(42px);
-  }
+
   .profile-initial {
     font-size: $font12;
     color: $white;
+    @media (max-width: $tablet) {
+      @include padding(10px);
+    }
   }
 }
 

@@ -36,7 +36,7 @@
   @include flex-between-center();
   @media (max-width: 1024px) {
     justify-content: flex-start;
-    gap: 1.4%;
+    gap: 2%;
     @include width(100%);
   }
   .temp-width {
@@ -45,7 +45,7 @@
       @include width(100%);
     }
     @media (max-width: 1024px) {
-      @include width(60%);
+      @include width(35%);
       display: flex;
       justify-content: flex-start;
     }
@@ -97,7 +97,7 @@
           @include width(31%);
         }
         @media (max-width: 1024px) {
-          @include width(25%);
+          @include width(30%);
         }
       }
 

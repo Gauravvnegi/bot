@@ -7,60 +7,60 @@
   align-items: center;
   justify-content: center;
 }
-.stat-val-wrapper{
+.stat-val-wrapper {
   display: flex;
   align-items: center;
 }
-.info-icon{
+.info-icon {
   position: relative;
 
-  img{
-    margin:3px 5px 0;
+  img {
+    margin: 3px 5px 0;
     width: 14px;
     height: 100%;
   }
-  .tooltip{
+  .tooltip {
     position: absolute;
     font: normal normal normal 12px/16px Roboto;
     background-color: #fff;
-    min-width: 160px; 
+    min-width: 160px;
     border: 1px solid #eee;
     padding: 10px;
     top: 120%;
     left: -200%;
-    color:#484848;
+    color: #484848;
     border-radius: 5px;
     box-shadow: 0px 0px 10px 0px #eee;
     display: none;
 
-    .arrow{
-        position: absolute;
-        top: -10px;
+    .arrow {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid #eee;
+      left: 40%;
+      transform: translate(-50%);
+
+      &::before {
+        content: '';
+        top: 1px;
         width: 0;
         height: 0;
-        border-left: 7px solid transparent;
-        border-right: 7px solid transparent;
-        border-bottom: 10px solid #eee;
-        left: 40%;
-        transform: translate(-50%);
-        
-        &::before{
-          content: "";
-          top: 1px;
-          width: 0;
-          height: 0;
-          border-left: 6px solid transparent;
-          border-right: 6px solid transparent;
-          border-bottom: 9px solid #ffffff;
-          left: -6px;
-          z-index: 3;
-          position: absolute;
-        }
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 9px solid #ffffff;
+        left: -6px;
+        z-index: 3;
+        position: absolute;
+      }
     }
   }
 
-  &:hover{
-    .tooltip{
+  &:hover {
+    .tooltip {
       display: block;
     }
   }
@@ -72,6 +72,10 @@
   color: #002046;
   opacity: 1;
   margin: 0 10px;
+  @media (max-width: $tablet) {
+    font-size: $tabfont25;
+    @include margin-left(0);
+  }
 }
 
 .stat-val-title {
@@ -82,18 +86,17 @@
   color: #6d7580;
   opacity: 1;
 }
-.stat-value-comparisonPercent{
+.stat-value-comparisonPercent {
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0px;
   color: #52b33f;
 }
-.stat-value-comparisonPercent-day{
+.stat-value-comparisonPercent-day {
   font: normal normal normal 10px/13px Roboto;
   letter-spacing: 0px;
   color: #c5c5c5;
   opacity: 1;
 }
-
 
 .progress-info {
   width: 100%;

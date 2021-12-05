@@ -186,3 +186,37 @@
 :host ::ng-deep input[disabled='true'] {
   opacity: 0.5;
 }
+::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
+  @media (max-width: $tablet) {
+    @include padding(3%);
+    background: $white;
+  }
+}
+// ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
+//   @media (max-width: $tablet) {
+//     @include padding(3%);
+//     @include padding-bottom(0);
+//   }
+//   .header {
+//     @media (max-width: $tablet) {
+//       @include padding(0);
+//     }
+//     .options {
+//       @media (max-width: $tablet) {
+//         @include padding(0);
+//       }
+//     }
+//   }
+// }
+@media (max-width: $tablet) {
+  ::ng-deep .p-datatable.p-datatable-sm .p-datatable-header {
+    @include padding(3%);
+    @include padding-bottom(0);
+    .header {
+      @include padding(0);
+      .options {
+        @include padding(0);
+      }
+    }
+  }
+}

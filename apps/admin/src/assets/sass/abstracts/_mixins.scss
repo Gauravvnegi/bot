@@ -137,11 +137,9 @@
 @mixin padding($padding) {
   @if length($padding) == 1 {
     padding: $padding;
-    // padding: $padding/10 + rem;
   }
   @if length($padding) == 2 {
     padding: nth($padding, 1) nth($padding, 2);
-    // padding: nth($padding, 1) * 0.1 + rem nth($padding, 2) * 0.1 + rem;
   }
   @if length($padding) == 3 {
     padding: nth($padding, 1) nth($padding, 2) nth($padding, 3);
@@ -167,8 +165,7 @@
 }
 //Height and width
 @mixin height($size) {
-  height: $size + px;
-  height: ($size/10) + rem;
+  height: $size;
 }
 @mixin min-height($size) {
   min-height: $size;

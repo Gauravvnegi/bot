@@ -207,3 +207,18 @@ export class ReservationStat {
     return this;
   }
 }
+
+export const config = {
+  radius: {
+    Failed: 55,
+    Read: 65,
+    Delivered: 75,
+    Sent: 85,
+  },
+  color: {
+    Failed: '#cc052b',
+    Read: '#4ba0f5',
+    Delivered: '#52b33f',
+    Sent: '#ffbf04',
+  },
+};

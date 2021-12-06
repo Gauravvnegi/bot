@@ -65,6 +65,7 @@ export class MainComponent implements OnInit {
             this.stepperData = this._templateService.templateData[
               this._templateService.templateId
             ];
+            this._hotelService.titleConfig$.next(reservationData['hotel']);
             // TO_DO: Remove function call
             // this.stepperData = this.modifyStepperData(this._templateService.templateData);
             this.getStepperData();
@@ -129,6 +130,7 @@ export class MainComponent implements OnInit {
         this.router.navigate(['booking-cancel'], {
           preserveQueryParams: true,
         });
+        this._hotelService.titleConfig$.next(hotel);
         this._templateLoadingService.isTemplateLoading$.next(false);
       },
       ({ error }) => {}

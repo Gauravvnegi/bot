@@ -11,8 +11,6 @@ import { DropdownModule } from 'primeng/dropdown';
 // import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabViewModule } from 'primeng/tabview';
-import { TranslateModule } from '@ngx-translate/core';
-
 import { DaterangeComponent } from './containers/daterange/daterange.component';
 import { FilterComponent } from './containers/filter/filter.component';
 import { FooterComponent } from './containers/footer/footer.component';
@@ -23,7 +21,6 @@ import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-
 import { SearchBarComponent } from './containers/search-bar/search-bar.component';
 import { SettingsComponent } from './containers/settings/settings.component';
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +34,6 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
     TabViewModule,
     AdminGuestDetailModule,
     AngularFireMessagingModule,
-    TranslateModule.forChild(),
   ],
   declarations: [
     SidenavComponent,

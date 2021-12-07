@@ -1,6 +1,6 @@
 <div class="container" *ngIf="data">
   <div class="card">
-    <div class="card__title">{{ 'subscription.title' | translate }}</div>
+    <div class="card__title">Subscription</div>
     <div class="card__details">
       <div class="card__details__label">{{ data.plan }}</div>
       <a
@@ -10,23 +10,23 @@
         [ngClass]="{ isDisabled: !data.upgradable }"
         [style.opacity]="data.upgradable ? 1 : 0.5"
         ><p class="text">
-          {{ 'subscription.upgrade' | translate }}
+          Upgrade
         </p></a
       >
     </div>
   </div>
   <div class="card">
     <div class="card__title">
-      {{ 'subscription.deployment' | translate }}
+      Deployment
       <div class="tooltip">
         <img
           class="tooltip__image"
           src="assets/svg/information-circle-outline.svg"
         />
         <div class="tooltip__text">
-          {{ 'subscription.deployment_tooltip1' | translate }}
-          <br />
-          {{ 'subscription.deployment_tooltip2' | translate }}
+          We offer multiple deployment channels to our customers. <br />Ex. For
+          hotel chains having more than 10 hotels on board, they may want to opt
+          for dedicated plan.
         </div>
       </div>
     </div>
@@ -38,23 +38,24 @@
         target="_blank"
       >
         <p class="text">
-          {{ 'subscription.switch' | translate }}
+          Switch
         </p>
       </a>
     </div>
   </div>
   <div class="card">
     <div class="card__title">
-      {{ 'subscription.technical_support' | translate }}
-
+      Technical Support
       <div class="tooltip">
         <img
           class="tooltip__image"
           src="assets/svg/information-circle-outline.svg"
         />
-        <span class="tooltip__text">
-          {{ 'subscription.technical_support_tooltip' | translate }}
-        </span>
+        <span class="tooltip__text"
+          >If you like being served without a delay choose our premium level
+          service.If you are happy to wait and want to save some cost, select
+          our basic service.</span
+        >
       </div>
     </div>
     <div class="card__details">
@@ -69,13 +70,13 @@
         [style.opacity]="data.upgradable ? 1 : 0.5"
       >
         <p class="text">
-          {{ 'subscription.upgrade' | translate }}
+          Upgrade
         </p>
       </a>
     </div>
   </div>
   <div class="card">
-    <div class="card__title">{{ 'subscription.due_date' | translate }}</div>
+    <div class="card__title">Plan Due Date</div>
     <div class="card__details">
       <div class="card__details__label">{{ data.getEndDate() }}</div>
     </div>

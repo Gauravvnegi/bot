@@ -1,12 +1,12 @@
 <div class="graphContainer">
   <div class="messageAnalytics">
     <div class="analyticsHeading">
-      <p>{{ 'analytics.messages.title' | translate }}</p>
+      <p>Messages</p>
       <div class="info-icon">
         <img src="assets/svg/info.svg" alt="info-icon" />
         <div class="tooltip">
           <span class="arrow"></span>
-          {{ 'analytics.messages.tooltip' | translate }}
+          Total number of guest arrivals in a selected time frame.
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
               {{ messageOverallAnalytics?.total || 0 }}
             </div>
             <div class="center-circle-progress__text">
-              {{ 'analytics.messages.total_requests' | translate }}
+              Total Requests
             </div>
           </div>
         </div>
@@ -90,9 +90,7 @@
               }"
               >{{ item?.comparisonPercentage }}%</span
             >
-            <span class="day">{{
-              'analytics.messages.than_yesterday' | translate
-            }}</span>
+            <span class="day">than yesterday</span>
           </div>
         </div>
       </div>
@@ -116,14 +114,12 @@
   </div>
   <div class="sentAnalytics">
     <div class="analyticsHeading">
-      <p>
-        {{ 'analytics.messages.sent_delivered' | translate }}
-      </p>
+      <p>SENT v/s DELIVERED</p>
       <div class="info-icon">
         <img src="assets/svg/info.svg" alt="info-icon" />
         <div class="tooltip">
           <span class="arrow"></span>
-          {{ 'analytics.messages.sent_delivered_tooltip' | translate }}
+          Total number of guest arrivals in a selected time frame.
         </div>
       </div>
     </div>

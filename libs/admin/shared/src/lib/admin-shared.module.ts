@@ -1,4 +1,4 @@
-import { Injector, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatatableComponent } from './components/datatable/datatable.component';
 import { TableModule } from 'primeng/table';
@@ -19,7 +19,6 @@ import { CardDirective } from './directives/card.directive';
 import { TableDirective } from './directives/table.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { ChannelDirective } from './directives/channel.directive';
-import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -34,7 +33,6 @@ import { TranslateModule } from '@ngx-translate/core';
     DropdownModule,
     MatChipsModule,
     MatAutocompleteModule,
-    TranslateModule.forChild(),
   ],
   declarations: [
     DatatableComponent,
@@ -64,7 +62,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TableDirective,
     FeatureDirective,
     ChannelDirective,
-    TranslateModule,
   ],
 })
 export class AdminSharedModule {}

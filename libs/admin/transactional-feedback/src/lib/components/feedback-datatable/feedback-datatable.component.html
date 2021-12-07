@@ -46,7 +46,7 @@
                 (click)="openFeedbackRequestPage($event)"
               >
                 <div class="request-btn__wrap">
-                  {{ 'feedback.request_feedback' | translate }}
+                  Request Feedback
                 </div>
               </div>
               <div class="btn read">
@@ -57,7 +57,7 @@
                 />
                 <!-- <span>Mark as Read</span> -->
                 <span class="btn_text">
-                  {{ 'feedback.mark_read' | translate }}
+                  Mark as Read
                 </span>
               </div>
               <div class="btn">
@@ -67,7 +67,7 @@
                   (click)="this.updateFeedbackStatus(false)"
                 />
                 <span class="btn_text">
-                  {{ 'feedback.mark_unread' | translate }}
+                  Mark as Unread
                 </span>
                 <!-- <span>Mark as Unread</span> -->
               </div>
@@ -178,7 +178,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">{{ 'no_data' | translate }}</p>
+    <p class="no-data-found">No data available in table</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -350,7 +350,7 @@
             class="view-notes"
             (click)="openEditNotes($event, rowData, rowData.notes)"
           >
-            {{ 'feedback.view_notes' | translate }}
+            View Notes
           </div></ng-container
         >
         <ng-template #addNote
@@ -358,7 +358,7 @@
             class="add-notes"
             (click)="openEditNotes($event, rowData, rowData.notes)"
           >
-            {{ 'feedback.notes' | translate }}
+            +Notes
           </div></ng-template
         >
       </td>

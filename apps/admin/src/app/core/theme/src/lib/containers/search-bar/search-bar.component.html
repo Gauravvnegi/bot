@@ -9,15 +9,12 @@
         type="text"
         pInputText
         [formControlName]="name"
-        placeholder="{{ 'search.placeholder' | translate }}"
+        placeholder="Search by Name, Number,Conf no..."
         (focus)="onFocus()"
       />
     </form>
   </span>
-  <div
-    *ngIf="searchDropdownVisible && parentSearchVisible"
-    class="global_search__dropdown"
-  >
+  <div *ngIf="searchDropdownVisible && parentSearchVisible" class="global_search__dropdown">
     <div class="global_search__dropdown__result">
       <ng-container *ngFor="let option of searchOptions; let i = index">
         <ng-container [ngSwitch]="option.type">
@@ -58,7 +55,7 @@
       </ng-container>
 
       <ng-container *ngIf="searchOptions.length === 0">
-        <div class="no_result">{{ 'search.no_results' | translate }}</div>
+       <div class="no_result">No results found</div> 
       </ng-container>
     </div>
     <ng-container
@@ -68,9 +65,7 @@
       "
     >
       <div class="show-all" (click)="getAllResults()">
-        {{ 'search.all_results' | translate }} '{{
-          parentForm.get('search').value
-        }}'
+        See all results for '{{ parentForm.get('search').value }}'
       </div>
     </ng-container>
   </div>

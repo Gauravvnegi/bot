@@ -1,12 +1,12 @@
 <div class="graphContainer">
   <div class="messageAnalytics" *ngIf="graphData">
     <div class="analyticsHeading">
-      <p>{{ 'analytics.inHouse.top_request' | translate }}</p>
+      <p>Top Request</p>
       <div class="info-icon">
         <img src="assets/svg/info.svg" alt="info-icon" />
         <div class="tooltip">
           <span class="arrow"></span>
-          {{ 'analytics.inHouse.request_tooltip' | translate }}
+          Total number of requests in a selected time frame.
         </div>
       </div>
     </div>
@@ -26,10 +26,7 @@
         </div>
         <div class="labels">
           <div class="val">{{ graphData.totalCount }}</div>
-
-          <div class="label">
-            {{ 'analytics.inHouse.total_request' | translate }}
-          </div>
+          <div class="label">Total Request</div>
         </div>
       </div>
     </div>
@@ -48,7 +45,5 @@
       </div>
     </div>
   </div>
-  <div class="days-label">
-    {{ 'analytics.inHouse.in_days' | translate }}
-  </div>
+  <div class="days-label">In 30 Days</div>
 </div>

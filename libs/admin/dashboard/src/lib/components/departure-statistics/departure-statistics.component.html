@@ -3,55 +3,41 @@
     <div class="icon">
       <img src="assets/svg/departure.svg" />
     </div>
-    <div class="stat-title">
-      {{ 'dashboard.cards.departures.label' | translate }}
-    </div>
+    <div class="stat-title">Departures</div>
     <div class="info-icon">
       <img src="assets/svg/info.svg" alt="info-icon" />
       <div class="tooltip">
         <span class="arrow"></span>
-        {{ 'dashboard.cards.departures.tooltip' | translate }}
+        Total number of guest departures in a selected time frame.
       </div>
     </div>
   </div>
   <div class="stat-val-container">
     <div class="stat-row">
-      <div class="stat-val-title">
-        {{ 'dashboard.cards.departures.expected_checkout' | translate }}
-      </div>
+      <div class="stat-val-title">Expected Check Out</div>
       <div class="stat-val">{{ departures.expected.totalCount }}</div>
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">
-        {{ 'dashboard.cards.departures.adult' | translate }}
-      </div>
+      <div class="stat-val-title">Adult</div>
       <div class="stat-val">{{ departures.expected.adults }}</div>
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">
-        {{ 'dashboard.cards.departures.children' | translate }}
-      </div>
+      <div class="stat-val-title">Children</div>
       <div class="stat-val">{{ departures.expected.kids }}</div>
     </div>
     <div class="division">
       <hr class="divionLine" />
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">
-        {{ 'dashboard.cards.departures.already_checkedout' | translate }}
-      </div>
+      <div class="stat-val-title">Already Checked Out</div>
       <div class="stat-val">{{ departures.actual.totalCount }}</div>
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">
-        {{ 'dashboard.cards.departures.adult' | translate }}
-      </div>
+      <div class="stat-val-title">Adult</div>
       <div class="stat-val">{{ departures.actual.adults }}</div>
     </div>
     <div class="stat-row">
-      <div class="stat-val-title">
-        {{ 'dashboard.cards.departures.children' | translate }}
-      </div>
+      <div class="stat-val-title">Children</div>
       <div class="stat-val">{{ departures.actual.kids }}</div>
     </div>
   </div>

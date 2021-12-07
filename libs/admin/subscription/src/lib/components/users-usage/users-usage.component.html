@@ -1,10 +1,28 @@
 <!-- <div class="container"> -->
 <div class="heading">
-  <div class="heading__label">{{ 'subscription.total_users' | translate }}</div>
+  <div class="heading__label">Total Users</div>
   <button class="heading__button" (click)="openRolesPermission($event)">
-    {{ 'subscription.manage_users' | translate }}
+    Manage Users
   </button>
 </div>
+<!-- <div class="menu-container">
+    <div class="pull-right">
+      <label class="labl" *ngFor="let option of chartTypes">
+        <input
+          name="method"
+          type="radio"
+          [checked]="chart.chartType === option.value"
+          [value]="option.value"
+          (click)="setChartType(option, $event)"
+          [id]="option.value + '-uesr'"
+        />
+        <div class="image">
+          <img [src]="option.url" />
+        </div>
+      </label>
+    </div>
+  </div> -->
+<!-- <div class="charts"> -->
 <div class="line-chart">
   <ng-container *ngIf="chartData; else noData">
     <canvas
@@ -54,7 +72,7 @@
     </div>
   </div>
   <div class="details__link">
-    {{ 'subscription.in_30_days' | translate }}
+    in 30 days
   </div>
 </div>
 <!-- </div> -->

@@ -40,7 +40,6 @@ export class LayoutOneComponent implements OnInit {
   };
 
   isGlobalSearchVisible: boolean = true;
-  isProgressSpinner: boolean;
 
   constructor(
     private _router: Router,
@@ -61,10 +60,6 @@ export class LayoutOneComponent implements OnInit {
     this.setInitialFilterValue();
     this.initSearchQueryForm();
     this.initFirebaseMessaging();
-  }
-
-  ngAfterContentInit() {
-    this.isProgressSpinner = this.progressSpinnerService.isProgressSpinnerVisible;
   }
 
   initFirebaseMessaging() {

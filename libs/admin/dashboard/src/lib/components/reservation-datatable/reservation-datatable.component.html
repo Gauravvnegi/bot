@@ -139,15 +139,24 @@
             </mat-chip-list>
             <img src="assets/svg/Filter-Icon.svg" />
           </div>
+
+          <!-- <div
+            class="button__wrapper"
+            *ngFor="let quickReplyType of quickReplyTypes"
+          >
+            <button
+              pButton
+              type="button"
+              [label]="quickReplyType.label"
+            ></button>
+          </div> -->
         </div>
       </form>
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">
-      {{ 'dashboard.table.reservations.nodata' | translate }}
-    </p>
+    <p class="no-data-found">No data available in table</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -302,6 +311,18 @@
           >
             {{ rowData.feedback.rating }}
           </p>
+          <!-- <ng-container
+            *ngFor="let suggestion of rowData.feedback.suggestions.slice(0, 2)"
+          >
+            <img
+              class="feedback-icon"
+              [ngClass]="{
+                'status-image-reject': rowData.feedback.rating < 5,
+                'status-image-success': rowData.feedback.rating >= 5
+              }"
+              [src]="feedbackService.getServiceUrl(suggestion.id)"
+            />
+          </ng-container> -->
           <div
             *ngIf="rowData.feedback.comments"
             [ngClass]="{
@@ -440,10 +461,10 @@
                   rowData.status.stepsStatus.documents == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.document' | translate }}
+              Document
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.document' | translate }}
+              Document
             </div>
           </div>
           <div
@@ -477,10 +498,10 @@
                   rowData.status.stepsStatus.payment == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.payment' | translate }}
+              Payment
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.payment' | translate }}
+              Payment
             </div>
           </div>
           <div class="icon">
@@ -511,10 +532,10 @@
                   rowData.status.stepsStatus.feedback == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.feedback' | translate }}
+              Feedback
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.feedback' | translate }}
+              Feedback
             </div>
           </div>
           <div class="icon extra-width">
@@ -546,10 +567,10 @@
                   rowData.status.journeyStatus.new == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.new' | translate }}
+              New
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.new' | translate }}
+              New
             </div>
           </div>
           <div class="icon extra-width">
@@ -581,10 +602,10 @@
                   rowData.status.journeyStatus.preCheckin == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.precheck_in' | translate }}
+              PreCheck-in
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.precheck_in' | translate }}
+              PreCheck-in
             </div>
           </div>
           <div class="icon extra-width">
@@ -616,10 +637,10 @@
                   rowData.status.journeyStatus.checkin == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.check_in' | translate }}
+              Check-In
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.check_in' | translate }}
+              Check-In
             </div>
           </div>
           <div class="icon extra-width">
@@ -651,10 +672,10 @@
                   rowData.status.journeyStatus.checkout == 'COMPLETED'
               }"
             >
-              {{ 'dashboard.table.reservations.check_out' | translate }}
+              Check-Out
             </p>
             <div class="tooltip">
-              {{ 'dashboard.table.reservations.check_out' | translate }}
+              Check-Out
             </div>
           </div>
         </div>

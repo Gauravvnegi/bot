@@ -4,9 +4,7 @@
       <div class="icon">
         <img src="assets/svg/nps-services.svg" />
       </div>
-      <div class="stat-title">
-        {{ 'feedback.nps_across_point_sale' | translate }}
-      </div>
+      <div class="stat-title">NPS Across Point of Sale</div>
     </div>
     <div class="menu-container" *ngIf="npsFG?.get('chartType')">
       <label class="labl" *ngFor="let option of chartTypes">
@@ -85,7 +83,7 @@
   <ng-container [ngSwitch]="chartType">
     <ng-container *ngSwitchCase="'compare'">
       <div class="header__outlet-heading">
-        {{ 'feedback.outlets' | translate }}
+        Outlets
       </div>
       <div class="outlet-wrap" *ngIf="stats && stats.data">
         <div

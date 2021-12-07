@@ -12,8 +12,6 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ResendPasswordComponent } from './components/resend-password/resend-password.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { ValidatorService } from './services/validator-service';
 
 @NgModule({
   declarations: [
@@ -26,10 +24,9 @@ import { ValidatorService } from './services/validator-service';
   imports: [
     CommonModule,
     FormsModule,
-    TranslateModule.forChild(),
     ReactiveFormsModule,
     SharedMaterialModule,
-    RouterModule,
+    RouterModule.forRoot([]),
   ],
   exports: [
     AuthComponent,
@@ -37,6 +34,6 @@ import { ValidatorService } from './services/validator-service';
     RequestPasswordComponent,
     ResetPasswordComponent,
   ],
-  providers: [AuthService, SnackBarService, ValidatorService],
+  providers: [AuthService, SnackBarService],
 })
 export class AuthModule {}

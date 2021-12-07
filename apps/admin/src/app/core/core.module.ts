@@ -49,7 +49,6 @@ import { ProgressSpinnerInterceptor } from './theme/src/lib/interceptor/progress
       multi: true,
     },
   ],
-  exports: [],
 })
 export class CoreModule extends EnsureModuleLoadedOnceGuard {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

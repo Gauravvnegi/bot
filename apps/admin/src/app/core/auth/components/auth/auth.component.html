@@ -4,11 +4,11 @@
       <router-outlet></router-outlet>
     </div>
     <footer class="wrapper--left-footer">
-      {{ 'footer.agreement_text' | translate }}&nbsp;<a
+      I hereby agree to&nbsp;<a
         [href]="authConstants.linkUrl.termsAndCondition"
         target="_blank"
         rel="noopener"
-        >{{ 'footer.terms_text' | translate }}</a
+        >Terms and Conditions</a
       >
     </footer>
     <div class="wrapper--left-svg-icons first">
@@ -26,21 +26,18 @@
   </div>
   <div class="wrapper--right">
     <header class="wrapper--right-header">
-      <a
-        [href]="authConstants.linkUrl.aboutUs"
-        target="_blank"
-        rel="noopener"
-        >{{ 'about_us' | translate }}</a
+      <a [href]="authConstants.linkUrl.aboutUs" target="_blank" rel="noopener"
+        >About Us</a
       >
       <a
         [href]="authConstants.linkUrl.privacyPolicy"
         target="_blank"
         rel="noopener"
-        >{{ 'privacy_policy' | translate }}</a
+        >Privacy Policy</a
       >
     </header>
     <div class="wrapper--right-managing-hotel">
-      <p class="heading">{{ 'auth.heading' | translate }}</p>
+      <p class="heading">Managing Hotel is Now Easy</p>
       <div class="wrapper--right-managing-hotel-option-box">
         <div
           *ngFor="
@@ -58,7 +55,7 @@
       <div class="image">
         <img [src]="authConstants.imgUrl.botshotLogo" alt="Botshot" />
       </div>
-      ©&nbsp;{{ currentDate }}, {{ 'footer.copyright_text' | translate }}
+      ©&nbsp;{{ currentDate }}, Botshot. All Right Reserved
     </div>
   </div>
 </div>

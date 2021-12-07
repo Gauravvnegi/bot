@@ -115,16 +115,26 @@
   &__graphContainer {
     display: flex;
     margin-top: 15px;
+    @media (max-width: $tablet) {
+      gap: 1.3%;
+    }
     &__request {
       width: 24.55%;
       margin-right: 0.9%;
       border-radius: 5px;
       border: solid 1px #e2e2e2;
+      @media (max-width: $tablet) {
+        @include width(38%);
+        @include margin-right(0);
+      }
     }
     &__Sentiments {
       width: 74.55%;
       border-radius: 5px;
       border: solid 1px #e2e2e2;
+      @media (max-width: $tablet) {
+        @include width(60.7%);
+      }
     }
   }
   .graphWrapper {

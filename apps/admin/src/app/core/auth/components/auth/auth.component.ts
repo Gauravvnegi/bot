@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { authConstants } from '../../constants/auth-constants';
-
 @Component({
   selector: 'admin-auth',
   templateUrl: './auth.component.html',

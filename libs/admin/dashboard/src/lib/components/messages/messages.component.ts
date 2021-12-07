@@ -1,5 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { config } from '../../data-models/statistics.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { Subscription } from 'rxjs';
+import {
+  CommunicationChannels,
+  config,
+  IMessageOverallAnalytics,
+  MessageOverallAnalytics,
+} from '../../data-models/statistics.model';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-messages',
@@ -15,11 +24,44 @@ export class MessagesComponent implements OnInit {
     { today: 3, yesterday: 0, comparisonPercent: 100, label: 'Failed' },
   ];
   total = 59;
-  constructor() {}
+  $subscription = new Subscription();
+  @Input() hotelId;
+  messageOverallAnalytics: IMessageOverallAnalytics;
+  channels;
+  constructor(
+    private statisticsService: StatisticsService,
+    private snackbarService: SnackBarService,
+    private subscriptionPlanService: SubscriptionPlanService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getConversationStats();
+    this.listenForChannels();
+  }
 
   progressValue(data) {
     return Math.floor((data.today / this.total) * 100);
+  }
+
+  getConversationStats() {
+    this.$subscription.add(
+      this.statisticsService.getConversationStats(this.hotelId).subscribe(
+        (response) => {
+          this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
+            response.messageCounts
+          );
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
+  listenForChannels() {
+    this.subscriptionPlanService.subscription$.subscribe((res) => {
+      if (res['features'])
+        this.channels = new CommunicationChannels()
+          .deserialize(res['features'].CHANNELS)
+          .channels.filter((channel) => channel.active);
+    });
   }
 }

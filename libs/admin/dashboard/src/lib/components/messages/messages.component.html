@@ -28,7 +28,7 @@
   <div style="display: flex; flex-wrap: wrap; margin-top: 25px;">
     <div
       style="
-        width: 50%;
+        width: 25%;
         font-family: Roboto;
         font-size: 14px;
         font-weight: 500;
@@ -36,17 +36,22 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: 0.84px;
-        margin-bottom: 25px;
       "
-      *ngFor="let item of data"
+      *ngFor="let item of messageOverallAnalytics?.stat"
     >
       <div style="margin-bottom: 15px;">{{ item.label }}</div>
+      <div style="display: flex; margin-bottom: 15px;" *ngIf="channels">
+        <div style="margin-right: 10px;" *ngFor="let channel of channels">
+          <img
+            style="height: 18px;"
+            [src]="channel.imageUrl"
+            [alt]="channel.label"
+          />
+        </div>
+      </div>
       <div style="margin-bottom: 5px;">{{ item.today }} Today</div>
       <div style="display: flex; align-items: center; margin-bottom: 5px;">
         <div>{{ item.yesterday }} Yesterday</div>
-        <div style="color: #b6bcc4; font-size: 10px; margin-left: 5px;">
-          (till 04:43 pm)
-        </div>
       </div>
       <div class="progress-bar">
         <div
@@ -55,8 +60,8 @@
           aria-valuenow="100"
           class="progress-bar progress-color"
           role="progressbar"
-          [style.width]="progressValue(item) + '%'"
-          [style.backgroundColor]="config.color[item.label]"
+          [style.width]="item.progress + '%'"
+          [style.backgroundColor]="item.color"
         ></div>
       </div>
       <div style="display: flex; align-items: center; margin-bottom: 5px;">
@@ -64,7 +69,7 @@
           <img
             style="height: 14.9px;"
             [src]="
-              item.comparisonPercent >= 0
+              item.comparisonPercentage >= 0
                 ? 'assets/svg/uparrow.svg'
                 : 'assets/svg/down-percentage.svg'
             "
@@ -74,16 +79,16 @@
         <div
           style="font-size: 13px; font-weight: normal;"
           [ngStyle]="
-            item.comparisonPercent >= 0
+            item.comparisonPercentage >= 0
               ? {
                   color: '#52b33f'
                 }
               : { color: '#CC052B' }
           "
         >
-          {{ item.comparisonPercent }}%
+          {{ item.comparisonPercentage }}%
         </div>
-        <div style="margin-left: 7.5px; color: #c5c5c5; font-size: 14px;">
+        <div style="color: #c5c5c5; font-size: 14px;">
           than yesterday
         </div>
       </div>

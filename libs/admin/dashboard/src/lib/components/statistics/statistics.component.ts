@@ -15,6 +15,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   customerData: Customer;
   interval: string = 'day';
   $subscription = new Subscription();
+  hotelId: string;
 
   constructor(
     private _statisticService: StatisticsService,
@@ -39,6 +40,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
         const config = {
           queryObj: this._adminUtilityService.makeQueryParams(queries),
         };
@@ -48,6 +53,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         });
       })
     );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   ngOnDestroy() {

@@ -1,3 +1,4 @@
+import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
 
 export class Statistics {
@@ -208,6 +209,101 @@ export class ReservationStat {
   }
 }
 
+export class MessageOverallAnalytics {
+  stat: IMessageOverallAnalytic[];
+  total: number;
+
+  deserialize(input) {
+    this.stat = new Array<IMessageOverallAnalytic>();
+    this.total = input?.sentCount?.today;
+
+    Object.keys(input).forEach((item) => {
+      if (item !== 'data')
+        this.stat.push(
+          new MessageOverallAnalytic().deserialize(
+            {
+              ...input[item],
+              ...{
+                color: config1.colors[item],
+                label: config1.label[item],
+                radius: config1.radius[item],
+              },
+            },
+            this.total
+          )
+        );
+    });
+    return this;
+  }
+}
+
+export class MessageOverallAnalytic {
+  label: string;
+  yesterday: number;
+  today: number;
+  graphvalue: number;
+  comparisonPercentage: number;
+  color: string;
+  radius: number;
+  progress: number;
+
+  deserialize(input, total) {
+    Object.assign(
+      this,
+      set({}, 'today', get(input, ['today'])),
+      set({}, 'yesterday', get(input, ['yesterday'])),
+      set({}, 'comparisonPercentage', get(input, ['comparisonPercentage'])),
+      set({}, 'color', get(input, ['color'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'radius', get(input, ['radius']))
+    );
+    this.progress = total > 0 ? (this.today / total) * 100 : 0;
+    this.graphvalue = 75;
+    return this;
+  }
+}
+
+export class CommunicationChannels {
+  channels;
+
+  deserialize(input) {
+    this.channels = new Array<any>();
+
+    input.forEach((data) => {
+      this.channels.push({
+        ...{
+          active: data.active,
+          label: data.label,
+        },
+        ...CommunicationConfig[data.name],
+      });
+    });
+
+    return this;
+  }
+}
+
+export const config1 = {
+  colors: {
+    deliveredCount: '#52B33F',
+    sentCount: '#FFBF04',
+    readCount: '#4BA0F5',
+    failedCount: '#CC052B',
+  },
+  label: {
+    deliveredCount: 'Delivered',
+    sentCount: 'Sent',
+    readCount: 'Read',
+    failedCount: 'Failed',
+  },
+  radius: {
+    deliveredCount: 75,
+    sentCount: 85,
+    readCount: 65,
+    failedCount: 55,
+  },
+};
+
 export const config = {
   radius: {
     Failed: 55,
@@ -222,3 +318,13 @@ export const config = {
     Sent: '#ffbf04',
   },
 };
+
+export type IMessageOverallAnalytic = Omit<
+  MessageOverallAnalytic,
+  'deserialize'
+>;
+
+export type IMessageOverallAnalytics = Omit<
+  MessageOverallAnalytics,
+  'deserialize'
+>;

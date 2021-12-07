@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { authConstants } from '../../constants/auth-constants';
+
 @Component({
   selector: 'admin-auth',
   templateUrl: './auth.component.html',
@@ -19,14 +20,7 @@ export class AuthComponent implements OnInit {
    * @param managingOptions
    * @returns id
    */
-  trackById(
-    index: number,
-    managingOptions: {
-      id: number;
-      label: string;
-      url: string;
-    }
-  ): number {
+  trackById(index, managingOptions) {
     return managingOptions.id;
   }
 

@@ -12,13 +12,11 @@ import { ProgressSpinnerInterceptor } from './theme/src/lib/interceptor/progress
 import { environment } from '@hospitality-bot/admin/environment';
 import { RefreshTokenInterceptor } from './interceptors/refresh-token.interceptor';
 import { TimezoneInterceptor } from './interceptors/timezone.interceptor';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  // return new TranslateHttpLoader(http, './assets/i18n/core/', '.json');
   return new MultiTranslateHttpLoader(http, [
     {
       prefix: `./assets/i18n/auth/`,

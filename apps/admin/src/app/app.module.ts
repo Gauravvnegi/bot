@@ -16,7 +16,6 @@ import { CoreModule } from './core/core.module';
     CoreModule,
     HttpClientModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
   ],
   bootstrap: [AppComponent],
 })

@@ -4,8 +4,8 @@
   </div>
   <form [formGroup]="loginForm">
     <div class="card">
-      <h4 class="card--heading">Login</h4>
-      <h3 class="card--quote">Welcome to BOTSHOT Admin Panel</h3>
+      <h4 class="card--heading">{{ 'login_text' | translate }}</h4>
+      <h3 class="card--quote">{{ 'welcome_text' | translate }}</h3>
       <div class="card--social-btns">
         <!-- Social buttons will come here -->
       </div>
@@ -16,7 +16,7 @@
               type="text"
               matInput
               formControlName="email"
-              placeholder="Email Address"
+              placeholder="{{ 'placeholder.email' | translate }}"
             />
             <mat-error
               *ngIf="
@@ -24,7 +24,7 @@
                 loginForm.get('email').hasError('required')
               "
             >
-              Email is required
+              {{ 'validation.email_required' | translate }}
             </mat-error>
             <mat-error
               *ngIf="
@@ -32,7 +32,7 @@
                 loginForm.get('email').hasError('pattern')
               "
             >
-              Please enter the valid Email
+              {{ 'validation.validate_email' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -44,7 +44,7 @@
               id="current-password"
               matInput
               formControlName="password"
-              placeholder="Password"
+              placeholder="{{ 'placeholder.password' | translate }}"
             />
             <button
               mat-icon-button
@@ -62,7 +62,7 @@
                 loginForm.get('password').hasError('required')
               "
             >
-              Password is required
+              {{ 'validation.password_required' | translate }}
             </mat-error>
             <mat-error
               *ngIf="
@@ -71,25 +71,20 @@
                   loginForm.get('password').hasError('maxlength'))
               "
             >
-              Please enter valid Password
+              {{ 'validation.validate_password' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
       </div>
       <div class="forgot__block">
-        <a class="forgot--password" (click)="navigateToRequestPassword()"
-          >Forgot Password?</a
-        >
+        <a class="forgot--password" (click)="navigateToRequestPassword()">{{
+          'button.forgot_password' | translate
+        }}</a>
       </div>
       <div class="card-footer">
-        <button
-          type="submit"
-          class="login"
-          mat-button
-          (click)="login()"
-        >
+        <button type="submit" class="login" mat-button (click)="login()">
           <i *ngIf="isSigningIn" class="fa fa-spinner fa-spin"></i>
-          Login
+          {{ 'button.login' | translate }}
         </button>
       </div>
     </div>

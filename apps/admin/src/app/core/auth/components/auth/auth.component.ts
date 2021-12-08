@@ -20,14 +20,7 @@ export class AuthComponent implements OnInit {
    * @param managingOptions
    * @returns id
    */
-  trackById(
-    index: number,
-    managingOptions: {
-      id: number;
-      label: string;
-      url: string;
-    }
-  ): number {
+  trackById(index, managingOptions) {
     return managingOptions.id;
   }
 

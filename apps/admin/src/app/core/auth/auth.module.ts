@@ -12,6 +12,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ResendPasswordComponent } from './components/resend-password/resend-password.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ResendPasswordComponent } from './components/resend-password/resend-pas
     ReactiveFormsModule,
     SharedMaterialModule,
     RouterModule.forRoot([]),
+    TranslateModule,
   ],
   exports: [
     AuthComponent,

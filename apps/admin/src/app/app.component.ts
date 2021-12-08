@@ -14,8 +14,8 @@ export class AppComponent implements OnInit {
   }
 
   configTranslator() {
-    this.translate.addLangs(['en', 'fr']);
-    this.translate.setDefaultLang('en');
-    this.translate.use('en');
+    this.translate.addLangs(['en-us', 'fr']);
+    this.translate.setDefaultLang('en-us');
+    this.translate.use('en-us');
   }
 }

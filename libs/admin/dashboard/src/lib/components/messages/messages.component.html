@@ -28,7 +28,7 @@
   <div style="display: flex; flex-wrap: wrap; margin-top: 25px;">
     <div
       style="
-        width: 25%;
+        width: 50%;
         font-family: Roboto;
         font-size: 14px;
         font-weight: 500;
@@ -36,18 +36,19 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: 0.84px;
+        margin-bottom: 25px;
       "
       *ngFor="let item of messageOverallAnalytics?.stat"
     >
       <div style="margin-bottom: 15px;">{{ item.label }}</div>
       <div style="display: flex; margin-bottom: 15px;" *ngIf="channels">
-        <div style="margin-right: 10px;" *ngFor="let channel of channels">
+        <!-- <div style="margin-right: 10px;" *ngFor="let channel of channels">
           <img
             style="height: 18px;"
             [src]="channel.imageUrl"
             [alt]="channel.label"
           />
-        </div>
+        </div> -->
       </div>
       <div style="margin-bottom: 5px;">{{ item.today }} Today</div>
       <div style="display: flex; align-items: center; margin-bottom: 5px;">

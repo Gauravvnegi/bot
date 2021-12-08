@@ -37,15 +37,15 @@
         justify-content: center;
         align-items: center;
       "
-      *ngFor="let item of notificationKeys"
+      *ngFor="let item of messageOverallAnalytics?.stat"
     >
       <circle-progress
-        [radius]="config.radius[item]"
-        [percent]="notification.percent[item]"
+        [radius]="item.radius"
+        [percent]="item.progress"
         [space]="-5"
         [outerStrokeWidth]="5"
         [innerStrokeWidth]="5"
-        [outerStrokeColor]="config.color[item]"
+        [outerStrokeColor]="item.color"
         [innerStrokeColor]="'#e7e8ea'"
         [outerStrokeLinecap]="'square'"
         [animation]="true"
@@ -66,7 +66,7 @@
         align-items: center;
       "
     >
-      <div>{{ notification.total }}</div>
+      <div>{{ messageOverallAnalytics?.total }}</div>
       <div>Total Sent</div>
     </div>
   </div>
@@ -78,7 +78,7 @@
         align-items: center;
         margin: 7.5px 0;
       "
-      *ngFor="let item of notificationKeys"
+      *ngFor="let item of messageOverallAnalytics?.stat"
     >
       <div
         style="
@@ -96,14 +96,14 @@
             border-radius: 50%;
             margin-right: 10px;
           "
-          [style.backgroundColor]="config.color[item]"
+          [style.backgroundColor]="item.color"
         ></div>
         <div style="color: #6d7580;">
-          {{ item }}
+          {{ item.label }}
         </div>
       </div>
       <div style="color: #4b56c0; font-weight: bold;">
-        {{ notification.circles[item] }}
+        {{ item.today }}
       </div>
     </div>
   </div>

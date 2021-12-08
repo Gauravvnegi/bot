@@ -1,5 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { config } from '../../data-models/statistics.model';
+import { Component, Input, OnInit } from '@angular/core';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { Subscription } from 'rxjs';
+import {
+  IMessageOverallAnalytics,
+  MessageOverallAnalytics,
+} from '../../data-models/statistics.model';
+import { StatisticsService } from '../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-notifications',
@@ -7,27 +14,39 @@ import { config } from '../../data-models/statistics.model';
   styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
-  config = config;
-  notification = {
-    circles: {
-      Sent: 161,
-      Delivered: 154,
-      Read: 148,
-      Failed: 60,
-    },
-    percent: {
-      Sent: (161 / 161) * 100,
-      Delivered: (154 / 161) * 100,
-      Read: (148 / 161) * 100,
-      Failed: (60 / 161) * 100,
-    },
-    total: 161,
-  };
-  constructor() {}
+  $subscription = new Subscription();
+  @Input() hotelId;
+  messageOverallAnalytics: IMessageOverallAnalytics;
+  constructor(
+    private statisticsService: StatisticsService,
+    private snackbarService: SnackBarService,
+    private adminutilityService: AdminUtilityService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getConversationStats();
+  }
 
-  get notificationKeys() {
-    return Object.keys(this.notification.circles);
+  getConversationStats() {
+    const config = {
+      queryObj: this.adminutilityService.makeQueryParams([
+        {
+          templateContext: 'TEMPLATE',
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.statisticsService
+        .getConversationStats(this.hotelId, config)
+        .subscribe(
+          (response) => {
+            this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
+              response.messageCounts
+            );
+            console.log(this.messageOverallAnalytics);
+          },
+          ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        )
+    );
   }
 }

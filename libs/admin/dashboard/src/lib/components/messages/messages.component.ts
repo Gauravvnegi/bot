@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import {
@@ -31,7 +32,8 @@ export class MessagesComponent implements OnInit {
   constructor(
     private statisticsService: StatisticsService,
     private snackbarService: SnackBarService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private adminutilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -44,15 +46,24 @@ export class MessagesComponent implements OnInit {
   }
 
   getConversationStats() {
-    this.$subscription.add(
-      this.statisticsService.getConversationStats(this.hotelId).subscribe(
-        (response) => {
-          this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
-            response.messageCounts
-          );
+    const config = {
+      queryObj: this.adminutilityService.makeQueryParams([
+        {
+          templateContext: 'TEXT',
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
-      )
+      ]),
+    };
+    this.$subscription.add(
+      this.statisticsService
+        .getConversationStats(this.hotelId, config)
+        .subscribe(
+          (response) => {
+            this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
+              response.messageCounts
+            );
+          },
+          ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        )
     );
   }
 

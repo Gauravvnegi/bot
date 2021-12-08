@@ -22,7 +22,9 @@ export class StatisticsService extends ApiService {
     return this.get(`/api/v1/dashboard-stats/reservations/${config.queryObj}`);
   }
 
-  getConversationStats(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/counts`);
+  getConversationStats(hotelId: string, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/stats/counts${config.queryObj}`
+    );
   }
 }

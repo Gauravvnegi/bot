@@ -20,7 +20,9 @@
     ></hospitality-bot-departure-statistics>
   </div>
   <div style="width: 32%; margin: 0.5%;">
-    <hospitality-bot-notifications></hospitality-bot-notifications>
+    <hospitality-bot-notifications
+      [hotelId]="hotelId"
+    ></hospitality-bot-notifications>
   </div>
   <div style="width: 65%; margin: 0.5%;">
     <hospitality-bot-messages [hotelId]="hotelId"></hospitality-bot-messages>

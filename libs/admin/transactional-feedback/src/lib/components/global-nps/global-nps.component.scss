@@ -1,3 +1,4 @@
+@import 'main';
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
@@ -24,6 +25,11 @@
         height: 115px;
         width: 100px;
       }
+    }
+    @media only screen and (max-width: $tablet) {
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   }
   .detail-container {

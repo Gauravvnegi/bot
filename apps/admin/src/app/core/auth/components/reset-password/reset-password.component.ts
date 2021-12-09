@@ -5,7 +5,6 @@ import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { authConstants } from '../../constants/auth-constants';
 import { ValidatorService } from '../../services/validator-service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'admin-reset-password',
@@ -16,7 +15,6 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
   isPasswordVisible = false;
   changePasswordToken: string;
-  resetPasswordText: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -24,8 +22,7 @@ export class ResetPasswordComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _snackbarService: SnackBarService,
     private _authService: AuthService,
-    private _validatorService: ValidatorService,
-    private readonly _translate: TranslateService
+    private _validatorService: ValidatorService
   ) {
     this.initResetForm();
   }
@@ -79,23 +76,32 @@ export class ResetPasswordComponent implements OnInit {
     if (!this.resetPasswordForm.valid) {
       return;
     }
+
     const data = {
       token: this.changePasswordToken,
       password: this.resetPasswordForm.get('password').value,
     };
+
+    const snackbar = this._snackbarService;
+    let translatedText: string;
+    snackbar
+      .translateText('messages.success.reset_password')
+      .subscribe((response) => (translatedText = response));
+
     this._authService.changePassword(data).subscribe(
       (response) => {
-        if (response?.message) {
-          this._snackbarService.openSnackBarAsText(response.message, '', {
+        snackbar.openSnackBarAsText(
+          response?.message ? response.message : translatedText,
+          '',
+          {
             panelClass: 'success',
-          });
-        } else {
-          this.showTranslatedMessage();
-        }
+          }
+        );
+
         this.navigateToLogin();
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message ?? '');
+        snackbar.openSnackBarAsText(error.message ?? '');
       }
     );
   }
@@ -106,18 +112,5 @@ export class ResetPasswordComponent implements OnInit {
    */
   navigateToLogin() {
     this._router.navigate(['/auth/login']);
-  }
-
-  /**
-   * @function showTranslatedMessage to get translated text.
-   */
-  showTranslatedMessage() {
-    this._translate
-      .get('messages.success.reset_password')
-      .subscribe((translatedText) => {
-        this._snackbarService.openSnackBarAsText(translatedText, '', {
-          panelClass: 'success',
-        });
-      });
   }
 }

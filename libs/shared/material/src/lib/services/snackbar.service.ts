@@ -7,10 +7,15 @@ import {
 } from '@angular/material/snack-bar';
 import { ComponentType } from '@angular/cdk/portal';
 import * as _ from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SnackBarService {
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(
+    private _snackBar: MatSnackBar,
+    private _translate: TranslateService
+  ) {}
 
   openSnackBarAsText(
     message: string,
@@ -32,5 +37,9 @@ export class SnackBarService {
     return this._snackBar.openFromComponent(component, {
       duration: config.duration || 2000,
     });
+  }
+
+  translateText(text: string) {
+    return this._translate.get(text);
   }
 }

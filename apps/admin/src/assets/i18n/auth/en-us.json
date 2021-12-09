@@ -27,9 +27,6 @@
     "forgot_password": "Forgot Password?",
     "login": "Login",
     "request": "Request",
-    "back": "Back",
-    "cancel": "Cancel",
-    "resend_mail": "Resend Mail",
-    "save": "Save"
+    "resend_mail": "Resend Mail"
   }
 }

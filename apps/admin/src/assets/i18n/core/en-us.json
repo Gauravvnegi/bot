@@ -6,5 +6,10 @@
   "menu": {
     "about_us": "About Us",
     "privacy_policy": "Privacy Policy"
+  },
+  "button": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save"
   }
 }

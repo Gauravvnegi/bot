@@ -23,6 +23,11 @@
     "confirm_password": "Please confirm the password",
     "password_not_match": "Passwords did not match"
   },
+  "messages": {
+    "success": {
+      "reset_password": "Reset password successful"
+    }
+  },
   "button": {
     "forgot_password": "Forgot Password?",
     "login": "Login",

@@ -1,56 +1,29 @@
-<div
-  style="
-    background: #ffffff;
-    box-shadow: 0px 3px 6px #0000000d;
-    border-radius: 5px;
-    padding: 20px;
-  "
->
-  <div style="display: flex; align-items: center;">
-    <div style="margin-right: 10px;">
+<div class="messages-wrapper">
+  <div class="messages-wrapper-header">
+    <div class="messages-wrapper-header-icon">
       <img src="assets/svg/Messages.svg" alt="" />
     </div>
-    <div
-      style="
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        text-align: left;
-        color: #002046;
-      "
-    >
+    <div class="messages-wrapper-header-text">
       Messages
     </div>
   </div>
-  <div style="display: flex; flex-wrap: wrap; margin-top: 25px;">
+  <div class="messages-wrapper-details">
     <div
-      style="
-        width: 25%;
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.43;
-        letter-spacing: 0.84px;
-      "
+      class="messages-wrapper-details-items"
       *ngFor="let item of messageOverallAnalytics?.stat"
     >
-      <div style="margin-bottom: 15px;">{{ item.label }}</div>
-      <div style="display: flex; margin-bottom: 15px;" *ngIf="channels">
-        <div style="margin-right: 10px;" *ngFor="let channel of channels">
+      <div class="messages-wrapper-details-items-heading">{{ item.label }}</div>
+      <div class="social" *ngIf="channels">
+        <div class="social-btn" *ngFor="let channel of channels">
           <img
-            style="height: 18px;"
+            class="social-btn-img"
             [src]="channel.imageUrl"
             [alt]="channel.label"
           />
         </div>
       </div>
-      <div style="margin-bottom: 5px;">{{ item.today }} Today</div>
-      <div style="display: flex; align-items: center; margin-bottom: 5px;">
+      <div class="today">{{ item.today }} Today</div>
+      <div class="yesterday">
         <div>{{ item.yesterday }} Yesterday</div>
       </div>
       <div class="progress-bar">
@@ -64,10 +37,10 @@
           [style.backgroundColor]="item.color"
         ></div>
       </div>
-      <div style="display: flex; align-items: center; margin-bottom: 5px;">
-        <div style="margin-right: 7.5px;">
+      <div class="then-yesterdeay">
+        <div class="then-yesterdeay-down-arrow">
           <img
-            style="height: 14.9px;"
+            class="then-yesterdeay-down-arrow-icon"
             [src]="
               item.comparisonPercentage >= 0
                 ? 'assets/svg/uparrow.svg'
@@ -77,7 +50,7 @@
           />
         </div>
         <div
-          style="font-size: 13px; font-weight: normal;"
+          class="then-yesterdeay-down-arrow-percentage"
           [ngStyle]="
             item.comparisonPercentage >= 0
               ? {
@@ -88,7 +61,7 @@
         >
           {{ item.comparisonPercentage }}%
         </div>
-        <div style="color: #c5c5c5; font-size: 14px; margin-left: 7.5px;">
+        <div class="then-yesterdeay-text">
           than yesterday
         </div>
       </div>

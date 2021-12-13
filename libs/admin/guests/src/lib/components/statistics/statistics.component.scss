@@ -4,7 +4,7 @@
   @include width(100%);
   @include height(100%);
   background: $white;
-  box-shadow: 0px 3px 6px $black;
+  // box-shadow: 0px 3px 6px $black;
   border-radius: 5px;
   @include padding(20px);
   display: flex;

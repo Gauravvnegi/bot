@@ -42,7 +42,7 @@ export class MessagesComponent implements OnChanges {
       {
         templateContext: 'TEXT',
         comparison: true,
-        channelType: this.messagesFG?.get('channel')?.value,
+        channelType: this.messagesFG?.get('channel')?.value || 'ALL',
       },
     ]);
   }

@@ -60,7 +60,7 @@ export class NotificationsComponent implements OnInit {
           ...this.globalQueries,
           {
             templateContext: 'TEMPLATE',
-            channelType: this.messagesFG?.get('channel')?.value,
+            channelType: this.messagesFG?.get('channel')?.value || 'ALL',
           },
         ]);
       })

@@ -130,7 +130,15 @@ export class GuestDetailsComponent implements OnInit, OnChanges {
     } else if (role === GuestRole.accompany || role === GuestRole.kids) {
       fg = {
         ...this.defaultFG,
-        firstName: ['', []],
+        firstName: [
+          '',
+          [
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Please enter a valid first name',
+            }),
+          ],
+        ],
         age: ['', []],
         lastName: ['', []],
       };

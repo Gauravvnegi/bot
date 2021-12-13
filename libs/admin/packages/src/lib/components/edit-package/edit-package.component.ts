@@ -7,43 +7,46 @@ import { Regex } from 'libs/shared/constants/regex';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { Category } from '../../data-models/categoryConfig.model';
-import { IpackageOptions, PackageDetail, PackageSource } from '../../data-models/packageConfig.model';
+import {
+  IpackageOptions,
+  PackageDetail,
+  PackageSource,
+} from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
 
 @Component({
   selector: 'hospitality-bot-edit-package',
   templateUrl: './edit-package.component.html',
-  styleUrls: ['./edit-package.component.scss']
+  styleUrls: ['./edit-package.component.scss'],
 })
 export class EditPackageComponent implements OnInit {
-
   @Input() id: string;
 
   private $subscription: Subscription = new Subscription();
 
   fileUploadData = {
     fileSize: 3145728,
-    fileType: ['png','jpg','jpeg','gif','eps']
-  }
+    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
+  };
 
   currency: IpackageOptions[] = [
     { key: 'INR', value: 'INR' },
-    { key: 'USD', value: 'USD' }
-  ]
+    { key: 'USD', value: 'USD' },
+  ];
 
   packageType: IpackageOptions[] = [
     { key: 'Complimentary', value: 'Complimentary' },
-    { key: 'Paid', value: 'Paid' }
-  ]
+    { key: 'Paid', value: 'Paid' },
+  ];
 
   unit: IpackageOptions[] = [
     { key: 'Km', value: 'Km' },
     { key: 'PERSON', value: 'PERSON' },
-    { key: 'TRIP', value: 'TRIP' }
-  ]
+    { key: 'TRIP', value: 'TRIP' },
+  ];
 
   packageForm: FormGroup;
-  hotelPackage: PackageDetail
+  hotelPackage: PackageDetail;
   categories: Category[];
   packageId: string;
   hotelId: string;
@@ -57,7 +60,7 @@ export class EditPackageComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private packageService: PackageService,
-    private _location: Location,
+    private _location: Location
   ) {
     this.initAddPackageForm();
   }
@@ -73,7 +76,10 @@ export class EditPackageComponent implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       type: ['', [Validators.required]],
-      rate: ['', [Validators.required, Validators.pattern(Regex.DECIMAL_REGEX)]],
+      rate: [
+        '',
+        [Validators.required, Validators.pattern(Regex.DECIMAL_REGEX)],
+      ],
       currency: ['', [Validators.required]],
       unit: ['', [Validators.required]],
       packageSource: [''],
@@ -82,7 +88,7 @@ export class EditPackageComponent implements OnInit {
       status: [false],
       autoAccept: [false],
       category: ['', [Validators.required]],
-    })
+    });
   }
 
   disableForm(packageData): void {
@@ -101,7 +107,6 @@ export class EditPackageComponent implements OnInit {
   }
 
   listenForGlobalFilters(): void {
-
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
@@ -118,7 +123,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   getHotelId(globalQueries): void {
-    globalQueries.forEach(element => {
+    globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
       }
@@ -127,11 +132,11 @@ export class EditPackageComponent implements OnInit {
 
   getPackageId(): void {
     this.$subscription.add(
-      this.activatedRoute.params.subscribe(params => {
+      this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.packageId = params['id'];
           this.getPackageDetails(this.packageId);
-        }else if(this.id){
+        } else if (this.id) {
           this.packageId = this.id;
           this.getPackageDetails(this.packageId);
         }
@@ -141,8 +146,9 @@ export class EditPackageComponent implements OnInit {
 
   getPackageDetails(packageId: string): void {
     this.$subscription.add(
-      this.packageService.getPackageDetails(this.hotelId, packageId)
-        .subscribe(response => {
+      this.packageService
+        .getPackageDetails(this.hotelId, packageId)
+        .subscribe((response) => {
           this.hotelPackage = new PackageDetail().deserialize(response);
           this.packageForm.patchValue(this.hotelPackage.amenityPackage);
           this.disableForm(this.packageForm.getRawValue());
@@ -152,10 +158,17 @@ export class EditPackageComponent implements OnInit {
 
   getCategoriesList(hotelId: string): void {
     this.$subscription.add(
-      this.packageService.getHotelPackageCategories(hotelId)
-        .subscribe(response => {
+      this.packageService
+        .getHotelPackageCategories(hotelId)
+        .subscribe((response) => {
           this.categories = response.records;
-          this.packageForm.get('category').patchValue(this.hotelPackage && this.hotelPackage.amenityPackage.category || response.records[0].id);
+          this.packageForm
+            .get('category')
+            .patchValue(
+              (this.hotelPackage &&
+                this.hotelPackage.amenityPackage.category) ||
+                response.records[0].id
+            );
         })
     );
   }
@@ -179,26 +192,35 @@ export class EditPackageComponent implements OnInit {
     }
 
     this.isSavingPackage = true;
-    let data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId);
+    let data = this.packageService.mapPackageData(
+      this.packageForm.getRawValue(),
+      this.hotelId
+    );
     this.$subscription.add(
-      this.packageService.addPackage(this.hotelId, data)
-        .subscribe(response => {
+      this.packageService.addPackage(this.hotelId, data).subscribe(
+        (response) => {
           this.hotelPackage = new PackageDetail().deserialize(response);
           this.packageForm.patchValue(this.hotelPackage.amenityPackage);
-          this.snackbarService.openSnackBarAsText('Package added successfully',
+          this.snackbarService.openSnackBarAsText(
+            'Package added successfully',
             '',
             { panelClass: 'success' }
           );
-          this.router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
+          this.router.navigate([
+            '/pages/package/edit',
+            this.hotelPackage.amenityPackage.id,
+          ]);
           this.isSavingPackage = false;
-        }, ({ error }) => {
+        },
+        ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
           this.isSavingPackage = false;
-        })
+        }
+      )
     );
   }
 
-  redirectToPackages(){
+  redirectToPackages() {
     this._location.back();
   }
 
@@ -206,17 +228,20 @@ export class EditPackageComponent implements OnInit {
     let formData = new FormData();
     formData.append('files', event.file);
     this.$subscription.add(
-      this.packageService.uploadImage(this.hotelId, formData)
-        .subscribe(response => {
+      this.packageService.uploadImage(this.hotelId, formData).subscribe(
+        (response) => {
           this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
           this.packageForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService.openSnackBarAsText('Package image uploaded successfully',
+          this.snackbarService.openSnackBarAsText(
+            'Package image uploaded successfully',
             '',
             { panelClass: 'success' }
           );
-        }, ({ error }) => {
+        },
+        ({ error }) => {
           this.snackbarService.openSnackBarAsText(error.message);
-        })
+        }
+      )
     );
   }
 
@@ -230,20 +255,32 @@ export class EditPackageComponent implements OnInit {
       return;
     }
     this.isSavingPackage = true;
-    const data = this.packageService.mapPackageData(this.packageForm.getRawValue(), this.hotelId, this.hotelPackage.amenityPackage.id);
+    const data = this.packageService.mapPackageData(
+      this.packageForm.getRawValue(),
+      this.hotelId,
+      this.hotelPackage.amenityPackage.id
+    );
     this.$subscription.add(
-      this.packageService.updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
-        .subscribe(response => {
-          this.snackbarService.openSnackBarAsText('Package updated successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this.router.navigate(['/pages/package/amenity', this.hotelPackage.amenityPackage.id]);
-          this.isSavingPackage = false;
-        }, ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
-          this.isSavingPackage = false;
-        })
+      this.packageService
+        .updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
+        .subscribe(
+          (response) => {
+            this.snackbarService.openSnackBarAsText(
+              'Package updated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.router.navigate([
+              '/pages/package/edit',
+              this.hotelPackage.amenityPackage.id,
+            ]);
+            this.isSavingPackage = false;
+          },
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+            this.isSavingPackage = false;
+          }
+        )
     );
   }
 
@@ -259,5 +296,4 @@ export class EditPackageComponent implements OnInit {
   get packageImageUrl(): string {
     return this.packageForm.get('imageUrl').value;
   }
-
 }

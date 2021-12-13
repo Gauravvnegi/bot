@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -18,6 +18,7 @@ import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/i
 })
 export class InhouseSentimentsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
+  @Input() requestConfiguration;
   $subscription = new Subscription();
   globalFilters;
   selectedInterval: any;
@@ -213,7 +214,7 @@ export class InhouseSentimentsComponent implements OnInit {
     const keys = Object.keys(this.graphData);
     this.chart.chartData = [];
     this.chart.chartLabels = [];
-    // this.chart.chartColors = [];
+    this.chart.chartColors = [];
     keys.forEach((key) => {
       if (key !== 'label' && key !== 'totalCount') {
         if (!this.chart.chartLabels.length)
@@ -222,6 +223,11 @@ export class InhouseSentimentsComponent implements OnInit {
           data: Object.values(this.graphData[key].stats),
           label: this.graphData[key].label,
           fill: false,
+        });
+        this.chart.chartColors.push({
+          borderColor: this.getFilteredConfig(this.graphData[key].label).color,
+          backgroundColor: this.getFilteredConfig(this.graphData[key].label)
+            .color,
         });
       }
     });
@@ -276,5 +282,9 @@ export class InhouseSentimentsComponent implements OnInit {
       // remove loader for detail close
       detailCompRef.close()
     );
+  }
+
+  getFilteredConfig(label) {
+    return this.requestConfiguration?.filter((d) => d.label === label)[0] || {};
   }
 }

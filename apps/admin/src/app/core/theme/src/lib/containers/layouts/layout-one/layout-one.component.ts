@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get } from 'lodash';
 import { AuthService } from '../../../../../../auth/services/auth.service';
@@ -49,7 +49,7 @@ export class LayoutOneComponent implements OnInit {
     public globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private _authService: AuthService,
-    private _userDetailService: UserDetailService,
+    private _userService: UserService,
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService
   ) {}
@@ -67,25 +67,32 @@ export class LayoutOneComponent implements OnInit {
       hotelId: this._hotelDetailService.hotelDetails.brands[0].branches.filter(
         (d) => d.name === this.filterConfig.branchName
       )[0].id,
-      userId: this._userDetailService.getLoggedInUserid(),
+      userId: this._userService.getLoggedInUserid(),
     });
     this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
       const notificationPayload = payload;
       this.firebaseMessagingService.playNotificationSound();
-      if (
-        notificationPayload &&
-        notificationPayload['data']?.notificationType &&
-        notificationPayload['data']?.notificationType === 'Live Request'
-      ) {
-        if (this.checkForMessageRoute())
-          this.firebaseMessagingService.liveRequestEnable.next(
-            notificationPayload
-          );
-      } else {
-        if (this.checkForMessageRoute())
-          this.firebaseMessagingService.currentMessage.next(payload);
-        else if (Object.keys(payload).length) {
-          this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+      if (notificationPayload) {
+        switch (notificationPayload['data']?.notificationType) {
+          case 'Live Request':
+            if (this.checkForMessageRoute())
+              this.firebaseMessagingService.liveRequestEnable.next(
+                notificationPayload
+              );
+            break;
+          case 'In-house Request':
+            if (this._router.url.includes('request'))
+              this.firebaseMessagingService.newInhouseRequest.next(
+                notificationPayload
+              );
+            break;
+          default:
+            if (this.checkForMessageRoute())
+              this.firebaseMessagingService.currentMessage.next(payload);
+            else if (Object.keys(payload).length) {
+              this.firebaseMessagingService.showNotificationAsSnackBar(payload);
+            }
+            break;
         }
       }
     });
@@ -269,25 +276,23 @@ export class LayoutOneComponent implements OnInit {
 
   displayProfile() {
     this._router.navigate([
-      `/pages/roles-permissions/${this._userDetailService.getLoggedInUserid()}`,
+      `/pages/roles-permissions/${this._userService.getLoggedInUserid()}`,
     ]);
   }
 
   logoutUser() {
-    this._authService
-      .logout(this._userDetailService.getLoggedInUserid())
-      .subscribe(
-        (response) => {
-          this._authService.clearToken();
-          this._router.navigate(['/auth']);
-          location.reload();
-        },
-        (error) => {
-          this._authService.clearToken();
-          this._router.navigate(['/auth']);
-          location.reload();
-        }
-      );
+    this._authService.logout(this._userService.getLoggedInUserid()).subscribe(
+      (response) => {
+        this._authService.clearToken();
+        this._router.navigate(['/auth']);
+        location.reload();
+      },
+      (error) => {
+        this._authService.clearToken();
+        this._router.navigate(['/auth']);
+        location.reload();
+      }
+    );
   }
 
   @HostListener('document:visibilitychange', ['$event'])

@@ -1,0 +1,394 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { Subscription, Observable } from 'rxjs';
+import { InhouseTable } from '../../models/inhouse-datatable.model';
+import { AnalyticsService } from '../../services/analytics.service';
+import * as FileSaver from 'file-saver';
+
+@Component({
+  selector: 'hospitality-bot-pre-arrival-datatable',
+  templateUrl: './pre-arrival-datatable.component.html',
+  styleUrls: [
+    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    './pre-arrival-datatable.component.scss',
+  ],
+})
+export class PreArrivalDatatableComponent extends BaseDatatableComponent
+  implements OnInit {
+  @Input() entityType = 'Inhouse';
+  @Input() optionLabels = [];
+  @Input() packageId: string;
+  @Output() onModalClose = new EventEmitter();
+  globalQueries;
+  $subscription = new Subscription();
+  tabFilterIdx = 0;
+  constructor(
+    public fb: FormBuilder,
+    private _adminUtilityService: AdminUtilityService,
+    private _globalFilterService: GlobalFilterService,
+    private _snackbarService: SnackBarService,
+    private analyticsService: AnalyticsService,
+    protected tabFilterService: TableService
+  ) {
+    super(fb, tabFilterService);
+  }
+
+  cols = [
+    {
+      field: 'itemCode',
+      header: 'Item & Priority Code / Qty',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'confirmationNumber',
+      header: 'Booking No. / Rooms',
+      isSort: true,
+      sortType: 'number',
+    },
+    {
+      field: 'guestDetails.primaryGuest.getFullName()',
+      header: 'Guest/ company',
+      isSort: true,
+      sortType: 'string',
+    },
+    {
+      field: 'journey',
+      header: 'Phone No./ Email',
+      isSort: false,
+      sortType: 'string',
+    },
+    {
+      field: 'journey',
+      header: 'Item Name/ Desc./ Status/ Job Duration',
+      isSort: false,
+      sortType: 'string',
+    },
+    {
+      field: 'remarks',
+      header: 'Open & Close- Date & Time',
+      isSort: false,
+      sortType: 'string',
+    },
+    {
+      field: '',
+      header: 'Actions',
+      isSort: false,
+      sortType: '',
+    },
+  ];
+
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: '',
+      disabled: false,
+      total: 0,
+      chips: [
+        {
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+          type: '',
+        },
+      ],
+    },
+  ];
+  hotelId: string;
+
+  ngOnInit(): void {
+    this.registerListeners();
+  }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        //set-global query everytime global filter changes
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        //fetch-api for records
+        this.loadInitialData([
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            entityType: this.entityType,
+            packageId: this.packageId,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      })
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  loadInitialData(
+    queries = [],
+    loading = true,
+    props?: { offset: number; limit: number }
+  ) {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries, props).subscribe(
+        (data) => {
+          this.values = new InhouseTable().deserialize(data).records;
+          //set pagination
+          this.totalRecords = data.total;
+          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
+            this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
+          else this.updateQuickReplyFilterCount(data.entityStateCounts);
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  addQuickReplyFilter(entityStateCounts, total) {
+    this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
+    Object.keys(entityStateCounts).forEach((key) =>
+      this.tabFilterItems[this.tabFilterIdx].chips.push({
+        label: key,
+        icon: '',
+        value: key,
+        total: entityStateCounts[key],
+        isSelected: false,
+        type: 'pending',
+      })
+    );
+  }
+
+  getSelectedQuickReplyFilters() {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        actionType: item.value,
+      }));
+  }
+
+  updateTabFilterCount(countObj, currentTabCount) {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
+    }
+  }
+
+  updateQuickReplyFilterCount(countObj) {
+    if (countObj) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach(
+        (chip) => (chip.total = countObj[chip.value])
+      );
+    }
+  }
+
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
+    this.resetRowSelection();
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
+    };
+
+    return this.analyticsService.getInhouseRequest(config);
+  }
+
+  loadData(event: LazyLoadEvent) {
+    this.loading = true;
+    this.updatePaginations(event);
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            entityType: this.entityType,
+            packageId: this.packageId,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ],
+        { offset: this.first, limit: this.rowsPerPage }
+      ).subscribe(
+        (data) => {
+          this.values = new InhouseTable().deserialize(data).records;
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
+          //set pagination
+          this.totalRecords = data.total;
+          //check for update tabs and quick reply filters
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  updatePaginations(event) {
+    this.first = event.first;
+    this.rowsPerPage = event.rows;
+  }
+
+  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+    if (quickReplyTypeIdx === 0) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL') chip.isSelected = false;
+      });
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
+    this.changePage(0);
+  }
+
+  customSort(event: SortEvent) {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
+  }
+
+  closeModal() {
+    this.onModalClose.emit(true);
+  }
+
+  exportCSV() {
+    this.loading = true;
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.entityType,
+          packageId: this.packageId,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
+    };
+    this.$subscription.add(
+      this.analyticsService.exportInhouseRequestCSV(config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            this.tableName.toLowerCase() +
+              '_export_' +
+              new Date().getTime() +
+              '.csv'
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  handleStatusChange(data, event) {
+    const requestData = {
+      systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
+      action: event.value,
+    };
+    this.analyticsService
+      .updatePreArrivalRequest(data.id, requestData)
+      .subscribe(
+        (response) => {
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: 'DESC',
+                entityType: this.entityType,
+                packageId: this.packageId,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false,
+            {
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+          this._snackbarService.openSnackBarAsText(
+            `Request status updated`,
+            '',
+            {
+              panelClass: 'success',
+            }
+          );
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      );
+  }
+
+  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    // value = value && value.trim();
+    // this.table.filter(value, field, matchMode);
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
+
+    value = value && value.trim();
+    this.table.filter(value, field, matchMode);
+  }
+}

@@ -1,6 +1,5 @@
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set, trim } from 'lodash';
-import * as moment from 'moment';
 
 export class InhouseTable {
   entityStateCounts: any;
@@ -33,7 +32,7 @@ export class InhouseData {
   action: string;
   closedTime: number;
   confirmationNumber: string;
-  elaspedTime: number;
+  elapsedTime: number;
   guestDetails: GuestType;
   hotelId: string;
   id: string;
@@ -63,7 +62,7 @@ export class InhouseData {
       set({}, 'action', get(input, ['action'])),
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
-      set({}, 'elaspedTime', get(input, ['elaspedTime'])),
+      set({}, 'elapsedTime', get(input, ['elapsedTime'])),
       set({}, 'hotelId', get(input, ['hotelId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'itemCode', get(input, ['itemCode'])),
@@ -108,6 +107,29 @@ export class InhouseData {
         timezone
       )}`;
     else '------';
+  }
+
+  getSLA() {
+    if (this.elapsedTime)
+      return `${Math.round(
+        ((this.elapsedTime % 86400000) % 3600000) / 60000
+      )}m`;
+    else '------';
+  }
+
+  getSLAvalue() {
+    if (this.elapsedTime)
+      return Math.round(((this.elapsedTime % 86400000) % 3600000) / 60000);
+    else 0;
+  }
+
+  getAction() {
+    switch (this.action) {
+      case 'Pending':
+        return 'To-Do';
+      default:
+        return this.action;
+    }
   }
 }
 
@@ -228,6 +250,17 @@ export class Guest {
       return cc.includes('+') ? cc : `+${cc}`;
     }
     return cc;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.firstName, this.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }
 

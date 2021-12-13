@@ -16,7 +16,7 @@ import * as FileSaver from 'file-saver';
 import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
@@ -93,7 +93,7 @@ export class DetailsComponent implements OnInit {
     private router: Router,
     private _hotelDetailService: HotelDetailService,
     private _globalFilterService: GlobalFilterService,
-    private _userDetailService: UserDetailService
+    private _userService: UserService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -126,7 +126,7 @@ export class DetailsComponent implements OnInit {
   }
 
   getShareIcon() {
-    this._userDetailService
+    this._userService
       .getUserShareIconByNationality(this.branchConfig.nationality)
       .subscribe(
         (response) => {

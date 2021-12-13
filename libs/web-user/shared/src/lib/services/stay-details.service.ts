@@ -167,19 +167,19 @@ export class StayDetailsService extends ApiService {
   }
 
   modifyStayDetails(stayDetails, timezone) {
+    const data = {
+      comments: stayDetails.special_comments.comments,
+      expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails, timezone),
+      expectedDepartureTime: this.getDepartureTimeTimestamp(
+        stayDetails,
+        timezone
+      ),
+    };
+    if (stayDetails.address) {
+      data['address'] = stayDetails.address.address;
+    }
     return {
-      stayDetails: {
-        address: stayDetails.address.address,
-        comments: stayDetails.special_comments.comments,
-        expectedArrivalTime: this.getArrivalTimeTimestamp(
-          stayDetails,
-          timezone
-        ),
-        expectedDepartureTime: this.getDepartureTimeTimestamp(
-          stayDetails,
-          timezone
-        ),
-      },
+      stayDetails: data,
     };
   }
 

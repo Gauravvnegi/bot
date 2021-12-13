@@ -6,15 +6,77 @@ $primary-purple: #4b56c0;
 $primary-gray: #9eaeb8;
 $primary-black: #484848;
 $dark-grey: #727272;
+$light-grey: #d9d9d9;
+$light-grey2: #c5c5c5;
 $initiated: #6bacf8;
 $reject: #f00d2a;
 $completed: #53b33e;
 $pending: #c2c2c2;
 $default: #959ea7;
 $dark-blue: #002046;
-
+$dark-blue2: #00162b;
+$white: #ffffff;
+$button-blue: #4b56c0;
+$auth-gray: #555;
+$black: #000;
+// grey palet
+$c-white: $white;
+$c-gray-71: #d3d3d3;
+$c-gray-98: #f3f3f3;
+$c-gray-95: #ededed;
+$c-gray-90: #e3e3e3;
+$c-gray-85: #d9d9d9;
+$c-gray-80: #cccccc;
+$c-gray-75: #c0c0c0;
+$c-gray-70: #b0b0b0;
+$c-gray-60: #999999;
+$c-gray-50: #808080;
+$c-gray-45: #727272;
+$c-gray-40: #696969;
+$c-gray-30: #4d4d4d;
+$c-gray-20: #363636;
+$c-gray-15: #222222;
+$c-gray-10: #171717;
+$c-black: #000000;
 // popup button width
 
 $popup-button-width: 10vw;
 
 $normal-button-width: 15vw;
+
+$box-shadow-1: 0px 0px 6px $c-gray-71;
+
+$palettes: (
+  red: (
+    600: #c6002b,
+    500: #cd212e,
+    400: #e22c3a,
+    300: #f4747c,
+    200: #f79096,
+    100: #f4adb1,
+  ),
+  blue: (
+    600: #0055b7,
+    500: #509da7,
+    400: #30bac6,
+    300: #68c8d5,
+    200: #84dae5,
+    100: #a3e2eb,
+  ),
+  grey: (
+    600: #27292d,
+    500: #3f4447,
+    400: #717277,
+    300: #a9afb2,
+    200: #e6eaed,
+    100: #f6f8f9,
+  ),
+);
+:root {
+  @each $colorname, $palette in $palettes {
+    @each $key, $value in $palette {
+      $keyname: '--palette-' + $colorname + '-' + $key;
+      #{$keyname}: #{$value};
+    }
+  }
+}

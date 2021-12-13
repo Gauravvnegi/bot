@@ -50,6 +50,7 @@ export class ThankYouMainComponent implements OnInit {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe((reservationData) => {
           this._hotelService.hotelConfig = reservationData['hotel'];
+          this._hotelService.titleConfig$.next(reservationData['hotel']);
           this.isReservationData = true;
           this.reservationData = reservationData;
           this._reservationService.reservationData = reservationData;

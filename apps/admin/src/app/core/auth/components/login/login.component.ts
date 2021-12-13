@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Regex } from '../../../../../../../../libs/shared/constants/regex';
+import { Regex } from 'libs/shared/constants/regex';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { AuthService } from '../../services/auth.service';
-import { UserDetailService } from '../../../../../../../../libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
+import { authConstants } from '../../constants/auth-constants';
 
 @Component({
   selector: 'admin-login',
@@ -15,13 +16,12 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPasswordVisible = false;
   isSigningIn = false;
-  dataSource = { id: '1234', token: 'token_xyz' };
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
     private _authService: AuthService,
-    private _userDetailService: UserDetailService,
+    private _userService: UserService,
     private _snackbarService: SnackBarService
   ) {
     this.initLoginForm();
@@ -33,6 +33,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Login form initialization
+   * @author Amit Singh
+   */
   initLoginForm() {
     this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
@@ -40,32 +44,41 @@ export class LoginComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(10),
+          Validators.minLength(authConstants.passwordMinLength),
+          Validators.maxLength(authConstants.passwordMaxLength),
         ],
       ],
     });
   }
 
+  /**
+   * Admin Login
+   * @returns null
+   * @author Amit Singh
+   */
   login() {
     if (!this.loginForm.valid) {
       return;
     }
     this.isSigningIn = true;
-    const data = this.loginForm.value;
+    const data = this.loginForm.getRawValue();
     data.email = data.email.toLowerCase().trim();
     this._authService.login(data).subscribe(
       (response) => {
-        this._userDetailService.setLoggedInUserId(response.id);
+        this._userService.setLoggedInUserId(response.id);
         this._router.navigate(['/pages/dashboard']);
       },
-      (error) => {
+      ({ error }) => {
         this.isSigningIn = false;
-        this._snackbarService.openSnackBarAsText(error.error.message);
+        this._snackbarService.openSnackBarAsText(error.message);
       }
     );
   }
 
+  /**
+   * Navigate to Request Password
+   * @author Amit Singh
+   */
   navigateToRequestPassword() {
     this._router.navigate(['/auth/request-password']);
   }

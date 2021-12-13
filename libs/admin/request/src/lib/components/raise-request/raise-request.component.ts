@@ -5,11 +5,18 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 
 @Component({
@@ -20,7 +27,9 @@ import { RequestService } from '../../services/request.service';
 export class RaiseRequestComponent implements OnInit, OnDestroy {
   @Output() onRaiseRequestClose = new EventEmitter();
   requestFG: FormGroup;
+  searchFG: FormGroup;
   hotelId: string;
+  reservation = {};
   $subscription = new Subscription();
   cmsServices = [];
   priorityList = [
@@ -33,12 +42,18 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private _requestService: RequestService
+    private _requestService: RequestService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
     this.initFG();
+    this.registerListeners();
+  }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+    this.listenForRoomNumberChanges();
   }
 
   listenForGlobalFilters() {
@@ -76,6 +91,9 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       remarks: [''],
       quantity: [1],
     });
+    this.searchFG = this.fb.group({
+      search: [''],
+    });
   }
 
   initItemList() {
@@ -108,26 +126,64 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
     const data = {
       ...this.requestFG.getRawValue(),
-      systemDateTime: DateService.currentDate('DD-MMM-YYYY hh:mm:ss'),
+      systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
       sender: 'KIOSK',
       propertyID: '1',
     };
 
-    this.$subscription.add(
-      this._requestService.createRequest(this.hotelId, data).subscribe(
-        (response) => {
-          this._snackbarService.openSnackBarAsText('Request created.', '', {
-            panelClass: 'success',
-          });
-          this.close(true);
-        },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-      )
-    );
+    // this.$subscription.add(
+    //   this._requestService.createRequest(this.hotelId, data).subscribe(
+    //     (response) => {
+    //       this._snackbarService.openSnackBarAsText('Request created.', '', {
+    //         panelClass: 'success',
+    //       });
+    //       this.close({ status: true, data: this.reservation });
+    //     },
+    //     ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+    //   )
+    // );
   }
 
-  close(status = false) {
-    this.onRaiseRequestClose.emit(status);
+  close(closeData) {
+    this.onRaiseRequestClose.emit(closeData);
+  }
+
+  listenForRoomNumberChanges() {
+    const formChanges$ = this.searchFG.valueChanges.pipe(
+      filter(() => !!(this.searchFG.get('search') as FormControl).value)
+    );
+
+    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
+      // setting minimum search character limit to 3
+      this.requestFG.patchValue({
+        roomNo: response.search,
+      });
+      if (response?.search.length >= 3) {
+        // this.$subscription.add(
+        //   this._requestService
+        //     .searchBooking(
+        //       this.adminUtilityService.makeQueryParams([
+        //         {
+        //           roomNo: response?.search,
+        //         },
+        //       ])
+        //     )
+        //     .subscribe((res) => {
+        //       if (res) {
+        //         this.reservation = res;
+        //         this.requestFG.patchValue({
+        //           firstName: res.guestDetails.primaryGuest.firstName,
+        //           lastName: res.guestDetails.primaryGuest.lastName,
+        //         });
+        //       } else {
+        //         this.reservation = {};
+        //       }
+        //     })
+        // );
+      } else {
+        this.reservation = {};
+      }
+    });
   }
 
   ngOnDestroy() {

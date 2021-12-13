@@ -34,23 +34,19 @@ export class AnalyticsService extends ApiService {
   }
 
   getSourceStats(config) {
-    return this.get(
-      `/api/v1/live-request/source-stats/count${config.queryObj}`
-    );
+    return this.get(`/api/v1/request/source-stats/count${config.queryObj}`);
   }
 
   getSentimentsStats(config) {
-    return this.get(
-      `/api/v1/live-request/sentiment-stats/count${config.queryObj}`
-    );
+    return this.get(`/api/v1/request/sentiment-stats/count${config.queryObj}`);
   }
 
   getInhouseRequest(config) {
-    return this.get(`/api/v1/live-request/list${config.queryObj}`);
+    return this.get(`/api/v1/request${config.queryObj}`);
   }
 
   exportInhouseRequestCSV(config) {
-    return this.get(`/api/v1/live-request/list/export${config.queryObj}`, {
+    return this.get(`/api/v1/request/export${config.queryObj}`, {
       responseType: 'blob',
     });
   }
@@ -60,5 +56,13 @@ export class AnalyticsService extends ApiService {
       `/api/v1/reservation/cms-close-job${config.queryObj}`,
       data
     );
+  }
+
+  getPackageList(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/packages`);
+  }
+
+  updatePreArrivalRequest(id, data) {
+    return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
   }
 }

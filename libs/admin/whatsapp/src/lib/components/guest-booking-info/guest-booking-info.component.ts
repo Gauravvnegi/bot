@@ -60,7 +60,6 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
           response,
           this.globalFilterService.timezone
         );
-        console.log(this.reservationData);
       },
       ({ error }) => {
         this._snackBarService.openSnackBarAsText(error.message);

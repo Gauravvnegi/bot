@@ -12,6 +12,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
 import { InhouseTable } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -45,7 +46,7 @@ export class RequestListComponent implements OnInit {
     {
       label: 'To-Do',
       content: '',
-      value: 'Immediate',
+      value: 'Pending',
       disabled: false,
       total: 0,
       chips: [],
@@ -75,12 +76,13 @@ export class RequestListComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private _requestService: RequestService,
     private _adminUtilityService: AdminUtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private firebaseMessagingService: FirebaseMessagingService
   ) {}
 
   ngOnInit(): void {
     this.initFG();
-    this.listenForGlobalFilters();
+    this.registerListeners();
     this._requestService.selectedRequest.next(null);
   }
 
@@ -88,6 +90,11 @@ export class RequestListComponent implements OnInit {
     this.parentFG = this.fb.group({
       search: ['', Validators.minLength(3)],
     });
+  }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+    this.listenForNotification();
   }
 
   listenForGlobalFilters() {
@@ -102,6 +109,7 @@ export class RequestListComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
+        this._requestService.selectedRequest.next(null);
         this.loadInitialRequestList([
           ...this.globalQueries,
           {
@@ -118,6 +126,27 @@ export class RequestListComponent implements OnInit {
         ]);
       })
     );
+  }
+
+  listenForNotification() {
+    this.firebaseMessagingService.newInhouseRequest.subscribe((response) => {
+      if (response) {
+        this.loadInitialRequestList([
+          ...this.globalQueries,
+          {
+            ...this.filterData,
+            order: 'DESC',
+            entityType: this.entityType,
+            actionType: this.tabFilterItems[this.tabFilterIdx].value,
+            offset: 0,
+            limit:
+              this.listData && this.listData.length > 10
+                ? this.listData.length
+                : 10,
+          },
+        ]);
+      }
+    });
   }
 
   getHotelId(globalQueries): void {

@@ -13,8 +13,8 @@ export class RequestListFilterComponent implements OnInit {
     { label: 'Latest', value: '', order: '' },
     { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
     { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
-    { label: 'Function Code', value: 'functionCode', order: 'ASC' },
-    { label: 'SLA Low -> High', value: 'sla', order: 'ASC' },
+    { label: 'Function Code', value: 'itemCode', order: 'ASC' },
+    // { label: 'SLA Low -> High', value: 'sla', order: 'ASC' },
   ];
 
   filterData = ['ASAP', 'High', 'Medium'];

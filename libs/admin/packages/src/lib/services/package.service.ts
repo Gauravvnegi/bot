@@ -60,7 +60,7 @@ export class PackageService extends ApiService {
     packageData.source = PackageSource.Botshot
     packageData.startDate = 0;
     packageData.endDate = 0
-    packageData.type = formValue.packageCode;
+    packageData.type = formValue.type;
     packageData.downloadUrl = '';
     packageData.unit = formValue.unit;
     packageData.autoAccept = formValue.autoAccept;

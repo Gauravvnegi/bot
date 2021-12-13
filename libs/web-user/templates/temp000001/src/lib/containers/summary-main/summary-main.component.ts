@@ -45,6 +45,7 @@ export class SummaryMainComponent implements OnInit {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe((reservationData) => {
           this._hotelService.hotelConfig = reservationData['hotel'];
+          this._hotelService.titleConfig$.next(reservationData['hotel']);
           this.isReservationData = true;
           this._templateLoadingService.isTemplateLoading$.next(false);
           this.reservationData = reservationData;

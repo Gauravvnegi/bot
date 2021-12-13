@@ -58,6 +58,9 @@
 .graphContainer {
   display: flex;
   height: 100%;
+  @media (max-width: $tablet) {
+    gap: 1.3%;
+  }
   .analyticsHeading {
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
@@ -77,10 +80,17 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    @media (max-width: $tablet) {
+      @include margin-right(0);
+      @include width(38%);
+    }
     .messageRequests {
       display: flex;
       margin-bottom: 20px;
       justify-content: space-around;
+      @media (max-width: $tablet) {
+        align-items: center;
+      }
       .requestCircle {
         position: relative;
         width: 173px;
@@ -163,6 +173,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    @media (max-width: $tablet) {
+      @include width(60.7%);
+    }
   }
 }
 .center-circle-progress {
@@ -385,4 +398,28 @@
 }
 .percentRed {
   color: #cc052b;
+}
+.conversation-notification {
+  display: flex;
+  margin-top: 15px;
+  @media (max-width: $tablet) {
+    gap: 1.3%;
+  }
+  &-conversation {
+    width: 60%;
+    border: solid 1px #e2e2e2;
+    border-radius: 5px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    margin-right: 15px;
+    @media (max-width: $tablet) {
+      @include width(60.7%);
+      @include margin-right(0);
+    }
+  }
+  &-notification {
+    width: 40%;
+    @media (max-width: $tablet) {
+      @include width(38%);
+    }
+  }
 }

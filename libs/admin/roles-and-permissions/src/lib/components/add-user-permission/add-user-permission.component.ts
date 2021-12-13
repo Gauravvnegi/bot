@@ -6,7 +6,7 @@ import {
   FormArray,
   FormControl,
 } from '@angular/forms';
-import { UserDetailService } from 'libs/admin/shared/src/lib/services/user-detail.service';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { CountryCode } from '../../../../../../shared/models/country-code.model';
 import { Regex } from '../../../../../../shared/constants/regex';
@@ -40,7 +40,7 @@ export class AddUserPermissionComponent implements OnInit {
   value;
   constructor(
     private _fb: FormBuilder,
-    private _userDetailService: UserDetailService,
+    private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
     private _snackbarService: SnackBarService,
@@ -90,11 +90,7 @@ export class AddUserPermissionComponent implements OnInit {
   }
 
   initManager() {
-    const {
-      firstName,
-      lastName,
-      jobTitle,
-    } = this._userDetailService.userDetails;
+    const { firstName, lastName, jobTitle } = this._userService.userDetails;
     this.managedBy = {
       firstName,
       lastName,
@@ -126,7 +122,7 @@ export class AddUserPermissionComponent implements OnInit {
   }
 
   initUserPermissions() {
-    const { permissionConfigs } = this._userDetailService.userDetails;
+    const { permissionConfigs } = this._userService.userDetails;
     this.userPermissions = permissionConfigs;
 
     permissionConfigs.forEach((config, index) => {
@@ -195,7 +191,7 @@ export class AddUserPermissionComponent implements OnInit {
     this._managePermissionService
       .addUser({
         data,
-        parentUserId: this._userDetailService.getLoggedInUserid(),
+        parentUserId: this._userService.getLoggedInUserid(),
       })
       .subscribe(
         (res) => {

@@ -31,8 +31,11 @@
     .feilds {
       display: flex;
       align-items: center;
-      // justify-content: space-between;
       margin-top: 2%;
+      @media (max-width: $tablet) {
+        flex-wrap: wrap;
+        gap: 60px;
+      }
       .toggle_wrapper {
         display: flex;
         align-items: center;
@@ -60,10 +63,10 @@
         align-items: center;
         width: 31.5%;
         margin-right: 1.5%;
-        // @media (max-width: 992px) {
-        //   overflow: hidden;
-        // }
-       ::ng-deep .mat-form-field-infix{
+        @media (max-width: $tablet) {
+          @include width(42.6%);
+        }
+        ::ng-deep .mat-form-field-infix {
           @media (max-width: 1024px) {
             width: inherit;
           }

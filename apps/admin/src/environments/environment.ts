@@ -7,6 +7,7 @@ export const environment = {
   name: 'default',
   // base_url: 'https://94fca43ae2e4.ngrok.io',
   base_url: 'https://testapi.botshot.in:32313',
+  // base_url: 'https://api.botshot.in:8443',
   firebase: {
     apiKey: 'AIzaSyBVotX7FRNCpG7WakjyDnxnUmgYDerLyHI',
     authDomain: 'push-notification-6455a.firebaseapp.com',

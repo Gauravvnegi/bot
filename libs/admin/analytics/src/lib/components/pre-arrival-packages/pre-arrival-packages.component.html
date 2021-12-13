@@ -1,23 +1,9 @@
-<div style="padding: 20px; height: 100%;">
-  <div
-    style="display: flex; justify-content: space-between; align-items: center;"
-  >
-    <div
-      style="
-        font-family: Roboto;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        text-align: left;
-        color: #002046;
-      "
-    >
+<div class="pap-wraper">
+  <div class="pap-wraper-header">
+    <div class="pap-wraper-header-title">
       Pre-Arrival Packages
     </div>
-    <div style="display: flex; align-items: center;" [formGroup]="packageFG">
+    <div class="pap-wraper-header-chart-type" [formGroup]="packageFG">
       <label
         class="labl"
         *ngFor="let option of chartTypes"
@@ -35,16 +21,17 @@
       </label>
     </div>
   </div>
-  <div style="margin: 10px 0; overflow-x: auto;">
+  <div class="pap-wraper-filter">
     <hospitality-bot-tab-group
       [listItems]="tabFilterItems"
       [selectedIndex]="tabFilterIdx"
       (selectedTabChange)="onSelectedTabFilterChange($event)"
     ></hospitality-bot-tab-group>
   </div>
-  <div style="margin: 10px;" (click)="openModal()">
+  <div class="m-10">
     <canvas
       baseChart
+      (click)="openModal()"
       [datasets]="chart.chartData"
       [labels]="chart.chartLabels"
       [options]="chart.chartOptions"
@@ -56,11 +43,16 @@
     <div class="stat-vals-container">
       <div
         class="stat-val"
+        [class.text-decoration]="textCut"
         *ngFor="let key of stats; let i = index"
         (click)="legendOnClick(i, $event)"
       >
         <div class="label">
-          <img [src]="graphData[key].img" alt="" />
+          <input class="legends" type="checkbox" />
+          <img
+            [src]="getFilteredConfig(graphData[key].label)?.icon"
+            [alt]="graphData[key].label"
+          />
           <span>{{ graphData[key].label }}</span>
         </div>
         <div class="value">{{ graphData[key].totalCount }}</div>

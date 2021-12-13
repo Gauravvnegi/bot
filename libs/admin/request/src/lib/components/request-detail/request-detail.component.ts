@@ -50,6 +50,7 @@ export class RequestDetailComponent implements OnInit {
           this.requestFG.patchValue({ status: response.action });
           this.status = true;
         } else {
+          this.data = new InhouseData();
           this.status = false;
         }
       })

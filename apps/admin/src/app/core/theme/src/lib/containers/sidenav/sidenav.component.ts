@@ -111,8 +111,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
     //check if admin or super admin by using command pattern
     ADMIN_ROUTES.forEach((data, i) => {
-      if (this.subscriptionCheck(data, subscription).length) {
-        this.menuItems.push(data);
+      const checkSubscriptionData = this.subscriptionCheck(data, subscription);
+      if (checkSubscriptionData.length) {
+        this.menuItems.push(
+          checkSubscriptionData.children ? checkSubscriptionData[0] : data
+        );
       }
     });
     this.menuItems = [
@@ -132,14 +135,41 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   subscriptionCheck(data, subscription) {
-    if (data.path === 'feedback')
-      return subscription.filter(
-        (d) =>
-          (ModuleNames[d.name] === data.path && d.active) ||
-          (ModuleNames.FEEDBACK_TRANSACTIONAL === d.name && d.active)
-      );
-    return subscription.filter(
-      (d) => ModuleNames[d.name] === data.path && d.active
-    );
+    switch (data.path) {
+      case 'feedback':
+        return subscription.filter(
+          (d) =>
+            (ModuleNames[d.name] === data.path && d.active) ||
+            (ModuleNames.FEEDBACK_TRANSACTIONAL === d.name && d.active)
+        );
+      case 'conversation':
+        const subItemList = this.checkConversationSubscription(
+          data,
+          subscription
+        );
+        if (subItemList.length) {
+          data.children = subItemList;
+          return [data];
+        } else return [];
+      default:
+        return subscription.filter(
+          (d) => ModuleNames[d.name] === data.path && d.active
+        );
+    }
+  }
+
+  checkConversationSubscription(item, subscription) {
+    const subItemList = [];
+    item.children.forEach((child) => {
+      if (
+        child.path.includes('request') &&
+        subscription.filter(
+          (d) => ModuleNames[d.name] === 'request' && d.active
+        ).length
+      ) {
+        subItemList.push(child);
+      } else if (!child.path.includes('request')) subItemList.push(child);
+    });
+    return subItemList;
   }
 }

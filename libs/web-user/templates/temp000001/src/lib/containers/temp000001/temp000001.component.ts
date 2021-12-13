@@ -57,47 +57,17 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
     this.reservationService.reservationId = reservationId;
     this.hotelService.currentJourney = journey;
     this.hotelService.hotelId = hotelId;
-    this.setWebUserTitle();
+    // this.setWebUserTitle();
   }
 
-  setWebUserTitle(): void {
-    //dev.botshot.in/?token=cg1jak6Id623uiUNGb1UOnRgMUTycRJO0kxLT2ceycybrpFaG6hcVNDnzgWxMY3zI5Vog_Ln5puJFItGajebaImQdO2yQF0N6aKjHBQ_AFC6cIAIVLF3UzAnr9-kU3k6aASl32qp0DhLF22IC-DlhA==
-    this.$subscription.add(
-      this.reservationService
-        .getReservationDetails(this.reservationService.reservationId)
-        .subscribe(
-          (reservationData) => {
-            if (reservationData) {
-              this.titleService.setTitle(
-                reservationData['hotel']
-                  ? reservationData['hotel'].name
-                  : 'Web-user'
-              );
-              let favicon = this.document.querySelector('#favicon');
-              favicon['href'] = reservationData['hotel']['favIcon']
-                ? reservationData['hotel']['favIcon'].trim()
-                : 'favicon.ico';
-            }
-          },
-          ({ error }) => {
-            if (error.type == 'BOOKING_CANCELED') {
-              this.getHotelData();
-            }
-          }
-        )
-    );
-  }
-
-  getHotelData() {
-    this.hotelService
-      .getHotelConfigById(this.hotelService.hotelId)
-      .subscribe((hotel) => {
-        this.titleService.setTitle(hotel.name);
+  listenForTitleConfig() {
+    this.hotelService.titleConfig$.subscribe((response) => {
+      if (response) {
+        this.titleService.setTitle(response.name);
         let favicon = this.document.querySelector('#favicon');
-        favicon['href'] = hotel['favIcon']
-          ? hotel['favIcon'].trim()
-          : 'favicon.ico';
-      });
+        favicon['href'] = response['favIcon']?.trim() ?? 'favicon.ico';
+      }
+    });
   }
 
   protected initTranslationService(): void {
@@ -112,6 +82,7 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
         }
       })
     );
+    this.listenForTitleConfig();
   }
 
   ngAfterViewInit(): void {
@@ -120,11 +91,6 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
 
   protected initCssVariables(): void {
     let cssText: string = '';
-    // this.templateService.templateData.layout_variables = {
-    //   '--stepper-background-color': 'blue',
-    //   '--header-background-color': 'red',
-    //   '--primary-button-background-color': 'red',
-    // };
     for (let stepperLayoutVariable in this.templateService.templateData[
       this.templateId
     ].layout_variables) {

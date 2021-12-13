@@ -182,9 +182,51 @@
           <input
             pInputText
             type="text"
+            (input)="onFilterTypeTextChange($event.target.value, 'itemCode')"
+            class="p-column-filter"
+          />
+        </th>
+        <th class="table-search-head">
+          <input
+            pInputText
+            type="text"
             (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
+              onFilterTypeTextChange($event.target.value, 'confirmationNumber')
             "
+            class="p-column-filter"
+          />
+        </th>
+        <th class="table-search-head">
+          <input
+            pInputText
+            type="text"
+            (input)="
+              onFilterTypeTextChange(
+                $event.target.value,
+                'guestDetails.primaryGuest.firstName'
+              )
+            "
+            class="p-column-filter"
+          />
+        </th>
+        <th class="table-search-head">
+          <input
+            pInputText
+            type="text"
+            (input)="
+              onFilterTypeTextChange(
+                $event.target.value,
+                'guestDetails.primaryGuest.email'
+              )
+            "
+            class="p-column-filter"
+          />
+        </th>
+        <th class="table-search-head">
+          <input
+            pInputText
+            type="text"
+            (input)="onFilterTypeTextChange($event.target.value, 'itemName')"
             class="p-column-filter"
           />
         </th>
@@ -196,46 +238,7 @@
               onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
             "
             class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
-            "
-            class="p-column-filter"
+            disabled="true"
           />
         </th>
         <th class="table-search-head">
@@ -294,7 +297,20 @@
             <div>JD :- {{ rowData.jobDuration }}min</div>
           </div>
         </td>
-        <td><div class="emptyCell">&mdash;</div></td>
+        <td>
+          <p class="date-time">
+            {{
+              rowData.getRequestDateTime(_globalFilterService.timezone) ||
+                '- - - - -'
+            }}
+          </p>
+          <p class="date-time">
+            {{
+              rowData.getClosedTime(_globalFilterService.timezone) ||
+                '- - - - -'
+            }}
+          </p>
+        </td>
         <td>
           <mat-select
             class="form-elements"

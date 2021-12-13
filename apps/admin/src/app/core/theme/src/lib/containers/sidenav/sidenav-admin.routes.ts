@@ -29,9 +29,6 @@ export const ADMIN_ROUTES = [
     children: null,
     url: 'assets/svg/virus.svg',
   },
-];
-
-export const DEFAULT_ROUTES = [
   {
     path: 'conversation',
     title: 'Conversations',
@@ -55,6 +52,9 @@ export const DEFAULT_ROUTES = [
       },
     ],
   },
+];
+
+export const DEFAULT_ROUTES = [
   {
     path: 'subscription',
     title: 'Subscription',

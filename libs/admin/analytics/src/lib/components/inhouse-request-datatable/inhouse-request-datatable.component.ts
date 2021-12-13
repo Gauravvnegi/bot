@@ -6,6 +6,7 @@ import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/dat
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
@@ -40,21 +41,21 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   cols = [
     {
-      field: 'rooms.roomNumber',
+      field: 'itemCode',
       header: 'Item & Priority Code / Qty',
-      isSort: false,
+      isSort: true,
       sortType: 'number',
     },
     {
-      field: 'booking.bookingNumber',
+      field: 'confirmationNumber',
       header: 'Booking No. / Rooms',
-      isSort: false,
+      isSort: true,
       sortType: 'number',
     },
     {
-      field: 'guests.primaryGuest.getFullName()',
+      field: 'guestDetails.primaryGuest.getFullName()',
       header: 'Guest/ company',
-      isSort: false,
+      isSort: true,
       sortType: 'string',
     },
     {
@@ -71,7 +72,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     },
     {
       field: 'remarks',
-      header: 'Assigned To/ Op & CI - Dt & Tm',
+      header: 'Assigned To/ Op & Cl - Dt & Tm',
       isSort: false,
       sortType: 'string',
     },
@@ -102,6 +103,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       ],
     },
   ];
+
   hotelId: string;
 
   ngOnInit(): void {
@@ -365,13 +367,29 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
               : this.rowsPerPage,
           }
         );
-        this._snackbarService.openSnackBarAsText(
-          `Job: ${data.jobID} closed`,
-          '',
-          { panelClass: 'success' }
-        );
+        this._snackbarService.openSnackBarAsText(`Request status updated`, '', {
+          panelClass: 'success',
+        });
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
     );
+  }
+
+  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+    // value = value && value.trim();
+    // this.table.filter(value, field, matchMode);
+
+    if (!!value && !this.isSearchSet) {
+      this.tempFirst = this.first;
+      this.tempRowsPerPage = this.rowsPerPage;
+      this.isSearchSet = true;
+    } else if (!!!value) {
+      this.isSearchSet = false;
+      this.first = this.tempFirst;
+      this.rowsPerPage = this.tempRowsPerPage;
+    }
+
+    value = value && value.trim();
+    this.table.filter(value, field, matchMode);
   }
 }

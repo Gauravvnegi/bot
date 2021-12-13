@@ -10,6 +10,10 @@
   align-items: center;
   border-bottom: 1px solid #9eaeb8;
   cursor: pointer;
+  &-guest-wrap {
+    display: flex;
+    align-items: center;
+  }
 }
 .guestInfoAvatar {
   width: 28px;

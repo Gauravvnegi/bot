@@ -79,6 +79,7 @@
       opacity: 1;
       @media (max-width: 1024px) {
         font-size: 10px;
+        white-space: nowrap;
       }
     }
   }
@@ -88,12 +89,14 @@
     letter-spacing: 0.72px;
     color: #4b56c0;
     opacity: 1;
-
+    display: flex;
+    font-size: 10px;
     span {
       font-weight: normal;
       color: #52b33f;
       @media (max-width: 1024px) {
-        font-size: 10px;
+        font-size: 8px;
+        white-space: nowrap;
       }
     }
   }

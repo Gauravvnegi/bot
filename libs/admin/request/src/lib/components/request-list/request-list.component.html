@@ -70,7 +70,9 @@
           selectedRequest.id === item.id && { background: '#f1f1f1' }
         "
       >
-        <div class="right-side-body-card-avt"></div>
+        <div class="right-side-body-card-avt">
+          {{ item.guestDetails.primaryGuest.getProfileNickName() }}
+        </div>
         <div class="content-wrap">
           <div class="content-wrap-r1">
             <div>RNO: {{ item.rooms[0]?.roomNumber }}</div>
@@ -96,9 +98,26 @@
             {{ item.remarks }}
           </div>
           <div class="content-wrap-r2">
-            <div>{{ item.priority || '------' }}</div>
+            <div
+              [ngClass]="{
+                'status-text-initiated': item.action == 'Timeout',
+                'status-text-reject': item.action == 'Pending',
+                'status-text-success': item.action == 'Closed'
+              }"
+            >
+              {{ item.getAction() || '------' }}
+            </div>
             <div class="content-wrap-r2-divider"></div>
-            <div>-----</div>
+            <div
+              [ngClass]="{
+                'sla-timeout': item.getSLAvalue() < 0,
+                'sla-pending':
+                  item.getSLAvalue() <= 5 && item.getSLAvalue() >= 0,
+                'sla-new': item.getSLAvalue() > 5
+              }"
+            >
+              SLA: {{ item.getSLA() }}
+            </div>
             <div class="content-wrap-r2-divider"></div>
             <div>JD:- {{ item.jobDuration }}m</div>
           </div>

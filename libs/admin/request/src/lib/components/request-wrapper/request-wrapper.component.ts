@@ -21,14 +21,6 @@ export class RequestWrapperComponent implements OnInit {
       total: 0,
       chips: [],
     },
-    {
-      label: 'Pre-Arrival',
-      content: '',
-      value: 'PREARRIVAL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
   ];
 
   tabFilterIdx: number = 0;
@@ -56,7 +48,7 @@ export class RequestWrapperComponent implements OnInit {
     this.$subscription.add(
       raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
         (res) => {
-          if (res) this._requestService.refreshData.next(res);
+          if (res.status) this._requestService.refreshData.next(res);
           raiseRequestCompRef.close();
         }
       )

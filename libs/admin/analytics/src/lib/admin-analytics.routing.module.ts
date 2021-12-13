@@ -9,6 +9,7 @@ import { InhouseSourceComponent } from './components/inhouse-source/inhouse-sour
 import { InhouseComponent } from './components/inhouse/inhouse.component';
 import { MessageAnalyticsComponent } from './components/message-analytics/message-analytics.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { PreArrivalDatatableComponent } from './components/pre-arrival-datatable/pre-arrival-datatable.component';
 import { PreArrivalPackagesComponent } from './components/pre-arrival-packages/pre-arrival-packages.component';
 import { PreArrivalComponent } from './components/pre-arrival/pre-arrival.component';
 import { WhatsappMessageAnalyticsComponent } from './components/whatsapp-message-analytics/whatsapp-message-analytics.component';
@@ -38,5 +39,6 @@ export class AdminAnalyticsRoutingModule {
     NotificationComponent,
     PreArrivalComponent,
     PreArrivalPackagesComponent,
+    PreArrivalDatatableComponent,
   ];
 }

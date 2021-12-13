@@ -3,13 +3,33 @@
     <div class="button raise-request-btn">
       Raise Request
     </div>
-    <div (click)="close()" class="close">
+    <div (click)="close({ status: false })" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
   <div class="mar-30">
-    <div class="form-elements-groups" [formGroup]="requestFG">
+    <div class="form-elements-groups" [formGroup]="searchFG">
       <div class="form-elements-container full-width">
+        <img class="icon" src="assets/svg/room.svg" alt="room" />
+        <input
+          matInput
+          type="text"
+          class="form-elements"
+          placeholder="Room *"
+          formControlName="search"
+        />
+      </div>
+      <mat-error
+        *ngIf="
+          requestFG.get('roomNo').touched &&
+          requestFG.get('roomNo').hasError('required')
+        "
+      >
+        Room No is required
+      </mat-error>
+    </div>
+    <div class="form-elements-groups" [formGroup]="requestFG">
+      <!-- <div class="form-elements-container full-width">
         <img class="icon" src="assets/svg/room.svg" alt="room" />
         <input
           matInput
@@ -25,7 +45,7 @@
         >
           Room No is required
         </mat-error>
-      </div>
+      </div> -->
       <div class="form-elements-container">
         <img class="icon" src="assets/svg/user-01.svg" alt="firstName" />
         <input
@@ -135,6 +155,7 @@
           class="form-elements"
           placeholder="Job Duration"
           formControlName="jobDuration"
+          disabled
         >
           <mat-option
             *ngFor="let item of [].constructor(60); let i = index"
@@ -154,7 +175,10 @@
       </div>
     </div>
     <div class="request-popup-btnwrap">
-      <div class="button request-popup-btnwrap-cancel" (click)="close()">
+      <div
+        class="button request-popup-btnwrap-cancel"
+        (click)="close({ status: false })"
+      >
         Cancel
       </div>
       <div class="button request-popup-btnwrap-save" (click)="raiseRequest()">

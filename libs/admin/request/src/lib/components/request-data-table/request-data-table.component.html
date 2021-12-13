@@ -172,9 +172,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th class="requestDataTableHead"
-        pResizableColumn
-      >
+      <th class="requestDataTableHead" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -271,7 +269,7 @@
       </td>
       <td class="guest">
         {{ rowData.guests.primaryGuest.getFullName() }}
-        <b style="color: #4b56c0;">{{
+        <b class="countstr">{{
           rowData.guests.getSecGuestDisplayConfig().countString
         }}</b>
         <div

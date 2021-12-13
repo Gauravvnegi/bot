@@ -71,6 +71,9 @@ td {
         border-radius: 50%;
         background-color: chocolate;
         margin-right: 15px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
       }
       &-title {
         font-family: Roboto;
@@ -136,4 +139,16 @@ td {
       }
     }
   }
+}
+
+.sla-new {
+  color: #119e0c;
+}
+
+.sla-pending {
+  color: #f8b633;
+}
+
+.sla-timeout {
+  color: #ce0c0c;
 }

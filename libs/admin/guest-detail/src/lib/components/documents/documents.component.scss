@@ -102,12 +102,12 @@
     font-weight: $bolder;
   }
   .download {
-		font: normal normal medium 14px/19px Roboto;
-		letter-spacing: 0.84px;
-		color: #9EAEB8;
-		opacity: 1;
-		cursor: pointer;
-	}
+    font: normal normal medium 14px/19px Roboto;
+    letter-spacing: 0.84px;
+    color: #9eaeb8;
+    opacity: 1;
+    cursor: pointer;
+  }
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -121,8 +121,6 @@
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;
 }
-
-
 
 .nationality-wrapper {
   display: flex;
@@ -179,8 +177,6 @@
   }
 }
 
-
-
 .pending-button-wrapper {
   display: flex;
   align-items: center;
@@ -211,8 +207,10 @@
   }
 }
 
-:host ::ng-deep .remark{
+:host ::ng-deep .remark {
   width: 70%;
 }
 
-
+.reject {
+  color: $reject;
+}

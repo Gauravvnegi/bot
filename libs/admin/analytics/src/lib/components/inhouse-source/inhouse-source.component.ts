@@ -13,6 +13,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 })
 export class InhouseSourceComponent implements OnInit {
   @Input() entityType = 'Inhouse';
+  @Input() requestConfiguration;
   $subscription = new Subscription();
   globalFilters;
   graphData;
@@ -99,10 +100,10 @@ export class InhouseSourceComponent implements OnInit {
         );
         this.chart.Labels.push(key);
         this.chart.Colors[0].backgroundColor.push(
-          this.graphData.inhouseRequestSourceStats[key].color
+          this.getFilteredConfig(key).color
         );
         this.chart.Colors[0].borderColor.push(
-          this.graphData.inhouseRequestSourceStats[key].color
+          this.getFilteredConfig(key).color
         );
       }
     });
@@ -118,20 +119,13 @@ export class InhouseSourceComponent implements OnInit {
     }
   }
 
-  setChartOptions() {
-    this.chart.Labels = ['Initiated', 'Pending', 'Accepted', 'Rejected'];
-
-    this.chart.Colors = [
-      {
-        backgroundColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-        borderColor: ['#FF8F00', '#38649F', '#389F99', '#EE1044'],
-      },
-    ];
-  }
-
   get stats() {
     if (this.graphData.inhouseRequestSourceStats)
       return Object.keys(this.graphData.inhouseRequestSourceStats);
     return [];
+  }
+
+  getFilteredConfig(label) {
+    return this.requestConfiguration?.filter((d) => d.label === label)[0] || {};
   }
 }

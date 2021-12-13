@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -10,7 +10,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
+import { PreArrivalDatatableComponent } from '../pre-arrival-datatable/pre-arrival-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-packages',
@@ -24,7 +24,8 @@ export class PreArrivalPackagesComponent implements OnInit {
   selectedInterval: any;
   graphData;
   packageFG: FormGroup;
-  entityType = 'pre arrival';
+  @Input() entityType = 'pre-arrival';
+  @Input() requestConfiguration;
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -65,8 +66,8 @@ export class PreArrivalPackagesComponent implements OnInit {
   ];
 
   chart: any = {
-    chartData: [{ data: [7, 43, 5, 8, 0], label: 'To Do', fill: false }],
-    chartLabels: ['1 Jun', '2 Jun', '3 Jun', '4 Jun', '5 Jun'],
+    chartData: [{ data: [], label: 'To Do', fill: false }],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {
@@ -105,67 +106,15 @@ export class PreArrivalPackagesComponent implements OnInit {
       },
       legendCallback: this.getLegendCallback,
     },
-    chartColors: [
-      {
-        borderColor: '#fb3d4e',
-        backgroundColor: '#fb3d4e',
-      },
-      {
-        borderColor: '#FF9F67',
-        backgroundColor: '#FF9F67',
-      },
-      {
-        borderColor: '#2a8853',
-        backgroundColor: '#2a8853',
-      },
-      {
-        borderColor: '#0bb2d4',
-        backgroundColor: '#0bb2d4',
-      },
-    ],
+    chartColors: [],
     chartLegend: false,
     chartType: 'line',
   };
 
-  tabFilterItems = [
-    {
-      label: 'Airport Pick-up',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 2',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 3',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 4',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-    {
-      label: 'Packages 5',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-    },
-  ];
+  tabFilterItems = [];
 
   tabFilterIdx = 0;
+  hotelId: string;
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -209,8 +158,45 @@ export class PreArrivalPackagesComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        if (!this.tabFilterItems.length) this.getPackageList();
         this.getInhouseSentimentsData();
       })
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  getPackageList() {
+    this.$subscription.add(
+      this.analyticsService.getPackageList(this.hotelId).subscribe(
+        (response) => {
+          const packages = response.paidPackages || [];
+
+          packages.forEach((item) => {
+            if (item.active && item.packageCode)
+              this.tabFilterItems.push({
+                label: item.name,
+                content: '',
+                value: item.id,
+                disabled: false,
+                total: 0,
+              });
+          });
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+      )
     );
   }
 
@@ -220,7 +206,7 @@ export class PreArrivalPackagesComponent implements OnInit {
         ...this.globalFilters,
         {
           entityType: this.entityType,
-          packageId: this.tabFilterItems[this.tabFilterIdx].value,
+          packageId: this.tabFilterItems[this.tabFilterIdx]?.value,
         },
       ]),
     };
@@ -229,11 +215,18 @@ export class PreArrivalPackagesComponent implements OnInit {
       this.analyticsService.getSentimentsStats(config).subscribe(
         (response) => {
           this.graphData = new InhouseSentiments().deserialize(response);
+          this.updatePackageCount(response.packageTotalCounts);
           this.initGraphData();
         },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  updatePackageCount(countObj) {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
+    }
   }
 
   legendOnClick = (index, event) => {
@@ -269,15 +262,20 @@ export class PreArrivalPackagesComponent implements OnInit {
     const keys = Object.keys(this.graphData);
     this.chart.chartData = [];
     this.chart.chartLabels = [];
-    // this.chart.chartColors = [];
+    this.chart.chartColors = [];
     keys.forEach((key) => {
-      if (key !== 'label' && key !== 'totalCount') {
+      if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
         if (!this.chart.chartLabels.length)
           this.initChartLabels(this.graphData[key].stats);
         this.chart.chartData.push({
           data: Object.values(this.graphData[key].stats),
           label: this.graphData[key].label,
           fill: false,
+        });
+        this.chart.chartColors.push({
+          borderColor: this.getFilteredConfig(this.graphData[key].label).color,
+          backgroundColor: this.getFilteredConfig(this.graphData[key].label)
+            .color,
         });
       }
     });
@@ -322,21 +320,33 @@ export class PreArrivalPackagesComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     const detailCompRef = this.modalService.openDialog(
-      InhouseRequestDatatableComponent,
+      PreArrivalDatatableComponent,
       dialogConfig
     );
 
     detailCompRef.componentInstance.tableName = 'Pre-arrival Request';
-    detailCompRef.componentInstance.entityType = 'pre arrival';
+    detailCompRef.componentInstance.entityType = 'pre-arrival';
     detailCompRef.componentInstance.optionLabels = [
-      'Immediate',
+      'Accept',
       'Reject',
       'Closed',
+      'Pending',
     ];
     detailCompRef.componentInstance.tabFilterIdx = 0;
+    detailCompRef.componentInstance.packageId = this.tabFilterItems[
+      this.tabFilterIdx
+    ]?.value;
     detailCompRef.componentInstance.onModalClose.subscribe((res) =>
       // remove loader for detail close
       detailCompRef.close()
     );
+  }
+
+  getFilteredConfig(label) {
+    return this.requestConfiguration?.filter((d) => d.label === label)[0] || {};
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

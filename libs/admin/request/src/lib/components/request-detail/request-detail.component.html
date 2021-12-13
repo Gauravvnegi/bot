@@ -1,7 +1,9 @@
 <div class="request-items" *ngIf="checkForData()">
   <div class="request-items-header">
     <div class="request-items-header-left">
-      <div class="request-items-header-left-avt"></div>
+      <div class="request-items-header-left-avt">
+        {{ data.guestDetails.primaryGuest.getProfileNickName() }}
+      </div>
       <div class="request-items-header-left-title">
         {{ data.guestDetails.primaryGuest.getFullName() }}
       </div>
@@ -88,9 +90,17 @@
           <td>
             {{ data.getRequestDateTime() }}
           </td>
-          <td>--------</td>
+          <td>{{ data.getClosedTime() || '------' }}</td>
           <td>JD: {{ data.jobDuration }}m</td>
-          <td>-</td>
+          <td
+            [ngClass]="{
+              'sla-timeout': data.getSLAvalue() < 0,
+              'sla-pending': data.getSLAvalue() <= 5 && data.getSLAvalue() >= 0,
+              'sla-new': data.getSLAvalue() > 5
+            }"
+          >
+            {{ data.getSLA() }}
+          </td>
           <td>{{ data.quantity || 'None' }}</td>
         </tr>
       </table>

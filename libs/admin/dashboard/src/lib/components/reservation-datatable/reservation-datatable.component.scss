@@ -139,6 +139,11 @@
 :host ::ng-deep .p-datatable {
   margin: 0 1.5%;
   margin-top: 20px;
+  @media (max-width: $tablet) {
+    @include width(100%);
+    @include margin(0 auto);
+    box-shadow: none;
+  }
 }
 
 :host ::ng-deep .booking-feedback {

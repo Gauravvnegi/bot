@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { Arrivals } from '../../data-models/statistics.model';
-import { ReservationDatatableModalComponent } from '../reservation-datatable-modal/reservation-datatable-modal.component';
+import { Arrivals } from '../../../data-models/statistics.model';
+import { ReservationDatatableModalComponent } from '../../reservation-datatable-modal/reservation-datatable-modal.component';
 
 @Component({
   selector: 'hospitality-bot-arrivals-statistics',
@@ -91,7 +91,7 @@ export class ArrivalsStatisticsComponent implements OnInit {
             type: 'failed',
           },
         ],
-        lastPage:0
+        lastPage: 0,
       },
     ],
     type: 'reservation',

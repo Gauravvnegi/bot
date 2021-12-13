@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import {
   IMessageOverallAnalytics,
   MessageOverallAnalytics,
-} from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+} from '../../../data-models/statistics.model';
+import { StatisticsService } from '../../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-notifications',

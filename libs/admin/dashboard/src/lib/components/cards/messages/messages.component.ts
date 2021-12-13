@@ -1,11 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
+import { Component, Input, OnChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import {
-  CommunicationChannels,
-  config,
   IMessageOverallAnalytics,
   MessageOverallAnalytics,
 } from '../../../data-models/statistics.model';
@@ -16,43 +14,42 @@ import { StatisticsService } from '../../../services/statistics.service';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss'],
 })
-export class MessagesComponent implements OnInit {
-  config = config;
-  data = [
-    { today: 59, yesterday: 31, comparisonPercent: 47, label: 'Sent' },
-    { today: 57, yesterday: 31, comparisonPercent: 46, label: 'Delivered' },
-    { today: 41, yesterday: 22, comparisonPercent: 46, label: 'Read' },
-    { today: 3, yesterday: 0, comparisonPercent: 100, label: 'Failed' },
-  ];
-  total = 59;
+export class MessagesComponent implements OnChanges {
   $subscription = new Subscription();
   @Input() hotelId;
+  @Input() channelOptions;
   messageOverallAnalytics: IMessageOverallAnalytics;
-  channels;
+  messagesFG: FormGroup;
   constructor(
     private statisticsService: StatisticsService,
     private snackbarService: SnackBarService,
-    private subscriptionPlanService: SubscriptionPlanService,
-    private adminutilityService: AdminUtilityService
+    private adminutilityService: AdminUtilityService,
+    private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {
-    this.getConversationStats();
-    this.listenForChannels();
+  ngOnInit() {
+    this.initFG();
   }
 
-  progressValue(data) {
-    return Math.floor((data.today / this.total) * 100);
+  initFG() {
+    this.messagesFG = this.fb.group({
+      channel: ['ALL'],
+    });
   }
 
-  getConversationStats() {
+  ngOnChanges(): void {
+    this.getConversationStats([
+      {
+        templateContext: 'TEXT',
+        comparison: true,
+        channelType: this.messagesFG?.get('channel')?.value,
+      },
+    ]);
+  }
+
+  getConversationStats(queries) {
     const config = {
-      queryObj: this.adminutilityService.makeQueryParams([
-        {
-          templateContext: 'TEXT',
-          comparison: true,
-        },
-      ]),
+      queryObj: this.adminutilityService.makeQueryParams(queries),
     };
     this.$subscription.add(
       this.statisticsService
@@ -68,12 +65,13 @@ export class MessagesComponent implements OnInit {
     );
   }
 
-  listenForChannels() {
-    this.subscriptionPlanService.subscription$.subscribe((res) => {
-      if (res['features'])
-        this.channels = new CommunicationChannels()
-          .deserialize(res['features'].CHANNELS)
-          .channels.filter((channel) => channel.active);
-    });
+  handleChannelChange(event) {
+    this.getConversationStats([
+      {
+        templateContext: 'TEXT',
+        comparison: true,
+        channelType: event.value,
+      },
+    ]);
   }
 }

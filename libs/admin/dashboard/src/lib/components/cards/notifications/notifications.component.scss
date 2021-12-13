@@ -6,6 +6,7 @@
   @include padding(20px);
   &-header {
     @include flex-item-center();
+    position: relative;
     &-icon {
       @include margin-right(10px);
     }
@@ -17,7 +18,16 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: $dark-blue;
+      color: #4b56c0;
+    }
+    &-channel {
+      width: 150px;
+      padding: 8px 15px 7px;
+      border-radius: 5px;
+      border: solid 1px #d9d9d9;
+      position: absolute;
+      top: 0;
+      right: 0;
     }
   }
   &-graph-wraper {

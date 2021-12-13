@@ -27,4 +27,8 @@ export class StatisticsService extends ApiService {
       `/api/v1/hotel/${hotelId}/conversations/stats/counts${config.queryObj}`
     );
   }
+
+  getHotelChannels(hotelId): Observable<any> {
+    return this.get(`/api/v1/hotel/${hotelId}/channels`);
+  }
 }

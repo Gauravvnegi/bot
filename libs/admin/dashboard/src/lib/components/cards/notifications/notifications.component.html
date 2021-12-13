@@ -1,11 +1,21 @@
 <div class="notifications">
-  <div class="notifications-header">
+  <div class="notifications-header" [formGroup]="messagesFG">
     <div class="notifications-header-icon">
       <img src="assets/svg/Notifications.svg" alt="" />
     </div>
     <div class="notifications-header-text">
       Notifications
     </div>
+    <mat-select
+      class="notifications-header-channel"
+      placeholder="Channel"
+      formControlName="channel"
+      (selectionChange)="handleChannelChange($event)"
+    >
+      <mat-option [value]="item.value" *ngFor="let item of channelOptions">{{
+        item.label
+      }}</mat-option>
+    </mat-select>
   </div>
   <div class="notifications-graph-wraper">
     <div

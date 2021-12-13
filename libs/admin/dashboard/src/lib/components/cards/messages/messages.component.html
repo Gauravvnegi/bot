@@ -1,11 +1,21 @@
 <div class="messages-wrapper">
-  <div class="messages-wrapper-header">
+  <div class="messages-wrapper-header" [formGroup]="messagesFG">
     <div class="messages-wrapper-header-icon">
       <img src="assets/svg/Messages.svg" alt="" />
     </div>
     <div class="messages-wrapper-header-text">
       Messages
     </div>
+    <mat-select
+      class="messages-wrapper-header-channel"
+      placeholder="Channel"
+      formControlName="channel"
+      (selectionChange)="handleChannelChange($event)"
+    >
+      <mat-option [value]="item.value" *ngFor="let item of channelOptions">{{
+        item.label
+      }}</mat-option>
+    </mat-select>
   </div>
   <div class="messages-wrapper-body">
     <div class="messages-wrapper-body-details">
@@ -16,15 +26,6 @@
         <div class="messages-wrapper-body-details-items-heading">
           {{ item.label }}
         </div>
-        <!-- <div class="social" *ngIf="channels">
-        <div class="social-btn" *ngFor="let channel of channels">
-          <img
-            class="social-btn-img"
-            [src]="channel.imageUrl"
-            [alt]="channel.label"
-          />
-        </div>
-      </div> -->
         <div class="today">{{ item.today }} Today</div>
         <div class="yesterday">
           <div>{{ item.yesterday }} Yesterday</div>

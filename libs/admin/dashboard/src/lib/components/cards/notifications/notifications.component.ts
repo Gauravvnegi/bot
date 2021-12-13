@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
@@ -16,24 +18,66 @@ import { StatisticsService } from '../../../services/statistics.service';
 export class NotificationsComponent implements OnInit {
   $subscription = new Subscription();
   @Input() hotelId;
+  @Input() channelOptions;
   messageOverallAnalytics: IMessageOverallAnalytics;
+  globalQueries;
+  messagesFG: FormGroup;
   constructor(
     private statisticsService: StatisticsService,
     private snackbarService: SnackBarService,
-    private adminutilityService: AdminUtilityService
+    private adminutilityService: AdminUtilityService,
+    private _globalFilterService: GlobalFilterService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.getConversationStats();
+    this.initFG();
+    this.registerListeners();
   }
 
-  getConversationStats() {
+  initFG() {
+    this.messagesFG = this.fb.group({
+      channel: ['ALL'],
+    });
+  }
+
+  registerListeners() {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.getConversationStats([
+          ...this.globalQueries,
+          {
+            templateContext: 'TEMPLATE',
+            channelType: this.messagesFG?.get('channel')?.value,
+          },
+        ]);
+      })
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  getConversationStats(queries) {
     const config = {
-      queryObj: this.adminutilityService.makeQueryParams([
-        {
-          templateContext: 'TEMPLATE',
-        },
-      ]),
+      queryObj: this.adminutilityService.makeQueryParams(queries),
     };
     this.$subscription.add(
       this.statisticsService
@@ -48,5 +92,15 @@ export class NotificationsComponent implements OnInit {
           ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
         )
     );
+  }
+
+  handleChannelChange(event) {
+    this.getConversationStats([
+      ...this.globalQueries,
+      {
+        templateContext: 'TEMPLATE',
+        channelType: event.value,
+      },
+    ]);
   }
 }

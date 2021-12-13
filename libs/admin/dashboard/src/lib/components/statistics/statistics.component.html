@@ -22,10 +22,14 @@
   <div class="notification-wrapper">
     <hospitality-bot-notifications
       [hotelId]="hotelId"
+      [channelOptions]="channelOptions"
     ></hospitality-bot-notifications>
   </div>
   <div class="massages-wraper">
-    <hospitality-bot-messages [hotelId]="hotelId"></hospitality-bot-messages>
+    <hospitality-bot-messages
+      [hotelId]="hotelId"
+      [channelOptions]="channelOptions"
+    ></hospitality-bot-messages>
   </div>
   <div
     class="stats inc-width-xl change-height"

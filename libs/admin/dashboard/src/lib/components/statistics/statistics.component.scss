@@ -43,13 +43,13 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 15px;
   @media (max-width: $tablet) {
     gap: 1.3%;
   }
   .stats {
     height: 254px;
     width: 32%;
-    margin: 0.5%;
     @media only screen and (max-width: $L) {
       width: 49%;
     }
@@ -96,4 +96,10 @@
       @include width(38%);
     }
   }
+}
+.massages-wraper {
+  width: 65%;
+}
+.notification-wrapper {
+  @include width(32%);
 }

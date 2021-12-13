@@ -81,7 +81,7 @@ export class FileUploadComponent extends BaseComponent {
     dialogConfig.disableClose = true;
     dialogConfig.id = 'image-cropper-modal';
     dialogConfig.width = '75vw';
-    dialogConfig.height = '80vh'
+    dialogConfig.height = '80vh';
 
     const dialogRef = this.modalService.openDialog(
       ImageHandlingComponent,
@@ -101,6 +101,7 @@ export class FileUploadComponent extends BaseComponent {
             index: this.index,
             imageUrl: response.data.url,
           };
+          this.url = response.data.url;
           this.documentData.emit({ ...data, ...{ status: true } });
         } else {
           this.isValidDocument = false;

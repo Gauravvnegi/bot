@@ -213,12 +213,12 @@ export class MessageOverallAnalytics {
   stat: IMessageOverallAnalytic[];
   total: number;
 
-  deserialize(input) {
+  deserialize(input, config = { comparison: true }) {
     this.stat = new Array<IMessageOverallAnalytic>();
-    this.total = input?.sentCount?.today;
+    this.total = input?.sentCount[config.comparison ? 'today' : 'count'];
 
     Object.keys(input).forEach((item) => {
-      if (item !== 'data')
+      if (item !== 'data') {
         this.stat.push(
           new MessageOverallAnalytic().deserialize(
             {
@@ -229,9 +229,11 @@ export class MessageOverallAnalytics {
                 radius: config1.radius[item],
               },
             },
-            this.total
+            this.total,
+            config
           )
         );
+      }
     });
     return this;
   }
@@ -247,10 +249,10 @@ export class MessageOverallAnalytic {
   radius: number;
   progress: number;
 
-  deserialize(input, total) {
+  deserialize(input, total, config) {
     Object.assign(
       this,
-      set({}, 'today', get(input, ['today'])),
+      set({}, 'today', get(input, [config.comparison ? 'today' : 'count'])),
       set({}, 'yesterday', get(input, ['yesterday'])),
       set({}, 'comparisonPercentage', get(input, ['comparisonPercentage'])),
       set({}, 'color', get(input, ['color'])),

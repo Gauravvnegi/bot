@@ -50,6 +50,7 @@ export class MessagesComponent implements OnInit {
       queryObj: this.adminutilityService.makeQueryParams([
         {
           templateContext: 'TEXT',
+          comparison: true,
         },
       ]),
     };

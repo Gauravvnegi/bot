@@ -41,9 +41,9 @@ export class NotificationsComponent implements OnInit {
         .subscribe(
           (response) => {
             this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
-              response.messageCounts
+              response.messageCounts,
+              { comparison: false }
             );
-            console.log(this.messageOverallAnalytics);
           },
           ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
         )

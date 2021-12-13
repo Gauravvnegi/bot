@@ -8,7 +8,6 @@ import {
 import { ComponentType } from '@angular/cdk/portal';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class SnackBarService {
@@ -39,7 +38,7 @@ export class SnackBarService {
     });
   }
 
-  translateText(text: string) {
-    return this._translate.get(text);
+  openSnackBarAsTranslate(translateText) {
+    return this._translate.get(translateText);
   }
 }

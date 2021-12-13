@@ -82,26 +82,22 @@ export class ResetPasswordComponent implements OnInit {
       password: this.resetPasswordForm.get('password').value,
     };
 
-    const snackbar = this._snackbarService;
-    let translatedText: string;
-    snackbar
-      .translateText('messages.success.reset_password')
-      .subscribe((response) => (translatedText = response));
-
     this._authService.changePassword(data).subscribe(
       (response) => {
-        snackbar.openSnackBarAsText(
-          response?.message ? response.message : translatedText,
-          '',
-          {
-            panelClass: 'success',
-          }
-        );
+        this._snackbarService
+          .openSnackBarAsTranslate('messages.success.reset_password')
+          .subscribe((translatedText) => {
+            this._snackbarService.openSnackBarAsText(
+              response?.message ? response.message : translatedText,
+              '',
+              { panelClass: 'success' }
+            );
+          });
 
         this.navigateToLogin();
       },
       ({ error }) => {
-        snackbar.openSnackBarAsText(error.message ?? '');
+        this._snackbarService.openSnackBarAsText(error.message ?? '');
       }
     );
   }

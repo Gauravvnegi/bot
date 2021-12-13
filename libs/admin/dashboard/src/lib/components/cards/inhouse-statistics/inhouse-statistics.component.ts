@@ -1,8 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { Inhouse, InhouseRequest } from '../../data-models/statistics.model';
-import { ReservationDatatableModalComponent } from '../reservation-datatable-modal/reservation-datatable-modal.component';
+import { Inhouse, InhouseRequest } from '../../../data-models/statistics.model';
+import { ReservationDatatableModalComponent } from '../../reservation-datatable-modal/reservation-datatable-modal.component';
 
 @Component({
   selector: 'hospitality-bot-inhouse-statistics',

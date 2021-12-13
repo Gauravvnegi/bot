@@ -3,8 +3,8 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
-import { ReservationStat } from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+import { ReservationStat } from '../../../data-models/statistics.model';
+import { StatisticsService } from '../../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-customer-statistics',

@@ -37,58 +37,63 @@
       color: #002046;
     }
   }
-  &-details {
+  &-body {
     display: flex;
-    flex-wrap: wrap;
-    margin-top: 25px;
-    &-items {
-      width: 25%;
-      font-family: Roboto;
-      font-size: 14px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.43;
-      letter-spacing: 0.84px;
-      &-heading {
-        margin-bottom: 15px;
-      }
-      .social {
-        display: flex;
-        margin-bottom: 15px;
-        &-btn {
-          margin-right: 10px;
-          &-img {
-            height: 18px;
+    justify-content: center;
+    flex-direction: column;
+    height: calc(100% - 40px);
+    &-details {
+      display: flex;
+      flex-wrap: wrap;
+      &-items {
+        width: 25%;
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: 0.84px;
+        &-heading {
+          margin-bottom: 15px;
+        }
+        .social {
+          display: flex;
+          margin-bottom: 15px;
+          &-btn {
+            margin-right: 10px;
+            &-img {
+              height: 18px;
+            }
           }
         }
-      }
-      .today {
-        margin-bottom: 5px;
-      }
-      .yesterday {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-      }
-      .then-yesterdeay {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-        &-down-arrow {
-          margin-right: 7.5px;
-          &-icon {
-            height: 14.9px;
-          }
-          &-percentage {
-            font-size: 13px;
-            font-weight: normal;
-          }
+        .today {
+          margin-bottom: 5px;
         }
-        &-text {
-          color: #c5c5c5;
-          font-size: 14px;
-          margin-left: 7.5px;
+        .yesterday {
+          display: flex;
+          align-items: center;
+          margin-bottom: 5px;
+        }
+        .then-yesterdeay {
+          display: flex;
+          align-items: center;
+          margin-bottom: 5px;
+          &-down-arrow {
+            margin-right: 7.5px;
+            &-icon {
+              height: 14.9px;
+            }
+            &-percentage {
+              font-size: 13px;
+              font-weight: normal;
+            }
+          }
+          &-text {
+            color: #c5c5c5;
+            font-size: 14px;
+            margin-left: 7.5px;
+          }
         }
       }
     }

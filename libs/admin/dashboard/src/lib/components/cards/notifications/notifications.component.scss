@@ -3,7 +3,6 @@
   background: $white;
   box-shadow: $box-shadow-1;
   border-radius: $borderRadius5;
-  margin-bottom: 1.3%;
   @include padding(20px);
   &-header {
     @include flex-item-center();

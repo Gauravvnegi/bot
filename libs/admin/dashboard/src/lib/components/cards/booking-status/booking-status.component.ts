@@ -4,8 +4,8 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { BookingStatus, Customer } from '../../data-models/statistics.model';
-import { StatisticsService } from '../../services/statistics.service';
+import { BookingStatus } from '../../../data-models/statistics.model';
+import { StatisticsService } from '../../../services/statistics.service';
 
 @Component({
   selector: 'hospitality-bot-booking-status',

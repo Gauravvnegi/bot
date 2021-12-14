@@ -1,13 +1,19 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarConfig,
   MatSnackBarRef,
-  SimpleSnackBar,
+  SimpleSnackBar
 } from '@angular/material/snack-bar';
-import { ComponentType } from '@angular/cdk/portal';
-import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
+import { map } from 'rxjs/operators';
+
+type SnackBarWithTranslateData = {
+  translateKey: string;
+  priorityMessage: string;
+};
 
 @Injectable()
 export class SnackBarService {
@@ -38,7 +44,21 @@ export class SnackBarService {
     });
   }
 
-  openSnackBarAsTranslate(translateText) {
-    return this._translate.get(translateText);
+  openSnackBarWithTranslate(
+    data: SnackBarWithTranslateData,
+    action?: string,
+    config?: MatSnackBarConfig
+  ) {
+    const { translateKey, priorityMessage } = data;
+
+    const handleTranslation = (translatedText) => {
+      const translationToBeShown = priorityMessage || translatedText;
+      this.openSnackBarAsText(translationToBeShown, action, config);
+      return translationToBeShown;
+    };
+
+    return this._translate
+      .get(translateKey)
+      .pipe(map((msg) => handleTranslation(msg)));
   }
 }

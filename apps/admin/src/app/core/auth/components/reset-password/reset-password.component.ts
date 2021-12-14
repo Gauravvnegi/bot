@@ -85,19 +85,28 @@ export class ResetPasswordComponent implements OnInit {
     this._authService.changePassword(data).subscribe(
       (response) => {
         this._snackbarService
-          .openSnackBarAsTranslate('messages.success.reset_password')
-          .subscribe((translatedText) => {
-            this._snackbarService.openSnackBarAsText(
-              response?.message ? response.message : translatedText,
-              '',
-              { panelClass: 'success' }
-            );
-          });
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.success.reset_password',
+              priorityMessage: response?.message,
+            },
+            '',
+            { panelClass: 'success' }
+          )
+          .subscribe();
 
         this.navigateToLogin();
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message ?? '');
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.success.reset_password',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }

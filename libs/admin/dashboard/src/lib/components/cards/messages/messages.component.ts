@@ -31,6 +31,9 @@ export class MessagesComponent implements OnChanges {
     this.initFG();
   }
 
+  /**
+   * @function initFG Initializes the form group
+   */
   initFG() {
     this.messagesFG = this.fb.group({
       channel: ['ALL'],
@@ -47,6 +50,10 @@ export class MessagesComponent implements OnChanges {
     ]);
   }
 
+  /**
+   * @function getConversationStats gets the messages stats for today from api
+   * @param {Array} queries
+   */
   getConversationStats(queries) {
     const config = {
       queryObj: this.adminutilityService.makeQueryParams(queries),
@@ -65,6 +72,10 @@ export class MessagesComponent implements OnChanges {
     );
   }
 
+  /**
+   * @function handleChannelChange Handles the channel dropdown value change
+   * @param {MouseEvent} event
+   */
   handleChannelChange(event) {
     this.getConversationStats([
       {

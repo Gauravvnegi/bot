@@ -35,16 +35,25 @@ export class NotificationsComponent implements OnInit {
     this.registerListeners();
   }
 
+  /**
+   * @function initFG Initializes the form group
+   */
   initFG() {
     this.messagesFG = this.fb.group({
       channel: ['ALL'],
     });
   }
 
+  /**
+   * @function registerListeners Register all the listeners
+   */
   registerListeners() {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters Listens for the global filters change and after each change reloads the data
+   */
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
@@ -67,6 +76,10 @@ export class NotificationsComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getHotelId Gets the hotel id from the array of object
+   * @param {Array} globalQueries
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -75,6 +88,10 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
+  /**
+   * @function getConversationStats Gets the notification stat for a date range
+   * @param {Array} queries
+   */
   getConversationStats(queries) {
     const config = {
       queryObj: this.adminutilityService.makeQueryParams(queries),
@@ -94,6 +111,10 @@ export class NotificationsComponent implements OnInit {
     );
   }
 
+  /**
+   * @function handleChannelChange Handles the channel dropdown value change
+   * @param {MouseEvent} event
+   */
   handleChannelChange(event) {
     this.getConversationStats([
       ...this.globalQueries,

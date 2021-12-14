@@ -76,21 +76,37 @@ export class ResetPasswordComponent implements OnInit {
     if (!this.resetPasswordForm.valid) {
       return;
     }
+
     const data = {
       token: this.changePasswordToken,
       password: this.resetPasswordForm.get('password').value,
     };
+
     this._authService.changePassword(data).subscribe(
-      () => {
-        this._snackbarService.openSnackBarAsText(
-          'Reset password successful',
-          '',
-          { panelClass: 'success' }
-        );
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.success.reset_password',
+              priorityMessage: response?.message,
+            },
+            '',
+            { panelClass: 'success' }
+          )
+          .subscribe();
+
         this.navigateToLogin();
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message ?? '');
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }

@@ -30,6 +30,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatSlideToggleModule,
     MatTabsModule,
     ClipboardModule,
+    TranslateModule,
   ],
   exports: [
     FlexLayoutModule,

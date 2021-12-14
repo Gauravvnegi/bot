@@ -15,15 +15,15 @@ import { SnackBarWithTranslateData } from '../types/snackbar.type';
 export class SnackBarService {
   constructor(
     private _snackBar: MatSnackBar,
-    private _translate: TranslateService
+    private _translateService: TranslateService
   ) {}
 
   /**
-   * @function openSnackBarAsText to display snackbar.
-   * @param {string} meesage to have message.
-   * @param {string} action  optional param
-   * @param {object} config - optional param takes default values from matsnackbar
-   * @returns {object} snackbar from matsnackbar
+   * @function openSnackBarAsText To open snackbar.
+   * @param {string} message The message to show in the snackbar.
+   * @param {string} action  The label for the snackbar action.
+   * @param {object} config  Additional configuration options for the snackbar.
+   * @returns {MatSnackBarRef} Reference to a snack bar dispatched from the snack bar service.
    */
   openSnackBarAsText(
     message: string,
@@ -39,10 +39,10 @@ export class SnackBarService {
   }
 
   /**
-   * @function openSnackBarAsComponent to display snackbar.
-   * @param {any} component component
-   * @param {object} config  optional with default configs from matsnackbar
-   * @returns {object} snackbar from matsnackbar
+   * @function openSnackBarAsComponent To open snackbar.
+   * @param {ComponentType} component Component to be instantiated.
+   * @param {object} config  Extra configuration for the snack bar.
+   * @returns {MatSnackBarRef} Reference to a snack bar dispatched from the snack bar service.
    */
   openSnackBarAsComponent(
     component: ComponentType<any>,
@@ -54,11 +54,11 @@ export class SnackBarService {
   }
 
   /**
-   * @function openSnackBarWithTranslate to display snackbar with translated message.
-   * @param {object} data to display message.
-   * @param {string} action  optional
-   * @param {object} config optional takes class with default value
-   * @returns {object} snackbar from openSnackBarAsText & observable from translation
+   * @function openSnackBarWithTranslate To open snackbar.
+   * @param {object} data The message to show in the snackbar.
+   * @param {string} action  The label for the snackbar action.
+   * @param {object} config Additional configuration options for the snackbar.
+   * @returns {Observable} The translated key.
    */
   openSnackBarWithTranslate(
     data: SnackBarWithTranslateData,
@@ -73,7 +73,7 @@ export class SnackBarService {
       return translationToBeShown;
     };
 
-    return this._translate
+    return this._translateService
       .get(translateKey)
       .pipe(map((msg) => handleTranslation(msg)));
   }

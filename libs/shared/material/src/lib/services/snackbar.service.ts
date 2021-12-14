@@ -11,6 +11,9 @@ import * as _ from 'lodash';
 import { map } from 'rxjs/operators';
 import { SnackBarWithTranslateData } from '../types/snackbar.type';
 
+/**
+ * @class To manage all the operations related to snackbar.
+ */
 @Injectable()
 export class SnackBarService {
   constructor(
@@ -20,10 +23,10 @@ export class SnackBarService {
 
   /**
    * @function openSnackBarAsText To open snackbar.
-   * @param {string} message The message to show in the snackbar.
-   * @param {string} action  The label for the snackbar action.
-   * @param {object} config  Additional configuration options for the snackbar.
-   * @returns {MatSnackBarRef} Reference to a snack bar dispatched from the snack bar service.
+   * @param message The message to show in the snackbar.
+   * @param action  The label for the snackbar action.
+   * @param config  Additional configuration options for the snackbar.
+   * @returns Reference to a snack bar dispatched from the snack bar service.
    */
   openSnackBarAsText(
     message: string,
@@ -40,9 +43,9 @@ export class SnackBarService {
 
   /**
    * @function openSnackBarAsComponent To open snackbar.
-   * @param {ComponentType} component Component to be instantiated.
-   * @param {object} config  Extra configuration for the snack bar.
-   * @returns {MatSnackBarRef} Reference to a snack bar dispatched from the snack bar service.
+   * @param component Component to be instantiated.
+   * @param config  Extra configuration for the snack bar.
+   * @returns Reference to a snack bar dispatched from the snack bar service.
    */
   openSnackBarAsComponent(
     component: ComponentType<any>,
@@ -55,10 +58,10 @@ export class SnackBarService {
 
   /**
    * @function openSnackBarWithTranslate To open snackbar.
-   * @param {object} data The message to show in the snackbar.
-   * @param {string} action  The label for the snackbar action.
-   * @param {object} config Additional configuration options for the snackbar.
-   * @returns {Observable} The translated key.
+   * @param data The message to show in the snackbar.
+   * @param action  The label for the snackbar action.
+   * @param config Additional configuration options for the snackbar.
+   * @returns Observable with translated message.
    */
   openSnackBarWithTranslate(
     data: SnackBarWithTranslateData,

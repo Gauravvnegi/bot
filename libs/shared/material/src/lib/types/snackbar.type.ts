@@ -1,7 +1,7 @@
 /**
  * @type SnackBarWithTranslateData
- * @property {string} translateKey gets a value from translation file
- * @property {string} priorityMessage gets a message from API data
+ * @property {string} translateKey Translation key whose value will be fetched from translation files.
+ * @property {string} priorityMessage Prioritized message over translated message, usually server messages.
  */
 export type SnackBarWithTranslateData = {
   translateKey: string;

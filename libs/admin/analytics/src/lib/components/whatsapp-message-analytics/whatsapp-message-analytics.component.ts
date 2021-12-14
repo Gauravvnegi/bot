@@ -156,9 +156,10 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
   }
 
   getConversationStats() {
-    const queries = [{ comparison: true }];
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(queries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        { comparison: true },
+      ]),
     };
     this.$subscription.add(
       this.analyticsService

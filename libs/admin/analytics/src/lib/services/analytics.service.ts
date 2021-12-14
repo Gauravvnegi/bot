@@ -4,8 +4,10 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AnalyticsService extends ApiService {
-  getConversationStats(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/conversations/stats/counts`);
+  getConversationStats(hotelId: string, config): Observable<any> {
+    return this.get(
+      `/api/v1/hotel/${hotelId}/conversations/stats/counts${config.queryObj}`
+    );
   }
 
   getConversationMessageStats(hotelId: string, config) {

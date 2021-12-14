@@ -101,7 +101,7 @@ export class ResetPasswordComponent implements OnInit {
         this._snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: 'messages.success.reset_password',
+              translateKey: 'messages.error.some_thing_wrong',
               priorityMessage: error?.message,
             },
             ''

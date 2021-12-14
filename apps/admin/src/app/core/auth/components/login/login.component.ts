@@ -70,7 +70,15 @@ export class LoginComponent implements OnInit {
       },
       ({ error }) => {
         this.isSigningIn = false;
-        this._snackbarService.openSnackBarAsText(error.message);
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }

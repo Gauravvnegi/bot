@@ -4,16 +4,12 @@ import {
   MatSnackBar,
   MatSnackBarConfig,
   MatSnackBarRef,
-  SimpleSnackBar
+  SimpleSnackBar,
 } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { map } from 'rxjs/operators';
-
-type SnackBarWithTranslateData = {
-  translateKey: string;
-  priorityMessage: string;
-};
+import { SnackBarWithTranslateData } from '../types/snackbar.type';
 
 @Injectable()
 export class SnackBarService {
@@ -22,6 +18,13 @@ export class SnackBarService {
     private _translate: TranslateService
   ) {}
 
+  /**
+   * @function openSnackBarAsText to display snackbar.
+   * @param {string} meesage to have message.
+   * @param {string} action  optional param
+   * @param {object} config - optional param takes default values from matsnackbar
+   * @returns {object} snackbar from matsnackbar
+   */
   openSnackBarAsText(
     message: string,
     action?: string,
@@ -35,6 +38,12 @@ export class SnackBarService {
     });
   }
 
+  /**
+   * @function openSnackBarAsComponent to display snackbar.
+   * @param {any} component component
+   * @param {object} config  optional with default configs from matsnackbar
+   * @returns {object} snackbar from matsnackbar
+   */
   openSnackBarAsComponent(
     component: ComponentType<any>,
     config?: MatSnackBarConfig
@@ -44,6 +53,13 @@ export class SnackBarService {
     });
   }
 
+  /**
+   * @function openSnackBarWithTranslate to display snackbar with translated message.
+   * @param {object} data to display message.
+   * @param {string} action  optional
+   * @param {object} config optional takes class with default value
+   * @returns {object} snackbar from openSnackBarAsText & observable from translation
+   */
   openSnackBarWithTranslate(
     data: SnackBarWithTranslateData,
     action?: string,

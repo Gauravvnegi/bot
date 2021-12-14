@@ -11,5 +11,10 @@
     "back": "Back",
     "cancel": "Cancel",
     "save": "Save"
+  },
+  "messages": {
+    "error": {
+      "some_thing_wrong": "Something went wrong !!"
+    }
   }
 }

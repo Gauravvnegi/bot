@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { InhouseRequest } from '../../data-models/statistics.model';
+import { InhouseRequest } from '../../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-statistics',

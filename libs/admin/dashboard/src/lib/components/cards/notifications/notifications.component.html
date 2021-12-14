@@ -1,0 +1,66 @@
+<div class="notifications">
+  <div class="notifications-header" [formGroup]="messagesFG">
+    <div class="notifications-header-icon">
+      <img src="assets/svg/Notifications.svg" alt="" />
+    </div>
+    <div class="notifications-header-text">
+      Notifications
+    </div>
+    <mat-select
+      class="notifications-header-channel"
+      placeholder="Channel"
+      formControlName="channel"
+      (selectionChange)="handleChannelChange($event)"
+    >
+      <mat-option [value]="item.value" *ngFor="let item of channelOptions">{{
+        item.label
+      }}</mat-option>
+    </mat-select>
+  </div>
+  <div class="notifications-graph-wraper">
+    <div
+      class="notifications-graph-wraper-graph"
+      *ngFor="let item of messageOverallAnalytics?.stat"
+    >
+      <circle-progress
+        [radius]="item.radius"
+        [percent]="item.progress"
+        [space]="-5"
+        [outerStrokeWidth]="5"
+        [innerStrokeWidth]="5"
+        [outerStrokeColor]="item.color"
+        [innerStrokeColor]="'#e7e8ea'"
+        [outerStrokeLinecap]="'square'"
+        [animation]="true"
+        [animationDuration]="300"
+        [showTitle]="false"
+        [showSubtitle]="false"
+        [showUnits]="false"
+        [showZeroOuterStroke]="false"
+      ></circle-progress>
+    </div>
+    <div class="notifications-graph-wraper-total">
+      <div>{{ messageOverallAnalytics?.total }}</div>
+      <div>Total Sent</div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="notifications-items"
+      *ngFor="let item of messageOverallAnalytics?.stat"
+    >
+      <div class="notifications-items-item">
+        <div
+          class="notifications-items-item-dot"
+          [style.backgroundColor]="item.color"
+        ></div>
+        <div class="notifications-items-item-status">
+          {{ item.label }}
+        </div>
+      </div>
+      <div class="notifications-items-item-count">
+        {{ item.today }}
+      </div>
+    </div>
+  </div>
+</div>

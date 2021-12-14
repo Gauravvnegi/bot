@@ -10,33 +10,27 @@
       [inhouseRequest]="statistics.inhouseRequest"
     ></hospitality-bot-inhouse-statistics>
   </div>
-  <div class="stats full-width" cardSubscribed [path]="'dashboard.cards.DEPARTURE'">
+  <div
+    class="stats full-width"
+    cardSubscribed
+    [path]="'dashboard.cards.DEPARTURE'"
+  >
     <hospitality-bot-departure-statistics
       [departures]="statistics.departures"
     ></hospitality-bot-departure-statistics>
   </div>
-  <!-- <div class="stats" featureSubscribed [feature]="'modules.request'">
-    <hospitality-bot-inhouse-request-statistics
-      [inhouseRequest]="statistics.inhouseRequest"
-    ></hospitality-bot-inhouse-request-statistics>
-  </div> -->
-  <!-- <div class="stats change-height">
-    <hospitality-bot-checkin-statistics
-      [expectedCheckIn]="statistics.expressCheckIn"
-    ></hospitality-bot-checkin-statistics>
-  </div> -->
-  <!-- <div
-    class="stats change-width"
-    cardSubscribed
-    [path]="'dashboard.cards.RESERVATION'"
-  >
-    <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
-  </div> -->
-  <!-- <div class="stats change-height">
-    <hospitality-bot-checkout-statistics
-      [expectedCheckout]="statistics.expressCheckOut"
-    ></hospitality-bot-checkout-statistics>
-  </div> -->
+  <div class="notification-wrapper">
+    <hospitality-bot-notifications
+      [hotelId]="hotelId"
+      [channelOptions]="channelOptions"
+    ></hospitality-bot-notifications>
+  </div>
+  <div class="massages-wraper">
+    <hospitality-bot-messages
+      [hotelId]="hotelId"
+      [channelOptions]="channelOptions"
+    ></hospitality-bot-messages>
+  </div>
   <div
     class="stats inc-width-xl change-height"
     cardSubscribed

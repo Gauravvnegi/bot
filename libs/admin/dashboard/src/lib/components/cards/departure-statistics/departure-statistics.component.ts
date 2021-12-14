@@ -1,16 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { Departures } from '../../data-models/statistics.model';
-import { ReservationDatatableModalComponent } from '../reservation-datatable-modal/reservation-datatable-modal.component';
+import { Departures } from '../../../data-models/statistics.model';
+import { ReservationDatatableModalComponent } from '../../reservation-datatable-modal/reservation-datatable-modal.component';
 
 @Component({
   selector: 'hospitality-bot-departure-statistics',
   templateUrl: './departure-statistics.component.html',
-  styleUrls: ['./departure-statistics.component.scss']
+  styleUrls: ['./departure-statistics.component.scss'],
 })
 export class DepartureStatisticsComponent implements OnInit {
-
   @Input() departures: Departures;
   modalData = {
     tabFilterItems: [
@@ -55,18 +54,15 @@ export class DepartureStatisticsComponent implements OnInit {
             type: 'failed',
           },
         ],
-        lastPage:0
-      }
+        lastPage: 0,
+      },
     ],
     type: 'reservation',
   };
-  
-  constructor(
-    private modalService: ModalService
-  ) { }
 
-  ngOnInit(): void {
-  }
+  constructor(private modalService: ModalService) {}
+
+  ngOnInit(): void {}
 
   openModal() {
     const dialogConfig = new MatDialogConfig();
@@ -85,5 +81,4 @@ export class DepartureStatisticsComponent implements OnInit {
       detailCompRef.close();
     });
   }
-
 }

@@ -4,6 +4,7 @@ import { Statistics, Customer } from '../../data-models/statistics.model';
 import { GlobalFilterService } from '../../../../../../../apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-statistics',
@@ -15,11 +16,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   customerData: Customer;
   interval: string = 'day';
   $subscription = new Subscription();
+  hotelId: string;
+  channelOptions = [{ label: 'All', value: 'ALL' }];
 
   constructor(
     private _statisticService: StatisticsService,
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +43,12 @@ export class StatisticsComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.channelOptions = [{ label: 'All', value: 'ALL' }];
+        this.getHotelChannels();
         const config = {
           queryObj: this._adminUtilityService.makeQueryParams(queries),
         };
@@ -47,6 +57,30 @@ export class StatisticsComponent implements OnInit, OnDestroy {
           this.statistics = new Statistics().deserialize(stats);
         });
       })
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  getHotelChannels() {
+    this.$subscription.add(
+      this._statisticService.getHotelChannels(this.hotelId).subscribe(
+        (response) => {
+          response?.forEach((channel) =>
+            this.channelOptions.push({
+              label: channel.name,
+              value: channel.name,
+            })
+          );
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error?.message)
+      )
     );
   }
 

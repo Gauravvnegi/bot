@@ -18,12 +18,17 @@ export class LoadGuard implements CanActivate {
   constructor(
     private _userService: UserService,
     private subscriptionService: SubscriptionPlanService,
-    private location: Location
+    private location: Location,
+    private _router: Router
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let subscription = this.subscriptionService.getModuleSubscription();
     if (subscription === undefined) {
+      if (!this._userService.getLoggedInUserid()) {
+        this._router.navigate(['/auth']);
+        return false;
+      }
       return this._userService
         .getUserDetailsById(this._userService.getLoggedInUserid())
         .pipe(

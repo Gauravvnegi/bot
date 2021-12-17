@@ -7,7 +7,7 @@ import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-materi
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
+import { AdminGuestDetailModule } from '@hospitality-bot/admin/guest-detail';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({

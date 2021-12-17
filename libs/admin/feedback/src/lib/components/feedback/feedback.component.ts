@@ -7,7 +7,7 @@ import {
   ViewContainerRef,
   Type,
 } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 
 @Component({

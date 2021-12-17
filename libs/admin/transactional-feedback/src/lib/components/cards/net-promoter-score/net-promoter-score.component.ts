@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { NetPromoterScoreComponent as BaseNetPromoterScoreComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/net-promoter-score/net-promoter-score.component';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { NetPromoterScoreComponent as BaseNetPromoterScoreComponent } from '@hospitality-bot/admin/stay-feedback';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
   selector: 'hospitality-bot-net-promoter-score',
   templateUrl: './net-promoter-score.component.html',
   styleUrls: [
-    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './net-promoter-score.component.scss',
   ],
 })

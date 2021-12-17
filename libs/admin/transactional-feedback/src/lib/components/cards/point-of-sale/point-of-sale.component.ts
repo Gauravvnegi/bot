@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 import { NPOS, NPOSVertical } from '../../../data-models/statistics.model';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import * as FileSaver from 'file-saver';
 
@@ -15,7 +17,7 @@ import * as FileSaver from 'file-saver';
   templateUrl: './point-of-sale.component.html',
   styleUrls: [
     './point-of-sale.component.scss',
-    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
   ],
 })
 export class PointOfSaleComponent implements OnInit {

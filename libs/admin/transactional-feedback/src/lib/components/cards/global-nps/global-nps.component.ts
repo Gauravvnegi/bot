@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { GlobalNpsComponent as BaseGlobalNpsComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/global-nps/global-nps.component';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { GlobalNpsComponent as BaseGlobalNpsComponent } from '@hospitality-bot/admin/stay-feedback';
 
 @Component({
   selector: 'hospitality-bot-global-nps',

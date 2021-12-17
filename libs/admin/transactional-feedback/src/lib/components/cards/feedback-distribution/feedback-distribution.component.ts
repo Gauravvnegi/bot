@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { FeedbackDistributionComponent as BaseFeedbackDistributionComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/feedback-distribution/feedback-distribution.component';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { FeedbackDistributionComponent as BaseFeedbackDistributionComponent } from '@hospitality-bot/admin/stay-feedback';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',

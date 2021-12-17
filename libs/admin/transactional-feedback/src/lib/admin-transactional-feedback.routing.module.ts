@@ -6,6 +6,7 @@ import { NetPromoterScoreComponent } from './components/cards/net-promoter-score
 import { OverallReceivedBifurcationComponent } from './components/cards/overall-received-bifurcation/overall-received-bifurcation.component';
 import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-sale.component';
 import { SharedComponent } from './components/cards/shared/shared.component';
+import { StackedBarGraphComponent } from './components/cards/stacked-bar-graph/stacked-bar-graph.component';
 import { TopLowNpsComponent } from './components/cards/top-low-nps/top-low-nps.component';
 import { FeedbackDatatableComponent } from './components/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
@@ -34,5 +35,6 @@ export class AdminTransactionalFeedbackRoutingModule {
     SharedComponent,
     PointOfSaleComponent,
     FeedbackNotesComponent,
+    StackedBarGraphComponent,
   ];
 }

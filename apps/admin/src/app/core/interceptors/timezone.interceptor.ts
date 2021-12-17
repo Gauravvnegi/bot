@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Injectable()
 export class TimezoneInterceptor implements HttpInterceptor {

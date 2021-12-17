@@ -66,28 +66,28 @@ export enum Communication {
 
 export const CommunicationConfig = {
   [Communication.FACEBOOK]: {
-    imageUrl: 'assets/mm.png',
-    disabledImageUrl: 'assets/messenger-disabled.png',
+    imageUrl: 'assets/images/mm.png',
+    disabledImageUrl: 'assets/images/messenger-disabled.png',
   },
   [Communication.WHATSAPP]: {
-    imageUrl: 'assets/whatsapp.png',
-    disabledImageUrl: 'assets/whatsapp-disabled.png',
+    imageUrl: 'assets/images/whatsapp.png',
+    disabledImageUrl: 'assets/images/whatsapp-disabled.png',
   },
   [Communication.WEB]: {
-    imageUrl: 'assets/web-bot.svg',
-    disabledImageUrl: 'assets/web-botb.svg',
+    imageUrl: 'assets/svg/web-bot.svg',
+    disabledImageUrl: 'assets/svg/web-botb.svg',
   },
   [Communication.MICRO]: {
-    imageUrl: 'assets/Micro-Site.svg',
-    disabledImageUrl: 'assets/Micro-Site-disabled.svg',
+    imageUrl: 'assets/svg/Micro-Site.svg',
+    disabledImageUrl: 'assets/svg/Micro-Site-disabled.svg',
   },
   [Communication.CALL_SUPPORT]: {
-    imageUrl: 'assets/call-support.png',
-    disabledImageUrl: 'assets/call-supprtb.png',
+    imageUrl: 'assets/images/call-support.png',
+    disabledImageUrl: 'assets/images/call-supprtb.png',
   },
   [Communication.WHATSAPP_LITE]: {
-    imageUrl: 'assets/whatsapp.png',
-    disabledImageUrl: 'assets/whatsapp-disabled.png',
+    imageUrl: 'assets/images/whatsapp.png',
+    disabledImageUrl: 'assets/images/whatsapp-disabled.png',
   },
 };
 
@@ -141,7 +141,7 @@ export const ModuleConfig = {
       CardNames.NPS,
       CardNames.TopLowNPS,
       CardNames.NPSAcrossServices,
-      // CardNames.NPSAcrossPOS,
+      CardNames.NPSAcrossPOS,
       CardNames.OverallReceivedBifurcation,
       CardNames.Shared,
     ],
@@ -153,12 +153,12 @@ export const ModuleConfig = {
   [ModuleNames.FEEDBACK_TRANSACTIONAL]: {
     cards: [
       CardNames.GlobalNPS,
-      // CardNames.NPSAcrossDepartment,
-      // CardNames.NPSAcrossTouchpoint,
+      CardNames.NPSAcrossDepartment,
+      CardNames.NPSAcrossTouchpoint,
       CardNames.FeedbackDistribution,
       CardNames.NPS,
       CardNames.TopLowNPS,
-      // CardNames.NPSAcrossServices,
+      CardNames.NPSAcrossServices,
       CardNames.NPSAcrossPOS,
       CardNames.OverallReceivedBifurcation,
       CardNames.Shared,

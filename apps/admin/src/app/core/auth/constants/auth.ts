@@ -14,7 +14,7 @@ export const authConstants = {
     analytics: 'assets/svg/Analytics.svg',
     liveRequest: 'assets/svg/live-help.svg',
     search: 'assets/svg/search.svg',
-    botshotLogo: 'assets/botshotlogo.png',
+    botshotLogo: 'assets/images/botshotlogo.png',
   },
   managingOptions: [
     { id: 1, label: 'Live Dashboard', url: 'assets/svg/dashboard-white.svg' },
@@ -27,6 +27,18 @@ export const authConstants = {
     },
     { id: 5, label: 'Universal Search', url: 'assets/svg/search.svg' },
   ],
+  alt: {
+    bell: 'bell',
+    hotel: 'hotel',
+    luggage: 'luggage',
+    metroHotel: 'metro-hotel',
+    liveDashboard: 'dashboard',
+    filter: 'Filter',
+    analytics: 'Analytics',
+    liveRequest: 'live-help',
+    search: 'search',
+    botshotLogo: 'botshotlogo',
+  },
   passwordMinLength: 6,
   passwordMaxLength: 10,
 };

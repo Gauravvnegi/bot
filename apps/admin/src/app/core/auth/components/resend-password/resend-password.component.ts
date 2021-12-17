@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+/**
+ * @class Resend password component.
+ */
 @Component({
   selector: 'admin-resend-password',
   templateUrl: './resend-password.component.html',
@@ -12,18 +15,16 @@ export class ResendPasswordComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Navigate to request password page
-   * @author Amit Singh
+   * @function navigateToRequestPassword To navigate to request password page.
    */
-  navigateToRequestPassword() {
+  navigateToRequestPassword(): void {
     this._router.navigate(['/auth/request-password']);
   }
 
   /**
-   * Navigate to login page
-   * @author Amit Singh
+   * @function navigateToLogin To navigate to login page.
    */
-  navigateToLogin() {
+  navigateToLogin(): void {
     this._router.navigate(['/auth/login']);
   }
 }

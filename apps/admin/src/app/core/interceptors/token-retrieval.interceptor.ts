@@ -1,16 +1,14 @@
-import { SharedTokenInterceptor } from 'libs/shared/interceptors/src';
-import { Injectable } from '@angular/core';
 import {
+  HttpEvent,
+  HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HttpHandler,
-  HttpEvent,
   HttpResponse,
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { isEmpty } from 'lodash';
-import { AuthService } from '../auth/services/auth.service';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../auth/services/auth.service';
 
 @Injectable()
 export class TokenRetievalInterceptor implements HttpInterceptor {

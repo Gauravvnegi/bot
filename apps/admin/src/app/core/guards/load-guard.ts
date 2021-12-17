@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
-import { switchMap } from 'rxjs/operators';
-import { forkJoin, of } from 'rxjs';
 import { get } from 'lodash';
+import { forkJoin, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
+import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoadGuard implements CanActivate {

@@ -18,18 +18,27 @@ export class PagesComponent implements OnInit {
     private _hotelDetailService: HotelDetailService,
     private _feedbackService: FeedbackService,
     private _route: ActivatedRoute,
-    private subscriptionPlanService: SubscriptionPlanService
+    private _subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
+    this.initAdminDetails();
+  }
+
+  /**
+   * @function initAdminDetails Initialize admin details.
+   */
+  initAdminDetails() {
     const adminDetails = this._route.snapshot.data['adminDetails'];
     this._userService.initUserDetails(get(adminDetails, ['userDetail']));
     this._hotelDetailService.initHotelDetails(
       get(adminDetails, ['userDetail'])
     );
-    this.subscriptionPlanService.initSubscriptionDetails(
+
+    this._subscriptionPlanService.initSubscriptionDetails(
       get(adminDetails, ['subscription'])
     );
+
     this._feedbackService.initFeedbackConfig(
       this._route.snapshot.data['feedbackConfig']
     );

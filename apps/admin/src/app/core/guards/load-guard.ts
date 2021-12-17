@@ -1,29 +1,33 @@
-import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
-  Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
-import { switchMap } from 'rxjs/operators';
-import { forkJoin, of } from 'rxjs';
 import { get } from 'lodash';
+import { forkJoin, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { ModuleSubscription } from '../theme/src/lib/data-models/subscription-plan-config.model';
+import { SubscriptionPlanService } from '../theme/src/lib/services/subscription-plan.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoadGuard implements CanActivate {
   constructor(
     private _userService: UserService,
     private subscriptionService: SubscriptionPlanService,
-    private location: Location
+    private location: Location,
+    private _router: Router
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let subscription = this.subscriptionService.getModuleSubscription();
     if (subscription === undefined) {
+      if (!this._userService.getLoggedInUserid()) {
+        this._router.navigate(['/auth']);
+        return false;
+      }
       return this._userService
         .getUserDetailsById(this._userService.getLoggedInUserid())
         .pipe(

@@ -1,33 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { TopLowNpsComponent as BaseTopLowNpsComponent } from 'libs/admin/stay-feedback/src/lib/components/top-low-nps/top-low-nps.component';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { GlobalNpsComponent as BaseGlobalNpsComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/global-nps/global-nps.component';
 
 @Component({
-  selector: 'hospitality-bot-top-low-nps',
-  templateUrl: './top-low-nps.component.html',
-  styleUrls: ['./top-low-nps.component.scss'],
+  selector: 'hospitality-bot-global-nps',
+  templateUrl: './global-nps.component.html',
+  styleUrls: ['./global-nps.component.scss'],
 })
-export class TopLowNpsComponent extends BaseTopLowNpsComponent
+export class GlobalNpsComponent extends BaseGlobalNpsComponent
   implements OnInit {
-  tabFilterItems = [
-    {
-      label: 'Department',
-      icon: '',
-      value: 'DEPARTMENT',
-      total: 0,
-      isSelected: true,
-    },
-    {
-      label: 'Experience',
-      icon: '',
-      value: 'EXPERIENCE',
-      total: 0,
-      isSelected: false,
-    },
-  ];
   constructor(
     statisticsService: StatisticsService,
     _globalFilterService: GlobalFilterService,
@@ -56,7 +40,7 @@ export class TopLowNpsComponent extends BaseTopLowNpsComponent
           ...data['dateRange'].queryValue,
           { outletsIds: this.statisticsService.outletIds },
         ];
-        this.getPerformanceNps();
+        this.getGlobalNps();
       })
     );
   }
@@ -67,7 +51,7 @@ export class TopLowNpsComponent extends BaseTopLowNpsComponent
         this.globalQueries[this.globalQueries.length - 1] = {
           outletsIds: this.statisticsService.outletIds,
         };
-        this.getPerformanceNps();
+        this.getGlobalNps();
       }
     });
   }

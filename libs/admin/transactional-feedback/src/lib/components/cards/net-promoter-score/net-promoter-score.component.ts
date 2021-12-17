@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { NetPromoterScoreComponent as BaseNetPromoterScoreComponent } from 'libs/admin/stay-feedback/src/lib/components/net-promoter-score/net-promoter-score.component';
+import { NetPromoterScoreComponent as BaseNetPromoterScoreComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/net-promoter-score/net-promoter-score.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 

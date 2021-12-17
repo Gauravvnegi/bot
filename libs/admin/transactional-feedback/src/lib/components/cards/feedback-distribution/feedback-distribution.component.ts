@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { GlobalNpsComponent as BaseGlobalNpsComponent } from 'libs/admin/stay-feedback/src/lib/components/global-nps/global-nps.component';
+import { FeedbackDistributionComponent as BaseFeedbackDistributionComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/feedback-distribution/feedback-distribution.component';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
-  selector: 'hospitality-bot-global-nps',
-  templateUrl: './global-nps.component.html',
-  styleUrls: ['./global-nps.component.scss'],
+  selector: 'hospitality-bot-feedback-distribution',
+  templateUrl: './feedback-distribution.component.html',
+  styleUrls: ['./feedback-distribution.component.scss'],
 })
-export class GlobalNpsComponent extends BaseGlobalNpsComponent
+export class FeedbackDistributionComponent
+  extends BaseFeedbackDistributionComponent
   implements OnInit {
   constructor(
     statisticsService: StatisticsService,
@@ -40,7 +41,7 @@ export class GlobalNpsComponent extends BaseGlobalNpsComponent
           ...data['dateRange'].queryValue,
           { outletsIds: this.statisticsService.outletIds },
         ];
-        this.getGlobalNps();
+        this.getFeedbackDistribution();
       })
     );
   }
@@ -51,7 +52,7 @@ export class GlobalNpsComponent extends BaseGlobalNpsComponent
         this.globalQueries[this.globalQueries.length - 1] = {
           outletsIds: this.statisticsService.outletIds,
         };
-        this.getGlobalNps();
+        this.getFeedbackDistribution();
       }
     });
   }

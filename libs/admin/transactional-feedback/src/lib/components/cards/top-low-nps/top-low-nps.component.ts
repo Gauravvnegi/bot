@@ -2,17 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { FeedbackDistributionComponent as BaseFeedbackDistributionComponent } from 'libs/admin/stay-feedback/src/lib/components/feedback-distribution/feedback-distribution.component';
+import { TopLowNpsComponent as BaseTopLowNpsComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/top-low-nps/top-low-nps.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 
 @Component({
-  selector: 'hospitality-bot-feedback-distribution',
-  templateUrl: './feedback-distribution.component.html',
-  styleUrls: ['./feedback-distribution.component.scss'],
+  selector: 'hospitality-bot-top-low-nps',
+  templateUrl: './top-low-nps.component.html',
+  styleUrls: ['./top-low-nps.component.scss'],
 })
-export class FeedbackDistributionComponent
-  extends BaseFeedbackDistributionComponent
+export class TopLowNpsComponent extends BaseTopLowNpsComponent
   implements OnInit {
+  tabFilterItems = [
+    {
+      label: 'Department',
+      icon: '',
+      value: 'DEPARTMENT',
+      total: 0,
+      isSelected: true,
+    },
+    {
+      label: 'Experience',
+      icon: '',
+      value: 'EXPERIENCE',
+      total: 0,
+      isSelected: false,
+    },
+  ];
   constructor(
     statisticsService: StatisticsService,
     _globalFilterService: GlobalFilterService,
@@ -41,7 +56,7 @@ export class FeedbackDistributionComponent
           ...data['dateRange'].queryValue,
           { outletsIds: this.statisticsService.outletIds },
         ];
-        this.getFeedbackDistribution();
+        this.getPerformanceNps();
       })
     );
   }
@@ -52,7 +67,7 @@ export class FeedbackDistributionComponent
         this.globalQueries[this.globalQueries.length - 1] = {
           outletsIds: this.statisticsService.outletIds,
         };
-        this.getFeedbackDistribution();
+        this.getPerformanceNps();
       }
     });
   }

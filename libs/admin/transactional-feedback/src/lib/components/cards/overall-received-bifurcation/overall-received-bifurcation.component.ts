@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { OverallReceivedBifurcationComponent as BaseOverallReceivedBifurcationComponent } from 'libs/admin/stay-feedback/src/lib/components/overall-received-bifurcation/overall-received-bifurcation.component';
+import { OverallReceivedBifurcationComponent as BaseOverallReceivedBifurcationComponent } from 'libs/admin/stay-feedback/src/lib/components/cards/overall-received-bifurcation/overall-received-bifurcation.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 

@@ -9,13 +9,13 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
-import { NPSDepartments } from '../../data-models/statistics.model';
+import { NPSDepartments } from '../../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-nps-across-departments',
   templateUrl: './nps-across-departments.component.html',
   styleUrls: [
-    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './nps-across-departments.component.scss',
   ],
 })

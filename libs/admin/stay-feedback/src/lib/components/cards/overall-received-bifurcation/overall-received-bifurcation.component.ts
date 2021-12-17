@@ -7,19 +7,19 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
-import { SharedStats } from '../../data-models/statistics.model';
+import { Bifurcation } from '../../../data-models/statistics.model';
 
 @Component({
-  selector: 'hospitality-bot-shared',
-  templateUrl: './shared.component.html',
-  styleUrls: ['./shared.component.scss'],
+  selector: 'hospitality-bot-overall-received-bifurcation',
+  templateUrl: './overall-received-bifurcation.component.html',
+  styleUrls: ['./overall-received-bifurcation.component.scss'],
 })
-export class SharedComponent implements OnInit {
+export class OverallReceivedBifurcationComponent implements OnInit {
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  stats: SharedStats;
-  chart: any = {
+  stats: Bifurcation;
+  feedbackChart = {
     Labels: ['No Data'],
     Data: [[100]],
     Type: 'doughnut',
@@ -32,7 +32,7 @@ export class SharedComponent implements OnInit {
     ],
     Options: {
       responsive: true,
-      cutoutPercentage: 0,
+      cutoutPercentage: 75,
       tooltips: {
         backgroundColor: 'white',
         bodyFontColor: 'black',
@@ -45,6 +45,7 @@ export class SharedComponent implements OnInit {
       },
     },
   };
+
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
@@ -92,23 +93,25 @@ export class SharedComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService.getSharedStats(config).subscribe((response) => {
-        this.stats = new SharedStats().deserialize(response);
-        this.initGraph(
-          this.stats.feedbacks.reduce(
-            (accumulator, current) => accumulator + current.count,
-            0
-          ) === 0
-        );
-      })
+      this._statisticService
+        .getBifurcationStats(config)
+        .subscribe((response) => {
+          this.stats = new Bifurcation().deserialize(response);
+          this.initFeedbackChart(
+            this.stats.feedbacks.reduce(
+              (accumulator, current) => accumulator + current.score,
+              0
+            ) === 0
+          );
+        })
     );
   }
 
-  initGraph(defaultGraph = true) {
+  initFeedbackChart(defaultGraph) {
     if (defaultGraph) {
-      this.chart.Labels = ['No Data'];
-      this.chart.Data = [[100]];
-      this.chart.Colors[0] = [
+      this.feedbackChart.Labels = ['No Data'];
+      this.feedbackChart.Data = [[100]];
+      this.feedbackChart.Colors = [
         {
           backgroundColor: ['#D5D1D1'],
           borderColor: ['#D5D1D1'],
@@ -116,18 +119,26 @@ export class SharedComponent implements OnInit {
       ];
       return;
     }
-    this.chart.Labels = [];
-    this.chart.Data = [[]];
-    this.chart.Colors[0].backgroundColor = [];
-    this.chart.Colors[0].borderColor = [];
-
-    this.stats.feedbacks.forEach((data) => {
-      if (data.count) {
-        this.chart.Labels.push(data.label);
-        this.chart.Data[0].push(data.count);
-        this.chart.Colors[0].backgroundColor.push(data.color);
-        this.chart.Colors[0].borderColor.push(data.color);
+    this.feedbackChart.Data = [[]];
+    this.feedbackChart.Labels = [];
+    this.feedbackChart.Colors = [
+      {
+        backgroundColor: [],
+        borderColor: [],
+      },
+    ];
+    const data = this.stats.feedbacks;
+    data.forEach((feedback) => {
+      if (feedback.score) {
+        this.feedbackChart.Data[0].push(feedback.score);
+        this.feedbackChart.Labels.push(feedback.label);
+        this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
+        this.feedbackChart.Colors[0].borderColor.push(feedback.color);
       }
     });
+  }
+
+  get feedbackReceivedData() {
+    return this.stats;
   }
 }

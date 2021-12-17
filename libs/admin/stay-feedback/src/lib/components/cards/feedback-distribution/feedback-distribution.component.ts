@@ -6,7 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { FeedbackDistribution } from '../../data-models/statistics.model';
+import { FeedbackDistribution } from '../../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',

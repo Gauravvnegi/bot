@@ -3,16 +3,16 @@ import { Route, RouterModule } from '@angular/router';
 
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableComponent } from './components/feedback-datatable/feedback-datatable.component';
-import { NetPromoterScoreComponent } from './components/net-promoter-score/net-promoter-score.component';
-import { NpsAcrossTouchpointsComponent } from './components/nps-across-touchpoints/nps-across-touchpoints.component';
-import { NpsAcrossServicesComponent } from './components/nps-across-services/nps-across-services.component';
-import { NpsAcrossDepartmentsComponent } from './components/nps-across-departments/nps-across-departments.component';
-import { TwoWayProgressComponent } from './components/two-way-progress/two-way-progress.component';
-import { TopLowNpsComponent } from './components/top-low-nps/top-low-nps.component';
-import { GlobalNpsComponent } from './components/global-nps/global-nps.component';
-import { FeedbackDistributionComponent } from './components/feedback-distribution/feedback-distribution.component';
-import { OverallReceivedBifurcationComponent } from './components/overall-received-bifurcation/overall-received-bifurcation.component';
-import { SharedComponent } from './components/shared/shared.component';
+import { FeedbackDistributionComponent } from './components/cards/feedback-distribution/feedback-distribution.component';
+import { GlobalNpsComponent } from './components/cards/global-nps/global-nps.component';
+import { NetPromoterScoreComponent } from './components/cards/net-promoter-score/net-promoter-score.component';
+import { NpsAcrossDepartmentsComponent } from './components/cards/nps-across-departments/nps-across-departments.component';
+import { NpsAcrossServicesComponent } from './components/cards/nps-across-services/nps-across-services.component';
+import { NpsAcrossTouchpointsComponent } from './components/cards/nps-across-touchpoints/nps-across-touchpoints.component';
+import { OverallReceivedBifurcationComponent } from './components/cards/overall-received-bifurcation/overall-received-bifurcation.component';
+import { SharedComponent } from './components/cards/shared/shared.component';
+import { TopLowNpsComponent } from './components/cards/top-low-nps/top-low-nps.component';
+import { TwoWayProgressComponent } from './components/cards/two-way-progress/two-way-progress.component';
 
 const appRoutes: Route[] = [
   {

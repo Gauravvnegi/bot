@@ -7,19 +7,19 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
-import { Bifurcation } from '../../data-models/statistics.model';
+import { SharedStats } from '../../../data-models/statistics.model';
 
 @Component({
-  selector: 'hospitality-bot-overall-received-bifurcation',
-  templateUrl: './overall-received-bifurcation.component.html',
-  styleUrls: ['./overall-received-bifurcation.component.scss'],
+  selector: 'hospitality-bot-shared',
+  templateUrl: './shared.component.html',
+  styleUrls: ['./shared.component.scss'],
 })
-export class OverallReceivedBifurcationComponent implements OnInit {
+export class SharedComponent implements OnInit {
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  stats: Bifurcation;
-  feedbackChart = {
+  stats: SharedStats;
+  chart: any = {
     Labels: ['No Data'],
     Data: [[100]],
     Type: 'doughnut',
@@ -32,7 +32,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     ],
     Options: {
       responsive: true,
-      cutoutPercentage: 75,
+      cutoutPercentage: 0,
       tooltips: {
         backgroundColor: 'white',
         bodyFontColor: 'black',
@@ -45,7 +45,6 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       },
     },
   };
-
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
@@ -93,25 +92,23 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService
-        .getBifurcationStats(config)
-        .subscribe((response) => {
-          this.stats = new Bifurcation().deserialize(response);
-          this.initFeedbackChart(
-            this.stats.feedbacks.reduce(
-              (accumulator, current) => accumulator + current.score,
-              0
-            ) === 0
-          );
-        })
+      this._statisticService.getSharedStats(config).subscribe((response) => {
+        this.stats = new SharedStats().deserialize(response);
+        this.initGraph(
+          this.stats.feedbacks.reduce(
+            (accumulator, current) => accumulator + current.count,
+            0
+          ) === 0
+        );
+      })
     );
   }
 
-  initFeedbackChart(defaultGraph) {
+  initGraph(defaultGraph = true) {
     if (defaultGraph) {
-      this.feedbackChart.Labels = ['No Data'];
-      this.feedbackChart.Data = [[100]];
-      this.feedbackChart.Colors = [
+      this.chart.Labels = ['No Data'];
+      this.chart.Data = [[100]];
+      this.chart.Colors[0] = [
         {
           backgroundColor: ['#D5D1D1'],
           borderColor: ['#D5D1D1'],
@@ -119,26 +116,18 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       ];
       return;
     }
-    this.feedbackChart.Data = [[]];
-    this.feedbackChart.Labels = [];
-    this.feedbackChart.Colors = [
-      {
-        backgroundColor: [],
-        borderColor: [],
-      },
-    ];
-    const data = this.stats.feedbacks;
-    data.forEach((feedback) => {
-      if (feedback.score) {
-        this.feedbackChart.Data[0].push(feedback.score);
-        this.feedbackChart.Labels.push(feedback.label);
-        this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
-        this.feedbackChart.Colors[0].borderColor.push(feedback.color);
+    this.chart.Labels = [];
+    this.chart.Data = [[]];
+    this.chart.Colors[0].backgroundColor = [];
+    this.chart.Colors[0].borderColor = [];
+
+    this.stats.feedbacks.forEach((data) => {
+      if (data.count) {
+        this.chart.Labels.push(data.label);
+        this.chart.Data[0].push(data.count);
+        this.chart.Colors[0].backgroundColor.push(data.color);
+        this.chart.Colors[0].borderColor.push(data.color);
       }
     });
-  }
-
-  get feedbackReceivedData() {
-    return this.stats;
   }
 }

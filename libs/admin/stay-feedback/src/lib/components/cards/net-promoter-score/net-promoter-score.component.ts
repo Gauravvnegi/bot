@@ -9,15 +9,15 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
-import { feedback } from '../../constants/feedback';
-import { NPS } from '../../data-models/statistics.model';
-import { ChartTypeOption } from '../../types/feedback.type';
+import { feedback } from '../../../constants/feedback';
+import { NPS } from '../../../data-models/statistics.model';
+import { ChartTypeOption } from '../../../types/feedback.type';
 
 @Component({
   selector: 'hospitality-bot-net-promoter-score',
   templateUrl: './net-promoter-score.component.html',
   styleUrls: [
-    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './net-promoter-score.component.scss',
   ],
 })

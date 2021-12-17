@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
-import { Department } from '../../data-models/statistics.model';
+import { Department } from '../../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-two-way-progress',

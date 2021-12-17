@@ -1,13 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { NPSDepartments, Department } from '../../data-models/statistics.model';
-import { Subscription } from 'rxjs';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { NPSDepartments } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-nps-across-departments',
@@ -19,11 +21,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 })
 export class NpsAcrossDepartmentsComponent implements OnInit {
   npsFG: FormGroup;
-  documentTypes = [
-    { label: 'CSV', value: 'csv' },
-    // { label: 'EXCEL', value: 'excel' },
-    // { label: 'PDF', value: 'pdf' },
-  ];
+  documentTypes = [{ label: 'CSV', value: 'csv' }];
   npsChartData: NPSDepartments;
   $subscription: Subscription = new Subscription();
   globalQueries = [];
@@ -78,6 +76,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     );
   }
 
+  /**
+   * @function initFG To intialize NPS form group.
+   */
   initFG(): void {
     this.npsFG = this.fb.group({
       documentType: ['csv'],
@@ -85,6 +86,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     });
   }
 
+  /**
+   * @function getNPSChartData To get NPS department chart data.
+   */
   protected getNPSChartData(): void {
     this.loading = true;
     const config = {
@@ -106,6 +110,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     );
   }
 
+  /**
+   * @function exportCSV To export CSV report for NPS across department.
+   */
   exportCSV() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([

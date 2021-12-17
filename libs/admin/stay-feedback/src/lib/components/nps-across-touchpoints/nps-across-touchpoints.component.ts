@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { NPSTouchpoints } from '../../data-models/statistics.model';
-import { Subscription } from 'rxjs';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { NPSTouchpoints } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-nps-across-touchpoints',

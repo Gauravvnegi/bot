@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { SharedStats } from '../../data-models/statistics.model';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-shared',

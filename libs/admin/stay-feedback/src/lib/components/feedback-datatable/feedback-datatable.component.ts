@@ -1,24 +1,28 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { DetailsComponent } from 'libs/admin/guest-detail/src/lib/components/details/details.component';
-import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
-import { SnackBarService } from 'libs/shared/material/src';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { GuestDetailService } from 'libs/admin/guest-detail/src/lib/services/guest-detail.service';
-import { GuestTable } from 'libs/admin/guests/src/lib/data-models/guest-table.model';
-import { Subscription, Observable } from 'rxjs';
-import * as FileSaver from 'file-saver';
-import { get } from 'lodash';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
+  DetailsComponent,
+  GuestDetailService,
+} from '@hospitality-bot/admin/guest-detail';
+import { Guest, GuestTable } from '@hospitality-bot/admin/guests';
+import {
+  AdminUtilityService,
+  BaseDatatableComponent,
+  FeedbackService,
   ModuleNames,
   TableNames,
-} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+  TableService,
+} from '@hospitality-bot/admin/shared';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { feedback } from '../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -40,85 +44,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   hotelId: string;
 
-  cols = [
-    {
-      field: 'getFullName()',
-      header: 'Guest/ Company',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'booking.getArrivalTimeStamp()',
-      header: 'Arrival/ Departure',
-      isSort: true,
-      sortType: 'date',
-    },
-    {
-      field: 'booking.bookingNumber',
-      header: 'Booking No./ Feedback',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: `getPhoneNumber()`,
-      header: 'Phone No.',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'payment.totalAmount',
-      header: 'Amount Due/ Total Spend',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestAttributes.transactionUsage',
-      header: 'Transaction Usage',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'guestAttributes.overAllNps',
-      header: 'Overall NPS',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestAttributes.churnProbalilty',
-      header: 'Churn Prob/ Prediction',
-      isSort: true,
-      sortType: 'number',
-    },
-    { field: 'stageAndourney', header: 'Stage/ Channels' },
-  ];
+  cols = feedback.cols.feedbackDatatable;
 
-  chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-    {
-      label: 'VIP',
-      icon: '',
-      value: 'VIP',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'High Potential ',
-      icon: '',
-      value: 'HIGHPOTENTIAL',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'High Risk ',
-      icon: '',
-      value: 'HIGHRISK',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-  ];
+  chips = feedback.chips.feedbackDatatable;
 
   tabFilterItems = [
     {
@@ -184,6 +112,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function getHotelId Gets the hotel id from the array of object.
+   * @param globalQueries The global filter array list.
+   */
   getHotelId(globalQueries): void {
     //todo
 
@@ -194,6 +126,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * @function loadInitialData To load the initial data for datatable.
+   * @param queries The filter list with date and hotel filters.
+   * @param loading The loading status.
+   * @param props The table props to control data fetching.
+   */
   loadInitialData(queries = [], loading = true) {
     this.loading = loading && true;
     this.$subscription.add(
@@ -216,6 +154,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function getSelectedQuickReplyFilters To return the selected chip list
+   * @returns The selected chips.
+   */
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
@@ -224,6 +166,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       }));
   }
 
+  /**
+   * @function updateTabFilterCount To update the count for the tabs.
+   * @param countObj The object with count for all the tab.
+   * @param currentTabCount The count for current selected tab.
+   */
   updateTabFilterCount(countObj, currentTabCount) {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
@@ -234,6 +181,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function updateQuickReplyFilterCount To update the count for chips.
+   * @param countObj The object with count for all the chip.
+   */
   updateQuickReplyFilterCount(countObj) {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
@@ -244,6 +195,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function fetchDataFrom Returns an observable for the feedback list api call.
+   * @param queries The filter list with date and hotel filters.
+   * @param defaultProps The default table props to control data fetching.
+   * @returns The observable with feedback list.
+   */
   fetchDataFrom(
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
@@ -257,6 +214,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return this._guestTableService.getGuestList(config);
   }
 
+  /**
+   * @function loadData To load data for the table after any event.
+   * @param event The lazy load event for the table.
+   */
   loadData(event: LazyLoadEvent) {
     this.loading = true;
     this.updatePaginations(event);
@@ -290,18 +251,25 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function updatePaginations To update the pagination variable values.
+   * @param event The lazy load event for the table.
+   */
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    // if(this.tabFilterItems.length){
-    //   this.updatePaginationForFilterItems(event.page)
-    // }
+    this.tempFirst = this.first;
+    this.tempRowsPerPage = this.rowsPerPage;
   }
 
   updatePaginationForFilterItems(pageEvent) {
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
+  /**
+   * @function customSort To sort the rows of the table.
+   * @param eventThe The event for sort click action.
+   */
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
@@ -313,15 +281,22 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function onSelectedTabFilterChange To handle the tab filter change.
+   * @param event The material tab change event.
+   */
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
     this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
 
+  /**
+   * @function onFilterTypeTextChange To handle the search for each column of the table.
+   * @param value The value of the search field.
+   * @param field The name of the field across which filter is done.
+   * @param matchMode The mode by which filter is to be done.
+   */
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    // value = value && value.trim();
-    // this.table.filter(value, field, matchMode);
-
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;
@@ -336,6 +311,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.table.filter(value, field, matchMode);
   }
 
+  /**
+   * @function exportCSV To export CSV report of the table.
+   */
   exportCSV() {
     this.loading = true;
 
@@ -370,13 +348,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function toggleQuickReplyFilter To handle the chip click for a tab.
+   * @param quickReplyTypeIdx The chip index.
+   * @param quickReplyType The chip type.
+   */
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    //toggle isSelected
-    // this.tabFilterItems[this.tabFilterIdx].chips[
-    //   quickReplyTypeIdx
-    // ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-    //   quickReplyTypeIdx
-    // ].isSelected;
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -400,7 +377,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openDetailPage(event, rowData?, tabKey?) {
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(event: MouseEvent, rowData?: Guest, tabKey?: string) {
     event.stopPropagation();
 
     if (rowData) {

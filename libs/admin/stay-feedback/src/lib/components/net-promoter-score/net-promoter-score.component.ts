@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { Subscription } from 'rxjs';
-import { NPS } from '../../data-models/statistics.model';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { feedback } from '../../constants/feedback';
+import { NPS } from '../../data-models/statistics.model';
+import { ChartTypeOption } from '../../types/feedback.type';
 
 @Component({
   selector: 'hospitality-bot-net-promoter-score',
@@ -19,36 +23,13 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 })
 export class NetPromoterScoreComponent implements OnInit {
   npsFG: FormGroup;
-  documentTypes = [
-    { label: 'CSV', value: 'csv' },
-    // { label: 'EXCEL', value: 'excel' },
-    // { label: 'PDF', value: 'pdf' },
-  ];
+  documentTypes = [{ label: 'CSV', value: 'csv' }];
   $subscription = new Subscription();
   selectedInterval: string;
   npsChartData: NPS;
   globalQueries = [];
 
-  chartTypes = [
-    // {
-    //   name: 'Bar',
-    //   value: 'compare',
-    //   url: 'assets/svg/net-promoter-score-bar.svg',
-    //   backgroundColor: '#1AB99F',
-    // },
-    {
-      name: 'Bar',
-      value: 'bar',
-      url: 'assets/svg/bar-graph.svg',
-      backgroundColor: '#1AB99F',
-    },
-    {
-      name: 'Line',
-      value: 'line',
-      url: 'assets/svg/line-graph.svg',
-      backgroundColor: '#DEFFF3',
-    },
-  ];
+  chartTypes = [feedback.chartType.bar, feedback.chartType.line];
 
   documentActionTypes = [
     {
@@ -174,11 +155,18 @@ export class NetPromoterScoreComponent implements OnInit {
     });
   }
 
-  setChartType(option): void {
+  /**
+   * @function setChartType To set the chart type option.
+   * @param option The chart type option.
+   */
+  setChartType(option: ChartTypeOption): void {
     this.chart.chartType = option.value;
     this.chart.chartColors[0].backgroundColor = option.backgroundColor;
   }
 
+  /**
+   * @function initGraphData To initialize the graph data.
+   */
   protected initGraphData(): void {
     const botKeys = Object.keys(this.npsChartData.npsGraph);
     this.chart.chartData[0].data = [];
@@ -203,6 +191,9 @@ export class NetPromoterScoreComponent implements OnInit {
     });
   }
 
+  /**
+   * @function getNPSChartData To get NPS chart data
+   */
   protected getNPSChartData(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
@@ -220,6 +211,9 @@ export class NetPromoterScoreComponent implements OnInit {
     );
   }
 
+  /**
+   * @function exportCSV To export CSV report for NPS.
+   */
   exportCSV() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([

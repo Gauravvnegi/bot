@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { NPSAcrossServices } from '../../data-models/statistics.model';
-import { Subscription } from 'rxjs';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { Subscription } from 'rxjs';
+import { NPSAcrossServices } from '../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-nps-across-services',
@@ -19,11 +21,7 @@ import { DateService } from 'libs/shared/utils/src/lib/date.service';
 })
 export class NpsAcrossServicesComponent implements OnInit {
   npsFG: FormGroup;
-  documentTypes = [
-    { label: 'CSV', value: 'csv' },
-    // { label: 'EXCEL', value: 'excel' },
-    // { label: 'PDF', value: 'pdf' },
-  ];
+  documentTypes = [{ label: 'CSV', value: 'csv' }];
   $subscription: Subscription = new Subscription();
   selectedInterval: string;
   npsProgressData: NPSAcrossServices;
@@ -94,6 +92,9 @@ export class NpsAcrossServicesComponent implements OnInit {
     );
   }
 
+  /**
+   * @function initFG To intialize NPS form group.
+   */
   initFG(): void {
     this.npsFG = this.fb.group({
       documentType: ['csv'],
@@ -102,24 +103,25 @@ export class NpsAcrossServicesComponent implements OnInit {
     });
   }
 
+  /**
+   * @function onSelectedTabFilterChange To handle the tab filter change.
+   * @param event The material tab change event.
+   */
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
     this.getNPSServices();
   }
 
   isQuickReplyFilterSelected(quickReplyFilter) {
-    // const index = this.quickReplyTypes.indexOf(offer);
-    // return index >= 0;
     return true;
   }
 
+  /**
+   * @function toggleQuickReplyFilter To handle the chip click for a tab.
+   * @param quickReplyTypeIdx The chip index.
+   * @param quickReplyType The chip type.
+   */
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    //toggle isSelected
-    // this.tabFilterItems[this.tabFilterIdx].chips[
-    //   quickReplyTypeIdx
-    // ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-    //   quickReplyTypeIdx
-    // ].isSelected;
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -142,6 +144,9 @@ export class NpsAcrossServicesComponent implements OnInit {
     this.updateQuickReplyActionFilters();
   }
 
+  /**
+   * @function updateQuickReplyActionFilters To set the selected chip values to the form.
+   */
   updateQuickReplyActionFilters(): void {
     let value = [];
     this.tabFilterItems[this.tabFilterIdx].chips
@@ -153,6 +158,11 @@ export class NpsAcrossServicesComponent implements OnInit {
     this.getNPSServices();
   }
 
+  /**
+   * @function initTabLabels To initialize the tab filters.
+   * @param entities The chips for the tabs.
+   * @param departments The array for department.
+   */
   protected initTabLabels(entities, departments): void {
     if (!this.tabFilterItems.length) {
       departments.forEach((data, i) => {
@@ -176,6 +186,10 @@ export class NpsAcrossServicesComponent implements OnInit {
     }
   }
 
+  /**
+   * @function initProgressData To initialize the progress bar data.
+   * @param entities The chips for the tabs.
+   */
   protected initProgressData(entities) {
     this.progresses = {};
     if (
@@ -211,6 +225,10 @@ export class NpsAcrossServicesComponent implements OnInit {
     }
   }
 
+  /**
+   * @function getSelectedQuickReplyFilters To get the selected chip list.
+   * @returns The quick reply filter array.
+   */
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems.length
       ? this.tabFilterItems[this.tabFilterIdx].chips
@@ -221,6 +239,9 @@ export class NpsAcrossServicesComponent implements OnInit {
       : '';
   }
 
+  /**
+   * @function getNPSServices To get the NPS services progress data.
+   */
   protected getNPSServices(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -253,6 +274,9 @@ export class NpsAcrossServicesComponent implements OnInit {
     );
   }
 
+  /**
+   * @function exportCSV To export NPS services CSV report data.
+   */
   exportCSV() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -283,6 +307,9 @@ export class NpsAcrossServicesComponent implements OnInit {
     this.$subscription.unsubscribe();
   }
 
+  /**
+   * @function quickReplyActionFilters To get the quickReplyActionFilters control.
+   */
   get quickReplyActionFilters(): FormControl {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;
   }

@@ -6,12 +6,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
-import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
+import { SharedMaterialModule } from '@hospitality-bot/shared/material';
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
-import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
+import { StatisticsService } from '@hospitality-bot/admin/shared';
+import { AdminGuestDetailModule } from '@hospitality-bot/admin/guest-detail';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AdminStayFeedbackRoutingModule } from './admin-stay-feedback.routing.module';
 import { FeedbackComponent } from './components/feedback/feedback.component';
@@ -24,7 +24,7 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
     ReactiveFormsModule,
     SharedMaterialModule,
     AdminSharedModule,
-    // AdminStayFeedbackRoutingModule,
+    AdminStayFeedbackRoutingModule,
     FlexLayoutModule,
     SlickCarouselModule,
     AdminGuestDetailModule,

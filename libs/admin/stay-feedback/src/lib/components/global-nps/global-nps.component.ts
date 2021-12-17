@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { GlobalNPS } from '../../data-models/statistics.model';
-import { StatisticsService } from 'libs/admin/shared/src/lib/services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-global-nps',
@@ -114,7 +116,11 @@ export class GlobalNpsComponent implements OnInit {
     );
   }
 
-  initGraphData(data) {
+  /**
+   * @function initGraphData Initializes the graph data.
+   * @param data The global nps data.
+   */
+  initGraphData(data): void {
     this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
     Object.keys(data).forEach((key) => {
       if (
@@ -135,6 +141,9 @@ export class GlobalNpsComponent implements OnInit {
     }
   }
 
+  /**
+   * @function getGlobalNps To get the global nps data.
+   */
   getGlobalNps(): void {
     this.loading = true;
     const config = {
@@ -153,7 +162,12 @@ export class GlobalNpsComponent implements OnInit {
     );
   }
 
-  roundValue(data) {
+  /**
+   * @function roundValue To convert the fractional number to a round value.
+   * @param data The fractional number.
+   * @returns The round valued data.
+   */
+  roundValue(data): number {
     return data % 1 >= 0.5 ? Math.ceil(data) : Math.floor(data);
   }
 }

@@ -9,3 +9,4 @@ export * from './lib/constants/subscriptionConfig';
 export * from './lib/components/datatable/base-datatable.component';
 export * from './lib/constants/index';
 export * from './lib/services/validator-service';
+export * from './lib/types/chart.type';

@@ -24,6 +24,7 @@ import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
+import { EntityState, SelectedEntityState } from '../../../types/feedback.type';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -158,7 +159,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function getSelectedQuickReplyFilters To return the selected chip list
    * @returns The selected chips.
    */
-  getSelectedQuickReplyFilters() {
+  getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
       .map((item) => ({
@@ -185,7 +186,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updateQuickReplyFilterCount To update the count for chips.
    * @param countObj The object with count for all the chip.
    */
-  updateQuickReplyFilterCount(countObj): void {
+  updateQuickReplyFilterCount(countObj: EntityState): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.chips.forEach((chip) => {
@@ -255,7 +256,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updatePaginations To update the pagination variable values.
    * @param event The lazy load event for the table.
    */
-  updatePaginations(event): void {
+  updatePaginations(event: LazyLoadEvent): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
     this.tempFirst = this.first;
@@ -296,7 +297,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param field The name of the field across which filter is done.
    * @param matchMode The mode by which filter is to be done.
    */
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {
+  onFilterTypeTextChange(
+    value: string,
+    field: string,
+    matchMode = 'startsWith'
+  ): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;

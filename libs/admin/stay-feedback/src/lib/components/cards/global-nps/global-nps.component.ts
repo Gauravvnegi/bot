@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  CircularChart,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -27,7 +28,7 @@ export class GlobalNpsComponent implements OnInit {
     negative: 'Negative',
   };
 
-  defaultChart: any = {
+  defaultChart: CircularChart = {
     Labels: ['No Data'],
     Data: [[0]],
     Type: 'doughnut',
@@ -55,7 +56,7 @@ export class GlobalNpsComponent implements OnInit {
     },
   };
 
-  chart: any = {
+  chart: CircularChart = {
     Labels: ['No Data'],
     Data: [[100]],
     Type: 'doughnut',

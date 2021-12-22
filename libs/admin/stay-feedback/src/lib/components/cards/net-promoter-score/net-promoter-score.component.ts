@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  BarChart,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -40,15 +41,15 @@ export class NetPromoterScoreComponent implements OnInit {
     },
   ];
 
-  chart: any = {
-    chartData: [
+  chart: BarChart = {
+    Data: [
       {
         data: [],
         label: 'Overall NPS',
       },
     ],
-    chartLabels: [],
-    chartOptions: {
+    Labels: [],
+    Options: {
       responsive: true,
       elements: {
         line: {
@@ -93,7 +94,7 @@ export class NetPromoterScoreComponent implements OnInit {
         yPadding: 10,
       },
     },
-    chartColors: [
+    Colors: [
       {
         borderColor: '#0C8054',
         backgroundColor: '#DEFFF3',
@@ -103,8 +104,8 @@ export class NetPromoterScoreComponent implements OnInit {
         pointHoverBorderColor: '#0C8054',
       },
     ],
-    chartLegend: false,
-    chartType: 'line',
+    Legend: false,
+    Type: 'line',
   };
 
   constructor(
@@ -118,7 +119,6 @@ export class NetPromoterScoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFG();
-    // this.setChartLabels();
     this.registerListeners();
   }
 
@@ -160,8 +160,8 @@ export class NetPromoterScoreComponent implements OnInit {
    * @param option The chart type option.
    */
   setChartType(option: ChartTypeOption): void {
-    this.chart.chartType = option.value;
-    this.chart.chartColors[0].backgroundColor = option.backgroundColor;
+    this.chart.Type = option.value;
+    this.chart.Colors[0].backgroundColor = option.backgroundColor;
   }
 
   /**
@@ -169,10 +169,10 @@ export class NetPromoterScoreComponent implements OnInit {
    */
   protected initGraphData(): void {
     const botKeys = Object.keys(this.npsChartData.npsGraph);
-    this.chart.chartData[0].data = [];
-    this.chart.chartLabels = [];
+    this.chart.Data[0].data = [];
+    this.chart.Labels = [];
     botKeys.forEach((d, i) => {
-      this.chart.chartLabels.push(
+      this.chart.Labels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
@@ -187,7 +187,7 @@ export class NetPromoterScoreComponent implements OnInit {
             : null
         )
       );
-      this.chart.chartData[0].data.push(this.npsChartData.npsGraph[d]);
+      this.chart.Data[0].data.push(this.npsChartData.npsGraph[d]);
     });
   }
 

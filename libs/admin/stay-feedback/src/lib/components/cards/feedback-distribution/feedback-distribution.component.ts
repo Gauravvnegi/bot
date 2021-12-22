@@ -3,6 +3,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   StatisticsService,
+  CircularChart,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -26,7 +27,7 @@ export class FeedbackDistributionComponent implements OnInit {
     OUTSTANDING: '#508919',
   };
 
-  defaultChart: any = {
+  defaultChart: CircularChart = {
     Labels: ['No Data'],
     Data: [[100]],
     Type: 'doughnut',
@@ -53,7 +54,7 @@ export class FeedbackDistributionComponent implements OnInit {
     },
   };
 
-  chart: any = {
+  chart: CircularChart = {
     Labels: ['No Data'],
     Data: [[100]],
     Type: 'doughnut',

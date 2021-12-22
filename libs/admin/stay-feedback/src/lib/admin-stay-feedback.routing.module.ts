@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-
-import { FeedbackComponent } from './components/feedback/feedback.component';
-import { FeedbackDatatableComponent } from './components/feedback-datatable/feedback-datatable.component';
 import { FeedbackDistributionComponent } from './components/cards/feedback-distribution/feedback-distribution.component';
 import { GlobalNpsComponent } from './components/cards/global-nps/global-nps.component';
 import { NetPromoterScoreComponent } from './components/cards/net-promoter-score/net-promoter-score.component';
@@ -13,6 +10,8 @@ import { OverallReceivedBifurcationComponent } from './components/cards/overall-
 import { SharedComponent } from './components/cards/shared/shared.component';
 import { TopLowNpsComponent } from './components/cards/top-low-nps/top-low-nps.component';
 import { TwoWayProgressComponent } from './components/cards/two-way-progress/two-way-progress.component';
+import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
 
 const appRoutes: Route[] = [
   {

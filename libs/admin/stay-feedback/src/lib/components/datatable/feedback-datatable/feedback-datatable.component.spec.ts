@@ -8,9 +8,8 @@ describe('FeedbackDatatableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeedbackDatatableComponent ]
-    })
-    .compileComponents();
+      declarations: [FeedbackDatatableComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

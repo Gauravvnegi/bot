@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   DetailsComponent,
@@ -45,7 +46,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   hotelId: string;
 
   cols = feedback.cols.feedbackDatatable;
-
   chips = feedback.chips.feedbackDatatable;
 
   tabFilterItems = [
@@ -132,7 +132,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param loading The loading status.
    * @param props The table props to control data fetching.
    */
-  loadInitialData(queries = [], loading = true) {
+  loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
@@ -171,7 +171,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param countObj The object with count for all the tab.
    * @param currentTabCount The count for current selected tab.
    */
-  updateTabFilterCount(countObj, currentTabCount) {
+  updateTabFilterCount(countObj, currentTabCount): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.total = countObj[tab.value];
@@ -185,7 +185,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updateQuickReplyFilterCount To update the count for chips.
    * @param countObj The object with count for all the chip.
    */
-  updateQuickReplyFilterCount(countObj) {
+  updateQuickReplyFilterCount(countObj): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.chips.forEach((chip) => {
@@ -255,14 +255,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updatePaginations To update the pagination variable values.
    * @param event The lazy load event for the table.
    */
-  updatePaginations(event) {
+  updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
     this.tempFirst = this.first;
     this.tempRowsPerPage = this.rowsPerPage;
   }
 
-  updatePaginationForFilterItems(pageEvent) {
+  updatePaginationForFilterItems(pageEvent): void {
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
@@ -270,7 +270,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
-  customSort(event: SortEvent) {
+  customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
       event.field[event.field.length - 1] === ')'
@@ -285,7 +285,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function onSelectedTabFilterChange To handle the tab filter change.
    * @param event The material tab change event.
    */
-  onSelectedTabFilterChange(event) {
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
@@ -296,7 +296,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param field The name of the field across which filter is done.
    * @param matchMode The mode by which filter is to be done.
    */
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
+  onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;
@@ -314,7 +314,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   /**
    * @function exportCSV To export CSV report of the table.
    */
-  exportCSV() {
+  exportCSV(): void {
     this.loading = true;
 
     const config = {
@@ -353,12 +353,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param quickReplyTypeIdx The chip index.
    * @param quickReplyType The chip type.
    */
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
-          chip.isSelected = false;
-        }
+        if (chip.value !== 'ALL') chip.isSelected = false;
       });
       this.tabFilterItems[this.tabFilterIdx].chips[
         quickReplyTypeIdx
@@ -383,7 +381,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param rowData The data of the clicked row.
    * @param tabKey The key of the tab to be opened in detail modal.
    */
-  openDetailPage(event: MouseEvent, rowData?: Guest, tabKey?: string) {
+  openDetailPage(event: MouseEvent, rowData?: Guest, tabKey?: string): void {
     event.stopPropagation();
 
     if (rowData) {

@@ -19,6 +19,9 @@ export class StackedBarGraphComponent implements OnInit {
     this.setProgresses();
   }
 
+  /**
+   * @function setProgress To set progress data for bar graph.
+   */
   setProgresses() {
     this.progresses = [];
     if (this.data.verticalData) {

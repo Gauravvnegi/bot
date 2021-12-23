@@ -6,6 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { TopLowNpsComponent as BaseTopLowNpsComponent } from '@hospitality-bot/admin/stay-feedback';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { feedback } from '../../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-top-low-nps',
@@ -14,22 +15,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 })
 export class TopLowNpsComponent extends BaseTopLowNpsComponent
   implements OnInit {
-  tabFilterItems = [
-    {
-      label: 'Department',
-      icon: '',
-      value: 'DEPARTMENT',
-      total: 0,
-      isSelected: true,
-    },
-    {
-      label: 'Experience',
-      icon: '',
-      value: 'EXPERIENCE',
-      total: 0,
-      isSelected: false,
-    },
-  ];
+  tabFilterItems = feedback.tabFilterItems.topLowNPS;
   constructor(
     statisticsService: StatisticsService,
     _globalFilterService: GlobalFilterService,

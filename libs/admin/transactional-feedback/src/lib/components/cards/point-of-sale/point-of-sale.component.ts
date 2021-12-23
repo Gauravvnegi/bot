@@ -11,6 +11,9 @@ import { Subscription } from 'rxjs';
 import { NPOS, NPOSVertical } from '../../../data-models/statistics.model';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import * as FileSaver from 'file-saver';
+import { feedback } from '../../../constants/feedback';
+import { EntityState } from '../../../types/feedback.type';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-point-of-sale',
@@ -27,20 +30,7 @@ export class PointOfSaleComponent implements OnInit {
   globalQueries;
   stats;
   branchId: string;
-  chartTypes = [
-    {
-      name: 'POSLine',
-      value: 'compare',
-      url: 'assets/svg/net-promoter-score-bar.svg',
-      backgroundColor: '#DEFFF3',
-    },
-    {
-      name: 'POSBar',
-      value: 'bar',
-      url: 'assets/svg/bar-graph.svg',
-      backgroundColor: '#1AB99F',
-    },
-  ];
+  chartTypes = feedback.chartTypes.pos;
   documentActionTypes = [
     {
       label: `Export`,
@@ -74,7 +64,7 @@ export class PointOfSaleComponent implements OnInit {
     this.registerListeners();
   }
 
-  initFG() {
+  initFG(): void {
     this.npsFG = this.fb.group({
       documentType: ['csv'],
       documentActionType: ['export'],
@@ -83,12 +73,12 @@ export class PointOfSaleComponent implements OnInit {
     });
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
   }
 
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe(
         (data) => {
@@ -117,7 +107,11 @@ export class PointOfSaleComponent implements OnInit {
     );
   }
 
-  setTabFilterItems(branchId) {
+  /**
+   * @function setTabFilterItems To set tab filter items.
+   * @param branchId The hotel branch id.
+   */
+  setTabFilterItems(branchId: string): void {
     const outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
       (branch) => branch['id'] == branchId
     ).outlets;
@@ -136,7 +130,7 @@ export class PointOfSaleComponent implements OnInit {
     });
   }
 
-  listenForOutletChanged() {
+  listenForOutletChanged(): void {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {
         this.setTabFilterItems(this.branchId);
@@ -145,7 +139,11 @@ export class PointOfSaleComponent implements OnInit {
     });
   }
 
-  getSelectedQuickReplyFilters() {
+  /**
+   * @function getSelectedQuickReplyFilters To get selected chip list.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters(): EntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
       .map((item) => ({
@@ -153,6 +151,9 @@ export class PointOfSaleComponent implements OnInit {
       }));
   }
 
+  /**
+   * @function getStats To get POS data fro the api.
+   */
   getStats() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(
@@ -181,7 +182,10 @@ export class PointOfSaleComponent implements OnInit {
     );
   }
 
-  addChipsToFilters() {
+  /**
+   * @function addChipsToFilters To set chips for tabs.
+   */
+  addChipsToFilters(): void {
     this.chips = [];
     if (this.stats.chipLabels.length > 1) {
       this.chips.push({
@@ -217,7 +221,10 @@ export class PointOfSaleComponent implements OnInit {
     else this.tabFilterItems[this.tabFilterIdx].chips = this.chips;
   }
 
-  addFilterItems() {
+  /**
+   * @function addFilterItems To add tab filter data.
+   */
+  addFilterItems(): void {
     this.stats.data.forEach((item) =>
       this.tabFilterItems.push({
         label: item.label,
@@ -230,20 +237,23 @@ export class PointOfSaleComponent implements OnInit {
     );
   }
 
-  onSelectedTabFilterChange(event) {
+  /**
+   * @function onSelectedTabFilterChange To handle selected tab filter change.
+   * @param event The material tab event change.
+   */
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.tabFilterItems[this.tabFilterIdx].chips = [];
     this.chips = [];
     this.getStats();
   }
 
-  isQuickReplyFilterSelected(quickReplyFilter) {
-    // const index = this.quickReplyTypes.indexOf(offer);
-    // return index >= 0;
-    return true;
-  }
-
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+  /**
+   * @function toggleQuickReplyFilter To toggle chip selection.
+   * @param quickReplyTypeIdx The index for selected chip.
+   * @param quickReplyType The selected chip data.
+   */
+  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -267,6 +277,9 @@ export class PointOfSaleComponent implements OnInit {
     this.getStats();
   }
 
+  /**
+   * @function updateQuickReplyActionFilters To set selected chip data to form data.
+   */
   updateQuickReplyActionFilters(): void {
     let value = [];
     this.tabFilterItems[this.tabFilterIdx].chips
@@ -277,7 +290,10 @@ export class PointOfSaleComponent implements OnInit {
     this.quickReplyActionFilters.patchValue(value);
   }
 
-  exportCSV() {
+  /**
+   * @function exportCSV To export CSV data for the POS data.
+   */
+  exportCSV(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -304,7 +320,11 @@ export class PointOfSaleComponent implements OnInit {
     );
   }
 
-  setChartType(chartType) {
+  /**
+   * @function setChartType To set chart type and load data for selected chart type.
+   * @param chartType The selected chart type.
+   */
+  setChartType(chartType: string): void {
     this.chartType = chartType;
     this.getStats();
   }
@@ -313,7 +333,7 @@ export class PointOfSaleComponent implements OnInit {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;
   }
 
-  get services() {
+  get services(): any[] {
     if (this.stats?.data) {
       return [
         ...new Map(

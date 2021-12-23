@@ -1,30 +1,61 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';
 
+/**
+ * @class Manages api calls for feedback table.
+ */
 @Injectable()
 export class FeedbackTableService extends ApiService {
-  getGuestFeedbacks(config) {
+  /**
+   * @function To get guest feedback list.
+   * @param config The filter config data.
+   * @returns The observable with guest feedback data.
+   */
+  getGuestFeedbacks(config): Observable<any> {
     return this.get(`/api/v1/transactional-feedback/guests${config.queryObj}`);
   }
 
-  updateNotes(id, data) {
+  /**
+   * @function updateNotes To update notes for a feedback.
+   * @param id The feedback id.
+   * @param data The notes data.
+   * @returns The observable with updated notes data.
+   */
+  updateNotes(id: string, data: UpdateNoteData): Observable<any> {
     return this.patch(`/api/v1/transactional-feedback/${id}/notes`, data);
   }
 
-  getFeedbackPdf(id) {
+  /**
+   * @function getFeedbackPdf To get feedback pdf for a feedback.
+   * @param id The feedback id.
+   * @returns The observable with feedback pdf.
+   */
+  getFeedbackPdf(id: string): Observable<any> {
     return this.get(
       `/api/v1/transactional-feedback/${id}/download-feedback-form`
     );
   }
 
-  exportCSV(config) {
+  /**
+   * @function To get CSV report for feedback table.
+   * @param config The filter config data.
+   * @returns The observable with CSV blob.
+   */
+  exportCSV(config): Observable<any> {
     return this.get(`/api/v1/transactional-feedback/export${config.queryObj}`, {
       responseType: 'blob',
     });
   }
 
-  updateFeedbackStatus(config, data) {
+  /**
+   * @function updateFeedbackStatus To update feedback status.
+   * @param config The filter config data.
+   * @param data The feedback status data.
+   * @returns The observable with updated feedback data.
+   */
+  updateFeedbackStatus(config, data: UpdateStatusData): Observable<any> {
     return this.patch(
       `/api/v1/transactional-feedback/status${config.queryObj}`,
       data

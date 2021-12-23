@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
@@ -20,8 +21,14 @@ import {
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { FeedbackTable } from '../../../data-models/feedback-datatable.model';
+import { feedback } from '../../../constants/feedback';
+import {
+  Feedback,
+  FeedbackTable,
+  Notes,
+} from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
+import { EntityState, SelectedChip } from '../../../types/feedback.type';
 import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
 
 @Component({
@@ -34,7 +41,7 @@ import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.comp
 })
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Guest - Feedback';
+  tableName = feedback.table.name;
   outlets = [];
   actionButtons = true;
   isQuickFilters = true;
@@ -46,83 +53,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   hotelId: string;
   rowsPerPage: number = 25;
 
-  cols = [
-    {
-      field: 'outlet',
-      header: 'Outlet',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'guest.getFullName()',
-      header: 'Name/Phone No.',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'getServiceTypeAndTime()',
-      header: 'Service/ Feedback',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: `getCreatedDate()`,
-      header: 'Visit Date/ curr. Living In',
-      isSort: true,
-      sortType: 'date',
-    },
-    {
-      field: 'comments',
-      header: 'Comment',
-      isSort: true,
-      sortType: 'string',
-    },
-    { field: 'stageAndourney', header: 'Actions' },
-  ];
+  cols = feedback.cols.feedbackDatatable;
 
-  chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-    {
-      label: 'High Potential ',
-      icon: '',
-      value: 'HIGHPOTENTIAL',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'High Risk ',
-      icon: '',
-      value: 'HIGHRISK',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'Read ',
-      icon: '',
-      value: 'READ',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'Unread ',
-      icon: '',
-      value: 'UNREAD',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-    {
-      label: 'Actioned ',
-      icon: '',
-      value: 'ACTIONED',
-      total: 0,
-      isSelected: false,
-      type: 'initiated',
-    },
-  ];
+  chips = feedback.chips.feedbackDatatable;
 
   tabFilterItems = [
     {
@@ -168,7 +101,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     });
   }
 
-  getOutlets(branchId) {
+  /**
+   * @function getOutlets To get outlets for a hotel.
+   * @param branchId The branch id.
+   */
+  getOutlets(branchId: string) {
     this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
       (branch) => branch['id'] == branchId
     ).outlets;
@@ -178,6 +115,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for filter data change.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
@@ -197,12 +137,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
-          // { offset: this.first, limit: this.rowsPerPage },
         ]);
       })
     );
   }
 
+  /**
+   * @function listenForOutletChanged To listen for outlet tab change.
+   */
   listenForOutletChanged() {
     this.statisticService.outletChange.subscribe((response) => {
       if (response) {
@@ -216,12 +158,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
-          // { offset: this.first, limit: this.rowsPerPage },
         ]);
       }
     });
   }
 
+  /**
+   * @function getHotelId To get hotel id from the filter data.
+   * @param globalQueries The filter list data.
+   */
   getHotelId(globalQueries): void {
     //todo
 
@@ -232,6 +177,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * @function loadInitialData To load initial feedback data.
+   * @param queries The filter list data.
+   * @param loading The table loading status.
+   */
   loadInitialData(queries = [], loading = true) {
     this.loading = loading && true;
     this.$subscription.add(
@@ -257,7 +207,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  getSelectedQuickReplyFilters() {
+  /**
+   * @function getSelectedQuickReplyFilters To get the selected chips.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters(): SelectedChip[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
       .map((item) => ({
@@ -265,7 +219,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       }));
   }
 
-  updateTabFilterCount(countObj, currentTabCount) {
+  /**
+   * @function updateTabFilterCount To update tab data count.
+   * @param countObj The Tab count object.
+   * @param currentTabCount The current tab data count.
+   */
+  updateTabFilterCount(countObj, currentTabCount: number) {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.total = countObj[tab.value];
@@ -275,7 +234,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
   }
 
-  updateQuickReplyFilterCount(countObj) {
+  /**
+   * @function updateQuickReplyFilterCount To update chip count.
+   * @param countObj The chip count data.
+   */
+  updateQuickReplyFilterCount(countObj: EntityState) {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.chips.forEach((chip) => {
@@ -285,6 +248,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function fetchDataFrom To fetch api data.
+   * @param queries The filter data.
+   * @param defaultProps The default page data.
+   * @returns The observable with stream of feedback data.
+   */
   fetchDataFrom(
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
@@ -298,6 +267,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return this.tableService.getGuestFeedbacks(config);
   }
 
+  /**
+   * @function loadData To load table data on a page change.
+   * @param event The lazy load event.
+   */
   loadData(event: LazyLoadEvent) {
     this.loading = true;
     this.updatePaginations(event);
@@ -334,18 +307,27 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  updatePaginations(event) {
+  /**
+   * @function updatePaginations To handle page change event.
+   * @param event The lazy load event.
+   */
+  updatePaginations(event: LazyLoadEvent) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    // if(this.tabFilterItems.length){
-    //   this.updatePaginationForFilterItems(event.page)
-    // }
   }
 
-  updatePaginationForFilterItems(pageEvent) {
+  /**
+   * @function updatePaginationForFilterItems To update the page number for a tab.
+   * @param pageEvent The page number.
+   */
+  updatePaginationForFilterItems(pageEvent: number) {
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
+  /**
+   * @function customSort To handle table sort click.
+   * @param event The sort event for the table.
+   */
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
@@ -357,15 +339,26 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  onSelectedTabFilterChange(event) {
+  /**
+   * @function onSelectedTabFilterChange To handle tab filter selection.
+   * @param event The material tab change event.
+   */
+  onSelectedTabFilterChange(event: MatTabChangeEvent) {
     this.tabFilterIdx = event.index;
     this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
 
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    // value = value && value.trim();
-    // this.table.filter(value, field, matchMode);
-
+  /**
+   * @function onFilterTypeTextChange To handle filter field text change.
+   * @param value The value for filter field.
+   * @param field The field for which table is to be filtered.
+   * @param matchMode The match mode for filter.
+   */
+  onFilterTypeTextChange(
+    value: string,
+    field: string,
+    matchMode = 'startsWith'
+  ) {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;
@@ -380,6 +373,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.table.filter(value, field, matchMode);
   }
 
+  /**
+   * @function exportCSV To export CSV report for feedback table.
+   */
   exportCSV() {
     this.loading = true;
     const queries = [
@@ -420,6 +416,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function updateFeedbackStatus To update the read status of a feedback.
+   * @param status The feedback status.
+   */
   updateFeedbackStatus(status: boolean) {
     if (!this.selectedRows.length) {
       this._snackbarService.openSnackBarAsText(
@@ -459,7 +459,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
               ...this.getSelectedQuickReplyFilters(),
-              // { offset: this.first, limit: this.rowsPerPage },
             ],
             false
           );
@@ -473,7 +472,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+  /**
+   * @function toggleQuickReplyFilter To toggle chip selection.
+   * @param quickReplyTypeIdx The selected chip index.
+   * @param quickReplyType The selected chip.
+   */
+  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType) {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -497,7 +501,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
-  openEditNotes(event, data, notes) {
+  /**
+   * @function openEditNotes To open edit notes modal.
+   * @param event The mouse click event.
+   * @param data The feedback data.
+   * @param notes The notes data for a particular feedback.
+   */
+  openEditNotes(event: MouseEvent, data: Feedback, notes: Notes) {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -534,7 +544,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
                       entityType: this.tabFilterItems[this.tabFilterIdx].value,
                     },
                     ...this.getSelectedQuickReplyFilters(),
-                    // { offset: this.first, limit: this.rowsPerPage },
                   ],
                   false
                 );
@@ -548,7 +557,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  downloadFeedbackPdf(event, id) {
+  /**
+   * @function downloadFeedbackPdf To download feedback pdf of a feedback.
+   * @param event The mouse click event.
+   * @param id The outlet id.
+   */
+  downloadFeedbackPdf(event: MouseEvent, id: string) {
     event.stopPropagation();
 
     this.$subscription.add(
@@ -566,11 +580,20 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  getFeedbackOutlet(id) {
+  /**
+   * @function getFeedbackOutlet To get outlet data for a outlet id.
+   * @param id The outlet id.
+   * @returns The outlet data for a particular id.
+   */
+  getFeedbackOutlet(id: string) {
     return this.outlets.filter((outlet) => outlet.id === id);
   }
 
-  openFeedbackRequestPage(event) {
+  /**
+   * @function openFeedbackRequestPage To open the request feedback modal.
+   * @param event The mouse click event.
+   */
+  openFeedbackRequestPage(event: MouseEvent) {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -585,7 +608,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
     this.$subscription.add(
       detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-        // remove loader for detail close
         detailCompRef.close();
       })
     );

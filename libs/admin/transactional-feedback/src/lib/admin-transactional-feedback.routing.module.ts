@@ -8,7 +8,7 @@ import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-
 import { SharedComponent } from './components/cards/shared/shared.component';
 import { StackedBarGraphComponent } from './components/cards/stacked-bar-graph/stacked-bar-graph.component';
 import { TopLowNpsComponent } from './components/cards/top-low-nps/top-low-nps.component';
-import { FeedbackDatatableComponent } from './components/feedback-datatable/feedback-datatable.component';
+import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 

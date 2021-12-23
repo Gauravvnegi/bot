@@ -7,6 +7,8 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { chartConfig } from '../../../constants/chart';
+import { feedback } from '../../../constants/feedback';
 import { GlobalNPS } from '../../../data-models/statistics.model';
 
 @Component({
@@ -16,23 +18,13 @@ import { GlobalNPS } from '../../../data-models/statistics.model';
 })
 export class GlobalNpsComponent implements OnInit {
   globalNps: GlobalNPS;
-  color = {
-    neutral: '#4BA0F5',
-    positive: '#1AB99F',
-    negative: '#EF1D45',
-  };
-
-  labels = {
-    neutral: 'Neutral',
-    positive: 'Positive',
-    negative: 'Negative',
-  };
+  color = feedback.colorConfig.globalNPS;
+  labels = feedback.labels.globalNPS;
 
   defaultChart: CircularChart = {
     Labels: ['No Data'],
     Data: [[0]],
-    Type: 'doughnut',
-
+    Type: chartConfig.type.doughnut,
     Legend: false,
     Colors: [
       {
@@ -40,27 +32,13 @@ export class GlobalNpsComponent implements OnInit {
         borderColor: ['#D5D1D1'],
       },
     ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 0,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
+    Options: chartConfig.options.globalNPS,
   };
 
   chart: CircularChart = {
     Labels: ['No Data'],
     Data: [[100]],
-    Type: 'doughnut',
-
+    Type: chartConfig.type.doughnut,
     Legend: false,
     Colors: [
       {
@@ -68,20 +46,7 @@ export class GlobalNpsComponent implements OnInit {
         borderColor: ['#D5D1D1'],
       },
     ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 0,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
+    Options: chartConfig.options.globalNPS,
   };
 
   loading: boolean = false;

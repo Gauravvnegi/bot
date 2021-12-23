@@ -4,7 +4,6 @@ export * from './net-promoter-score/net-promoter-score.component';
 export * from './nps-across-departments/nps-across-departments.component';
 export * from './nps-across-services/nps-across-services.component';
 export * from './shared/shared.component';
-export * from './nps-across-touchpoints/nps-across-touchpoints.component';
 export * from './overall-received-bifurcation/overall-received-bifurcation.component';
 export * from './top-low-nps/top-low-nps.component';
 export * from './two-way-progress/two-way-progress.component';

@@ -10,6 +10,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
+import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { NPS } from '../../../data-models/statistics.model';
 import { ChartTypeOption } from '../../../types/feedback.type';
@@ -44,68 +45,15 @@ export class NetPromoterScoreComponent implements OnInit {
   chart: BarChart = {
     Data: [
       {
-        data: [],
+        data: [''],
         label: 'Overall NPS',
       },
     ],
-    Labels: [],
-    Options: {
-      responsive: true,
-      elements: {
-        line: {
-          tension: 0,
-        },
-        point: {
-          radius: 4,
-          borderWidth: 2,
-          hitRadius: 5,
-          hoverRadius: 5,
-          hoverBorderWidth: 2,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: -100,
-              max: 100,
-            },
-          },
-        ],
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
-    Colors: [
-      {
-        borderColor: '#0C8054',
-        backgroundColor: '#DEFFF3',
-        pointBackgroundColor: 'white',
-        pointBorderColor: '#0C8054',
-        pointHoverBackgroundColor: 'white',
-        pointHoverBorderColor: '#0C8054',
-      },
-    ],
+    Labels: [''],
+    Options: chartConfig.options.nps,
+    Colors: chartConfig.colors.nps,
     Legend: false,
-    Type: 'line',
+    Type: chartConfig.type.line,
   };
 
   constructor(
@@ -122,11 +70,11 @@ export class NetPromoterScoreComponent implements OnInit {
     this.registerListeners();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
@@ -214,7 +162,7 @@ export class NetPromoterScoreComponent implements OnInit {
   /**
    * @function exportCSV To export CSV report for NPS.
    */
-  exportCSV() {
+  exportCSV(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -6,6 +7,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { feedback } from '../../../constants/feedback';
 import { PerformanceNPS } from '../../../data-models/statistics.model';
 
 @Component({
@@ -47,32 +49,13 @@ export class TopLowNpsComponent implements OnInit {
 
   progressItems = [];
 
-  tabFilterItems = [
-    {
-      label: 'Department',
-      icon: '',
-      value: 'DEPARTMENT',
-      total: 0,
-      isSelected: true,
-    },
-    {
-      label: 'Service',
-      icon: '',
-      value: 'SERVICE',
-      total: 0,
-      isSelected: false,
-    },
-    {
-      label: 'Touchpoint',
-      icon: '',
-      value: 'TOUCHPOINT',
-      total: 0,
-      isSelected: false,
-    },
-  ];
+  tabFilterItems = feedback.tabFilterItems.topLowNPS;
 
   tabFilterIdx: number = 0;
 
+  /**
+   * @function getPerformanceNps To get the performance nps data.
+   */
   getPerformanceNps(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -94,7 +77,11 @@ export class TopLowNpsComponent implements OnInit {
     );
   }
 
-  onSelectedTabFilterChange($event) {
+  /**
+   * @function onSelectedTabFilterChange To handle the tab change.
+   * @param $event The Tab Chenge event.
+   */
+  onSelectedTabFilterChange($event: MatTabChangeEvent): void {
     this.tabFilterIdx = $event.index;
     this.getPerformanceNps();
   }

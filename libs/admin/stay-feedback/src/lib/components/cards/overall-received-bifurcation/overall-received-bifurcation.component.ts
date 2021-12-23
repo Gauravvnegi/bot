@@ -7,6 +7,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
+import { chartConfig } from '../../../constants/chart';
 import { Bifurcation } from '../../../data-models/statistics.model';
 
 @Component({
@@ -22,28 +23,10 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   feedbackChart = {
     Labels: ['No Data'],
     Data: [[100]],
-    Type: 'doughnut',
+    Type: chartConfig.type.doughnut,
     Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 75,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
+    Colors: chartConfig.defultColor,
+    Options: chartConfig.options.distribution,
   };
 
   constructor(
@@ -58,11 +41,11 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     this.registerListeners();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe(
         (data) => {
@@ -88,7 +71,10 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     );
   }
 
-  getStats() {
+  /**
+   * @function getStats To get received feedback bifurcation data.
+   */
+  getStats(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
@@ -107,16 +93,15 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     );
   }
 
-  initFeedbackChart(defaultGraph) {
+  /**
+   * @function initFeedbackChart To initialize chart data.
+   * @param defaultGraph The data status.
+   */
+  initFeedbackChart(defaultGraph: boolean): void {
     if (defaultGraph) {
       this.feedbackChart.Labels = ['No Data'];
       this.feedbackChart.Data = [[100]];
-      this.feedbackChart.Colors = [
-        {
-          backgroundColor: ['#D5D1D1'],
-          borderColor: ['#D5D1D1'],
-        },
-      ];
+      this.feedbackChart.Colors = chartConfig.defultColor;
       return;
     }
     this.feedbackChart.Data = [[]];
@@ -136,9 +121,5 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         this.feedbackChart.Colors[0].borderColor.push(feedback.color);
       }
     });
-  }
-
-  get feedbackReceivedData() {
-    return this.stats;
   }
 }

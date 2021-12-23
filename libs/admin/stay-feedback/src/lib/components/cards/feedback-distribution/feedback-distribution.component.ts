@@ -7,6 +7,8 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { chartConfig } from '../../../constants/chart';
+import { feedback } from '../../../constants/feedback';
 import { FeedbackDistribution } from '../../../data-models/statistics.model';
 
 @Component({
@@ -18,67 +20,24 @@ export class FeedbackDistributionComponent implements OnInit {
   globalQueries;
   $subscription = new Subscription();
   totalDistribution = 0;
-  color = {
-    VERYPOOR: '#CC052B',
-    POOR: '#EF1D45',
-    ADEQUATE: '#FF8F00',
-    GOOD: '#4BA0F5',
-    VERYGOOD: '#224BD5',
-    OUTSTANDING: '#508919',
-  };
+  color = feedback.colorConfig.distribution;
 
   defaultChart: CircularChart = {
     Labels: ['No Data'],
     Data: [[100]],
-    Type: 'doughnut',
+    Type: chartConfig.type.doughnut,
     Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 80,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
+    Colors: chartConfig.colors.distribution,
+    Options: chartConfig.options.distribution,
   };
 
   chart: CircularChart = {
     Labels: ['No Data'],
     Data: [[100]],
-    Type: 'doughnut',
+    Type: chartConfig.type.doughnut,
     Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 80,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
+    Colors: chartConfig.colors.distribution,
+    Options: chartConfig.options.distribution,
   };
 
   keyLabels = [];

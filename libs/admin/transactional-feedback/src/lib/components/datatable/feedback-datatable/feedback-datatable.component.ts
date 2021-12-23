@@ -20,15 +20,15 @@ import {
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { FeedbackTable } from '../../data-models/feedback-datatable.model';
-import { FeedbackTableService } from '../../services/table.service';
-import { FeedbackNotesComponent } from '../feedback-notes/feedback-notes.component';
+import { FeedbackTable } from '../../../data-models/feedback-datatable.model';
+import { FeedbackTableService } from '../../../services/table.service';
+import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
   styleUrls: [
-    '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
     './feedback-datatable.component.scss',
   ],
 })

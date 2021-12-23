@@ -95,4 +95,63 @@ export const feedback = {
       backgroundColor: '#DEFFF3',
     },
   },
+  colorConfig: {
+    distribution: {
+      VERYPOOR: '#CC052B',
+      POOR: '#EF1D45',
+      ADEQUATE: '#FF8F00',
+      GOOD: '#4BA0F5',
+      VERYGOOD: '#224BD5',
+      OUTSTANDING: '#508919',
+    },
+    globalNPS: {
+      neutral: '#4BA0F5',
+      positive: '#1AB99F',
+      negative: '#EF1D45',
+    },
+  },
+  labels: {
+    globalNPS: {
+      neutral: 'Neutral',
+      positive: 'Positive',
+      negative: 'Negative',
+    },
+  },
+  tabFilterItems: {
+    topLowNPS: [
+      {
+        label: 'Department',
+        icon: '',
+        value: 'DEPARTMENT',
+        total: 0,
+        isSelected: true,
+      },
+      {
+        label: 'Service',
+        icon: '',
+        value: 'SERVICE',
+        total: 0,
+        isSelected: false,
+      },
+      {
+        label: 'Touchpoint',
+        icon: '',
+        value: 'TOUCHPOINT',
+        total: 0,
+        isSelected: false,
+      },
+    ],
+  },
+  canvas: {
+    department: {
+      lineWidth: 15,
+      x: 62,
+      y: 62,
+      radius: 55,
+    },
+  },
+  defaultColor: '#f2f2f2',
+  negativeColor: '#EF1D45',
+  neutralColor: '#4BA0F5',
+  positiveColor: '#1AB99F',
 };

@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
+import { feedback } from '../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -20,6 +21,7 @@ export class FeedbackComponent implements OnInit {
   container: ViewContainerRef;
   $subscription = new Subscription();
   trasactionalModuleLoad = false;
+  loadedModule = '';
 
   constructor(
     private compiler: Compiler,
@@ -39,36 +41,48 @@ export class FeedbackComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.trasactionalModuleLoad =
-          data['filter'].value.feedback.feedbackType === 'Transactional';
-        this.loadModules();
+          data['filter'].value.feedback.feedbackType ===
+          feedback.types.transactional;
+        this.handleModuleLoad();
       })
     );
   }
 
-  async loadModules() {
+  /**
+   * @function handleModuleLoad To handle loading of module based on the global filter data.
+   */
+  async handleModuleLoad() {
     if (this.trasactionalModuleLoad) {
-      this.loadModule(
-        await import(
-          'libs/admin/transactional-feedback/src/lib/admin-transactional-feedback.module'
-        ).then((m) => m.AdminTransactionalFeedbackModule)
-      );
+      this.loadedModule !== feedback.types.transactional &&
+        this.loadModule(
+          await import(
+            'libs/admin/transactional-feedback/src/lib/admin-transactional-feedback.module'
+          ).then((m) => m.AdminTransactionalFeedbackModule)
+        );
+      this.loadedModule = feedback.types.transactional;
     } else {
-      this.loadModule(
-        await import(
-          'libs/admin/stay-feedback/src/lib/admin-stay-feedback.module'
-        ).then((m) => m.AdminStayFeedbackModule)
-      );
+      this.loadedModule !== feedback.types.stay &&
+        this.loadModule(
+          await import(
+            'libs/admin/stay-feedback/src/lib/admin-stay-feedback.module'
+          ).then((m) => m.AdminStayFeedbackModule)
+        );
+      this.loadedModule = feedback.types.stay;
     }
   }
 
+  /**
+   * @function loadModule To load a module.
+   * @param module The module import statement.
+   */
   async loadModule(module: Type<any>) {
-    let ref;
+    let containerRef;
     try {
       this.container.clear();
       const moduleFactory = await this.compiler.compileModuleAsync(module);
       const moduleRef: any = moduleFactory.create(this.injector);
-      const componentFactory = moduleRef.instance.resolveComponent(); // ASSERTION ERROR
-      ref = this.container.createComponent(
+      const componentFactory = moduleRef.instance.resolveComponent();
+      containerRef = this.container.createComponent(
         componentFactory,
         null,
         moduleRef.injector
@@ -76,6 +90,5 @@ export class FeedbackComponent implements OnInit {
     } catch (e) {
       console.error(e);
     }
-    return ref;
   }
 }

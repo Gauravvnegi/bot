@@ -5,7 +5,6 @@ import { GlobalNpsComponent } from './components/cards/global-nps/global-nps.com
 import { NetPromoterScoreComponent } from './components/cards/net-promoter-score/net-promoter-score.component';
 import { NpsAcrossDepartmentsComponent } from './components/cards/nps-across-departments/nps-across-departments.component';
 import { NpsAcrossServicesComponent } from './components/cards/nps-across-services/nps-across-services.component';
-import { NpsAcrossTouchpointsComponent } from './components/cards/nps-across-touchpoints/nps-across-touchpoints.component';
 import { OverallReceivedBifurcationComponent } from './components/cards/overall-received-bifurcation/overall-received-bifurcation.component';
 import { SharedComponent } from './components/cards/shared/shared.component';
 import { TopLowNpsComponent } from './components/cards/top-low-nps/top-low-nps.component';
@@ -29,7 +28,6 @@ export class AdminStayFeedbackRoutingModule {
     FeedbackComponent,
     FeedbackDatatableComponent,
     NetPromoterScoreComponent,
-    NpsAcrossTouchpointsComponent,
     NpsAcrossServicesComponent,
     NpsAcrossDepartmentsComponent,
     TwoWayProgressComponent,

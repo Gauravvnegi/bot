@@ -51,7 +51,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     this.registerListeners();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
@@ -113,7 +113,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   /**
    * @function exportCSV To export CSV report for NPS across department.
    */
-  exportCSV() {
+  exportCSV(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,

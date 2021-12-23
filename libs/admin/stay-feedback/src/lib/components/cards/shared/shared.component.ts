@@ -7,6 +7,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
+import { chartConfig } from '../../../constants/chart';
 import { SharedStats } from '../../../data-models/statistics.model';
 
 @Component({
@@ -22,7 +23,7 @@ export class SharedComponent implements OnInit {
   chart: any = {
     Labels: ['No Data'],
     Data: [[100]],
-    Type: 'doughnut',
+    Type: chartConfig.type.doughnut,
     Legend: false,
     Colors: [
       {
@@ -30,20 +31,7 @@ export class SharedComponent implements OnInit {
         borderColor: ['#D5D1D1'],
       },
     ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 0,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
+    Options: chartConfig.options.shared,
   };
   constructor(
     protected _adminUtilityService: AdminUtilityService,
@@ -57,11 +45,11 @@ export class SharedComponent implements OnInit {
     this.registerListeners();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe(
         (data) => {
@@ -87,7 +75,10 @@ export class SharedComponent implements OnInit {
     );
   }
 
-  getStats() {
+  /**
+   * @function getStats To get the shared stat data.
+   */
+  getStats(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
@@ -104,22 +95,25 @@ export class SharedComponent implements OnInit {
     );
   }
 
-  initGraph(defaultGraph = true) {
+  /**
+   * @function initGraph To initialize the graph data.
+   * @param defaultGraph The data status.
+   */
+  initGraph(defaultGraph = true): void {
     if (defaultGraph) {
       this.chart.Labels = ['No Data'];
       this.chart.Data = [[100]];
-      this.chart.Colors[0] = [
-        {
-          backgroundColor: ['#D5D1D1'],
-          borderColor: ['#D5D1D1'],
-        },
-      ];
+      this.chart.Colors[0] = chartConfig.colors.shared;
       return;
     }
     this.chart.Labels = [];
     this.chart.Data = [[]];
-    this.chart.Colors[0].backgroundColor = [];
-    this.chart.Colors[0].borderColor = [];
+    this.chart.Colors = [
+      {
+        backgroundColor: [],
+        borderColor: [],
+      },
+    ];
 
     this.stats.feedbacks.forEach((data) => {
       if (data.count) {

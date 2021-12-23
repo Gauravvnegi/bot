@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -10,6 +11,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import { NPSAcrossServices } from '../../../data-models/statistics.model';
+import { Chip } from '../../../types/feedback.type';
 
 @Component({
   selector: 'hospitality-bot-nps-across-services',
@@ -107,12 +109,12 @@ export class NpsAcrossServicesComponent implements OnInit {
    * @function onSelectedTabFilterChange To handle the tab filter change.
    * @param event The material tab change event.
    */
-  onSelectedTabFilterChange(event) {
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.getNPSServices();
   }
 
-  isQuickReplyFilterSelected(quickReplyFilter) {
+  isQuickReplyFilterSelected(quickReplyFilter): boolean {
     return true;
   }
 
@@ -121,7 +123,7 @@ export class NpsAcrossServicesComponent implements OnInit {
    * @param quickReplyTypeIdx The chip index.
    * @param quickReplyType The chip type.
    */
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
+  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -163,7 +165,10 @@ export class NpsAcrossServicesComponent implements OnInit {
    * @param entities The chips for the tabs.
    * @param departments The array for department.
    */
-  protected initTabLabels(entities, departments): void {
+  protected initTabLabels(
+    entities: Array<Chip>,
+    departments: Array<any>
+  ): void {
     if (!this.tabFilterItems.length) {
       departments.forEach((data, i) => {
         let chips = [];
@@ -190,7 +195,7 @@ export class NpsAcrossServicesComponent implements OnInit {
    * @function initProgressData To initialize the progress bar data.
    * @param entities The chips for the tabs.
    */
-  protected initProgressData(entities) {
+  protected initProgressData(entities: Object) {
     this.progresses = {};
     if (
       this.tabFilterItems[this.tabFilterIdx].chips.filter(

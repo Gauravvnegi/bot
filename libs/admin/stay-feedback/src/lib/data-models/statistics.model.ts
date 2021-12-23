@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { Chip } from '../types/feedback.type';
 
 export class NPS {
   label: string;
@@ -44,11 +45,11 @@ export class NPSAcrossServices {
   npsStats;
   entities;
   departments;
-  services;
+  services: Chip[];
 
   deserialize(statistics) {
     this.departments = new Array<any>();
-    this.services = new Array<any>();
+    this.services = new Array<Chip>();
     this.entities = {};
     Object.keys(statistics.departments).forEach((key) =>
       this.departments.push({ key, value: statistics.departments[key] })

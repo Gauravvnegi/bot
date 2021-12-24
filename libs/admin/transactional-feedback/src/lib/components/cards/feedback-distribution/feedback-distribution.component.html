@@ -3,7 +3,7 @@
     <div class="icon">
       <img src="assets/svg/feedback-distribution.svg" />
     </div>
-    <div class="stat-title">Feedback Distribution</div>
+    <div class="stat-title">{{ 'distribution.title' | translate }}</div>
   </div>
   <div class="graph-container" *ngIf="!loading">
     <div class="graph" *ngIf="totalDistribution; else defaultGraph">

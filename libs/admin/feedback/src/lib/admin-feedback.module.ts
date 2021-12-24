@@ -28,7 +28,6 @@ import { TranslateModule } from '@ngx-translate/core';
     SlickCarouselModule,
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
-
     TranslateModule.forChild(
       getTranslationConfigs(
         [HttpClient],

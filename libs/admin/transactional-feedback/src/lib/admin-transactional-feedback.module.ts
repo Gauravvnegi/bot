@@ -5,7 +5,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import {
+  AdminSharedModule,
+  getTranslationConfigs,
+} from '@hospitality-bot/admin/shared';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -16,6 +19,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { AdminTransactionalFeedbackRoutingModule } from './admin-transactional-feedback.routing.module';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackTableService } from './services/table.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -30,6 +35,12 @@ import { FeedbackTableService } from './services/table.service';
     SlickCarouselModule,
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
+    TranslateModule.forChild(
+      getTranslationConfigs(
+        [HttpClient],
+        ['stay-feedback', 'transactional-feedback']
+      )
+    ),
   ],
   declarations: [...AdminTransactionalFeedbackRoutingModule.components],
   providers: [StatisticsService, FeedbackTableService],

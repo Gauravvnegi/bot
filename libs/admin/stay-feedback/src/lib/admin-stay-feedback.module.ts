@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import {
   ComponentFactory,
   ComponentFactoryResolver,
@@ -9,9 +10,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminGuestDetailModule } from '@hospitality-bot/admin/guest-detail';
 import {
   AdminSharedModule,
+  getTranslationConfigs,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SharedMaterialModule } from '@hospitality-bot/shared/material';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { ChartsModule } from 'ng2-charts';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
@@ -31,6 +34,9 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
     SlickCarouselModule,
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
+    TranslateModule.forChild(
+      getTranslationConfigs([HttpClient], ['stay-feedback'])
+    ),
   ],
   declarations: [...AdminStayFeedbackRoutingModule.components],
   providers: [StatisticsService],

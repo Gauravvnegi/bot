@@ -3,7 +3,7 @@
     <div class="icon">
       <img src="assets/svg/global_nps.svg" />
     </div>
-    <div class="stat-title">Global NPS</div>
+    <div class="stat-title">{{ 'global_nps.title' | translate }}</div>
   </div>
   <div class="graph-container" *ngIf="!loading">
     <div class="graph" *ngIf="chart.Data[0].length; else defaultGraph">

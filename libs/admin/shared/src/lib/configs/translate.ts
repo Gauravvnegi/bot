@@ -37,7 +37,6 @@ export const getTranslationConfigs = (
   deps: any[],
   moduleName: string[]
 ): any => {
-  debugger;
   mapTranslationFiles(moduleName);
 
   return {

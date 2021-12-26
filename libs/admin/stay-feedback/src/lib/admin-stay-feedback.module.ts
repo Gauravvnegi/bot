@@ -35,7 +35,7 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(
-      getTranslationConfigs([HttpClient], ['stay-feedback'])
+      getTranslationConfigs([HttpClient], ['feedback', 'stay-feedback'])
     ),
   ],
   declarations: [...AdminStayFeedbackRoutingModule.components],

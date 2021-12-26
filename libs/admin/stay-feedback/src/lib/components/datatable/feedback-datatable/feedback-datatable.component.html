@@ -29,7 +29,7 @@
           <div class="header">
             <!-- <div class="header--text"> -->
             <p class="heading">
-              <img src="" alt="" class="headImg" /> {{ tableName }}
+              {{ tableName }}
             </p>
             <!-- <p class="selected">2 record(s) are selected</p> -->
             <div class="options">
@@ -59,7 +59,10 @@
                   formControlName="documentType"
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img src="assets/svg/CSV.svg" />
+                    <img
+                      [src]="globalFeedbackConfig.images.exportCSV.url"
+                      [alt]="globalFeedbackConfig.images.exportCSV.alt"
+                    />
                     <span class="documentActionItemLabel">{{
                       documentTypeItem.label
                     }}</span>
@@ -138,7 +141,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data available in table</p>
+    <p class="no-data-found">{{ 'no_data_available' | translate }}</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>

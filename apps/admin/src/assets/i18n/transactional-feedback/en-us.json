@@ -1,15 +1,25 @@
 {
-  "distribution": {
-    "title": "Feedback Distribution"
+  "bifurcation": { "title": "Bifurcations" },
+  "nps_across_pos": {
+    "title": "NPS Across Point of Sale",
+    "outlet_label": "Outlets",
+    "nps_across_touchpoints": "NPS Across All Touchpoints"
   },
-  "global_nps": {
-    "title": "Global NPS"
+  "notes": {
+    "closed_by_admin": "Closed by Admin",
+    "closed_date": "Closed Date",
+    "closed_time": "Closed Time",
+    "add_notes": "Add Notes",
+    "edit": "Edit",
+    "close": "Close",
+    "submit": "Submit",
+    "add_modal_title": "Please add notes in order to close this feedback"
   },
-  "top_low_nps": {
-    "title": "Top/Low NPS"
-  },
-  "shared": {
-    "title": "Feedback Shared",
-    "sub_title": "Response Bifurcation as per feedback shared"
+  "datatable": {
+    "mark_as_read": "Mark as Read",
+    "mark_as_unread": "Mark as Unread",
+    "view_notes": "View Notes",
+    "add_notes": "+Notes",
+    "no_data_available": "No data available in table"
   }
 }

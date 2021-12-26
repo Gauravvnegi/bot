@@ -38,7 +38,7 @@ import { HttpClient } from '@angular/common/http';
     TranslateModule.forChild(
       getTranslationConfigs(
         [HttpClient],
-        ['stay-feedback', 'transactional-feedback']
+        ['feedback', 'transactional-feedback']
       )
     ),
   ],

@@ -1,47 +1,7 @@
 <div class="progress_data_wrapper">
   <div class="progress_data_wrapper__graph_pointer_wrapper">
-    <div class="pointer">
-      <p class="label">100</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">80</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">60</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">40</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">20</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">0</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">-20</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">-40</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">-60</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">-80</p>
-      <p class="bar">-</p>
-    </div>
-    <div class="pointer">
-      <p class="label">-100</p>
+    <div class="pointer" *ngFor="let percent of feedbackConfig.percentValues">
+      <p class="label">{{ percent }}</p>
       <p class="bar">-</p>
     </div>
   </div>

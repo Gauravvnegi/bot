@@ -6,6 +6,7 @@ import {
   CircularChart,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
@@ -17,6 +18,7 @@ import { FeedbackDistribution } from '../../../data-models/statistics.model';
   styleUrls: ['./feedback-distribution.component.scss'],
 })
 export class FeedbackDistributionComponent implements OnInit {
+  globalFeedbackConfig = globalFeedback;
   globalQueries;
   $subscription = new Subscription();
   totalDistribution = 0;

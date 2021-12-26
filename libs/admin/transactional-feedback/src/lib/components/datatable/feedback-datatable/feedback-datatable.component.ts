@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   AdminUtilityService,
@@ -41,6 +42,7 @@ import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.comp
 })
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  globalFeedbackConfig = globalFeedback;
   tableName = feedback.table.name;
   outlets = [];
   actionButtons = true;

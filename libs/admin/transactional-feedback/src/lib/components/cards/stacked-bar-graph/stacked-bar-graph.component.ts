@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { feedback } from '../../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-stacked-bar-graph',
@@ -6,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./stacked-bar-graph.component.scss'],
 })
 export class StackedBarGraphComponent implements OnInit {
+  feedbackConfig = feedback;
   @Input() tabFilterItems = [];
   @Input() tabFilterIdx = 0;
   @Input() data;

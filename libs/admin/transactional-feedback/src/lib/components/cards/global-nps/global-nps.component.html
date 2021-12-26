@@ -1,7 +1,10 @@
 <div class="container">
   <div class="title-container">
     <div class="icon">
-      <img src="assets/svg/global_nps.svg" />
+      <img
+        [src]="globalFeedbackConfig.images.globalNPS.url"
+        [alt]="globalFeedbackConfig.images.globalNPS.alt"
+      />
     </div>
     <div class="stat-title">{{ 'global_nps.title' | translate }}</div>
   </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   StatisticsService,
@@ -20,6 +21,7 @@ import { NPSDepartments } from '../../../data-models/statistics.model';
   ],
 })
 export class NpsAcrossDepartmentsComponent implements OnInit {
+  globalFeedbackConfig = globalFeedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
   npsChartData: NPSDepartments;

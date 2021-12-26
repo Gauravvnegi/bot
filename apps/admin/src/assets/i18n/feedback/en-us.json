@@ -1,15 +1,22 @@
 {
   "distribution": {
-    "title": "Feedback Distribution"
+    "title": "Feedback Distribution",
+    "total_response": "Total Responses"
   },
-  "global_nps": {
-    "title": "Global NPS"
-  },
+  "global_nps": { "title": "Global NPS" },
   "top_low_nps": {
-    "title": "Top/Low NPS"
+    "title": "Top/Low NPS",
+    "top_performing": "Top Performing",
+    "low_performing": "Low Performing"
   },
   "shared": {
     "title": "Feedback Shared",
     "sub_title": "Response Bifurcation as per feedback shared"
-  }
+  },
+  "nps": { "title": "Net Promoter Score" },
+  "nps_across_department": { "title": "NPS Across Departments" },
+  "nps_across_services": { "title": "NPS Across Services" },
+  "in_thirty_days": "In 30 Days",
+  "request_feedback_label": "Request Feedback",
+  "no_data_available": "No data available in table"
 }

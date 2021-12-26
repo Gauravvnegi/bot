@@ -28,12 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
     SlickCarouselModule,
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
-    TranslateModule.forChild(
-      getTranslationConfigs(
-        [HttpClient],
-        ['feedback', 'stay-feedback', 'transactional-feedback']
-      )
-    ),
+    TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
 })

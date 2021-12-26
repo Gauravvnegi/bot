@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
-import { NPOS, NPOSVertical } from '../../../data-models/statistics.model';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import * as FileSaver from 'file-saver';
 import { feedback } from '../../../constants/feedback';
+import { NPOS, NPOSVertical } from '../../../data-models/statistics.model';
 import { EntityState } from '../../../types/feedback.type';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-point-of-sale',
@@ -24,6 +25,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   ],
 })
 export class PointOfSaleComponent implements OnInit {
+  globalFeedbackConfig = globalFeedback;
   npsFG: FormGroup;
   $subscription = new Subscription();
   selectedInterval;

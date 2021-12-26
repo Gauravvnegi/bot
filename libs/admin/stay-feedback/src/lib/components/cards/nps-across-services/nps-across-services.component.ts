@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   StatisticsService,
@@ -10,6 +11,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
+import { feedback } from '../../../constants/feedback';
 import { NPSAcrossServices } from '../../../data-models/statistics.model';
 import { Chip } from '../../../types/feedback.type';
 
@@ -22,6 +24,8 @@ import { Chip } from '../../../types/feedback.type';
   ],
 })
 export class NpsAcrossServicesComponent implements OnInit {
+  globalFeedbackConfig = globalFeedback;
+  feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
   $subscription: Subscription = new Subscription();

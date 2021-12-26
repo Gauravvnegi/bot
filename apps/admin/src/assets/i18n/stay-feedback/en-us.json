@@ -1,15 +1,3 @@
 {
-  "distribution": {
-    "title": "Feedback Distribution"
-  },
-  "global_nps": {
-    "title": "Global NPS"
-  },
-  "top_low_nps": {
-    "title": "Top/Low NPS"
-  },
-  "shared": {
-    "title": "Feedback Shared",
-    "sub_title": "Response Bifurcation as per feedback shared"
-  }
+  "bifurcation": { "title": "Overall Received Bifurcation" }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   BarChart,
@@ -24,6 +25,7 @@ import { ChartTypeOption } from '../../../types/feedback.type';
   ],
 })
 export class NetPromoterScoreComponent implements OnInit {
+  globalFeedbackConfig = globalFeedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
   $subscription = new Subscription();

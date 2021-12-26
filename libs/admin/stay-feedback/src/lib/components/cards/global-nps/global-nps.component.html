@@ -1,7 +1,10 @@
 <div class="container">
   <div class="title-container">
     <div class="icon">
-      <img src="assets/svg/global_nps.svg" />
+      <img
+        [src]="globalFeedbackConfig.images.globalNPS.url"
+        [alt]="globalFeedbackConfig.images.globalNPS.alt"
+      />
     </div>
     <div class="stat-title">{{ 'global_nps.title' | translate }}</div>
   </div>
@@ -47,12 +50,11 @@
             "
             alt="uparrow"
           />
-          <span>In 30 Days</span>
+          <span>{{ 'in_thirty_days' | translate }}</span>
         </div>
       </div>
       <div class="label">
-        Global Nps
-        <!-- {{ globalNps.label }} -->
+        {{ 'global_nps.title' | translate }}
       </div>
     </div>
   </div>
@@ -140,6 +142,6 @@
     </div>
   </div>
   <div class="thirty__days">
-    <span>In 30 Days</span>
+    <span>{{ 'in_thirty_days' | translate }}</span>
   </div>
 </div>

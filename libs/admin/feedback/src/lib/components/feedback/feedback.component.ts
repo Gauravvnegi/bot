@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
-import { feedback } from '../../constants/feedback';
+import { globalFeedback } from '../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -42,7 +42,7 @@ export class FeedbackComponent implements OnInit {
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.trasactionalModuleLoad =
           data['filter'].value.feedback.feedbackType ===
-          feedback.types.transactional;
+          globalFeedback.types.transactional;
         this.handleModuleLoad();
       })
     );
@@ -53,21 +53,21 @@ export class FeedbackComponent implements OnInit {
    */
   async handleModuleLoad() {
     if (this.trasactionalModuleLoad) {
-      this.loadedModule !== feedback.types.transactional &&
+      this.loadedModule !== globalFeedback.types.transactional &&
         this.loadModule(
           await import(
             'libs/admin/transactional-feedback/src/lib/admin-transactional-feedback.module'
           ).then((m) => m.AdminTransactionalFeedbackModule)
         );
-      this.loadedModule = feedback.types.transactional;
+      this.loadedModule = globalFeedback.types.transactional;
     } else {
-      this.loadedModule !== feedback.types.stay &&
+      this.loadedModule !== globalFeedback.types.stay &&
         this.loadModule(
           await import(
             'libs/admin/stay-feedback/src/lib/admin-stay-feedback.module'
           ).then((m) => m.AdminStayFeedbackModule)
         );
-      this.loadedModule = feedback.types.stay;
+      this.loadedModule = globalFeedback.types.stay;
     }
   }
 

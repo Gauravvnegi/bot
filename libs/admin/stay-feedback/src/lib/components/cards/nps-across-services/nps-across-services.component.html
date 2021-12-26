@@ -2,9 +2,14 @@
   <div class="header">
     <div class="title-container">
       <div class="icon">
-        <img src="assets/svg/nps-services.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.nps_services.url"
+          [alt]="globalFeedbackConfig.images.nps_services.alt"
+        />
       </div>
-      <div class="stat-title">NPS Across Services</div>
+      <div class="stat-title">
+        {{ 'nps_across_services.title' | translate }}
+      </div>
     </div>
     <div class="dropdown--wrapper">
       <p-dropdown
@@ -24,7 +29,10 @@
         formControlName="documentType"
       >
         <ng-template let-documentTypeItem pTemplate="selectedItem">
-          <img src="assets/svg/CSV.svg" />
+          <img
+            [src]="globalFeedbackConfig.images.exportCSV.url"
+            [alt]="globalFeedbackConfig.images.exportCSV.alt"
+          />
           <span class="dropdown-label">{{ documentTypeItem.label }}</span>
         </ng-template>
       </p-dropdown>
@@ -72,48 +80,8 @@
   <!-- Graph container -->
   <div class="progress_data_wrapper">
     <div class="progress_data_wrapper__graph_pointer_wrapper">
-      <div class="pointer">
-        <p class="label">100</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">80</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">60</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">40</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">20</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">0</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">-20</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">-40</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">-60</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">-80</p>
-        <p class="bar">-</p>
-      </div>
-      <div class="pointer">
-        <p class="label">-100</p>
+      <div class="pointer" *ngFor="let percent of feedbackConfig.percentValues">
+        <p class="label">{{ percent }}</p>
         <p class="bar">-</p>
       </div>
     </div>
@@ -126,10 +94,6 @@
           class="dotted_seperator"
         ></div>
       </ng-container>
-      <!-- <div class="dotted_seperator"></div>
-      <div class="dotted_seperator"></div>
-      <div class="dotted_seperator"></div>
-      <div class="dotted_seperator"></div> -->
       <div class="horizontal_seperator"></div>
     </div>
 

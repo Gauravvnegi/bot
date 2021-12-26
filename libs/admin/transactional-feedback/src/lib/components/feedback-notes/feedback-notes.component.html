@@ -7,7 +7,7 @@
         </div>
         <div class="header-items-closed-admin-item">
           <div class="header-items-closed-admin-item-title">
-            Closed by Admin
+            {{ 'notes.closed_by_admin' | translate }}
           </div>
           <div class="header-items-closed-admin-item-name">
             {{ notes.adminName }}
@@ -20,7 +20,7 @@
         </div>
         <div class="header-items-closed-admin-item">
           <div class="header-items-closed-admin-item-title">
-            Closed Date
+            {{ 'notes.closed_date' | translate }}
           </div>
           <div class="header-items-closed-admin-item-name">
             {{ notes.getUpdatedDate(timezone) }}
@@ -33,7 +33,7 @@
         </div>
         <div class="header-items-closed-admin-item">
           <div class="header-items-closed-admin-item-title">
-            Closed Time
+            {{ 'notes.closed_time' | translate }}
           </div>
           <div class="header-items-closed-admin-item-name">
             {{ notes.getUpdatedTime(timezone) }}
@@ -47,9 +47,11 @@
   </div>
   <div class="view-body">
     <div class="view-body-items">
-      <div class="view-body-items-title">Add Notes</div>
+      <div class="view-body-items-title">
+        {{ 'notes.add_notes' | translate }}
+      </div>
       <div class="view-body-items-btn" (click)="openEditForm()">
-        Edit
+        {{ 'notes.edit' | translate }}
       </div>
     </div>
     <div [formGroup]="notesFG">
@@ -59,14 +61,16 @@
         formControlName="notes"
       ></textarea>
     </div>
-    <div class="close-btn" (click)="closeNotes()">Close</div>
+    <div class="close-btn" (click)="closeNotes()">
+      {{ 'notes.close' | translate }}
+    </div>
   </div>
 </ng-container>
 <ng-template #editForm>
   <div class="editForm-header header">
     <div class="editForm-header-items">
       <div class="editForm-header-items-note">
-        Please add notes in order to close this feedback
+        {{ 'notes.add_modal_title' | translate }}
       </div>
       <div (click)="closeNotes()" class="close">
         <i class="fa fa-times" aria-hidden="true"></i>
@@ -74,7 +78,9 @@
     </div>
   </div>
   <div class="editForm-popup-body">
-    <div class="editForm-popup-body-title">Add Notes</div>
+    <div class="editForm-popup-body-title">
+      {{ 'notes.add_notes' | translate }}
+    </div>
     <div [formGroup]="notesFG">
       <textarea
         class="editForm-popup-body-textarea"
@@ -82,6 +88,8 @@
         formControlName="notes"
       ></textarea>
     </div>
-    <div class="submit-btn" (click)="submit()">Submit</div>
+    <div class="submit-btn" (click)="submit()">
+      {{ 'notes.submit' | translate }}
+    </div>
   </div>
 </ng-template>

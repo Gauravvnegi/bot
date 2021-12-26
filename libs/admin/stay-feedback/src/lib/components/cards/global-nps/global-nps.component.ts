@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   CircularChart,
@@ -17,6 +18,7 @@ import { GlobalNPS } from '../../../data-models/statistics.model';
   styleUrls: ['./global-nps.component.scss'],
 })
 export class GlobalNpsComponent implements OnInit {
+  globalFeedbackConfig = globalFeedback;
   globalNps: GlobalNPS;
   color = feedback.colorConfig.globalNPS;
   labels = feedback.labels.globalNPS;

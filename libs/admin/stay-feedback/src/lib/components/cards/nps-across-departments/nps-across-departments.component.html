@@ -2,21 +2,37 @@
   <div class="header">
     <div class="title-container">
       <div class="icon">
-        <img src="assets/svg/nps_departments.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.nps_departments.url"
+          [alt]="globalFeedbackConfig.images.nps_departments.alt"
+        />
       </div>
-      <div class="stat-title">NPS Across Departments</div>
+      <div class="stat-title">
+        {{ 'nps_across_department.title' | translate }}
+      </div>
     </div>
     <div [formGroup]="npsFG" class="dropdown--wrapper">
-      <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+      <p-dropdown
+        class="export"
+        [options]="documentActionTypes"
+        formControlName="documentActionType"
+      >
         <ng-template let-documentActionItem pTemplate="selectedItem">
           <img src="assets/svg/Export.svg" />
           <span class="dropdown-label">{{ documentActionItem.label }}</span>
         </ng-template>
       </p-dropdown>
       <div class="divider"></div>
-      <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
+      <p-dropdown
+        class="export"
+        [options]="documentTypes"
+        formControlName="documentType"
+      >
         <ng-template let-documentTypeItem pTemplate="selectedItem">
-          <img src="assets/svg/CSV.svg" />
+          <img
+            [src]="globalFeedbackConfig.images.exportCSV.url"
+            [alt]="globalFeedbackConfig.images.exportCSV.alt"
+          />
           <span class="dropdown-label">{{ documentTypeItem.label }}</span>
         </ng-template>
       </p-dropdown>
@@ -28,7 +44,9 @@
   <div class="progress_container">
     <div class="progress_container__carousel_box" *ngIf="npsChartData">
       <div class="slide" *ngFor="let progress of npsChartData.departments">
-        <hospitality-bot-two-way-progress [settings]="progress"></hospitality-bot-two-way-progress>
+        <hospitality-bot-two-way-progress
+          [settings]="progress"
+        ></hospitality-bot-two-way-progress>
       </div>
     </div>
   </div>

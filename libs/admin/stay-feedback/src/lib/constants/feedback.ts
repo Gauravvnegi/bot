@@ -154,4 +154,7 @@ export const feedback = {
   negativeColor: '#EF1D45',
   neutralColor: '#4BA0F5',
   positiveColor: '#1AB99F',
+  percentValues: [100, 80, 60, 40, 20, 0, -20, -40, -60, -80, -100],
+  minPercent: -100,
+  maxPercent: 100,
 };

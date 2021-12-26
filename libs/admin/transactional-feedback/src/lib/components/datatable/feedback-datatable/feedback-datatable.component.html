@@ -31,22 +31,13 @@
             <p class="heading">
               <img src="" alt="" class="headImg" /> {{ tableName }}
             </p>
-
-            <!-- <p class="selected">2 record(s) are selected</p> -->
-
             <div class="mark-btn-container">
-              <!-- <div class="import-guests-btn">
-                <div class="import-guests-btn__wrap">
-                  <img src="assets/svg/import-guests.svg" alt="import guest" />
-                  Import Guests
-                </div>
-              </div> -->
               <div
                 class="request-btn"
                 (click)="openFeedbackRequestPage($event)"
               >
                 <div class="request-btn__wrap">
-                  Request Feedback
+                  {{ 'request_feedback_label' | translate }}
                 </div>
               </div>
               <div class="btn read">
@@ -55,9 +46,8 @@
                   alt="Mark Read"
                   (click)="updateFeedbackStatus(true)"
                 />
-                <!-- <span>Mark as Read</span> -->
                 <span class="btn_text">
-                  Mark as Read
+                  {{ 'datatable.mark_as_read' | translate }}
                 </span>
               </div>
               <div class="btn">
@@ -67,9 +57,8 @@
                   (click)="this.updateFeedbackStatus(false)"
                 />
                 <span class="btn_text">
-                  Mark as Unread
+                  {{ 'datatable.mark_as_unread' | translate }}
                 </span>
-                <!-- <span>Mark as Unread</span> -->
               </div>
             </div>
             <div class="options">
@@ -99,7 +88,10 @@
                   formControlName="documentType"
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img src="assets/svg/CSV.svg" />
+                    <img
+                      [src]="globalFeedbackConfig.images.exportCSV.url"
+                      [alt]="globalFeedbackConfig.images.exportCSV.alt"
+                    />
                     <span class="documentActionItemLabel">{{
                       documentTypeItem.label
                     }}</span>
@@ -178,7 +170,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data available in table</p>
+    <p class="no-data-found">{{ 'datatable.no_data_available' | translate }}</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -350,7 +342,7 @@
             class="view-notes"
             (click)="openEditNotes($event, rowData, rowData.notes)"
           >
-            View Notes
+            {{ 'datatable.view_notes' | translate }}
           </div></ng-container
         >
         <ng-template #addNote
@@ -358,7 +350,7 @@
             class="add-notes"
             (click)="openEditNotes($event, rowData, rowData.notes)"
           >
-            +Notes
+            {{ 'datatable.add_notes' | translate }}
           </div></ng-template
         >
       </td>

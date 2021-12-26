@@ -116,4 +116,5 @@ export const feedback = {
       },
     ],
   },
+  percentValues: [100, 80, 60, 40, 20, 0, -20, -40, -60, -80, -100],
 };

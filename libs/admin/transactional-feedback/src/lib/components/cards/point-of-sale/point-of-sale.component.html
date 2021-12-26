@@ -2,9 +2,12 @@
   <div class="header">
     <div class="title-container">
       <div class="icon">
-        <img src="assets/svg/nps-services.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.nps_services.url"
+          [alt]="globalFeedbackConfig.images.nps_services.alt"
+        />
       </div>
-      <div class="stat-title">NPS Across Point of Sale</div>
+      <div class="stat-title">{{ 'nps_across_pos.title' | translate }}</div>
     </div>
     <div class="menu-container" *ngIf="npsFG?.get('chartType')">
       <label class="labl" *ngFor="let option of chartTypes">
@@ -37,7 +40,10 @@
         formControlName="documentType"
       >
         <ng-template let-documentTypeItem pTemplate="selectedItem">
-          <img src="assets/svg/CSV.svg" />
+          <img
+            [src]="globalFeedbackConfig.images.exportCSV.url"
+            [alt]="globalFeedbackConfig.images.exportCSV.alt"
+          />
           <span class="dropdown-label">{{ documentTypeItem.label }}</span>
         </ng-template>
       </p-dropdown>
@@ -82,7 +88,7 @@
   <ng-container [ngSwitch]="chartType">
     <ng-container *ngSwitchCase="'compare'">
       <div class="header__outlet-heading">
-        Outlets
+        {{ 'nps_across_pos.outlet_label' | translate }}
       </div>
       <div class="outlet-wrap" *ngIf="stats && stats.data">
         <div
@@ -106,7 +112,7 @@
                 </ng-container>
                 <div class="stat-data">
                   <div class="stat-data__label">
-                    NPS Across All Touchpoints
+                    {{ 'nps_across_pos.nps_across_touchpoints' | translate }}
                   </div>
                   <div
                     class="stat-data__items"

@@ -2,7 +2,10 @@
   <div class="header" [formGroup]="npsFG">
     <div class="title-container">
       <div class="icon">
-        <img src="assets/svg/net-promoter.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.nps.url"
+          [alt]="globalFeedbackConfig.images.nps.alt"
+        />
       </div>
       <div class="stat-title">Net Promoter Score</div>
     </div>
@@ -38,7 +41,10 @@
           formControlName="documentType"
         >
           <ng-template let-documentTypeItem pTemplate="selectedItem">
-            <img src="assets/svg/CSV.svg" />
+            <img
+              [src]="globalFeedbackConfig.images.exportCSV.url"
+              [alt]="globalFeedbackConfig.images.exportCSV.alt"
+            />
             <span class="dropdown-label">{{ documentTypeItem.label }}</span>
           </ng-template>
         </p-dropdown>

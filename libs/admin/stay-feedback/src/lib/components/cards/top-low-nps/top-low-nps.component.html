@@ -54,11 +54,15 @@
     <div class="stat-body-key">
       <div class="key-container">
         <div class="icon" [style.background]="'#1AB99F'"></div>
-        <div class="stat-lable">Top Performing</div>
+        <div class="stat-lable">
+          {{ 'top_low_nps.top_performing' | translate }}
+        </div>
       </div>
       <div class="key-container">
         <div class="icon" [style.background]="'#EF1D45'"></div>
-        <div class="stat-lable">Low Performing</div>
+        <div class="stat-lable">
+          {{ 'top_low_nps.low_performing' | translate }}
+        </div>
       </div>
     </div>
   </div>

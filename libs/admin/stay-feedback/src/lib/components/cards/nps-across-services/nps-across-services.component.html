@@ -18,7 +18,10 @@
         formControlName="documentActionType"
       >
         <ng-template let-documentActionItem pTemplate="selectedItem">
-          <img src="assets/svg/Export.svg" />
+          <img
+            [src]="globalFeedbackConfig.images.export.url"
+            [alt]="globalFeedbackConfig.images.export.alt"
+          />
           <span class="dropdown-label">{{ documentActionItem.label }}</span>
         </ng-template>
       </p-dropdown>

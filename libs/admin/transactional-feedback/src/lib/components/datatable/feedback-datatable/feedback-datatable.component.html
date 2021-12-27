@@ -29,7 +29,7 @@
           <div class="header">
             <!-- <div class="header--text"> -->
             <p class="heading">
-              <img src="" alt="" class="headImg" /> {{ tableName }}
+              {{ tableName }}
             </p>
             <div class="mark-btn-container">
               <div
@@ -42,8 +42,8 @@
               </div>
               <div class="btn read">
                 <img
-                  src="assets/svg/mark-read.svg"
-                  alt="Mark Read"
+                  [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
+                  [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
                   (click)="updateFeedbackStatus(true)"
                 />
                 <span class="btn_text">
@@ -52,8 +52,12 @@
               </div>
               <div class="btn">
                 <img
-                  src="assets/svg/mark-unread.svg"
-                  alt="Mark Unread"
+                  [src]="
+                    globalFeedbackConfig.images.datatable.mark_as_unread.url
+                  "
+                  [alt]="
+                    globalFeedbackConfig.images.datatable.mark_as_unread.alt
+                  "
                   (click)="this.updateFeedbackStatus(false)"
                 />
                 <span class="btn_text">
@@ -63,9 +67,21 @@
             </div>
             <div class="options">
               <div *ngIf="isActionButtons" class="icons">
-                <img src="assets/svg/Download.svg" class="svg" />
-                <img src="assets/svg/google-docs.svg" class="svg" />
-                <img src="assets/svg/card.svg" class="svg" />
+                <img
+                  [src]="globalFeedbackConfig.images.datatable.download.url"
+                  [alt]="globalFeedbackConfig.images.datatable.download.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.datatable.google_docs.url"
+                  [alt]="globalFeedbackConfig.images.datatable.google_docs.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.datatable.card.url"
+                  [alt]="globalFeedbackConfig.images.datatable.card.alt"
+                  class="svg"
+                />
               </div>
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
@@ -75,7 +91,10 @@
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img src="assets/svg/Export.svg" />
+                    <img
+                      [src]="globalFeedbackConfig.images.export.url"
+                      [alt]="globalFeedbackConfig.images.export.alt"
+                    />
                     <span class="documentActionItemLabel">{{
                       documentActionItem.label
                     }}</span>
@@ -310,8 +329,8 @@
           </div>
           <div>
             <img
-              src="assets/svg/pdf.svg"
-              alt="pdf"
+              [src]="globalFeedbackConfig.images.datatable.pdf.url"
+              [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
               (click)="downloadFeedbackPdf($event, rowData.id)"
             />
           </div>

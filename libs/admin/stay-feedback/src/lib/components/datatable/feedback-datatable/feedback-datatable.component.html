@@ -34,9 +34,21 @@
             <!-- <p class="selected">2 record(s) are selected</p> -->
             <div class="options">
               <div *ngIf="isActionButtons" class="icons">
-                <img src="assets/svg/Download.svg" class="svg" />
-                <img src="assets/svg/google-docs.svg" class="svg" />
-                <img src="assets/svg/card.svg" class="svg" />
+                <img
+                  [src]="globalFeedbackConfig.images.datatable.download.url"
+                  [alt]="globalFeedbackConfig.images.datatable.download.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.datatable.google_docs.url"
+                  [alt]="globalFeedbackConfig.images.datatable.google_docs.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.datatable.card.url"
+                  [alt]="globalFeedbackConfig.images.datatable.card.alt"
+                  class="svg"
+                />
               </div>
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
@@ -46,7 +58,10 @@
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img src="assets/svg/Export.svg" />
+                    <img
+                      [src]="globalFeedbackConfig.images.export.url"
+                      [alt]="globalFeedbackConfig.images.export.alt"
+                    />
                     <span class="documentActionItemLabel">{{
                       documentActionItem.label
                     }}</span>
@@ -270,7 +285,10 @@
       </td>
       <td class="guest">
         <div class="vip-image" *ngIf="rowData.vip">
-          <img src="assets/images/VIP.png" />
+          <img
+            [src]="globalFeedbackConfig.images.datatable.vip_guest.url"
+            [alt]="globalFeedbackConfig.images.datatable.vip_guest.alt"
+          />
         </div>
         <span>{{ rowData.getFullName() }}</span>
       </td>
@@ -420,7 +438,8 @@
             <!-- <div (click)="openDetailPage($event, rowData, 'document_details')" class="icon"> -->
             <img
               class="table-body-journey-icon"
-              src="assets/svg/Document.svg"
+              [src]="globalFeedbackConfig.images.datatable.document.url"
+              [alt]="globalFeedbackConfig.images.datatable.document.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.documents == 'INITIATED',
@@ -454,7 +473,8 @@
           <div class="icon">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/Payment.svg"
+              [src]="globalFeedbackConfig.images.datatable.payment.url"
+              [alt]="globalFeedbackConfig.images.datatable.payment.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.payment == 'INITIATED',
@@ -488,7 +508,8 @@
           <div class="icon">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/Feedback.svg"
+              [src]="globalFeedbackConfig.images.datatable.feedback.url"
+              [alt]="globalFeedbackConfig.images.datatable.feedback.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.stepsStatus.feedback == 'INITIATED',
@@ -522,7 +543,8 @@
           <div class="icon extra-width">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/New-Journey.svg"
+              [src]="globalFeedbackConfig.images.datatable.new_journey.url"
+              [alt]="globalFeedbackConfig.images.datatable.new_journey.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.new == 'INITIATED',
@@ -557,7 +579,8 @@
           <div class="icon extra-width">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/precheckin.svg"
+              [src]="globalFeedbackConfig.images.datatable.precheckin.url"
+              [alt]="globalFeedbackConfig.images.datatable.precheckin.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.preCheckin == 'INITIATED',
@@ -592,7 +615,8 @@
           <div class="icon extra-width">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/checkin.svg"
+              [src]="globalFeedbackConfig.images.datatable.checkin.url"
+              [alt]="globalFeedbackConfig.images.datatable.checkin.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.checkin == 'INITIATED',
@@ -627,7 +651,8 @@
           <div class="icon extra-width">
             <img
               class="table-body-journey-icon"
-              src="assets/svg/checkout.svg"
+              [src]="globalFeedbackConfig.images.datatable.checkout.url"
+              [alt]="globalFeedbackConfig.images.datatable.checkout.alt"
               [ngClass]="{
                 'status-image-initiated':
                   rowData.status.journeyStatus.checkout == 'INITIATED',

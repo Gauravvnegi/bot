@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import { feedback } from '../../../constants/feedback';
 import { Department } from '../../../data-models/statistics.model';
 import { DepartmentValue } from '../../../types/feedback.type';
@@ -109,5 +110,9 @@ export class TwoWayProgressComponent implements OnInit {
       positiveValue,
       negativeValue,
     };
+  }
+
+  get globalFeedbackConfig() {
+    return globalFeedback;
   }
 }

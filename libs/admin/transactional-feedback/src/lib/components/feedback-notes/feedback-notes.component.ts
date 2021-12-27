@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
+import { feedback } from '../../constants/feedback';
 import { Feedback, Notes } from '../../data-models/feedback-datatable.model';
 
 @Component({
@@ -62,5 +63,9 @@ export class FeedbackNotesComponent implements OnInit {
 
   get remarks() {
     return this.notesFG.get('notes') as FormControl;
+  }
+
+  get feedbackConfig() {
+    return feedback;
   }
 }

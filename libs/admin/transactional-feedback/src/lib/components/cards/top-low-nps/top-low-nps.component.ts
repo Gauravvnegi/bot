@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   StatisticsService,
@@ -58,5 +59,9 @@ export class TopLowNpsComponent extends BaseTopLowNpsComponent
         this.getPerformanceNps();
       }
     });
+  }
+
+  get globalFeedbackConfig() {
+    return globalFeedback;
   }
 }

@@ -1,7 +1,10 @@
 <div class="container" *ngIf="performanceNPS">
   <div class="title-container">
     <div class="icon">
-      <img src="assets/svg/speedometer.svg" />
+      <img
+        [src]="globalFeedbackConfig.images.top_low_nps.url"
+        [alt]="globalFeedbackConfig.images.top_low_nps.alt"
+      />
     </div>
     <div class="stat-title">{{ 'top_low_nps.title' | translate }}</div>
   </div>

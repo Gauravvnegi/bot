@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   StatisticsService,
@@ -84,5 +85,9 @@ export class TopLowNpsComponent implements OnInit {
   onSelectedTabFilterChange($event: MatTabChangeEvent): void {
     this.tabFilterIdx = $event.index;
     this.getPerformanceNps();
+  }
+
+  get globalFeedbackConfig() {
+    return globalFeedback;
   }
 }

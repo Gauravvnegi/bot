@@ -116,5 +116,21 @@ export const feedback = {
       },
     ],
   },
+  images: {
+    notes: {
+      user: {
+        url: 'assets/svg/user-01.svg',
+        alt: 'user',
+      },
+      calendar: {
+        url: 'assets/svg/calendar.svg',
+        alt: 'calendar',
+      },
+      clock: {
+        url: 'assets/svg/clock.svg',
+        alt: 'clock',
+      },
+    },
+  },
   percentValues: [100, 80, 60, 40, 20, 0, -20, -40, -60, -80, -100],
 };

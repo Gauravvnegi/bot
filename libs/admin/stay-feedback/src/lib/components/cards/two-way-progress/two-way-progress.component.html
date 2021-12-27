@@ -7,7 +7,11 @@
     <div class="text-box">
       <p class="label">{{ settings.score }}</p>
     </div>
-    <img class="location-icon" src="assets/svg/location.svg" />
+    <img
+      class="location-icon"
+      [src]="globalFeedbackConfig.images.location.url"
+      [alt]="globalFeedbackConfig.images.location.alt"
+    />
   </div>
   <div class="limit-box">
     <div class="limit added-margin">-100</div>
@@ -16,19 +20,28 @@
   <div class="smiley-wrapper">
     <div class="smiley">
       <div class="image">
-        <img src="assets/svg/happy.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.happy.url"
+          [alt]="globalFeedbackConfig.images.happy.alt"
+        />
       </div>
       <div class="label">{{ settings.positive }}</div>
     </div>
     <div class="smiley">
       <div class="image">
-        <img src="assets/svg/sceptic.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.sceptic.url"
+          [alt]="globalFeedbackConfig.images.sceptic.alt"
+        />
       </div>
       <div class="label">{{ settings.neutral }}</div>
     </div>
     <div class="smiley">
       <div class="image">
-        <img src="assets/svg/sad.svg" />
+        <img
+          [src]="globalFeedbackConfig.images.sad.url"
+          [alt]="globalFeedbackConfig.images.sad.alt"
+        />
       </div>
       <div class="label">{{ settings.negative }}</div>
     </div>

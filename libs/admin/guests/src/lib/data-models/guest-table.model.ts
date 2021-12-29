@@ -1,4 +1,4 @@
-import { get, set } from 'lodash';
+import { get, set, trim } from 'lodash';
 import {
   Booking,
   CurrentJourney,
@@ -93,10 +93,10 @@ export class Guest implements Deserializable {
       this,
       set({}, 'dateOfBirth', get(input, ['dateOfBirth'])),
       set({}, 'contactDetails', get(input, ['contactDetails'])),
-      set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'title', get(input, ['title'])),
-      set({}, 'lastName', get(input, ['lastName'])),
+      set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
+      set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
       set({}, 'nameTitle', get(input, ['nameTitle'])),
       set({}, 'nationality', get(input, ['nationality'])),
       set(

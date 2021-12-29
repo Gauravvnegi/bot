@@ -38,6 +38,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     { label: 'High', value: 'HIGH' },
     { label: 'ASAP', value: 'ASAP' },
   ];
+  isRaisingRequest = false;
   constructor(
     private fb: FormBuilder,
     private _globalFilterService: GlobalFilterService,
@@ -130,16 +131,20 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       sender: 'KIOSK',
       propertyID: '1',
     };
-
+    this.isRaisingRequest = true;
     this.$subscription.add(
       this._requestService.createRequest(this.hotelId, data).subscribe(
         (response) => {
           this._snackbarService.openSnackBarAsText('Request created.', '', {
             panelClass: 'success',
           });
+          this.isRaisingRequest = false;
           this.close({ status: true, data: this.reservation });
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => {
+          this.isRaisingRequest = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
       )
     );
   }

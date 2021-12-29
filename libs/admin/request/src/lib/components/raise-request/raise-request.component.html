@@ -29,23 +29,6 @@
       </mat-error>
     </div>
     <div class="form-elements-groups" [formGroup]="requestFG">
-      <!-- <div class="form-elements-container full-width">
-        <img class="icon" src="assets/svg/room.svg" alt="room" />
-        <input
-          matInput
-          class="form-elements"
-          placeholder="Room *"
-          formControlName="roomNo"
-        />
-        <mat-error
-          *ngIf="
-            requestFG.get('roomNo').touched &&
-            requestFG.get('roomNo').hasError('required')
-          "
-        >
-          Room No is required
-        </mat-error>
-      </div> -->
       <div class="form-elements-container">
         <img class="icon" src="assets/svg/user-01.svg" alt="firstName" />
         <input
@@ -181,7 +164,11 @@
       >
         Cancel
       </div>
-      <div class="button request-popup-btnwrap-save" (click)="raiseRequest()">
+      <div
+        class="button request-popup-btnwrap-save"
+        (click)="raiseRequest()"
+        [ngClass]="{ 'disabled-btn': isRaisingRequest }"
+      >
         Save
       </div>
     </div>

@@ -73,7 +73,7 @@ export class FeedbackDistributionComponent implements OnInit {
   initChartData(): void {
     this.totalDistribution = 0;
     this.keyLabels.length = this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
-    this.distribution.data.forEach((data) => {
+    this.distribution.data.map((data) => {
       if (data.count) {
         this.chart.Labels.push(data.label);
         this.chart.Data[0].push(data.count);

@@ -125,7 +125,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       return;
     }
     const data = this.stats.feedbacks;
-    data.forEach((feedback) => {
+    data.map((feedback) => {
       if (feedback.score) {
         this.feedbackChart.Data[0].push(feedback.score);
         this.feedbackChart.Labels.push(feedback.label);

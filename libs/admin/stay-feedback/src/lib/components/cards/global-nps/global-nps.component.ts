@@ -78,7 +78,7 @@ export class GlobalNpsComponent implements OnInit {
    */
   initGraphData(data): void {
     this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
-    Object.keys(data).forEach((key) => {
+    Object.keys(data).map((key) => {
       if (
         key !== 'label' &&
         key !== 'score' &&

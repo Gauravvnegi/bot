@@ -127,7 +127,7 @@ export class SharedComponent implements OnInit {
       return;
     }
 
-    this.stats.feedbacks.forEach((data) => {
+    this.stats.feedbacks.map((data) => {
       if (data.count) {
         this.chart.Labels.push(data.label);
         this.chart.Data[0].push(data.count);

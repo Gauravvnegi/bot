@@ -21,5 +21,15 @@
     "view_notes": "View Notes",
     "add_notes": "+Notes",
     "no_data_available": "No data available in table"
+  },
+  "messages": {
+    "validation": {
+      "notes_remarks": "Please add remarks.",
+      "select_record_status": "Please select a record to be marked as {{status}}."
+    },
+    "success": {
+      "feedback_closed": "Feedback Closed successfully",
+      "feedback_status_updated": "'Status updated.'"
+    }
   }
 }

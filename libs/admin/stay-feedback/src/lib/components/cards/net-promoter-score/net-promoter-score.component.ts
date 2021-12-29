@@ -127,11 +127,7 @@ export class NetPromoterScoreComponent implements OnInit {
           this.selectedInterval,
           d,
           this._globalFilterService.timezone,
-          this.selectedInterval === 'date'
-            ? 'DD MMM'
-            : this.selectedInterval === 'month'
-            ? 'MMM YYYY'
-            : '',
+          this.getFormatForlabels(),
           this.selectedInterval === 'week'
             ? this._adminUtilityService.getToDate(this.globalQueries)
             : null
@@ -139,6 +135,12 @@ export class NetPromoterScoreComponent implements OnInit {
       );
       this.chart.Data[0].data.push(this.npsChartData.npsGraph[d]);
     });
+  }
+
+  getFormatForlabels() {
+    if (this.selectedInterval === 'date') return 'DD MMM';
+    else if (this.selectedInterval === 'month') return 'MMM YYYY';
+    return '';
   }
 
   /**
@@ -155,7 +157,15 @@ export class NetPromoterScoreComponent implements OnInit {
           this.initGraphData();
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -182,7 +192,15 @@ export class NetPromoterScoreComponent implements OnInit {
           );
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

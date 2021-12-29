@@ -9,7 +9,7 @@
     <div class="stat-title">{{ 'global_nps.title' | translate }}</div>
   </div>
   <div class="graph-container" *ngIf="!loading">
-    <div class="graph" *ngIf="chart.Data[0].length; else defaultGraph">
+    <div class="graph">
       <canvas
         class="height-138"
         baseChart
@@ -22,21 +22,6 @@
       >
       </canvas>
     </div>
-    <ng-template #defaultGraph>
-      <div class="graph">
-        <canvas
-          baseChart
-          class="height-138"
-          [data]="defaultChart.Data"
-          [labels]="defaultChart.Labels"
-          [chartType]="defaultChart.Type"
-          [legend]="defaultChart.Legend"
-          [colors]="defaultChart.Colors"
-          [options]="defaultChart.Options"
-        >
-        </canvas>
-      </div>
-    </ng-template>
     <div class="detail-container" *ngIf="globalNps">
       <div class="wrapper-stats">
         <div class="val">{{ this.roundValue(globalNps.score) }}</div>

@@ -91,9 +91,16 @@ export class NpsAcrossServicesComponent implements OnInit {
           ];
           this.getNPSServices();
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -276,9 +283,16 @@ export class NpsAcrossServicesComponent implements OnInit {
           }
           this.initProgressData(this.npsProgressData.entities);
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -305,9 +319,16 @@ export class NpsAcrossServicesComponent implements OnInit {
             'NPS_Across_Services_export_' + new Date().getTime() + '.csv'
           );
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

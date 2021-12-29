@@ -6,6 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { OverallReceivedBifurcationComponent as BaseOverallReceivedBifurcationComponent } from '@hospitality-bot/admin/stay-feedback';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
@@ -21,14 +22,16 @@ export class OverallReceivedBifurcationComponent
     _statisticService: StatisticsService,
     _globalFilterService: GlobalFilterService,
     _snackbarService: SnackBarService,
-    dateService: DateService
+    dateService: DateService,
+    _translateService: TranslateService
   ) {
     super(
       _adminUtilityService,
       _statisticService,
       _globalFilterService,
       _snackbarService,
-      dateService
+      dateService,
+      _translateService
     );
   }
 
@@ -59,7 +62,15 @@ export class OverallReceivedBifurcationComponent
           this.getStats();
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

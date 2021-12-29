@@ -103,7 +103,15 @@ export class PointOfSaleComponent implements OnInit {
           this.getStats();
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -317,7 +325,16 @@ export class PointOfSaleComponent implements OnInit {
               '.csv'
           );
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

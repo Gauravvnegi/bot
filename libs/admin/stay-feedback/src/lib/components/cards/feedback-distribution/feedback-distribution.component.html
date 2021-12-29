@@ -9,7 +9,7 @@
     <div class="stat-title">{{ 'distribution.title' | translate }}</div>
   </div>
   <div class="graph-container" *ngIf="!loading">
-    <div class="graph" *ngIf="totalDistribution; else defaultGraph">
+    <div class="graph">
       <canvas
         baseChart
         class="height-125"
@@ -22,21 +22,6 @@
       >
       </canvas>
     </div>
-    <ng-template #defaultGraph>
-      <div class="graph">
-        <canvas
-          baseChart
-          class="height-125"
-          [data]="defaultChart.Data"
-          [labels]="defaultChart.Labels"
-          [chartType]="chart.Type"
-          [legend]="defaultChart.Legend"
-          [colors]="defaultChart.Colors"
-          [options]="defaultChart.Options"
-        >
-        </canvas>
-      </div>
-    </ng-template>
     <div class="labels" *ngIf="distribution">
       <div class="val">{{ distribution.totalCount }}</div>
       <div class="label">{{ 'distribution.total_response' | translate }}</div>

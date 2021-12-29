@@ -6,6 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { SharedStats } from '../../../data-models/statistics.model';
@@ -21,14 +22,14 @@ export class SharedComponent implements OnInit {
   globalQueries;
   stats: SharedStats;
   chart: any = {
-    Labels: ['No Data'],
-    Data: [[100]],
+    Labels: [],
+    Data: [[]],
     Type: chartConfig.type.doughnut,
     Legend: false,
     Colors: [
       {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
+        backgroundColor: [chartConfig.defaultColor],
+        borderColor: [chartConfig.defaultColor],
       },
     ],
     Options: chartConfig.options.shared,
@@ -38,7 +39,8 @@ export class SharedComponent implements OnInit {
     protected _statisticService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected dateService: DateService
+    protected _dateService: DateService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +56,7 @@ export class SharedComponent implements OnInit {
       this._globalFilterService.globalFilter$.subscribe(
         (data) => {
           let calenderType = {
-            calenderType: this.dateService.getCalendarType(
+            calenderType: this._dateService.getCalendarType(
               data['dateRange'].queryValue[0].toDate,
               data['dateRange'].queryValue[1].fromDate,
               this._globalFilterService.timezone
@@ -68,9 +70,16 @@ export class SharedComponent implements OnInit {
           ];
           this.getStats();
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -100,12 +109,6 @@ export class SharedComponent implements OnInit {
    * @param defaultGraph The data status.
    */
   initGraph(defaultGraph = true): void {
-    if (defaultGraph) {
-      this.chart.Labels = ['No Data'];
-      this.chart.Data = [[100]];
-      this.chart.Colors[0] = chartConfig.colors.shared;
-      return;
-    }
     this.chart.Labels = [];
     this.chart.Data = [[]];
     this.chart.Colors = [
@@ -114,6 +117,15 @@ export class SharedComponent implements OnInit {
         borderColor: [],
       },
     ];
+    if (defaultGraph) {
+      this._translateService
+        .get('no_data_chart')
+        .subscribe((message) => this.chart.Labels.push(message));
+      this.chart.Data[0].push(100);
+      this.chart.Colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.Colors[0].borderColor.push(chartConfig.defaultColor);
+      return;
+    }
 
     this.stats.feedbacks.forEach((data) => {
       if (data.count) {

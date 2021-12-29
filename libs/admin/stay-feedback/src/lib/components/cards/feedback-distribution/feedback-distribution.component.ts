@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { FeedbackDistribution } from '../../../data-models/statistics.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',
@@ -24,18 +25,9 @@ export class FeedbackDistributionComponent implements OnInit {
   totalDistribution = 0;
   color = feedback.colorConfig.distribution;
 
-  defaultChart: CircularChart = {
-    Labels: ['No Data'],
-    Data: [[100]],
-    Type: chartConfig.type.doughnut,
-    Legend: false,
-    Colors: chartConfig.colors.distribution,
-    Options: chartConfig.options.distribution,
-  };
-
   chart: CircularChart = {
-    Labels: ['No Data'],
-    Data: [[100]],
+    Labels: [],
+    Data: [[]],
     Type: chartConfig.type.doughnut,
     Legend: false,
     Colors: chartConfig.colors.distribution,
@@ -50,7 +42,8 @@ export class FeedbackDistributionComponent implements OnInit {
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _snackbarService: SnackBarService
+    protected _snackbarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +86,14 @@ export class FeedbackDistributionComponent implements OnInit {
         color: data.color,
       });
     });
+    if (!this.chart.Data[0].length) {
+      this._translateService
+        .get('no_data_chart')
+        .subscribe((message) => (this.chart.Labels = [message]));
+      this.chart.Colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.Colors[0].borderColor.push(chartConfig.defaultColor);
+      this.chart.Data = [[100]];
+    }
   }
 
   /**
@@ -111,7 +112,15 @@ export class FeedbackDistributionComponent implements OnInit {
       },
       ({ error }) => {
         this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }

@@ -6,6 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { FeedbackDistributionComponent as BaseFeedbackDistributionComponent } from '@hospitality-bot/admin/stay-feedback';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',
@@ -19,13 +20,15 @@ export class FeedbackDistributionComponent
     statisticsService: StatisticsService,
     _globalFilterService: GlobalFilterService,
     _adminUtilityService: AdminUtilityService,
-    _snackbarService: SnackBarService
+    _snackbarService: SnackBarService,
+    _translateService: TranslateService
   ) {
     super(
       statisticsService,
       _globalFilterService,
       _adminUtilityService,
-      _snackbarService
+      _snackbarService,
+      _translateService
     );
   }
 

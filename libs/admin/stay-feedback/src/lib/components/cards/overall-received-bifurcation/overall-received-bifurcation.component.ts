@@ -6,6 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { Bifurcation } from '../../../data-models/statistics.model';
@@ -21,11 +22,16 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   globalQueries;
   stats: Bifurcation;
   feedbackChart = {
-    Labels: ['No Data'],
-    Data: [[100]],
+    Labels: [],
+    Data: [[]],
     Type: chartConfig.type.doughnut,
     Legend: false,
-    Colors: chartConfig.defultColor,
+    Colors: [
+      {
+        backgroundColor: [chartConfig.defaultColor],
+        borderColor: [chartConfig.defaultColor],
+      },
+    ],
     Options: chartConfig.options.distribution,
   };
 
@@ -34,7 +40,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     protected _statisticService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected dateService: DateService
+    protected dateService: DateService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -64,9 +71,16 @@ export class OverallReceivedBifurcationComponent implements OnInit {
           ];
           this.getStats();
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -98,20 +112,18 @@ export class OverallReceivedBifurcationComponent implements OnInit {
    * @param defaultGraph The data status.
    */
   initFeedbackChart(defaultGraph: boolean): void {
+    this.feedbackChart.Data[0].length = this.feedbackChart.Labels.length = this.feedbackChart.Colors[0].backgroundColor.length = this.feedbackChart.Colors[0].borderColor.length = 0;
     if (defaultGraph) {
-      this.feedbackChart.Labels = ['No Data'];
+      this._translateService
+        .get('no_data_chart')
+        .subscribe((message) => (this.feedbackChart.Labels = [message]));
+      this.feedbackChart.Colors[0].backgroundColor.push(
+        chartConfig.defaultColor
+      );
+      this.feedbackChart.Colors[0].borderColor.push(chartConfig.defaultColor);
       this.feedbackChart.Data = [[100]];
-      this.feedbackChart.Colors = chartConfig.defultColor;
       return;
     }
-    this.feedbackChart.Data = [[]];
-    this.feedbackChart.Labels = [];
-    this.feedbackChart.Colors = [
-      {
-        backgroundColor: [],
-        borderColor: [],
-      },
-    ];
     const data = this.stats.feedbacks;
     data.forEach((feedback) => {
       if (feedback.score) {

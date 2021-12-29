@@ -72,9 +72,16 @@ export class TopLowNpsComponent implements OnInit {
         this.performanceNPS = new PerformanceNPS().deserialize(response);
         // this.initData();
       },
-      ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
+      ({ error }) =>
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe()
     );
   }
 

@@ -127,10 +127,5 @@ export const chartConfig = {
       },
     ],
   },
-  defultColor: [
-    {
-      backgroundColor: ['#D5D1D1'],
-      borderColor: ['#D5D1D1'],
-    },
-  ],
+  defaultColor: '#D5D1D1',
 };

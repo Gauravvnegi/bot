@@ -106,7 +106,15 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -132,9 +140,16 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
             'NPS_Across_Departments_export_' + new Date().getTime() + '.csv'
           );
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

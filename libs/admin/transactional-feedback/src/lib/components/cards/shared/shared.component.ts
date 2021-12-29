@@ -6,6 +6,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SharedComponent as BaseSharedComponent } from '@hospitality-bot/admin/stay-feedback';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 
 @Component({
@@ -19,14 +20,16 @@ export class SharedComponent extends BaseSharedComponent implements OnInit {
     _statisticService: StatisticsService,
     _globalFilterService: GlobalFilterService,
     _snackbarService: SnackBarService,
-    dateService: DateService
+    _dateService: DateService,
+    _translateService: TranslateService
   ) {
     super(
       _adminUtilityService,
       _statisticService,
       _globalFilterService,
       _snackbarService,
-      dateService
+      _dateService,
+      _translateService
     );
   }
 
@@ -40,7 +43,7 @@ export class SharedComponent extends BaseSharedComponent implements OnInit {
       this._globalFilterService.globalFilter$.subscribe(
         (data) => {
           let calenderType = {
-            calenderType: this.dateService.getCalendarType(
+            calenderType: this._dateService.getCalendarType(
               data['dateRange'].queryValue[0].toDate,
               data['dateRange'].queryValue[1].fromDate,
               this._globalFilterService.timezone
@@ -56,7 +59,15 @@ export class SharedComponent extends BaseSharedComponent implements OnInit {
           this.getStats();
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

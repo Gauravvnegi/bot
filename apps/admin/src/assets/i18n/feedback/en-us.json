@@ -18,5 +18,16 @@
   "nps_across_services": { "title": "NPS Across Services" },
   "in_thirty_days": "In 30 Days",
   "request_feedback_label": "Request Feedback",
-  "no_data_available": "No data available in table"
+  "no_data_available": "No data available in table",
+  "no_data_chart": "No Data",
+  "messages": {
+    "validation": {
+      "notes_remarks": "Please add remarks.",
+      "select_record_status": "Please select a record to be marked as {{status}}."
+    },
+    "success": {
+      "feedback_closed": "Feedback Closed successfully",
+      "feedback_status_updated": "'Status updated.'"
+    }
+  }
 }

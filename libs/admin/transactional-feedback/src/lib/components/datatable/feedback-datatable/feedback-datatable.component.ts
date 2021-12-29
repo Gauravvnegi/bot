@@ -19,6 +19,7 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
@@ -83,7 +84,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     protected tableService: FeedbackTableService,
     protected statisticService: StatisticsService,
-    protected _hotelDetailService: HotelDetailService
+    protected _hotelDetailService: HotelDetailService,
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }
@@ -203,7 +205,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -303,7 +313,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -412,7 +430,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -425,7 +451,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   updateFeedbackStatus(status: boolean) {
     if (!this.selectedRows.length) {
       this._snackbarService.openSnackBarAsText(
-        `Please select a record to be marked as ${status ? 'read' : 'unread'}`
+        this._translateService.instant(
+          'messages.validation.select_record_status',
+          { status: status ? 'read' : 'unread' }
+        )
       );
       return;
     }
@@ -450,9 +479,18 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.tableService.updateFeedbackStatus(config, reqData).subscribe(
         (response) => {
           this.statisticService.markReadStatusChanged.next(true);
-          this._snackbarService.openSnackBarAsText('Status updated', '', {
-            panelClass: 'success',
-          });
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.feedback_status_updated',
+                priorityMessage: 'Status updated.',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
           this.loadInitialData(
             [
               ...this.globalQueries,
@@ -468,7 +506,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -531,13 +577,18 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             this.tableService.updateNotes(res.id, res.data).subscribe(
               (response) => {
                 detailCompRef.close();
-                this._snackbarService.openSnackBarAsText(
-                  'Feedback Closed successfully',
-                  '',
-                  {
-                    panelClass: 'success',
-                  }
-                );
+                this._snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.success.feedback_closed',
+                      priorityMessage: 'Feedback Closed successfully.',
+                    },
+                    '',
+                    {
+                      panelClass: 'success',
+                    }
+                  )
+                  .subscribe();
                 this.loadInitialData(
                   [
                     ...this.globalQueries,
@@ -551,7 +602,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
                 );
               },
               ({ error }) =>
-                this._snackbarService.openSnackBarAsText(error.message)
+                this._snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.error.some_thing_wrong',
+                      priorityMessage: error?.message,
+                    },
+                    ''
+                  )
+                  .subscribe()
             )
           );
         } else detailCompRef.close();
@@ -577,7 +636,16 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           link.click();
           link.remove();
         },
-        (error) => this._snackbarService.openSnackBarAsText(error.message)
+        (error) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

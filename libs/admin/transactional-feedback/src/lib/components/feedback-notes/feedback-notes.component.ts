@@ -51,7 +51,12 @@ export class FeedbackNotesComponent implements OnInit {
 
   submit() {
     if (this.notesFG.invalid) {
-      this.snackbarService.openSnackBarAsText('Please add remarks.');
+      this.snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.validation.notes_remarks',
+          priorityMessage: 'Please add remarks.',
+        })
+        .subscribe();
       return;
     }
     this.onNotesClosed.emit({

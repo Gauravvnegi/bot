@@ -7,6 +7,7 @@ import {
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
@@ -23,29 +24,15 @@ export class GlobalNpsComponent implements OnInit {
   color = feedback.colorConfig.globalNPS;
   labels = feedback.labels.globalNPS;
 
-  defaultChart: CircularChart = {
-    Labels: ['No Data'],
-    Data: [[0]],
-    Type: chartConfig.type.doughnut,
-    Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: chartConfig.options.globalNPS,
-  };
-
   chart: CircularChart = {
-    Labels: ['No Data'],
-    Data: [[100]],
+    Labels: [],
+    Data: [[]],
     Type: chartConfig.type.doughnut,
     Legend: false,
     Colors: [
       {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
+        backgroundColor: [chartConfig.defaultColor],
+        borderColor: [chartConfig.defaultColor],
       },
     ],
     Options: chartConfig.options.globalNPS,
@@ -60,7 +47,8 @@ export class GlobalNpsComponent implements OnInit {
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _snackbarService: SnackBarService
+    protected _snackbarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -104,7 +92,11 @@ export class GlobalNpsComponent implements OnInit {
       }
     });
     if (!this.chart.Data[0].length) {
-      this.chart.Labels = ['No Data'];
+      this._translateService
+        .get('no_data_chart')
+        .subscribe((message) => (this.chart.Labels = [message]));
+      this.chart.Colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.Colors[0].borderColor.push(chartConfig.defaultColor);
       this.chart.Data = [[100]];
     }
   }
@@ -125,7 +117,15 @@ export class GlobalNpsComponent implements OnInit {
       },
       ({ error }) => {
         this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }

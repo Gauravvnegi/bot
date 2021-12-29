@@ -35,7 +35,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: #4b56c0;
+      color: $c-black;
     }
     &-channel {
       width: 150px;
@@ -55,8 +55,9 @@
     &-details {
       display: flex;
       flex-wrap: wrap;
+      margin-top: 25px;
       &-items {
-        width: 25%;
+        width: 50%;
         font-family: Roboto;
         font-size: 14px;
         font-weight: 500;
@@ -64,6 +65,7 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: 0.84px;
+        margin-bottom: 30px;
         &-heading {
           margin-bottom: 15px;
         }

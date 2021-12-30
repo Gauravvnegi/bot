@@ -108,7 +108,7 @@
             letter-spacing: 0.72px;
             opacity: 1;
             line-height: 1.17;
-            color: #6d7580;
+            color: $quote-color;
           }
         }
       }
@@ -132,7 +132,7 @@
           font-size: 10px;
           font-weight: 500;
           letter-spacing: 0.6px;
-          color: #6d7580;
+          color: $quote-color;
         }
         .value {
           font-size: 12px;

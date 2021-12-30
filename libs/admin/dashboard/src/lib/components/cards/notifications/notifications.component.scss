@@ -28,7 +28,7 @@
       width: 150px;
       padding: 8px 15px 7px;
       border-radius: 5px;
-      border: solid 1px #d9d9d9;
+      border: solid 1px $c-gray-85;
       position: absolute;
       top: 0;
       right: 0;
@@ -75,11 +75,11 @@
         margin-right: 10px;
       }
       &-status {
-        color: #6d7580;
+        color: $quote-color;
       }
     }
     &-count {
-      color: #4b56c0;
+      color: $primary-purple;
       font-weight: bold;
     }
   }

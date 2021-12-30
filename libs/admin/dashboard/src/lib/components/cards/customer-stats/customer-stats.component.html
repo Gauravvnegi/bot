@@ -1,0 +1,87 @@
+<div class="container">
+  <div class="stat-header">
+    <div class="title-container">
+      <div class="icon">
+        <img
+          [src]="dashboardConfig.images.reservationStat.headerIcon.url"
+          [alt]="dashboardConfig.images.reservationStat.headerIcon.alt"
+        />
+      </div>
+      <div class="stat-title">{{ 'card.customer.title_text' | translate }}</div>
+    </div>
+  </div>
+  <div class="graph-container">
+    <div class="graph">
+      <div class="graph-canvas">
+        <canvas
+          baseChart
+          class="graph-canvas-base-chart"
+          [data]="checkinChart.data"
+          [labels]="checkinChart.labels"
+          [chartType]="checkinChart.type"
+          [legend]="checkinChart.legend"
+          [colors]="checkinChart.colors"
+          [options]="checkinChart.options"
+        >
+        </canvas>
+      </div>
+      <div class="labels">
+        <div class="val">{{ statData?.checkin?.totalCount }}</div>
+        <div class="label">
+          {{ 'card.customer.total_user_text' | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="graph">
+      <div class="graph-canvas">
+        <canvas
+          baseChart
+          class="graph-canvas-base-chart"
+          [data]="checkoutChart.data"
+          [labels]="checkoutChart.labels"
+          [chartType]="checkoutChart.type"
+          [legend]="checkoutChart.legend"
+          [colors]="checkoutChart.colors"
+          [options]="checkoutChart.options"
+        >
+        </canvas>
+      </div>
+      <div class="labels">
+        <div class="val">{{ statData?.checkout?.totalCount }}</div>
+        <div class="label">
+          {{ 'card.customer.total_user_text' | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="legends-container">
+    <div class="legend">
+      <div
+        class="stat-val-container"
+        *ngFor="let stat of (statData?.legends)[0]"
+      >
+        <div class="label">
+          <div class="icon" [style.backgroundColor]="stat.color"></div>
+          <div class="text">
+            {{ 'card.customer.legend.' + stat.key | translate }}
+          </div>
+        </div>
+        <div class="value">{{ stat.value }}</div>
+      </div>
+    </div>
+    <div class="legend">
+      <div
+        class="stat-val-container"
+        *ngFor="let stat of (statData?.legends)[1]"
+      >
+        <div class="label">
+          <div class="icon" [style.backgroundColor]="stat.color"></div>
+          <div class="text">
+            {{ 'card.customer.legend.' + stat.key | translate }}
+          </div>
+        </div>
+        <div class="value">{{ stat.value }}</div>
+      </div>
+    </div>
+  </div>
+</div>

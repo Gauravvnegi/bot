@@ -19,13 +19,21 @@
       [departures]="statistics.departures"
     ></hospitality-bot-departure-statistics>
   </div>
-  <div class="notification-wrapper">
+  <div
+    class="notification-wrapper"
+    cardSubscribed
+    [path]="'dashboard.cards.Notification'"
+  >
     <hospitality-bot-notifications
       [hotelId]="hotelId"
       [channelOptions]="channelOptions"
     ></hospitality-bot-notifications>
   </div>
-  <div class="massages-wraper">
+  <div
+    class="massages-wraper"
+    cardSubscribed
+    [path]="'dashboard.cards.Messages'"
+  >
     <hospitality-bot-messages
       [hotelId]="hotelId"
       [channelOptions]="channelOptions"

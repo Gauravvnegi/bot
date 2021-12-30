@@ -185,11 +185,17 @@ export class ReservationStat {
     );
     this.legends = [
       [
-        { label: 'Check-In', color: '#0ea47a', value: input?.checkin?.checkIn },
+        {
+          label: 'Check-In',
+          color: '#0ea47a',
+          value: input?.checkin?.checkIn,
+          key: 'checkIn',
+        },
         {
           label: 'Ex Check-In',
           color: '#15eda3',
           value: input?.checkin?.expressCheckIn,
+          key: 'expressCheckIn',
         },
       ],
       [
@@ -197,18 +203,19 @@ export class ReservationStat {
           label: 'Check-Out',
           color: '#ff4545',
           value: input?.checkout?.checkout,
+          key: 'checkout',
         },
         {
           label: 'Ex Check-Out',
           color: '#ff9867',
           value: input?.checkout.expressCheckout,
+          key: 'expressCheckout',
         },
       ],
     ];
     return this;
   }
 }
-
 export class MessageOverallAnalytics {
   stat: IMessageOverallAnalytic[];
   total: number;

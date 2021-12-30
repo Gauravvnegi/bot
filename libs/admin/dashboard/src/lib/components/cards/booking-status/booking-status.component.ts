@@ -1,11 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  BarChart,
+  sharedConfig,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
+import { chartConfig } from '../../../constants/chart';
+import { dashboard } from '../../../constants/dashboard';
 import { BookingStatus } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/statistics.service';
+import { ChartTypeOption } from '../../../types/dashboard.type';
 
 @Component({
   selector: 'hospitality-bot-booking-status',
@@ -17,139 +25,45 @@ export class BookingStatusComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
 
-  legendData = [
-    {
-      label: 'New',
-      borderColor: '#0749fc',
-      backgroundColor: '#0749fc',
-      dashed: true,
-    },
-    {
-      label: 'Pre Check-In',
-      borderColor: '#f2509b',
-      backgroundColor: '#f2509b',
-      dashed: false,
-    },
-    {
-      label: 'Check-In',
-      borderColor: '#0ea47a',
-      backgroundColor: '#0ea47a',
-      dashed: false,
-    },
-    {
-      label: 'Checkout',
-      borderColor: '#ff4545',
-      backgroundColor: '#ff4545',
-      dashed: true,
-    },
-  ];
-  chartTypes = [
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
-  ];
+  legendData = dashboard.legend.bookingStatus;
+  chartTypes: ChartTypeOption[] = chartConfig.chartTypes;
 
-  selectedInterval: any;
+  selectedInterval = '';
 
-  public getLegendCallback: any = ((self: this): any => {
-    function handle(chart: any): any {
-      return chart.legend.legendItems;
-    }
-
-    return function (chart: Chart): any {
-      return handle(chart);
-    };
-  })(this);
-
-  chart: any = {
-    chartData: [
-      { data: [], label: 'New', fill: false, borderDash: [10, 5] },
-      { data: [], label: 'Pre Check-In', fill: false },
-      { data: [], label: 'Check-In', fill: false },
-      { data: [], label: 'Checkout', fill: false, borderDash: [10, 5] },
-    ],
-    chartLabels: [],
-    chartOptions: {
-      responsive: true,
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-              stepSize: 1,
-            },
-          },
-        ],
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      legendCallback: this.getLegendCallback,
-    },
-    chartColors: [
-      {
-        borderColor: '#0749fc',
-      },
-      {
-        borderColor: '#f2509b',
-      },
-      {
-        borderColor: '#0ea47a',
-      },
-      {
-        borderColor: '#ff4545',
-      },
-    ],
-    chartLegend: false,
-    chartType: 'line',
+  chart: BarChart = {
+    data: chartConfig.bookingStatus.defaultData,
+    labels: [],
+    options: dashboard.chart.option.bookingStatus,
+    colors: dashboard.chart.color.bookingStatus,
+    legend: false,
+    type: chartConfig.types.line,
   };
   timeShow = false;
-  globalQueries;
+  globalQueries = [];
 
   constructor(
-    private dateService: DateService,
+    private _dateService: DateService,
     private _statisticService: StatisticsService,
     private _globalFilterService: GlobalFilterService,
-    private _adminUtilityService: AdminUtilityService
+    private _adminUtilityService: AdminUtilityService,
+    private _snackbarService: SnackBarService
   ) {}
 
-  setChartType(option) {
-    this.chart.chartType = option.value;
+  /**
+   * @function setChartType To set the current chart type as the selected one.
+   * @param option The chart type option.
+   */
+  setChartType(option: ChartTypeOption): void {
+    this.chart.type = option.value;
     this.setChartColors();
   }
 
+  /**
+   * @function setChartColors Sets the chart color for bar graph.
+   */
   setChartColors() {
-    if (this.chart.chartType === 'bar') {
-      this.chart.chartColors = [
-        {
-          backgroundColor: '#0749fc',
-        },
-        {
-          backgroundColor: '#0239CF',
-        },
-        {
-          backgroundColor: '#288ad6',
-        },
-        {
-          backgroundColor: '#F2509B',
-        },
-      ];
+    if (this.chart.type === chartConfig.types.bar) {
+      this.chart.colors = chartConfig.bookingStatus.barColors;
     }
   }
 
@@ -157,11 +71,14 @@ export class BookingStatusComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this.dateService.getCalendarType(
+          calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
             this._globalFilterService.timezone
@@ -178,45 +95,57 @@ export class BookingStatusComponent implements OnInit {
     );
   }
 
-  private initGraphData() {
-    const botKeys = Object.keys(this.customerData.checkIn);
-    this.chart.chartData.forEach((d) => {
-      d.data = [];
-    });
-    this.chart.chartLabels = [];
-    botKeys.forEach((d, i) => {
-      this.chart.chartLabels.push(
-        this.dateService.convertTimestampToLabels(
+  /**
+   * @function initGraphData To initialize the graph data based on the api values.
+   */
+  private initGraphData(): void {
+    const timestamps = Object.keys(this.customerData?.checkIn);
+    this.chart.data.map((d) => (d.data = []));
+    this.chart.labels = [];
+    timestamps.forEach((timestamp, i) => {
+      this.chart.labels.push(
+        this._dateService.convertTimestampToLabels(
           this.selectedInterval,
-          d,
+          timestamp,
           this._globalFilterService.timezone,
-          this.selectedInterval === 'date' && this.selectedInterval === 'week'
-            ? 'DD MMM'
-            : this.selectedInterval === 'month'
-            ? 'MMM YYYY'
-            : '',
-          this.selectedInterval === 'week'
+          this.extractFormatFromSelectedInterval(),
+          this.selectedInterval === sharedConfig.timeInterval.week
             ? this._adminUtilityService.getToDate(this.globalQueries)
             : null
         )
       );
-      this.chart.chartData[0].data.push(this.customerData.new[d]);
-      this.chart.chartData[1].data.push(this.customerData.preCheckIn[d]);
-      this.chart.chartData[2].data.push(this.customerData.checkIn[d]);
-      this.chart.chartData[3].data.push(this.customerData.checkout[d]);
+      this.chart.data[0].data.push(this.customerData.new[timestamp]);
+      this.chart.data[1].data.push(this.customerData.preCheckIn[timestamp]);
+      this.chart.data[2].data.push(this.customerData.checkIn[timestamp]);
+      this.chart.data[3].data.push(this.customerData.checkout[timestamp]);
     });
     this.setChartColors();
   }
 
-  legendOnClick = (index) => {
-    let ci = this.baseChart.chart;
-    let alreadyHidden =
-      ci.getDatasetMeta(index).hidden === null
-        ? false
-        : ci.getDatasetMeta(index).hidden;
+  extractFormatFromSelectedInterval() {
+    if (
+      this.selectedInterval === sharedConfig.timeInterval.date &&
+      this.selectedInterval === sharedConfig.timeInterval.week
+    )
+      return 'DD MMM';
+    else if (this.selectedInterval === sharedConfig.timeInterval.month)
+      return 'MMM YYYY';
+    else return '';
+  }
 
-    ci.data.datasets.forEach((e, i) => {
-      let meta = ci.getDatasetMeta(i);
+  /**
+   * @function legendOnClick To handle legend click for the graph.
+   * @param index The index of the legend.
+   */
+  legendOnClick = (index) => {
+    let chartRef = this.baseChart.chart;
+    let alreadyHidden =
+      chartRef.getDatasetMeta(index).hidden === null
+        ? false
+        : chartRef.getDatasetMeta(index).hidden;
+
+    chartRef.data.datasets.forEach((error, i) => {
+      let meta = chartRef.getDatasetMeta(i);
 
       if (i == index) {
         if (!alreadyHidden) {
@@ -227,24 +156,41 @@ export class BookingStatusComponent implements OnInit {
       }
     });
 
-    ci.update();
+    chartRef.update();
   };
 
-  getCustomerStatistics() {
+  /**
+   * @function getCustomerStatistics To get the graph data from the api.
+   */
+  getCustomerStatistics(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService
-        .getBookingStatusStatistics(config)
-        .subscribe((res) => {
+      this._statisticService.getBookingStatusStatistics(config).subscribe(
+        (res) => {
           this.customerData = new BookingStatus().deserialize(res);
           this.initGraphData();
-        })
+        },
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
+      )
     );
   }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+  }
+
+  get dashboardConfig() {
+    return dashboard;
   }
 }

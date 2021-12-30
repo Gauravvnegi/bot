@@ -74,7 +74,7 @@
       text-align: left;
       font: normal normal medium 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: #6d7580;
+      color: $quote-color;
       opacity: 1;
       @media (max-width: $tablet) {
         @include padding-left(19px);

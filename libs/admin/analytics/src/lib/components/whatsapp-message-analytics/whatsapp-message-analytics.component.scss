@@ -149,7 +149,7 @@
             line-height: 19px;
             font-family: Roboto;
             letter-spacing: 0.84px;
-            color: #6d7580;
+            color: $quote-color;
           }
           .detailText {
             font-size: 12px;
@@ -265,7 +265,7 @@
   text-align: left;
   font: normal normal normal 12px/14px Roboto;
   letter-spacing: 0.72px;
-  color: #6d7580;
+  color: $quote-color;
   margin: 7px;
   opacity: 1;
   @media screen and (max-width: 1070px) {

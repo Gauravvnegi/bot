@@ -84,6 +84,9 @@
       "@hospitality-bot/admin/stay-feedback": [
         "libs/admin/stay-feedback/src/index.ts"
       ],
+      "@hospitality-bot/admin/core/theme": [
+        "apps/admin/src/app/core/theme/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -6,9 +6,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { environment } from '@hospitality-bot/admin/environment';
 import { TranslateModule } from '@ngx-translate/core';
+import getTranslationConfigs from 'libs/admin/shared/src/lib/configs/translate';
 import { AuthModule } from './auth/auth.module';
 import systemInterceptors from './configs/interceptor';
-import getTranslationConfigs from './configs/translate';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 
 @NgModule({
@@ -19,7 +19,9 @@ import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
     AuthModule,
     RouterModule,
     AngularFireModule.initializeApp(environment.firebase),
-    TranslateModule.forRoot(getTranslationConfigs([HttpClient])),
+    TranslateModule.forRoot(
+      getTranslationConfigs([HttpClient], ['core', 'auth'])
+    ),
   ],
   providers: [...systemInterceptors],
 })

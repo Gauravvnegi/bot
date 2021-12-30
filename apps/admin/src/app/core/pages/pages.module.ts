@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PagesComponent } from './containers/pages/pages.component';
-import { PagesRoutingModule } from './pages.routing.module';
-import { ThemeModule } from '../theme/src';
-import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { NgModule } from '@angular/core';
 import { AdminDashboardModule } from '@hospitality-bot/admin/dashboard';
+import { ThemeModule } from '../theme/src';
+import { PagesRoutingModule } from './pages.routing.module';
 
+import { PagesComponent } from './containers/pages/pages.component';
 @NgModule({
   declarations: [PagesComponent],
   imports: [

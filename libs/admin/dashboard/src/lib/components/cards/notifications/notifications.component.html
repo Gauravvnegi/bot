@@ -1,10 +1,13 @@
 <div class="notifications">
   <div class="notifications-header" [formGroup]="messagesFG">
     <div class="notifications-header-icon">
-      <img src="assets/svg/Notifications.svg" alt="" />
+      <img
+        [src]="dashboardConfig.images.messages.headerIcon.url"
+        [alt]="dashboardConfig.images.messages.headerIcon.alt"
+      />
     </div>
     <div class="notifications-header-text">
-      Notifications
+      {{ 'card.notifications.title_text' | translate }}
     </div>
     <mat-select
       class="notifications-header-channel"
@@ -41,7 +44,7 @@
     </div>
     <div class="notifications-graph-wraper-total">
       <div>{{ messageOverallAnalytics?.total }}</div>
-      <div>Total Sent</div>
+      <div>{{ 'card.notifications.total_sent' | translate }}</div>
     </div>
   </div>
   <div>
@@ -55,7 +58,7 @@
           [style.backgroundColor]="item.color"
         ></div>
         <div class="notifications-items-item-status">
-          {{ item.label }}
+          {{ 'card.notifications.' + item.label | translate }}
         </div>
       </div>
       <div class="notifications-items-item-count">

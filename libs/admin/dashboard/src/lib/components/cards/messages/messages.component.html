@@ -1,7 +1,10 @@
 <div class="messages-wrapper">
   <div class="messages-wrapper-header" [formGroup]="messagesFG">
     <div class="messages-wrapper-header-icon">
-      <img src="assets/svg/Messages.svg" alt="" />
+      <img
+        [src]="dashboardConfig.images.messages.headerIcon.url"
+        [alt]="dashboardConfig.images.messages.headerIcon.alt"
+      />
     </div>
     <div class="messages-wrapper-header-text">
       Messages
@@ -24,11 +27,15 @@
         *ngFor="let item of messageOverallAnalytics?.stat"
       >
         <div class="messages-wrapper-body-details-items-heading">
-          {{ item.label }}
+          {{ 'card.messages.' + item.label | translate }}
         </div>
-        <div class="today">{{ item.today }} Today</div>
+        <div class="today">
+          {{ item.today }} {{ 'card.messages.today' | translate }}
+        </div>
         <div class="yesterday">
-          <div>{{ item.yesterday }} Yesterday</div>
+          <div>
+            {{ item.yesterday }} {{ 'card.messages.yesterday' | translate }}
+          </div>
         </div>
         <div class="progress-bar">
           <div
@@ -55,18 +62,15 @@
           </div>
           <div
             class="then-yesterdeay-down-arrow-percentage"
-            [ngStyle]="
-              item.comparisonPercentage >= 0
-                ? {
-                    color: '#52b33f'
-                  }
-                : { color: '#CC052B' }
-            "
+            [ngClass]="{
+              'comparison-positive': item.comparisonPercentage >= 0,
+              'comparison-negative': item.comparisonPercentage < 0
+            }"
           >
             {{ item.comparisonPercentage }}%
           </div>
           <div class="then-yesterdeay-text">
-            than yesterday
+            {{ 'than_yesterday' | translate }}
           </div>
         </div>
       </div>

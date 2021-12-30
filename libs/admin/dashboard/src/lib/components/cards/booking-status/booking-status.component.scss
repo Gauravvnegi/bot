@@ -11,16 +11,7 @@
   text-align: left;
   font: normal normal bold 25px/33px Roboto;
   letter-spacing: 1.5px;
-  color: #ffffff;
-  opacity: 1;
-}
-
-.stat-val-title {
-  height: 16px;
-  text-align: left;
-  font: normal normal normal 12px/16px Roboto;
-  letter-spacing: 0.72px;
-  color: #c6f0ef;
+  color: $white;
   opacity: 1;
 }
 
@@ -35,8 +26,8 @@
 .stat-label {
   cursor: pointer;
   height: 28px;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #edeef0;
+  background: $white 0% 0% no-repeat padding-box;
+  border: 1px solid $border;
   border-radius: 100px;
   opacity: 1;
   padding: 5px 8px;
@@ -48,7 +39,7 @@
     display: none;
   }
   .text-white {
-    color: white;
+    color: $white;
   }
   @media screen and (max-width: 1070px) {
     padding: 5px;
@@ -61,24 +52,27 @@
   text-align: left;
   font: normal normal normal 10px/16px Roboto;
   letter-spacing: 0.72px;
-  color: #6d7580;
+  color: $quote-color;
   @media screen and (max-width: 1070px) {
     font: normal normal normal 8px/16px Roboto;
     letter-spacing: 0;
   }
 }
 
-// .stat-label-content {
-//   height: 16px;
-//   text-align: right;
-//   font: normal normal bold 12px/16px Roboto;
-//   letter-spacing: 0.72px;
-//   color: #0239cf;
-//   opacity: 1;
-// }
-
 .legend-border {
   border-top: 1px solid;
+  height: 1px;
+  line-height: 0.1em;
+  width: 15px;
+  margin-top: 7px;
+  margin-right: 3px;
+  @media screen and (max-width: 1070px) {
+    width: 8px;
+  }
+}
+
+.legend-border-dashed {
+  border-top: 1px dashed;
   height: 1px;
   line-height: 0.1em;
   width: 15px;
@@ -93,8 +87,6 @@
   width: auto;
   height: 200px;
   padding: 0 10px;
-  // padding: 5px 10px;
-  // max-width: 100%;
   &-base-chart {
     max-height: 100%;
   }
@@ -142,23 +134,6 @@
   }
 }
 
-// .labl > div > .circle {
-//   display: none;
-//   position: absolute;
-//   top: -9px;
-//   right: -9px;
-//   width: 17px;
-//   height: 17px;
-//   -webkit-border-radius: 25px;
-//   -moz-border-radius: 25px;
-//   border-radius: 25px;
-//   background: #4bda82;
-// }
-
-// .labl > input:checked + div > .circle {
-//   display: unset;
-// }
-
 .pull-right {
   display: flex;
   justify-content: flex-end;
@@ -179,51 +154,6 @@
   }
 }
 
-// .stat-label > input + span{ /* DIV STYLES */
-//     position: relative;
-//     cursor:pointer;
-// }
-
 .stat-label > input:checked + p {
   text-decoration: line-through;
 }
-
-// .checkIn-Background {
-//   background-color: #0239cf;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkIn-border {
-//     display: none;
-//   }
-// }
-
-// .express-checkIn-Background {
-//   background-color: #288ad6;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkIn-border {
-//     display: none;
-//   }
-// }
-
-// .checkOut-Background {
-//   background-color: #f2509b;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkout-border {
-//     display: none;
-//   }
-// }
-
-// .express-checkOut-Background {
-//   background-color: #f2809b;
-//   .stat-label-title {
-//     color: white;
-//   }
-//   .checkout-border {
-//     display: none;
-//   }
-// }

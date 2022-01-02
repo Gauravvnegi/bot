@@ -4,6 +4,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
+  sharedConfig,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -128,7 +129,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
         },
       ]),
     };

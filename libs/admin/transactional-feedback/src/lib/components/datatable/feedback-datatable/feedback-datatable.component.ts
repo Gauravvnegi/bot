@@ -11,6 +11,7 @@ import {
   FeedbackService,
   HotelDetailService,
   ModuleNames,
+  sharedConfig,
   StatisticsService,
   TableNames,
   TableService,
@@ -137,7 +138,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
@@ -158,7 +159,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
@@ -291,7 +292,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
@@ -401,7 +402,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     const queries = [
       ...this.globalQueries,
       {
-        order: 'DESC',
+        order: sharedConfig.defaultOrder,
         entityType: this.tabFilterItems[this.tabFilterIdx].value,
       },
       ...this.getSelectedQuickReplyFilters(),
@@ -463,7 +464,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
@@ -495,7 +496,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             [
               ...this.globalQueries,
               {
-                order: 'DESC',
+                order: sharedConfig.defaultOrder,
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
               ...this.getSelectedQuickReplyFilters(),
@@ -593,7 +594,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
                   [
                     ...this.globalQueries,
                     {
-                      order: 'DESC',
+                      order: sharedConfig.defaultOrder,
                       entityType: this.tabFilterItems[this.tabFilterIdx].value,
                     },
                     ...this.getSelectedQuickReplyFilters(),

@@ -5,6 +5,7 @@ import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   BarChart,
+  sharedConfig,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -179,7 +180,7 @@ export class NetPromoterScoreComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
         },
       ]),
     };

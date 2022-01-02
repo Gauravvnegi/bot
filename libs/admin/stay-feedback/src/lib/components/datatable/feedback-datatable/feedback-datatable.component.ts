@@ -14,6 +14,7 @@ import {
   BaseDatatableComponent,
   FeedbackService,
   ModuleNames,
+  sharedConfig,
   TableNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -105,7 +106,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
@@ -237,7 +238,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
@@ -344,7 +345,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
@@ -436,7 +437,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             [
               ...this.globalQueries,
               {
-                order: 'DESC',
+                order: sharedConfig.defaultOrder,
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
               ...this.getSelectedQuickReplyFilters(),

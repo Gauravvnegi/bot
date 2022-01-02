@@ -5,6 +5,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { globalFeedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
+  sharedConfig,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -263,7 +264,7 @@ export class NpsAcrossServicesComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
           departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
             : 'FRONTOFFICE',
@@ -305,7 +306,7 @@ export class NpsAcrossServicesComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         // ...this.getSelectedQuickReplyFilters(),

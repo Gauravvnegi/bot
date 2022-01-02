@@ -40,13 +40,10 @@
         {{ value.count }}
         <span
           class="positive"
-          [ngStyle]="
-            value.comparePercent >= 0
-              ? {
-                  color: '#52b33f'
-                }
-              : { color: '#CC052B' }
-          "
+          [ngClass]="{
+            'comparison-positive': value.comparePercent >= 0,
+            'comparison-negative': value.comparePercent < 0
+          }"
         >
           ({{ value.comparePercent }}%)
           <img

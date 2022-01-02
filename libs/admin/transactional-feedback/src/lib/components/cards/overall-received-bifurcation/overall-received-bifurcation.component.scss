@@ -13,7 +13,7 @@
   &__title {
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
-    color: #002046;
+    color: $dark-blue;
     @media (max-width: 1024px) {
       font-size: 12px;
     }
@@ -56,14 +56,14 @@
         .val {
           font: normal normal bold 25px/30px Roboto;
           letter-spacing: 1.5px;
-          color: #002046;
+          color: $dark-blue;
           opacity: 1;
         }
         .label {
           font: normal normal bold 10px/14px Roboto;
           letter-spacing: 0.72px;
           opacity: 1;
-          color: #002046;
+          color: $dark-blue;
           word-wrap: break-word;
           max-width: 80px;
           text-align: center;
@@ -99,7 +99,7 @@
           &__stat {
             font-size: 16px;
             font-weight: bold;
-            color: #002046;
+            color: $dark-blue;
             margin-right: 10px;
           }
           &__days {
@@ -137,7 +137,7 @@
   &__total {
     font: normal normal bold 25px/30px Roboto;
     letter-spacing: 1.5px;
-    color: #002046;
+    color: $dark-blue;
     margin-bottom: 10px;
     opacity: 1;
   }

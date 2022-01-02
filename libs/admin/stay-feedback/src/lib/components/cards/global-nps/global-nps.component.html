@@ -25,8 +25,14 @@
     <div class="detail-container" *ngIf="globalNps">
       <div class="wrapper-stats">
         <div class="val">{{ this.roundValue(globalNps.score) }}</div>
-        <div class="comparisonPercent">
-          ({{ this.roundValue(globalNps.comparisonPercent) }}%)
+        <div
+          class="comparisonPercent"
+          [ngClass]="{
+            'comparison-positive': roundValue(globalNps.comparisonPercent) >= 0,
+            'comparison-negative': roundValue(globalNps.comparisonPercent) < 0
+          }"
+        >
+          ({{ roundValue(globalNps.comparisonPercent) }}%)
           <img
             [src]="
               globalNps.comparisonPercent >= 0
@@ -52,13 +58,10 @@
       <div class="stat-lable">Negative</div>
       <div
         class="stat-comparisonPercent"
-        [ngStyle]="
-          globalNps.negative.comparisonPercent >= 0
-            ? {
-                color: '#52b33f'
-              }
-            : { color: '#CC052B' }
-        "
+        [ngClass]="{
+          'comparison-positive': globalNps.negative.comparisonPercent >= 0,
+          'comparison-negative': globalNps.negative.comparisonPercent < 0
+        }"
       >
         ({{ this.roundValue(globalNps.negative.comparisonPercent) }}%)
         <img
@@ -79,13 +82,10 @@
       <div class="stat-lable">Neutral</div>
       <div
         class="stat-comparisonPercent"
-        [ngStyle]="
-          globalNps.neutral.comparisonPercent >= 0
-            ? {
-                color: '#52b33f'
-              }
-            : { color: '#CC052B' }
-        "
+        [ngClass]="{
+          'comparison-positive': globalNps.neutral.comparisonPercent >= 0,
+          'comparison-negative': globalNps.neutral.comparisonPercent < 0
+        }"
       >
         ({{ this.roundValue(globalNps.neutral.comparisonPercent) }}%)
         <img
@@ -106,13 +106,10 @@
       <div class="stat-lable">Positive</div>
       <div
         class="stat-comparisonPercent"
-        [ngStyle]="
-          globalNps.positive.comparisonPercent >= 0
-            ? {
-                color: '#52b33f'
-              }
-            : { color: '#CC052B' }
-        "
+        [ngClass]="{
+          'comparison-positive': globalNps.positive.comparisonPercent >= 0,
+          'comparison-negative': globalNps.positive.comparisonPercent < 0
+        }"
       >
         ({{ this.roundValue(globalNps.positive.comparisonPercent) }}%)
         <img

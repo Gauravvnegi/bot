@@ -41,13 +41,10 @@
             <div>
               <span
                 class="percentChange"
-                [ngStyle]="
-                  item.comparePercent >= 0
-                    ? {
-                        color: '#52b33f'
-                      }
-                    : { color: '#CC052B' }
-                "
+                [ngClass]="{
+                  'comparison-positive': item.comparePercent >= 0,
+                  'comparison-negative': item.comparePercent < 0
+                }"
                 >({{ item.comparePercent }}%)</span
               ><img
                 class="received-wrap__container__percentChange-img"

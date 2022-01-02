@@ -3,8 +3,8 @@
 .container {
   width: 100%;
   margin: 15px 0;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: solid 1px #e2e2e2;
+  background: $white 0% 0% no-repeat padding-box;
+  border: solid 1px $c-gray-89;
   border-radius: 5px;
   padding: 20px;
 }
@@ -18,7 +18,7 @@
   }
   .selected {
     font-size: 20px;
-    color: #7e7e7e;
+    color: $c-gray-47;
     font-style: italic;
     margin-bottom: 0;
     margin-left: 3%;
@@ -66,7 +66,7 @@
   .go {
     outline: none;
     color: $primary-purple;
-    background: #4b56c033;
+    background: $primary-purple;
     border: none;
     font-size: 10px;
     padding: 5px;
@@ -177,8 +177,8 @@
     padding: 13px 20px 15px;
     border-radius: 5px;
     box-shadow: 3px 3px 6px 0 rgba(0, 0, 0, 0.16);
-    background-color: #fff;
-    border: solid 1px #e2e2e2;
+    background-color: $white;
+    border: solid 1px $c-gray-89;
     z-index: 3;
     &::after {
       content: '';
@@ -188,7 +188,7 @@
       margin-left: -5px;
       border-width: 5px;
       border-style: solid;
-      border-color: #fff transparent transparent transparent;
+      border-color: $white transparent transparent transparent;
     }
     &__label {
       font-weight: bold;
@@ -196,7 +196,7 @@
       font-style: normal;
       line-height: normal;
       letter-spacing: 0.72px;
-      color: #002046;
+      color: $dark-blue;
       margin-bottom: 10px;
     }
     &__items {
@@ -221,7 +221,7 @@
       }
       &__count {
         font-weight: bold;
-        color: #002046;
+        color: $dark-blue;
       }
     }
   }

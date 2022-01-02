@@ -2,7 +2,7 @@
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: #002046;
+  color: $dark-blue;
   opacity: 1;
   @media (max-width: 1024px) {
     font-size: 12px;
@@ -42,13 +42,12 @@
       .val {
         font: normal normal bold 25px/30px Roboto;
         letter-spacing: 1.5px;
-        color: #002046;
+        color: $dark-blue;
         opacity: 1;
       }
       .comparisonPercent {
         font: normal normal normal 10px/14px Roboto;
         letter-spacing: 0.72px;
-        color: #52b33f;
         margin-left: 10px;
 
         span {
@@ -95,15 +94,6 @@
       height: 14px;
       opacity: 1;
     }
-    .full {
-      background: #3e8ef7 0% 0% no-repeat padding-box;
-    }
-    .partial {
-      background: #faa700 0% 0% no-repeat padding-box;
-    }
-    .not {
-      background: #ff4c52 0% 0% no-repeat padding-box;
-    }
     .stat-lable {
       text-align: center;
       font: normal normal normal 12px/14px Roboto;
@@ -117,7 +107,6 @@
     .stat-comparisonPercent {
       font: normal normal normal 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: #52b33f;
       margin: 10px 0;
       @media (max-width: 1024px) {
         font-size: 10px;
@@ -129,7 +118,7 @@
       padding: 5px;
       font: normal normal bold 20px/30px Roboto;
       letter-spacing: 1.5px;
-      color: #4b56c0;
+      color: $primary-purple;
       @media (max-width: 1024px) {
         font-size: 15px;
       }
@@ -141,14 +130,14 @@
   font-size: 10px;
   width: 100%;
   text-align: center;
-  background-color: #fff;
-  color: #b4b4b4;
+  background-color: $white;
+  color: $c-gray-72;
   position: relative;
   z-index: 10;
   display: block;
 
   span {
-    background: white;
+    background: $white;
     padding: 5px 10px;
   }
 
@@ -159,7 +148,7 @@
     height: 0.5px;
     top: 50%;
     left: 0%;
-    background-color: #b4b4b4;
+    background-color: $c-gray-72;
     transform: translateY(-50%);
     z-index: -1;
   }
@@ -175,4 +164,12 @@
     width: 154px !important;
     left: 0px;
   }
+}
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
 }

@@ -139,10 +139,10 @@
     top: 50%;
     font-size: 12px;
     color: $dark-grey;
-    background-color: white;
+    background-color: $white;
     left: 0%;
     padding: 7px;
-    box-shadow: 0px 0px 5px 0px lightgray;
+    box-shadow: 0px 0px 5px 0px $light-grey;
     border-radius: 5px;
     display: none;
   }
@@ -152,7 +152,7 @@
   }
   .number {
     padding: 4px 0;
-    color: white;
+    color: $white;
     margin: 0 2px;
     text-align: center;
     min-width: 23px;
@@ -200,8 +200,8 @@
   width: 75px;
   padding: 6px 2px 6px 2px;
   border-radius: 5px;
-  border: solid 1px #4b56c0;
-  background-color: #fff;
+  border: solid 1px $primary-purple;
+  background-color: $white;
   font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
@@ -210,14 +210,14 @@
   line-height: 1.25;
   letter-spacing: 0.72px;
   text-align: center;
-  color: #4b56c0;
+  color: $primary-purple;
 }
 
 .add-notes {
   width: 75px;
   padding: 6px 16px 6px 17px;
   border-radius: 5px;
-  background-color: #4b56c0;
+  background-color: $primary-purple;
   font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
@@ -226,7 +226,7 @@
   line-height: 1.25;
   letter-spacing: 0.72px;
   text-align: center;
-  color: #fff;
+  color: $white;
 }
 
 .guest {
@@ -310,9 +310,9 @@
     .btn_text {
       visibility: hidden;
       width: 120px;
-      background-color: #fff;
+      background-color: $white;
       border: 1px solid #ccc;
-      color: #000;
+      color: $black;
       text-align: center;
       border-radius: 6px;
       padding: 5px;
@@ -332,19 +332,8 @@
         border-color: #ccc transparent transparent transparent;
       }
     }
-    // span {
-    //   display: none;
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 0;
-    //   min-width: 120px;
-    //   padding: 10px;
-    //   background: #333;
-    //   color: #fff;
-    // }
 
     &:hover .btn_text {
-      // display: block;
       visibility: visible;
     }
   }
@@ -358,7 +347,7 @@
   height: 36px;
   padding: 11px 0 10px;
   border-radius: 100px;
-  background-color: #4b56c0;
+  background-color: $primary-purple;
   cursor: pointer;
   margin-right: 10px;
   &:active {
@@ -373,7 +362,7 @@
     line-height: normal;
     letter-spacing: 0.66px;
     text-align: center;
-    color: #fff;
+    color: $white;
   }
 }
 .import-guests-btn {
@@ -402,7 +391,7 @@
     line-height: normal;
     letter-spacing: 0.66px;
     text-align: center;
-    color: #002046;
+    color: $dark-blue;
     display: flex;
     align-items: center;
     justify-content: space-between;

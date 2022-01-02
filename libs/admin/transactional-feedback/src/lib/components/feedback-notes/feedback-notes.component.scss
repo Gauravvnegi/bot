@@ -1,3 +1,4 @@
+@import 'main';
 .header {
   padding: 15px;
   background-color: #f4f5f7;
@@ -17,7 +18,7 @@
   padding: 8px 49px 9px 50px;
   margin: 30px auto;
   border-radius: 18px;
-  border: solid 1px #4b56c0;
+  border: solid 1px $primary-purple;
   font-family: Roboto;
   font-size: 13px;
   font-weight: 500;
@@ -26,7 +27,7 @@
   line-height: normal;
   letter-spacing: 0.78px;
   text-align: center;
-  color: #4b56c0;
+  color: $primary-purple;
   cursor: pointer;
 }
 
@@ -40,7 +41,7 @@
   padding: 8px 44px 9px 45px;
   margin: 30px auto;
   border-radius: 18px;
-  background-color: #4b56c0;
+  background-color: $primary-purple;
   font-family: Roboto;
   font-size: 13px;
   font-weight: 500;
@@ -49,7 +50,7 @@
   line-height: normal;
   letter-spacing: 0.78px;
   text-align: center;
-  color: #fff;
+  color: $white;
   cursor: pointer;
 }
 .editForm-header {
@@ -103,7 +104,7 @@
           line-height: normal;
           letter-spacing: 0.72px;
           text-align: left;
-          color: #002046;
+          color: $dark-blue;
         }
         &-name {
           font-size: 12px;
@@ -142,7 +143,7 @@
       line-height: normal;
       letter-spacing: 0.78px;
       text-align: right;
-      color: #4b56c0;
+      color: $primary-purple;
       cursor: pointer;
     }
   }

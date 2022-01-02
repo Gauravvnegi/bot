@@ -38,13 +38,10 @@
           </div>
           <div
             class="stats__container__actions__action__record__compare"
-            [ngStyle]="
-              action.comparisonPercent >= 0
-                ? {
-                    color: '#52b33f'
-                  }
-                : { color: '#CC052B' }
-            "
+            [ngClass]="{
+              'comparison-positive': action.comparisonPercent >= 0,
+              'comparison-negative': action.comparisonPercent < 0
+            }"
           >
             ({{ action.comparisonPercent }}%)<img
               class="upArrow"

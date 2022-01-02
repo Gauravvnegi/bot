@@ -2,7 +2,7 @@
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: #002046;
+  color: $dark-blue;
   opacity: 1;
   @media (max-width: 1024px) {
     font-size: 12px;
@@ -30,7 +30,7 @@
     .val {
       font: normal normal bold 25px/29px Roboto;
       letter-spacing: 1.5px;
-      color: #002046;
+      color: $dark-blue;
       opacity: 1;
     }
     .label {
@@ -60,16 +60,16 @@
       border-radius: 50%;
     }
     .initiated {
-      background: #ff8f00 0% 0% no-repeat padding-box;
+      background: $initiated-2 0% 0% no-repeat padding-box;
     }
     .pending {
-      background: #38649f 0% 0% no-repeat padding-box;
+      background: $pending-2 0% 0% no-repeat padding-box;
     }
     .accepted {
-      background: #389f99 0% 0% no-repeat padding-box;
+      background: $accepted 0% 0% no-repeat padding-box;
     }
     .rejected {
-      background: #ee1044 0% 0% no-repeat padding-box;
+      background: $rejected 0% 0% no-repeat padding-box;
     }
     .stat-lable {
       padding-left: 10px;
@@ -88,13 +88,12 @@
     text-align: right;
     font: normal normal bold 12px/14px Roboto;
     letter-spacing: 0.72px;
-    color: #4b56c0;
+    color: $primary-purple;
     opacity: 1;
     display: flex;
     font-size: 10px;
     span {
       font-weight: normal;
-      color: #52b33f;
       @media (max-width: 1024px) {
         font-size: 8px;
         white-space: nowrap;
@@ -106,14 +105,14 @@
   font-size: 10px;
   width: 100%;
   text-align: center;
-  background-color: #fff;
-  color: #b4b4b4;
+  background-color: $white;
+  color: $c-gray-72;
   position: relative;
   z-index: 10;
   display: block;
 
   span {
-    background: white;
+    background: $white;
     padding: 5px 10px;
   }
 
@@ -124,7 +123,7 @@
     height: 0.5px;
     top: 50%;
     left: 0%;
-    background-color: #b4b4b4;
+    background-color: $c-gray-72;
     transform: translateY(-50%);
     z-index: -1;
   }
@@ -133,4 +132,12 @@
   @media (max-width: 1024px) {
     width: 140px;
   }
+}
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
 }

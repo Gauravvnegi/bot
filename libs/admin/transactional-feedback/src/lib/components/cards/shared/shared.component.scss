@@ -89,7 +89,7 @@
     &__count {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
-      color: #002046;
+      color: $dark-blue;
       margin: 0 5px;
     }
     &__percentChange-img {
@@ -121,7 +121,7 @@
       &__count {
         font: normal normal bold 16px/21px Roboto;
         letter-spacing: 0px;
-        color: #002046;
+        color: $dark-blue;
         margin: 0 5px;
       }
       &__date {
@@ -137,4 +137,12 @@
       color: $quote-color;
     }
   }
+}
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
 }

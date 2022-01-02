@@ -15,9 +15,9 @@
 }
 
 .container {
-  background: #ffffff;
-  border: solid 1px #e2e2e2;
-  box-shadow: 0px 3px 6px #0000000d;
+  background: $white;
+  border: solid 1px $c-gray-89;
+  box-shadow: 0px 3px 6px $box-shadow;
   border-radius: 5px;
 }
 
@@ -31,7 +31,7 @@
   }
   .selected {
     font-size: 20px;
-    color: #7e7e7e;
+    color: $c-gray-47;
     font-style: italic;
     margin-bottom: 0;
     margin-left: 3%;
@@ -79,7 +79,7 @@
   .go {
     outline: none;
     color: $primary-purple;
-    background: #4b56c033;
+    background: $primary-purple;
     border: none;
     font-size: 10px;
     padding: 5px;
@@ -198,7 +198,7 @@
             .service {
               font: normal normal bold 16px/19px Roboto;
               letter-spacing: 0.96px;
-              color: #002046;
+              color: $dark-blue;
             }
             .details_box {
               margin-top: 15px;
@@ -221,7 +221,7 @@
                 .percentage {
                   font: normal normal bold 12px/14px Roboto;
                   letter-spacing: 0.72px;
-                  color: #002046;
+                  color: $dark-blue;
                 }
               }
             }

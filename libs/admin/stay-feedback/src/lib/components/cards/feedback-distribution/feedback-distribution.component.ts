@@ -26,12 +26,12 @@ export class FeedbackDistributionComponent implements OnInit {
   color = feedback.colorConfig.distribution;
 
   chart: CircularChart = {
-    Labels: [],
-    Data: [[]],
-    Type: chartConfig.type.doughnut,
-    Legend: false,
-    Colors: chartConfig.colors.distribution,
-    Options: chartConfig.options.distribution,
+    labels: [],
+    data: [[]],
+    type: chartConfig.type.doughnut,
+    legend: false,
+    colors: chartConfig.colors.distribution,
+    options: chartConfig.options.distribution,
   };
 
   keyLabels = [];
@@ -72,13 +72,13 @@ export class FeedbackDistributionComponent implements OnInit {
    */
   initChartData(): void {
     this.totalDistribution = 0;
-    this.keyLabels.length = this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
+    this.keyLabels.length = this.chart.data[0].length = this.chart.labels.length = this.chart.colors[0].backgroundColor.length = this.chart.colors[0].borderColor.length = 0;
     this.distribution.data.map((data) => {
       if (data.count) {
-        this.chart.Labels.push(data.label);
-        this.chart.Data[0].push(data.count);
-        this.chart.Colors[0].backgroundColor.push(data.color);
-        this.chart.Colors[0].borderColor.push(data.color);
+        this.chart.labels.push(data.label);
+        this.chart.data[0].push(data.count);
+        this.chart.colors[0].backgroundColor.push(data.color);
+        this.chart.colors[0].borderColor.push(data.color);
       }
       this.totalDistribution += data.count;
       this.keyLabels.push({
@@ -86,13 +86,13 @@ export class FeedbackDistributionComponent implements OnInit {
         color: data.color,
       });
     });
-    if (!this.chart.Data[0].length) {
+    if (!this.chart.data[0].length) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => (this.chart.Labels = [message]));
-      this.chart.Colors[0].backgroundColor.push(chartConfig.defaultColor);
-      this.chart.Colors[0].borderColor.push(chartConfig.defaultColor);
-      this.chart.Data = [[100]];
+        .subscribe((message) => (this.chart.labels = [message]));
+      this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.colors[0].borderColor.push(chartConfig.defaultColor);
+      this.chart.data = [[100]];
     }
   }
 

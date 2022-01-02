@@ -45,17 +45,17 @@ export class NetPromoterScoreComponent implements OnInit {
   ];
 
   chart: BarChart = {
-    Data: [
+    data: [
       {
         data: [''],
         label: 'Overall NPS',
       },
     ],
-    Labels: [''],
-    Options: chartConfig.options.nps,
-    Colors: chartConfig.colors.nps,
-    Legend: false,
-    Type: chartConfig.type.line,
+    labels: [''],
+    options: chartConfig.options.nps,
+    colors: chartConfig.colors.nps,
+    legend: false,
+    type: chartConfig.type.line,
   };
 
   constructor(
@@ -110,8 +110,8 @@ export class NetPromoterScoreComponent implements OnInit {
    * @param option The chart type option.
    */
   setChartType(option: ChartTypeOption): void {
-    this.chart.Type = option.value;
-    this.chart.Colors[0].backgroundColor = option.backgroundColor;
+    this.chart.type = option.value;
+    this.chart.colors[0].backgroundColor = option.backgroundColor;
   }
 
   /**
@@ -119,10 +119,10 @@ export class NetPromoterScoreComponent implements OnInit {
    */
   protected initGraphData(): void {
     const botKeys = Object.keys(this.npsChartData.npsGraph);
-    this.chart.Data[0].data = [];
-    this.chart.Labels = [];
+    this.chart.data[0].data = [];
+    this.chart.labels = [];
     botKeys.forEach((d, i) => {
-      this.chart.Labels.push(
+      this.chart.labels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
@@ -133,7 +133,7 @@ export class NetPromoterScoreComponent implements OnInit {
             : null
         )
       );
-      this.chart.Data[0].data.push(this.npsChartData.npsGraph[d]);
+      this.chart.data[0].data.push(this.npsChartData.npsGraph[d]);
     });
   }
 

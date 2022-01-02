@@ -25,17 +25,17 @@ export class GlobalNpsComponent implements OnInit {
   labels = feedback.labels.globalNPS;
 
   chart: CircularChart = {
-    Labels: [],
-    Data: [[]],
-    Type: chartConfig.type.doughnut,
-    Legend: false,
-    Colors: [
+    labels: [],
+    data: [[]],
+    type: chartConfig.type.doughnut,
+    legend: false,
+    colors: [
       {
         backgroundColor: [chartConfig.defaultColor],
         borderColor: [chartConfig.defaultColor],
       },
     ],
-    Options: chartConfig.options.globalNPS,
+    options: chartConfig.options.globalNPS,
   };
 
   loading: boolean = false;
@@ -77,7 +77,7 @@ export class GlobalNpsComponent implements OnInit {
    * @param data The global nps data.
    */
   initGraphData(data): void {
-    this.chart.Data[0].length = this.chart.Labels.length = this.chart.Colors[0].backgroundColor.length = this.chart.Colors[0].borderColor.length = 0;
+    this.chart.data[0].length = this.chart.labels.length = this.chart.colors[0].backgroundColor.length = this.chart.colors[0].borderColor.length = 0;
     Object.keys(data).map((key) => {
       if (
         key !== 'label' &&
@@ -85,19 +85,19 @@ export class GlobalNpsComponent implements OnInit {
         key !== 'comparisonPercent' &&
         data[key].score
       ) {
-        this.chart.Labels.push(this.labels[key]);
-        this.chart.Data[0].push(this.roundValue(data[key].score));
-        this.chart.Colors[0].backgroundColor.push(this.color[key]);
-        this.chart.Colors[0].borderColor.push(this.color[key]);
+        this.chart.labels.push(this.labels[key]);
+        this.chart.data[0].push(this.roundValue(data[key].score));
+        this.chart.colors[0].backgroundColor.push(this.color[key]);
+        this.chart.colors[0].borderColor.push(this.color[key]);
       }
     });
-    if (!this.chart.Data[0].length) {
+    if (!this.chart.data[0].length) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => (this.chart.Labels = [message]));
-      this.chart.Colors[0].backgroundColor.push(chartConfig.defaultColor);
-      this.chart.Colors[0].borderColor.push(chartConfig.defaultColor);
-      this.chart.Data = [[100]];
+        .subscribe((message) => (this.chart.labels = [message]));
+      this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.colors[0].borderColor.push(chartConfig.defaultColor);
+      this.chart.data = [[100]];
     }
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  CircularChart,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -21,18 +22,18 @@ export class SharedComponent implements OnInit {
   selectedInterval;
   globalQueries;
   stats: SharedStats;
-  chart: any = {
-    Labels: [],
-    Data: [[]],
-    Type: chartConfig.type.doughnut,
-    Legend: false,
-    Colors: [
+  chart: CircularChart = {
+    labels: [],
+    data: [[]],
+    type: chartConfig.type.doughnut,
+    legend: false,
+    colors: [
       {
         backgroundColor: [chartConfig.defaultColor],
         borderColor: [chartConfig.defaultColor],
       },
     ],
-    Options: chartConfig.options.shared,
+    options: chartConfig.options.shared,
   };
   constructor(
     protected _adminUtilityService: AdminUtilityService,
@@ -109,9 +110,9 @@ export class SharedComponent implements OnInit {
    * @param defaultGraph The data status.
    */
   initGraph(defaultGraph = true): void {
-    this.chart.Labels = [];
-    this.chart.Data = [[]];
-    this.chart.Colors = [
+    this.chart.labels = [];
+    this.chart.data = [[]];
+    this.chart.colors = [
       {
         backgroundColor: [],
         borderColor: [],
@@ -120,19 +121,19 @@ export class SharedComponent implements OnInit {
     if (defaultGraph) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => this.chart.Labels.push(message));
-      this.chart.Data[0].push(100);
-      this.chart.Colors[0].backgroundColor.push(chartConfig.defaultColor);
-      this.chart.Colors[0].borderColor.push(chartConfig.defaultColor);
+        .subscribe((message) => this.chart.labels.push(message));
+      this.chart.data[0].push(100);
+      this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.colors[0].borderColor.push(chartConfig.defaultColor);
       return;
     }
 
     this.stats.feedbacks.map((data) => {
       if (data.count) {
-        this.chart.Labels.push(data.label);
-        this.chart.Data[0].push(data.count);
-        this.chart.Colors[0].backgroundColor.push(data.color);
-        this.chart.Colors[0].borderColor.push(data.color);
+        this.chart.labels.push(data.label);
+        this.chart.data[0].push(data.count);
+        this.chart.colors[0].backgroundColor.push(data.color);
+        this.chart.colors[0].borderColor.push(data.color);
       }
     });
   }

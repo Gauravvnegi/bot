@@ -1,7 +1,7 @@
 // color-variables
 
 $auth-color: #4b56c0;
-$auth-quote-color: #6d7580;
+$quote-color: #6d7580;
 $primary-purple: #4b56c0;
 $primary-gray: #9eaeb8;
 $primary-black: #484848;
@@ -23,7 +23,9 @@ $black: #000;
 $tooltip: #484848;
 $warning: #f6b155;
 $approved: #2f1dce;
-$auth-btn-shadow: #4b56c04d;
+$btn-shadow: #4b56c04d;
+$box-shadow: #0000000d;
+$hover-box-shadow: #0368ff42;
 // grey palet
 $c-white: $white;
 $c-gray-71: #d3d3d3;
@@ -32,6 +34,7 @@ $c-gray-95: #ededed;
 $c-gray-90: #e3e3e3;
 $c-gray-85: #d9d9d9;
 $c-gray-80: #cccccc;
+$c-gray-77: #c5c5c5;
 $c-gray-75: #c0c0c0;
 $c-gray-70: #b0b0b0;
 $c-gray-60: #999999;
@@ -51,6 +54,8 @@ $progress-bar-arrivals-base: #e7f4f6;
 $progress-bar-arrivals: #1495a4;
 $progress-bar-messages-base: #f7f7f7;
 $progress-bar-messages: #0000000d;
+$comparison-positive: #52b33f;
+$comparison-negative: #cc052b;
 
 $popup-button-width: 10vw;
 

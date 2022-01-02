@@ -1,0 +1,81 @@
+<div class="container" (click)="openModal()">
+  <div class="title-container">
+    <div class="icon">
+      <img
+        [src]="dashboardConfig.images.arrivals.headerIcon.url"
+        [alt]="dashboardConfig.images.arrivals.headerIcon.alt"
+      />
+    </div>
+    <div class="stat-title">{{ 'card.arrivals.title_text' | translate }}</div>
+    <div class="info-icon">
+      <img
+        [src]="dashboardConfig.images.info.url"
+        [alt]="dashboardConfig.images.info.alt"
+      />
+      <div class="tooltip">
+        <span class="arrow"></span>
+        {{ 'card.arrivals.tooltip_text' | translate }}
+      </div>
+    </div>
+  </div>
+  <div class="stat-val-container">
+    <div class="stat-val-wrapper">
+      <div class="stat-value">{{ arrivals.maxExpected }}</div>
+      <div>
+        <div>
+          <div
+            class="stat-value-comparisonPercent"
+            [ngClass]="{
+              'comparison-positive': arrivals.comparisonPercent >= 0,
+              'comparison-negative': arrivals.comparisonPercent < 0
+            }"
+          >
+            ({{ arrivals.comparisonPercent }}%)
+            <img
+              [src]="
+                arrivals.comparisonPercent >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/down-percentage.svg'
+              "
+              alt="uparrow"
+            />
+          </div>
+          <div class="stat-value-comparisonPercent-day">
+            {{ 'compareDays_text' | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-val-title">
+      {{ 'card.arrivals.total_arrival_text' | translate }}
+    </div>
+  </div>
+  <div>
+    <div class="progress progress-bar-height">
+      <div
+        aria-valuemax="100"
+        aria-valuemin="10"
+        aria-valuenow="100"
+        class="progress-bar progress-color"
+        role="progressbar"
+        [style.width]="progress + '%'"
+      ></div>
+    </div>
+    <div class="progress-info">
+      <div class="progress-info-labels">
+        <span class="label"
+          >{{ 'card.arrivals.arrived_text' | translate }}&nbsp;<strong>{{
+            arrivals.currentlyArrived
+          }}</strong></span
+        >
+      </div>
+      <div class="progress-info-labels">
+        <span class="label"
+          >{{ 'card.arrivals.remaining_text' | translate }}&nbsp;<b>{{
+            arrivals.currentlyExpected
+          }}</b></span
+        >
+      </div>
+    </div>
+  </div>
+</div>

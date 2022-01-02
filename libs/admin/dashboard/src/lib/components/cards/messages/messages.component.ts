@@ -1,13 +1,16 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { MatSelectChange } from '@angular/material/select';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { dashboard } from '../../../constants/dashboard';
 import {
   IMessageOverallAnalytics,
   MessageOverallAnalytics,
 } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/statistics.service';
+import { SelectOption } from '../../../types/dashboard.type';
 
 @Component({
   selector: 'hospitality-bot-messages',
@@ -16,25 +19,25 @@ import { StatisticsService } from '../../../services/statistics.service';
 })
 export class MessagesComponent implements OnChanges {
   $subscription = new Subscription();
-  @Input() hotelId;
-  @Input() channelOptions;
+  @Input() hotelId: string;
+  @Input() channelOptions: SelectOption[];
   messageOverallAnalytics: IMessageOverallAnalytics;
   messagesFG: FormGroup;
   constructor(
     private statisticsService: StatisticsService,
-    private snackbarService: SnackBarService,
+    private _snackbarService: SnackBarService,
     private adminutilityService: AdminUtilityService,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initFG();
   }
 
   /**
-   * @function initFG Initializes the form group
+   * @function initFG Initializes the form group.
    */
-  initFG() {
+  initFG(): void {
     this.messagesFG = this.fb.group({
       channel: ['ALL'],
     });
@@ -51,10 +54,10 @@ export class MessagesComponent implements OnChanges {
   }
 
   /**
-   * @function getConversationStats gets the messages stats for today from api
-   * @param {Array} queries
+   * @function getConversationStats gets the messages stats for today from api.
+   * @param queries The filter array list.
    */
-  getConversationStats(queries) {
+  getConversationStats(queries): void {
     const config = {
       queryObj: this.adminutilityService.makeQueryParams(queries),
     };
@@ -64,19 +67,28 @@ export class MessagesComponent implements OnChanges {
         .subscribe(
           (response) => {
             this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
-              response.messageCounts
+              response?.messageCounts
             );
           },
-          ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.error.some_thing_wrong',
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
 
   /**
-   * @function handleChannelChange Handles the channel dropdown value change
-   * @param {MouseEvent} event
+   * @function handleChannelChange Handles the channel dropdown value change.
+   * @param event The material select change event.
    */
-  handleChannelChange(event) {
+  handleChannelChange(event: MatSelectChange): void {
     this.getConversationStats([
       {
         templateContext: 'TEXT',
@@ -84,5 +96,9 @@ export class MessagesComponent implements OnChanges {
         channelType: event.value,
       },
     ]);
+  }
+
+  get dashboardConfig() {
+    return dashboard;
   }
 }

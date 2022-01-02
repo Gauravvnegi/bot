@@ -1,3 +1,4 @@
+@import 'main';
 .stat-label {
   cursor: pointer;
   height: 28px;
@@ -18,7 +19,7 @@
     text-align: left;
     font: normal normal normal 10px/12px Roboto;
     letter-spacing: 0.72px;
-    color: #6d7580;
+    color: $quote-color;
     opacity: 1;
     padding-top: 2px;
     padding-left: 5px;
@@ -85,7 +86,7 @@
     line-height: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #6d7580;
+    color: $quote-color;
     margin: 20px 0;
   }
   &-baseChart {
@@ -115,7 +116,7 @@
         line-height: normal;
         letter-spacing: 0.72px;
         text-align: left;
-        color: #6d7580;
+        color: $quote-color;
       }
     }
   }
@@ -132,7 +133,7 @@
       line-height: normal;
       letter-spacing: 0.84px;
       text-align: left;
-      color: #6d7580;
+      color: $quote-color;
       max-width: 113px;
     }
     &-values {

@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="title-container">
+    <div class="icon">
+      <img
+        [src]="dashboardConfig.images.departures.headerIcon.url"
+        [alt]="dashboardConfig.images.departures.headerIcon.alt"
+      />
+    </div>
+    <div class="stat-title">{{ 'card.inhouse.title_text' | translate }}</div>
+    <div class="info-icon">
+      <img
+        [src]="dashboardConfig.images.info.url"
+        [alt]="dashboardConfig.images.info.alt"
+      />
+      <div class="tooltip">
+        <span class="arrow"></span>
+        {{ 'card.inhouse.tooltip' | translate }}
+      </div>
+    </div>
+  </div>
+  <mat-tab-group>
+    <mat-tab label="{{ 'card.inhouse.tab.request.title_text' | translate }}">
+      <ng-template matTabContent>
+        <hospitality-bot-inhouse-request-statistics
+          [inhouseRequest]="inhouseRequest"
+        ></hospitality-bot-inhouse-request-statistics> </ng-template
+    ></mat-tab>
+    <mat-tab label="{{ 'card.inhouse.tab.total.title_text' | translate }}">
+      <ng-template matTabContent>
+        <div class="chart__wrapper">
+          <div class="chart__wrapper--container">
+            <canvas
+              baseChart
+              class="chart__wrapper-base-chart"
+              [data]="chart.data"
+              [labels]="chart.labels"
+              [chartType]="chart.type"
+              [legend]="chart.legend"
+              [colors]="chart.colors"
+              [options]="chart.options"
+            >
+            </canvas>
+          </div>
+          <div class="chartDetailsWrapper">
+            <div>
+              <div class="currentChart">
+                <div class="currentChartHeading">
+                  {{ inhouse.roomOccupied }}
+                </div>
+                <div>
+                  <div
+                    class="chartPercent"
+                    [ngClass]="{
+                      'comparison-positive': inhouse.comparisonPercent >= 0,
+                      'comparison-negative': inhouse.comparisonPercent < 0
+                    }"
+                  >
+                    ({{ inhouse.comparisonPercent }}%)
+                    <img
+                      [src]="
+                        inhouse.comparisonPercent >= 0
+                          ? 'assets/svg/uparrow.svg'
+                          : 'assets/svg/down-percentage.svg'
+                      "
+                      alt="uparrow"
+                    />
+                  </div>
+                  <div class="chartDays">
+                    {{ 'compareDays_text' | translate }}
+                  </div>
+                </div>
+              </div>
+              <div class="totalGuestsHeading">
+                {{ 'card.inhouse.tab.total.total_guest' | translate }}
+              </div>
+            </div>
+            <div class="chartsubDetailsWrapper">
+              <div class="chartsubDetail">
+                <div class="chartsubDetail__logo">
+                  <img
+                    class="stat-image"
+                    [src]="dashboardConfig.images.adult.url"
+                    [alt]="dashboardConfig.images.adult.url"
+                  />
+                </div>
+                <div>
+                  <div class="chartDetailBlock"></div>
+                  <div>
+                    <span class="chartDetailHeading">{{
+                      'card.inhouse.tab.total.adult' | translate
+                    }}</span>
+                    <span class="chartDetailText">{{
+                      inhouse.adultCount
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="chartsubRightDetail">
+                <div class="chartsubDetail__logo">
+                  <img
+                    class="stat-image"
+                    [src]="dashboardConfig.images.kids.url"
+                    [alt]="dashboardConfig.images.kids.url"
+                  />
+                </div>
+                <div>
+                  <div class="chartDetailRightBlock"></div>
+                  <div>
+                    <span class="chartDetailHeading">{{
+                      'card.inhouse.tab.total.kids' | translate
+                    }}</span>
+                    <span class="chartDetailText">{{ inhouse.kidsCount }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template></mat-tab
+    >
+  </mat-tab-group>
+</div>

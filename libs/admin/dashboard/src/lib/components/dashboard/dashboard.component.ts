@@ -8,7 +8,8 @@ import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConf
 })
 export class DashboardComponent implements OnInit {
   tables = TableNames;
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {}
 }

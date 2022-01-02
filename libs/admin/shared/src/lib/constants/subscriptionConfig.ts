@@ -43,6 +43,8 @@ export enum CardNames {
   TopLowNPS = 'Top/LowNPS',
   OverallReceivedBifurcation = 'OverallReceivedBifurcation',
   Shared = 'Shared',
+  Messages = 'Messages',
+  Notification = 'Notification',
 }
 
 export enum Filters {
@@ -105,6 +107,8 @@ export const ModuleConfig = {
       CardNames.DEPARTURE,
       CardNames.BOOKINGSTATUS,
       CardNames.RESERVATION,
+      CardNames.Messages,
+      CardNames.Notification,
     ],
     tables: [TableNames.RESERVATION],
     filters: {

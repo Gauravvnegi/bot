@@ -2,42 +2,31 @@
   <div class="stat-header">
     <div class="title-container">
       <div class="icon">
-        <img src="assets/svg/booking-status.svg" />
+        <img
+          [src]="dashboardConfig.images.bookingStatus.headerIcon.url"
+          [alt]="dashboardConfig.images.bookingStatus.headerIcon.alt"
+        />
       </div>
-      <div class="stat-title">Booking Status</div>
+      <div class="stat-title">
+        {{ 'card.booking_status.title_text' | translate }}
+      </div>
     </div>
   </div>
-  <!-- <div> -->
-  <!-- <div class="pull-right">
-      <label class="labl" *ngFor="let option of chartTypes">
-        <input
-          name="method"
-          type="radio"
-          [checked]="chart.chartType === option.value"
-          [value]="option.value"
-          (click)="setChartType(option)"
-        />
-        <div class="image">
-          <img [src]="option.url" />
-        </div>
-      </label>
-    </div> -->
-  <!-- </div> -->
   <div class="line-chart">
     <canvas
       baseChart
       class="line-chart-base-chart"
-      [datasets]="chart.chartData"
-      [labels]="chart.chartLabels"
-      [options]="chart.chartOptions"
-      [colors]="chart.chartColors"
-      [legend]="chart.chartLegend"
-      [chartType]="chart.chartType"
+      [datasets]="chart.data"
+      [labels]="chart.labels"
+      [options]="chart.options"
+      [colors]="chart.colors"
+      [legend]="chart.legend"
+      [chartType]="chart.type"
     >
     </canvas>
   </div>
   <div class="stat-labels-container">
-    <ng-container [ngSwitch]="chart.chartType">
+    <ng-container [ngSwitch]="chart.type">
       <ng-container *ngSwitchCase="'line'">
         <ng-container
           *ngFor="let legend of legendData; let legendIndex = index"
@@ -45,15 +34,11 @@
           <div class="stat-label" (click)="legendOnClick(legendIndex)">
             <input class="legends" type="checkbox" />
             <div
-              class="legend-border"
-              [ngStyle]="
-                legend.dashed
-                  ? {
-                      'border-top': '1px dashed',
-                      'border-color': legend.borderColor
-                    }
-                  : { 'border-color': legend.borderColor }
-              "
+              [ngClass]="{
+                'legend-border': !legend.dashed,
+                'legend-border-dashed': legend.dashed
+              }"
+              [style.border-color]="legend.borderColor"
             ></div>
             <p class="stat-label-title">{{ legend.label }}</p>
           </div>

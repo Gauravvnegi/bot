@@ -1,10 +1,10 @@
 export type CircularChart = {
-  Labels: string[];
-  Data: number[][];
-  Type: string;
-  Legend: false;
-  Colors: ChartColor[];
-  Options: any;
+  labels: string[];
+  data: number[][];
+  type: string;
+  legend: false;
+  colors: ChartColor[];
+  options: any;
 };
 
 export type ChartColor = {
@@ -13,12 +13,12 @@ export type ChartColor = {
 };
 
 export type BarChart = {
-  Labels: string[];
-  Data: Bar[];
-  Type: string;
-  Legend: false;
-  Colors: BarColor[];
-  Options: any;
+  labels: string[];
+  data: Bar[];
+  type: string;
+  legend: false;
+  colors: BarColor[];
+  options: any;
 };
 
 export type BarColor = {

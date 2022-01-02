@@ -20,7 +20,7 @@
   &__subheading {
     font: normal normal medium 12px/16px Roboto;
     letter-spacing: 0px;
-    color: #6d7580;
+    color: $quote-color;
     margin: 10px 0;
     @media (max-width: 1024px) {
       font-size: 11px;
@@ -70,7 +70,7 @@
       &__sharedtitle {
         font: normal normal bold 12px/16px Roboto;
         letter-spacing: 0.72px;
-        color: #6d7580;
+        color: $quote-color;
       }
     }
   }
@@ -98,14 +98,14 @@
     &__date {
       font: normal normal normal 10px/14px Roboto;
       letter-spacing: 0.72px;
-      color: #6d7580;
+      color: $quote-color;
       margin: 0 5px;
     }
   }
   &__recived-title {
     font: normal normal normal 12px/16px Roboto;
     letter-spacing: 0.72px;
-    color: #6d7580;
+    color: $quote-color;
   }
   &__no-recived {
     margin-top: 20px;
@@ -127,14 +127,14 @@
       &__date {
         font: normal normal normal 10px/14px Roboto;
         letter-spacing: 0.72px;
-        color: #6d7580;
+        color: $quote-color;
         margin: 0 5px;
       }
     }
     &__title {
       font: normal normal normal 12px/16px Roboto;
       letter-spacing: 0.72px;
-      color: #6d7580;
+      color: $quote-color;
     }
   }
 }

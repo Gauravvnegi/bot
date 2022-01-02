@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { environment } from '@hospitality-bot/admin/environment';
 import { TranslateModule } from '@ngx-translate/core';
-import getTranslationConfigs from 'libs/admin/shared/src/lib/configs/translate';
+import { getTranslationConfigs } from 'libs/admin/shared/src/lib/configs/translate';
 import { AuthModule } from './auth/auth.module';
 import systemInterceptors from './configs/interceptor';
 import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';

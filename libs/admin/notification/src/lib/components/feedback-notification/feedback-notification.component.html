@@ -29,6 +29,7 @@
                 <mat-select
                   formControlName="channel"
                   placeholder="Select Channel"
+                  (selectionChange)="handleChannelChange($event)"
                 >
                   <mat-option
                     *ngFor="let channel of config.channels"
@@ -44,9 +45,8 @@
               </div>
               <mat-form-field class="templateWrapper__select">
                 <mat-select
-                  formControlName="templateId"
                   placeholder="Select Template"
-                  (selectionChange)="fetchTemplate($event.value)"
+                  (selectionChange)="fetchTemplate($event)"
                   [disabled]="
                     templates.ids === undefined || templates.ids.length === 0
                   "
@@ -60,7 +60,7 @@
                   </mat-option>
                   <mat-option
                     *ngFor="let template of templates.ids"
-                    [value]="template.id"
+                    [value]="template"
                     >{{ template.name }}
                   </mat-option>
                 </mat-select>
@@ -107,7 +107,10 @@
           </div>
         </div>
 
-        <div class="col mb-56">
+        <div
+          class="col mb-56"
+          *ngIf="notificationForm?.get('channel')?.value !== 'Sms'"
+        >
           <div class="row">
             <div class="row-title">Email :</div>
             <div class="row-body">

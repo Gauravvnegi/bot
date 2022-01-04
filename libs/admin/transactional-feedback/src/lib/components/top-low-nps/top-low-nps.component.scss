@@ -125,6 +125,6 @@
     font-size: 12px;
   }
 }
-::ng-deep .mat-tab-header-pagination {
+:host ::ng-deep .mat-tab-header-pagination {
   display: flex !important;
 }

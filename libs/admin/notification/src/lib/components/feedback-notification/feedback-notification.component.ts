@@ -140,7 +140,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
       message: data.message,
       messageType: 'TRANSACTIONAL',
     };
-
+    this.isSending = true;
     this.$subscription.add(
       this.requestService
         .createRequestData(this.templates.hotelId, requestData)

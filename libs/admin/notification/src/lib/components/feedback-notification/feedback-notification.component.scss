@@ -146,17 +146,6 @@
 
 .button {
   @include admin-panel-button();
-  // outline: none;
-  // border: none;
-  // width: 250px;
-  // height: 46px;
-  // background: #4b56c0 0% 0% no-repeat padding-box;
-  // border-radius: 23px;
-  // opacity: 1;
-  // font: normal normal medium 16px/19px Roboto;
-  // letter-spacing: 0.96px;
-  // color: #ffffff;
-  // opacity: 1;
   &:hover {
     cursor: pointer;
   }
@@ -266,9 +255,6 @@
 .close {
   display: flex;
   justify-content: flex-end;
-  // position: absolute;
-  // top: 5px;
-  // right: 10px;
   i {
     color: gray;
     margin: 0 10px;
@@ -337,4 +323,8 @@
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-end {
   border-color: $primary-purple;
+}
+
+.disabled-btn {
+  pointer-events: none;
 }

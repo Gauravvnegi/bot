@@ -146,7 +146,11 @@
           </div>
         </div>
         <div class="send-btn">
-          <button class="button" (click)="sendMessage()">
+          <button
+            class="button"
+            (click)="sendMessage()"
+            [ngClass]="{ 'disabled-btn': isSending }"
+          >
             <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
             {{ isSending ? 'Sending' : 'Send' }}
           </button>

@@ -31,7 +31,7 @@ export class EditPackageComponent implements OnInit {
 
   currency: IpackageOptions[] = [
     { key: 'INR', value: 'INR' },
-    { key: 'USD', value: 'USD' },
+    // { key: 'USD', value: 'USD' },
   ];
 
   packageType: IpackageOptions[] = [

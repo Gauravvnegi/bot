@@ -40,7 +40,7 @@
         <div
           class="comparisonPercent"
           [ngStyle]="
-            globalNps.negative.comparisonPercent >= 0
+            roundValue(globalNps.comparisonPercent) >= 0
               ? {
                   color: '#52b33f'
                 }

@@ -128,3 +128,7 @@
 :host ::ng-deep .mat-tab-header-pagination {
   display: flex !important;
 }
+
+:host ::ng-deep .mat-tab-header {
+  border-bottom: 1px solid $tab-bottom-border;
+}

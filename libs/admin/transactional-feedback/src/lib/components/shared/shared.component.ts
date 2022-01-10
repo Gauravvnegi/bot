@@ -63,9 +63,11 @@ export class SharedComponent extends BaseSharedComponent implements OnInit {
   listenForOutletChanged() {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {
-        this.globalQueries[this.globalQueries.length - 1] = {
-          outletsIds: this._statisticService.outletIds,
-        };
+        this.globalQueries.forEach((element) => {
+          if (element.hasOwnProperty('outletsIds')) {
+            element.outletsIds = this._statisticService.outletIds;
+          }
+        });
         this.getStats();
       }
     });

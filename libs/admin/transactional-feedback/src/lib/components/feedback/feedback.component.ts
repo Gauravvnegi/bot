@@ -37,9 +37,10 @@ export class FeedbackComponent extends BaseFeedbackComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
-        this.getOutletsSelected([...data['feedback'].queryValue]);
-        if (data['filter'].value.feedback.feedbackType === 'Transactional')
-          this.getOutlets(data['filter'].value.property.branchName);
+        this.getOutletsSelected(
+          [...data['feedback'].queryValue],
+          data['filter'].value
+        );
       })
     );
   }
@@ -48,7 +49,11 @@ export class FeedbackComponent extends BaseFeedbackComponent implements OnInit {
     this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
       (branch) => branch['id'] == branchId
     ).outlets;
-    this.statisticsService.outletIds = this.outlets.map((outlet) => outlet.id);
+    this.statisticsService.outletIds = this.outlets
+      .map((outlet) => {
+        if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
+      })
+      .filter((id) => id !== undefined);
     this.tabFilterItems = [
       {
         label: 'Overall',
@@ -83,18 +88,24 @@ export class FeedbackComponent extends BaseFeedbackComponent implements OnInit {
     });
   }
 
-  getOutletsSelected(globalQueries) {
+  getOutletsSelected(globalQueries, globalQueryValue) {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
     });
+    this.getOutlets(globalQueryValue.property.branchName);
   }
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+
     this.statisticsService.outletIds =
       event.index === 0
-        ? this.outlets.map((outlet) => outlet.id)
-        : [this.outlets[event.index - 1].id];
+        ? this.outlets
+            .map((outlet) => {
+              if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
+            })
+            .filter((outlet) => outlet !== undefined)
+        : [this.tabFilterItems[this.tabFilterIdx].value];
 
     this.statisticsService.outletChange.next(true);
   }

@@ -174,6 +174,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForOutletChanged();
   }
 
   listenForGlobalFilters(): void {

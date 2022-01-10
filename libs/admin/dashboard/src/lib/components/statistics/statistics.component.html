@@ -1,5 +1,10 @@
 <div class="stats--wrapper" *ngIf="statistics">
-  <div class="stats" cardSubscribed [path]="'dashboard.cards.ARRIVAL'">
+  <div
+    class="stats"
+    cardSubscribed
+    [path]="'dashboard.cards.ARRIVAL'"
+    click-allow
+  >
     <hospitality-bot-arrivals-statistics
       [arrivals]="statistics.arrivals"
     ></hospitality-bot-arrivals-statistics>
@@ -14,6 +19,7 @@
     class="stats full-width"
     cardSubscribed
     [path]="'dashboard.cards.DEPARTURE'"
+    click-allow
   >
     <hospitality-bot-departure-statistics
       [departures]="statistics.departures"

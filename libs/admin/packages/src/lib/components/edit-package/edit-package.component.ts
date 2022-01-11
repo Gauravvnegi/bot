@@ -13,6 +13,7 @@ import {
   PackageSource,
 } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
+import { ConfigService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-edit-package',
@@ -29,10 +30,7 @@ export class EditPackageComponent implements OnInit {
     fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
   };
 
-  currency: IpackageOptions[] = [
-    { key: 'INR', value: 'INR' },
-    // { key: 'USD', value: 'USD' },
-  ];
+  currency: IpackageOptions[];
 
   packageType: IpackageOptions[] = [
     { key: 'Complimentary', value: 'Complimentary' },
@@ -60,7 +58,8 @@ export class EditPackageComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private packageService: PackageService,
-    private _location: Location
+    private _location: Location,
+    private configService: ConfigService
   ) {
     this.initAddPackageForm();
   }
@@ -116,6 +115,7 @@ export class EditPackageComponent implements OnInit {
         ];
 
         this.getHotelId(this.globalQueries);
+        this.getConfig();
         this.getCategoriesList(this.hotelId);
         this.getPackageId();
       })
@@ -171,6 +171,26 @@ export class EditPackageComponent implements OnInit {
             );
         })
     );
+  }
+
+  getConfig() {
+    this.configService.$config.subscribe((response) => {
+      if (response) this.setCurrencyOptions(response.currencyConfiguration);
+      else this.getConfigByHotelID();
+    });
+  }
+
+  getConfigByHotelID() {
+    this.configService
+      .getColorAndIconConfig(this.hotelId)
+      .subscribe((response) => {
+        this.setCurrencyOptions(response.currencyConfiguration);
+      });
+  }
+
+  setCurrencyOptions(data) {
+    this.currency = new Array<IpackageOptions>();
+    data.forEach((d) => this.currency.push({ key: d.key, value: d.value }));
   }
 
   saveDetails(): void {

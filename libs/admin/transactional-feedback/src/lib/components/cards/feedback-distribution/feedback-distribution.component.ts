@@ -54,9 +54,11 @@ export class FeedbackDistributionComponent
   listenForOutletChanged() {
     this.statisticsService.outletChange.subscribe((response) => {
       if (response) {
-        this.globalQueries[this.globalQueries.length - 1] = {
-          outletsIds: this.statisticsService.outletIds,
-        };
+        this.globalQueries.forEach((element) => {
+          if (element.hasOwnProperty('outletsIds')) {
+            element.outletsIds = this.statisticsService.outletIds;
+          }
+        });
         this.getFeedbackDistribution();
       }
     });

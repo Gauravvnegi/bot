@@ -24,7 +24,7 @@
     </div>
     <div class="detail-container" *ngIf="globalNps">
       <div class="wrapper-stats">
-        <div class="val">{{ this.roundValue(globalNps.score) }}</div>
+        <div class="val">{{ roundValue(globalNps.score) }}</div>
         <div
           class="comparisonPercent"
           [ngClass]="{
@@ -52,9 +52,7 @@
   <div class="stat-vals-container" *ngIf="globalNps">
     <div class="stat-val-container">
       <div class="icon" [style.background]="'#EF1D45'"></div>
-      <div class="stat-val">
-        {{ this.roundValue(globalNps.negative.score) }}%
-      </div>
+      <div class="stat-val">{{ roundValue(globalNps.negative.score) }}%</div>
       <div class="stat-lable">Negative</div>
       <div
         class="stat-comparisonPercent"
@@ -63,7 +61,7 @@
           'comparison-negative': globalNps.negative.comparisonPercent < 0
         }"
       >
-        ({{ this.roundValue(globalNps.negative.comparisonPercent) }}%)
+        ({{ roundValue(globalNps.negative.comparisonPercent) }}%)
         <img
           [src]="
             globalNps.negative.comparisonPercent >= 0
@@ -76,9 +74,7 @@
     </div>
     <div class="stat-val-container">
       <div class="icon" [style.background]="'#4BA0F5'"></div>
-      <div class="stat-val">
-        {{ this.roundValue(globalNps.neutral.score) }}%
-      </div>
+      <div class="stat-val">{{ roundValue(globalNps.neutral.score) }}%</div>
       <div class="stat-lable">Neutral</div>
       <div
         class="stat-comparisonPercent"
@@ -87,7 +83,7 @@
           'comparison-negative': globalNps.neutral.comparisonPercent < 0
         }"
       >
-        ({{ this.roundValue(globalNps.neutral.comparisonPercent) }}%)
+        ({{ roundValue(globalNps.neutral.comparisonPercent) }}%)
         <img
           [src]="
             globalNps.neutral.comparisonPercent >= 0
@@ -100,9 +96,7 @@
     </div>
     <div class="stat-val-container">
       <div class="icon" [style.background]="'#1AB99F'"></div>
-      <div class="stat-val">
-        {{ this.roundValue(globalNps.positive.score) }}%
-      </div>
+      <div class="stat-val">{{ roundValue(globalNps.positive.score) }}%</div>
       <div class="stat-lable">Positive</div>
       <div
         class="stat-comparisonPercent"
@@ -111,7 +105,7 @@
           'comparison-negative': globalNps.positive.comparisonPercent < 0
         }"
       >
-        ({{ this.roundValue(globalNps.positive.comparisonPercent) }}%)
+        ({{ roundValue(globalNps.positive.comparisonPercent) }}%)
         <img
           [src]="
             globalNps.positive.comparisonPercent >= 0

@@ -73,7 +73,6 @@ export class FeedbackNotificationComponent extends NotificationComponent
   getConfigData(hotelId): void {
     this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
       this.config = new FeedbackNotificationConfig().deserialize(response);
-      this.templates.ids = this.config.templateIds;
       this.templates.hotelId = hotelId;
       this.initNotificationForm();
     });
@@ -89,28 +88,34 @@ export class FeedbackNotificationComponent extends NotificationComponent
     });
   }
 
-  fetchTemplate(templateId) {
-    if (templateId) {
-      const config = {
-        queryObj: this._adminUtilityService.makeQueryParams([
-          { templateType: 'TRANSACTIONAL' },
-        ]),
-      };
-      this.$subscription.add(
-        this.requestService
-          .getTemplate(this.hotelId, templateId, config)
-          .subscribe(
-            (response) => {
-              this.notificationForm
-                .get('message')
-                .patchValue(response.template);
-            },
-            ({ error }) => {
-              this._snackbarService.openSnackBarAsText(error.message);
-            }
-          )
-      );
+  handleChannelChange(event) {
+    this.notificationForm.patchValue({ templateId: '', message: '' });
+    this.templates.ids = this.config.templateIds.filter(
+      (template) => template.title === event.value
+    );
+    if (event.value === 'Sms') {
+      this.notificationForm.get('message').disable();
+      return;
     }
+    this.notificationForm.get('message').enable();
+  }
+
+  fetchTemplate(event) {
+    this.notificationForm.patchValue({ templateId: event.value.id });
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        { templateType: event.value.name },
+      ]),
+    };
+    this.$subscription.add(
+      this.requestService
+        .getTemplate(this.hotelId, event.value.id, config)
+        .subscribe(
+          (response) =>
+            this.notificationForm.get('message').patchValue(response.template),
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
   }
 
   sendMessage(): void {
@@ -140,7 +145,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
       message: data.message,
       messageType: 'TRANSACTIONAL',
     };
-
+    this.isSending = true;
     this.$subscription.add(
       this.requestService
         .createRequestData(this.templates.hotelId, requestData)

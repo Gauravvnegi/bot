@@ -76,7 +76,7 @@
 
 :host ::ng-deep .stat-title {
   letter-spacing: 0.96px;
-  color: black;
+  color: $black;
   font-weight: 700;
   @media screen and (max-width: 800px) {
     font-size: 12px;
@@ -94,22 +94,12 @@
     border: solid 1px $c-gray-89;
     border-radius: 5px;
     background: $white 0% 0% no-repeat padding-box;
-    &:hover {
-      cursor: pointer;
-      box-shadow: 0px 3px 20px #0368ff42;
-      border: 1px solid $primary-purple;
-    }
   }
   &__received-bifurcation {
     width: calc(50% - 7.5px);
     border: solid 1px $c-gray-89;
     border-radius: 5px;
     background: $white 0% 0% no-repeat padding-box;
-    &:hover {
-      cursor: pointer;
-      box-shadow: 0px 3px 20px #0368ff42;
-      border: 1px solid $primary-purple;
-    }
   }
 }
 .stats--wrapper {
@@ -125,11 +115,6 @@
     border: solid 1px $c-gray-89;
     box-shadow: 0px 3px 6px $box-shadow;
     border-radius: 5px;
-    &:hover {
-      cursor: pointer;
-      box-shadow: 0px 3px 20px #0368ff42;
-      border: 1px solid $primary-purple;
-    }
     @media screen and (max-width: 800px) {
       // height: 185px;
     }

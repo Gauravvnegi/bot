@@ -68,10 +68,6 @@
   }
 }
 
-// :host ::ng-deep .table-header-text {
-//   font-size: 13px;
-// }
-
 :host ::ng-deep .status-image {
   padding: 5px !important;
 }
@@ -112,11 +108,6 @@
     padding: 5px;
   }
 }
-
-// :host ::ng-deep .p-datatable {
-//   margin: 0 1.5%;
-//   margin-top: 20px;
-// }
 
 :host ::ng-deep .booking-feedback {
   display: flex;

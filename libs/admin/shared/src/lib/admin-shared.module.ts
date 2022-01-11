@@ -21,6 +21,7 @@ import { CardDirective } from './directives/card.directive';
 import { TableDirective } from './directives/table.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { ChannelDirective } from './directives/channel.directive';
+import { ClickableDirective } from './directives/clickable.directive';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { ChannelDirective } from './directives/channel.directive';
     TableDirective,
     FeatureDirective,
     ChannelDirective,
+    ClickableDirective,
   ],
   exports: [
     DatatableComponent,
@@ -63,7 +65,8 @@ import { ChannelDirective } from './directives/channel.directive';
     CardDirective,
     TableDirective,
     FeatureDirective,
-    ChannelDirective
+    ChannelDirective,
+    ClickableDirective,
   ],
 })
 export class AdminSharedModule {}

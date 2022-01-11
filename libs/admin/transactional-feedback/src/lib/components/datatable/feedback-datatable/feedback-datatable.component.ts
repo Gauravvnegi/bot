@@ -118,6 +118,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForOutletChanged();
   }
 
   /**
@@ -153,9 +154,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   listenForOutletChanged() {
     this.statisticService.outletChange.subscribe((response) => {
       if (response) {
-        this.globalQueries[this.globalQueries.length - 1] = {
-          outletsIds: this.statisticService.outletIds,
-        };
+        this.globalQueries.forEach((element) => {
+          if (element.hasOwnProperty('outletsIds')) {
+            element.outletsIds = this.statisticService.outletIds;
+          }
+        });
         this.loadInitialData([
           ...this.globalQueries,
           {

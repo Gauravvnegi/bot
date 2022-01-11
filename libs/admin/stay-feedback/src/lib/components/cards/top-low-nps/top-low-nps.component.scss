@@ -106,3 +106,7 @@
     min-width: 15vw !important;
   }
 }
+
+:host ::ng-deep .mat-tab-header {
+  border-bottom: 1px solid $tab-bottom-border;
+}

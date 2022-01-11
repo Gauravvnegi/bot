@@ -11,3 +11,4 @@ export * from './lib/components/datatable/base-datatable.component';
 export * from './lib/services/validator-service';
 export * from './lib/types/chart.type';
 export * from './lib/configs/translate';
+export * from './lib/services/config.service';

@@ -18,7 +18,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
 import { SnackBarService } from 'libs/shared/material/src/index.js';
 import { Subscription } from 'rxjs';
-import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
+// import * as ClassicEditor from '../../../../../../../apps/admin/src/assets/js/ckeditor/ckeditor.js';
 import { RequestConfig, RequestData } from '../../data-models/request.model.js';
 import { RequestService } from '../../services/request.service.js';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -29,6 +29,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
   styleUrls: ['./notification.component.scss'],
 })
 export class NotificationComponent implements OnInit {
+  templateData: string;
   attachment: string;
   templates = {
     ids: [],
@@ -45,9 +46,14 @@ export class NotificationComponent implements OnInit {
   isSending: boolean = false;
 
   ckeditorContent;
-  public Editor = ClassicEditor;
+  // public Editor = ClassicEditor;
 
-  ckeConfig = {};
+  ckeConfig = {
+    allowedContent: false,
+    extraPlugins: 'divarea',
+    forcePasteAsPlainText: true,
+    removePlugins: 'exportpdf',
+  };
   notificationForm: FormGroup;
 
   visible = true;
@@ -320,6 +326,14 @@ export class NotificationComponent implements OnInit {
 
   closeModal() {
     this.onModalClose.emit(true);
+  }
+
+  modifyTemplate(template: string) {
+    this.templateData = template;
+    return template.substring(
+      template.indexOf('<table'),
+      template.lastIndexOf('</div>')
+    );
   }
 
   get social_channels(): FormControl {

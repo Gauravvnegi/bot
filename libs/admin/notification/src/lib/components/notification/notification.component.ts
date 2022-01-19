@@ -49,10 +49,10 @@ export class NotificationComponent implements OnInit {
   // public Editor = ClassicEditor;
 
   ckeConfig = {
-    allowedContent: false,
-    extraPlugins: 'divarea',
-    forcePasteAsPlainText: true,
-    removePlugins: 'exportpdf',
+    // allowedContent: false,
+    // extraPlugins: 'divarea',
+    // forcePasteAsPlainText: true,
+    // removePlugins: 'exportpdf',
   };
   notificationForm: FormGroup;
 
@@ -334,6 +334,17 @@ export class NotificationComponent implements OnInit {
       template.indexOf('<table'),
       template.lastIndexOf('</div>')
     );
+  }
+
+  getTemplateMessage(data) {
+    return data.channel === 'email'
+      ? this.templateData.substring(0, this.templateData.indexOf('<table')) +
+          data.message +
+          this.templateData.substring(
+            this.templateData.lastIndexOf('</div'),
+            this.templateData.length
+          )
+      : data.message;
   }
 
   get social_channels(): FormControl {

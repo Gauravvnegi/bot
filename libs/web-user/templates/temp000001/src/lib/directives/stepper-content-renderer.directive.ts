@@ -22,7 +22,6 @@ import {
 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { BillSummaryDetailsWrapperComponent } from '../containers/bill-summary-details-wrapper/bill-summary-details-wrapper.component';
 import { DocumentsDetailsWrapperComponent } from '../containers/documents-details-wrapper/documents-details-wrapper.component';
-import { FeedbackDetailsWrapperComponent } from '../containers/feedback-details-wrapper/feedback-details-wrapper.component';
 import { GuestDetailsWrapperComponent } from '../containers/guest-details-wrapper/guest-details-wrapper.component';
 import { HealthDeclarationWrapperComponent } from '../containers/health-declaration-wrapper/health-declaration-wrapper.component';
 import { PaymentDetailsWrapperComponent } from '../containers/payment-details-wrapper/payment-details-wrapper.component';
@@ -55,7 +54,6 @@ const componentMapping: IComponentWrapperMapTemp000001 = {
   'health-declaration-wrapper': HealthDeclarationWrapperComponent,
   'payment-details-wrapper': PaymentDetailsWrapperComponent,
   'document-details-wrapper': DocumentsDetailsWrapperComponent,
-  'feedback-details-wrapper': FeedbackDetailsWrapperComponent,
   'bill-summary-details-wrapper': BillSummaryDetailsWrapperComponent,
   'summary-wrapper': SummaryWrapperComponent,
 };
@@ -67,7 +65,7 @@ export class StepperContentRendererDirective implements OnChanges {
   @Input() dataToPopulate;
 
   protected _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
-  protected stepperComponent=Temp000001StepperComponent;
+  protected stepperComponent = Temp000001StepperComponent;
   protected _isStepperRendered: boolean = false;
   protected componentMapping = componentMapping;
 

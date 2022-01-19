@@ -41,7 +41,6 @@ export type ComponentWrappersTemp000001 =
   | 'health-declaration-wrapper'
   | 'payment-details-wrapper'
   | 'document-details-wrapper'
-  | 'feedback-details-wrapper'
   | 'bill-summary-details-wrapper'
   | 'summary-wrapper';
 

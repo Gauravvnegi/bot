@@ -85,18 +85,9 @@ export class ThankYouMainComponent implements OnInit {
 
   getState() {
     this.state = this.route.snapshot.queryParamMap.get('state');
-    switch (this.state) {
-      case 'feedback':
-        this.config.description = 'Your feedback is completed successfully';
-        this.headerTitle = 'Feedback';
-        break;
-
-      default:
-        let { title } = this._hotelService.getCurrentJourneyConfig();
-        this.headerTitle = title;
-        this.config.description = `Your ${title} is completed successfully`;
-        break;
-    }
+    let { title } = this._hotelService.getCurrentJourneyConfig();
+    this.headerTitle = title;
+    this.config.description = `Your ${title} is completed successfully`;
   }
 
   ngOnDestroy() {

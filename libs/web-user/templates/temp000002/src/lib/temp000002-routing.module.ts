@@ -8,9 +8,6 @@ import { BillSummaryDetailsWrapperComponent } from './containers/bill-summary-de
 import { ComplimentaryAmenitiesComponent } from './containers/complimentary-amenities/complimentary-amenities.component';
 import { DocumentsDetailsComponent } from './containers/documents-details/documents-details.component';
 import { DocumentDetailsWrapperComponent } from './containers/document-details-wrapper/document-details-wrapper.component';
-import { FeedbackDetailsComponent } from './containers/feedback-details/feedback-details.component';
-import { FeedbackDetailsWrapperComponent } from './containers/feedback-details-wrapper/feedback-details-wrapper.component';
-import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
 import { FooterComponent } from './containers/footer/footer.component';
 import { GuestDetailsComponent } from './containers/guest-details/guest-details.component';
 import { GuestDetailsWrapperComponent } from './containers/guest-details-wrapper/guest-details-wrapper.component';
@@ -85,16 +82,6 @@ export const sharedAuthRoutes: Route[] = [
     ],
   },
   {
-    path: 'feedback',
-    component: Temp000002Component,
-    children: [
-      {
-        path: '',
-        component: FeedbackMainComponent,
-      },
-    ],
-  },
-  {
     path: 'thankyou',
     component: Temp000002Component,
     children: [
@@ -130,9 +117,6 @@ export class Temp000002RoutingModule {
     ComplimentaryAmenitiesComponent,
     DocumentsDetailsComponent,
     DocumentDetailsWrapperComponent,
-    FeedbackDetailsComponent,
-    FeedbackDetailsWrapperComponent,
-    FeedbackMainComponent,
     FooterComponent,
     GuestDetailsComponent,
     GuestDetailsWrapperComponent,
@@ -163,6 +147,6 @@ export class Temp000002RoutingModule {
     Temp000002InputPopupComponent,
     Temp000002RadioComponent,
     InvoiceNotGeneratedComponent,
-    CancelBookingComponent
+    CancelBookingComponent,
   ];
 }

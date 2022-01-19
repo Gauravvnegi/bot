@@ -13,7 +13,6 @@ import { ReservationService } from 'libs/web-user/shared/src/lib/services/bookin
 import { ComplimentaryService } from 'libs/web-user/shared/src/lib/services/complimentary.service';
 import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
-import { FeedbackDetailsService } from 'libs/web-user/shared/src/lib/services/feedback-details.service';
 import { GuestDetailsService } from 'libs/web-user/shared/src/lib/services/guest-details.service';
 import { HealthDetailsService } from 'libs/web-user/shared/src/lib/services/health-details.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
@@ -87,7 +86,6 @@ import { QuestionnaireComponent } from './containers/questionnaire/questionnaire
     GuestDetailsService,
     DocumentDetailsService,
     PaymentDetailsService,
-    FeedbackDetailsService,
     ReservationSummaryService,
     BillSummaryService,
     HealthDetailsService,

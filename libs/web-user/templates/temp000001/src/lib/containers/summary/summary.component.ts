@@ -34,14 +34,6 @@ export class SummaryComponent implements OnInit {
     this.reservationData = this._reservationService.reservationData;
   }
 
-  openFeedback() {
-    this.router.navigateByUrl(
-      `/feedback?token=${this.route.snapshot.queryParamMap.get(
-        'token'
-      )}&entity=feedback`
-    );
-  }
-
   goToDocumentsStep(event: any, ...args: any) {
     this._stepperService.jumpToStep(3);
   }

@@ -8,9 +8,6 @@ import { BillSummaryDetailsComponent } from './containers/bill-summary-details/b
 import { ComplimentaryAmenitiesComponent } from './containers/complimentary-amenities/complimentary-amenities.component';
 import { DocumentsDetailsWrapperComponent } from './containers/documents-details-wrapper/documents-details-wrapper.component';
 import { DocumentsDetailsComponent } from './containers/documents-details/documents-details.component';
-import { FeedbackDetailsWrapperComponent } from './containers/feedback-details-wrapper/feedback-details-wrapper.component';
-import { FeedbackDetailsComponent } from './containers/feedback-details/feedback-details.component';
-import { FeedbackMainComponent } from './containers/feedback-main/feedback-main.component';
 import { FooterComponent } from './containers/footer/footer.component';
 import { GuestDetailsWrapperComponent } from './containers/guest-details-wrapper/guest-details-wrapper.component';
 import { GuestDetailsComponent } from './containers/guest-details/guest-details.component';
@@ -86,16 +83,6 @@ export const sharedAuthRoutes: Route[] = [
     ],
   },
   {
-    path: 'feedback',
-    component: Temp000001Component,
-    children: [
-      {
-        path: '',
-        component: FeedbackMainComponent,
-      },
-    ],
-  },
-  {
     path: 'thankyou',
     component: Temp000001Component,
     children: [
@@ -138,8 +125,6 @@ export class Temp000001RoutingModule {
     DocumentsDetailsWrapperComponent,
     HeaderComponent,
     StatusComponent,
-    FeedbackDetailsComponent,
-    FeedbackDetailsWrapperComponent,
     FooterComponent,
     BillSummaryDetailsComponent,
     BillSummaryDetailsWrapperComponent,
@@ -155,7 +140,6 @@ export class Temp000001RoutingModule {
     AirportFacilitiesComponent,
     DefaultAmenityComponent,
     PaymentMainComponent,
-    FeedbackMainComponent,
     SummaryMainComponent,
     ThankYouMainComponent,
     PaidAmenitiesComponent,

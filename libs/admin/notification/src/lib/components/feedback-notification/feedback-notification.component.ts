@@ -114,7 +114,11 @@ export class FeedbackNotificationComponent extends NotificationComponent
           (response) =>
             this.notificationForm
               .get('message')
-              .patchValue(this.modifyTemplate(response.template)),
+              .patchValue(
+                this.notificationForm.get('channel').value === 'email'
+                  ? this.modifyTemplate(response.template)
+                  : response.template
+              ),
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )
     );
@@ -144,16 +148,9 @@ export class FeedbackNotificationComponent extends NotificationComponent
       roomNumbers: data.roomNumbers,
       sources: [data.channel],
       emailIds: data.emailIds,
-      message:
-        this.templateData.substring(0, this.templateData.indexOf('<table')) +
-        data.message +
-        this.templateData.substring(
-          this.templateData.lastIndexOf('</div'),
-          this.templateData.length
-        ),
+      message: this.getTemplateMessage(data),
       messageType: 'TRANSACTIONAL',
     };
-    console.log(requestData.message);
     this.isSending = true;
     this.$subscription.add(
       this.requestService

@@ -19,29 +19,6 @@
         font-size: $font-small;
       }
     }
-    &-feedback {
-      color: $primary-blue;
-      text-decoration: underline;
-      text-decoration-color: $primary-blue;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      width: 33%;
-      &:hover {
-        cursor: pointer;
-      }
-      .feedback-icon {
-        height: 25px;
-        filter: invert(40%) sepia(11%) saturate(443%) hue-rotate(196deg)
-          brightness(99%) contrast(89%);
-        margin-right: $margin-small;
-      }
-      .feedback-label {
-        @media screen and (max-width: $M) {
-          display: none;
-        }
-      }
-    }
     @media screen and (max-width: $M) {
       display: none;
     }
@@ -59,20 +36,6 @@
     font-weight: $bolder;
     text-align: center;
     font-size: $font-small;
-  }
-  &-feedback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: $margin-large;
-    img {
-      height: 20px;
-      margin-right: 8px;
-    }
-    p {
-      font-weight: $bold;
-      font-size: $font-small;
-    }
   }
   @media screen and (max-width: $M) {
     display: flex;

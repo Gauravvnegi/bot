@@ -30,33 +30,6 @@
   right: 14px;
   top: -13px;
 }
-.feedback {
-  color: $primary-blue;
-  text-decoration: underline;
-  text-decoration-color: $primary-blue;
-  display: flex;
-  align-items: flex-end;
-
-  justify-content: flex-end;
-  width: 33%;
-  &:hover {
-    cursor: pointer;
-  }
-  .feedback-icon {
-    height: 25px;
-    filter: invert(40%) sepia(11%) saturate(443%) hue-rotate(196deg)
-      brightness(99%) contrast(89%);
-    margin-right: $margin-small;
-  }
-  .feedback-label {
-    @media screen and (max-width: 700px) {
-      display: none;
-    }
-  }
-  @media screen and (max-width: 700px) {
-    width: 15%;
-  }
-}
 
 .temp-div {
   width: 33%;

@@ -48,13 +48,4 @@ export class HeaderSummaryComponent implements OnInit {
   closeModal() {
     this.dialogRef.close();
   }
-
-  openFeedback() {
-    this.closeModal();
-    this.router.navigateByUrl(
-      `/feedback?token=${this.route.snapshot.queryParamMap.get(
-        'token'
-      )}&entity=feedback`
-    );
-  }
 }

@@ -112,7 +112,13 @@ export class FeedbackNotificationComponent extends NotificationComponent
         .getTemplate(this.hotelId, event.value.id, config)
         .subscribe(
           (response) =>
-            this.notificationForm.get('message').patchValue(response.template),
+            this.notificationForm
+              .get('message')
+              .patchValue(
+                this.notificationForm.get('channel').value === 'email'
+                  ? this.modifyTemplate(response.template)
+                  : response.template
+              ),
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )
     );
@@ -142,7 +148,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
       roomNumbers: data.roomNumbers,
       sources: [data.channel],
       emailIds: data.emailIds,
-      message: data.message,
+      message: this.getTemplateMessage(data),
       messageType: 'TRANSACTIONAL',
     };
     this.isSending = true;

@@ -19,5 +19,38 @@
   "in_thirty_days": "In 30 Days",
   "request_feedback_label": "Request Feedback",
   "no_data_available": "No data available in table",
-  "no_data_chart": "No Data"
+  "no_data_chart": "No Data",
+  "bifurcation": { "title": "Bifurcations" },
+  "nps_across_pos": {
+    "title": "NPS Across Point of Sale",
+    "outlet_label": "Outlets",
+    "nps_across_touchpoints": "NPS Across All Touchpoints"
+  },
+  "notes": {
+    "closed_by_admin": "Closed by Admin",
+    "closed_date": "Closed Date",
+    "closed_time": "Closed Time",
+    "add_notes": "Add Notes",
+    "edit": "Edit",
+    "close": "Close",
+    "submit": "Submit",
+    "add_modal_title": "Please add notes in order to close this feedback"
+  },
+  "datatable": {
+    "mark_as_read": "Mark as Read",
+    "mark_as_unread": "Mark as Unread",
+    "view_notes": "View Notes",
+    "add_notes": "+Notes",
+    "no_data_available": "No data available in table"
+  },
+  "messages": {
+    "validation": {
+      "notes_remarks": "Please add remarks.",
+      "select_record_status": "Please select a record to be marked as {{status}}."
+    },
+    "success": {
+      "feedback_closed": "Feedback Closed successfully",
+      "feedback_status_updated": "'Status updated.'"
+    }
+  }
 }

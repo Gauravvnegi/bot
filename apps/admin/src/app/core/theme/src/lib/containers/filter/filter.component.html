@@ -195,6 +195,15 @@
               (change)="handleFeedbackTypeChange($event)"
               >Transactional</mat-radio-button
             >
+            <mat-radio-button
+              *ngIf="
+                checkForStayFeedbackSubscribed() &&
+                checkForTransactionFeedbackSubscribed()
+              "
+              value="Both"
+              (change)="handleFeedbackTypeChange($event)"
+              >Both</mat-radio-button
+            >
             <!-- <mat-radio-button value="Both">Both</mat-radio-button> -->
           </mat-radio-group>
         </div>

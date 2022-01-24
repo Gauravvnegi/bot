@@ -285,12 +285,10 @@ export class LayoutOneComponent implements OnInit {
       (response) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
-        location.reload();
       },
       (error) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
-        location.reload();
       }
     );
   }

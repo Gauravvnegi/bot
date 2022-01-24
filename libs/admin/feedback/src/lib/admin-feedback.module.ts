@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminSharedModule,
   getTranslationConfigs,
+  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { AdminFeedbackRoutingModule } from './admin-feedback.routing.module';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
@@ -14,6 +15,7 @@ import { AdminGuestDetailModule } from '@hospitality-bot/admin/guest-detail';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { FeedbackTableService } from './services/table.service';
 
 @NgModule({
   imports: [
@@ -31,5 +33,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
+  providers: [StatisticsService, FeedbackTableService],
 })
 export class AdminFeedbackModule {}

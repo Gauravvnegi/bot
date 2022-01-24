@@ -78,12 +78,6 @@
       ],
       "@hospitality-bot/admin/analytics": ["libs/admin/analytics/src/index.ts"],
       "@hospitality-bot/admin/whatsapp": ["libs/admin/whatsapp/src/index.ts"],
-      "@hospitality-bot/admin/transactional-feedback": [
-        "libs/admin/transactional-feedback/src/index.ts"
-      ],
-      "@hospitality-bot/admin/stay-feedback": [
-        "libs/admin/stay-feedback/src/index.ts"
-      ],
       "@hospitality-bot/admin/core/theme": [
         "apps/admin/src/app/core/theme/src/index.ts"
       ]

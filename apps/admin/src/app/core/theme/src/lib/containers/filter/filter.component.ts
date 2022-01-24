@@ -197,7 +197,17 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   handleFeedbackTypeChange(event) {
-    this.updateOutletsValue(event.value === 'Transactional');
+    switch (event.value) {
+      case 'Transactional':
+        this.updateOutletsValue(true);
+        break;
+      case 'Stay Experience':
+        this.updateOutletsValue(false);
+        break;
+      case 'Both':
+        this.updateOutletsValue(true);
+        break;
+    }
   }
 
   checkForTransactionFeedbackSubscribed() {

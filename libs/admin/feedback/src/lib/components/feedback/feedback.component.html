@@ -247,6 +247,12 @@
             [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossPOS"
             [globalFeedbackFilterType]="globalFeedbackFilterType"
           ></hospitality-bot-point-of-sale
+          ><hospitality-bot-transactional-datatable
+            tableSubscribed
+            [path]="
+              'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
+            "
+          ></hospitality-bot-transactional-datatable
         ></ng-container>
         <ng-container *ngSwitchCase="feedbackConfig.types.both"
           ><hospitality-bot-nps-across-departments
@@ -263,7 +269,13 @@
             cardSubscribed
             [path]="'FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossPOS"
             [globalFeedbackFilterType]="globalFeedbackFilterType"
-          ></hospitality-bot-point-of-sale
+          ></hospitality-bot-point-of-sale>
+          <hospitality-bot-transactional-datatable
+            tableSubscribed
+            [path]="
+              'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
+            "
+          ></hospitality-bot-transactional-datatable
         ></ng-container>
       </ng-container>
     </ng-container>

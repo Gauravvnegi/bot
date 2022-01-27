@@ -68,11 +68,13 @@ export class FeedbackComponent {
         if (
           this.globalFeedbackFilterType === feedback.types.transactional ||
           this.globalFeedbackFilterType === feedback.types.both
-        )
+        ) {
+          this.tabFilterIdx = 0;
           this.getOutletsSelected(
             [...data['feedback'].queryValue],
             data['filter'].value
           );
+        }
       })
     );
   }
@@ -109,7 +111,7 @@ export class FeedbackComponent {
         disabled: false,
         total: 0,
         chips: [],
-        type: feedback.types.transactional,
+        type: feedback.types.stay,
       });
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
@@ -151,13 +153,10 @@ export class FeedbackComponent {
 
     this.statisticsService.outletIds =
       event.index === 0
-        ? this.outlets
-            .map((outlet) => {
-              if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
-            })
-            .filter((outlet) => outlet !== undefined)
+        ? this.tabFilterItems
+            .map((item) => item.value)
+            .filter((value) => value != 'ALL')
         : [this.tabFilterItems[this.tabFilterIdx].value];
-
     this.statisticsService.outletChange.next(true);
   }
 

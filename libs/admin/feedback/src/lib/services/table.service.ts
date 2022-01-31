@@ -14,7 +14,7 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with guest feedback data.
    */
   getGuestFeedbacks(config): Observable<any> {
-    return this.get(`/api/v1/transactional-feedback/guests${config.queryObj}`);
+    return this.get(`/api/v1/feedback/guests${config.queryObj}`);
   }
 
   /**
@@ -24,7 +24,7 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with updated notes data.
    */
   updateNotes(id: string, data: UpdateNoteData): Observable<any> {
-    return this.patch(`/api/v1/transactional-feedback/${id}/notes`, data);
+    return this.patch(`/api/v1/feedback/${id}/notes`, data);
   }
 
   /**
@@ -33,9 +33,7 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with feedback pdf.
    */
   getFeedbackPdf(id: string): Observable<any> {
-    return this.get(
-      `/api/v1/transactional-feedback/${id}/download-feedback-form`
-    );
+    return this.get(`/api/v1/feedback/${id}/download-feedback-form`);
   }
 
   /**
@@ -44,7 +42,7 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with CSV blob.
    */
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/transactional-feedback/export${config.queryObj}`, {
+    return this.get(`/api/v1/feedback/export${config.queryObj}`, {
       responseType: 'blob',
     });
   }
@@ -56,9 +54,6 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with updated feedback data.
    */
   updateFeedbackStatus(config, data: UpdateStatusData): Observable<any> {
-    return this.patch(
-      `/api/v1/transactional-feedback/status${config.queryObj}`,
-      data
-    );
+    return this.patch(`/api/v1/feedback/status${config.queryObj}`, data);
   }
 }

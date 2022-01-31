@@ -171,8 +171,9 @@ export class PointOfSaleComponent implements OnInit {
           ? [
               ...this.globalQueries,
               {
-                outletsIds: [this.tabFilterItems[this.tabFilterIdx].value],
+                entityIds: [this.tabFilterItems[this.tabFilterIdx].value],
                 graphType: this.chartType === 'bar' ? 'vertical' : '',
+                feedbackType: this.globalFeedbackConfig.types.transactional,
               },
               ...this.getSelectedQuickReplyFilters(),
             ]
@@ -197,7 +198,7 @@ export class PointOfSaleComponent implements OnInit {
    */
   addChipsToFilters(): void {
     this.chips = [];
-    if (this.stats.chipLabels.length > 1) {
+    if (this.stats.chipLabels?.length > 1) {
       this.chips.push({
         label: 'Overall',
         icon: '',
@@ -308,7 +309,8 @@ export class PointOfSaleComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          outletsIds: [this.tabFilterItems[this.tabFilterIdx].value],
+          entityIds: [this.tabFilterItems[this.tabFilterIdx].value],
+          feedbackType: this.globalFeedbackConfig.types.transactional,
         },
       ]),
     };

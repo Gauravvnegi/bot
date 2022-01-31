@@ -82,7 +82,7 @@ export class SharedComponent implements OnInit {
           )
             this.globalQueries = [
               ...this.globalQueries,
-              { outletsIds: this._statisticService.outletIds },
+              { entityIds: this._statisticService.outletIds },
             ];
           this.getStats();
         },
@@ -104,8 +104,8 @@ export class SharedComponent implements OnInit {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {
         this.globalQueries.forEach((element) => {
-          if (element.hasOwnProperty('outletsIds')) {
-            element.outletsIds = this._statisticService.outletIds;
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this._statisticService.outletIds;
           }
         });
         this.getStats();
@@ -118,7 +118,10 @@ export class SharedComponent implements OnInit {
    */
   getStats(): void {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { feedbackType: this.globalFeedbackFilterType },
+      ]),
     };
     this.$subscription.add(
       this._statisticService.getSharedStats(config).subscribe((response) => {

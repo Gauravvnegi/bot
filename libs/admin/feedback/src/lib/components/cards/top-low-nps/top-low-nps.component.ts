@@ -29,6 +29,10 @@ export class TopLowNpsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.tabFilterItems =
+      this.globalFeedbackFilterType === feedback.types.transactional
+        ? feedback.tabFilterItems.topLowNPS.transactional
+        : feedback.tabFilterItems.topLowNPS.stay;
     this.registerListeners();
   }
 
@@ -55,7 +59,7 @@ export class TopLowNpsComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            { outletsIds: this.statisticsService.outletIds },
+            { entityIds: this.statisticsService.outletIds },
           ];
         this.getPerformanceNps();
       })
@@ -66,8 +70,8 @@ export class TopLowNpsComponent implements OnInit {
     this.statisticsService.outletChange.subscribe((response) => {
       if (response) {
         this.globalQueries.forEach((element) => {
-          if (element.hasOwnProperty('outletsIds')) {
-            element.outletsIds = this.statisticsService.outletIds;
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this.statisticsService.outletIds;
           }
         });
         this.getPerformanceNps();
@@ -77,7 +81,7 @@ export class TopLowNpsComponent implements OnInit {
 
   progressItems = [];
 
-  tabFilterItems = feedback.tabFilterItems.topLowNPS;
+  tabFilterItems;
 
   tabFilterIdx: number = 0;
 
@@ -90,7 +94,8 @@ export class TopLowNpsComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          npsFilter: this.tabFilterItems[this.tabFilterIdx].value,
+          npsFilter: this.tabFilterItems[this.tabFilterIdx]?.value,
+          feedbackType: this.globalFeedbackFilterType,
         },
       ]),
     };

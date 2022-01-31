@@ -264,6 +264,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          feedbackType: this.feedbackConfig.types.stay,
           departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
             : 'FRONTOFFICE',
@@ -307,6 +308,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         {
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          feedbackType: this.globalFeedbackFilterType,
         },
         // ...this.getSelectedQuickReplyFilters(),
       ]),

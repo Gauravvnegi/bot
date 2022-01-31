@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -10,10 +10,8 @@ import {
   BaseDatatableComponent,
   FeedbackService,
   HotelDetailService,
-  ModuleNames,
   sharedConfig,
   StatisticsService,
-  TableNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -43,6 +41,7 @@ import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.comp
 })
 export class TransactionalDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  @Input() globalFeedbackFilterType: string;
   globalFeedbackConfig = feedback;
   tableName = feedback.table.name;
   outlets = [];
@@ -60,17 +59,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
 
   chips = feedback.chips.feedbackDatatable;
 
-  tabFilterItems = [
-    {
-      label: 'Transactional ',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: this.chips,
-      lastPage: 0,
-    },
-  ];
+  tabFilterItems;
   tabFilterIdx: number = 0;
   globalQueries = [];
   $subscription = new Subscription();
@@ -91,18 +80,25 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.setTabFilters();
     this.registerListeners();
-    this.getSubscribedFilters(
-      ModuleNames.FEEDBACK,
-      TableNames.FEEDBACK,
-      this.tabFilterItems
-    );
     this.documentActionTypes.push({
       label: `Export Summary`,
       value: 'summary',
       type: '',
       defaultLabel: 'Export Summary',
     });
+  }
+
+  /**
+   * @function setTabFilters To set tab filters based on filter.
+   */
+  setTabFilters() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
+    else if (this.globalFeedbackFilterType === feedback.types.stay)
+      this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
+    else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
   }
 
   /**
@@ -130,7 +126,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
-          { outletsIds: this.statisticService.outletIds },
+          { entityIds: this.statisticService.outletIds },
         ];
         this.getHotelId(this.globalQueries);
         this.getOutlets(data['filter'].value.property.branchName);
@@ -139,7 +135,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            // entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
         ]);
@@ -154,15 +150,15 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
     this.statisticService.outletChange.subscribe((response) => {
       if (response) {
         this.globalQueries.forEach((element) => {
-          if (element.hasOwnProperty('outletsIds')) {
-            element.outletsIds = this.statisticService.outletIds;
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this.statisticService.outletIds;
           }
         });
         this.loadInitialData([
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            // entityType: 'TRANSACTIONALFEEDBACK',
           },
           ...this.getSelectedQuickReplyFilters(),
         ]);
@@ -276,7 +272,12 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
     this.resetRowSelection();
     queries.push(defaultProps);
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(queries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...queries,
+        {
+          feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+      ]),
     };
 
     return this.tableService.getGuestFeedbacks(config);
@@ -295,7 +296,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            // entityType: 'TRANSACTIONAL',
           },
           ...this.getSelectedQuickReplyFilters(),
         ],
@@ -405,7 +406,8 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
       ...this.globalQueries,
       {
         order: sharedConfig.defaultOrder,
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        // entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
       },
       ...this.getSelectedQuickReplyFilters(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),
@@ -467,7 +469,8 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+          // entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -499,7 +502,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
               ...this.globalQueries,
               {
                 order: sharedConfig.defaultOrder,
-                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+                // entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
               ...this.getSelectedQuickReplyFilters(),
             ],
@@ -597,7 +600,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
                     ...this.globalQueries,
                     {
                       order: sharedConfig.defaultOrder,
-                      entityType: this.tabFilterItems[this.tabFilterIdx].value,
+                      // entityType: this.tabFilterItems[this.tabFilterIdx].value,
                     },
                     ...this.getSelectedQuickReplyFilters(),
                   ],

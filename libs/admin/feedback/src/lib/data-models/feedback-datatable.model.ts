@@ -59,7 +59,7 @@ export class Feedback {
       set({}, 'updated', get(input, ['updated']))
     );
     this.outlet = outlets.filter(
-      (outlet) => outlet.id === input.outletId
+      (outlet) => outlet.id === input.entityId
     )[0].name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guest = new Guest().deserialize(input.guestId);

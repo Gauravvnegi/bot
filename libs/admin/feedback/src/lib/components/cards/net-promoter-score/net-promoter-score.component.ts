@@ -105,7 +105,7 @@ export class NetPromoterScoreComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            { outletsIds: this._statisticService.outletIds },
+            { entityIds: this._statisticService.outletIds },
           ];
         this.getNPSChartData();
       })
@@ -116,8 +116,8 @@ export class NetPromoterScoreComponent implements OnInit {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {
         this.globalQueries.forEach((element) => {
-          if (element.hasOwnProperty('outletsIds')) {
-            element.outletsIds = this._statisticService.outletIds;
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this._statisticService.outletIds;
           }
         });
         this.getNPSChartData();
@@ -176,7 +176,10 @@ export class NetPromoterScoreComponent implements OnInit {
    */
   protected getNPSChartData(): void {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { feedbackType: this.globalFeedbackFilterType },
+      ]),
     };
     this.$subscription.add(
       this._statisticService.getOverallNPSStatistics(config).subscribe(
@@ -208,6 +211,7 @@ export class NetPromoterScoreComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          feedbackType: this.globalFeedbackFilterType,
         },
       ]),
     };

@@ -171,10 +171,9 @@ export class FeedbackComponent {
     detailCompRef.componentInstance.hotelId = this.hotelId;
 
     this.$subscription.add(
-      detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-        // remove loader for detail close
-        detailCompRef.close();
-      })
+      detailCompRef.componentInstance.onModalClose.subscribe((res) =>
+        detailCompRef.close()
+      )
     );
   }
 

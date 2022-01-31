@@ -162,6 +162,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   getSubscribedFilters(module, table, tabFilters) {
+    debugger;
     this.tabFilterItems = this.tabFilterService.getSubscribedFilters(
       module,
       table,

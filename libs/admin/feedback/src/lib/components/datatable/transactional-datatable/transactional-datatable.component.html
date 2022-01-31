@@ -122,7 +122,7 @@
               </div>
             </div>
           </div>
-          <div *ngIf="isTabFilters">
+          <div *ngIf="isTabFilters && tabFilterItems">
             <hospitality-bot-tab-group
               [listItems]="tabFilterItems"
               [selectedIndex]="tabFilterIdx"
@@ -131,7 +131,7 @@
           </div>
         </div>
         <div
-          *ngIf="tabFilterItems[tabFilterIdx].chips.length"
+          *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length"
           class="caption__wrapper--buttons"
         >
           <div class="button__wrapper">

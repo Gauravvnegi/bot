@@ -96,7 +96,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   protected getNPSChartData(): void {
     this.loading = true;
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { feedbackType: this.feedbackConfig.types.stay },
+      ]),
     };
     this.$subscription.add(
       this._statisticService.getDepartmentsStatistics(config).subscribe(
@@ -131,6 +134,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          feedbackType: this.globalFeedbackFilterType,
         },
       ]),
     };

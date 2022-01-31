@@ -74,7 +74,7 @@ export class FeedbackDistributionComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            { outletsIds: this.statisticsService.outletIds },
+            { entityIds: this.statisticsService.outletIds },
           ];
         this.getFeedbackDistribution();
       })
@@ -85,8 +85,8 @@ export class FeedbackDistributionComponent implements OnInit {
     this.statisticsService.outletChange.subscribe((response) => {
       if (response) {
         this.globalQueries.forEach((element) => {
-          if (element.hasOwnProperty('outletsIds')) {
-            element.outletsIds = this.statisticsService.outletIds;
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this.statisticsService.outletIds;
           }
         });
         this.getFeedbackDistribution();
@@ -129,7 +129,10 @@ export class FeedbackDistributionComponent implements OnInit {
   getFeedbackDistribution() {
     this.loading = true;
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { feedbackType: this.globalFeedbackFilterType },
+      ]),
     };
     this.statisticsService.feedbackDistribution(config).subscribe(
       (response) => {

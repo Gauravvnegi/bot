@@ -290,10 +290,15 @@ export class Data {
 
 export class NPOS {
   data: Outlet[];
+  chipLabels: string[];
 
   deserialize(input) {
     this.data = new Array<Outlet>();
-    input.forEach((data) => this.data.push(new Outlet().deserialize(data)));
+    this.chipLabels = new Array<string>();
+    input.forEach((data) => {
+      this.data.push(new Outlet().deserialize(data));
+      this.chipLabels.push(data.label);
+    });
     return this;
   }
 }

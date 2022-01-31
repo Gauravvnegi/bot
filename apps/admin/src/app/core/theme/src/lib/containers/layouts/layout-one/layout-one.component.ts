@@ -151,7 +151,7 @@ export class LayoutOneComponent implements OnInit {
         ]),
       },
       feedback: {
-        feedbackType: 'Transactional',
+        feedbackType: 'TRANSACTIONALFEEDBACK',
       },
       outlets: this.getOutletIds(),
     });

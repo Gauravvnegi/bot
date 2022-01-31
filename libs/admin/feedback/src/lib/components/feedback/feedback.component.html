@@ -74,6 +74,9 @@
         [path]="'feedback.cards.' + cards.NPSAcrossServices"
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-nps-across-services>
+      <hospitality-bot-transactional-datatable
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      ></hospitality-bot-transactional-datatable>
     </ng-container>
     <ng-container *ngSwitchCase="feedbackConfig.types.transactional">
       <div class="feedback-container__header">
@@ -157,6 +160,7 @@
         [path]="
           'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
         "
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-transactional-datatable>
     </ng-container>
     <ng-container *ngSwitchCase="feedbackConfig.types.both">
@@ -275,6 +279,7 @@
             [path]="
               'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
             "
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
           ></hospitality-bot-transactional-datatable
         ></ng-container>
       </ng-container>

@@ -1,33 +1,54 @@
+import { Component } from '@angular/core';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
-  Component,
-  OnInit,
-  Compiler,
-  Injector,
-  ViewChild,
-  ViewContainerRef,
-  Type,
-} from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+  CardNames,
+  TableNames,
+  HotelDetailService,
+  StatisticsService,
+} from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
+import { feedback } from '../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss'],
 })
-export class FeedbackComponent implements OnInit {
-  @ViewChild('container', { read: ViewContainerRef })
-  container: ViewContainerRef;
+export class FeedbackComponent {
+  feedbackConfig = feedback;
+  public cards = CardNames;
+  tables = TableNames;
+  hotelId: string;
   $subscription = new Subscription();
-  trasactionalModuleLoad = false;
+  globalFeedbackFilterType = '';
+  outlets;
+  outletIds;
 
+  tabFilterIdx = 0;
+  tabFilterItems = [
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: [],
+      type: 'Both',
+    },
+  ];
   constructor(
-    private compiler: Compiler,
-    private injector: Injector,
-    private _globalFilterService: GlobalFilterService
+    protected _modal: ModalService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _hotelDetailService: HotelDetailService,
+    protected statisticsService: StatisticsService,
+    protected subscriptionPlanService: SubscriptionPlanService
   ) {}
 
-  public ngOnInit() {
+  ngOnInit(): void {
     this.registerListeners();
   }
 
@@ -38,44 +59,131 @@ export class FeedbackComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.trasactionalModuleLoad =
-          data['filter'].value.feedback.feedbackType === 'Transactional';
-        this.loadModules();
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.globalFeedbackFilterType =
+          data['filter'].value.feedback.feedbackType;
+        if (
+          this.globalFeedbackFilterType === feedback.types.transactional ||
+          this.globalFeedbackFilterType === feedback.types.both
+        ) {
+          this.tabFilterIdx = 0;
+          this.getOutletsSelected(
+            [...data['feedback'].queryValue],
+            data['filter'].value
+          );
+        }
       })
     );
   }
 
-  async loadModules() {
-    if (this.trasactionalModuleLoad) {
-      this.loadModule(
-        await import(
-          'libs/admin/transactional-feedback/src/lib/admin-transactional-feedback.module'
-        ).then((m) => m.AdminTransactionalFeedbackModule)
-      );
-    } else {
-      this.loadModule(
-        await import(
-          'libs/admin/stay-feedback/src/lib/admin-stay-feedback.module'
-        ).then((m) => m.AdminStayFeedbackModule)
-      );
-    }
+  getOutlets(branchId, brandId) {
+    const branch = this._hotelDetailService.hotelDetails.brands
+      .find((brand) => brand.id === brandId)
+      .branches.find((branch) => branch['id'] == branchId);
+    this.outlets = branch.outlets;
+    this.statisticsService.outletIds = this.outlets
+      .map((outlet) => {
+        if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
+      })
+      .filter((id) => id !== undefined);
+    this.tabFilterItems = [
+      {
+        label: 'Overall',
+        content: '',
+        value: 'ALL',
+        disabled: false,
+        total: 0,
+        chips: [],
+        type:
+          this.globalFeedbackFilterType === feedback.types.both
+            ? feedback.types.both
+            : feedback.types.transactional,
+      },
+    ];
+    if (this.globalFeedbackFilterType === feedback.types.both)
+      this.tabFilterItems.push({
+        label: branch.name,
+        content: '',
+        value: branch.id,
+        disabled: false,
+        total: 0,
+        chips: [],
+        type: feedback.types.stay,
+      });
+    this.outlets.forEach((outlet) => {
+      if (this.outletIds[outlet.id]) {
+        this.tabFilterItems.push({
+          label: outlet.name,
+          content: '',
+          value: outlet.id,
+          disabled: false,
+          total: 0,
+          chips: [],
+          type: feedback.types.transactional,
+        });
+      }
+    });
   }
 
-  async loadModule(module: Type<any>) {
-    let ref;
-    try {
-      this.container.clear();
-      const moduleFactory = await this.compiler.compileModuleAsync(module);
-      const moduleRef: any = moduleFactory.create(this.injector);
-      const componentFactory = moduleRef.instance.resolveComponent(); // ASSERTION ERROR
-      ref = this.container.createComponent(
-        componentFactory,
-        null,
-        moduleRef.injector
-      );
-    } catch (e) {
-      console.error(e);
-    }
-    return ref;
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  getOutletsSelected(globalQueries, globalQueryValue) {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
+    });
+    this.getOutlets(
+      globalQueryValue.property.branchName,
+      globalQueryValue.property.hotelName
+    );
+  }
+
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+
+    this.statisticsService.outletIds =
+      event.index === 0
+        ? this.tabFilterItems
+            .map((item) => item.value)
+            .filter((value) => value != 'ALL')
+        : [this.tabFilterItems[this.tabFilterIdx].value];
+    this.statisticsService.outletChange.next(true);
+  }
+
+  openFeedbackRequestPage(event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const detailCompRef = this._modal.openDialog(
+      FeedbackNotificationComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.hotelId = this.hotelId;
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onModalClose.subscribe((res) =>
+        detailCompRef.close()
+      )
+    );
+  }
+
+  checkForStaySubscribed() {
+    return this.subscriptionPlanService.getModuleSubscription().modules.feedback
+      .active;
+  }
+
+  checkForTransactionalSubscribed() {
+    return this.subscriptionPlanService.getModuleSubscription().modules
+      .FEEDBACK_TRANSACTIONAL.active;
   }
 }

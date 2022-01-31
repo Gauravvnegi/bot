@@ -66,8 +66,8 @@ export class FilterComponent implements OnChanges, OnInit {
       feedback: this._fb.group({
         feedbackType: [
           this.checkForTransactionFeedbackSubscribed()
-            ? 'Transactional'
-            : 'Stay Experience',
+            ? 'TRANSACTIONALFEEDBACK'
+            : 'STAYFEEDBACK',
         ],
       }),
       outlets: this._fb.group({}),
@@ -128,7 +128,7 @@ export class FilterComponent implements OnChanges, OnInit {
       outletFG.addControl(
         outlet.id,
         new FormControl(
-          this.feedbackFG.get('feedbackType').value === 'Transactional'
+          this.feedbackFG.get('feedbackType').value === 'TRANSACTIONALFEEDBACK'
         )
       );
     });
@@ -180,11 +180,11 @@ export class FilterComponent implements OnChanges, OnInit {
   onOutletSelect(event) {
     if (
       event.checked &&
-      this.feedbackFG.get('feedbackType').value !== 'Transactional'
+      this.feedbackFG.get('feedbackType').value !== 'TRANSACTIONALFEEDBACK'
     ) {
-      this.feedbackFG.patchValue({ feedbackType: 'Transactional' });
+      this.feedbackFG.patchValue({ feedbackType: 'TRANSACTIONALFEEDBACK' });
     } else if (!this.checkForNoOutletSelected(this.outletFG.value)) {
-      this.feedbackFG.patchValue({ feedbackType: 'Stay Experience' });
+      this.feedbackFG.patchValue({ feedbackType: 'STAYFEEDBACK' });
     }
   }
 
@@ -197,7 +197,17 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   handleFeedbackTypeChange(event) {
-    this.updateOutletsValue(event.value === 'Transactional');
+    switch (event.value) {
+      case 'TRANSACTIONALFEEDBACK':
+        this.updateOutletsValue(true);
+        break;
+      case 'STAYFEEDBACK':
+        this.updateOutletsValue(false);
+        break;
+      case 'ALL':
+        this.updateOutletsValue(true);
+        break;
+    }
   }
 
   checkForTransactionFeedbackSubscribed() {

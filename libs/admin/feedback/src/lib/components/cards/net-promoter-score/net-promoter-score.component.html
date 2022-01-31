@@ -1,0 +1,73 @@
+<div class="container" *ngIf="npsFG">
+  <div class="header" [formGroup]="npsFG">
+    <div class="title-container">
+      <div class="icon">
+        <img
+          [src]="feedbackConfig.images.nps.url"
+          [alt]="feedbackConfig.images.nps.alt"
+        />
+      </div>
+      <div class="stat-title">{{ 'nps.title' | translate }}</div>
+    </div>
+    <div class="menu-container">
+      <div class="pull-right">
+        <label class="labl" *ngFor="let option of chartTypes">
+          <input
+            type="radio"
+            formControlName="npsChartType"
+            [value]="option.value"
+            (click)="setChartType(option)"
+          />
+          <div class="image">
+            <img [src]="option.url" />
+          </div>
+        </label>
+      </div>
+      <div [formGroup]="npsFG" class="dropdown--wrapper">
+        <p-dropdown
+          class="export"
+          [options]="documentActionTypes"
+          formControlName="documentActionType"
+        >
+          <ng-template let-documentActionItem pTemplate="selectedItem">
+            <img
+              [src]="feedbackConfig.images.export.url"
+              [alt]="feedbackConfig.images.export.alt"
+            />
+            <span class="dropdown-label">{{ documentActionItem.label }}</span>
+          </ng-template>
+        </p-dropdown>
+        <div class="divider"></div>
+        <p-dropdown
+          class="export"
+          [options]="documentTypes"
+          formControlName="documentType"
+        >
+          <ng-template let-documentTypeItem pTemplate="selectedItem">
+            <img
+              [src]="feedbackConfig.images.exportCSV.url"
+              [alt]="feedbackConfig.images.exportCSV.alt"
+            />
+            <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+          </ng-template>
+        </p-dropdown>
+        <button class="go" (click)="exportCSV()">
+          <mat-icon class="material-icons" matSuffix>east</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="line-chart">
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.data"
+      [labels]="chart.labels"
+      [options]="chart.options"
+      [colors]="chart.colors"
+      [legend]="chart.legend"
+      [chartType]="chart.type"
+    >
+    </canvas>
+  </div>
+</div>

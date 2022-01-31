@@ -1,0 +1,70 @@
+<div class="stats">
+  <div class="stats__title">
+    {{ 'shared.title' | translate }}
+  </div>
+  <div class="stats__subheading">
+    {{ 'shared.sub_title' | translate }}
+  </div>
+  <div class="stats__body">
+    <div class="graph-container">
+      <div class="graphcontainer__graph">
+        <canvas
+          baseChart
+          class="graphcontainer__graph-canvas"
+          [data]="chart.data"
+          [labels]="chart.labels"
+          [chartType]="chart.type"
+          [legend]="chart.legend"
+          [colors]="chart.colors"
+          [options]="chart.options"
+        >
+        </canvas>
+      </div>
+    </div>
+    <div class="stats__body__detail">
+      <div class="stats__body__detail__shared">
+        {{ stats?.totalResponse }}
+      </div>
+      <div class="stats__body__detail__sharedtitle">
+        Overall Shared
+      </div>
+      <ng-container *ngIf="stats?.feedbacks">
+        <div class="received-wrap" *ngFor="let item of stats.feedbacks">
+          <div class="received-wrap__container">
+            <div
+              class="received-wrap__container__dot"
+              [style.background]="item.color"
+            ></div>
+            <div class="received-wrap__container__count">
+              {{ item.count }}
+            </div>
+            <div>
+              <span
+                class="percentChange"
+                [ngClass]="{
+                  'comparison-positive': item.comparePercent >= 0,
+                  'comparison-negative': item.comparePercent < 0
+                }"
+                >({{ item.comparePercent }}%)</span
+              ><img
+                class="received-wrap__container__percentChange-img"
+                [src]="
+                  item.comparePercent >= 0
+                    ? 'assets/svg/uparrow.svg'
+                    : 'assets/svg/down-percentage.svg'
+                "
+                alt="uparrow"
+              />
+            </div>
+            <div class="received-wrap__container__date">
+              {{ 'in_thirty_days' | translate }}
+            </div>
+          </div>
+          <div class="received-wrap__recived-title">
+            {{ item.label }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

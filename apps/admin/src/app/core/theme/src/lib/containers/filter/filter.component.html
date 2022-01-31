@@ -185,15 +185,24 @@
           <mat-radio-group formControlName="feedbackType">
             <mat-radio-button
               *ngIf="checkForStayFeedbackSubscribed()"
-              value="Stay Experience"
+              value="STAYFEEDBACK"
               (change)="handleFeedbackTypeChange($event)"
               >Stay Experience</mat-radio-button
             >
             <mat-radio-button
               *ngIf="checkForTransactionFeedbackSubscribed()"
-              value="Transactional"
+              value="TRANSACTIONALFEEDBACK"
               (change)="handleFeedbackTypeChange($event)"
               >Transactional</mat-radio-button
+            >
+            <mat-radio-button
+              *ngIf="
+                checkForStayFeedbackSubscribed() &&
+                checkForTransactionFeedbackSubscribed()
+              "
+              value="ALL"
+              (change)="handleFeedbackTypeChange($event)"
+              >Both</mat-radio-button
             >
             <!-- <mat-radio-button value="Both">Both</mat-radio-button> -->
           </mat-radio-group>

@@ -53,8 +53,8 @@ export enum Filters {
   DEPARTURE = 'DEPARTURE',
   OUTGUEST = 'OUTGUEST',
   RESERVATION = 'RESERVATION',
-  JOURNEYRESERVATION = 'ALL',
-  Transactional = 'Transactional',
+  JOURNEYRESERVATION = 'STAYFEEDBACK',
+  Transactional = 'TRANSACTIONALFEEDBACK',
 }
 
 export enum Communication {

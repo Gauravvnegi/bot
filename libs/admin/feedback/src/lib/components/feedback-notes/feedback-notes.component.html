@@ -1,0 +1,104 @@
+<ng-container *ngIf="viewOnly; else editForm">
+  <div class="header">
+    <div class="header-items">
+      <div class="header-items-closed-admin">
+        <div class="header-items-closed-admin-icon">
+          <img
+            [src]="feedbackConfig.images.notes.user.url"
+            [alt]="feedbackConfig.images.notes.user.alt"
+          />
+        </div>
+        <div class="header-items-closed-admin-item">
+          <div class="header-items-closed-admin-item-title">
+            {{ 'notes.closed_by_admin' | translate }}
+          </div>
+          <div class="header-items-closed-admin-item-name">
+            {{ notes.adminName }}
+          </div>
+        </div>
+      </div>
+      <div class="header-items-closed-admin">
+        <div class="header-items-closed-admin-icon">
+          <img
+            [src]="feedbackConfig.images.notes.calendar.url"
+            [alt]="feedbackConfig.images.notes.calendar.alt"
+          />
+        </div>
+        <div class="header-items-closed-admin-item">
+          <div class="header-items-closed-admin-item-title">
+            {{ 'notes.closed_date' | translate }}
+          </div>
+          <div class="header-items-closed-admin-item-name">
+            {{ notes.getUpdatedDate(timezone) }}
+          </div>
+        </div>
+      </div>
+      <div class="header-items-closed-admin">
+        <div class="header-items-closed-admin-icon">
+          <img
+            [src]="feedbackConfig.images.notes.clock.url"
+            [alt]="feedbackConfig.images.notes.clock.alt"
+          />
+        </div>
+        <div class="header-items-closed-admin-item">
+          <div class="header-items-closed-admin-item-title">
+            {{ 'notes.closed_time' | translate }}
+          </div>
+          <div class="header-items-closed-admin-item-name">
+            {{ notes.getUpdatedTime(timezone) }}
+          </div>
+        </div>
+      </div>
+      <div (click)="closeNotes()" class="close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="view-body">
+    <div class="view-body-items">
+      <div class="view-body-items-title">
+        {{ 'notes.add_notes' | translate }}
+      </div>
+      <div class="view-body-items-btn" (click)="openEditForm()">
+        {{ 'notes.edit' | translate }}
+      </div>
+    </div>
+    <div [formGroup]="notesFG">
+      <textarea
+        class="view-body-textarea"
+        matInput
+        formControlName="notes"
+      ></textarea>
+    </div>
+    <div class="close-btn" (click)="closeNotes()">
+      {{ 'notes.close' | translate }}
+    </div>
+  </div>
+</ng-container>
+<ng-template #editForm>
+  <div class="editForm-header header">
+    <div class="editForm-header-items">
+      <div class="editForm-header-items-note">
+        {{ 'notes.add_modal_title' | translate }}
+      </div>
+      <div (click)="closeNotes()" class="close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="editForm-popup-body">
+    <div class="editForm-popup-body-title">
+      {{ 'notes.add_notes' | translate }}
+    </div>
+    <div [formGroup]="notesFG">
+      <textarea
+        class="editForm-popup-body-textarea"
+        matInput
+        formControlName="notes"
+      ></textarea>
+    </div>
+    <div class="submit-btn" (click)="submit()">
+      {{ 'notes.submit' | translate }}
+    </div>
+  </div>
+</ng-template>

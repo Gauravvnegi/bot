@@ -26,19 +26,23 @@ $approved: #2f1dce;
 $btn-shadow: #4b56c04d;
 $box-shadow: #0000000d;
 $hover-box-shadow: #0368ff42;
+
 // grey palet
 $c-white: $white;
 $c-gray-71: #d3d3d3;
 $c-gray-98: #f3f3f3;
 $c-gray-95: #ededed;
 $c-gray-90: #e3e3e3;
+$c-gray-89: #e2e2e2;
 $c-gray-85: #d9d9d9;
 $c-gray-80: #cccccc;
 $c-gray-77: #c5c5c5;
 $c-gray-75: #c0c0c0;
+$c-gray-72: #b4b4b4;
 $c-gray-70: #b0b0b0;
 $c-gray-60: #999999;
 $c-gray-50: #808080;
+$c-gray-47: #7e7e7e;
 $c-gray-45: #727272;
 $c-gray-40: #696969;
 $c-gray-30: #4d4d4d;
@@ -56,6 +60,10 @@ $progress-bar-messages-base: #f7f7f7;
 $progress-bar-messages: #0000000d;
 $comparison-positive: #52b33f;
 $comparison-negative: #cc052b;
+$rejected: #ee1044;
+$pending-2: #38649f;
+$accepted: #389f99;
+$initiated-2: #ff8f00;
 $tab-bottom-border: rgba(0, 0, 0, 0.12);
 
 $popup-button-width: 10vw;

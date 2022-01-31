@@ -22,7 +22,7 @@ import { ReservationDatatableComponent } from './components/datatable/reservatio
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { StatisticsService } from './services/statistics.service';
 import { HttpClient } from '@angular/common/http';
-import getTranslationConfigs from 'libs/admin/shared/src/lib/configs/translate';
+import { getTranslationConfigs } from 'libs/admin/shared/src/lib/configs/translate';
 export const adminDashboardRoutes: Route[] = [
   {
     path: '',

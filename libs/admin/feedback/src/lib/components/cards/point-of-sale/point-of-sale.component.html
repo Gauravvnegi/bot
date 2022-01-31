@@ -1,0 +1,175 @@
+<div class="container" [formGroup]="npsFG">
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img
+          [src]="globalFeedbackConfig.images.nps_services.url"
+          [alt]="globalFeedbackConfig.images.nps_services.alt"
+        />
+      </div>
+      <div class="stat-title">{{ 'nps_across_pos.title' | translate }}</div>
+    </div>
+    <div class="menu-container" *ngIf="npsFG?.get('chartType')">
+      <label class="labl" *ngFor="let option of chartTypes">
+        <input
+          type="radio"
+          formControlName="chartType"
+          [value]="option.value"
+          (click)="setChartType(option.value)"
+        />
+        <div class="image">
+          <img [src]="option.url" />
+        </div>
+      </label>
+    </div>
+    <div class="dropdown--wrapper">
+      <p-dropdown
+        class="export"
+        [options]="documentActionTypes"
+        formControlName="documentActionType"
+      >
+        <ng-template let-documentActionItem pTemplate="selectedItem">
+          <img
+            [src]="globalFeedbackConfig.images.export.url"
+            [alt]="globalFeedbackConfig.images.export.alt"
+          />
+          <span class="dropdown-label">{{ documentActionItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <div class="divider"></div>
+      <p-dropdown
+        class="export"
+        [options]="documentTypes"
+        formControlName="documentType"
+      >
+        <ng-template let-documentTypeItem pTemplate="selectedItem">
+          <img
+            [src]="globalFeedbackConfig.images.exportCSV.url"
+            [alt]="globalFeedbackConfig.images.exportCSV.alt"
+          />
+          <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <button class="go" (click)="exportCSV()">
+        <mat-icon class="material-icons" matSuffix>east</mat-icon>
+      </button>
+    </div>
+  </div>
+  <hospitality-bot-tab-group
+    *ngIf="tabFilterItems.length"
+    [listItems]="tabFilterItems"
+    [selectedIndex]="tabFilterIdx"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+  <div class="button__wrapper">
+    <mat-chip-list
+      multiple
+      #chipList
+      aria-label="Quick Reply selection"
+      formControlName="quickReplyActionFilters"
+      *ngIf="tabFilterItems.length && tabFilterItems[tabFilterIdx].chips"
+    >
+      <mat-chip
+        *ngFor="
+          let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+          let quickReplyTypeIdx = index
+        "
+        selectable="true"
+        (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
+        [ngClass]="{
+          'chipSelected status-selected-default': quickReplyType.isSelected,
+          'status-opacity-initiated status-text-initiated':
+            quickReplyType.type == 'initiated',
+          'status-selected-initiated':
+            quickReplyType.type == 'initiated' && quickReplyType.isSelected
+        }"
+      >
+        {{ quickReplyType.label }}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+  <ng-container [ngSwitch]="chartType">
+    <ng-container *ngSwitchCase="'compare'">
+      <div class="header__outlet-heading">
+        {{ 'nps_across_pos.outlet_label' | translate }}
+      </div>
+      <div class="outlet-wrap" *ngIf="stats && stats.data">
+        <div
+          class="outlet-wrap__outlet"
+          [style.height]="stats.data.length * 40 + 40 + 'px'"
+        >
+          <ng-container *ngFor="let item of stats.data">
+            <div
+              class="outlet-wrap__outlet__outlets"
+              *ngIf="item.services?.length"
+            >
+              <div class="outlet-wrap__outlet__outlets__label">
+                {{ item.label }}
+              </div>
+              <div class="progress-bar">
+                <ng-container *ngFor="let progress of item.services">
+                  <div
+                    [style.width]="progress.percentage + '%'"
+                    [style.background]="progress.color"
+                  ></div>
+                </ng-container>
+                <div class="stat-data">
+                  <div class="stat-data__label">
+                    {{ 'nps_across_pos.nps_across_touchpoints' | translate }}
+                  </div>
+                  <div
+                    class="stat-data__items"
+                    *ngFor="let progress of item.services"
+                  >
+                    <div
+                      class="stat-data__items__dot"
+                      [style.background]="progress.color"
+                    ></div>
+                    <div class="stat-data__items__label">
+                      {{ progress.label }}
+                    </div>
+                    <div class="stat-data__items__count">
+                      {{ progress.percentage }}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div
+            class="outlet-wrap__outlet__progress-back"
+            [style.height]="stats.data.length * 40 + 40 + 'px'"
+          >
+            <div class="outlet-wrap__outlet__progress-backpercentbar">
+              <div
+                *ngFor="let percent of percentValue"
+                class="outlet-wrap__outlet__progress-backpercentbar__percent-value"
+              >
+                <div
+                  class="outlet-wrap__outlet__progress-backpercentbar__percent-value__bar"
+                  [style.height]="stats.data.length * 40 + 20 + 'px'"
+                ></div>
+                <div class="percent">{{ percent }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="footer__item" *ngFor="let item of services">
+          <div class="footer__item__dot" [style.background]="item.color"></div>
+          <div class="__label">
+            {{ item.label }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'bar'">
+      <hospitality-bot-stacked-bar-graph
+        [tabFilterItems]="tabFilterItems"
+        [tabFilterIdx]="tabFilterIdx"
+        [data]="stats"
+      ></hospitality-bot-stacked-bar-graph>
+    </ng-container>
+  </ng-container>
+</div>

@@ -151,7 +151,7 @@ export class LayoutOneComponent implements OnInit {
         ]),
       },
       feedback: {
-        feedbackType: 'Transactional',
+        feedbackType: 'TRANSACTIONALFEEDBACK',
       },
       outlets: this.getOutletIds(),
     });
@@ -285,12 +285,10 @@ export class LayoutOneComponent implements OnInit {
       (response) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
-        location.reload();
       },
       (error) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
-        location.reload();
       }
     );
   }

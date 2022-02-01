@@ -25,7 +25,7 @@ import { Chip } from '../../../types/feedback.type';
 })
 export class NpsAcrossServicesComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  @Input() hotelId;
+
   feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
@@ -89,13 +89,21 @@ export class NpsAcrossServicesComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
+        this.setEntityId();
         this.getNPSServices();
       })
     );
   }
 
   setEntityId() {
-    this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    this.globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.globalQueries = [
+          ...this.globalQueries,
+          { entityIds: element.hotelId },
+        ];
+      }
+    });
   }
 
   /**

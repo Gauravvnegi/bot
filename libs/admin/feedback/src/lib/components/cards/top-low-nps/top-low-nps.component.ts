@@ -18,7 +18,7 @@ import { PerformanceNPS } from '../../../data-models/statistics.model';
 })
 export class TopLowNpsComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  @Input() hotelId;
+
   globalQueries;
   performanceNPS: PerformanceNPS;
   protected $subscription = new Subscription();
@@ -31,9 +31,9 @@ export class TopLowNpsComponent implements OnInit {
 
   ngOnInit(): void {
     this.tabFilterItems =
-      this.globalFeedbackFilterType === feedback.types.transactional
-        ? feedback.tabFilterItems.topLowNPS.transactional
-        : feedback.tabFilterItems.topLowNPS.stay;
+      this.globalFeedbackFilterType === feedback.types.stay
+        ? feedback.tabFilterItems.topLowNPS.stay
+        : feedback.tabFilterItems.topLowNPS.transactional;
     this.registerListeners();
   }
 
@@ -54,31 +54,43 @@ export class TopLowNpsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.setEntityId();
-        this.getPerformanceNps();
+        this.globalFeedbackFilterType =
+          data['filter'].value.feedback.feedbackType;
+        this.setEntityId(data['filter'].value.feedback.feedbackType);
       })
     );
   }
 
-  setEntityId() {
-    if (this.globalFeedbackFilterType === feedback.types.transactional)
+  setEntityId(feedbackType) {
+    if (feedbackType === feedback.types.transactional)
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this.statisticsService.outletIds },
       ];
-    else if (this.globalFeedbackFilterType === feedback.types.both) {
+    else if (feedbackType === feedback.types.both) {
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this.statisticsService.outletIds },
       ];
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('entityIds')) {
-          element.entityIds.push(this.hotelId);
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
         }
       });
     } else {
-      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
+        }
+      });
     }
+    this.getPerformanceNps();
   }
 
   listenForOutletChanged() {

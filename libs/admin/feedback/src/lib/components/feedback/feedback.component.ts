@@ -89,6 +89,11 @@ export class FeedbackComponent {
         if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
       })
       .filter((id) => id !== undefined);
+
+    this.settabFilters(branch);
+  }
+
+  settabFilters(branch) {
     this.tabFilterItems = [
       {
         label: 'Overall',

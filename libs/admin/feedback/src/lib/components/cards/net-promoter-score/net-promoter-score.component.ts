@@ -100,24 +100,12 @@ export class NetPromoterScoreComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-<<<<<<< HEAD
         this.setEntityId();
-=======
-        if (
-          this.globalFeedbackFilterType === feedback.types.transactional ||
-          this.globalFeedbackFilterType === feedback.types.both
-        )
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: this._statisticService.outletIds },
-          ];
->>>>>>> k8s-dev-deploy
         this.getNPSChartData();
       })
     );
   }
 
-<<<<<<< HEAD
   setEntityId() {
     if (this.globalFeedbackFilterType === feedback.types.transactional)
       this.globalQueries = [
@@ -139,8 +127,6 @@ export class NetPromoterScoreComponent implements OnInit {
     }
   }
 
-=======
->>>>>>> k8s-dev-deploy
   listenForOutletChanged() {
     this._statisticService.outletChange.subscribe((response) => {
       if (response) {

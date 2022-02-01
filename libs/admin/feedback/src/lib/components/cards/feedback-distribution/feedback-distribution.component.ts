@@ -19,6 +19,7 @@ import { chartConfig } from '../../../constants/chart';
 })
 export class FeedbackDistributionComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  tabfeedbackType: string;
   feedbackConfig = feedback;
   globalQueries;
   $subscription = new Subscription();
@@ -89,10 +90,14 @@ export class FeedbackDistributionComponent implements OnInit {
       ];
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: element.hotelId },
-          ];
+          if (
+            !this.globalQueries[
+              this.globalQueries.length - 1
+            ].entityIds.includes(element.hotelId)
+          )
+            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
+              element.hotelId
+            );
         }
       });
     } else {
@@ -108,8 +113,9 @@ export class FeedbackDistributionComponent implements OnInit {
   }
 
   listenForOutletChanged() {
-    this.statisticsService.outletChange.subscribe((response) => {
-      if (response) {
+    this.statisticsService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.tabfeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -157,7 +163,10 @@ export class FeedbackDistributionComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.statisticsService.type },
+        {
+          feedbackType:
+            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+        },
       ]),
     };
     this.statisticsService.feedbackDistribution(config).subscribe(

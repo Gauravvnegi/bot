@@ -20,6 +20,7 @@ import { SharedStats } from '../../../data-models/statistics.model';
 })
 export class SharedComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
@@ -104,10 +105,14 @@ export class SharedComponent implements OnInit {
       ];
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: element.hotelId },
-          ];
+          if (
+            !this.globalQueries[
+              this.globalQueries.length - 1
+            ].entityIds.includes(element.hotelId)
+          )
+            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
+              element.hotelId
+            );
         }
       });
     } else {
@@ -123,8 +128,9 @@ export class SharedComponent implements OnInit {
   }
 
   listenForOutletChanged() {
-    this._statisticService.outletChange.subscribe((response) => {
-      if (response) {
+    this._statisticService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.tabfeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this._statisticService.outletIds;
@@ -142,7 +148,10 @@ export class SharedComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this._statisticService.type },
+        {
+          feedbackType:
+            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+        },
       ]),
     };
     this.$subscription.add(

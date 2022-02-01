@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class StatisticsService extends ApiService {
   outletIds = [];
   type: string;
-  outletChange = new BehaviorSubject(false);
+  $outletChange = new BehaviorSubject({ status: false, type: '' });
   markReadStatusChanged = new BehaviorSubject(false);
   getOverallNPSStatistics(config): Observable<any> {
     return this.get(`/api/v1/feedback-stats/${config.queryObj}`);

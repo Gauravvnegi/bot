@@ -18,6 +18,7 @@ import { PerformanceNPS } from '../../../data-models/statistics.model';
 })
 export class TopLowNpsComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   globalQueries;
   performanceNPS: PerformanceNPS;
   protected $subscription = new Subscription();
@@ -53,17 +54,31 @@ export class TopLowNpsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        if (
-          this.globalFeedbackFilterType === feedback.types.transactional ||
-          this.globalFeedbackFilterType === feedback.types.both
-        )
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: this.statisticsService.outletIds },
-          ];
+        this.setEntityId();
         this.getPerformanceNps();
       })
     );
+  }
+
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    } else {
+      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    }
   }
 
   listenForOutletChanged() {
@@ -128,5 +143,9 @@ export class TopLowNpsComponent implements OnInit {
 
   get feedbackConfig() {
     return feedback;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

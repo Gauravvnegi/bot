@@ -19,6 +19,7 @@ import { chartConfig } from '../../../constants/chart';
 })
 export class FeedbackDistributionComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   feedbackConfig = feedback;
   globalQueries;
   $subscription = new Subscription();
@@ -68,6 +69,9 @@ export class FeedbackDistributionComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+<<<<<<< HEAD
+        this.setEntityId();
+=======
         if (
           this.globalFeedbackFilterType === feedback.types.transactional ||
           this.globalFeedbackFilterType === feedback.types.both
@@ -76,11 +80,36 @@ export class FeedbackDistributionComponent implements OnInit {
             ...this.globalQueries,
             { entityIds: this.statisticsService.outletIds },
           ];
+>>>>>>> k8s-dev-deploy
         this.getFeedbackDistribution();
       })
     );
   }
 
+<<<<<<< HEAD
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    } else {
+      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    }
+  }
+
+=======
+>>>>>>> k8s-dev-deploy
   listenForOutletChanged() {
     this.statisticsService.outletChange.subscribe((response) => {
       if (response) {
@@ -154,4 +183,11 @@ export class FeedbackDistributionComponent implements OnInit {
       }
     );
   }
+<<<<<<< HEAD
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
+=======
+>>>>>>> k8s-dev-deploy
 }

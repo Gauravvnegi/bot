@@ -25,6 +25,7 @@ import { EntityState } from '../../../types/feedback.type';
 })
 export class PointOfSaleComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   globalFeedbackConfig = feedback;
   npsFG: FormGroup;
   $subscription = new Subscription();
@@ -82,39 +83,45 @@ export class PointOfSaleComponent implements OnInit {
 
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe(
-        (data) => {
-          let calenderType = {
-            calenderType: this.dateService.getCalendarType(
-              data['dateRange'].queryValue[0].toDate,
-              data['dateRange'].queryValue[1].fromDate,
-              this._globalFilterService.timezone
-            ),
-          };
-          this.selectedInterval = calenderType.calenderType;
-          this.globalQueries = [
-            ...data['filter'].queryValue,
-            ...data['dateRange'].queryValue,
-            calenderType,
-          ];
-          this.branchId = data['filter'].value.property.branchName;
-          if (this.tabFilterItems.length === 0)
-            this.setTabFilterItems(this.branchId);
-          this.getStats();
-        },
-        ({ error }) => {
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.branchId = data['filter'].value.property.branchName;
+        if (this.tabFilterItems.length === 0)
+          this.setTabFilterItems(this.branchId);
+        this.getStats();
+      })
     );
+  }
+
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    }
   }
 
   /**
@@ -365,5 +372,9 @@ export class PointOfSaleComponent implements OnInit {
       ];
     }
     return [];
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

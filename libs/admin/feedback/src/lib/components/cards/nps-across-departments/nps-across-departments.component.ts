@@ -23,6 +23,7 @@ import { NPSDepartments } from '../../../data-models/statistics.model';
 })
 export class NpsAcrossDepartmentsComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
@@ -78,6 +79,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
         this.getNPSChartData();
       })
     );
+  }
+
+  setEntityId() {
+    this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
   }
 
   /**

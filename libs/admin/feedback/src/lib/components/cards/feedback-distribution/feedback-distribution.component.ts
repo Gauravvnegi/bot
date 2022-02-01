@@ -19,6 +19,7 @@ import { chartConfig } from '../../../constants/chart';
 })
 export class FeedbackDistributionComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   feedbackConfig = feedback;
   globalQueries;
   $subscription = new Subscription();
@@ -68,17 +69,31 @@ export class FeedbackDistributionComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        if (
-          this.globalFeedbackFilterType === feedback.types.transactional ||
-          this.globalFeedbackFilterType === feedback.types.both
-        )
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: this.statisticsService.outletIds },
-          ];
+        this.setEntityId();
         this.getFeedbackDistribution();
       })
     );
+  }
+
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    } else {
+      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    }
   }
 
   listenForOutletChanged() {
@@ -153,5 +168,9 @@ export class FeedbackDistributionComponent implements OnInit {
           .subscribe();
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

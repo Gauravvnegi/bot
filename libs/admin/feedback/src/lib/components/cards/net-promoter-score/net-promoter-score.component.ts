@@ -26,6 +26,7 @@ import { ChartTypeOption } from '../../../types/feedback.type';
 })
 export class NetPromoterScoreComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
@@ -99,17 +100,31 @@ export class NetPromoterScoreComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        if (
-          this.globalFeedbackFilterType === feedback.types.transactional ||
-          this.globalFeedbackFilterType === feedback.types.both
-        )
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: this._statisticService.outletIds },
-          ];
+        this.setEntityId();
         this.getNPSChartData();
       })
     );
+  }
+
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    } else {
+      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    }
   }
 
   listenForOutletChanged() {

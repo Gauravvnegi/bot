@@ -19,6 +19,7 @@ import { GlobalNPS } from '../../../data-models/statistics.model';
 })
 export class GlobalNpsComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   feedbackConfig = feedback;
   globalNps: GlobalNPS;
   color = feedback.colorConfig.globalNPS;
@@ -73,17 +74,31 @@ export class GlobalNpsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        if (
-          this.globalFeedbackFilterType === feedback.types.transactional ||
-          this.globalFeedbackFilterType === feedback.types.both
-        )
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: this.statisticsService.outletIds },
-          ];
+        this.setEntityId();
         this.getGlobalNps();
       })
     );
+  }
+
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this.statisticsService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    } else {
+      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    }
   }
 
   listenForOutletChanged() {
@@ -167,5 +182,9 @@ export class GlobalNpsComponent implements OnInit {
    */
   roundValue(data): number {
     return data % 1 >= 0.5 ? Math.ceil(data) : Math.floor(data);
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

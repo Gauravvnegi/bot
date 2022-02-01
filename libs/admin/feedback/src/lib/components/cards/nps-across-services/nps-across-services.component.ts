@@ -25,6 +25,7 @@ import { Chip } from '../../../types/feedback.type';
 })
 export class NpsAcrossServicesComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
@@ -74,35 +75,27 @@ export class NpsAcrossServicesComponent implements OnInit {
 
   listenForGlobalFilters() {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe(
-        (data) => {
-          let calenderType = {
-            calenderType: this.dateService.getCalendarType(
-              data['dateRange'].queryValue[0].toDate,
-              data['dateRange'].queryValue[1].fromDate,
-              this._globalFilterService.timezone
-            ),
-          };
-          this.selectedInterval = calenderType.calenderType;
-          this.globalQueries = [
-            ...data['filter'].queryValue,
-            ...data['dateRange'].queryValue,
-            calenderType,
-          ];
-          this.getNPSServices();
-        },
-        ({ error }) =>
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getNPSServices();
+      })
     );
+  }
+
+  setEntityId() {
+    this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
   }
 
   /**

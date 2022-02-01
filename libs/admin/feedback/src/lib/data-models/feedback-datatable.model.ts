@@ -60,7 +60,7 @@ export class Feedback {
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
-    )[0].name;
+    )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guest = new Guest().deserialize(input.guestId);
     return this;

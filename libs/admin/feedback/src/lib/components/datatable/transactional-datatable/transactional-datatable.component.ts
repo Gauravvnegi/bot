@@ -109,6 +109,12 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
     this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
       (branch) => branch['id'] == branchId
     ).outlets;
+    this.outlets = [
+      ...this.outlets,
+      ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+        (branch) => branch['id'] == branchId
+      ),
+    ];
   }
 
   registerListeners(): void {
@@ -126,7 +132,6 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
-          { entityIds: this.statisticService.outletIds },
         ];
         this.getHotelId(this.globalQueries);
         this.getOutlets(data['filter'].value.property.branchName);
@@ -276,11 +281,21 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
         ...queries,
         {
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityIds: this.setEntityId(),
         },
       ]),
     };
 
     return this.tableService.getGuestFeedbacks(config);
+  }
+
+  setEntityId() {
+    if (
+      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.globalFeedbackConfig.types.transactional
+    )
+      return this.statisticService.outletIds;
+    else return this.hotelId;
   }
 
   /**
@@ -408,6 +423,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
         order: sharedConfig.defaultOrder,
         // entityType: this.tabFilterItems[this.tabFilterIdx].value,
         feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+        entityIds: this.setEntityId(),
       },
       ...this.getSelectedQuickReplyFilters(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),

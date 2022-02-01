@@ -25,7 +25,6 @@ import { EntityState } from '../../../types/feedback.type';
 })
 export class PointOfSaleComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  @Input() hotelId;
   globalFeedbackConfig = feedback;
   npsFG: FormGroup;
   $subscription = new Subscription();
@@ -100,6 +99,7 @@ export class PointOfSaleComponent implements OnInit {
         this.branchId = data['filter'].value.property.branchName;
         if (this.tabFilterItems.length === 0)
           this.setTabFilterItems(this.branchId);
+        this.setEntityId();
         this.getStats();
       })
     );
@@ -117,8 +117,11 @@ export class PointOfSaleComponent implements OnInit {
         { entityIds: this._statisticService.outletIds },
       ];
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('entityIds')) {
-          element.entityIds.push(this.hotelId);
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
         }
       });
     }

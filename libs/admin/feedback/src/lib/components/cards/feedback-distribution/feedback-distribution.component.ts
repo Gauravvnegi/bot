@@ -19,7 +19,6 @@ import { chartConfig } from '../../../constants/chart';
 })
 export class FeedbackDistributionComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  @Input() hotelId;
   feedbackConfig = feedback;
   globalQueries;
   $subscription = new Subscription();
@@ -69,30 +68,42 @@ export class FeedbackDistributionComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.setEntityId();
+        this.globalFeedbackFilterType =
+          data['filter'].value.feedback.feedbackType;
+        this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getFeedbackDistribution();
       })
     );
   }
 
-  setEntityId() {
-    if (this.globalFeedbackFilterType === feedback.types.transactional)
+  setEntityId(feedbackType) {
+    if (feedbackType === feedback.types.transactional)
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this.statisticsService.outletIds },
       ];
-    else if (this.globalFeedbackFilterType === feedback.types.both) {
+    else if (feedbackType === feedback.types.both) {
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this.statisticsService.outletIds },
       ];
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('entityIds')) {
-          element.entityIds.push(this.hotelId);
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
         }
       });
     } else {
-      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
+        }
+      });
     }
   }
 

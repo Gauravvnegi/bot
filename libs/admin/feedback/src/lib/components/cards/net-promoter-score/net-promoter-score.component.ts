@@ -26,7 +26,6 @@ import { ChartTypeOption } from '../../../types/feedback.type';
 })
 export class NetPromoterScoreComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  @Input() hotelId;
   feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
@@ -94,36 +93,48 @@ export class NetPromoterScoreComponent implements OnInit {
             this._globalFilterService.timezone
           ),
         };
+        this.globalFeedbackFilterType =
+          data['filter'].value.feedback.feedbackType;
         this.selectedInterval = calenderType.calenderType;
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.setEntityId();
+        this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getNPSChartData();
       })
     );
   }
 
-  setEntityId() {
-    if (this.globalFeedbackFilterType === feedback.types.transactional)
+  setEntityId(feedbackType) {
+    if (feedbackType === feedback.types.transactional)
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this._statisticService.outletIds },
       ];
-    else if (this.globalFeedbackFilterType === feedback.types.both) {
+    else if (feedbackType === feedback.types.both) {
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this._statisticService.outletIds },
       ];
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('entityIds')) {
-          element.entityIds.push(this.hotelId);
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
         }
       });
     } else {
-      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
+        }
+      });
     }
   }
 

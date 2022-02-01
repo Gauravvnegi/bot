@@ -19,7 +19,6 @@ import { Bifurcation } from '../../../data-models/statistics.model';
 })
 export class OverallReceivedBifurcationComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  @Input() hotelId;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
@@ -76,6 +75,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
+        this.globalFeedbackFilterType =
+          data['filter'].value.feedback.feedbackType;
         if (
           this.globalFeedbackFilterType === feedback.types.transactional ||
           this.globalFeedbackFilterType === feedback.types.both
@@ -84,29 +85,40 @@ export class OverallReceivedBifurcationComponent implements OnInit {
             ...this.globalQueries,
             { entityIds: this._statisticService.outletIds },
           ];
+        this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getStats();
       })
     );
   }
 
-  setEntityId() {
-    if (this.globalFeedbackFilterType === feedback.types.transactional)
+  setEntityId(feedbackType) {
+    if (feedbackType === feedback.types.transactional)
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this._statisticService.outletIds },
       ];
-    else if (this.globalFeedbackFilterType === feedback.types.both) {
+    else if (feedbackType === feedback.types.both) {
       this.globalQueries = [
         ...this.globalQueries,
         { entityIds: this._statisticService.outletIds },
       ];
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('entityIds')) {
-          element.entityIds.push(this.hotelId);
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
         }
       });
     } else {
-      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
+        }
+      });
     }
   }
 

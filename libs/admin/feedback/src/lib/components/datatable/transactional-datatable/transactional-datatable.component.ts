@@ -118,6 +118,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
   }
 
   registerListeners(): void {
+    this.listenForFeedbackTypeChanged();
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
   }
@@ -152,23 +153,37 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
    * @function listenForOutletChanged To listen for outlet tab change.
    */
   listenForOutletChanged() {
-    this.statisticService.outletChange.subscribe((response) => {
-      if (response) {
-        this.globalQueries.forEach((element) => {
-          if (element.hasOwnProperty('entityIds')) {
-            element.entityIds = this.statisticService.outletIds;
-          }
-        });
-        this.loadInitialData([
-          ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            // entityType: 'TRANSACTIONALFEEDBACK',
-          },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
-      }
-    });
+    this.$subscription.add(
+      this.statisticService.outletChange.subscribe((response) => {
+        if (response) {
+          this.globalQueries.forEach((element) => {
+            if (element.hasOwnProperty('entityIds')) {
+              element.entityIds = this.statisticService.outletIds;
+            }
+          });
+          this.loadInitialData([
+            ...this.globalQueries,
+            {
+              order: sharedConfig.defaultOrder,
+              // entityType: 'TRANSACTIONALFEEDBACK',
+            },
+            ...this.getSelectedQuickReplyFilters(),
+          ]);
+        }
+      })
+    );
+  }
+
+  listenForFeedbackTypeChanged() {
+    this.$subscription.add(
+      this.tableService.$feedbackType.subscribe((response) => {
+        if (response === feedback.types.transactional)
+          this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
+        else if (response === feedback.types.stay)
+          this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
+        else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
+      })
+    );
   }
 
   /**

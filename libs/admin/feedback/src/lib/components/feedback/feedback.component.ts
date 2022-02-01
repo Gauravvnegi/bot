@@ -12,6 +12,7 @@ import { ModalService } from '@hospitality-bot/shared/material';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { FeedbackTableService } from '../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -45,7 +46,8 @@ export class FeedbackComponent {
     protected _globalFilterService: GlobalFilterService,
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,
-    protected subscriptionPlanService: SubscriptionPlanService
+    protected subscriptionPlanService: SubscriptionPlanService,
+    protected tableService: FeedbackTableService
   ) {}
 
   ngOnInit(): void {
@@ -74,11 +76,16 @@ export class FeedbackComponent {
             [...data['feedback'].queryValue],
             data['filter'].value
           );
-          if (this.globalFeedbackFilterType === feedback.types.transactional)
+          if (this.globalFeedbackFilterType === feedback.types.transactional) {
             this.statisticsService.type = this.globalFeedbackFilterType;
-          else this.statisticsService.type = '';
+            this.tableService.$feedbackType.next(this.globalFeedbackFilterType);
+          } else {
+            this.statisticsService.type = '';
+            this.tableService.$feedbackType.next('');
+          }
         } else {
           this.statisticsService.type = feedback.types.stay;
+          this.tableService.$feedbackType.next(feedback.types.stay);
         }
       })
     );
@@ -160,7 +167,9 @@ export class FeedbackComponent {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-
+    this.tableService.$feedbackType.next(
+      this.tabFilterItems[this.tabFilterIdx].type
+    );
     this.statisticsService.outletIds =
       event.index === 0
         ? this.tabFilterItems

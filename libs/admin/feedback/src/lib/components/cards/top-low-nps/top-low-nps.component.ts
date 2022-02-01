@@ -144,11 +144,8 @@ export class TopLowNpsComponent implements OnInit {
   get feedbackConfig() {
     return feedback;
   }
-<<<<<<< HEAD
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
-=======
->>>>>>> k8s-dev-deploy
 }

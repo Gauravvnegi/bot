@@ -175,11 +175,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       }
     });
   }
-<<<<<<< HEAD
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }
-=======
->>>>>>> k8s-dev-deploy
 }

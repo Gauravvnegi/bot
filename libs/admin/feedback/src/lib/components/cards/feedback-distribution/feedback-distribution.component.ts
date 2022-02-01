@@ -157,7 +157,7 @@ export class FeedbackDistributionComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.globalFeedbackFilterType },
+        { feedbackType: this.statisticsService.type },
       ]),
     };
     this.statisticsService.feedbackDistribution(config).subscribe(

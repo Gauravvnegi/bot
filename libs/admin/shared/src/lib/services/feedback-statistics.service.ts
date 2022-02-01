@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class StatisticsService extends ApiService {
   outletIds = [];
+  type: string;
   outletChange = new BehaviorSubject(false);
   markReadStatusChanged = new BehaviorSubject(false);
   getOverallNPSStatistics(config): Observable<any> {

@@ -270,6 +270,14 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-nps-across-services
+          ><hospitality-bot-transactional-datatable
+            tableSubscribed
+            [path]="
+              'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
+            "
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+            [hotelId]="hotelId"
+          ></hospitality-bot-transactional-datatable
         ></ng-container>
         <ng-container *ngSwitchCase="feedbackConfig.types.transactional"
           ><hospitality-bot-point-of-sale

@@ -142,7 +142,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.globalFeedbackFilterType },
+        { feedbackType: this._statisticService.type },
       ]),
     };
     this.$subscription.add(

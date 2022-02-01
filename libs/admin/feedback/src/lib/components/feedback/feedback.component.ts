@@ -74,6 +74,11 @@ export class FeedbackComponent {
             [...data['feedback'].queryValue],
             data['filter'].value
           );
+          if (this.globalFeedbackFilterType === feedback.types.transactional)
+            this.statisticsService.type = this.globalFeedbackFilterType;
+          else this.statisticsService.type = '';
+        } else {
+          this.statisticsService.type = feedback.types.stay;
         }
       })
     );
@@ -162,6 +167,9 @@ export class FeedbackComponent {
             .map((item) => item.value)
             .filter((value) => value != 'ALL')
         : [this.tabFilterItems[this.tabFilterIdx].value];
+    if (this.globalFeedbackFilterType !== feedback.types.both)
+      this.statisticsService.type = this.tabFilterItems[this.tabFilterIdx].type;
+    else this.statisticsService.type = '';
     this.statisticsService.outletChange.next(true);
   }
 

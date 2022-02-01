@@ -146,7 +146,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          feedbackType: this.globalFeedbackFilterType,
+          feedbackType: this._statisticService.type,
         },
       ]),
     };

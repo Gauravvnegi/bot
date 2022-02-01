@@ -308,7 +308,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         {
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
-          feedbackType: this.globalFeedbackFilterType,
+          feedbackType: this._statisticService.type,
         },
         // ...this.getSelectedQuickReplyFilters(),
       ]),

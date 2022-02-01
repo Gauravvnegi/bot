@@ -121,7 +121,7 @@ export class TopLowNpsComponent implements OnInit {
         {
           order: sharedConfig.defaultOrder,
           npsFilter: this.tabFilterItems[this.tabFilterIdx]?.value,
-          feedbackType: this.globalFeedbackFilterType,
+          feedbackType: this.statisticsService.type,
         },
       ]),
     };

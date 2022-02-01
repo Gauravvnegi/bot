@@ -204,7 +204,7 @@ export class NetPromoterScoreComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.globalFeedbackFilterType },
+        { feedbackType: this._statisticService.type },
       ]),
     };
     this.$subscription.add(
@@ -237,7 +237,7 @@ export class NetPromoterScoreComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          feedbackType: this.globalFeedbackFilterType,
+          feedbackType: this._statisticService.type,
         },
       ]),
     };

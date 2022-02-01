@@ -162,7 +162,7 @@ export class GlobalNpsComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.globalFeedbackFilterType },
+        { feedbackType: this.statisticsService.type },
       ]),
     };
     this.statisticsService.getGlobalNPS(config).subscribe(

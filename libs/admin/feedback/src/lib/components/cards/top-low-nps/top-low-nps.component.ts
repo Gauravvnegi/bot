@@ -18,6 +18,7 @@ import { PerformanceNPS } from '../../../data-models/statistics.model';
 })
 export class TopLowNpsComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  tabfeedbackType: string;
   globalQueries;
   performanceNPS: PerformanceNPS;
   protected $subscription = new Subscription();
@@ -55,6 +56,7 @@ export class TopLowNpsComponent implements OnInit {
         ];
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
+        this.tabfeedbackType = this.globalFeedbackFilterType;
         this.setEntityId(data['filter'].value.feedback.feedbackType);
       })
     );
@@ -73,10 +75,14 @@ export class TopLowNpsComponent implements OnInit {
       ];
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: element.hotelId },
-          ];
+          if (
+            !this.globalQueries[
+              this.globalQueries.length - 1
+            ].entityIds.includes(element.hotelId)
+          )
+            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
+              element.hotelId
+            );
         }
       });
     } else {
@@ -93,8 +99,9 @@ export class TopLowNpsComponent implements OnInit {
   }
 
   listenForOutletChanged() {
-    this.statisticsService.outletChange.subscribe((response) => {
-      if (response) {
+    this.statisticsService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.tabfeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -121,7 +128,8 @@ export class TopLowNpsComponent implements OnInit {
         {
           order: sharedConfig.defaultOrder,
           npsFilter: this.tabFilterItems[this.tabFilterIdx]?.value,
-          feedbackType: this.statisticsService.type,
+          feedbackType:
+            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
         },
       ]),
     };

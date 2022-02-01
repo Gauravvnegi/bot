@@ -154,7 +154,7 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
    */
   listenForOutletChanged() {
     this.$subscription.add(
-      this.statisticService.outletChange.subscribe((response) => {
+      this.statisticService.$outletChange.subscribe((response) => {
         if (response) {
           this.globalQueries.forEach((element) => {
             if (element.hasOwnProperty('entityIds')) {

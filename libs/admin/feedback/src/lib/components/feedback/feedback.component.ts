@@ -179,7 +179,10 @@ export class FeedbackComponent {
     if (this.globalFeedbackFilterType !== feedback.types.both)
       this.statisticsService.type = this.tabFilterItems[this.tabFilterIdx].type;
     else this.statisticsService.type = '';
-    this.statisticsService.outletChange.next(true);
+    this.statisticsService.$outletChange.next({
+      status: true,
+      type: this.tabFilterItems[this.tabFilterIdx].type,
+    });
   }
 
   openFeedbackRequestPage(event) {

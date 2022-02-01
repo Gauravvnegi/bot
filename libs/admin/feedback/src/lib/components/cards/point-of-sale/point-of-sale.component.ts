@@ -118,10 +118,14 @@ export class PointOfSaleComponent implements OnInit {
       ];
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: element.hotelId },
-          ];
+          if (
+            !this.globalQueries[
+              this.globalQueries.length - 1
+            ].entityIds.includes(element.hotelId)
+          )
+            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
+              element.hotelId
+            );
         }
       });
     }
@@ -151,7 +155,7 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   listenForOutletChanged(): void {
-    this._statisticService.outletChange.subscribe((response) => {
+    this._statisticService.$outletChange.subscribe((response) => {
       if (response) {
         this.setTabFilterItems(this.branchId);
         this.getStats();

@@ -19,6 +19,7 @@ import { GlobalNPS } from '../../../data-models/statistics.model';
 })
 export class GlobalNpsComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  tabfeedbackType: string;
   feedbackConfig = feedback;
   globalNps: GlobalNPS;
   color = feedback.colorConfig.globalNPS;
@@ -94,10 +95,14 @@ export class GlobalNpsComponent implements OnInit {
       ];
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
-          this.globalQueries = [
-            ...this.globalQueries,
-            { entityIds: element.hotelId },
-          ];
+          if (
+            !this.globalQueries[
+              this.globalQueries.length - 1
+            ].entityIds.includes(element.hotelId)
+          )
+            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
+              element.hotelId
+            );
         }
       });
     } else {
@@ -113,8 +118,9 @@ export class GlobalNpsComponent implements OnInit {
   }
 
   listenForOutletChanged() {
-    this.statisticsService.outletChange.subscribe((response) => {
-      if (response) {
+    this.statisticsService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.tabfeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -162,7 +168,10 @@ export class GlobalNpsComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.statisticsService.type },
+        {
+          feedbackType:
+            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+        },
       ]),
     };
     this.statisticsService.getGlobalNPS(config).subscribe(

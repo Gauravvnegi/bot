@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';
 
 /**
@@ -8,6 +8,7 @@ import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';
  */
 @Injectable()
 export class FeedbackTableService extends ApiService {
+  $feedbackType = new BehaviorSubject('');
   /**
    * @function To get guest feedback list.
    * @param config The filter config data.

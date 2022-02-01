@@ -52,6 +52,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForReadStatusChange();
     if (
       this.globalFeedbackFilterType === feedback.types.transactional ||
       this.globalFeedbackFilterType === feedback.types.both
@@ -86,6 +87,14 @@ export class OverallReceivedBifurcationComponent implements OnInit {
             { entityIds: this._statisticService.outletIds },
           ];
         this.setEntityId(data['filter'].value.feedback.feedbackType);
+        this.getStats();
+      })
+    );
+  }
+
+  listenForReadStatusChange() {
+    this.$subscription.add(
+      this._statisticService.markReadStatusChanged.subscribe((response) => {
         this.getStats();
       })
     );

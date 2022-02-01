@@ -19,6 +19,7 @@ import { Bifurcation } from '../../../data-models/statistics.model';
 })
 export class OverallReceivedBifurcationComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  @Input() hotelId;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
@@ -61,43 +62,52 @@ export class OverallReceivedBifurcationComponent implements OnInit {
 
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe(
-        (data) => {
-          let calenderType = {
-            calenderType: this.dateService.getCalendarType(
-              data['dateRange'].queryValue[0].toDate,
-              data['dateRange'].queryValue[1].fromDate,
-              this._globalFilterService.timezone
-            ),
-          };
-          this.selectedInterval = calenderType.calenderType;
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        if (
+          this.globalFeedbackFilterType === feedback.types.transactional ||
+          this.globalFeedbackFilterType === feedback.types.both
+        )
           this.globalQueries = [
-            ...data['filter'].queryValue,
-            ...data['dateRange'].queryValue,
-            calenderType,
+            ...this.globalQueries,
+            { entityIds: this._statisticService.outletIds },
           ];
-          if (
-            this.globalFeedbackFilterType === feedback.types.transactional ||
-            this.globalFeedbackFilterType === feedback.types.both
-          )
-            this.globalQueries = [
-              ...this.globalQueries,
-              { entityIds: this._statisticService.outletIds },
-            ];
-          this.getStats();
-        },
-        ({ error }) =>
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+        this.getStats();
+      })
     );
+  }
+
+  setEntityId() {
+    if (this.globalFeedbackFilterType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+    else if (this.globalFeedbackFilterType === feedback.types.both) {
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('entityIds')) {
+          element.entityIds.push(this.hotelId);
+        }
+      });
+    } else {
+      this.globalQueries = [...this.globalQueries, { entityIds: this.hotelId }];
+    }
   }
 
   listenForOutletChanged() {
@@ -164,5 +174,9 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         this.feedbackChart.Colors[0].borderColor.push(feedback.color);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

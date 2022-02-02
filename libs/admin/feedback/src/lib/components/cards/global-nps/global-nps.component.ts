@@ -169,8 +169,7 @@ export class GlobalNpsComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          feedbackType:
-            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+          feedbackType: this.getFeedbackType(),
         },
       ]),
     };
@@ -202,6 +201,17 @@ export class GlobalNpsComponent implements OnInit {
    */
   roundValue(data): number {
     return data % 1 >= 0.5 ? Math.ceil(data) : Math.floor(data);
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === this.feedbackConfig.types.both
+        ? ''
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === this.feedbackConfig.types.both
+      ? ''
+      : this.tabfeedbackType;
   }
 
   ngOnDestroy() {

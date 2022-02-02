@@ -211,8 +211,7 @@ export class NetPromoterScoreComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          feedbackType:
-            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+          feedbackType: this.getFeedbackType(),
         },
       ]),
     };
@@ -246,8 +245,7 @@ export class NetPromoterScoreComponent implements OnInit {
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          feedbackType:
-            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+          feedbackType: this.getFeedbackType(),
         },
       ]),
     };
@@ -272,6 +270,17 @@ export class NetPromoterScoreComponent implements OnInit {
         }
       )
     );
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === this.feedbackConfig.types.both
+        ? ''
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === this.feedbackConfig.types.both
+      ? ''
+      : this.tabfeedbackType;
   }
 
   ngOnDestroy(): void {

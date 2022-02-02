@@ -164,8 +164,7 @@ export class FeedbackDistributionComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          feedbackType:
-            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+          feedbackType: this.getFeedbackType(),
         },
       ]),
     };
@@ -188,6 +187,17 @@ export class FeedbackDistributionComponent implements OnInit {
           .subscribe();
       }
     );
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === this.feedbackConfig.types.both
+        ? ''
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === this.feedbackConfig.types.both
+      ? ''
+      : this.tabfeedbackType;
   }
 
   ngOnDestroy() {

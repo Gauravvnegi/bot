@@ -158,8 +158,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          feedbackType:
-            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+          feedbackType: this.getFeedbackType(),
         },
       ]),
     };
@@ -204,6 +203,17 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         this.feedbackChart.Colors[0].borderColor.push(feedback.color);
       }
     });
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === feedback.types.both
+        ? ''
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === feedback.types.both
+      ? ''
+      : this.tabfeedbackType;
   }
 
   ngOnDestroy() {

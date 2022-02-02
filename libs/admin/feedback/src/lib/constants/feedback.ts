@@ -333,39 +333,86 @@ export const feedback = {
     ],
   },
   cols: {
-    feedbackDatatable: [
-      {
-        field: 'outlet',
-        header: 'Outlet',
-        isSort: true,
-        sortType: 'string',
-      },
-      {
-        field: 'guest.getFullName()',
-        header: 'Name/Phone No.',
-        isSort: true,
-        sortType: 'string',
-      },
-      {
-        field: 'getServiceTypeAndTime()',
-        header: 'Service/ Feedback',
-        isSort: true,
-        sortType: 'string',
-      },
-      {
-        field: `getCreatedDate()`,
-        header: 'Visit Date/ curr. Living In',
-        isSort: true,
-        sortType: 'date',
-      },
-      {
-        field: 'comments',
-        header: 'Comment',
-        isSort: true,
-        sortType: 'string',
-      },
-      { field: 'stageAndourney', header: 'Actions' },
-    ],
+    feedbackDatatable: {
+      transactional: [
+        {
+          field: 'outlet',
+          header: 'Outlet',
+          isSort: true,
+          sortType: 'string',
+        },
+        {
+          field: 'guest.getFullName()',
+          header: 'Name/Phone No.',
+          isSort: true,
+          sortType: 'string',
+        },
+        {
+          field: 'getServiceTypeAndTime()',
+          header: 'Service/ Feedback',
+          isSort: true,
+          sortType: 'string',
+        },
+        {
+          field: `getCreatedDate()`,
+          header: 'Visit Date/ curr. Living In',
+          isSort: true,
+          sortType: 'date',
+        },
+        {
+          field: 'comments',
+          header: 'Comment',
+          isSort: true,
+          sortType: 'string',
+        },
+        { field: 'stageAndourney', header: 'Actions' },
+      ],
+      stay: [
+        {
+          field: 'guestData.bookingNo',
+          header: 'Booking No./ Outlet',
+          isSort: true,
+          sortType: 'string',
+        },
+        {
+          field: '',
+          header: 'Purpose/ Feedback',
+          isSort: false,
+          sortType: 'string',
+        },
+        {
+          field: 'guest.getFullName()',
+          header: 'Name/Phone No./ Email',
+          isSort: true,
+          sortType: 'string',
+        },
+        {
+          field: `guest.getCreatedDate()`,
+          header: 'Date/Time /Guests',
+          isSort: true,
+          sortType: 'date',
+        },
+        {
+          field: 'guestData.dueSpend',
+          header: 'Amount Due/ Total Spend',
+          isSort: true,
+          sortType: 'number',
+        },
+        {
+          field: 'guestData.overAllNps',
+          header: 'Overall NPS',
+          isSort: true,
+          sortType: 'number',
+        },
+        {
+          field: 'guestData.churnProbalilty',
+          header: 'Churn Prob/ Prediction',
+          isSort: false,
+          sortType: 'string',
+        },
+        { field: 'stageAndourney', header: 'Actions' },
+      ],
+    },
   },
   tabFilterItems: {
     topLowNPS: {

@@ -128,8 +128,7 @@ export class TopLowNpsComponent implements OnInit {
         {
           order: sharedConfig.defaultOrder,
           npsFilter: this.tabFilterItems[this.tabFilterIdx]?.value,
-          feedbackType:
-            this.tabfeedbackType === 'ALL' ? '' : this.tabfeedbackType,
+          feedbackType: this.getFeedbackType(),
         },
       ]),
     };
@@ -162,6 +161,17 @@ export class TopLowNpsComponent implements OnInit {
 
   get feedbackConfig() {
     return feedback;
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === feedback.types.both
+        ? ''
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === feedback.types.both
+      ? ''
+      : this.tabfeedbackType;
   }
 
   ngOnDestroy() {

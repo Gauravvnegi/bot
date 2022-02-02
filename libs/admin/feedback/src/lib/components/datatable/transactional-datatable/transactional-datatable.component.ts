@@ -26,6 +26,7 @@ import {
   Feedback,
   FeedbackTable,
   Notes,
+  StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
 import { EntityState, SelectedChip } from '../../../types/feedback.type';
@@ -55,7 +56,8 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
   hotelId: string;
   rowsPerPage: number = 25;
 
-  cols = feedback.cols.feedbackDatatable;
+  cols = feedback.cols.feedbackDatatable.transactional;
+  stayCols = feedback.cols.feedbackDatatable.stay;
 
   chips = feedback.chips.feedbackDatatable;
 
@@ -99,6 +101,11 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
     else if (this.globalFeedbackFilterType === feedback.types.stay)
       this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
     else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
+    this.cols =
+      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.globalFeedbackConfig.types.stay
+        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
+        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
   }
 
   /**
@@ -210,10 +217,19 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new FeedbackTable().deserialize(
-            data,
-            this.outlets
-          ).records;
+          if (
+            this.tabFilterItems[this.tabFilterIdx].value ===
+            this.globalFeedbackConfig.types.transactional
+          )
+            this.values = new FeedbackTable().deserialize(
+              data,
+              this.outlets
+            ).records;
+          else
+            this.values = new StayFeedbackTable().deserialize(
+              data,
+              this.outlets
+            ).records;
           //set pagination
           this.totalRecords = data.total;
           this.tabFilterItems[this.tabFilterIdx].total = data.total;
@@ -333,10 +349,19 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new FeedbackTable().deserialize(
-            data,
-            this.outlets
-          ).records;
+          if (
+            this.tabFilterItems[this.tabFilterIdx].value ===
+            this.globalFeedbackConfig.types.transactional
+          )
+            this.values = new FeedbackTable().deserialize(
+              data,
+              this.outlets
+            ).records;
+          else
+            this.values = new StayFeedbackTable().deserialize(
+              data,
+              this.outlets
+            ).records;
           this.tabFilterItems[this.tabFilterIdx].total = data.total;
           data.entityStateCounts &&
             this.updateQuickReplyFilterCount(data.entityStateCounts);
@@ -399,6 +424,12 @@ export class TransactionalDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent) {
     this.tabFilterIdx = event.index;
+    this.cols =
+      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.globalFeedbackConfig.types.stay
+        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
+        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+    this.values = [];
     this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
 

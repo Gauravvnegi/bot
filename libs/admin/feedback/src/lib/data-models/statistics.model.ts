@@ -302,15 +302,15 @@ export class Outlet {
   deserialize(input) {
     this.services = new Array<Service>();
     Object.assign(this, set({}, 'label', get(input, ['label'])));
-    Object.keys(input.services).forEach((key) => {
+    Object.keys(input.services).forEach((key) =>
       this.services.push(
         new Service().deserialize({
           label: key,
           percentage: input.services[key],
-          color: SharedColors[key],
+          color: SharedColors[key.toUpperCase()],
         })
-      );
-    });
+      )
+    );
 
     // this.services = new Services().deserialize(input.services);
     return this;
@@ -349,7 +349,7 @@ export class Bifurcation {
       this.feedbacks.push(
         new Status().deserialize({
           ...input.stats[key],
-          color: SharedColors[key],
+          color: SharedColors[key.toUpperCase()],
         })
       )
     );
@@ -390,6 +390,9 @@ export const SharedColors = {
   READ: '#ffbf04',
   UNREAD: '#4ba0f5',
   ACTIONED: '#31bb92',
+  LUNCH: '#f18533',
+  BREAKFAST: '#4974e0',
+  DINNER: '#3db76b',
 };
 
 export class NPOSVertical {

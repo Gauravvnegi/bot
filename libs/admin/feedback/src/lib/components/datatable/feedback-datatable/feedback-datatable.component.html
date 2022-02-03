@@ -40,7 +40,7 @@
                   {{ 'request_feedback_label' | translate }}
                 </div>
               </div>
-              <div class="btn read">
+              <div class="btn read" *ngIf="selectedRows.length > 0">
                 <img
                   [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
                   [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
@@ -50,7 +50,7 @@
                   {{ 'datatable.mark_as_read' | translate }}
                 </span>
               </div>
-              <div class="btn">
+              <div class="btn" *ngIf="selectedRows.length > 0">
                 <img
                   [src]="
                     globalFeedbackConfig.images.datatable.mark_as_unread.url
@@ -566,6 +566,7 @@
               rowData.guestData.getDepartureTime(_globalFilterService.timezone)
             }}
           </p>
+          <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
         </td>
         <td class="comments">
           <span

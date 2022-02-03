@@ -82,7 +82,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.setTabFilters();
+    this.setTabFilters(this.globalFeedbackFilterType);
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -90,38 +90,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       type: '',
       defaultLabel: 'Export Summary',
     });
-  }
-
-  /**
-   * @function setTabFilters To set tab filters based on filter.
-   */
-  setTabFilters() {
-    if (this.globalFeedbackFilterType === feedback.types.transactional)
-      this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
-    else if (this.globalFeedbackFilterType === feedback.types.stay)
-      this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
-    else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
-    this.cols =
-      this.tabFilterItems[this.tabFilterIdx].value ===
-      this.globalFeedbackConfig.types.stay
-        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
-        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
-  }
-
-  /**
-   * @function getOutlets To get outlets for a hotel.
-   * @param branchId The branch id.
-   */
-  getOutlets(branchId: string) {
-    this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
-      (branch) => branch['id'] == branchId
-    ).outlets;
-    this.outlets = [
-      ...this.outlets,
-      ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
-        (branch) => branch['id'] == branchId
-      ),
-    ];
   }
 
   registerListeners(): void {
@@ -136,7 +104,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        //set-global query everytime global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
@@ -146,10 +113,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            // entityType: this.tabFilterItems[this.tabFilterIdx].value,
-          },
+          { order: sharedConfig.defaultOrder },
           ...this.getSelectedQuickReplyFilters(),
         ]);
       })
@@ -159,7 +123,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   /**
    * @function listenForOutletChanged To listen for outlet tab change.
    */
-  listenForOutletChanged() {
+  listenForOutletChanged(): void {
     this.$subscription.add(
       this.statisticService.$outletChange.subscribe((response) => {
         if (response) {
@@ -170,10 +134,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           });
           this.loadInitialData([
             ...this.globalQueries,
-            {
-              order: sharedConfig.defaultOrder,
-              // entityType: 'TRANSACTIONALFEEDBACK',
-            },
+            { order: sharedConfig.defaultOrder },
             ...this.getSelectedQuickReplyFilters(),
           ]);
         }
@@ -181,16 +142,55 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  listenForFeedbackTypeChanged() {
+  /**
+   * @function listenForFeedbackTypeChanged To listen the local tab change.
+   */
+  listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
       this.tableService.$feedbackType.subscribe((response) => {
-        if (response === feedback.types.transactional)
-          this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
-        else if (response === feedback.types.stay)
-          this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
-        else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
+        this.setTabFilters(response);
       })
     );
+  }
+
+  /**
+   * @function setTabFilters To set tab filters based on feedback type  .
+   * @param feedbackType The current feedback type.
+   */
+  setTabFilters(feedbackType): void {
+    if (feedbackType === feedback.types.transactional)
+      this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
+    else if (feedbackType === feedback.types.stay)
+      this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
+    else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
+    this.setTableCols();
+  }
+
+  /**
+   * @function setTableCols To set table columns header
+   */
+  setTableCols(): void {
+    this.cols =
+      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.globalFeedbackConfig.types.stay
+        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
+        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+  }
+
+  /**
+   * @function getOutlets To get outlets for a hotel.
+   * @param branchId The branch id.
+   */
+  getOutlets(branchId: string): void {
+    this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
+      (branch) => branch['id'] == branchId
+    ).outlets;
+    this.outlets = [
+      ...this.outlets,
+      ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+        (branch) => branch['id'] == branchId
+      ),
+    ];
   }
 
   /**
@@ -198,8 +198,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param globalQueries The filter list data.
    */
   getHotelId(globalQueries): void {
-    //todo
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -212,43 +210,16 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param queries The filter list data.
    * @param loading The table loading status.
    */
-  loadInitialData(queries = [], loading = true) {
+  loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          if (
-            this.tabFilterItems[this.tabFilterIdx].value ===
-            this.globalFeedbackConfig.types.transactional
-          )
-            this.values = new FeedbackTable().deserialize(
-              data,
-              this.outlets
-            ).records;
-          else
-            this.values = new StayFeedbackTable().deserialize(
-              data,
-              this.outlets
-            ).records;
-          //set pagination
-          this.totalRecords = data.total;
-          this.tabFilterItems[this.tabFilterIdx].total = data.total;
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.showErrorMessage(error);
         }
       )
     );
@@ -271,7 +242,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param countObj The Tab count object.
    * @param currentTabCount The current tab data count.
    */
-  updateTabFilterCount(countObj, currentTabCount: number) {
+  updateTabFilterCount(countObj, currentTabCount: number): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.total = countObj[tab.value];
@@ -285,7 +256,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updateQuickReplyFilterCount To update chip count.
    * @param countObj The chip count data.
    */
-  updateQuickReplyFilterCount(countObj: EntityState) {
+  updateQuickReplyFilterCount(countObj: EntityState): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         tab.chips.forEach((chip) => {
@@ -320,6 +291,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return this.tableService.getGuestFeedbacks(config);
   }
 
+  /**
+   * @function setEntityId To set entity id based on current table filter.
+   * @returns The entityIds.
+   */
   setEntityId() {
     if (
       this.tabFilterItems[this.tabFilterIdx].value ===
@@ -333,64 +308,57 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function loadData To load table data on a page change.
    * @param event The lazy load event.
    */
-  loadData(event: LazyLoadEvent) {
+  loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [
           ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            // entityType: 'TRANSACTIONAL',
-          },
+          { order: sharedConfig.defaultOrder },
           ...this.getSelectedQuickReplyFilters(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          if (
-            this.tabFilterItems[this.tabFilterIdx].value ===
-            this.globalFeedbackConfig.types.transactional
-          )
-            this.values = new FeedbackTable().deserialize(
-              data,
-              this.outlets
-            ).records;
-          else
-            this.values = new StayFeedbackTable().deserialize(
-              data,
-              this.outlets
-            ).records;
-          this.tabFilterItems[this.tabFilterIdx].total = data.total;
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.showErrorMessage(error);
         }
       )
     );
   }
 
   /**
+   * @function setRecords To set the table row data.
+   * @param data The api response data for feedback.
+   */
+  setRecords(data): void {
+    if (
+      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.globalFeedbackConfig.types.transactional
+    )
+      this.values = new FeedbackTable().deserialize(data, this.outlets).records;
+    else
+      this.values = new StayFeedbackTable().deserialize(
+        data,
+        this.outlets
+      ).records;
+    this.totalRecords = data.total;
+    this.tabFilterItems[this.tabFilterIdx].total = data.total;
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+
+    this.loading = false;
+  }
+
+  /**
    * @function updatePaginations To handle page change event.
    * @param event The lazy load event.
    */
-  updatePaginations(event: LazyLoadEvent) {
+  updatePaginations(event: LazyLoadEvent): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
   }
@@ -399,7 +367,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updatePaginationForFilterItems To update the page number for a tab.
    * @param pageEvent The page number.
    */
-  updatePaginationForFilterItems(pageEvent: number) {
+  updatePaginationForFilterItems(pageEvent: number): void {
     this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
@@ -407,7 +375,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function customSort To handle table sort click.
    * @param event The sort event for the table.
    */
-  customSort(event: SortEvent) {
+  customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
       event.field[event.field.length - 1] === ')'
@@ -422,13 +390,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function onSelectedTabFilterChange To handle tab filter selection.
    * @param event The material tab change event.
    */
-  onSelectedTabFilterChange(event: MatTabChangeEvent) {
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.cols =
-      this.tabFilterItems[this.tabFilterIdx].value ===
-      this.globalFeedbackConfig.types.stay
-        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
-        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+    this.setTableCols();
     this.values = [];
     this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
@@ -443,7 +407,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     value: string,
     field: string,
     matchMode = 'startsWith'
-  ) {
+  ): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;
@@ -461,7 +425,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   /**
    * @function exportCSV To export CSV report for feedback table.
    */
-  exportCSV() {
+  exportCSV(): void {
     this.loading = true;
     const queries = [
       ...this.globalQueries,
@@ -497,15 +461,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.showErrorMessage(error);
         }
       )
     );
@@ -515,7 +471,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function updateFeedbackStatus To update the read status of a feedback.
    * @param status The feedback status.
    */
-  updateFeedbackStatus(status: boolean) {
+  updateFeedbackStatus(status: boolean): void {
     if (!this.selectedRows.length) {
       this._snackbarService.openSnackBarAsText(
         this._translateService.instant(
@@ -562,10 +518,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loadInitialData(
             [
               ...this.globalQueries,
-              {
-                order: sharedConfig.defaultOrder,
-                // entityType: this.tabFilterItems[this.tabFilterIdx].value,
-              },
+              { order: sharedConfig.defaultOrder },
               ...this.getSelectedQuickReplyFilters(),
             ],
             false
@@ -574,15 +527,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.showErrorMessage(error);
         }
       )
     );
@@ -593,7 +538,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param quickReplyTypeIdx The selected chip index.
    * @param quickReplyType The selected chip.
    */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType) {
+  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
@@ -623,7 +568,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param data The feedback data.
    * @param notes The notes data for a particular feedback.
    */
-  openEditNotes(event: MouseEvent, data: Feedback, notes: Notes) {
+  openEditNotes(event: MouseEvent, data: Feedback, notes: Notes): void {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -660,25 +605,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
                 this.loadInitialData(
                   [
                     ...this.globalQueries,
-                    {
-                      order: sharedConfig.defaultOrder,
-                      // entityType: this.tabFilterItems[this.tabFilterIdx].value,
-                    },
+                    { order: sharedConfig.defaultOrder },
                     ...this.getSelectedQuickReplyFilters(),
                   ],
                   false
                 );
               },
-              ({ error }) =>
-                this._snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.error.some_thing_wrong',
-                      priorityMessage: error?.message,
-                    },
-                    ''
-                  )
-                  .subscribe()
+              ({ error }) => this.showErrorMessage(error)
             )
           );
         } else detailCompRef.close();
@@ -691,7 +624,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param event The mouse click event.
    * @param id The outlet id.
    */
-  downloadFeedbackPdf(event: MouseEvent, id: string) {
+  downloadFeedbackPdf(event: MouseEvent, id: string): void {
     event.stopPropagation();
 
     this.$subscription.add(
@@ -704,16 +637,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           link.click();
           link.remove();
         },
-        (error) =>
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        (error) => this.showErrorMessage(error)
       )
     );
   }
@@ -731,7 +655,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function openFeedbackRequestPage To open the request feedback modal.
    * @param event The mouse click event.
    */
-  openFeedbackRequestPage(event: MouseEvent) {
+  openFeedbackRequestPage(event: MouseEvent): void {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -751,7 +675,23 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  ngOnDestroy() {
+  /**
+   * @function showErrorMessage To show error message via snackbar.
+   * @param error The error object from api.
+   */
+  showErrorMessage(error): void {
+    this._snackbarService
+      .openSnackBarWithTranslate(
+        {
+          translateKey: 'messages.error.some_thing_wrong',
+          priorityMessage: error?.message,
+        },
+        ''
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }

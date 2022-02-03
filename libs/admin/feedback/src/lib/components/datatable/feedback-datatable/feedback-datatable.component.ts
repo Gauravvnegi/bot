@@ -33,14 +33,14 @@ import { EntityState, SelectedChip } from '../../../types/feedback.type';
 import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
 
 @Component({
-  selector: 'hospitality-bot-transactional-datatable',
-  templateUrl: './transactional-datatable.component.html',
+  selector: 'hospitality-bot-feedback-datatable',
+  templateUrl: './feedback-datatable.component.html',
   styleUrls: [
     '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './transactional-datatable.component.scss',
+    './feedback-datatable.component.scss',
   ],
 })
-export class TransactionalDatatableComponent extends BaseDatatableComponent
+export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   globalFeedbackConfig = feedback;

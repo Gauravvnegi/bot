@@ -247,7 +247,6 @@ export class StayGuestData {
       set({}, 'totalSpend', get(input, ['totalSpend'])),
       set({}, 'transactionUsage', get(input, ['transactionUsage']))
     );
-    console.log(this);
     return this;
   }
 

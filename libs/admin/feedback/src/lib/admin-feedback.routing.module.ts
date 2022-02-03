@@ -12,7 +12,7 @@ import {
   TwoWayProgressComponent,
 } from './components/cards';
 import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-sale.component';
-import { TransactionalDatatableComponent } from './components/datatable/transactional-datatable/transactional-datatable.component';
+import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 
 import { FeedbackComponent } from './components/feedback/feedback.component';
@@ -40,7 +40,7 @@ export class AdminFeedbackRoutingModule {
     SharedComponent,
     TopLowNpsComponent,
     TwoWayProgressComponent,
-    TransactionalDatatableComponent,
+    FeedbackDatatableComponent,
     FeedbackNotesComponent,
     PointOfSaleComponent,
   ];

@@ -203,45 +203,6 @@ export class NpsAcrossServicesComponent implements OnInit {
   }
 
   /**
-   * @function initProgressData To initialize the progress bar data.
-   * @param entities The chips for the tabs.
-   */
-  protected initProgressData(entities: Object) {
-    this.progresses = {};
-    if (
-      this.tabFilterItems[this.tabFilterIdx].chips.filter(
-        (data) => data.value === 'ALL' && data.isSelected
-      ).length
-    ) {
-      this.progresses = {
-        ...this.progresses,
-        ...entities,
-      };
-      this.maxBarCount = 0;
-      Object.keys(entities).forEach((data) => {
-        if (this.maxBarCount < entities[data].length) {
-          this.maxBarCount = entities[data].length;
-        }
-      });
-    } else {
-      this.maxBarCount = 0;
-      this.progressLength = 0;
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.isSelected) {
-          this.progressLength += 1;
-          this.progresses = {
-            ...this.progresses,
-            [chip.value]: entities[chip.value],
-          };
-          if (entities[chip.value].length > this.maxBarCount) {
-            this.maxBarCount = entities[chip.value].length;
-          }
-        }
-      });
-    }
-  }
-
-  /**
    * @function getSelectedQuickReplyFilters To get the selected chip list.
    * @returns The quick reply filter array.
    */
@@ -282,7 +243,6 @@ export class NpsAcrossServicesComponent implements OnInit {
               this.npsProgressData.departments
             );
           }
-          this.initProgressData(this.npsProgressData.entities);
         },
         ({ error }) =>
           this._snackbarService
@@ -308,7 +268,7 @@ export class NpsAcrossServicesComponent implements OnInit {
         {
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
-          feedbackType: this._statisticService.type,
+          feedbackType: this.feedbackConfig.types.stay,
         },
         // ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -344,5 +304,11 @@ export class NpsAcrossServicesComponent implements OnInit {
    */
   get quickReplyActionFilters(): FormControl {
     return this.npsFG.get('quickReplyActionFilters') as FormControl;
+  }
+
+  get npsStatKeys() {
+    if (this.npsProgressData?.npsStats)
+      return Object.keys(this.npsProgressData.npsStats);
+    return [];
   }
 }

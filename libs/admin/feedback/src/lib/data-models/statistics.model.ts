@@ -43,14 +43,13 @@ export class Department {
 
 export class NPSAcrossServices {
   npsStats;
-  entities;
   departments;
   services: Chip[];
 
   deserialize(statistics) {
     this.departments = new Array<any>();
     this.services = new Array<Chip>();
-    this.entities = {};
+    this.npsStats = {};
     Object.keys(statistics.departments).forEach((key) =>
       this.departments.push({ key, value: statistics.departments[key] })
     );
@@ -71,17 +70,10 @@ export class NPSAcrossServices {
         isSelected: false,
         type: 'initiated',
       });
-      this.entities[key] = [];
-      statistics.entities[key] &&
-        Object.keys(statistics.entities[key]).forEach((entity) => {
-          this.entities[key].push({
-            entity,
-            value: statistics.entities[key][entity],
-            statistic: statistics.npsStats[key][entity]
-              ? statistics.npsStats[key][entity]
-              : {},
-          });
-        });
+      this.npsStats[key] = {
+        ...statistics.npsStats[key],
+        label: statistics.services[key],
+      };
     });
     return this;
   }

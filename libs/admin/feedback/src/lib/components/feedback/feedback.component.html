@@ -83,9 +83,9 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
         [hotelId]="hotelId"
       ></hospitality-bot-nps-across-services>
-      <hospitality-bot-transactional-datatable
+      <hospitality-bot-feedback-datatable
         [globalFeedbackFilterType]="globalFeedbackFilterType"
-      ></hospitality-bot-transactional-datatable>
+      ></hospitality-bot-feedback-datatable>
     </ng-container>
     <ng-container *ngSwitchCase="feedbackConfig.types.transactional">
       <div class="feedback-container__header">
@@ -171,14 +171,14 @@
         [hotelId]="hotelId"
       ></hospitality-bot-point-of-sale>
 
-      <hospitality-bot-transactional-datatable
+      <hospitality-bot-feedback-datatable
         tableSubscribed
         [path]="
           'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
         "
         [globalFeedbackFilterType]="globalFeedbackFilterType"
         [hotelId]="hotelId"
-      ></hospitality-bot-transactional-datatable>
+      ></hospitality-bot-feedback-datatable>
     </ng-container>
     <ng-container *ngSwitchCase="feedbackConfig.types.both">
       <div class="feedback-container__header">
@@ -270,14 +270,14 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-nps-across-services
-          ><hospitality-bot-transactional-datatable
+          ><hospitality-bot-feedback-datatable
             tableSubscribed
             [path]="
               'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
             "
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
-          ></hospitality-bot-transactional-datatable
+          ></hospitality-bot-feedback-datatable
         ></ng-container>
         <ng-container *ngSwitchCase="feedbackConfig.types.transactional"
           ><hospitality-bot-point-of-sale
@@ -286,13 +286,13 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-point-of-sale
-          ><hospitality-bot-transactional-datatable
+          ><hospitality-bot-feedback-datatable
             tableSubscribed
             [path]="
               'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
             "
             [hotelId]="hotelId"
-          ></hospitality-bot-transactional-datatable
+          ></hospitality-bot-feedback-datatable
         ></ng-container>
         <ng-container *ngSwitchCase="feedbackConfig.types.both"
           ><hospitality-bot-nps-across-departments
@@ -313,14 +313,14 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-point-of-sale>
-          <hospitality-bot-transactional-datatable
+          <hospitality-bot-feedback-datatable
             tableSubscribed
             [path]="
               'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
             "
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
-          ></hospitality-bot-transactional-datatable
+          ></hospitality-bot-feedback-datatable
         ></ng-container>
       </ng-container>
     </ng-container>

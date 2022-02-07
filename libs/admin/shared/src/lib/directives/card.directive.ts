@@ -4,7 +4,7 @@ import { get } from 'lodash';
 
 @Directive({ selector: '[cardSubscribed]' })
 export class CardDirective implements OnInit {
-  @Input() path: string;
+  @Input() paths: any[];
   constructor(
     protected subscriptionService: SubscriptionPlanService,
     protected elementRef: ElementRef
@@ -16,13 +16,19 @@ export class CardDirective implements OnInit {
 
   checkSubscription(): void {
     const subscription = this.subscriptionService.getModuleSubscription();
-    let getPath = [...['modules'], ...this.path.split('.'), ...['active']];
-    this.elementRef.nativeElement.style.display = get(
-      subscription,
-      getPath,
-      false
-    )
-      ? 'block'
-      : 'none';
+    this.paths = this.paths.map((path) => [
+      'modules',
+      ...path.split('.'),
+      'active',
+    ]);
+
+    let subscribedStatus = this.paths.map((path) =>
+      get(subscription, path, false)
+    );
+
+    this.elementRef.nativeElement.style.display =
+      subscribedStatus.filter(Boolean).length === subscribedStatus.length
+        ? 'block'
+        : 'none';
   }
 }

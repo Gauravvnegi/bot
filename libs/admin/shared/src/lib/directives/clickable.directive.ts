@@ -1,10 +1,4 @@
-import {
-  Directive,
-  Input,
-  OnInit,
-  ElementRef,
-  HostListener,
-} from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
 
 @Directive({ selector: '[click-allow]' })
 export class ClickableDirective implements OnInit {

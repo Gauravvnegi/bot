@@ -170,4 +170,8 @@ export class NotificationComponent implements OnInit {
   get labels() {
     return this.chart.chartLabels;
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

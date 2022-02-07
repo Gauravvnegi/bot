@@ -214,4 +214,8 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
 
     ci.update();
   };
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

@@ -137,4 +137,8 @@ export class NotificationsComponent implements OnInit {
   get dashboardConfig() {
     return dashboard;
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

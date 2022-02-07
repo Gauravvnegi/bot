@@ -2,14 +2,14 @@
   <div
     class="stats"
     cardSubscribed
-    [path]="'dashboard.cards.ARRIVAL'"
+    [paths]="['dashboard.cards.ARRIVAL']"
     click-allow
   >
     <hospitality-bot-arrivals-statistics
       [arrivals]="statistics.arrivals"
     ></hospitality-bot-arrivals-statistics>
   </div>
-  <div class="stats" cardSubscribed [path]="'dashboard.cards.INHOUSE'">
+  <div class="stats" cardSubscribed [paths]="['dashboard.cards.INHOUSE']">
     <hospitality-bot-inhouse-statistics
       [inhouse]="statistics.inhouse"
       [inhouseRequest]="statistics.inhouseRequest"
@@ -18,7 +18,7 @@
   <div
     class="stats full-width"
     cardSubscribed
-    [path]="'dashboard.cards.DEPARTURE'"
+    [paths]="['dashboard.cards.DEPARTURE']"
     click-allow
   >
     <hospitality-bot-departure-statistics
@@ -28,7 +28,7 @@
   <div
     class="notification-wrapper"
     cardSubscribed
-    [path]="'dashboard.cards.Notification'"
+    [paths]="['dashboard.cards.Notification']"
   >
     <hospitality-bot-notifications
       [hotelId]="hotelId"
@@ -38,7 +38,7 @@
   <div
     class="massages-wraper"
     cardSubscribed
-    [path]="'dashboard.cards.Messages'"
+    [paths]="['dashboard.cards.Messages']"
   >
     <hospitality-bot-messages
       [hotelId]="hotelId"
@@ -48,14 +48,14 @@
   <div
     class="stats inc-width-xl change-height"
     cardSubscribed
-    [path]="'dashboard.cards.BOOKINGSTATUS'"
+    [paths]="['dashboard.cards.BOOKINGSTATUS']"
   >
     <hospitality-bot-booking-status></hospitality-bot-booking-status>
   </div>
   <div
     class="stats inc-width-l change-height"
     cardSubscribed
-    [path]="'dashboard.cards.RESERVATION'"
+    [paths]="['dashboard.cards.RESERVATION']"
   >
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
   </div>

@@ -13,29 +13,6 @@
 body {
   overflow-y: hidden;
 }
-// Four color state
-
-// images-color
-
-// .status-image-pending {
-//   filter: invert(95%) sepia(19%) saturate(0%) hue-rotate(193deg) brightness(77%)
-//     contrast(101%);
-// }
-
-// @media screen and (max-width: 1100px) and (orientation: landscape) {
-//   html {
-//     transform: rotate(90deg);
-//     transform-origin: left top;
-//     width: 100vh;
-//     overflow-x: hidden;
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     right: 0;
-//   }
-// }
-
-// popup modal box
 
 .mat-dialog-container {
   overflow: auto !important;
@@ -206,4 +183,11 @@ body {
     padding-top: 80px;
     padding-left: 80px;
   }
+}
+
+.clickable-card {
+  cursor: pointer;
+  box-shadow: 0px 3px 20px #0368ff42;
+  border: 1px solid $primary-purple;
+  border-radius: 5px;
 }

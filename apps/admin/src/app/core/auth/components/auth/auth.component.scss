@@ -38,7 +38,7 @@
       text-align: center;
       position: absolute;
       bottom: 15px;
-      color: $auth-quote-color;
+      color: $quote-color;
       @media (max-width: 1024px) {
         bottom: 25px;
       }
@@ -79,7 +79,7 @@
     @include width-percentage(65%);
     @include padding-percentage(1%);
     height: 100vh;
-    background-image: url('../../../../../assets/auth-banner.png');
+    background-image: url('../../../../../assets/images/auth-banner.webp');
     background-repeat: no-repeat;
     background-size: $full $full;
     position: relative;

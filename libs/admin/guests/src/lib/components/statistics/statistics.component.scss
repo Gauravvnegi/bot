@@ -4,7 +4,6 @@
   @include width(100%);
   @include height(100%);
   background: $white;
-  // box-shadow: 0px 3px 6px $black;
   border-radius: 5px;
   @include padding(20px);
   display: flex;
@@ -49,15 +48,6 @@
       width: 32.33%;
       margin: 0.5%;
       margin: 0.5%;
-      &:hover {
-        cursor: pointer;
-        box-shadow: 0px 3px 20px #0368ff42;
-        border: 1px solid $primary-purple;
-        border-radius: 5px;
-      }
-      // @media screen and (max-width: 800px) {
-      //   height: 185px;
-      // }
     }
   }
   .full-width {

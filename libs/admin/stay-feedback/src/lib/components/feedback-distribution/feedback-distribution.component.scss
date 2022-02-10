@@ -1,3 +1,4 @@
+@import 'main';
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
@@ -35,7 +36,7 @@
     .label {
       font: normal normal bold 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: #6d7580;
+      color: $quote-color;
       text-align: center;
       width: 80px;
       opacity: 1;
@@ -75,7 +76,7 @@
       text-align: left;
       font: normal normal normal 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: #6d7580;
+      color: $quote-color;
       opacity: 1;
       @media (max-width: 1024px) {
         font-size: 10px;

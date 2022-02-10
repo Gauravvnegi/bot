@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
@@ -54,7 +54,6 @@ export class MainComponent implements OnInit {
   }
 
   getReservationDetails(): void {
-    //dev.botshot.in/?token=cg1jak6Id623uiUNGb1UOnRgMUTycRJO0kxLT2ceycybrpFaG6hcVNDnzgWxMY3zI5Vog_Ln5puJFItGajebaImQdO2yQF0N6aKjHBQ_AFC6cIAIVLF3UzAnr9-kU3k6aASl32qp0DhLF22IC-DlhA==
     this.$subscription.add(
       this._reservationService
         .getReservationDetails(this._reservationService.reservationId)
@@ -66,8 +65,6 @@ export class MainComponent implements OnInit {
               this._templateService.templateId
             ];
             this._hotelService.titleConfig$.next(reservationData['hotel']);
-            // TO_DO: Remove function call
-            // this.stepperData = this.modifyStepperData(this._templateService.templateData);
             this.getStepperData();
             this.listenForStepperChange();
             this.reservationData = reservationData;
@@ -89,17 +86,6 @@ export class MainComponent implements OnInit {
           this._templateService.templateId
         ];
         if (templateData) {
-          // let data;
-          // templateData.stepConfigs.find((item, ix) => {
-          //   if (item.component.name === 'payment-details-wrapper') {
-          //     data = ix;
-          //   }
-          // });
-          // if (index > data) {
-          //   this.checkForTodaysBooking(
-          //     this._reservationService.reservationData
-          //   );
-          // }
           this.showFooterSocialIcons =
             index === templateData.stepConfigs.length - 1;
         }

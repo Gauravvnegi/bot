@@ -39,12 +39,12 @@ export const ADMIN_ROUTES = [
         title: 'Analytics',
         url: 'assets/svg/Analytics.svg',
       },
-      // {
-      //   path: 'conversation/request',
-      //   title: 'Requests',
-      //   children: null,
-      //   url: 'assets/svg/request.svg',
-      // },
+      {
+        path: 'conversation/request',
+        title: 'Requests',
+        children: null,
+        url: 'assets/svg/request.svg',
+      },
       {
         path: 'conversation/messages',
         title: 'Messages',

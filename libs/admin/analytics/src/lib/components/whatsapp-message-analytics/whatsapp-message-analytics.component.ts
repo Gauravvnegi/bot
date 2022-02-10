@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import {
@@ -121,7 +122,8 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
   };
   constructor(
     private _globalFilterService: GlobalFilterService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private _adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -154,9 +156,14 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
   }
 
   getConversationStats() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        { comparison: true },
+      ]),
+    };
     this.$subscription.add(
       this.analyticsService
-        .getConversationStats(this.hotelId)
+        .getConversationStats(this.hotelId, config)
         .subscribe((response) => {
           this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
             response.messageCounts

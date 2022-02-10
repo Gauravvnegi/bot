@@ -1,0 +1,281 @@
+@import 'main';
+
+.chart__wrapper {
+  display: flex;
+  margin-top: 15px;
+  @media (max-width: $tablet) {
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  &--container {
+    width: 50%;
+    height: 100%;
+    transform: scale(1.5) translateY(17%);
+
+    @media only screen and (min-width: $XL) {
+      transform: unset;
+    }
+
+    @media only screen and (max-width: $L) {
+      transform: unset;
+    }
+    &-base-chart {
+      height: 117px;
+    }
+  }
+  .chartDetailsWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 124px;
+    .currentChart {
+      display: flex;
+      align-items: center;
+      .currentChartHeading {
+        font: normal normal bold 38px/46px Roboto;
+        text-align: center;
+        font: normal normal bold 35px/46px Roboto;
+        letter-spacing: 2.1px;
+        color: $dark-blue;
+        margin: 5px 10px 5px 0;
+        @media (max-width: $tablet) {
+          font-size: $tabfont25;
+        }
+      }
+      .chartPercent {
+        font: normal normal normal 12px/16px Roboto;
+        letter-spacing: 0px;
+        color: $completed;
+      }
+      .chartDays {
+        font: normal normal normal 10px/13px Roboto;
+        letter-spacing: 0px;
+        color: $light-grey2;
+        opacity: 1;
+      }
+    }
+    .totalGuestsHeading {
+      font: normal normal bold 12px/16px Roboto;
+      letter-spacing: 0.72px;
+      color: $quote-color;
+      opacity: 1;
+    }
+    .chartsubDetailsWrapper {
+      display: flex;
+      .chartsubDetail {
+        display: flex;
+        align-items: center;
+        margin-right: 25px;
+        @media (max-width: $tablet) {
+          @include margin-right(10px);
+        }
+        &__logo {
+          margin-right: 8px;
+        }
+      }
+      .chartDetailBlock {
+        width: 14px;
+        height: 14px;
+        background: $warning 0% 0% no-repeat padding-box;
+        border-radius: 2px;
+        opacity: 1;
+      }
+      .chartDetailHeading {
+        font: normal normal normal 12px/16px Roboto;
+        letter-spacing: 0.72px;
+        color: $quote-color;
+      }
+      .chartDetailText {
+        font: normal normal bold 12px/16px Roboto;
+        letter-spacing: 0.72px;
+        color: $dark-blue;
+        margin-left: 5px;
+      }
+      .chartDetailRightBlock {
+        width: 14px;
+        height: 14px;
+        background: #4ba0f5 0% 0% no-repeat padding-box;
+        border-radius: 2px;
+        opacity: 1;
+      }
+      .chartsubRightDetail {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.stat-val-container {
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-info-labels {
+  letter-spacing: 0.72px;
+  display: flex;
+  align-items: baseline;
+  font-size: 12px;
+  .stat-image {
+    height: 23px;
+    margin-right: 5px;
+  }
+}
+
+.progress-info-labels-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+// ===================Semi Donut Chart model-1========================
+
+.semi-donut {
+  --percentage: 0;
+  --fill: $warning;
+  width: 223px;
+  height: 112px;
+  position: relative;
+  color: $white;
+  font-size: 22px;
+  overflow: hidden;
+  color: var(--fill);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-sizing: border-box;
+  &:after {
+    content: '';
+    width: 223px;
+    height: 223px;
+    border: 20px solid;
+    border-color: #7c21f333 #7c21f333 var(--fill) var(--fill);
+    position: absolute;
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+    box-sizing: border-box;
+    transform: rotate(calc(1deg * (-45 + var(--percentage) * 1.8)));
+    animation: fillAnimation 1s ease-in;
+  }
+}
+
+@keyframes fillAnimation {
+  0% {
+    transform: rotate(-45deg);
+  }
+  50% {
+    transform: rotate(135deg);
+  }
+}
+
+@keyframes fillGraphAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+.progress-detail-contaner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  height: 46px;
+  text-align: center;
+  font: normal normal bold 38px/46px Roboto;
+  letter-spacing: 2.1px;
+  color: $black;
+  opacity: 1;
+}
+
+.stat-val-title {
+  height: 16px;
+  text-align: center;
+  font: normal normal bold 12px/16px Roboto;
+  letter-spacing: 0.72px;
+  color: $quote-color;
+  opacity: 1;
+}
+
+.info-icon {
+  position: relative;
+
+  img {
+    margin: 3px 5px 0;
+    width: 14px;
+    height: 100%;
+  }
+  .tooltip {
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: $white;
+    min-width: 160px;
+    border: 1px solid $border;
+    padding: 10px;
+    top: 120%;
+    left: -200%;
+    color: $tooltip;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px $border;
+    display: none;
+    z-index: 99;
+
+    .arrow {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid $border;
+      left: 40%;
+      transform: translate(-50%);
+
+      &::before {
+        content: '';
+        top: 1px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 9px solid $white;
+        left: -6px;
+        z-index: 3;
+        position: absolute;
+      }
+    }
+  }
+
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+}
+
+:host ::ng-deep .mat-tab-label {
+  width: 50%;
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  font: normal normal normal 18px/24px Roboto;
+  letter-spacing: 1.08px;
+  color: $button-blue;
+  opacity: 1;
+}
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
+}

@@ -38,6 +38,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     { label: 'High', value: 'HIGH' },
     { label: 'ASAP', value: 'ASAP' },
   ];
+  isRaisingRequest = false;
   constructor(
     private fb: FormBuilder,
     private _globalFilterService: GlobalFilterService,
@@ -130,18 +131,22 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       sender: 'KIOSK',
       propertyID: '1',
     };
-
-    // this.$subscription.add(
-    //   this._requestService.createRequest(this.hotelId, data).subscribe(
-    //     (response) => {
-    //       this._snackbarService.openSnackBarAsText('Request created.', '', {
-    //         panelClass: 'success',
-    //       });
-    //       this.close({ status: true, data: this.reservation });
-    //     },
-    //     ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-    //   )
-    // );
+    this.isRaisingRequest = true;
+    this.$subscription.add(
+      this._requestService.createRequest(this.hotelId, data).subscribe(
+        (response) => {
+          this._snackbarService.openSnackBarAsText('Request created.', '', {
+            panelClass: 'success',
+          });
+          this.isRaisingRequest = false;
+          this.close({ status: true, data: this.reservation });
+        },
+        ({ error }) => {
+          this.isRaisingRequest = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   close(closeData) {
@@ -159,27 +164,27 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         roomNo: response.search,
       });
       if (response?.search.length >= 3) {
-        // this.$subscription.add(
-        //   this._requestService
-        //     .searchBooking(
-        //       this.adminUtilityService.makeQueryParams([
-        //         {
-        //           roomNo: response?.search,
-        //         },
-        //       ])
-        //     )
-        //     .subscribe((res) => {
-        //       if (res) {
-        //         this.reservation = res;
-        //         this.requestFG.patchValue({
-        //           firstName: res.guestDetails.primaryGuest.firstName,
-        //           lastName: res.guestDetails.primaryGuest.lastName,
-        //         });
-        //       } else {
-        //         this.reservation = {};
-        //       }
-        //     })
-        // );
+        this.$subscription.add(
+          this._requestService
+            .searchBooking(
+              this.adminUtilityService.makeQueryParams([
+                {
+                  roomNo: response?.search,
+                },
+              ])
+            )
+            .subscribe((res) => {
+              if (res) {
+                this.reservation = res;
+                this.requestFG.patchValue({
+                  firstName: res.guestDetails.primaryGuest.firstName,
+                  lastName: res.guestDetails.primaryGuest.lastName,
+                });
+              } else {
+                this.reservation = {};
+              }
+            })
+        );
       } else {
         this.reservation = {};
       }

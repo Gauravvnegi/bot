@@ -1,21 +1,15 @@
 <ng-container [ngSwitch]="message.type">
   <ng-container *ngSwitchCase="'image'">
     <div class="media__chat">
-      <img
-        class="media__chat__img"
-        [src]="message.url"
-        (click)="openImage()"
-      />
+      <img class="media__chat__img" [src]="message.url" (click)="openImage()" />
     </div>
-    <div class="media__chat__download__link" >
-      <div class="media__chat__download__link__filename">{{ message.fileName }}
+    <div class="media__chat__download__link">
+      <div class="media__chat__download__link__filename">
+        {{ message.fileName }}
         <div *ngIf="message.caption">{{ message.caption }}</div>
       </div>
-      <div
-        class="media__chat__download__link__btn"
-        (click)="downloadDoc()"
-      >
-        <img src="assets/download-button.png" alt="" />
+      <div class="media__chat__download__link__btn" (click)="downloadDoc()">
+        <img src="assets/images/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -31,12 +25,11 @@
       </video>
     </div>
     <div class="media__chat__video__download">
-      <div class="media__chat__video__download__filename">{{ message.fileName }}</div>
-      <div 
-        class="media__chat__video__download__btn"
-        (click)="downloadDoc()"
-      >
-        <img src="assets/download-button.png" alt="" />
+      <div class="media__chat__video__download__filename">
+        {{ message.fileName }}
+      </div>
+      <div class="media__chat__video__download__btn" (click)="downloadDoc()">
+        <img src="assets/images/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -49,11 +42,8 @@
     </div>
     <div class="media__chat__file">
       <div class="media__chat__file__filename">{{ message.fileName }}</div>
-      <div
-        class="media__chat__file__download"
-        (click)="downloadDoc()"
-      >
-        <img src="assets/download-button.png" alt="" />
+      <div class="media__chat__file__download" (click)="downloadDoc()">
+        <img src="assets/images/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>
@@ -62,11 +52,8 @@
       <div *ngIf="message.caption">
         {{ message.caption }}
       </div>
-      <div
-        class="media__chat__download__btn"
-        (click)="downloadDoc()"
-      >
-        <img src="assets/download-button.png" alt="" />
+      <div class="media__chat__download__btn" (click)="downloadDoc()">
+        <img src="assets/images/download-button.png" alt="" />
       </div>
     </div>
   </ng-container>

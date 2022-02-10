@@ -1,3 +1,4 @@
+import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
 
 export class Statistics {
@@ -184,11 +185,17 @@ export class ReservationStat {
     );
     this.legends = [
       [
-        { label: 'Check-In', color: '#0ea47a', value: input?.checkin?.checkIn },
+        {
+          label: 'Check-In',
+          color: '#0ea47a',
+          value: input?.checkin?.checkIn,
+          key: 'checkIn',
+        },
         {
           label: 'Ex Check-In',
           color: '#15eda3',
           value: input?.checkin?.expressCheckIn,
+          key: 'expressCheckIn',
         },
       ],
       [
@@ -196,14 +203,137 @@ export class ReservationStat {
           label: 'Check-Out',
           color: '#ff4545',
           value: input?.checkout?.checkout,
+          key: 'checkout',
         },
         {
           label: 'Ex Check-Out',
           color: '#ff9867',
           value: input?.checkout.expressCheckout,
+          key: 'expressCheckout',
         },
       ],
     ];
     return this;
   }
 }
+export class MessageOverallAnalytics {
+  stat: IMessageOverallAnalytic[];
+  total: number;
+
+  deserialize(input, config = { comparison: true }) {
+    this.stat = new Array<IMessageOverallAnalytic>();
+    this.total = input?.sentCount[config.comparison ? 'today' : 'count'];
+
+    Object.keys(input).forEach((item) => {
+      if (item !== 'data') {
+        this.stat.push(
+          new MessageOverallAnalytic().deserialize(
+            {
+              ...input[item],
+              ...{
+                color: config1.colors[item],
+                label: config1.label[item],
+                radius: config1.radius[item],
+              },
+            },
+            this.total,
+            config
+          )
+        );
+      }
+    });
+    return this;
+  }
+}
+
+export class MessageOverallAnalytic {
+  label: string;
+  yesterday: number;
+  today: number;
+  graphvalue: number;
+  comparisonPercentage: number;
+  color: string;
+  radius: number;
+  progress: number;
+
+  deserialize(input, total, config) {
+    Object.assign(
+      this,
+      set({}, 'today', get(input, [config.comparison ? 'today' : 'count'])),
+      set({}, 'yesterday', get(input, ['yesterday'])),
+      set({}, 'comparisonPercentage', get(input, ['comparisonPercentage'])),
+      set({}, 'color', get(input, ['color'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'radius', get(input, ['radius']))
+    );
+    this.progress = total > 0 ? (this.today / total) * 100 : 0;
+    this.graphvalue = 75;
+    return this;
+  }
+}
+
+export class CommunicationChannels {
+  channels;
+
+  deserialize(input) {
+    this.channels = new Array<any>();
+
+    input.forEach((data) => {
+      this.channels.push({
+        ...{
+          active: data.active,
+          label: data.label,
+        },
+        ...CommunicationConfig[data.name],
+      });
+    });
+
+    return this;
+  }
+}
+
+export const config1 = {
+  colors: {
+    deliveredCount: '#52B33F',
+    sentCount: '#FFBF04',
+    readCount: '#4BA0F5',
+    failedCount: '#CC052B',
+  },
+  label: {
+    deliveredCount: 'Delivered',
+    sentCount: 'Sent',
+    readCount: 'Read',
+    failedCount: 'Failed',
+  },
+  radius: {
+    deliveredCount: 75,
+    sentCount: 85,
+    readCount: 65,
+    failedCount: 55,
+  },
+};
+
+export const config = {
+  radius: {
+    Failed: 55,
+    Read: 65,
+    Delivered: 75,
+    Sent: 85,
+  },
+  color: {
+    Failed: '#cc052b',
+    Read: '#4ba0f5',
+    Delivered: '#52b33f',
+    Sent: '#ffbf04',
+  },
+};
+
+export type IMessageOverallAnalytic = Omit<
+  MessageOverallAnalytic,
+  'deserialize'
+>;
+
+export type IMessageOverallAnalytics = Omit<
+  MessageOverallAnalytics,
+  'deserialize'
+>;

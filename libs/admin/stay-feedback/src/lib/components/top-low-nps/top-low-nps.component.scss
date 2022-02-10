@@ -16,7 +16,7 @@
     text-align: center;
     font: normal normal medium 9px/11px Roboto;
     letter-spacing: 0.6px;
-    color: #6d7580;
+    color: $quote-color;
     opacity: 1;
   }
 }
@@ -44,7 +44,7 @@
         font-size: 12px;
         // font: normal normal medium 10px Roboto;
         letter-spacing: 0.72px;
-        color: #6d7580;
+        color: $quote-color;
         @media (max-width: 1024px) {
           font-size: 10px;
         }
@@ -79,7 +79,7 @@
         text-align: center;
         font-size: 12px;
         letter-spacing: 0.6px;
-        color: #6d7580;
+        color: $quote-color;
         @media (max-width: 1024px) {
           font-size: 10px;
         }
@@ -105,4 +105,8 @@
   @media (max-width: $L) {
     min-width: 15vw !important;
   }
+}
+
+:host ::ng-deep .mat-tab-header {
+  border-bottom: 1px solid $tab-bottom-border;
 }

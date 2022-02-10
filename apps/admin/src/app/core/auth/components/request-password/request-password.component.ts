@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
-} from '@angular/forms';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { Regex } from 'libs/shared/constants/regex';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Regex } from '@hospitality-bot/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AuthService } from '../../services/auth.service';
 
+/**
+ * @class Request password component
+ */
 @Component({
   selector: 'admin-request-password',
   templateUrl: './request-password.component.html',
@@ -31,51 +29,50 @@ export class RequestPasswordComponent implements OnInit {
   ngOnInit(): void {}
 
   /**
-   * Request Password Form Initialization
-   * @author Amit Singh
+   * @function initRequestForm To initialize request password form.
    */
-  initRequestForm() {
+  initRequestForm(): void {
     this.requestPasswordForm = this._fb.group({
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
     });
   }
 
   /**
-   * Request Password
-   * @returns null
-   * @author Amit Singh
+   * @function requestPassword To request for a new password.
    */
-  requestPassword() {
+  requestPassword(): void {
     if (!this.requestPasswordForm.valid) {
       return;
     }
-    const email = this.emailFC.value ?? ''.trim();
-    this._authService.forgotPassword(email).subscribe(
+    const requestData = {
+      email: this.requestPasswordForm?.get('email')?.value ?? ''.trim(),
+    };
+    this._authService.forgotPassword(requestData).subscribe(
       (response) => {
         this.isEmailSent = response.status ?? false;
-        this._snackbarService.openSnackBarAsText(response.message, '', {
+        this._snackbarService.openSnackBarAsText(response?.message, '', {
           panelClass: 'success',
         });
         this._router.navigate(['/auth/resend-password']);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message ?? '');
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }
 
   /**
-   * Navigate to Login Page
-   * @author Amit Singh
+   * @function navigateToLogin To navigate to login route.
    */
-  navigateToLogin() {
+  navigateToLogin(): void {
     this._router.navigate(['/auth']);
-  }
-
-  /**
-   * Returns email form-control
-   */
-  get emailFC(): FormControl {
-    return this.requestPasswordForm.get('email') as FormControl;
   }
 }

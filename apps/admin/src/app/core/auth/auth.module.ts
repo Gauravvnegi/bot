@@ -8,11 +8,12 @@ import { RouterModule } from '@angular/router';
 import {
   SharedMaterialModule,
   SnackBarService,
-} from 'libs/shared/material/src';
+} from '@hospitality-bot/shared/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { ResendPasswordComponent } from './components/resend-password/resend-password.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { TranslateModule } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     SharedMaterialModule,
-    RouterModule.forRoot([]),
+    AdminSharedModule,
+    RouterModule,
     TranslateModule,
   ],
   exports: [

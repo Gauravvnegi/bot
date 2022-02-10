@@ -22,7 +22,10 @@
       "@hospitality-bot/admin/environment": [
         "apps/admin/src/environments/environment.ts"
       ],
+      "@hospitality-bot/shared": ["libs/shared/index.ts"],
       "@hospitality-bot/shared/utils": ["libs/shared/utils/src/index.ts"],
+      "@hospitality-bot/shared/material": ["libs/shared/material/src/index.ts"],
+      "@hospitality-bot/shared/interceptors": ["libs/shared/iterceptors/src/index.ts"],
       "@hospitality-bot/web-user/shared": ["libs/web-user/shared/src/index.ts"],
       "@hospitality-bot/shared/auth": ["libs/shared/auth/src/index.ts"],
       "@hospitality-bot/web-user/template-renderer": [
@@ -80,6 +83,9 @@
       ],
       "@hospitality-bot/admin/stay-feedback": [
         "libs/admin/stay-feedback/src/index.ts"
+      ],
+      "@hospitality-bot/admin/core/theme": [
+        "apps/admin/src/app/core/theme/src/index.ts"
       ]
     }
   },

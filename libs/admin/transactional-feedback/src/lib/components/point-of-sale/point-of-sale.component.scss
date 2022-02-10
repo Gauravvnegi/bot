@@ -92,7 +92,7 @@
     font: normal normal normal 16px Roboto;
     letter-spacing: 0.84px;
     text-align: left;
-    color: #6d7580;
+    color: $quote-color;
     margin: 10px 0;
   }
 }
@@ -216,7 +216,7 @@
         line-height: normal;
         letter-spacing: 0.72px;
         text-align: left;
-        color: #6d7580;
+        color: $quote-color;
         margin-right: 10px;
       }
       &__count {
@@ -262,7 +262,7 @@
       line-height: normal;
       letter-spacing: 0.84px;
       text-align: left;
-      color: #6d7580;
+      color: $quote-color;
     }
   }
 }
@@ -315,7 +315,6 @@
   max-height: 65vh;
   margin: 0 15px;
   margin-bottom: 10px;
-  // max-height: 350px;
 }
 
 mat-radio-group {

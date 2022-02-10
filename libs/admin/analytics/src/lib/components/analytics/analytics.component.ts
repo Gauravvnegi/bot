@@ -18,6 +18,7 @@ export class AnalyticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.getColorConfig();
   }
 
   listenForGlobalFilters() {
@@ -28,7 +29,6 @@ export class AnalyticsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
-        this.getColorConfig();
       })
     );
   }
@@ -44,6 +44,14 @@ export class AnalyticsComponent implements OnInit {
   }
 
   getColorConfig() {
+    this.configService.$config.subscribe((response) => {
+      if (response)
+        this.requestConfiguration = response.requestModuleConfiguration;
+      else this.getColorConfigByHotelID();
+    });
+  }
+
+  getColorConfigByHotelID() {
     this.configService
       .getColorAndIconConfig(this.hotelId)
       .subscribe((response) => {

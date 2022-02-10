@@ -17,17 +17,5 @@
       text-align: center;
       width: 33%;
     }
-    &-feedback {
-      text-align: right;
-      color: #2187d5;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-decoration-color: #2187d5;
-      cursor: pointer;
-      // width: 33%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
   }
 }

@@ -1,0 +1,79 @@
+<div class="messages-wrapper">
+  <div class="messages-wrapper-header" [formGroup]="messagesFG">
+    <div class="messages-wrapper-header-icon">
+      <img
+        [src]="dashboardConfig.images.messages.headerIcon.url"
+        [alt]="dashboardConfig.images.messages.headerIcon.alt"
+      />
+    </div>
+    <div class="messages-wrapper-header-text">
+      Messages
+    </div>
+    <mat-select
+      class="messages-wrapper-header-channel"
+      placeholder="Channel"
+      formControlName="channel"
+      (selectionChange)="handleChannelChange($event)"
+    >
+      <mat-option [value]="item.value" *ngFor="let item of channelOptions">{{
+        item.label
+      }}</mat-option>
+    </mat-select>
+  </div>
+  <div class="messages-wrapper-body">
+    <div class="messages-wrapper-body-details">
+      <div
+        class="messages-wrapper-body-details-items"
+        *ngFor="let item of messageOverallAnalytics?.stat"
+      >
+        <div class="messages-wrapper-body-details-items-heading">
+          {{ 'card.messages.' + item.label | translate }}
+        </div>
+        <div class="today">
+          {{ item.today }} {{ 'card.messages.today' | translate }}
+        </div>
+        <div class="yesterday">
+          <div>
+            {{ item.yesterday }} {{ 'card.messages.yesterday' | translate }}
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div
+            aria-valuemax="100"
+            aria-valuemin="0"
+            aria-valuenow="100"
+            class="progress-bar progress-color"
+            role="progressbar"
+            [style.width]="item.progress + '%'"
+            [style.backgroundColor]="item.color"
+          ></div>
+        </div>
+        <div class="then-yesterdeay">
+          <div class="then-yesterdeay-down-arrow">
+            <img
+              class="then-yesterdeay-down-arrow-icon"
+              [src]="
+                item.comparisonPercentage >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/down-percentage.svg'
+              "
+              alt="uparrow"
+            />
+          </div>
+          <div
+            class="then-yesterdeay-down-arrow-percentage"
+            [ngClass]="{
+              'comparison-positive': item.comparisonPercentage >= 0,
+              'comparison-negative': item.comparisonPercentage < 0
+            }"
+          >
+            {{ item.comparisonPercentage }}%
+          </div>
+          <div class="then-yesterdeay-text">
+            {{ 'than_yesterday' | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

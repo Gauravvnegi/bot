@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Regex } from 'libs/shared/constants/regex';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { AuthService } from '../../services/auth.service';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { authConstants } from '../../constants/auth-constants';
+import { Regex } from '@hospitality-bot/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { authConstants } from '../../constants/auth';
+import { AuthService } from '../../services/auth.service';
 
+/**
+ * @class Login Component
+ */
 @Component({
   selector: 'admin-login',
   templateUrl: './login.component.html',
@@ -34,10 +37,9 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Login form initialization
-   * @author Amit Singh
+   * @function initLoginForm To initialize login form.
    */
-  initLoginForm() {
+  initLoginForm(): void {
     this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       password: [
@@ -52,34 +54,39 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Admin Login
-   * @returns null
-   * @author Amit Singh
+   * @function login To login to the admin panel.
    */
-  login() {
+  login(): void {
     if (!this.loginForm.valid) {
       return;
     }
     this.isSigningIn = true;
     const data = this.loginForm.getRawValue();
-    data.email = data.email.toLowerCase().trim();
+    data.email = data.email?.toLowerCase().trim();
     this._authService.login(data).subscribe(
       (response) => {
-        this._userService.setLoggedInUserId(response.id);
+        this._userService.setLoggedInUserId(response?.id);
         this._router.navigate(['/pages/dashboard']);
       },
       ({ error }) => {
         this.isSigningIn = false;
-        this._snackbarService.openSnackBarAsText(error.message);
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }
 
   /**
-   * Navigate to Request Password
-   * @author Amit Singh
+   * @function navigateToRequestPassword To navigate to the request password route.
    */
-  navigateToRequestPassword() {
+  navigateToRequestPassword(): void {
     this._router.navigate(['/auth/request-password']);
   }
 }

@@ -30,7 +30,7 @@
       "title_text": "Departures",
       "tooltip": "Total number of guest departures in a selected time frame.",
       "expected_checkout": "Expected Check Out",
-      "already_checkout": "Already Checked Out",
+      "already_checkout": "Checked Out",
       "adult": "Adult",
       "children": "Children"
     },

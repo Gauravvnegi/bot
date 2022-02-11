@@ -183,7 +183,7 @@ export class NpsAcrossServicesComponent implements OnInit {
     if (!this.tabFilterItems.length) {
       departments.forEach((data, i) => {
         let chips = [];
-        if (data.key === 'FRONTOFFICE') {
+        if (data.key === 'FRONT_OFFICE') {
           chips = entities;
           this.tabFilterIdx = i;
         }
@@ -228,7 +228,7 @@ export class NpsAcrossServicesComponent implements OnInit {
           feedbackType: this.feedbackConfig.types.stay,
           departments: this.tabFilterItems.length
             ? this.tabFilterItems[this.tabFilterIdx].value
-            : 'FRONTOFFICE',
+            : 'FRONT_OFFICE',
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),

@@ -29,7 +29,7 @@ export class CryptoService extends ApiService {
 
     return {
       templateId,
-      expiry,
+      expiry: parseInt(expiry),
       journey,
       reservationId,
       hotelId,

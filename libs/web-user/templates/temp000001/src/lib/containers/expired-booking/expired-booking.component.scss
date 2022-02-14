@@ -1,0 +1,59 @@
+@import 'temp000001';
+
+.parent_block {
+  min-height: 86.5vh;
+  @media only screen and (max-width: 1100px) {
+    min-height: 92vh;
+  }
+  @media only screen and (max-width: $M) {
+    min-height: 93vh;
+  }
+}
+
+.booking_cancel {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 8%;
+  min-height: calc(100vh - 25vh);
+  color: white;
+  @media only screen and (max-width: $T) {
+    min-height: calc(100vh - 17vh);
+  }
+  &__content {
+    text-align: center;
+    .heading {
+      font-size: 35px;
+      font-weight: $bold;
+      margin: $margin-large 0;
+      @media only screen and (max-width: $M) {
+        font-size: 25px;
+      }
+    }
+    .sub_heading {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: $margin-large;
+      @media only screen and (max-width: $T) {
+        font-size: $font16;
+      }
+    }
+    &__note {
+      display: flex;
+      align-items: center;
+      min-width: 70%;
+      justify-content: center;
+      p {
+        margin-left: $margin-medium;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .next-button {
+  @include footer-next();
+  @media only screen and (max-width: $M) {
+    width: 100vw !important;
+  }
+}

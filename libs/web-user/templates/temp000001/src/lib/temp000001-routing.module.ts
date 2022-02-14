@@ -40,6 +40,7 @@ import { Temp000001InputPopupComponent } from './presentational/temp000001-input
 import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 import { InvoiceNotGeneratedComponent } from './containers/invoice-not-generated/invoice-not-generated.component';
 import { AddressComponent } from './containers/address/address.component';
+import { ExpiredBookingComponent } from './containers/expired-booking/expired-booking.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -102,6 +103,16 @@ export const sharedAuthRoutes: Route[] = [
       },
     ],
   },
+  {
+    path: 'booking-expired',
+    component: Temp000001Component,
+    children: [
+      {
+        path: '',
+        component: ExpiredBookingComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({
@@ -151,5 +162,6 @@ export class Temp000001RoutingModule {
     CancelBookingComponent,
     InvoiceNotGeneratedComponent,
     AddressComponent,
+    ExpiredBookingComponent,
   ];
 }

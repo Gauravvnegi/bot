@@ -136,17 +136,15 @@ export class NotificationComponent implements OnInit {
 
   initGraphData() {
     this.chart.chartLabels = [];
-    this.chart.chartData[0].data = [[]];
+    this.chart.chartData[0].data = [];
     this.chart.chartColors[0].backgroundColor = [];
     this.chart.chartColors[0].borderColor = [];
 
     this.stats.statistics.forEach((data) => {
-      // if (data.count) {
       this.chart.chartLabels.push(data.label);
       this.chart.chartData[0].data.push(data.count);
       this.chart.chartColors[0].backgroundColor.push(data.color);
       this.chart.chartColors[0].borderColor.push(data.color);
-      // }
     });
   }
 

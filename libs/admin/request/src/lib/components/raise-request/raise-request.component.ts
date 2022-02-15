@@ -98,8 +98,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   }
 
   initItemList() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        { entityType: 'cms services' },
+      ]),
+    };
     this.$subscription.add(
-      this._requestService.getCMSServices(this.hotelId).subscribe(
+      this._requestService.getCMSServices(this.hotelId, config).subscribe(
         (response) => {
           this.cmsServices = response.cms_services;
         },

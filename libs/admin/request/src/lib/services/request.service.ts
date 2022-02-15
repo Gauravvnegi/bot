@@ -58,8 +58,8 @@ export class RequestService extends ApiService {
     return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
   }
 
-  getCMSServices(hotelId: string) {
-    return this.get(`/api/v1/hotel/${hotelId}/cms-services`);
+  getCMSServices(hotelId: string, config) {
+    return this.get(`/api/v1/hotel/${hotelId}/cms-services${config.queryObj}`);
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {

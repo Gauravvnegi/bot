@@ -65,7 +65,7 @@
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <img class="icon" src="assets/svg/user-01.svg" alt="Channel" />
         <mat-select
           class="form-elements"
           placeholder="Item Name*"
@@ -88,7 +88,11 @@
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <img
+          class="icon"
+          src="assets//images/shopping-list.png"
+          alt="Channel"
+        />
         <mat-select
           class="form-elements"
           placeholder="Item Code*"
@@ -111,7 +115,7 @@
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <img class="icon" src="assets/images/pyramid.png" alt="Channel" />
         <mat-select
           class="form-elements"
           placeholder="Priority Code*"
@@ -133,7 +137,7 @@
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/whatsapp-o.svg" alt="Channel" />
+        <img class="icon" src="assets/images/hourglass.png" alt="Channel" />
         <mat-select
           class="form-elements"
           placeholder="Job Duration"
@@ -149,12 +153,18 @@
       </div>
       <div class="form-elements-container full-width">
         <img class="icon" src="assets/svg/comments.svg" alt="description" />
-        <input
+        <textarea
+          formControlName="remarks"
+          class="form-elements"
+          placeholder="Description"
+          matInput
+        ></textarea>
+        <!-- <input
           matInput
           class="form-elements"
           placeholder="Desription"
           formControlName="remarks"
-        />
+        /> -->
       </div>
     </div>
     <div class="request-popup-btnwrap">

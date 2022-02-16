@@ -250,7 +250,9 @@ export class RequestListComponent implements OnInit {
       ) {
         if (this.totalData > this.listData.length) {
           this.offset = this.listData.length;
-          this.loadData(this.offset, this.limit);
+          if (this.parentFG.get('search').value.trim().length)
+            this.getRequestWithSearchAndFilter(this.offset, this.limit);
+          else this.loadData(this.offset, this.limit);
         }
       }
   }
@@ -266,13 +268,14 @@ export class RequestListComponent implements OnInit {
   }
 
   clearSearch() {
+    this.parentFG.patchValue({ search: '' });
     this.enableSearchField = false;
     this.loading = true;
     this.loadData(0, 10);
   }
 
   getSearchValue(event) {
-    if (event.response)
+    if (event.status)
       this.listData = new InhouseTable().deserialize({
         records: event.response,
       }).records;
@@ -285,8 +288,34 @@ export class RequestListComponent implements OnInit {
   handleFilter(event) {
     if (event.status) {
       this.filterData = event.data;
-      this.loadData(0, 10);
+      if (this.parentFG.get('search').value.trim().length)
+        this.getRequestWithSearchAndFilter(0, 10);
+      else this.loadData(0, 10);
     }
     this.showFilter = false;
+  }
+
+  getRequestWithSearchAndFilter(offset, limit) {
+    this._requestService
+      .searchRequest(this.hotelId, {
+        queryObj: this._adminUtilityService.makeQueryParams([
+          ...this.globalQueries,
+          {
+            ...this.filterData,
+            offset,
+            limit,
+            order: 'DESC',
+            key: this.parentFG.get('search').value.trim(),
+            entityType: this.entityType,
+          },
+        ]),
+      })
+      .subscribe(
+        (response) =>
+          (this.listData = new InhouseTable().deserialize({
+            records: response,
+          }).records),
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      );
   }
 }

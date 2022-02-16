@@ -53,7 +53,11 @@ export class SearchComponent implements OnInit {
         })
       )
       .subscribe(
-        (response) => this.search.emit({ response }),
+        (response) =>
+          this.search.emit({
+            status: this.parentFG.get('search').value.trim().length,
+            response,
+          }),
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       );
   }

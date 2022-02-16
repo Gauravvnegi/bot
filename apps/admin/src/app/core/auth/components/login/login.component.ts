@@ -87,6 +87,8 @@ export class LoginComponent implements OnInit {
    * @function navigateToRequestPassword To navigate to the request password route.
    */
   navigateToRequestPassword(): void {
-    this._router.navigate(['/auth/request-password']);
+    this._router.navigate(['/auth/request-password'], {
+      state: { email: this.loginForm.get('email')?.value.toLowerCase().trim() },
+    });
   }
 }

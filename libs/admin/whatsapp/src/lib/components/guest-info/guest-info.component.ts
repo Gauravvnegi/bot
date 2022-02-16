@@ -14,7 +14,10 @@ import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
-import { Contact, IContact } from '../../models/message.model';
+import { Contact, IContact, RequestList } from '../../models/message.model';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-guest-info',
@@ -30,6 +33,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   hotelId: string;
   isLoading = false;
   selectedIndex = 0;
+  requestList;
   buttonConfig = [
     {
       button: true,
@@ -41,13 +45,14 @@ export class GuestInfoComponent implements OnInit, OnChanges {
       label: 'Map Details',
       icon: 'assets/svg/user.svg',
     },
-    { button: false, label: 'Edit Details', icon: 'assets/svg/user.svg' },
-    { button: false, label: 'Map Details', icon: 'assets/svg/user.svg' },
+    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
   ];
   constructor(
     private modalService: ModalService,
     private messageService: MessageService,
-    private _globalFilterService: GlobalFilterService
+    private _globalFilterService: GlobalFilterService,
+    private snackBarService: SnackBarService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +61,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.hotelId) this.getGuestInfo();
+    if (this.hotelId) {
+      this.getGuestInfo();
+    }
   }
 
   getGuestInfo() {
@@ -69,6 +76,8 @@ export class GuestInfoComponent implements OnInit, OnChanges {
             response.receiver,
             this._globalFilterService.timezone
           );
+          if (this.guestData.reservationId) this.getRequestList();
+          else this.requestList = [];
           this.isLoading = false;
         })
     );
@@ -103,6 +112,25 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     });
   }
 
+  getRequestList() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          hotelId: this.hotelId,
+          confirmationNumber: this.data.reservationId,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.messageService.getRequestByConfNo(config).subscribe(
+        (response) => {
+          this.requestList = new RequestList().deserialize(response).data;
+        },
+        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
   closeGuestInfo() {
     this.closeInfo.emit({ close: true });
   }
@@ -118,6 +146,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
         break;
       case 1:
         this.updateGuestDetails();
+        break;
+      case 2:
+        this.openRaiseRequest();
         break;
     }
   }
@@ -136,5 +167,40 @@ export class GuestInfoComponent implements OnInit, OnChanges {
       // remove loader for detail close
       detailCompRef.close();
     });
+  }
+
+  openRaiseRequest() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '50%';
+    const raiseRequestCompRef = this.modalService.openDialog(
+      RaiseRequestComponent,
+      dialogConfig
+    );
+
+    this.$subscription.add(
+      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
+        (res) => {
+          if (res.status) {
+            this.getRequestList();
+            const values = {
+              reservationId: res.data.number,
+            };
+            this.$subscription.add(
+              this.messageService
+                .updateGuestDetail(this.hotelId, this.data.receiverId, values)
+                .subscribe(
+                  (response) => {
+                    this.messageService.refreshData$.next(true);
+                  },
+                  ({ error }) =>
+                    this.snackBarService.openSnackBarAsText(error.message)
+                )
+            );
+          }
+          raiseRequestCompRef.close();
+        }
+      )
+    );
   }
 }

@@ -17,6 +17,7 @@ import { MessageBoxComponent } from './components/message-box/message-box.compon
 import { WhatsappComponent } from './components/whatsapp/whatsapp.component';
 import { MessageService } from 'primeng/api';
 import { LinkDetector } from 'libs/shared/pipes/linkDetector.pipe';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 
 @NgModule({
   imports: [
@@ -55,6 +56,6 @@ import { LinkDetector } from 'libs/shared/pipes/linkDetector.pipe';
     MediaChatComponent,
     MessageBoxComponent,
   ],
-  providers: [MessageService],
+  providers: [MessageService, RequestService],
 })
 export class AdminWhatsappModule {}

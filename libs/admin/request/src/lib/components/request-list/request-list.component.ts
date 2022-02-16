@@ -272,9 +272,14 @@ export class RequestListComponent implements OnInit {
   }
 
   getSearchValue(event) {
-    this.listData = new InhouseTable().deserialize({
-      records: event.response,
-    }).records;
+    if (event.response)
+      this.listData = new InhouseTable().deserialize({
+        records: event.response,
+      }).records;
+    else {
+      this.loading = true;
+      this.loadData(0, 10);
+    }
   }
 
   handleFilter(event) {

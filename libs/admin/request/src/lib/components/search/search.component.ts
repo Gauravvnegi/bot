@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { empty } from 'rxjs';
+import { empty, of } from 'rxjs';
 import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 
@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit {
           ...this.globalQueries,
           {
             ...this.filterData,
-            key: search,
+            key: search.trim(),
             entityType: this.entityType,
           },
         ]),
@@ -46,9 +46,11 @@ export class SearchComponent implements OnInit {
     formChanges$
       .pipe(
         debounceTime(1000),
-        switchMap((formValue) =>
-          findSearch$(formValue).pipe(catchError((err) => empty()))
-        )
+        switchMap((formValue) => {
+          if (formValue.search.trim().length)
+            return findSearch$(formValue).pipe(catchError((err) => empty()));
+          else return of(null);
+        })
       )
       .subscribe(
         (response) => this.search.emit({ response }),

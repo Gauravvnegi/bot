@@ -20,7 +20,7 @@ export class InhouseTable {
       set({}, 'total', get(input, ['total']))
     );
 
-    input.records.forEach((record) =>
+    input?.records?.forEach((record) =>
       this.records.push(new InhouseData().deserialize(record))
     );
 
@@ -54,9 +54,11 @@ export class InhouseData {
 
   deserialize(input) {
     this.rooms = new Array<Room>();
-    this.guestDetails = new GuestType().deserialize(input.guestDetails);
-    this.stayDetails = new StayDetails().deserialize(input.stayDetails);
-    input.rooms.forEach((room) => this.rooms.push(new Room().desrialize(room)));
+    this.guestDetails = new GuestType().deserialize(input?.guestDetails);
+    this.stayDetails = new StayDetails().deserialize(input?.stayDetails);
+    input?.rooms?.forEach((room) =>
+      this.rooms.push(new Room().desrialize(room))
+    );
     Object.assign(
       this,
       set({}, 'action', get(input, ['action'])),
@@ -164,14 +166,14 @@ export class GuestType {
   primaryGuest;
   secondaryGuest = [];
   deserialize(input) {
-    this.primaryGuest = new Guest().deserialize(input.primaryGuest);
-    input.accompanyGuests.forEach((guest) => {
+    this.primaryGuest = new Guest().deserialize(input?.primaryGuest);
+    input?.accompanyGuests?.forEach((guest) => {
       this.secondaryGuest.push(new Guest().deserialize(guest));
     });
-    input.sharerGuests.forEach((guest) => {
+    input?.sharerGuests?.forEach((guest) => {
       this.secondaryGuest.push(new Guest().deserialize(guest));
     });
-    input.kids.forEach((guest) => {
+    input?.kids?.forEach((guest) => {
       this.secondaryGuest.push(new Guest().deserialize(guest));
     });
     return this;
@@ -293,7 +295,7 @@ export class StayDetails {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'status', get(input, ['status']))
     );
-    this.statusMessage = new Status().deserialize(input.statusMessage);
+    this.statusMessage = new Status().deserialize(input?.statusMessage);
 
     return this;
   }

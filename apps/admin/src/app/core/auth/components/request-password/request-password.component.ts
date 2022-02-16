@@ -33,7 +33,10 @@ export class RequestPasswordComponent implements OnInit {
    */
   initRequestForm(): void {
     this.requestPasswordForm = this._fb.group({
-      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
+      email: [
+        this._router.getCurrentNavigation().extras.state.email,
+        [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
+      ],
     });
   }
 

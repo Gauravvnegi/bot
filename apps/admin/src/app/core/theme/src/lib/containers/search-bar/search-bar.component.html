@@ -9,12 +9,15 @@
         type="text"
         pInputText
         [formControlName]="name"
-        placeholder="Search by Name, Number,Conf no..."
+        placeholder="Search by Name, Number, Conf no..."
         (focus)="onFocus()"
       />
     </form>
   </span>
-  <div *ngIf="searchDropdownVisible && parentSearchVisible" class="global_search__dropdown">
+  <div
+    *ngIf="searchDropdownVisible && parentSearchVisible"
+    class="global_search__dropdown"
+  >
     <div class="global_search__dropdown__result">
       <ng-container *ngFor="let option of searchOptions; let i = index">
         <ng-container [ngSwitch]="option.type">
@@ -55,7 +58,7 @@
       </ng-container>
 
       <ng-container *ngIf="searchOptions.length === 0">
-       <div class="no_result">No results found</div> 
+        <div class="no_result">No results found</div>
       </ng-container>
     </div>
     <ng-container

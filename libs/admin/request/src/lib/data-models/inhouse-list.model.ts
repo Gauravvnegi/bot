@@ -88,7 +88,7 @@ export class InhouseData {
   getRequestDateTime(timezone = '+05:30') {
     return `${DateService.getDateFromTimeStamp(
       this.requestTime,
-      'd-M-yy',
+      'D-M-YYYY',
       timezone
     )} at ${DateService.getDateFromTimeStamp(
       this.requestTime,
@@ -101,7 +101,7 @@ export class InhouseData {
     if (this.closedTime)
       return `${DateService.getDateFromTimeStamp(
         this.closedTime,
-        'd-M-yy',
+        'D-M-YYYY',
         timezone
       )} at ${DateService.getDateFromTimeStamp(
         this.closedTime,

@@ -153,7 +153,9 @@ export class LayoutOneComponent implements OnInit {
         ]),
       },
       feedback: {
-        feedbackType: 'TRANSACTIONALFEEDBACK',
+        feedbackType: this.checkForTransactionFeedbackSubscribed()
+          ? 'TRANSACTIONALFEEDBACK'
+          : 'STAYFEEDBACK',
       },
       outlets: this.getOutletIds(),
     });
@@ -295,6 +297,11 @@ export class LayoutOneComponent implements OnInit {
         this._router.navigate(['/auth']);
       }
     );
+  }
+
+  checkForTransactionFeedbackSubscribed() {
+    const subscription = this.subscriptionPlanService.getModuleSubscription();
+    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
   }
 
   @HostListener('document:visibilitychange', ['$event'])

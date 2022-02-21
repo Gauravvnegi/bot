@@ -88,12 +88,12 @@
   }
 }
 
-.databaseActionLabel{
+.databaseActionLabel {
   vertical-align: middle;
   margin-left: 0.5em;
   font-weight: 500;
 }
-.databaseActionLabel{
+.databaseActionLabel {
   width: 5%;
   background-color: #eaf0f6;
   border-top: 0 !important;
@@ -162,7 +162,7 @@
   .go {
     outline: none;
     color: $primary-purple;
-    background: #4b56c033;
+    background: $go-btn-default;
     border: none;
     font-size: 10px;
     padding: 5px;
@@ -530,12 +530,12 @@ th {
   }
 }
 
-:host ::ng-deep .icon{
+:host ::ng-deep .icon {
   position: relative;
 
-  .tooltip{
+  .tooltip {
     position: absolute;
-    top:-160%;
+    top: -160%;
     right: -35%;
     font-size: 12px;
     background: #fff;
@@ -548,7 +548,7 @@ th {
     min-width: 100px;
     text-align: center;
 
-    &::before{
+    &::before {
       content: '';
       position: absolute;
       bottom: -35%;
@@ -560,9 +560,9 @@ th {
       border-top: 10px solid #ffffff;
     }
   }
-  &:hover{
-    .tooltip{
+  &:hover {
+    .tooltip {
       display: block;
-    } 
+    }
   }
-} 
+}

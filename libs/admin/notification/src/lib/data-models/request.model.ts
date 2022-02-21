@@ -91,7 +91,7 @@ export class FeedbackNotificationConfig {
     Object.keys(input.channels).forEach((key) => {
       this.channels.push({
         value: input.channels[key].title,
-        label: input.channels[key].title,
+        label: input.channels[key].label,
       });
     });
 

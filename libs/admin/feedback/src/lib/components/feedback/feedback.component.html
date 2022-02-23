@@ -47,6 +47,7 @@
           class="feedback__shared"
           cardSubscribed
           [paths]="['feedback.cards.' + cards.Shared]"
+          click-allow
         >
           <hospitality-bot-shared
             [globalFeedbackFilterType]="globalFeedbackFilterType"
@@ -58,6 +59,7 @@
           cardSubscribed
           [paths]="['feedback.cards.' + cards.OverallReceivedBifurcation]"
           [hotelId]="hotelId"
+          click-allow
         >
           <hospitality-bot-overall-received-bifurcation
             [globalFeedbackFilterType]="globalFeedbackFilterType"
@@ -141,6 +143,7 @@
           class="feedback__shared"
           cardSubscribed
           [paths]="['FEEDBACK_TRANSACTIONAL.cards.' + cards.Shared]"
+          click-allow
         >
           <hospitality-bot-shared
             [globalFeedbackFilterType]="globalFeedbackFilterType"
@@ -153,6 +156,7 @@
           [paths]="[
             'FEEDBACK_TRANSACTIONAL.cards.' + cards.OverallReceivedBifurcation
           ]"
+          click-allow
         >
           <hospitality-bot-overall-received-bifurcation
             [globalFeedbackFilterType]="globalFeedbackFilterType"
@@ -247,6 +251,7 @@
             'feedback.cards.' + cards.Shared,
             'FEEDBACK_TRANSACTIONAL.cards.' + cards.Shared
           ]"
+          click-allow
         >
           <hospitality-bot-shared
             [globalFeedbackFilterType]="globalFeedbackFilterType"
@@ -260,6 +265,7 @@
             'feedback.cards.' + cards.OverallReceivedBifurcation,
             'FEEDBACK_TRANSACTIONAL.cards.' + cards.OverallReceivedBifurcation
           ]"
+          click-allow
         >
           <hospitality-bot-overall-received-bifurcation
             [globalFeedbackFilterType]="globalFeedbackFilterType"

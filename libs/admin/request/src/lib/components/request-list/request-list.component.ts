@@ -25,7 +25,11 @@ export class RequestListComponent implements OnInit {
   entityType = 'Inhouse';
   enableSearchField = false;
   showFilter = false;
-  filterData = {};
+  filterData = {
+    sort: '',
+    order: 'DESC',
+    priorityType: '',
+  };
   loading = false;
   globalQueries = [];
   listData;
@@ -200,7 +204,6 @@ export class RequestListComponent implements OnInit {
           ...this.filterData,
           offset,
           limit,
-          order: 'DESC',
           entityType: this.entityType,
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
@@ -304,7 +307,6 @@ export class RequestListComponent implements OnInit {
             ...this.filterData,
             offset,
             limit,
-            order: 'DESC',
             key: this.parentFG.get('search').value.trim(),
             entityType: this.entityType,
           },

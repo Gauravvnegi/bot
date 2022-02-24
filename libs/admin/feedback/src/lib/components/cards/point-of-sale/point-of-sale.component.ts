@@ -45,6 +45,7 @@ export class PointOfSaleComponent implements OnInit {
   documentTypes = [{ label: 'CSV', value: 'csv' }];
 
   chips = [];
+  progresses = [];
 
   tabFilterIdx: number = 0;
 
@@ -198,13 +199,28 @@ export class PointOfSaleComponent implements OnInit {
       this._statisticService.getPOSStats(config).subscribe((response) => {
         if (this.chartType === 'bar') {
           this.stats = new NPOSVertical().deserialize(response);
-        } else {
-          this.stats = new NPOS().deserialize(response);
-        }
+          this.setProgresses(this.stats);
+        } else this.stats = new NPOS().deserialize(response);
         if (this.tabFilterItems.length === 0 || this.chips.length === 0)
           this.addChipsToFilters();
       })
     );
+  }
+
+  /**
+   * @function setProgress To set progress data for bar graph.
+   */
+  setProgresses(stats) {
+    this.progresses = [];
+    if (stats.verticalData) {
+      Object.keys(stats.verticalData).forEach((key) => {
+        if (stats.verticalData[key].length)
+          this.progresses.push({
+            label: key,
+            data: stats.verticalData[key],
+          });
+      });
+    }
   }
 
   /**

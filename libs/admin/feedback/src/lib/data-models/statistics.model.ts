@@ -393,6 +393,8 @@ export const SharedColors = {
   LUNCH: '#f18533',
   BREAKFAST: '#4974e0',
   DINNER: '#3db76b',
+  INPROGRESS: '#31bb92',
+  RESOLVED: '#ff6804',
 };
 
 export class NPOSVertical {

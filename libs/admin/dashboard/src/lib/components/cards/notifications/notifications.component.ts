@@ -100,12 +100,11 @@ export class NotificationsComponent implements OnInit {
       this.statisticsService
         .getConversationStats(this.hotelId, config)
         .subscribe(
-          (response) => {
-            this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
+          (response) =>
+            (this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
               response?.messageCounts,
               { comparison: false }
-            );
-          },
+            )),
           ({ error }) =>
             this._snackbarService
               .openSnackBarWithTranslate(

@@ -85,11 +85,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
       this.statisticsService
         .getConversationStats(this.hotelId, config)
         .subscribe(
-          (response) => {
-            this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
+          (response) =>
+            (this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
               response?.messageCounts
-            );
-          },
+            )),
           ({ error }) =>
             this._snackbarService
               .openSnackBarWithTranslate(

@@ -31,7 +31,7 @@ export const chartConfig = {
       checkIn: '#0ea47a',
       expressCheckIn: '#15eda3',
       checkout: '#FF4545',
-      excheckout: '#FF9867',
+      expressCheckout: '#FF9867',
     },
   },
   chartTypes: [

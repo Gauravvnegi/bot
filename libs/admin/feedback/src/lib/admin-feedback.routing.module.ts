@@ -12,6 +12,7 @@ import {
   TwoWayProgressComponent,
 } from './components/cards';
 import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-sale.component';
+import { StackedBarGraphComponent } from './components/cards/stacked-bar-graph/stacked-bar-graph.component';
 import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 
@@ -43,5 +44,6 @@ export class AdminFeedbackRoutingModule {
     FeedbackDatatableComponent,
     FeedbackNotesComponent,
     PointOfSaleComponent,
+    StackedBarGraphComponent,
   ];
 }

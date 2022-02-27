@@ -107,16 +107,7 @@ export class PointOfSaleComponent implements OnInit {
   }
 
   setEntityId() {
-    if (this.globalFeedbackFilterType === feedback.types.transactional)
-      this.globalQueries = [
-        ...this.globalQueries,
-        { entityIds: this._statisticService.outletIds },
-      ];
-    else if (this.globalFeedbackFilterType === feedback.types.both) {
-      this.globalQueries = [
-        ...this.globalQueries,
-        { entityIds: this._statisticService.outletIds },
-      ];
+    if (this.globalFeedbackFilterType === feedback.types.both) {
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
           if (

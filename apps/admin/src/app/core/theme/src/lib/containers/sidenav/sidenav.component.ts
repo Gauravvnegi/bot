@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ADMIN_ROUTES, DEFAULT_ROUTES } from './sidenav-admin.routes';
-// import { SUPER_ADMIN_ROUTES } from './sidenav-admin.routes';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -114,7 +113,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       const checkSubscriptionData = this.subscriptionCheck(data, subscription);
       if (checkSubscriptionData.length) {
         this.menuItems.push(
-          checkSubscriptionData.children ? checkSubscriptionData[0] : data
+          checkSubscriptionData[0].children ? checkSubscriptionData[0] : data
         );
       }
     });
@@ -148,8 +147,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
           subscription
         );
         if (subItemList.length) {
-          data.children = subItemList;
-          return [data];
+          return [{ ...data, children: subItemList }];
         } else return [];
       default:
         return subscription.filter(

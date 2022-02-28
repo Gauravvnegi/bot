@@ -63,6 +63,7 @@ export class LoginComponent implements OnInit {
     this.isSigningIn = true;
     const data = this.loginForm.getRawValue();
     data.email = data.email?.toLowerCase().trim();
+    data.password = data.password?.trim();
     this._authService.login(data).subscribe(
       (response) => {
         this._userService.setLoggedInUserId(response?.id);

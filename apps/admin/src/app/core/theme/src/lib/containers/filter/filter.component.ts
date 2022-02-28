@@ -149,6 +149,17 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   applyFilter() {
+    if (
+      this.feedbackFG.get('feedbackType').value !== 'STAYFEEDBACK' &&
+      !Object.keys(this.outletFG.value)
+        .map((key) => this.outletFG.value[key])
+        .reduce((acc, red) => acc || red)
+    ) {
+      this.snackbarService.openSnackBarAsText(
+        'Please select at-least one outlet.'
+      );
+      return;
+    }
     this.onApplyFilter.next({
       values: this.filterForm.getRawValue(),
       token: this.hotelBasedToken,
@@ -183,7 +194,10 @@ export class FilterComponent implements OnChanges, OnInit {
       this.feedbackFG.get('feedbackType').value !== 'TRANSACTIONALFEEDBACK'
     ) {
       this.feedbackFG.patchValue({ feedbackType: 'TRANSACTIONALFEEDBACK' });
-    } else if (!this.checkForNoOutletSelected(this.outletFG.value)) {
+    } else if (
+      !this.checkForNoOutletSelected(this.outletFG.value) &&
+      this.checkForStayFeedbackSubscribed()
+    ) {
       this.feedbackFG.patchValue({ feedbackType: 'STAYFEEDBACK' });
     }
   }

@@ -98,7 +98,13 @@ export class PointOfSaleComponent implements OnInit {
           calenderType,
         ];
         this.branchId = data['filter'].value.property.branchName;
-        if (this.tabFilterItems.length === 0)
+        if (
+          this.tabFilterItems.length === 0 ||
+          !this._adminUtilityService.compareArray(
+            this.tabFilterItems.map((item) => item.value),
+            this._statisticService.outletIds
+          )
+        )
           this.setTabFilterItems(this.branchId, this.chips);
         this.setEntityId();
         this.getStats();

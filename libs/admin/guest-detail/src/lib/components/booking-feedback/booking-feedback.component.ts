@@ -35,36 +35,7 @@ export class BookingFeedbackComponent implements OnInit {
     private _modal: ModalService
   ) {}
 
-  ngOnInit(): void {
-    if (this.openedState) {
-      this.loadFeedbackData(this.rowData.booking.bookingId);
-    }
-  }
-
-  loadFeedbackData(reservationId) {
-    if (!this.feedbackData) {
-      // this.guestDetailService.getReservationFeedback('09335387-1fd6-484d-a5b5-91a7c823d2d0')
-      this.guestDetailService.getReservationFeedback(reservationId).subscribe(
-        (response) => {
-          if (response) {
-            this.feedbackData = new BookingFeedback().deserialize(
-              response,
-              this.feedbackConfig.ratingScaleConfig
-            );
-            this.setFeedbackData(
-              new BookingFeedback().deserialize(
-                response,
-                this.feedbackConfig.ratingScaleConfig
-              )
-            );
-          }
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      );
-    }
-  }
+  ngOnInit(): void {}
 
   openDetailPage(event, bookingId, tabKey?) {
     event.stopPropagation();

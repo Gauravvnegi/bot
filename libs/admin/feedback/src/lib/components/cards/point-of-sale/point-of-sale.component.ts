@@ -99,7 +99,7 @@ export class PointOfSaleComponent implements OnInit {
         ];
         this.branchId = data['filter'].value.property.branchName;
         if (this.tabFilterItems.length === 0)
-          this.setTabFilterItems(this.branchId);
+          this.setTabFilterItems(this.branchId, this.chips);
         this.setEntityId();
         this.getStats();
       })
@@ -127,11 +127,13 @@ export class PointOfSaleComponent implements OnInit {
    * @function setTabFilterItems To set tab filter items.
    * @param branchId The hotel branch id.
    */
-  setTabFilterItems(branchId: string): void {
+  setTabFilterItems(branchId: string, chips): void {
     const outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
       (branch) => branch['id'] == branchId
     ).outlets;
     this.tabFilterItems = [];
+    this.chips = chips;
+    this.tabFilterIdx = 0;
     outlets.forEach((outlet) => {
       if (this._statisticService.outletIds.find((d) => d === outlet.id)) {
         this.tabFilterItems.push({
@@ -140,7 +142,7 @@ export class PointOfSaleComponent implements OnInit {
           value: outlet.id,
           disabled: false,
           total: 0,
-          chips: this.chips,
+          chips: chips,
         });
       }
     });
@@ -149,7 +151,7 @@ export class PointOfSaleComponent implements OnInit {
   listenForOutletChanged(): void {
     this._statisticService.$outletChange.subscribe((response) => {
       if (response) {
-        this.setTabFilterItems(this.branchId);
+        this.setTabFilterItems(this.branchId, []);
         this.getStats();
       }
     });
@@ -249,7 +251,8 @@ export class PointOfSaleComponent implements OnInit {
         });
       });
     }
-    if (this.tabFilterItems.length === 0) this.setTabFilterItems(this.branchId);
+    if (this.tabFilterItems.length === 0)
+      this.setTabFilterItems(this.branchId, this.chips);
     else this.tabFilterItems[this.tabFilterIdx].chips = this.chips;
   }
 

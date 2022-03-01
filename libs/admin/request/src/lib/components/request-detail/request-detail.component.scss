@@ -152,3 +152,12 @@ td {
 .sla-timeout {
   color: #ce0c0c;
 }
+
+.no-data {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  line-height: 20px;
+}

@@ -17,6 +17,8 @@
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
@@ -110,18 +112,6 @@
               </mat-chip>
             </mat-chip-list>
           </div>
-
-          <!-- {{ selectedQuickReplyFilters | json }} -->
-          <!-- <div
-            class="button__wrapper"
-            *ngFor="let quickReplyType of quickReplyTypes"
-          >
-            <button
-              pButton
-              type="button"
-              [label]="quickReplyType.label"
-            ></button>
-          </div> -->
         </div>
       </form>
     </div>
@@ -144,7 +134,7 @@
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon [field]="col.field"></p-sortIcon>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
         </div>
       </th>
     </tr>
@@ -220,9 +210,6 @@
         ></p-tableCheckbox>
       </td>
       <td class="name">
-        <!-- <div class="profile">
-          <img src="assets/bg.png" />
-        </div> -->
         <div class="data">
           {{ rowData.getFullName() }}
           <p>{{ rowData.getContactDetails() }}</p>
@@ -235,21 +222,6 @@
       </td>
       <td class="guest">
         {{ rowData.getSecGuestDisplayConfig().displayString }}
-        <!-- <div
-        
-          *ngIf="rowData.permissionConfigs.length > 0"
-          [ngClass]="{ demo: rowData.permissionConfigs.length > 0 }"
-        >
-        <pre>{{rowData && rowData.permissionConfigs.length}}</pre>
-          <div
-            *ngFor="
-              let permission of rowData.permissionConfigs;
-              let permissionIdx = index
-            "
-          >
-            {{ rowData.permissionConfigs[permissionIdx].label }}
-          </div>
-        </div> -->
       </td>
       <td class="service-details">
         {{ userService.userDetails.getFullName() }}

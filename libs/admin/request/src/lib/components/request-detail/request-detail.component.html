@@ -1,4 +1,4 @@
-<div class="request-items" *ngIf="checkForData()">
+<div class="request-items" *ngIf="checkForData(); else noRequestData">
   <div class="request-items-header">
     <div class="request-items-header-left">
       <div class="request-items-header-left-avt">
@@ -107,3 +107,8 @@
     </div>
   </div>
 </div>
+<ng-template #noRequestData>
+  <div class="no-data">
+    Please select a request to view
+  </div>
+</ng-template>

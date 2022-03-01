@@ -188,7 +188,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       );
   }
 
-  customSort(event: SortEvent) {
+  /**
+   * @function customSort To sort the rows of the table.
+   * @param eventThe The event for sort click action.
+   */
+  customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     let field =
       event.field[event.field.length - 1] === ')'

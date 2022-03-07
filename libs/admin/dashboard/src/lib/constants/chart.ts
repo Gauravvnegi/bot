@@ -1,22 +1,11 @@
 export const chartConfig = {
-  types: {
-    bar: 'bar',
-    line: 'line',
-    doughnut: 'doughnut',
-  },
+  types: { bar: 'bar', line: 'line', doughnut: 'doughnut' },
   bookingStatus: {
     defaultData: [
       { data: [], label: 'Check-In', fill: false },
       { data: [], label: 'Checkout', fill: false },
     ],
-    barColors: [
-      {
-        backgroundColor: '#288ad6',
-      },
-      {
-        backgroundColor: '#F2509B',
-      },
-    ],
+    barColors: [{ backgroundColor: '#288ad6' }, { backgroundColor: '#F2509B' }],
   },
   customer: {
     colors: {

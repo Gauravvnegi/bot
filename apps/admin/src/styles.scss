@@ -85,7 +85,7 @@ body {
 
 .status-selected-new {
   background-color: rgba(62, 142, 247, 1) !important;
-  color: white;
+  color: $white;
   opacity: 1;
 }
 
@@ -147,12 +147,12 @@ body {
 
 .success {
   background-color: $completed !important;
-  color: white !important;
+  color: $white !important;
 }
 
 .notification {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: $white;
+  color: $black;
 }
 
 // modal overlay styling

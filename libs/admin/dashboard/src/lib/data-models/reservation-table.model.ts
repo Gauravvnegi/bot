@@ -211,19 +211,35 @@ export class Booking implements Deserializable {
   }
 
   getArrivalDate(timezone = '+05:30') {
-    return DateService.getDateFromTimeStamp(
-      this.arrivalTimeStamp,
-      'DD/M/YY',
-      timezone
-    );
+    if (this.expectedArrivalTimeStamp == 0) {
+      return DateService.getDateFromTimeStamp(
+        this.arrivalTimeStamp,
+        'DD/M/YY',
+        timezone
+      );
+    } else {
+      return DateService.getDateFromTimeStamp(
+        this.expectedArrivalTimeStamp,
+        'DD/M/YY',
+        timezone
+      );
+    }
   }
 
   getDepartureDate(timezone = '+05:30') {
-    return DateService.getDateFromTimeStamp(
-      this.departureTimeStamp,
-      'DD/M/YY',
-      timezone
-    );
+    if (this.expectedArrivalTimeStamp == 0) {
+      return DateService.getDateFromTimeStamp(
+        this.arrivalTimeStamp,
+        'DD/M/YY',
+        timezone
+      );
+    } else {
+      return DateService.getDateFromTimeStamp(
+        this.expectedDepartureTimeStamp,
+        'DD/M/YY',
+        timezone
+      );
+    }
   }
 
   getArrivalTime(timezone = '+05:30') {

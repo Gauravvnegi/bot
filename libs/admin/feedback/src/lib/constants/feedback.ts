@@ -433,9 +433,9 @@ export const feedback = {
           isSelected: true,
         },
         {
-          label: 'Experience',
+          label: 'Service',
           icon: '',
-          value: 'EXPERIENCE',
+          value: 'SERVICE',
           total: 0,
           isSelected: false,
         },

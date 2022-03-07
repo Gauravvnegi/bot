@@ -114,10 +114,8 @@ export class BookingStatusComponent implements OnInit {
             : null
         )
       );
-      this.chart.data[0].data.push(this.customerData.new[timestamp]);
-      this.chart.data[1].data.push(this.customerData.preCheckIn[timestamp]);
-      this.chart.data[2].data.push(this.customerData.checkIn[timestamp]);
-      this.chart.data[3].data.push(this.customerData.checkout[timestamp]);
+      this.chart.data[0].data.push(this.customerData.checkIn[timestamp]);
+      this.chart.data[1].data.push(this.customerData.checkout[timestamp]);
     });
     this.setChartColors();
   }

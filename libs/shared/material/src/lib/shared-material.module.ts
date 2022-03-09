@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -25,12 +24,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SnackBarService } from './services/snackbar.service';
 import { ModalService } from './services/modal.service';
-import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   imports: [
@@ -63,6 +63,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatTabsModule,
     ClipboardModule,
     TranslateModule,
+    MatAutocompleteModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -93,6 +94,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatSlideToggleModule,
     MatTabsModule,
     ClipboardModule,
+
+    MatAutocompleteModule,
   ],
   providers: [SnackBarService, ModalService],
 })

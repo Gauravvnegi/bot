@@ -116,6 +116,10 @@
   }
   &-button-wrap {
     align-self: center;
+    text-align: center;
+    position: sticky;
+    bottom: 0;
+    margin-bottom: 10px;
   }
 }
 
@@ -131,6 +135,7 @@
 
 .button {
   @include admin-panel-button();
+  padding: 16px 0px !important;
   // outline: none;
   // border: none;
   // width: 250px;

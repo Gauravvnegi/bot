@@ -1,10 +1,7 @@
 <!-- <pre>
   {{ detailsForm.getRawValue() | json }}
 </pre> -->
-<div
-  *ngIf="isReservationDetailFetched; else detailsLoader"
-  class="details-wrapper"
->
+<div class="details-wrapper ng-star-inserted" style_ngcontent-bpq-c336>
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -146,7 +143,7 @@
                 />
               </ng-container>
             </ng-container>
-
+  
             <div
               *ngIf="details.feedbackDetails.comments"
               [ngClass]="{
@@ -160,7 +157,7 @@
       </div>
       <!-- </div> -->
       <div class="header-seperator"></div>
-
+  
       <div class="room-details">
         <p>
           {{ stayDetailsFG.get('roomNumber').value }}
@@ -169,7 +166,7 @@
         </p>
       </div>
     </div>
-
+  
     <div class="options-wrapper" *ngIf="isGuestInfoPatched">
       <button
         class="check-button"
@@ -198,22 +195,22 @@
           <mat-icon *ngSwitchCase="'COMPLETED'" class="material-icons" matSuffix
             >check_circle</mat-icon
           >
-
+  
           <mat-icon *ngSwitchCase="'FAILED'" class="material-icons" matSuffix
             >disabled_by_default</mat-icon
           >
-
+  
           <mat-icon *ngSwitchCase="'PENDING'" class="material-icons" matSuffix
             >help</mat-icon
           >
-
+  
           <mat-icon *ngSwitchCase="'INITIATED'" class="material-icons" matSuffix
             >help</mat-icon
           >
-
+  
           <!-- add default case icon -->
         </ng-container>
-
+  
         <p class="text">Health Declaration</p>
       </button>
       <!-- bind it to detailsForm -->
@@ -224,264 +221,271 @@
       </p-dropdown>
     </div>
   </div>
-  <div class="mat-group">
-    <mat-tab-group [selectedIndex]="tabIndex">
-      <mat-tab label="Guest Details">
-        <hospitality-bot-admin-guest-details
-          *ngIf="isReservationDetailFetched"
-          [parentForm]="detailsForm"
-          [data]="details"
-          (addFGEvent)="addFGEvent($event)"
-          (isGuestInfoPatched)="guestInfoPatched($event)"
-        ></hospitality-bot-admin-guest-details>
-      </mat-tab>
-      <mat-tab label="Documents">
-        <hospitality-bot-admin-documents-details
-          *ngIf="isReservationDetailFetched"
-          #adminDocumentsDetailsComponent
-          [parentForm]="detailsForm"
-          [data]="details"
-          (addFGEvent)="addFGEvent($event)"
-        ></hospitality-bot-admin-documents-details>
-      </mat-tab>
-      <mat-tab label="Package">
-        <hospitality-bot-admin-package-details
-          *ngIf="isReservationDetailFetched"
-          [parentForm]="detailsForm"
-          [data]="details"
-        ></hospitality-bot-admin-package-details>
-      </mat-tab>
-
-      <mat-tab label="Payment">
-        <hospitality-bot-admin-payment-details
-          *ngIf="isReservationDetailFetched"
-          [parentForm]="detailsForm"
-          [data]="details"
-          (addFGEvent)="addFGEvent($event)"
-        ></hospitality-bot-admin-payment-details>
-      </mat-tab>
-
-      <mat-tab label="Activities & Notes">
-        <hospitality-bot-requests-table
-          *ngIf="isReservationDetailFetched"
-          [parentForm]="detailsForm"
-          [data]="details"
-        ></hospitality-bot-requests-table>
-      </mat-tab>
-    </mat-tab-group>
-
-    <div *ngIf="isReservationDetailFetched" class="tab-buttons">
-      <div class="button-wrapper">
-        <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
-          <ng-container *ngSwitchCase="'PRECHECKIN'">
-            <ng-container *ngTemplateOutlet="PRECHECKIN"></ng-container>
-          </ng-container>
-          <ng-container *ngSwitchCase="'CHECKIN'">
-            <ng-container *ngTemplateOutlet="CHECKIN"></ng-container>
-          </ng-container>
-          <ng-container *ngSwitchCase="'CHECKOUT'">
-            <ng-container *ngTemplateOutlet="CHECKOUT"></ng-container>
-          </ng-container>
-        </ng-container>
-
-        <ng-template #PRECHECKIN>
-          <ng-container [ngSwitch]="details.currentJourneyDetails.status">
-            <ng-container *ngSwitchCase="'PENDING'">
-              <button
-                (click)="activateAndgenerateJourney('PRECHECKIN')"
-                class="button"
-              >
-                Activate & Generate PreCheckIn Link
-              </button>
+  <div
+    *ngIf="isReservationDetailFetched; else detailsLoader"
+    class="details-wrapper"
+  >
+   
+    <div class="mat-group">
+      <mat-tab-group [selectedIndex]="tabIndex">
+        <mat-tab label="Guest Details">
+          <hospitality-bot-admin-guest-details
+            *ngIf="isReservationDetailFetched"
+            [parentForm]="detailsForm"
+            [data]="details"
+            (addFGEvent)="addFGEvent($event)"
+            (isGuestInfoPatched)="guestInfoPatched($event)"
+          ></hospitality-bot-admin-guest-details>
+        </mat-tab>
+        <mat-tab label="Documents">
+          <hospitality-bot-admin-documents-details
+            *ngIf="isReservationDetailFetched"
+            #adminDocumentsDetailsComponent
+            [parentForm]="detailsForm"
+            [data]="details"
+            (addFGEvent)="addFGEvent($event)"
+          ></hospitality-bot-admin-documents-details>
+        </mat-tab>
+        <mat-tab label="Package">
+          <hospitality-bot-admin-package-details
+            *ngIf="isReservationDetailFetched"
+            [parentForm]="detailsForm"
+            [data]="details"
+          ></hospitality-bot-admin-package-details>
+        </mat-tab>
+  
+        <mat-tab label="Payment">
+          <hospitality-bot-admin-payment-details
+            *ngIf="isReservationDetailFetched"
+            [parentForm]="detailsForm"
+            [data]="details"
+            (addFGEvent)="addFGEvent($event)"
+          ></hospitality-bot-admin-payment-details>
+        </mat-tab>
+  
+        <mat-tab label="Activities & Notes">
+          <hospitality-bot-requests-table
+            *ngIf="isReservationDetailFetched"
+            [parentForm]="detailsForm"
+            [data]="details"
+          ></hospitality-bot-requests-table>
+        </mat-tab>
+      </mat-tab-group>
+  
+      <div *ngIf="isReservationDetailFetched" class="tab-buttons">
+        <div class="button-wrapper">
+          <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
+            <ng-container *ngSwitchCase="'PRECHECKIN'">
+              <ng-container *ngTemplateOutlet="PRECHECKIN"></ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'INITIATED'">
-              <button
-                (click)="activateAndgenerateJourney('PRECHECKIN')"
-                class="button"
-              >
-                Activate & Generate PreCheckIn Link
-              </button>
+            <ng-container *ngSwitchCase="'CHECKIN'">
+              <ng-container *ngTemplateOutlet="CHECKIN"></ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'COMPLETED'">
-              <button
-                (click)="activateAndgenerateJourney('PRECHECKIN')"
-                class="button"
-              >
-                Activate & Generate PreCheckIn Link
-              </button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'FAILED'">
-              <button
-                (click)="activateAndgenerateJourney('PRECHECKIN')"
-                class="button"
-              >
-                Activate & Generate PreCheckIn Link
-              </button>
+            <ng-container *ngSwitchCase="'CHECKOUT'">
+              <ng-container *ngTemplateOutlet="CHECKOUT"></ng-container>
             </ng-container>
           </ng-container>
-        </ng-template>
-
-        <ng-template #CHECKIN>
-          <ng-container [ngSwitch]="details.currentJourneyDetails.status">
-            <ng-container *ngSwitchCase="'PENDING'">
-              <button
-                (click)="activateAndgenerateJourney('CHECKIN')"
-                class="button"
-              >
-                Generate CheckIn Link
-              </button>
+  
+          <ng-template #PRECHECKIN>
+            <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+              <ng-container *ngSwitchCase="'PENDING'">
+                <button
+                  (click)="activateAndgenerateJourney('PRECHECKIN')"
+                  class="button"
+                >
+                  Activate & Generate PreCheckIn Link
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'INITIATED'">
+                <button
+                  (click)="activateAndgenerateJourney('PRECHECKIN')"
+                  class="button"
+                >
+                  Activate & Generate PreCheckIn Link
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'COMPLETED'">
+                <button
+                  (click)="activateAndgenerateJourney('PRECHECKIN')"
+                  class="button"
+                >
+                  Activate & Generate PreCheckIn Link
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'FAILED'">
+                <button
+                  (click)="activateAndgenerateJourney('PRECHECKIN')"
+                  class="button"
+                >
+                  Activate & Generate PreCheckIn Link
+                </button>
+              </ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'INITIATED'">
-              <button
-                (click)="activateAndgenerateJourney('CHECKIN')"
-                class="button"
-              >
-                Generate CheckIn Link
-              </button>
-
-              <button class="button" (click)="verifyAllDocuments()">
-                Confirm All Docs
-              </button>
-
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button>
-              <!-- ---------------------------------------------------------------------------------------------- -->
-              <button
-                button-dependency
-                [id]="'confirmAndNotifyCheckin'"
-                [context]="self"
-                [parentForm]="detailsForm"
-                [data]="details"
-                [handler]="{
-                  fn_name: 'confirmAndNotifyCheckin',
-                  args: []
-                }"
-                class="button"
-              >
-                Confirm And Notify Checkin
-              </button>
+          </ng-template>
+  
+          <ng-template #CHECKIN>
+            <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+              <ng-container *ngSwitchCase="'PENDING'">
+                <button
+                  (click)="activateAndgenerateJourney('CHECKIN')"
+                  class="button"
+                >
+                  Generate CheckIn Link
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'INITIATED'">
+                <button
+                  (click)="activateAndgenerateJourney('CHECKIN')"
+                  class="button"
+                >
+                  Generate CheckIn Link
+                </button>
+  
+                <button class="button" (click)="verifyAllDocuments()">
+                  Confirm All Docs
+                </button>
+  
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button>
+                <!-- ---------------------------------------------------------------------------------------------- -->
+                <button
+                  button-dependency
+                  [id]="'confirmAndNotifyCheckin'"
+                  [context]="self"
+                  [parentForm]="detailsForm"
+                  [data]="details"
+                  [handler]="{
+                    fn_name: 'confirmAndNotifyCheckin',
+                    args: []
+                  }"
+                  class="button"
+                >
+                  Confirm And Notify Checkin
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'COMPLETED'">
+                <!-- initiate force checkout -->
+                <!-- download invoice -->
+              </ng-container>
+              <ng-container *ngSwitchCase="'FAILED'">
+                <button
+                  (click)="activateAndgenerateJourney('CHECKIN')"
+                  class="button"
+                >
+                  Generate CheckIn Link
+                </button>
+  
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button>
+              </ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'COMPLETED'">
-              <!-- initiate force checkout -->
-              <!-- download invoice -->
-            </ng-container>
-            <ng-container *ngSwitchCase="'FAILED'">
-              <button
-                (click)="activateAndgenerateJourney('CHECKIN')"
-                class="button"
-              >
-                Generate CheckIn Link
-              </button>
-
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button>
-            </ng-container>
-          </ng-container>
-          <!-- <button
-            (click)="manualCheckin()"
-            class="button"
-            *ngIf="details.currentJourneyDetails.status !== 'COMPLETED'"
-          >
-            Manual Checkin
-          </button> -->
-        </ng-template>
-
-        <ng-template #CHECKOUT
-          ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
-            <ng-container *ngSwitchCase="'PENDING'">
-              <button
-                (click)="activateAndgenerateJourney('CHECKOUT')"
-                class="button"
-              >
-                Activate & Generate Checkout Link
-              </button>
-              <button class="button" (click)="prepareInvoice()">
-                Prepare Invoice
-              </button>
-              <button class="button" (click)="sendInvoice()">
-                Send Invoice
-              </button>
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'INITIATED'">
-              <!-- iniated only from bot   -->
-              <button
-                (click)="activateAndgenerateJourney('CHECKOUT')"
-                class="button"
-              >
-                Activate & Generate Checkout Link
-              </button>
-              <button class="button" (click)="prepareInvoice()">
-                Prepare Invoice
-              </button>
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'COMPLETED'">
-              <!-- <button
-                (click)="activateAndgenerateJourney('CHECKOUT')"
-                class="button"
-              >
-                Activate & Generate Checkout Link
-              </button>
-              <button class="button" (click)="prepareInvoice()">
-                Prepare Invoice
-              </button>
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button> -->
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'FAILED'">
-              <!-- Flow to-be-decided -->
-              <button
-                (click)="activateAndgenerateJourney('CHECKOUT')"
-                class="button"
-              >
-                Activate & Generate Checkout Link
-              </button>
-              <button class="button" (click)="prepareInvoice()">
-                Prepare Invoice
-              </button>
-              <button (click)="downloadInvoice()" class="button">
-                Download Invoice/Folio
-              </button>
-            </ng-container>
-          </ng-container>
-        </ng-template>
-      </div>
-      <div featureSubscribed [feature]="'modules.notification'">
-        <p class="contact">Contact Guest</p>
-        <div class="right-bottom-icons">
-          <ng-container *ngFor="let icon of shareIconList">
-            <div
-              class="social-icons"
-              (click)="openSendNotification(icon.value)"
+            <!-- <button
+              (click)="manualCheckin()"
+              class="button"
+              *ngIf="details.currentJourneyDetails.status !== 'COMPLETED'"
             >
-              <div class="icon">
-                <img [src]="icon.iconUrl" />
+              Manual Checkin
+            </button> -->
+          </ng-template>
+  
+          <ng-template #CHECKOUT
+            ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
+              <ng-container *ngSwitchCase="'PENDING'">
+                <button
+                  (click)="activateAndgenerateJourney('CHECKOUT')"
+                  class="button"
+                >
+                  Activate & Generate Checkout Link
+                </button>
+                <button class="button" (click)="prepareInvoice()">
+                  Prepare Invoice
+                </button>
+                <button class="button" (click)="sendInvoice()">
+                  Send Invoice
+                </button>
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'INITIATED'">
+                <!-- iniated only from bot   -->
+                <button
+                  (click)="activateAndgenerateJourney('CHECKOUT')"
+                  class="button"
+                >
+                  Activate & Generate Checkout Link
+                </button>
+                <button class="button" (click)="prepareInvoice()">
+                  Prepare Invoice
+                </button>
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'COMPLETED'">
+                <!-- <button
+                  (click)="activateAndgenerateJourney('CHECKOUT')"
+                  class="button"
+                >
+                  Activate & Generate Checkout Link
+                </button>
+                <button class="button" (click)="prepareInvoice()">
+                  Prepare Invoice
+                </button>
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button> -->
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'FAILED'">
+                <!-- Flow to-be-decided -->
+                <button
+                  (click)="activateAndgenerateJourney('CHECKOUT')"
+                  class="button"
+                >
+                  Activate & Generate Checkout Link
+                </button>
+                <button class="button" (click)="prepareInvoice()">
+                  Prepare Invoice
+                </button>
+                <button (click)="downloadInvoice()" class="button">
+                  Download Invoice/Folio
+                </button>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </div>
+        <div featureSubscribed [feature]="'modules.notification'">
+          <p class="contact">Contact Guest</p>
+          <div class="right-bottom-icons">
+            <ng-container *ngFor="let icon of shareIconList">
+              <div
+                class="social-icons"
+                (click)="openSendNotification(icon.value)"
+              >
+                <div class="icon">
+                  <img [src]="icon.iconUrl" />
+                </div>
               </div>
-            </div>
-          </ng-container>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <!-- <pre>
   {{ details | json }}
 </pre> -->
 
 <ng-template #detailsLoader>
   <div class="loader">
-    <p class="loading">Loading</p>
+    <p class="loading">Loading  </p>
     <div class="spinner">
       <div class="bounce1"></div>
       <div class="bounce2"></div>

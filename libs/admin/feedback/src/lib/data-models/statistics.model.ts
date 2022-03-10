@@ -387,14 +387,15 @@ export const SharedColors = {
   Cleaniness: '#4974e0',
   Pricing: '#3db76b',
   Quality: '#ffbf04',
-  READ: '#ffbf04',
-  UNREAD: '#4ba0f5',
+  READ: '#4ba0f5',
+  UNREAD: '#c5c5c5',
   ACTIONED: '#31bb92',
   LUNCH: '#f18533',
   BREAKFAST: '#4974e0',
   DINNER: '#3db76b',
   INPROGRESS: '#31bb92',
   RESOLVED: '#ff6804',
+  OPEN: '#4ba0f5',
 };
 
 export class NPOSVertical {

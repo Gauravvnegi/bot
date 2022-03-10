@@ -145,18 +145,9 @@
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "
 >
-  <div class="sortFilt">
-    <div class="sortFilt-text">
-      Sort & Filters
-    </div>
-    <div class="cross" (click)="showFilter = false">
-      &#10006;
-    </div>
-  </div>
-  <div class="right-side-list-filter">
-    <hospitality-bot-request-list-filter
-      [parentFG]="parentFG"
-      (filterApplied)="handleFilter($event)"
-    ></hospitality-bot-request-list-filter>
-  </div>
+  <hospitality-bot-request-list-filter
+    [parentFG]="parentFG"
+    (filterApplied)="handleFilter($event)"
+    (close)="showFilter = false"
+  ></hospitality-bot-request-list-filter>
 </div>

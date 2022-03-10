@@ -9,6 +9,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 export class ContactSortFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Output() filterApplied = new EventEmitter();
+  @Output() filterClosed = new EventEmitter();
   sortList = [
     { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
     { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
@@ -16,7 +17,6 @@ export class ContactSortFilterComponent implements OnInit {
     { label: 'Name Z -> A', value: 'guestName', order: 'DESC' },
   ];
 
-  filterData = ['Unread', 'Failed', 'Tags', 'Attachments'];
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -25,19 +25,18 @@ export class ContactSortFilterComponent implements OnInit {
 
   initFG(): void {
     this.parentFG.addControl('sortBy', new FormControl([]));
-    this.parentFG.addControl(
-      'filterBy',
-      this.fb.array(this.filterData.map((x) => false))
-    );
   }
 
   applyFilter() {
     const values = this.parentFG.getRawValue();
-    values.filterBy = this.convertFilterToValue();
     this.filterApplied.emit({
       status: true,
       data: { sort: values.sortBy.label, order: values.sortBy.order },
     });
+  }
+
+  close() {
+    this.filterClosed.emit();
   }
 
   setSortBy(item) {
@@ -45,10 +44,8 @@ export class ContactSortFilterComponent implements OnInit {
     this.parentFG.markAsTouched();
   }
 
-  convertFilterToValue() {
-    return this.filterFormArray.value
-      .map((x, i) => x && this.filterData[i])
-      .filter((x) => !!x);
+  clearFilter() {
+    this.parentFG.patchValue({ sortBy: [] });
   }
 
   get sortControl(): FormControl {

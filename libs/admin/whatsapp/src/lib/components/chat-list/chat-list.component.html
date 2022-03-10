@@ -91,16 +91,9 @@
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "
 >
-  <div class="sortFilt">
-    <div>Sort & Filters</div>
-    <div class="cross" (click)="showFilter = false">
-      &#10006;
-    </div>
-  </div>
-  <div class="sort-filter">
-    <hospitality-bot-contact-sort-filter
-      [parentFG]="contactFG"
-      (filterApplied)="handleFilter($event)"
-    ></hospitality-bot-contact-sort-filter>
-  </div>
+  <hospitality-bot-contact-sort-filter
+    [parentFG]="contactFG"
+    (filterApplied)="handleFilter($event)"
+    (filterClosed)="showFilter = false"
+  ></hospitality-bot-contact-sort-filter>
 </div>

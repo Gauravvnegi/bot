@@ -41,7 +41,9 @@
     linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
     padding-box;
   padding: $padding20;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 999;
   .close {
     position: absolute;
     top: 5px;
@@ -344,13 +346,14 @@
   width: 79%;
   margin: $margin20 25px;
   margin-right: 0;
-  min-height: 60vh;
+  height: 49vh;
   border-right: 2px solid #e8f3fe;
   padding-right: 15px;
-  @media screen and (max-width: 1100px) {
-    min-height: 64vh;
-  }
-}
+  overflow-y:auto;
+   @media screen and (max-width: 1100px) {
+     min-height: 64vh;
+   }
+ }
 
 :host ::ng-deep .mat-group {
   position: relative;
@@ -408,9 +411,11 @@
   position: absolute;
   top: 53px;
   right: 0;
-  height: 86%;
+  height: 67%;
   z-index: 22;
   background-color: white;
+  overflow-y:auto;
+  overflow-x: hidden;
   .contact {
     font-size: 11px;
     color: $primary-gray;
@@ -422,7 +427,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 93%;
+    height:49vh;
     .button {
       border: 1px solid $primary-purple;
       font-size: $font12;

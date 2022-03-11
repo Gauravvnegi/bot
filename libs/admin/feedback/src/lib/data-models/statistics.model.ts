@@ -396,6 +396,7 @@ export const SharedColors = {
   INPROGRESS: '#31bb92',
   RESOLVED: '#ff6804',
   OPEN: '#4ba0f5',
+  CLOSED: '#ff6804',
 };
 
 export class NPOSVertical {

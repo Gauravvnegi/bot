@@ -17,9 +17,14 @@ import { Feedback, Notes } from '../../data-models/feedback-datatable.model';
 export class FeedbackNotesComponent implements OnInit {
   @Input() feedback: Feedback;
   @Input() notes: Notes;
+  @Input() status: string;
   @Input() timezone: string;
   @Output() onNotesClosed = new EventEmitter();
-  viewOnly = false;
+  statusOptions = [
+    { label: 'In-Progress', value: 'INPROGRESS' },
+    { label: 'Closed', value: 'CLOSED' },
+  ];
+  // viewOnly = false;
   notesFG: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -31,13 +36,15 @@ export class FeedbackNotesComponent implements OnInit {
   }
 
   initFG() {
+    debugger;
     this.notesFG = this.fb.group({
       notes: [this.notes?.remarks || '', Validators.required],
+      status: [this.status, Validators.required],
     });
-    if (this.notes?.remarks) {
-      this.viewOnly = true;
-      this.remarks?.disable();
-    }
+    // if (this.notes?.remarks) {
+    // this.viewOnly = true;
+    //   this.remarks?.disable();
+    // }
   }
 
   closeNotes() {
@@ -45,7 +52,7 @@ export class FeedbackNotesComponent implements OnInit {
   }
 
   openEditForm() {
-    this.viewOnly = false;
+    // this.viewOnly = false;
     this.remarks?.enable();
   }
 
@@ -59,6 +66,7 @@ export class FeedbackNotesComponent implements OnInit {
         .subscribe();
       return;
     }
+    debugger;
     this.onNotesClosed.emit({
       status: true,
       data: this.notesFG.getRawValue(),

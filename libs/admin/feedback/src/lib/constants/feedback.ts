@@ -126,88 +126,6 @@ export const feedback = {
       },
     },
   },
-  // cols: {
-  //   feedbackDatatable: [
-  //     {
-  //       field: 'getFullName()',
-  //       header: 'Guest/ Company',
-  //       isSort: true,
-  //       sortType: 'string',
-  //     },
-  //     {
-  //       field: 'booking.getArrivalTimeStamp()',
-  //       header: 'Arrival/ Departure',
-  //       isSort: true,
-  //       sortType: 'date',
-  //     },
-  //     {
-  //       field: 'booking.bookingNumber',
-  //       header: 'Booking No./ Feedback',
-  //       isSort: true,
-  //       sortType: 'number',
-  //     },
-  //     {
-  //       field: `getPhoneNumber()`,
-  //       header: 'Phone No.',
-  //       isSort: false,
-  //       sortType: 'string',
-  //     },
-  //     {
-  //       field: 'payment.totalAmount',
-  //       header: 'Amount Due/ Total Spend',
-  //       isSort: true,
-  //       sortType: 'number',
-  //     },
-  //     {
-  //       field: 'guestAttributes.transactionUsage',
-  //       header: 'Transaction Usage',
-  //       isSort: true,
-  //       sortType: 'string',
-  //     },
-  //     {
-  //       field: 'guestAttributes.overAllNps',
-  //       header: 'Overall NPS',
-  //       isSort: true,
-  //       sortType: 'number',
-  //     },
-  //     {
-  //       field: 'guestAttributes.churnProbalilty',
-  //       header: 'Churn Prob/ Prediction',
-  //       isSort: true,
-  //       sortType: 'number',
-  //     },
-  //     { field: 'stageAndourney', header: 'Stage/ Channels' },
-  //   ],
-  // },
-  // chips: {
-  //   feedbackDatatable: [
-  //     { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-  //     {
-  //       label: 'VIP',
-  //       icon: '',
-  //       value: 'VIP',
-  //       total: 0,
-  //       isSelected: false,
-  //       type: 'initiated',
-  //     },
-  //     {
-  //       label: 'High Potential ',
-  //       icon: '',
-  //       value: 'HIGHPOTENTIAL',
-  //       total: 0,
-  //       isSelected: false,
-  //       type: 'initiated',
-  //     },
-  //     {
-  //       label: 'High Risk ',
-  //       icon: '',
-  //       value: 'HIGHRISK',
-  //       total: 0,
-  //       isSelected: false,
-  //       type: 'initiated',
-  //     },
-  //   ],
-  // },
   chartType: {
     bar: {
       name: 'Bar',
@@ -244,31 +162,6 @@ export const feedback = {
       negative: 'Negative',
     },
   },
-  // tabFilterItems: {
-  //   topLowNPS: [
-  //     {
-  //       label: 'Department',
-  //       icon: '',
-  //       value: 'DEPARTMENT',
-  //       total: 0,
-  //       isSelected: true,
-  //     },
-  //     {
-  //       label: 'Service',
-  //       icon: '',
-  //       value: 'SERVICE',
-  //       total: 0,
-  //       isSelected: false,
-  //     },
-  //     {
-  //       label: 'Touchpoint',
-  //       icon: '',
-  //       value: 'TOUCHPOINT',
-  //       total: 0,
-  //       isSelected: false,
-  //     },
-  //   ],
-  // },
   canvas: {
     department: {
       lineWidth: 15,
@@ -557,9 +450,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Read ',
+              label: 'Open ',
               icon: '',
-              value: 'READ',
+              value: 'OPEN',
               total: 0,
               isSelected: false,
               type: 'initiated',
@@ -581,9 +474,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Resolved ',
+              label: 'Closed ',
               icon: '',
-              value: 'RESOLVED',
+              value: 'CLOSED',
               total: 0,
               isSelected: false,
               type: 'initiated',
@@ -624,9 +517,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Read ',
+              label: 'Open ',
               icon: '',
-              value: 'READ',
+              value: 'OPEN',
               total: 0,
               isSelected: false,
               type: 'initiated',
@@ -648,9 +541,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Resolved ',
+              label: 'Closed ',
               icon: '',
-              value: 'RESOLVED',
+              value: 'CLOSED',
               total: 0,
               isSelected: false,
               type: 'initiated',
@@ -689,9 +582,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Read ',
+              label: 'Open ',
               icon: '',
-              value: 'READ',
+              value: 'OPEN',
               total: 0,
               isSelected: false,
               type: 'initiated',
@@ -713,9 +606,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Resolved ',
+              label: 'Closed ',
               icon: '',
-              value: 'RESOLVED',
+              value: 'CLOSED',
               total: 0,
               isSelected: false,
               type: 'initiated',

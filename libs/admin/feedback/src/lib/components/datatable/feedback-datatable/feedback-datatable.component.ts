@@ -580,6 +580,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
     detailCompRef.componentInstance.feedback = data;
     detailCompRef.componentInstance.notes = notes;
+    detailCompRef.componentInstance.status = data.status;
     detailCompRef.componentInstance.timezone = this._globalFilterService.timezone;
 
     this.$subscription.add(

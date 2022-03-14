@@ -408,6 +408,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     tabKey?: string
   ): void {
     event.stopPropagation();
+    if (!rowData) return;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';

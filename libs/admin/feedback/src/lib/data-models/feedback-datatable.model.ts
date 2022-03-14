@@ -195,6 +195,7 @@ export class StayFeedback {
   tableOrRoomNumber: string;
   transactionalService: string;
   outlet: string;
+  status: string;
 
   deserialize(input, outlets) {
     Object.assign(
@@ -211,7 +212,8 @@ export class StayFeedback {
       set({}, 'session', get(input, ['session'])),
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
-      set({}, 'transactionalService', get(input, ['transactionalService']))
+      set({}, 'transactionalService', get(input, ['transactionalService'])),
+      set({}, 'status', get(input, ['status']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId

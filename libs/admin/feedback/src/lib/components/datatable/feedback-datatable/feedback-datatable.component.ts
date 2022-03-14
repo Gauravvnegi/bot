@@ -573,15 +573,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '550';
+    dialogConfig.data = {
+      feedback: data,
+      timezone: this._globalFilterService.timezone,
+    };
     const detailCompRef = this._modal.openDialog(
       FeedbackNotesComponent,
       dialogConfig
     );
-
-    detailCompRef.componentInstance.feedback = data;
-    detailCompRef.componentInstance.notes = notes;
-    detailCompRef.componentInstance.status = data.status;
-    detailCompRef.componentInstance.timezone = this._globalFilterService.timezone;
 
     this.$subscription.add(
       detailCompRef.componentInstance.onNotesClosed.subscribe((res) => {

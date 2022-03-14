@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackBarService } from 'libs/shared/material/src';
 import { feedback } from '../../constants/feedback';
-import { Feedback, Notes } from '../../data-models/feedback-datatable.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-notes',
@@ -15,20 +15,16 @@ import { Feedback, Notes } from '../../data-models/feedback-datatable.model';
   styleUrls: ['./feedback-notes.component.scss'],
 })
 export class FeedbackNotesComponent implements OnInit {
-  @Input() feedback: Feedback;
-  @Input() notes: Notes;
-  @Input() status: string;
-  @Input() timezone: string;
   @Output() onNotesClosed = new EventEmitter();
   statusOptions = [
     { label: 'In-Progress', value: 'INPROGRESS' },
     { label: 'Closed', value: 'CLOSED' },
   ];
-  // viewOnly = false;
   notesFG: FormGroup;
   constructor(
     private fb: FormBuilder,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
@@ -36,15 +32,10 @@ export class FeedbackNotesComponent implements OnInit {
   }
 
   initFG() {
-    debugger;
     this.notesFG = this.fb.group({
-      notes: [this.notes?.remarks || '', Validators.required],
-      status: [this.status, Validators.required],
+      notes: [this.data?.feedback?.notes?.remarks || '', Validators.required],
+      status: [this.data?.feedback?.status, Validators.required],
     });
-    // if (this.notes?.remarks) {
-    // this.viewOnly = true;
-    //   this.remarks?.disable();
-    // }
   }
 
   closeNotes() {
@@ -52,7 +43,6 @@ export class FeedbackNotesComponent implements OnInit {
   }
 
   openEditForm() {
-    // this.viewOnly = false;
     this.remarks?.enable();
   }
 
@@ -61,16 +51,15 @@ export class FeedbackNotesComponent implements OnInit {
       this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.validation.notes_remarks',
-          priorityMessage: 'Please add remarks.',
+          priorityMessage: 'Invalid form.',
         })
         .subscribe();
       return;
     }
-    debugger;
     this.onNotesClosed.emit({
       status: true,
       data: this.notesFG.getRawValue(),
-      id: this.feedback.id,
+      id: this.data.feedback.id,
     });
   }
 

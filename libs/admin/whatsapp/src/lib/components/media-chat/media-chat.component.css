@@ -1,0 +1,137 @@
+.media__chat {
+  height: 280px;
+}
+
+.media__chat__img {
+  height: 100%;
+  max-width: 100%;
+  cursor: pointer;
+}
+
+.media__chat__video__chat {
+  height: 280px;
+}
+
+.media__chat__video__chat__vid {
+  height: 100%;
+  max-width: 100%;
+}
+
+.media__chat__video__download {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px 0;
+}
+
+.media__chat__video__download__filename {
+  margin-right: 5px;
+}
+
+.media__chat__video__download__btn {
+  padding: 5px;
+  border-radius: 50%;
+  background: cornsilk;
+  cursor: pointer;
+}
+
+.media__chat__video__download__btn img {
+  height: 15px;
+}
+
+.media__chat__file {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px 0;
+}
+
+.media__chat__file__filename {
+  margin-right: 5px;
+}
+
+.media__chat__file__download {
+  padding: 5px;
+  border-radius: 50%;
+  background: cornsilk;
+  cursor: pointer;
+}
+
+.media__chat__file__download img {
+  height: 15px;
+}
+
+.media__chat__download {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid black;
+  background: #afabab;
+}
+
+.media__chat__download__btn {
+  padding: 10px;
+  border-radius: 50%;
+  background: cornsilk;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.media__chat__download__btn img {
+  height: 20px;
+}
+
+.media__chat__download__link {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px 0;
+}
+
+.media__chat__download__link__filename {
+  margin-right: 5px;
+}
+
+.media__chat__download__link__btn {
+  padding: 5px;
+  border-radius: 50%;
+  background: cornsilk;
+  cursor: pointer;
+}
+
+.media__chat__download__link__btn img {
+  height: 15px;
+}
+
+.message-url {
+  height: 100%;
+  max-width: 100%;
+}
+
+.prograsses {
+  margin-top: 5px;
+}
+/*# sourceMappingURL=media-chat.component.css.map */

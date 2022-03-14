@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,KAAK,CAAC,SAAS,CAAC,cAAc,CAAC;EAC7B,SAAS,EAAE,eAAe;CAO3B;;AARD,AAEE,KAFG,CAAC,SAAS,CAAC,cAAc,CAE5B,GAAG,CAAC;EACF,KAAK,EAAE,MAAM;EACb,MAAM,EAAE,MAAM;EACd,YAAY,EAAE,GAAG;EACjB,MAAM,EAAE,eAAe;CACxB;;AAEH,AAAA,kBAAkB,CAAC;EACjB,OAAO,EAAE,IAAI;EACb,WAAW,EAAE,MAAM;CACpB;;AAED,AACE,KADG,CAAC,SAAS,CAAC,qBAAqB,CACnC,GAAG,CAAC;EACF,MAAM,EAAE,WAAW,CAAC,kBAAkB,CAAC,cAAc;CACtD",
+    "sources": [
+        "message-tab-menu.component.scss"
+    ],
+    "names": [],
+    "file": "message-tab-menu.component.css"
+}

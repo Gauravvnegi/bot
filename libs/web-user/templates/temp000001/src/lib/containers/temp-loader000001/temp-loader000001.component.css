@@ -1,0 +1,267 @@
+.background__wrapper {
+  background: url("../../../../../../../../apps/web-user/src/assets/bg.png");
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.background__wrapper-img {
+  min-width: 100%;
+  min-height: 100%;
+}
+
+@-webkit-keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.shine {
+  background: #f6f7f8;
+  background-image: -webkit-gradient(linear, left top, right top, from(#f6f7f8), color-stop(20%, #edeef1), color-stop(40%, #f6f7f8), to(#f6f7f8));
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  position: relative;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
+  -webkit-animation-name: placeholderShimmer;
+          animation-name: placeholderShimmer;
+  -webkit-animation-timing-function: linear;
+          animation-timing-function: linear;
+}
+
+.header {
+  padding: 15px 20px;
+  background-color: white;
+}
+
+.header .header_effect {
+  height: 35px;
+}
+
+.shimmer_container {
+  padding: 35px 70px;
+}
+
+.shimmer_container .responsive-stepper {
+  display: none;
+}
+
+.shimmer_container .stepper {
+  padding: 0px 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 55px;
+}
+
+.shimmer_container .stepper .dot {
+  height: 30px;
+  width: 30px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.shimmer_container .stepper .line {
+  height: 2px;
+  width: 22%;
+  background-color: white;
+}
+
+.shimmer_container .details {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.shimmer_container .details .detail_header {
+  height: 30px;
+  width: 250px;
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+
+.shimmer_container .details .detail_wrapper {
+  margin: 0 24px 16px;
+  padding: 20px 30px;
+  border: 2px solid #e6e6e6;
+  border-radius: 15px;
+  position: relative;
+}
+
+.shimmer_container .details .detail_wrapper::before {
+  content: '';
+  width: 15px;
+  height: 20px;
+  position: absolute;
+  background-color: #fff;
+  border: 2px solid #e6e6e6;
+  top: 50%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  left: -2px;
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+  border-left: 0;
+}
+
+.shimmer_container .details .detail_wrapper::after {
+  content: '';
+  width: 15px;
+  height: 20px;
+  position: absolute;
+  background-color: #fff;
+  border: 2px solid #e6e6e6;
+  top: 50%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  right: -2px;
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  border-right: 0;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data .data {
+  width: 48%;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data .data .title {
+  height: 30px;
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data .data .feild {
+  height: 30px;
+  width: 100%;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data-responsive {
+  display: none;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data-responsive .data {
+  width: 48%;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data-responsive .data .title {
+  height: 30px;
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.shimmer_container .details .detail_wrapper .detail_data-responsive .data .feild {
+  height: 30px;
+  width: 100%;
+}
+
+.shimmer_container .second_details {
+  padding: 20px 30px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.shimmer_container .second_details .second_detail_header {
+  height: 30px;
+  width: 250px;
+}
+
+@media only screen and (max-width: 990px) {
+  .shimmer_container {
+    padding: 15px 10px;
+  }
+  .shimmer_container .responsive-stepper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin: 20px auto;
+  }
+  .shimmer_container .responsive-stepper .circle {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+  }
+  .shimmer_container .responsive-stepper .text_box {
+    width: 200px;
+    height: 25px;
+    margin-left: 20px;
+  }
+  .shimmer_container .stepper {
+    display: none;
+  }
+  .shimmer_container .details {
+    margin-top: 30px;
+    padding: 10px;
+  }
+  .shimmer_container .details .detail_header {
+    width: 200px;
+    height: 20px;
+    margin-left: 0px;
+  }
+  .shimmer_container .details .detail_wrapper {
+    margin: 0px;
+    padding: 15px;
+    padding-top: 25px;
+  }
+  .shimmer_container .details .detail_wrapper .detail_data {
+    display: none;
+  }
+  .shimmer_container .details .detail_wrapper .detail_data-responsive {
+    display: block;
+  }
+  .shimmer_container .details .detail_wrapper .detail_data-responsive .data {
+    width: auto;
+    margin-bottom: 20px;
+  }
+  .shimmer_container .details .detail_wrapper .detail_data-responsive .data .title {
+    height: 20px;
+  }
+  .shimmer_container .details .detail_wrapper .detail_data-responsive .data .feild {
+    height: 20px;
+  }
+  .shimmer_container .second_details .second_detail_header {
+    width: 200px;
+    height: 20px;
+  }
+}
+/*# sourceMappingURL=temp-loader000001.component.css.map */

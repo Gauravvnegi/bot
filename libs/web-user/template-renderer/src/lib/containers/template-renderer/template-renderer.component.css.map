@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "template-renderer.component.scss"
+    ],
+    "names": [],
+    "file": "template-renderer.component.css"
+}

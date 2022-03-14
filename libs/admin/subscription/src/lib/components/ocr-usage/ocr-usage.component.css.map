@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "ocr-usage.component.scss"
+    ],
+    "names": [],
+    "file": "ocr-usage.component.css"
+}

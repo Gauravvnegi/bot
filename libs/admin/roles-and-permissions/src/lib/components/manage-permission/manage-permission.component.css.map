@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "manage-permission.component.scss"
+    ],
+    "names": [],
+    "file": "manage-permission.component.css"
+}

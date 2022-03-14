@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,SAAS,CAAC,WAAW,CAAC;EACpB,eAAe,EAAE,QAAQ;CAC1B;;AACD,AAAA,SAAS,CAAC,YAAY,CAAC;EACrB,KAAK,EAAE,GAAG;CACX",
+    "sources": [
+        "edit-user-permission.component.scss"
+    ],
+    "names": [],
+    "file": "edit-user-permission.component.css"
+}

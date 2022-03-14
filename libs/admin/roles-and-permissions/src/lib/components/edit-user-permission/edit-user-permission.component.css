@@ -1,0 +1,10 @@
+::ng-deep .feild-trio {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+::ng-deep .feild-width {
+  width: 40%;
+}
+/*# sourceMappingURL=edit-user-permission.component.css.map */

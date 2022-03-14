@@ -1,0 +1,26 @@
+:host ::ng-deep .mat-tab-label {
+  min-width: 55px !important;
+}
+
+:host ::ng-deep .mat-tab-label img {
+  width: 18.2px;
+  height: 18.2px;
+  margin-right: 6px;
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+.messageTabWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+:host ::ng-deep .mat-tab-label-active img {
+  -webkit-filter: sepia(100%) hue-rotate(190deg) saturate(500%);
+          filter: sepia(100%) hue-rotate(190deg) saturate(500%);
+}
+/*# sourceMappingURL=message-tab-menu.component.css.map */

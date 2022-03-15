@@ -13,6 +13,13 @@
     "title": "Response Rate",
     "sub_title": "Response Breakdown as per feedback shared"
   },
+  "gtm_across_services": {
+    "title_text": "GTM across services",
+    "tooltip_text": "",
+    "closed_text": "Closed",
+    "remaining_text": "Remaining",
+    "total_arrival_text": "Total Guest to meet who are at risk"
+  },
   "nps": { "title": "Net Promoter Score" },
   "nps_across_department": { "title": "NPS Across Departments" },
   "nps_across_services": { "title": "NPS Across Services" },

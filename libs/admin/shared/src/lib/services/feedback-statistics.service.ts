@@ -88,4 +88,8 @@ export class StatisticsService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  getGTMAcrossServices(config) {
+    return this.get(`/api/v1/feedback-stats/gtm${config.queryObj}`);
+  }
 }

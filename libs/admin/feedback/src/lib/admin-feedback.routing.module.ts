@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import {
+  ArtAcrossExperienceComponent,
   FeedbackDistributionComponent,
   GlobalNpsComponent,
   GtmAcrossServicesComponent,
@@ -31,20 +32,21 @@ const appRoutes: Route[] = [
 })
 export class AdminFeedbackRoutingModule {
   static components = [
+    ArtAcrossExperienceComponent,
     FeedbackComponent,
+    FeedbackDatatableComponent,
     FeedbackDistributionComponent,
+    FeedbackNotesComponent,
     GlobalNpsComponent,
+    GtmAcrossServicesComponent,
     NetPromoterScoreComponent,
     NpsAcrossDepartmentsComponent,
     NpsAcrossServicesComponent,
     OverallReceivedBifurcationComponent,
+    PointOfSaleComponent,
     SharedComponent,
+    StackedBarGraphComponent,
     TopLowNpsComponent,
     TwoWayProgressComponent,
-    FeedbackDatatableComponent,
-    FeedbackNotesComponent,
-    PointOfSaleComponent,
-    StackedBarGraphComponent,
-    GtmAcrossServicesComponent,
   ];
 }

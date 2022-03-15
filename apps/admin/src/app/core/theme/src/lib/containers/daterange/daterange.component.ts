@@ -19,7 +19,11 @@ export class DaterangeComponent implements OnInit {
     this.onDateRangeFilter.next({
       end: this.getCurrentTime().endOf('day'),
       label: 'Today',
-      start: this.getCurrentTime().startOf('day'),
+      start: moment()
+        .subtract(7, 'd')
+        .utc()
+        .utcOffset(this.timezone)
+        .startOf('day'),
     });
   }
 

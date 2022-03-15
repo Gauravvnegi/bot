@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GaugeModule } from 'angular-gauge';
 import {
   AdminSharedModule,
   getTranslationConfigs,
@@ -31,6 +32,7 @@ import { FeedbackTableService } from './services/table.service';
     AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
+    GaugeModule.forRoot(),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
   providers: [StatisticsService, FeedbackTableService],

@@ -84,11 +84,18 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
         [hotelId]="hotelId"
       ></hospitality-bot-nps-across-services>
-      <hospitality-bot-gtm-across-services
-        cardSubscribed
-        [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      ></hospitality-bot-gtm-across-services>
+      <div class="across--wrapper">
+        <div class="stats stats__gtm--across">
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services>
+        </div>
+        <div class="stats stats__art--across">
+          <hospitality-bot-art-across-experience></hospitality-bot-art-across-experience>
+        </div>
+      </div>
       <hospitality-bot-feedback-datatable
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-feedback-datatable>
@@ -180,11 +187,18 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
         [hotelId]="hotelId"
       ></hospitality-bot-point-of-sale>
-      <hospitality-bot-gtm-across-services
-        cardSubscribed
-        [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      ></hospitality-bot-gtm-across-services>
+      <div class="across--wrapper">
+        <div class="stats stats__gtm--across">
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services>
+        </div>
+        <div class="stats stats__art--across">
+          <hospitality-bot-art-across-experience></hospitality-bot-art-across-experience>
+        </div>
+      </div>
       <hospitality-bot-feedback-datatable
         tableSubscribed
         [paths]="[
@@ -304,12 +318,19 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-nps-across-services>
-          <hospitality-bot-gtm-across-services
-            cardSubscribed
-            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
-            [globalFeedbackFilterType]="globalFeedbackFilterType"
-          ></hospitality-bot-gtm-across-services
-          ><hospitality-bot-feedback-datatable
+          <div class="across--wrapper">
+            <div class="stats stats__gtm--across">
+              <hospitality-bot-gtm-across-services
+                cardSubscribed
+                [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+                [globalFeedbackFilterType]="globalFeedbackFilterType"
+              ></hospitality-bot-gtm-across-services>
+            </div>
+            <div class="stats stats__art--across">
+              <hospitality-bot-art-across-experience></hospitality-bot-art-across-experience>
+            </div>
+          </div>
+          <hospitality-bot-feedback-datatable
             tableSubscribed
             [paths]="
               'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
@@ -325,12 +346,19 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-point-of-sale>
-          <hospitality-bot-gtm-across-services
-            cardSubscribed
-            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
-            [globalFeedbackFilterType]="globalFeedbackFilterType"
-          ></hospitality-bot-gtm-across-services
-          ><hospitality-bot-feedback-datatable
+          <div class="across--wrapper">
+            <div class="stats stats__gtm--across">
+              <hospitality-bot-gtm-across-services
+                cardSubscribed
+                [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+                [globalFeedbackFilterType]="globalFeedbackFilterType"
+              ></hospitality-bot-gtm-across-services>
+            </div>
+            <div class="stats stats__art--across">
+              <hospitality-bot-art-across-experience></hospitality-bot-art-across-experience>
+            </div>
+          </div>
+          <hospitality-bot-feedback-datatable
             tableSubscribed
             [paths]="
               'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
@@ -357,11 +385,18 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-point-of-sale>
-          <hospitality-bot-gtm-across-services
-            cardSubscribed
-            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
-            [globalFeedbackFilterType]="globalFeedbackFilterType"
-          ></hospitality-bot-gtm-across-services>
+          <div class="across--wrapper">
+            <div class="stats stats__gtm--across">
+              <hospitality-bot-gtm-across-services
+                cardSubscribed
+                [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+                [globalFeedbackFilterType]="globalFeedbackFilterType"
+              ></hospitality-bot-gtm-across-services>
+            </div>
+            <div class="stats stats__art--across">
+              <hospitality-bot-art-across-experience></hospitality-bot-art-across-experience>
+            </div>
+          </div>
           <hospitality-bot-feedback-datatable
             tableSubscribed
             [paths]="

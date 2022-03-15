@@ -20,6 +20,9 @@
     "remaining_text": "Remaining",
     "total_arrival_text": "Total Guest to meet who are at risk"
   },
+  "art_across_experience": {
+    "title_text": "ART across experience"
+  },
   "nps": { "title": "Net Promoter Score" },
   "nps_across_department": { "title": "NPS Across Departments" },
   "nps_across_services": { "title": "NPS Across Services" },

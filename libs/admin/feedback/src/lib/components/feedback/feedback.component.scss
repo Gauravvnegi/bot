@@ -162,3 +162,23 @@
   border: 1px solid $primary-purple;
   border-radius: 5px;
 }
+
+.across--wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 5px;
+  .stats {
+    background: #ffffff;
+    border: solid 1px #e2e2e2;
+    box-shadow: 0px 3px 6px #0000000d;
+    border-radius: 5px;
+    margin: 0.5%;
+    &__gtm--across {
+      width: 44%;
+    }
+    &__art--across {
+      width: 54%;
+    }
+  }
+}

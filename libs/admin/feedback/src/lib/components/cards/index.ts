@@ -7,3 +7,4 @@ export * from './shared/shared.component';
 export * from './overall-received-bifurcation/overall-received-bifurcation.component';
 export * from './top-low-nps/top-low-nps.component';
 export * from './two-way-progress/two-way-progress.component';
+export * from './gtm-across-services/gtm-across-services.component';

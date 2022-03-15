@@ -37,6 +37,10 @@ export const feedback = {
       url: 'assets/svg/speedometer.svg',
       alt: 'speedometer',
     },
+    gtm_across_services: {
+      url: 'assets/svg/gtm_services.svg',
+      alt: 'GTM',
+    },
     location: {
       url: 'assets/svg/location.svg',
       alt: 'Location',
@@ -53,6 +57,7 @@ export const feedback = {
       url: 'assets/svg/sad.svg',
       alt: 'Sad',
     },
+    info: { url: 'assets/svg/info.svg', alt: 'Info' },
     datatable: {
       download: {
         url: 'assets/svg/Download.svg',

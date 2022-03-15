@@ -376,6 +376,25 @@ export class Status {
   }
 }
 
+export class GTM {
+  comparisonPercent: number;
+  CLOSED: number;
+  REMAINING: number;
+  score: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set({}, 'CLOSED', get(input, ['gtmStatData', 'CLOSED'])),
+      set({}, 'REMAINING', get(input, ['gtmStatData', 'REMAINING'])),
+      set({}, 'score', get(input, ['score']))
+    );
+
+    return this;
+  }
+}
+
 export const SharedColors = {
   Received: '#31BB92',
   'Not Received': '#FFEC8C',

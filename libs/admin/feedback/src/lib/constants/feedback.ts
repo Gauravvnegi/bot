@@ -388,9 +388,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Read ',
+              label: 'Open ',
               icon: '',
-              value: 'READ',
+              value: 'OPEN',
               total: 0,
               isSelected: false,
               type: 'initiated',
@@ -412,9 +412,9 @@ export const feedback = {
               type: 'initiated',
             },
             {
-              label: 'Resolved ',
+              label: 'Closed ',
               icon: '',
-              value: 'RESOLVED',
+              value: 'CLOSED',
               total: 0,
               isSelected: false,
               type: 'initiated',

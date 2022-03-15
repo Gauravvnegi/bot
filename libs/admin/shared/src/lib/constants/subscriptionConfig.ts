@@ -45,6 +45,8 @@ export enum CardNames {
   Shared = 'Shared',
   Messages = 'Messages',
   Notification = 'Notification',
+  GTMAcrossServices = 'GTMAcrossServices',
+  ARTAcrossExperience = 'ARTAcrossExperience',
 }
 
 export enum Filters {
@@ -148,6 +150,8 @@ export const ModuleConfig = {
       CardNames.NPSAcrossPOS,
       CardNames.OverallReceivedBifurcation,
       CardNames.Shared,
+      CardNames.GTMAcrossServices,
+      CardNames.ARTAcrossExperience,
     ],
     tables: [TableNames.FEEDBACK],
     filters: {

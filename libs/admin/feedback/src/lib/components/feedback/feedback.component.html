@@ -1,4 +1,3 @@
-<!-- <ng-template #container></ng-template> -->
 <div class="feedback-container">
   <ng-container [ngSwitch]="globalFeedbackFilterType">
     <ng-container *ngSwitchCase="feedbackConfig.types.stay">
@@ -85,6 +84,11 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
         [hotelId]="hotelId"
       ></hospitality-bot-nps-across-services>
+      <hospitality-bot-gtm-across-services
+        cardSubscribed
+        [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      ></hospitality-bot-gtm-across-services>
       <hospitality-bot-feedback-datatable
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-feedback-datatable>
@@ -176,7 +180,11 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
         [hotelId]="hotelId"
       ></hospitality-bot-point-of-sale>
-
+      <hospitality-bot-gtm-across-services
+        cardSubscribed
+        [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      ></hospitality-bot-gtm-across-services>
       <hospitality-bot-feedback-datatable
         tableSubscribed
         [paths]="[
@@ -295,7 +303,12 @@
             [paths]="['feedback.cards.' + cards.NPSAcrossServices]"
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
-          ></hospitality-bot-nps-across-services
+          ></hospitality-bot-nps-across-services>
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services
           ><hospitality-bot-feedback-datatable
             tableSubscribed
             [paths]="
@@ -311,7 +324,12 @@
             [paths]="['FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossPOS]"
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
-          ></hospitality-bot-point-of-sale
+          ></hospitality-bot-point-of-sale>
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services
           ><hospitality-bot-feedback-datatable
             tableSubscribed
             [paths]="
@@ -339,6 +357,11 @@
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-point-of-sale>
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services>
           <hospitality-bot-feedback-datatable
             tableSubscribed
             [paths]="

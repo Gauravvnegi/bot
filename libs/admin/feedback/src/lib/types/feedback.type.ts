@@ -33,6 +33,7 @@ export type UpdateStatusData = {
 
 export type UpdateNoteData = {
   notes: string;
+  status: string;
 };
 
 export type Chip = {

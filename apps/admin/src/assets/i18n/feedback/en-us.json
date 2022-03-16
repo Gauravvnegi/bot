@@ -46,8 +46,8 @@
   "datatable": {
     "mark_as_read": "Mark as Read",
     "mark_as_unread": "Mark as Unread",
-    "view_notes": "View Notes",
-    "add_notes": "+Notes",
+    "view_notes": "View Details",
+    "add_notes": "+Details",
     "no_data_available": "No data available in table"
   },
   "messages": {

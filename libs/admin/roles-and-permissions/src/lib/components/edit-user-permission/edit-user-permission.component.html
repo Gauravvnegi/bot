@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="feilds">
-        <div class="feild width-trio">
+        <div class="feild width-half">
           <mat-label class="mat-label">Job Title :</mat-label>
           <mat-form-field>
             <input
@@ -101,27 +101,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild width-trio feild-trio">
-          <mat-label class="mat-label">Hotel :</mat-label>
-          <mat-form-field>
-            <mat-select formControlName="branchName">
-              <!-- <option value="" selected>None</option> -->
-              <mat-option
-                *ngFor="let branch of branchNames"
-                [value]="branch.value"
-                >{{ branch.label }}</mat-option
-              >
-            </mat-select>
-            <mat-error
-              *ngIf="
-                userForm.get('branchName').touched &&
-                userForm.get('branchName').hasError('required')
-              "
-            >
-              Hotel name is required
-            </mat-error>
-          </mat-form-field>
-        </div>
+        
       </div>
       <div class="feilds">
         <div class="feild feild-width">
@@ -201,6 +181,29 @@
               "
             >
               Please enter the valid Email
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="feilds">
+        <div class="feild width-half">
+          <mat-label class="mat-label">Hotel :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="branchName">
+              <!-- <option value="" selected>None</option> -->
+              <mat-option
+                *ngFor="let branch of branchNames"
+                [value]="branch.value"
+                >{{ branch.label }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('branchName').touched &&
+                userForm.get('branchName').hasError('required')
+              "
+            >
+              Hotel name is required
             </mat-error>
           </mat-form-field>
         </div>

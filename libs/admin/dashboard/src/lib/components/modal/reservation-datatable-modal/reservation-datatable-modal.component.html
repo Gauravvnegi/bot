@@ -384,7 +384,7 @@
               </div>
             </div>
           </td>
-          <td class="package" (click)="openDetailPage($event)">
+          <td class="package">
             <span
               *ngIf="
                 rowData.guests.getPhoneNumbers().length &&
@@ -403,7 +403,12 @@
                     let link of rowData.guests.getPhoneNumbers().split(',\n')
                   "
                 >
-                  <a href="tel:{{ link }}" *ngIf="link" class="email">
+                  <a
+                    href="tel:{{ link }}"
+                    *ngIf="link"
+                    class="email"
+                    (click)="openDetailPage($event)"
+                  >
                     <u> {{ link }}</u> </a
                   ><br />
                 </ng-container>
@@ -412,6 +417,7 @@
                 <a
                   href="tel:{{ rowData.guests.getPhoneNumbers() }}"
                   class="email"
+                  (click)="openDetailPage($event)"
                 >
                   <u> {{ rowData.guests.getPhoneNumbers() }}</u>
                 </a>

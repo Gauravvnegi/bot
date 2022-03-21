@@ -9,7 +9,7 @@
     <div class="stat-title">
       {{ 'gtm_across_services.title_text' | translate }}
     </div>
-    <!-- <div class="info-icon">
+    <div class="info-icon">
       <img
         [src]="feedbackConfig.images.info.url"
         [alt]="feedbackConfig.images.info.alt"
@@ -18,7 +18,7 @@
         <span class="arrow"></span>
         {{ 'gtm_across_services.tooltip_text' | translate }}
       </div>
-    </div> -->
+    </div>
   </div>
   <div class="stat-val-container">
     <div class="stat-val-wrapper">
@@ -67,14 +67,14 @@
       <div class="progress-info-labels">
         <span class="label"
           >{{ 'gtm_across_services.closed_text' | translate }}&nbsp;<strong>{{
-            statistics?.gtmStatData.CLOSED
+            statistics?.CLOSED
           }}</strong></span
         >
       </div>
       <div class="progress-info-labels">
         <span class="label"
           >{{ 'gtm_across_services.remaining_text' | translate }}&nbsp;<b>{{
-            statistics?.gtmStatData.REMAINING
+            statistics?.REMAINING
           }}</b></span
         >
       </div>

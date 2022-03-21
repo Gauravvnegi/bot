@@ -43,8 +43,10 @@ import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.comp
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
+  @Input() tableName = feedback.table.name;
+  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterItems;
   globalFeedbackConfig = feedback;
-  tableName = feedback.table.name;
   outlets = [];
   actionButtons = true;
   isQuickFilters = true;
@@ -61,16 +63,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   chips = feedback.chips.feedbackDatatable;
 
-  tabFilterItems;
-  tabFilterIdx: number = 0;
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _modal: ModalService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
     protected tableService: FeedbackTableService,

@@ -8,6 +8,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
+import { GTM } from '../../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-gtm-across-services',
@@ -21,7 +22,7 @@ export class GtmAcrossServicesComponent implements OnInit {
   feedbackConfig = feedback;
   globalQueries = [];
   progress = 0;
-  statistics;
+  statistics: GTM;
   constructor(
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
@@ -110,11 +111,9 @@ export class GtmAcrossServicesComponent implements OnInit {
   }
 
   setProgress() {
-    if (this.statistics?.gtmStatData.REMAINING) {
+    if (this.statistics?.REMAINING) {
       this.progress = Math.abs(
-        (this.statistics?.gtmStatData.CLOSED /
-          this.statistics?.gtmStatData.REMAINING) *
-          100
+        (this.statistics?.CLOSED / this.statistics?.score) * 100
       );
     } else {
       this.progress = 0;
@@ -135,7 +134,7 @@ export class GtmAcrossServicesComponent implements OnInit {
       this.statisticsService
         .getGTMAcrossServices(config)
         .subscribe((response) => {
-          this.statistics = response;
+          this.statistics = new GTM().deserialize(response);
           this.setProgress();
         })
     );

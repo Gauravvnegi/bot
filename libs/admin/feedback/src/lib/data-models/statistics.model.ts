@@ -363,6 +363,7 @@ export class Status {
   score: number;
   comparisonPercent: number;
   color: string;
+  key: string;
 
   deserialize(input) {
     Object.assign(
@@ -372,6 +373,26 @@ export class Status {
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
       set({}, 'label', get(input, ['label']))
     );
+    this.key = this.label.toUpperCase().split(' ').join('');
+    return this;
+  }
+}
+
+export class GTM {
+  comparisonPercent: number;
+  CLOSED: number;
+  REMAINING: number;
+  score: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set({}, 'CLOSED', get(input, ['gtmStatData', 'CLOSED'])),
+      set({}, 'REMAINING', get(input, ['gtmStatData', 'REMAINING'])),
+      set({}, 'score', get(input, ['score']))
+    );
+
     return this;
   }
 }

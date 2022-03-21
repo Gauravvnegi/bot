@@ -118,7 +118,7 @@ export const dashboard = {
             fontStyle: 'normal',
           },
         },
-        cutoutPercentage: 0,
+        cutoutPercentage: 75,
       },
       reservation: {
         tooltips: {

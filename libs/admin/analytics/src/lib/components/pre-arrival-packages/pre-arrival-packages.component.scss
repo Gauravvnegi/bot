@@ -25,6 +25,7 @@
 .labl > input + .image {
   position: relative;
   cursor: pointer;
+  border: none;
 }
 
 .labl > input:checked + .image {
@@ -87,6 +88,8 @@
       letter-spacing: 0.96px;
       text-align: left;
       color: #002046;
+      display: flex;
+      align-items: center;
     }
    
     &-chart-type {

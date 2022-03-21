@@ -363,6 +363,7 @@ export class Status {
   score: number;
   comparisonPercent: number;
   color: string;
+  key: string;
 
   deserialize(input) {
     Object.assign(
@@ -372,6 +373,7 @@ export class Status {
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
       set({}, 'label', get(input, ['label']))
     );
+    this.key = this.label.toUpperCase().split(' ').join('');
     return this;
   }
 }

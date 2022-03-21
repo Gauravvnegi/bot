@@ -80,14 +80,14 @@
             </div>
           </div>
           </div>
-          <div class="filter-range-wrapper">
-          <hospitality-bot-daterange
-            class="date-range temp-width"
-            [timezone]="timezone"
-            (onDateRangeFilter)="applyDateRangeFilter($event)"
-            (removeVisibility)="noFilterNoSearch()"
-          ></hospitality-bot-daterange>
-        </div>
+          
+            <hospitality-bot-daterange
+              class="date-range temp-width"
+              [timezone]="timezone"
+              (onDateRangeFilter)="applyDateRangeFilter($event)"
+              (removeVisibility)="noFilterNoSearch()"
+            ></hospitality-bot-daterange>
+          
         <div class="dropdown-wrapper">
           <admin-profile-dropdown
             [items]="profile"

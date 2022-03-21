@@ -120,6 +120,30 @@ export const dashboard = {
         },
         cutoutPercentage: 75,
       },
+      inhouseRequest: {
+        tooltips: {
+          backgroundColor: 'white',
+          bodyFontColor: 'black',
+          borderColor: '#f4f5f6',
+          borderWidth: 3,
+          titleFontColor: 'black',
+          titleMarginBottom: 5,
+          xPadding: 10,
+          yPadding: 10,
+        },
+        responsive: true,
+        elements: {
+          center: {
+            text: '401',
+            text3: 'Total Users',
+            fontColor: '#000',
+            fontFamily: "CalibreWeb, 'Helvetica Neue', Arial ",
+            fontSize: 36,
+            fontStyle: 'normal',
+          },
+        },
+        cutoutPercentage: 0,
+      },
       reservation: {
         tooltips: {
           backgroundColor: 'white',

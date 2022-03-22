@@ -488,7 +488,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
-          // entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),

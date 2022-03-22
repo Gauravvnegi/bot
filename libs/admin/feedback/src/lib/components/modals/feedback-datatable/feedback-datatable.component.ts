@@ -193,6 +193,81 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.loading = false;
   }
 
+  /**
+   * @function setEntityId To set entity id based on current table filter.
+   * @returns The entityIds.
+   */
+  setEntityId() {
+    if (this.feedbackType === this.globalFeedbackConfig.types.transactional)
+      return this.statisticService.outletIds;
+    else return this.hotelId;
+  }
+
+  /**
+   * @function updateFeedbackStatus To update the read status of a feedback.
+   * @param status The feedback status.
+   */
+  updateFeedbackStatus(status: boolean): void {
+    if (!this.selectedRows.length) {
+      this._snackbarService.openSnackBarAsText(
+        this._translateService.instant(
+          'messages.validation.select_record_status',
+          { status: status ? 'read' : 'unread' }
+        )
+      );
+      return;
+    }
+    this.loading = true;
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+          feedbackType: this.feedbackType,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]),
+    };
+
+    const reqData = {
+      read: status,
+      feedbackId: this.selectedRows.map((data) => data.id),
+    };
+
+    this.$subscription.add(
+      this.tableService.updateFeedbackStatus(config, reqData).subscribe(
+        (response) => {
+          this.statisticService.markReadStatusChanged.next(true);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.feedback_status_updated',
+                priorityMessage: 'Status updated.',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              { order: sharedConfig.defaultOrder },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.showErrorMessage(error);
+        }
+      )
+    );
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

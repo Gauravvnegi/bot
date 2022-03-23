@@ -40,7 +40,6 @@ export class StayDetailsComponent implements OnInit {
   }
 
   pushDataToForm() {
-    debugger;
     this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
     this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
   }

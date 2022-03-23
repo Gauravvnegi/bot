@@ -5,6 +5,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -688,6 +689,42 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ''
       )
       .subscribe();
+  }
+
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
+    event.stopPropagation();
+    if (!rowData) return;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.guestId = rowData.guest.id;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        // remove loader for detail close
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
+            { order: sharedConfig.defaultOrder },
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false
+        );
+        detailCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

@@ -28,6 +28,7 @@ import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
+import { Guest, GuestReservation } from '../../models/guest-table.model';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -48,7 +49,7 @@ export class DetailsComponent implements OnInit {
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
   ];
-  @Input() bookingId;
+  bookingId;
   @Output() onDetailsClose = new EventEmitter();
   branchConfig;
   $subscription = new Subscription();
@@ -81,6 +82,11 @@ export class DetailsComponent implements OnInit {
       index: 4,
     },
   ];
+  guestData;
+  guestReservations;
+  guestReservationDropdownList = [];
+  @Input() guestId: string;
+  bookingFG: FormGroup;
 
   constructor(
     private _fb: FormBuilder,
@@ -120,8 +126,35 @@ export class DetailsComponent implements OnInit {
           (branch) => branch.id == branchId
         );
         this.getShareIcon();
-        this.getReservationDetails();
+        this.loadGuestInfo();
       })
+    );
+  }
+
+  loadGuestInfo(): void {
+    this._reservationService.getGuestById(this.guestId).subscribe(
+      (response) => {
+        this.guestData = new Guest().deserialize(response);
+        this.loadGuestReservations();
+      },
+      ({ error }) => {
+        this._snackBarService.openSnackBarAsText(error.message);
+        this.closeDetails();
+      }
+    );
+  }
+
+  loadGuestReservations(): void {
+    this._reservationService.getGuestReservations(this.guestId).subscribe(
+      (response) => {
+        this.guestReservations = new GuestReservation().deserialize(response);
+        this.initBookingsFG();
+        this.initGuestReservationDropdownList();
+      },
+      ({ error }) => {
+        this._snackBarService.openSnackBarAsText(error.message);
+        this.closeDetails();
+      }
     );
   }
 
@@ -156,6 +189,12 @@ export class DetailsComponent implements OnInit {
         this.closeDetails();
       }
     );
+  }
+
+  initBookingsFG() {
+    this.bookingFG = this._fb.group({
+      booking: [''],
+    });
   }
 
   initDetailsForm() {
@@ -555,6 +594,50 @@ export class DetailsComponent implements OnInit {
 
   closeDetails() {
     this.onDetailsClose.next(true);
+  }
+
+  initGuestReservationDropdownList() {
+    this.guestReservationDropdownList = new Array<any>();
+    this.guestReservations.presentBookings.forEach((item) =>
+      this.guestReservationDropdownList.push({
+        bookingId: item.booking.bookingId,
+        bookingNumber: item.booking.bookingNumber,
+        label: 'Current Booking',
+      })
+    );
+    this.guestReservations.pastBookings.forEach((item) =>
+      this.guestReservationDropdownList.push({
+        bookingId: item.booking.bookingId,
+        bookingNumber: item.booking.bookingNumber,
+        label: 'Past Booking',
+      })
+    );
+    this.guestReservations.upcomingBookings.forEach((item) =>
+      this.guestReservationDropdownList.push({
+        bookingId: item.booking.bookingId,
+        bookingNumber: item.booking.bookingNumber,
+        label: 'Upcoming Booking',
+      })
+    );
+    this.bookingFG
+      .get('booking')
+      .setValue(this.guestReservationDropdownList[0].bookingId);
+    this.bookingId = this.guestReservationDropdownList[0].bookingId;
+    console.log(this.bookingFG.get('booking').value);
+    this.getReservationDetails();
+  }
+
+  handleBookingChange(event) {
+    this.bookingId = event.value;
+    this.getReservationDetails();
+  }
+
+  get bookingCount() {
+    let count = 0;
+    count += this.guestReservations.pastBookings.length;
+    count += this.guestReservations.presentBookings.length;
+    count += this.guestReservations.upcomingBookings.length;
+    return count;
   }
 
   get reservationDetailsFG() {

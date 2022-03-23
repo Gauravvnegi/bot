@@ -36,6 +36,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     //this.listenForGuestNationalityChange();
+  }
+
+  ngOnChanges() {
     this.getLOV();
     this.addDocumentStatusForm();
   }

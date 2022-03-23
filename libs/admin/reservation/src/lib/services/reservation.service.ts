@@ -78,4 +78,12 @@ export class ReservationService extends ApiService {
       data
     );
   }
+
+  getGuestById(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}`);
+  }
+
+  getGuestReservations(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}/reservations`);
+  }
 }

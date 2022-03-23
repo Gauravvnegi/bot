@@ -110,6 +110,12 @@
           .label {
             font-weight: 500;
             color: $quote-color;
+            font-size: 12px;
+            line-height: 1.25;
+            letter-spacing: 0.72px;
+            display: flex;
+            align-items: center;
+            
             .legends {
               opacity: 0;
               position: absolute;
@@ -229,6 +235,7 @@
 .labl > input + .image {
   position: relative;
   cursor: pointer;
+  border: none;
 }
 
 .labl > input:checked + .image {

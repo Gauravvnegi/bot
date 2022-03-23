@@ -37,6 +37,7 @@ export class Feedback {
   tableNo: string;
   updated: number;
   notes: Notes;
+  status: string;
 
   deserialize(input, outlets) {
     Object.assign(
@@ -57,7 +58,8 @@ export class Feedback {
       set({}, 'services', JSON.parse(get(input, ['services']))),
       set({}, 'session', get(input, ['session'])),
       set({}, 'tableNo', get(input, ['tableNo'])),
-      set({}, 'updated', get(input, ['updated']))
+      set({}, 'updated', get(input, ['updated'])),
+      set({}, 'status', get(input, ['status']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
@@ -193,6 +195,7 @@ export class StayFeedback {
   tableOrRoomNumber: string;
   transactionalService: string;
   outlet: string;
+  status: string;
 
   deserialize(input, outlets) {
     Object.assign(
@@ -209,7 +212,8 @@ export class StayFeedback {
       set({}, 'session', get(input, ['session'])),
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
-      set({}, 'transactionalService', get(input, ['transactionalService']))
+      set({}, 'transactionalService', get(input, ['transactionalService'])),
+      set({}, 'status', get(input, ['status']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId

@@ -116,10 +116,41 @@
     }
   }
   .no-contact {
-    margin-top: 20vh;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     font-size: 14px;
     line-height: 20px;
     text-align: center;
+    &__img {
+      img {
+        width: 134.2px;
+        margin-bottom: 10px;
+      }
+    }
+    &__title {
+      margin: 12px 0;
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: #002046;
+    }
+    &__description {
+      font-size: 12px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: #c5c5c5;
+    }
   }
 }
 .search-field-input {

@@ -43,7 +43,7 @@ export const ADMIN_ROUTES = [
         path: 'conversation/request',
         title: 'Requests',
         children: null,
-        url: 'assets/svg/request.svg',
+        url: 'assets/svg/request_icon.svg',
       },
       {
         path: 'conversation/messages',

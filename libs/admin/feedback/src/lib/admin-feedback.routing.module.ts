@@ -3,6 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import {
   FeedbackDistributionComponent,
   GlobalNpsComponent,
+  GtmAcrossServicesComponent,
   NetPromoterScoreComponent,
   NpsAcrossDepartmentsComponent,
   NpsAcrossServicesComponent,
@@ -15,8 +16,8 @@ import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-
 import { StackedBarGraphComponent } from './components/cards/stacked-bar-graph/stacked-bar-graph.component';
 import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
-
 import { FeedbackComponent } from './components/feedback/feedback.component';
+import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 
 const appRoutes: Route[] = [
   {
@@ -42,8 +43,10 @@ export class AdminFeedbackRoutingModule {
     TopLowNpsComponent,
     TwoWayProgressComponent,
     FeedbackDatatableComponent,
+    FeedbackDatatableModalComponent,
     FeedbackNotesComponent,
     PointOfSaleComponent,
     StackedBarGraphComponent,
+    GtmAcrossServicesComponent,
   ];
 }

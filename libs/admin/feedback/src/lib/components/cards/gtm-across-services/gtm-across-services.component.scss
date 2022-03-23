@@ -1,0 +1,151 @@
+@import 'main';
+
+.container {
+  background: #ffffff;
+  border: solid 1px #e2e2e2;
+  box-shadow: 0px 3px 6px #0000000d;
+  border-radius: 5px;
+  height: 330px;
+  width: 45%;
+}
+
+.stat-val-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.stat-val-wrapper {
+  display: flex;
+  align-items: center;
+}
+.info-icon {
+  position: relative;
+  img {
+    margin: 3px 5px 0;
+    width: 14px;
+    height: 100%;
+  }
+  .tooltip {
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: $white;
+    min-width: 160px;
+    border: 1px solid $border;
+    padding: 10px;
+    top: 120%;
+    left: -200%;
+    color: $tooltip;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px $border;
+    display: none;
+    .arrow {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid $border;
+      left: 40%;
+      transform: translate(-50%);
+      &::before {
+        content: '';
+        top: 1px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 9px solid $white;
+        left: -6px;
+        z-index: 3;
+        position: absolute;
+      }
+    }
+  }
+
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+}
+.stat-value {
+  // height: 46px;
+  font: normal normal bold 35px/46px Roboto;
+  letter-spacing: 0px;
+  color: $dark-blue;
+  opacity: 1;
+  margin: 0 10px;
+  @media (max-width: $tablet) {
+    font-size: $tabfont25;
+    @include margin-left(0);
+  }
+}
+
+.stat-val-title {
+  height: 16px;
+  text-align: center;
+  font: normal normal bold 12px/16px Roboto;
+  letter-spacing: 0.72px;
+  color: $quote-color;
+  opacity: 1;
+}
+.stat-value-comparisonPercent {
+  font: normal normal normal 12px/16px Roboto;
+  letter-spacing: 0px;
+  color: $comparison;
+}
+.stat-value-comparisonPercent-day {
+  font: normal normal normal 10px/13px Roboto;
+  letter-spacing: 0px;
+  color: $c-gray-77;
+  opacity: 1;
+}
+
+.progress-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-bar-height {
+  height: 10px;
+  background-color: $progress-bar-arrivals-base;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.progress-color {
+  background-color: $progress-bar-arrivals;
+  height: 100%;
+  width: 0px;
+  border-radius: 5px;
+}
+
+.progress-info-labels {
+  //   letter-spacing: 0.72px;
+  display: flex;
+  align-items: center;
+  .label {
+    letter-spacing: 0.72px;
+    color: $quote-color;
+    margin-right: 5px;
+    font-size: 12px;
+    b {
+      font-size: 13px;
+    }
+    @media only screen and (max-width: 1100px) {
+      font-size: 11px;
+    }
+  }
+}
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
+}

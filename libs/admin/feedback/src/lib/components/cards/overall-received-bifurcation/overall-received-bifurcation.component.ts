@@ -1,16 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { Bifurcation } from '../../../data-models/statistics.model';
+import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-overall-received-bifurcation',
@@ -37,6 +42,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     ],
     Options: chartConfig.options.distribution,
   };
+  feedbackConfig = feedback;
 
   constructor(
     protected _adminUtilityService: AdminUtilityService,
@@ -44,7 +50,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected dateService: DateService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -216,6 +223,39 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       : this.tabfeedbackType;
   }
 
+  openTableModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    dialogConfig.data = {
+      tableName: 'Received Breakdown',
+      tabFilterItems: this.createTabFilterItem(),
+      tabFilterIdx: 0,
+      globalFeedbackFilterType: this.globalFeedbackFilterType,
+      config: [{ feedbackGraph: 'BIFURCATIONS' }],
+      feedbackType: this.getFeedbackType(),
+    };
+    const detailCompRef = this._modalService.openDialog(
+      FeedbackDatatableModalComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+      detailCompRef.close();
+    });
+  }
+
+  createTabFilterItem() {
+    return this.stats.feedbacks.map((keyObj) => {
+      return {
+        label: keyObj.label,
+        content: '',
+        value: keyObj.key,
+        disabled: false,
+        total: 0,
+        chips: this.feedbackConfig.chips.feedbackDatatable,
+      };
+    });
+  }
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

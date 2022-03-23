@@ -5,7 +5,9 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: black !important;
+  color:#002046;
+  font-size: 14px;
+  font-weight: bold;
 }
 .request-wrapper-header {
   height: 65px;

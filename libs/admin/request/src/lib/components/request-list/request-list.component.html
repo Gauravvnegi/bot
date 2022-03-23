@@ -128,7 +128,15 @@
     </ng-container>
     <ng-template #noList>
       <div *ngIf="listData" class="no-contact">
-        No requests found
+        <div class="no-contact__img">
+          <img src="assets/svg/no_request.svg" alt="No Request" />
+        </div>
+        <div class="no-contact__title">
+          No Requests
+        </div>
+        <div class="no-contact__description">
+          When you have requests, you'll see them here
+        </div>
       </div>
     </ng-template>
   </div>

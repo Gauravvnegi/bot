@@ -188,9 +188,9 @@
 }
 
 .view-notes {
-  width: 75px;
+  width: 87px;
   padding: 6px 2px 6px 2px;
-  border-radius: 5px;
+  border-radius: 14px;
   border: solid 1px $primary-purple;
   background-color: $white;
   font-family: Roboto;
@@ -206,8 +206,8 @@
 
 .add-notes {
   width: 75px;
-  padding: 6px 16px 6px 17px;
-  border-radius: 5px;
+  padding: 6px 2px 6px 2px;
+  border-radius: 14px;
   background-color: $primary-purple;
   font-family: Roboto;
   font-size: 12px;
@@ -278,10 +278,11 @@
 .status-image {
   .view-notes {
     letter-spacing: inherit;
+    margin: auto;
   }
   .add-notes {
     letter-spacing: inherit;
-    padding: 6px 13px 6px 17px;
+    margin: auto;
   }
 }
 

@@ -26,7 +26,7 @@
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
       [ngClass]="
-        rla.isActive ? (menuItem.children === null ? 'active' : '') : ''
+        rla.isActive ? 'active' : ''
       "
     >
       <a
@@ -38,9 +38,7 @@
         "
         [style.color]="
           rla.isActive
-            ? menuItem.children === null
-              ? activeFontColor
-              : normalFontColor
+            ? activeFontColor
             : normalFontColor
         "
         [style.padding]="'0px 15px'"

@@ -14,7 +14,7 @@
     "sub_title": "Response Breakdown as per feedback shared"
   },
   "gtm_across_services": {
-    "title_text": "GTM across services",
+    "title_text": "GTM(Guest To Meet) across services",
     "tooltip_text": "",
     "closed_text": "Closed",
     "remaining_text": "Remaining",
@@ -27,7 +27,7 @@
   "request_feedback_label": "Request Feedback",
   "no_data_available": "No data available in table",
   "no_data_chart": "No Data",
-  "bifurcation": { "title": "Received Bifurcations" },
+  "bifurcation": { "title": "Received Breakdown" },
   "nps_across_pos": {
     "title": "NPS Across Point of Sale",
     "outlet_label": "Outlets",
@@ -46,8 +46,8 @@
   "datatable": {
     "mark_as_read": "Mark as Read",
     "mark_as_unread": "Mark as Unread",
-    "view_notes": "View Notes",
-    "add_notes": "+Notes",
+    "view_notes": "View Details",
+    "add_notes": "+Details",
     "no_data_available": "No data available in table"
   },
   "messages": {

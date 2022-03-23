@@ -7,6 +7,7 @@
 
 .card {
   &--heading {
+    color:$navy-blue !important;
     @include auth-heading();
     @media (max-width: 1024px) {
       font-size: $font30;

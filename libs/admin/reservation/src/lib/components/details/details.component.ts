@@ -44,6 +44,7 @@ export class DetailsComponent implements OnInit {
   isGuestInfoPatched: boolean = false;
   primaryGuest;
   isReservationDetailFetched: boolean = false;
+  isGuestReservationFetched = false;
   shareIconList;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
@@ -150,6 +151,7 @@ export class DetailsComponent implements OnInit {
         this.guestReservations = new GuestReservation().deserialize(response);
         this.initBookingsFG();
         this.initGuestReservationDropdownList();
+        this.isGuestReservationFetched = true;
       },
       ({ error }) => {
         this._snackBarService.openSnackBarAsText(error.message);
@@ -623,12 +625,12 @@ export class DetailsComponent implements OnInit {
       .get('booking')
       .setValue(this.guestReservationDropdownList[0].bookingId);
     this.bookingId = this.guestReservationDropdownList[0].bookingId;
-    console.log(this.bookingFG.get('booking').value);
     this.getReservationDetails();
   }
 
   handleBookingChange(event) {
     this.bookingId = event.value;
+    this.isReservationDetailFetched = false;
     this.getReservationDetails();
   }
 

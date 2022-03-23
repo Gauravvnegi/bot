@@ -12,7 +12,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestTable } from '../../data-models/guest-table.model';
-import { DetailsComponent } from '../../../../../guest-detail/src/lib/components/details/details.component';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import * as FileSaver from 'file-saver';
 import { get } from 'lodash';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
@@ -456,9 +456,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         dialogConfig
       );
 
-      detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
       detailCompRef.componentInstance.guestId = rowData.id;
-      detailCompRef.componentInstance.hotelId = this.hotelId;
       tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
       this.$subscription.add(

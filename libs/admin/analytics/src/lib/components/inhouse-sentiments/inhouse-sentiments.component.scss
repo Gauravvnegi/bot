@@ -110,6 +110,10 @@
           .label {
             font-weight: 500;
             color: $quote-color;
+            font-size: 12px;
+            line-height: 1.25;
+            letter-spacing: 0.72px;
+            
             .legends {
               opacity: 0;
               position: absolute;

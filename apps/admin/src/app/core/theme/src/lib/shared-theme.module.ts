@@ -16,6 +16,7 @@ import { FilterComponent } from './containers/filter/filter.component';
 import { FooterComponent } from './containers/footer/footer.component';
 import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.component';
 import { MessageTabMenuComponent } from './containers/message-tab-menu/message-tab-menu.component';
+import { NotificationComponent } from './containers/notification/notification.component';
 import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
 import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-dropdown.component';
 import { SearchBarComponent } from './containers/search-bar/search-bar.component';
@@ -46,6 +47,7 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
     FilterComponent,
     OrientationPopupComponent,
     MessageTabMenuComponent,
+    NotificationComponent,
   ],
   exports: [
     SidenavComponent,
@@ -57,6 +59,7 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
     SearchBarComponent,
     FilterComponent,
     MessageTabMenuComponent,
+    NotificationComponent,
   ],
 })
 export class ThemeModule {}

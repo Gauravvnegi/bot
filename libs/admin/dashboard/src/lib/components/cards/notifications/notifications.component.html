@@ -10,11 +10,10 @@
       {{ 'card.notifications.title_text' | translate }}
     </div>
     <div class="info-icon">
-      <img
-        [src]="dashboardConfig.images.info.url"
-        [alt]="dashboardConfig.images.info.alt"
-      />
-      
+      <img src="assets/svg/info.svg" alt="info-icon" />
+      <div class="tooltip">
+        <span class="arrow"> </span> Notifications
+      </div>
     </div>
     <mat-select
       class="notifications-header-channel"

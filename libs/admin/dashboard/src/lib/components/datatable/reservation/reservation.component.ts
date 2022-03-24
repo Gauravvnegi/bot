@@ -408,6 +408,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     tabKey?: string
   ): void {
     event.stopPropagation();
+    if (!rowData) return;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -416,7 +417,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       dialogConfig
     );
 
-    detailCompRef.componentInstance.bookingId = rowData.booking.bookingId;
+    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

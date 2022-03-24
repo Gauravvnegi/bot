@@ -20,6 +20,10 @@
   padding: 20px;
   height: 100%;
   margin-bottom: 1.3%;
+  &:hover{
+    border: 0.5px solid rgb(108, 108, 245);
+    cursor: pointer;
+  }
   &-header {
     display: flex;
     align-items: center;

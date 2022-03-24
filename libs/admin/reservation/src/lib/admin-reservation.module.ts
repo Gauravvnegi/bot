@@ -21,6 +21,7 @@ import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
 import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
 import { ManualCheckinComponent } from './components/manual-checkin/manual-checkin.component';
+import { StayDetailsComponent } from './components/stay-details/stay-details.component';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -49,6 +50,7 @@ export const adminReservationRoutes: Route[] = [];
     RequestsTableComponent,
     DepositRuleComponent,
     ManualCheckinComponent,
+    StayDetailsComponent,
   ],
   exports: [
     DetailsComponent,

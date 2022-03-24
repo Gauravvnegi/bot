@@ -39,7 +39,7 @@ export class PreArrivalPackagesComponent implements OnInit {
 
   legendData = [
     {
-      label: 'To Do',
+      label: 'To DO',
       bubbleColor: '#fb3d4e',
       img: 'assets/svg/test-4.svg',
     },

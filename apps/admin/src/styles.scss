@@ -190,6 +190,36 @@ body {
   border: 1px solid $primary-purple;
   border-radius: 5px;
 }
-.mat-option.mat-active{
+.mat-option.mat-active {
   color: #673ab7;
+}
+
+.info-icon {
+  position: relative;
+}
+
+.info-icon img {
+  margin: 3px 5px 0;
+  height: 100%;
+  width: 14px;
+}
+
+.notifications-items-item-count {
+  color: #4b56c0;
+  font-weight: bold;
+  letter-spacing: 0.72px;
+  line-height: normal;
+}
+.notifications-header .info-icon img {
+  width: 14px;
+  height: 100%;
+  margin: 3px 5px 0;
+}
+.messages-wrapper-header .info-icon img {
+  width: 14px;
+  height: 100%;
+  margin: 3px 5px 0;
+}
+.rowData {
+  color: $auth-color;
 }

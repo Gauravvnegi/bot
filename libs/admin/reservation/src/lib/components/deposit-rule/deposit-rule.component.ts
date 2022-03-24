@@ -50,7 +50,9 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
     private _snackBarService: SnackBarService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnChanges() {
     this.initDepositRuleForm();
     this.registerListeners();
     this.pushDataToForm();

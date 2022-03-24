@@ -5,6 +5,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -43,8 +44,10 @@ import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.comp
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
+  @Input() tableName = feedback.table.name;
+  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterItems;
   globalFeedbackConfig = feedback;
-  tableName = feedback.table.name;
   outlets = [];
   actionButtons = true;
   isQuickFilters = true;
@@ -61,16 +64,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   chips = feedback.chips.feedbackDatatable;
 
-  tabFilterItems;
-  tabFilterIdx: number = 0;
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
     public fb: FormBuilder,
-    private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private _modal: ModalService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected _globalFilterService: GlobalFilterService,
+    protected _snackbarService: SnackBarService,
+    protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
     protected tableService: FeedbackTableService,
@@ -488,7 +489,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
-          // entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -573,14 +573,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '550';
+    dialogConfig.data = {
+      feedback: data,
+      timezone: this._globalFilterService.timezone,
+    };
     const detailCompRef = this._modal.openDialog(
       FeedbackNotesComponent,
       dialogConfig
     );
-
-    detailCompRef.componentInstance.feedback = data;
-    detailCompRef.componentInstance.notes = notes;
-    detailCompRef.componentInstance.timezone = this._globalFilterService.timezone;
 
     this.$subscription.add(
       detailCompRef.componentInstance.onNotesClosed.subscribe((res) => {
@@ -689,6 +689,42 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ''
       )
       .subscribe();
+  }
+
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
+    event.stopPropagation();
+    if (!rowData) return;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const detailCompRef = this._modal.openDialog(
+      DetailsComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.guestId = rowData.guest.id;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        // remove loader for detail close
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
+            { order: sharedConfig.defaultOrder },
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false
+        );
+        detailCompRef.close();
+      })
+    );
   }
 
   ngOnDestroy(): void {

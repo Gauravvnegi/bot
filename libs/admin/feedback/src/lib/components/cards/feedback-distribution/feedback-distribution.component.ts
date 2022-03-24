@@ -5,12 +5,17 @@ import {
   StatisticsService,
   CircularChart,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
 import { FeedbackDistribution } from '../../../data-models/statistics.model';
 import { TranslateService } from '@ngx-translate/core';
 import { chartConfig } from '../../../constants/chart';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',
@@ -44,7 +49,8 @@ export class FeedbackDistributionComponent implements OnInit {
     protected _globalFilterService: GlobalFilterService,
     protected _adminUtilityService: AdminUtilityService,
     protected _snackbarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -198,6 +204,41 @@ export class FeedbackDistributionComponent implements OnInit {
     return this.tabfeedbackType === this.feedbackConfig.types.both
       ? ''
       : this.tabfeedbackType;
+  }
+
+  openTableModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    dialogConfig.data = {
+      tableName: 'Feedback Distribution',
+      tabFilterItems: this.createTabFilterItem(),
+      tabFilterIdx: 0,
+      globalFeedbackFilterType: this.globalFeedbackFilterType,
+      config: [{ feedbackGraph: 'DISTRIBUTION' }],
+      feedbackType: this.getFeedbackType(),
+    };
+    const detailCompRef = this._modalService.openDialog(
+      FeedbackDatatableModalComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+      // remove loader for detail close
+      detailCompRef.close();
+    });
+  }
+
+  createTabFilterItem() {
+    return this.keyLabels.map((keyObj) => {
+      return {
+        label: keyObj.label,
+        content: '',
+        value: keyObj.key,
+        disabled: false,
+        total: 0,
+        chips: this.feedbackConfig.chips.feedbackDatatable,
+      };
+    });
   }
 
   ngOnDestroy() {

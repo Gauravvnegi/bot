@@ -253,7 +253,13 @@ export class SharedStats {
 
     Object.keys(input.feedbacks).forEach((key) =>
       this.feedbacks.push(
-        new Data().deserialize(input.feedbacks[key], SharedColors[key])
+        new Data().deserialize(
+          {
+            ...input.feedbacks[key],
+            key: key.toUpperCase().split(' ').join(''),
+          },
+          SharedColors[key]
+        )
       )
     );
     return this;
@@ -266,6 +272,7 @@ export class Data {
   percent: number;
   comparePercent: number;
   color: string;
+  key: string;
 
   deserialize(input, color?) {
     Object.assign(
@@ -274,7 +281,8 @@ export class Data {
       set({}, 'count', get(input, ['count'])),
       set({}, 'percent', get(input, ['percent'])),
       set({}, 'comparePercent', get(input, ['comparePercent'])),
-      set({}, 'color', color)
+      set({}, 'color', color),
+      set({}, 'key', get(input, ['key']))
     );
     return this;
   }
@@ -363,6 +371,7 @@ export class Status {
   score: number;
   comparisonPercent: number;
   color: string;
+  key: string;
 
   deserialize(input) {
     Object.assign(
@@ -372,6 +381,7 @@ export class Status {
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
       set({}, 'label', get(input, ['label']))
     );
+    this.key = this.label.toUpperCase().split(' ').join('');
     return this;
   }
 }
@@ -396,8 +406,9 @@ export class GTM {
 }
 
 export const SharedColors = {
-  Received: '#31BB92',
-  'Not Received': '#FFEC8C',
+  Received: '#4ba0f5',
+  'Not Received': '#ef1d45',
+  Dropped: '#ffec8c',
   Negative: '#cc052b',
   Positive: '#52b33f',
   Closed: '#4ba0f5',

@@ -174,7 +174,7 @@ export class SourceStatisticsComponent implements OnInit {
           type: key,
         });
       });
-      if (!this.sourceGraphData.total) {
+      if (!this.sourceGraphData.total || !this.chart.Data[0].length) {
         this.initDefaultGraph();
       }
       this.chart.total = this.sourceGraphData.total;

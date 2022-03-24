@@ -1,0 +1,27 @@
+@import 'main';
+
+.width-added {
+  width: 33%;
+}
+
+.width-quarter {
+  width: 33%;
+}
+
+.feilds-wrapper {
+  display: flex;
+  margin: 30px 0px;
+  .feild {
+    .label {
+      letter-spacing: 0.72px;
+      font-size: $font12;
+      color: $primary-gray;
+    }
+    .value {
+      letter-spacing: 0.84px;
+      font-size: $font14;
+      margin-top: $margin10;
+      font-weight: $medium;
+    }
+  }
+}

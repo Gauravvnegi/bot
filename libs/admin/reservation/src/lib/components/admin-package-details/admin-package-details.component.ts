@@ -1,12 +1,12 @@
 import {
   Component,
-  OnInit,
   Input,
   ViewChild,
   ViewContainerRef,
   ComponentFactoryResolver,
   AfterViewInit,
   ComponentRef,
+  OnChanges,
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { DefaultPackageComponent } from '../packages/default-package/default-package.component';
@@ -22,7 +22,7 @@ const componentPackageMapping = {
   templateUrl: './admin-package-details.component.html',
   styleUrls: ['./admin-package-details.component.scss'],
 })
-export class AdminPackageDetailsComponent implements OnInit, AfterViewInit {
+export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
   @Input('data') detailsData;
   @Input() parentForm;
 
@@ -33,7 +33,7 @@ export class AdminPackageDetailsComponent implements OnInit, AfterViewInit {
     private _resolver: ComponentFactoryResolver
   ) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.initPaidPackageForm();
   }
 

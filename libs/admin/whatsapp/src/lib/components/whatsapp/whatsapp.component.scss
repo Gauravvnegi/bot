@@ -19,11 +19,39 @@
   .no-selected-guest {
     height: 100%;
     width: 75%;
+    background: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: #ffffff;
+    font-size: 14px;
+    line-height: 20px;
+    &__img {
+      img {
+        width: 191.8px;
+      }
+    }
+    &__title {
+      margin: 12px 0;
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: #002046;
+    }
+    &__description {
+      font-size: 12px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: #c5c5c5;
+    }
   }
   .guest-info-enable {
     width: 23%;

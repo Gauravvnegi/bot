@@ -1,10 +1,7 @@
-<svg id="Component_57_30" data-name="Component 57 – 30" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
-    <defs>
-        <style>
-            .cls-1{fill:#dfdfdf}
-        </style>
-    </defs>
-    <path id="Path_2457" data-name="Path 2457" class="cls-1" d="M69.964 289.876a.676.676 0 0 0-.676-.676h-4.345a.676.676 0 0 0-.676.676v6.662h5.7z" transform="translate(-64.267 -276.654)"/>
-    <path id="Path_2458" data-name="Path 2458" class="cls-1" d="M390.621 144.6h-4.345a.676.676 0 0 0-.676.676v13.179h5.021a2.019 2.019 0 0 1 .676.116v-13.3a.676.676 0 0 0-.676-.671z" transform="translate(-371.297 -138.571)"/>
-    <path id="Path_2459" data-name="Path 2459" class="cls-1" d="M230.63.66a.668.668 0 0 0-.676-.66h-4.345a.668.668 0 0 0-.676.66v19.224h5.7z" transform="translate(-217.782)"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="20.001" height="20" viewBox="0 0 20.001 20">
+    <g data-name="Group 8224">
+        <path data-name="Path 2457" d="M69.964 289.876a.676.676 0 0 0-.676-.676h-4.345a.676.676 0 0 0-.676.676v6.662h5.7z" transform="translate(-64.267 -276.654)" style="fill:#dfdfdf"/>
+        <path data-name="Path 2458" d="M390.621 144.6h-4.345a.676.676 0 0 0-.676.676v13.179h5.021a2.019 2.019 0 0 1 .676.116v-13.3a.676.676 0 0 0-.676-.671z" transform="translate(-371.296 -138.571)" style="fill:#dfdfdf"/>
+        <path data-name="Path 2459" d="M230.63.66a.668.668 0 0 0-.676-.66h-4.345a.668.668 0 0 0-.676.66v19.224h5.7z" transform="translate(-217.78)" style="fill:#dfdfdf"/>
+    </g>
 </svg>

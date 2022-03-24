@@ -190,6 +190,19 @@ body {
   border: 1px solid $primary-purple;
   border-radius: 5px;
 }
+.material-body {
+  width: 79%;
+  margin: 4px 25px !important;
+  margin-right: 0;
+  height: 49vh;
+  border-right: 2px solid #e8f3fe;
+  padding-right: 15px;
+  overflow-y: auto;
+}
+.details-wrapper {
+  background-color: white;
+  max-height: 94%;
+}
 .mat-option.mat-active {
   color: #673ab7;
 }

@@ -132,7 +132,7 @@ export class Guest implements Deserializable {
   }
 
   getFullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.nameTitle} ${this.firstName} ${this.lastName}`;
   }
 
   getPhoneNumber() {

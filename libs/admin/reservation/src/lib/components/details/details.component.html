@@ -252,7 +252,6 @@
             [data]="details"
           ></hospitality-bot-admin-package-details>
         </mat-tab>
-
         <mat-tab label="Payment">
           <hospitality-bot-admin-payment-details
             *ngIf="isReservationDetailFetched"
@@ -261,7 +260,6 @@
             (addFGEvent)="addFGEvent($event)"
           ></hospitality-bot-admin-payment-details>
         </mat-tab>
-
         <mat-tab label="Activities & Notes">
           <hospitality-bot-requests-table
             *ngIf="isReservationDetailFetched"
@@ -270,7 +268,6 @@
           ></hospitality-bot-requests-table>
         </mat-tab>
       </mat-tab-group>
-
       <div *ngIf="isReservationDetailFetched" class="tab-buttons">
         <div class="button-wrapper">
           <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
@@ -284,7 +281,6 @@
               <ng-container *ngTemplateOutlet="CHECKOUT"></ng-container>
             </ng-container>
           </ng-container>
-
           <ng-template #PRECHECKIN>
             <ng-container [ngSwitch]="details.currentJourneyDetails.status">
               <ng-container *ngSwitchCase="'PENDING'">
@@ -321,7 +317,6 @@
               </ng-container>
             </ng-container>
           </ng-template>
-
           <ng-template #CHECKIN>
             <ng-container [ngSwitch]="details.currentJourneyDetails.status">
               <ng-container *ngSwitchCase="'PENDING'">
@@ -374,7 +369,6 @@
                 >
                   Generate CheckIn Link
                 </button>
-
                 <button (click)="downloadInvoice()" class="button">
                   Download Invoice/Folio
                 </button>
@@ -388,7 +382,6 @@
               Manual Checkin
             </button> -->
           </ng-template>
-
           <ng-template #CHECKOUT
             ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
               <ng-container *ngSwitchCase="'PENDING'">

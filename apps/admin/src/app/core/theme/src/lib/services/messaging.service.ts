@@ -5,6 +5,9 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 import { SnackBarService } from '../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
 import { MessageTabService } from './messages-tab.service';
 import { Howl } from 'howler';
+import { ModalService } from '../../../../../../../../../libs/shared/material/src';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { NotificationComponent } from '../containers/notification/notification.component';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +22,8 @@ export class FirebaseMessagingService {
   constructor(
     private fireMessaging: AngularFireMessaging,
     private messageTabService: MessageTabService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _modalService: ModalService
   ) {
     this.fireMessaging.tokenChanges.subscribe((response) => {
       console.log('Token Refreshed');
@@ -48,21 +52,28 @@ export class FirebaseMessagingService {
                   );
                 }
               );
-          } else {
-            this._snackbarService.openSnackBarAsText(
-              `Please allow notification or else some of your features won't work properly.`,
-              '',
-              {
-                panelClass: 'notification',
-                duration: 60000,
-              }
-            );
-          }
+          } else this.openNotificationAlert();
         },
         (err) => {
           console.error('Unable to get permission to notify.', err);
         }
       )
+    );
+  }
+
+  openNotificationAlert() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '550';
+    dialogConfig.disableClose = true;
+    const detailCompRef = this._modalService.openDialog(
+      NotificationComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.onNotificationClose.subscribe(
+      (response) => {
+        if (response.close) detailCompRef.close();
+      }
     );
   }
 

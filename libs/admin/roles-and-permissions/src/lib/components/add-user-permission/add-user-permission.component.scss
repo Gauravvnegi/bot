@@ -236,9 +236,10 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font12;
+  font-size: $font14;
   color: $primary-gray;
   margin-right: 10px;
+  letter-spacing: 0.84pt;
   @media only screen and (max-width: 1250px) {
     font-size: 9px;
   }
@@ -249,7 +250,7 @@
 }
 
 :host ::ng-deep .phone-no-dropdown {
-  width: 20%;
+  width: 7%;
   margin-right: 10px;
 }
 
@@ -293,7 +294,7 @@
 .width-half {
   width: 32%;
   .mat-form-field {
-    width: 58%;
+    // width: 58%;
   }
 }
 

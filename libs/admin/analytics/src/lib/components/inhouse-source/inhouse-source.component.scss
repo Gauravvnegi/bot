@@ -91,7 +91,7 @@
           position: absolute;
           height: 100%;
           width: 100%;
-          top: -10px;
+          top: -8px;
           display: flex;
           justify-content: center;
           flex-direction: column;
@@ -101,14 +101,16 @@
             letter-spacing: 1.5px;
             color: #002046;
             opacity: 1;
+            padding-top: 7px;
           }
           .label {
-            margin-top: 5px;
+            margin-top: 4px;
             font: normal normal bold 12px/14px Roboto;
             letter-spacing: 0.72px;
             opacity: 1;
             line-height: 1.17;
             color: $quote-color;
+            text-align: center;
           }
         }
       }

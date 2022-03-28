@@ -35,7 +35,7 @@
           <a
             data-toggle="collapse"
             [href]="[menuItem.path]"
-            style="padding: 0px 15px;"
+            style="padding: 0 15px;"
             [ngClass]="rla.isActive ? 'parent-active' : ''"
             class="collapse-a collapsed"
             [style.color]="normalFontColor"
@@ -50,7 +50,7 @@
           </a>
           <div id="component" class="collapse" [id]="[menuItem.id]">
             <ul class="nav">
-              <lingFor
+              <li
                 *ngFor="let subItem of menuItem.children"
                 routerLinkActive
                 #subrla="routerLinkActive"

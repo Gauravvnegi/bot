@@ -20,7 +20,7 @@ export class InhouseRequestStatisticsComponent implements OnChanges {
     type: chartConfig.types.doughnut,
     legend: false,
     colors: chartConfig.default.colors,
-    options: dashboard.chart.option.inhouse,
+    options: dashboard.chart.option.inhouseRequest,
   };
 
   constructor(private _translateService: TranslateService) {}

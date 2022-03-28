@@ -380,6 +380,7 @@
       <tr
         class="data-table-row"
         [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+        (click)="openDetailPage($event, rowData)"
       >
         <!-- <tr class="data-table-row"> -->
         <td class="table--checkbox">
@@ -481,6 +482,7 @@
       <tr
         class="data-table-row"
         [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+        (click)="openDetailPage($event, rowData)"
       >
         <!-- <tr class="data-table-row"> -->
         <td class="table--checkbox">

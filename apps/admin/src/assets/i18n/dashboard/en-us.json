@@ -19,6 +19,8 @@
     "customer": {
       "title_text": "Reservations",
       "total_user_text": "Total Users",
+      "total_user_checkin": "Total Check-In",
+      "total_user_checkout": "Total Check-Out",
       "legend": {
         "checkIn": "Check-In",
         "checkout": "Check-Out",

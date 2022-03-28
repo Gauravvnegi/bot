@@ -237,6 +237,7 @@
         color: #fff;
         .material-icons {
           margin-right: $margin15;
+          margin-left: $margin5;
         }
         .text {
           text-decoration: underline;
@@ -252,6 +253,15 @@
     background: #fff;
     opacity: 0.2;
   }
+
+  .past-booking{
+    width: 250px;
+    margin-left: 15px;
+  }
+  
+}
+:host ::ng-deep .mat-select-panel:not([class*=mat-elevation-z]){
+  margin: 30px 0 0 15px !important;
 }
 
 :host ::ng-deep .p-dropdown {

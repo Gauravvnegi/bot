@@ -1,7 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-
+import {
+  FeedbackDistributionComponent,
+  GlobalNpsComponent,
+  GtmAcrossServicesComponent,
+  NetPromoterScoreComponent,
+  NpsAcrossDepartmentsComponent,
+  NpsAcrossServicesComponent,
+  OverallReceivedBifurcationComponent,
+  SharedComponent,
+  TopLowNpsComponent,
+  TwoWayProgressComponent,
+} from './components/cards';
+import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-sale.component';
+import { StackedBarGraphComponent } from './components/cards/stacked-bar-graph/stacked-bar-graph.component';
+import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
+import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
+import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 
 const appRoutes: Route[] = [
   {
@@ -15,5 +31,22 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminFeedbackRoutingModule {
-  static components = [FeedbackComponent];
+  static components = [
+    FeedbackComponent,
+    FeedbackDistributionComponent,
+    GlobalNpsComponent,
+    NetPromoterScoreComponent,
+    NpsAcrossDepartmentsComponent,
+    NpsAcrossServicesComponent,
+    OverallReceivedBifurcationComponent,
+    SharedComponent,
+    TopLowNpsComponent,
+    TwoWayProgressComponent,
+    FeedbackDatatableComponent,
+    FeedbackDatatableModalComponent,
+    FeedbackNotesComponent,
+    PointOfSaleComponent,
+    StackedBarGraphComponent,
+    GtmAcrossServicesComponent,
+  ];
 }

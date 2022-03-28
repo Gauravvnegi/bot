@@ -1,5 +1,38 @@
+.sortFilt {
+  height: 62px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #9eaeb8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-clear {
+    display: flex;
+    align-items: center;
+    &-all {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      .filter {
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.56px;
+        color: #9eaeb8;
+        margin-right: 5px;
+      }
+    }
+  }
+}
+.cross {
+  font-size: 22px;
+  cursor: pointer;
+  color: #9eaeb8;
+}
+
 .sortFilterWrapper {
-  height: 100%;
+  height: calc(100% - 62px);
   width: 100%;
   .sortFilterContainer {
     height: calc(100% - 62px);
@@ -74,4 +107,14 @@
     justify-content: center;
     align-items: center;
   }
+}
+
+.division {
+  height: 20px;
+  border: 1px solid #9eaeb8;
+  margin: 0 10px;
+}
+
+.material-icon {
+  color: #9eaeb8;
 }

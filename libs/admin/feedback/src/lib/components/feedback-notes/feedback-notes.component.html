@@ -1,0 +1,35 @@
+<div [formGroup]="notesFG">
+  <div class="editForm-header header">
+    <div class="editForm-header-items">
+      <div class="editForm-header-items-note">
+        <mat-select
+          style="width: 110px;"
+          formControlName="status"
+          placeholder="Select status"
+        >
+          <mat-option [value]="item.value" *ngFor="let item of statusOptions">{{
+            item.label
+          }}</mat-option>
+        </mat-select>
+      </div>
+      <div (click)="closeNotes()" class="close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div class="editForm-popup-body">
+    <div class="editForm-popup-body-title">
+      {{ 'notes.add_notes' | translate }}
+    </div>
+    <div>
+      <textarea
+        class="editForm-popup-body-textarea"
+        matInput
+        formControlName="notes"
+      ></textarea>
+    </div>
+    <div class="submit-btn" (click)="submit()">
+      {{ 'notes.submit' | translate }}
+    </div>
+  </div>
+</div>

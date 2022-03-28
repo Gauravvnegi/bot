@@ -1,6 +1,7 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -17,21 +18,24 @@ import { SelectOption } from '../../../types/dashboard.type';
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.scss'],
 })
-export class MessagesComponent implements OnChanges {
+export class MessagesComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   @Input() hotelId: string;
   @Input() channelOptions: SelectOption[];
   messageOverallAnalytics: IMessageOverallAnalytics;
   messagesFG: FormGroup;
+  globalQueries;
   constructor(
     private statisticsService: StatisticsService,
     private _snackbarService: SnackBarService,
     private adminutilityService: AdminUtilityService,
+    private _globalFilterService: GlobalFilterService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.initFG();
+    this.registerListeners();
   }
 
   /**
@@ -43,14 +47,30 @@ export class MessagesComponent implements OnChanges {
     });
   }
 
-  ngOnChanges(): void {
-    this.getConversationStats([
-      {
-        templateContext: 'TEXT',
-        comparison: true,
-        channelType: this.messagesFG?.get('channel')?.value || 'ALL',
-      },
-    ]);
+  registerListeners(): void {
+    this.listenForGlobalFilters();
+  }
+
+  /**
+   * @function listenForGlobalFilters To listen for the global filters change and after each change reloads the data.
+   */
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.getConversationStats([
+          ...this.globalQueries,
+          {
+            templateContext: 'TEMPLATE',
+            comparison: true,
+            channelType: this.messagesFG?.get('channel')?.value || 'ALL',
+          },
+        ]);
+      })
+    );
   }
 
   /**
@@ -65,11 +85,10 @@ export class MessagesComponent implements OnChanges {
       this.statisticsService
         .getConversationStats(this.hotelId, config)
         .subscribe(
-          (response) => {
-            this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
+          (response) =>
+            (this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
               response?.messageCounts
-            );
-          },
+            )),
           ({ error }) =>
             this._snackbarService
               .openSnackBarWithTranslate(
@@ -100,5 +119,9 @@ export class MessagesComponent implements OnChanges {
 
   get dashboardConfig() {
     return dashboard;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

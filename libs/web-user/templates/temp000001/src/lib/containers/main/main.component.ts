@@ -3,6 +3,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
@@ -45,6 +46,7 @@ export class MainComponent implements OnInit {
     protected _stepperService: StepperService,
     protected _modal: ModalService,
     protected dateService: DateService,
+    protected snackbarService: SnackBarService,
     @Inject(DOCUMENT) private document: Document
   ) {}
 
@@ -60,6 +62,7 @@ export class MainComponent implements OnInit {
         .subscribe(
           (reservationData) => {
             this._hotelService.hotelConfig = reservationData['hotel'];
+            this.checkForExpiry(reservationData['hotel']);
             this.isReservationData = true;
             this.stepperData = this._templateService.templateData[
               this._templateService.templateId
@@ -72,7 +75,7 @@ export class MainComponent implements OnInit {
           },
           ({ error }) => {
             if (error.type == 'BOOKING_CANCELED') {
-              this.getHotelDataById();
+              this.getHotelDataById(error.type);
             }
           }
         )
@@ -93,6 +96,14 @@ export class MainComponent implements OnInit {
     );
   }
 
+  checkForExpiry(hotelConfig) {
+    if (
+      this.dateService.getCurrentTimeStamp(hotelConfig.timezone) >
+      this._templateService.templateConfig.expiry
+    )
+      this.getHotelDataById('expiry');
+  }
+
   // TO-DO: Remove this function
   modifyStepperData(data) {
     return {
@@ -109,17 +120,26 @@ export class MainComponent implements OnInit {
     };
   }
 
-  getHotelDataById() {
+  getHotelDataById(errorType) {
     this._hotelService.getHotelConfigById(this._hotelService.hotelId).subscribe(
       (hotel) => {
         this._hotelService.hotelConfig = hotel;
-        this.router.navigate(['booking-cancel'], {
-          preserveQueryParams: true,
-        });
         this._hotelService.titleConfig$.next(hotel);
+        switch (errorType) {
+          case 'BOOKING_CANCELED':
+            this.router.navigate(['booking-cancel'], {
+              preserveQueryParams: true,
+            });
+            break;
+          case 'expiry':
+            this.router.navigate(['booking-expired'], {
+              preserveQueryParams: true,
+            });
+            break;
+        }
         this._templateLoadingService.isTemplateLoading$.next(false);
       },
-      ({ error }) => {}
+      ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
     );
   }
 

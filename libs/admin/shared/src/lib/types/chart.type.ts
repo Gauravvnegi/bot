@@ -24,11 +24,15 @@ export type BarChart = {
 export type BarColor = {
   borderColor?: string;
   backgroundColor?: string;
+  pointBackgroundColor?: string;
+  pointBorderColor?: string;
+  pointHoverBackgroundColor?: string;
+  pointHoverBorderColor?: string;
 };
 
 export type Bar = {
   data: string[];
   label: string;
-  fill: boolean;
+  fill?: boolean;
   borderDash?: number[];
 };

@@ -1,30 +1,11 @@
 export const chartConfig = {
-  types: {
-    bar: 'bar',
-    line: 'line',
-    doughnut: 'doughnut',
-  },
+  types: { bar: 'bar', line: 'line', doughnut: 'doughnut' },
   bookingStatus: {
     defaultData: [
-      { data: [], label: 'New', fill: false, borderDash: [10, 5] },
-      { data: [], label: 'Pre Check-In', fill: false },
       { data: [], label: 'Check-In', fill: false },
-      { data: [], label: 'Checkout', fill: false, borderDash: [10, 5] },
+      { data: [], label: 'Checkout', fill: false },
     ],
-    barColors: [
-      {
-        backgroundColor: '#0749fc',
-      },
-      {
-        backgroundColor: '#0239CF',
-      },
-      {
-        backgroundColor: '#288ad6',
-      },
-      {
-        backgroundColor: '#F2509B',
-      },
-    ],
+    barColors: [{ backgroundColor: '#288ad6' }, { backgroundColor: '#F2509B' }],
   },
   customer: {
     colors: {

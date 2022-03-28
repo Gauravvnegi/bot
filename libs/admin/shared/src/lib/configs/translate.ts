@@ -8,7 +8,10 @@ import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
  * @param moduleName List of module names.
  * @returns An instance of the loader currently used (static loader by default).
  */
-const getTranslationConfigs = (deps: any[], moduleName: string[]): any => {
+export const getTranslationConfigs = (
+  deps: any[],
+  moduleName: string[]
+): any => {
   /**
    * @function HttpLoaderFactory Loads translations.
    * @param http Performs HTTP requests.
@@ -31,5 +34,3 @@ const getTranslationConfigs = (deps: any[], moduleName: string[]): any => {
     isolate: true,
   };
 };
-
-export default getTranslationConfigs;

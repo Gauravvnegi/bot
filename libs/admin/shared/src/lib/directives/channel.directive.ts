@@ -3,7 +3,7 @@ import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/s
 
 @Directive({ selector: '[channelSubscribed]' })
 export class ChannelDirective implements OnInit {
-  @Input() path: string;
+  @Input() paths: string;
   constructor(
     protected subscriptionService: SubscriptionPlanService,
     protected elementRef: ElementRef
@@ -15,7 +15,7 @@ export class ChannelDirective implements OnInit {
 
   checkSubscription(): void {
     const subscription = this.subscriptionService.ChannelSubscription;
-    let channel = subscription.filter((d) => d.name === this.path);
+    let channel = subscription.filter((d) => d.name === this.paths);
     this.elementRef.nativeElement.style.display =
       channel.length && channel[0].active ? 'block' : 'none';
   }

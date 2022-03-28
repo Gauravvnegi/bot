@@ -66,18 +66,26 @@
       </div>
       <div class="form-elements-container">
         <img class="icon" src="assets/svg/user-01.svg" alt="Channel" />
-        <mat-select
+        <input
+          type="text"
           class="form-elements"
-          placeholder="Item Name*"
+          matInput
           formControlName="itemName"
-          (selectionChange)="handleItemNameChange($event)"
+          placeholder="Item Name*"
+          required
+          [matAutocomplete]="autoGroup"
+        />
+        <mat-autocomplete
+          #autoGroup="matAutocomplete"
+          (optionSelected)="handleItemNameChange($event)"
         >
           <mat-option
-            *ngFor="let service of cmsServices"
+            *ngFor="let service of filteredCMSServiceOptions | async"
             [value]="service.itemName"
-            >{{ service.itemName }}</mat-option
           >
-        </mat-select>
+            {{ service.itemName }}
+          </mat-option>
+        </mat-autocomplete>
         <mat-error
           *ngIf="
             requestFG.get('itemName').touched &&
@@ -161,20 +169,21 @@
         ></textarea>
       </div>
     </div>
-    <div class="request-popup-btnwrap">
-      <div
-        class="button request-popup-btnwrap-cancel"
-        (click)="close({ status: false })"
-      >
-        Cancel
-      </div>
-      <div
-        class="button request-popup-btnwrap-save"
-        (click)="raiseRequest()"
-        [ngClass]="{ 'disabled-btn': isRaisingRequest }"
-      >
-        Save
-      </div>
+    
+  </div>
+  <div class="request-popup-btnwrap">
+    <div
+      class="button request-popup-btnwrap-cancel"
+      (click)="close({ status: false })"
+    >
+      Cancel
+    </div>
+    <div
+      class="button request-popup-btnwrap-save"
+      (click)="raiseRequest()"
+      [ngClass]="{ 'disabled-btn': isRaisingRequest }"
+    >
+      Save
     </div>
   </div>
 </div>

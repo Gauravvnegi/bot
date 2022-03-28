@@ -7,7 +7,7 @@
 
 :host ::ng-deep .mat-tab-label-active {
   color: $primary-purple;
-  font-size: $font20;
+  font-size: $font16;
   font-weight: $bolder;
 }
 
@@ -22,7 +22,7 @@
 
 .details-wrapper {
   background-color: white;
-  max-height: 85vh;
+  max-height:100%;
   @media screen and (max-width: 1100px) {
     height: 85vh;
   }
@@ -37,11 +37,10 @@
 }
 
 :host ::ng-deep .header {
-  background: transparent
-    linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
-    padding-box;
-  padding: $padding20;
-  position: relative;
+  background: #4b56c0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
   .close {
     position: absolute;
     top: 5px;
@@ -54,50 +53,90 @@
     }
   }
   .header-seperator {
-    height: 30px;
+    height: 50px;
     border: 1px solid #ffffff;
+    opacity: 0.2;
   }
   .name-details {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     color: white;
     font-size: $font16;
-    padding: 0 25px;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
+    padding: 20px 20px 0 20px;
     .name-details-wrapper {
-      .name {
-        display: flex;
-        align-items: baseline;
+      display: flex;
+      align-items: center;
+      .profile-pic {
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        margin-right: 15px;
+        background-color: #ffffff;
       }
-      .contact-details {
-        color: white;
-        font-size: $font10;
-        display: flex;
-        align-items: center;
-        margin-top: $margin10;
-        .call,
-        .email {
+      .details {
+        .name {
+          display: flex;
+          align-items: baseline;
+        }
+        .contact-details {
+          color: white;
+          font-size: $font10;
           display: flex;
           align-items: center;
-          text-decoration: none;
-          color: white;
-          :hover {
-            color: rgb(75, 86, 192);
-          }
-          .material-icons {
-            font-size: $font12;
-            height: auto;
-            width: auto;
-            margin-right: 5px;
+          margin-top: $margin10;
+          .call,
+          .email {
+            display: flex;
+            align-items: center;
             text-decoration: none;
+            color: white;
+            :hover {
+              color: rgb(75, 86, 192);
+            }
+            .material-icons {
+              font-size: $font12;
+              height: auto;
+              width: auto;
+              margin-right: 5px;
+              text-decoration: none;
+            }
+          }
+          .call {
+            margin-right: 20px;
+            :hover {
+              color: rgb(75, 86, 192);
+            }
           }
         }
-        .call {
-          margin-right: 20px;
-          :hover {
-            color: rgb(75, 86, 192);
-          }
+      }
+    }
+    .guest_data {
+      display: flex;
+      align-items: baseline;
+      color: white;
+      justify-content: space-between;
+      font-size: $font16;
+      padding-left: 5px;
+      width: 70%;
+      &__feild {
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        margin-right: 5rem;
+        .label {
+          letter-spacing: 0.84px;
+          font-size: 14px;
+          font-weight: bold;
+          text-align: left;
+        }
+        .value {
+          font-size: 11px;
+          color: #bebebe;
+          letter-spacing: 0.66px;
+          margin-top: 5px;
+          font-weight: 500;
         }
       }
     }
@@ -175,30 +214,54 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 20px;
-    padding: 0 25px;
-
-    .check-button {
-      outline: none;
-      border: 1px solid #ffffff;
-      background: #41b5e89c 0% 0% no-repeat padding-box;
+    padding: 10px 20px 0;
+    // margin-top: 20px;
+    .btn-wrapper {
       display: flex;
-      align-items: center;
-      border-radius: 5px;
-      padding: 6px $padding20;
-      color: white;
-      .material-icons {
-        margin-right: $margin15;
-      }
-      .text {
-        text-decoration: underline;
-        font-size: $font14;
-      }
-      &:hover {
-        cursor: pointer;
+      .check-button {
+        outline: none;
+        border: 1px solid #ffffff;
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        padding: 6px $padding20;
+        font-family: Roboto;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.84px;
+        text-align: center;
+        color: #fff;
+        .material-icons {
+          margin-right: $margin15;
+          margin-left: $margin5;
+        }
+        .text {
+          text-decoration: underline;
+          font-size: $font14;
+        }
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }
+  hr {
+    background: #fff;
+    opacity: 0.2;
+  }
+
+  .past-booking{
+    width: 250px;
+    margin-left: 15px;
+  }
+  
+}
+:host ::ng-deep .mat-select-panel:not([class*=mat-elevation-z]){
+  margin: 30px 0 0 15px !important;
 }
 
 :host ::ng-deep .p-dropdown {
@@ -222,15 +285,56 @@
 
 .svg-wrapper {
   padding-left: 5px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
   .svg {
     path {
       fill: white;
     }
+    margin-right: 5px;
   }
 }
 
 .vip-image {
   margin-left: 15px;
+}
+.vip-add {
+  ul {
+    display: flex;
+    li.cricle {
+      width: 30px;
+      height: 30px;
+      background: #ff0000;
+      border-radius: 15px;
+      border: solid 2px #fff;
+      text-align: center;
+      padding-top: 4px;
+      margin-left: 30px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      padding-top: 7px;
+    }
+    li.contant {
+      color: #fff;
+      font-size: 12px;
+      margin-left: 25px;
+      padding-top: 8px;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    button {
+      border: none;
+      padding: 6px 15px;
+      border-radius: 15px;
+      background: #fc9d03;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
 }
 
 :host ::ng-deep .mat-head {
@@ -344,9 +448,10 @@
   width: 79%;
   margin: $margin20 25px;
   margin-right: 0;
-  min-height: 60vh;
+  height: 49vh;
   border-right: 2px solid #e8f3fe;
   padding-right: 15px;
+  overflow-y: auto;
   @media screen and (max-width: 1100px) {
     min-height: 64vh;
   }
@@ -406,11 +511,13 @@
   width: 18%;
   padding: $padding20;
   position: absolute;
-  top: 53px;
+  top: 52px;
   right: 0;
-  height: 86%;
+  height:85%;
   z-index: 22;
   background-color: white;
+  overflow-y: auto;
+  overflow-x: hidden;
   .contact {
     font-size: 11px;
     color: $primary-gray;
@@ -422,7 +529,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 93%;
+    height: 49vh;
     .button {
       border: 1px solid $primary-purple;
       font-size: $font12;
@@ -543,5 +650,22 @@
   40% {
     -webkit-transform: scale(1);
     transform: scale(1);
+  }
+}
+
+:host ::ng-deep {
+  .mat-select-value-text {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.88;
+    letter-spacing: 0.96px;
+    text-align: left;
+    color: #fff;
+  }
+  .mat-select-arrow {
+    color: #ffffff;
   }
 }

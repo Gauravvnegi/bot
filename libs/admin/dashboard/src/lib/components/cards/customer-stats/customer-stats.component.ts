@@ -124,12 +124,10 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       const keys = Object.keys(this.statData?.checkin).filter(
         (key) => key !== 'totalCount'
       );
-      keys.forEach((key) => {
-        this.setChartData(this.checkinChart, key, this.statData.checkin);
-      });
-    } else {
-      this.setChartData(this.checkinChart);
-    }
+      keys.forEach((key) =>
+        this.setChartData(this.checkinChart, key, this.statData.checkin)
+      );
+    } else this.setChartData(this.checkinChart);
   }
 
   /**
@@ -141,12 +139,10 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
       const keys = Object.keys(this.statData?.checkout).filter(
         (key) => key !== 'totalCount'
       );
-      keys.forEach((key) => {
-        this.setChartData(this.checkoutChart, key, this.statData.checkout);
-      });
-    } else {
-      this.setChartData(this.checkoutChart);
-    }
+      keys.forEach((key) =>
+        this.setChartData(this.checkoutChart, key, this.statData.checkout)
+      );
+    } else this.setChartData(this.checkoutChart);
   }
 
   /**

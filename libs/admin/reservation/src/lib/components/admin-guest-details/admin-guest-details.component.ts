@@ -16,7 +16,6 @@ export class AdminGuestDetailsComponent implements OnInit {
   @Output() isGuestInfoPatched = new EventEmitter();
   roles: string[] = [];
 
-  stayDetailsForm: FormGroup;
   healthCardDetailsForm: FormGroup;
   guestDetailsForm: FormGroup;
 
@@ -26,14 +25,15 @@ export class AdminGuestDetailsComponent implements OnInit {
     private _snackBarService: SnackBarService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnChanges() {
     this.addFormsControls();
     this.pushDataToForm();
   }
 
   addFormsControls() {
     this.healthCardDetailsForm = this.initHealthCardDetailsForm();
-    this.stayDetailsForm = this.initStayDetailsForm();
     (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
       this.initGuestDetailsForm();
   }
@@ -46,9 +46,6 @@ export class AdminGuestDetailsComponent implements OnInit {
       name: 'healthCardDetails',
       value: this.healthCardDetailsForm,
     });
-
-    this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
-    this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
 
     this.guestDetailsForm
       .get('guests')
@@ -75,20 +72,6 @@ export class AdminGuestDetailsComponent implements OnInit {
       remarks: [''],
       url: [''],
       temperature: [''],
-    });
-  }
-
-  initStayDetailsForm() {
-    return this._fb.group({
-      arrivalDate: [''],
-      departureDate: [''],
-      expectedArrivalTime: [''],
-      roomType: [''],
-      kidsCount: [''],
-      adultsCount: [''],
-      roomNumber: [''],
-      special_comments: [''],
-      checkin_comments: [''],
     });
   }
 

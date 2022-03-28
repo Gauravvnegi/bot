@@ -9,6 +9,7 @@ import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 export class RequestListFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Output() filterApplied = new EventEmitter();
+  @Output() close = new EventEmitter();
   sortList = [
     { label: 'Latest', value: '', order: '' },
     { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
@@ -54,6 +55,17 @@ export class RequestListFilterComponent implements OnInit {
     return this.filterFormArray.value
       .map((x, i) => x && this.filterData[i])
       .filter((x) => !!x);
+  }
+
+  closeFilter() {
+    this.close.emit();
+  }
+
+  clearFilter() {
+    this.parentFG.patchValue({
+      sortBy: [],
+      filterBy: this.filterData.map((x) => false),
+    });
   }
 
   get sortControl(): FormControl {

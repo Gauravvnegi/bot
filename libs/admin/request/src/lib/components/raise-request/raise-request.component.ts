@@ -16,7 +16,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, map, startWith } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 
 @Component({
@@ -32,6 +32,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   reservation = {};
   $subscription = new Subscription();
   cmsServices = [];
+  filteredCMSServiceOptions;
   priorityList = [
     // { label: 'Low', value: 'LOW' },
     { label: 'Medium', value: 'MEDIUM' },
@@ -70,9 +71,23 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     );
   }
 
-  getHotelId(globalQueries): void {
-    //todo
+  listenForItemNameChange() {
+    this.filteredCMSServiceOptions = this.requestFG
+      .get('itemName')!
+      .valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filter(value))
+      );
+  }
 
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.cmsServices.filter((option) =>
+      option.itemName.toLowerCase().includes(filterValue)
+    );
+  }
+
+  getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -106,7 +121,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._requestService.getCMSServices(this.hotelId, config).subscribe(
         (response) => {
-          this.cmsServices = response.cms_services;
+          this.cmsServices = response.cms_services.sort((a, b) =>
+            a.itemName.trim().localeCompare(b.itemName.trim())
+          );
+          this.listenForItemNameChange();
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);
@@ -117,7 +135,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
 
   handleItemNameChange(event) {
     const service = this.cmsServices.filter(
-      (d) => d.itemName === event.value
+      (d) => d.itemName === event.option.value
     )[0];
     this.requestFG.get('itemCode').setValue(service.itemCode);
     this.requestFG.get('jobDuration').setValue(parseInt(service.duration));
@@ -164,7 +182,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     );
 
     formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
-      // setting minimum search character limit to 3
       this.requestFG.patchValue({
         roomNo: response.search,
       });

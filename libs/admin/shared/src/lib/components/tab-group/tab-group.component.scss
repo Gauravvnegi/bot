@@ -11,8 +11,12 @@
   }
 }
 :host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
+  color: $dark-blue;
+  font-size: $font14;
+  font-weight: bold;
+
   color: $primary-purple;
-  font-size: $font18;
+  font-size: $font16;
   @media (max-width: 1024px) {
     font-size: 12px;
   }

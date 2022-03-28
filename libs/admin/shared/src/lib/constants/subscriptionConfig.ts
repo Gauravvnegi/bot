@@ -5,7 +5,7 @@ export enum ModuleNames {
   PACKAGES = 'package',
   RESERVATION = 'dashboard',
   NOTIFICATIONS = 'notification',
-  USERS = 'roles-permissions',
+  ROLE_MANAGEMENT = 'roles-permissions',
   FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
 }
 
@@ -16,7 +16,7 @@ export enum Integrations {
 export enum TableNames {
   RESERVATION = 'Reservations',
   GUEST = 'Guest List',
-  FEEDBACK = 'Customers - Feedback',
+  FEEDBACK = 'Guest - Feedback',
   PACKAGE = 'Packages',
   CATEGORY = 'Categories',
   REQUEST = 'Requests',
@@ -45,6 +45,8 @@ export enum CardNames {
   Shared = 'Shared',
   Messages = 'Messages',
   Notification = 'Notification',
+  GTMAcrossServices = 'GTMAcrossServices',
+  ARTAcrossExperience = 'ARTAcrossExperience',
 }
 
 export enum Filters {
@@ -53,8 +55,8 @@ export enum Filters {
   DEPARTURE = 'DEPARTURE',
   OUTGUEST = 'OUTGUEST',
   RESERVATION = 'RESERVATION',
-  JOURNEYRESERVATION = 'ALL',
-  Transactional = 'Transactional',
+  JOURNEYRESERVATION = 'STAYFEEDBACK',
+  Transactional = 'TRANSACTIONALFEEDBACK',
 }
 
 export enum Communication {
@@ -148,10 +150,14 @@ export const ModuleConfig = {
       CardNames.NPSAcrossPOS,
       CardNames.OverallReceivedBifurcation,
       CardNames.Shared,
+      CardNames.GTMAcrossServices,
+      CardNames.ARTAcrossExperience,
     ],
     tables: [TableNames.FEEDBACK],
     filters: {
-      [TableNames.FEEDBACK]: { tabFilters: [Filters.JOURNEYRESERVATION] },
+      [TableNames.FEEDBACK]: {
+        tabFilters: [Filters.JOURNEYRESERVATION, Filters.Transactional],
+      },
     },
   },
   [ModuleNames.FEEDBACK_TRANSACTIONAL]: {
@@ -196,7 +202,7 @@ export const ModuleConfig = {
     tables: [],
     filters: {},
   },
-  [ModuleNames.USERS]: {
+  [ModuleNames.ROLE_MANAGEMENT]: {
     cards: [],
     tables: [],
     filters: {},

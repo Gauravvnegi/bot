@@ -5,7 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class StatisticsService extends ApiService {
   outletIds = [];
-  outletChange = new BehaviorSubject(false);
+  type: string;
+  $outletChange = new BehaviorSubject({ status: false, type: '' });
   markReadStatusChanged = new BehaviorSubject(false);
   getOverallNPSStatistics(config): Observable<any> {
     return this.get(`/api/v1/feedback-stats/${config.queryObj}`);
@@ -86,5 +87,9 @@ export class StatisticsService extends ApiService {
     return this.get(`/api/v1/feedback-stats/npos/export${config.queryObj}`, {
       responseType: 'blob',
     });
+  }
+
+  getGTMAcrossServices(config) {
+    return this.get(`/api/v1/feedback-stats/gtm${config.queryObj}`);
   }
 }

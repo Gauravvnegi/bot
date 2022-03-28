@@ -79,7 +79,15 @@
   </ng-container>
   <ng-template #noContact>
     <div *ngIf="chatList" class="no-contact">
-      No contacts found
+      <div class="no-contact__img">
+        <img src="assets/svg/no_message.svg" alt="No Request" />
+      </div>
+      <div class="no-contact__title">
+        No Conversations
+      </div>
+      <div class="no-contact__description">
+        When you have messages, you'll see them here
+      </div>
     </div>
   </ng-template>
 </div>
@@ -91,16 +99,9 @@
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "
 >
-  <div class="sortFilt">
-    <div>Sort & Filters</div>
-    <div class="cross" (click)="showFilter = false">
-      &#10006;
-    </div>
-  </div>
-  <div class="sort-filter">
-    <hospitality-bot-contact-sort-filter
-      [parentFG]="contactFG"
-      (filterApplied)="handleFilter($event)"
-    ></hospitality-bot-contact-sort-filter>
-  </div>
+  <hospitality-bot-contact-sort-filter
+    [parentFG]="contactFG"
+    (filterApplied)="handleFilter($event)"
+    (filterClosed)="showFilter = false"
+  ></hospitality-bot-contact-sort-filter>
 </div>

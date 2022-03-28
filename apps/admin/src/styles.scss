@@ -15,8 +15,7 @@ body {
 }
 
 .mat-dialog-container {
-  overflow: auto !important;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
   // max-height: 100vh !important;
   padding: 0 !important;
 }
@@ -85,7 +84,7 @@ body {
 
 .status-selected-new {
   background-color: rgba(62, 142, 247, 1) !important;
-  color: white;
+  color: $white;
   opacity: 1;
 }
 
@@ -147,12 +146,12 @@ body {
 
 .success {
   background-color: $completed !important;
-  color: white !important;
+  color: $white !important;
 }
 
 .notification {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: $white;
+  color: $black;
 }
 
 // modal overlay styling
@@ -190,4 +189,17 @@ body {
   box-shadow: 0px 3px 20px #0368ff42;
   border: 1px solid $primary-purple;
   border-radius: 5px;
+}
+.material-body {
+  width: 79%;
+  margin: 4px 25px !important;
+  margin-right: 0;
+  height:85%;
+  border-right: 2px solid #e8f3fe;
+  padding-right: 15px;
+  overflow-y: auto;
+}
+.details-wrapper {
+  background-color: white;
+  max-height: 94%;
 }

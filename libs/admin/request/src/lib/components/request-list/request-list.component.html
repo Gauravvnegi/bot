@@ -127,8 +127,16 @@
       </ng-container>
     </ng-container>
     <ng-template #noList>
-      <div class="no-contact">
-        No requests found
+      <div *ngIf="listData" class="no-contact">
+        <div class="no-contact__img">
+          <img src="assets/svg/no_request.svg" alt="No Request" />
+        </div>
+        <div class="no-contact__title">
+          No Requests
+        </div>
+        <div class="no-contact__description">
+          When you have requests, you'll see them here
+        </div>
       </div>
     </ng-template>
   </div>
@@ -145,18 +153,9 @@
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "
 >
-  <div class="sortFilt">
-    <div class="sortFilt-text">
-      Sort & Filters
-    </div>
-    <div class="cross" (click)="showFilter = false">
-      &#10006;
-    </div>
-  </div>
-  <div class="right-side-list-filter">
-    <hospitality-bot-request-list-filter
-      [parentFG]="parentFG"
-      (filterApplied)="handleFilter($event)"
-    ></hospitality-bot-request-list-filter>
-  </div>
+  <hospitality-bot-request-list-filter
+    [parentFG]="parentFG"
+    (filterApplied)="handleFilter($event)"
+    (close)="showFilter = false"
+  ></hospitality-bot-request-list-filter>
 </div>

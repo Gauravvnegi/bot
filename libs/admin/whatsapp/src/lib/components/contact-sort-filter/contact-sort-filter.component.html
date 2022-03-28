@@ -1,3 +1,16 @@
+<div class="sortFilt">
+  <div>Sort & Filters</div>
+  <div class="sortFilt-clear">
+    <div class="sortFilt-clear-all" (click)="clearFilter()">
+      <p class="filter">Clear All</p>
+      <mat-icon class="material-icon" matSuffix>undo</mat-icon>
+    </div>
+    <div class="division"></div>
+    <div class="cross" (click)="close()">
+      &#10006;
+    </div>
+  </div>
+</div>
 <div class="sortFilterWrapper" *ngIf="parentFG">
   <div class="sortFilterContainer" [formGroup]="parentFG">
     <div class="sortBy">
@@ -26,22 +39,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="filterUnderline"></div>
-    <div class="filterBy">
-      Filter By
-    </div>
-    <div
-      *ngFor="let filter of filterData; let i = index"
-      formArrayName="filterBy"
-      class="filterItemWrapper"
-    >
-      <div>
-        <input class="filterCheckbox" type="checkbox" [formControlName]="i" />
-      </div>
-      <div class="filterItem">
-        {{ filter }}
-      </div>
-    </div> -->
   </div>
   <div class="applyBtnWrapper">
     <div

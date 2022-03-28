@@ -50,28 +50,14 @@ export const dashboard = {
   legend: {
     bookingStatus: [
       {
-        label: 'New',
-        borderColor: '#0749fc',
-        backgroundColor: '#0749fc',
-        dashed: true,
-      },
-      {
-        label: 'Pre Check-In',
-        borderColor: '#f2509b',
-        backgroundColor: '#f2509b',
-        dashed: false,
-      },
-      {
         label: 'Check-In',
         borderColor: '#0ea47a',
         backgroundColor: '#0ea47a',
-        dashed: false,
       },
       {
         label: 'Checkout',
         borderColor: '#ff4545',
         backgroundColor: '#ff4545',
-        dashed: true,
       },
     ],
   },
@@ -134,6 +120,30 @@ export const dashboard = {
         },
         cutoutPercentage: 0,
       },
+      inhouseRequest: {
+        tooltips: {
+          backgroundColor: 'white',
+          bodyFontColor: 'black',
+          borderColor: '#f4f5f6',
+          borderWidth: 3,
+          titleFontColor: 'black',
+          titleMarginBottom: 5,
+          xPadding: 10,
+          yPadding: 10,
+        },
+        responsive: true,
+        elements: {
+          center: {
+            text: '401',
+            text3: 'Total Users',
+            fontColor: '#000',
+            fontFamily: "CalibreWeb, 'Helvetica Neue', Arial ",
+            fontSize: 36,
+            fontStyle: 'normal',
+          },
+        },
+        cutoutPercentage: 75,
+      },
       reservation: {
         tooltips: {
           backgroundColor: 'white',
@@ -151,12 +161,6 @@ export const dashboard = {
     },
     color: {
       bookingStatus: [
-        {
-          borderColor: '#0749fc',
-        },
-        {
-          borderColor: '#f2509b',
-        },
         {
           borderColor: '#0ea47a',
         },

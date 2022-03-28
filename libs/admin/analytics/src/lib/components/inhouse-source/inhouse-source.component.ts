@@ -128,4 +128,8 @@ export class InhouseSourceComponent implements OnInit {
   getFilteredConfig(label) {
     return this.requestConfiguration?.filter((d) => d.label === label)[0] || {};
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

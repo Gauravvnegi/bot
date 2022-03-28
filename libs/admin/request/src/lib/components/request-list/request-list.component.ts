@@ -320,4 +320,12 @@ export class RequestListComponent implements OnInit {
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       );
   }
+
+  resetFilter() {
+    this.filterData = {
+      sort: '',
+      order: 'DESC',
+      priorityType: '',
+    };
+  }
 }

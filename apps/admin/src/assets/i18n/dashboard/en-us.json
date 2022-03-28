@@ -19,6 +19,8 @@
     "customer": {
       "title_text": "Reservations",
       "total_user_text": "Total Users",
+      "total_user_checkin": "Total Check-In",
+      "total_user_checkout": "Total Check-Out",
       "legend": {
         "checkIn": "Check-In",
         "checkout": "Check-Out",
@@ -30,7 +32,7 @@
       "title_text": "Departures",
       "tooltip": "Total number of guest departures in a selected time frame.",
       "expected_checkout": "Expected Check Out",
-      "already_checkout": "Already Checked Out",
+      "already_checkout": "Checked Out",
       "adult": "Adult",
       "children": "Children"
     },

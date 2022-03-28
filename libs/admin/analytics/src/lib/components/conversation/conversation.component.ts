@@ -129,4 +129,8 @@ export class ConversationComponent implements OnInit {
       }
     });
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

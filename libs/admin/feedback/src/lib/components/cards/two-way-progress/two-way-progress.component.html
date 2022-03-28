@@ -1,0 +1,49 @@
+<div class="wrapper">
+  <p class="heading">{{ settings.label }}</p>
+  <div class="progress-bars">
+    <canvas class="red-bar" #negativeCanvas width="128" height="138"></canvas>
+    <canvas class="green-bar" #positiveCanvas width="128" height="138"></canvas>
+    <canvas class="gray-bar" #defaultCanvas width="128" height="138"></canvas>
+    <div class="text-box">
+      <p class="label">{{ settings.score }}</p>
+    </div>
+    <img
+      class="location-icon"
+      [src]="feedbackConfig.images.location.url"
+      [alt]="feedbackConfig.images.location.alt"
+    />
+  </div>
+  <div class="limit-box">
+    <div class="limit added-margin">-100</div>
+    <div class="limit">100</div>
+  </div>
+  <div class="smiley-wrapper">
+    <div class="smiley">
+      <div class="image">
+        <img
+          [src]="feedbackConfig.images.happy.url"
+          [alt]="feedbackConfig.images.happy.alt"
+        />
+      </div>
+      <div class="label">{{ settings.positive }}</div>
+    </div>
+    <div class="smiley">
+      <div class="image">
+        <img
+          [src]="feedbackConfig.images.sceptic.url"
+          [alt]="feedbackConfig.images.sceptic.alt"
+        />
+      </div>
+      <div class="label">{{ settings.neutral }}</div>
+    </div>
+    <div class="smiley">
+      <div class="image">
+        <img
+          [src]="feedbackConfig.images.sad.url"
+          [alt]="feedbackConfig.images.sad.alt"
+        />
+      </div>
+      <div class="label">{{ settings.negative }}</div>
+    </div>
+  </div>
+</div>

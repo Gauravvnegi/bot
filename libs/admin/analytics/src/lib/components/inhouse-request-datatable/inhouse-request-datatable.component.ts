@@ -392,4 +392,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

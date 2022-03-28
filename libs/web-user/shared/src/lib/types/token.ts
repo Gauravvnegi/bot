@@ -4,7 +4,7 @@ export interface IToken {
 
 export interface ITokenInfo {
   templateId: string;
-  expiry: string;
+  expiry: number;
   journey: string;
   reservationId: string;
   hotelId: string;

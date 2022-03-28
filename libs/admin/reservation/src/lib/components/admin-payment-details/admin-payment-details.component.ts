@@ -13,46 +13,11 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   dataSource = [];
 
-  // PaymentData = [
-  //   {
-  //     description: 'Room Rental',
-  //     unit: '1',
-  //     unitPrice: 1000,
-  //     amount: 3000,
-  //     CGST: '5%',
-  //     SGST: '9%',
-  //     discount: '',
-  //     totalAmount: '',
-  //   },
-  //   {
-  //     description: 'Breakfast',
-  //     unit: '2',
-  //     unitPrice: 1500,
-  //     amount: 3000,
-  //     CGST: '5%',
-  //     SGST: '9%',
-  //     discount: '',
-  //     totalAmount: '',
-  //   },
-  //   {
-  //     description: 'Spa',
-  //     unit: '1',
-  //     unitPrice: 1000,
-  //     amount: 1000,
-  //     CGST: '5%',
-  //     SGST: '9%',
-  //     discount: '',
-  //     totalAmount: '',
-  //   },
-  // ];
-
   displayedColumns: string[] = [
     'label',
     'unit',
     'unitPrice',
     'amount',
-    // 'CGST',
-    // 'SGST',
     'discount',
     'totalAmount',
   ];
@@ -62,7 +27,9 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   constructor(private _fb: FormBuilder) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngOnChanges() {
     this.paymentDetailForm = this._fb.group({});
 
     this.addFGEvent.next({
@@ -71,41 +38,11 @@ export class AdminPaymentDetailsComponent implements OnInit {
     });
 
     this.getPrimaryGuest();
-    // this.dataSource = this.PaymentData;
     this.getModifiedPaymentSummary();
   }
 
   getModifiedPaymentSummary() {
     const paymentSummary = this.detailsData.paymentDetails;
-    // if (paymentSummary.roomRates) {
-    //   let {
-    //     label,
-    //     description,
-    //     unit,
-    //     unitPrice,
-    //     amount,
-    //     discount,
-    //     totalAmount,
-    //     taxAndFees,
-    //   } = paymentSummary.roomRates;
-    //   this.dataSource.push({
-    //     label,
-    //     description,
-    //     unit,
-    //     unitPrice,
-    //     amount,
-    //     discount,
-    //     totalAmount,
-    //     currency: paymentSummary.currency,
-    //     ...Object.assign(
-    //       {},
-    //       taxAndFees &&
-    //         taxAndFees.map((taxType) => ({
-    //           [taxType.type]: taxType.amount,
-    //         }))
-    //     ),
-    //   });
-    // }
     paymentSummary.packages.forEach((amenity) => {
       let {
         label,
@@ -115,8 +52,6 @@ export class AdminPaymentDetailsComponent implements OnInit {
         amount,
         totalAmount,
         discount,
-        // cgstAmount,
-        // sgstAmount,
       } = amenity;
 
       this.dataSource.push({
@@ -128,15 +63,6 @@ export class AdminPaymentDetailsComponent implements OnInit {
         totalAmount,
         discount,
         currency: paymentSummary.currency,
-        // cgstAmount,
-        // sgstAmount,
-        // ...Object.assign(
-        //   {},
-        //   taxAndFees &&
-        //     taxAndFees.map((taxType) => ({
-        //       [taxType.type]: taxType.amount,
-        //     }))
-        // ),
       });
     });
   }

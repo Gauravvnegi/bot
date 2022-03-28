@@ -1,0 +1,218 @@
+<div [formGroup]="npsFG" class="container" *ngIf="npsProgressData">
+  <div class="header">
+    <div class="title-container">
+      <div class="icon">
+        <img
+          [src]="feedbackConfig.images.nps_services.url"
+          [alt]="feedbackConfig.images.nps_services.alt"
+        />
+      </div>
+      <div class="stat-title">
+        {{ 'nps_across_services.title' | translate }}
+      </div>
+    </div>
+    <div class="dropdown--wrapper">
+      <p-dropdown
+        class="export"
+        [options]="documentActionTypes"
+        formControlName="documentActionType"
+      >
+        <ng-template let-documentActionItem pTemplate="selectedItem">
+          <img
+            [src]="feedbackConfig.images.export.url"
+            [alt]="feedbackConfig.images.export.alt"
+          />
+          <span class="dropdown-label">{{ documentActionItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <div class="divider"></div>
+      <p-dropdown
+        class="export"
+        [options]="documentTypes"
+        formControlName="documentType"
+      >
+        <ng-template let-documentTypeItem pTemplate="selectedItem">
+          <img
+            [src]="feedbackConfig.images.exportCSV.url"
+            [alt]="feedbackConfig.images.exportCSV.alt"
+          />
+          <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <button class="go" (click)="exportCSV()">
+        <mat-icon class="material-icons" matSuffix>east</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="tab-group">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="button__wrapper">
+    <mat-chip-list
+      multiple
+      #chipList
+      aria-label="Quick Reply selection"
+      formControlName="quickReplyActionFilters"
+      *ngIf="tabFilterItems.length"
+    >
+      <mat-chip
+        *ngFor="
+          let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+          let quickReplyTypeIdx = index
+        "
+        selectable="true"
+        [selected]="isQuickReplyFilterSelected(quickReplyType)"
+        (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
+        [ngClass]="{
+          'chipSelected status-selected-default': quickReplyType.isSelected,
+          'status-opacity-initiated status-text-initiated':
+            quickReplyType.type == 'initiated',
+          'status-selected-initiated':
+            quickReplyType.type == 'initiated' && quickReplyType.isSelected
+        }"
+      >
+        {{ quickReplyType.label }}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+
+  <!-- Graph container -->
+  <div class="progress_data_wrapper">
+    <div class="progress_data_wrapper__graph_pointer_wrapper">
+      <div class="pointer" *ngFor="let percent of feedbackConfig.percentValues">
+        <p class="label">{{ percent }}</p>
+        <p class="bar">-</p>
+      </div>
+    </div>
+
+    <div class="progress_data_wrapper__back_bars">
+      <div class="seperator"></div>
+      <ng-container *ngFor="let data of npsStatKeys">
+        <div class="dotted_seperator"></div>
+      </ng-container>
+      <div class="horizontal_seperator"></div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="progress_data_wrapper__progress_services_bars_wrapper">
+      <ng-container *ngFor="let key of npsStatKeys">
+        <div
+          class="progress_bar_data"
+          [style.width]="100 / npsStatKeys.length + '%'"
+        >
+          <div class="progess_bars">
+            <div class="bar" [style.width]="'25%'">
+              <div class="status_box">
+                <p class="journey">
+                  {{ npsProgressData.npsStats[key].label }}
+                </p>
+                <!-- <p class="service">{{ npsProgressData.npsStats[key].label }}</p> -->
+                <div class="details_box">
+                  <div class="details">
+                    <div
+                      class="dot"
+                      [style.background]="
+                        (npsProgressData.npsStats[key].score >= 0 &&
+                          npsProgressData.npsStats[key].score < 31) ||
+                        npsProgressData.npsStats[key].score < -69
+                          ? '#4BA0F5'
+                          : '#3DB76B'
+                      "
+                    ></div>
+                    <div class="details__label">
+                      {{
+                        npsProgressData.npsStats[key].score <= 30 &&
+                        npsProgressData.npsStats[key].score >= -30
+                          ? 'Neutral'
+                          : 'Positive'
+                      }}
+                    </div>
+                    <div class="percentage">
+                      {{
+                        npsProgressData.npsStats[key].score >= 0
+                          ? npsProgressData.npsStats[key].score
+                          : 100 + npsProgressData.npsStats[key].score
+                      }}
+                    </div>
+                  </div>
+                  <div class="details">
+                    <div class="dot"></div>
+                    <div class="details__label">Negative</div>
+                    <div class="percentage">
+                      {{
+                        npsProgressData.npsStats[key].score > 0
+                          ? 100 - npsProgressData.npsStats[key].score
+                          : npsProgressData.npsStats[key].score * -1
+                      }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="progress">
+                <div
+                  class="tranparent-bg"
+                  [style.height]="
+                    (npsProgressData.npsStats[key].score === 0
+                      ? 100 - 1
+                      : npsProgressData.npsStats[key].score >= 0
+                      ? 100 - npsProgressData.npsStats[key].score
+                      : npsProgressData.npsStats[key].score * -1) + '%'
+                  "
+                ></div>
+                <div
+                  [style.background]="
+                    (npsProgressData.npsStats[key].score > 0 &&
+                      npsProgressData.npsStats[key].score < 31) ||
+                    npsProgressData.npsStats[key].score < -69
+                      ? '#4BA0F5'
+                      : npsProgressData.npsStats[key].score === 0
+                      ? '#d6d6d6'
+                      : '#3DB76B'
+                  "
+                  [style.height]="
+                    (npsProgressData.npsStats[key].score === 0
+                      ? 1
+                      : npsProgressData.npsStats[key].score >= 0
+                      ? npsProgressData.npsStats[key].score
+                      : 100 + npsProgressData.npsStats[key].score) + '%'
+                  "
+                ></div>
+              </div>
+              <div class="progress">
+                <div
+                  [style.background]="
+                    npsProgressData.npsStats[key].score === 0
+                      ? '#d6d6d6'
+                      : '#ea0431'
+                  "
+                  [style.height]="
+                    (npsProgressData.npsStats[key].score === 0
+                      ? 1
+                      : npsProgressData.npsStats[key].score >= 0
+                      ? 100 - npsProgressData.npsStats[key].score
+                      : npsProgressData.npsStats[key].score * -1) + '%'
+                  "
+                ></div>
+                <div
+                  class="tranparent-bg"
+                  [style.height]="
+                    (npsProgressData.npsStats[key].score === 0
+                      ? 100 - 1
+                      : npsProgressData.npsStats[key].score >= 0
+                      ? npsProgressData.npsStats[key].score
+                      : 100 + npsProgressData.npsStats[key].score) + '%'
+                  "
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="label">{{ npsProgressData.npsStats[key].label }}</div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

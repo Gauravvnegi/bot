@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="header">
+    <div class="header__title-container">
+      <img src="assets/svg/notifications-title-icon.svg" alt="Notification" />
+      <div class="title">
+        Notification
+      </div>
+    </div>
+    <div (click)="closeNotes()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <!-- <div
+    class="allow-body"
+    *ngIf="allowNotificationValue(); else allowNotificationMessage"
+  >
+    <div class="allow-body__text">
+      <ol>
+        <li>On your computer, open Chrome.</li>
+        <li>At the top right, click More Settings.</li>
+        <br />
+        <li>Click Privacy and security Site Settings Notifications.</li>
+        <li>
+          Select the option you want as your default setting. Block a site:
+        </li>
+        <br />
+        <li>
+          Next to "Not allowed to send notifications", Click Add. Enter the
+          site's web address. Click Add.
+        </li>
+      </ol>
+    </div>
+    <div class="btn__goto-settings" (click)="openSettings()">
+      <div class="btn__goto-settings__text">Go to the settings</div>
+    </div>
+  </div>
+</div>
+<ng-template #allowNotificationMessage> -->
+  <div class="body">
+    <div class="body__text">
+      Allow notification otherwise few features may not work properly
+    </div>
+    <div class="btn-container">
+      <!-- <div class="btn btn__no" (click)="closeNotes()">
+        <div class="btn__no__text">
+          No
+        </div>
+      </div> -->
+      <div class="btn btn__yes" (click)="closeNotes()">
+        <div class="btn__yes__text">
+          OK
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- </ng-template> -->
+</div>

@@ -1,0 +1,27 @@
+<div class="parent_block">
+  <hospitality-bot-header
+    [headerName]="'Booking-Expired'"
+  ></hospitality-bot-header>
+  <div class="booking_cancel">
+    <div class="booking_cancel__image">
+      <img src="assets/booking-cancel.png" />
+    </div>
+    <div class="booking_cancel__content">
+      <p class="heading">Expired Booking!</p>
+      <p class="sub_heading">Oops! your booking has been expired.</p>
+      <!-- <div class="booking_cancel__content__note">
+        <img src="assets/email_thanku.png" />
+        <p>An Email including cancelled Booking.</p>
+      </div> -->
+    </div>
+    <div class="main-template-button">
+      <hospitality-bot-temp000001-button
+        (click)="explore()"
+        [settings]="{ label: 'Explore More' }"
+        [buttonClass]="'next-button'"
+        class="user-button"
+      ></hospitality-bot-temp000001-button>
+    </div>
+  </div>
+</div>
+<hospitality-bot-footer></hospitality-bot-footer>

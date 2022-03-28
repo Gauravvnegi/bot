@@ -11,6 +11,7 @@ import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
+import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -51,7 +52,8 @@ export class LayoutOneComponent implements OnInit {
     private _authService: AuthService,
     private _userService: UserService,
     private fb: FormBuilder,
-    private firebaseMessagingService: FirebaseMessagingService
+    private firebaseMessagingService: FirebaseMessagingService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit() {
@@ -151,7 +153,9 @@ export class LayoutOneComponent implements OnInit {
         ]),
       },
       feedback: {
-        feedbackType: 'Transactional',
+        feedbackType: this.checkForTransactionFeedbackSubscribed()
+          ? 'TRANSACTIONALFEEDBACK'
+          : 'STAYFEEDBACK',
       },
       outlets: this.getOutletIds(),
     });
@@ -173,11 +177,8 @@ export class LayoutOneComponent implements OnInit {
 
   refreshDashboard() {
     let currentUrl = this._router.url;
-
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
-
     this._router.onSameUrlNavigation = 'reload';
-
     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this._router.navigate([currentUrl]);
       this.lastUpdatedAt = DateService.getCurrentDateWithFormat('h:mm A');
@@ -275,9 +276,14 @@ export class LayoutOneComponent implements OnInit {
   }
 
   displayProfile() {
-    this._router.navigate([
-      `/pages/roles-permissions/${this._userService.getLoggedInUserid()}`,
-    ]);
+    if (
+      this.subscriptionPlanService.getModuleSubscription().modules[
+        'roles-permissions'
+      ].active
+    )
+      this._router.navigate([
+        `/pages/roles-permissions/${this._userService.getLoggedInUserid()}`,
+      ]);
   }
 
   logoutUser() {
@@ -285,14 +291,17 @@ export class LayoutOneComponent implements OnInit {
       (response) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
-        location.reload();
       },
       (error) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
-        location.reload();
       }
     );
+  }
+
+  checkForTransactionFeedbackSubscribed() {
+    const subscription = this.subscriptionPlanService.getModuleSubscription();
+    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
   }
 
   @HostListener('document:visibilitychange', ['$event'])

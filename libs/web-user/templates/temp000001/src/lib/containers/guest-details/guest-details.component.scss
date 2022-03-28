@@ -79,7 +79,8 @@ mat-icon {
 }
 ::ng-deep .travelling__info{
   .travelling__info--block{
-    justify-content: end;
+    justify-content:flex-start;
+    margin-top: -1.5em;
     .travelling__info--block-item{
       margin-right: 60px;
     }

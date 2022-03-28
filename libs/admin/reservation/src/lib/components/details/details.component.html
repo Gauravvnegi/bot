@@ -66,12 +66,9 @@
     <hr />
 
     <div class="options-wrapper" *ngIf="isGuestInfoPatched">
-      <div
-        *ngIf="isGuestReservationFetched"
-        [formGroup]="bookingFG"
-        style="width: 320px; margin-left: 15px;"
-      >
+      <div *ngIf="isGuestReservationFetched" [formGroup]="bookingFG">
         <mat-select
+          class="past-booking"
           formControlName="booking"
           (selectionChange)="getReservationDetails()"
         >
@@ -215,7 +212,6 @@
         <div class="vip-image">
           <img src="assets/images/VIP.png" />
         </div>
-        <<<<<<< HEAD
         <!-- <div class="vip-add">
           <ul>
             <li class="cricle">2</li>
@@ -223,7 +219,6 @@
             <button type="button">Still Cleaning</button>
           </ul>
         </div> -->
-        ======= >>>>>>> bug/RE-2100
       </div>
     </div>
   </div>

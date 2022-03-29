@@ -237,7 +237,7 @@
 
 :host ::ng-deep .mat-label {
   font-size: $font14;
-  color: $primary-gray;
+  color: $primary-gray1;
   margin-right: 10px;
   letter-spacing: 0.84pt;
   @media only screen and (max-width: 1250px) {
@@ -250,12 +250,12 @@
 }
 
 :host ::ng-deep .phone-no-dropdown {
-  width: 7%;
-  margin-right: 10px;
+  width: 12%;
+  margin-right:-40px;
 }
 
 :host ::ng-deep .phone-no-feild {
-  width:32%;
+  width:32% !important;
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -299,9 +299,9 @@
 }
 
 .width-trio {
-  width: 32%;
+  width: 37%;
   .mat-form-field {
-    width: 58%;
+    width:49%;
   }
 }
 

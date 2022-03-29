@@ -5,7 +5,7 @@ export class InhouseSource {
   label: string;
   totalCount: number;
 
-  deserialize(input: any) {
+  deserialize(input: any, config) {
     this.inhouseRequestSourceStats = {};
     Object.assign(
       this,
@@ -14,11 +14,10 @@ export class InhouseSource {
     );
 
     const keys = Object.keys(input.requestSourceStats);
-
     keys.forEach((key, index) => {
       this.inhouseRequestSourceStats[key] = {
         value: input.requestSourceStats[key],
-        color: colors[index],
+        color: config.filter((d) => d.label === key)[0]?.color,
       };
     });
 

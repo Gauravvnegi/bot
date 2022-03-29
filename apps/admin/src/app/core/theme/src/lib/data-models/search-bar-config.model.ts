@@ -67,6 +67,7 @@ export class ReservationSearchResult implements Deserializable {
   type: string;
   arrivalTime: string;
   departureTime: string;
+  guestId: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -77,7 +78,8 @@ export class ReservationSearchResult implements Deserializable {
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'imageUrl', get(input, ['imageUrl'])),
       set({}, 'arrivalTime', get(input, ['arrivalTime'])),
-      set({}, 'departureTime', get(input, ['departureTime']))
+      set({}, 'departureTime', get(input, ['departureTime'])),
+      set({}, 'guestId', get(input, ['guestId']))
     );
     return this;
   }

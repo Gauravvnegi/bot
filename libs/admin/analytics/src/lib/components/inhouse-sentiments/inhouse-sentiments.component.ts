@@ -58,8 +58,8 @@ export class InhouseSentimentsComponent implements OnInit {
   ];
 
   chartTypes = [
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
     { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
+    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
   ];
 
   chart: any = {

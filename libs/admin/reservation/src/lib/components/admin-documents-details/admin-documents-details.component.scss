@@ -220,3 +220,20 @@
 .red-color {
   color: #f00d2a;
 }
+
+:host ::ng-deep {
+  .mat-select-value-text {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.07;
+    letter-spacing: 0.84px;
+    text-align: left;
+    color: $dark-grey;
+  }
+  .mat-select-arrow {
+    color: $dark-grey;
+  }
+}

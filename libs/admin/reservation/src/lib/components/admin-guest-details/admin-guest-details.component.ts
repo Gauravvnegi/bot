@@ -11,13 +11,13 @@ import { isEmpty } from 'lodash';
 export class AdminGuestDetailsComponent implements OnInit {
   @Input('data') detailsData;
   @Input() parentForm: FormGroup;
-  @Output()
-  addFGEvent = new EventEmitter();
+  @Output() addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
   roles: string[] = [];
 
   healthCardDetailsForm: FormGroup;
   guestDetailsForm: FormGroup;
+  stayDetailsForm: FormGroup;
 
   constructor(
     private _fb: FormBuilder,
@@ -36,6 +36,21 @@ export class AdminGuestDetailsComponent implements OnInit {
     this.healthCardDetailsForm = this.initHealthCardDetailsForm();
     (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
       this.initGuestDetailsForm();
+    this.stayDetailsForm = this.initStayDetailsForm();
+  }
+
+  initStayDetailsForm() {
+    return this._fb.group({
+      arrivalDate: [''],
+      departureDate: [''],
+      expectedArrivalTime: [''],
+      roomType: [''],
+      kidsCount: [''],
+      adultsCount: [''],
+      roomNumber: [''],
+      special_comments: [''],
+      checkin_comments: [''],
+    });
   }
 
   pushDataToForm() {
@@ -55,6 +70,8 @@ export class AdminGuestDetailsComponent implements OnInit {
       value: this.guestDetailsForm,
     });
 
+    this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
+    this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
     this.isGuestInfoPatched.next(true);
   }
 

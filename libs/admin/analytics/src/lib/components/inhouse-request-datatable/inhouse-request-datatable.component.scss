@@ -20,9 +20,9 @@
   }
 }
 .popup__wrap {
-  margin: 20px;
+  margin: 20px 20px 0 20px;
   overflow-y: auto;
-  max-height: 100vh;
+  max-height: 500px;
   &__close {
     display: flex;
     justify-content: flex-end;

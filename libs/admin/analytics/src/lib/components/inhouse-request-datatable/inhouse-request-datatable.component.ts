@@ -184,7 +184,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: 'pending',
+        type: key,
       })
     );
   }

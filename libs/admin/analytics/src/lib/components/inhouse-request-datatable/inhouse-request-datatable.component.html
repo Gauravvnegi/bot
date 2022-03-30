@@ -115,25 +115,20 @@
                     'chipSelected status-selected-default':
                       quickReplyType.isSelected,
                     'status-opacity-pending status-text-pending':
-                      quickReplyType.type == 'pending',
+                      quickReplyType.type == 'Timeout',
                     'status-opacity-initiated status-text-initiated':
-                      quickReplyType.type == 'initiated',
+                      quickReplyType.type == 'Closed',
                     'status-opacity-success status-text-success':
-                      quickReplyType.type == 'completed',
-                    'status-opacity-reject status-text-reject':
-                      quickReplyType.type == 'failed',
+                      quickReplyType.type == 'Pending',
                     'status-default': quickReplyType.type == '',
-                    'status-selected-pending':
-                      quickReplyType.type == 'pending' &&
+                    'status-selected-pending status-text-timeout':
+                      quickReplyType.type == 'Timeout' &&
                       quickReplyType.isSelected,
-                    'status-selected-initiated':
-                      quickReplyType.type == 'initiated' &&
+                    'status-selected-initiated status-text-closed':
+                      quickReplyType.type == 'Closed' &&
                       quickReplyType.isSelected,
-                    'status-selected-completed':
-                      quickReplyType.type == 'completed' &&
-                      quickReplyType.isSelected,
-                    'status-selected-reject':
-                      quickReplyType.type == 'failed' &&
+                    'status-selected-completed status-text-pending':
+                      quickReplyType.type == 'Pending' &&
                       quickReplyType.isSelected
                   }"
                   [selected]="isQuickReplyFilterSelected(quickReplyType)"

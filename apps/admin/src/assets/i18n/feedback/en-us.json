@@ -15,7 +15,7 @@
   },
   "gtm_across_services": {
     "title_text": "GTM(Guest To Meet) across services",
-    "tooltip_text": "",
+    "tooltip_text": "Number of guest that must be met due to low score for the selected date range",
     "closed_text": "Closed",
     "remaining_text": "Remaining",
     "total_arrival_text": "Total Guest to meet who are at risk"

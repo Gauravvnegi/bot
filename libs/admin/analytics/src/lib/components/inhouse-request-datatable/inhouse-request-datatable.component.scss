@@ -99,3 +99,26 @@ td {
     color: #9eaeb8;
   }
 }
+
+:host ::ng-deep .status-text-timeout {
+  background: #0bb2d4 !important;
+  color: #fff !important; 
+}
+:host ::ng-deep .status-opacity-pending{
+  color: #0bb2d4;
+}
+:host ::ng-deep .status-opacity-initiated{
+  color: #fb3d4e !important;
+}
+:host ::ng-deep .status-text-closed {
+  background: #fb3d4e !important;
+  color: #fff !important;
+}
+
+:host ::ng-deep .status-opacity-success{
+  color: #119e0c !important;
+}
+:host ::ng-deep .status-text-pending {
+  background: #119e0c !important;
+  color: #fff !important;
+}

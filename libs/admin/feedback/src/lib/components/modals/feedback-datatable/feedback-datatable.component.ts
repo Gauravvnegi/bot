@@ -30,6 +30,7 @@ import {
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable-modal',
@@ -257,6 +258,50 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
               ...this.getSelectedQuickReplyFilters(),
             ],
             false
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.showErrorMessage(error);
+        }
+      )
+    );
+  }
+
+  /**
+   * @function exportCSV To export CSV report for feedback table.
+   */
+  exportCSV(): void {
+    this.loading = true;
+    const queries = [
+      ...this.globalQueries,
+      {
+        order: sharedConfig.defaultOrder,
+        feedbackType: this.feedbackType,
+        entityType: this.tabFilterItems[this.tabFilterIdx].value,
+      },
+      ...this.getSelectedQuickReplyFilters(),
+      ...this.selectedRows.map((item) => ({ ids: item.id })),
+    ];
+    if (
+      this.tableFG.get('documentActions').get('documentActionType').value ===
+      'summary'
+    ) {
+      queries.push({ type: 'summary' });
+    }
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
+    };
+    this.$subscription.add(
+      this.tableService.exportCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            this.tableName.toLowerCase() +
+              '_Feedback_export_' +
+              new Date().getTime() +
+              '.csv'
           );
           this.loading = false;
         },

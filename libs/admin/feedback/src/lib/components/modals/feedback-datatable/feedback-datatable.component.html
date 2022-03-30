@@ -540,10 +540,7 @@
               <ng-container *ngIf="rowData.services?.length > 0">
                 <div class="feedback-service">
                   <div
-                    *ngFor="
-                      let service of filterServices(rowData.services);
-                      let i = index
-                    "
+                    *ngFor="let service of rowData.services; let i = index"
                     class="feedback-service__container"
                   >
                     <ng-container *ngIf="i < 3">
@@ -551,6 +548,12 @@
                         <div class="feedback-service__container__label__text">
                           {{ service.label | titlecase }}
                         </div>
+                      </div>
+                      <div
+                        class="service-list-popup"
+                        *ngIf="rowData.getServiceComment(service.label)"
+                      >
+                        {{ rowData.getServiceComment(service.label) }}
                       </div>
                       <div
                         class="stay-booking-feedback"
@@ -578,7 +581,7 @@
                         </div>
                         <div class="stay-booking-feedback">
                           <p class="number">
-                            +{{ filterServices(rowData.services).length - 3 }}
+                            +{{ rowData.services.length - 3 }}
                           </p>
                         </div>
                       </div>
@@ -586,18 +589,18 @@
                   </div>
                   <!-- <div
                   class="feedback-service__container__extra"
-                  *ngIf="filterServices(rowData.services).length > 3"
+                  *ngIf="rowData.services.length > 3"
                 >
                   <span class="label"
                     >Others +{{
-                      filterServices(rowData.services).length - 3
+                      rowData.services.length - 3
                     }}</span
                   >
                   <div class="service-list-popup">
                     <div
                       class="feedback-service"
                       *ngFor="
-                        let service of filterServices(rowData.services);
+                        let service of rowData.services;
                         let i = index
                       "
                     >

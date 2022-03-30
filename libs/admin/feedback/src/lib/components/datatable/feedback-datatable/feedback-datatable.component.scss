@@ -399,6 +399,12 @@
     display: flex;
     align-items: center;
     padding: 2px 0;
+    position: relative;
+    &:hover {
+      .service-list-popup {
+        display: block;
+      }
+    }
     &__label {
       font-size: 11px;
       font-weight: normal;
@@ -412,6 +418,18 @@
       &__text {
         color: $primary-purple;
       }
+    }
+    &__comment {
+      display: none;
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 14px;
+      background-color: #cfd9f5;
+      padding: 3px;
     }
     &__extra {
       position: relative;
@@ -491,14 +509,14 @@
 
 .service-list-popup {
   border: 1px solid #e1e1f2;
-  border-radius: 15px;
-  padding: 10px;
+  border-radius: 12px;
+  padding: 5px;
   z-index: 1;
   display: none;
   position: absolute;
   background-color: $white;
-  top: 0;
-  left: 0;
+  top: 75%;
+  left: 10px;
 }
 
 .others {

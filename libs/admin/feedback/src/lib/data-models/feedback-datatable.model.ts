@@ -123,12 +123,14 @@ export class StayService {
   label: string;
   value: string;
   category: string;
+  key: string;
 
   deserialize(input) {
     Object.assign(
       this,
       set({}, 'value', get(input, 'value')),
       set({}, 'category', get(input, 'category')),
+      set({}, 'key', get(input, 'key')),
       set({}, 'label', get(input, ['label']).split('_').join(' '))
     );
     return this;
@@ -253,9 +255,11 @@ export class StayFeedback {
   transactionalService: string;
   outlet: string;
   status: string;
+  commentList;
 
   deserialize(input, outlets) {
     this.services = new Array<StayService>();
+    this.commentList = {};
     Object.assign(
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
@@ -266,30 +270,39 @@ export class StayFeedback {
       set({}, 'ratings', get(input, ['ratings'])),
       set({}, 'read', get(input, ['read'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
-      set(
-        {},
-        'services',
-        this.getServices(JSON.parse(get(input, ['services'])))
-      ),
       set({}, 'session', get(input, ['session'])),
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
       set({}, 'transactionalService', get(input, ['transactionalService'])),
       set({}, 'status', get(input, ['status']))
     );
+    const service = JSON.parse(get(input, ['services']));
+    Object.keys(service).forEach((key) => {
+      if (key.includes('COMMENT')) this.commentList[key] = service[key];
+      else {
+        this.services.push(
+          new StayService().deserialize({ ...service[key], label: key })
+        );
+      }
+    });
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
+    console.log(this);
     return this;
   }
 
-  getServices(input) {
-    return Object.keys(input).map((key) =>
-      new StayService().deserialize({ ...input[key], label: key })
+  getFilteredServices() {
+    return this.services.filter(
+      (service) => !service.label.includes('COMMENT')
     );
+  }
+
+  getServiceComment(serviceName) {
+    return this.commentList[serviceName.split(' ').join('_') + '_COMMENT'];
   }
 }
 

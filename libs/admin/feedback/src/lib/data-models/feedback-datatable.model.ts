@@ -32,7 +32,7 @@ export class Feedback {
   ratings: number;
   read: boolean;
   serviceType: string;
-  services: string;
+  services: TransactionalService;
   session: string;
   tableNo: string;
   updated: number;
@@ -55,7 +55,13 @@ export class Feedback {
       set({}, 'ratings', get(input, ['ratings'])),
       set({}, 'read', get(input, ['read'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
-      set({}, 'services', JSON.parse(get(input, ['services']))),
+      set(
+        {},
+        'services',
+        new TransactionalService().deserialize(
+          JSON.parse(get(input, ['services']))
+        )
+      ),
       set({}, 'session', get(input, ['session'])),
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated'])),
@@ -75,6 +81,57 @@ export class Feedback {
 
   getCreatedDate(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
+  }
+}
+
+export class TransactionalService {
+  services: Service[];
+  rating;
+  comment: string;
+  staffName: string;
+
+  deserialize(input) {
+    this.services = new Array<Service>();
+    Object.assign(
+      this,
+      set({}, 'comment', get(input, ['comment'])),
+      set({}, 'staffName', get(input, ['staffName'])),
+      set({}, 'rating', get(input, ['rating']))
+    );
+    input.services.forEach((service) =>
+      this.services.push(new Service().deserialize(service))
+    );
+    return this;
+  }
+}
+
+export class Service {
+  serviceName: string;
+  rating: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'serviceName', get(input, 'serviceName')),
+      set({}, 'rating', get(input, 'rating'))
+    );
+    return this;
+  }
+}
+
+export class StayService {
+  label: string;
+  value: string;
+  category: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'value', get(input, 'value')),
+      set({}, 'category', get(input, 'category')),
+      set({}, 'label', get(input, ['label']))
+    );
+    return this;
   }
 }
 
@@ -189,7 +246,7 @@ export class StayFeedback {
   ratings: number;
   read: boolean;
   serviceType: string;
-  services;
+  services: StayService[];
   session: string;
   size: number;
   tableOrRoomNumber: string;
@@ -198,6 +255,7 @@ export class StayFeedback {
   status: string;
 
   deserialize(input, outlets) {
+    this.services = new Array<StayService>();
     Object.assign(
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
@@ -208,7 +266,11 @@ export class StayFeedback {
       set({}, 'ratings', get(input, ['ratings'])),
       set({}, 'read', get(input, ['read'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
-      set({}, 'services', JSON.parse(get(input, ['services']))),
+      set(
+        {},
+        'services',
+        this.getServices(JSON.parse(get(input, ['services'])))
+      ),
       set({}, 'session', get(input, ['session'])),
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
@@ -222,6 +284,12 @@ export class StayFeedback {
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
     return this;
+  }
+
+  getServices(input) {
+    return Object.keys(input).map((key) =>
+      new StayService().deserialize({ ...input[key], label: key })
+    );
   }
 }
 

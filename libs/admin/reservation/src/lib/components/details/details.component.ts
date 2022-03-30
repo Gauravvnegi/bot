@@ -36,6 +36,8 @@ import { Guest, GuestReservation } from '../../models/guest-table.model';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
+  @Input() tabKey = 'guest_details';
+  @Output() onDetailsClose = new EventEmitter();
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
@@ -51,10 +53,8 @@ export class DetailsComponent implements OnInit {
     { label: 'Current Booking', icon: '' },
   ];
   bookingId;
-  @Output() onDetailsClose = new EventEmitter();
   branchConfig;
   $subscription = new Subscription();
-  @Input() tabKey = 'guest_details';
 
   defaultIconList = [
     { iconUrl: 'assets/svg/messenger.svg', label: 'Request', value: '' },

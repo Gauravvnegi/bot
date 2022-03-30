@@ -727,6 +727,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  filterServices(services) {
+    return services.filter((service) => !service.label.includes('COMMENT'));
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

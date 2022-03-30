@@ -368,8 +368,6 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-
     <ng-container
       *ngIf="
         tabFilterItems[tabFilterIdx]?.value ===
@@ -498,50 +496,71 @@
           <div>{{ rowData.outlet }}</div>
         </td>
         <td class="service-feedback">
-          <div class="guest">{{ rowData.bookingDetails.visitPurpose }}</div>
-          <div class="service-feedback-service">
-            <div
-              class="booking-feedback"
-              [ngClass]="{
-                'status-opacity-reject': rowData.ratings < 5,
-                'status-opacity-success': rowData.ratings >= 5
-              }"
-            >
-              <p
-                class="number"
-                [ngClass]="{
-                  'status-background-reject': rowData.ratings < 5,
-                  'status-background-success': rowData.ratings >= 5
-                }"
-                *ngIf="rowData.ratings"
-              >
-                {{ rowData.ratings }}
-              </p>
+          <ng-container *ngIf="rowData.services?.length > 0">
+            <div class="feedback-service">
+              <div class="feedback-service__label">
+                {{ rowData.services[0].label }}
+              </div>
               <div
-                *ngIf="rowData.comments"
+                class="stay-booking-feedback"
                 [ngClass]="{
-                  'feedback-msg': rowData.comments.length > 0
+                  'status-opacity-reject': rowData.services[0].value < 5,
+                  'status-opacity-success': rowData.services[0].value >= 5
                 }"
               >
-                {{ rowData.comments }}
+                <p
+                  class="number"
+                  [ngClass]="{
+                    'status-background-reject': rowData.services[0].value < 5,
+                    'status-background-success': rowData.services[0].value >= 5
+                  }"
+                  *ngIf="rowData.services[0].value"
+                >
+                  {{ rowData.services[0].value }}
+                </p>
+              </div>
+              <div
+                class="feedback-service__extra"
+                *ngIf="rowData.services.length > 1"
+              >
+                <span class="label"
+                  >+{{ filterServices(rowData.services).length - 1 }}</span
+                >
+                <div class="service-list-popup">
+                  <div
+                    class="feedback-service"
+                    *ngFor="let service of rowData.services; let i = index"
+                  >
+                    <ng-container
+                      *ngIf="!service.label.includes('COMMENT') && i > 0"
+                    >
+                      <div class="feedback-service__label">
+                        {{ service.label }}
+                      </div>
+                      <div
+                        class="stay-booking-feedback"
+                        [ngClass]="{
+                          'status-opacity-reject': service.value < 5,
+                          'status-opacity-success': service.value >= 5
+                        }"
+                      >
+                        <p
+                          class="number"
+                          [ngClass]="{
+                            'status-background-reject': service.value < 5,
+                            'status-background-success': service.value >= 5
+                          }"
+                          *ngIf="service.value"
+                        >
+                          {{ service.value }}
+                        </p>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
               </div>
             </div>
-            <div>
-              <img
-                [src]="globalFeedbackConfig.images.datatable.pdf.url"
-                [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
-                (click)="downloadFeedbackPdf($event, rowData.id)"
-              />
-            </div>
-          </div>
-          <div class="service-feedback-amount-wrapper">
-            <div
-              *ngFor="let data of rowData.services.services"
-              class="service-feedback-amount-wrapper-amount"
-            >
-              {{ data.serviceName }}: {{ data.rating }}
-            </div>
-          </div>
+          </ng-container>
         </td>
         <td class="guest">
           <div class="guest-name">{{ rowData.guest.getFullName() }}</div>

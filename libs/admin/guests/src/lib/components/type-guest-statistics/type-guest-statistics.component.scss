@@ -133,9 +133,10 @@
 }
 
 .pull-right {
-  display: flex;
+  // display: flex;
   justify-content: flex-end;
   flex-direction: row;
+  display: none;
 }
 
 .stat-label > input {

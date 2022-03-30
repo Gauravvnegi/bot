@@ -2,7 +2,7 @@
   "card": {
     "arrivals": {
       "title_text": "Arrivals",
-      "tooltip_text": "Total number of guest arrivals in a selected time frame.",
+      "tooltip_text": "Total number of arrival rooms for the selected date range.",
       "total_arrival_text": "Total Arrival",
       "arrived_text": "Arrived",
       "remaining_text": "Remaining"
@@ -30,7 +30,7 @@
     },
     "departure": {
       "title_text": "Departures",
-      "tooltip": "Total number of guest departures in a selected time frame.",
+      "tooltip": "Total number of due-out/checked-out rooms for the selected date range.",
       "expected_checkout": "Expected Check Out",
       "already_checkout": "Checked Out",
       "adult": "Adult",
@@ -38,7 +38,7 @@
     },
     "inhouse": {
       "title_text": "In-House",
-      "tooltip": "Total number of Inhouse guests in a selected time frame.",
+      "tooltip": "Total number of In-house rooms for the selected date range.",
       "tab": {
         "request": {
           "title_text": "Request",

@@ -92,7 +92,7 @@
 }
 
 :host ::ng-deep .booking-number {
-  color: $dark-grey;
+  color: $quote-color;
   font-size: $font12;
   text-align: center;
   @media screen and (max-width: 800px) {
@@ -127,9 +127,10 @@
 :host ::ng-deep .tabel-room-no {
   padding: 7px;
   font-size: 12px;
-  // background-color: rgb(72, 192, 72, 0.2);
+  background-color: rgb(72, 192, 72, 0.1);
   border-radius: 25px;
   text-align: center;
+  color: #52b33f;
   @media screen and (max-width: 800px) {
     font-size: 10px;
     padding: 5px;

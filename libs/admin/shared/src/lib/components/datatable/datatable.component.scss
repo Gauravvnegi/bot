@@ -270,7 +270,7 @@
 }
 
 :host ::ng-deep .guest {
-  color: $primary-black;
+  color: $quote-color;
   font-size: $font12;
   position: relative;
   &:hover {
@@ -295,6 +295,9 @@
         color: $primary-purple;
       }
     }
+  }
+  .rowData{
+    color: #4b56c0;
   }
   @media screen and (max-width: 800px) {
     font-size: 10px;
@@ -389,6 +392,10 @@
 
 :host ::ng-deep .p-paginator-last:hover {
   border-radius: 50%;
+}
+
+:host ::ng-deep .amount .status-text-success {
+  color: red;
 }
 
 :host ::ng-deep .no-data-found {

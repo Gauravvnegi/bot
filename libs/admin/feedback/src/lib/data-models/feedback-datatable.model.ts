@@ -129,7 +129,7 @@ export class StayService {
       this,
       set({}, 'value', get(input, 'value')),
       set({}, 'category', get(input, 'category')),
-      set({}, 'label', get(input, ['label']))
+      set({}, 'label', get(input, ['label']).split('_').join(' '))
     );
     return this;
   }

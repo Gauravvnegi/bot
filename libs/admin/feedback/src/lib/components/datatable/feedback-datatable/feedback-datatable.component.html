@@ -498,67 +498,98 @@
         <td class="service-feedback">
           <ng-container *ngIf="rowData.services?.length > 0">
             <div class="feedback-service">
-              <div class="feedback-service__label">
-                {{ rowData.services[0].label }}
-              </div>
               <div
-                class="stay-booking-feedback"
-                [ngClass]="{
-                  'status-opacity-reject': rowData.services[0].value < 5,
-                  'status-opacity-success': rowData.services[0].value >= 5
-                }"
+                *ngFor="
+                  let service of filterServices(rowData.services);
+                  let i = index
+                "
+                class="feedback-service__container"
               >
-                <p
-                  class="number"
-                  [ngClass]="{
-                    'status-background-reject': rowData.services[0].value < 5,
-                    'status-background-success': rowData.services[0].value >= 5
-                  }"
-                  *ngIf="rowData.services[0].value"
-                >
-                  {{ rowData.services[0].value }}
-                </p>
+                <ng-container *ngIf="i < 3">
+                  <div class="feedback-service__container__label">
+                    <div class="feedback-service__container__label__text">
+                      {{ service.label | titlecase }}
+                    </div>
+                  </div>
+                  <div
+                    class="stay-booking-feedback"
+                    [ngClass]="{
+                      'status-opacity-reject': service.value < 5,
+                      'status-opacity-success': service.value >= 5
+                    }"
+                  >
+                    <p
+                      class="number"
+                      [ngClass]="{
+                        'status-background-reject': service.value < 5,
+                        'status-background-success': service.value >= 5
+                      }"
+                      *ngIf="service.value"
+                    >
+                      {{ service.value }}
+                    </p>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="i == 3">
+                  <div class="feedback-service__container__label others">
+                    <div class="feedback-service__container__label__text">
+                      Others
+                    </div>
+                    <div class="stay-booking-feedback">
+                      <p class="number">
+                        +{{ filterServices(rowData.services).length - 3 }}
+                      </p>
+                    </div>
+                  </div>
+                </ng-container>
               </div>
-              <div
-                class="feedback-service__extra"
-                *ngIf="rowData.services.length > 1"
+              <!-- <div
+                class="feedback-service__container__extra"
+                *ngIf="filterServices(rowData.services).length > 3"
               >
                 <span class="label"
-                  >+{{ filterServices(rowData.services).length - 1 }}</span
+                  >Others +{{
+                    filterServices(rowData.services).length - 3
+                  }}</span
                 >
                 <div class="service-list-popup">
                   <div
                     class="feedback-service"
-                    *ngFor="let service of rowData.services; let i = index"
+                    *ngFor="
+                      let service of filterServices(rowData.services);
+                      let i = index
+                    "
                   >
-                    <ng-container
-                      *ngIf="!service.label.includes('COMMENT') && i > 0"
-                    >
-                      <div class="feedback-service__label">
-                        {{ service.label }}
-                      </div>
-                      <div
-                        class="stay-booking-feedback"
-                        [ngClass]="{
-                          'status-opacity-reject': service.value < 5,
-                          'status-opacity-success': service.value >= 5
-                        }"
-                      >
-                        <p
-                          class="number"
+                    <ng-container *ngIf="i > 2">
+                      <div class="feedback-service__container">
+                        <div class="feedback-service__container__label">
+                          <div class="feedback-service__container__label__text">
+                            {{ service.label | titlecase }}
+                          </div>
+                        </div>
+                        <div
+                          class="stay-booking-feedback"
                           [ngClass]="{
-                            'status-background-reject': service.value < 5,
-                            'status-background-success': service.value >= 5
+                            'status-opacity-reject': service.value < 5,
+                            'status-opacity-success': service.value >= 5
                           }"
-                          *ngIf="service.value"
                         >
-                          {{ service.value }}
-                        </p>
+                          <p
+                            class="number"
+                            [ngClass]="{
+                              'status-background-reject': service.value < 5,
+                              'status-background-success': service.value >= 5
+                            }"
+                            *ngIf="service.value"
+                          >
+                            {{ service.value }}
+                          </p>
+                        </div>
                       </div>
                     </ng-container>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </ng-container>
         </td>

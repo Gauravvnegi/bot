@@ -394,31 +394,42 @@
 .feedback-service {
   display: flex;
   align-items: center;
-  &__label {
-    font-size: 11px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 0;
-    letter-spacing: 0.66px;
-    text-align: center;
-  }
-  &__extra {
-    position: relative;
-    .label {
+  flex-wrap: wrap;
+  &__container {
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    &__label {
       font-size: 11px;
       font-weight: normal;
       font-stretch: normal;
       font-style: normal;
-      line-height: 0;
       letter-spacing: 0.66px;
       text-align: center;
-      text-decoration: underline;
-      color: $primary-purple;
+      border-radius: 14px;
+      background-color: #cfd9f5;
+      padding: 8px;
+      &__text {
+        color: $primary-purple;
+      }
     }
-    &:hover {
-      .service-list-popup {
-        display: block;
+    &__extra {
+      position: relative;
+      .label {
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0;
+        letter-spacing: 0.66px;
+        text-align: center;
+        text-decoration: underline;
+        color: $primary-purple;
+      }
+      &:hover {
+        .service-list-popup {
+          display: block;
+        }
       }
     }
   }
@@ -431,6 +442,7 @@
   padding: 2px;
   border-radius: 25px;
   position: relative;
+  background-color: #0030b5;
   &:hover {
     cursor: pointer;
     .feedback-msg {
@@ -487,4 +499,9 @@
   background-color: $white;
   top: 0;
   left: 0;
+}
+
+.others {
+  display: flex;
+  align-items: center;
 }

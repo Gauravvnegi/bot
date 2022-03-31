@@ -77,7 +77,7 @@
                     </span>
                   </div>
                 </div>
-                <!-- <div class="options">
+                <div class="options">
                   <div *ngIf="isActionButtons" class="icons">
                     <img
                       [src]="globalFeedbackConfig.images.datatable.download.url"
@@ -145,7 +145,7 @@
                       <mat-icon class="material-icons" matSuffix>east</mat-icon>
                     </button>
                   </div>
-                </div> -->
+                </div>
               </div>
               <div *ngIf="isTabFilters && tabFilterItems">
                 <hospitality-bot-tab-group
@@ -291,10 +291,9 @@
               <input
                 pInputText
                 type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'comments')
-                "
+                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
                 class="p-column-filter"
+                disabled="true"
               />
             </th>
             <th class="table-search-head">
@@ -363,17 +362,6 @@
               <input
                 pInputText
                 type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'comments')
-                "
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
                 (input)="onFilterTypeTextChange($event.target.value, 'vin')"
                 class="p-column-filter"
                 disabled="true"
@@ -408,18 +396,17 @@
         let-columns="columns"
         let-rowIndex="rowIndex"
       >
-        <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-
         <ng-container
           *ngIf="
-            feedbackType === globalFeedbackConfig.types.transactional;
+            tabFilterItems[tabFilterIdx]?.value ===
+              globalFeedbackConfig.types.transactional;
             else stayTable
           "
-          (click)="openDetailPage($event, rowData)"
         >
           <tr
             class="data-table-row"
             [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+            (click)="openDetailPage($event, rowData)"
           >
             <!-- <tr class="data-table-row"> -->
             <td class="table--checkbox">
@@ -440,51 +427,172 @@
               </div>
             </td>
             <td class="service-feedback">
-              <div></div>
-              <div class="service-feedback-service">
-                <div
-                  class="booking-feedback"
-                  [ngClass]="{
-                    'status-opacity-reject': rowData.ratings < 5,
-                    'status-opacity-success': rowData.ratings >= 5
-                  }"
-                >
-                  <p
-                    class="number"
-                    [ngClass]="{
-                      'status-background-reject': rowData.ratings < 5,
-                      'status-background-success': rowData.ratings >= 5
-                    }"
-                    *ngIf="rowData.ratings"
-                  >
-                    {{ rowData.ratings }}
-                  </p>
+              <div class="feedback">
+                <ng-container *ngIf="rowData.services.services?.length > 0">
                   <div
-                    *ngIf="rowData.comments"
-                    [ngClass]="{
-                      'feedback-msg': rowData.comments.length > 0
-                    }"
+                    class="feedback-service"
+                    *ngIf="
+                      rowData.services.getNegativeRatedService().length > 0;
+                      else noNegativeFeedback
+                    "
                   >
-                    {{ rowData.comments }}
+                    <div class="feedback-service__container">
+                      <div class="feedback-service__container__label others">
+                        <div class="feedback-service__container__label__text">
+                          Overall
+                        </div>
+                      </div>
+                      <div
+                        class="stay-booking-feedback"
+                        [ngClass]="{
+                          'status-opacity-reject':
+                            rowData.services.rating.value < 5,
+                          'status-opacity-success':
+                            rowData.services.rating.value >= 5
+                        }"
+                      >
+                        <p
+                          class="number"
+                          [ngClass]="{
+                            'status-background-reject':
+                              rowData.services.rating.value < 5,
+                            'status-background-moderate':
+                              rowData.services.rating.value >= 5 &&
+                              rowData.services.rating.value < 9,
+                            'status-background-success':
+                              rowData.services.rating.value > 8
+                          }"
+                          *ngIf="rowData.services.rating.value"
+                        >
+                          {{ rowData.services.rating.value }}
+                        </p>
+                      </div>
+                    </div>
+                    <ng-container
+                      *ngFor="
+                        let service of rowData.services.getNegativeRatedService();
+                        let i = index
+                      "
+                    >
+                      <div class="feedback-service__container" *ngIf="i < 2">
+                        <div class="feedback-service__container__label">
+                          <div class="feedback-service__container__label__text">
+                            {{ service.serviceName | titlecase }}
+                          </div>
+                        </div>
+                        <!-- <div
+                    class="service-list-popup"
+                    *ngIf="rowData.services.getServiceComment(service.label)"
+                  >
+                    {{ rowData.getServiceComment(service.label) }}
+                  </div> -->
+                        <div
+                          class="stay-booking-feedback"
+                          [ngClass]="{
+                            'status-opacity-reject': service.rating === 'EI',
+                            'status-opacity-success': service.rating >= 5
+                          }"
+                        >
+                          <p
+                            class="number"
+                            [ngClass]="{
+                              'status-background-reject':
+                                service.rating === 'EI',
+                              'status-background-moderate':
+                                service.rating === 'ME',
+                              'status-background-success':
+                                service.rating === 'EE'
+                            }"
+                          >
+                            {{ service.rating }}
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        class="feedback-service__container"
+                        *ngIf="
+                          i == 1 &&
+                          rowData.services.getNegativeRatedService()?.length >=
+                            2
+                        "
+                      >
+                        <div class="feedback-service__container__label others">
+                          <div class="feedback-service__container__label__text">
+                            Others
+                          </div>
+                          <div class="stay-booking-feedback">
+                            <p class="number">
+                              +{{ rowData.services.services.length - 2 }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container
+                        *ngIf="
+                          i == 0 &&
+                          rowData.services.getNegativeRatedService()?.length ==
+                            1
+                        "
+                      >
+                        <div class="feedback-service__container__label others">
+                          <div class="feedback-service__container__label__text">
+                            Others
+                          </div>
+                          <div class="stay-booking-feedback">
+                            <p class="number">
+                              +{{ rowData.services.services.length - 1 }}
+                            </p>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
                   </div>
-                </div>
-                <div class="amount">
-                  {{ rowData.getServiceTypeAndTime() }}
-                </div>
-                <div>
+                  <ng-template #noNegativeFeedback>
+                    <div class="feedback-service__container">
+                      <div class="feedback-service__container__label others">
+                        <div class="feedback-service__container__label__text">
+                          Overall
+                        </div>
+                        <div class="stay-booking-feedback">
+                          <p class="number">
+                            +{{ rowData.services.services.length }}
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        class="stay-booking-feedback"
+                        [ngClass]="{
+                          'status-opacity-reject':
+                            rowData.services.rating.value < 5,
+                          'status-opacity-success':
+                            rowData.services.rating.value >= 5
+                        }"
+                      >
+                        <p
+                          class="number"
+                          [ngClass]="{
+                            'status-background-reject':
+                              rowData.services.rating.value < 5,
+                            'status-background-moderate':
+                              rowData.services.rating.value >= 5 &&
+                              rowData.services.rating.value < 9,
+                            'status-background-success':
+                              rowData.services.rating.value > 8
+                          }"
+                          *ngIf="rowData.services.rating.value"
+                        >
+                          {{ rowData.services.rating.value }}
+                        </p>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-container>
+                <div class="pdf">
                   <img
                     [src]="globalFeedbackConfig.images.datatable.pdf.url"
                     [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
                     (click)="downloadFeedbackPdf($event, rowData.id)"
                   />
-                </div>
-              </div>
-              <div class="service-feedback-amount-wrapper">
-                <div
-                  *ngFor="let data of rowData.services.services"
-                  class="service-feedback-amount-wrapper-amount"
-                >
-                  {{ data.serviceName }}: {{ data.rating }}
                 </div>
               </div>
             </td>
@@ -494,9 +602,8 @@
               </div>
               <div class="package-city">{{ rowData.guest.place }}</div>
             </td>
-            <td class="comments">
-              {{ rowData.comments }}
-            </td>
+            <td class="comments">{{ rowData.guestData.overAllNps }}</td>
+            <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
 
             <!-- status-image-initiated -->
             <td class="status-image">
@@ -539,48 +646,153 @@
               <div>{{ rowData.outlet }}</div>
             </td>
             <td class="service-feedback">
-              <div class="guest">{{ rowData.bookingDetails.visitPurpose }}</div>
-              <div class="service-feedback-service">
-                <div
-                  class="booking-feedback"
-                  [ngClass]="{
-                    'status-opacity-reject': rowData.ratings < 5,
-                    'status-opacity-success': rowData.ratings >= 5
-                  }"
-                >
-                  <p
-                    class="number"
-                    [ngClass]="{
-                      'status-background-reject': rowData.ratings < 5,
-                      'status-background-success': rowData.ratings >= 5
-                    }"
-                    *ngIf="rowData.ratings"
-                  >
-                    {{ rowData.ratings }}
-                  </p>
+              <div class="feedback">
+                <ng-container *ngIf="rowData.getSortedServices()?.length > 0">
                   <div
-                    *ngIf="rowData.comments"
-                    [ngClass]="{
-                      'feedback-msg': rowData.comments.length > 0
-                    }"
+                    class="feedback-service"
+                    *ngIf="
+                      rowData.getNegativeRatedService().length > 0;
+                      else noNegativeFeedback
+                    "
                   >
-                    {{ rowData.comments }}
+                    <div class="feedback-service__container">
+                      <div class="feedback-service__container__label others">
+                        <div class="feedback-service__container__label__text">
+                          Overall
+                        </div>
+                      </div>
+                      <div
+                        class="stay-booking-feedback"
+                        [ngClass]="{
+                          'status-opacity-reject': rowData.ratings < 5,
+                          'status-opacity-success': rowData.ratings >= 5
+                        }"
+                      >
+                        <p
+                          class="number"
+                          [ngClass]="{
+                            'status-background-reject': rowData.ratings < 5,
+                            'status-background-success': rowData.ratings >= 5
+                          }"
+                          *ngIf="rowData.ratings"
+                        >
+                          {{ rowData.ratings }}
+                        </p>
+                      </div>
+                    </div>
+                    <ng-container
+                      *ngFor="
+                        let service of rowData.getNegativeRatedService();
+                        let i = index
+                      "
+                    >
+                      <div class="feedback-service__container" *ngIf="i < 2">
+                        <div class="feedback-service__container__label">
+                          <div class="feedback-service__container__label__text">
+                            {{ service.label | titlecase }}
+                          </div>
+                        </div>
+                        <div
+                          class="service-list-popup"
+                          *ngIf="rowData.getServiceComment(service.label)"
+                        >
+                          {{ rowData.getServiceComment(service.label) }}
+                        </div>
+                        <div
+                          class="stay-booking-feedback"
+                          [ngClass]="{
+                            'status-opacity-reject': service.value < 5,
+                            'status-opacity-success': service.value >= 5
+                          }"
+                        >
+                          <p
+                            class="number"
+                            [ngClass]="{
+                              'status-background-reject': service.value < 5,
+                              'status-background-success': service.value >= 5
+                            }"
+                            *ngIf="service.value"
+                          >
+                            {{ service.value }}
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        class="feedback-service__container"
+                        *ngIf="
+                          i == 1 &&
+                          rowData.getNegativeRatedService()?.length >= 2
+                        "
+                      >
+                        <div class="feedback-service__container__label others">
+                          <div class="feedback-service__container__label__text">
+                            Others
+                          </div>
+                          <div class="stay-booking-feedback">
+                            <p class="number">
+                              +{{ rowData.getSortedServices().length - 2 }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container
+                        *ngIf="
+                          i == 0 &&
+                          rowData.getNegativeRatedService()?.length == 1
+                        "
+                      >
+                        <div class="feedback-service__container__label others">
+                          <div class="feedback-service__container__label__text">
+                            Others
+                          </div>
+                          <div class="stay-booking-feedback">
+                            <p class="number">
+                              +{{ rowData.getSortedServices().length - 1 }}
+                            </p>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
                   </div>
-                </div>
-                <div>
+                  <ng-template #noNegativeFeedback>
+                    <div class="feedback-service__container">
+                      <div class="feedback-service__container__label others">
+                        <div class="feedback-service__container__label__text">
+                          Overall
+                        </div>
+                        <div class="stay-booking-feedback">
+                          <p class="number">
+                            +{{ rowData.getSortedServices().length }}
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        class="stay-booking-feedback"
+                        [ngClass]="{
+                          'status-opacity-reject': rowData.ratings < 5,
+                          'status-opacity-success': rowData.ratings >= 5
+                        }"
+                      >
+                        <p
+                          class="number"
+                          [ngClass]="{
+                            'status-background-reject': rowData.ratings < 5,
+                            'status-background-success': rowData.ratings >= 5
+                          }"
+                          *ngIf="rowData.ratings"
+                        >
+                          {{ rowData.ratings }}
+                        </p>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-container>
+                <div class="pdf">
                   <img
                     [src]="globalFeedbackConfig.images.datatable.pdf.url"
                     [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
                     (click)="downloadFeedbackPdf($event, rowData.id)"
                   />
-                </div>
-              </div>
-              <div class="service-feedback-amount-wrapper">
-                <div
-                  *ngFor="let data of rowData.services.services"
-                  class="service-feedback-amount-wrapper-amount"
-                >
-                  {{ data.serviceName }}: {{ data.rating }}
                 </div>
               </div>
             </td>
@@ -620,17 +832,6 @@
                 }}
               </p>
               <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
-            </td>
-            <td class="comments">
-              <span
-                [ngClass]="{
-                  'status-text-reject':
-                    rowData.guestData.dueSpend > 0 &&
-                    rowData.guestData.dueSpend <= rowData.guestData.totalSpend,
-                  'status-text-success': rowData.guestData.dueSpend == 0
-                }"
-                >{{ rowData.guestData.dueSpend }}</span
-              >/ {{ rowData.guestData.totalSpend }}
             </td>
             <td class="comments">{{ rowData.guestData.overAllNps }}</td>
             <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>

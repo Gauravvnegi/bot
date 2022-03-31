@@ -390,3 +390,144 @@
     justify-content: space-between;
   }
 }
+
+.feedback {
+  display: flex;
+  align-items: center;
+  .pdf {
+    width: 24px;
+  }
+}
+.feedback-service {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: calc(100% - 24px);
+  &__container {
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    position: relative;
+    &:hover {
+      .service-list-popup {
+        display: block;
+      }
+    }
+    &__label {
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 14px;
+      background-color: #cfd9f5;
+      padding: 8px;
+      &__text {
+        color: $primary-purple;
+      }
+    }
+    &__comment {
+      display: none;
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 14px;
+      background-color: #cfd9f5;
+      padding: 3px;
+    }
+    &__extra {
+      position: relative;
+      .label {
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0;
+        letter-spacing: 0.66px;
+        text-align: center;
+        text-decoration: underline;
+        color: $primary-purple;
+      }
+      &:hover {
+        .service-list-popup {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.stay-booking-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 25px;
+  position: relative;
+  background-color: #0030b5;
+  &:hover {
+    cursor: pointer;
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: $dark-grey;
+    background-color: $white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px $light-grey;
+    border-radius: 5px;
+    display: none;
+  }
+  .feedback-icon {
+    height: 14px;
+    margin: 0 2px;
+  }
+  .number {
+    padding: 4px 0;
+    color: $white;
+    margin: 0 2px;
+    text-align: center;
+    min-width: 23px;
+    border-radius: 50%;
+    font-size: $font12;
+  }
+  @media screen and (max-width: 1050px) {
+    margin: 0;
+    margin-top: 7px;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px 0;
+      min-width: 15px;
+    }
+  }
+}
+
+.service-list-popup {
+  border: 1px solid #e1e1f2;
+  border-radius: 12px;
+  padding: 5px;
+  z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: $white;
+  top: 75%;
+  left: 10px;
+}
+
+.others {
+  display: flex;
+  align-items: center;
+}

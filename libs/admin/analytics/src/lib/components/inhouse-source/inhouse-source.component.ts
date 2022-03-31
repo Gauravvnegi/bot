@@ -79,7 +79,10 @@ export class InhouseSourceComponent implements OnInit {
     this.$subscription.add(
       this.analyticsService.getSourceStats(config).subscribe(
         (response) => {
-          this.graphData = new InhouseSource().deserialize(response);
+          this.graphData = new InhouseSource().deserialize(
+            response,
+            this.requestConfiguration
+          );
           this.initGraphData();
         },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)

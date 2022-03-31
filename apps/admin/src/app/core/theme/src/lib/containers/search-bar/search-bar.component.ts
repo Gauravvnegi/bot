@@ -11,6 +11,7 @@ import { SnackBarService } from '../../../../../../../../../../libs/shared/mater
 import { SearchResultDetail } from '../../data-models/search-bar-config.model';
 import { SearchService } from '../../services/search.service';
 import { Router } from '@angular/router';
+import { GlobalFilterService } from '../../services/global-filters.service';
 
 @Component({
   selector: 'admin-search-bar',
@@ -22,13 +23,7 @@ export class SearchBarComponent implements OnInit {
   @Input() name: string;
   @Input() parentSearchVisible: boolean;
   @Output() parentFilterVisible = new EventEmitter();
-
-  // @Output() selectedSearchOption = new EventEmitter();
-
-  componentInstances = {
-    RESERVATIONS: BookingDetailComponent,
-    GUEST: GuestDetailComponent,
-  };
+  hotelId: string;
 
   searchOptions: SearchResultDetail[];
   results: any;
@@ -40,7 +35,8 @@ export class SearchBarComponent implements OnInit {
     private hotelDetailService: HotelDetailService,
     private modal: ModalService,
     private snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private _globalFilterService: GlobalFilterService
   ) {}
 
   searchValue = false;
@@ -51,6 +47,15 @@ export class SearchBarComponent implements OnInit {
 
   registerListeners(): void {
     this.listenForSearchChanges();
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        const { branchName: branchId } = data['filter'].value.property;
+        this.hotelId = branchId;
+      })
+    );
   }
 
   listenForSearchChanges(): void {
@@ -103,20 +108,22 @@ export class SearchBarComponent implements OnInit {
   setOptionSelection(searchData) {
     this.searchDropdownVisible = false;
     // this.selectedSearchOption.next(searchData);
-    this.openDetailsPage(searchData, this.componentInstances[searchData.type]);
+    this.openDetailsPage(searchData);
   }
 
-  openDetailsPage(searchData, component) {
+  openDetailsPage(searchData) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
-    const detailCompRef = this.modal.openDialog(component, dialogConfig);
+    const detailCompRef = this.modal.openDialog(
+      BookingDetailComponent,
+      dialogConfig
+    );
 
     if (searchData.type === 'GUEST') {
       detailCompRef.componentInstance.guestId = searchData.id;
-      detailCompRef.componentInstance.hotelId = this.hotelDetailService.hotelDetails.hotelAccess.chains[0].hotels[0].id;
     } else {
-      detailCompRef.componentInstance.bookingId = searchData.id;
+      detailCompRef.componentInstance.guestId = searchData.guestId;
     }
 
     this.$subscription.add(

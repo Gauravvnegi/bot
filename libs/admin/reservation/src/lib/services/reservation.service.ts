@@ -86,4 +86,13 @@ export class ReservationService extends ApiService {
   getGuestReservations(guestId: string): Observable<any> {
     return this.get(`/api/v1/guest/${guestId}/reservations`);
   }
+
+  /**
+   * @function getFeedbackPdf To get feedback pdf for a feedback.
+   * @param id The feedback id.
+   * @returns The observable with feedback pdf.
+   */
+  getFeedbackPdf(id: string): Observable<any> {
+    return this.get(`/api/v1/feedback/${id}/download-feedback-form`);
+  }
 }

@@ -21,6 +21,8 @@ import {
   StayDetailsComponent,
   DetailsComponent,
 } from './components';
+import { InstantFeedbackComponent } from './components/instant-feedback/instant-feedback.component';
+import { StayFeedbackComponent } from './components/stay-feedback/stay-feedback.component';
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
@@ -53,6 +55,8 @@ export const adminReservationRoutes: Route[] = [];
     DepositRuleComponent,
     ManualCheckinComponent,
     StayDetailsComponent,
+    StayFeedbackComponent,
+    InstantFeedbackComponent,
   ],
   exports: [
     DetailsComponent,
@@ -66,6 +70,9 @@ export const adminReservationRoutes: Route[] = [];
     JourneyDialogComponent,
     RequestsTableComponent,
     DepositRuleComponent,
+    StayDetailsComponent,
+    StayFeedbackComponent,
+    InstantFeedbackComponent,
   ],
 })
 export class AdminReservationModule {}

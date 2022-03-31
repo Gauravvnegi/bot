@@ -1,0 +1,180 @@
+<mat-accordion>
+  <mat-expansion-panel #depositPanel2 [expanded]="openedState">
+    <mat-expansion-panel-header class="accordian__header">
+      <mat-panel-title class="container__title">
+        <p>
+          {{ rowData.getTitle() }} -
+          <span class="booking_number">{{
+            rowData.booking.bookingNumber
+          }}</span>
+        </p>
+        <div class="header-seperator"></div>
+        <p>
+          {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }} -
+          {{ rowData.booking.getDepartureDate(_globalFilterService.timezone) }}
+          ({{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .nights
+          }}N |
+          {{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .days
+          }}D)
+        </p>
+        <ng-container *ngIf="rowData.visitDetail?.feedbackId">
+          <div class="header-seperator"></div>
+          <div
+            class="booking-id-wrapper"
+            *ngIf="rowData.visitDetail?.feedbackId"
+          >
+            <div class="feedback">
+              <div class="booking-feedback">
+                <p
+                  class="number"
+                  [ngClass]="{
+                    'status-background-reject':
+                      rowData.visitDetail?.intentToRecommends < 5,
+                    'status-background-success':
+                      rowData.visitDetail?.intentToRecommends >= 5
+                  }"
+                >
+                  {{ rowData.visitDetail?.intentToRecommends }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              width: 158px;
+              height: 33px;
+              margin: 0 32px 0 95px;
+              padding: 5px 12px 9px 7.5px;
+              border-radius: 6px;
+              border: solid 1px #4b56c0;
+              background-color: #ecf1f7;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+            (click)="downloadFeedback($event, rowData.visitDetail?.feedbackId)"
+          >
+            <div
+              style="
+                font-family: Roboto;
+                font-size: 11px;
+                font-weight: bold;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: 0.66px;
+                text-align: right;
+                color: #4b56c0;
+              "
+            >
+              View Feedback
+            </div>
+          </div>
+        </ng-container>
+        <mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded"
+          >add</mat-icon
+        >
+        <mat-icon class="expand-icon" *ngIf="depositPanel2.expanded"
+          >remove</mat-icon
+        >
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div>
+      <ng-container>
+        <div class="feilds-wrapper">
+          <div class="feild width-quarter">
+            <mat-label class="label">Arrival Date</mat-label>
+            <div class="value">
+              {{
+                rowData.booking.getArrivalDate(_globalFilterService.timezone)
+              }}
+            </div>
+          </div>
+          <div class="feild width-quarter">
+            <mat-label class="label">Departure Date</mat-label>
+            <div class="value">
+              {{
+                rowData.booking.getDepartureDate(_globalFilterService.timezone)
+              }}
+            </div>
+          </div>
+          <div class="feild width-quarter">
+            <mat-label class="label">Expected Arrival Time</mat-label>
+            <div class="value">
+              {{
+                rowData.booking.getArrivalTime(_globalFilterService.timezone)
+              }}
+            </div>
+          </div>
+        </div>
+        <div class="feilds-wrapper">
+          <div class="feild width-quarter">
+            <mat-label class="label">Duration</mat-label>
+            <div class="value">
+              {{
+                rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+                  .nights
+              }}N |
+              {{
+                rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+                  .days
+              }}D
+            </div>
+          </div>
+          <div class="feild width-quarter">
+            <mat-label class="label">Room Type</mat-label>
+            <div class="value">
+              {{ rowData.rooms.type }}
+            </div>
+          </div>
+          <div class="feild width-quarter">
+            <mat-label class="label">Room Number</mat-label>
+            <div class="value">
+              {{ rowData.rooms.roomNumber }}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <hr class="data-seperator" *ngIf="rowData.visitDetail?.feedbackId" />
+    <div *ngIf="rowData.visitDetail?.feedbackId">
+      <div class="feilds-wrapper">
+        <div class="feild width-quarter">
+          <mat-label class="label">Date/Time</mat-label>
+          <div class="value">
+            {{
+              rowData.visitDetail?.getfeedbackSubmissionTime(
+                _globalFilterService.timezone
+              )
+            }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Intent to Recommend</mat-label>
+          <div class="value">
+            {{ rowData.visitDetail?.intentToRecommends }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Market Segment</mat-label>
+          <div class="value">
+            {{ rowData.visitDetail?.marketSegment }}
+          </div>
+        </div>
+      </div>
+      <div class="feilds-wrapper">
+        <div class="feild">
+          <mat-label class="label">Comments</mat-label>
+          <div class="question">
+            {{ rowData.visitDetail?.comment?.question }}
+          </div>
+          <div class="answer">{{ rowData.visitDetail?.comment?.answer }}</div>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

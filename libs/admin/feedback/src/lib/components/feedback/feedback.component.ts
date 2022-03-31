@@ -86,9 +86,19 @@ export class FeedbackComponent {
         } else {
           this.statisticsService.type = feedback.types.stay;
           this.tableService.$feedbackType.next(feedback.types.stay);
+          this.setStayTabFilters(data['filter'].value);
         }
       })
     );
+  }
+
+  setStayTabFilters(globalQueryValue) {
+    const branch = this._hotelDetailService.hotelDetails.brands
+      .find((brand) => brand.id === globalQueryValue.property.hotelName)
+      .branches.find(
+        (branch) => branch['id'] == globalQueryValue.property.branchName
+      );
+    this.setTabFilterItems(branch);
   }
 
   getOutlets(branchId, brandId) {
@@ -102,10 +112,14 @@ export class FeedbackComponent {
       })
       .filter((id) => id !== undefined);
 
-    this.settabFilters(branch);
+    this.setTabFilterItems(branch);
   }
 
-  settabFilters(branch) {
+  setTabFilterItems(branch) {
+    if (this.globalFeedbackFilterType === feedback.types.stay) {
+      this.tabFilterItems = [this.getTabItem(branch, feedback.types.stay)];
+      return;
+    }
     this.tabFilterItems = [
       {
         label: 'Overall',
@@ -121,33 +135,29 @@ export class FeedbackComponent {
       },
     ];
     if (this.globalFeedbackFilterType === feedback.types.both)
-      this.tabFilterItems.push({
-        label: branch.name,
-        content: '',
-        value: branch.id,
-        disabled: false,
-        total: 0,
-        chips: [],
-        type: feedback.types.stay,
-      });
+      this.tabFilterItems.push(this.getTabItem(branch, feedback.types.stay));
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
-        this.tabFilterItems.push({
-          label: outlet.name,
-          content: '',
-          value: outlet.id,
-          disabled: false,
-          total: 0,
-          chips: [],
-          type: feedback.types.transactional,
-        });
+        this.tabFilterItems.push(
+          this.getTabItem(outlet, feedback.types.transactional)
+        );
       }
     });
   }
 
-  getHotelId(globalQueries): void {
-    //todo
+  getTabItem(item, type) {
+    return {
+      label: item.name,
+      content: '',
+      value: item.id,
+      disabled: false,
+      total: 0,
+      chips: [],
+      type: type,
+    };
+  }
 
+  getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;

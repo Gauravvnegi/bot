@@ -592,6 +592,13 @@
               </div> -->
             </div>
           </ng-container>
+          <div>
+            <img
+              [src]="globalFeedbackConfig.images.datatable.pdf.url"
+              [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
+              (click)="downloadFeedbackPdf($event, rowData.id)"
+            />
+          </div>
         </td>
         <td class="guest">
           <div class="guest-name">{{ rowData.guest.getFullName() }}</div>

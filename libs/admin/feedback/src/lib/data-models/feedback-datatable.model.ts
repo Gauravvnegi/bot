@@ -103,6 +103,10 @@ export class TransactionalService {
     );
     return this;
   }
+
+  getNegativeRatedService() {
+    return this.services.filter((service) => service.rating === 'EI');
+  }
 }
 
 export class Service {
@@ -121,7 +125,7 @@ export class Service {
 
 export class StayService {
   label: string;
-  value: string;
+  value: number;
   category: string;
   key: string;
 
@@ -291,14 +295,15 @@ export class StayFeedback {
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
-    console.log(this);
     return this;
   }
 
-  getFilteredServices() {
-    return this.services.filter(
-      (service) => !service.label.includes('COMMENT')
-    );
+  getSortedServices() {
+    return this.services.sort((a, b) => (a.value > b.value ? 1 : -1));
+  }
+
+  getNegativeRatedService() {
+    return this.services.filter((service) => service.value < 5);
   }
 
   getServiceComment(serviceName) {

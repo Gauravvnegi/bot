@@ -279,7 +279,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       {
         order: sharedConfig.defaultOrder,
         feedbackType: this.feedbackType,
-        entityType: this.tabFilterItems[this.tabFilterIdx].value,
+        entityIds: this.setEntityId(),
       },
       ...this.getSelectedQuickReplyFilters(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),

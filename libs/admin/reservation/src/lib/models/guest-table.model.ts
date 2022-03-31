@@ -1,3 +1,4 @@
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import {
   Booking,
@@ -178,6 +179,7 @@ export class Reservation implements Deserializable {
   feedback: Feedback;
   booking: Booking;
   guestAttributes: GuestAttributes;
+  visitDetail: VisitDetail;
   deserialize(input: any) {
     this.rooms = new Room().deserialize(input.stayDetails);
     this.feedback = new Feedback().deserialize(input.feedback);
@@ -185,7 +187,46 @@ export class Reservation implements Deserializable {
     this.guestAttributes = new GuestAttributes().deserialize(
       input.guestAttributes
     );
+    this.visitDetail = new VisitDetail().deserialize(input.visitDetails);
     return this;
+  }
+}
+
+export class VisitDetail {
+  comments: string;
+  feedbackId: string;
+  feedbackSubmissionTime: number;
+  feedbackType: string;
+  intentToRecommends: string;
+  marketSegment: string;
+  outletId: string;
+  serviceType: string;
+  statusMessage: Status;
+  surveyType: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'comments', get(input, ['comments'])),
+      set({}, 'feedbackId', get(input, ['feedbackId'])),
+      set({}, 'feedbackSubmissionTime', get(input, ['feedbackSubmissionTime'])),
+      set({}, 'feedbackType', get(input, ['feedbackType'])),
+      set({}, 'intentToRecommends', get(input, ['intentToRecommends'])),
+      set({}, 'marketSegment', get(input, ['marketSegment'])),
+      set({}, 'outletId', get(input, ['outletId'])),
+      set({}, 'serviceType', get(input, ['serviceType'])),
+      set({}, 'surveyType', get(input, ['surveyType'])),
+      set({}, 'statusMessage', get(input, ['statusMessage']))
+    );
+    return this;
+  }
+
+  getfeedbackSubmissionTime(timezone = '+05:30') {
+    return DateService.getDateFromTimeStamp(
+      this.feedbackSubmissionTime,
+      'DD/M/YY',
+      timezone
+    );
   }
 }
 

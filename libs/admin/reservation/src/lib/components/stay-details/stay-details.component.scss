@@ -25,3 +25,13 @@
     }
   }
 }
+
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+:host ::ng-deep .booking__container {
+  margin-bottom: 10px;
+}

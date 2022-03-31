@@ -249,13 +249,13 @@ export const feedback = {
       transactional: [
         {
           field: 'outlet',
-          header: 'Outlet',
+          header: 'Table No./ Outlet',
           isSort: true,
           sortType: 'string',
         },
         {
           field: 'guest.getFullName()',
-          header: 'Name/Phone No.',
+          header: 'Name/Phone No./ Email',
           isSort: true,
           sortType: 'string',
         },
@@ -267,17 +267,23 @@ export const feedback = {
         },
         {
           field: `getCreatedDate()`,
-          header: 'Visit Date/ curr. Living In',
+          header: 'Date/Time /Guests',
           isSort: true,
           sortType: 'date',
         },
         {
-          field: 'comments',
-          header: 'Comment',
+          field: 'guestData.overAllNps',
+          header: 'Overall NPS',
           isSort: true,
+          sortType: 'number',
+        },
+        {
+          field: 'guestData.churnProbalilty',
+          header: 'Churn Prob/ Prediction',
+          isSort: false,
           sortType: 'string',
         },
-        { field: 'stageAndourney', header: 'Actions' },
+        { field: 'actions', header: 'Actions' },
       ],
       stay: [
         {
@@ -288,7 +294,7 @@ export const feedback = {
         },
         {
           field: '',
-          header: 'Purpose/ Feedback',
+          header: 'Service/ Feedback',
           isSort: false,
           sortType: 'string',
         },
@@ -305,12 +311,6 @@ export const feedback = {
           sortType: 'date',
         },
         {
-          field: 'guestData.dueSpend',
-          header: 'Amount Due/ Total Spend',
-          isSort: true,
-          sortType: 'number',
-        },
-        {
           field: 'guestData.overAllNps',
           header: 'Overall NPS',
           isSort: true,
@@ -322,7 +322,7 @@ export const feedback = {
           isSort: false,
           sortType: 'string',
         },
-        { field: 'stageAndourney', header: 'Actions' },
+        { field: 'actions', header: 'Actions' },
       ],
     },
   },

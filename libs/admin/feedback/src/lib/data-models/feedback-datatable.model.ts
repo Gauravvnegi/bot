@@ -25,6 +25,7 @@ export class Feedback {
   comments: string;
   created: number;
   feedback: string;
+  guestData: StayGuestData;
   guest: Guest;
   hotelId: string;
   id: string;
@@ -72,6 +73,15 @@ export class Feedback {
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guest = new Guest().deserialize(input.guestId);
+    this.guestData = new StayGuestData().deserialize({
+      arrivalTime: 0,
+      churnProbalilty: 0,
+      departureTime: 0,
+      dueSpend: 0,
+      guestCount: 0,
+      overAllNps: 0,
+      totalSpend: 0,
+    });
     return this;
   }
 

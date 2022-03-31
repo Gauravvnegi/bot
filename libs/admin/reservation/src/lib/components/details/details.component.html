@@ -84,6 +84,7 @@
           class="check-button"
           (click)="downloadRegcard(details.guestDetails.guests[0].regcardUrl)"
         >
+        <img src="assets/svg/Layer_d.svg" alt="Download" srcset=""> &nbsp; &nbsp;
           <p class="text">Reg card</p>
           <ng-container
             [ngSwitch]="
@@ -106,6 +107,7 @@
           (click)="downloadHealthcard(details.healDeclarationDetails.url)"
           class="check-button"
         >
+        <img src="assets/svg/Layer_d.svg" alt="Download" srcset=""> &nbsp; &nbsp;
           <p class="text">Health Declaration</p>
           <ng-container [ngSwitch]="healthCardDetailsFG.get('status').value">
             <mat-icon

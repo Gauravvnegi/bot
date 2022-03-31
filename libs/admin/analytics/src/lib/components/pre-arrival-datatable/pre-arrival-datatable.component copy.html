@@ -115,25 +115,25 @@
                     'chipSelected status-selected-default':
                       quickReplyType.isSelected,
                     'status-opacity-pending status-text-pending':
-                      quickReplyType.type == 'Pending',
-                    'status-opacity-closed status-text-closed':
-                      quickReplyType.type == 'Closed',
-                    'status-opacity-accept status-text-accept':
-                      quickReplyType.type == 'Accept',
+                      quickReplyType.type == 'pending',
+                    'status-opacity-initiated status-text-initiated':
+                      quickReplyType.type == 'initiated',
+                    'status-opacity-success status-text-success':
+                      quickReplyType.type == 'completed',
                     'status-opacity-reject status-text-reject':
-                      quickReplyType.type == 'Reject',
+                      quickReplyType.type == 'failed',
                     'status-default': quickReplyType.type == '',
-                    'status-selected-pending status-text-pending':
-                      quickReplyType.type == 'Pending' &&
+                    'status-selected-pending':
+                      quickReplyType.type == 'pending' &&
                       quickReplyType.isSelected,
-                    'status-selected-closed status-text-closed':
-                      quickReplyType.type == 'Closed' &&
+                    'status-selected-initiated':
+                      quickReplyType.type == 'initiated' &&
                       quickReplyType.isSelected,
-                    'status-selected-accept status-text-accept':
-                      quickReplyType.type == 'Accept' &&
+                    'status-selected-completed':
+                      quickReplyType.type == 'completed' &&
                       quickReplyType.isSelected,
-                    'status-selected-reject status-text-reject':
-                      quickReplyType.type == 'Reject' &&
+                    'status-selected-reject':
+                      quickReplyType.type == 'failed' &&
                       quickReplyType.isSelected
                   }"
                   [selected]="isQuickReplyFilterSelected(quickReplyType)"
@@ -141,6 +141,7 @@
                     toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
                   "
                 >
+                
                   {{ quickReplyType.label }}
                   <span *ngIf="quickReplyType.value != 'ALL'"> (</span
                   >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''

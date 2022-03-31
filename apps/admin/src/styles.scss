@@ -136,6 +136,10 @@ body {
   background-color: $reject;
 }
 
+.status-background-moderate {
+  background-color: $initiated-2;
+}
+
 .status-background-success {
   background-color: $completed;
 }

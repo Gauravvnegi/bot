@@ -391,10 +391,18 @@
   }
 }
 
+.feedback {
+  display: flex;
+  align-items: center;
+  .pdf {
+    width: 24px;
+  }
+}
 .feedback-service {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  width: calc(100% - 24px);
   &__container {
     display: flex;
     align-items: center;

@@ -134,10 +134,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
       (res) => {
         FileSaver.saveAs(
           res,
-          this.tableName.toLowerCase() +
-            '_export_' +
-            new Date().getTime() +
-            '.csv'
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
         );
         this.loading = false;
       },

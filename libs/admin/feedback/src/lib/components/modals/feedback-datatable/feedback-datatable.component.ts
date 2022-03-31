@@ -298,10 +298,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         (response) => {
           FileSaver.saveAs(
             response,
-            this.tableName.toLowerCase() +
-              '_Feedback_export_' +
-              new Date().getTime() +
-              '.csv'
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
         },

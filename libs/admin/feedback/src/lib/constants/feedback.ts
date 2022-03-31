@@ -277,7 +277,7 @@ export const feedback = {
           isSort: true,
           sortType: 'string',
         },
-        { field: 'stageAndourney', header: 'Actions' },
+        { field: 'actions', header: 'Actions' },
       ],
       stay: [
         {
@@ -322,7 +322,7 @@ export const feedback = {
           isSort: false,
           sortType: 'string',
         },
-        { field: 'stageAndourney', header: 'Actions' },
+        { field: 'actions', header: 'Actions' },
       ],
     },
   },

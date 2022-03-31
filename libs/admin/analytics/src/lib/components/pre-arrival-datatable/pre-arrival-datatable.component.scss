@@ -3,11 +3,11 @@
   width: 75%;
   padding: 5px 10px;
   font-size: 16px;
-  color: #002046;
+  color: $dark-blue;
   letter-spacing: 0.32px;
   border: 1px solid #ced5d9;
   border-radius: 5px;
-  background: #ffffff;
+  background: $white;
   ::placeholder {
     font-family: Roboto;
     font-size: 12px;
@@ -80,10 +80,10 @@ td {
       overflow: hidden;
     }
     &.item-name {
-      color: #002046;
+      color: $dark-blue;
     }
     &.date-time {
-      color: #002046;
+      color: $dark-blue;
     }
   }
   .job-duration {
@@ -99,3 +99,40 @@ td {
     color: #9eaeb8;
   }
 }
+
+:host ::ng-deep .status-opacity-reject{
+  color: $light-blue !important;
+}
+:host ::ng-deep .status-text-reject{
+background-color: $light-blue !important;
+color: $white !important;
+}
+
+:host ::ng-deep .status-opacity-accept{
+  color: $accept !important;
+  background: $white !important;
+}
+:host ::ng-deep .status-text-accept{
+     background-color: $accept !important;
+     color: $white !important;
+   }
+
+:host ::ng-deep .status-opacity-closed{
+    color: $closed !important;
+    background: #fff !important;
+}
+:host ::ng-deep .status-text-closed{
+    background-color: $closed !important;
+    color: $white !important;
+}
+
+:host ::ng-deep .status-opacity-pending{
+  color: $timeout !important;
+}
+:host ::ng-deep .status-text-pending{
+    background-color: $timeout !important;
+    color: $white !important;
+}
+
+
+

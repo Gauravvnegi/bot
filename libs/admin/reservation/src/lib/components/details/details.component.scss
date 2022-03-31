@@ -668,3 +668,6 @@
     color: $white;
   }
 }
+:host ::ng-deep .item {
+  color: #4b56c0 !important;
+}

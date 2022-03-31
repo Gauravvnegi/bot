@@ -185,7 +185,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: 'pending',
+        type: key,
       })
     );
   }

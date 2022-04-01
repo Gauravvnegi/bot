@@ -27,7 +27,6 @@ export class NotificationComponent {
   }
 
   openSettings() {
-    debugger;
     const link = document.createElement('a');
     link.href = 'chrome://settings/';
     link.target = '_blank';

@@ -33,12 +33,12 @@
                   class="number"
                   [ngClass]="{
                     'status-background-reject':
-                      rowData.visitDetail?.intentToRecommends < 5,
+                      rowData.visitDetail?.intentToRecommends.rating < 5,
                     'status-background-success':
-                      rowData.visitDetail?.intentToRecommends >= 5
+                      rowData.visitDetail?.intentToRecommends.rating >= 5
                   }"
                 >
-                  {{ rowData.visitDetail?.intentToRecommends }}
+                  {{ rowData.visitDetail?.intentToRecommends.rating }}
                 </p>
               </div>
             </div>
@@ -156,7 +156,8 @@
         <div class="feild width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
           <div class="value">
-            {{ rowData.visitDetail?.intentToRecommends }}
+            {{ rowData.visitDetail?.intentToRecommends.rating }}
+            {{ rowData.visitDetail?.intentToRecommends.Category }}
           </div>
         </div>
         <div class="feild width-quarter">

@@ -11,6 +11,7 @@ import { isEmpty } from 'lodash';
 export class AdminGuestDetailsComponent implements OnInit {
   @Input('data') detailsData;
   @Input() parentForm: FormGroup;
+  @Input() guestData;
   @Output()
   addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
@@ -27,8 +28,16 @@ export class AdminGuestDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.addFormsControls();
-    this.pushDataToForm();
+    if (this.detailsData) {
+      this.addFormsControls();
+      this.pushDataToForm();
+    } else {
+      this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) });
+      const guestFA = this.guestDetailsForm.get('guests') as FormArray;
+      this.roles.push('');
+      guestFA.push(this.getGuestFG());
+      guestFA.controls[0].patchValue(this.guestData);
+    }
   }
 
   addFormsControls() {

@@ -7,17 +7,39 @@ import {
   Status,
 } from '../../../../dashboard/src/lib/data-models/reservation-table.model';
 
-export class VisitDetails {
-  records;
+export class GuestDetails {
+  records: GuestDetail[];
 
-  deserialize(input, subscription) {
+  deserialize(input) {
     this.records = new Array();
     input.forEach((item) => {
-      if (item.type === 'INSTANT' && subscription)
-        this.records.push(new VisitDetail().deserialize(item));
-      else if (item.type === 'BOOKING')
-        this.records.push(new Reservation().deserialize(item, subscription));
+      this.records.push(new GuestDetail().deserialize(item));
     });
+    return this;
+  }
+}
+
+export class GuestDetail {
+  reservation: Reservation;
+  feedback: VisitDetail;
+  type: string;
+  subType: string;
+
+  deserialize(input) {
+    if (input.guestReservation) {
+      this.reservation = new Reservation().deserialize(
+        input.guestReservation,
+        input.subType
+      );
+    }
+    if (input.feedback)
+      this.feedback = new VisitDetail().deserialize(input.feedback);
+    Object.assign(
+      this,
+      set({}, 'type', get(input, ['type'])),
+      set({}, 'subType', get(input, ['subType']))
+    );
+
     return this;
   }
 }
@@ -28,25 +50,22 @@ export class Reservation {
   booking: Booking;
   visitDetail: VisitDetail;
   type: string;
-  bookingType: string;
-  deserialize(input: any, subscription) {
+  deserialize(input: any, type: string) {
     this.rooms = new Room().deserialize(input.stayDetails);
-    this.feedback = new Feedback().deserialize(input.feedback);
+    // this.feedback = new Feedback().deserialize(input.feedback);
     this.booking = new Booking().deserialize(input);
-    if (subscription)
-      this.visitDetail = new VisitDetail().deserialize(input.visitDetails);
-    this.type = input.type;
-    this.bookingType = input.bookingType;
+    this.visitDetail = new VisitDetail().deserialize(input.feedback);
+    this.type = type;
     return this;
   }
 
   getTitle() {
-    switch (this.bookingType) {
+    switch (this.type) {
       case 'UPCOMING':
         return 'Upcoming Booking';
       case 'PAST':
         return 'Past Booking';
-      case 'CURRENT':
+      case 'PRESENT':
         return 'Current Booking';
     }
   }
@@ -57,18 +76,17 @@ export class VisitDetail {
   feedbackId: string;
   feedbackSubmissionTime: number;
   feedbackType: string;
-  intentToRecommends: string;
+  intentToRecommends;
   marketSegment: string;
   outletId: string;
   serviceType: string;
-  statusMessage: Status;
+  statusMessage;
   surveyType: string;
-  type: string;
 
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'comment', get(input, ['comment'])),
+      set({}, 'comment', get(input, ['comments'])),
       set({}, 'feedbackId', get(input, ['feedbackId'])),
       set({}, 'feedbackSubmissionTime', get(input, ['feedbackSubmissionTime'])),
       set({}, 'feedbackType', get(input, ['feedbackType'])),
@@ -77,8 +95,7 @@ export class VisitDetail {
       set({}, 'outletId', get(input, ['outletId'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
       set({}, 'surveyType', get(input, ['surveyType'])),
-      set({}, 'statusMessage', get(input, ['statusMessage'])),
-      set({}, 'type', get(input, ['type']))
+      set({}, 'statusMessage', get(input, ['statusMessage']))
     );
     return this;
   }

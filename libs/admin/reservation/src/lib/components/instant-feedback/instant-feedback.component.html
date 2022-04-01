@@ -8,7 +8,9 @@
         </p>
         <div class="header-seperator"></div>
         <p>
-          {{ rowData.getfeedbackSubmissionTime(_globalFilterService.timezone) }}
+          {{
+            rowData?.getfeedbackSubmissionTime(_globalFilterService.timezone)
+          }}
         </p>
         <div class="header-seperator"></div>
         <div class="booking-id-wrapper">
@@ -17,11 +19,13 @@
               <p
                 class="number"
                 [ngClass]="{
-                  'status-background-reject': rowData.intentToRecommends < 5,
-                  'status-background-success': rowData.intentToRecommends >= 5
+                  'status-background-reject':
+                    rowData.intentToRecommends.rating < 5,
+                  'status-background-success':
+                    rowData.intentToRecommends.rating >= 5
                 }"
               >
-                {{ rowData.intentToRecommends }}
+                {{ rowData.intentToRecommends.rating }}
               </p>
             </div>
           </div>
@@ -48,14 +52,15 @@
           <mat-label class="label">Date/Time</mat-label>
           <div class="value">
             {{
-              rowData.getfeedbackSubmissionTime(_globalFilterService.timezone)
+              rowData?.getfeedbackSubmissionTime(_globalFilterService.timezone)
             }}
           </div>
         </div>
         <div class="feild width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
           <div class="value">
-            {{ rowData.intentToRecommends }}
+            {{ rowData.intentToRecommends.rating }}
+            {{ rowData.intentToRecommends.Category }}
           </div>
         </div>
         <div class="feild width-quarter">

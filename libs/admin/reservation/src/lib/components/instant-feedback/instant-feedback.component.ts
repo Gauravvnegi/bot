@@ -50,7 +50,7 @@ export class InstantFeedbackComponent implements OnInit {
 
   getOutlet(id) {
     if (this.outlets?.length) {
-      return this.outlets.filter((outlet) => outlet.id === id)[0].name;
+      return this.outlets.filter((outlet) => outlet.id === id)[0]?.name;
     }
   }
 

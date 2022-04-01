@@ -28,9 +28,10 @@ import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
-import { Guest, GuestReservation } from '../../models/guest-table.model';
+import { Guest } from '../../models/guest-table.model';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -90,7 +91,7 @@ export class DetailsComponent implements OnInit {
     },
   ];
   guestData;
-  guestReservations;
+  guestReservations: GuestDetails;
   guestReservationDropdownList = [];
   @Input() guestId: string;
   bookingFG: FormGroup;
@@ -158,7 +159,7 @@ export class DetailsComponent implements OnInit {
     this.$subscription.add(
       this._reservationService.getGuestReservations(this.guestId).subscribe(
         (response) => {
-          this.guestReservations = new GuestReservation().deserialize(response);
+          this.guestReservations = new GuestDetails().deserialize(response);
           this.initBookingsFG();
           this.initGuestReservationDropdownList();
           this.isGuestReservationFetched = true;
@@ -582,12 +583,13 @@ export class DetailsComponent implements OnInit {
   }
 
   getPrimaryGuestDetails() {
-    this.details.guestDetails.forEach((guest) => {
-      if (guest.isPrimary === true) {
-        this.primaryGuest = guest;
-        return;
-      }
-    });
+    if (this.guestReservationDropdownList.length)
+      this.details.guestDetails.forEach((guest) => {
+        if (guest.isPrimary === true) {
+          this.primaryGuest = guest;
+          return;
+        }
+      });
   }
 
   openSendNotification(channel) {
@@ -626,32 +628,25 @@ export class DetailsComponent implements OnInit {
 
   initGuestReservationDropdownList() {
     this.guestReservationDropdownList = new Array<any>();
-    this.guestReservations.presentBookings.forEach((item) =>
-      this.guestReservationDropdownList.push({
-        bookingId: item.booking.bookingId,
-        bookingNumber: item.booking.bookingNumber,
-        label: 'Current Booking',
-      })
-    );
-    this.guestReservations.pastBookings.forEach((item) =>
-      this.guestReservationDropdownList.push({
-        bookingId: item.booking.bookingId,
-        bookingNumber: item.booking.bookingNumber,
-        label: 'Past Booking',
-      })
-    );
-    this.guestReservations.upcomingBookings.forEach((item) =>
-      this.guestReservationDropdownList.push({
-        bookingId: item.booking.bookingId,
-        bookingNumber: item.booking.bookingNumber,
-        label: 'Upcoming Booking',
-      })
-    );
-    this.bookingFG
-      .get('booking')
-      .setValue(this.guestReservationDropdownList[0].bookingId);
-    this.bookingId = this.guestReservationDropdownList[0].bookingId;
-    this.getReservationDetails();
+    this.guestReservations.records.forEach((item: GuestDetail) => {
+      if (item.type === 'RESERVATION') {
+        this.guestReservationDropdownList.push({
+          bookingId: item.reservation.booking.bookingId,
+          bookingNumber: item.reservation.booking.bookingNumber,
+          label: `${item.subType} Booking`,
+        });
+      }
+    });
+    if (this.guestReservationDropdownList.length) {
+      this.bookingFG
+        .get('booking')
+        .setValue(this.guestReservationDropdownList[0].bookingId);
+      this.bookingId = this.guestReservationDropdownList[0].bookingId;
+      this.getReservationDetails();
+    } else {
+      this.isReservationDetailFetched = true;
+      this.isGuestInfoPatched = true;
+    }
   }
 
   handleBookingChange(event) {
@@ -683,9 +678,7 @@ export class DetailsComponent implements OnInit {
 
   get bookingCount() {
     let count = 0;
-    count += this.guestReservations.pastBookings.length;
-    count += this.guestReservations.presentBookings.length;
-    count += this.guestReservations.upcomingBookings.length;
+    count += this.guestReservations.records.length;
     return count;
   }
 

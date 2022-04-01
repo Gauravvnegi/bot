@@ -2,7 +2,10 @@
   <div class="material-body">
     <div class="label-wrapper">
       <mat-label class="mat-head">Guest Info</mat-label>
-      <ng-container [ngSwitch]="healthCardDetailsForm.get('status').value">
+      <ng-container
+        *ngIf="healthCardDetailsForm"
+        [ngSwitch]="healthCardDetailsForm.get('status').value"
+      >
         <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
 
         <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
@@ -224,108 +227,116 @@
         </div>
       </div>
     </ng-container> -->
-    <hr class="data-seperator" />
-    <mat-label class="mat-head">Health Declaration</mat-label>
-    <ng-container>
-      <div class="pending-button-wrapper">
-        <p class="health-status">
-          Health Declaration Status :&nbsp;
-          <ng-container
-            class="status-icon"
-            [ngSwitch]="healthCardDetailsForm.get('status').value"
-          >
-            <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
-              {{ healthCardDetailsForm.get('status').value }}
-            </b>
-            <b *ngSwitchCase="'FAILED'" class="status-text-reject">
-              {{ healthCardDetailsForm.get('status').value }}
-            </b>
-            <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
-              {{ healthCardDetailsForm.get('status').value }}
-            </b>
-            <b *ngSwitchCase="'PENDING'" class="status-text-pending">
-              {{ healthCardDetailsForm.get('status').value }}
-            </b>
-
-            <!-- add default case icon -->
-          </ng-container>
-        </p>
-        <div
-          *ngIf="
-            ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey)
-          "
-        >
-          <div class="decision-button-wrapper">
+    <ng-container *ngIf="healthCardDetailsForm">
+      <hr class="data-seperator" />
+      <mat-label class="mat-head">Health Declaration</mat-label>
+      <ng-container>
+        <div class="pending-button-wrapper">
+          <p class="health-status">
+            Health Declaration Status :&nbsp;
             <ng-container
-              *ngIf="
-                ['INITIATED', 'FAILED'].includes(
-                  healthCardDetailsForm.get('status').value
-                )
-              "
+              class="status-icon"
+              [ngSwitch]="healthCardDetailsForm.get('status').value"
             >
-              <button class="right" (click)="updateHealthCardStatus('ACCEPT')">
-                <img src="assets/svg/tick.svg" />
-              </button>
-              <button class="right" (click)="updateHealthCardStatus('REJECT')">
-                <img src="assets/svg/cross.svg" />
-              </button>
+              <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
+                {{ healthCardDetailsForm.get('status').value }}
+              </b>
+              <b *ngSwitchCase="'FAILED'" class="status-text-reject">
+                {{ healthCardDetailsForm.get('status').value }}
+              </b>
+              <b *ngSwitchCase="'INITIATED'" class="status-text-initiate">
+                {{ healthCardDetailsForm.get('status').value }}
+              </b>
+              <b *ngSwitchCase="'PENDING'" class="status-text-pending">
+                {{ healthCardDetailsForm.get('status').value }}
+              </b>
+
+              <!-- add default case icon -->
             </ng-container>
+          </p>
+          <div
+            *ngIf="
+              ['CHECKIN'].includes(detailsData.currentJourneyDetails.journey)
+            "
+          >
+            <div class="decision-button-wrapper">
+              <ng-container
+                *ngIf="
+                  ['INITIATED', 'FAILED'].includes(
+                    healthCardDetailsForm.get('status').value
+                  )
+                "
+              >
+                <button
+                  class="right"
+                  (click)="updateHealthCardStatus('ACCEPT')"
+                >
+                  <img src="assets/svg/tick.svg" />
+                </button>
+                <button
+                  class="right"
+                  (click)="updateHealthCardStatus('REJECT')"
+                >
+                  <img src="assets/svg/cross.svg" />
+                </button>
+              </ng-container>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        class="remark-wrapper"
-        *ngIf="
-          ['CHECKIN', 'CHECKOUT'].includes(
-            detailsData.currentJourneyDetails.journey
-          ) &&
-          ['INITIATED', 'COMPLETED', 'FAILED'].includes(
-            healthCardDetailsForm.get('status').value
-          )
-        "
-      >
-        <form [formGroup]="healthCardDetailsForm">
-          <div>
-            <span class="text">Remark :</span>
-            <mat-form-field
-              class="remark"
-              [style.opacity]="
-                healthCardDetailsForm.get('status').value === 'COMPLETED'
-                  ? 0.5
-                  : 1
-              "
-            >
-              <input
-                matInput
-                formControlName="remarks"
-                [readonly]="
+        <div
+          class="remark-wrapper"
+          *ngIf="
+            ['CHECKIN', 'CHECKOUT'].includes(
+              detailsData.currentJourneyDetails.journey
+            ) &&
+            ['INITIATED', 'COMPLETED', 'FAILED'].includes(
+              healthCardDetailsForm.get('status').value
+            )
+          "
+        >
+          <form [formGroup]="healthCardDetailsForm">
+            <div>
+              <span class="text">Remark :</span>
+              <mat-form-field
+                class="remark"
+                [style.opacity]="
                   healthCardDetailsForm.get('status').value === 'COMPLETED'
+                    ? 0.5
+                    : 1
                 "
-              />
-            </mat-form-field>
-          </div>
-          <div>
-            <span class="text">Temperature :</span>
-            <mat-form-field
-              class="remark"
-              [style.opacity]="
-                healthCardDetailsForm.get('status').value === 'COMPLETED'
-                  ? 0.5
-                  : 1
-              "
-            >
-              <input
-                matInput
-                formControlName="temperature"
-                placeholder="Guest1 Name - Temp, Guest2 Name - Temp"
-                [readonly]="
+              >
+                <input
+                  matInput
+                  formControlName="remarks"
+                  [readonly]="
+                    healthCardDetailsForm.get('status').value === 'COMPLETED'
+                  "
+                />
+              </mat-form-field>
+            </div>
+            <div>
+              <span class="text">Temperature :</span>
+              <mat-form-field
+                class="remark"
+                [style.opacity]="
                   healthCardDetailsForm.get('status').value === 'COMPLETED'
+                    ? 0.5
+                    : 1
                 "
-              />
-            </mat-form-field>
-          </div>
-        </form>
-      </div>
+              >
+                <input
+                  matInput
+                  formControlName="temperature"
+                  placeholder="Guest1 Name - Temp, Guest2 Name - Temp"
+                  [readonly]="
+                    healthCardDetailsForm.get('status').value === 'COMPLETED'
+                  "
+                />
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </ng-container>
     </ng-container>
   </div>
 </div>

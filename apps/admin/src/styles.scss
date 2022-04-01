@@ -207,3 +207,7 @@ body {
   background-color: white;
   max-height: 94%;
 }
+
+.mat-option.mat-active {
+  color: $dropdown-selected-value;
+}

@@ -227,7 +227,7 @@
     color: #727272;
   }
   &-phone {
-    color: #e3e3e3;
+    color: #b2b7bc;
     font-weight: normal;
     margin-top: 8px;
     overflow-x: hidden;
@@ -420,11 +420,12 @@
       font-style: normal;
       letter-spacing: 0.66px;
       text-align: center;
-      border-radius: 14px;
+      border-radius: 20px;
       background-color: #cfd9f5;
-      padding: 8px;
+      padding: 4px 10px;
       &__text {
         color: $primary-purple;
+        padding-top: 2px;
       }
     }
     &__comment {
@@ -463,12 +464,15 @@
 
 .stay-booking-feedback {
   display: flex;
-  align-items: center;
+  align-items: end;
   justify-content: center;
-  padding: 2px;
-  border-radius: 25px;
+  padding: 0px;
+  border-radius: 10px;
   position: relative;
   background-color: #0030b5;
+  width: 18px;
+  height: 18px;
+  margin: 0 3px;
   &:hover {
     cursor: pointer;
     .feedback-msg {
@@ -493,14 +497,15 @@
     margin: 0 2px;
   }
   .number {
-    padding: 4px 0;
+    padding: 5px 0;
     color: $white;
-    margin: 0 2px;
+    margin: 0 0px;
     text-align: center;
-    min-width: 23px;
+    min-width: 20px;
     border-radius: 50%;
-    font-size: $font12;
+    font-size: $font8;
   }
+  
   @media screen and (max-width: 1050px) {
     margin: 0;
     margin-top: 7px;
@@ -528,6 +533,6 @@
 }
 
 .others {
-  display: flex;
+  display: -webkit-box;
   align-items: center;
 }

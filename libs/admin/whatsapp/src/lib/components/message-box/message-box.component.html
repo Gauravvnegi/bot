@@ -21,7 +21,10 @@
   </div>
 </div>
 <ng-template #noSend>
-  <div class="whatsAppRule">
+  <div
+    class="whatsAppRule"
+    [ngStyle]="status === 'true' ? { display: 'none' } : { display: 'block' }"
+  >
     As per WhatsApp's rules, you can only respond to a user within 24 hours of
     their messages.
   </div>

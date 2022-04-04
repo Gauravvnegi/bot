@@ -198,40 +198,18 @@
       <th class="tableHeading" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <ng-container
-        *ngIf="
-          tabFilterItems[tabFilterIdx]?.value ===
-            globalFeedbackConfig.types.transactional;
-          else stayTableColumns
-        "
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns; let i = index"
+        [ngStyle]="col.dynamicWidth ? { width: '320px' } : {}"
       >
-        <th
-          class="table-data-head"
-          pResizableColumn
-          [pSortableColumn]="col.field"
-          *ngFor="let col of columns; let i = index"
-          [ngStyle]="i == 2 ? { width: '320px' } : {}"
-        >
-          <div>
-            <p class="table-header-text">{{ col.header }}</p>
-            <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-      </ng-container>
-      <ng-template #stayTableColumns>
-        <th
-          class="table-data-head"
-          pResizableColumn
-          [pSortableColumn]="col.field"
-          *ngFor="let col of columns; let i = index"
-          [ngStyle]="i == 1 ? { width: '320px' } : {}"
-        >
-          <div>
-            <p class="table-header-text">{{ col.header }}</p>
-            <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-      </ng-template>
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
     </tr>
 
     <ng-container
@@ -538,41 +516,43 @@
                 </ng-container>
               </div>
               <ng-template #noNegativeFeedback>
-                <div class="feedback-service__container">
-                  <div class="feedback-service__container__label others">
-                    <div class="feedback-service__container__label__text">
-                      Overall
+                <div class="feedback-service">
+                  <div class="feedback-service__container">
+                    <div class="feedback-service__container__label others">
+                      <div class="feedback-service__container__label__text">
+                        Overall
+                      </div>
+                      <div class="stay-booking-feedback">
+                        <p class="number">
+                          +{{ rowData.services.services.length }}
+                        </p>
+                      </div>
                     </div>
-                    <div class="stay-booking-feedback">
-                      <p class="number">
-                        +{{ rowData.services.services.length }}
+                    <div
+                      class="stay-booking-feedback"
+                      [ngClass]="{
+                        'status-opacity-reject':
+                          rowData.services.rating.value < 5,
+                        'status-opacity-success':
+                          rowData.services.rating.value >= 5
+                      }"
+                    >
+                      <p
+                        class="number"
+                        [ngClass]="{
+                          'status-background-reject':
+                            rowData.services.rating.value < 5,
+                          'status-background-moderate':
+                            rowData.services.rating.value >= 5 &&
+                            rowData.services.rating.value < 9,
+                          'status-background-success':
+                            rowData.services.rating.value > 8
+                        }"
+                        *ngIf="rowData.services.rating.value"
+                      >
+                        {{ rowData.services.rating.value }}
                       </p>
                     </div>
-                  </div>
-                  <div
-                    class="stay-booking-feedback"
-                    [ngClass]="{
-                      'status-opacity-reject':
-                        rowData.services.rating.value < 5,
-                      'status-opacity-success':
-                        rowData.services.rating.value >= 5
-                    }"
-                  >
-                    <p
-                      class="number"
-                      [ngClass]="{
-                        'status-background-reject':
-                          rowData.services.rating.value < 5,
-                        'status-background-moderate':
-                          rowData.services.rating.value >= 5 &&
-                          rowData.services.rating.value < 9,
-                        'status-background-success':
-                          rowData.services.rating.value > 8
-                      }"
-                      *ngIf="rowData.services.rating.value"
-                    >
-                      {{ rowData.services.rating.value }}
-                    </p>
                   </div>
                 </div>
               </ng-template>
@@ -743,34 +723,36 @@
                 </ng-container>
               </div>
               <ng-template #noNegativeFeedback>
-                <div class="feedback-service__container">
-                  <div class="feedback-service__container__label others">
-                    <div class="feedback-service__container__label__text">
-                      Overall
+                <div class="feedback-service">
+                  <div class="feedback-service__container">
+                    <div class="feedback-service__container__label others">
+                      <div class="feedback-service__container__label__text">
+                        Overall
+                      </div>
+                      <div class="stay-booking-feedback">
+                        <p class="number">
+                          +{{ rowData.getSortedServices().length }}
+                        </p>
+                      </div>
                     </div>
-                    <div class="stay-booking-feedback">
-                      <p class="number">
-                        +{{ rowData.getSortedServices().length }}
+                    <div
+                      class="stay-booking-feedback"
+                      [ngClass]="{
+                        'status-opacity-reject': rowData.ratings < 5,
+                        'status-opacity-success': rowData.ratings >= 5
+                      }"
+                    >
+                      <p
+                        class="number"
+                        [ngClass]="{
+                          'status-background-reject': rowData.ratings < 5,
+                          'status-background-success': rowData.ratings >= 5
+                        }"
+                        *ngIf="rowData.ratings"
+                      >
+                        {{ rowData.ratings }}
                       </p>
                     </div>
-                  </div>
-                  <div
-                    class="stay-booking-feedback"
-                    [ngClass]="{
-                      'status-opacity-reject': rowData.ratings < 5,
-                      'status-opacity-success': rowData.ratings >= 5
-                    }"
-                  >
-                    <p
-                      class="number"
-                      [ngClass]="{
-                        'status-background-reject': rowData.ratings < 5,
-                        'status-background-success': rowData.ratings >= 5
-                      }"
-                      *ngIf="rowData.ratings"
-                    >
-                      {{ rowData.ratings }}
-                    </p>
                   </div>
                 </div>
               </ng-template>

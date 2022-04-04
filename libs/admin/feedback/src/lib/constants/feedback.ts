@@ -200,7 +200,7 @@ export const feedback = {
         value: 'HIGHPOTENTIAL',
         total: 0,
         isSelected: false,
-        type: 'initiated',
+        type: 'failed',
       },
       {
         label: 'High Risk ',
@@ -208,7 +208,7 @@ export const feedback = {
         value: 'HIGHRISK',
         total: 0,
         isSelected: false,
-        type: 'initiated',
+        type: 'completed',
       },
       {
         label: 'Open ',
@@ -216,7 +216,7 @@ export const feedback = {
         value: 'OPEN',
         total: 0,
         isSelected: false,
-        type: 'initiated',
+        type: 'pending',
       },
       {
         label: 'Unread ',
@@ -224,7 +224,7 @@ export const feedback = {
         value: 'UNREAD',
         total: 0,
         isSelected: false,
-        type: 'initiated',
+        type: 'failed',
       },
       {
         label: 'In-Progress ',
@@ -240,7 +240,7 @@ export const feedback = {
         value: 'CLOSED',
         total: 0,
         isSelected: false,
-        type: 'initiated',
+        type: 'completed',
       },
     ],
   },
@@ -283,6 +283,7 @@ export const feedback = {
           isSort: false,
           sortType: 'string',
         },
+        {field: 'stageAndourney', header: 'Actions'},
         { field: 'actions', header: 'Actions' },
       ],
       stay: [
@@ -383,7 +384,7 @@ export const feedback = {
               value: 'HIGHPOTENTIAL',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'High Risk ',
@@ -391,7 +392,7 @@ export const feedback = {
               value: 'HIGHRISK',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
             {
               label: 'Open ',
@@ -399,7 +400,7 @@ export const feedback = {
               value: 'OPEN',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'pending',
             },
             {
               label: 'Unread ',
@@ -407,7 +408,7 @@ export const feedback = {
               value: 'UNREAD',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'In-Progress ',
@@ -423,7 +424,7 @@ export const feedback = {
               value: 'CLOSED',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
           ],
           lastPage: 0,
@@ -450,7 +451,7 @@ export const feedback = {
               value: 'HIGHPOTENTIAL',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'High Risk ',
@@ -458,7 +459,7 @@ export const feedback = {
               value: 'HIGHRISK',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
             {
               label: 'Open ',
@@ -466,7 +467,7 @@ export const feedback = {
               value: 'OPEN',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'pending',
             },
             {
               label: 'Unread ',
@@ -474,7 +475,7 @@ export const feedback = {
               value: 'UNREAD',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'In-Progress ',
@@ -490,7 +491,7 @@ export const feedback = {
               value: 'CLOSED',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
           ],
           lastPage: 0,
@@ -517,7 +518,7 @@ export const feedback = {
               value: 'HIGHPOTENTIAL',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'High Risk ',
@@ -525,7 +526,7 @@ export const feedback = {
               value: 'HIGHRISK',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
             {
               label: 'Open ',
@@ -533,7 +534,7 @@ export const feedback = {
               value: 'OPEN',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'pending',
             },
             {
               label: 'Unread ',
@@ -541,7 +542,7 @@ export const feedback = {
               value: 'UNREAD',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'In-Progress ',
@@ -557,7 +558,7 @@ export const feedback = {
               value: 'CLOSED',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
           ],
           lastPage: 0,
@@ -582,7 +583,7 @@ export const feedback = {
               value: 'HIGHPOTENTIAL',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'High Risk ',
@@ -590,7 +591,7 @@ export const feedback = {
               value: 'HIGHRISK',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
             {
               label: 'Open ',
@@ -598,7 +599,7 @@ export const feedback = {
               value: 'OPEN',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'pending',
             },
             {
               label: 'Unread ',
@@ -606,7 +607,7 @@ export const feedback = {
               value: 'UNREAD',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'failed',
             },
             {
               label: 'In-Progress ',
@@ -622,7 +623,7 @@ export const feedback = {
               value: 'CLOSED',
               total: 0,
               isSelected: false,
-              type: 'initiated',
+              type: 'completed',
             },
           ],
           lastPage: 0,

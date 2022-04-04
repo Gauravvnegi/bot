@@ -70,15 +70,21 @@
           </div>
         </div>
       </div>
-      <div class="feilds-wrapper">
+      <div class="feilds-wrapper" *ngIf="rowData.comment">
         <div class="feild">
           <mat-label class="label">Comments</mat-label>
           <div class="question">
             {{ rowData.comment?.question }}
           </div>
-          <div class="answer">{{ rowData.comment?.answer }}</div>
+          <div class="answer" *ngIf="rowData.comment?.answer; else emptyCell">
+            {{ rowData.comment?.answer }}
+          </div>
         </div>
       </div>
     </div>
   </mat-expansion-panel>
 </mat-accordion>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">--</div>
+</ng-template>

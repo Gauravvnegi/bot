@@ -226,18 +226,39 @@
           <th class="tableHeading" pResizableColumn>
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th
-            class="table-data-head"
-            pResizableColumn
-            [pSortableColumn]="col.field"
-            *ngFor="let col of columns; let i = index"
-            [ngStyle]="i == 1 ? { width: '320px' } : {}"
+          <ng-container
+            *ngIf="
+              feedbackType === globalFeedbackConfig.types.transactional;
+              else stayTableColumns
+            "
           >
-            <div>
-              <p class="table-header-text">{{ col.header }}</p>
-              <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-            </div>
-          </th>
+            <th
+              class="table-data-head"
+              pResizableColumn
+              [pSortableColumn]="col.field"
+              *ngFor="let col of columns; let i = index"
+              [ngStyle]="i == 2 ? { width: '320px' } : {}"
+            >
+              <div>
+                <p class="table-header-text">{{ col.header }}</p>
+                <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+              </div>
+            </th>
+          </ng-container>
+          <ng-template #stayTableColumns>
+            <th
+              class="table-data-head"
+              pResizableColumn
+              [pSortableColumn]="col.field"
+              *ngFor="let col of columns; let i = index"
+              [ngStyle]="i == 1 ? { width: '320px' } : {}"
+            >
+              <div>
+                <p class="table-header-text">{{ col.header }}</p>
+                <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+              </div>
+            </th>
+          </ng-template>
         </tr>
         <ng-container
           *ngIf="

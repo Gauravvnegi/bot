@@ -262,7 +262,7 @@ export const feedback = {
         {
           field: 'getServiceTypeAndTime()',
           header: 'Service/ Feedback',
-          isSort: true,
+          isSort: false,
           sortType: 'string',
         },
         {

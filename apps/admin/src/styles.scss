@@ -74,30 +74,30 @@ body {
 // text-color
 
 .status-opacity-new {
-  background-color: transparent;
+  background-color: transparent !important;
   opacity: 0.4;
 }
 
 .status-text-new {
-  color: #3e8ef7;
+  color: #3e8ef7 !important;
 }
 
 .status-selected-new {
-  background-color: rgba(62, 142, 247, 1);
+  background-color: rgba(62, 142, 247, 1) !important;
   color: $white;
   opacity: 1;
 }
 
 .status-text-pending {
-  color: $pending;
+  color: $pending !important;
 }
 
 .status-text-initiated {
-  color: $initiated;
+  color: $initiated !important;
 }
 
 .status-text-reject {
-  color: $reject;
+  color: $reject !important;
 }
 
 .status-text-success {
@@ -105,22 +105,22 @@ body {
 }
 
 .status-opacity-pending {
-  background-color: transparent;
+  background-color: transparent !important;
   opacity: 0.4;
 }
 
 .status-opacity-initiated {
-  background-color: transparent;
+  background-color: transparent !important;
   opacity: 0.4;
 }
 
 .status-opacity-reject {
-  background-color: transparent;
+  background-color: transparent !important;
   opacity: 0.4;
 }
 
 .status-opacity-success {
-  background-color: transparent;
+  background-color: transparent !important;
   opacity: 0.4;
 }
 
@@ -145,11 +145,11 @@ body {
 }
 
 .danger {
-  background-color: $reject;
+  background-color: $reject !important;
 }
 
 .success {
-  background-color: $completed;
+  background-color: $completed !important;
   color: $white;
 }
 

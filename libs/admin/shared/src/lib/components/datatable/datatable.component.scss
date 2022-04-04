@@ -485,7 +485,7 @@ th {
 }
 
 :host ::ng-deep .chipSelected {
-  color: white;
+  color: white !important;
   font-weight: 400;
 }
 
@@ -501,20 +501,20 @@ th {
 }
 
 :host ::ng-deep .status-selected-pending {
-  background-color: $pending;
+  background-color: $pending !important;
   opacity: 1;
 }
 :host ::ng-deep .status-selected-initiated {
-  background-color: $initiated;
+  background-color: $initiated !important;
   opacity: 1;
 }
 :host ::ng-deep .status-selected-completed {
-  background-color: $completed;
+  background-color: $completed !important;
   opacity: 1;
 }
 
 :host ::ng-deep .status-selected-reject {
-  background-color: $reject;
+  background-color: $reject !important;
   opacity: 1;
 }
 

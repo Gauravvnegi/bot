@@ -508,7 +508,7 @@
 
 .tab-buttons {
   width: 18%;
-  padding: $padding20;
+  padding: $padding4;
   position: absolute;
   top: 52px;
   right: 0;
@@ -528,13 +528,13 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 49vh;
+    height: 35vh;
     .button {
       border: 1px solid $primary-purple;
       font-size: $font12;
       outline: none;
       padding: 10px 5px;
-      margin: 8px 0;
+      margin: 5px 0;
       background-color: transparent;
       width: 100%;
       color: $primary-purple;

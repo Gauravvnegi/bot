@@ -44,6 +44,7 @@
             <div class="caption__wrapper--tabmenu">
               <div class="header">
                 <!-- <div class="header--text"> -->
+                <img src="assets/svg/surveyor.svg" alt="" /> &nbsp;
                 <p class="heading">
                   {{ tableName }}
                 </p>
@@ -229,7 +230,8 @@
             class="table-data-head"
             pResizableColumn
             [pSortableColumn]="col.field"
-            *ngFor="let col of columns"
+            *ngFor="let col of columns; let i = index"
+            [ngStyle]="i == 1 ? { width: '320px' } : {}"
           >
             <div>
               <p class="table-header-text">{{ col.header }}</p>
@@ -237,7 +239,6 @@
             </div>
           </th>
         </tr>
-
         <ng-container
           *ngIf="
             feedbackType === globalFeedbackConfig.types.transactional;
@@ -285,6 +286,15 @@
                   onFilterTypeTextChange($event.target.value, 'guest.place')
                 "
                 class="p-column-filter"
+              />
+            </th>
+            <th class="table-search-head">
+              <input
+                pInputText
+                type="text"
+                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+                class="p-column-filter"
+                disabled="true"
               />
             </th>
             <th class="table-search-head">
@@ -398,8 +408,7 @@
       >
         <ng-container
           *ngIf="
-            tabFilterItems[tabFilterIdx]?.value ===
-              globalFeedbackConfig.types.transactional;
+            feedbackType === globalFeedbackConfig.types.transactional;
             else stayTable
           "
         >
@@ -481,11 +490,11 @@
                           </div>
                         </div>
                         <!-- <div
-                    class="service-list-popup"
-                    *ngIf="rowData.services.getServiceComment(service.label)"
-                  >
-                    {{ rowData.getServiceComment(service.label) }}
-                  </div> -->
+                      class="service-list-popup"
+                      *ngIf="rowData.services.getServiceComment(service.label)"
+                    >
+                      {{ rowData.getServiceComment(service.label) }}
+                    </div> -->
                         <div
                           class="stay-booking-feedback"
                           [ngClass]="{

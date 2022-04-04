@@ -391,24 +391,36 @@
   }
 }
 
-:host ::ng-deep .status-text-reject{
-  color:$completed1;
+:host ::ng-deep .status-text-reject {
+  color: $completed1;
 }
- 
- :host ::ng-deep .status-text-reject.chipSelected{background-color:$completed1; color: white;}
 
- :host ::ng-deep .status-text-success {
-    color: $reject;
+:host ::ng-deep .status-text-reject.chipSelected {
+  background-color: $completed1;
+  color: white;
 }
-:host ::ng-deep .status-text-success.chipSelected{background-color:$reject; color: white;}
-:host ::ng-deep .status-text-pending {color: $auth-color;}
-:host ::ng-deep .status-text-pending.chipSelected{background-color: $auth-color;color: white;}
-:host ::ng-deep .status-text-initiated {color:$warning1;}
-:host ::ng-deep .status-text-initiated.chipSelected{background-color: $warning1;color: white;}
 
-
-
-
+:host ::ng-deep .status-text-success {
+  color: $reject;
+}
+:host ::ng-deep .status-text-success.chipSelected {
+  background-color: $reject;
+  color: white;
+}
+:host ::ng-deep .status-text-pending {
+  color: $auth-color;
+}
+:host ::ng-deep .status-text-pending.chipSelected {
+  background-color: $auth-color;
+  color: white;
+}
+:host ::ng-deep .status-text-initiated {
+  color: $warning1;
+}
+:host ::ng-deep .status-text-initiated.chipSelected {
+  background-color: $warning1;
+  color: white;
+}
 
 .feedback {
   display: flex;
@@ -489,7 +501,7 @@
   border-radius: 10px;
   position: relative;
   background-color: #0030b5;
-  width: 18px;
+  min-width: 18px;
   height: 18px;
   margin: 0 3px;
   &:hover {
@@ -524,7 +536,7 @@
     border-radius: 50%;
     font-size: $font8;
   }
-  
+
   @media screen and (max-width: 1050px) {
     margin: 0;
     margin-top: 7px;

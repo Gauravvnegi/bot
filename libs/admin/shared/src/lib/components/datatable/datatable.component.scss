@@ -473,6 +473,7 @@ th {
   display: inline-block;
   text-align: center;
   font-weight: 400;
+  background-color: white;
   &:hover {
     cursor: pointer;
   }
@@ -484,7 +485,7 @@ th {
 }
 
 :host ::ng-deep .chipSelected {
-  color: white !important;
+  color: white;
   font-weight: 400;
 }
 
@@ -500,20 +501,20 @@ th {
 }
 
 :host ::ng-deep .status-selected-pending {
-  background-color: $pending !important;
+  background-color: $pending;
   opacity: 1;
 }
 :host ::ng-deep .status-selected-initiated {
-  background-color: $initiated !important;
+  background-color: $initiated;
   opacity: 1;
 }
 :host ::ng-deep .status-selected-completed {
-  background-color: $completed !important;
+  background-color: $completed;
   opacity: 1;
 }
 
 :host ::ng-deep .status-selected-reject {
-  background-color: $reject !important;
+  background-color: $reject;
   opacity: 1;
 }
 

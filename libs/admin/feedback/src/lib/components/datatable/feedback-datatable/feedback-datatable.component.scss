@@ -391,6 +391,25 @@
   }
 }
 
+:host ::ng-deep .status-text-reject{
+  color:$completed1;
+}
+ 
+ :host ::ng-deep .status-text-reject.chipSelected{background-color:$completed1; color: white;}
+
+ :host ::ng-deep .status-text-success {
+    color: $reject;
+}
+:host ::ng-deep .status-text-success.chipSelected{background-color:$reject; color: white;}
+:host ::ng-deep .status-text-pending {color: $auth-color;}
+:host ::ng-deep .status-text-pending.chipSelected{background-color: $auth-color;color: white;}
+:host ::ng-deep .status-text-initiated {color:$warning1;}
+:host ::ng-deep .status-text-initiated.chipSelected{background-color: $warning1;color: white;}
+
+
+
+
+
 .feedback {
   display: flex;
   align-items: center;

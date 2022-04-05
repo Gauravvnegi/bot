@@ -122,3 +122,7 @@ td {
   background: #119e0c !important;
   color: #fff !important;
 }
+:host ::ng-deep .requestDataActionLabel{
+  margin-left: 0.5em;
+  font-weight: 500;
+}

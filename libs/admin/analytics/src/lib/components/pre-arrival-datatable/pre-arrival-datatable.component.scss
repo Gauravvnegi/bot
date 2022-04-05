@@ -133,6 +133,9 @@ color: $white !important;
     background-color: $timeout !important;
     color: $white !important;
 }
-
+:host ::ng-deep .requestDataActionLabel{
+  margin-left: 0.5em;
+  font-weight: 500;
+}
 
 

@@ -69,9 +69,11 @@
 }
 
 .data-seperator {
-  border: 2px solid #4b56c0;
+  // border: 2px solid #4b56c0;
   margin: $margin20 0px;
   opacity: 0.1;
+  background:#4b56c0 ;
+  margin: 0 -30px -20px;
 }
 
 :host ::ng-deep .mat-head {
@@ -192,3 +194,49 @@
 ::ng-deep .d-flex {
   display: flex;
 }
+
+.visit-details{
+  width: 160px;
+  height: 33px;
+  margin: 0 94px 0 60px;
+  padding: 0px 0px 0px 10px;
+  border-radius: 6px;
+  border: solid 1px #4b56c0;
+  background-color: #ecf1f7;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  .view-feedback{
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.66px;
+    text-align: right;
+    color: #4b56c0;
+    border-right: solid 2px #4b56c0;
+    padding-right: 10px;
+    padding-top: 4px;
+    height: 20px;
+     img{
+      width: 18px !important;
+      margin-right: 3px;
+    }
+  }
+  img{
+    padding-left: 2px;
+    margin-left: 3px;
+  }
+}
+
+.mat-expansion-panel{
+  box-shadow: none !important;
+  border: solid 1px $light-grey;
+
+}
+
+
+
+

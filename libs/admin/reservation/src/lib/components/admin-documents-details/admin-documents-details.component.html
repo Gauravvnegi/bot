@@ -31,7 +31,8 @@
         *ngIf="selectedGuestGroup"
         (click)="downloadDocs(selectedGuestGroup.get('documents').value)"
       >
-        Download
+      <img src="assets/svg/d_document.svg" alt=""> &nbsp;
+      <p>Download All Docs</p> 
       </div>
     </div>
     <ng-container *ngIf="selectedGuestGroup">

@@ -11,9 +11,7 @@
   border-bottom: 0 !important;
   text-align: center;
 }
-.rowsData {
-  color: $primary-purple;
-}
+
 
 .icon-wrapper {
   @include flex-space-between();
@@ -209,3 +207,8 @@
 :host ::ng-deep .mat-tab-label {
   min-width: 190px !important;
 }
+
+.rowData {
+  color: $primary-purple !important;
+}
+

@@ -23,12 +23,18 @@
       margin-right: $margin20;
       font-weight: $bolder;
     }
+  
   }
 
   .go-to {
     color: $primary-gray;
     font-size: $font16;
     font-weight: $bolder;
+  }
+  .go-requests{
+    font-size: 12px;
+    color: #9eaeb8;
+    cursor: pointer;
   }
 }
 

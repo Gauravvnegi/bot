@@ -8,7 +8,14 @@ export const tabFilterItems = {
       total: 0,
       chips: [
         { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-        { label: 'New', icon: '', value: 'NEW', total: 0, isSelected: false },
+        {
+          label: 'New',
+          icon: '',
+          value: 'NEW',
+          total: 0,
+          isSelected: false,
+          type: 'new',
+        },
         {
           label: 'Precheckin_Pending ',
           icon: '',

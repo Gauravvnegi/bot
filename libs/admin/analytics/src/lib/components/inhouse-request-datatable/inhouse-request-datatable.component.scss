@@ -126,3 +126,7 @@ td {
   margin-left: 0.5em;
   font-weight: 500;
 }
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: rgb(75, 86, 192) !important;
+}

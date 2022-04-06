@@ -53,7 +53,7 @@
 
 :host ::ng-deep .arrival-time {
   font-size: $font12;
-  color: #b2b7bc;
+  color: $arrival-time;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -221,13 +221,13 @@
 }
 
 .guest {
-  color: #727272;
+  color: $dark-grey;
   font-weight: 500;
   &-name {
-    color: #727272;
+    color: $dark-grey;
   }
   &-phone {
-    color: #b2b7bc;
+    color: $arrival-time;
     font-weight: normal;
     margin-top: 8px;
     overflow-x: hidden;
@@ -244,7 +244,7 @@
       margin: 0;
     }
     .amount {
-      color: #727272;
+      color: $dark-grey;
     }
   }
   &-amount-wrapper {
@@ -252,7 +252,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     &-amount {
-      color: #b2b7bc;
+      color: $arrival-time;
       font-size: 12px;
       font-weight: normal;
     }
@@ -261,17 +261,17 @@
 
 .package {
   &-date {
-    color: #727272;
+    color: $dark-grey;
     font-size: 12px;
   }
   &-city {
-    color: #b2b7bc;
+    color: $arrival-time;
     font-size: 12px;
     margin-top: 8px;
   }
 }
 .comments {
-  color: #727272;
+  color: $dark-grey;
   font-size: 12px;
   text-align: left;
 }
@@ -452,7 +452,7 @@
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 20px;
-      background-color: #cfd9f5;
+      background-color: $list-popup;
       padding: 4px 10px;
       &__text {
         color: $primary-purple;
@@ -468,7 +468,7 @@
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 14px;
-      background-color: #cfd9f5;
+      background-color: $list-popup;
       padding: 3px;
     }
     &__extra {
@@ -500,7 +500,7 @@
   padding: 0px;
   border-radius: 10px;
   position: relative;
-  background-color: #0030b5;
+  background-color: $booking-feedback;
   min-width: 18px;
   height: 18px;
   margin: 0 3px;
@@ -566,4 +566,8 @@
 .others {
   display: -webkit-box;
   align-items: center;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: $primary-purple !important;
 }

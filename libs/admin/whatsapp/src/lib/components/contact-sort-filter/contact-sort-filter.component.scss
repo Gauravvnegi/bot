@@ -1,7 +1,9 @@
+@import 'main';
+
 .sortFilt {
   height: 62px;
   padding: 10px 15px;
-  border-bottom: 1px solid #9eaeb8;
+  border-bottom: 1px solid $primary-gray;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,7 +21,7 @@
         font-style: normal;
         line-height: normal;
         letter-spacing: 0.56px;
-        color: #9eaeb8;
+        color: $primary-gray;
         margin-right: 5px;
       }
     }
@@ -28,7 +30,7 @@
 .cross {
   font-size: 22px;
   cursor: pointer;
-  color: #9eaeb8;
+  color: $primary-gray;
 }
 
 .sortFilterWrapper {
@@ -37,7 +39,7 @@
   .sortFilterContainer {
     height: calc(100% - 62px);
     width: 100%;
-    border-bottom: 1px solid #9eaeb8;
+    border-bottom: 1px solid $primary-gray;
     padding: 15px;
     .sortBy {
       font: normal normal bold 10px/13px Roboto;
@@ -60,7 +62,7 @@
         .sortItem {
           font: normal normal normal 14px/19px Roboto;
           letter-spacing: 0.84px;
-          color: #002046;
+          color: $dark-blue;
         }
       }
     }
@@ -87,7 +89,7 @@
     .filterItem {
       font: normal normal normal 14px/19px Roboto;
       letter-spacing: 0.84px;
-      color: #002046;
+      color: $dark-blue;
       opacity: 1;
     }
   }
@@ -111,10 +113,10 @@
 
 .division {
   height: 20px;
-  border: 1px solid #9eaeb8;
+  border: 1px solid $primary-gray;
   margin: 0 10px;
 }
 
 .material-icon {
-  color: #9eaeb8;
+  color: $primary-gray;
 }

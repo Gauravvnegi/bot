@@ -97,12 +97,12 @@
 }
 
 .status-text-bot {
-  color: #745af2 !important;
+  color: $text-bot !important;
 }
 
 .status-selected-bot {
-  background-color: #745af2 !important;
-  color: #ffffff !important;
+  background-color: $text-bot !important;
+  color: $white !important;
   opacity: 1;
 }
 
@@ -112,12 +112,12 @@
 }
 
 .status-text-micro {
-  color: #3e8ef7 !important;
+  color: $light-blue !important;
 }
 
 .status-selected-micro {
-  background-color: #3e8ef7 !important;
-  color: #ffffff !important;
+  background-color: $light-blue !important;
+  color: $white !important;
   opacity: 1;
 }
 
@@ -127,12 +127,12 @@
 }
 
 .status-text-others {
-  color: #0bb2d4 !important;
+  color: $timeout !important;
 }
 
 .status-selected-others {
-  background-color: #0bb2d4 !important;
-  color: #ffffff !important;
+  background-color: $timeout !important;
+  color: $white !important;
   opacity: 1;
 }
 
@@ -142,12 +142,12 @@
 }
 
 .status-text-email {
-  color: #faa700 !important;
+  color: $text-email !important;
 }
 
 .status-selected-email {
-  background-color: #faa700 !important;
-  color: #ffffff !important;
+  background-color: $text-email !important;
+  color: $white !important;
   opacity: 1;
 }
 
@@ -157,11 +157,14 @@
 }
 
 .status-text-whatsapp {
-  color: #389f99 !important;
+  color: $accepted !important;
 }
 
 .status-selected-whatsapp {
-  background-color: #389f99 !important;
-  color: #ffffff !important;
+  background-color: $accepted !important;
+  color: $white !important;
   opacity: 1;
 }
+
+
+

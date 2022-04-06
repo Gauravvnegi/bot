@@ -44,7 +44,7 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: normal;
-  color: #b4b4b4;
+  color: $c-gray-72;
   align-self: flex-start;
 }
 
@@ -87,7 +87,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: #002046;
+      color: $dark-blue;
       display: flex;
       align-items: center;
     }
@@ -150,10 +150,14 @@
     }
     .value {
       font-weight: bold;
-      color: #002046;
+      color: $dark-blue;
     }
   }
 }
 .legends:checked ~ span {
   text-decoration: line-through;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: $primary-purple !important;
 }

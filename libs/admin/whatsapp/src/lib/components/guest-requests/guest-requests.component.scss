@@ -40,20 +40,20 @@
         margin-top: 10px;
         font-weight: 500;
         letter-spacing: 0.72px;
-        color: #002046;
+        color: $dark-blue;
       }
       .gsb-row {
         margin-top: 5px;
         line-height: 1.17;
         letter-spacing: 0.72px;
-        color: #b2b7bc;
+        color: $arrival-time;
       }
       .date-time-row {
         display: flex;
         margin-top: 10px;
         line-height: normal;
         letter-spacing: 0.72px;
-        color: #002046;
+        color: $dark-blue;
         &-img {
           width: 13px;
           height: 13px;
@@ -78,7 +78,7 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: 0.72px;
-    color: #727272;
+    color: $dark-grey;
     margin-top: 15px;
   }
   &-underline {

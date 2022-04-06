@@ -160,10 +160,14 @@
         letter-spacing: 0.84px;
         color: $light-grey2;
         opacity: 1;
-
+        &_messages {
+          font-weight: 600;
+          color: $dark-blue;
+        }
         span {
           color: $dark-blue;
         }
+        
       }
     }
   }

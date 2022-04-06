@@ -33,6 +33,9 @@
         letter-spacing: 0.56px;
         color: #9eaeb8;
         margin-right: 5px;
+        &:hover{
+          color:$primary-purple;
+        }
       }
     }
   }
@@ -41,6 +44,9 @@
   font-size: 22px;
   cursor: pointer;
   color: #9eaeb8;
+  &:hover{
+    color: $primary-purple;
+  }
 }
 .sortFilterWrapper {
   height: 100%;
@@ -135,6 +141,9 @@
 
 .material-icon {
   color: #9eaeb8;
+  &:hover{
+    color: $primary-purple;
+  }
 }
 
 ::ng-deep

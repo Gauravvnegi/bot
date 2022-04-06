@@ -47,18 +47,19 @@
         top: 30%;
         left: 40%;
         text-align: center;
-        color: $dark-blue;
         .val {
           font: normal normal bold 25px/30px Roboto;
           letter-spacing: 1.5px;
-          color: $dark-blue;
+          color: $note1;
           opacity: 1;
+        color: $dark-blue;
+
         }
         .label {
           font: normal normal bold 10px/14px Roboto;
           letter-spacing: 0.72px;
           opacity: 1;
-          color: #8995a3;
+          color:$note1;
           max-width: 80px;
           text-align: center;
           font-size: 12px;
@@ -155,3 +156,9 @@
 .comparison-positive {
   color: $comparison-positive;
 }
+// :host ::ng-deep .val {
+//   color: $dark-blue !important;
+// }
+// :host ::ng-deep .label {
+//   color:$note1 !important;
+// }

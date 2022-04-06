@@ -198,10 +198,18 @@ svg text.label {
 }
 :host ::ng-deep .labels {
   position: absolute;
-  top:34%;
-  right:67%;
-  font: normal normal bold 12px/14px Roboto;
+    top: 25%;
+    right: 71%;
+    color:$note1;
+    width: 30px;
+    font: normal normal bold 11px/12px Roboto;
+  
 }
 :host ::ng-deep .labels .val {
-  text-align: center;
+    text-align: center;
+    color:$dark-blue;
+    font: normal normal bold 21px/24px Roboto;
+
 }
+
+

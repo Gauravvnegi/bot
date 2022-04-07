@@ -30,14 +30,6 @@ const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'package',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/packages').then(
-            (m) => m.AdminPackagesModule
-          ),
-        canActivate: [LoadGuard],
-      },
-      {
         path: 'covid',
         loadChildren: () =>
           import('@hospitality-bot/admin/covid').then(
@@ -81,6 +73,13 @@ const appRoutes: Route[] = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
         canActivate: [LoadGuard],
+      },
+      {
+        path: 'library',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/library').then(
+            (m) => m.AdminLibraryModule
+          ),
       },
     ],
   },

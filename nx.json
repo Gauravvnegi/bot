@@ -116,6 +116,12 @@
     },
     "admin-stay-feedback": {
       "tags": []
+    },
+    "admin-listing": {
+      "tags": []
+    },
+    "admin-library": {
+      "tags": []
     }
   }
 }

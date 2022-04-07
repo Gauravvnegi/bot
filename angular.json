@@ -1328,6 +1328,70 @@
           "style": "scss"
         }
       }
+    },
+    "admin-listing": {
+      "projectType": "library",
+      "root": "libs/admin/listing",
+      "sourceRoot": "libs/admin/listing/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/listing/tsconfig.lib.json",
+              "libs/admin/listing/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/listing/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/listing/jest.config.js",
+            "tsConfig": "libs/admin/listing/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/listing/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-library": {
+      "projectType": "library",
+      "root": "libs/admin/library",
+      "sourceRoot": "libs/admin/library/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/library/tsconfig.lib.json",
+              "libs/admin/library/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/library/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/library/jest.config.js",
+            "tsConfig": "libs/admin/library/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/library/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

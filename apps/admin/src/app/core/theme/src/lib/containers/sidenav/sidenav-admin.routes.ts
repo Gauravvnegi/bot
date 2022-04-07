@@ -18,12 +18,6 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/feedback-tab.svg',
   },
   {
-    path: 'package',
-    title: 'Packages',
-    children: null,
-    url: 'assets/svg/box.svg',
-  },
-  {
     path: 'covid',
     title: 'Covid-19',
     children: null,
@@ -55,6 +49,25 @@ export const ADMIN_ROUTES = [
 ];
 
 export const DEFAULT_ROUTES = [
+  {
+    path: 'library',
+    title: 'Library',
+    url: 'assets/svg/messenger.svg',
+    children: [
+      {
+        path: 'library/package',
+        title: 'Packages',
+        children: null,
+        url: 'assets/svg/box.svg',
+      },
+      {
+        path: 'library/listing',
+        title: 'Listing',
+        children: null,
+        url: 'assets/svg/box.svg',
+      },
+    ],
+  },
   {
     path: 'subscription',
     title: 'Subscription',

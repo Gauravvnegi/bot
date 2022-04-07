@@ -266,10 +266,12 @@
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  font: normal normal normal 18px/24px Roboto;
+  font: normal normal normal 16px/24px Roboto;
   letter-spacing: 1.08px;
   color: $button-blue;
   opacity: 1;
+  font-weight: 600;
+
 }
 
 .comparison-negative {

@@ -693,6 +693,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
 
     detailCompRef.componentInstance.guestId = rowData.guest.id;
+    detailCompRef.componentInstance.feedbackId = rowData.id;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

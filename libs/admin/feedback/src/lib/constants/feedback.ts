@@ -270,7 +270,7 @@ export const feedback = {
         },
         {
           field: `getCreatedDate()`,
-          header: 'Date/Time /Guests',
+          header: 'Date/Time',
           isSort: true,
           sortType: 'date',
           dynamicWidth: false,

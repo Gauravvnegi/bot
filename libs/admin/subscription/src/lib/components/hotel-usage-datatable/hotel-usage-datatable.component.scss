@@ -1,3 +1,5 @@
+@import 'main';
+
 .hotelUsageActionLabel {
   vertical-align: middle;
   margin-left: 0.5em;
@@ -34,4 +36,14 @@
   padding-right: 14px !important;
   border-top: none !important;
   background: #eaf0f6 !important;
+}
+
+:host ::ng-deep .heading{
+  color: $dark-blue;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+:host ::ng-deep .table_header_text{
+  color: $dark-blue;
 }

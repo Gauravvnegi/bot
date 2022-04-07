@@ -110,3 +110,10 @@
 :host ::ng-deep .mat-tab-header {
   border-bottom: 1px solid $tab-bottom-border;
 }
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: $primary-purple !important;
+}
+
+
+

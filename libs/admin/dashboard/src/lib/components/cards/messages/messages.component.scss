@@ -39,7 +39,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: $c-black;
+      color: $dark-blue;
     }
     &-channel {
       width: 150px;
@@ -86,11 +86,15 @@
         }
         .today {
           margin-bottom: 5px;
+          font-size: 12px;
+          color: $dark-blue;
         }
         .yesterday {
           display: flex;
           align-items: center;
           margin-bottom: 5px;
+          font-size: 12px;
+          color: $dark-blue;
         }
         .then-yesterdeay {
           display: flex;

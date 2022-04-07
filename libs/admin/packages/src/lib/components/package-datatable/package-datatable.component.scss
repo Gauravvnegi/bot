@@ -58,7 +58,7 @@
     }
     .text {
       font-size: 12px;
-      color: #484848;
+      color: $primary-black;
       max-width: 60%;
       // @media (max-width: 992px) {
       //   overflow: hidden;
@@ -84,7 +84,7 @@
 
 :host ::ng-deep .brand-name {
   font-size: 12px;
-  color: #484848;
+  color: $primary-black;
 
   p {
     color: $primary-gray;
@@ -93,7 +93,7 @@
 }
 .amount_wrapper {
   font-size: 12px;
-  color: #484848;
+  color: $primary-black;
 }
 
 :host ::ng-deep .mat-slide-toggle-bar {
@@ -120,7 +120,7 @@
 
 :host ::ng-deep .service-details {
   font-size: 12px;
-  color: #484848;
+  color: $primary-black;
 
   p {
     color: $primary-gray;
@@ -226,3 +226,15 @@
     background: rgba(0,0,0,.04) !important;
   }
 }
+
+:host ::ng-deep .heading{
+  color: $dark-blue;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+:host ::ng-deep .table-header-text{
+  color: $dark-blue;
+  font-size: 14px;
+}
+

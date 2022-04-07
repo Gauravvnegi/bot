@@ -92,6 +92,10 @@ export class Feedback {
   getCreatedDate(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
   }
+
+  getCreatedTime(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('HH:mm');
+  }
 }
 
 export class TransactionalService {
@@ -351,35 +355,43 @@ export class StayGuestData {
   }
 
   getArrivalDate(timezone = '+05:30') {
-    return DateService.getDateFromTimeStamp(
-      this.arrivalTime,
-      'DD/M/YY',
-      timezone
-    );
+    if (this.arrivalTime)
+      return DateService.getDateFromTimeStamp(
+        this.arrivalTime,
+        'DD/M/YY',
+        timezone
+      );
+    else return '';
   }
 
   getDepartureDate(timezone = '+05:30') {
-    return DateService.getDateFromTimeStamp(
-      this.departureTime,
-      'DD/M/YY',
-      timezone
-    );
+    if (this.departureTime)
+      return DateService.getDateFromTimeStamp(
+        this.departureTime,
+        'DD/M/YY',
+        timezone
+      );
+    else return '';
   }
 
   getArrivalTime(timezone = '+05:30') {
-    return DateService.getDateFromTimeStamp(
-      this.arrivalTime,
-      'HH:mm',
-      timezone
-    );
+    if (this.arrivalTime)
+      return DateService.getDateFromTimeStamp(
+        this.arrivalTime,
+        'HH:mm',
+        timezone
+      );
+    else return '';
   }
 
   getDepartureTime(timezone = '+05:30') {
-    return DateService.getDateFromTimeStamp(
-      this.departureTime,
-      'HH:mm',
-      timezone
-    );
+    if (this.departureTime)
+      return DateService.getDateFromTimeStamp(
+        this.departureTime,
+        'HH:mm',
+        timezone
+      );
+    else return '';
   }
 }
 

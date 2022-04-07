@@ -11,9 +11,7 @@
   border-bottom: 0 !important;
   text-align: center;
 }
-.rowsData {
-  color: $primary-purple;
-}
+
 
 .icon-wrapper {
   @include flex-space-between();
@@ -68,7 +66,7 @@
 
 :host ::ng-deep .arrival-time {
   font-size: $font12;
-  color: #b2b7bc;
+  color: $c-gray-72;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -92,7 +90,7 @@
 }
 
 :host ::ng-deep .booking-number {
-  color: $dark-grey;
+  color: $quote-color;
   font-size: $font12;
   text-align: center;
   @media screen and (max-width: 800px) {
@@ -127,9 +125,10 @@
 :host ::ng-deep .tabel-room-no {
   padding: 7px;
   font-size: 12px;
-  // background-color: rgb(72, 192, 72, 0.2);
+  background-color: rgb(72, 192, 72, 0.1);
   border-radius: 25px;
   text-align: center;
+  color: $comparison;
   @media screen and (max-width: 800px) {
     font-size: 10px;
     padding: 5px;
@@ -208,3 +207,12 @@
 :host ::ng-deep .mat-tab-label {
   min-width: 190px !important;
 }
+
+.rowData {
+  color: $primary-purple !important;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: $primary-purple !important;
+}
+

@@ -53,7 +53,7 @@
 
 :host ::ng-deep .arrival-time {
   font-size: $font12;
-  color: #b2b7bc;
+  color: $arrival-time;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -221,13 +221,13 @@
 }
 
 .guest {
-  color: #727272;
+  color: $dark-grey;
   font-weight: 500;
   &-name {
-    color: #727272;
+    color: $dark-grey;
   }
   &-phone {
-    color: #e3e3e3;
+    color: $arrival-time;
     font-weight: normal;
     margin-top: 8px;
     overflow-x: hidden;
@@ -244,7 +244,7 @@
       margin: 0;
     }
     .amount {
-      color: #727272;
+      color: $dark-grey;
     }
   }
   &-amount-wrapper {
@@ -252,7 +252,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     &-amount {
-      color: #b2b7bc;
+      color: $arrival-time;
       font-size: 12px;
       font-weight: normal;
     }
@@ -261,17 +261,17 @@
 
 .package {
   &-date {
-    color: #727272;
+    color: $dark-grey;
     font-size: 12px;
   }
   &-city {
-    color: #b2b7bc;
+    color: $arrival-time;
     font-size: 12px;
     margin-top: 8px;
   }
 }
 .comments {
-  color: #727272;
+  color: $dark-grey;
   font-size: 12px;
   text-align: left;
 }
@@ -389,4 +389,185 @@
     align-items: center;
     justify-content: space-between;
   }
+}
+
+// :host ::ng-deep .status-text-reject {
+//   color: $completed1;
+// }
+
+// :host ::ng-deep .status-text-reject.chipSelected {
+//   background-color: $completed1;
+//   color: white;
+// }
+
+// :host ::ng-deep .status-text-success {
+//   color: $reject;
+// }
+// :host ::ng-deep .status-text-success.chipSelected {
+//   background-color: $reject;
+//   color: white;
+// }
+// :host ::ng-deep .status-text-pending {
+//   color: $auth-color;
+// }
+// :host ::ng-deep .status-text-pending.chipSelected {
+//   background-color: $auth-color;
+//   color: white;
+// }
+// :host ::ng-deep .status-text-initiated {
+//   color: $warning1;
+// }
+// :host ::ng-deep .status-text-initiated.chipSelected {
+//   background-color: $warning1;
+//   color: white;
+// }
+
+.feedback {
+  display: flex;
+  align-items: center;
+  .pdf {
+    width: 24px;
+  }
+}
+.feedback-service {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: calc(100% - 24px);
+  &__container {
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    position: relative;
+    &:hover {
+      .service-list-popup {
+        display: block;
+      }
+    }
+    &__label {
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 20px;
+      background-color: $list-popup;
+      padding: 4px 10px;
+      &__text {
+        color: $primary-purple;
+        padding-top: 2px;
+      }
+    }
+    &__comment {
+      display: none;
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 14px;
+      background-color: $list-popup;
+      padding: 3px;
+    }
+    &__extra {
+      position: relative;
+      .label {
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0;
+        letter-spacing: 0.66px;
+        text-align: center;
+        text-decoration: underline;
+        color: $primary-purple;
+      }
+      &:hover {
+        .service-list-popup {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.stay-booking-feedback {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  padding: 0px;
+  border-radius: 10px;
+  position: relative;
+  background-color: $booking-feedback;
+  min-width: 18px;
+  height: 18px;
+  margin: 0 3px;
+  &:hover {
+    cursor: pointer;
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: $dark-grey;
+    background-color: $white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px $light-grey;
+    border-radius: 5px;
+    display: none;
+  }
+  .feedback-icon {
+    height: 14px;
+    margin: 0 2px;
+  }
+  .number {
+    padding: 5px 0;
+    color: $white;
+    margin: 0 0px;
+    text-align: center;
+    min-width: 20px;
+    border-radius: 50%;
+    font-size: $font8;
+  }
+
+  @media screen and (max-width: 1050px) {
+    margin: 0;
+    margin-top: 7px;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px 0;
+      min-width: 15px;
+    }
+  }
+}
+
+.service-list-popup {
+  border: 1px solid #e1e1f2;
+  border-radius: 12px;
+  padding: 5px;
+  z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: $white;
+  top: 75%;
+  left: 10px;
+}
+
+.others {
+  display: -webkit-box;
+  align-items: center;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: $primary-purple !important;
 }

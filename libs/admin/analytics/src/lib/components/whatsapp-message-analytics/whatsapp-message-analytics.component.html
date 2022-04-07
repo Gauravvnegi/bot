@@ -1,12 +1,12 @@
 <div class="graphContainer">
   <div class="messageAnalytics">
     <div class="analyticsHeading">
-      <p>Messages</p>
+      <p>Notification</p>
       <div class="info-icon">
         <img src="assets/svg/info.svg" alt="info-icon" />
         <div class="tooltip">
           <span class="arrow"></span>
-          Total number of guest arrivals in a selected time frame.
+          Number of messages per message status for running two days
         </div>
       </div>
     </div>
@@ -106,20 +106,20 @@
           <div class="detailHeading">
             {{ item.label }}
           </div>
-          <div class="detailText">{{ item.today }} Today</div>
-          <div class="detailText">{{ item.yesterday }} Yesterday</div>
+          <div class="detailText">{{ item.today }} <span class="detailText__days">Today</span> </div>
+          <div class="detailText">{{ item.yesterday }} <span class="detailText__days">Yesterday</span> </div>
         </div>
       </div>
     </div>
   </div>
   <div class="sentAnalytics">
     <div class="analyticsHeading">
-      <p>SENT v/s DELIVERED</p>
+      <p>SENT V/S DELIVERED</p>
       <div class="info-icon">
         <img src="assets/svg/info.svg" alt="info-icon" />
         <div class="tooltip">
           <span class="arrow"></span>
-          Total number of guest arrivals in a selected time frame.
+          Number of messages sent VS delivered in a specific hours of the day.
         </div>
       </div>
     </div>

@@ -4,12 +4,14 @@
     width: 18.2px;
     height: 18.2px;
     margin-right: 6px;
+    margin-top: 5px;
     filter: grayscale(100%);
   }
 }
 .messageTabWrapper {
   display: flex;
   align-items: center;
+  font-size: 18px;
 }
 
 :host ::ng-deep .mat-tab-label-active {

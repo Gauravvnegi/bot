@@ -34,12 +34,16 @@
       margin-left: $margin10;
       &:hover {
         cursor: pointer;
+        color: $primary-purple;
       }
     }
     .filter {
       font-weight: 400;
       margin: 0;
       font-size: $font16;
+      &:hover{
+        color: $primary-purple;
+      }
     }
   }
   &:hover {

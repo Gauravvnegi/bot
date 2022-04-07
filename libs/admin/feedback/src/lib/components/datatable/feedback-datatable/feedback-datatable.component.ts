@@ -453,10 +453,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         (response) => {
           FileSaver.saveAs(
             response,
-            this.tableName.toLowerCase() +
-              '_export_' +
-              new Date().getTime() +
-              '.csv'
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
         },
@@ -515,14 +512,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               }
             )
             .subscribe();
-          this.loadInitialData(
-            [
-              ...this.globalQueries,
-              { order: sharedConfig.defaultOrder },
-              ...this.getSelectedQuickReplyFilters(),
-            ],
-            false
-          );
+          this.refreshTableData();
           this.loading = false;
         },
         ({ error }) => {
@@ -589,6 +579,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.$subscription.add(
             this.tableService.updateNotes(res.id, res.data).subscribe(
               (response) => {
+                this.statisticService.markReadStatusChanged.next(true);
                 detailCompRef.close();
                 this._snackbarService
                   .openSnackBarWithTranslate(
@@ -602,14 +593,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
                     }
                   )
                   .subscribe();
-                this.loadInitialData(
-                  [
-                    ...this.globalQueries,
-                    { order: sharedConfig.defaultOrder },
-                    ...this.getSelectedQuickReplyFilters(),
-                  ],
-                  false
-                );
+                this.refreshTableData();
               },
               ({ error }) => this.showErrorMessage(error)
             )
@@ -714,17 +698,25 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
-            { order: sharedConfig.defaultOrder },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false
-        );
+        this.refreshTableData();
         detailCompRef.close();
       })
     );
+  }
+
+  refreshTableData() {
+    this.loadInitialData(
+      [
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ],
+      false
+    );
+  }
+
+  filterServices(services) {
+    return services.filter((service) => !service.label.includes('COMMENT'));
   }
 
   ngOnDestroy(): void {

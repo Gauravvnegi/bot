@@ -1,5 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import { get } from 'lodash';
+import { GuestDetails } from '../../models/guest-feedback.model';
+import { GuestReservation } from '../../models/guest-table.model';
 
 @Component({
   selector: 'hospitality-bot-stay-details',
@@ -11,14 +15,20 @@ export class StayDetailsComponent implements OnInit {
   @Input() parentForm: FormGroup;
   @Output() addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
+  @Input() guestReservations;
   stayDetailsForm: FormGroup;
-  constructor(private _fb: FormBuilder) {}
+  constructor(
+    private _fb: FormBuilder,
+    private subscriptionService: SubscriptionPlanService
+  ) {}
 
   ngOnInit(): void {}
 
   ngOnChanges() {
-    this.addFormsControls();
-    this.pushDataToForm();
+    if (this.detailsData) {
+      this.addFormsControls();
+      this.pushDataToForm();
+    }
   }
 
   addFormsControls() {
@@ -42,5 +52,15 @@ export class StayDetailsComponent implements OnInit {
   pushDataToForm() {
     this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
     this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
+  }
+
+  checkForTransactionFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+  }
+
+  checkForStayFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'feedback', 'active']);
   }
 }

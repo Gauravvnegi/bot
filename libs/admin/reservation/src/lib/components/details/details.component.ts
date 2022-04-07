@@ -28,7 +28,10 @@ import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
-import { Guest, GuestReservation } from '../../models/guest-table.model';
+import { Guest } from '../../models/guest-table.model';
+import { get } from 'lodash';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -36,6 +39,8 @@ import { Guest, GuestReservation } from '../../models/guest-table.model';
   styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
+  @Input() tabKey = 'guest_details';
+  @Output() onDetailsClose = new EventEmitter();
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
@@ -51,10 +56,8 @@ export class DetailsComponent implements OnInit {
     { label: 'Current Booking', icon: '' },
   ];
   bookingId;
-  @Output() onDetailsClose = new EventEmitter();
   branchConfig;
   $subscription = new Subscription();
-  @Input() tabKey = 'guest_details';
 
   defaultIconList = [
     { iconUrl: 'assets/svg/messenger.svg', label: 'Request', value: '' },
@@ -71,20 +74,24 @@ export class DetailsComponent implements OnInit {
       index: 1,
     },
     {
-      key: 'package_details',
+      key: 'stay_details',
       index: 2,
     },
     {
-      key: 'payment_details',
+      key: 'package_details',
       index: 3,
     },
     {
-      key: 'request_details',
+      key: 'payment_details',
       index: 4,
+    },
+    {
+      key: 'request_details',
+      index: 5,
     },
   ];
   guestData;
-  guestReservations;
+  guestReservations: GuestDetails;
   guestReservationDropdownList = [];
   @Input() guestId: string;
   bookingFG: FormGroup;
@@ -100,7 +107,8 @@ export class DetailsComponent implements OnInit {
     private router: Router,
     private _hotelDetailService: HotelDetailService,
     private _globalFilterService: GlobalFilterService,
-    private _userService: UserService
+    private _userService: UserService,
+    private subscriptionService: SubscriptionPlanService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -133,63 +141,71 @@ export class DetailsComponent implements OnInit {
   }
 
   loadGuestInfo(): void {
-    this._reservationService.getGuestById(this.guestId).subscribe(
-      (response) => {
-        this.guestData = new Guest().deserialize(response);
-        this.loadGuestReservations();
-      },
-      ({ error }) => {
-        this._snackBarService.openSnackBarAsText(error.message);
-        this.closeDetails();
-      }
+    this.$subscription.add(
+      this._reservationService.getGuestById(this.guestId).subscribe(
+        (response) => {
+          this.guestData = new Guest().deserialize(response);
+          this.loadGuestReservations();
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+          this.closeDetails();
+        }
+      )
     );
   }
 
   loadGuestReservations(): void {
-    this._reservationService.getGuestReservations(this.guestId).subscribe(
-      (response) => {
-        this.guestReservations = new GuestReservation().deserialize(response);
-        this.initBookingsFG();
-        this.initGuestReservationDropdownList();
-        this.isGuestReservationFetched = true;
-      },
-      ({ error }) => {
-        this._snackBarService.openSnackBarAsText(error.message);
-        this.closeDetails();
-      }
+    this.$subscription.add(
+      this._reservationService.getGuestReservations(this.guestId).subscribe(
+        (response) => {
+          this.guestReservations = new GuestDetails().deserialize(response);
+          this.initBookingsFG();
+          this.initGuestReservationDropdownList();
+          this.isGuestReservationFetched = true;
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+          this.closeDetails();
+        }
+      )
     );
   }
 
   getShareIcon() {
-    this._userService
-      .getUserShareIconByNationality(this.branchConfig.nationality)
-      .subscribe(
-        (response) => {
-          this.shareIconList = new ShareIconConfig().deserialize(response);
-          this.shareIconList = this.shareIconList.applications.concat(
-            this.defaultIconList
-          );
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+    this.$subscription.add(
+      this._userService
+        .getUserShareIconByNationality(this.branchConfig.nationality)
+        .subscribe(
+          (response) => {
+            this.shareIconList = new ShareIconConfig().deserialize(response);
+            this.shareIconList = this.shareIconList.applications.concat(
+              this.defaultIconList
+            );
+          },
+          ({ error }) => {
+            this._snackBarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
   }
 
   getReservationDetails() {
-    this._reservationService.getReservationDetails(this.bookingId).subscribe(
-      (response) => {
-        this.details = new Details().deserialize(
-          response,
-          this._globalFilterService.timezone
-        );
-        this.mapValuesInForm();
-        this.isReservationDetailFetched = true;
-      },
-      ({ error }) => {
-        this._snackBarService.openSnackBarAsText(error.message);
-        this.closeDetails();
-      }
+    this.$subscription.add(
+      this._reservationService.getReservationDetails(this.bookingId).subscribe(
+        (response) => {
+          this.details = new Details().deserialize(
+            response,
+            this._globalFilterService.timezone
+          );
+          this.mapValuesInForm();
+          this.isReservationDetailFetched = true;
+        },
+        ({ error }) => {
+          this._snackBarService.openSnackBarAsText(error.message);
+          this.closeDetails();
+        }
+      )
     );
   }
 
@@ -298,58 +314,67 @@ export class DetailsComponent implements OnInit {
       remarks: '',
     };
 
-    this._reservationService
-      .updateStepStatus(this.reservationDetailsFG.get('bookingId').value, data)
-      .subscribe(
-        (res) => {
-          this._snackBarService.openSnackBarAsText('Payment accepted', '', {
-            panelClass: 'success',
-          });
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+    this.$subscription.add(
+      this._reservationService
+        .updateStepStatus(
+          this.reservationDetailsFG.get('bookingId').value,
+          data
+        )
+        .subscribe(
+          (res) => {
+            this._snackBarService.openSnackBarAsText('Payment accepted', '', {
+              panelClass: 'success',
+            });
+          },
+          ({ error }) => {
+            this._snackBarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
   }
 
   downloadInvoice() {
-    this._reservationService
-      .downloadInvoice(this.reservationDetailsFG.get('bookingId').value)
-      .subscribe(
-        (res) => {
-          if (res && res.file_download_url) {
-            FileSaver.saveAs(
-              res.file_download_url,
-              'invoice_' +
-                this.reservationDetailsFG.get('bookingNumber').value +
-                new Date().getTime() +
-                '.pdf'
-            );
+    this.$subscription.add(
+      this._reservationService
+        .downloadInvoice(this.reservationDetailsFG.get('bookingId').value)
+        .subscribe(
+          (res) => {
+            if (res && res.file_download_url) {
+              FileSaver.saveAs(
+                res.file_download_url,
+                'invoice_' +
+                  this.reservationDetailsFG.get('bookingNumber').value +
+                  new Date().getTime() +
+                  '.pdf'
+              );
+            }
+          },
+          ({ error }) => {
+            this._snackBarService.openSnackBarAsText(error.message);
           }
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+        )
+    );
   }
 
   prepareInvoice() {
-    this._reservationService
-      .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
-      .subscribe(
-        (res) => {
-          this._snackBarService.openSnackBarAsText(
-            'Ticket raised for invoice',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-        },
-        ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
-        }
-      );
+    this.$subscription.add(
+      this._reservationService
+        .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
+        .subscribe(
+          (res) => {
+            this._snackBarService.openSnackBarAsText(
+              'Ticket raised for invoice',
+              '',
+              {
+                panelClass: 'success',
+              }
+            );
+          },
+          ({ error }) => {
+            this._snackBarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
   }
 
   downloadRegcard(regcardUrl) {
@@ -482,27 +507,29 @@ export class DetailsComponent implements OnInit {
       if (res?.status) {
         if (res.data.phoneNumber.length === 0) res.data.cc = '';
         manualCheckinCompRef.componentInstance.loading = true;
-        this._reservationService
-          .manualCheckin(
-            this.reservationDetailsFG.get('bookingId').value,
-            res.data
-          )
-          .subscribe(
-            (response) => {
-              manualCheckinCompRef.componentInstance.loading = false;
-              this._snackBarService.openSnackBarAsText(
-                'Guest Manually Checked In',
-                '',
-                { panelClass: 'success' }
-              );
-              manualCheckinCompRef.close();
-              this.closeDetails();
-            },
-            ({ error }) => {
-              manualCheckinCompRef.componentInstance.loading = false;
-              this._snackBarService.openSnackBarAsText(error.message);
-            }
-          );
+        this.$subscription.add(
+          this._reservationService
+            .manualCheckin(
+              this.reservationDetailsFG.get('bookingId').value,
+              res.data
+            )
+            .subscribe(
+              (response) => {
+                manualCheckinCompRef.componentInstance.loading = false;
+                this._snackBarService.openSnackBarAsText(
+                  'Guest Manually Checked In',
+                  '',
+                  { panelClass: 'success' }
+                );
+                manualCheckinCompRef.close();
+                this.closeDetails();
+              },
+              ({ error }) => {
+                manualCheckinCompRef.componentInstance.loading = false;
+                this._snackBarService.openSnackBarAsText(error.message);
+              }
+            )
+        );
       } else res && manualCheckinCompRef.close();
     });
   }
@@ -556,12 +583,13 @@ export class DetailsComponent implements OnInit {
   }
 
   getPrimaryGuestDetails() {
-    this.details.guestDetails.forEach((guest) => {
-      if (guest.isPrimary === true) {
-        this.primaryGuest = guest;
-        return;
-      }
-    });
+    if (this.guestReservationDropdownList.length)
+      this.details.guestDetails.forEach((guest) => {
+        if (guest.isPrimary === true) {
+          this.primaryGuest = guest;
+          return;
+        }
+      });
   }
 
   openSendNotification(channel) {
@@ -600,32 +628,25 @@ export class DetailsComponent implements OnInit {
 
   initGuestReservationDropdownList() {
     this.guestReservationDropdownList = new Array<any>();
-    this.guestReservations.presentBookings.forEach((item) =>
-      this.guestReservationDropdownList.push({
-        bookingId: item.booking.bookingId,
-        bookingNumber: item.booking.bookingNumber,
-        label: 'Current Booking',
-      })
-    );
-    this.guestReservations.pastBookings.forEach((item) =>
-      this.guestReservationDropdownList.push({
-        bookingId: item.booking.bookingId,
-        bookingNumber: item.booking.bookingNumber,
-        label: 'Past Booking',
-      })
-    );
-    this.guestReservations.upcomingBookings.forEach((item) =>
-      this.guestReservationDropdownList.push({
-        bookingId: item.booking.bookingId,
-        bookingNumber: item.booking.bookingNumber,
-        label: 'Upcoming Booking',
-      })
-    );
-    this.bookingFG
-      .get('booking')
-      .setValue(this.guestReservationDropdownList[0].bookingId);
-    this.bookingId = this.guestReservationDropdownList[0].bookingId;
-    this.getReservationDetails();
+    this.guestReservations.records.forEach((item: GuestDetail) => {
+      if (item.type === 'RESERVATION') {
+        this.guestReservationDropdownList.push({
+          bookingId: item.reservation.booking.bookingId,
+          bookingNumber: item.reservation.booking.bookingNumber,
+          label: `${item.subType} Booking`,
+        });
+      }
+    });
+    if (this.guestReservationDropdownList.length) {
+      this.bookingFG
+        .get('booking')
+        .setValue(this.guestReservationDropdownList[0].bookingId);
+      this.bookingId = this.guestReservationDropdownList[0].bookingId;
+      this.getReservationDetails();
+    } else {
+      this.isReservationDetailFetched = true;
+      this.isGuestInfoPatched = true;
+    }
   }
 
   handleBookingChange(event) {
@@ -634,11 +655,30 @@ export class DetailsComponent implements OnInit {
     this.getReservationDetails();
   }
 
+  getVisitDetaillabel() {
+    let label = 'Visit Details';
+    if (
+      this.checkForStayFeedbackSubscribed() ||
+      this.checkForTransactionFeedbackSubscribed()
+    )
+      label += ' & Feedback';
+
+    return label;
+  }
+
+  checkForTransactionFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+  }
+
+  checkForStayFeedbackSubscribed() {
+    const subscription = this.subscriptionService.getModuleSubscription();
+    return get(subscription, ['modules', 'feedback', 'active']);
+  }
+
   get bookingCount() {
     let count = 0;
-    count += this.guestReservations.pastBookings.length;
-    count += this.guestReservations.presentBookings.length;
-    count += this.guestReservations.upcomingBookings.length;
+    count += this.guestReservations.records.length;
     return count;
   }
 
@@ -671,5 +711,9 @@ export class DetailsComponent implements OnInit {
       (tabConfig) => tabConfig.key == this.tabKey
     );
     return index ? index : 0;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

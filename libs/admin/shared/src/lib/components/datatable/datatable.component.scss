@@ -368,7 +368,7 @@
 :host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
-    background: rgba(232, 238, 245, 0.6);
+    background: rgba(0, 0, 0, 0.04);
   }
 }
 
@@ -473,6 +473,7 @@ th {
   display: inline-block;
   text-align: center;
   font-weight: 400;
+  background-color: white;
   &:hover {
     cursor: pointer;
   }
@@ -499,25 +500,30 @@ th {
   display: none;
 }
 
-:host ::ng-deep .status-selected-pending {
+.status-selected-new {
+  background-color: rgba(62, 142, 247, 1) !important;
+  opacity: 1;
+}
+
+.status-selected-pending {
   background-color: $pending !important;
   opacity: 1;
 }
-:host ::ng-deep .status-selected-initiated {
+.status-selected-initiated {
   background-color: $initiated !important;
   opacity: 1;
 }
-:host ::ng-deep .status-selected-completed {
+.status-selected-completed {
   background-color: $completed !important;
   opacity: 1;
 }
 
-:host ::ng-deep .status-selected-reject {
+.status-selected-reject {
   background-color: $reject !important;
   opacity: 1;
 }
 
-:host ::ng-deep .status-selected-default {
+.status-selected-default {
   background-color: $default;
   opacity: 1;
 }

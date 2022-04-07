@@ -65,7 +65,10 @@
     </div>
     <hr />
 
-    <div class="options-wrapper" *ngIf="isGuestInfoPatched">
+    <div
+      class="options-wrapper"
+      *ngIf="isGuestInfoPatched && guestReservationDropdownList.length"
+    >
       <div *ngIf="isGuestReservationFetched" [formGroup]="bookingFG">
         <mat-select
           class="past-booking"
@@ -75,7 +78,7 @@
           <mat-option
             [value]="item.bookingId"
             *ngFor="let item of guestReservationDropdownList"
-            >{{ item.label }} - {{ item.bookingNumber }}</mat-option
+            >{{ item.label | titlecase }} - {{ item.bookingNumber }}</mat-option
           >
         </mat-select>
       </div>
@@ -84,6 +87,8 @@
           class="check-button"
           (click)="downloadRegcard(details.guestDetails.guests[0].regcardUrl)"
         >
+          <img src="assets/svg/Layer_d.svg" alt="Download" srcset="" /> &nbsp;
+          &nbsp;
           <p class="text">Reg card</p>
           <ng-container
             [ngSwitch]="
@@ -106,6 +111,8 @@
           (click)="downloadHealthcard(details.healDeclarationDetails.url)"
           class="check-button"
         >
+          <img src="assets/svg/Layer_d.svg" alt="Download" srcset="" /> &nbsp;
+          &nbsp;
           <p class="text">Health Declaration</p>
           <ng-container [ngSwitch]="healthCardDetailsFG.get('status').value">
             <mat-icon
@@ -140,7 +147,7 @@
         margin: 15px 0;
         padding: 0 30px 20px;
       "
-      *ngIf="isGuestInfoPatched"
+      *ngIf="isGuestInfoPatched && guestReservationDropdownList.length"
     >
       <div style="display: flex; align-items: center;">
         <div class="svg-wrapper">
@@ -235,34 +242,38 @@
             [data]="details"
             (addFGEvent)="addFGEvent($event)"
             (isGuestInfoPatched)="guestInfoPatched($event)"
+            [guestData]="guestData"
           ></hospitality-bot-admin-guest-details>
         </mat-tab>
-        <mat-tab label="Documents">
+        <mat-tab label="Documents" *ngIf="guestReservationDropdownList.length">
           <hospitality-bot-admin-documents-details
-            *ngIf="isReservationDetailFetched"
+            *ngIf="
+              isReservationDetailFetched && guestReservationDropdownList.length
+            "
             #adminDocumentsDetailsComponent
             [parentForm]="detailsForm"
             [data]="details"
             (addFGEvent)="addFGEvent($event)"
           ></hospitality-bot-admin-documents-details>
         </mat-tab>
-        <!-- <mat-tab label="Visit Details">
+        <mat-tab [label]="getVisitDetaillabel()">
           <hospitality-bot-stay-details
             *ngIf="isReservationDetailFetched"
             #adminStayDetailsComponent
             [parentForm]="detailsForm"
             [data]="details"
+            [guestReservations]="guestReservations.records"
             (addFGEvent)="addFGEvent($event)"
           ></hospitality-bot-stay-details>
-        </mat-tab> -->
-        <mat-tab label="Package">
+        </mat-tab>
+        <mat-tab label="Package" *ngIf="guestReservationDropdownList.length">
           <hospitality-bot-admin-package-details
             *ngIf="isReservationDetailFetched"
             [parentForm]="detailsForm"
             [data]="details"
           ></hospitality-bot-admin-package-details>
         </mat-tab>
-        <mat-tab label="Payment">
+        <mat-tab label="Payment" *ngIf="guestReservationDropdownList.length">
           <hospitality-bot-admin-payment-details
             *ngIf="isReservationDetailFetched"
             [parentForm]="detailsForm"
@@ -270,7 +281,10 @@
             (addFGEvent)="addFGEvent($event)"
           ></hospitality-bot-admin-payment-details>
         </mat-tab>
-        <mat-tab label="Activities & Notes">
+        <mat-tab
+          label="Activities & Notes"
+          *ngIf="guestReservationDropdownList.length"
+        >
           <hospitality-bot-requests-table
             *ngIf="isReservationDetailFetched"
             [parentForm]="detailsForm"
@@ -278,7 +292,12 @@
           ></hospitality-bot-requests-table>
         </mat-tab>
       </mat-tab-group>
-      <div *ngIf="isReservationDetailFetched" class="tab-buttons">
+      <div
+        *ngIf="
+          isReservationDetailFetched && guestReservationDropdownList.length
+        "
+        class="tab-buttons"
+      >
         <div class="button-wrapper">
           <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
             <ng-container *ngSwitchCase="'PRECHECKIN'">
@@ -495,6 +514,3 @@
     </div>
   </div>
 </ng-template>
-
-<!-- Confirm all Docs -- button -- [docs- confirm]
-notify - [health,docs,payment,] == true =enable -->

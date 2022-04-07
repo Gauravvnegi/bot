@@ -1,0 +1,92 @@
+<mat-accordion>
+  <mat-expansion-panel #depositPanel2 [expanded]="openedState">
+    <mat-expansion-panel-header class="accordian__header">
+      <mat-panel-title class="container__title">
+        <p>
+          Instant Feedback -
+          <span class="booking_number">{{ getOutlet(rowData.outletId) }}</span>
+        </p>
+        <div class="header-seperator"></div>
+        <p>
+          {{
+            rowData?.getfeedbackSubmissionTime(_globalFilterService.timezone)
+          }}
+        </p>
+        <div class="header-seperator"></div>
+        <div class="booking-id-wrapper">
+          <div class="feedback">
+            <div class="booking-feedback">
+              <p
+                class="number"
+                [ngClass]="{
+                  'status-background-reject':
+                    rowData.intentToRecommends.rating < 5,
+                  'status-background-success':
+                    rowData.intentToRecommends.rating >= 5
+                }"
+              >
+                {{ rowData.intentToRecommends.rating }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="view-feedback-btn"
+          (click)="downloadFeedback($event, rowData.feedbackId)"
+        >
+          <div class="view-feedback-btn__text">
+            <img src="assets/svg/View.svg" alt="">
+            View Feedback
+          </div>
+          <img src="assets/svg/union.svg" alt="">
+        </div>
+        <mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded"
+          >add</mat-icon
+        >
+        <mat-icon class="expand-icon" *ngIf="depositPanel2.expanded"
+          >remove</mat-icon
+        >
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div>
+      <div class="feilds-wrapper">
+        <div class="feild width-quarter">
+          <mat-label class="label">Date/Time</mat-label>
+          <div class="value">
+            {{
+              rowData?.getfeedbackSubmissionTime(_globalFilterService.timezone)
+            }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Intent to Recommend</mat-label>
+          <div class="value">
+            {{ rowData.intentToRecommends.rating }}
+            {{ rowData.intentToRecommends.Category }}
+          </div>
+        </div>
+        <div class="feild width-quarter">
+          <mat-label class="label">Market Segment</mat-label>
+          <div class="value">
+            {{ rowData.marketSegment }}
+          </div>
+        </div>
+      </div>
+      <div class="feilds-wrapper" *ngIf="rowData.comment">
+        <div class="feild">
+          <mat-label class="label">Comments</mat-label>
+          <div class="question">
+            {{ rowData.comment?.question }}
+          </div>
+          <div class="answer" *ngIf="rowData.comment?.answer; else emptyCell">
+            {{ rowData.comment?.answer }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">--</div>
+</ng-template>

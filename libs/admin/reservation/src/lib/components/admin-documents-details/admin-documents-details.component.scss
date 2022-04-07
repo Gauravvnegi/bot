@@ -58,9 +58,9 @@
 // }
 
 .data-seperator {
-  border: 2px solid #218af3;
+  background: none;
+  border: none;
   margin: $margin20 0px;
-  opacity: 0.1;
 }
 
 // .feilds-wrapper {
@@ -94,6 +94,7 @@
 .document-header {
   display: flex;
   margin-bottom: $margin20;
+  margin-top: $margin15;
   align-items: center;
   justify-content: space-between;
   .heading {
@@ -223,17 +224,18 @@
 
 :host ::ng-deep {
   .mat-select-value-text {
-    font-family: Roboto;
-    font-size: 14px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.07;
-    letter-spacing: 0.84px;
-    text-align: left;
-    color: $dark-grey;
+    color: #000000;
   }
   .mat-select-arrow {
-    color: $dark-grey;
+    color: #000000;
   }
+}
+.download{
+  font-size: 12px;
+  color: $button-blue !important;
+  display: flex;
+  align-items: center;
+ p{
+   padding-top: 4px;
+ }
 }

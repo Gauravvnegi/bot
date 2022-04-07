@@ -1,52 +1,24 @@
-<div>
-  <div class="material-body">
-    <mat-label class="mat-head">Stay Details</mat-label>
-    <ng-container>
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
-          <mat-label class="label">Arrival Date</mat-label>
-          <div class="value">
-            {{ stayDetailsForm.get('arrivalDate').value }}
-          </div>
-        </div>
-        <div class="feild width-quarter">
-          <mat-label class="label">Departure Date</mat-label>
-          <div class="value">
-            {{ stayDetailsForm.get('departureDate').value }}
-          </div>
-        </div>
-        <div class="feild width-quarter">
-          <mat-label class="label">Expected Arrival Time</mat-label>
-          <div
-            *ngIf="
-              stayDetailsForm.get('expectedArrivalTime').value;
-              else emptyCell
-            "
-            class="value"
-          >
-            {{ stayDetailsForm.get('expectedArrivalTime').value }}
-          </div>
-        </div>
-      </div>
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
-          <mat-label class="label">Duration</mat-label>
-          <div class="value">
-            {{ detailsData.stayDetails.getDaysAndNights().nights }}N |
-            {{ detailsData.stayDetails.getDaysAndNights().days }}D
-          </div>
-        </div>
-        <div class="feild width-quarter">
-          <mat-label class="label">Room Type</mat-label>
-          <div class="value">
-            {{ stayDetailsForm.get('roomType').value }}
-          </div>
-        </div>
-      </div></ng-container
-    >
+<div class="material-body">
+  <div class="label-wrapper">
+    <mat-label class="heading">Visit Details</mat-label>
+  </div>
+  <div
+    class="booking__container"
+    *ngFor="let booking of guestReservations; let index = index"
+  >
+    <ng-container *ngIf="booking.type === 'FEEDBACK'; else reservation">
+      <hospitality-bot-instant-feedback
+        [rowData]="booking.feedback"
+        [openedState]="index === 0"
+      >
+      </hospitality-bot-instant-feedback>
+    </ng-container>
+    <ng-template #reservation>
+      <hospitality-bot-stay-feedback
+        [rowData]="booking.reservation"
+        [openedState]="index === 0"
+      >
+      </hospitality-bot-stay-feedback>
+    </ng-template>
   </div>
 </div>
-
-<ng-template #emptyCell>
-  <div class="emptyCell">--</div>
-</ng-template>

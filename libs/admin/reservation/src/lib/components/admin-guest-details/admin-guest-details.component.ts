@@ -11,13 +11,15 @@ import { isEmpty } from 'lodash';
 export class AdminGuestDetailsComponent implements OnInit {
   @Input('data') detailsData;
   @Input() parentForm: FormGroup;
-  @Output() addFGEvent = new EventEmitter();
+  @Input() guestData;
+  @Output()
+  addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
   roles: string[] = [];
 
+  stayDetailsForm: FormGroup;
   healthCardDetailsForm: FormGroup;
   guestDetailsForm: FormGroup;
-  stayDetailsForm: FormGroup;
 
   constructor(
     private _fb: FormBuilder,
@@ -25,32 +27,25 @@ export class AdminGuestDetailsComponent implements OnInit {
     private _snackBarService: SnackBarService
   ) {}
 
-  ngOnInit(): void {}
-
-  ngOnChanges() {
-    this.addFormsControls();
-    this.pushDataToForm();
+  ngOnInit(): void {
+    if (this.detailsData) {
+      this.addFormsControls();
+      this.pushDataToForm();
+    } else {
+      this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) });
+      const guestFA = this.guestDetailsForm.get('guests') as FormArray;
+      this.roles.push('');
+      guestFA.push(this.getGuestFG());
+      guestFA.controls[0].patchValue(this.guestData);
+    }
   }
 
   addFormsControls() {
     this.healthCardDetailsForm = this.initHealthCardDetailsForm();
+    this.stayDetailsForm = this.initStayDetailsForm();
     (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
       this.initGuestDetailsForm();
     this.stayDetailsForm = this.initStayDetailsForm();
-  }
-
-  initStayDetailsForm() {
-    return this._fb.group({
-      arrivalDate: [''],
-      departureDate: [''],
-      expectedArrivalTime: [''],
-      roomType: [''],
-      kidsCount: [''],
-      adultsCount: [''],
-      roomNumber: [''],
-      special_comments: [''],
-      checkin_comments: [''],
-    });
   }
 
   pushDataToForm() {
@@ -61,6 +56,9 @@ export class AdminGuestDetailsComponent implements OnInit {
       name: 'healthCardDetails',
       value: this.healthCardDetailsForm,
     });
+
+    this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
+    this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
 
     this.guestDetailsForm
       .get('guests')
@@ -89,6 +87,20 @@ export class AdminGuestDetailsComponent implements OnInit {
       remarks: [''],
       url: [''],
       temperature: [''],
+    });
+  }
+
+  initStayDetailsForm() {
+    return this._fb.group({
+      arrivalDate: [''],
+      departureDate: [''],
+      expectedArrivalTime: [''],
+      roomType: [''],
+      kidsCount: [''],
+      adultsCount: [''],
+      roomNumber: [''],
+      special_comments: [''],
+      checkin_comments: [''],
     });
   }
 

@@ -1,0 +1,238 @@
+@import 'main';
+
+.width-quarter {
+  width: 33%;
+}
+
+.fieldImg {
+  height: 20px;
+  margin-right: 10px;
+}
+.showMore {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font: normal normal medium 14px/19px Roboto;
+  letter-spacing: 0.56px;
+  color: #9eaeb8;
+}
+
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  // img {
+  //   margin-left: 10px;
+  // }
+}
+
+.feilds-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 30px 0px;
+  .feild {
+    .label {
+      letter-spacing: 0.72px;
+      font-size: $font12;
+      color: $primary-gray;
+    }
+    .value {
+      letter-spacing: 0.84px;
+      font-size: $font14;
+      margin-top: $margin10;
+      font-weight: $medium;
+    }
+    .question {
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.24px;
+      text-align: left;
+      color: #545454;
+      margin: 5px 0;
+    }
+    .answer {
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.67;
+      letter-spacing: 0.24px;
+      text-align: left;
+      color: #6d7580;
+    }
+  }
+}
+
+.data-seperator {
+  border: 2px solid $primary-purple;
+  margin: $margin20 0px;
+  opacity: 0.1;
+}
+
+:host ::ng-deep .mat-head {
+  font-size: $font16;
+  font-weight: $bolder;
+  color: #002046;
+  letter-spacing: 0.96px;
+}
+
+:host ::ng-deep .container__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $primary-black;
+  font-weight: 500;
+  letter-spacing: 0.84px;
+  margin-right: 0 !important;
+  .booking_number:hover {
+    color: rgb(75, 86, 192);
+  }
+}
+
+:host ::ng-deep .expand-icon {
+  color: $primary-purple;
+}
+
+:host ::ng-deep .mat-expansion-indicator {
+  display: none !important;
+}
+
+.accordian__header {
+  background: #e8eef5e6 0% 0% no-repeat padding-box;
+}
+
+:host ::ng-deep .mat-expansion-panel-header:focus {
+  background: #e8eef5e6 0% 0% no-repeat padding-box;
+}
+
+.booking__container {
+  margin: 7.5px 0;
+}
+
+.booking-id-wrapper {
+  // margin-top: 20px;
+  .booking-id {
+    text-align: center;
+  }
+  .feedback {
+    color: white;
+    font-size: $font10;
+    display: flex;
+    align-items: center;
+    .booking-feedback {
+      display: flex;
+      align-items: center;
+      background-color: #f5f5f5;
+      justify-content: space-around;
+      padding: 0px;
+      margin: 0 10px;
+      min-width: 20px;
+      min-height: 20px;
+      // margin-top: 7px;
+      border-radius: 25px;
+      position: relative;
+      &:hover {
+        cursor: pointer;
+        .feedback-msg {
+          display: block;
+        }
+      }
+      .feedback-msg {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        font-size: 12px;
+        color: $dark-grey;
+        background-color: white;
+        left: 0%;
+        padding: 7px;
+        box-shadow: 0px 0px 5px 0px lightgray;
+        border-radius: 5px;
+        display: none;
+      }
+      .feedback-icon {
+        height: 10px;
+        margin: 0 2px;
+      }
+      .number {
+        padding: 3px;
+        color: white;
+        text-align: center;
+        width: 15px;
+        border-radius: 50%;
+        font-size: 12px;
+        margin: 0 2px;
+        min-width: 20px;
+        min-height: 20px;
+      }
+      @media screen and (max-width: 800px) {
+        margin: 0;
+        margin-top: 7px;
+        .feedback-icon {
+          height: 12px;
+        }
+        .number {
+          font-size: 10px;
+          padding: 2px;
+          width: 15px;
+        }
+      }
+    }
+  }
+}
+
+.header-seperator {
+  height: 20px;
+  border: 1px solid #b8b8b8;
+}
+
+::ng-deep .d-flex {
+  display: flex;
+}
+
+.view-feedback-btn {
+  width: 160px;
+  height: 33px;
+  margin: 0 50px 0 60px;
+  padding: 0px 0px 0px 10px;
+  border-radius: 6px;
+  border: solid 1px $primary-purple;
+  background-color: #ecf1f7;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  &__text {
+    font-family: Roboto;
+    font-size: 11px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.66px;
+    text-align: right;
+    color: $primary-purple;
+    padding-right: 10px;
+    border-right: solid 2px $primary-purple;
+    height: 20px;
+    padding-top: 4px;
+    img{
+      width: 18px;
+      padding-right: 2px;
+      margin-right: 5px;
+    }
+  }
+  img{
+    padding-left: 2px;
+    margin-left: 3px;
+  }
+}
+
+.mat-expansion-panel-spacing {
+  box-shadow: none !important;
+  border: solid 1px $c-gray-85 !important;
+}

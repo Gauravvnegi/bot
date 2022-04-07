@@ -7,7 +7,13 @@
         matSuffix
         >keyboard_backspace</mat-icon
       >
-      <p class="label">{{ categoryForm.get('name').value }}</p>
+      <p class="label">
+        <ng-container *ngIf="categoryId; else addCategory">
+          {{ categoryForm.get('name').value }}
+        </ng-container>
+        <ng-template #addCategory>
+          Add Category
+        </ng-template>
     </div>
   </header>
   <form [formGroup]="categoryForm">

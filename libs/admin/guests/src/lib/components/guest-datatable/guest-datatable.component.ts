@@ -399,10 +399,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         (response) => {
           FileSaver.saveAs(
             response,
-            this.tableName.toLowerCase() +
-              '_export_' +
-              new Date().getTime() +
-              '.csv'
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
         },

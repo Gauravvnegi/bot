@@ -82,12 +82,6 @@ body {
   color: #3e8ef7 !important;
 }
 
-.status-selected-new {
-  background-color: rgba(62, 142, 247, 1) !important;
-  color: $white;
-  opacity: 1;
-}
-
 .status-text-pending {
   color: $pending !important;
 }
@@ -136,6 +130,10 @@ body {
   background-color: $reject;
 }
 
+.status-background-moderate {
+  background-color: $initiated-2;
+}
+
 .status-background-success {
   background-color: $completed;
 }
@@ -146,7 +144,7 @@ body {
 
 .success {
   background-color: $completed !important;
-  color: $white !important;
+  color: $white;
 }
 
 .notification {
@@ -202,4 +200,8 @@ body {
 .details-wrapper {
   background-color: white;
   max-height: 94%;
+}
+
+.mat-option.mat-active {
+  color: $dropdown-selected-value;
 }

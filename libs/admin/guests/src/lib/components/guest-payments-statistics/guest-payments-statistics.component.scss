@@ -14,13 +14,14 @@
     .val {
       font: normal normal bold 25px/30px Roboto;
       letter-spacing: 1.5px;
-      color: #002046;
+      color:$dark-blue;
       opacity: 1;
     }
     .label {
       font: normal normal bold 12px/14px Roboto;
       letter-spacing: 0.72px;
       opacity: 1;
+      color: $note1;
     }
     position: absolute;
     left: 70%;
@@ -132,3 +133,4 @@
 .graph-base-chart {
   height: 138px;
 }
+

@@ -35,8 +35,9 @@
   display: flex;
 }
 .stat-val {
-  color: $primary-purple;
+  color: $dark-blue;
   font-size: 13px;
+  font-weight: bold;
   @media only screen and (max-width: 1100px) {
     font-size: 11px;
   }

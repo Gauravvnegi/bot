@@ -3,25 +3,29 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { DropdownModule } from 'primeng/dropdown';
 import { AdminReservationRoutingModule } from './admin-reservation.routing.module';
-import { AdminDocumentsDetailsComponent } from './components/admin-documents-details/admin-documents-details.component';
-import { AdminGuestDetailsComponent } from './components/admin-guest-details/admin-guest-details.component';
-import { AdminPackageDetailsComponent } from './components/admin-package-details/admin-package-details.component';
-import { AdminPaymentDetailsComponent } from './components/admin-payment-details/admin-payment-details.component';
-import { DepositRuleComponent } from './components/deposit-rule/deposit-rule.component';
-import { DetailsComponent } from './components/details/details.component';
-import { JourneyDialogComponent } from './components/journey-dialog/journey-dialog.component';
-import { AirportPickupComponent } from './components/packages/airport-pickup/airport-pickup.component';
-import { DefaultPackageComponent } from './components/packages/default-package/default-package.component';
-import { RequestsTableComponent } from './components/requests-table/requests-table.component';
+import {
+  AdminGuestDetailsComponent,
+  AdminDocumentsDetailsComponent,
+  AdminPackageDetailsComponent,
+  AdminPaymentDetailsComponent,
+  DefaultPackageComponent,
+  AirportPickupComponent,
+  JourneyDialogComponent,
+  RequestsTableComponent,
+  DepositRuleComponent,
+  ManualCheckinComponent,
+  StayDetailsComponent,
+  DetailsComponent,
+} from './components';
+import { InstantFeedbackComponent } from './components/instant-feedback/instant-feedback.component';
+import { StayFeedbackComponent } from './components/stay-feedback/stay-feedback.component';
 import { ButtonDependencyDirective } from './directives/button-dependency.directive';
 import { AdminDetailsService } from './services/admin-details.service';
 import { ReservationService } from './services/reservation.service';
-import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
-import { ManualCheckinComponent } from './components/manual-checkin/manual-checkin.component';
-import { StayDetailsComponent } from './components/stay-details/stay-details.component';
 
 export const adminReservationRoutes: Route[] = [];
 
@@ -51,6 +55,8 @@ export const adminReservationRoutes: Route[] = [];
     DepositRuleComponent,
     ManualCheckinComponent,
     StayDetailsComponent,
+    StayFeedbackComponent,
+    InstantFeedbackComponent,
   ],
   exports: [
     DetailsComponent,
@@ -64,6 +70,9 @@ export const adminReservationRoutes: Route[] = [];
     JourneyDialogComponent,
     RequestsTableComponent,
     DepositRuleComponent,
+    StayDetailsComponent,
+    StayFeedbackComponent,
+    InstantFeedbackComponent,
   ],
 })
 export class AdminReservationModule {}

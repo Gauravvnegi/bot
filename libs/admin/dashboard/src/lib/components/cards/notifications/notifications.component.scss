@@ -61,7 +61,17 @@
       align-items: center;
       color: $dark-blue;
     }
+    &-number-color{
+      color: $dark-blue;
+      font-weight: bold;
+      font-size: 25px;
+    }
+    &-text-color{
+      color: $quote-color;
+      font-size: 12px;
+    }
   }
+  
   &-items {
     display: flex;
     justify-content: space-between;
@@ -70,6 +80,7 @@
     align-items: center;
     font-family: Roboto;
     font-size: 12px;
+    color: $button-blue;
     &-item {
       display: flex;
       font-weight: 500;
@@ -106,7 +117,7 @@
       padding: 10px;
       top: 120%;
       left: -200%;
-      color: #484848;
+      color: $tooltip;
       border-radius: 5px;
       box-shadow: 0px 0px 10px 0px #eee;
       display: none;
@@ -145,4 +156,13 @@
       }
     }
   }
+}
+.notifications-graph-wraper-number-color {
+  color: $dark-blue;
+  font-weight: 700;
+  font-size: 25px;
+}
+.notifications-graph-wraper-text-color {
+  color: $note1;
+  font:normal normal 700 12px/14px Roboto;
 }

@@ -3,8 +3,9 @@
 $auth-color: #4b56c0;
 $quote-color: #6d7580;
 $primary-purple: #4b56c0;
-$navy-blue:rgb(0 32 70);
+$navy-blue: rgb(0 32 70);
 $primary-gray: #9eaeb8;
+$primary-gray1: rgba(158, 174, 184);
 $primary-black: #484848;
 $dark-grey: #727272;
 $light-grey: #d9d9d9;
@@ -12,6 +13,9 @@ $light-grey2: #c5c5c5;
 $initiated: #6bacf8;
 $reject: #f00d2a;
 $completed: #53b33e;
+$light-gray: #e0e0e0;
+$medium-gay:#b8bbbe;
+// $completed1: #2cf708;
 $pending: #c2c2c2;
 $default: #959ea7;
 $dark-blue: #002046;
@@ -20,13 +24,26 @@ $white: #ffffff;
 $button-blue: #4b56c0;
 $auth-gray: #555;
 $note: #9ea3aa;
+$note1:#8995a3;
 $black: #000;
 $tooltip: #484848;
 $warning: #f6b155;
+$dark-warning: #fc9d03;
+// $warning1: #f7910b;
 $approved: #2f1dce;
 $btn-shadow: #4b56c04d;
 $box-shadow: #0000000d;
 $hover-box-shadow: #0368ff42;
+$timeout: #0bb2d4;
+$accept: #119e0c;
+$closed: #fb3d4e;
+$light-blue: #3e8ef7;
+$gray-total: #8995a3;
+$text-email: #faa700;
+$text-bot: #745af2;
+$booking-feedback: #0030b5;
+$list-popup:#cfd9f5;
+$arrival-time: #b2b7bc;
 
 // grey palet
 $c-white: $white;
@@ -67,6 +84,7 @@ $accepted: #389f99;
 $initiated-2: #ff8f00;
 $tab-bottom-border: rgba(0, 0, 0, 0.12);
 $go-btn-default: #4b56c033;
+$dropdown-selected-value: #673ab7;
 
 $popup-button-width: 10vw;
 

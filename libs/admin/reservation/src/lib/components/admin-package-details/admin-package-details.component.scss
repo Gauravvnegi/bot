@@ -5,6 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-top: 15px;
     .go-to-package {
       font-weight: 500;
       color: $primary-gray;
@@ -54,9 +55,11 @@
 }
 
 .data-seperator {
-  border: 2px solid #218af3;
+  border: none;
   margin: $margin20 0px;
-  opacity: 0.1;
+  // opacity: 0.1;
+  background: $light-grey;
+  height: 1px;
 }
 
 .package-label {
@@ -91,3 +94,8 @@
 }
 
 
+:host ::ng-deep .mat-expansion-panel{
+  margin-top: 20px !important;
+  box-shadow: none;
+  border: solid 1px $light-grey
+}

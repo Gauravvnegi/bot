@@ -287,3 +287,7 @@
 ::ng-deep .tranparent-bg {
   background: transparent;
 }
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: rgb(75, 86, 192) !important;
+}

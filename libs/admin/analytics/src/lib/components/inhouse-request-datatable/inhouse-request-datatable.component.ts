@@ -184,7 +184,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: 'pending',
+        type: key,
       })
     );
   }
@@ -317,10 +317,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         (res) => {
           FileSaver.saveAs(
             res,
-            this.tableName.toLowerCase() +
-              '_export_' +
-              new Date().getTime() +
-              '.csv'
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
         },

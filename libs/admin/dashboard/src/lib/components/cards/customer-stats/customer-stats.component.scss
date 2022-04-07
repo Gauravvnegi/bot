@@ -71,7 +71,6 @@
       align-items: center;
       transform: scale(1.1);
       text-align: center;
-      color:$dark-blue;
       .val {
         font: normal normal bold 25px/30px Roboto;
         letter-spacing: 1.5px;
@@ -82,7 +81,11 @@
         font: normal normal bold 12px/14px Roboto;
         letter-spacing: 0.72px;
         opacity: 1;
+        // color: $dark-blue;
+        color:$gray-total;
       }
     }
   }
 }
+
+

@@ -21,7 +21,7 @@
 }
 
 .details-wrapper {
-  background-color: white;
+  background-color: $white;
   max-height: 100%;
   @media screen and (max-width: 1100px) {
     height: 85vh;
@@ -37,7 +37,7 @@
 }
 
 :host ::ng-deep .header {
-  background: #4b56c0;
+  background: $primary-purple;
   position: sticky;
   top: 0;
   z-index: 999;
@@ -46,7 +46,7 @@
     top: 5px;
     right: 10px;
     i {
-      color: white;
+      color: $white;
     }
     &:hover {
       cursor: pointer;
@@ -54,14 +54,14 @@
   }
   .header-seperator {
     height: 50px;
-    border: 1px solid #ffffff;
+    border: 1px solid $white;
     opacity: 0.2;
   }
   .name-details {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: $white;
     font-size: $font16;
     margin-bottom: 1.5rem;
     padding: 20px 20px 0 20px;
@@ -73,7 +73,7 @@
         height: 66px;
         border-radius: 50%;
         margin-right: 15px;
-        background-color: #ffffff;
+        background-color: $white;
       }
       .details {
         .name {
@@ -81,7 +81,7 @@
           align-items: baseline;
         }
         .contact-details {
-          color: white;
+          color: $white;
           font-size: $font10;
           display: flex;
           align-items: center;
@@ -91,9 +91,9 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            color: white;
+            color: $white;
             :hover {
-              color: rgb(75, 86, 192);
+              color: $white;
             }
             .material-icons {
               font-size: $font12;
@@ -106,7 +106,7 @@
           .call {
             margin-right: 20px;
             :hover {
-              color: rgb(75, 86, 192);
+              color: $white;
             }
           }
         }
@@ -115,7 +115,7 @@
     .guest_data {
       display: flex;
       align-items: baseline;
-      color: white;
+      color: $white;
       justify-content: space-between;
       font-size: $font16;
       padding-left: 5px;
@@ -146,7 +146,7 @@
         text-align: center;
       }
       .feedback {
-        color: white;
+        color: $white;
         font-size: $font10;
         display: flex;
         align-items: center;
@@ -173,7 +173,7 @@
             top: 50%;
             font-size: 12px;
             color: $dark-grey;
-            background-color: white;
+            background-color: $white;
             left: 0%;
             padding: 7px;
             box-shadow: 0px 0px 5px 0px lightgray;
@@ -186,7 +186,7 @@
           }
           .number {
             padding: 2px;
-            color: white;
+            color: $white;
             text-align: center;
             width: 15px;
             border-radius: 50%;
@@ -220,7 +220,7 @@
       display: flex;
       .check-button {
         outline: none;
-        border: 1px solid #ffffff;
+        border: 1px solid $white;
         background: transparent;
         border: none;
         display: flex;
@@ -234,7 +234,7 @@
         line-height: normal;
         letter-spacing: 0.84px;
         text-align: center;
-        color: #fff;
+        color: $white;
         .material-icons {
           margin-right: $margin15;
           margin-left: $margin5;
@@ -250,7 +250,7 @@
     }
   }
   hr {
-    background: #fff;
+    background: $white;
     opacity: 0.2;
   }
 
@@ -267,29 +267,29 @@
   margin-left: 0;
   background: transparent;
   outline: none;
-  border: 1px solid #ffffff;
+  border: 1px solid $white;
   border-radius: 5px;
   padding: 6px $padding20;
   .p-inputtext {
-    color: white;
+    color: $white;
   }
   &:hover {
-    border-color: #ffffff;
+    border-color: $white;
   }
 }
 
 :host ::ng-deep .pi {
-  color: white;
+  color: $white;
 }
 
 .svg-wrapper {
   padding-left: 5px;
-  color: #ffffff;
+  color: $white;
   display: flex;
   align-items: center;
   .svg {
     path {
-      fill: white;
+      fill: $white;
     }
     margin-right: 5px;
   }
@@ -306,17 +306,17 @@
       height: 30px;
       background: #ff0000;
       border-radius: 15px;
-      border: solid 2px #fff;
+      border: solid 2px $white;
       text-align: center;
       padding-top: 4px;
       margin-left: 30px;
-      color: #fff;
+      color: $white;
       font-size: 12px;
       font-weight: bold;
       padding-top: 7px;
     }
     li.contant {
-      color: #fff;
+      color: $white;
       font-size: 12px;
       margin-left: 25px;
       padding-top: 8px;
@@ -327,8 +327,8 @@
       border: none;
       padding: 6px 15px;
       border-radius: 15px;
-      background: #fc9d03;
-      color: #fff;
+      background: $dark-warning;
+      color: $white;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
@@ -340,7 +340,7 @@
   font-size: $font16;
   margin-right: $margin20;
   font-weight: $bolder;
-  color: #002046;
+  color: $dark-blue;
 }
 
 .data-seperator {
@@ -404,7 +404,7 @@
 
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;
-  color: #484848;
+  color: $primary-black;
 }
 
 .health-status {
@@ -429,7 +429,7 @@
     text-align: center;
     font-size: $font12;
     margin: 1%;
-    border: 1px dashed #d9d9d9;
+    border: 1px dashed $light-grey;
     border-radius: 8px;
     img {
       border-radius: 8px;
@@ -508,13 +508,13 @@
 
 .tab-buttons {
   width: 18%;
-  padding: $padding20;
+  padding: $padding4;
   position: absolute;
   top: 52px;
   right: 0;
   height: 85%;
   z-index: 22;
-  background-color: white;
+  background-color: $white;
   overflow-y: auto;
   overflow-x: hidden;
   .contact {
@@ -528,13 +528,13 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 49vh;
+    height: 35vh;
     .button {
       border: 1px solid $primary-purple;
       font-size: $font12;
       outline: none;
       padding: 10px 5px;
-      margin: 8px 0;
+      margin: 5px 0;
       background-color: transparent;
       width: 100%;
       color: $primary-purple;
@@ -542,7 +542,7 @@
       &:hover {
         cursor: pointer;
         background-color: $primary-purple;
-        color: white;
+        color: $white;
       }
     }
   }
@@ -667,4 +667,7 @@
   .mat-select-arrow {
     color: $white;
   }
+}
+:host ::ng-deep .item {
+  color: $primary-purple !important;
 }

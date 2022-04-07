@@ -74,7 +74,7 @@
 }
 
 :host ::ng-deep .arrival-date {
-  font-size: $font12;
+  font-size: $font10;
   color: $dark-grey;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -160,7 +160,7 @@
     top: 50%;
     font-size: 12px;
     color: $dark-grey;
-    background-color: white;
+    background-color: $white;
     left: 0%;
     padding: 7px;
     box-shadow: 0px 0px 5px 0px lightgray;
@@ -173,7 +173,7 @@
   }
   .number {
     padding: 4px 0;
-    color: white;
+    color: $white;
     margin: 0 2px;
     text-align: center;
     min-width: 23px;
@@ -196,4 +196,8 @@
 
 :host ::ng-deep input[disabled='true'] {
   opacity: 0.5;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+  color: $primary-purple !important;
 }

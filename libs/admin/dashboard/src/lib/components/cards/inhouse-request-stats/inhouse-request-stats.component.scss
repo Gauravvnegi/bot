@@ -196,3 +196,20 @@ svg text.label {
 .comparison-positive {
   color: $comparison-positive;
 }
+:host ::ng-deep .labels {
+  position: absolute;
+    top: 25%;
+    right: 71%;
+    color:$note1;
+    width: 30px;
+    font: normal normal bold 11px/12px Roboto;
+  
+}
+:host ::ng-deep .labels .val {
+    text-align: center;
+    color:$dark-blue;
+    font: normal normal bold 21px/24px Roboto;
+
+}
+
+

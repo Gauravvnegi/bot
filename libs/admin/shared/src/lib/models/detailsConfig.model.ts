@@ -71,8 +71,8 @@ export class FeedbackDetails implements Deserializable {
       set({}, 'status', get(input, ['statusMessage', 'status']))
     );
     this.suggestions =
-      input.quickServices &&
-      input.quickServices.map((service) => {
+      input?.quickServices &&
+      input.quickServices?.map((service) => {
         return new FeedbackSuggestion().deserialize(service);
       });
     return this;

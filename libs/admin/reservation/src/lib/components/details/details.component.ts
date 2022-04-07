@@ -94,6 +94,7 @@ export class DetailsComponent implements OnInit {
   guestReservations: GuestDetails;
   guestReservationDropdownList = [];
   @Input() guestId: string;
+  @Input() bookingNumber: string;
   bookingFG: FormGroup;
 
   constructor(
@@ -638,10 +639,10 @@ export class DetailsComponent implements OnInit {
       }
     });
     if (this.guestReservationDropdownList.length) {
-      this.bookingFG
-        .get('booking')
-        .setValue(this.guestReservationDropdownList[0].bookingId);
-      this.bookingId = this.guestReservationDropdownList[0].bookingId;
+      this.bookingId = this.guestReservationDropdownList.filter(
+        (booking) => booking.bookingNumber === this.bookingNumber
+      )[0].bookingId;
+      this.bookingFG.get('booking').setValue(this.bookingId);
       this.getReservationDetails();
     } else {
       this.isReservationDetailFetched = true;

@@ -415,6 +415,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     );
 
     detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
+    detailCompRef.componentInstance.bookingNumber =
+      rowData.booking.bookingNumber;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
 
     this.$subscription.add(

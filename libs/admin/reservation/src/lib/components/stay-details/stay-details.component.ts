@@ -16,6 +16,8 @@ export class StayDetailsComponent implements OnInit {
   @Output() addFGEvent = new EventEmitter();
   @Output() isGuestInfoPatched = new EventEmitter();
   @Input() guestReservations;
+  @Input() bookingNumber: string;
+  @Input() feedbackId: string;
   stayDetailsForm: FormGroup;
   constructor(
     private _fb: FormBuilder,

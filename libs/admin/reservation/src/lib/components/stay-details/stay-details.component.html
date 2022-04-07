@@ -4,19 +4,21 @@
   </div>
   <div
     class="booking__container"
-    *ngFor="let booking of guestReservations; let index = index"
+    *ngFor="let rowData of guestReservations; let index = index"
   >
-    <ng-container *ngIf="booking.type === 'FEEDBACK'; else reservation">
+    <ng-container *ngIf="rowData.type === 'FEEDBACK'; else reservation">
       <hospitality-bot-instant-feedback
-        [rowData]="booking.feedback"
-        [openedState]="index === 0"
+        [rowData]="rowData.feedback"
+        [openedState]="index == 0"
       >
       </hospitality-bot-instant-feedback>
     </ng-container>
     <ng-template #reservation>
       <hospitality-bot-stay-feedback
-        [rowData]="booking.reservation"
-        [openedState]="index === 0"
+        [rowData]="rowData.reservation"
+        [openedState]="
+          bookingNumber == rowData.reservation?.booking.bookingNumber
+        "
       >
       </hospitality-bot-stay-feedback>
     </ng-template>

@@ -393,7 +393,10 @@
           </p-tableCheckbox>
         </td>
         <td class="guest">
-          {{ rowData.outlet }}
+          <div class="guest-name">
+            {{ rowData.bookingDetails.tableOrRoomNumber }}
+          </div>
+          <div class="guest-phone">{{ rowData.outlet }}</div>
         </td>
         <td class="guest">
           <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
@@ -570,7 +573,10 @@
           <div class="package-date">
             {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
           </div>
-          <div class="package-city">{{ rowData.guest.place }}</div>
+          <div class="package-date">
+            {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
+          </div>
+          <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
         </td>
         <td class="comments">{{ rowData.guestData.overAllNps }}</td>
         <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>

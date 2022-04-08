@@ -66,6 +66,12 @@ export const DEFAULT_ROUTES = [
         children: null,
         url: 'assets/svg/box.svg',
       },
+      {
+        path: 'library/topic',
+        title: 'Topic',
+        children: null,
+        url: 'assets/svg/box.svg',
+      },
     ],
   },
   {
@@ -74,5 +80,4 @@ export const DEFAULT_ROUTES = [
     children: null,
     url: 'assets/svg/subscription.svg',
   },
-  
 ];

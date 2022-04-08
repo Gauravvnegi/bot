@@ -1333,10 +1333,6 @@
       "projectType": "library",
       "root": "libs/admin/listing",
       "sourceRoot": "libs/admin/listing/src",
-    "admin-topic": {
-      "projectType": "library",
-      "root": "libs/admin/topic",
-      "sourceRoot": "libs/admin/topic/src",
       "prefix": "hospitality-bot",
       "architect": {
         "lint": {
@@ -1347,10 +1343,6 @@
               "libs/admin/listing/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/admin/listing/**/*"]
-              "libs/admin/topic/tsconfig.lib.json",
-              "libs/admin/topic/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/admin/topic/**/*"]
           }
         },
         "test": {
@@ -1392,6 +1384,34 @@
             "tsConfig": "libs/admin/library/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/library/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-topic": {
+      "projectType": "library",
+      "root": "libs/admin/topic",
+      "sourceRoot": "libs/admin/topic/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/topic/tsconfig.lib.json",
+              "libs/admin/topic/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/topic/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
             "jestConfig": "libs/admin/topic/jest.config.js",
             "tsConfig": "libs/admin/topic/tsconfig.spec.json",
             "passWithNoTests": true,
@@ -1408,7 +1428,7 @@
   },
   "cli": {
     "defaultCollection": "@nrwl/angular",
-    "analytics": false
+    "analytics": "10c25d98-a450-4460-85e5-4d3dd856d677"
   },
   "schematics": {
     "@nrwl/angular:application": {

@@ -12,7 +12,6 @@
   text-align: center;
 }
 
-
 .icon-wrapper {
   @include flex-space-between();
   flex-wrap: wrap;
@@ -23,7 +22,7 @@
     margin: 6% 0.5%;
     @include flex-item-center();
     flex-direction: column;
-    
+
     .table-body-journey-icon {
       height: 14px;
       width: 14px;
@@ -212,7 +211,7 @@
   color: $primary-purple !important;
 }
 
-:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-purple !important;
 }
 
@@ -221,12 +220,13 @@
     cursor: pointer;
     background: $table-hover-background !important;
   }
-:host ::ng-deep .header{
+}
+:host ::ng-deep .header {
   color: $dark-blue !important;
   font-size: 16px;
   font-weight: bold;
 }
 
-:host ::ng-deep .table-data-head{
+:host ::ng-deep .table-data-head {
   color: $dark-blue !important;
 }

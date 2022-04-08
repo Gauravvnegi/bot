@@ -10,7 +10,6 @@
       <hospitality-bot-instant-feedback
         [rowData]="rowData.feedback"
         [openedState]="index == 0"
-        [colorMap]="colorMap"
       >
       </hospitality-bot-instant-feedback>
     </ng-container>
@@ -20,7 +19,6 @@
         [openedState]="
           bookingNumber == rowData.reservation?.booking.bookingNumber
         "
-        [colorMap]="colorMap"
       >
       </hospitality-bot-stay-feedback>
     </ng-template>

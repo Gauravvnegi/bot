@@ -14,7 +14,6 @@ export class InstantFeedbackComponent implements OnInit {
   @Input() title;
   @Input() rowData;
   @Input() openedState: boolean;
-  @Input() colorMap;
   outlets;
   private $subscription = new Subscription();
   constructor(

@@ -169,7 +169,10 @@ export class DetailsComponent implements OnInit {
     this.$subscription.add(
       this._reservationService.getGuestReservations(this.guestId).subscribe(
         (response) => {
-          this.guestReservations = new GuestDetails().deserialize(response);
+          this.guestReservations = new GuestDetails().deserialize(
+            response,
+            this.colorMap
+          );
           this.initBookingsFG();
           this.initGuestReservationDropdownList();
           this.isGuestReservationFetched = true;

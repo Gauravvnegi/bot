@@ -28,21 +28,10 @@
             *ngIf="rowData.visitDetail?.feedbackId"
           >
             <div class="feedback">
-              <div
-                class="booking-feedback"
-                [style.backgroundColor]="
-                  (colorMap?.stayFeedbacks)[
-                    rowData.visitDetail?.intentToRecommends.rating
-                  ]?.colorCode
-                "
-              >
+              <div class="booking-feedback">
                 <p
                   class="number"
-                  [style.backgroundColor]="
-                    (colorMap?.stayFeedbacks)[
-                      rowData.visitDetail?.intentToRecommends.rating
-                    ]?.colorCode
-                  "
+                  [style.backgroundColor]="rowData.visitDetail?.color"
                 >
                   {{ rowData.visitDetail?.intentToRecommends.rating }}
                 </p>
@@ -140,14 +129,7 @@
         </div>
         <div class="feild width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
-          <div
-            class="value"
-            [style.color]="
-              (colorMap?.stayFeedbacks)[
-                rowData.visitDetail?.intentToRecommends.rating
-              ]?.colorCode
-            "
-          >
+          <div class="value" [style.color]="rowData.visitDetail?.color">
             {{ rowData.visitDetail?.intentToRecommends.rating }}
             {{ rowData.visitDetail?.intentToRecommends.Category }}
           </div>

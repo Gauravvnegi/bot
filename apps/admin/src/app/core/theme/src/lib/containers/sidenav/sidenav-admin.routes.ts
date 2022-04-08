@@ -74,4 +74,5 @@ export const DEFAULT_ROUTES = [
     children: null,
     url: 'assets/svg/subscription.svg',
   },
+  
 ];

@@ -1333,6 +1333,10 @@
       "projectType": "library",
       "root": "libs/admin/listing",
       "sourceRoot": "libs/admin/listing/src",
+    "admin-topic": {
+      "projectType": "library",
+      "root": "libs/admin/topic",
+      "sourceRoot": "libs/admin/topic/src",
       "prefix": "hospitality-bot",
       "architect": {
         "lint": {
@@ -1343,6 +1347,10 @@
               "libs/admin/listing/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**", "!libs/admin/listing/**/*"]
+              "libs/admin/topic/tsconfig.lib.json",
+              "libs/admin/topic/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/topic/**/*"]
           }
         },
         "test": {
@@ -1384,6 +1392,10 @@
             "tsConfig": "libs/admin/library/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/library/src/test-setup.ts"
+            "jestConfig": "libs/admin/topic/jest.config.js",
+            "tsConfig": "libs/admin/topic/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/topic/src/test-setup.ts"
           }
         }
       },

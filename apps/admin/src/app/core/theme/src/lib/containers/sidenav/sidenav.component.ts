@@ -149,6 +149,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
         if (subItemList.length) {
           return [{ ...data, children: subItemList }];
         } else return [];
+      case 'library':
+        const librarySubItemList = this.checkLibraryItems(data, subscription);
+        if (librarySubItemList.length)
+          return [{ ...data, children: subItemList }];
+        else return [];
       default:
         return subscription.filter(
           (d) => ModuleNames[d.name] === data.path && d.active
@@ -167,6 +172,21 @@ export class SidenavComponent implements OnInit, OnDestroy {
       ) {
         subItemList.push(child);
       } else if (!child.path.includes('request')) subItemList.push(child);
+    });
+    return subItemList;
+  }
+
+  checkLibraryItems(item, subscription) {
+    const subItemList = [];
+    item.children.forEach((child) => {
+      if (
+        child.path.includes('package') &&
+        subscription.filter(
+          (d) => ModuleNames[d.name] === 'package' && d.active
+        ).length
+      ) {
+        subItemList.push(child);
+      } else if (!child.path.includes('package')) subItemList.push(child);
     });
     return subItemList;
   }

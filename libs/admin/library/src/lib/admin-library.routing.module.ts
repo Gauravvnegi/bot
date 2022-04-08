@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { LibraryComponent } from './components/library/library.component';
+import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
 
 const appRoutes: Route[] = [
   { path: '', redirectTo: 'package' },
@@ -10,6 +11,7 @@ const appRoutes: Route[] = [
       import('@hospitality-bot/admin/packages').then(
         (m) => m.AdminPackagesModule
       ),
+    canActivate: [LoadGuard],
   },
   {
     path: 'listing',

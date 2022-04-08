@@ -10,10 +10,10 @@ import {
 export class GuestDetails {
   records: GuestDetail[];
 
-  deserialize(input) {
+  deserialize(input, colorMap) {
     this.records = new Array();
     input.forEach((item) => {
-      this.records.push(new GuestDetail().deserialize(item));
+      this.records.push(new GuestDetail().deserialize(item, colorMap));
     });
     return this;
   }
@@ -25,15 +25,16 @@ export class GuestDetail {
   type: string;
   subType: string;
 
-  deserialize(input) {
+  deserialize(input, colorMap) {
     if (input.guestReservation) {
       this.reservation = new Reservation().deserialize(
         input.guestReservation,
-        input.subType
+        input.subType,
+        colorMap
       );
     }
     if (input.feedback)
-      this.feedback = new VisitDetail().deserialize(input.feedback);
+      this.feedback = new VisitDetail().deserialize(input.feedback, colorMap);
     Object.assign(
       this,
       set({}, 'type', get(input, ['type'])),
@@ -50,11 +51,11 @@ export class Reservation {
   booking: Booking;
   visitDetail: VisitDetail;
   type: string;
-  deserialize(input: any, type: string) {
+  deserialize(input: any, type: string, colorMap) {
     this.rooms = new Room().deserialize(input.stayDetails);
     // this.feedback = new Feedback().deserialize(input.feedback);
     this.booking = new Booking().deserialize(input);
-    this.visitDetail = new VisitDetail().deserialize(input.feedback);
+    this.visitDetail = new VisitDetail().deserialize(input.feedback, colorMap);
     this.type = type;
     return this;
   }
@@ -82,8 +83,9 @@ export class VisitDetail {
   serviceType: string;
   statusMessage;
   surveyType: string;
+  color: string;
 
-  deserialize(input) {
+  deserialize(input, colorMap) {
     Object.assign(
       this,
       set({}, 'comment', get(input, ['comments'])),
@@ -95,9 +97,27 @@ export class VisitDetail {
       set({}, 'outletId', get(input, ['outletId'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
       set({}, 'surveyType', get(input, ['surveyType'])),
-      set({}, 'statusMessage', get(input, ['statusMessage']))
+      set({}, 'statusMessage', get(input, ['statusMessage'])),
+      set({}, 'color', this.getColor(input, colorMap))
     );
     return this;
+  }
+
+  getColor(input, colorMap) {
+    if (input.feedbackType === 'STAYFEEDBACK') {
+      return colorMap.stayFeedbacks[input.intentToRecommends.rating].colorCode;
+    } else {
+      return (
+        input.feedbackType &&
+        colorMap.transactionalFeedbacks[
+          Object.keys(colorMap.transactionalFeedbacks).filter((key) =>
+            colorMap.transactionalFeedbacks[key].scale.includes(
+              input.intentToRecommends.rating
+            )
+          )[0]
+        ].colorCode
+      );
+    }
   }
 
   getfeedbackSubmissionTime(timezone = '+05:30') {

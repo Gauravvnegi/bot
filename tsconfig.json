@@ -84,7 +84,8 @@
         "apps/admin/src/app/core/theme/src/index.ts"
       ],
       "@hospitality-bot/admin/listing": ["libs/admin/listing/src/index.ts"],
-      "@hospitality-bot/admin/library": ["libs/admin/library/src/index.ts"]
+      "@hospitality-bot/admin/library": ["libs/admin/library/src/index.ts"],
+      "@hospitality-bot/admin/assets": ["libs/admin/assets/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

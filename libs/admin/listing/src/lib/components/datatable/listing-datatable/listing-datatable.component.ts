@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ReservationTable } from '@hospitality-bot/admin/dashboard';
 import {
   AdminUtilityService,
   BaseDatatableComponent,

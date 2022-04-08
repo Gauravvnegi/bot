@@ -27,6 +27,11 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <p class="heading">{{ tableName }}</p>
+            <div>
+              <div class="request-btn__wrap">
+                {{ 'request_feedback_label' | translate }}
+              </div>
+            </div>
             <div class="options">
               <div *ngIf="isActionButtons" class="icons">
                 <img

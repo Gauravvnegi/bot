@@ -15,15 +15,19 @@
         <div class="header-seperator"></div>
         <div class="booking-id-wrapper">
           <div class="feedback">
-            <div class="booking-feedback">
+            <div
+              class="booking-feedback"
+              [style.backgroundColor]="
+                (colorMap?.stayFeedbacks)[rowData.intentToRecommends.rating]
+                  ?.colorCode
+              "
+            >
               <p
                 class="number"
-                [ngClass]="{
-                  'status-background-reject':
-                    rowData.intentToRecommends.rating < 5,
-                  'status-background-success':
-                    rowData.intentToRecommends.rating >= 5
-                }"
+                [style.backgroundColor]="
+                  (colorMap?.stayFeedbacks)[rowData.intentToRecommends.rating]
+                    ?.colorCode
+                "
               >
                 {{ rowData.intentToRecommends.rating }}
               </p>
@@ -35,10 +39,10 @@
           (click)="downloadFeedback($event, rowData.feedbackId)"
         >
           <div class="view-feedback-btn__text">
-            <img src="assets/svg/View.svg" alt="">
+            <img src="assets/svg/View.svg" alt="" />
             View Feedback
           </div>
-          <img src="assets/svg/union.svg" alt="">
+          <img src="assets/svg/union.svg" alt="" />
         </div>
         <mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded"
           >add</mat-icon
@@ -60,7 +64,13 @@
         </div>
         <div class="feild width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
-          <div class="value">
+          <div
+            class="value"
+            [style.color]="
+              (colorMap?.stayFeedbacks)[rowData.intentToRecommends.rating]
+                ?.colorCode
+            "
+          >
             {{ rowData.intentToRecommends.rating }}
             {{ rowData.intentToRecommends.Category }}
           </div>

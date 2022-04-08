@@ -12,6 +12,7 @@ import { ReservationService } from '../../services/reservation.service';
 export class StayFeedbackComponent implements OnInit {
   @Input() rowData;
   @Input() openedState: boolean;
+  @Input() colorMap;
   private $subscription = new Subscription();
   constructor(
     public _globalFilterService: GlobalFilterService,

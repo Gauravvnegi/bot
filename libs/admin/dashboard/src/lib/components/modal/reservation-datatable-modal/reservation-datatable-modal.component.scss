@@ -108,9 +108,9 @@
   }
 }
 
-:host ::ng-deep .data-table-row {
-  &:hover { 
-    cursor: pointer;
-    background: $table-hover-background !important;
-  }
-}
+// :host ::ng-deep .data-table-row.hover-background {
+//   &:hover { 
+//     cursor: pointer;
+//     background: $table-popup-background !important;
+//   }
+// }

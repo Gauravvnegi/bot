@@ -155,9 +155,9 @@ export const feedback = {
       OUTSTANDING: '#508919',
     },
     globalNPS: {
-      neutral: '#4BA0F5',
-      positive: '#1AB99F',
-      negative: '#EF1D45',
+      neutral: '#ff8f00',
+      positive: '#508919',
+      negative: '#cc052b',
     },
   },
   labels: {

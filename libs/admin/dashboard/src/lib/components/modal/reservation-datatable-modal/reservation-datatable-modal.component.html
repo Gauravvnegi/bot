@@ -313,7 +313,7 @@
         let-rowIndex="rowIndex"
       >
         <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
-        <tr class="data-table-row" (click)="openDetailPage($event, rowData)">
+        <tr class="data-table-row hover-background" (click)="openDetailPage($event, rowData)">
           <td class="table--checkbox">
             <p-tableCheckbox
               [value]="rowData"

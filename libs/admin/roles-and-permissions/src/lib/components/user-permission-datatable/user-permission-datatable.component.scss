@@ -173,3 +173,11 @@
 tr > td {
   border-bottom: none;
 }
+
+:host ::ng-deep .data-table-row {
+  &:hover {
+    cursor: pointer;
+    background: $table-hover-background;
+  }
+}
+

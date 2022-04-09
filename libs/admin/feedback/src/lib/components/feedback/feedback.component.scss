@@ -169,6 +169,6 @@
 :host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
-    background: $table-hover-background !important;
+    background: $table-hover-dark-background !important;
   }
 }

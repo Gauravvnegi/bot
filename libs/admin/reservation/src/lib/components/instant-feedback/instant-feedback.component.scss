@@ -161,14 +161,17 @@
       }
       .number {
         padding: 3px;
-        color: white;
+        color: $white;
         text-align: center;
         width: 15px;
         border-radius: 50%;
         font-size: 12px;
         margin: 0 2px;
-        min-width: 20px;
-        min-height: 20px;
+        min-width: 26px;
+        min-height: 26px;
+        padding-top: 5px;
+        background: $white;
+        border: solid 2px $white;
       }
       @media screen and (max-width: 800px) {
         margin: 0;
@@ -235,4 +238,11 @@
 .mat-expansion-panel-spacing {
   box-shadow: none !important;
   border: solid 1px $c-gray-85 !important;
+}
+
+:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover{
+  background: $accordian-background;
+}
+:host ::ng-deep .mat-expansion-panel-header:hover{
+  background: $accordian-background !important;
 }

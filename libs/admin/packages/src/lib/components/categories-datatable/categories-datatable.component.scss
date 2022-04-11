@@ -144,6 +144,12 @@
 :host ::ng-deep input[disabled='true'] {
   opacity: 0.5;
 }
+:host ::ng-deep .data-table-row {
+  &:hover {
+    cursor: pointer;
+    background: $table-hover-background !important;
+  }
+}
 :host ::ng-deep .heading{
   color: $dark-blue;
   font-size: 16px;

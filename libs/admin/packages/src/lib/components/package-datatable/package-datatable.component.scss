@@ -221,9 +221,10 @@
   }
 }
 
-.data-table-row{
-  &:hover{
-    background: rgba(0,0,0,.04) !important;
+:host ::ng-deep .data-table-row {
+  &:hover {
+    cursor: pointer;
+    background: $table-hover-background !important;
   }
 }
 

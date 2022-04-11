@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ReservationTable } from '@hospitality-bot/admin/dashboard';
 import {
@@ -32,8 +33,8 @@ import { listingConfig } from '../../../constants/listing';
 })
 export class ListingDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Listing';
-  @Input() tabFilterItems;
+  @Input() tableName = 'Reservations';
+  @Input() tabFilterItems = listingConfig.datatable.tabFilterItems;
   @Input() tabFilterIdx: number = 1;
   actionButtons = true;
   isQuickFilters = true;
@@ -43,23 +44,29 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 200;
+  rowsPerPage = 5;
   cols = listingConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
+
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected router: Router,
+    private route: ActivatedRoute
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.tabFilterItems = listingConfig.datatable.tabFilterItems;
+    // this.tabFilterItems = listingConfig.datatable.tabFilterItems;
+    console.log(this.tabFilterItems);
+    this.values = [];
+    this.totalRecords = 0;
   }
 
   /**
@@ -219,6 +226,10 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     }
 
     this.changePage(0);
+  }
+
+  openCreateListing() {
+    this.router.navigate(['create'], { relativeTo: this.route });
   }
 
   get listingConfiguration() {

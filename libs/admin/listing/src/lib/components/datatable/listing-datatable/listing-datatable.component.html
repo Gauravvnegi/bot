@@ -27,65 +27,92 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <p class="heading">{{ tableName }}</p>
-            <div>
-              <div class="request-btn__wrap">
-                {{ 'request_feedback_label' | translate }}
-              </div>
-            </div>
-            <div class="options">
-              <div *ngIf="isActionButtons" class="icons">
-                <img
-                  [src]="listingConfiguration.images.download.url"
-                  [alt]="listingConfiguration.images.download.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="listingConfiguration.images.googleDoc.url"
-                  [alt]="listingConfiguration.images.googleDoc.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="listingConfiguration.images.card.url"
-                  [alt]="listingConfiguration.images.card.alt"
-                  class="svg"
-                />
-              </div>
-              <div *ngIf="isActionButtons" class="seperator"></div>
-              <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
-                  class="export"
-                  [options]="documentActionTypes"
-                  formControlName="documentActionType"
+            <div style="display: flex; align-items: center;">
+              <div
+                style="
+                  width: 145px;
+                  height: 36px;
+                  border-radius: 18px;
+                  background-color: #4b56c0;
+                  padding: 8px 23.25px 8px 18.25px;
+                  cursor: pointer;
+                "
+                (click)="openCreateListing()"
+              >
+                <div
+                  style="
+                    font-family: Roboto;
+                    font-size: 14px;
+                    font-weight: 500;
+                    font-stretch: normal;
+                    font-style: normal;
+                    line-height: normal;
+                    letter-spacing: 0.56px;
+                    text-align: left;
+                    color: #fff;
+                  "
                 >
-                  <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img
-                      [src]="listingConfiguration.images.export.url"
-                      [alt]="listingConfiguration.images.export.alt"
-                    />
-                    <span class="documentActionItemLabel">{{
-                      documentActionItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <div class="divider"></div>
-                <p-dropdown
-                  class="export"
-                  [options]="documentTypes"
-                  formControlName="documentType"
-                >
-                  <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img
-                      [src]="listingConfiguration.images.csv.url"
-                      [alt]="listingConfiguration.images.csv.alt"
-                    />
-                    <span class="documentActionItemLabel">{{
-                      documentTypeItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                </button>
+                  +Create Listing
+                </div>
+              </div>
+              <div class="options">
+                <div *ngIf="isActionButtons" class="icons">
+                  <img
+                    [src]="listingConfiguration.images.download.url"
+                    [alt]="listingConfiguration.images.download.alt"
+                    class="svg"
+                  />
+                  <img
+                    [src]="listingConfiguration.images.googleDoc.url"
+                    [alt]="listingConfiguration.images.googleDoc.alt"
+                    class="svg"
+                  />
+                  <img
+                    [src]="listingConfiguration.images.card.url"
+                    [alt]="listingConfiguration.images.card.alt"
+                    class="svg"
+                  />
+                </div>
+                <div *ngIf="isActionButtons" class="seperator"></div>
+                <div formGroupName="documentActions" class="dropdown--wrapper">
+                  <p-dropdown
+                    class="export"
+                    [options]="documentActionTypes"
+                    formControlName="documentActionType"
+                  >
+                    <ng-template
+                      let-documentActionItem
+                      pTemplate="selectedItem"
+                    >
+                      <img
+                        [src]="listingConfiguration.images.export.url"
+                        [alt]="listingConfiguration.images.export.alt"
+                      />
+                      <span class="documentActionItemLabel">{{
+                        documentActionItem.label
+                      }}</span>
+                    </ng-template>
+                  </p-dropdown>
+                  <div class="divider"></div>
+                  <p-dropdown
+                    class="export"
+                    [options]="documentTypes"
+                    formControlName="documentType"
+                  >
+                    <ng-template let-documentTypeItem pTemplate="selectedItem">
+                      <img
+                        [src]="listingConfiguration.images.csv.url"
+                        [alt]="listingConfiguration.images.csv.alt"
+                      />
+                      <span class="documentActionItemLabel">{{
+                        documentTypeItem.label
+                      }}</span>
+                    </ng-template>
+                  </p-dropdown>
+                  <button class="go" (click)="onDocumentActions()">
+                    <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

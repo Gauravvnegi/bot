@@ -14,7 +14,7 @@ const appRoutes: Route[] = [
     component: PagesComponent,
     resolve: {
       adminDetails: AdminDetailResolver,
-      feedbackConfig: FeedbackConfigResolver,
+      // feedbackConfig: FeedbackConfigResolver,
     },
     children: [
       {

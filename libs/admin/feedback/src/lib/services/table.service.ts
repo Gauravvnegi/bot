@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';
 
@@ -56,5 +58,45 @@ export class FeedbackTableService extends ApiService {
    */
   updateFeedbackStatus(config, data: UpdateStatusData): Observable<any> {
     return this.patch(`/api/v1/feedback/status${config.queryObj}`, data);
+  }
+
+  getCalendarTypeNPS(startDate, endDate, timezone) {
+    const dateDiff = DateService.getDateDifference(
+      startDate,
+      endDate,
+      timezone
+    );
+    if (dateDiff >= 0 && dateDiff < 30) {
+      return 'date';
+    } else if (dateDiff >= 30 && dateDiff < 365) {
+      if (
+        DateService.getMonthFromDate(startDate, timezone) ===
+          DateService.getMonthFromDate(endDate, timezone) &&
+        DateService.getYearFromDate(startDate, timezone) ===
+          DateService.getYearFromDate(endDate, timezone)
+      ) {
+        return 'week';
+      }
+      return 'month';
+    } else {
+      if (
+        DateService.getYearFromDate(startDate, timezone) ===
+        DateService.getYearFromDate(endDate, timezone)
+      ) {
+        return 'month';
+      }
+      return 'year';
+    }
+  }
+
+  getNPSStartDate(startDate, endDate, timezone = '+05:30') {
+    if (
+      moment(startDate).utcOffset(timezone).format('M') ===
+      moment(endDate).utcOffset(timezone).format('M')
+    ) {
+      return (
+        moment(startDate).utcOffset(timezone).startOf('month').unix() * 1000
+      );
+    } else return startDate;
   }
 }

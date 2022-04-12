@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -12,7 +13,8 @@ export class CreateTopicComponent implements OnInit {
 
   createTopicFG: FormGroup;
 
-  constructor(private _fb:FormBuilder, private _snackbarService:SnackBarService) { }
+  constructor(private _fb:FormBuilder, private _snackbarService:SnackBarService,
+    private location:Location) { }
 
   initFG() :void{
     this.createTopicFG=this._fb.group({
@@ -34,6 +36,10 @@ export class CreateTopicComponent implements OnInit {
     const data=this.createTopicFG.getRawValue();
     //api call with data
     console.log(data);
+  }
+
+  redirectToTable(){
+    this.location.back();
   }
 
 }

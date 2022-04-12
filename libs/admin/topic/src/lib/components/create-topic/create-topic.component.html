@@ -1,5 +1,13 @@
 <div class="container">
-  <div>Create Topic</div>
+  <div class="go-back">
+    <mat-icon
+        (click)="redirectToTable()"
+        class="material-icons"
+        matSuffix
+        >keyboard_backspace  </mat-icon
+      >
+    <p>Create Topic</p>
+  </div>
   <div class="wrapper-form" [formGroup]="createTopicFG" *ngIf="createTopicFG">
     <div class="feilds">
       <div class="feild">
@@ -21,22 +29,27 @@
         </mat-form-field>
       </div>
       <div class="feild">
-        <mat-label class="mat-label">Description : </mat-label>
-        <mat-form-field>
+        <mat-label class="mat-label mat-label--width">Description : </mat-label>
+        <mat-form-field class="description">
           <input
             matInput
             formControlName="description"
             placeholder="Write Your Description Here"
+            class="mat-label mat-label--description"
           />
         </mat-form-field>
       </div>
-    </div>
-    <div class="toggle_wrapper">
-      <mat-label class="mat-label">Active : </mat-label>
-      <div class="status status--left">Disable</div>
-      <mat-slide-toggle formControlName="active"></mat-slide-toggle>
-      <div class="status status--left">Enable</div>
+      <div class="toggle_wrapper">
+        <mat-label class="mat-label">Active : </mat-label>
+        <div class="status status--left">Disable</div>
+        <mat-slide-toggle
+          formControlName="active"
+        ></mat-slide-toggle>
+        <div class="status status--right">Enable</div>
+      </div>
     </div>
   </div>
-  <div class="button" (click)="createTopic()" >save</div>
+  <div class="footer_button">
+    <button mat-button (click)="createTopic()">save</button>
+  </div>
 </div>

@@ -1,1 +1,192 @@
-<p>edit-contact works!</p>
+<div
+  (click)="close()"
+  style="margin: 10px; cursor: pointer; text-align: right;"
+>
+  <i class="fa fa-times" aria-hidden="true"></i>
+</div>
+<div style="padding: 30px 40px; height: 80vh;">
+  <div
+    style="
+      font-family: Roboto;
+      font-size: 20px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 1.2px;
+      color: #002046;
+    "
+  >
+    Add Contacts
+  </div>
+  <div style="padding: 20px 0;" class="tableWrap">
+    <table *ngIf="contactFA?.controls.length">
+      <thead>
+        <tr>
+          <th>Email*</th>
+          <th>Salutation*</th>
+          <th>First Name*</th>
+          <th>Last Name*</th>
+          <th>Company Name</th>
+          <th>Mobile*</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let contactFG of contactFA?.controls; let i = index"
+          [formGroup]="contactFG"
+        >
+          <td>
+            <div style="margin: 5px 10px;">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Contact Email"
+                  formControlName="email"
+                />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('email').touched &&
+                    contactFG.get('email').hasError('required')
+                  "
+                >
+                  Email is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div style="margin: 5px 10px;">
+              <mat-form-field>
+                <mat-select
+                  formControlName="salutation"
+                  placeholder="Select Salutation"
+                >
+                  <mat-option
+                    *ngFor="let salutation of salutationList"
+                    [value]="salutation.value"
+                    >{{ salutation.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error
+                  *ngIf="
+                    contactFG.get('salutation').touched &&
+                    contactFG.get('salutation').hasError('required')
+                  "
+                >
+                  Salutation is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div style="margin: 5px 10px;">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="First Name"
+                  formControlName="firstName"
+                />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('firstName').touched &&
+                    contactFG.get('firstName').hasError('required')
+                  "
+                >
+                  First Name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div style="margin: 5px 10px;">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Last Name"
+                  formControlName="lastName"
+                />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('lastName').touched &&
+                    contactFG.get('lastName').hasError('required')
+                  "
+                >
+                  Last Name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div style="margin: 5px 10px;">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Company Name"
+                  formControlName="companyName"
+                />
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div style="margin: 5px 10px;">
+              <mat-form-field>
+                <input matInput placeholder="Mobile" formControlName="mobile" />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('mobile').touched &&
+                    contactFG.get('mobile').hasError('required')
+                  "
+                >
+                  Mobile is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td (click)="removeContactField(i)">
+            <div style="cursor: pointer;">Remove</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div
+    style="width: fit-content; cursor: pointer; margin: 20px 0;"
+    (click)="generateContactField()"
+  >
+    +Add Contact
+  </div>
+  <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        width: 250px;
+        height: 46px;
+        margin: 20px 34px 0 2.5px;
+        padding: 12px 106px 13px;
+        border-radius: 23px;
+        box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+        background-color: #4b56c0;
+        cursor: pointer;
+      "
+      (click)="submitContact()"
+    >
+      <div
+        style="
+          font-size: 16px;
+          font-weight: 500;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.96px;
+          text-align: left;
+          color: #fff;
+        "
+      >
+        Save
+      </div>
+    </div>
+  </div>
+</div>

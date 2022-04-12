@@ -1,0 +1,30 @@
+@import 'main';
+
+.tableWrap {
+  max-height: calc(100% - 160px);
+  overflow: auto;
+}
+/* Set header to stick to the top of the container. */
+thead tr th {
+  background-color: $white;
+  padding: 10px;
+  position: sticky;
+  top: 0px;
+}
+
+tr,
+th {
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #9eaeb8;
+}
+
+tr,
+td {
+  background-color: transparent;
+}

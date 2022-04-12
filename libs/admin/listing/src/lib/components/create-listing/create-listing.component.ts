@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -5,6 +6,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ListingService } from '../../services/listing.service';
+import { EditContactComponent } from '../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../import-contact/import-contact.component';
 
 @Component({
@@ -22,7 +24,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private listingService: ListingService,
     private globalFilterService: GlobalFilterService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private _location: Location
   ) {
     this.initFG();
   }
@@ -37,7 +40,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       topic: ['', [Validators.required]],
       description: [''],
       contacts: [[]],
-      active: [false],
+      active: [true],
     });
   }
 
@@ -84,6 +87,27 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         detailCompRef.close();
       }
     });
+  }
+
+  openAddContact(event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const detailCompRef = this._modal.openDialog(
+      EditContactComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.onContactClosed.subscribe((response) => {
+      if (response.status) {
+        this.listFG.patchValue({ contacts: response.data });
+      }
+      detailCompRef.close();
+    });
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   ngOnDestroy(): void {

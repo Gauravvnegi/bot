@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -12,7 +12,7 @@ import { ImportContactComponent } from '../import-contact/import-contact.compone
   templateUrl: './create-listing.component.html',
   styleUrls: ['./create-listing.component.scss'],
 })
-export class CreateListingComponent implements OnInit {
+export class CreateListingComponent implements OnInit, OnDestroy {
   listFG: FormGroup;
   private $subscription = new Subscription();
   hotelId: string;
@@ -84,5 +84,9 @@ export class CreateListingComponent implements OnInit {
         detailCompRef.close();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

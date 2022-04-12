@@ -229,7 +229,7 @@ export class Booking implements Deserializable {
   getDepartureDate(timezone = '+05:30') {
     if (this.expectedArrivalTimeStamp == 0) {
       return DateService.getDateFromTimeStamp(
-        this.arrivalTimeStamp,
+        this.departureTimeStamp,
         'DD/M/YY',
         timezone
       );

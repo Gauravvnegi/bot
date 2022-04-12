@@ -8,6 +8,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { AssetService } from './components/assets/services/asset.service';
 
 @NgModule({
   imports: [
@@ -19,5 +20,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['asset'])),
   ],
   declarations: [...AdminAssetsRoutingModule.components],
+  providers: [AssetService],
 })
 export class AdminAssetsModule {}

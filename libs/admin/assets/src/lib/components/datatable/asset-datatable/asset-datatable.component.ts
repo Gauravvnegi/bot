@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+
 import {
-  AdminUtilityService,
   BaseDatatableComponent,
   sharedConfig,
   TableService,
@@ -18,9 +19,11 @@ import {
   EntityType,
   EntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { Packages } from 'libs/admin/packages/src/lib/data-models/packageConfig.model';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../constants/asset';
+import { AssetService } from '../../assets/services/asset.service';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -43,26 +46,31 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 200;
+  rowsPerPage = 5;
   cols = assetConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
+  snackbarService: any;
+
+  hotelId: any;
 
   constructor(
     private _router: Router,
     private route: ActivatedRoute,
     public fb: FormBuilder,
-    protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private assetService: AssetService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.tabFilterItems = assetConfig.datatable.tabFilterItems;
+    this.listenForGlobalFilters();
   }
 
   /**
@@ -111,7 +119,32 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
-    this.$subscription.add();
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+          },
+        ],
+        {
+          offset: this.first,
+          limit: this.rowsPerPage,
+        }
+      ).subscribe(
+        (data) => {
+          this.values = new Packages().deserialize(data).records;
+
+          //set pagination
+          this.totalRecords = data.total;
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   /**
@@ -121,8 +154,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
+    // this.tempFirst = this.first;
+    // this.tempRowsPerPage = this.rowsPerPage;
   }
 
   /**
@@ -181,7 +214,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this.loading = true;
 
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
+      queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
@@ -234,5 +267,60 @@ export class AssetDatatableComponent extends BaseDatatableComponent
 
   openCreateAsset() {
     this._router.navigate(['create'], { relativeTo: this.route });
+  }
+
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      //set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getHotelId(this.globalQueries);
+      //fetch-api for records
+      this.loadInitialData([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+        },
+      ]);
+    });
+  }
+  getHotelId(globalQueries): void {
+    //todo
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+  loadInitialData(queries = [], loading = true): void {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.values = new Packages().deserialize(data).records;
+          //set pagination
+          this.totalRecords = data.total;
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
+    };
+    return this.assetService.getHotelAsset(config);
   }
 }

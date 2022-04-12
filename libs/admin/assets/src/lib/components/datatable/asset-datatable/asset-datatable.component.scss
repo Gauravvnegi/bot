@@ -72,3 +72,82 @@
         top: 65%;
     }
 }
+
+:host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: $completed;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked {
+    .mat-slide-toggle-thumb-container {
+        left: 2px;
+        transform: translate3d(30px, 0, 0);
+        .mat-slide-toggle-thumb {
+            background-color: white;
+        }
+    }
+}
+
+:host ::ng-deep .name {
+    .package_image_wrapper {
+        display: flex;
+        align-items: center;
+        .image {
+            height: 50px;
+            width: 50px;
+            margin-right: 10px;
+            @media (max-width: 1024px) {
+                margin-right: 4px;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                @media (max-width: 1024px) {
+                    width: 38px;
+                    height: 38px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+        .text {
+            font-size: 12px;
+            color: $primary-black;
+            max-width: 60%;
+            // @media (max-width: 992px) {
+            //   overflow: hidden;
+            // }
+            div {
+                @media (max-width: 1024px) {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+            p {
+                color: $primary-gray;
+                margin-top: 5px;
+            }
+        }
+    }
+}
+
+.brand-name {
+    font-size: 12px;
+    color: $primary-black;
+    max-width: 60%;
+}
+
+.service-details {
+    font-size: 12px;
+    color: $primary-black;
+    max-width: 60%;
+}
+
+.package-image {
+    width: 40%;
+    height: 40%;
+}
+
+:host ::ng-deep .mat-slide-toggle-bar {
+    width: 50px;
+}

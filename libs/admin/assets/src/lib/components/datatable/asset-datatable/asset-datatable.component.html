@@ -137,6 +137,74 @@
     </ng-template>
 
     <!-- **************************************BODY********************************* -->
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+        <tr class="data-table-row" (click)="openPackageDetails(rowData)">
+            <td class="table--checkbox">
+                <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
+            </td>
+            <td class="name">
+                <!-- <div class="profile">
+        <img src="assets/bg.png" />
+      </div> -->
+                <div class="package_image_wrapper">
+                    <div class="image">
+                        <img class="package-image" src="{{ rowData.imageUrl }}" />
+                    </div>
+                    <div class="text">
+                        <div>{{ rowData.name }}</div>
+                        <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p>
+                    </div>
+                </div>
+                <!-- <div class="data">
+        {{ rowData.name }}
+        <p>{{ rowData.categoryName }}</p>
+        <img class="package-image" src="{{rowData.imageUrl}}" />
+      </div> -->
+            </td>
+            <td>
+                <div class="brand-name">
+                    <div>{{ rowData.packageCode }}</div>
+                    <p>{{ rowData.packageSource }}</p>
+                </div>
+            </td>
+            <td class="guest">
+                {{ rowData.description }}
+                <!-- <div
+        *ngIf="rowData.guests.secondaryGuest.length > 0"
+        [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+      >
+        <div
+          *ngFor="
+            let secondaryGuest of rowData.guests.secondaryGuest;
+            let guestIdx = index
+          "
+        >
+          {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+        </div>
+      </div> -->
+            </td>
+            <td class="service-details">
+                {{ rowData.type }}
+            </td>
+            <!-- <td class="amount_wrapper">
+                <p class="amount">
+                    {{ rowData.currency }}{{ rowData.rate }}/{{ rowData.unit }}
+                </p>
+            </td> -->
+            <td class="">
+                <label (click)="onCheckboxClicked($event)" class="switch">
+          <!-- <input type="checkbox" [checked]="rowData.status" /> -->
+          <!-- <span class="slider round" (click)="updatePackageStatus($event)"></span> -->
+          <mat-slide-toggle
+            [checked]="rowData.status"
+            (change)="updatePackageStatus($event, rowData.id)"
+          ></mat-slide-toggle>
+        </label>
+            </td>
+        </tr>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+
     <!-- <ng-template
     pTemplate="body"
     let-rowData
@@ -557,6 +625,7 @@
       </td>
     </tr>
   </ng-template> -->
+
     <!-- *********************************FOOTER******************************* -->
     <ng-template pTemplate="summary">
         <p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" (onPageChange)="paginate($event)"></p-paginator>

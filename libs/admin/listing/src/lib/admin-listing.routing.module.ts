@@ -5,6 +5,7 @@ import { CreateListingComponent } from './components/create-listing/create-listi
 import { ListingDatatableComponent } from './components/datatable/listing-datatable/listing-datatable.component';
 import { EditContactComponent } from './components/edit-contact/edit-contact.component';
 import { EditListingComponent } from './components/edit-listing/edit-listing.component';
+import { ImportContactComponent } from './components/import-contact/import-contact.component';
 import { ListingComponent } from './components/listing/listing.component';
 
 const appRoutes: Route[] = [
@@ -24,6 +25,7 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
+  declarations: [],
 })
 export class AdminListingRoutingModule {
   static components = [
@@ -33,5 +35,6 @@ export class AdminListingRoutingModule {
     EditListingComponent,
     EditContactComponent,
     ListingDatatableComponent,
+    ImportContactComponent,
   ];
 }

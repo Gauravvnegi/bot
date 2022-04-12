@@ -1,1 +1,140 @@
-<p>create-listing works!</p>
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <p class="label">
+        Create Listing
+      </p>
+    </div>
+  </header>
+  <form [formGroup]="listFG">
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Name:</mat-label>
+          <mat-form-field>
+            <input matInput formControlName="name" />
+            <mat-error
+              *ngIf="
+                listFG.get('name').touched &&
+                listFG.get('name').hasError('required')
+              "
+            >
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild">
+          <mat-label class="mat-label">Topic:</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="topic">
+              <mat-option *ngFor="let topic of topicList" [value]="topic.id">{{
+                topic.name
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Description:</mat-label>
+          <mat-form-field>
+            <input matInput formControlName="description" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div style="margin: 15px 0; padding-left: 20px;">
+      <div
+        style="
+          font-family: Roboto;
+          font-size: 16px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.96px;
+          text-align: left;
+          color: #002046;
+        "
+      >
+        Add Contacts
+      </div>
+      <div style="display: flex;">
+        <div
+          style="
+            opacity: 0.4;
+            border-radius: 4px;
+            border: solid 1px #707070;
+            width: 255px;
+            height: 135px;
+            margin: 30px 31px 15px 0;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 16px;
+              font-weight: bold;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.96px;
+              text-align: left;
+              color: #9eaeb8;
+            "
+          >
+            Add Contacts Manually
+          </div>
+        </div>
+        <div
+          style="
+            opacity: 0.4;
+            border-radius: 4px;
+            border: solid 1px #707070;
+            width: 255px;
+            height: 135px;
+            margin: 30px 31px 15px 0;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          "
+          (click)="openImportContact($event)"
+        >
+          <div
+            style="
+              font-family: Roboto;
+              font-size: 16px;
+              font-weight: bold;
+              font-stretch: normal;
+              font-style: normal;
+              line-height: normal;
+              letter-spacing: 0.96px;
+              text-align: left;
+              color: #9eaeb8;
+            "
+          >
+            Import your contacts
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="toggle_wrapper">
+          <mat-label class="mat-label">Active :</mat-label>
+          <div class="status status--left">Disable</div>
+          <mat-slide-toggle formControlName="active"></mat-slide-toggle>
+          <div class="status status--right">Enable</div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

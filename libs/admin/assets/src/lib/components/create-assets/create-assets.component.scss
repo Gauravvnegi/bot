@@ -1,111 +1,156 @@
-@import 'main';
-.wrapper {
-    padding: $padding20;
-    background-color: white;
-    margin: $margin20 0px;
-    border-radius: 5px;
-    &-header {
+    @import 'main';
+    .container {
+        padding: 17px 38px 58px 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+        background-color: #fff;
+    }
+    
+    .create_Assets {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        .back {
-            display: flex;
-            align-items: center;
-            .label {
-                letter-spacing: 0.96px;
-                font-weight: $bold;
-                font-size: $font16;
-            }
-            .material-icons {
-                margin-right: $margin15;
-                &:hover {
-                    cursor: pointer;
-                }
-            }
+        font-weight: bold;
+        p {
+            margin-top: 3px;
+            padding-left: 15px;
         }
     }
-    &-form {
-        padding-left: 20px;
-        .feilds {
-            display: flex;
-            align-items: center;
-            margin-top: 2%;
-            @media (max-width: $tablet) {
-                flex-wrap: wrap;
-                gap: 60px;
-            }
-            .toggle_wrapper {
+    
+    .wrapper {
+        padding: $padding20;
+        background-color: white;
+        margin: $margin20 0px;
+        border-radius: 5px;
+        &-form {
+            padding-left: 20px;
+            .feilds {
                 display: flex;
                 align-items: center;
-                min-width: 35%;
-                .status {
-                    font-size: $font14;
-                    margin-right: 20px;
-                }
-                .status--left {
-                    color: $primary-gray;
-                }
-                .status--right {
-                    color: $primary-black;
-                    margin-left: 20px;
-                }
-            }
-            .note {
-                color: $primary-gray;
-                font-size: $font12;
-                padding-left: 11%;
-                margin-bottom: 20px;
-            }
-            .feild {
-                display: flex;
-                align-items: center;
-                width: 31.5%;
-                margin-right: 1.5%;
+                justify-content: space-between;
+                margin-top: 2%;
                 @media (max-width: $tablet) {
-                    @include width(42.6%);
+                    flex-wrap: wrap;
+                    gap: 60px;
                 }
-                 ::ng-deep .mat-form-field-infix {
-                    @media (max-width: 1024px) {
-                        width: inherit;
+                .feild {
+                    display: flex;
+                    align-items: center;
+                    width: 14%;
+                    margin-right: 1.5%;
+                    color: #9eaeb8;
+                    input {
+                        color: #002046;
+                    }
+                    @media (max-width: $tablet) {
+                        @include width(42.6%);
+                    }
+                     ::ng-deep .mat-form-field-infix {
+                        @media (max-width: 1024px) {
+                            width: inherit;
+                        }
                     }
                 }
             }
+            .full-width {
+                margin-top: 50px;
+                color: #9eaeb8;
+                display: flex;
+                .mat-label {
+                    display: flex;
+                    align-items: center;
+                }
+            }
+            .image_upload {
+                display: flex;
+                margin-top: 82px;
+                gap: 64px;
+                color: #9eaeb8;
+                position: relative;
+                p {
+                    font-weight: bold;
+                    color: #4b56c0;
+                    font-size: 16px;
+                    position: absolute;
+                    z-index: 1111;
+                    top: 54%;
+                    left: 14%;
+                    cursor: pointer;
+                }
+                .image_message {
+                    display: block;
+                    .image_menu {
+                        // width: 325px;
+                        // height: 223px;
+                        // padding: 60px 85px 59px 86px;
+                        // border-radius: 5px;
+                        // border: solid 1px #9eaeb8;
+                        // background-color: #fff;
+                    }
+                }
+                .message {
+                    padding-top: 15px;
+                    font-size: 14px;
+                    display: flex;
+                    justify-content: center;
+                }
+            }
         }
     }
-}
-
-.full-width {
-    padding: 0 0 0 20px;
-}
-
-.margin-adjust {
-    padding-top: 80px;
-    width: 325px;
-    height: 223px;
-}
-
-.toggle_wrapper {
-    display: flex;
-    gap: 20px;
-    padding-top: 30px;
-    .status--left {
-        padding-left: 90px;
+    
+    .toggle_wrapper {
+        display: flex;
+        gap: 20px;
+        padding-top: 86px;
+        color: #9eaeb8;
+        .status--left {
+            padding-left: 90px;
+        }
     }
-}
-
-.saveButton {
-    width: 250px;
-    height: 46px;
-    margin: 77px 34px 0 4.5px;
-    padding: 12px 106px 13px;
-    border-radius: 23px;
-    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-    background-color: #4b56c0;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 500;
-    // border-style: none;
-}
+    
+    .button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        .saveButton {
+            width: 250px;
+            height: 46px;
+            margin: 77px 34px 0 4.5px;
+            padding: 12px 106px 13px;
+            border-radius: 23px;
+            box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+            background-color: #4b56c0;
+            line-height: normal;
+            letter-spacing: 0.96px;
+            text-align: left;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            border-style: none;
+        }
+    }
+    
+     :host ::ng-deep .description {
+        width: 100%;
+        color: gray;
+    }
+    
+     :host ::ng-deep .mat-form-field {
+        padding-left: 17px;
+    }
+    
+     :host ::ng-deep .upload__box {
+        position: relative;
+        width: 325px;
+        height: 223px !important;
+        border-radius: 5px;
+        padding: 60px 85px 59px 86px;
+        border: solid 1px #9eaeb8 !important;
+        background-color: #fff;
+    }
+    
+     :host ::ng-deep .mat-form-field-infix {
+        padding: 6px;
+    }
+    
+     :host ::ng-deep .upload-label {
+        display: none;
+    }

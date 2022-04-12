@@ -1,0 +1,568 @@
+<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout" [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginaton" [rows]="rowsPerPage" [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions" [(first)]="first" [totalRecords]="totalRecords" [filterDelay]="0" [selectionMode]="selectionMode" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" (sortFunction)="customSort($event)"
+    [customSort]="isCustomSort" (onFilter)="onDataFilter()">
+    <ng-template pTemplate="caption">
+        <div class="caption__wrapper">
+            <form [formGroup]="tableFG">
+                <div class="caption__wrapper--tabmenu">
+                    <div class="header">
+                        <p class="heading">{{ tableName }}</p>
+
+                        <div class="options">
+                            <!-- Create Asset button with ExportAll,CSV -->
+                            <div class="request-btn__wrap" style="cursor: pointer;" (click)="openCreateAsset()">
+                                <div class="request-btn">
+                                    {{ '+Create Asset' | translate }}
+                                </div>
+                            </div>
+                            <div *ngIf="isActionButtons" class="icons">
+                                <img [src]="assetConfiguration.images.download.url" [alt]="assetConfiguration.images.download.alt" class="svg" />
+                                <img [src]="assetConfiguration.images.googleDoc.url" [alt]="assetConfiguration.images.googleDoc.alt" class="svg" />
+                                <img [src]="assetConfiguration.images.card.url" [alt]="assetConfiguration.images.card.alt" class="svg" />
+                            </div>
+                            <div *ngIf="isActionButtons" class="seperator"></div>
+                            <div formGroupName="documentActions" class="dropdown--wrapper">
+                                <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+                                    <ng-template let-documentActionItem pTemplate="selectedItem">
+                                        <img [src]="assetConfiguration.images.export.url" [alt]="assetConfiguration.images.export.alt" />
+                                        <span class="documentActionItemLabel">{{
+                      documentActionItem.label
+                    }}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div class="divider"></div>
+                                <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
+                                    <ng-template let-documentTypeItem pTemplate="selectedItem">
+                                        <img [src]="assetConfiguration.images.csv.url" [alt]="assetConfiguration.images.csv.alt" />
+                                        <span class="documentActionItemLabel">{{
+                      documentTypeItem.label
+                    }}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                                <button class="go" (click)="onDocumentActions()">
+                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="isTabFilters">
+                        <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx" (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
+                    </div>
+                </div>
+                <div *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length" class="caption__wrapper--buttons">
+                    <div class="button__wrapper">
+                        <mat-chip-list multiple #chipList aria-label="Quick Reply selection" formControlName="quickReplyActionFilters">
+                            {{ tabFilterItems | json }}
+                            <mat-chip *ngFor="
+                  let quickReplyType of tabFilterItems[tabFilterIdx].chips;
+                  let quickReplyTypeIdx = index
+                " selectable="true" [ngClass]="{
+                  'chipSelected status-selected-default':
+                    quickReplyType.isSelected,
+                  'status-opacity-new status-text-new':
+                    quickReplyType.type == 'new',
+                  'status-selected-new':
+                    quickReplyType.type == 'new' && quickReplyType.isSelected,
+                  'status-opacity-pending status-text-pending':
+                    quickReplyType.type == 'pending',
+                  'status-opacity-initiated status-text-initiated':
+                    quickReplyType.type == 'initiated',
+                  'status-opacity-success status-text-success':
+                    quickReplyType.type == 'completed',
+                  'status-opacity-reject status-text-reject':
+                    quickReplyType.type == 'failed',
+                  'status-default': quickReplyType.type == '',
+                  'status-selected-pending':
+                    quickReplyType.type == 'pending' &&
+                    quickReplyType.isSelected,
+                  'status-selected-initiated':
+                    quickReplyType.type == 'initiated' &&
+                    quickReplyType.isSelected,
+                  'status-selected-completed':
+                    quickReplyType.type == 'completed' &&
+                    quickReplyType.isSelected,
+                  'status-selected-reject':
+                    quickReplyType.type == 'failed' && quickReplyType.isSelected
+                }" [selected]="isQuickReplyFilterSelected(quickReplyType)" (click)="
+                  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
+                ">
+                                {{ quickReplyType.label }}
+                                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''
+                }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
+                            </mat-chip>
+                        </mat-chip-list>
+                        <img [src]="assetConfiguration.images.filter.url" [alt]="assetConfiguration.images.filter.alt" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
+    </ng-template>
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th class="tableHeading" pResizableColumn>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="table-data-head" pResizableColumn [pSortableColumn]="col.field" *ngFor="let col of columns">
+                <div>
+                    <p class="table-header-text">{{ col.header }}</p>
+                    <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+                </div>
+            </th>
+        </tr>
+
+        <tr class="table-search-head">
+            <th class="table-search-head"></th>
+            <th class="table-search-head">
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+            </th>
+            <th class="table-search-head">
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+            </th>
+            <th class="table-search-head">
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+            </th>
+            <th class="table-search-head">
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+            </th>
+            <th class="table-search-head">
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+            </th>
+        </tr>
+    </ng-template>
+
+    <!-- **************************************BODY********************************* -->
+    <!-- <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="data-table-row" (click)="openDetailPage($event, rowData)">
+      <td class="table--checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td>
+        <p
+          class="tabel-room-no"
+          [ngClass]="{
+            'status-text-success': rowData.booking.roomStatus === 'CL',
+            'status-text-reject': rowData.booking.roomStatus === 'DI',
+            'status-text-initiated': rowData.booking.roomStatus === 'IN',
+            'status-text-pending': rowData.booking.roomStatus === 'PI'
+          }"
+        >
+          {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
+        </p>
+      </td>
+      <td>
+        <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
+        <div
+          *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
+          class="booking-feedback"
+          [ngClass]="{
+            'status-opacity-reject': rowData.feedback.rating < 5,
+            'status-opacity-success': rowData.feedback.rating >= 5
+          }"
+        >
+          <p
+            class="number"
+            [ngClass]="{
+              'status-background-reject': rowData.feedback.rating < 5,
+              'status-background-success': rowData.feedback.rating >= 5
+            }"
+          >
+            {{ rowData.feedback.rating }}
+          </p>
+          <div
+            *ngIf="rowData.feedback.comments"
+            [ngClass]="{
+              'feedback-msg': rowData.feedback.comments.length > 0
+            }"
+          >
+            {{ rowData.feedback.comments }}
+          </div>
+        </div>
+      </td>
+      <td class="guest">
+        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+        <b class="rowData">{{
+          rowData.guests.getSecGuestDisplayConfig().countString
+        }}</b>
+        <div
+          *ngIf="rowData.guests.secondaryGuest.length > 0"
+          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+        >
+          <div
+            *ngFor="
+              let secondaryGuest of rowData.guests.secondaryGuest;
+              let guestIdx = index
+            "
+          >
+            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+          </div>
+        </div>
+      </td>
+      <td class="package">
+        <span
+          *ngIf="
+            rowData.guests.getPhoneNumbers().length &&
+              rowData.guests.getPhoneNumbers() !== ' ';
+            else emptyCell
+          "
+        >
+          <ng-container
+            *ngIf="
+              rowData.guests.getPhoneNumbers().includes(',');
+              else singlePhone
+            "
+          >
+            <ng-container
+              *ngFor="let link of rowData.guests.getPhoneNumbers().split(',\n')"
+            >
+              <a
+                href="tel:{{ link }}"
+                *ngIf="link"
+                class="email"
+                (click)="openDetailPage($event)"
+              >
+                <u> {{ link }}</u> </a
+              ><br />
+            </ng-container>
+          </ng-container>
+          <ng-template #singlePhone>
+            <a
+              href="tel:{{ rowData.guests.getPhoneNumbers() }}"
+              class="email"
+              (click)="openDetailPage($event)"
+            >
+              <u> {{ rowData.guests.getPhoneNumbers() }}</u>
+            </a>
+          </ng-template>
+        </span>
+      </td>
+      <td>
+        <p class="arrival-date">
+          {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }}-{{
+            rowData.booking.getDepartureDate(_globalFilterService.timezone)
+          }}
+        </p>
+
+        <p class="arrival-time">
+          {{ rowData.booking.getArrivalTime(_globalFilterService.timezone) }}-{{
+            rowData.booking.getDepartureTime(_globalFilterService.timezone)
+          }}
+        </p>
+        <p class="arrival-time">
+          {{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .nights
+          }}N |
+          {{
+            rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+              .days
+          }}D
+        </p>
+      </td>
+      <td class="amount">
+        <span
+          [ngClass]="{
+            'status-text-reject':
+              rowData.payment.dueAmount > 0 &&
+              rowData.payment.dueAmount <= rowData.payment.totalAmount,
+            'status-text-success': rowData.payment.dueAmount == 0
+          }"
+          >{{ rowData.payment.dueAmount }}</span
+        >/ {{ rowData.payment.totalAmount }}
+      </td>
+      <td class="package">
+        <span
+          *ngIf="
+            rowData.packages.getPaidPackagesLabels().length;
+            else emptyCell
+          "
+          >{{ rowData.packages.getPaidPackagesLabels() }}
+        </span>
+      </td>
+
+      <td class="status-image">
+        <div class="icon-wrapper">
+          <div class="line first"></div>
+          <div class="line second"></div>
+          <div
+            (click)="openDetailPage($event, rowData, 'document_details')"
+            class="icon"
+          >
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.document.url"
+              [alt]="assetConfiguration.images.document.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.stepsStatus.documents == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.stepsStatus.documents == 'PENDING',
+                'status-image-reject':
+                  rowData.status.stepsStatus.documents == 'FAILED',
+                'status-image-success':
+                  rowData.status.stepsStatus.documents == 'COMPLETED'
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.stepsStatus.documents == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.stepsStatus.documents == 'PENDING',
+                'status-text-reject':
+                  rowData.status.stepsStatus.documents == 'FAILED',
+                'status-text-success':
+                  rowData.status.stepsStatus.documents == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.document' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.document' | translate }}
+            </div>
+          </div>
+          <div
+            (click)="openDetailPage($event, rowData, 'payment_details')"
+            class="icon"
+          >
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.payment.url"
+              [alt]="assetConfiguration.images.payment.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.stepsStatus.payment == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.stepsStatus.payment == 'PENDING',
+                'status-image-reject':
+                  rowData.status.stepsStatus.payment == 'FAILED',
+                'status-image-success':
+                  rowData.status.stepsStatus.payment == 'COMPLETED'
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.stepsStatus.payment == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.stepsStatus.payment == 'PENDING',
+                'status-text-reject':
+                  rowData.status.stepsStatus.payment == 'FAILED',
+                'status-text-success':
+                  rowData.status.stepsStatus.payment == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.payment' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.payment' | translate }}
+            </div>
+          </div>
+          <div class="icon">
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.feedback.url"
+              [alt]="assetConfiguration.images.feedback.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.stepsStatus.feedback == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.stepsStatus.feedback == 'PENDING',
+                'status-image-reject':
+                  rowData.status.stepsStatus.feedback == 'FAILED',
+                'status-image-success':
+                  rowData.status.stepsStatus.feedback == 'COMPLETED'
+              }"
+            />
+            <p
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.stepsStatus.feedback == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.stepsStatus.feedback == 'PENDING',
+                'status-text-reject':
+                  rowData.status.stepsStatus.feedback == 'FAILED',
+                'status-text-success':
+                  rowData.status.stepsStatus.feedback == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.feedback' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.feedback' | translate }}
+            </div>
+          </div>
+          <div class="icon extra-width">
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.newJourney.url"
+              [alt]="assetConfiguration.images.newJourney.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.new == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.new == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.new == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.new == 'COMPLETED'
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'NEW'"
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.new == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.new == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.new == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.new == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.new' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.new' | translate }}
+            </div>
+          </div>
+          <div class="icon extra-width">
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.preCheckin.url"
+              [alt]="assetConfiguration.images.preCheckin.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.preCheckin == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.preCheckin == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.preCheckin == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.preCheckin == 'COMPLETED'
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'PRECHECKIN'"
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.preCheckin == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.preCheckin == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.preCheckin == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.preCheckin == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.pre_checkin' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.pre_checkin' | translate }}
+            </div>
+          </div>
+          <div class="icon extra-width">
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.checkin.url"
+              [alt]="assetConfiguration.images.checkin.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.checkin == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.checkin == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.checkin == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.checkin == 'COMPLETED'
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKIN'"
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.checkin == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.checkin == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.checkin == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.checkin == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.checkin' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.checkin' | translate }}
+            </div>
+          </div>
+          <div class="icon extra-width">
+            <img
+              class="table-body-journey-icon"
+              [src]="assetConfiguration.images.checkout.url"
+              [alt]="assetConfiguration.images.checkout.alt"
+              [ngClass]="{
+                'status-image-initiated':
+                  rowData.status.journeyStatus.checkout == 'INITIATED',
+                'status-image-pending':
+                  rowData.status.journeyStatus.checkout == 'PENDING',
+                'status-image-reject':
+                  rowData.status.journeyStatus.checkout == 'FAILED',
+                'status-image-success':
+                  rowData.status.journeyStatus.checkout == 'COMPLETED'
+              }"
+            />
+            <p
+              *ngIf="rowData.currentJourney.currentJourneyName == 'CHECKOUT'"
+              class="label"
+              [ngClass]="{
+                'status-text-initiated':
+                  rowData.status.journeyStatus.checkout == 'INITIATED',
+                'status-text-pending':
+                  rowData.status.journeyStatus.checkout == 'PENDING',
+                'status-text-reject':
+                  rowData.status.journeyStatus.checkout == 'FAILED',
+                'status-text-success':
+                  rowData.status.journeyStatus.checkout == 'COMPLETED'
+              }"
+            >
+              {{ 'datatable.checkout' | translate }}
+            </p>
+            <div class="tooltip">
+              {{ 'datatable.checkout' | translate }}
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template> -->
+    <!-- *********************************FOOTER******************************* -->
+    <ng-template pTemplate="summary">
+        <p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" (onPageChange)="paginate($event)"></p-paginator>
+    </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+    <div class="emptyCell">&mdash;</div>
+</ng-template>

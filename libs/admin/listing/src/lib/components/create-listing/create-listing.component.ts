@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ListingService } from '../../services/listing.service';
+import { ImportContactComponent } from '../import-contact/import-contact.component';
 
 @Component({
   selector: 'hospitality-bot-create-listing',
@@ -64,5 +66,23 @@ export class CreateListingComponent implements OnInit {
         this.topicList = response;
       })
     );
+  }
+
+  openImportContact(event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '550';
+    const detailCompRef = this._modal.openDialog(
+      ImportContactComponent,
+      dialogConfig
+    );
+
+    detailCompRef.componentInstance.onImportClosed.subscribe((response) => {
+      if (response.status) {
+        console.log('Import done.');
+        detailCompRef.close();
+      }
+    });
   }
 }

@@ -110,11 +110,19 @@ export class VisitDetail {
       return (
         input.feedbackType &&
         colorMap.transactionalFeedbacks[
-          Object.keys(colorMap.transactionalFeedbacks).filter((key) =>
-            colorMap.transactionalFeedbacks[key].scale.includes(
-              input.intentToRecommends.rating
-            )
-          )[0]
+          Object.keys(colorMap.transactionalFeedbacks).filter((key) => {
+            const startValue = parseInt(
+              colorMap.transactionalFeedbacks[key].scale[0]
+            );
+            const endValue = parseInt(
+              colorMap.transactionalFeedbacks[key].scale.substring(
+                2,
+                colorMap.transactionalFeedbacks[key].scale.length
+              )
+            );
+            const rating = parseInt(input.intentToRecommends.rating);
+            return rating >= startValue && rating <= endValue;
+          })[0]
         ].colorCode
       );
     }

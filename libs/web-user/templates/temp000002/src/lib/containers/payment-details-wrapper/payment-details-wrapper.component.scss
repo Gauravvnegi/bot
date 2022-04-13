@@ -163,3 +163,13 @@
 :host ::ng-deep .labl > input:checked + div {
   border: 1px solid $primary-blue !important;
 }
+
+:host ::ng-deep .info-label{
+  font-size: 18px;
+  color: #9EAEB8;
+  padding-top: 8px;
+}
+
+:host ::ng-deep .mat-tab-label-content{
+  font-size: 26px !important;
+}

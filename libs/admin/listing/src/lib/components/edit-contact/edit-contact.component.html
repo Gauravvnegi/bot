@@ -4,22 +4,11 @@
 >
   <i class="fa fa-times" aria-hidden="true"></i>
 </div>
-<div style="padding: 30px 40px; height: 80vh;">
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 20px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 1.2px;
-      color: #002046;
-    "
-  >
+<div class="add-popup">
+  <div class="add-contact">
     Add Contacts
   </div>
-  <div style="padding: 20px 0;" class="tableWrap">
+  <div class="table-wrap">
     <table *ngIf="contactFA?.controls.length">
       <thead>
         <tr>
@@ -38,7 +27,7 @@
           [formGroup]="contactFG"
         >
           <td>
-            <div style="margin: 5px 10px;">
+            <div class="contact-mail-field">
               <mat-form-field>
                 <input
                   matInput
@@ -57,7 +46,7 @@
             </div>
           </td>
           <td>
-            <div style="margin: 5px 10px;">
+            <div class="contact-mail-field">
               <mat-form-field>
                 <mat-select
                   formControlName="salutation"
@@ -81,7 +70,7 @@
             </div>
           </td>
           <td>
-            <div style="margin: 5px 10px;">
+            <div class="contact-mail-field">
               <mat-form-field>
                 <input
                   matInput
@@ -100,7 +89,7 @@
             </div>
           </td>
           <td>
-            <div style="margin: 5px 10px;">
+            <div class="contact-mail-field">
               <mat-form-field>
                 <input
                   matInput
@@ -119,7 +108,7 @@
             </div>
           </td>
           <td>
-            <div style="margin: 5px 10px;">
+            <div class="contact-mail-field">
               <mat-form-field>
                 <input
                   matInput
@@ -130,7 +119,7 @@
             </div>
           </td>
           <td>
-            <div style="margin: 5px 10px;">
+            <div class="contact-mail-field">
               <mat-form-field>
                 <input matInput placeholder="Mobile" formControlName="mobile" />
                 <mat-error
@@ -151,40 +140,16 @@
       </tbody>
     </table>
   </div>
-  <div
-    style="width: fit-content; cursor: pointer; margin: 20px 0;"
+  <div class="ad-contact"
     (click)="generateContactField()"
   >
     +Add Contact
   </div>
-  <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        width: 250px;
-        height: 46px;
-        margin: 20px 34px 0 2.5px;
-        padding: 12px 106px 13px;
-        border-radius: 23px;
-        box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-        background-color: #4b56c0;
-        cursor: pointer;
-      "
+  <div class="submit">
+    <div class="submit-contact"
       (click)="submitContact()"
     >
-      <div
-        style="
-          font-size: 16px;
-          font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.96px;
-          text-align: left;
-          color: #fff;
-        "
-      >
+      <div class="save">
         Save
       </div>
     </div>

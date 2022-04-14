@@ -26,11 +26,12 @@
     }
   }
   &-form {
-    padding-left: 20px;
+    padding-left: $padding20;
     .feilds {
       display: flex;
       align-items: center;
       margin-top: 2%;
+      justify-content: space-between;
       @media (max-width: $tablet) {
         flex-wrap: wrap;
         gap: 60px;
@@ -71,6 +72,20 @@
           }
         }
       }
+      .description {
+        display: flex;
+        align-items: center;
+        width: 31.5%;
+        margin-right: 1.5%;
+        @media (max-width: $tablet) {
+          @include width(42.6%);
+        }
+        ::ng-deep .mat-form-field-infix {
+          @media (max-width: 1024px) {
+            width: inherit;
+          }
+        }
+      }
       .material-icons {
         margin-left: 15px;
         &:hover {
@@ -87,7 +102,68 @@
       }
     }
     .margin-adjust {
-      padding: 20px 0;
+      padding: $padding20 0;
+    }
+  }
+  .wrapper-text{
+    margin: 15px 0; 
+    padding-left: $padding20;
+    .add-text {
+      font-family: Roboto;
+      font-size: $font16;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: $dark-blue;
+    }
+  }
+  .manually-add{
+    display: flex;
+    .manually-contacts{
+      opacity: 0.4;
+      border-radius: 4px;
+      border: solid 1px $manually-contacts;
+      width: 255px;
+      height: 135px;
+      margin: 30px 31px 15px 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      align-items: center;
+      color: $primary-gray;
+      letter-spacing: 0.96px;
+      font-weight: bold;
+      padding-bottom: 12px;
+    }
+  }
+  .save-section{
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: 20px;
+    .save-button{
+      display: flex;
+      justify-content: center;
+      width: 250px;
+      height: 46px;
+      margin: 121px 34px 0 2.5px;
+      padding: 12px 106px 13px;
+      border-radius: 23px;
+      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      background-color: $primary-purple;
+      .save-text{
+        font-size: $font16;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: white;
+      }
     }
   }
 }
@@ -116,6 +192,7 @@
 
 :host ::ng-deep .mat-form-field-infix {
   border-top: none;
+  letter-spacing: 0.96px;
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
@@ -132,10 +209,10 @@
   margin-right: 10px;
   min-width: 31%;
   @media only screen and (max-width: 1300px) {
-    font-size: 13px;
+    font-size: $font13;
   }
   @media only screen and (max-width: 1080px) {
-    font-size: 10px;
+    font-size: $font10;
   }
 }
 
@@ -165,7 +242,7 @@
 }
 
 :host ::ng-deep .upload__box {
-  border: 1px dashed #d9d9d9;
+  border: 1px dashed $light-grey;
 }
 
 :host ::ng-deep .currency {
@@ -179,10 +256,19 @@
 
 :host ::ng-deep .mat-select-value-text {
   font-size: $font14;
-  color: #002046;
+  color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
   font-size: $font14;
-  color: #002046;
+  color: $dark-blue;
+}
+
+:host ::ng-deep .description .mat-form-field-underline{
+  width: 975px !important;
+}
+
+:host ::ng-deep .description .mat-form-field-infix{
+  width: 975px;
+  letter-spacing: 0.96px;
 }

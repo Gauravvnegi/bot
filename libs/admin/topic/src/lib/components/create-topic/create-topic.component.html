@@ -8,11 +8,11 @@
       >
     <p>Create Topic</p>
   </div>
-  <div class="wrapper-form" [formGroup]="createTopicFG" *ngIf="createTopicFG">
+  <div class="wrapper-form" [formGroup]="topicForm" *ngIf="topicForm">
     <div class="feilds">
       <div class="feild">
         <mat-label class="mat-label">Name : </mat-label>
-        <mat-form-field>
+        <mat-form-field class="name">
           <input
             matInput
             formControlName="name"
@@ -20,8 +20,8 @@
           />
           <mat-error
             *ngIf="
-              createTopicFG.get('name').touched &&
-              createTopicFG.get('name').hasError('required')
+              topicForm.get('name').touched &&
+              topicForm.get('name').hasError('required')
             "
           >
             Name is required
@@ -29,13 +29,11 @@
         </mat-form-field>
       </div>
       <div class="feild">
-        <mat-label class="mat-label mat-label--width">Description : </mat-label>
+        <mat-label class="mat-label">Description : </mat-label>
         <mat-form-field class="description">
-          <input
-            matInput
+          <input matInput
             formControlName="description"
             placeholder="Write Your Description Here"
-            class="mat-label mat-label--description"
           />
         </mat-form-field>
       </div>

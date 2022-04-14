@@ -27,11 +27,11 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <p class="heading">{{ tableName }}</p>
-              <div class="request-btn__wrap" (click)="openCreateTopic()">
-                <div class="request-btn">
-                  {{'+Create Topic' | translate }}
-                </div>
+            <div class="request-btn__wrap" (click)="openCreateTopic()">
+              <div class="request-btn">
+                {{ '+Create Topic' | translate }}
               </div>
+            </div>
             <div class="options">
               <div *ngIf="isActionButtons" class="icons">
                 <img
@@ -108,7 +108,6 @@
               aria-label="Quick Reply selection"
               formControlName="quickReplyActionFilters"
             >
-              {{ tabFilterItems | json }}
               <mat-chip
                 *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
@@ -212,7 +211,7 @@
           class="p-column-filter"
         />
       </th>
-      <th class="table-search-head">
+      <!-- <th class="table-search-head">
         <input
           pInputText
           type="text"
@@ -228,10 +227,86 @@
           class="p-column-filter"
           disabled="true"
         />
-      </th>
+      </th> -->
     </tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
+  <ng-template
+  pTemplate="body"
+  let-rowData
+  let-columns="columns"
+  let-rowIndex="rowIndex"
+>
+  <tr class="data-table-row" (click)="openTopicDetails(rowData)">
+    <td class="table--checkbox">
+      <p-tableCheckbox
+        [value]="rowData"
+        [index]="rowIndex"
+        (click)="onCheckboxClicked($event)"
+      ></p-tableCheckbox>
+    </td>
+    <td class="name">
+      <!-- <div class="profile">
+        <img src="assets/bg.png" />
+      </div> -->
+      <div class="topic_image_wrapper">
+        <!-- <div class="image">
+          <img class="topic-image" src="{{ rowData.imageUrl }}" />
+        </div> -->
+        <div class="text">
+          <div>{{ rowData.name }}</div>
+          <!-- <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p> -->
+        </div>
+      </div>
+      <!-- <div class="text">
+        {{ rowData.name }} -->
+        <!-- <p>{{ rowData.categoryName }}</p> -->
+        <!-- <img class="topic-image" src="{{rowData.imageUrl}}" /> -->
+      <!-- </div> -->
+    </td>
+    <!-- <td>
+      <div class="brand-name">
+        <div>{{ rowData.topicCode }}</div>
+        <p>{{ rowData.topicSource }}</p>
+      </div>
+    </td> -->
+    <td class="guest">
+      {{ rowData.description }}
+      <!-- <div
+        *ngIf="rowData.guests.secondaryGuest.length > 0"
+        [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
+      >
+        <div
+          *ngFor="
+            let secondaryGuest of rowData.guests.secondaryGuest;
+            let guestIdx = index
+          "
+        >
+          {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+        </div>
+      </div> -->
+    </td>
+    <!-- <td class="service-details">
+      {{ rowData.type }}
+    </td> -->
+    <!-- <td class="amount_wrapper">
+      <p class="amount">
+        {{ rowData.currency }}{{ rowData.rate }}/{{ rowData.unit }}
+      </p>
+    </td> -->
+    <td class="">
+      <label (click)="onCheckboxClicked($event)" class="switch">
+        <!-- <input type="checkbox" [checked]="rowData.status" /> -->
+        <!-- <span class="slider round" (click)="updatetopicStatus($event)"></span> -->
+        <mat-slide-toggle
+          [checked]="rowData.status"
+          (change)="updatetopicStatus($event, rowData.id)"
+        ></mat-slide-toggle>
+      </label>
+    </td>
+  </tr>
+</ng-template>
+<!-- *********************************FOOTER******************************* -->
   <!-- <ng-template
     pTemplate="body"
     let-rowData
@@ -307,7 +382,7 @@
           </div>
         </div>
       </td>
-      <td class="package">
+      <td class="topic">
         <span
           *ngIf="
             rowData.guests.getPhoneNumbers().length &&
@@ -379,13 +454,13 @@
           >{{ rowData.payment.dueAmount }}</span
         >/ {{ rowData.payment.totalAmount }}
       </td>
-      <td class="package">
+      <td class="topic">
         <span
           *ngIf="
-            rowData.packages.getPaidPackagesLabels().length;
+            rowData.topics.getPaidtopicsLabels().length;
             else emptyCell
           "
-          >{{ rowData.packages.getPaidPackagesLabels() }}
+          >{{ rowData.topics.getPaidtopicsLabels() }}
         </span>
       </td>
 

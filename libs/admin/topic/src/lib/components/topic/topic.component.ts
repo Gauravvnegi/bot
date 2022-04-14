@@ -12,10 +12,5 @@ export class TopicComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  openCreateTopic(){
-    this._router.navigate(['create'],{relativeTo :this.route});
-  }
-
-
+  
 }

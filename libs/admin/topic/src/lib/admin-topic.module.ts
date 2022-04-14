@@ -8,6 +8,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { TopicService } from './services/topic.service';
 
 @NgModule({
   imports: [
@@ -19,5 +20,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['topic'])),
   ],
   declarations: [...AdminTopicRoutingModule.components],
+  providers:[TopicService]
 })
 export class AdminTopicModule {}

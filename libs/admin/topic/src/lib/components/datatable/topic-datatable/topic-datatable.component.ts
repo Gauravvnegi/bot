@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import {
-  AdminUtilityService,
   BaseDatatableComponent,
   sharedConfig,
   TableService,
@@ -19,7 +19,9 @@ import {
   EntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { TopicService } from '../../../services/topic.service';
+import { Topics } from '../../../data-models/topicConfig.model';
 import { topicConfig } from '../../../constants/topic';
 
 @Component({
@@ -32,9 +34,9 @@ import { topicConfig } from '../../../constants/topic';
 })
 export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Topic';
+  @Input() tableName = 'Topics';
   @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 1;
+  @Input() tabFilterIdx: number = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -43,29 +45,138 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 200;
-  cols = topicConfig.datatable.cols;
+  rowsPerPage = 5;
+  // cols = topicConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
+  topicList=[];
+  hotelId: any;
+  snackbarService: any;
+
+  cols = [
+    { field: 'name', header: 'Name', sortType: 'string', isSort: true },
+    {
+      field: 'description',
+      header: 'Description',
+      sortType: 'string',
+      isSort: true,
+    },
+    { field: 'status', header: 'Active', isSort: false },
+  ];
 
   constructor(
     public fb: FormBuilder,
-    protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
-    private _router:Router, private route:ActivatedRoute
+    private _router:Router, private route:ActivatedRoute,
+    private topicService:TopicService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.tabFilterItems = topicConfig.datatable.tabFilterItems;
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getHotelId(this.globalQueries);
+      // fetch-api for records
+      this.loadInitialData([
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+        },
+      ]);
+    });
+  }
+
+  getHotelId(globalQueries): void {
+
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId; 
+        // this.hotelId ="0a80105d-0aab-4cf8-8cab-a63ed13f2c38";
+      }
+    });
+  }
+
+  loadInitialData(queries = [], loading = true): void {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.values= new Topics().deserialize(data).records;
+          // this.values = data.records;
+          //set pagination
+          this.totalRecords = data.total;
+          data.entityTypeCounts &&
+          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+        data.entityStateCounts &&
+          this.updateQuickReplyFilterCount(data.entityStateCounts);
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => {
+        tab.total = countObj[tab.value];
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
+    }
+  }
+
+  updateQuickReplyFilterCount(countObj: EntityState): void {
+    if (countObj) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        chip.total = countObj[chip.value];
+      });
+    }
+  }
+
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
+    };
+    return this.topicService.getHotelTopic(config,this.hotelId);
+  }
+
+
+  getTopicList(hotelId){
+    this.$subscription.add(
+      this.topicService.getTopicList(hotelId).subscribe((response)=>{
+        this.topicList= response;
+      })
+    )
   }
 
   openCreateTopic(){
     this._router.navigate(['create'],{relativeTo :this.route});
+  }
+
+  openTopicDetails(amenity): void {
+    this._router.navigate([`create/${amenity.id}`], { relativeTo: this.route });
   }
 
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
@@ -77,40 +188,38 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
-  }
-
-  /**
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
   loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
-    this.$subscription.add();
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+          },
+        ],
+        {
+          offset: this.first,
+          limit: this.rowsPerPage,
+        }
+      ).subscribe(
+        (data) => {
+          this.values = new Topics().deserialize(data).records;
+          // this.values = data.records;
+          //set pagination
+          this.totalRecords = data.total;
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   /**
@@ -120,8 +229,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
+    // this.tempFirst = this.first;
+    // this.tempRowsPerPage = this.rowsPerPage;
   }
 
   /**
@@ -180,7 +289,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     this.loading = true;
 
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams([
+      queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,

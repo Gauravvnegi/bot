@@ -50,6 +50,7 @@
   }
   p {
     margin-top: $margin-large;
+    text-align: center !important;
     @media only screen and (max-width: 900px) {
       font-size: $font-small;
       margin: $margin-small auto;

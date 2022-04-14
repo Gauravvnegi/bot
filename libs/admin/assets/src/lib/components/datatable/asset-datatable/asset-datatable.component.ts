@@ -24,6 +24,7 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../constants/asset';
 import { AssetService } from '../../assets/services/asset.service';
+import { Asset, Assets } from '../../../data-models/assetConfig.model';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -37,7 +38,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   @Input() tableName = 'Asset';
   @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 1;
+  @Input() tabFilterIdx: number = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -47,12 +48,25 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 5;
-  cols = assetConfig.datatable.cols;
+  // cols = assetConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
   snackbarService: any;
 
   hotelId: any;
+
+  cols = [
+    { field: 'name', header: 'Name', sortType: 'string', isSort: true },
+    {
+      field: 'description',
+      header: 'Description',
+      sortType: 'string',
+      isSort: true,
+    },
+    { field: 'type', header: 'Type', sortType: 'string', isSort: true },
+    { field: 'url', header: 'url', sortType: 'string', isSort: true },
+    { field: 'active', header: 'Active', isSort: false },
+  ];
 
   constructor(
     private _router: Router,
@@ -90,27 +104,11 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @param countObj The object with count for all the tab.
    * @param currentTabCount The count for current selected tab.
    */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
 
   /**
    * @function updateQuickReplyFilterCount To update the count for chips.
    * @param countObj The object with count for all the chip.
    */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
-  }
 
   /**
    * @function loadData To load data for the table after any event.
@@ -133,8 +131,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Packages().deserialize(data).records;
-
+          this.values = new Assets().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
           this.loading = false;
@@ -292,6 +289,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
+        // this.hotelId = '0a80105d-0aab-4cf8-8cab-a63ed13f2c38';
       }
     });
   }
@@ -300,9 +298,13 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Packages().deserialize(data).records;
+          this.values = new Assets().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.loading = false;
         },
         ({ error }) => {
@@ -321,6 +323,24 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.assetService.getHotelAsset(config);
+    return this.assetService.getHotelAsset(config, this.hotelId);
+  }
+
+  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => {
+        tab.total = countObj[tab.value];
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
+    }
+  }
+
+  updateQuickReplyFilterCount(countObj: EntityState): void {
+    if (countObj) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        chip.total = countObj[chip.value];
+      });
+    }
   }
 }

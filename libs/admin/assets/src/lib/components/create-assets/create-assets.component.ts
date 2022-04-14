@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { Location } from '@angular/common';
+import { AssetDetail } from '../../data-models/assetConfig.model';
 @Component({
   selector: 'hospitality-bot-create-assets',
   templateUrl: './create-assets.component.html',
@@ -10,6 +11,13 @@ import { Location } from '@angular/common';
 })
 export class CreateAssetsComponent implements OnInit {
   createAssetFG: FormGroup;
+  isSavingasset: false;
+  assetService: any;
+  // assetForm: any;
+  $subscription: any;
+  hotelasset: any;
+  snackbarService: any;
+  hotelId: any;
 
   constructor(
     private _location: Location,

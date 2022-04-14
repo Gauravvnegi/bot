@@ -52,7 +52,6 @@
                 <div *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length" class="caption__wrapper--buttons">
                     <div class="button__wrapper">
                         <mat-chip-list multiple #chipList aria-label="Quick Reply selection" formControlName="quickReplyActionFilters">
-                            {{ tabFilterItems | json }}
                             <mat-chip *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
                   let quickReplyTypeIdx = index
@@ -144,15 +143,15 @@
             </td>
             <td class="name">
                 <!-- <div class="profile">
-        <img src="assets/bg.png" />
-      </div> -->
+                    <img src="assets/bg.png" />
+                </div> -->
                 <div class="package_image_wrapper">
                     <div class="image">
                         <img class="package-image" src="{{ rowData.imageUrl }}" />
                     </div>
                     <div class="text">
                         <div>{{ rowData.name }}</div>
-                        <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p>
+                        <!-- <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p> -->
                     </div>
                 </div>
                 <!-- <div class="data">
@@ -161,12 +160,7 @@
         <img class="package-image" src="{{rowData.imageUrl}}" />
       </div> -->
             </td>
-            <td>
-                <div class="brand-name">
-                    <div>{{ rowData.packageCode }}</div>
-                    <p>{{ rowData.packageSource }}</p>
-                </div>
-            </td>
+
             <td class="guest">
                 {{ rowData.description }}
                 <!-- <div
@@ -186,6 +180,17 @@
             <td class="service-details">
                 {{ rowData.type }}
             </td>
+            <td class="service-details">
+                {{ rowData.url }}
+            </td>
+
+            <!-- <td>
+              <div class="brand-name">
+                  <div>{{ rowData.packageCode }}</div>
+                  <p>{{ rowData.packageSource }}</p>
+              </div>
+          </td> -->
+
             <!-- <td class="amount_wrapper">
                 <p class="amount">
                     {{ rowData.currency }}{{ rowData.rate }}/{{ rowData.unit }}

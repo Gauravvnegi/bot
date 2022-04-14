@@ -4,25 +4,25 @@ export interface Deserializable {
   deserialize(input: any): this;
 }
 
-export class PackageDetail implements Deserializable {
-  amenityPackage: Package;
+export class AssetDetail implements Deserializable {
+  amenityPackage: Asset;
   deserialize(input: any) {
-    this.amenityPackage = new Package().deserialize(input);
+    this.amenityPackage = new Asset().deserialize(input);
     return this;
   }
 }
 
-export class Packages implements Deserializable {
-  records: Package[];
+export class Assets implements Deserializable {
+  records: Asset[];
   deserialize(input: any) {
-    this.records = input.records.map((record) =>
-      new Package().deserialize(record)
+    this.records = input.records.map((record: any) =>
+      new Asset().deserialize(record)
     );
     return this;
   }
 }
 
-export class Package implements Deserializable {
+export class Asset implements Deserializable {
   id: string;
   status: boolean;
   description: string;
@@ -39,6 +39,9 @@ export class Package implements Deserializable {
   autoAccept: boolean;
   categoryName: string;
   category: string;
+  url: string;
+  active: boolean;
+  records: any[];
 
   deserialize(input: any) {
     Object.assign(
@@ -57,7 +60,9 @@ export class Package implements Deserializable {
       set({}, 'autoAccept', get(input, ['autoAccept'])),
       set({}, 'categoryName', get(input, ['categoryName']) || ''),
       set({}, 'category', get(input, ['parentId']) || ''),
-      set({}, 'type', get(input, ['rate']) == 0 ? 'Complimentary' : 'Paid')
+      set({}, 'type', get(input, ['type'])),
+      set({}, 'url', get(input, ['url'])),
+      set({}, 'active', get(input, ['active']))
     );
     return this;
   }

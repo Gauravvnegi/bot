@@ -3,7 +3,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ModalService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ListingService } from '../../services/listing.service';
 import { EditContactComponent } from '../edit-contact/edit-contact.component';
@@ -25,7 +28,9 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private listingService: ListingService,
     private globalFilterService: GlobalFilterService,
     private _modal: ModalService,
-    private _location: Location
+    private _location: Location,
+    private _listingService: ListingService,
+    private _snackbarService: SnackBarService
   ) {
     this.initFG();
   }
@@ -37,9 +42,9 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.listFG = this._fb.group({
       name: ['', [Validators.required]],
-      topic: ['', [Validators.required]],
+      topicName: ['', [Validators.required]],
       description: [''],
-      contacts: [[]],
+      marketingContacts: [[]],
       active: [true],
     });
   }
@@ -66,7 +71,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   getTopicList(hotelId) {
     this.$subscription.add(
       this.listingService.getAssetList(hotelId).subscribe((response) => {
-        this.topicList = response;
+        this.topicList = response.records;
       })
     );
   }
@@ -76,15 +81,16 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '550';
-    const detailCompRef = this._modal.openDialog(
+    const importCompRef = this._modal.openDialog(
       ImportContactComponent,
       dialogConfig
     );
 
-    detailCompRef.componentInstance.onImportClosed.subscribe((response) => {
+    importCompRef.componentInstance.hotelId = this.hotelId;
+    importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) {
         console.log('Import done.');
-        detailCompRef.close();
+        importCompRef.close();
       }
     });
   }
@@ -93,17 +99,42 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    const detailCompRef = this._modal.openDialog(
+    const editContactCompRef = this._modal.openDialog(
       EditContactComponent,
       dialogConfig
     );
 
-    detailCompRef.componentInstance.onContactClosed.subscribe((response) => {
-      if (response.status) {
-        this.listFG.patchValue({ contacts: response.data });
+    editContactCompRef.componentInstance.onContactClosed.subscribe(
+      (response) => {
+        if (response.status) {
+          this.listFG.patchValue({ marketingContacts: response.data });
+        }
+        editContactCompRef.close();
       }
-      detailCompRef.close();
-    });
+    );
+  }
+
+  createList() {
+    if (
+      this.listFG.invalid ||
+      this.listFG.get('marketingContacts').value.length === 0
+    ) {
+      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      return;
+    }
+    const data = this.listFG.getRawValue();
+
+    this._listingService.createList(this.hotelId, data).subscribe(
+      (response) => {
+        this._snackbarService.openSnackBarAsText(
+          `${response.name} is created.`,
+          '',
+          { panelClass: 'success' }
+        );
+        this._location.back();
+      },
+      ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+    );
   }
 
   goBack() {

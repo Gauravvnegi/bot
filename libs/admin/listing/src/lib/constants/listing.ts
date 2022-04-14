@@ -39,7 +39,7 @@ export const listingConfig = {
             value: 'Holidays',
             total: 0,
             isSelected: false,
-            type: 'completed',
+            type: 'initiated',
           },
           {
             label: 'Promotions',
@@ -47,7 +47,7 @@ export const listingConfig = {
             value: 'Promotions',
             total: 0,
             isSelected: false,
-            type: 'failed',
+            type: 'initiated',
           },
           {
             label: 'Highlights',
@@ -55,7 +55,7 @@ export const listingConfig = {
             value: 'Highlights',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'initiated',
           },
         ],
         lastPage: 0,

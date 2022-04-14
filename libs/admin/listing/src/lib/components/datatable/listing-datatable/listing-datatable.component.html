@@ -135,7 +135,6 @@
               aria-label="Quick Reply selection"
               formControlName="quickReplyActionFilters"
             >
-              {{ tabFilterItems | json }}
               <mat-chip
                 *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;

@@ -1,0 +1,33 @@
+@import 'main';
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin-left: 210px;
+}
+
+.btn {
+  width: 132px;
+  height: 46px;
+  padding: 11px 22px 14px 20px;
+  border-radius: 23px;
+  background-color: #4b56c0;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: $white;
+  cursor: pointer;
+}
+
+.upload-btn-wrapper input[type='file'] {
+  font-size: 35px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}

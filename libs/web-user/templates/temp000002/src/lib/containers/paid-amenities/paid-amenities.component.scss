@@ -206,3 +206,7 @@
     width: $full-width;
   }
 }
+
+:host ::ng-deep .ngx-timepicker-control__input{
+  background: transparent !important;
+}

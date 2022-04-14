@@ -15,7 +15,7 @@
         <div class="feild">
           <mat-label class="mat-label">Name:</mat-label>
           <mat-form-field>
-            <input matInput formControlName="name" />
+            <input matInput placeholder="Enter Listing Name" formControlName="name" />
             <mat-error
               *ngIf="
                 listFG.get('name').touched &&
@@ -40,90 +40,28 @@
       <div class="feilds">
         <div class="feild">
           <mat-label class="mat-label">Description:</mat-label>
-          <mat-form-field>
-            <input matInput formControlName="description" />
+          <mat-form-field class="description">
+            <input matInput placeholder="Write Your Description Here" formControlName="description" />
           </mat-form-field>
         </div>
       </div>
     </div>
-    <div style="margin: 15px 0; padding-left: 20px;">
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 16px;
-          font-weight: bold;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.96px;
-          text-align: left;
-          color: #002046;
-        "
-      >
+    <div class="wrapper-text">
+      <div class="add-text">
         Add Contacts
       </div>
-      <div style="display: flex;">
-        <div
-          style="
-            opacity: 0.4;
-            border-radius: 4px;
-            border: solid 1px #707070;
-            width: 255px;
-            height: 135px;
-            margin: 30px 31px 15px 0;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          "
+      <div class="manually-add">
+        <div class="manually-contacts"
           (click)="openAddContact($event)"
         >
-          <div
-            style="
-              font-family: Roboto;
-              font-size: 16px;
-              font-weight: bold;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
-              letter-spacing: 0.96px;
-              text-align: left;
-              color: #9eaeb8;
-            "
-          >
+          <div class="manually-import">
             Add Contacts Manually
           </div>
         </div>
-        <div
-          style="
-            opacity: 0.4;
-            border-radius: 4px;
-            border: solid 1px #707070;
-            width: 255px;
-            height: 135px;
-            margin: 30px 31px 15px 0;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-          "
+        <div class="manually-contacts"
           (click)="openImportContact($event)"
         >
-          <div
-            style="
-              font-family: Roboto;
-              font-size: 16px;
-              font-weight: bold;
-              font-stretch: normal;
-              font-style: normal;
-              line-height: normal;
-              letter-spacing: 0.96px;
-              text-align: left;
-              color: #9eaeb8;
-            "
-          >
+          <div class="manually-import">
             Import your contacts
           </div>
         </div>
@@ -139,32 +77,9 @@
         </div>
       </div>
     </div>
-    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          width: 250px;
-          height: 46px;
-          margin: 121px 34px 0 2.5px;
-          padding: 12px 106px 13px;
-          border-radius: 23px;
-          box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-          background-color: #4b56c0;
-        "
-      >
-        <div
-          style="
-            font-size: 16px;
-            font-weight: 500;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: 0.96px;
-            text-align: left;
-            color: #fff;
-          "
-        >
+    <div class="save-section">
+      <div class="save-button">
+        <div class="save-text">
           Save
         </div>
       </div>

@@ -7,25 +7,23 @@ import { EditContactComponent } from './components/edit-contact/edit-contact.com
 import { EditListingComponent } from './components/edit-listing/edit-listing.component';
 import { ImportContactComponent } from './components/import-contact/import-contact.component';
 import { ListingComponent } from './components/listing/listing.component';
+import { ContactDatatableComponent } from './components/datatable/contact-datatable/contact-datatable.component';
 
 const appRoutes: Route[] = [
   { path: '', component: ListingComponent },
   {
     path: 'create',
     component: CreateListingComponent,
-    children: [{ path: 'contact', component: CreateContactComponent }],
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: EditListingComponent,
-    children: [{ path: 'contact', component: EditContactComponent }],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
-  declarations: [],
 })
 export class AdminListingRoutingModule {
   static components = [
@@ -36,5 +34,6 @@ export class AdminListingRoutingModule {
     EditContactComponent,
     ListingDatatableComponent,
     ImportContactComponent,
+    ContactDatatableComponent,
   ];
 }

@@ -22,6 +22,7 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
 import { ListingService } from '../../../services/listing.service';
+import { ListTable } from '../../../data-models/listing.model';
 
 @Component({
   selector: 'hospitality-bot-listing-datatable',
@@ -126,7 +127,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = data.records;
+          this.values = new ListTable().deserialize(data).records;
           this.initialLoading = false;
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -211,7 +212,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = data.records;
+          this.values = new ListTable().deserialize(data).records;
           data.entityTypeCounts &&
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
           data.entityStateCounts &&
@@ -366,6 +367,28 @@ export class ListingDatatableComponent extends BaseDatatableComponent
 
   openCreateListing() {
     this.router.navigate(['create'], { relativeTo: this.route });
+  }
+
+  updateStatus(event, rowData) {
+    // event.stopPropagation();
+    this.$subscription.add(
+      this.listingService
+        .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText(
+              `${rowData.name}'s status changed.`,
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
+  openList(id) {
+    this.router.navigate([`edit/${id}`], { relativeTo: this.route });
   }
 
   get listingConfiguration() {

@@ -36,7 +36,7 @@ export const listingConfig = {
           {
             label: 'Holidays ',
             icon: '',
-            value: 'Holidays',
+            value: 'HOLIDAYS',
             total: 0,
             isSelected: false,
             type: 'initiated',
@@ -44,7 +44,7 @@ export const listingConfig = {
           {
             label: 'Promotions',
             icon: '',
-            value: 'Promotions',
+            value: 'PROMOTIONS',
             total: 0,
             isSelected: false,
             type: 'initiated',
@@ -52,7 +52,7 @@ export const listingConfig = {
           {
             label: 'Highlights',
             icon: '',
-            value: 'Highlights',
+            value: 'HIGHLIGHTS',
             total: 0,
             isSelected: false,
             type: 'initiated',
@@ -82,7 +82,7 @@ export const listingConfig = {
       },
       {
         field: `guests.primaryGuest.getFullName()`,
-        header: 'Send/achedule Campaign#',
+        header: 'Send/Schedule Campaign#',
         isSort: true,
         sortType: 'string',
       },

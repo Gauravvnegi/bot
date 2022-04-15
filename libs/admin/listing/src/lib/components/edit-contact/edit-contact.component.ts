@@ -8,6 +8,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class EditContactComponent implements OnInit {
   @Input() listId: string;
+  @Input() contacts = [];
   @Output() onContactClosed = new EventEmitter();
   contactFA: FormArray;
   salutationList = [
@@ -21,10 +22,13 @@ export class EditContactComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateContactField();
-    this.generateContactField();
-    this.generateContactField();
-    this.generateContactField();
-    this.generateContactField();
+    if (this.contacts.length) {
+      this.contacts.forEach((i) => this.generateContactField());
+      this.contactFA.patchValue(this.contacts);
+    } else {
+      this.generateContactField();
+      this.generateContactField();
+    }
   }
 
   createFA(): void {

@@ -14,6 +14,10 @@ export class ListingService extends ApiService {
     );
   }
 
+  getListById(hotelId: string, listId: string): Observable<any> {
+    return this.get(`/api/v1/marketing/entity/${hotelId}/listing/${listId}`);
+  }
+
   createList(hotelId: string, data): Observable<any> {
     return this.post(`/api/v1/marketing/entity/${hotelId}/listing`, data);
   }
@@ -30,12 +34,21 @@ export class ListingService extends ApiService {
   }
 
   updateListStatus(hotelId: string, listId: string, data) {
-    this.patch(`/api/v1/marketing/entity/${hotelId}/listing/${listId}`, data);
+    return this.patch(
+      `/api/v1/marketing/entity/${hotelId}/listing/${listId}`,
+      data
+    );
   }
 
   deleteList(hotelId: string, config) {
     this.delete(
       `/api/v1/marketing/entity/${hotelId}/listing${config.queryObj}`
+    );
+  }
+
+  deleteContact(hotelId: string, contactId: string): Observable<any> {
+    return this.delete(
+      `/api/v1/marketing/entity/${hotelId}/contacts?contact_id=${contactId}`
     );
   }
 }

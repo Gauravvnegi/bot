@@ -22,6 +22,7 @@ import { TableDirective } from './directives/table.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { ChannelDirective } from './directives/channel.directive';
 import { ClickableDirective } from './directives/clickable.directive';
+import { UploadCsvComponent } from './components/upload-csv/upload-csv.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ClickableDirective } from './directives/clickable.directive';
     FeatureDirective,
     ChannelDirective,
     ClickableDirective,
+    UploadCsvComponent,
   ],
   exports: [
     DatatableComponent,
@@ -62,6 +64,7 @@ import { ClickableDirective } from './directives/clickable.directive';
     DropdownModule,
     NumberDirective,
     MultipleDropdownComponent,
+    UploadCsvComponent,
     CardDirective,
     TableDirective,
     FeatureDirective,

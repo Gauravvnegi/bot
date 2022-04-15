@@ -1,7 +1,4 @@
-<div
-  style="width: 546px; padding: 30px 30px 40px 40px;"
-  [formGroup]="contactFG"
->
+<div style="width: 546px; padding: 30px 30px 40px 40px;">
   <div (click)="close()" style="cursor: pointer; text-align: right;">
     <i class="fa fa-times" aria-hidden="true"></i>
   </div>
@@ -23,18 +20,17 @@
     <div style="display: flex; align-items: center; width: 300px;">
       <mat-label class="mat-label">File:</mat-label>
       <mat-form-field>
-        <input
-          matInput
-          type="text"
-          disabled
-          placeholder="Choose how to import your contacts"
-        />
+        <input matInput type="text" disabled [value]="fileName" />
       </mat-form-field>
     </div>
   </div>
   <div class="upload-btn-wrapper">
-    <button class="btn">Select file</button>
-    <input formControlName="file" type="file" name="myfile" />
+    <hospitality-bot-upload-csv
+      [fileUploadData]="fileUploadData"
+      [isDisable]="false"
+      (fileData)="importContact($event)"
+    >
+    </hospitality-bot-upload-csv>
   </div>
   <div style="display: flex; justify-content: center; margin-bottom: 20px;">
     <div
@@ -50,7 +46,7 @@
         background-color: #4b56c0;
         cursor: pointer;
       "
-      (click)="importContact()"
+      (click)="save()"
     >
       <div
         style="

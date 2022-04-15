@@ -89,9 +89,9 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     importCompRef.componentInstance.hotelId = this.hotelId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) {
-        console.log('Import done.');
-        importCompRef.close();
+        this.listFG.patchValue({ marketingContacts: response.data });
       }
+      importCompRef.close();
     });
   }
 
@@ -123,6 +123,24 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       return;
     }
     const data = this.listFG.getRawValue();
+    data.marketingContacts = data.marketingContacts.map((contact) => {
+      const {
+        firstName,
+        lastName,
+        salutation,
+        companyName,
+        mobile,
+        email,
+      } = contact;
+      return {
+        firstName,
+        lastName,
+        salutation,
+        companyName,
+        mobile,
+        email,
+      };
+    });
 
     this._listingService.createList(this.hotelId, data).subscribe(
       (response) => {
@@ -135,6 +153,12 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
     );
+  }
+
+  updateContactList(event) {
+    if (event.add) {
+      this.listFG.patchValue({ marketingContacts: event.data });
+    }
   }
 
   goBack() {

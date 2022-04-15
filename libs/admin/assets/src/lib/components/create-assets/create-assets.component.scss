@@ -27,6 +27,7 @@
                 align-items: center;
                 justify-content: space-between;
                 margin-top: 2%;
+                color: #9eaeb8;
                 @media (max-width: $tablet) {
                     flex-wrap: wrap;
                     gap: 60px;
@@ -129,7 +130,7 @@
     
      :host ::ng-deep .description {
         width: 100%;
-        color: gray;
+        color: black
     }
     
      :host ::ng-deep .mat-form-field {

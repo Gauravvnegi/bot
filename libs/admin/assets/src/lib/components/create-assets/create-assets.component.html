@@ -5,15 +5,15 @@
         <p>Create Assets</p>
     </div>
 
-    <div class="wrapper-form" [formGroup]="createAssetFG" *ngIf="createAssetFG">
+    <div class="wrapper-form" [formGroup]="assetForm" *ngIf="assetForm">
         <div class="feilds">
             <div class="feild">
                 <mat-label class="mat-label">Name:</mat-label>
                 <mat-form-field>
                     <input matInput formControlName="name" placeholder="Random Image" />
                     <mat-error *ngIf="
-              createAssetFG.get('name').touched &&
-              createAssetFG.get('name').hasError('required')
+              assetForm.get('name').touched &&
+              assetForm.get('name').hasError('required')
             ">
                         Name is required
                     </mat-error>
@@ -24,12 +24,12 @@
                 <mat-label class="mat-label">Type:</mat-label>
                 <mat-form-field>
                     <mat-select formControlName="type" placeholder="Select">
-                        <mat-option value="Topic1">Image</mat-option>
-                        <mat-option value="Topic2">Video</mat-option>
+                        <mat-option value="Image">Image</mat-option>
+                        <mat-option value="Video">Video</mat-option>
                     </mat-select>
                     <mat-error *ngIf="
-              createAssetFG.get('type').touched &&
-              createAssetFG.get('type').hasError('required')
+              assetForm.get('type').touched &&
+              assetForm.get('type').hasError('required')
             ">
                         Type is required
                     </mat-error>
@@ -42,8 +42,8 @@
             <mat-form-field class="description">
                 <input matInput formControlName="description" placeholder="Write your description here" />
                 <mat-error *ngIf="
-            createAssetFG.get('description').touched &&
-            createAssetFG.get('description').hasError('required')
+            assetForm.get('description').touched &&
+            assetForm.get('description').hasError('required')
           ">
                     Description is required
                 </mat-error>
@@ -54,9 +54,9 @@
             <div class="mat-label">Image:</div>
             <div class="image_message">
                 <div class="image_menu">
-                    <!-- <p>Upload image</p> -->
-
-                    <hospitality-bot-upload-file> </hospitality-bot-upload-file>
+                    <hospitality-bot-upload-file>
+                        [fileUploadData]="fileUploadData" [url]="assetImageUrl" [isDisable]="false" (fileData)="uploadAssetFile($event)"
+                    </hospitality-bot-upload-file>
                 </div>
                 <div class="message">Recommended Ratio : 16:9 | 1MB Max Size</div>
             </div>

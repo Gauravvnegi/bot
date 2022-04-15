@@ -137,7 +137,7 @@
 
     <!-- **************************************BODY********************************* -->
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-        <tr class="data-table-row" (click)="openPackageDetails(rowData)">
+        <tr class="data-table-row" (click)="openAssetDetails(rowData)">
             <td class="table--checkbox">
                 <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
             </td>
@@ -202,7 +202,7 @@
           <!-- <span class="slider round" (click)="updatePackageStatus($event)"></span> -->
           <mat-slide-toggle
             [checked]="rowData.status"
-            (change)="updatePackageStatus($event, rowData.id)"
+            (change)="updateAssetStatus($event, rowData.id)"
           ></mat-slide-toggle>
         </label>
             </td>

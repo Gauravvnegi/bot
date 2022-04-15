@@ -5,9 +5,9 @@ export interface Deserializable {
 }
 
 export class AssetDetail implements Deserializable {
-  amenityPackage: Asset;
+  amenityasset: Asset;
   deserialize(input: any) {
-    this.amenityPackage = new Asset().deserialize(input);
+    this.amenityasset = new Asset().deserialize(input);
     return this;
   }
 }
@@ -89,7 +89,7 @@ export class Amenity {
   autoAccept: boolean;
 }
 
-export enum PackageSource {
+export enum AssetSource {
   Botshot = 'BOTSHOT',
   Pms = 'PMS',
 }

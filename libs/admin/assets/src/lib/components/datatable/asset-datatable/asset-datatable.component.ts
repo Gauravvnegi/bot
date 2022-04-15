@@ -19,12 +19,11 @@ import {
   EntityType,
   EntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
-import { Packages } from 'libs/admin/packages/src/lib/data-models/packageConfig.model';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../constants/asset';
 import { AssetService } from '../../assets/services/asset.service';
-import { Asset, Assets } from '../../../data-models/assetConfig.model';
+import { Assets } from '../../../data-models/assetConfig.model';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -51,7 +50,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   // cols = assetConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  snackbarService: any;
 
   hotelId: any;
 
@@ -138,7 +136,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarAsText(error.message);
         }
       )
     );
@@ -207,22 +205,22 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   /**
    * @function exportCSV To export CSV report of the table.
    */
-  exportCSV(): void {
-    this.loading = true;
+  // exportCSV(): void {
+  //   this.loading = true;
 
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
-        {
-          order: sharedConfig.defaultOrder,
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
-        },
-        ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
-      ]),
-    };
-    this.$subscription.add();
-  }
+  //   const config = {
+  //     queryObj: this.adminUtilityService.makeQueryParams([
+  //       ...this.globalQueries,
+  //       {
+  //         order: sharedConfig.defaultOrder,
+  //         entityType: this.tabFilterItems[this.tabFilterIdx].value,
+  //       },
+  //       ...this.getSelectedQuickReplyFilters(),
+  //       ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+  //     ]),
+  //   };
+  //   this.$subscription.add();
+  // }
 
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
@@ -266,6 +264,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
+  openAssetDetails(amenity): void {
+    this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
+  }
+
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       //set-global query everytime global filter changes
@@ -293,6 +295,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
       }
     });
   }
+
+  /**
+   * loading initial data and showing snackbar accordingly
+   */
   loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
     this.$subscription.add(
@@ -309,12 +315,19 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarAsText(error.message);
         }
       )
     );
   }
 
+  /**
+   *
+   * @param queries
+   * @param defaultProps
+   * @returns hotel id
+   * fetching hotel id data from api
+   */
   fetchDataFrom(
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
@@ -342,5 +355,31 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         chip.total = countObj[chip.value];
       });
     }
+  }
+
+  /**
+   *
+   * @param event
+   * @param assetId
+   * updating asset status on active and deactive
+   */
+  updateAssetStatus(event, assetId): void {
+    // let asset = [];
+    // asset.push(assetId);
+    let data = {
+      active: event.checked,
+    };
+    this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(
+      (response) => {
+        this._snackbarService.openSnackBarAsText(
+          'Status updated successfully',
+          '',
+          { panelClass: 'success' }
+        );
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 }

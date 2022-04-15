@@ -3,10 +3,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'hospitality-bot-upload-file',
   templateUrl: './upload-file.component.html',
-  styleUrls: ['./upload-file.component.scss']
+  styleUrls: ['./upload-file.component.scss'],
 })
 export class UploadFileComponent implements OnInit {
-
   private defaultValue = {
     maxFileSize: 3145728,
     fileType: ['png', 'jpg'],
@@ -17,26 +16,25 @@ export class UploadFileComponent implements OnInit {
   @Input() uploadStatus: boolean;
   @Input() pageType: string;
   @Input() documentType: string;
-  @Input() isDisable: boolean =false;
-  @Input('fileUploadData') set fileUploadData(value: {
-  }) {
+  @Input() isDisable: boolean = false;
+  @Input('fileUploadData') set fileUploadData(value: {}) {
     this._fileUploadData = { ...this.defaultValue, ...value };
   }
 
   get uploadFileData() {
-    return { ...this.defaultValue, ...this. _fileUploadData };
+    return { ...this.defaultValue, ...this._fileUploadData };
   }
 
   @Output()
   fileData = new EventEmitter();
-  
-  error = 'Invalid FileType';
-  constructor() { }
 
-  ngOnInit(): void {
-  }
+  error = 'Invalid FileType';
+  constructor() {}
+
+  ngOnInit(): void {}
 
   onSelectFile(event) {
+    debugger;
     this.url = '';
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
@@ -45,7 +43,7 @@ export class UploadFileComponent implements OnInit {
       const fileSize = event.target.files[0].size;
       const extension = file.name.split('.')[1];
       if (
-        this.checkFileType(extension)&&
+        this.checkFileType(extension) &&
         fileSize <= +this.uploadFileData.maxFileSize
       ) {
         reader.onload = (_event) => {
@@ -55,7 +53,7 @@ export class UploadFileComponent implements OnInit {
             file: file,
             imageUrl: this.url,
             pageType: this.pageType,
-            documentType: this.documentType
+            documentType: this.documentType,
           };
           this.fileData.emit(data);
         };

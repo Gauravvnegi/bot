@@ -7,6 +7,7 @@ import { TopicComponent } from './components/topic/topic.component';
 const appRoutes: Route[] = [
   { path: '', component: TopicComponent },
   { path: 'create', component: CreateTopicComponent },
+  { path: 'edit/:id', component: CreateTopicComponent}
 ];
 
 @NgModule({

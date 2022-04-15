@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfigService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -8,16 +8,17 @@ import { Subscription } from 'rxjs';
 import { TopicService } from '../../services/topic.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { TopicDetail } from '../../data-models/topicConfig.model';
+import {
+  TopicDetail
+} from '../../data-models/topicConfig.model';
 
 @Component({
   selector: 'hospitality-bot-create-topic',
   templateUrl: './create-topic.component.html',
-  styleUrls: ['./create-topic.component.scss']
+  styleUrls: ['./create-topic.component.scss'],
 })
 export class CreateTopicComponent implements OnInit {
-
-
+  @Input() id: string;
   private $subscription: Subscription = new Subscription();
 
   topicForm: FormGroup;
@@ -27,20 +28,22 @@ export class CreateTopicComponent implements OnInit {
   isSavingTopic = false;
   globalQueries = [];
 
-  constructor(private _fb:FormBuilder, private _snackbarService:SnackBarService,
-    private location:Location,
+  constructor(
+    private _fb: FormBuilder,
+    private _snackbarService: SnackBarService,
+    private location: Location,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private globalFilterService: GlobalFilterService,
     private topicService: TopicService,
-    private configService: ConfigService) { 
-    }
+    private configService: ConfigService
+  ) {}
 
-  initFG() :void{
-    this.topicForm=this._fb.group({
-      name:['',[Validators.required, Validators.pattern(Regex.NAME)]],
-      description:['',[Validators.required]],
-      active:[false]
+  initFG(): void {
+    this.topicForm = this._fb.group({
+      name: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      description: ['', [Validators.required]],
+      active: [false],
     });
   }
 
@@ -49,7 +52,6 @@ export class CreateTopicComponent implements OnInit {
     this.listenForGlobalFilters();
   }
   listenForGlobalFilters(): void {
-    debugger;
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
@@ -61,7 +63,7 @@ export class CreateTopicComponent implements OnInit {
         this.getHotelId(this.globalQueries);
         // this.getConfig();
         // this.getCategoriesList(this.hotelId);
-        // this.getPackageId();
+        this.getTopicId();
       })
     );
   }
@@ -74,18 +76,22 @@ export class CreateTopicComponent implements OnInit {
     });
   }
 
-  createTopic(){
-    if(this.topicForm.invalid){
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
-      return;
-    }
-    const data=this.topicForm.getRawValue();
+  createTopic() {
+    // if (this.topicForm.invalid) {
+    //   this._snackbarService.openSnackBarAsText('Invalid Form.');
+    //   return;
+    // }
+    // const data = this.topicForm.getRawValue();
     //api call with data
-    console.log(data);
-    this.addTopic();
+    // console.log(data);
+    if (this.topicId) {
+      this.updateTopic();
+    } else {
+      this.addTopic();
+    }
   }
 
-  addTopic(){
+  addTopic() {
     this.isSavingTopic = true;
     let data = this.topicService.mapTopicData(
       this.topicForm.getRawValue(),
@@ -115,8 +121,64 @@ export class CreateTopicComponent implements OnInit {
     );
   }
 
-  redirectToTable(){
-    this.location.back();
+  getTopicId(): void {
+    this.$subscription.add(
+      this.activatedRoute.params.subscribe((params) => {
+        if (params['id']) {
+          this.topicId = params['id'];
+          this.getTopicDetails(this.topicId);
+        } else if (this.id) {
+          this.topicId = this.id;
+          this.getTopicDetails(this.topicId);
+        }
+      })
+    );
   }
 
+  getTopicDetails(topicId: string): void {
+    this.$subscription.add(
+      this.topicService
+        .getTopicDetails(this.hotelId, topicId)
+        .subscribe((response) => {
+          this.hotelTopic = new TopicDetail().deserialize(response);
+          this.topicForm.patchValue(this.hotelTopic.amenityTopic);
+          // this.disableForm(this.topicForm.getRawValue());
+        })
+    );
+  }
+
+  updateTopic(): void {
+    this.isSavingTopic = true;
+    const data = this.topicService.mapTopicData(
+      this.topicForm.getRawValue(),
+      this.hotelId,
+      this.hotelTopic.amenityTopic.id
+    );
+    this.$subscription.add(
+      this.topicService
+        .updateTopic(this.hotelId, this.hotelTopic.amenityTopic.id, data)
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText(
+              'Package updated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            // this.router.navigate([
+            //   'edit',
+            //   this.hotelTopic.amenityTopic.id,
+            // ]);
+            this.isSavingTopic = false;
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+            this.isSavingTopic = false;
+          }
+        )
+    );
+  }
+
+  redirectToTable() {
+    this.location.back();
+  }
 }

@@ -5,17 +5,28 @@ import { Amenity, TopicSource } from '../data-models/topicConfig.model';
 
 @Injectable()
 export class TopicService extends ApiService {
+  getTopicDetails(hotelId, packageId) {
+    return this.get(`/api/v1/entity/${hotelId}/topics/${packageId}`);
+  }
   getTopicList(id: string): Observable<any> {
     return this.get(`/api/v1/entity/${id}/topics`);
   }
 
   getHotelTopic(config,hotelId) {
-    // return this.get(`/api/v1/packages${config.queryObj}`);
     return this.get(`/api/v1/entity/${hotelId}/topics${config.queryObj}`);
   }
 
   addTopic(hotelId, data){
     return this.post(`/api/v1/entity/${hotelId}/topics`,data);
+  }
+
+  updateTopicStatus(hotelId, data, topicId){
+    console.log(data);
+    return this.patch(`/api/v1/entity/${hotelId}/topics/${topicId}/status`,data);
+  }
+
+  updateTopic(hotelId, topicId, data) {
+    return this.put(`/api/v1/entity/${hotelId}/topics/${topicId}`, data);
   }
 
   mapTopicData(formValue, hotelId, id?) {

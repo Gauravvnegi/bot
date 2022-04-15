@@ -51,7 +51,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   topicList=[];
   hotelId: any;
-  snackbarService: any;
 
   cols = [
     { field: 'name', header: 'Name', sortType: 'string', isSort: true },
@@ -105,7 +104,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId; 
-        // this.hotelId ="0a80105d-0aab-4cf8-8cab-a63ed13f2c38";
       }
     });
   }
@@ -127,7 +125,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          // alert('data not available');
+          this._snackbarService.openSnackBarAsText('data is not available');
         }
       )
     );
@@ -162,6 +161,29 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     return this.topicService.getHotelTopic(config,this.hotelId);
   }
 
+  updateTopicStatus(event, topicId): void {
+    // debugger;
+    // let topics = [];
+    // topics.push(topicId);
+    let data = {
+      active:event.checked,
+    };
+    this.topicService
+      .updateTopicStatus(this.hotelId, data, topicId )
+      .subscribe(
+        (response) => {
+          // debugger;
+          this._snackbarService.openSnackBarAsText(
+            'Status updated successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
 
   getTopicList(hotelId){
     this.$subscription.add(
@@ -176,7 +198,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   openTopicDetails(amenity): void {
-    this._router.navigate([`create/${amenity.id}`], { relativeTo: this.route });
+    this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
   }
 
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
@@ -216,7 +238,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarAsText('error');
         }
       )
     );

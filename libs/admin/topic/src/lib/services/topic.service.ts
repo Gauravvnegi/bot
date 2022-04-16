@@ -1,54 +1,69 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs';
-import { Amenity, TopicSource } from '../data-models/topicConfig.model';
+import { Topic } from '../data-models/topicConfig.model';
 
 @Injectable()
 export class TopicService extends ApiService {
-  getTopicDetails(hotelId, packageId) {
-    return this.get(`/api/v1/entity/${hotelId}/topics/${packageId}`);
-  }
-  getTopicList(id: string): Observable<any> {
-    return this.get(`/api/v1/entity/${id}/topics`);
+
+  /**
+   * get existing topic record details
+   * @param hotelId 
+   * @param packageId 
+   * @returns topics details
+   */
+  getTopicDetails(hotelId, topicId) {
+    return this.get(`/api/v1/entity/${hotelId}/topics/${topicId}`);
   }
 
+  /**
+   * get topic list from get api
+   * @param config 
+   * @param hotelId 
+   * @returns topic list
+   */
   getHotelTopic(config,hotelId) {
     return this.get(`/api/v1/entity/${hotelId}/topics${config.queryObj}`);
   }
 
+  /**
+   * add new topic record  
+   * @param hotelId 
+   * @param data 
+   * @returns add record
+   */
   addTopic(hotelId, data){
     return this.post(`/api/v1/entity/${hotelId}/topics`,data);
   }
 
+  /**
+   * change topic status (active/deactive)
+   * @param hotelId 
+   * @param data 
+   * @param topicId 
+   * @returns update topic status
+   */
   updateTopicStatus(hotelId, data, topicId){
-    console.log(data);
     return this.patch(`/api/v1/entity/${hotelId}/topics/${topicId}/status`,data);
   }
 
+  /**
+   * edit existing topic record
+   * @param hotelId 
+   * @param topicId 
+   * @param data 
+   * @returns update record
+   */
   updateTopic(hotelId, topicId, data) {
     return this.put(`/api/v1/entity/${hotelId}/topics/${topicId}`, data);
   }
 
   mapTopicData(formValue, hotelId, id?) {
-    const topicData = new Amenity();
-    topicData.active = formValue.active;
+    const topicData = new Topic();
+    topicData.status = formValue.status;
     topicData.hotelId = hotelId;
-    // topicData.imageUrl = formValue.imageUrl;
-    topicData.topicCode = formValue.topicCode;
     topicData.id = id || '';
-    topicData.parentId = formValue.category;
     topicData.name = formValue.name;
     topicData.description = formValue.description;
-    // topicData.currency = formValue.currency;
-    topicData.rate = formValue.rate;
-    // topicData.quantity = 0;
-    topicData.source = TopicSource.Botshot
-    // topicData.startDate = 0;
-    // topicData.endDate = 0
-    topicData.type = formValue.type;
-    // topicData.downloadUrl = '';
-    topicData.unit = formValue.unit;
-    topicData.autoAccept = formValue.autoAccept;
     return topicData;
   }
 

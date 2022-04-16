@@ -98,7 +98,11 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       ]);
     });
   }
-
+  
+  /**
+   * returns Hotel Id
+   * @param globalQueries 
+   */
   getHotelId(globalQueries): void {
 
     globalQueries.forEach((element) => {
@@ -108,6 +112,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * load data into topic datatable
+   */
   loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
     this.$subscription.add(
@@ -161,8 +168,12 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     return this.topicService.getHotelTopic(config,this.hotelId);
   }
 
+  /**
+   * change topic status (active/deactive)
+   * @param event 
+   * @param topicId 
+   */
   updateTopicStatus(event, topicId): void {
-    // debugger;
     // let topics = [];
     // topics.push(topicId);
     let data = {
@@ -172,7 +183,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       .updateTopicStatus(this.hotelId, data, topicId )
       .subscribe(
         (response) => {
-          // debugger;
           this._snackbarService.openSnackBarAsText(
             'Status updated successfully',
             '',
@@ -185,18 +195,17 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       );
   }
 
-  getTopicList(hotelId){
-    this.$subscription.add(
-      this.topicService.getTopicList(hotelId).subscribe((response)=>{
-        this.topicList= response;
-      })
-    )
-  }
-
+  /**
+   * open create topic page
+   */
   openCreateTopic(){
     this._router.navigate(['create'],{relativeTo :this.route});
   }
 
+  /**
+   * open create topic page of a topic Id
+   * @param amenity 
+   */
   openTopicDetails(amenity): void {
     this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
   }
@@ -231,8 +240,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new Topics().deserialize(data).records;
-          // this.values = data.records;
-          //set pagination
           this.totalRecords = data.total;
           this.loading = false;
         },
@@ -251,8 +258,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    // this.tempFirst = this.first;
-    // this.tempRowsPerPage = this.rowsPerPage;
   }
 
   /**
@@ -358,6 +363,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     return topicConfig;
   }
 
+  /**
+   * destroys subcription
+   */ 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

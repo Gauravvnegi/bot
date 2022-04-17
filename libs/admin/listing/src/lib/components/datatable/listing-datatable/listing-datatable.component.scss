@@ -84,3 +84,22 @@
     }
   }
 }
+.listing-button {
+  width: 145px;
+  height: 36px;
+  border-radius: 18px;
+  background-color: #4b56c0;
+  padding: 10px 23.25px 8px 18.25px;
+  cursor: pointer;
+  &.listing-button {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.56px;
+    text-align: left;
+    color: #fff;
+  }
+}

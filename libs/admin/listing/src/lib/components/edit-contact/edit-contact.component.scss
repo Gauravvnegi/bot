@@ -46,7 +46,7 @@ td {
     overflow: auto;
     padding-bottom: 20px;
 
-    .contact-mail-field{
+    .add-contacts-field{
       margin: 5px 10px;
     }
   }
@@ -111,4 +111,14 @@ td {
   width: 173px;
   margin-left: 3px;
   margin-top: -2px;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+  display: none;
+}
+
+.close-popup-icon{
+  margin: 10px; 
+  cursor: pointer; 
+  text-align: right;
 }

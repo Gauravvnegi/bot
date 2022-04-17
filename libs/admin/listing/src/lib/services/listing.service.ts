@@ -48,7 +48,14 @@ export class ListingService extends ApiService {
 
   deleteContact(hotelId: string, contactId: string): Observable<any> {
     return this.delete(
-      `/api/v1/marketing/entity/${hotelId}/contacts?contact_id=${contactId}`
+      `/api/v1/marketing/entity/${hotelId}/contacts${contactId}`
+    );
+  }
+
+  updateListContact(hotelId: string, listId: string, data) {
+    return this.post(
+      `/api/v1/marketing/entity/${hotelId}/listing/${listId}/contacts`,
+      data
     );
   }
 }

@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
@@ -118,7 +118,33 @@ export class EditListingComponent implements OnInit {
     importCompRef.componentInstance.hotelId = this.hotelId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) {
-        this.listFG.patchValue({ marketingContacts: response.data });
+        const {
+          firstName,
+          lastName,
+          salutation,
+          companyName,
+          mobile,
+          email,
+        } = response.data[0];
+        const reqData = {
+          firstName,
+          lastName,
+          salutation,
+          companyName,
+          mobile,
+          email,
+        };
+        this.$subscription.add(
+          this._listingService
+            .updateListContact(this.hotelId, this.listId, reqData)
+            .subscribe(
+              (response) => {
+                this.getListDetails(this.listId);
+              },
+              ({ error }) =>
+                this._snackbarService.openSnackBarAsText(error.message)
+            )
+        );
       }
       importCompRef.close();
     });
@@ -136,14 +162,24 @@ export class EditListingComponent implements OnInit {
     editContactCompRef.componentInstance.onContactClosed.subscribe(
       (response) => {
         if (response.status) {
-          this.listFG.patchValue({ marketingContacts: response.data });
+          this.$subscription.add(
+            this._listingService
+              .updateListContact(this.hotelId, this.listId, response.data[0])
+              .subscribe(
+                (response) => {
+                  this.getListDetails(this.listId);
+                },
+                ({ error }) =>
+                  this._snackbarService.openSnackBarAsText(error.message)
+              )
+          );
         }
         editContactCompRef.close();
       }
     );
   }
 
-  createList() {
+  updateList() {
     if (
       this.listFG.invalid ||
       this.listFG.get('marketingContacts').value.length === 0
@@ -153,33 +189,39 @@ export class EditListingComponent implements OnInit {
     }
     const data = this.listFG.getRawValue();
     data.marketingContacts = data.marketingContacts.map((contact) => {
-      const { firstName, lastName, salutation, companyName, mobile } = contact;
+      const {
+        firstName,
+        lastName,
+        salutation,
+        companyName,
+        mobile,
+        email,
+      } = contact;
       return {
         firstName,
         lastName,
         salutation,
         companyName,
         mobile,
+        email,
       };
     });
 
-    this._listingService.createList(this.hotelId, data).subscribe(
+    this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
       (response) => {
         this._snackbarService.openSnackBarAsText(
-          `${response.name} is created.`,
+          `${response.name} is updated.`,
           '',
           { panelClass: 'success' }
         );
-        this._location.back();
+        this.listFG.patchValue(response);
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
     );
   }
 
   updateContactList(event) {
-    if (event.add) {
-      this.listFG.patchValue({ marketingContacts: event.data });
-    }
+    this.getListDetails(this.listId);
   }
 
   goBack() {

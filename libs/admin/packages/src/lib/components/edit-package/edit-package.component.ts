@@ -241,7 +241,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   redirectToPackages() {
-    this._location.back();
+    this.router.navigate(['/pages/library/package']);
   }
 
   uploadFile(event): void {
@@ -291,7 +291,7 @@ export class EditPackageComponent implements OnInit {
               { panelClass: 'success' }
             );
             this.router.navigate([
-              '/pages/package/edit',
+              '/pages/library/package/edit',
               this.hotelPackage.amenityPackage.id,
             ]);
             this.isSavingPackage = false;

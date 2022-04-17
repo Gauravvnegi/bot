@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ListingService } from '../../services/listing.service';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -10,6 +11,8 @@ export class EditContactComponent implements OnInit {
   @Input() listId: string;
   @Input() contacts = [];
   @Output() onContactClosed = new EventEmitter();
+  @Input() add: boolean;
+  @Input() hotelId: string;
   contactFA: FormArray;
   salutationList = [
     { name: 'Mr.', value: 'Mr.' },

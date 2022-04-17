@@ -17,6 +17,7 @@ import { Observable, of, Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
 import { ListingService } from '../../../services/listing.service';
 import { EditContactComponent } from '../../edit-contact/edit-contact.component';
+import { Contact } from '../../../data-models/listing.model';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -162,14 +163,8 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   deleteContact() {
-    const ids = this.selectedRows.map((item) => ({ id: item.id }));
-    if (this.add) {
-      this.dataSource = this.dataSource.filter(
-        (data) => !ids.some((el) => el.id === data.id)
-      );
-      this.updateContacts.emit({ add: true, data: this.dataSource });
-      this.totalRecords = this.dataSource.length;
-    } else {
+    const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
+    if (!this.add) {
       this.$subscription.add(
         this._listingService
           .deleteContact(
@@ -177,15 +172,26 @@ export class ContactDatatableComponent extends BaseDatatableComponent
             this._adminUtilityService.makeQueryParams(ids)
           )
           .subscribe(
-            (response) =>
+            (response) => {
               this._snackbarService.openSnackBarAsText('Contact deleted', '', {
                 panelClass: 'success',
-              }),
+              });
+              this.selectedRows = [];
+              this.updateDataSourceAfterDelete(ids);
+            },
             ({ error }) =>
               this._snackbarService.openSnackBarAsText(error.message)
           )
       );
-    }
+    } else this.updateDataSourceAfterDelete(ids);
+  }
+
+  updateDataSourceAfterDelete(ids) {
+    this.dataSource = this.dataSource.filter(
+      (data) => !ids.some((el) => el.contact_id === data.id)
+    );
+    this.updateContacts.emit({ add: true, data: this.dataSource });
+    this.totalRecords = this.dataSource.length;
     this.changePage(this.currentPage);
   }
 
@@ -198,18 +204,46 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       dialogConfig
     );
 
-    editContactCompRef.componentInstance.contacts = this.dataSource;
-    if (!this.add) editContactCompRef.componentInstance.listId = this.listId;
+    if (this.add)
+      editContactCompRef.componentInstance.contacts = this.dataSource;
     editContactCompRef.componentInstance.onContactClosed.subscribe(
       (response) => {
         if (response.status) {
-          this.dataSource = response.data;
-          this.changePage(this.currentPage);
-          this.updateContacts.emit({ add: true, data: this.dataSource });
+          if (!this.add) {
+            this.$subscription.add(
+              this._listingService
+                .updateListContact(this.hotelId, this.listId, response.data[0])
+                .subscribe(
+                  (response) => {
+                    this.handleContactAddEvent(response);
+                  },
+                  ({ error }) =>
+                    this._snackbarService.openSnackBarAsText(error.message)
+                )
+            );
+          } else this.handleContactAddEvent(response.data);
         }
         editContactCompRef.close();
       }
     );
+  }
+
+  handleContactAddEvent(data) {
+    if (this.add) {
+      this.dataSource = data;
+      this.updateContacts.emit({
+        data: this.dataSource,
+      });
+      this.changePage(this.currentPage);
+    } else {
+      this.dataSource = [
+        ...this.dataSource,
+        new Contact().deserialize(data, 0),
+      ];
+      this.totalRecords = this.dataSource.length + 1;
+      this.updateContacts.emit();
+      this.changePage(this.currentPage);
+    }
   }
 
   get listingConfiguration() {

@@ -80,7 +80,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        const queries = [
+        this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];

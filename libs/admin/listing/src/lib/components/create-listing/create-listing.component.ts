@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
@@ -30,7 +31,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private _modal: ModalService,
     private _location: Location,
     private _listingService: ListingService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _router: Router
   ) {
     this.initFG();
   }
@@ -149,7 +151,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           '',
           { panelClass: 'success' }
         );
-        this._location.back();
+        this._router.navigate([`pages/library/listing/edit/${response.id}`]);
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
     );

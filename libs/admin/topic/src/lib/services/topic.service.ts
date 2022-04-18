@@ -67,7 +67,7 @@ export class TopicService extends ApiService {
     const topicData = new Topic();
     topicData.active = formValue.status;
     topicData.hotelId = hotelId;
-    topicData.id = id || '';
+    topicData.id = formValue.id;
     topicData.name = formValue.name;
     topicData.description = formValue.description;
     return topicData;

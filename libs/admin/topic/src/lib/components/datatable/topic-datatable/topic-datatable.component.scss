@@ -104,3 +104,6 @@
 :host ::ng-deep .name{
   font-size: 15px !important;
 }
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th{
+  padding: 0.8rem 0.5rem !important;
+}

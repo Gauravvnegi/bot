@@ -111,7 +111,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries).subscribe(
         (data) => {
           this.values= new Topics().deserialize(data).records;
-          // this.values = data.records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -122,7 +121,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          // alert('data not available');
           this._snackbarService.openSnackBarAsText('data is not available');
         }
       )
@@ -164,8 +162,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @param topicId 
    */
   updateTopicStatus(event, topicId): void {
-    // let topics = [];
-    // topics.push(topicId);
     let data = {
       active:event.checked,
     };

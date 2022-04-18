@@ -80,7 +80,7 @@ export class EditTopicComponent implements OnInit {
   /**
    * create topic and check validation
    */
-  createTopic() {
+   handleSubmit() {
     if (this.topicForm.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid Form.');
       return;

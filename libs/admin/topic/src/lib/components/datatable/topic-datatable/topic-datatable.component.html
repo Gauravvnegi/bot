@@ -153,10 +153,6 @@
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
-            <!-- <img
-              [src]="topicConfiguration.images.filter.url"
-              [alt]="topicConfiguration.images.filter.alt"
-            /> -->
           </div>
         </div>
       </form>
@@ -172,7 +168,7 @@
       <th class="tableHeading" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th
+      <th 
         class="table-data-head"
         pResizableColumn
         [pSortableColumn]="col.field"
@@ -185,7 +181,7 @@
       </th>
     </tr>
 
-    <tr class="table-search-head">
+    <tr class="table-search-head" >
       <th class="table-search-head"></th>
       <th class="table-search-head">
         <input

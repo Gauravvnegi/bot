@@ -16,7 +16,7 @@ import * as FileSaver from 'file-saver';
 import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
@@ -51,6 +51,7 @@ export class DetailsComponent implements OnInit {
   isReservationDetailFetched: boolean = false;
   isGuestReservationFetched = false;
   shareIconList;
+  colorMap;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
     { label: 'Current Booking', icon: '' },
@@ -109,7 +110,8 @@ export class DetailsComponent implements OnInit {
     private _hotelDetailService: HotelDetailService,
     private _globalFilterService: GlobalFilterService,
     private _userService: UserService,
-    private subscriptionService: SubscriptionPlanService
+    private subscriptionService: SubscriptionPlanService,
+    private configService: ConfigService
   ) {
     this.self = this;
     this.initDetailsForm();
@@ -117,6 +119,7 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getConfig();
   }
 
   registerListeners(): void {
@@ -141,6 +144,12 @@ export class DetailsComponent implements OnInit {
     );
   }
 
+  getConfig() {
+    this.configService.$config.subscribe((response) => {
+      if (response) this.colorMap = response?.feedbackColorMap;
+    });
+  }
+
   loadGuestInfo(): void {
     this.$subscription.add(
       this._reservationService.getGuestById(this.guestId).subscribe(
@@ -160,7 +169,10 @@ export class DetailsComponent implements OnInit {
     this.$subscription.add(
       this._reservationService.getGuestReservations(this.guestId).subscribe(
         (response) => {
-          this.guestReservations = new GuestDetails().deserialize(response);
+          this.guestReservations = new GuestDetails().deserialize(
+            response,
+            this.colorMap
+          );
           this.initBookingsFG();
           this.initGuestReservationDropdownList();
           this.isGuestReservationFetched = true;

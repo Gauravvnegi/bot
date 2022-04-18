@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,7 +11,8 @@ import {
   TableService,
 } from '@hospitality-bot/admin/shared';
 import {
-  SnackBarService
+  SnackBarService,
+  ModalService,
 } from '@hospitality-bot/shared/material';
 import {
   SelectedEntityState,
@@ -35,8 +36,8 @@ import { topicConfig } from '../../../constants/topic';
 export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   tableName = 'Topics';
-  tabFilterItems;
-  tabFilterIdx: number = 0;
+  @Input() tabFilterItems;
+  @Input() tabFilterIdx: number = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -57,6 +58,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected tabFilterService: TableService,
+    protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
     private topicService: TopicService
@@ -70,7 +72,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * filter out Global filter queries of api
+   * To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -121,7 +123,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText('data is not available');
+          this._snackbarService.openSnackBarAsText(error.message);
         }
       )
     );
@@ -182,8 +184,11 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     };
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarAsText(
-          'Status updated successfully',
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'datatable.status_success',
+            priorityMessage: 'Status updated.',
+          },
           '',
           { panelClass: 'success' }
         );
@@ -234,7 +239,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
           },
         ],
         {
@@ -253,7 +258,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText('error');
+          this._snackbarService.openSnackBarAsText(error.message);
         }
       )
     );
@@ -327,7 +332,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
         },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),

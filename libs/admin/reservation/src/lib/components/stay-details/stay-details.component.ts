@@ -18,6 +18,7 @@ export class StayDetailsComponent implements OnInit {
   @Input() guestReservations;
   @Input() bookingNumber: string;
   @Input() feedbackId: string;
+  @Input() colorMap;
   stayDetailsForm: FormGroup;
   constructor(
     private _fb: FormBuilder,

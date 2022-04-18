@@ -1,0 +1,116 @@
+@import 'main';
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  margin-left: 210px;
+}
+
+.btn {
+  width: 132px;
+  height: 46px;
+  padding: 11px 22px 14px 20px;
+  border-radius: 23px;
+  background-color: $button-blue;
+  font-family: Roboto;
+  font-size: $font16;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: $white;
+  cursor: pointer;
+}
+
+.upload-btn-wrapper input[type='file'] {
+  font-size: 35px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.import{
+  width: 546px; 
+  padding: 30px 30px 40px 40px;
+  .import-close{
+    cursor: pointer; 
+    text-align: right;
+  }
+  .import-contact{
+    font-family: Roboto;
+    font-size: $font20;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.2px;
+    color: $dark-blue;
+  }
+  .import-file{
+    display: flex; 
+    justify-content: flex-end; 
+    margin: $margin10 0;
+    .file{
+      display: flex; 
+      align-items: center; 
+      width: 300px;
+    }
+  }
+  .import-save{
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: $margin20;
+    .save-btn{
+      display: flex;
+      justify-content: center;
+      width: 250px;
+      height: 46px;
+      margin: 121px 34px 0 2.5px;
+      padding: 12px 106px 13px;
+      border-radius: 23px;
+      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      background-color: $button-blue;
+      cursor: pointer;
+      .save{
+        font-size: $font16;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: white;
+      }
+    }
+  }
+  .import-select{
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: $margin20;
+    .select-btn{
+      display: flex;
+      justify-content: center;
+      width: 140px;
+      height: 46px;
+      margin: $margin10 0px 0 70px;
+      padding: 12px 0px 13px;
+      border-radius: 23px;
+      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      background-color: $button-blue;
+      cursor: pointer;
+      .select-file{
+        font-size: $font16;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: white;
+      }
+    }
+  } 
+}

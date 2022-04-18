@@ -47,3 +47,9 @@
 :host ::ng-deep .table_header_text{
   color: $dark-blue;
 }
+:host ::ng-deep .data-table-row {
+  &:hover {
+    cursor: pointer;
+    background: $table-hover-background;
+  }
+}

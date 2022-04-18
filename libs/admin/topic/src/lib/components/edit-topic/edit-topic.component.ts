@@ -107,8 +107,11 @@ export class EditTopicComponent implements OnInit {
         (response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
-          this._snackbarService.openSnackBarAsText(
-            'Topic added successfully',
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'datatable.status_success',
+              priorityMessage: 'Status updated.',
+            },
             '',
             { panelClass: 'success' }
           );
@@ -170,8 +173,11 @@ export class EditTopicComponent implements OnInit {
         .updateTopic(this.hotelId, this.topic.id, data)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText(
-              'Topic updated successfully',
+            this._snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'datatable.status_success',
+                priorityMessage: 'Status updated.',
+              },
               '',
               { panelClass: 'success' }
             );

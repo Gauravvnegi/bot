@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '@hospitality-bot/admin/shared';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-
 import { ActivatedRoute } from '@angular/router';
-import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
+import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '../../../theme/src/lib/services/subscription-plan.service';
-import { ConfigService } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'admin-pages',
@@ -18,7 +15,6 @@ export class PagesComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
-    private _feedbackService: FeedbackService,
     private _route: ActivatedRoute,
     private _subscriptionPlanService: SubscriptionPlanService,
     private _configService: ConfigService,
@@ -44,10 +40,6 @@ export class PagesComponent implements OnInit {
 
     this._subscriptionPlanService.initSubscriptionDetails(
       get(adminDetails, ['subscription'])
-    );
-
-    this._feedbackService.initFeedbackConfig(
-      this._route.snapshot.data['feedbackConfig']
     );
   }
 

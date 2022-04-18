@@ -9,7 +9,7 @@
           }}</span>
         </p>
         <div class="header-seperator"></div>
-        <p>
+        <p class="visit-padding">
           {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }} -
           {{ rowData.booking.getDepartureDate(_globalFilterService.timezone) }}
           ({{
@@ -31,26 +31,22 @@
               <div class="booking-feedback">
                 <p
                   class="number"
-                  [ngClass]="{
-                    'status-background-reject':
-                      rowData.visitDetail?.intentToRecommends.rating < 5,
-                    'status-background-success':
-                      rowData.visitDetail?.intentToRecommends.rating >= 5
-                  }"
+                  [style.backgroundColor]="rowData.visitDetail?.color"
                 >
                   {{ rowData.visitDetail?.intentToRecommends.rating }}
                 </p>
               </div>
             </div>
           </div>
-          <div class="visit-details"
+          <div
+            class="visit-details"
             (click)="downloadFeedback($event, rowData.visitDetail?.feedbackId)"
           >
-            <div class="view-feedback" >
-            <img src="assets/svg/View.svg" alt="">
+            <div class="view-feedback">
+              <img src="assets/svg/View.svg" alt="" />
               View Feedback
             </div>
-            <img src="assets/svg/union.svg" alt="">
+            <img src="assets/svg/union.svg" alt="" />
           </div>
         </ng-container>
         <mat-icon class="expand-icon" *ngIf="!depositPanel2.expanded"
@@ -133,7 +129,7 @@
         </div>
         <div class="feild width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
-          <div class="value">
+          <div class="value" [style.color]="rowData.visitDetail?.color">
             {{ rowData.visitDetail?.intentToRecommends.rating }}
             {{ rowData.visitDetail?.intentToRecommends.Category }}
           </div>

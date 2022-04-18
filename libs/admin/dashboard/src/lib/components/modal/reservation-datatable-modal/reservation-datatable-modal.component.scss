@@ -107,3 +107,11 @@
     transform: scale(1);
   }
 }
+
+ :host ::ng-deep .data-table-row.hover-background {
+   &:hover { 
+     cursor: pointer;
+     background: $table-popup-background !important;
+   }
+ }
+

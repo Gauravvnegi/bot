@@ -1,0 +1,42 @@
+<div class="import">
+  <div class="import-close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </div>
+  <div class="import-contact">
+    Import Contacts
+  </div>
+  <div class="import-file">
+    <div class="file">
+      <mat-label class="mat-label">File:</mat-label>
+      <mat-form-field>
+        <input matInput type="text" disabled [value]="fileName" />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="import-select">
+    <div class="select-btn">
+      <div class="select-file">
+        Select File
+      </div>
+    </div>
+  </div>
+
+  <div class="upload-btn-wrapper">
+    <hospitality-bot-upload-csv
+      [fileUploadData]="fileUploadData"
+      [isDisable]="false"
+      (fileData)="importContact($event)"  
+    >
+    </hospitality-bot-upload-csv>
+  </div>
+  <div class="import-save">
+    <div class="save-btn"
+      (click)="save()"
+    >
+      <div class="save">
+        Save
+      </div>
+    </div>
+  </div>
+</div>

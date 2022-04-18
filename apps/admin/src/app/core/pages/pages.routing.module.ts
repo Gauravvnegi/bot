@@ -14,7 +14,7 @@ const appRoutes: Route[] = [
     component: PagesComponent,
     resolve: {
       adminDetails: AdminDetailResolver,
-      feedbackConfig: FeedbackConfigResolver,
+      // feedbackConfig: FeedbackConfigResolver,
     },
     children: [
       {
@@ -28,14 +28,6 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/conversation').then(
             (m) => m.AdminConversationModule
           ),
-      },
-      {
-        path: 'package',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/packages').then(
-            (m) => m.AdminPackagesModule
-          ),
-        canActivate: [LoadGuard],
       },
       {
         path: 'covid',
@@ -81,6 +73,13 @@ const appRoutes: Route[] = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
         canActivate: [LoadGuard],
+      },
+      {
+        path: 'library',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/library').then(
+            (m) => m.AdminLibraryModule
+          ),
       },
     ],
   },

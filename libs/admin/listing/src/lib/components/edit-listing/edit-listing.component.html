@@ -1,0 +1,129 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">
+        Edit Listing
+      </p>
+    </div>
+  </header>
+  <div class="stats-container">
+    <div class="stats">
+      <div class="stats__value">{{ listData?.stats.totalContacts }}</div>
+      <div class="stats__text">Total Contacts</div>
+    </div>
+    <div class="stats">
+      <div class="stats__value">{{ listData?.stats.unsubscribed }}</div>
+      <div class="stats__text">Unsubscribed</div>
+    </div>
+    <div class="stats">
+      <div class="stats__value">{{ listData?.stats.bounce }}</div>
+      <div class="stats__text">Bounce</div>
+    </div>
+    <div class="stats">
+      <div class="stats__value">{{ listData?.stats.sendCampaign }}</div>
+      <div class="stats__text">Send Campaign</div>
+    </div>
+    <div class="stats">
+      <div class="stats__value">{{ listData?.stats.scheduleCampaign }}</div>
+      <div class="stats__text">Schedule Campaign</div>
+    </div>
+  </div>
+  <form [formGroup]="listFG">
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Name:</mat-label>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Enter Listing Name"
+              formControlName="name"
+            />
+            <mat-error
+              *ngIf="
+                listFG.get('name').touched &&
+                listFG.get('name').hasError('required')
+              "
+            >
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild">
+          <mat-label class="mat-label">Topic:</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="topicName">
+              <mat-option
+                *ngFor="let topic of topicList"
+                [value]="topic.name"
+                >{{ topic.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Description:</mat-label>
+          <mat-form-field class="description">
+            <input
+              matInput
+              placeholder="Write Your Description Here"
+              formControlName="description"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-text">
+      <ng-container
+        *ngIf="listFG?.get('marketingContacts')?.value.length; else noContact"
+        ><hospitality-bot-contact-datatable
+          [add]="false"
+          [dataSource]="listFG?.get('marketingContacts')?.value"
+          [totalRecords]="listFG?.get('marketingContacts')?.value.length"
+          [hotelId]="hotelId"
+          [listId]="listId"
+          (updateContacts)="updateContactList($event)"
+        ></hospitality-bot-contact-datatable
+      ></ng-container>
+      <ng-template #noContact>
+        <div class="add-text">
+          Add Contacts
+        </div>
+        <div class="manually-add">
+          <div class="manually-contacts" (click)="openAddContact($event)">
+            <div class="manually-import">
+              Add Contacts Manually
+            </div>
+          </div>
+          <div class="manually-contacts" (click)="openImportContact($event)">
+            <div class="manually-import">
+              Import your contacts
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="toggle_wrapper">
+          <mat-label class="mat-label">Active :</mat-label>
+          <div class="status status--left">Disable</div>
+          <mat-slide-toggle formControlName="active"></mat-slide-toggle>
+          <div class="status status--right">Enable</div>
+        </div>
+      </div>
+    </div>
+    <div class="save-section">
+      <div class="save-button" (click)="updateList()">
+        <div class="save-text">
+          Save
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

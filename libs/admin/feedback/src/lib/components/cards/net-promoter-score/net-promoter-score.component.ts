@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { NPS } from '../../../data-models/statistics.model';
+import { FeedbackTableService } from '../../../services/table.service';
 import { ChartTypeOption } from '../../../types/feedback.type';
 
 @Component({
@@ -66,7 +67,8 @@ export class NetPromoterScoreComponent implements OnInit {
     protected _statisticService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected dateService: DateService
+    protected dateService: DateService,
+    protected tableService: FeedbackTableService
   ) {}
 
   ngOnInit(): void {
@@ -88,7 +90,7 @@ export class NetPromoterScoreComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this.dateService.getCalendarType(
+          calenderType: this.tableService.getCalendarTypeNPS(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
             this._globalFilterService.timezone
@@ -207,7 +209,7 @@ export class NetPromoterScoreComponent implements OnInit {
    * @function getNPSChartData To get NPS chart data
    */
   protected getNPSChartData(): void {
-    const config = {
+    const configuration = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
@@ -215,8 +217,9 @@ export class NetPromoterScoreComponent implements OnInit {
         },
       ]),
     };
+    configuration.queryObj = this.getModifiedConfig(configuration);
     this.$subscription.add(
-      this._statisticService.getOverallNPSStatistics(config).subscribe(
+      this._statisticService.getOverallNPSStatistics(configuration).subscribe(
         (response) => {
           this.npsChartData = new NPS().deserialize(response);
           this.initGraphData();
@@ -240,7 +243,7 @@ export class NetPromoterScoreComponent implements OnInit {
    * @function exportCSV To export CSV report for NPS.
    */
   exportCSV(): void {
-    const config = {
+    const configuration = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
@@ -249,8 +252,9 @@ export class NetPromoterScoreComponent implements OnInit {
         },
       ]),
     };
+    configuration.queryObj = this.getModifiedConfig(configuration);
     this.$subscription.add(
-      this._statisticService.exportOverallNPSCSV(config).subscribe(
+      this._statisticService.exportOverallNPSCSV(configuration).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,
@@ -285,5 +289,27 @@ export class NetPromoterScoreComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  getModifiedConfig(configuration) {
+    const fromDate = this.tableService.getNPSStartDate(
+      this.globalQueries[6].fromDate,
+      this.globalQueries[5].toDate,
+      this._globalFilterService.timezone
+    );
+    return (
+      configuration.queryObj.substring(
+        0,
+        configuration.queryObj.indexOf('fromDate=')
+      ) +
+      `fromDate=${fromDate}` +
+      configuration.queryObj.substring(
+        configuration.queryObj.indexOf(
+          '&',
+          configuration.queryObj.indexOf('fromDate=')
+        ),
+        configuration.queryObj.length
+      )
+    );
   }
 }

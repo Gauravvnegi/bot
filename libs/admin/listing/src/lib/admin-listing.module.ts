@@ -8,6 +8,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { ListingService } from './services/listing.service';
 
 @NgModule({
   imports: [
@@ -19,5 +20,6 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['listing'])),
   ],
   declarations: [...AdminListingRoutingModule.components],
+  providers: [ListingService],
 })
 export class AdminListingModule {}

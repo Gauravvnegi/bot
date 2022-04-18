@@ -129,15 +129,15 @@
     .booking-feedback {
       display: flex;
       align-items: center;
-      background-color: $completed;
+      // background-color: $completed;
       justify-content: space-around;
       padding: 2px;
       margin: 0 10px;
       // margin-top: 7px;
       border-radius: 25px;
       position: relative;
-      min-width: 20px;
-      min-height: 20px;
+      // min-width: 20px;
+      // min-height: 20px;
       &:hover {
         cursor: pointer;
         .feedback-msg {
@@ -163,12 +163,16 @@
       }
       .number {
         padding: 2px 0;
-        color: white;
+        color: $white;
         text-align: center;
         width: 15px;
         border-radius: 50%;
         font-size: 12px;
         margin: 0 2px;
+        min-width: 26px;
+        min-height: 26px;
+        padding-top: 4px;
+        border: solid 2px $white;
       }
       @media screen and (max-width: 800px) {
         margin: 0;
@@ -198,7 +202,7 @@
 .visit-details{
   width: 160px;
   height: 33px;
-  margin: 0 94px 0 60px;
+  margin: 0 94px 0 40px;
   padding: 0px 0px 0px 10px;
   border-radius: 6px;
   border: solid 1px #4b56c0;
@@ -236,7 +240,13 @@
   border: solid 1px $light-grey;
 
 }
+:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover{
+  background: $accordian-background;
+}
+:host ::ng-deep .mat-expansion-panel-header:hover{
+  background: $accordian-background !important;
+}
 
-
-
-
+.visit-padding{
+  padding: 0 0 0 10px !important;
+}

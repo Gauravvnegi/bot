@@ -13,6 +13,12 @@
   <div class="graph-container">
     <div class="graph">
       <div class="graph-canvas">
+        <div class="labels">
+          <div class="val">{{ statData?.checkin?.totalCount }}</div>
+          <div class="label">
+            {{ 'card.customer.total_user_checkin' | translate }}
+          </div>
+        </div>
         <canvas
           baseChart
           class="graph-canvas-base-chart"
@@ -25,15 +31,15 @@
         >
         </canvas>
       </div>
-      <div class="labels">
-        <div class="val">{{ statData?.checkin?.totalCount }}</div>
-        <div class="label">
-          {{ 'card.customer.total_user_checkin' | translate }}
-        </div>
-      </div>
     </div>
     <div class="graph">
       <div class="graph-canvas">
+        <div class="labels">
+          <div class="val">{{ statData?.checkout?.totalCount }}</div>
+          <div class="label">
+            {{ 'card.customer.total_user_checkout' | translate }}
+          </div>
+        </div>
         <canvas
           baseChart
           class="graph-canvas-base-chart"
@@ -45,12 +51,6 @@
           [options]="checkoutChart.options"
         >
         </canvas>
-      </div>
-      <div class="labels">
-        <div class="val">{{ statData?.checkout?.totalCount }}</div>
-        <div class="label">
-          {{ 'card.customer.total_user_checkout' | translate }}
-        </div>
       </div>
     </div>
   </div>

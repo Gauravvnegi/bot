@@ -70,7 +70,7 @@ export const DEFAULT_ROUTES = [
         path: 'library/topic',
         title: 'Topic',
         children: null,
-        url: 'assets/svg/box.svg',
+        url: 'assets/svg/ballot.svg',
       },
     ],
   },

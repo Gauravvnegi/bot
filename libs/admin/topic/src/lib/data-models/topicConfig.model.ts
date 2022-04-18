@@ -20,7 +20,7 @@ export class Topic implements Deserializable {
   description: string;
   name: string;
   hotelId: string;
-  active:boolean;
+  active: boolean;
 
   deserialize(input: any) {
     Object.assign(
@@ -30,7 +30,7 @@ export class Topic implements Deserializable {
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'hotelId', get(input, ['hotelId'])),
-      set({}, 'active', get(input, ['active'])),
+      set({}, 'active', get(input, ['active']))
     );
     return this;
   }

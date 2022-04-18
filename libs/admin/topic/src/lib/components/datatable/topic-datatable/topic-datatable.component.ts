@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,8 +11,7 @@ import {
   TableService,
 } from '@hospitality-bot/admin/shared';
 import {
-  SnackBarService,
-  ModalService,
+  SnackBarService
 } from '@hospitality-bot/shared/material';
 import {
   SelectedEntityState,
@@ -35,9 +34,9 @@ import { topicConfig } from '../../../constants/topic';
 })
 export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Topics';
-  @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 0;
+  tableName = 'Topics';
+  tabFilterItems;
+  tabFilterIdx: number = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -50,7 +49,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   cols = topicConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  topicList=[];
   hotelId: any;
 
   constructor(
@@ -58,10 +56,10 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected _modal: ModalService,
     protected tabFilterService: TableService,
-    private _router:Router, private route:ActivatedRoute,
-    private topicService:TopicService
+    private _router: Router,
+    private route: ActivatedRoute,
+    private topicService: TopicService
   ) {
     super(fb, tabFilterService);
   }
@@ -71,6 +69,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
   }
 
+  /**
+   * filter out Global filter queries of api
+   */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
@@ -83,21 +84,20 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
         },
       ]);
     });
   }
-  
+
   /**
    * returns Hotel Id
-   * @param globalQueries 
+   * @param globalQueries
    */
   getHotelId(globalQueries): void {
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId; 
+        this.hotelId = element.hotelId;
       }
     });
   }
@@ -110,13 +110,13 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values= new Topics().deserialize(data).records;
+          this.values = new Topics().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-        data.entityStateCounts &&
-          this.updateQuickReplyFilterCount(data.entityStateCounts);
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.loading = false;
         },
         ({ error }) => {
@@ -127,6 +127,11 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * manages tabs count
+   * @param countObj
+   * @param currentTabCount
+   */
   updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
@@ -137,6 +142,10 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * manages active, in-active chip count
+   * @param countObj
+   */
   updateQuickReplyFilterCount(countObj: EntityState): void {
     if (countObj) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
@@ -145,6 +154,12 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * fetching topic list from api
+   * @param queries
+   * @param defaultProps
+   * @returns topic list
+   */
   fetchDataFrom(
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
@@ -153,50 +168,52 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.topicService.getHotelTopic(config,this.hotelId);
+    return this.topicService.getHotelTopic(config, this.hotelId);
   }
 
   /**
    * change topic status (active/deactive)
-   * @param event 
-   * @param topicId 
+   * @param event
+   * @param topicId
    */
   updateTopicStatus(event, topicId): void {
     let data = {
-      active:event.checked,
+      active: event.checked,
     };
-    this.topicService
-      .updateTopicStatus(this.hotelId, data, topicId )
-      .subscribe(
-        (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Status updated successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this.changePage(this.currentPage);
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      );
+    this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
+      (response) => {
+        this._snackbarService.openSnackBarAsText(
+          'Status updated successfully',
+          '',
+          { panelClass: 'success' }
+        );
+        this.changePage(this.currentPage);
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
   }
 
   /**
    * open create topic page
    */
-  openCreateTopic(){
-    this._router.navigate(['create'],{relativeTo :this.route});
+  openCreateTopic() {
+    this._router.navigate(['create'], { relativeTo: this.route });
   }
 
   /**
    * open create topic page of a topic Id
-   * @param amenity 
+   * @param topic
    */
-  openTopicDetails(amenity): void {
-    this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
+  openTopicDetails(topic): void {
+    this._router.navigate([`edit/${topic.id}`], { relativeTo: this.route });
   }
 
+  /**
+   * get selected entity state(active/inactive)
+   * @returns selected entity state
+   */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
@@ -229,9 +246,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           this.values = new Topics().deserialize(data).records;
           this.totalRecords = data.total;
           data.entityTypeCounts &&
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-        data.entityStateCounts &&
-          this.updateQuickReplyFilterCount(data.entityStateCounts);
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.loading = false;
         },
         ({ error }) => {
@@ -303,7 +320,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   /**
    * @function exportCSV To export CSV report of the table.
    */
-   exportCSV(): void {
+  exportCSV(): void {
     this.loading = true;
 
     const config = {
@@ -316,7 +333,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.topicService.exportCSV(this.hotelId,config).subscribe(
+      this.topicService.exportCSV(this.hotelId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,
@@ -331,7 +348,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       )
     );
   }
-
 
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
@@ -363,13 +379,16 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
+  /**
+   * return topicConfig object
+   */
   get topicConfiguration() {
     return topicConfig;
   }
 
   /**
    * destroys subcription
-   */ 
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

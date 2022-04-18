@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'hospitality-bot-edit-topic',
   templateUrl: './edit-topic.component.html',
-  styleUrls: ['./edit-topic.component.scss']
+  styleUrls: ['./edit-topic.component.scss'],
 })
 export class EditTopicComponent implements OnInit {
   @Input() id: string;
@@ -31,7 +31,7 @@ export class EditTopicComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private globalFilterService: GlobalFilterService,
     private topicService: TopicService,
-    private _router:Router
+    private _router: Router
   ) {
     this.initFG();
   }
@@ -46,10 +46,9 @@ export class EditTopicComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
     this.listenForGlobalFilters();
   }
-  
+
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -67,7 +66,7 @@ export class EditTopicComponent implements OnInit {
 
   /**
    * returns Hotel Id
-   * @param globalQueries 
+   * @param globalQueries
    */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
@@ -80,7 +79,7 @@ export class EditTopicComponent implements OnInit {
   /**
    * create topic and check validation
    */
-   handleSubmit() {
+  handleSubmit() {
     if (this.topicForm.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid Form.');
       return;
@@ -143,7 +142,7 @@ export class EditTopicComponent implements OnInit {
 
   /**
    * returns topic record details
-   * @param topicId 
+   * @param topicId
    */
   getTopicDetails(topicId: string): void {
     this.$subscription.add(

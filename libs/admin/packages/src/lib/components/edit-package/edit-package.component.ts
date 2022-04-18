@@ -14,7 +14,6 @@ import {
 } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
 import { ConfigService } from '@hospitality-bot/admin/shared';
-import { debug } from 'console';
 
 @Component({
   selector: 'hospitality-bot-edit-package',

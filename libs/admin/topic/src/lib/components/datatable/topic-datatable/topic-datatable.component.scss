@@ -65,7 +65,7 @@
 .request-btn__wrap {
   cursor: pointer;
   margin-left: 690px;
-  margin-top:20px;
+  margin-top: 20px;
   display: flex;
   justify-content: end;
   align-items: center;
@@ -101,9 +101,9 @@
     }
   }
 }
-:host ::ng-deep .name{
+:host ::ng-deep .name {
   font-size: 15px !important;
 }
-:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th{
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
   padding: 0.8rem 0.5rem !important;
 }

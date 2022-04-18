@@ -1,0 +1,78 @@
+<div class="container">
+    <div class="create_Assets">
+        <mat-icon (click)="redirectToAssets()" class="material-icons" style="cursor: pointer;" matSuffix>keyboard_backspace
+        </mat-icon>
+        <p>Create Assets</p>
+    </div>
+
+    <div class="wrapper-form" [formGroup]="assetForm" *ngIf="assetForm">
+        <div class="feilds">
+            <div class="feild">
+                <mat-label class="mat-label">Name:</mat-label>
+                <mat-form-field>
+                    <input matInput formControlName="name" placeholder="Random Image" />
+                    <mat-error *ngIf="
+              assetForm.get('name').touched &&
+              assetForm.get('name').hasError('required')
+            ">
+                        Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="feild">
+                <mat-label class="mat-label">Type:</mat-label>
+                <mat-form-field>
+                    <mat-select formControlName="type" placeholder="Select">
+                        <mat-option value="Image">Image</mat-option>
+                        <mat-option value="Video">Video</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="
+              assetForm.get('type').touched &&
+              assetForm.get('type').hasError('required')
+            ">
+                        Type is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="full-width">
+            <mat-label class="mat-label">Description:</mat-label>
+            <mat-form-field class="description">
+                <input matInput formControlName="description" placeholder="Write your description here" />
+                <mat-error *ngIf="
+            assetForm.get('description').touched &&
+            assetForm.get('description').hasError('required')
+          ">
+                    Description is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="image_container">
+            <div class="feilds margin-adjust">
+                <div class="upload_image">
+                    <mat-label class="mat-label">Image:</mat-label>
+                </div>
+                <div class="image-button">
+                    <div class="image">
+                        <hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="ImageUrl" [isDisable]="false" (fileData)="uploadFile($event)">
+                        </hospitality-bot-upload-file>
+                    </div>
+                    <div class="message">Recommended Ratio : 16:9 | 1MB Max Size</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle_wrapper">
+            <mat-label class="mat-label">Active :</mat-label>
+            <div class="status status--left">Disable</div>
+            <mat-slide-toggle formControlName="status"></mat-slide-toggle>
+            <div class="status status--right">Enable</div>
+        </div>
+    </div>
+
+    <div class="button">
+        <button class="saveButton" (click)="createAsset()">Save</button>
+    </div>
+</div>

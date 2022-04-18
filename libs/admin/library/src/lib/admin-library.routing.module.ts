@@ -21,6 +21,11 @@ const appRoutes: Route[] = [
       ),
   },
   {
+    path: 'assets',
+    loadChildren: () =>
+      import('@hospitality-bot/admin/assets').then((m) => m.AdminAssetsModule),
+  },
+  {
     path: 'topic',
     loadChildren: () =>
       import('@hospitality-bot/admin/topic').then((m) => m.AdminTopicModule),

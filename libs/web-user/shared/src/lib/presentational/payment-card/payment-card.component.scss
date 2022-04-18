@@ -1,6 +1,4 @@
 @import 'main';
-
-
 body {
     margin: 0;
     padding: 0;
@@ -9,16 +7,16 @@ body {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-line-pack: center;
-        align-content: center;
+    align-content: center;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     min-height: 100vh;
     -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    flex-wrap: wrap;
     font-family: 'Raleway';
 }
 
@@ -85,7 +83,9 @@ input {
     width: 60px;
 }
 
+
 /* CREDIT CARD IMAGE STYLING */
+
 .preload * {
     -webkit-transition: none !important;
     -moz-transition: none !important;
@@ -120,7 +120,7 @@ input {
     border-radius: 22px;
 }
 
-#generatecard{
+#generatecard {
     cursor: pointer;
     float: right;
     font-size: 12px;
@@ -129,10 +129,12 @@ input {
     background-color: #909090;
     border-radius: 4px;
     cursor: pointer;
-    float:right;
+    float: right;
 }
 
+
 /* CHANGEABLE CARD ELEMENTS */
+
 .creditcard .lightcolor,
 .creditcard .darkcolor {
     -webkit-transition: fill .5s;
@@ -211,7 +213,9 @@ input {
     fill: #616161;
 }
 
+
 /* FRONT OF CARD */
+
 #svgname {
     text-transform: uppercase;
 }
@@ -264,7 +268,9 @@ input {
     fill: #4C4C4C;
 }
 
+
 /* BACK OF CARD */
+
 #cardback .st0 {
     fill: none;
     stroke: #0F0F0F;
@@ -320,7 +326,9 @@ input {
     font-size: 37.769px;
 }
 
+
 /* FLIP ANIMATION */
+
 .container {
     perspective: 1000px;
 }
@@ -358,35 +366,32 @@ input {
     transform: rotateY(180deg);
 }
 
-
 // new css
-
-.card_container{
+.card_container {
     position: relative;
-            background-image: linear-gradient( #5bb4f9,#2187d5);
-    padding:16px;
+    background-image: linear-gradient( #5bb4f9, #2187d5);
+    padding: 16px;
     color: white;
     height: 227px;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-   
-    & p{
+    & p {
         letter-spacing: 2px;
-        padding-bottom:10px ;
+        padding-bottom: 10px;
         font-size: 14px;
         font-weight: 700;
     }
-    &-img-chip{
+    &-img-chip {
         width: 43px;
         margin: 21px 0px;
     }
-    &-brandImg{
-            position: absolute;
-    right: 6px;
-    bottom: 4px;
-    width: 73px;
-    & img{
-        width: 100%;
-    }
+    &-brandImg {
+        position: absolute;
+        right: 6px;
+        bottom: 4px;
+        width: 73px;
+        & img {
+            width: 100%;
+        }
     }
 }

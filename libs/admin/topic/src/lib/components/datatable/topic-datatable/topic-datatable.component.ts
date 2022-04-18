@@ -4,6 +4,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import * as FileSaver from 'file-saver';
 import {
   BaseDatatableComponent,
   sharedConfig,
@@ -46,22 +47,11 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 5;
-  // cols = topicConfig.datatable.cols;
+  cols = topicConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
   topicList=[];
   hotelId: any;
-
-  cols = [
-    { field: 'name', header: 'Name', sortType: 'string', isSort: true },
-    {
-      field: 'description',
-      header: 'Description',
-      sortType: 'string',
-      isSort: true,
-    },
-    { field: 'status', header: 'Active', isSort: false },
-  ];
 
   constructor(
     public fb: FormBuilder,
@@ -188,6 +178,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
             '',
             { panelClass: 'success' }
           );
+          this.changePage(this.currentPage);
         },
         ({ error }) => {
           this._snackbarService.openSnackBarAsText(error.message);
@@ -241,6 +232,10 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         (data) => {
           this.values = new Topics().deserialize(data).records;
           this.totalRecords = data.total;
+          data.entityTypeCounts &&
+          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+        data.entityStateCounts &&
+          this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.loading = false;
         },
         ({ error }) => {
@@ -312,22 +307,35 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   /**
    * @function exportCSV To export CSV report of the table.
    */
-  exportCSV(): void {
+   exportCSV(): void {
     this.loading = true;
 
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
-          order: sharedConfig.defaultOrder,
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          order: 'DESC',
         },
-        ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
-    this.$subscription.add();
+    this.$subscription.add(
+      this.topicService.exportCSV(this.hotelId,config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
+
 
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.

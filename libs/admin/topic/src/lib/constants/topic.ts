@@ -31,22 +31,21 @@ export const topicConfig = {
         ],
         cols: [
           {
-            field: '',
+            field: 'name',
             header: 'Name',
             isSort: true,
-            sortType: 'number',
+            sortType: 'string',
           },
           {
-            field: '',
+            field: 'description',
             header: 'Description',
             isSort: true,
-            sortType: 'number',
+            sortType: 'string',
           },
           {
-            field: '',
+            field: 'active',
             header: 'Active',
             isSort: false,
-            sortType: 'number',
           },
         ],
       },

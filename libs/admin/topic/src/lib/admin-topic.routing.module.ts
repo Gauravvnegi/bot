@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { CreateTopicComponent } from './components/create-topic/create-topic.component';
 import { TopicDatatableComponent } from './components/datatable/topic-datatable/topic-datatable.component';
 import { TopicComponent } from './components/topic/topic.component';
+import { EditTopicComponent } from './components/edit-topic/edit-topic.component';
 
 const appRoutes: Route[] = [
   { path: '', component: TopicComponent },
-  { path: 'create', component: CreateTopicComponent },
-  { path: 'edit/:id', component: CreateTopicComponent}
+  { path: 'create', component: EditTopicComponent },
+  { path: 'edit/:id', component: EditTopicComponent}
 ];
 
 @NgModule({
@@ -17,7 +17,7 @@ const appRoutes: Route[] = [
 })
 export class AdminTopicRoutingModule {
   static components = [
-    CreateTopicComponent,
+    EditTopicComponent,
     TopicComponent,
     TopicDatatableComponent,
   ];

@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="go-back">
+      <mat-icon
+          (click)="redirectToTable()"
+          class="material-icons"
+          matSuffix
+          >keyboard_backspace  </mat-icon
+        >
+      <p>Create Topic</p>
+    </div>
+    <div class="wrapper-form" [formGroup]="topicForm" *ngIf="topicForm">
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Name : </mat-label>
+          <mat-form-field class="name">
+            <input
+              matInput
+              formControlName="name"
+              placeholder="Enter Topic Name"
+            />
+            <mat-error
+              *ngIf="
+                topicForm.get('name').touched &&
+                topicForm.get('name').hasError('required')
+              "
+            >
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild">
+          <mat-label class="mat-label">Description : </mat-label>
+          <mat-form-field class="description">
+            <input matInput
+              formControlName="description"
+              placeholder="Write Your Description Here"
+            />
+          </mat-form-field>
+        </div>
+        <div class="toggle_wrapper">
+          <mat-label class="mat-label">Active : </mat-label>
+          <div class="status status--left">Disable</div>
+          <mat-slide-toggle
+            formControlName="status"
+          ></mat-slide-toggle>
+          <div class="status status--right">Enable</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer_button">
+      <button mat-button (click)="createTopic()">save</button>
+    </div>
+  </div>
+  

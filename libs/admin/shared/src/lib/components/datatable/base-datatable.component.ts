@@ -18,6 +18,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
 
@@ -170,6 +171,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   private paginate(event) {
+    this.currentPage = event.page;
     //first - index of the first page to be displayed
     //rows - Number of rows to display per page.
     //event.page: Index of the new page

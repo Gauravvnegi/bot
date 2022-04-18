@@ -1,21 +1,19 @@
-import { Location } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit ,Input} from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { Subscription } from 'rxjs';
-import { TopicService } from '../../services/topic.service';
-import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Topic } from '../../data-models/topicConfig.model';
-
+import { TopicService } from '../../services/topic.service';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'hospitality-bot-create-topic',
-  templateUrl: './create-topic.component.html',
-  styleUrls: ['./create-topic.component.scss'],
+  selector: 'hospitality-bot-edit-topic',
+  templateUrl: './edit-topic.component.html',
+  styleUrls: ['./edit-topic.component.scss']
 })
-export class CreateTopicComponent implements OnInit {
+export class EditTopicComponent implements OnInit {
   @Input() id: string;
   private $subscription: Subscription = new Subscription();
 
@@ -33,18 +31,22 @@ export class CreateTopicComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private globalFilterService: GlobalFilterService,
     private topicService: TopicService,
-  ) {}
+    private _router:Router
+  ) {
+    this.initFG();
+  }
 
+  // , Validators.pattern(Regex.NAME)
   initFG(): void {
     this.topicForm = this._fb.group({
-      name: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      name: ['', [Validators.required]],
       description: ['', [Validators.required]],
       status: [true],
     });
   }
 
   ngOnInit(): void {
-    this.initFG();
+    
     this.listenForGlobalFilters();
   }
   
@@ -111,7 +113,7 @@ export class CreateTopicComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          this.redirectToTable();
+          // this._router.navigate(['/pages/library/topic']);
           this.isSavingTopic = false;
         },
         ({ error }) => {
@@ -174,7 +176,7 @@ export class CreateTopicComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this.redirectToTable();
+            // this._router.navigate(['/pages/library/topic']);
             this.isSavingTopic = false;
           },
           ({ error }) => {

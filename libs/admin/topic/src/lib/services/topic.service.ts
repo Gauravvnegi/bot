@@ -57,9 +57,15 @@ export class TopicService extends ApiService {
     return this.put(`/api/v1/entity/${hotelId}/topics/${topicId}`, data);
   }
 
+  exportCSV(hotelId,config){
+    return this.get(`/api/v1/entity/${hotelId}/topics/export${config.queryObj}`, {
+      responseType: 'blob',
+    })
+  }
+
   mapTopicData(formValue, hotelId, id?) {
     const topicData = new Topic();
-    topicData.status = formValue.status;
+    topicData.active = formValue.status;
     topicData.hotelId = hotelId;
     topicData.id = id || '';
     topicData.name = formValue.name;

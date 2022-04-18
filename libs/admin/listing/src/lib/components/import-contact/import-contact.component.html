@@ -1,65 +1,40 @@
-<div style="width: 546px; padding: 30px 30px 40px 40px;">
-  <div (click)="close()" style="cursor: pointer; text-align: right;">
+<div class="import">
+  <div class="import-close" (click)="close()">
     <i class="fa fa-times" aria-hidden="true"></i>
   </div>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 20px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 1.2px;
-      color: #002046;
-    "
-  >
+  <div class="import-contact">
     Import Contacts
   </div>
-  <div style="display: flex; justify-content: flex-end; margin: 10px 0;">
-    <div style="display: flex; align-items: center; width: 300px;">
+  <div class="import-file">
+    <div class="file">
       <mat-label class="mat-label">File:</mat-label>
       <mat-form-field>
         <input matInput type="text" disabled [value]="fileName" />
       </mat-form-field>
     </div>
   </div>
+
+  <div class="import-select">
+    <div class="select-btn">
+      <div class="select-file">
+        Select File
+      </div>
+    </div>
+  </div>
+
   <div class="upload-btn-wrapper">
     <hospitality-bot-upload-csv
       [fileUploadData]="fileUploadData"
       [isDisable]="false"
-      (fileData)="importContact($event)"
+      (fileData)="importContact($event)"  
     >
     </hospitality-bot-upload-csv>
   </div>
-  <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        width: 250px;
-        height: 46px;
-        margin: 121px 34px 0 2.5px;
-        padding: 12px 106px 13px;
-        border-radius: 23px;
-        box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-        background-color: #4b56c0;
-        cursor: pointer;
-      "
+  <div class="import-save">
+    <div class="save-btn"
       (click)="save()"
     >
-      <div
-        style="
-          font-size: 16px;
-          font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.96px;
-          text-align: left;
-          color: #fff;
-        "
-      >
+      <div class="save">
         Save
       </div>
     </div>

@@ -184,11 +184,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     };
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'datatable.status_success',
-            priorityMessage: 'Status updated.',
-          },
+        this._snackbarService.openSnackBarAsText(
+          'Successfully updated',
           '',
           { panelClass: 'success' }
         );

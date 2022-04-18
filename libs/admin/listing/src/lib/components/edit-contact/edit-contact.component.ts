@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Regex } from '@hospitality-bot/shared';
 import { ListingService } from '../../services/listing.service';
 
 @Component({
@@ -40,12 +41,15 @@ export class EditContactComponent implements OnInit {
 
   createContactFG(): FormGroup {
     return this._fb.group({
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       salutation: ['', [Validators.required]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      lastName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
       companyName: [''],
-      mobile: ['', [Validators.required]],
+      mobile: [
+        '',
+        [Validators.required, , Validators.pattern(Regex.NUMBER_REGEX)],
+      ],
     });
   }
 

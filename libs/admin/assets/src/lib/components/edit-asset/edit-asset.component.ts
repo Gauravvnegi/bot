@@ -17,7 +17,18 @@ export class EditAssetComponent implements OnInit {
   @Input() id: string;
   fileUploadData = {
     fileSize: 3145728,
-    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
+    fileType: [
+      'png',
+      'jpg',
+      'jpeg',
+      'gif',
+      'eps',
+      'mp4',
+      'MPEG',
+      'MOV',
+      'AVI',
+      'MKV',
+    ],
   };
 
   assetForm: FormGroup;
@@ -28,7 +39,6 @@ export class EditAssetComponent implements OnInit {
   hotelId: any;
   globalQueries = [];
   assetId: string;
-  disableForm: any;
 
   constructor(
     private router: Router,
@@ -203,7 +213,6 @@ export class EditAssetComponent implements OnInit {
    * editing the existing records
    */
   updateAsset(): void {
-    debugger;
     this.isSavingasset = true;
     const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
@@ -212,7 +221,7 @@ export class EditAssetComponent implements OnInit {
     );
     this.$subscription.add(
       this.assetService
-        .updateAsset(this.hotelId, data,this.hotelasset.id)
+        .updateAsset(this.hotelId, data, this.hotelasset.id)
         .subscribe(
           (response) => {
             this._snakbarService.openSnackBarAsText(

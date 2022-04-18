@@ -1,0 +1,235 @@
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <form [formGroup]="tableFG">
+        <div class="caption__wrapper--tabmenu">
+          <div class="header">
+            <p class="heading">{{ tableName }}</p>
+            <div class="manage-contacts">
+              <div class="delete"
+                (click)="deleteContact()"
+                *ngIf="selectedRows.length"
+              >
+              <div class="manage-delete">
+                Delete
+              </div>
+              </div>
+              <div class="add"
+                (click)="openAddContact($event)"
+              >
+                <div class="add-contact">
+                  +Add Contact
+                </div>
+              </div>
+              <div class="options" *ngIf="!add">
+                <div *ngIf="isActionButtons" class="icons">
+                  <img
+                    [src]="listingConfiguration.images.download.url"
+                    [alt]="listingConfiguration.images.download.alt"
+                    class="svg"
+                  />
+                  <img
+                    [src]="listingConfiguration.images.googleDoc.url"
+                    [alt]="listingConfiguration.images.googleDoc.alt"
+                    class="svg"
+                  />
+                  <img
+                    [src]="listingConfiguration.images.card.url"
+                    [alt]="listingConfiguration.images.card.alt"
+                    class="svg"
+                  />
+                </div>
+                <div *ngIf="isActionButtons" class="seperator"></div>
+                <div formGroupName="documentActions" class="dropdown--wrapper">
+                  <p-dropdown
+                    class="export"
+                    [options]="documentActionTypes"
+                    formControlName="documentActionType"
+                  >
+                    <ng-template
+                      let-documentActionItem
+                      pTemplate="selectedItem"
+                    >
+                      <img
+                        [src]="listingConfiguration.images.export.url"
+                        [alt]="listingConfiguration.images.export.alt"
+                      />
+                      <span class="documentActionItemLabel">{{
+                        documentActionItem.label
+                      }}</span>
+                    </ng-template>
+                  </p-dropdown>
+                  <div class="divider"></div>
+                  <p-dropdown
+                    class="export"
+                    [options]="documentTypes"
+                    formControlName="documentType"
+                  >
+                    <ng-template let-documentTypeItem pTemplate="selectedItem">
+                      <img
+                        [src]="listingConfiguration.images.csv.url"
+                        [alt]="listingConfiguration.images.csv.alt"
+                      />
+                      <span class="documentActionItemLabel">{{
+                        documentTypeItem.label
+                      }}</span>
+                    </ng-template>
+                  </p-dropdown>
+                  <button class="go" (click)="onDocumentActions()">
+                    <mat-icon class="material-icons" matSuffix>east</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th class="tableHeading" pResizableColumn>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns"
+      >
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+
+    <tr class="table-search-head">
+      <th class="table-search-head"></th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'email')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'salutation')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'lastName')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'companyName')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'mobile')"
+          class="p-column-filter"
+        />
+      </th>
+    </tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="data-table-row">
+      <td class="table--checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td>
+        {{ rowData.email }}
+      </td>
+      <td>
+        {{ rowData.salutation }}
+      </td>
+      <td>
+        {{ rowData.firstName }}
+      </td>
+      <td>
+        {{ rowData.lastName }}
+      </td>
+      <td>
+        {{ rowData.companyName }}
+      </td>
+      <td>
+        {{ rowData.mobile }}
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>

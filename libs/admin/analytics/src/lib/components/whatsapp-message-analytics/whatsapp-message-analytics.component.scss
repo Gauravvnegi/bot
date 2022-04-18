@@ -2,6 +2,7 @@
 
 .info-icon {
   position: relative;
+  cursor: pointer;
 
   img {
     margin: 3px 5px 0;
@@ -198,7 +199,6 @@
     font: normal normal bold 25px/30px Roboto;
     letter-spacing: 1.5px;
     color: #002046;
-    margin-bottom: 10px;
     opacity: 1;
   }
   &__text {

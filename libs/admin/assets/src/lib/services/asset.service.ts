@@ -11,10 +11,13 @@ export class AssetService extends ApiService {
     );
   }
 
-  exportCSV(config,hotelId) {
-    return this.get(`/api/v1/entity/${hotelId}/assets/export${config.queryObj}`, {
-      responseType: 'blob',
-    });
+  exportCSV(config, hotelId) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/assets/export${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
   }
   getHotelAsset(config: { queryObj: any }, hotelId: any) {
     return this.get(`/api/v1/entity/${hotelId}/assets${config.queryObj}`);
@@ -38,16 +41,16 @@ export class AssetService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/assets/${assetId}`);
   }
 
-
   mapAssetData(formValue, hotelId, id?) {
     const assetData = new Asset();
     assetData.active = formValue.status;
     assetData.hotelId = hotelId;
-    assetData.imageUrl = formValue.imageUrl;
+    // assetData.imageUrl = formValue.imageUrl;
     assetData.id = formValue.id;
     assetData.name = formValue.name;
     assetData.description = formValue.description;
     assetData.type = formValue.type;
+    assetData.url = formValue.url;
     return assetData;
   }
 }

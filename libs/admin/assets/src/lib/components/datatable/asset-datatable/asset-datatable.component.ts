@@ -75,20 +75,14 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     super(fb, tabFilterService);
   }
 
-  /**
-   * copying data on clipboard
-   */
-  copyToClipboard(input) {
-    input.select();
-    document.execCommand('copy');
-    input.setSelectRange(0, 0);
-  }
-
   ngOnInit(): void {
     this.tabFilterItems = assetConfig.datatable.tabFilterItems;
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       //set-global query everytime global filter changes
@@ -107,6 +101,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extractinf from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -116,10 +114,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   *
-   * @param queries
-   * @param loading
-   * Loading Data
+   * @function loadInitialData To load the initial data for datatable.
+   * @param queries The filter list with date and hotel filters.
+   * @param loading The loading status.
+   * @param props The table props to control data fetching.
    */
   loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
@@ -144,10 +142,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   *
-   * @param queries
-   * @param defaultProps
-   * @returns hotel id
+   * @function fetchDataFrom Returns an observable for the reservation list api call.
+   * @param queries The filter list with date and hotel filters.
+   * @param defaultProps The default table props to control data fetching.
+   * @returns The observable with reservation list.
    */
   fetchDataFrom(
     queries,
@@ -237,7 +235,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   /**
    * @function exportCSV To export CSV report of the table.
    */
-
   exportCSV(): void {
     this.loading = true;
 

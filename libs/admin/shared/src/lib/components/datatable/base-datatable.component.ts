@@ -44,6 +44,7 @@ export class BaseDatatableComponent implements OnInit {
   showCurrentPageReport: boolean = true;
   rowsPerPageOptions = [5, 10, 25, 50];
   first = 0; //index of the first page to show
+  currentPage = 0;
 
   @Input() tableConfig = {
     styleClass: 'p-datatable-sm p-datatable-gridlines',
@@ -175,6 +176,7 @@ export class BaseDatatableComponent implements OnInit {
     //rows - Number of rows to display per page.
     //event.page: Index of the new page
     //event.pageCount: Total number of pages
+    this.currentPage = event.page;
     this.loadData(event);
   }
 

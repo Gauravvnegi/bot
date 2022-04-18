@@ -1,1 +1,155 @@
-<p>edit-contact works!</p>
+<div class="close-popup-icon"
+  (click)="close()">
+  <i class="fa fa-times" aria-hidden="true"></i>
+</div>
+<div class="add-popup">
+  <div class="add-contact">
+    Add Contacts
+  </div>
+  <div class="table-wrap">
+    <table *ngIf="contactFA?.controls.length">
+      <thead>
+        <tr>
+          <th>Email*</th>
+          <th>Salutation*</th>
+          <th>First Name*</th>
+          <th>Last Name*</th>
+          <th>Company Name</th>
+          <th>Mobile*</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let contactFG of contactFA?.controls; let i = index"
+          [formGroup]="contactFG"
+        >
+          <td>
+            <div class="add-contacts-field">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Contact Email"
+                  formControlName="email"
+                />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('email').touched &&
+                    contactFG.get('email').hasError('required')
+                  "
+                >
+                  Email is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div class="add-contacts-field">
+              <mat-form-field>
+                <mat-select
+                  formControlName="salutation"
+                  placeholder="Select Salutation"
+                >
+                  <mat-option
+                    *ngFor="let salutation of salutationList"
+                    [value]="salutation.value"
+                    >{{ salutation.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error
+                  *ngIf="
+                    contactFG.get('salutation').touched &&
+                    contactFG.get('salutation').hasError('required')
+                  "
+                >
+                  Salutation is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div class="add-contacts-field">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="First Name"
+                  formControlName="firstName"
+                />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('firstName').touched &&
+                    contactFG.get('firstName').hasError('required')
+                  "
+                >
+                  First Name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div class="add-contacts-field">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Last Name"
+                  formControlName="lastName"
+                />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('lastName').touched &&
+                    contactFG.get('lastName').hasError('required')
+                  "
+                >
+                  Last Name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div class="add-contacts-field">
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Company Name"
+                  formControlName="companyName"
+                />
+              </mat-form-field>
+            </div>
+          </td>
+          <td>
+            <div class="add-contacts-field">
+              <mat-form-field>
+                <input matInput placeholder="Mobile" formControlName="mobile" />
+                <mat-error
+                  *ngIf="
+                    contactFG.get('mobile').touched &&
+                    contactFG.get('mobile').hasError('required')
+                  "
+                >
+                  Mobile is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </td>
+          <td (click)="removeContactField(i)">
+            <div style="cursor: pointer;">X</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ad-contact"
+    (click)="generateContactField()"
+  >
+    +Add Contact
+  </div>
+  <div class="submit">
+    <div class="submit-contact"
+      (click)="submitContact()"
+    >
+      <div class="save">
+        Save
+      </div>
+    </div>
+  </div>
+</div>

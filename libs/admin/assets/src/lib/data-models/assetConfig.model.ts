@@ -19,7 +19,7 @@ export class Asset implements Deserializable {
   description: string;
   name: string;
   hotelId: string;
-  imageUrl: string;
+  url: string;
   type: string;
   active: boolean;
 

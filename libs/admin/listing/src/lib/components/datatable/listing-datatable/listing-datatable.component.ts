@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ReservationTable } from '@hospitality-bot/admin/dashboard';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -21,6 +21,8 @@ import {
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
+import { ListingService } from '../../../services/listing.service';
+import { ListTable } from '../../../data-models/listing.model';
 
 @Component({
   selector: 'hospitality-bot-listing-datatable',
@@ -32,9 +34,9 @@ import { listingConfig } from '../../../constants/listing';
 })
 export class ListingDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Listing';
-  @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 1;
+  @Input() tableName = 'Reservations';
+  @Input() tabFilterItems = listingConfig.datatable.tabFilterItems;
+  @Input() tabFilterIdx: number = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -43,23 +45,114 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 200;
+  rowsPerPage = 5;
   cols = listingConfig.datatable.cols;
   globalQueries = [];
+  hotelId: string;
   $subscription = new Subscription();
+
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected _modal: ModalService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    protected router: Router,
+    private route: ActivatedRoute,
+    private listingService: ListingService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.tabFilterItems = listingConfig.datatable.tabFilterItems;
+    this.registerListeners();
+  }
+
+  registerListeners(): void {
+    this.listenForGlobalFilters();
+  }
+
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.loadInitialData([
+          ...this.globalQueries,
+          {
+            order: sharedConfig.defaultOrder,
+            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      })
+    );
+  }
+
+  /**
+   * @function getHotelId To set the hotel id after extractinf from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  /**
+   * @function loadInitialData To load the initial data for datatable.
+   * @param queries The filter list with date and hotel filters.
+   * @param loading The loading status.
+   * @param props The table props to control data fetching.
+   */
+  loadInitialData(
+    queries = [],
+    loading = true,
+    props?: { offset: number; limit: number }
+  ): void {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries, props).subscribe(
+        (data) => {
+          this.initialLoading = false;
+          this.setRecords(data);
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      )
+    );
+  }
+
+  setRecords(data): void {
+    this.values = new ListTable().deserialize(data).records;
+    this.totalRecords = data.total;
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.loading = false;
   }
 
   /**
@@ -108,7 +201,54 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
-    this.$subscription.add();
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: sharedConfig.defaultOrder,
+            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ],
+        { offset: this.first, limit: this.rowsPerPage }
+      ).subscribe(
+        (data) => {
+          this.setRecords(data);
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      )
+    );
+  }
+
+  /**
+   * @function fetchDataFrom Returns an observable for the reservation list api call.
+   * @param queries The filter list with date and hotel filters.
+   * @param defaultProps The default table props to control data fetching.
+   * @returns The observable with reservation list.
+   */
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
+    this.resetRowSelection();
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
+    };
+
+    return this.listingService.getListings(config, this.hotelId);
   }
 
   /**
@@ -219,6 +359,33 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     }
 
     this.changePage(0);
+  }
+
+  openCreateListing() {
+    this.router.navigate(['create'], { relativeTo: this.route });
+  }
+
+  updateStatus(event, rowData) {
+    // event.stopPropagation();
+    this.$subscription.add(
+      this.listingService
+        .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText(
+              `${rowData.name}'s status changed.`,
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
+  openList(event, id) {
+    event.stopPropagation();
+    this.router.navigate([`edit/${id}`], { relativeTo: this.route });
   }
 
   get listingConfiguration() {

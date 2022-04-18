@@ -144,7 +144,7 @@
             <td class="name">
                 <div class="package_image_wrapper">
                     <div class="image">
-                        <img class="package-image" src="{{ rowData.imageUrl }}" />
+                        <img class="package-image" src="{{ rowData.url }}" />
                     </div>
                     <div class="text">
                         <div>{{ rowData.name }}</div>
@@ -158,9 +158,9 @@
             <td class="service-details">
                 {{ rowData.type }}
             </td>
-            <td class="service-details">
+            <td class="service-details" style="position: relative; width: fit-content; word-wrap: break-word;">
                 {{ rowData.url }}
-                <img src="assets/svg/copy.svg" alt="" />
+                <img src="assets/svg/copy.svg" alt="" style="position: absolute; right: 7px; bottom: 7px;" />
             </td>
 
             <td class="">

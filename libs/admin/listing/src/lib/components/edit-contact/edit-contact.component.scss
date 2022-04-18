@@ -1,0 +1,124 @@
+@import 'main';
+
+
+/* Set header to stick to the top of the container. */
+thead tr th {
+  background-color: white;
+  padding: 40px 10px 20px 10px;
+  position: sticky;
+  top: 0px;
+  z-index: 111;
+  height: 60px;
+}
+
+tr,
+th {
+  font-size:$font14;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: $primary-gray;
+}
+
+tr,
+td {
+  background-color: transparent;
+}
+
+.add-popup{
+  padding: 30px 40px; 
+  height: 80vh;
+  .add-contact{
+    font-family: Roboto;
+    font-size: $font20;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.2px;
+    color: $dark-blue;
+  }
+  .table-wrap {
+    max-height: calc(100% - 160px);
+    overflow: auto;
+    padding-bottom: 20px;
+
+    .add-contacts-field{
+      margin: 5px 10px;
+    }
+  }
+}
+.ad-contact{
+  width: fit-content; 
+  cursor: pointer; 
+  margin: 20px 0;
+}
+.submit{
+  display: flex; 
+  justify-content: center; 
+  margin-bottom: 20px;
+  .submit-contact{
+    display: flex;
+    justify-content: center;
+    width: 250px;
+    height: 46px;
+    margin: 20px 34px 0 2.5px;
+    padding: 12px 106px 13px;
+    border-radius: 23px;
+    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+    background-color: $primary-purple;
+    cursor: pointer;
+    .save{
+      font-size: $font16;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: white;
+    }
+  }
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix {
+  border: solid 2px $light-grey2;
+  border-radius: 4px;
+}
+
+:host ::ng-deep .mat-form-field-label-wrapper{
+  margin-left: 9px;
+  top: -6px;
+}
+
+:host ::ng-deep input.mat-input-element{
+  padding-top: 8px;
+}
+
+:host ::ng-deep .mat-select-placeholder{
+  padding-top: 5px;
+}
+
+:host ::ng-deep .mat-form-field-underline {
+  height: 0px !important;
+}
+
+:host ::ng-deep .mat-form-field-ripple{
+  height: 1px;
+  width: 173px;
+  margin-left: 3px;
+  margin-top: -2px;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+  display: none;
+}
+
+.close-popup-icon{
+  margin: 10px; 
+  cursor: pointer; 
+  text-align: right;
+}

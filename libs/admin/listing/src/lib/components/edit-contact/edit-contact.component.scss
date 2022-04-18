@@ -125,3 +125,11 @@ td {
   cursor: pointer; 
   text-align: right;
 }
+
+:host ::ng-deep .mat-form-field-ripple{
+  display: none;
+}
+
+:host ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+  display: none;
+}

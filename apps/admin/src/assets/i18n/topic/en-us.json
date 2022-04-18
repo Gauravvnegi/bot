@@ -1,0 +1,8 @@
+{
+  "datatable": {
+    "no_data": "No data available in table",
+    "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries",
+    "status_success":"Status updated successfully",
+    "error_message":"Invalid"
+  }
+}

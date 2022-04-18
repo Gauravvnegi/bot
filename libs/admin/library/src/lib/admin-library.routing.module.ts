@@ -20,6 +20,11 @@ const appRoutes: Route[] = [
         (m) => m.AdminListingModule
       ),
   },
+  {
+    path: 'topic',
+    loadChildren: () =>
+      import('@hospitality-bot/admin/topic').then((m) => m.AdminTopicModule),
+  },
 ];
 
 @NgModule({

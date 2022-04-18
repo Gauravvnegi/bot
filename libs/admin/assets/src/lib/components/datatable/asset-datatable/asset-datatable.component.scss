@@ -151,3 +151,7 @@
 :host ::ng-deep .mat-slide-toggle-bar {
     width: 50px;
 }
+
+:host ::ng-deep .caption__wrapper--buttons .button__wrapper img {
+    display: none;
+}

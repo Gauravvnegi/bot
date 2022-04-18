@@ -3,17 +3,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { Location } from '@angular/common';
-import { AssetDetail, AssetSource } from '../../data-models/assetConfig.model';
-import { AssetService } from '../assets/services/asset.service';
+import { Asset } from '../../data-models/assetConfig.model';
+import { AssetService } from '../../services/asset.service';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
-  selector: 'hospitality-bot-create-assets',
-  templateUrl: './create-assets.component.html',
-  styleUrls: ['./create-assets.component.scss'],
+  selector: 'hospitality-bot-edit-asset',
+  templateUrl: './edit-asset.component.html',
+  styleUrls: ['./edit-asset.component.scss'],
 })
-export class CreateAssetsComponent implements OnInit {
+export class EditAssetComponent implements OnInit {
   @Input() id: string;
   fileUploadData = {
     fileSize: 3145728,
@@ -22,16 +22,16 @@ export class CreateAssetsComponent implements OnInit {
 
   assetForm: FormGroup;
   isSavingasset = false;
-  // assetService: any;
-  // assetForm: any;
+
   private $subscription: Subscription = new Subscription();
-  hotelasset: AssetDetail;
+  hotelasset: Asset;
   hotelId: any;
   globalQueries = [];
   assetId: string;
   disableForm: any;
 
   constructor(
+    private router: Router,
     private _location: Location,
     private _fb: FormBuilder,
     private _snakbarService: SnackBarService,
@@ -50,17 +50,15 @@ export class CreateAssetsComponent implements OnInit {
     this.assetForm = this._fb.group({
       name: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
       type: ['', [Validators.required]],
-      description: [''],
+      description: ['', [Validators.required]],
       url: ['', [Validators.required]],
-
-      active: [false, [Validators.required]],
+      status: [true, [Validators.required]],
     });
   }
 
   /**
    * create topic and checking validaton
    */
-
   createAsset() {
     if (this.assetForm.invalid) {
       this._snakbarService.openSnackBarAsText('Invalid form.');
@@ -69,12 +67,14 @@ export class CreateAssetsComponent implements OnInit {
     const data = this.assetForm.getRawValue();
     //api call with data
     console.log(data);
-    this.addasset();
+    // this.addasset() ;
+    if (this.assetId) {
+      this.updateAsset();
+    } else {
+      this.addasset();
+    }
   }
 
-  /**
-   *
-   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -85,8 +85,7 @@ export class CreateAssetsComponent implements OnInit {
         ];
 
         this.getHotelId(this.globalQueries);
-        // this.getConfig();
-        // this.getCategoriesList(this.hotelId);
+
         this.getAssetId();
       })
     );
@@ -104,122 +103,6 @@ export class CreateAssetsComponent implements OnInit {
       }
     });
   }
-
-  /**
-   *adding new record in asset datatable
-   */
-  addasset(): void {
-    this.isSavingasset = true;
-    let data = this.assetService.mapAssetData(
-      this.assetForm.getRawValue(),
-      this.hotelId
-    );
-    this.$subscription.add(
-      this.assetService.addasset(this.hotelId, data).subscribe(
-        (response) => {
-          this.hotelasset = new AssetDetail().deserialize(response);
-          this.assetForm.patchValue(this.hotelasset.amenityasset);
-          this._snakbarService.openSnackBarAsText(
-            'asset added successfully',
-            '',
-            { panelClass: 'success' }
-          );
-
-          this.isSavingasset = false;
-        },
-        ({ error }) => {
-          this._snakbarService.openSnackBarAsText(error.message);
-          this.isSavingasset = false;
-        }
-      )
-    );
-  }
-
-  /**
-   * redirecting to asset datatable from create asset
-   */
-  redirectToAssets() {
-    this._location.back();
-  }
-
-  /**
-   *
-   * @param event
-   * upload image
-   */
-  uploadAssetFile(event): void {
-    debugger;
-    let formData = new FormData();
-    formData.append('files', event.file);
-    this.$subscription.add(
-      this.assetService.uploadImage(this.hotelId, formData).subscribe(
-        (response) => {
-          debugger;
-          this.assetForm.get('url').patchValue(response.fileDownloadUri);
-          this._snakbarService.openSnackBarAsText(
-            'Asset image uploaded successfully',
-            '',
-            { panelClass: 'success' }
-          );
-        },
-        ({ error }) => {
-          this._snakbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
-  }
-
-  /**
-   * editing the existing records
-   */
-  updateAsset(): void {
-    // const status = this.assetService.validatePackageDetailForm(
-    //   this.assetForm
-    // ) as Array<any>;
-
-    // if (status.length) {
-    //   this.performActionIfNotValid(status);
-    //   return;
-    // }
-    this.isSavingasset = true;
-    const data = this.assetService.mapAssetData(
-      this.assetForm.getRawValue(),
-      this.hotelId,
-      this.hotelasset.amenityasset.id
-    );
-    this.$subscription.add(
-      this.assetService
-        .updateAsset(this.hotelId, this.hotelasset.amenityasset.id, data)
-        .subscribe(
-          (response) => {
-            this._snakbarService.openSnackBarAsText(
-              'Asset updated successfully',
-              '',
-              { panelClass: 'success' }
-            );
-            // this.router.navigate([
-            //   '/pages/package/edit',
-            //   this.hotelasset.amenityasset.id,
-            // ]);
-            this.isSavingasset = false;
-          },
-          ({ error }) => {
-            this._snakbarService.openSnackBarAsText(error.message);
-            this.isSavingasset = false;
-          }
-        )
-    );
-  }
-
-  // disableForm(assetData): void {
-  //   if (assetData.assetSource === AssetSource.Pms) {
-  //     this.assetForm.disable();
-  //     this.assetForm.get('description').enable();
-  //     this.assetForm.get('name').enable();
-  //   } else {
-  //     this.assetForm.get('packageCode').disable();
-  //   }
-  // }
 
   /**
    * getting asset id
@@ -248,15 +131,116 @@ export class CreateAssetsComponent implements OnInit {
       this.assetService
         .getAssetDetails(this.hotelId, assetId)
         .subscribe((response) => {
-          this.hotelasset = new AssetDetail().deserialize(response);
-          this.assetForm.patchValue(this.hotelasset.amenityasset);
-          // this.disableForm(this.assetForm.getRawValue());
+          this.hotelasset = new Asset().deserialize(response);
+          this.assetForm.patchValue(this.hotelasset);
         })
     );
   }
 
   /**
-   * getting image url
+   *adding new record in asset datatable
+   */
+  addasset(): void {
+    this.isSavingasset = true;
+    let data = this.assetService.mapAssetData(
+      this.assetForm.getRawValue(),
+      this.hotelId
+    );
+    this.$subscription.add(
+      this.assetService.addasset(this.hotelId, data).subscribe(
+        (response) => {
+          this.hotelasset = new Asset().deserialize(response);
+          this.assetForm.patchValue(this.hotelasset);
+          this._snakbarService.openSnackBarAsText(
+            'asset added successfully',
+            '',
+            { panelClass: 'success' }
+          );
+
+          // this.router.navigate(['/pages/library/assets'])
+          this.isSavingasset = false;
+        },
+        ({ error }) => {
+          this._snakbarService.openSnackBarAsText(error.message);
+          this.isSavingasset = false;
+        }
+      )
+    );
+  }
+
+  /**
+   * redirecting to asset datatable from create asset
+   */
+  redirectToAssets() {
+    this._location.back();
+  }
+
+  /**
+   *
+   * @param event
+   * upload image
+   */
+  uploadFile(event): void {
+    let formData = new FormData();
+    this.isSavingasset = true;
+
+    formData.append('files', event.file);
+    this.$subscription.add(
+      this.assetService.uploadImage(this.hotelId, formData).subscribe(
+        (response) => {
+          this.assetForm.get('url').patchValue(response.fileDownloadUri);
+          this._snakbarService.openSnackBarAsText(
+            'Asset image uploaded successfully',
+            '',
+
+            { panelClass: 'success' }
+          );
+          // this.router.navigate(['/pages/library/assets'])
+          this.isSavingasset = false;
+        },
+        ({ error }) => {
+          this._snakbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  /**
+   * editing the existing records
+   */
+  updateAsset(): void {
+    this.isSavingasset = true;
+    const data = this.assetService.mapAssetData(
+      this.assetForm.getRawValue(),
+      this.hotelId,
+      this.hotelasset.id
+    );
+    this.$subscription.add(
+      this.assetService
+        .updateAsset(this.hotelId, data,this.hotelasset.id)
+        .subscribe(
+          (response) => {
+            this._snakbarService.openSnackBarAsText(
+              'Asset updated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.isSavingasset = false;
+          },
+          ({ error }) => {
+            this._snakbarService.openSnackBarAsText(error.message);
+            this.isSavingasset = false;
+          }
+        )
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+
+  /**
+   * getter for image url
    */
   get assetImageUrl(): string {
     return this.assetForm.get('imageUrl').value;

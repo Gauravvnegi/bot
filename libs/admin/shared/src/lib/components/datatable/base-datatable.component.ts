@@ -18,6 +18,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  currentpage=0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
 

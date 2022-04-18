@@ -49,23 +49,25 @@
                 </mat-error>
             </mat-form-field>
         </div>
-
-        <div class="image_upload">
-            <div class="mat-label">Image:</div>
-            <div class="image_message">
-                <div class="image_menu">
-                    <hospitality-bot-upload-file>
-                        [fileUploadData]="fileUploadData" [url]="assetImageUrl" [isDisable]="false" (fileData)="uploadAssetFile($event)"
-                    </hospitality-bot-upload-file>
+        <div class="image_container">
+            <div class="feilds margin-adjust">
+                <div class="upload_image">
+                    <mat-label class="mat-label">Image:</mat-label>
                 </div>
-                <div class="message">Recommended Ratio : 16:9 | 1MB Max Size</div>
+                <div class="image-button">
+                    <div class="image">
+                        <hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="ImageUrl" [isDisable]="false" (fileData)="uploadFile($event)">
+                        </hospitality-bot-upload-file>
+                    </div>
+                    <div class="message">Recommended Ratio : 16:9 | 1MB Max Size</div>
+                </div>
             </div>
         </div>
 
         <div class="toggle_wrapper">
             <mat-label class="mat-label">Active :</mat-label>
             <div class="status status--left">Disable</div>
-            <mat-slide-toggle formControlName="active"></mat-slide-toggle>
+            <mat-slide-toggle formControlName="status"></mat-slide-toggle>
             <div class="status status--right">Enable</div>
         </div>
     </div>

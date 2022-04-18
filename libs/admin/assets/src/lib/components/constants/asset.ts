@@ -31,31 +31,31 @@ export const assetConfig = {
     ],
     cols: [
       {
-        field: '',
+        field: 'name',
         header: 'Name',
         isSort: true,
         sortType: 'number',
       },
       {
-        field: '',
+        field: 'description',
         header: 'Description',
         isSort: true,
         sortType: 'number',
       },
       {
-        field: '',
+        field: 'type',
         header: 'Type',
         isSort: true,
         sortType: 'string',
       },
       {
-        field: '',
+        field: 'url',
         header: 'URL',
         isSort: true,
         sortType: 'string',
       },
       {
-        field: '',
+        field: 'active',
         header: 'Active',
         isSort: false,
         sortType: 'number',

@@ -8,7 +8,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
-import { AssetService } from './components/assets/services/asset.service';
+import { AssetService } from './services/asset.service';
 
 @NgModule({
   imports: [

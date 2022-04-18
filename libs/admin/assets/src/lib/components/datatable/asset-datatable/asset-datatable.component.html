@@ -118,19 +118,19 @@
         <tr class="table-search-head">
             <th class="table-search-head"></th>
             <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'name')" class="p-column-filter" />
             </th>
             <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'description')" class="p-column-filter" />
             </th>
             <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'type')" class="p-column-filter" />
             </th>
             <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, '')" class="p-column-filter" />
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'url')" class="p-column-filter" />
             </th>
             <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'status')" class="p-column-filter" disabled="true" />
             </th>
         </tr>
     </ng-template>
@@ -182,6 +182,7 @@
             </td>
             <td class="service-details">
                 {{ rowData.url }}
+                <button (click)="copyToClipboard(userInput)">copy</button>
             </td>
 
             <!-- <td>

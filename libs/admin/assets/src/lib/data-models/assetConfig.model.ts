@@ -4,13 +4,6 @@ export interface Deserializable {
   deserialize(input: any): this;
 }
 
-export class AssetDetail implements Deserializable {
-  amenityasset: Asset;
-  deserialize(input: any) {
-    this.amenityasset = new Asset().deserialize(input);
-    return this;
-  }
-}
 
 export class Assets implements Deserializable {
   records: Asset[];
@@ -24,24 +17,14 @@ export class Assets implements Deserializable {
 
 export class Asset implements Deserializable {
   id: string;
-  status: boolean;
+  // status: boolean;
   description: string;
   name: string;
-  currency: string;
   hotelId: string;
-  packageCode: string;
   imageUrl: string;
-  rate: number;
-  packageSource: string;
-  unit: string;
-  quantity: number;
   type: string;
-  autoAccept: boolean;
-  categoryName: string;
-  category: string;
-  url: string;
   active: boolean;
-  records: any[];
+
 
   deserialize(input: any) {
     Object.assign(
@@ -68,26 +51,7 @@ export class Asset implements Deserializable {
   }
 }
 
-export class Amenity {
-  id: string;
-  parentId: string;
-  name: string;
-  description: string;
-  quantity: number;
-  rate: number;
-  startDate: number;
-  endDate: number;
-  active: boolean;
-  currency: string;
-  packageCode: string;
-  imageUrl: string;
-  hotelId: string;
-  source: string;
-  type: string;
-  unit: string;
-  downloadUrl: string;
-  autoAccept: boolean;
-}
+
 
 export enum AssetSource {
   Botshot = 'BOTSHOT',

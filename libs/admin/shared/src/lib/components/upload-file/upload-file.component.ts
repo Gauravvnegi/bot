@@ -34,7 +34,6 @@ export class UploadFileComponent implements OnInit {
   ngOnInit(): void {}
 
   onSelectFile(event) {
-    debugger;
     this.url = '';
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();

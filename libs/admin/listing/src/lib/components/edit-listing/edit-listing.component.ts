@@ -164,7 +164,7 @@ export class EditListingComponent implements OnInit {
         if (response.status) {
           this.$subscription.add(
             this._listingService
-              .updateListContact(this.hotelId, this.listId, response.data[0])
+              .updateListContact(this.hotelId, this.listId, response.data)
               .subscribe(
                 (response) => {
                   this.getListDetails(this.listId);

@@ -151,7 +151,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           '',
           { panelClass: 'success' }
         );
-        this._router.navigate([`pages/library/listing/edit/${response.id}`]);
+        this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
     );

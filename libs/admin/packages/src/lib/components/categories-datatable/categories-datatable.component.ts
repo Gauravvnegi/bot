@@ -226,4 +226,8 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

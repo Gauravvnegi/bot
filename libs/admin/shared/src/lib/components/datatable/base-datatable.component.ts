@@ -18,6 +18,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
 
@@ -43,7 +44,6 @@ export class BaseDatatableComponent implements OnInit {
   showCurrentPageReport: boolean = true;
   rowsPerPageOptions = [5, 10, 25, 50];
   first = 0; //index of the first page to show
-  currentPage = 0;
 
   @Input() tableConfig = {
     styleClass: 'p-datatable-sm p-datatable-gridlines',

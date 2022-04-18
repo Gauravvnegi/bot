@@ -262,7 +262,7 @@
       <td>
         {{ rowData.stats.sendCampaign }} / {{ rowData.stats.scheduleCampaign }}
       </td>
-      <td>
+      <td (click)="onCheckboxClicked($event)">
         <mat-slide-toggle
           [checked]="rowData.active"
           (change)="updateStatus($event, rowData)"

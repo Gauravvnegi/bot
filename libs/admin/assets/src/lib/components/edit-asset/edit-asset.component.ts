@@ -65,9 +65,6 @@ export class EditAssetComponent implements OnInit {
       return;
     }
     const data = this.assetForm.getRawValue();
-    //api call with data
-    console.log(data);
-    // this.addasset() ;
     if (this.assetId) {
       this.updateAsset();
     } else {
@@ -83,7 +80,6 @@ export class EditAssetComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-
         this.getHotelId(this.globalQueries);
 
         this.getAssetId();
@@ -157,7 +153,6 @@ export class EditAssetComponent implements OnInit {
             { panelClass: 'success' }
           );
 
-          // this.router.navigate(['/pages/library/assets'])
           this.isSavingasset = false;
         },
         ({ error }) => {
@@ -195,7 +190,6 @@ export class EditAssetComponent implements OnInit {
 
             { panelClass: 'success' }
           );
-          // this.router.navigate(['/pages/library/assets'])
           this.isSavingasset = false;
         },
         ({ error }) => {
@@ -209,6 +203,7 @@ export class EditAssetComponent implements OnInit {
    * editing the existing records
    */
   updateAsset(): void {
+    debugger;
     this.isSavingasset = true;
     const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),

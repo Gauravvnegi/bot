@@ -8,12 +8,10 @@ import * as FileSaver from 'file-saver';
 
 import {
   BaseDatatableComponent,
+  sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import {
-  SnackBarService,
-  ModalService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   SelectedEntityState,
   EntityType,
@@ -35,7 +33,7 @@ import { Assets } from '../../../data-models/assetConfig.model';
 })
 export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Asset';
+  tableName = 'Asset';
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -50,7 +48,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
-  // cols=assetConfig.datatable.cols;
 
   cols = [
     { field: 'name', header: 'Name', sortType: 'string', isSort: true },
@@ -72,19 +69,20 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected _modal: ModalService,
     protected tabFilterService: TableService,
     private assetService: AssetService
   ) {
     super(fb, tabFilterService);
   }
 
-  copyToClipboard(input){
+  /**
+   * copying data on clipboard
+   */
+  copyToClipboard(input) {
     input.select();
     document.execCommand('copy');
-    input.setSelectRange(0,0);
+    input.setSelectRange(0, 0);
   }
-
 
   ngOnInit(): void {
     this.tabFilterItems = assetConfig.datatable.tabFilterItems;
@@ -103,16 +101,13 @@ export class AssetDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         {
-          order: 'DESC',
+          order: sharedConfig.defaultOrder,
         },
       ]);
     });
   }
 
-
   getHotelId(globalQueries): void {
-    //todo
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -120,12 +115,12 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     });
   }
 
-/**
- * 
- * @param queries 
- * @param loading 
- * Loading Data
- */
+  /**
+   *
+   * @param queries
+   * @param loading
+   * Loading Data
+   */
   loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
     this.$subscription.add(
@@ -148,13 +143,12 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     );
   }
 
-
-/**
- * 
- * @param queries 
- * @param defaultProps 
- * @returns hotel id
- */
+  /**
+   *
+   * @param queries
+   * @param defaultProps
+   * @returns hotel id
+   */
   fetchDataFrom(
     queries,
     defaultProps = { offset: this.first, limit: this.rowsPerPage }
@@ -166,8 +160,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     return this.assetService.getHotelAsset(config, this.hotelId);
   }
 
-
- /**
+  /**
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
@@ -179,7 +172,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           {
-            order: 'DESC',
+            order: sharedConfig.defaultOrder,
           },
         ],
         {
@@ -192,9 +185,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-        data.entityStateCounts &&
-          this.updateQuickReplyFilterCount(data.entityStateCounts);
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.loading = false;
         },
         ({ error }) => {
@@ -205,22 +198,20 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     );
   }
 
-
-    /**
+  /**
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
-     customSort(event: SortEvent): void {
-      const col = this.cols.filter((data) => data.field === event.field)[0];
-      let field =
-        event.field[event.field.length - 1] === ')'
-          ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
-          : event.field;
-      event.data.sort((data1, data2) =>
-        this.sortOrder(event, field, data1, data2, col)
-      );
-    }
-
+  customSort(event: SortEvent): void {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    let field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
+  }
 
   /**
    * @function getSelectedQuickReplyFilters To return the selected chip list
@@ -234,8 +225,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
       }));
   }
 
-
- 
   /**
    * @function updatePaginations To update the pagination variable values.
    * @param event The lazy load event for the table.
@@ -243,43 +232,40 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
- 
   }
 
-
-    /**
+  /**
    * @function exportCSV To export CSV report of the table.
    */
 
-     exportCSV(): void {
-      this.loading = true;
-  
-      const config = {
-        queryObj: this.adminUtilityService.makeQueryParams([
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-          },
-          ...this.selectedRows.map((item) => ({ ids: item.id })),
-        ]),
-      };
-      this.$subscription.add(
-        this.assetService.exportCSV(config,this.hotelId).subscribe(
-          (res) => {
-            FileSaver.saveAs(
-              res,
-              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-            );
-            this.loading = false;
-          },
-          ({ error }) => {
-            this.loading = false;
-            this._snackbarService.openSnackBarAsText(error.message);
-          }
-        )
-      );
-    }
+  exportCSV(): void {
+    this.loading = true;
 
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+        },
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
+    };
+    this.$subscription.add(
+      this.assetService.exportCSV(config, this.hotelId).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
 
   /**
    *
@@ -287,7 +273,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @param assetId
    * updating asset status on active and deactive
    */
-   updateAssetStatus(event, assetId): void {
+  updateAssetStatus(event, assetId): void {
     let data = {
       active: event.checked,
     };
@@ -305,7 +291,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
       }
     );
   }
-
 
   /**
    * @function onSelectedTabFilterChange To handle the tab filter change.
@@ -340,7 +325,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
   }
-
 
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
@@ -385,11 +369,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   *
-   * @param queries
-   * @param defaultProps
-   * @returns hotel id
-   * fetching hotel id data from api
+   * @function updateTabFilterCount To update the count for the tabs.
+   * @param countObj The object with count for all the tab.
+   * @param currentTabCount The count for current selected tab.
    */
   updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
     if (countObj) {
@@ -401,6 +383,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function updateQuickReplyFilterCount To update the count for chips.
+   * @param countObj The object with count for all the chip.
+   */
   updateQuickReplyFilterCount(countObj: EntityState): void {
     if (countObj) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
@@ -409,9 +395,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     }
   }
 
-
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

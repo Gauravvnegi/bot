@@ -8,9 +8,8 @@ describe('AssetDatatableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AssetDatatableComponent ]
-    })
-    .compileComponents();
+      declarations: [AssetDatatableComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

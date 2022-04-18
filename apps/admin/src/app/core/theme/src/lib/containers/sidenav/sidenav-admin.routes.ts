@@ -70,7 +70,7 @@ export const DEFAULT_ROUTES = [
         path: 'library/assets',
         title: 'Assets',
         children: null,
-        url: 'assets/svg/box.svg',
+        url: 'assets/svg/allocation.svg',
       },
     ],
   },

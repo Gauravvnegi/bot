@@ -11,7 +11,6 @@ export class AssetService extends ApiService {
     );
   }
 
-
   exportCSV(config,hotelId) {
     return this.get(`/api/v1/entity/${hotelId}/assets/export${config.queryObj}`, {
       responseType: 'blob',

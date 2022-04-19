@@ -172,6 +172,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,
@@ -361,7 +362,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
-  openAssetDetails(amenity): void {
+  openAssetDetails(amenity, event): void {
+    event.stopPropagation();
     this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
   }
 

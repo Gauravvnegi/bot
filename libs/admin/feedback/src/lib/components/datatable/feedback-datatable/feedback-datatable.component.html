@@ -1,154 +1,81 @@
-<p-table
-  #dt
-  [styleClass]="tableConfig.styleClass"
-  [resizableColumns]="isResizableColumns"
-  [autoLayout]="isAutoLayout"
-  [loading]="loading"
-  [columns]="cols"
-  [value]="values"
-  [paginator]="isPaginaton"
-  [rows]="rowsPerPage"
-  [showCurrentPageReport]="showCurrentPageReport"
-  [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-  [(first)]="first"
-  [totalRecords]="totalRecords"
-  [filterDelay]="0"
-  [selectionMode]="selectionMode"
-  [(selection)]="selectedRows"
-  (onRowSelect)="onRowSelect($event)"
-  (onRowUnselect)="onRowUnselect($event)"
-  (sortFunction)="customSort($event)"
-  [customSort]="isCustomSort"
-  (onFilter)="onDataFilter($event)"
->
-  <ng-template pTemplate="caption">
-    <div class="caption__wrapper">
-      <form [formGroup]="tableFG">
-        <div class="caption__wrapper--tabmenu">
-          <div class="header">
-            <!-- <div class="header--text"> -->
-            <img src="assets/svg/surveyor.svg" alt="" /> &nbsp;
-            <p class="heading">
-              {{ tableName }}
-            </p>
-            <div class="mark-btn-container">
-              <div
-                class="request-btn"
-                (click)="openFeedbackRequestPage($event)"
-              >
-                <div class="request-btn__wrap">
-                  {{ 'request_feedback_label' | translate }}
-                </div>
-              </div>
-              <div class="btn read" *ngIf="selectedRows.length > 0">
-                <img
-                  [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
-                  [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
-                  (click)="updateFeedbackStatus(true)"
-                />
-                <span class="btn_text">
+<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout" [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginaton" [rows]="rowsPerPage" [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(first)]="first" [totalRecords]="totalRecords" [filterDelay]="0" [selectionMode]="selectionMode" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)" (sortFunction)="customSort($event)" [customSort]="isCustomSort" (onFilter)="onDataFilter($event)">
+    <ng-template pTemplate="caption">
+        <div class="caption__wrapper">
+            <form [formGroup]="tableFG">
+                <div class="caption__wrapper--tabmenu">
+                    <div class="header">
+                        <!-- <div class="header--text"> -->
+                        <img src="assets/svg/surveyor.svg" alt="" /> &nbsp;
+                        <p class="heading">
+                            {{ tableName }}
+                        </p>
+                        <div class="mark-btn-container">
+                            <div class="request-btn" (click)="openFeedbackRequestPage($event)">
+                                <div class="request-btn__wrap">
+                                    {{ 'request_feedback_label' | translate }}
+                                </div>
+                            </div>
+                            <div class="btn read" *ngIf="selectedRows.length > 0">
+                                <img [src]="globalFeedbackConfig.images.datatable.mark_as_read.url" [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt" (click)="updateFeedbackStatus(true)" />
+                                <span class="btn_text">
                   {{ 'datatable.mark_as_read' | translate }}
                 </span>
-              </div>
-              <div class="btn" *ngIf="selectedRows.length > 0">
-                <img
-                  [src]="
+                            </div>
+                            <div class="btn" *ngIf="selectedRows.length > 0">
+                                <img [src]="
                     globalFeedbackConfig.images.datatable.mark_as_unread.url
-                  "
-                  [alt]="
+                  " [alt]="
                     globalFeedbackConfig.images.datatable.mark_as_unread.alt
-                  "
-                  (click)="this.updateFeedbackStatus(false)"
-                />
-                <span class="btn_text">
+                  " (click)="this.updateFeedbackStatus(false)" />
+                                <span class="btn_text">
                   {{ 'datatable.mark_as_unread' | translate }}
                 </span>
-              </div>
-            </div>
-            <div class="options">
-              <div *ngIf="isActionButtons" class="icons">
-                <img
-                  [src]="globalFeedbackConfig.images.datatable.download.url"
-                  [alt]="globalFeedbackConfig.images.datatable.download.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="globalFeedbackConfig.images.datatable.google_docs.url"
-                  [alt]="globalFeedbackConfig.images.datatable.google_docs.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="globalFeedbackConfig.images.datatable.card.url"
-                  [alt]="globalFeedbackConfig.images.datatable.card.alt"
-                  class="svg"
-                />
-              </div>
-              <div *ngIf="isActionButtons" class="seperator"></div>
-              <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
-                  class="export"
-                  [options]="documentActionTypes"
-                  formControlName="documentActionType"
-                >
-                  <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img
-                      [src]="globalFeedbackConfig.images.export.url"
-                      [alt]="globalFeedbackConfig.images.export.alt"
-                    />
-                    <span class="documentActionItemLabel">{{
+                            </div>
+                        </div>
+                        <div class="options">
+                            <div *ngIf="isActionButtons" class="icons">
+                                <img [src]="globalFeedbackConfig.images.datatable.download.url" [alt]="globalFeedbackConfig.images.datatable.download.alt" class="svg" />
+                                <img [src]="globalFeedbackConfig.images.datatable.google_docs.url" [alt]="globalFeedbackConfig.images.datatable.google_docs.alt" class="svg" />
+                                <img [src]="globalFeedbackConfig.images.datatable.card.url" [alt]="globalFeedbackConfig.images.datatable.card.alt" class="svg" />
+                            </div>
+                            <div *ngIf="isActionButtons" class="seperator"></div>
+                            <div formGroupName="documentActions" class="dropdown--wrapper">
+                                <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
+                                    <ng-template let-documentActionItem pTemplate="selectedItem">
+                                        <img [src]="globalFeedbackConfig.images.export.url" [alt]="globalFeedbackConfig.images.export.alt" />
+                                        <span class="documentActionItemLabel">{{
                       documentActionItem.label
                     }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <div class="divider"></div>
-                <p-dropdown
-                  class="export"
-                  [options]="documentTypes"
-                  formControlName="documentType"
-                >
-                  <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img
-                      [src]="globalFeedbackConfig.images.exportCSV.url"
-                      [alt]="globalFeedbackConfig.images.exportCSV.alt"
-                    />
-                    <span class="documentActionItemLabel">{{
+                                    </ng-template>
+                                </p-dropdown>
+                                <div class="divider"></div>
+                                <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
+                                    <ng-template let-documentTypeItem pTemplate="selectedItem">
+                                        <img [src]="globalFeedbackConfig.images.exportCSV.url" [alt]="globalFeedbackConfig.images.exportCSV.alt" />
+                                        <span class="documentActionItemLabel">{{
                       documentTypeItem.label
                     }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <button class="go" (click)="onDocumentActions()">
+                                    </ng-template>
+                                </p-dropdown>
+                                <button class="go" (click)="onDocumentActions()">
                   <mat-icon class="material-icons" matSuffix>east</mat-icon>
                 </button>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="isTabFilters && tabFilterItems">
-            <hospitality-bot-tab-group
-              [listItems]="tabFilterItems"
-              [selectedIndex]="tabFilterIdx"
-              (selectedTabChange)="onSelectedTabFilterChange($event)"
-            ></hospitality-bot-tab-group>
-          </div>
-        </div>
-        <div
-          *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length"
-          class="caption__wrapper--buttons"
-        >
-          <div class="button__wrapper">
-            <mat-chip-list
-              multiple
-              #chipList
-              aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters"
-            >
-              <mat-chip
-                *ngFor="
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="isTabFilters && tabFilterItems">
+                        <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx" (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
+                    </div>
+                </div>
+                <div *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length" class="caption__wrapper--buttons">
+                    <div class="button__wrapper">
+                        <mat-chip-list multiple #chipList aria-label="Quick Reply selection" formControlName="quickReplyActionFilters">
+                            <mat-chip *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
                   let quickReplyTypeIdx = index
-                "
-                selectable="true"
-                [ngClass]="{
+                " selectable="true" [ngClass]="{
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
@@ -171,265 +98,154 @@
                     quickReplyType.isSelected,
                   'status-selected-reject':
                     quickReplyType.type == 'failed' && quickReplyType.isSelected
-                }"
-                [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="
+                }" [selected]="isQuickReplyFilterSelected(quickReplyType)" (click)="
                   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                "
-              >
-                {{ quickReplyType.label }}
-                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                ">
+                                {{ quickReplyType.label }}
+                                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
                 >{{ quickReplyType.total
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
-              </mat-chip>
-            </mat-chip-list>
-          </div>
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  </ng-template>
+    </ng-template>
 
-  <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">{{ 'datatable.no_data_available' | translate }}</p>
-  </ng-template>
-  <!-- *******************************HEADER WITH SEARCH******************************* -->
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th class="tableHeading" pResizableColumn>
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns; let i = index"
-        [ngStyle]="col.dynamicWidth ? { width: '320px' } : {}"
-      >
-        <div>
-          <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
+    <ng-template pTemplate="emptymessage">
+        <p class="no-data-found">{{ 'datatable.no_data_available' | translate }}</p>
+    </ng-template>
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th class="tableHeading" pResizableColumn>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="table-data-head" pResizableColumn [pSortableColumn]="col.field" *ngFor="let col of columns; let i = index" [ngStyle]="col.dynamicWidth ? { width: '320px' } : {}">
+                <div>
+                    <p class="table-header-text">{{ col.header }}</p>
+                    <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+                </div>
+            </th>
+        </tr>
 
-    <ng-container
-      *ngIf="
+        <ng-container *ngIf="
         tabFilterItems[tabFilterIdx]?.value ===
           globalFeedbackConfig.types.transactional;
         else stayTableSearch
-      "
-    >
-      <tr class="table-search-head">
-        <th class="table-search-head"></th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'outlet')"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
+      ">
+            <tr class="table-search-head">
+                <th class="table-search-head"></th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'outlet')" class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="
               onFilterTypeTextChange($event.target.value, 'guest.firstName')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
+            " class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="
               onFilterTypeTextChange(
                 $event.target.value,
                 'booking.bookingNumber'
               )
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'guest.place')"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-      </tr>
-    </ng-container>
-    <ng-template #stayTableSearch
-      ><tr class="table-search-head">
-        <th class="table-search-head"></th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
+            " class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'guest.place')" class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+                </th>
+            </tr>
+        </ng-container>
+        <ng-template #stayTableSearch>
+            <tr class="table-search-head">
+                <th class="table-search-head"></th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="
               onFilterTypeTextChange($event.target.value, 'guestData.bookingNo')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
+            " class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="
               onFilterTypeTextChange(
                 $event.target.value,
                 'booking.bookingNumber'
               )
-            "
-            disabled="true"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
+            " disabled="true" class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="
               onFilterTypeTextChange($event.target.value, 'guest.firstName')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'guest.place')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'comments')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th></tr
-    ></ng-template>
-  </ng-template>
-  <!-- **************************************BODY********************************* -->
-  <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-    let-rowIndex="rowIndex"
-  >
-    <ng-container
-      *ngIf="
+            " class="p-column-filter" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'guest.place')" class="p-column-filter" disabled="true" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'comments')" class="p-column-filter" disabled="true" />
+                </th>
+                <th class="table-search-head">
+                    <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'vin')" class="p-column-filter" disabled="true" />
+                </th>
+            </tr>
+        </ng-template>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+        <ng-container *ngIf="
         tabFilterItems[tabFilterIdx]?.value ===
           globalFeedbackConfig.types.transactional;
         else stayTable
-      "
-    >
-      <tr
-        class="data-table-row"
-        [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
-        (click)="openDetailPage($event, rowData)"
-      >
-        <!-- <tr class="data-table-row"> -->
-        <td class="table--checkbox">
-          <p-tableCheckbox
-            [value]="rowData"
-            [index]="rowIndex"
-            (click)="onCheckboxClicked($event)"
-          >
-          </p-tableCheckbox>
-        </td>
-        <td class="guest">
-          <div class="guest-name">
-            {{ rowData.bookingDetails.tableOrRoomNumber }}
-          </div>
-          <div class="guest-phone">{{ rowData.outlet }}</div>
-        </td>
-        <td class="guest">
-          <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-          <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
-        </td>
-        <td class="service-feedback">
-          <div class="feedback">
-            <ng-container *ngIf="rowData.services.services?.length > 0">
-              <div
-                class="feedback-service"
-                *ngIf="
+      ">
+            <tr class="data-table-row" [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'" (click)="openDetailPage($event, rowData)">
+                <!-- <tr class="data-table-row"> -->
+                <td class="table--checkbox">
+                    <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)">
+                    </p-tableCheckbox>
+                </td>
+                <td class="guest">
+                    <div class="guest-name">
+                        {{ rowData.bookingDetails.tableOrRoomNumber }}
+                    </div>
+                    <div class="guest-phone">{{ rowData.outlet }}</div>
+                </td>
+                <td class="guest">
+                    <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+                    <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
+                </td>
+                <td class="service-feedback">
+                    <div class="feedback">
+                        <ng-container *ngIf="rowData.services.services?.length > 0">
+                            <div class="feedback-service" *ngIf="
                   rowData.services.getNegativeRatedService().length > 0;
                   else noNegativeFeedback
-                "
-              >
-                <div class="feedback-service__container">
-                  <div class="feedback-service__container__label others">
-                    <div class="feedback-service__container__label__text">
-                      Overall
-                    </div>
-                  </div>
-                  <div
-                    class="stay-booking-feedback"
-                    [ngClass]="{
+                ">
+                                <div class="feedback-service__container">
+                                    <div class="feedback-service__container__label others">
+                                        <div class="feedback-service__container__label__text">
+                                            Overall
+                                        </div>
+                                    </div>
+                                    <div class="stay-booking-feedback" [ngClass]="{
                       'status-opacity-reject':
                         rowData.services.rating.value < 5,
                       'status-opacity-success':
                         rowData.services.rating.value >= 5
-                    }"
-                  >
-                    <p
-                      class="number"
-                      [ngClass]="{
+                    }">
+                                        <p class="number" [ngClass]="{
                         'status-background-reject':
                           rowData.services.rating.value < 5,
                         'status-background-moderate':
@@ -437,112 +253,92 @@
                           rowData.services.rating.value < 9,
                         'status-background-success':
                           rowData.services.rating.value > 8
-                      }"
-                      *ngIf="rowData.services.rating.value"
-                    >
-                      {{ rowData.services.rating.value }}
-                    </p>
-                  </div>
-                </div>
-                <ng-container
-                  *ngFor="
+                      }" *ngIf="rowData.services.rating.value">
+                                            {{ rowData.services.rating.value }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <ng-container *ngFor="
                     let service of rowData.services.getNegativeRatedService();
                     let i = index
-                  "
-                >
-                  <div class="feedback-service__container" *ngIf="i < 2">
-                    <div class="feedback-service__container__label">
-                      <div class="feedback-service__container__label__text">
-                        {{ service.serviceName | titlecase }}
-                      </div>
-                    </div>
-                    <!-- <div
+                  ">
+                                    <div class="feedback-service__container" *ngIf="i < 2">
+                                        <div class="feedback-service__container__label">
+                                            <div class="feedback-service__container__label__text">
+                                                {{ service.serviceName | titlecase }}
+                                            </div>
+                                        </div>
+                                        <!-- <div
                     class="service-list-popup"
                     *ngIf="rowData.services.getServiceComment(service.label)"
                   >
                     {{ rowData.getServiceComment(service.label) }}
                   </div> -->
-                    <div
-                      class="stay-booking-feedback"
-                      [ngClass]="{
+                                        <div class="stay-booking-feedback" [ngClass]="{
                         'status-opacity-reject': service.rating === 'EI',
                         'status-opacity-success': service.rating >= 5
-                      }"
-                    >
-                      <p
-                        class="number"
-                        [ngClass]="{
+                      }">
+                                            <p class="number" [ngClass]="{
                           'status-background-reject': service.rating === 'EI',
                           'status-background-moderate': service.rating === 'ME',
                           'status-background-success': service.rating === 'EE'
-                        }"
-                      >
-                        {{ service.rating }}
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    class="feedback-service__container"
-                    *ngIf="
+                        }">
+                                                {{ service.rating }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="feedback-service__container" *ngIf="
                       i == 1 &&
                       rowData.services.getNegativeRatedService()?.length >= 2
-                    "
-                  >
-                    <div class="feedback-service__container__label others">
-                      <div class="feedback-service__container__label__text">
-                        Others
-                      </div>
-                      <div class="stay-booking-feedback">
-                        <p class="number">
-                          +{{ rowData.services.services.length - 2 }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <ng-container
-                    *ngIf="
+                    ">
+                                        <div class="feedback-service__container__label others">
+                                            <div class="feedback-service__container__label__text">
+                                                Others
+                                            </div>
+                                            <div class="stay-booking-feedback">
+                                                <p class="number">
+                                                    +{{ rowData.services.services.length - 2 }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ng-container *ngIf="
                       i == 0 &&
                       rowData.services.getNegativeRatedService()?.length == 1
-                    "
-                  >
-                    <div class="feedback-service__container__label others">
-                      <div class="feedback-service__container__label__text">
-                        Others
-                      </div>
-                      <div class="stay-booking-feedback">
-                        <p class="number">
-                          +{{ rowData.services.services.length - 1 }}
-                        </p>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-              <ng-template #noNegativeFeedback>
-                <div class="feedback-service">
-                  <div class="feedback-service__container">
-                    <div class="feedback-service__container__label others">
-                      <div class="feedback-service__container__label__text">
-                        Overall
-                      </div>
-                      <div class="stay-booking-feedback">
-                        <p class="number">
-                          +{{ rowData.services.services.length }}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      class="stay-booking-feedback"
-                      [ngClass]="{
+                    ">
+                                        <div class="feedback-service__container__label others">
+                                            <div class="feedback-service__container__label__text">
+                                                Others
+                                            </div>
+                                            <div class="stay-booking-feedback">
+                                                <p class="number">
+                                                    +{{ rowData.services.services.length - 1 }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <ng-template #noNegativeFeedback>
+                                <div class="feedback-service">
+                                    <div class="feedback-service__container">
+                                        <div class="feedback-service__container__label others">
+                                            <div class="feedback-service__container__label__text">
+                                                Overall
+                                            </div>
+                                            <div class="stay-booking-feedback">
+                                                <p class="number">
+                                                    +{{ rowData.services.services.length }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="stay-booking-feedback" [ngClass]="{
                         'status-opacity-reject':
                           rowData.services.rating.value < 5,
                         'status-opacity-success':
                           rowData.services.rating.value >= 5
-                      }"
-                    >
-                      <p
-                        class="number"
-                        [ngClass]="{
+                      }">
+                                            <p class="number" [ngClass]="{
                           'status-background-reject':
                             rowData.services.rating.value < 5,
                           'status-background-moderate':
@@ -550,292 +346,210 @@
                             rowData.services.rating.value < 9,
                           'status-background-success':
                             rowData.services.rating.value > 8
-                        }"
-                        *ngIf="rowData.services.rating.value"
-                      >
-                        {{ rowData.services.rating.value }}
-                      </p>
+                        }" *ngIf="rowData.services.rating.value">
+                                                {{ rowData.services.rating.value }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                        <div class="pdf">
+                            <img [src]="globalFeedbackConfig.images.datatable.pdf.url" [alt]="globalFeedbackConfig.images.datatable.pdf.alt" (click)="downloadFeedbackPdf($event, rowData.id)" />
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </ng-template>
-            </ng-container>
-            <div class="pdf">
-              <img
-                [src]="globalFeedbackConfig.images.datatable.pdf.url"
-                [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
-                (click)="downloadFeedbackPdf($event, rowData.id)"
-              />
-            </div>
-          </div>
-        </td>
-        <td class="package">
-          <div class="package-date">
-            {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
-          </div>
-          <div class="package-date">
-            {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
-          </div>
-          <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
-        </td>
-        <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-        <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+                </td>
+                <td class="package">
+                    <div class="package-date">
+                        {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
+                    </div>
+                    <div class="package-date">
+                        {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
+                    </div>
+                    <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
+                </td>
+                <td class="comments">{{ rowData.guestData.overAllNps }}</td>
+                <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
 
-        <!-- status-image-initiated -->
-        <td class="status-image">
-          <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-            <div
-              class="view-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.view_notes' | translate }}
-            </div></ng-container
-          >
-          <ng-template #addNote
-            ><div
-              class="add-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.add_notes' | translate }}
-            </div></ng-template
-          >
-        </td>
-      </tr>
-    </ng-container>
-    <ng-template #stayTable>
-      <tr
-        class="data-table-row"
-        [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
-        (click)="openDetailPage($event, rowData)"
-      >
-        <!-- <tr class="data-table-row"> -->
-        <td class="table--checkbox">
-          <p-tableCheckbox
-            [value]="rowData"
-            [index]="rowIndex"
-            (click)="onCheckboxClicked($event)"
-          >
-          </p-tableCheckbox>
-        </td>
-        <td class="guest">
-          <div>{{ rowData.guestData.bookingNo }}</div>
-          <div>{{ rowData.outlet }}</div>
-        </td>
-        <td class="service-feedback">
-          <div class="feedback">
-            <ng-container *ngIf="rowData.getSortedServices()?.length > 0">
-              <div
-                class="feedback-service"
-                *ngIf="
+                <!-- status-image-initiated -->
+                <td class="status-image">
+                    <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+                        <div class="view-notes" (click)="openEditNotes($event, rowData, rowData.notes)">
+                            {{ 'datatable.view_notes' | translate }}
+                        </div>
+                    </ng-container>
+                    <ng-template #addNote>
+                        <div class="add-notes" (click)="openEditNotes($event, rowData, rowData.notes)">
+                            {{ 'datatable.add_notes' | translate }}
+                        </div>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-container>
+        <ng-template #stayTable>
+            <tr class="data-table-row" [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'" (click)="openDetailPage($event, rowData)">
+                <!-- <tr class="data-table-row"> -->
+                <td class="table--checkbox">
+                    <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)">
+                    </p-tableCheckbox>
+                </td>
+                <td class="guest">
+                    <div>{{ rowData.guestData.bookingNo }}</div>
+                    <div>{{ rowData.outlet }}</div>
+                </td>
+                <td class="service-feedback">
+                    <div class="feedback">
+                        <ng-container *ngIf="rowData.getSortedServices()?.length > 0">
+                            <div class="feedback-service" *ngIf="
                   rowData.getNegativeRatedService().length > 0;
                   else noNegativeFeedback
-                "
-              >
-                <div class="feedback-service__container">
-                  <div class="feedback-service__container__label others">
-                    <div class="feedback-service__container__label__text">
-                      Overall
-                    </div>
-                  </div>
-                  <div
-                    class="stay-booking-feedback"
-                    [ngClass]="{
+                ">
+                                <div class="feedback-service__container">
+                                    <div class="feedback-service__container__label others">
+                                        <div class="feedback-service__container__label__text">
+                                            Overall
+                                        </div>
+                                    </div>
+                                    <div class="stay-booking-feedback" [ngClass]="{
                       'status-opacity-reject': rowData.ratings < 5,
                       'status-opacity-success': rowData.ratings >= 5
-                    }"
-                  >
-                    <p
-                      class="number"
-                      [ngClass]="{
+                    }">
+                                        <p class="number" [ngClass]="{
                         'status-background-reject': rowData.ratings < 5,
                         'status-background-success': rowData.ratings >= 5
-                      }"
-                      *ngIf="rowData.ratings"
-                    >
-                      {{ rowData.ratings }}
-                    </p>
-                  </div>
-                </div>
-                <ng-container
-                  *ngFor="
+                      }" *ngIf="rowData.ratings">
+                                            {{ rowData.ratings }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <ng-container *ngFor="
                     let service of rowData.getNegativeRatedService();
                     let i = index
-                  "
-                >
-                  <div class="feedback-service__container" *ngIf="i < 2">
-                    <div class="feedback-service__container__label">
-                      <div class="feedback-service__container__label__text">
-                        {{ service.label | titlecase }}
-                      </div>
-                    </div>
-                    <div
-                      class="service-list-popup"
-                      *ngIf="rowData.getServiceComment(service.label)"
-                    >
-                      {{ rowData.getServiceComment(service.label) }}
-                    </div>
-                    <div
-                      class="stay-booking-feedback"
-                      [ngClass]="{
+                  ">
+                                    <div class="feedback-service__container" *ngIf="i < 2">
+                                        <div class="feedback-service__container__label">
+                                            <div class="feedback-service__container__label__text">
+                                                {{ service.label | titlecase }}
+                                            </div>
+                                        </div>
+                                        <div class="service-list-popup" *ngIf="rowData.getServiceComment(service.label)">
+                                            {{ rowData.getServiceComment(service.label) }}
+                                        </div>
+                                        <div class="stay-booking-feedback" [ngClass]="{
                         'status-opacity-reject': service.value < 5,
                         'status-opacity-success': service.value >= 5
-                      }"
-                    >
-                      <p
-                        class="number"
-                        [ngClass]="{
+                      }">
+                                            <p class="number" [ngClass]="{
                           'status-background-reject': service.value < 5,
                           'status-background-success': service.value >= 5
-                        }"
-                        *ngIf="service.value"
-                      >
-                        {{ service.value }}
-                      </p>
-                    </div>
-                  </div>
-                  <div
-                    class="feedback-service__container"
-                    *ngIf="
+                        }" *ngIf="service.value">
+                                                {{ service.value }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="feedback-service__container" *ngIf="
                       i == 1 && rowData.getNegativeRatedService()?.length >= 2
-                    "
-                  >
-                    <div class="feedback-service__container__label others">
-                      <div class="feedback-service__container__label__text">
-                        Others
-                      </div>
-                      <div class="stay-booking-feedback">
-                        <p class="number">
-                          +{{ rowData.getSortedServices().length - 2 }}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <ng-container
-                    *ngIf="
+                    ">
+                                        <div class="feedback-service__container__label others">
+                                            <div class="feedback-service__container__label__text">
+                                                Others
+                                            </div>
+                                            <div class="stay-booking-feedback">
+                                                <p class="number">
+                                                    +{{ rowData.getSortedServices().length - 2 }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ng-container *ngIf="
                       i == 0 && rowData.getNegativeRatedService()?.length == 1
-                    "
-                  >
-                    <div class="feedback-service__container__label others">
-                      <div class="feedback-service__container__label__text">
-                        Others
-                      </div>
-                      <div class="stay-booking-feedback">
-                        <p class="number">
-                          +{{ rowData.getSortedServices().length - 1 }}
-                        </p>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </div>
-              <ng-template #noNegativeFeedback>
-                <div class="feedback-service">
-                  <div class="feedback-service__container">
-                    <div class="feedback-service__container__label others">
-                      <div class="feedback-service__container__label__text">
-                        Overall
-                      </div>
-                      <div class="stay-booking-feedback">
-                        <p class="number">
-                          +{{ rowData.getSortedServices().length }}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      class="stay-booking-feedback"
-                      [ngClass]="{
+                    ">
+                                        <div class="feedback-service__container__label others">
+                                            <div class="feedback-service__container__label__text">
+                                                Others
+                                            </div>
+                                            <div class="stay-booking-feedback">
+                                                <p class="number">
+                                                    +{{ rowData.getSortedServices().length - 1 }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <ng-template #noNegativeFeedback>
+                                <div class="feedback-service">
+                                    <div class="feedback-service__container">
+                                        <div class="feedback-service__container__label others">
+                                            <div class="feedback-service__container__label__text">
+                                                Overall
+                                            </div>
+                                            <div class="stay-booking-feedback">
+                                                <p class="number">
+                                                    +{{ rowData.getSortedServices().length }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="stay-booking-feedback" [ngClass]="{
                         'status-opacity-reject': rowData.ratings < 5,
                         'status-opacity-success': rowData.ratings >= 5
-                      }"
-                    >
-                      <p
-                        class="number"
-                        [ngClass]="{
+                      }">
+                                            <p class="number" [ngClass]="{
                           'status-background-reject': rowData.ratings < 5,
                           'status-background-success': rowData.ratings >= 5
-                        }"
-                        *ngIf="rowData.ratings"
-                      >
-                        {{ rowData.ratings }}
-                      </p>
+                        }" *ngIf="rowData.ratings">
+                                                {{ rowData.ratings }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-container>
+                        <div class="pdf">
+                            <img [src]="globalFeedbackConfig.images.datatable.pdf.url" [alt]="globalFeedbackConfig.images.datatable.pdf.alt" (click)="downloadFeedbackPdf($event, rowData.id)" />
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </ng-template>
-            </ng-container>
-            <div class="pdf">
-              <img
-                [src]="globalFeedbackConfig.images.datatable.pdf.url"
-                [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
-                (click)="downloadFeedbackPdf($event, rowData.id)"
-              />
-            </div>
-          </div>
-        </td>
-        <td class="guest">
-          <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-          <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
-          <div class="guest-phone">{{ rowData.guest.emailId }}</div>
-        </td>
-        <td class="package">
-          <p class="arrival-date">
-            {{
-              rowData.guestData.getArrivalDate(_globalFilterService.timezone)
-            }}
-            -
-            {{
-              rowData.guestData.getDepartureDate(_globalFilterService.timezone)
-            }}
-          </p>
+                </td>
+                <td class="guest">
+                    <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+                    <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
+                    <div class="guest-phone">{{ rowData.guest.emailId }}</div>
+                </td>
+                <td class="package">
+                    <p class="arrival-date">
+                        {{ rowData.guestData.getArrivalDate(_globalFilterService.timezone) }} - {{ rowData.guestData.getDepartureDate(_globalFilterService.timezone) }}
+                    </p>
 
-          <p class="arrival-time">
-            {{
-              rowData.guestData.getArrivalTime(_globalFilterService.timezone)
-            }}
-            -
-            {{
-              rowData.guestData.getDepartureTime(_globalFilterService.timezone)
-            }}
-          </p>
-          <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
-        </td>
-        <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-        <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+                    <p class="arrival-time">
+                        {{ rowData.guestData.getArrivalTime(_globalFilterService.timezone) }} - {{ rowData.guestData.getDepartureTime(_globalFilterService.timezone) }}
+                    </p>
+                    <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
+                </td>
+                <td class="comments">{{ rowData.guestData.overAllNps }}</td>
+                <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
 
-        <!-- status-image-initiated -->
-        <td class="status-image">
-          <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-            <div
-              class="view-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.view_notes' | translate }}
-            </div></ng-container
-          >
-          <ng-template #addNote
-            ><div
-              class="add-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.add_notes' | translate }}
-            </div></ng-template
-          >
-        </td>
-      </tr>
+                <!-- status-image-initiated -->
+                <td class="status-image">
+                    <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+                        <div class="view-notes" (click)="openEditNotes($event, rowData, rowData.notes)">
+                            {{ 'datatable.view_notes' | translate }}
+                        </div>
+                    </ng-container>
+                    <ng-template #addNote>
+                        <div class="add-notes" (click)="openEditNotes($event, rowData, rowData.notes)">
+                            {{ 'datatable.add_notes' | translate }}
+                        </div>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-template>
     </ng-template>
-  </ng-template>
-  <!-- *********************************FOOTER******************************* -->
-  <ng-template pTemplate="summary">
-    <p-paginator
-      #paginator
-      [rows]="rowsPerPage"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      (onPageChange)="paginate($event)"
-    ></p-paginator>
-  </ng-template>
+    <!-- *********************************FOOTER******************************* -->
+    <ng-template pTemplate="summary">
+        <p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" (onPageChange)="paginate($event)"></p-paginator>
+    </ng-template>
 </p-table>
 
 <ng-template #emptyCell>
-  <div class="emptyCell">&mdash;</div>
+    <div class="emptyCell">&mdash;</div>
 </ng-template>

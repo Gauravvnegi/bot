@@ -651,9 +651,14 @@ export class DetailsComponent implements OnInit {
       }
     });
     if (this.guestReservationDropdownList.length) {
-      this.bookingId = this.guestReservationDropdownList.filter(
-        (booking) => booking.bookingNumber === this.bookingNumber
-      )[0].bookingId;
+      if (this.bookingNumber)
+        this.bookingId = this.guestReservationDropdownList.filter(
+          (booking) => booking.bookingNumber === this.bookingNumber
+        )[0].bookingId;
+      else {
+        this.bookingNumber = this.guestReservationDropdownList[0]?.bookingNumber;
+        this.bookingId = this.guestReservationDropdownList[0]?.bookingId;
+      }
       this.bookingFG.get('booking').setValue(this.bookingId);
       this.getReservationDetails();
     } else {

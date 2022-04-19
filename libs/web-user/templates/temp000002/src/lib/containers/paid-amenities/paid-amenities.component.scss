@@ -106,7 +106,7 @@
   &::after {
     content: '';
     position: absolute;
-    bottom: -26px;
+    bottom: -15px;
     right: 46%;
     width: 0;
     height: 0;
@@ -129,7 +129,7 @@
   z-index: 2;
   &::before {
     font-size: 47px;
-    color: lightgray;
+    color: $primary-blue;
     @media only screen and (max-width: $M) {
       font-size: 30px;
     }
@@ -145,7 +145,7 @@
   z-index: 2;
   &::before {
     font-size: 47px;
-    color: lightgray;
+    color: $primary-blue;
     @media only screen and (max-width: $M) {
       font-size: 30px;
     }
@@ -205,4 +205,8 @@
     height: $full-width;
     width: $full-width;
   }
+}
+
+:host ::ng-deep .ngx-timepicker-control__input{
+  background: transparent !important;
 }

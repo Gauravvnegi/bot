@@ -34,8 +34,8 @@
             .feild {
                 display: flex;
                 align-items: center;
-                width: 14%;
-                margin-right: 1.5%;
+                // width: 14%;
+                margin-right: 4%;
                 color: #9eaeb8;
                 input {
                     color: #002046;
@@ -159,4 +159,14 @@
     -ms-transform: translateY(-1.28125em) scale(0.75);
     width: 133.3333333333%;
     display: none;
+}
+
+:host ::ng-deep .before-upload{
+    .upload-label{
+        font-size: $font16 !important;
+        padding-top: $padding15;
+        font-weight: bold;
+        color:$primary-purple !important;
+        letter-spacing: 0.96px;
+    }
 }

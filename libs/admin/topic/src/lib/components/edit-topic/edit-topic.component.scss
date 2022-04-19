@@ -95,7 +95,7 @@
       .feild {
         display: flex;
         align-items: center;
-        width: 76.5%;
+        width: 100%;
         margin-right: 1.5%;
         margin-bottom: 55px;
         @media (max-width: $tablet) {
@@ -127,7 +127,7 @@
     display: flex;
     justify-content: center;
     margin: 15px 0;
-    margin-top: 70px;
+    margin-top: 140px;
     button {
       @include admin-panel-button();
       padding: 0;

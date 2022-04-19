@@ -139,6 +139,18 @@
     color: $primary-black;
     max-width: 60%;
 }
+.service-url{
+    position: relative; 
+    width: 100px; 
+    text-overflow: ellipsis;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    img{
+        position: absolute; 
+        right: 7px; 
+        bottom: 7px;
+    }
+}
 
 .package-image {
     width: 40%;
@@ -151,4 +163,8 @@
 
 :host ::ng-deep .caption__wrapper--buttons .button__wrapper img {
     display: none;
+}
+
+.data-table-row{
+    height: 100px;
 }

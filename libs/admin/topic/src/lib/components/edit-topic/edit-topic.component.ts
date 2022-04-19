@@ -108,11 +108,11 @@ export class EditTopicComponent implements OnInit {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
           this._snackbarService.openSnackBarAsText(
-            'Successfully updated',
+            'Topic Created Successfully',
             '',
             { panelClass: 'success' }
           );
-          // this._router.navigate(['/pages/library/topic']);
+          this._router.navigate(['/pages/library/topic']);
           this.isSavingTopic = false;
         },
         ({ error }) => {
@@ -171,11 +171,11 @@ export class EditTopicComponent implements OnInit {
         .subscribe(
           (response) => {
             this._snackbarService.openSnackBarAsText(
-              'Successfully updated',
+              'Topic Updated Successfully',
               '',
               { panelClass: 'success' }
             );
-            // this._router.navigate(['/pages/library/topic']);
+            this._router.navigate(['/pages/library/topic']);
             this.isSavingTopic = false;
           },
           ({ error }) => {

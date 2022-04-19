@@ -148,7 +148,7 @@
                 "
               >
                 {{ quickReplyType.label }}
-                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                <span *ngIf="quickReplyType.value != 'ALL'">(</span
                 >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
@@ -172,7 +172,8 @@
         class="table-data-head"
         pResizableColumn
         [pSortableColumn]="col.field"
-        *ngFor="let col of columns"
+        *ngFor="let col of columns; let i = index"
+        [ngStyle]="col.dynamicWidth ? { width: '10%' } : {}"
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
@@ -217,7 +218,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openTopicDetails(rowData)">
+    <tr class="data-table-row" (click)="openTopic($event, rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -235,9 +236,10 @@
       <td class="guest">
         {{ rowData.description }}
       </td>
-      <td class="">
+      <td class="slide">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
+            class="active"
             [checked]="rowData.status"
             (change)="updateTopicStatus($event, rowData.id)"
           ></mat-slide-toggle>

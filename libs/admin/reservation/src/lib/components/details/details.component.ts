@@ -32,6 +32,7 @@ import { Guest } from '../../models/guest-table.model';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
+import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -606,33 +607,41 @@ export class DetailsComponent implements OnInit {
   }
 
   openSendNotification(channel) {
-    if (channel) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
-      dialogConfig.width = '100%';
-      const notificationCompRef = this._modal.openDialog(
-        NotificationComponent,
-        dialogConfig
-      );
+    // if (channel) {
+    //   const dialogConfig = new MatDialogConfig();
+    //   dialogConfig.disableClose = true;
+    //   dialogConfig.width = '100%';
+    //   const notificationCompRef = this._modal.openDialog(
+    //     NotificationComponent,
+    //     dialogConfig
+    //   );
 
-      if (channel === 'email') {
-        notificationCompRef.componentInstance.isEmail = true;
-        notificationCompRef.componentInstance.email = this.primaryGuest.email;
-      } else {
-        notificationCompRef.componentInstance.isEmail = false;
-        notificationCompRef.componentInstance.channel = channel;
-      }
-      notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-      notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
-      notificationCompRef.componentInstance.isModal = true;
-      notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-        // remove loader for detail close
-        notificationCompRef.close();
-      });
-    } else {
-      this._modal.close();
-      this.router.navigateByUrl('/pages/request');
-    }
+    //   if (channel === 'email') {
+    //     notificationCompRef.componentInstance.isEmail = true;
+    //     notificationCompRef.componentInstance.email = this.primaryGuest.email;
+    //   } else {
+    //     notificationCompRef.componentInstance.isEmail = false;
+    //     notificationCompRef.componentInstance.channel = channel;
+    //   }
+    //   notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
+    //   notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
+    //   notificationCompRef.componentInstance.isModal = true;
+    //   notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
+    //     // remove loader for detail close
+    //     notificationCompRef.close();
+    //   });
+    // } else {
+    //   this._modal.close();
+    //   this.router.navigateByUrl('/pages/request');
+    // }
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const notificationCompRef = this._modal.openDialog(
+      MarketingNotificationComponent,
+      dialogConfig
+    );
   }
 
   closeDetails() {

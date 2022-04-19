@@ -7,6 +7,8 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { NotificationComponent } from './components/notification/notification.component';
 import { RequestService } from './services/request.service';
 import { FeedbackNotificationComponent } from './components/feedback-notification/feedback-notification.component';
+import { MarketingNotificationComponent } from './components/marketing-notification/marketing-notification.component';
+import { EmailService } from './services/email.service';
 
 @NgModule({
   imports: [
@@ -17,8 +19,16 @@ import { FeedbackNotificationComponent } from './components/feedback-notificatio
     SharedMaterialModule,
     CKEditorModule,
   ],
-  declarations: [NotificationComponent, FeedbackNotificationComponent],
-  exports: [NotificationComponent],
-  providers: [RequestService],
+  declarations: [
+    NotificationComponent,
+    FeedbackNotificationComponent,
+    MarketingNotificationComponent,
+  ],
+  exports: [
+    NotificationComponent,
+    FeedbackNotificationComponent,
+    MarketingNotificationComponent,
+  ],
+  providers: [RequestService, EmailService],
 })
 export class AdminNotificationModule {}

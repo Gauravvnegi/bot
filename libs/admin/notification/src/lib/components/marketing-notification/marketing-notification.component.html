@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="header">Send E-mail</div>
+  <div class="body" [formGroup]="emailFG">
+    <div class="form-wrapper" *ngIf="emailFG">
+      <div class="fields">
+        <div class="feild">
+          <mat-label class="mat-label">From:</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="fromId">
+              <mat-option
+                *ngFor="let item of fromEmailList"
+                [value]="item.id"
+                >{{ item.email }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                emailFG.get('fromId').touched &&
+                emailFG.get('fromId').hasError('required')
+              "
+            >
+              From is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="feild">
+          <mat-label class="mat-label">Topic:</mat-label>
+          <mat-form-field>
+            <mat-select>
+              <mat-option
+                *ngFor="let topic of topicList"
+                [value]="topic.name"
+                >{{ topic.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="feild">
+          <mat-label class="mat-label">Template:</mat-label>
+          <mat-form-field>
+            <mat-select>
+              <mat-option
+                *ngFor="let topic of topicList"
+                [value]="topic.name"
+                >{{ topic.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="fields">
+        <mat-label>To:</mat-label>
+        <mat-form-field class="email-chip-list" appearance="fill">
+          <mat-chip-list #chipList>
+            <mat-chip
+              *ngFor="let email of emailIds?.value"
+              (removed)="removeEmail(email)"
+            >
+              {{ email }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="addEmail($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <mat-label class="mat-label">Subject:</mat-label>
+          <mat-form-field class="description">
+            <input matInput formControlName="subject" />
+            <mat-error
+              *ngIf="
+                emailFG.get('subject').touched &&
+                emailFG.get('subject').hasError('required')
+              "
+            >
+              Subject is required
+            </mat-error>
+            <mat-error
+              *ngIf="
+                emailFG.get('subject').touched &&
+                emailFG.get('subject').hasError('maxlength')
+              "
+            >
+              Maximum length is 200 characters.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <ckeditor
+            [editor]="Editor"
+            class="row-body-editor"
+            formControlName="message"
+          ></ckeditor>
+        </div>
+      </div>
+    </div>
+    <div class="btn-wrapper">
+      <div class="schedule">
+        <div class="schedule__text">
+          Schedule
+        </div>
+      </div>
+      <div class="send">
+        <div class="send__text">
+          Send
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -394,6 +394,13 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  handleCopyToClipboard(event) {
+    event.stopPropagation();
+    this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
+      panelClass: 'success',
+    });
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

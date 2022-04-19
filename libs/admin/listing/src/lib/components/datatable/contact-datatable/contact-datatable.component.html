@@ -138,7 +138,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, '')"
+          (input)="onFilterTypeTextChange($event.target.value, 'email')"
           class="p-column-filter"
         />
       </th>
@@ -146,7 +146,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, '')"
+          (input)="onFilterTypeTextChange($event.target.value, 'salutation')"
           class="p-column-filter"
         />
       </th>
@@ -154,7 +154,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, '')"
+          (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
           class="p-column-filter"
         />
       </th>
@@ -162,7 +162,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, '')"
+          (input)="onFilterTypeTextChange($event.target.value, 'lastName')"
           class="p-column-filter"
         />
       </th>
@@ -170,18 +170,16 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="onFilterTypeTextChange($event.target.value, 'companyName')"
           class="p-column-filter"
-          disabled="true"
         />
       </th>
       <th class="table-search-head">
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+          (input)="onFilterTypeTextChange($event.target.value, 'mobile')"
           class="p-column-filter"
-          disabled="true"
         />
       </th>
     </tr>

@@ -63,27 +63,27 @@ export const listingConfig = {
     ],
     cols: [
       {
-        field: '',
+        field: 'name',
         header: 'Name/Topic',
-        isSort: true,
-        sortType: 'number',
-      },
-      {
-        field: '',
-        header: 'Description',
-        isSort: true,
-        sortType: 'number',
-      },
-      {
-        field: `guests.primaryGuest.getFullName()`,
-        header: 'Unsubscribed/ bounce#',
         isSort: true,
         sortType: 'string',
       },
       {
-        field: `guests.primaryGuest.getFullName()`,
-        header: 'Send/Schedule Campaign#',
+        field: 'description',
+        header: 'Description',
         isSort: true,
+        sortType: 'string',
+      },
+      {
+        field: ``,
+        header: 'Unsubscribed/ bounce#',
+        isSort: false,
+        sortType: 'string',
+      },
+      {
+        field: ``,
+        header: 'Send/Schedule Campaign#',
+        isSort: false,
         sortType: 'string',
       },
       {

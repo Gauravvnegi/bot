@@ -12,19 +12,17 @@ export class PackageService extends ApiService {
     );
   }
 
-  exportCSV(config){
+  exportCSV(config) {
     return this.get(`/api/v1/packages/export${config.queryObj}`, {
       responseType: 'blob',
-    })
+    });
   }
 
   getHotelPackages(config) {
-    return this.get(
-      `/api/v1/packages${config.queryObj}`
-    );
+    return this.get(`/api/v1/packages${config.queryObj}`);
   }
 
-  getHotelPackageCategories(hotelId){
+  getHotelPackageCategories(hotelId) {
     return this.get(`/api/v1/packages/categories?hotelId=${hotelId}`);
   }
 
@@ -36,12 +34,15 @@ export class PackageService extends ApiService {
     return this.patch(`/api/v1/hotel/${hotelId}/packages/${packageId}`, data);
   }
 
-  addPackage(hotelId, data){
-    return this.post(`/api/v1/hotel/${hotelId}/packages`,data);
+  addPackage(hotelId, data) {
+    return this.post(`/api/v1/hotel/${hotelId}/packages`, data);
   }
 
-  updatePackageStatus(hotelId, status, data){
-    return this.put(`/api/v1/hotel/${hotelId}/packages/status?active=${status}`,data);
+  updatePackageStatus(hotelId, status, data) {
+    return this.put(
+      `/api/v1/hotel/${hotelId}/packages/status?active=${status}`,
+      data
+    );
   }
 
   mapPackageData(formValue, hotelId, id?) {
@@ -57,9 +58,9 @@ export class PackageService extends ApiService {
     packageData.currency = formValue.currency;
     packageData.rate = formValue.rate;
     packageData.quantity = 0;
-    packageData.source = PackageSource.Botshot
+    packageData.source = PackageSource.Botshot;
     packageData.startDate = 0;
-    packageData.endDate = 0
+    packageData.endDate = 0;
     packageData.type = formValue.type;
     packageData.downloadUrl = '';
     packageData.unit = formValue.unit;

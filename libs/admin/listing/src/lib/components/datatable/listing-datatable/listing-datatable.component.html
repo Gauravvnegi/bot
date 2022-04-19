@@ -28,8 +28,7 @@
           <div class="header">
             <p class="heading">{{ tableName }}</p>
             <div style="display: flex; align-items: center;">
-              <div class="create-listing-button"
-                (click)="openCreateListing()">
+              <div class="create-listing-button" (click)="openCreateListing()">
                 <div class="listing-button">
                   +Create Listing
                 </div>
@@ -197,7 +196,15 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, '')"
+          (input)="onFilterTypeTextChange($event.target.value, 'name')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'description')"
           class="p-column-filter"
         />
       </th>
@@ -207,6 +214,7 @@
           type="text"
           (input)="onFilterTypeTextChange($event.target.value, '')"
           class="p-column-filter"
+          disabled="true"
         />
       </th>
       <th class="table-search-head">
@@ -215,14 +223,7 @@
           type="text"
           (input)="onFilterTypeTextChange($event.target.value, '')"
           class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, '')"
-          class="p-column-filter"
+          disabled="true"
         />
       </th>
       <th class="table-search-head">
@@ -243,7 +244,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openList(rowData.id)">
+    <tr class="data-table-row" (click)="openList($event, rowData.id)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -257,13 +258,11 @@
       <td>
         {{ rowData.description }}
       </td>
+      <td>{{ rowData.stats.unsubscribed }} / {{ rowData.stats.bounce }}</td>
       <td>
-        --
+        {{ rowData.stats.sendCampaign }} / {{ rowData.stats.scheduleCampaign }}
       </td>
-      <td>
-        --
-      </td>
-      <td>
+      <td (click)="onCheckboxClicked($event)">
         <mat-slide-toggle
           [checked]="rowData.active"
           (change)="updateStatus($event, rowData)"

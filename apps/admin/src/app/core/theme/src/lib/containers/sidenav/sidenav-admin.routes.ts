@@ -66,6 +66,18 @@ export const DEFAULT_ROUTES = [
         children: null,
         url: 'assets/svg/box.svg',
       },
+      {
+        path: 'library/assets',
+        title: 'Assets',
+        children: null,
+        url: 'assets/svg/allocation.svg',
+      },
+      {
+        path: 'library/topic',
+        title: 'Topic',
+        children: null,
+        url: 'assets/svg/ballot.svg',
+      },
     ],
   },
   {

@@ -40,40 +40,40 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   tableName: string = 'Manage Contacts';
   cols = [
     {
-      field: '',
+      field: 'email',
       header: 'Email',
       isSort: true,
-      sortType: 'number',
+      sortType: 'string',
     },
     {
-      field: '',
+      field: 'salutation',
       header: 'Salutation',
       isSort: true,
-      sortType: 'number',
+      sortType: 'string',
     },
     {
-      field: ``,
+      field: 'firstName',
       header: 'First Name',
       isSort: true,
       sortType: 'string',
     },
     {
-      field: ``,
+      field: 'lastName',
       header: 'Last Name',
       isSort: true,
       sortType: 'string',
     },
     {
-      field: ``,
+      field: 'companyName',
       header: 'Company Name',
       isSort: true,
       sortType: 'string',
     },
     {
-      field: ``,
+      field: 'mobile',
       header: 'Mobile',
       isSort: true,
-      sortType: 'string',
+      sortType: 'number',
     },
   ];
   $subscription = new Subscription();
@@ -212,7 +212,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           if (!this.add) {
             this.$subscription.add(
               this._listingService
-                .updateListContact(this.hotelId, this.listId, response.data[0])
+                .updateListContact(this.hotelId, this.listId, response.data)
                 .subscribe(
                   (response) => {
                     this.handleContactAddEvent(response);
@@ -236,10 +236,12 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       });
       this.changePage(this.currentPage);
     } else {
-      this.dataSource = [
-        ...this.dataSource,
-        new Contact().deserialize(data, 0),
-      ];
+      data.forEach((item) => {
+        this.dataSource = [
+          ...this.dataSource,
+          new Contact().deserialize(item, 0),
+        ];
+      });
       this.totalRecords = this.dataSource.length + 1;
       this.updateContacts.emit();
       this.changePage(this.currentPage);

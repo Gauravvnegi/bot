@@ -66,7 +66,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    // this.tabFilterItems = listingConfig.datatable.tabFilterItems;
     this.registerListeners();
   }
 
@@ -127,15 +126,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new ListTable().deserialize(data).records;
           this.initialLoading = false;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
@@ -151,6 +143,16 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         }
       )
     );
+  }
+
+  setRecords(data): void {
+    this.values = new ListTable().deserialize(data).records;
+    this.totalRecords = data.total;
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.loading = false;
   }
 
   /**
@@ -212,13 +214,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new ListTable().deserialize(data).records;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.totalRecords = data.total;
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
@@ -387,7 +383,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  openList(id) {
+  openList(event, id) {
+    event.stopPropagation();
     this.router.navigate([`edit/${id}`], { relativeTo: this.route });
   }
 

@@ -137,7 +137,7 @@
 
     <!-- **************************************BODY********************************* -->
     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-        <tr class="data-table-row" (click)="openAssetDetails(rowData)">
+        <tr class="data-table-row" (click)="openAssetDetails(rowData, $event)">
             <td class="table--checkbox">
                 <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
             </td>
@@ -160,7 +160,9 @@
             </td>
             <td class="service-details" style="position: relative; width: fit-content; word-wrap: break-word;">
                 {{ rowData.url }}
-                <img src="assets/svg/copy.svg" alt="" style="position: absolute; right: 7px; bottom: 7px;" />
+                <div (click)="onCheckboxClicked($event)">
+                    <img src="assets/svg/copy.svg" alt="" [cdkCopyToClipboard]="rowData.url" style="position: absolute; right: 7px; bottom: 7px;" />
+                </div>
             </td>
 
             <td class="">

@@ -58,7 +58,7 @@ export class EditAssetComponent implements OnInit {
 
   initFg(): void {
     this.assetForm = this._fb.group({
-      name: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      name: ['', Validators.required],
       type: ['', [Validators.required]],
       description: ['', [Validators.required]],
       url: ['', [Validators.required]],

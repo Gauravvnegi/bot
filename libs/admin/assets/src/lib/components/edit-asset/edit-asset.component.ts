@@ -17,18 +17,7 @@ export class EditAssetComponent implements OnInit {
   @Input() id: string;
   fileUploadData = {
     fileSize: 3145728,
-    fileType: [
-      'png',
-      'jpg',
-      'jpeg',
-      'gif',
-      'eps',
-      'mp4',
-      'MPEG',
-      'MOV',
-      'AVI',
-      'MKV',
-    ],
+    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
   };
 
   assetForm: FormGroup;
@@ -78,7 +67,7 @@ export class EditAssetComponent implements OnInit {
     if (this.assetId) {
       this.updateAsset();
     } else {
-      this.addasset();
+      this.addAsset();
     }
   }
 
@@ -139,6 +128,7 @@ export class EditAssetComponent implements OnInit {
         .subscribe((response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
+          this.updateFileType(this.hotelasset.type);
         })
     );
   }
@@ -146,7 +136,7 @@ export class EditAssetComponent implements OnInit {
   /**
    *adding new record in asset datatable
    */
-  addasset(): void {
+  addAsset(): void {
     this.isSavingasset = true;
     let data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
@@ -244,6 +234,17 @@ export class EditAssetComponent implements OnInit {
     );
   }
 
+  handleAssetTypeChanged(event) {
+    this.updateFileType(event.value);
+  }
+
+  updateFileType(type: string): void {
+    this.fileUploadData.fileType =
+      type === 'Image'
+        ? ['png', 'jpg', 'jpeg', 'gif', 'eps']
+        : ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'];
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
@@ -252,6 +253,10 @@ export class EditAssetComponent implements OnInit {
    * getter for image url
    */
   get assetImageUrl(): string {
-    return this.assetForm.get('imageUrl').value;
+    return this.assetForm?.get('url').value || '';
+  }
+
+  get assetType() {
+    return this.assetForm?.get('type').value || 'Image';
   }
 }

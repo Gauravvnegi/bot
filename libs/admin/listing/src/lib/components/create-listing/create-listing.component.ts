@@ -9,6 +9,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { EditContactComponent } from '../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../import-contact/import-contact.component';
@@ -72,9 +73,11 @@ export class CreateListingComponent implements OnInit, OnDestroy {
 
   getTopicList(hotelId) {
     this.$subscription.add(
-      this.listingService.getAssetList(hotelId).subscribe((response) => {
-        this.topicList = response.records;
-      })
+      this.listingService.getTopicList(hotelId).subscribe(
+        (response) =>
+          (this.topicList = new Topics().deserialize(response).records),
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
     );
   }
 

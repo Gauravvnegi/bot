@@ -54,7 +54,7 @@
               <div formGroupName="documentActions" class="dropdown--wrapper">
                 <p-dropdown
                   class="export"
-                  [options]="documentActiohonTypes"
+                  [options]="documentActionTypes"
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
@@ -173,7 +173,7 @@
         pResizableColumn
         [pSortableColumn]="col.field"
         *ngFor="let col of columns; let i = index"
-        [ngStyle]="col.dynamicWidth ? { width: '10%' } : {  }"
+        [ngStyle]="col.dynamicWidth ? { width: '10%' } : {}"
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
@@ -218,7 +218,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openTopic($event,rowData)">
+    <tr class="data-table-row" (click)="openTopic($event, rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -238,7 +238,8 @@
       </td>
       <td class="slide">
         <label (click)="onCheckboxClicked($event)" class="switch">
-          <mat-slide-toggle class="active"
+          <mat-slide-toggle
+            class="active"
             [checked]="rowData.status"
             (change)="updateTopicStatus($event, rowData.id)"
           ></mat-slide-toggle>

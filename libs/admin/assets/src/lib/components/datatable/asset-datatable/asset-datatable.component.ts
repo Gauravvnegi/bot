@@ -172,6 +172,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,

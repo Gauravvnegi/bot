@@ -162,6 +162,7 @@ export class EditAssetComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
+          this.router.navigate(['/pages/library/assets']);
 
           this.isSavingasset = false;
         },
@@ -200,6 +201,7 @@ export class EditAssetComponent implements OnInit {
 
             { panelClass: 'success' }
           );
+
           this.isSavingasset = false;
         },
         ({ error }) => {
@@ -227,8 +229,11 @@ export class EditAssetComponent implements OnInit {
             this._snakbarService.openSnackBarAsText(
               'Asset updated successfully',
               '',
+
               { panelClass: 'success' }
             );
+            this.router.navigate(['/pages/library/assets']);
+
             this.isSavingasset = false;
           },
           ({ error }) => {

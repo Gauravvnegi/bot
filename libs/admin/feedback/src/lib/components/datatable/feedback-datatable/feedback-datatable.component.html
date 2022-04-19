@@ -70,20 +70,12 @@
                     </div>
                 </div>
                 <div *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length" class="caption__wrapper--buttons">
-                    <!-- <div class="button__wrapper">
-            <mat-chip-list
-              multiple
-              #chipList
-              aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters"
-            >
-              <mat-chip
-                *ngFor="
+                    <div class="button__wrapper">
+                        <mat-chip-list multiple #chipList aria-label="Quick Reply selection" formControlName="quickReplyActionFilters">
+                            <mat-chip *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
                   let quickReplyTypeIdx = index
-                "
-                selectable="true"
-                [ngClass]="{
+                " selectable="true" [ngClass]="{
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
@@ -106,19 +98,16 @@
                     quickReplyType.isSelected,
                   'status-selected-reject':
                     quickReplyType.type == 'failed' && quickReplyType.isSelected
-                }"
-                [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="
+                }" [selected]="isQuickReplyFilterSelected(quickReplyType)" (click)="
                   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                "
-              >
-                {{ quickReplyType.label }}
-                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                ">
+                                {{ quickReplyType.label }}
+                                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
                 >{{ quickReplyType.total
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
-              </mat-chip>
-            </mat-chip-list>
-          </div> -->
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
                 </div>
             </form>
         </div>

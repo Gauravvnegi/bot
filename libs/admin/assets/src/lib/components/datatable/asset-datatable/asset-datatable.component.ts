@@ -19,7 +19,7 @@ import {
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { assetConfig } from '../../constants/asset';
+import { assetConfig } from '../../../constants/asset';
 import { AssetService } from '../../../services/asset.service';
 import { Assets } from '../../../data-models/assetConfig.model';
 

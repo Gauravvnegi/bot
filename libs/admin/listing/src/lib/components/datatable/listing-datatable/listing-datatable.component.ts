@@ -34,7 +34,7 @@ import { ListTable } from '../../../data-models/listing.model';
 })
 export class ListingDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Reservations';
+  @Input() tableName = listingConfig.datatable.title;
   @Input() tabFilterItems = listingConfig.datatable.tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;

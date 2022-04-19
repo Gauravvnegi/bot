@@ -1,5 +1,6 @@
 export const listingConfig = {
   datatable: {
+    title: 'Listings',
     tabFilterItems: [
       {
         label: 'All',

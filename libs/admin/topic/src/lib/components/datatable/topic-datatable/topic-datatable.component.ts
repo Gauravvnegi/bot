@@ -88,6 +88,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
         },
+        ...this.getSelectedQuickReplyFilters(),
       ]);
     });
   }
@@ -185,7 +186,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
       (response) => {
         this._snackbarService.openSnackBarAsText(
-          'Successfully updated',
+          'Successfully status updated',
           '',
           { panelClass: 'success' }
         );
@@ -208,7 +209,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * open create topic page of a topic Id
    * @param topic
    */
-  openTopicDetails(topic): void {
+  openTopic(event, topic): void {
+    event.stopPropagation();
     this._router.navigate([`edit/${topic.id}`], { relativeTo: this.route });
   }
 
@@ -238,6 +240,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,

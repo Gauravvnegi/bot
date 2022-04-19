@@ -123,7 +123,7 @@
   .manually-add{
     display: flex;
     .manually-contacts{
-      opacity: 0.4;
+      opacity: 0.9;
       border-radius: 4px;
       border: solid 1px $manually-contacts;
       width: 255px;
@@ -132,12 +132,17 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      justify-content: end;
+      // justify-content: center;
+      padding-top: 30px;
       align-items: center;
       color: $primary-gray;
       letter-spacing: 0.96px;
       font-weight: bold;
       padding-bottom: 12px;
+      .manually-import {
+        padding-top: 20px;
+        font-size: 16px;
+    }
     }
   }
   .save-section{

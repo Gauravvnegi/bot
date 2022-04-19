@@ -1,5 +1,4 @@
-<div class="close-popup-icon"
-  (click)="close()">
+<div class="close-popup-icon" (click)="close()">
   <i class="fa fa-times" aria-hidden="true"></i>
 </div>
 <div class="add-popup">
@@ -39,6 +38,14 @@
                   "
                 >
                   Email is required
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    contactFG.get('email').touched &&
+                    contactFG.get('email').hasError('pattern')
+                  "
+                >
+                  Please enter the valid Email
                 </mat-error>
               </mat-form-field>
             </div>
@@ -83,6 +90,14 @@
                 >
                   First Name is required
                 </mat-error>
+                <mat-error
+                  *ngIf="
+                    contactFG.get('firstName').touched &&
+                    contactFG.get('firstName').hasError('pattern')
+                  "
+                >
+                  Please enter the valid First name
+                </mat-error>
               </mat-form-field>
             </div>
           </td>
@@ -101,6 +116,14 @@
                   "
                 >
                   Last Name is required
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    contactFG.get('lastName').touched &&
+                    contactFG.get('lastName').hasError('pattern')
+                  "
+                >
+                  Please enter the valid Last name
                 </mat-error>
               </mat-form-field>
             </div>
@@ -128,25 +151,31 @@
                 >
                   Mobile is required
                 </mat-error>
+                <mat-error
+                  *ngIf="
+                    contactFG.get('mobile').touched &&
+                    contactFG.get('mobile').hasError('pattern')
+                  "
+                >
+                  Please enter the valid Mobile Number
+                </mat-error>
               </mat-form-field>
             </div>
           </td>
           <td (click)="removeContactField(i)">
-            <div style="cursor: pointer;">X</div>
+            <div class="remove-table">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="ad-contact"
-    (click)="generateContactField()"
-  >
+  <div class="ad-contact" (click)="generateContactField()">
     +Add Contact
   </div>
   <div class="submit">
-    <div class="submit-contact"
-      (click)="submitContact()"
-    >
+    <div class="submit-contact" (click)="submitContact()">
       <div class="save">
         Save
       </div>

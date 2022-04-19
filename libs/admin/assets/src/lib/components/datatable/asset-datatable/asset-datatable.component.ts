@@ -282,7 +282,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           '',
           { panelClass: 'success' }
         );
-        this.changePage(this.currentpage);
+        this.changePage(this.currentPage);
       },
       ({ error }) => {
         this._snackbarService.openSnackBarAsText(error.message);

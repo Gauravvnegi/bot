@@ -31,10 +31,10 @@
   padding: $padding-large;
   height: auto;
   opacity: 1;
-  background-color: #fafafa;
-  color: #979797;
+  background-color: $payment-tab-background;
+  color: $payment-tab-dark-color;
   svg path {
-    fill: #979797 !important;
+    fill: $payment-tab-color !important;
   }
   img {
     filter: contrast(0);
@@ -71,10 +71,9 @@
 
 :host ::ng-deep .mat-tab-label-active {
   color: #000000;
-  background-color: white;
+  background-color: $accordian-header-background-color;
   border-radius: 10px 0px 0px 0px;
-  border: 1px solid white;
-  border-bottom-color: $primary-blue;
+  border-bottom: 3px solid $primary-blue;
   svg path {
     fill: #000000 !important;
   }
@@ -162,4 +161,14 @@
 
 :host ::ng-deep .labl > input:checked + div {
   border: 1px solid $primary-blue !important;
+}
+
+:host ::ng-deep .info-label{
+  font-size: 18px;
+  color: #9EAEB8;
+  padding-top: 8px;
+}
+
+:host ::ng-deep .mat-tab-label-content{
+  font-size: 26px !important;
 }

@@ -49,4 +49,8 @@ export class ImportContactComponent implements OnInit {
   save() {
     this.onImportClosed.emit({ status: true, data: this.contacts });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

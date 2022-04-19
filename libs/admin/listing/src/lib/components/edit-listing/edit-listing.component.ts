@@ -118,22 +118,25 @@ export class EditListingComponent implements OnInit {
     importCompRef.componentInstance.hotelId = this.hotelId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) {
-        const {
-          firstName,
-          lastName,
-          salutation,
-          companyName,
-          mobile,
-          email,
-        } = response.data[0];
-        const reqData = {
-          firstName,
-          lastName,
-          salutation,
-          companyName,
-          mobile,
-          email,
-        };
+        const reqData = [];
+        response.data.forEach((item) => {
+          const {
+            firstName,
+            lastName,
+            salutation,
+            companyName,
+            mobile,
+            email,
+          } = item;
+          reqData.push({
+            firstName,
+            lastName,
+            salutation,
+            companyName,
+            mobile,
+            email,
+          });
+        });
         this.$subscription.add(
           this._listingService
             .updateListContact(this.hotelId, this.listId, reqData)

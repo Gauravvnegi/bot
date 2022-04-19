@@ -48,7 +48,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
-
   cols = [
     { field: 'name', header: 'Name', sortType: 'string', isSort: true },
     {
@@ -61,6 +60,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     { field: 'url', header: 'url', sortType: 'string', isSort: true },
     { field: 'active', header: 'Active', isSort: false },
   ];
+  currentpage: any;
 
   constructor(
     private _router: Router,

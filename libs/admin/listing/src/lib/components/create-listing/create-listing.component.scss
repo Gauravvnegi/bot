@@ -75,7 +75,7 @@
       .description {
         display: flex;
         align-items: center;
-        width: 31.5%;
+        width: 100%;
         margin-right: 1.5%;
         @media (max-width: $tablet) {
           @include width(42.6%);
@@ -208,11 +208,11 @@
   background-color: transparent;
 }
 
-:host ::ng-deep .mat-label {
+.mat-label {
   font-size: $font14;
   color: $primary-gray;
   margin-right: 10px;
-  min-width: 31%;
+  width: 31%;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }
@@ -269,11 +269,38 @@
   color: $dark-blue;
 }
 
-:host ::ng-deep .description .mat-form-field-underline{
-  width: 975px !important;
+:host ::ng-deep .description{
+  width: 100% !important;
+
 }
 
 :host ::ng-deep .description .mat-form-field-infix{
-  width: 975px;
+  min-width: 100%;
   letter-spacing: 0.96px;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{
+  display: none !important;
+}
+
+// :host ::ng-deep .description-feilds{
+//   width: 100% !important;
+//   display: block !important;
+// // }
+// :host ::ng-deep .description-feild{
+//   width: 100% !important;
+//   display: block !important;
+// }
+
+:host ::ng-deep .feild.description-feild{
+  width: 100% !important;
+  display: block;
+}
+:host ::ng-deep .mat-form-field.description{
+  width: 100% !important;
+  display: block !important;
+}
+
+:host ::ng-deep .mat-description{
+  width: 12% !important;
 }

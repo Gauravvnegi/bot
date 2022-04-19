@@ -4,7 +4,7 @@
 /* Set header to stick to the top of the container. */
 thead tr th {
   background-color: white;
-  padding: 40px 10px 20px 10px;
+  padding: 40px $padding10 $padding20 $padding10;
   position: sticky;
   top: 0px;
   z-index: 111;
@@ -29,7 +29,7 @@ td {
 }
 
 .add-popup{
-  padding: 30px 40px; 
+  padding: $padding30 40px; 
   height: 80vh;
   .add-contact{
     font-family: Roboto;
@@ -44,10 +44,10 @@ td {
   .table-wrap {
     max-height: calc(100% - 160px);
     overflow: auto;
-    padding-bottom: 20px;
+    padding-bottom: $padding20;
 
     .add-contacts-field{
-      margin: 5px 10px;
+      margin: $margin5 $margin10;
     }
     .remove-table{
       cursor: pointer;
@@ -57,18 +57,19 @@ td {
 .ad-contact{
   width: fit-content; 
   cursor: pointer; 
-  margin: 20px 0;
+  margin: $margin20 0;
+  color: $primary-purple;
 }
 .submit{
   display: flex; 
   justify-content: center; 
-  margin-bottom: 20px;
+  margin-bottom: $margin20;
   .submit-contact{
     display: flex;
     justify-content: center;
     width: 250px;
     height: 46px;
-    margin: 20px 34px 0 2.5px;
+    margin: $margin20 34px 0 2.5px;
     padding: 12px 106px 13px;
     border-radius: 23px;
     box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
@@ -98,12 +99,17 @@ td {
 }
 
 :host ::ng-deep input.mat-input-element{
-  padding-top: 8px;
+  padding-top: $padding5;
+  padding-bottom: 4px;
 }
 
-:host ::ng-deep .mat-select-placeholder{
-  padding-top: 5px;
+:host ::ng-deep .mat-input-element {
+  color: #000;
+  padding-left: $padding5;
 }
+// :host ::ng-deep .mat-select-placeholder{
+//   padding-top: 5px;
+// }
 
 :host ::ng-deep .mat-form-field-underline {
   height: 0px !important;
@@ -121,7 +127,7 @@ td {
 }
 
 .close-popup-icon{
-  margin: 10px; 
+  margin: $margin10; 
   cursor: pointer; 
   text-align: right;
 }
@@ -133,3 +139,16 @@ td {
 :host ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
   display: none;
 }
+
+:host ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  cursor: pointer;
+  width: 100px;
+}
+
+:host ::ng-deep .mat-select-value{
+  padding-left: $padding5;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+

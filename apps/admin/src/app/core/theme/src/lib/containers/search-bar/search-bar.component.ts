@@ -124,6 +124,7 @@ export class SearchBarComponent implements OnInit {
       detailCompRef.componentInstance.guestId = searchData.id;
     } else {
       detailCompRef.componentInstance.guestId = searchData.guestId;
+      detailCompRef.componentInstance.bookingNumber = searchData.bookingNumber;
     }
 
     this.$subscription.add(

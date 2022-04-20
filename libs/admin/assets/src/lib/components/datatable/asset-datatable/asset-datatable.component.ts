@@ -49,18 +49,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   hotelId: any;
 
-  cols = [
-    { field: 'name', header: 'Name', sortType: 'string', isSort: true },
-    {
-      field: 'description',
-      header: 'Description',
-      sortType: 'string',
-      isSort: true,
-    },
-    { field: 'type', header: 'Type', sortType: 'string', isSort: true },
-    { field: 'url', header: 'url', sortType: 'string', isSort: true },
-    { field: 'active', header: 'Active', isSort: false },
-  ];
+  cols = assetConfig.datatable.cols;
 
   constructor(
     private _router: Router,

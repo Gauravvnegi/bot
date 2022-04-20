@@ -6,11 +6,15 @@
   }
 }
 
+:host ::ng-deep .slick-track{
+  width: 6000px !important;
+}
+
 :host ::ng-deep .draggable {
   margin-top: 3%;
+  height: 51vh;
   .slick-track {
-    height: 49vh;
-    min-width: 1300px;
+    height: 16vh;
     display: inline-block;
     div:focus {
       border: none;
@@ -59,10 +63,11 @@
   }
   .slider__text {
     padding: $padding-small;
+    min-height: 40px;
     .label {
       font-size: $font-medium;
       font-weight: $bolder;
-      margin-bottom: $margin-small;
+      // margin-bottom: $margin-small;
     }
     .description {
       font-size: $font-responsive-small;

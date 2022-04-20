@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ListingService extends ApiService {
-  getTopicList(id: string): Observable<any> {
-    return this.get(`/api/v1/entity/${id}/topics`);
+  getTopicList(id: string, config): Observable<any> {
+    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
   }
 
   getListings(config, hotelId: string) {

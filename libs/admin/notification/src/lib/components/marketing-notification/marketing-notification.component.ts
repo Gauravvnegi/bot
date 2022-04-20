@@ -22,13 +22,15 @@ export class MarketingNotificationComponent implements OnInit {
   @Input() hotelId: string = '5ef958ce-39a7-421c-80e8-ee9973e27b99';
   fromEmailList = [];
   topicList = [];
+  templateList = [];
+  selectedTemplate;
   private $subscription = new Subscription();
   separatorKeysCodes = [ENTER, COMMA];
   visible: boolean = true;
   selectable: boolean = true;
   removable: boolean = true;
   addOnBlur: boolean = true;
-
+  templateData: string;
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
@@ -108,6 +110,45 @@ export class MarketingNotificationComponent implements OnInit {
         this.emailIds.value.filter((item) => item != keyword)
       );
     }
+  }
+
+  handleTopicChange(event) {
+    this.$subscription.add(
+      this._emailService
+        .getTemplateByTopic(this.hotelId, event.value)
+        .subscribe((response) => {
+          this.templateList = response;
+        })
+    );
+  }
+
+  handleTemplateChange(event) {
+    this.emailFG.get('message').patchValue(this.modifyTemplate(event.value));
+  }
+
+  modifyTemplate(template: string) {
+    this.templateData = template;
+    console.log(
+      template.substring(
+        template.indexOf('<div'),
+        template.lastIndexOf('</body>')
+      )
+    );
+    return template.substring(
+      template.indexOf('<div'),
+      template.lastIndexOf('</body>')
+    );
+  }
+
+  getTemplateMessage(data) {
+    return data.channel === 'email'
+      ? this.templateData.substring(0, this.templateData.indexOf('<div')) +
+          data.message +
+          this.templateData.substring(
+            this.templateData.lastIndexOf('</body'),
+            this.templateData.length
+          )
+      : data.message;
   }
 
   private isValidEmail(email): RegExpMatchArray {

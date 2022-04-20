@@ -25,8 +25,11 @@
       <div class="field">
         <mat-label class="mat-label">Topic:</mat-label>
         <mat-form-field>
-          <mat-select>
-            <mat-option *ngFor="let topic of topicList" [value]="topic.name">{{
+          <mat-select (selectionChange)="handleTopicChange($event)">
+            <mat-option value="" *ngIf="topicList.length === 0" disabled
+              >NO DATA</mat-option
+            >
+            <mat-option *ngFor="let topic of topicList" [value]="topic.id">{{
               topic.name
             }}</mat-option>
           </mat-select>
@@ -35,10 +38,15 @@
       <div class="field">
         <mat-label class="mat-label">Template:</mat-label>
         <mat-form-field>
-          <mat-select>
-            <mat-option *ngFor="let topic of topicList" [value]="topic.name">{{
-              topic.name
-            }}</mat-option>
+          <mat-select (selectionChange)="handleTemplateChange($event)">
+            <mat-option value="" *ngIf="templateList.length === 0" disabled
+              >NO DATA</mat-option
+            >
+            <mat-option
+              *ngFor="let template of templateList"
+              [value]="template.htmlTemplate"
+              >{{ template.name }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
       </div>

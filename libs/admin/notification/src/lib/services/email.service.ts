@@ -11,4 +11,10 @@ export class EmailService extends ApiService {
   getTopicList(id: string): Observable<any> {
     return this.get(`/api/v1/entity/${id}/topics`);
   }
+
+  getTemplateByTopic(hotelId: string, topicId: string) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/templates/template-topic/${topicId}`
+    );
+  }
 }

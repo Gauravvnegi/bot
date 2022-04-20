@@ -1,61 +1,126 @@
-<p-table #dt [styleClass]="tableConfig.styleClass" [resizableColumns]="isResizableColumns" [autoLayout]="isAutoLayout" [loading]="loading" [columns]="cols" [value]="values" [paginator]="isPaginaton" [rows]="rowsPerPage" [showCurrentPageReport]="showCurrentPageReport"
-    [rowsPerPageOptions]="rowsPerPageOptions" [(first)]="first" [totalRecords]="totalRecords" [filterDelay]="0" [selectionMode]="selectionMode" [(selection)]="selectedRows" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" (sortFunction)="customSort($event)"
-    [customSort]="isCustomSort" (onFilter)="onDataFilter()">
-    <ng-template pTemplate="caption">
-        <div class="caption__wrapper">
-            <form [formGroup]="tableFG">
-                <div class="caption__wrapper--tabmenu">
-                    <div class="header">
-                        <p class="heading">{{ tableName }}</p>
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <form [formGroup]="tableFG">
+        <div class="caption__wrapper--tabmenu">
+          <div class="header">
+            <p class="heading">{{ tableName }}</p>
 
-                        <div class="options">
-                            <!-- Create Asset button with ExportAll,CSV -->
-                            <div class="request-btn__wrap" style="cursor: pointer;" (click)="openCreateAsset()">
-                                <div class="request-btn">
-                                    {{ '+Create Asset' | translate }}
-                                </div>
-                            </div>
-                            <div *ngIf="isActionButtons" class="icons">
-                                <img [src]="assetConfiguration.images.download.url" [alt]="assetConfiguration.images.download.alt" class="svg" />
-                                <img [src]="assetConfiguration.images.googleDoc.url" [alt]="assetConfiguration.images.googleDoc.alt" class="svg" />
-                                <img [src]="assetConfiguration.images.card.url" [alt]="assetConfiguration.images.card.alt" class="svg" />
-                            </div>
-                            <div *ngIf="isActionButtons" class="seperator"></div>
-                            <div formGroupName="documentActions" class="dropdown--wrapper">
-                                <p-dropdown class="export" [options]="documentActionTypes" formControlName="documentActionType">
-                                    <ng-template let-documentActionItem pTemplate="selectedItem">
-                                        <img [src]="assetConfiguration.images.export.url" [alt]="assetConfiguration.images.export.alt" />
-                                        <span class="documentActionItemLabel">{{
+            <div class="options">
+              <!-- Create Asset button with ExportAll,CSV -->
+              <div
+                class="request-btn__wrap"
+                style="cursor: pointer;"
+                (click)="openCreateAsset()"
+              >
+                <div class="request-btn">
+                  {{ '+Create Asset' | translate }}
+                </div>
+              </div>
+              <div *ngIf="isActionButtons" class="icons">
+                <img
+                  [src]="assetConfiguration.images.download.url"
+                  [alt]="assetConfiguration.images.download.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="assetConfiguration.images.googleDoc.url"
+                  [alt]="assetConfiguration.images.googleDoc.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="assetConfiguration.images.card.url"
+                  [alt]="assetConfiguration.images.card.alt"
+                  class="svg"
+                />
+              </div>
+              <div *ngIf="isActionButtons" class="seperator"></div>
+              <div formGroupName="documentActions" class="dropdown--wrapper">
+                <p-dropdown
+                  class="export"
+                  [options]="documentActionTypes"
+                  formControlName="documentActionType"
+                >
+                  <ng-template let-documentActionItem pTemplate="selectedItem">
+                    <img
+                      [src]="assetConfiguration.images.export.url"
+                      [alt]="assetConfiguration.images.export.alt"
+                    />
+                    <span class="documentActionItemLabel">{{
                       documentActionItem.label
                     }}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                                <div class="divider"></div>
-                                <p-dropdown class="export" [options]="documentTypes" formControlName="documentType">
-                                    <ng-template let-documentTypeItem pTemplate="selectedItem">
-                                        <img [src]="assetConfiguration.images.csv.url" [alt]="assetConfiguration.images.csv.alt" />
-                                        <span class="documentActionItemLabel">{{
+                  </ng-template>
+                </p-dropdown>
+                <div class="divider"></div>
+                <p-dropdown
+                  class="export"
+                  [options]="documentTypes"
+                  formControlName="documentType"
+                >
+                  <ng-template let-documentTypeItem pTemplate="selectedItem">
+                    <img
+                      [src]="assetConfiguration.images.csv.url"
+                      [alt]="assetConfiguration.images.csv.alt"
+                    />
+                    <span class="documentActionItemLabel">{{
                       documentTypeItem.label
                     }}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                                <button class="go" (click)="onDocumentActions()">
+                  </ng-template>
+                </p-dropdown>
+                <button class="go" (click)="onDocumentActions()">
                   <mat-icon class="material-icons" matSuffix>east</mat-icon>
                 </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="isTabFilters">
-                        <hospitality-bot-tab-group [listItems]="tabFilterItems" [selectedIndex]="tabFilterIdx" (selectedTabChange)="onSelectedTabFilterChange($event)"></hospitality-bot-tab-group>
-                    </div>
-                </div>
-                <div *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length" class="caption__wrapper--buttons">
-                    <div class="button__wrapper">
-                        <mat-chip-list multiple #chipList aria-label="Quick Reply selection" formControlName="quickReplyActionFilters">
-                            <mat-chip *ngFor="
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isTabFilters">
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
+          </div>
+        </div>
+        <div
+          *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length"
+          class="caption__wrapper--buttons"
+        >
+          <div class="button__wrapper">
+            <mat-chip-list
+              multiple
+              #chipList
+              aria-label="Quick Reply selection"
+              formControlName="quickReplyActionFilters"
+            >
+              <mat-chip
+                *ngFor="
                   let quickReplyType of tabFilterItems[tabFilterIdx].chips;
                   let quickReplyTypeIdx = index
-                " selectable="true" [ngClass]="{
+                "
+                selectable="true"
+                [ngClass]="{
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
                   'status-opacity-new status-text-new':
@@ -82,106 +147,168 @@
                     quickReplyType.isSelected,
                   'status-selected-reject':
                     quickReplyType.type == 'failed' && quickReplyType.isSelected
-                }" [selected]="isQuickReplyFilterSelected(quickReplyType)" (click)="
+                }"
+                [selected]="isQuickReplyFilterSelected(quickReplyType)"
+                (click)="
                   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                ">
-                                {{ quickReplyType.label }}
-                                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+                "
+              >
+                {{ quickReplyType.label }}
+                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
                 >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
-                            </mat-chip>
-                        </mat-chip-list>
-                        <img [src]="assetConfiguration.images.filter.url" [alt]="assetConfiguration.images.filter.alt" />
-                    </div>
-                </div>
-            </form>
+              </mat-chip>
+            </mat-chip-list>
+            <img
+              [src]="assetConfiguration.images.filter.url"
+              [alt]="assetConfiguration.images.filter.alt"
+            />
+          </div>
         </div>
-    </ng-template>
+      </form>
+    </div>
+  </ng-template>
 
-    <ng-template pTemplate="emptymessage">
-        <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
-    </ng-template>
-    <!-- *******************************HEADER WITH SEARCH******************************* -->
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th class="tableHeading" pResizableColumn>
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-            <th class="table-data-head" pResizableColumn [pSortableColumn]="col.field" *ngFor="let col of columns; let i = index" [ngStyle]="col.dynamicWidth ? { width: '100px' } : {}">
-                <div>
-                    <p class="table-header-text">{{ col.header }}</p>
-                    <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-                </div>
-            </th>
-        </tr>
+  <ng-template pTemplate="emptymessage">
+    <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th class="tableHeading" pResizableColumn>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns; let i = index"
+        [ngStyle]="col.dynamicWidth ? { width: '100px' } : {}"
+      >
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
 
-        <tr class="table-search-head">
-            <th class="table-search-head"></th>
-            <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'name')" class="p-column-filter" />
-            </th>
-            <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'description')" class="p-column-filter" />
-            </th>
-            <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'type')" class="p-column-filter" />
-            </th>
-            <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'url')" class="p-column-filter" />
-            </th>
-            <th class="table-search-head">
-                <input pInputText type="text" (input)="onFilterTypeTextChange($event.target.value, 'status')" class="p-column-filter" disabled="true" />
-            </th>
-        </tr>
-    </ng-template>
+    <tr class="table-search-head">
+      <th class="table-search-head"></th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'name')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'description')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'type')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'url')"
+          class="p-column-filter"
+        />
+      </th>
+      <th class="table-search-head">
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event.target.value, 'status')"
+          class="p-column-filter"
+          disabled="true"
+        />
+      </th>
+    </tr>
+  </ng-template>
 
-    <!-- **************************************BODY********************************* -->
-    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-        <tr class="data-table-row" (click)="openAssetDetails(rowData, $event)">
-            <td class="table--checkbox">
-                <p-tableCheckbox [value]="rowData" [index]="rowIndex" (click)="onCheckboxClicked($event)"></p-tableCheckbox>
-            </td>
-            <td class="name">
-                <div class="package_image_wrapper">
-                    <div class="image">
-                        <img class="package-image" src="{{ rowData.url }}" />
-                    </div>
-                    <div class="text">
-                        <div>{{ rowData.name }}</div>
-                    </div>
-                </div>
-            </td>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="data-table-row" (click)="openAssetDetails(rowData, $event)">
+      <td class="table--checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td class="name">
+        <div class="package_image_wrapper">
+          <div class="image">
+            <img class="package-image" src="{{ rowData.url }}" />
+          </div>
+          <div class="text">
+            <div>{{ rowData.name }}</div>
+          </div>
+        </div>
+      </td>
 
-            <td class="guest">
-                {{ rowData.description }}
-            </td>
-            <td class="service-details">
-                {{ rowData.type }}
-            </td>
-            <td class="service-details" style="position: relative; width: fit-content; word-wrap: break-word;">
-                <div class="image_url">{{ rowData.url }}</div>
-                <div (click)="onCheckboxClicked($event)">
-                    <img src="assets/svg/copy.svg" alt="Copy to clipboard" [cdkCopyToClipboard]="rowData.url" style="position: absolute; right: 7px; bottom: 7px;" (click)="handleCopyToClipboard($event)" />
-                </div>
-            </td>
+      <td class="guest">
+        {{ rowData.description }}
+      </td>
+      <td class="service-details">
+        {{ rowData.type }}
+      </td>
+      <td
+        class="service-details"
+        style="position: relative; width: fit-content; word-wrap: break-word;"
+      >
+        <div class="image_url">{{ rowData.url }}</div>
+        <div (click)="onCheckboxClicked($event)">
+          <img
+            [src]="assetConfiguration.images.copy.url"
+            [alt]="assetConfiguration.images.copy.alt"
+            [cdkCopyToClipboard]="rowData.url"
+            style="position: absolute; right: 7px; bottom: 7px;"
+            (click)="handleCopyToClipboard($event)"
+          />
+        </div>
+      </td>
 
-            <td class="active_class">
-                <label (click)="onCheckboxClicked($event)" class="switch">
+      <td class="active_class" style="text-align: center;">
+        <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
             [checked]="rowData.status"
             (change)="updateAssetStatus($event, rowData.id)"
           ></mat-slide-toggle>
         </label>
-            </td>
-        </tr>
-    </ng-template>
+      </td>
+    </tr>
+  </ng-template>
 
-    <!-- *********************************FOOTER******************************* -->
-    <ng-template pTemplate="summary">
-        <p-paginator #paginator [rows]="rowsPerPage" [totalRecords]="totalRecords" [rowsPerPageOptions]="rowsPerPageOptions" (onPageChange)="paginate($event)"></p-paginator>
-    </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
 </p-table>
 
 <ng-template #emptyCell>
-    <div class="emptyCell">&mdash;</div>
+  <div class="emptyCell">&mdash;</div>
 </ng-template>

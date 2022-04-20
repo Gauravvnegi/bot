@@ -52,7 +52,7 @@ export const DEFAULT_ROUTES = [
   {
     path: 'library',
     title: 'Library',
-    url: 'assets/svg/messenger.svg',
+    url: 'assets/svg/books.svg',
     children: [
       {
         path: 'library/package',

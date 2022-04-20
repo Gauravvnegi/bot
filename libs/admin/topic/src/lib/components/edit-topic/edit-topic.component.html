@@ -51,6 +51,14 @@
     </div>
   </div>
   <div class="footer_button">
-    <button mat-button class="button" (click)="handleSubmit()">save</button>
+    <button
+      mat-button
+      class="button"
+      (click)="handleSubmit()"
+      [ngClass]="{ active: !isSavingTopic, disabled: isSavingTopic }"
+    >
+      <i *ngIf="isSavingTopic" class="fa fa-spinner fa-spin"></i>
+      {{ isSavingTopic ? 'Saving' : 'Save' }}
+    </button>
   </div>
 </div>

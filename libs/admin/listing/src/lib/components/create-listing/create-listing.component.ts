@@ -26,6 +26,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   hotelId: string;
   globalQueries = [];
   topicList = [];
+  isSaving = false;
   constructor(
     private _fb: FormBuilder,
     private listingService: ListingService,
@@ -153,7 +154,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         email,
       };
     });
-
+    this.isSaving = true;
     this._listingService.createList(this.hotelId, data).subscribe(
       (response) => {
         this._snackbarService.openSnackBarAsText(
@@ -163,7 +164,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         );
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+      () => (this.isSaving = false)
     );
   }
 

@@ -104,9 +104,14 @@
       </div>
     </div>
     <div class="save-section">
-      <div class="save-button" (click)="createList()">
+      <div
+        class="save-button"
+        (click)="createList()"
+        [ngClass]="{ active: !isSaving, disabled: isSaving }"
+      >
         <div class="save-text">
-          Save
+          <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
+          {{ isSaving ? 'Saving' : 'Save' }}
         </div>
       </div>
     </div>

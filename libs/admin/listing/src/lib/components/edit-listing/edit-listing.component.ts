@@ -28,6 +28,7 @@ export class EditListingComponent implements OnInit {
   globalQueries = [];
   topicList = [];
   listId: string;
+  isSaving = false;
   loading = false;
   constructor(
     private _fb: FormBuilder,
@@ -228,7 +229,7 @@ export class EditListingComponent implements OnInit {
         email,
       };
     });
-
+    this.isSaving = true;
     this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
       (response) => {
         this._snackbarService.openSnackBarAsText(
@@ -238,7 +239,8 @@ export class EditListingComponent implements OnInit {
         );
         this.listFG.patchValue(response);
       },
-      ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+      () => (this.isSaving = false)
     );
   }
 

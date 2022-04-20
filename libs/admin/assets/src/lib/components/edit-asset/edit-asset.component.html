@@ -129,6 +129,13 @@
   </div>
 
   <div class="button">
-    <button class="saveButton" (click)="createAsset()">Save</button>
+    <button
+      class="saveButton"
+      (click)="createAsset()"
+      [ngClass]="{ active: !isSavingasset, disabled: isSavingasset }"
+    >
+      <i *ngIf="isSavingasset" class="fa fa-spinner fa-spin"></i>
+      {{ isSavingasset ? 'Saving' : 'Save' }}
+    </button>
   </div>
 </div>

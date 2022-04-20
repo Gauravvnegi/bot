@@ -274,11 +274,11 @@
         class="service-details"
         style="position: relative; width: fit-content; word-wrap: break-word;"
       >
-        <div>{{ rowData.url }}</div>
+        <div class="image_url">{{ rowData.url }}</div>
         <div (click)="onCheckboxClicked($event)">
           <img
-            src="assets/svg/copy.svg"
-            alt="Copy to clipboard"
+            [src]="assetConfiguration.images.copy.url"
+            [alt]="assetConfiguration.images.copy.alt"
             [cdkCopyToClipboard]="rowData.url"
             style="position: absolute; right: 7px; bottom: 7px;"
             (click)="handleCopyToClipboard($event)"
@@ -286,7 +286,7 @@
         </div>
       </td>
 
-      <td class="active_class">
+      <td class="active_class" style="text-align: center;">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
             [checked]="rowData.status"

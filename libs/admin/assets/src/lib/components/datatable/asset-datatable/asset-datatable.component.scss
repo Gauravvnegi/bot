@@ -138,6 +138,11 @@
   font-size: 12px;
   color: $primary-black;
   max-width: 60%;
+  .image_url {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap !important;
+  }
 }
 
 .package-image {
@@ -163,6 +168,7 @@
     background: $table-hover-background !important;
   }
 }
+
 :host ::ng-deep .header {
   color: $dark-blue !important;
   font-size: 16px;
@@ -171,4 +177,17 @@
 
 :host ::ng-deep .table-data-head {
   color: $dark-blue !important;
+}
+
+.data-table-row {
+  height: 100px;
+}
+
+:host ::ng-deep .tableHeading {
+  height: 60px;
+  background-color: #eaf0f6 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  text-align: center;
 }

@@ -129,5 +129,6 @@ export const assetConfig = {
     export: { url: 'assets/svg/Export.svg', alt: 'Export' },
     csv: { url: 'assets/svg/CSV.svg', alt: 'CSV' },
     filter: { url: 'assets/svg/Filter-Icon.svg', alt: 'Filter' },
+    copy: { url: 'assets/svg/copy.svg', alt: 'copy' },
   },
 };

@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
@@ -36,7 +37,8 @@ export class EditListingComponent implements OnInit {
     private _listingService: ListingService,
     private _snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private adminUtilityService: AdminUtilityService
   ) {
     this.initFG();
   }
@@ -77,8 +79,13 @@ export class EditListingComponent implements OnInit {
   }
 
   getTopicList(hotelId) {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        { entityState: 'INACTIVE', limit: 50 },
+      ]),
+    };
     this.$subscription.add(
-      this.listingService.getTopicList(hotelId).subscribe(
+      this.listingService.getTopicList(hotelId, config).subscribe(
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
         },

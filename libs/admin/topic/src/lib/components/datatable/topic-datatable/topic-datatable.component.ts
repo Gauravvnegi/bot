@@ -35,7 +35,7 @@ import { topicConfig } from '../../../constants/topic';
 })
 export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Topics';
+  tableName = 'Topic';
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;

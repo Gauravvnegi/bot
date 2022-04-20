@@ -27,12 +27,12 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <p class="heading">{{ tableName }}</p>
-            <div class="request-btn__wrap" (click)="openCreateTopic()">
-              <div class="request-btn">
-                {{ '+Create Topic' | translate }}
-              </div>
-            </div>
             <div class="options">
+              <div class="request-btn__wrap" (click)="openCreateTopic()">
+                <div class="request-btn">
+                  {{ '+Create Topic' | translate }}
+                </div>
+              </div>
               <div *ngIf="isActionButtons" class="icons">
                 <img
                   [src]="topicConfiguration.images.download.url"
@@ -148,7 +148,7 @@
                 "
               >
                 {{ quickReplyType.label }}
-                <span *ngIf="quickReplyType.value != 'ALL'">(</span
+                <span *ngIf="quickReplyType.value != 'ALL'"> (</span
                 >{{ quickReplyType.value != 'ALL' ? quickReplyType.total : ''
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
@@ -163,7 +163,7 @@
     <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
-  <ng-template pTemplate="header" let-columns>
+  <ng-template pTemplate="header" let-columns class="table_head">
     <tr>
       <th class="tableHeading" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>

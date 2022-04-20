@@ -110,24 +110,16 @@
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   text-align: center !important;
 }
-<<<<<<< HEAD
-:host ::ng-deep .slide {
-  text-align: center !important;
-}
-=======
 
 :host ::ng-deep .slide {
   text-align: center !important;
 }
 
->>>>>>> k8s-dev-deploy
 :host ::ng-deep .data-table-row {
   td {
     padding: 20px !important;
   }
 }
-<<<<<<< HEAD
-=======
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-purple !important;
@@ -148,4 +140,3 @@
 :host ::ng-deep .table-data-head {
   color: $dark-blue !important;
 }
->>>>>>> k8s-dev-deploy

@@ -89,55 +89,35 @@ export const assetConfig = {
         header: 'Name',
         isSort: true,
         sortType: 'number',
-<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
-        dynamicWidth:false,
-=======
         dynamicWidth: false,
->>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
         field: 'description',
         header: 'Description',
         isSort: true,
         sortType: 'number',
-<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
-        dynamicWidth:false,
-=======
         dynamicWidth: false,
->>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
         field: 'type',
         header: 'Type',
         isSort: true,
         sortType: 'string',
-<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
-        dynamicWidth:false,
-=======
         dynamicWidth: false,
->>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
         field: 'url',
         header: 'URL',
         isSort: true,
         sortType: 'string',
-<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
-        dynamicWidth:false,
-=======
         dynamicWidth: false,
->>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
         field: 'active',
         header: 'Active',
         isSort: false,
         sortType: 'number',
-<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
-        dynamicWidth:true,
-=======
         dynamicWidth: true,
->>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
     ],
   },

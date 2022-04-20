@@ -183,11 +183,7 @@
         pResizableColumn
         [pSortableColumn]="col.field"
         *ngFor="let col of columns; let i = index"
-<<<<<<< HEAD
-        [ngStyle]="col.dynamicWidth ? { width:'10px' } : { }"
-=======
         [ngStyle]="col.dynamicWidth ? { width: '100px' } : {}"
->>>>>>> k8s-dev-deploy
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>
@@ -249,11 +245,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-<<<<<<< HEAD
-    <tr class="data-table-row" (click)="openAssetDetails(rowData)">
-=======
     <tr class="data-table-row" (click)="openAssetDetails(rowData, $event)">
->>>>>>> k8s-dev-deploy
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -282,17 +274,6 @@
         class="service-details"
         style="position: relative; width: fit-content; word-wrap: break-word;"
       >
-<<<<<<< HEAD
-        {{ rowData.url }}
-        <img
-          src="assets/svg/copy.svg"
-          alt=""
-          style="position: absolute; right: 7px; bottom: 7px;"
-        />
-      </td>
-
-      <td class="">
-=======
         <div>{{ rowData.url }}</div>
         <div (click)="onCheckboxClicked($event)">
           <img
@@ -306,7 +287,6 @@
       </td>
 
       <td class="active_class">
->>>>>>> k8s-dev-deploy
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
             [checked]="rowData.status"

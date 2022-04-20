@@ -48,7 +48,7 @@
   &-form {
     padding-left: 20px;
     border-bottom: 2px solid rgb(61, 187, 230, 0.1);
-    .feilds {
+    .fields {
       display: flex;
       align-items: center;
       // justify-content: space-between;
@@ -59,7 +59,7 @@
         padding-left: 7%;
         margin-bottom: 20px;
       }
-      .feild {
+      .field {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
@@ -189,7 +189,7 @@
               letter-spacing: 0.9px;
               margin: 0 auto;
               width: 60%;
-              padding:15px 0;
+              padding: 15px 0;
               @media only screen and (max-width: 1200px) {
                 font-size: $font10;
               }
@@ -206,7 +206,7 @@
               position: absolute;
               top: -30%;
               left: 42%;
-              img{
+              img {
                 width: 37px;
                 height: 34px;
                 position: absolute;
@@ -259,11 +259,11 @@
 
 :host ::ng-deep .phone-no-dropdown {
   width: 12%;
-  margin-right:-40px;
+  margin-right: -40px;
 }
 
-:host ::ng-deep .phone-no-feild {
-  width:32% !important;
+:host ::ng-deep .phone-no-field {
+  width: 32% !important;
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -309,7 +309,7 @@
 .width-trio {
   width: 37%;
   .mat-form-field {
-    width:49%;
+    width: 49%;
   }
 }
 

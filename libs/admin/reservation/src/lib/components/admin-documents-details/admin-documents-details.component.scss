@@ -63,13 +63,13 @@
   margin: $margin20 0px;
 }
 
-// .feilds-wrapper {
+// .fields-wrapper {
 //   display: flex;
 //   justify-content: space-between;
 //   align-items: center;
 //   margin: 30px 0px;
 //   padding: 0px 30px;
-//   .feild {
+//   .field {
 //     .label {
 //       letter-spacing: 0.72px;
 //       font-size: $font12;
@@ -230,12 +230,12 @@
     color: #000000;
   }
 }
-.download{
+.download {
   font-size: 12px;
   color: $button-blue !important;
   display: flex;
   align-items: center;
- p{
-   padding-top: 4px;
- }
+  p {
+    padding-top: 4px;
+  }
 }

@@ -73,15 +73,17 @@ export class Feedback {
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guest = new Guest().deserialize(input.guestId);
-    this.guestData = new StayGuestData().deserialize({
-      arrivalTime: 0,
-      churnProbalilty: 0,
-      departureTime: 0,
-      dueSpend: 0,
-      guestCount: 0,
-      overAllNps: 0,
-      totalSpend: 0,
-    });
+    this.guestData = new StayGuestData().deserialize(
+      input.guestData || {
+        arrivalTime: 0,
+        churnProbalilty: 0,
+        departureTime: 0,
+        dueSpend: 0,
+        guestCount: 0,
+        overAllNps: 0,
+        totalSpend: 0,
+      }
+    );
     return this;
   }
 
@@ -274,6 +276,7 @@ export class StayFeedback {
   outlet: string;
   status: string;
   commentList;
+  created: number;
 
   deserialize(input, outlets) {
     this.services = new Array<StayService>();
@@ -282,6 +285,7 @@ export class StayFeedback {
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
       set({}, 'comments', get(input, ['comments'])),
+      set({}, 'created', get(input, ['created'])),
       set({}, 'feedbackType', get(input, ['feedbackType'])),
       set({}, 'feedbackUrl', get(input, ['feedbackUrl'])),
       set({}, 'id', get(input, ['id'])),
@@ -322,6 +326,14 @@ export class StayFeedback {
 
   getServiceComment(serviceName) {
     return this.commentList[serviceName.split(' ').join('_') + '_COMMENT'];
+  }
+
+  getCreatedDate(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
+  }
+
+  getCreatedTime(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('HH:mm');
   }
 }
 

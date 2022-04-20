@@ -1,8 +1,7 @@
 @import 'main';
 
 .container {
-  height: 683px;
-  margin: 30px 27px 0 32px;
+  height: 740px;
   padding: 17px 38px 21px 20px;
   border-radius: 5px;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
@@ -59,7 +58,7 @@
   }
   &-form {
     padding-left: 20px;
-    .feilds {
+    .fields {
       color: #9eaeb8;
       margin-top: 2%;
       @media (max-width: $tablet) {
@@ -71,6 +70,7 @@
         display: flex;
         align-items: center;
         min-width: 35%;
+        padding-top: 15px;
         .status {
           font-size: $font14;
           margin-right: 20px;
@@ -84,20 +84,14 @@
           color: $primary-black;
           padding-left: 20px;
           font-size: 20px;
+          color: #484848 !important;
         }
       }
-      .note {
-        color: $primary-gray;
-        font-size: $font12;
-        padding-left: 11%;
-        margin-bottom: 20px;
-      }
-      .feild {
+      .field {
         display: flex;
         align-items: center;
         width: 100%;
-        margin-right: 1.5%;
-        margin-bottom: 55px;
+        margin-bottom: 54px;
         @media (max-width: $tablet) {
           @include width(42.6%);
         }
@@ -126,10 +120,9 @@
   .button {
     width: 250px;
     height: 46px;
-    margin: 170px 34px 0 4.5px;
+    margin: 260px 34px 0 4.5px;
     padding: 12px 106px 13px;
     border-radius: 23px;
-    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
     background-color: #4b56c0;
     line-height: normal;
     letter-spacing: 0.96px;
@@ -139,13 +132,6 @@
     font-weight: 500;
     border-style: none;
   }
-}
-:host ::ng-deep .footer_button {
-  margin: 30px 27px 0 32px;
-  padding: 17px 38px 21px 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-  background-color: #fff;
 }
 :host ::ng-deep .mat-form-field-infix {
   width: 40rem !important;
@@ -200,7 +186,6 @@
 }
 
 input.mat-input-element {
-  margin-top: -0.0625em;
   color: black;
 }
 :host ::ng-deep .mat-label {

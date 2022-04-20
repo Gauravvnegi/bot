@@ -4,14 +4,21 @@
   margin-left: 0.5em;
   font-weight: 500;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
 .tableHeading {
-  width: 7%;
+  width: 60px;
   background-color: #eaf0f6;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
 }
-
+.table_head {
+  background-color: #eaf0f6 !important;
+}
 .icon-wrapper {
   @include flex-space-between();
   flex-wrap: wrap;
@@ -55,26 +62,15 @@
       width: 62%;
     }
   }
-  .first {
-    top: 15%;
-  }
-  .second {
-    top: 65%;
-  }
 }
 .request-btn__wrap {
   cursor: pointer;
-  margin-left: 690px;
-  margin-top: 20px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
   .request-btn {
     font-size: 14px;
     width: 145px;
     height: 36px;
-    margin: 6px 20px 26px 254px;
-    padding: 8.5px 28.5px 8.5px 23.5px;
+    margin: 0 20px 0 254px;
+    padding: 9.5px 28.5px 8.5px 25.5px;
     border-radius: 18px;
     background-color: #4b56c0;
     color: white;
@@ -105,16 +101,17 @@
   font-size: 15px !important;
 }
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
-  padding: 0.5rem 0.5rem !important;
+  padding: 0.8rem 0.5rem !important;
+  background-color: #eaf0f6;
 }
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-text-align:center !important;
+  text-align: center !important;
 }
-:host ::ng-deep .slide{
- text-align: center !important;
+:host ::ng-deep .slide {
+  text-align: center !important;
 }
-:host ::ng-deep .data-table-row{
-  td{
+:host ::ng-deep .data-table-row {
+  td {
     padding: 20px !important;
   }
 }

@@ -76,7 +76,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   getTopicList(hotelId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'INACTIVE', limit: 50 },
+        { entityState: 'ACTIVE', limit: 50 },
       ]),
     };
     this.$subscription.add(

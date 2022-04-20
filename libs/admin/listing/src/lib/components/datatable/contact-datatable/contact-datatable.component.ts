@@ -176,20 +176,25 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this._snackbarService.openSnackBarAsText('Contact deleted', '', {
                 panelClass: 'success',
               });
-              this.selectedRows = [];
               this.updateDataSourceAfterDelete(ids);
             },
             ({ error }) =>
               this._snackbarService.openSnackBarAsText(error.message)
           )
       );
-    } else this.updateDataSourceAfterDelete(ids);
+    } else this.updateDataSourceAfterDelete(ids, this.selectedRows);
   }
 
-  updateDataSourceAfterDelete(ids) {
-    this.dataSource = this.dataSource.filter(
-      (data) => !ids.some((el) => el.contact_id === data.id)
-    );
+  updateDataSourceAfterDelete(ids, selectedRows = []) {
+    if (selectedRows.length)
+      this.dataSource = this.dataSource.filter(
+        (data) => !selectedRows.some((el) => el.email === data.email)
+      );
+    else
+      this.dataSource = this.dataSource.filter(
+        (data) => !ids.some((el) => el.contact_id === data.id)
+      );
+    this.selectedRows = [];
     this.updateContacts.emit({ add: true, data: this.dataSource });
     this.totalRecords = this.dataSource.length;
     this.changePage(this.currentPage);

@@ -509,24 +509,35 @@
                             <img [src]="globalFeedbackConfig.images.datatable.pdf.url" [alt]="globalFeedbackConfig.images.datatable.pdf.alt" (click)="downloadFeedbackPdf($event, rowData.id)" />
                         </div>
                     </div>
-                </td>
-                <td class="guest">
-                    <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-                    <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
-                    <div class="guest-phone">{{ rowData.guest.emailId }}</div>
-                </td>
-                <td class="package">
-                    <p class="arrival-date">
-                        {{ rowData.guestData.getArrivalDate(_globalFilterService.timezone) }} - {{ rowData.guestData.getDepartureDate(_globalFilterService.timezone) }}
-                    </p>
-
-                    <p class="arrival-time">
-                        {{ rowData.guestData.getArrivalTime(_globalFilterService.timezone) }} - {{ rowData.guestData.getDepartureTime(_globalFilterService.timezone) }}
-                    </p>
-                    <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
-                </td>
-                <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-                <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+            <div class="pdf">
+              <img
+                [src]="globalFeedbackConfig.images.datatable.pdf.url"
+                [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
+                (click)="downloadFeedbackPdf($event, rowData.id)"
+              />
+            </div>
+          </div>
+        </td>
+        <td class="guest">
+          <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+          <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
+          <div class="guest-phone">{{ rowData.guest.emailId }}</div>
+        </td>
+        <td class="package">
+          <p class="arrival-date">
+            {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
+          </p>
+          <p class="arrival-time">
+            {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
+          </p>
+          <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
+        </td>
+        <td class="comments">{{ rowData.guestData.overAllNps }}</td>
+        <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
 
                 <!-- status-image-initiated -->
                 <td class="status-image">

@@ -3,7 +3,7 @@
 .upload-btn-wrapper {
   position: relative;
   overflow: hidden;
-  margin-left: 210px;
+  margin-left: 170px;
 }
 
 .btn {
@@ -32,14 +32,14 @@
   opacity: 0;
 }
 
-.import{
-  width: 546px; 
+.import {
+  width: 546px;
   padding: 30px 30px 40px 40px;
-  .import-close{
-    cursor: pointer; 
+  .import-close {
+    cursor: pointer;
     text-align: right;
   }
-  .import-contact{
+  .import-contact {
     font-family: Roboto;
     font-size: $font20;
     font-weight: bold;
@@ -49,32 +49,32 @@
     letter-spacing: 1.2px;
     color: $dark-blue;
   }
-  .import-file{
-    display: flex; 
-    justify-content: flex-start; 
+  .import-file {
+    display: flex;
+    justify-content: flex-start;
     margin: $margin10 0;
-    .file{
-      display: flex; 
-      align-items: center; 
+    .file {
+      display: flex;
+      align-items: center;
       width: 300px;
     }
   }
-  .import-save{
-    display: flex; 
-    justify-content: center; 
+  .import-save {
+    display: flex;
+    justify-content: center;
     margin-bottom: $margin20;
-    .save-btn{
+    .save-btn {
       display: flex;
       justify-content: center;
       width: 250px;
       height: 46px;
-      margin: 121px 34px 0 2.5px;
+      margin: 121px 0 0 2.5px;
       padding: 12px 106px 13px;
       border-radius: 23px;
       box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
       background-color: $button-blue;
       cursor: pointer;
-      .save{
+      .save {
         font-size: $font16;
         font-weight: 500;
         font-stretch: normal;
@@ -86,36 +86,32 @@
       }
     }
   }
-  .import-select{
-    display: flex; 
-    justify-content: center; 
+  .import-select {
+    display: flex;
+    justify-content: center;
     margin-bottom: $margin20;
-    .select-btn{
-      display: flex;
-      justify-content: center;
-      width: 140px;
-      height: 46px;
-      // margin: $margin10 0px 0 70px;
-      padding: 12px 0px 13px;
-      border-radius: 23px;
-      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-      background-color: $button-blue;
-      cursor: pointer;
-      .select-file{
-        font-size: $font16;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        text-align: left;
-        color: white;
-      }
-    }
-  } 
+  }
 }
 
-
-:host ::ng-deep .mat-form-field-underline{
+:host ::ng-deep .mat-form-field-underline {
   width: 400px !important;
+}
+
+:host ::ng-deep .before-upload {
+  width: 133px !important;
+  height: 38px !important;
+  padding: 13px 30px;
+  border-radius: 30px;
+  background-color: $auth-color;
+  margin: 0 auto;
+  .upload-label {
+    font-size: 16px !important;
+    color: white !important;
+    margin-top: 0px !important;
+  }
+}
+:host ::ng-deep .upload__box {
+  position: relative;
+  height: 80px !important;
+  border-bottom: 0px !important;
 }

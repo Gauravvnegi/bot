@@ -124,6 +124,7 @@ export class SearchBarComponent implements OnInit {
       detailCompRef.componentInstance.guestId = searchData.id;
     } else {
       detailCompRef.componentInstance.guestId = searchData.guestId;
+      detailCompRef.componentInstance.bookingNumber = searchData.bookingNumber;
     }
 
     this.$subscription.add(
@@ -148,7 +149,7 @@ export class SearchBarComponent implements OnInit {
 
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
-    this.router.navigateByUrl(`/pages/package/edit/${id}`);
+    this.router.navigateByUrl(`/pages/library/package/edit/${id}`);
   }
 
   clearSearch() {

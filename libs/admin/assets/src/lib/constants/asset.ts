@@ -1,6 +1,5 @@
-export const listingConfig = {
+export const assetConfig = {
   datatable: {
-    title: 'Listings',
     tabFilterItems: [
       {
         label: 'All',
@@ -26,37 +25,59 @@ export const listingConfig = {
             isSelected: false,
             type: 'pending',
           },
+        ],
+        lastPage: 0,
+      },
+      {
+        label: 'Image',
+        content: '',
+        value: 'IMAGE',
+        disabled: false,
+        total: 0,
+        chips: [
+          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
           {
-            label: 'General ',
+            label: 'Active',
             icon: '',
-            value: 'GENERAL',
+            value: 'ACTIVE',
             total: 0,
             isSelected: false,
-            type: 'initiated',
+            type: 'new',
           },
           {
-            label: 'Holidays ',
+            label: 'In-Active ',
             icon: '',
-            value: 'HOLIDAYS',
+            value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'initiated',
+            type: 'pending',
+          },
+        ],
+        lastPage: 0,
+      },
+      {
+        label: 'Video',
+        content: '',
+        value: 'VIDEO',
+        disabled: false,
+        total: 0,
+        chips: [
+          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'Active',
+            icon: '',
+            value: 'ACTIVE',
+            total: 0,
+            isSelected: false,
+            type: 'new',
           },
           {
-            label: 'Promotions',
+            label: 'In-Active ',
             icon: '',
-            value: 'PROMOTIONS',
+            value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'initiated',
-          },
-          {
-            label: 'Highlights',
-            icon: '',
-            value: 'HIGHLIGHTS',
-            total: 0,
-            isSelected: false,
-            type: 'initiated',
+            type: 'pending',
           },
         ],
         lastPage: 0,
@@ -65,38 +86,58 @@ export const listingConfig = {
     cols: [
       {
         field: 'name',
-        header: 'Name/Topic',
+        header: 'Name',
         isSort: true,
-        sortType: 'string',
+        sortType: 'number',
+<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
+        dynamicWidth:false,
+=======
         dynamicWidth: false,
+>>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
         field: 'description',
         header: 'Description',
         isSort: true,
-        sortType: 'string',
+        sortType: 'number',
+<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
+        dynamicWidth:false,
+=======
         dynamicWidth: false,
+>>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
-        field: ``,
-        header: 'Unsubscribed/ bounce#',
-        isSort: false,
+        field: 'type',
+        header: 'Type',
+        isSort: true,
         sortType: 'string',
+<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
+        dynamicWidth:false,
+=======
         dynamicWidth: false,
+>>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
-        field: ``,
-        header: 'Send/Schedule Campaign#',
-        isSort: false,
+        field: 'url',
+        header: 'URL',
+        isSort: true,
         sortType: 'string',
+<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
+        dynamicWidth:false,
+=======
         dynamicWidth: false,
+>>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
       {
-        field: '',
+        field: 'active',
         header: 'Active',
         isSort: false,
         sortType: 'number',
+<<<<<<< HEAD:libs/admin/assets/src/lib/components/constants/asset.ts
+        dynamicWidth:true,
+=======
         dynamicWidth: true,
+>>>>>>> k8s-dev-deploy:libs/admin/assets/src/lib/constants/asset.ts
       },
     ],
   },

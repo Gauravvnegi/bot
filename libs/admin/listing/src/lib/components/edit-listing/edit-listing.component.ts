@@ -9,7 +9,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { IList, List } from '../../data-models/listing.model';
+import { IList, List, Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { EditContactComponent } from '../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../import-contact/import-contact.component';
@@ -27,6 +27,7 @@ export class EditListingComponent implements OnInit {
   globalQueries = [];
   topicList = [];
   listId: string;
+  loading = false;
   constructor(
     private _fb: FormBuilder,
     private listingService: ListingService,
@@ -77,9 +78,14 @@ export class EditListingComponent implements OnInit {
 
   getTopicList(hotelId) {
     this.$subscription.add(
-      this.listingService.getAssetList(hotelId).subscribe((response) => {
-        this.topicList = response.records;
-      })
+      this.listingService.getTopicList(hotelId).subscribe(
+        (response) => {
+          this.topicList = new Topics().deserialize(response).records;
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -95,13 +101,19 @@ export class EditListingComponent implements OnInit {
   }
 
   getListDetails(id) {
+    this.loading = true;
     this.$subscription.add(
-      this._listingService
-        .getListById(this.hotelId, id)
-        .subscribe((response) => {
+      this._listingService.getListById(this.hotelId, id).subscribe(
+        (response) => {
+          this.loading = false;
           this.listData = new List().deserialize(response, 0);
           this.listFG.patchValue(this.listData);
-        })
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -118,22 +130,25 @@ export class EditListingComponent implements OnInit {
     importCompRef.componentInstance.hotelId = this.hotelId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) {
-        const {
-          firstName,
-          lastName,
-          salutation,
-          companyName,
-          mobile,
-          email,
-        } = response.data[0];
-        const reqData = {
-          firstName,
-          lastName,
-          salutation,
-          companyName,
-          mobile,
-          email,
-        };
+        const reqData = [];
+        response.data.forEach((item) => {
+          const {
+            firstName,
+            lastName,
+            salutation,
+            companyName,
+            mobile,
+            email,
+          } = item;
+          reqData.push({
+            firstName,
+            lastName,
+            salutation,
+            companyName,
+            mobile,
+            email,
+          });
+        });
         this.$subscription.add(
           this._listingService
             .updateListContact(this.hotelId, this.listId, reqData)

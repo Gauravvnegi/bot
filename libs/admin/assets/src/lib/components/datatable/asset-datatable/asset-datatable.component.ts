@@ -19,7 +19,7 @@ import {
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { assetConfig } from '../../constants/asset';
+import { assetConfig } from '../../../constants/asset';
 import { AssetService } from '../../../services/asset.service';
 import { Assets } from '../../../data-models/assetConfig.model';
 
@@ -49,18 +49,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   hotelId: any;
 
-  cols = [
-    { field: 'name', header: 'Name', sortType: 'string', isSort: true },
-    {
-      field: 'description',
-      header: 'Description',
-      sortType: 'string',
-      isSort: true,
-    },
-    { field: 'type', header: 'Type', sortType: 'string', isSort: true },
-    { field: 'url', header: 'url', sortType: 'string', isSort: true },
-    { field: 'active', header: 'Active', isSort: false },
-  ];
+  cols = assetConfig.datatable.cols;
 
   constructor(
     private _router: Router,
@@ -172,6 +161,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,
@@ -361,7 +351,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
-  openAssetDetails(amenity): void {
+  openAssetDetails(amenity, event): void {
+    event.stopPropagation();
     this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
   }
 
@@ -390,6 +381,13 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         chip.total = countObj[chip.value];
       });
     }
+  }
+
+  handleCopyToClipboard(event) {
+    event.stopPropagation();
+    this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
+      panelClass: 'success',
+    });
   }
 
   ngOnDestroy(): void {

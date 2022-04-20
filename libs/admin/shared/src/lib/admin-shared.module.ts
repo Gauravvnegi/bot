@@ -23,6 +23,7 @@ import { FeatureDirective } from './directives/feature.directive';
 import { ChannelDirective } from './directives/channel.directive';
 import { ClickableDirective } from './directives/clickable.directive';
 import { UploadCsvComponent } from './components/upload-csv/upload-csv.component';
+import { UploadVideoComponent } from './components/upload-video/upload-video.component';
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import { UploadCsvComponent } from './components/upload-csv/upload-csv.component
     ChannelDirective,
     ClickableDirective,
     UploadCsvComponent,
+    UploadVideoComponent,
   ],
   exports: [
     DatatableComponent,
@@ -70,6 +72,7 @@ import { UploadCsvComponent } from './components/upload-csv/upload-csv.component
     FeatureDirective,
     ChannelDirective,
     ClickableDirective,
+    UploadVideoComponent,
   ],
 })
 export class AdminSharedModule {}

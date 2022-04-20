@@ -192,4 +192,8 @@ export class EditTopicComponent implements OnInit {
   redirectToTable() {
     this.location.back();
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

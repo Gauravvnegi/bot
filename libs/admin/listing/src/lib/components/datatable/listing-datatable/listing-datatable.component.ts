@@ -34,7 +34,7 @@ import { ListTable } from '../../../data-models/listing.model';
 })
 export class ListingDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Reservations';
+  @Input() tableName = listingConfig.datatable.title;
   @Input() tabFilterItems = listingConfig.datatable.tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -47,7 +47,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 5;
   cols = listingConfig.datatable.cols;
-  globalQueries = [];
   hotelId: string;
   $subscription = new Subscription();
 
@@ -79,16 +78,11 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
         this.getHotelId([
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
         this.loadInitialData([
-          ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
@@ -204,7 +198,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(
         [
-          ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
@@ -319,7 +312,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
 
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,

@@ -64,7 +64,7 @@ export const DEFAULT_ROUTES = [
         path: 'library/listing',
         title: 'Listing',
         children: null,
-        url: 'assets/svg/box.svg',
+        url: 'assets/svg/to-do-list.svg',
       },
       {
         path: 'library/assets',

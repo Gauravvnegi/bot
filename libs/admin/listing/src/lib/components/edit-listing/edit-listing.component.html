@@ -78,9 +78,15 @@
         </div>
       </div>
     </div>
-    <div class="wrapper-text">
+    <div class="wrapper-text" *ngIf="!loading">
       <ng-container
-        *ngIf="listFG?.get('marketingContacts')?.value.length; else noContact"
+        *ngIf="
+          listFG?.get('marketingContacts')?.value.length;
+          then contactDatatable;
+          else noContact
+        "
+      ></ng-container>
+      <ng-template #contactDatatable
         ><hospitality-bot-contact-datatable
           [add]="false"
           [dataSource]="listFG?.get('marketingContacts')?.value"
@@ -89,18 +95,20 @@
           [listId]="listId"
           (updateContacts)="updateContactList($event)"
         ></hospitality-bot-contact-datatable
-      ></ng-container>
+      ></ng-template>
       <ng-template #noContact>
         <div class="add-text">
           Add Contacts
         </div>
         <div class="manually-add">
           <div class="manually-contacts" (click)="openAddContact($event)">
+            <img src="assets/images/add-user.png" alt="Add User" />
             <div class="manually-import">
               Add Contacts Manually
             </div>
           </div>
           <div class="manually-contacts" (click)="openImportContact($event)">
+            <img src="assets/images/group.png" alt="Add User" />
             <div class="manually-import">
               Import your contacts
             </div>

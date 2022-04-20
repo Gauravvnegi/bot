@@ -158,10 +158,6 @@
                 }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
               </mat-chip>
             </mat-chip-list>
-            <img
-              [src]="listingConfiguration.images.filter.url"
-              [alt]="listingConfiguration.images.filter.alt"
-            />
           </div>
         </div>
       </form>
@@ -182,6 +178,7 @@
         pResizableColumn
         [pSortableColumn]="col.field"
         *ngFor="let col of columns"
+        [ngStyle]="col.dynamicWidth ? { width: '100px' } : {}"
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>

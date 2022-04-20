@@ -4,11 +4,12 @@
   background-color: $white;
   padding: 20px 0 20px 20px;
   max-height: 85vh;
+  overflow-y: scroll;
 }
 
 .body {
   max-height: calc(100% - 200px);
-  overflow-y: scroll;
+  // overflow-y: scroll;
 }
 
 .header {
@@ -45,6 +46,8 @@
     }
     .mat-label {
       width: 200px;
+      color: #b5b5c3;
+      font-size: 14px;
     }
   }
 }
@@ -110,4 +113,18 @@
       color: #fff;
     }
   }
+}
+
+:host ::ng-deep .full-width{
+  width: 100% !important;
+}
+
+:host ::ng-deep .full-width .mat-label{
+  width: 170px !important;
+}
+
+.full-width p{
+  color: #4b56c0;
+  cursor: pointer;
+  padding-right: 8px;
 }

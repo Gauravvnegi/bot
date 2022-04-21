@@ -14,10 +14,11 @@ import {
 import { SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
-import { Contact } from '../../../data-models/listing.model';
+import { Contact, List } from '../../../data-models/listing.model';
 import { ListingService } from '../../../services/listing.service';
 import { EditContactComponent } from '../../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../../import-contact/import-contact.component';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -36,7 +37,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   @Input() add: boolean = true;
   @Input() hotelId: string;
   @Output() updateContacts = new EventEmitter();
-  @Input() listId: string;
+  @Input() list: List;
   tableName: string = 'Manage Contacts';
   cols = [
     {
@@ -149,17 +150,31 @@ export class ContactDatatableComponent extends BaseDatatableComponent
    */
   exportCSV(): void {
     this.loading = true;
-
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
         },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
-    this.$subscription.add();
+    this.$subscription.add(
+      this._listingService
+        .exportContact(this.hotelId, this.list.id, config)
+        .subscribe(
+          (response) => {
+            FileSaver.saveAs(
+              response,
+              `${this.list.name.toLowerCase()}_contacts_export_${new Date().getTime()}.csv`
+            );
+            this.loading = false;
+          },
+          ({ error }) => {
+            this.loading = false;
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
+        )
+    );
   }
 
   deleteContact() {
@@ -217,7 +232,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           if (!this.add) {
             this.$subscription.add(
               this._listingService
-                .updateListContact(this.hotelId, this.listId, response.data)
+                .updateListContact(this.hotelId, this.list.id, response.data)
                 .subscribe(
                   (response) => {
                     this.handleContactAddEvent(response);
@@ -299,7 +314,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       });
       this.$subscription.add(
         this._listingService
-          .updateListContact(this.hotelId, this.listId, reqData)
+          .updateListContact(this.hotelId, this.list.id, reqData)
           .subscribe(
             (response) => {
               this.dataSource = [...this.dataSource, ...data];

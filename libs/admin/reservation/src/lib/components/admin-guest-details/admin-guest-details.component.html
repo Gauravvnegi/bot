@@ -46,8 +46,8 @@
                 let i = index
               "
             >
-              <div class="feilds-wrapper" [formGroupName]="i">
-                <div class="feild width-added">
+              <div class="fields-wrapper" [formGroupName]="i">
+                <div class="field width-added">
                   <mat-label class="label">Full Name</mat-label>
                   <div class="value">
                     {{ guestFormGroup.title }}
@@ -55,7 +55,7 @@
                     {{ guestFormGroup.lastName }}
                   </div>
                 </div>
-                <div class="feild width-added">
+                <div class="field width-added">
                   <mat-label class="label">Phone No.</mat-label>
                   <div
                     *ngIf="guestFormGroup.phoneNumber; else emptyCell"
@@ -65,7 +65,7 @@
                     {{ guestFormGroup.phoneNumber }}
                   </div>
                 </div>
-                <div class="feild width-added">
+                <div class="field width-added">
                   <mat-label class="label">Email</mat-label>
                   <div
                     *ngIf="guestFormGroup.email; else emptyCell"
@@ -104,8 +104,8 @@
                 let i = index
               "
             >
-              <div class="feilds-wrapper" [formGroupName]="i">
-                <div class="feild width-added">
+              <div class="fields-wrapper" [formGroupName]="i">
+                <div class="field width-added">
                   <mat-label class="label">Full Name</mat-label>
                   <div class="value">
                     {{ guestFormGroup.title }}
@@ -154,8 +154,8 @@
                 let i = index
               "
             >
-              <div class="feilds-wrapper" [formGroupName]="i">
-                <div class="feild width-added">
+              <div class="fields-wrapper" [formGroupName]="i">
+                <div class="field width-added">
                   <mat-label class="label">Full Name</mat-label>
                   <div class="value">
                     {{ guestFormGroup.title }}
@@ -163,7 +163,7 @@
                     {{ guestFormGroup.lastName }}
                   </div>
                 </div>
-                <div class="feild width-added">
+                <div class="field width-added">
                   <mat-label class="label">Age</mat-label>
                   <div *ngIf="guestFormGroup.age; else emptyCell" class="value">
                     {{ guestFormGroup.age }} Years
@@ -185,20 +185,20 @@
     <!-- <hr class="data-seperator" />
     <mat-label class="mat-head">Stay Details</mat-label>
     <ng-container>
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
+      <div class="fields-wrapper">
+        <div class="field width-quarter">
           <mat-label class="label">Arrival Date</mat-label>
           <div class="value">
             {{ stayDetailsForm.get('arrivalDate').value }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Departure Date</mat-label>
           <div class="value">
             {{ stayDetailsForm.get('departureDate').value }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Expected Arrival Time</mat-label>
           <div
             *ngIf="
@@ -211,15 +211,15 @@
           </div>
         </div>
       </div>
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
+      <div class="fields-wrapper">
+        <div class="field width-quarter">
           <mat-label class="label">Duration</mat-label>
           <div class="value">
             {{ detailsData.stayDetails.getDaysAndNights().nights }}N |
             {{ detailsData.stayDetails.getDaysAndNights().days }}D
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Room Type</mat-label>
           <div class="value">
             {{ stayDetailsForm.get('roomType').value }}

@@ -5,7 +5,6 @@ import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
-import { FeedbackConfigResolver } from './resolvers/feedback-config.resolver';
 import { LoadGuard } from '../guards/load-guard';
 
 const appRoutes: Route[] = [

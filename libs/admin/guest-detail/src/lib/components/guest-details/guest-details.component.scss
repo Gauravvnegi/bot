@@ -40,10 +40,10 @@
   opacity: 0.1;
 }
 
-.feilds-wrapper {
+.fields-wrapper {
   display: flex;
   margin: 30px 0px;
-  .feild {
+  .field {
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;
@@ -105,11 +105,11 @@
   }
 }
 
-:host ::ng-deep .remark{
+:host ::ng-deep .remark {
   width: 70%;
 }
 
-.emptyCell{
+.emptyCell {
   text-align: center;
 }
 

@@ -13,7 +13,6 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
-import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
@@ -32,6 +31,10 @@ import { Guest } from '../../models/guest-table.model';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
+import {
+  NotificationComponent,
+  MarketingNotificationComponent,
+} from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -44,6 +47,7 @@ export class DetailsComponent implements OnInit {
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
+  hotelId: string;
   detailsForm: FormGroup;
   details;
   isGuestInfoPatched: boolean = false;
@@ -129,6 +133,10 @@ export class DetailsComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
@@ -142,6 +150,14 @@ export class DetailsComponent implements OnInit {
         this.loadGuestInfo();
       })
     );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   getConfig() {
@@ -611,7 +627,9 @@ export class DetailsComponent implements OnInit {
       dialogConfig.disableClose = true;
       dialogConfig.width = '100%';
       const notificationCompRef = this._modal.openDialog(
-        NotificationComponent,
+        channel === 'email'
+          ? MarketingNotificationComponent
+          : NotificationComponent,
         dialogConfig
       );
 
@@ -622,16 +640,15 @@ export class DetailsComponent implements OnInit {
         notificationCompRef.componentInstance.isEmail = false;
         notificationCompRef.componentInstance.channel = channel;
       }
+      notificationCompRef.componentInstance.hotelId = this.hotelId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-      notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
       notificationCompRef.componentInstance.isModal = true;
       notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-        // remove loader for detail close
         notificationCompRef.close();
       });
     } else {
       this._modal.close();
-      this.router.navigateByUrl('/pages/request');
+      this.router.navigateByUrl('/pages/conversation/request');
     }
   }
 

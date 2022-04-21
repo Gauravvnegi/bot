@@ -8,13 +8,13 @@
 }
 
 .body {
-  max-height: calc(100% - 200px);
-  // overflow-y: scroll;
+  height: calc(100% - 400px);
+  padding-top: 30px;
 }
 
 .header {
   text-align: center;
-  padding: 15px 0;
+  padding: 20px 0;
   font-family: Roboto;
   font-size: $font20;
   font-weight: bold;
@@ -142,6 +142,19 @@
     cursor: pointer;
     color: $dark-blue;
   }
+}
+
+.chip-remove-btn {
+  height: 30px;
+  border: none;
+  background: transparent;
+  margin-top: 2px;
+}
+
+.ck-editor {
+  width: calc(100% - 180px);
+  margin: 10px 90px;
+  min-height: 310px;
 }
 
 :host

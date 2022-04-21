@@ -5,7 +5,7 @@
       <div class="field">
         <mat-label class="mat-label">From:</mat-label>
         <mat-form-field>
-          <mat-select formControlName="fromId">
+          <mat-select formControlName="fromId" placeholder="Select email">
             <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
               item.email
             }}</mat-option>
@@ -25,7 +25,10 @@
       <div class="field">
         <mat-label class="mat-label">Topic:</mat-label>
         <mat-form-field>
-          <mat-select (selectionChange)="handleTopicChange($event)">
+          <mat-select
+            (selectionChange)="handleTopicChange($event)"
+            placeholder="Select Topic"
+          >
             <mat-option value="" *ngIf="topicList.length === 0" disabled
               >NO DATA</mat-option
             >
@@ -36,9 +39,12 @@
         </mat-form-field>
       </div>
       <div class="field">
-        <mat-label class="mat-label">Insert Template:</mat-label>
+        <mat-label class="mat-label">Template:</mat-label>
         <mat-form-field>
-          <mat-select (selectionChange)="handleTemplateChange($event)">
+          <mat-select
+            (selectionChange)="handleTemplateChange($event)"
+            placeholder="Select template"
+          >
             <mat-option value="" *ngIf="templateList.length === 0" disabled
               >NO DATA</mat-option
             >
@@ -61,7 +67,7 @@
               (removed)="removeEmail(email, to)"
             >
               {{ email }}
-              <button matChipRemove>
+              <button matChipRemove class="chip-remove-btn">
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip>
@@ -145,7 +151,7 @@
     </div>
 
     <div class="fields">
-      <div style="width: calc(100% - 180px); margin: 10px 90px;">
+      <div class="ck-editor">
         <ckeditor formControlName="message" [config]="ckeConfig"></ckeditor>
       </div>
     </div>

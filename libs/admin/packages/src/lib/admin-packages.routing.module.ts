@@ -28,7 +28,7 @@ export const adminPackagesRoutes: Route[] = [
   {
     path: 'category/:id',
     component: EditCategoryComponent,
-  }
+  },
 ];
 
 @NgModule({

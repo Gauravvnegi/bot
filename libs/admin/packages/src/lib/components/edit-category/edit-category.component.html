@@ -1,71 +1,86 @@
 <div class="wrapper">
-    <header class="wrapper-header">
-        <div class="back">
-            <mat-icon (click)="redirectToCategories()" class="material-icons" matSuffix>keyboard_backspace</mat-icon>
-            <p class="label">
-                <ng-container *ngIf="categoryId; else addCategory">
-                    {{ categoryForm.get('name').value }}
-                </ng-container>
-                <ng-template #addCategory>
-                    Add Category
-                </ng-template>
-            </p>
-        </div>
-    </header>
-    <form [formGroup]="categoryForm">
-        <div class="wrapper-form">
-            <div class="feilds">
-                <div class="feild">
-                    <mat-label class="mat-label">Category Name:</mat-label>
-                    <mat-form-field>
-                        <input matInput formControlName="name" />
-                        <mat-error *ngIf="
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon
+        (click)="redirectToCategories()"
+        class="material-icons"
+        matSuffix
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">
+        <ng-container *ngIf="categoryId; else addCategory">
+          {{ categoryForm.get('name').value }}
+        </ng-container>
+        <ng-template #addCategory>
+          Add Category
+        </ng-template>
+      </p>
+    </div>
+  </header>
+  <form [formGroup]="categoryForm">
+    <div class="wrapper-form">
+      <div class="fields">
+        <div class="field">
+          <mat-label class="mat-label">Category Name:</mat-label>
+          <mat-form-field>
+            <input matInput formControlName="name" />
+            <mat-error
+              *ngIf="
                 categoryForm.get('name').touched &&
                 categoryForm.get('name').hasError('required')
-              ">
-                            Name is required
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="feild" *ngIf="categoryId; else packageCodeField">
-                    <mat-label class="mat-label" *ngIf="subPackages">Packages:</mat-label>
-                    <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
-                    <mat-form-field *ngIf="subPackages && subPackages.length > 0">
-                        <mat-select formControlName="packages">
-                            <mat-option *ngFor="let subPackage of subPackages" [value]="subPackage.id">{{ subPackage.name }}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <ng-template #packageCodeField>
-                    <div class="feild">
-                        <mat-label class="mat-label">Category Code:</mat-label>
-                        <mat-form-field>
-                            <input matInput formControlName="packageCode" />
-                            <mat-error *ngIf="
+              "
+            >
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field" *ngIf="categoryId; else packageCodeField">
+          <mat-label class="mat-label" *ngIf="subPackages">Packages:</mat-label>
+          <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
+          <mat-form-field *ngIf="subPackages && subPackages.length > 0">
+            <mat-select formControlName="packages">
+              <mat-option
+                *ngFor="let subPackage of subPackages"
+                [value]="subPackage.id"
+                >{{ subPackage.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <ng-template #packageCodeField>
+          <div class="field">
+            <mat-label class="mat-label">Category Code:</mat-label>
+            <mat-form-field>
+              <input matInput formControlName="packageCode" />
+              <mat-error
+                *ngIf="
                   categoryForm.get('packageCode').touched &&
                   categoryForm.get('packageCode').hasError('required')
-                ">
-                                Category Code is required
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </ng-template>
-            </div>
-            <div class="feilds">
-                <div class="feild full-width">
-                    <mat-label class="mat-label">Description:</mat-label>
-                    <mat-form-field>
-                        <input matInput formControlName="description" />
-                        <mat-error *ngIf="
+                "
+              >
+                Category Code is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </ng-template>
+      </div>
+      <div class="fields">
+        <div class="field full-width">
+          <mat-label class="mat-label">Description:</mat-label>
+          <mat-form-field>
+            <input matInput formControlName="description" />
+            <mat-error
+              *ngIf="
                 categoryForm.get('description').touched &&
                 categoryForm.get('description').hasError('required')
-              ">
-                            Description is required
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-            <!-- <div class="feilds image-wrapper">
+              "
+            >
+              Description is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- <div class="fields image-wrapper">
         <div class="image">
           <hospitality-bot-upload-file
             [fileUploadData]="fileUploadData"
@@ -75,26 +90,30 @@
           </hospitality-bot-upload-file>
         </div>
       </div> -->
-            <div class="feilds margin-adjust">
-                <div class="image-button">
-                    <mat-label class="mat-label">Upload Image:</mat-label>
-                    <div class="image">
-                        <hospitality-bot-upload-file [fileUploadData]="fileUploadData" [url]="categoryImageUrl" (fileData)="uploadFile($event)">
-                        </hospitality-bot-upload-file>
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="feilds margin-adjust">
+      <div class="fields margin-adjust">
+        <div class="image-button">
+          <mat-label class="mat-label">Upload Image:</mat-label>
+          <div class="image">
+            <hospitality-bot-upload-file
+              [fileUploadData]="fileUploadData"
+              [url]="categoryImageUrl"
+              (fileData)="uploadFile($event)"
+            >
+            </hospitality-bot-upload-file>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="fields margin-adjust">
         <div class="note">
           Recommended dimension (in px) : 60*60
         </div>
       </div> -->
-        </div>
-        <div class="footer_button">
-            <button mat-button (click)="saveDetails()">
+    </div>
+    <div class="footer_button">
+      <button mat-button (click)="saveDetails()">
         <i *ngIf="isSavingCategory" class="fa fa-spinner fa-spin"></i>
         {{ isSavingCategory ? 'Saving Category' : 'Save' }}
       </button>
-        </div>
-    </form>
+    </div>
+  </form>
 </div>

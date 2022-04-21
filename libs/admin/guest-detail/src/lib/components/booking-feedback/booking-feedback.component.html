@@ -81,8 +81,8 @@
     </mat-expansion-panel-header>
     <div>
       <ng-container>
-        <div class="feilds-wrapper">
-          <div class="feild width-quarter">
+        <div class="fields-wrapper">
+          <div class="field width-quarter">
             <mat-label class="label">Arrival Date</mat-label>
             <div class="value">
               {{
@@ -90,7 +90,7 @@
               }}
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Departure Date</mat-label>
             <div class="value">
               {{
@@ -98,7 +98,7 @@
               }}
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Expected Arrival Time</mat-label>
             <div class="value">
               {{
@@ -107,8 +107,8 @@
             </div>
           </div>
         </div>
-        <div class="feilds-wrapper">
-          <div class="feild width-quarter">
+        <div class="fields-wrapper">
+          <div class="field width-quarter">
             <mat-label class="label">Duration</mat-label>
             <div class="value">
               {{
@@ -121,13 +121,13 @@
               }}D
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Room Type</mat-label>
             <div class="value">
               {{ rowData.rooms.type }}
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Room Number</mat-label>
             <div class="value">
               {{ rowData.rooms.roomNumber }}
@@ -141,22 +141,22 @@
       <div class="container__title">
         <p>Journey Feedback</p>
       </div>
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
+      <div class="fields-wrapper">
+        <div class="field width-quarter">
           <mat-label class="label">Date/Time</mat-label>
           <div class="value">
             {{ feedbackData.getFeedbackDate() }},
             {{ feedbackData.getFeedbackTime() }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Ratings</mat-label>
           <div class="value" [style.color]="feedbackData.ratingColor.color">
             {{ feedbackData.rating }} ({{ feedbackData.ratingColor.category }})
           </div>
         </div>
         <div
-          class="feild width-quarter"
+          class="field width-quarter"
           *ngIf="feedbackData.suggestions && feedbackData.suggestions.length"
         >
           <mat-label class="label">Facilities</mat-label>
@@ -194,21 +194,21 @@
       </div>
       <div *ngIf="!showMore">
         <div *ngFor="let service of services; let i = index">
-          <div class="feilds-wrapper">
-            <div class="feild width-quarter">
+          <div class="fields-wrapper">
+            <div class="field width-quarter">
               <mat-label class="label">Name</mat-label>
               <div class="value">
                 {{ service.name }}
               </div>
             </div>
-            <div class="feild width-quarter">
+            <div class="field width-quarter">
               <mat-label class="label">Ratings</mat-label>
               <div class="value" [style.color]="service.ratingColor.color">
                 {{ service.rating }} ({{ service.ratingColor.category }})
               </div>
             </div>
           </div>
-          <div class="feilds-wrapper" *ngIf="service.comments">
+          <div class="fields-wrapper" *ngIf="service.comments">
             <div class="field">
               <mat-label class="label">Comments</mat-label>
               <div class="value">{{ service.comments }}</div>

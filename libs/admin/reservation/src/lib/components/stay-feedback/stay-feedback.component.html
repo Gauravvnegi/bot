@@ -59,8 +59,8 @@
     </mat-expansion-panel-header>
     <div>
       <ng-container>
-        <div class="feilds-wrapper">
-          <div class="feild width-quarter">
+        <div class="fields-wrapper">
+          <div class="field width-quarter">
             <mat-label class="label">Arrival Date</mat-label>
             <div class="value">
               {{
@@ -68,7 +68,7 @@
               }}
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Departure Date</mat-label>
             <div class="value">
               {{
@@ -76,7 +76,7 @@
               }}
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Expected Arrival Time</mat-label>
             <div class="value">
               {{
@@ -85,8 +85,8 @@
             </div>
           </div>
         </div>
-        <div class="feilds-wrapper">
-          <div class="feild width-quarter">
+        <div class="fields-wrapper">
+          <div class="field width-quarter">
             <mat-label class="label">Duration</mat-label>
             <div class="value">
               {{
@@ -99,13 +99,13 @@
               }}D
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Room Type</mat-label>
             <div class="value">
               {{ rowData.rooms.type }}
             </div>
           </div>
-          <div class="feild width-quarter">
+          <div class="field width-quarter">
             <mat-label class="label">Room Number</mat-label>
             <div class="value">
               {{ rowData.rooms.roomNumber }}
@@ -116,8 +116,8 @@
     </div>
     <hr class="data-seperator" *ngIf="rowData.visitDetail?.feedbackId" />
     <div *ngIf="rowData.visitDetail?.feedbackId">
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
+      <div class="fields-wrapper">
+        <div class="field width-quarter">
           <mat-label class="label">Date/Time</mat-label>
           <div class="value">
             {{
@@ -127,22 +127,22 @@
             }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
           <div class="value" [style.color]="rowData.visitDetail?.color">
             {{ rowData.visitDetail?.intentToRecommends.rating }}
             {{ rowData.visitDetail?.intentToRecommends.Category }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Market Segment</mat-label>
           <div class="value">
             {{ rowData.visitDetail?.marketSegment }}
           </div>
         </div>
       </div>
-      <div class="feilds-wrapper" *ngIf="rowData.visitDetail?.comment">
-        <div class="feild">
+      <div class="fields-wrapper" *ngIf="rowData.visitDetail?.comment">
+        <div class="field">
           <mat-label class="label">Comments</mat-label>
           <div class="question">
             {{ rowData.visitDetail?.comment?.question }}

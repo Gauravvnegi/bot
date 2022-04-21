@@ -215,9 +215,9 @@
           <div class="row-title base-align">Input Message:</div>
           <div class="row-body">
             <ckeditor
-              [editor]="Editor"
-              class="row-body-editor"
+              class="ckeditor"
               formControlName="message"
+              [config]="ckeConfig"
             ></ckeditor>
           </div>
         </div>
@@ -240,7 +240,6 @@
             </div>
           </div>
         </div>
-       
       </div>
     </div>
     <div class="request-body-button-wrap">

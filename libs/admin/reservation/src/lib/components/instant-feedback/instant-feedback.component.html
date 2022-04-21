@@ -41,8 +41,8 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div>
-      <div class="feilds-wrapper">
-        <div class="feild width-quarter">
+      <div class="fields-wrapper">
+        <div class="field width-quarter">
           <mat-label class="label">Date/Time</mat-label>
           <div class="value">
             {{
@@ -50,22 +50,22 @@
             }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Intent to Recommend</mat-label>
           <div class="value" [style.color]="rowData.color">
             {{ rowData.intentToRecommends.rating }}
             {{ rowData.intentToRecommends.Category }}
           </div>
         </div>
-        <div class="feild width-quarter">
+        <div class="field width-quarter">
           <mat-label class="label">Market Segment</mat-label>
           <div class="value">
             {{ rowData.marketSegment }}
           </div>
         </div>
       </div>
-      <div class="feilds-wrapper" *ngIf="rowData.comment">
-        <div class="feild">
+      <div class="fields-wrapper" *ngIf="rowData.comment">
+        <div class="field">
           <mat-label class="label">Comments</mat-label>
           <div class="question">
             {{ rowData.comment?.question }}

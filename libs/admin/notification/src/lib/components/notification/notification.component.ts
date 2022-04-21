@@ -139,7 +139,7 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  private isValidEmail(email): RegExpMatchArray {
+  isValidEmail(email): RegExpMatchArray {
     let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return !!email && typeof email === 'string' && email.match(emailRegex);
   }
@@ -299,7 +299,7 @@ export class NotificationComponent implements OnInit {
             (response) => {
               this.notificationForm
                 .get('message')
-                .patchValue(response.template);
+                .patchValue(this.modifyTemplate(response.template));
             },
             ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);

@@ -36,7 +36,7 @@
 }
 
 .data-seperator {
-  background:none;
+  background: none;
   border: none;
   margin: $margin20 0px;
   opacity: 0.1;
@@ -46,10 +46,10 @@
   margin: 0 20px;
 }
 
-.feilds-wrapper {
+.fields-wrapper {
   display: flex;
   margin: 30px 0px;
-  .feild {
+  .field {
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;

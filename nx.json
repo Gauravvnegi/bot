@@ -120,11 +120,16 @@
     "admin-listing": {
       "tags": []
     },
-    "admin-library": { "tags": [] },
+    "admin-library": {
+      "tags": []
+    },
     "admin-assets": {
       "tags": []
     },
     "admin-topic": {
+      "tags": []
+    },
+    "admin-template": {
       "tags": []
     }
   }

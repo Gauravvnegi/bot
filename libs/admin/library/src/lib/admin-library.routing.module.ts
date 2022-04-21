@@ -30,6 +30,13 @@ const appRoutes: Route[] = [
     loadChildren: () =>
       import('@hospitality-bot/admin/topic').then((m) => m.AdminTopicModule),
   },
+  {
+    path: 'template',
+    loadChildren: () =>
+      import('@hospitality-bot/admin/template').then(
+        (m) => m.AdminTemplateModule
+      ),
+  },
 ];
 
 @NgModule({

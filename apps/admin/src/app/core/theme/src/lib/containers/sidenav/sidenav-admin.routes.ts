@@ -78,6 +78,12 @@ export const DEFAULT_ROUTES = [
         children: null,
         url: 'assets/svg/ballot.svg',
       },
+      {
+        path: 'library/template',
+        title: 'Template',
+        children: null,
+        url: 'assets/svg/template.svg',
+      },
     ],
   },
   {

@@ -124,3 +124,23 @@
 :host ::ng-deep .table-data-head {
   color: $dark-blue !important;
 }
+
+td {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  color: #484848;
+}
+
+.topic-name {
+  opacity: 0.4;
+}
+
+.status-toggle {
+  display: flex;
+  justify-content: center;
+}

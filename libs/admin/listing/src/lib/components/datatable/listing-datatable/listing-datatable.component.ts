@@ -369,6 +369,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
               '',
               { panelClass: 'success' }
             );
+            this.changePage(this.currentPage);
           },
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )

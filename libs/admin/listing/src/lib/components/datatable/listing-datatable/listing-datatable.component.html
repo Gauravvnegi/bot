@@ -241,7 +241,11 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openList($event, rowData.id)">
+    <tr
+      class="data-table-row"
+      (click)="openList($event, rowData.id)"
+      style="height: 80px;"
+    >
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -250,7 +254,8 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        {{ rowData.name }}
+        <p>{{ rowData.name }}</p>
+        <p class="topic-name">{{ rowData.topicName }}</p>
       </td>
       <td>
         {{ rowData.description }}
@@ -260,10 +265,12 @@
         {{ rowData.stats.sendCampaign }} / {{ rowData.stats.scheduleCampaign }}
       </td>
       <td (click)="onCheckboxClicked($event)">
-        <mat-slide-toggle
-          [checked]="rowData.active"
-          (change)="updateStatus($event, rowData)"
-        ></mat-slide-toggle>
+        <div class="status-toggle">
+          <mat-slide-toggle
+            [checked]="rowData.active"
+            (change)="updateStatus($event, rowData)"
+          ></mat-slide-toggle>
+        </div>
       </td>
     </tr>
   </ng-template>

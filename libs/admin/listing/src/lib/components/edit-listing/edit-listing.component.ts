@@ -39,7 +39,8 @@ export class EditListingComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private _location: Location,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private _router: Router
   ) {
     this.initFG();
   }
@@ -237,7 +238,7 @@ export class EditListingComponent implements OnInit {
           '',
           { panelClass: 'success' }
         );
-        this.listFG.patchValue(response);
+        this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
       () => (this.isSaving = false)

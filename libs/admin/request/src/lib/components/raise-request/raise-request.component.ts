@@ -202,8 +202,12 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                   firstName: res.guestDetails.primaryGuest.firstName,
                   lastName: res.guestDetails.primaryGuest.lastName,
                 });
+                this.requestFG.get('firstName').disable();
+                this.requestFG.get('lastName').disable();
               } else {
                 this.reservation = {};
+                this.requestFG.get('firstName').enable();
+                this.requestFG.get('lastName').enable();
               }
             })
         );

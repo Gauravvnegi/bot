@@ -14,7 +14,7 @@
 
 .header {
   text-align: center;
-  padding: 10px 0;
+  padding: 15px 0;
   font-family: Roboto;
   font-size: $font20;
   font-weight: bold;
@@ -22,8 +22,13 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 1.2px;
-  text-align: center;
+  position: fixed;
+  top: 10.1%;
+  right: 12%;
+  left: 12%;
+  background-color: white !important;
   color: $dark-blue;
+  z-index: 111;
 }
 
 .fields {
@@ -144,6 +149,10 @@
   display: none !important;
 }
 
+:host ::ng-deep .mat-input-element{
+  max-width: 90% !important;
+}
 
-
-
+:host ::ng-deep .mat-chip-list-wrapper{
+  max-width: 90% !important;
+}

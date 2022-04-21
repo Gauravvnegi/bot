@@ -166,6 +166,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   sendMail() {
     if (this.emailFG.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid form.');
+      this.emailFG.markAllAsTouched();
       return;
     }
     const reqData = this.emailFG.getRawValue();

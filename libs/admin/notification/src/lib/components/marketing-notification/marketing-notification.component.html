@@ -150,10 +150,19 @@
       </div>
     </div>
 
-    <div class="fields">
+    <div>
       <div class="ck-editor">
         <ckeditor formControlName="message" [config]="ckeConfig"></ckeditor>
       </div>
+      <mat-error
+        *ngIf="
+          emailFG.get('message').touched &&
+          emailFG.get('message').hasError('required')
+        "
+        class="message-error"
+      >
+        Message is required
+      </mat-error>
     </div>
   </div>
   <div class="btn-wrapper">

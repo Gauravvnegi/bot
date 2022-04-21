@@ -153,8 +153,13 @@
 
 .ck-editor {
   width: calc(100% - 180px);
-  margin: 10px 90px;
+  margin: 10px 90px 0 90px;
   min-height: 310px;
+}
+
+.message-error {
+  font-size: 13px;
+  margin-left: 90px;
 }
 
 :host

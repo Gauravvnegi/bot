@@ -36,7 +36,7 @@
         </mat-form-field>
       </div>
       <div class="field">
-        <mat-label class="mat-label">Template:</mat-label>
+        <mat-label class="mat-label">Insert Template:</mat-label>
         <mat-form-field>
           <mat-select (selectionChange)="handleTemplateChange($event)">
             <mat-option value="" *ngIf="templateList.length === 0" disabled
@@ -82,11 +82,13 @@
       <div class="field full-width">
         <mat-label class="mat-label">Subject:</mat-label>
         <mat-form-field class="description">
+          
           <input
             matInput
             formControlName="subject"
             placeholder="Be specific & concise to spark interest"
           />
+          <p>0/200</p>
           <mat-error
             *ngIf="
               emailFG.get('subject').touched &&
@@ -106,6 +108,37 @@
         </mat-form-field>
       </div>
     </div>
+
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Preivew Text:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="subject"
+            placeholder="Write a summary of your email to display after the subject line"
+          />
+          <p>0/200</p>
+          <mat-error
+            *ngIf="
+              emailFG.get('subject').touched &&
+              emailFG.get('subject').hasError('required')
+            "
+          >
+            Subject is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              emailFG.get('subject').touched &&
+              emailFG.get('subject').hasError('maxlength')
+            "
+          >
+            Maximum length is 200 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
     <div class="fields">
       <div style="width: calc(100% - 180px); margin: 10px 90px;">
         <ckeditor

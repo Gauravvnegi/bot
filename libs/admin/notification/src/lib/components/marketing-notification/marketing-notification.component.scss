@@ -40,12 +40,12 @@
     display: flex;
     align-items: center;
     margin-right: 1.5%;
-    width: 50%;
+    width: 45%;
     @media (max-width: $tablet) {
       @include width(42.6%);
     }
     .mat-label {
-      width: 200px;
+      width: 150px;
       color: #b5b5c3;
       font-size: 14px;
     }
@@ -120,11 +120,23 @@
 }
 
 :host ::ng-deep .full-width .mat-label{
-  width: 170px !important;
+  width: 130px !important;
 }
 
 .full-width p{
   color: #4b56c0;
   cursor: pointer;
   padding-right: 8px;
+  text-align: right;
 }
+
+:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+  display: none !important;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-infix {
+  display: flex;
+  justify-content: end;
+}
+
+

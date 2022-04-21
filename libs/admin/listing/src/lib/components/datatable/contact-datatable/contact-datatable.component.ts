@@ -11,13 +11,13 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { delay } from 'rxjs/operators';
 import { SortEvent } from 'primeng/api';
-import { Observable, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
+import { Contact } from '../../../data-models/listing.model';
 import { ListingService } from '../../../services/listing.service';
 import { EditContactComponent } from '../../edit-contact/edit-contact.component';
-import { Contact } from '../../../data-models/listing.model';
+import { ImportContactComponent } from '../../import-contact/import-contact.component';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -234,22 +234,82 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   handleContactAddEvent(data) {
+    data.forEach((item) =>
+      this.dataSource.push(new Contact().deserialize(item, 0))
+    );
+    this.totalRecords = this.dataSource.length + 1;
+    this.changePage(this.currentPage);
     if (this.add) {
-      this.dataSource = data;
       this.updateContacts.emit({
+        add: true,
+        data: this.dataSource,
+      });
+    } else {
+      this.updateContacts.emit();
+    }
+  }
+
+  openImportContact(event) {
+    event.stopPropagation();
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '550';
+    const importCompRef = this._modal.openDialog(
+      ImportContactComponent,
+      dialogConfig
+    );
+
+    importCompRef.componentInstance.hotelId = this.hotelId;
+    importCompRef.componentInstance.onImportClosed.subscribe((response) => {
+      if (response.status) {
+        this.handleContactImport(response.data);
+      }
+      importCompRef.close();
+    });
+  }
+
+  handleContactImport(data) {
+    if (this.add) {
+      this.dataSource = [...this.dataSource, ...data];
+      this.totalRecords = this.dataSource.length;
+      this.updateContacts.emit({
+        add: true,
         data: this.dataSource,
       });
       this.changePage(this.currentPage);
     } else {
+      const reqData = [];
       data.forEach((item) => {
-        this.dataSource = [
-          ...this.dataSource,
-          new Contact().deserialize(item, 0),
-        ];
+        const {
+          firstName,
+          lastName,
+          salutation,
+          companyName,
+          mobile,
+          email,
+        } = item;
+        reqData.push({
+          firstName,
+          lastName,
+          salutation,
+          companyName,
+          mobile,
+          email,
+        });
       });
-      this.totalRecords = this.dataSource.length + 1;
-      this.updateContacts.emit();
-      this.changePage(this.currentPage);
+      this.$subscription.add(
+        this._listingService
+          .updateListContact(this.hotelId, this.listId, reqData)
+          .subscribe(
+            (response) => {
+              this.dataSource = [...this.dataSource, ...data];
+              this.changePage(this.currentPage);
+              this.updateContacts.emit();
+            },
+            ({ error }) =>
+              this._snackbarService.openSnackBarAsText(error.message)
+          )
+      );
     }
   }
 

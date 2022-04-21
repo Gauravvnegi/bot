@@ -12,8 +12,6 @@ import {
 import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
-import { EditContactComponent } from '../edit-contact/edit-contact.component';
-import { ImportContactComponent } from '../import-contact/import-contact.component';
 
 @Component({
   selector: 'hospitality-bot-create-listing',
@@ -86,44 +84,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           (this.topicList = new Topics().deserialize(response).records),
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
-    );
-  }
-
-  openImportContact(event) {
-    event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
-    const importCompRef = this._modal.openDialog(
-      ImportContactComponent,
-      dialogConfig
-    );
-
-    importCompRef.componentInstance.hotelId = this.hotelId;
-    importCompRef.componentInstance.onImportClosed.subscribe((response) => {
-      if (response.status) {
-        this.listFG.patchValue({ marketingContacts: response.data });
-      }
-      importCompRef.close();
-    });
-  }
-
-  openAddContact(event) {
-    event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const editContactCompRef = this._modal.openDialog(
-      EditContactComponent,
-      dialogConfig
-    );
-
-    editContactCompRef.componentInstance.onContactClosed.subscribe(
-      (response) => {
-        if (response.status) {
-          this.listFG.patchValue({ marketingContacts: response.data });
-        }
-        editContactCompRef.close();
-      }
     );
   }
 

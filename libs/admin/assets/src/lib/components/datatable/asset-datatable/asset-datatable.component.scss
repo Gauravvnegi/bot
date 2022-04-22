@@ -9,10 +9,12 @@
   .request-btn {
     width: 145px;
     height: 36px;
-    padding: 8.5px 0 8.5px 22.5px;
+    padding-top: 9px;
     border-radius: 18px;
     background-color: #4b56c0;
     color: #eaf0f6;
+    font-size: $font14;
+    text-align: center;
   }
 }
 
@@ -180,7 +182,7 @@
 }
 
 .data-table-row {
-  height: 100px;
+  height: 80px;
 }
 
 :host ::ng-deep .tableHeading {
@@ -190,4 +192,10 @@
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   text-align: center;
+  border-top: solid 1px #e4e4e4 !important
+  ;
+}
+
+:host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
+  font-size: $font14 !important;
 }

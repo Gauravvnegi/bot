@@ -11,14 +11,15 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
 import { SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { contactConfig } from '../../../constants/contact';
 import { listingConfig } from '../../../constants/listing';
 import { Contact, List } from '../../../data-models/listing.model';
 import { ListingService } from '../../../services/listing.service';
 import { EditContactComponent } from '../../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../../import-contact/import-contact.component';
-import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -39,50 +40,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   @Output() updateContacts = new EventEmitter();
   @Input() list: List;
   tableName: string = 'Manage Contacts';
-  cols = [
-    {
-      field: 'email',
-      header: 'Email',
-      isSort: true,
-      sortType: 'string',
-      dynamicWidth: false
-    },
-    {
-      field: 'salutation',
-      header: 'Salutation',
-      isSort: true,
-      sortType: 'string',
-      dynamicWidth: true
-    },
-    {
-      field: 'firstName',
-      header: 'First Name',
-      isSort: true,
-      sortType: 'string',
-      dynamicWidth: true
-    },
-    {
-      field: 'lastName',
-      header: 'Last Name',
-      isSort: true,
-      sortType: 'string',
-      dynamicWidth: true
-    },
-    {
-      field: 'companyName',
-      header: 'Company Name',
-      isSort: true,
-      sortType: 'string',
-      dynamicWidth: true
-    },
-    {
-      field: 'mobile',
-      header: 'Mobile',
-      isSort: true,
-      sortType: 'number',
-      dynamicWidth: true
-    },
-  ];
+  cols = contactConfig.datatable.cols;
   $subscription = new Subscription();
   globalQueries = [];
   constructor(

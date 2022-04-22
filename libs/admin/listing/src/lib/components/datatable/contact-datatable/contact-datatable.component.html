@@ -170,7 +170,7 @@
         pResizableColumn
         [pSortableColumn]="col.field"
         *ngFor="let col of columns"
-        [ngStyle]="col.dynamicWidth ? { width: '150px' } : {}"
+        [ngStyle]="col.dynamicWidth ? { width: col.width } : {}"
       >
         <div>
           <p class="table-header-text">{{ col.header }}</p>

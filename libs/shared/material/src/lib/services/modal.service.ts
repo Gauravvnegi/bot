@@ -9,6 +9,7 @@ export class ModalService {
     return this._dialog.open(component, {
       width: config.width,
       data: config.data,
+      disableClose: config.disableClose,
     });
   }
 

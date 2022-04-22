@@ -3,26 +3,13 @@
     <i class="fa fa-times" aria-hidden="true"></i>
   </div>
   <div class="import-contact">
+    <img
+      style="margin-right: 5px; width: 15px;"
+      src="assets/svg/import.svg"
+      alt="import"
+    />
     Import Contacts
   </div>
-  <!-- <div class="import-file">
-    <div class="file">
-      <mat-label class="mat-label">File:</mat-label>
-      <mat-form-field>
-        <input matInput type="text" disabled [value]="fileName" />
-      </mat-form-field>
-    </div>
-  </div> -->
-
-  
-
-  <!-- <div class="import-select">
-    <div class="select-btn">
-      <div class="select-file">
-        Select File
-      </div>
-    </div>
-  </div> -->
 
   <div class="upload-btn-wrapper">
     <hospitality-bot-upload-csv
@@ -35,106 +22,116 @@
   <div class="import-popup">
     <div class="sample">
       <div class="simple-feilds">
-      <div class="feild">
-        <mat-label class="mat-label">Sample Type:</mat-label>
-        <mat-form-field>
-          <mat-select formControlName="sampleName">
-          </mat-select>
-        </mat-form-field>
+        <div class="feild">
+          <mat-label class="mat-label">Sample Type:</mat-label>
+          <mat-form-field>
+            <mat-select placeholder="Select Sample" disabled="true"
+              ><mat-option>NO DATA</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="import-checkbox">
+        <form>
+          <input type="checkbox" (change)="enableField($event)" />
+          <label>
+            Update data for existing samples during this file import.</label
+          >
+        </form>
       </div>
     </div>
-        <div class="import-checkbox">
-          <form>
-            <input type="checkbox">
-            <label> Update data for existing samples during this file import.</label>
-          </form>
-        </div> 
-  </div> 
 
-  <div class="add-contact">
-    Add Contacts
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Email*</th>
-          <th>Salutation*</th>
-          <th>First Name*</th>
-          <th>Last Name*</th>
-          <th>Company Name</th>
-          <th>Mobile*</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-        <td>
-          <div class="add-contacts-field">
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Contact Email"
-                formControlName="email"
-              />
-            </mat-form-field>
-          </div>
-        </td>
-        <td>
-          <div class="add-contacts-field small">
-            <mat-form-field>
-              <mat-select
-                formControlName="salutation"
-                placeholder="Mr."
-              >
-              </mat-select>
-              
-            </mat-form-field>
-          </div>
-        </td>
-        <td>
-          <div class="add-contacts-field">
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="First Name"
-                formControlName="firstName"
-              />
-            </mat-form-field>
-          </div>
-        </td>
-        <td>
-          <div class="add-contacts-field">
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Last Name"
-                formControlName="lastName"
-              />
-            </mat-form-field>
-          </div>
-        </td>
-        <td>
-          <div class="add-contacts-field">
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Company Name"
-                formControlName="companyName"
-              />
-            </mat-form-field>
-          </div>
-        </td>
-        <td>
-          <div class="add-contacts-field">
-            <mat-form-field>
-              <input matInput placeholder="Mobile" formControlName="mobile" />
-              
-            </mat-form-field>
-          </div>
-        </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="add-contact">
+      Add Contacts
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Email*</th>
+            <th>Salutation*</th>
+            <th>First Name*</th>
+            <th>Last Name*</th>
+            <th>Company Name</th>
+            <th>Mobile*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let contactFG of contactFA?.controls; let i = index"
+            [formGroup]="contactFG"
+          >
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Contact Email"
+                    formControlName="email"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field small">
+                <mat-form-field>
+                  <mat-select formControlName="salutation" placeholder="Mr.">
+                    <mat-option
+                      *ngFor="let salutation of salutationList"
+                      [value]="salutation.value"
+                      >{{ salutation.name }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="First Name"
+                    formControlName="firstName"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Last Name"
+                    formControlName="lastName"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Company Name"
+                    formControlName="companyName"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Mobile"
+                    formControlName="mobile"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="import-save">

@@ -624,7 +624,7 @@ export class DetailsComponent implements OnInit {
   openSendNotification(channel) {
     if (channel) {
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
+      dialogConfig.disableClose = false;
       dialogConfig.width = '100%';
       const notificationCompRef = this._modal.openDialog(
         channel === 'email'

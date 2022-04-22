@@ -40,6 +40,14 @@
                 >{{ topic.name }}</mat-option
               >
             </mat-select>
+            <mat-error
+              *ngIf="
+                listFG.get('topicName').touched &&
+                listFG.get('topicName').hasError('required')
+              "
+            >
+              Topic Name is required
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

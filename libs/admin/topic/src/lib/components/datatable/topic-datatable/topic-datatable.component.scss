@@ -66,7 +66,7 @@
 .request-btn__wrap {
   cursor: pointer;
   .request-btn {
-    font-size: 14px;
+    font-size: $font14;
     width: 145px;
     height: 36px;
     margin: 0 20px 0 254px;
@@ -99,7 +99,7 @@
 }
 
 :host ::ng-deep .name {
-  font-size: 15px !important;
+  font-size: $font12 !important;
 }
 
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
@@ -117,7 +117,7 @@
 
 :host ::ng-deep .data-table-row {
   td {
-    padding: 20px !important;
+    padding: $padding20 !important;
   }
 }
 
@@ -133,10 +133,17 @@
 }
 :host ::ng-deep .header {
   color: $dark-blue !important;
-  font-size: 16px;
+  font-size: $font16;
   font-weight: bold;
 }
 
 :host ::ng-deep .table-data-head {
   color: $dark-blue !important;
 }
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  font-size: $font14 !important;
+}
+:host ::ng-deep thead.p-datatable-thead {
+  border-top: solid 1px $c-gray-90 !important; 
+}
+

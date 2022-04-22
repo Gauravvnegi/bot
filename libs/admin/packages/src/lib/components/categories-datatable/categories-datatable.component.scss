@@ -17,9 +17,9 @@
   background: transparent;
   border: none;
   outline: none;
-  margin-right: 20px;
+  margin-right: $margin20;
   color: $primary-gray;
-  font-size: 14px;
+  font-size: $font14;
   &:hover {
     cursor: pointer;
     color: $primary-purple;
@@ -30,7 +30,7 @@
   display: flex;
   justify-content: center;
   width: 72vw;
-  padding: 10px 0;
+  padding: $padding10 0;
 }
 
 :host ::ng-deep .name {
@@ -40,7 +40,7 @@
     .image {
       height: 40px;
       width: 40px;
-      margin-right: 10px;
+      margin-right: $margin10;
       img {
         width: 100%;
         height: 100%;
@@ -48,8 +48,8 @@
       }
     }
     .text {
-      font-size: 12px;
-      color: #484848;
+      font-size: $font12;
+      color: $primary-black;
     }
   }
 }
@@ -60,8 +60,8 @@
 }
 
 :host ::ng-deep .brand-name {
-  font-size: 12px;
-  color: #484848;
+  font-size: $font12;
+  color: $primary-black;
 
   p {
     color: $primary-gray;
@@ -77,8 +77,8 @@
 // }
 
 :host ::ng-deep .service-details {
-  font-size: 12px;
-  color: #484848;
+  font-size: $font12;
+  color: $primary-black;
 
   p {
     color: $primary-gray;
@@ -96,10 +96,10 @@
     width: 0;
     height: 0;
     &:checked + .slider {
-      background-color: #53b33e;
+      background-color: $completed;
     }
     &:focus + .slider {
-      box-shadow: 0 0 1px #53b33e;
+      box-shadow: 0 0 1px $completed;
     }
     &:checked + .slider:before {
       -webkit-transform: translateX(40px);
@@ -152,10 +152,25 @@
 }
 :host ::ng-deep .heading{
   color: $dark-blue;
-  font-size: 16px;
+  font-size: $font16;
   font-weight: bold;
 }
 
 :host ::ng-deep .table-header-text {
   color: $dark-blue;
+}
+
+
+:host ::ng-deep thead.p-datatable-thead {
+  border-top: solid 1px $c-gray-90;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  text-align: center;
+  background: #eaf0f6 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+  outline: 0 none;
+  height: 80px !important;
 }

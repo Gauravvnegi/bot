@@ -26,7 +26,7 @@
     }
   }
   &-form {
-    padding-left: 20px;
+    padding-left: $margin20;
     // border-bottom: 2px solid rgb(61, 187, 230, 0.1);
     .fields {
       display: flex;
@@ -41,22 +41,22 @@
         align-items: center;
         min-width: 35%;
         .status {
-          font-size: $font14;
-          margin-right: 20px;
+          font-size: $font16;
+          margin-right: $margin20;
         }
         .status--left {
           color: $primary-gray;
         }
         .status--right {
           color: $primary-black;
-          margin-left: 20px;
+          margin-left: $margin20;
         }
       }
       .note {
         color: $primary-gray;
         font-size: $font12;
         padding-left: 11%;
-        margin-bottom: 20px;
+        margin-bottom: $margin20;
       }
       .field {
         display: flex;
@@ -73,7 +73,7 @@
         }
       }
       .material-icons {
-        margin-left: 15px;
+        margin-left: $margin15;
         &:hover {
           cursor: pointer;
         }
@@ -125,7 +125,7 @@
       // }
     }
     .margin-adjust {
-      padding: 20px 0;
+      padding: $padding20 0;
     }
   }
 }
@@ -167,7 +167,7 @@
 :host ::ng-deep .mat-label {
   font-size: $font14;
   color: $primary-gray;
-  margin-right: 10px;
+  margin-right: $margin10;
   min-width: 31%;
   @media only screen and (max-width: 1300px) {
     font-size: 13px;
@@ -193,7 +193,7 @@
 .footer_button {
   display: flex;
   justify-content: center;
-  margin: 15px 0;
+  margin: $margin15 0;
   margin-top: 50px;
   button {
     @include admin-panel-button();
@@ -203,7 +203,7 @@
 }
 
 :host ::ng-deep .upload__box {
-  border: 1px dashed #d9d9d9;
+  border: 1px dashed $light-grey;
 }
 
 :host ::ng-deep .currency {
@@ -217,10 +217,10 @@
 
 :host ::ng-deep .mat-select-value-text {
   font-size: $font14;
-  color: #002046;
+  color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
   font-size: $font14;
-  color: #002046;
+  color: $dark-blue;
 }

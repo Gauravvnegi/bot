@@ -196,7 +196,7 @@ export class BaseDatatableComponent implements OnInit {
   ): Observable<any> {
     return of(
       this.dataSource.slice(config.first, config.first + config.rows)
-    ).pipe(delay(2000));
+    ).pipe(delay(this.dataSource.length ? 2000 : 500));
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {

@@ -5,41 +5,41 @@ import { Topic } from '../data-models/topicConfig.model';
 @Injectable()
 export class TopicService extends ApiService {
   /**
-   * get existing topic record details
-   * @param hotelId
-   * @param packageId
-   * @returns topics details
+   * @function getTopicDetails get topic record details.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param topicId dynamically getting topicId into api.
+   * @returns get api of topic details.
    */
   getTopicDetails(hotelId, topicId) {
     return this.get(`/api/v1/entity/${hotelId}/topics/${topicId}`);
   }
 
   /**
-   * get topic list from get api
-   * @param config
-   * @param hotelId
-   * @returns topic list
+   * @function getHotelTopic get topic list from api.
+   * @param config dynamically getting global query filter into api.
+   * @param hotelId dynamically getting hotelId into api.
+   * @returns get api of topic lists.
    */
   getHotelTopic(config, hotelId) {
     return this.get(`/api/v1/entity/${hotelId}/topics${config.queryObj}`);
   }
 
   /**
-   * add new topic record
-   * @param hotelId
-   * @param data
-   * @returns add record
+   * @function addTopic add new topic record.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param data getting form input data.
+   * @returns post api of adding new record.
    */
   addTopic(hotelId, data) {
     return this.post(`/api/v1/entity/${hotelId}/topics`, data);
   }
 
   /**
-   * change topic status (active/deactive)
-   * @param hotelId
-   * @param data
-   * @param topicId
-   * @returns update topic status
+   * @function updateTopicStatus update status of a topic record.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param data getting form input data.
+   * @param topicId dynamically getting topicId into api.
+   * @returns patch api of update status.
    */
   updateTopicStatus(hotelId, data, topicId) {
     return this.patch(
@@ -49,16 +49,22 @@ export class TopicService extends ApiService {
   }
 
   /**
-   * edit existing topic record
-   * @param hotelId
-   * @param topicId
-   * @param data
-   * @returns update record
+   * @function updateTopic update topic record.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param topicId dynamically getting topicId into api.
+   * @param data getting form input data.
+   * @returns put api of update topic record.
    */
   updateTopic(hotelId, topicId, data) {
     return this.put(`/api/v1/entity/${hotelId}/topics/${topicId}`, data);
   }
 
+  /**
+   * @function exportCSV To export CSV report of the table.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param config dynamically getting global query filter into api.
+   * @returns get api of export csv report of table.
+   */
   exportCSV(hotelId, config) {
     return this.get(
       `/api/v1/entity/${hotelId}/topics/export${config.queryObj}`,
@@ -68,6 +74,13 @@ export class TopicService extends ApiService {
     );
   }
 
+  /**
+   * @function mapTopicData map api data into topic form data.
+   * @param formValue form key values.
+   * @param hotelId hotelId for topic table.
+   * @param id topic id.
+   * @returns topic data.
+   */
   mapTopicData(formValue, hotelId, id?) {
     const topicData = new Topic();
     topicData.active = formValue.status;

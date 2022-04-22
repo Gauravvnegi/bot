@@ -72,7 +72,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * To listen for global filters and load data when filter value is changed.
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -94,8 +94,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * returns Hotel Id
-   * @param globalQueries
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
    */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
@@ -106,7 +106,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * load data into topic datatable
+   * @function loadInitialData To load the initial data for datatable.
+   * @param queries The filter list with date and hotel filters.
+   * @param loading The loading status.
    */
   loadInitialData(queries = [], loading = true): void {
     this.loading = loading && true;
@@ -131,9 +133,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * manages tabs count
-   * @param countObj
-   * @param currentTabCount
+   * @function updateTabFilterCount To update the count for the tabs.
+   * @param countObj The object with count for all the tab.
+   * @param currentTabCount The count for current selected tab.
    */
   updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
     if (countObj) {
@@ -146,8 +148,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * manages active, in-active chip count
-   * @param countObj
+   * @function updateQuickReplyFilterCount To update the count for chips.
+   * @param countObj The object with count for all the chip.
    */
   updateQuickReplyFilterCount(countObj: EntityState): void {
     if (countObj) {
@@ -158,10 +160,10 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * fetching topic list from api
-   * @param queries
-   * @param defaultProps
-   * @returns topic list
+   * @function fetchDataFrom Returns an observable for the topic list api call.
+   * @param queries The filter list with date and hotel filters.
+   * @param defaultProps The default table props to control data fetching.
+   * @returns The observable with topic list.
    */
   fetchDataFrom(
     queries,
@@ -175,9 +177,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * change topic status (active/deactive)
-   * @param event
-   * @param topicId
+   * @function updateTopicStatus update status of a topic record.
+   * @param event active & inactive event check.
+   * @param topicId The topic id for which status update action will be done.
    */
   updateTopicStatus(event, topicId): void {
     let data = {
@@ -199,15 +201,16 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * open create topic page
+   * @function openCreateTopic navigate to create topic page.
    */
   openCreateTopic() {
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
   /**
-   * open create topic page of a topic Id
-   * @param topic
+   * @function openTopic navigate to edit topic page.
+   * @param event to stop openCreateTopic navigation.
+   * @param topic The topic for which edit action will be done.
    */
   openTopic(event, topic): void {
     event.stopPropagation();
@@ -215,8 +218,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * get selected entity state(active/inactive)
-   * @returns selected entity state
+   * @function getSelectedQuickReplyFilters To return the selected chip list.
+   * @returns The selected chips.
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
@@ -385,14 +388,15 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * return topicConfig object
+   * @function topicConfiguration returns topicConfig object.
+   * @returns topicConfig object.
    */
   get topicConfiguration() {
     return topicConfig;
   }
 
   /**
-   * destroys subcription
+   * @function ngOnDestroy to unsubscribe subscription.
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

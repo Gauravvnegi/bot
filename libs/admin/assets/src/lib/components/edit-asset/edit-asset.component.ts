@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { Location } from '@angular/common';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpBackend } from '@angular/common/http';
 @Component({
   selector: 'hospitality-bot-edit-asset',
   templateUrl: './edit-asset.component.html',
@@ -51,6 +51,7 @@ export class EditAssetComponent implements OnInit {
       type: ['', [Validators.required]],
       description: ['', [Validators.required]],
       url: ['', [Validators.required]],
+      thumbnailUrl:[''],
       status: [true, [Validators.required]],
     });
   }
@@ -174,7 +175,7 @@ export class EditAssetComponent implements OnInit {
   /**
    *
    * @param event
-   * upload image
+   * upload file
    */
   uploadFile(event): void {
     let formData = new FormData();
@@ -188,10 +189,8 @@ export class EditAssetComponent implements OnInit {
           this._snakbarService.openSnackBarAsText(
             'Asset image uploaded successfully',
             '',
-
             { panelClass: 'success' }
           );
-
           this.isSavingasset = false;
         },
         ({ error }) => {
@@ -245,18 +244,20 @@ export class EditAssetComponent implements OnInit {
         : ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'];
   }
 
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
-
   /**
    * getter for image url
    */
-  get assetImageUrl(): string {
+   get assetImageUrl(): string {
     return this.assetForm?.get('url').value || '';
   }
 
   get assetType() {
     return this.assetForm?.get('type').value || 'Image';
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
+
+  
 }

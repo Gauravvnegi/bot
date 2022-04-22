@@ -67,16 +67,16 @@ export const DEFAULT_ROUTES = [
         url: 'assets/svg/to-do-list.svg',
       },
       {
-        path: 'library/assets',
-        title: 'Assets',
-        children: null,
-        url: 'assets/svg/allocation.svg',
-      },
-      {
         path: 'library/topic',
         title: 'Topic',
         children: null,
         url: 'assets/svg/ballot.svg',
+      },
+      {
+        path: 'library/assets',
+        title: 'Assets',
+        children: null,
+        url: 'assets/svg/allocation.svg',
       },
       {
         path: 'library/template',

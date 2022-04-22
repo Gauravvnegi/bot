@@ -45,12 +45,12 @@ export class AssetService extends ApiService {
     const assetData = new Asset();
     assetData.active = formValue.status;
     assetData.hotelId = hotelId;
-    // assetData.imageUrl = formValue.imageUrl;
     assetData.id = formValue.id;
     assetData.name = formValue.name;
     assetData.description = formValue.description;
     assetData.type = formValue.type;
     assetData.url = formValue.url;
+    assetData.thumbnailUrl=formValue.thumbnailUrl;
     return assetData;
   }
 }

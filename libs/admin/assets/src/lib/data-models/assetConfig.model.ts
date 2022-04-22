@@ -22,7 +22,7 @@ export class Asset implements Deserializable {
   url: string;
   type: string;
   active: boolean;
-
+  thumbnailUrl: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -31,7 +31,8 @@ export class Asset implements Deserializable {
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'type', get(input, ['type'])),
-      set({}, 'url', get(input, ['url']))
+      set({}, 'url', get(input, ['url'])),
+      set({}, 'thumbnailUrl', get(input, ['thumbnailUrl']))
     );
     return this;
   }

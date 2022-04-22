@@ -131,7 +131,7 @@
   <div class="button">
     <button
       class="saveButton"
-      (click)="createAsset()"
+      (click)="handleSubmit()"
       [ngClass]="{ active: !isSavingasset, disabled: isSavingasset }"
     >
       <i *ngIf="isSavingasset" class="fa fa-spinner fa-spin"></i>

@@ -105,6 +105,19 @@
   }
 }
 
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td{
+  height: 80px !important;
+  color: $primary-black;
+  font-size: $font14;
+}
+th.tableHeading.p-resizable-column {
+  background: #eaf0f6 !important;
+  border-top:  1px solid #e4e4e4 !important;
+}
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th{
+  text-align: center;
+}
+
 :host ::ng-deep .data-table-row {
-  height: 100px;
+  height: 80px;
 }

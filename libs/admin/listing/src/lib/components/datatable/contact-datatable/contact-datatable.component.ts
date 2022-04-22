@@ -45,36 +45,42 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       header: 'Email',
       isSort: true,
       sortType: 'string',
+      dynamicWidth: false
     },
     {
       field: 'salutation',
       header: 'Salutation',
       isSort: true,
       sortType: 'string',
+      dynamicWidth: true
     },
     {
       field: 'firstName',
       header: 'First Name',
       isSort: true,
       sortType: 'string',
+      dynamicWidth: true
     },
     {
       field: 'lastName',
       header: 'Last Name',
       isSort: true,
       sortType: 'string',
+      dynamicWidth: true
     },
     {
       field: 'companyName',
       header: 'Company Name',
       isSort: true,
       sortType: 'string',
+      dynamicWidth: true
     },
     {
       field: 'mobile',
       header: 'Mobile',
       isSort: true,
       sortType: 'number',
+      dynamicWidth: true
     },
   ];
   $subscription = new Subscription();

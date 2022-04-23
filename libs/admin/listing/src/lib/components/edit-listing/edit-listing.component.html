@@ -33,8 +33,8 @@
   </div>
   <form [formGroup]="listFG">
     <div class="wrapper-form">
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Name:</mat-label>
           <mat-form-field>
             <input
@@ -52,7 +52,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <mat-label class="mat-label">Topic:</mat-label>
           <mat-form-field>
             <mat-select formControlName="topicName">
@@ -65,8 +65,8 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Description:</mat-label>
           <mat-form-field class="description">
             <input
@@ -79,45 +79,17 @@
       </div>
     </div>
     <div class="wrapper-text" *ngIf="!loading">
-      <ng-container
-        *ngIf="
-          listFG?.get('marketingContacts')?.value.length;
-          then contactDatatable;
-          else noContact
-        "
-      ></ng-container>
-      <ng-template #contactDatatable
-        ><hospitality-bot-contact-datatable
-          [add]="false"
-          [dataSource]="listFG?.get('marketingContacts')?.value"
-          [totalRecords]="listFG?.get('marketingContacts')?.value.length"
-          [hotelId]="hotelId"
-          [listId]="listId"
-          (updateContacts)="updateContactList($event)"
-        ></hospitality-bot-contact-datatable
-      ></ng-template>
-      <ng-template #noContact>
-        <div class="add-text">
-          Add Contacts
-        </div>
-        <div class="manually-add">
-          <div class="manually-contacts" (click)="openAddContact($event)">
-            <img src="assets/images/add-user.png" alt="Add User" />
-            <div class="manually-import">
-              Add Contacts Manually
-            </div>
-          </div>
-          <div class="manually-contacts" (click)="openImportContact($event)">
-            <img src="assets/images/group.png" alt="Add User" />
-            <div class="manually-import">
-              Import your contacts
-            </div>
-          </div>
-        </div>
-      </ng-template>
+      <hospitality-bot-contact-datatable
+        [add]="false"
+        [dataSource]="listFG?.get('marketingContacts')?.value"
+        [totalRecords]="listFG?.get('marketingContacts')?.value.length"
+        [hotelId]="hotelId"
+        [list]="listFG?.getRawValue()"
+        (updateContacts)="updateContactList($event)"
+      ></hospitality-bot-contact-datatable>
     </div>
     <div class="wrapper-form">
-      <div class="feilds">
+      <div class="fields">
         <div class="toggle_wrapper">
           <mat-label class="mat-label">Active :</mat-label>
           <div class="status status--left">Disable</div>

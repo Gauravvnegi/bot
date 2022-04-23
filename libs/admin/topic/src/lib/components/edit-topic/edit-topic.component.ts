@@ -1,12 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Topic } from '../../data-models/topicConfig.model';
 import { TopicService } from '../../services/topic.service';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-edit-topic',

@@ -58,4 +58,22 @@ export class ListingService extends ApiService {
       data
     );
   }
+
+  exportContact(hotelId: string, listId: string, config) {
+    return this.get(
+      `/api/v1/marketing/entity/${hotelId}/listing/${listId}/export${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
+
+  exportListings(hotelId: string, config) {
+    return this.get(
+      `/api/v1/marketing/entity/${hotelId}/listing/export${config.queryObj}`,
+      {
+        responseType: 'blob',
+      }
+    );
+  }
 }

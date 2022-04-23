@@ -23,6 +23,7 @@ import { Observable, Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
 import { ListingService } from '../../../services/listing.service';
 import { ListTable } from '../../../data-models/listing.model';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-listing-datatable',
@@ -317,10 +318,24 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
         ...this.getSelectedQuickReplyFilters(),
-        ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
-    this.$subscription.add();
+    this.$subscription.add(
+      this.listingService.exportListings(this.hotelId, config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   /**
@@ -369,6 +384,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
               '',
               { panelClass: 'success' }
             );
+            this.changePage(this.currentPage);
           },
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )

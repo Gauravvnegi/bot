@@ -26,13 +26,8 @@ export class EditContactComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateContactField();
-    if (this.contacts.length) {
-      this.contacts.forEach((i) => this.generateContactField());
-      this.contactFA.patchValue(this.contacts);
-    } else {
-      this.generateContactField();
-      this.generateContactField();
-    }
+    this.generateContactField();
+    this.generateContactField();
   }
 
   createFA(): void {

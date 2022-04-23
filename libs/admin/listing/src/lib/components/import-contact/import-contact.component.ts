@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Regex } from '@hospitality-bot/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ContactList, IContact } from '../../data-models/listing.model';
@@ -24,9 +25,48 @@ export class ImportContactComponent implements OnInit {
     private _fb: FormBuilder,
     private _listingService: ListingService,
     private _snackbarService: SnackBarService
-  ) {}
+  ) {
+    this.createFA();
+  }
 
-  ngOnInit(): void {}
+  contactFA: FormArray;
+  salutationList = [
+    { name: 'Mr.', value: 'Mr.' },
+    { name: 'Mrs.', value: 'Mrs.' },
+    { name: 'Miss', value: 'Miss' },
+  ];
+
+  ngOnInit(): void {
+    this.generateContactField();
+    this.contactFA.controls.forEach((control) => control.disable());
+  }
+
+  createFA(): void {
+    this.contactFA = this._fb.array([]);
+  }
+
+  createContactFG(): FormGroup {
+    return this._fb.group({
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
+      salutation: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      lastName: ['', [Validators.required, Validators.pattern(Regex.NAME)]],
+      companyName: [''],
+      mobile: [
+        '',
+        [Validators.required, , Validators.pattern(Regex.NUMBER_REGEX)],
+      ],
+    });
+  }
+
+  generateContactField() {
+    this.contactFA.push(this.createContactFG());
+  }
+
+  removeContactField(index: number) {
+    if (this.contactFA.controls.length === 1) return;
+    this.contactFA.removeAt(index);
+  }
 
   close() {
     this.onImportClosed.emit({ status: false });
@@ -40,6 +80,13 @@ export class ImportContactComponent implements OnInit {
         (response) => {
           this.fileName = event.file.name;
           this.contacts = new ContactList().deserialize(response).records;
+          this.contacts.forEach((contact, index) => {
+            this.contactFA.controls[index].patchValue(contact);
+            if (index < this.contacts.length - 1) {
+              this.contactFA.push(this.createContactFG());
+            }
+          });
+          this.contactFA.controls.forEach((control) => control.disable());
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
@@ -47,7 +94,16 @@ export class ImportContactComponent implements OnInit {
   }
 
   save() {
-    this.onImportClosed.emit({ status: true, data: this.contacts });
+    this.onImportClosed.emit({
+      status: true,
+      data: this.contactFA.getRawValue(),
+    });
+  }
+
+  enableField(event) {
+    if (event.target.checked)
+      this.contactFA.controls.forEach((control) => control.enable());
+    else this.contactFA.controls.forEach((control) => control.disable());
   }
 
   ngOnDestroy() {

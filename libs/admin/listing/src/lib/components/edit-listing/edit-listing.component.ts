@@ -12,8 +12,6 @@ import {
 import { Subscription } from 'rxjs';
 import { IList, List, Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
-import { EditContactComponent } from '../edit-contact/edit-contact.component';
-import { ImportContactComponent } from '../import-contact/import-contact.component';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -39,7 +37,8 @@ export class EditListingComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private _location: Location,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private _router: Router
   ) {
     this.initFG();
   }
@@ -125,83 +124,6 @@ export class EditListingComponent implements OnInit {
     );
   }
 
-  openImportContact(event) {
-    event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
-    const importCompRef = this._modal.openDialog(
-      ImportContactComponent,
-      dialogConfig
-    );
-
-    importCompRef.componentInstance.hotelId = this.hotelId;
-    importCompRef.componentInstance.onImportClosed.subscribe((response) => {
-      if (response.status) {
-        const reqData = [];
-        response.data.forEach((item) => {
-          const {
-            firstName,
-            lastName,
-            salutation,
-            companyName,
-            mobile,
-            email,
-          } = item;
-          reqData.push({
-            firstName,
-            lastName,
-            salutation,
-            companyName,
-            mobile,
-            email,
-          });
-        });
-        this.$subscription.add(
-          this._listingService
-            .updateListContact(this.hotelId, this.listId, reqData)
-            .subscribe(
-              (response) => {
-                this.getListDetails(this.listId);
-              },
-              ({ error }) =>
-                this._snackbarService.openSnackBarAsText(error.message)
-            )
-        );
-      }
-      importCompRef.close();
-    });
-  }
-
-  openAddContact(event) {
-    event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const editContactCompRef = this._modal.openDialog(
-      EditContactComponent,
-      dialogConfig
-    );
-
-    editContactCompRef.componentInstance.onContactClosed.subscribe(
-      (response) => {
-        if (response.status) {
-          this.$subscription.add(
-            this._listingService
-              .updateListContact(this.hotelId, this.listId, response.data)
-              .subscribe(
-                (response) => {
-                  this.getListDetails(this.listId);
-                },
-                ({ error }) =>
-                  this._snackbarService.openSnackBarAsText(error.message)
-              )
-          );
-        }
-        editContactCompRef.close();
-      }
-    );
-  }
-
   updateList() {
     if (
       this.listFG.invalid ||
@@ -237,7 +159,7 @@ export class EditListingComponent implements OnInit {
           '',
           { panelClass: 'success' }
         );
-        this.listFG.patchValue(response);
+        this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
       () => (this.isSaving = false)

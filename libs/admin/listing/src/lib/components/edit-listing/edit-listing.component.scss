@@ -27,7 +27,7 @@
   }
   &-form {
     padding-left: $padding20;
-    .feilds {
+    .fields {
       display: flex;
       align-items: center;
       margin-top: 2%;
@@ -41,7 +41,7 @@
         align-items: center;
         min-width: 35%;
         .status {
-          font-size: $font14;
+          font-size: $font16;
           margin-right: 20px;
         }
         .status--left {
@@ -58,7 +58,7 @@
         padding-left: 11%;
         margin-bottom: 20px;
       }
-      .feild {
+      .field {
         display: flex;
         align-items: center;
         width: 31.5%;
@@ -304,12 +304,12 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font14;
+  font-size: $font16;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
-  font-size: $font14;
+  font-size: $font16;
   color: $dark-blue;
 }
 
@@ -320,4 +320,8 @@
 :host ::ng-deep .description .mat-form-field-infix {
   width: 975px;
   letter-spacing: 0.96px;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+  display: none;
 }

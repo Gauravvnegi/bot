@@ -85,6 +85,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]);
     });
@@ -160,6 +161,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
+            entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
           ...this.getSelectedQuickReplyFilters(),
         ],

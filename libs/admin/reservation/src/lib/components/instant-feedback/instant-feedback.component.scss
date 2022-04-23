@@ -26,11 +26,11 @@
   // }
 }
 
-.feilds-wrapper {
+.fields-wrapper {
   display: flex;
   align-items: center;
   margin: 30px 0px;
-  .feild {
+  .field {
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;
@@ -223,13 +223,13 @@
     border-right: solid 2px $primary-purple;
     height: 20px;
     padding-top: 4px;
-    img{
+    img {
       width: 18px;
       padding-right: 2px;
       margin-right: 5px;
     }
   }
-  img{
+  img {
     padding-left: 2px;
     margin-left: 3px;
   }
@@ -240,9 +240,9 @@
   border: solid 1px $c-gray-85 !important;
 }
 
-:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover{
+:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {
   background: $accordian-background;
 }
-:host ::ng-deep .mat-expansion-panel-header:hover{
+:host ::ng-deep .mat-expansion-panel-header:hover {
   background: $accordian-background !important;
 }

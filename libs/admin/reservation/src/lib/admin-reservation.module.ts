@@ -38,7 +38,6 @@ export const adminReservationRoutes: Route[] = [];
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
-    AdminNotificationModule,
   ],
   providers: [ReservationService, AdminDetailsService],
   declarations: [

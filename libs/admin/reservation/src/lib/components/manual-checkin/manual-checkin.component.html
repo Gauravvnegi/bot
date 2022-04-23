@@ -10,7 +10,7 @@
     <p>{{ config.description }}</p>
     <p>{{ config.question }}</p>
 
-    <div class="feild" [formGroup]="checkinFG">
+    <div class="field" [formGroup]="checkinFG">
       <mat-label class="mat-label">Phone No. :</mat-label>
       <mat-form-field class="phone-no-dropdown">
         <mat-select
@@ -46,10 +46,10 @@
           </ng-template>
         </mat-select>
       </mat-form-field>
-      <mat-form-field class="phone-no-feild">
+      <mat-form-field class="phone-no-field">
         <input
           formControlName="phoneNumber"
-          class="input-feild"
+          class="input-field"
           type="text"
           placeholder=""
           matInput

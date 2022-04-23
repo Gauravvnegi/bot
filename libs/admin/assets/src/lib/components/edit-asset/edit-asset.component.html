@@ -19,8 +19,8 @@
   </div>
 
   <div class="wrapper-form" [formGroup]="assetForm" *ngIf="assetForm">
-    <div class="feilds">
-      <div class="feild">
+    <div class="fields">
+      <div class="field">
         <mat-label class="mat-label">Name:</mat-label>
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Random Image" />
@@ -35,7 +35,7 @@
         </mat-form-field>
       </div>
 
-      <div class="feild">
+      <div class="field">
         <mat-label class="mat-label">Type:</mat-label>
         <mat-form-field>
           <mat-select
@@ -77,7 +77,7 @@
       </mat-form-field>
     </div>
     <div class="image_container">
-      <div class="feilds margin-adjust">
+      <div class="fields margin-adjust">
         <div class="upload_image">
           <mat-label class="mat-label"
             ><ng-container
@@ -108,7 +108,7 @@
             <ng-template #videoControl
               ><hospitality-bot-upload-video
                 [fileUploadData]="fileUploadData"
-                [url]="assetImageUrl"
+                [url]="thumbnailUrl"
                 [isDisable]="false"
                 (fileData)="uploadFile($event)"
               >

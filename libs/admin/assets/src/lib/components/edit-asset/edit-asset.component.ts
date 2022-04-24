@@ -242,7 +242,6 @@ export class EditAssetComponent implements OnInit {
             this._snakbarService.openSnackBarAsText(
               'Asset updated successfully',
               '',
-
               { panelClass: 'success' }
             );
             this.router.navigate(['/pages/library/assets']);

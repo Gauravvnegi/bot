@@ -181,8 +181,11 @@ mat-label.mat-label {
   display: none;
 }
 
-
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
   color: $dark-blue;
   opacity: 0.5;
+}
+
+.back {
+  cursor: pointer;
 }

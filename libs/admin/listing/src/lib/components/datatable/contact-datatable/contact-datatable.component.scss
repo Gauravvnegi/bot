@@ -105,16 +105,36 @@
   }
 }
 
-:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td{
+.import {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.07;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #4b56c0;
+  margin-right: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  img {
+    margin-right: 5px;
+    width: 15px;
+  }
+}
+
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
   height: 80px !important;
   color: $primary-black;
   font-size: $font14;
 }
 th.tableHeading.p-resizable-column {
   background: #eaf0f6 !important;
-  border-top:  1px solid #e4e4e4 !important;
+  border-top: 1px solid #e4e4e4 !important;
 }
-:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th{
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
   text-align: center;
 }
 

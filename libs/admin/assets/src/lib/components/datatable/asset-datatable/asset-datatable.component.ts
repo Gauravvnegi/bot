@@ -92,7 +92,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getHotelId To set the hotel id after extractinf from filter array.
+   * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
    */
   getHotelId(globalQueries): void {
@@ -204,7 +204,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list
+   * @function getSelectedQuickReplyFilters To return the selected chip list.
    * @returns The selected chips.
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
@@ -257,10 +257,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   *
-   * @param event
-   * @param assetId
-   * updating asset status on active and deactive
+   * @function updateAssetStatus updating active and inactive status of form fields.
+   * @param assetId Id of the asset being updated.
+   * @param event active and inactive event check.
    */
   updateAssetStatus(event, assetId): void {
     let data = {
@@ -345,17 +344,29 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
+  /**
+   * @function assetConfiguration return asset config object.
+   * @return assetConfig object.
+   */
   get assetConfiguration() {
     return assetConfig;
   }
 
+  /**
+   * @function openCreateAsset navigate to create Asset form.
+   */
   openCreateAsset() {
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
-  openAssetDetails(amenity, event): void {
+  /**
+   * @function openAssetDetails navigating to edit asset page.
+   * @param event event object for stopping propogation.
+   * @param asset The asset for which edit action will be done.
+   */
+  openAssetDetails(asset, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
+    this._router.navigate([`edit/${asset.id}`], { relativeTo: this.route });
   }
 
   /**
@@ -385,6 +396,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function handleCopyToClipboard handling copy to clipboard functionality of urls.
+   * @param event event object for stoping propagation.
+   */
   handleCopyToClipboard(event) {
     event.stopPropagation();
     this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
@@ -392,6 +407,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscriiption
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

@@ -7,6 +7,8 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
+import { map } from 'lodash';
+import { file } from 'jszip';
 @Component({
   selector: 'hospitality-bot-edit-asset',
   templateUrl: './edit-asset.component.html',
@@ -56,9 +58,9 @@ export class EditAssetComponent implements OnInit {
   }
 
   /**
-   * create topic and checking validaton
+   * @function handleSubmit validating and handling form submission.
    */
-  createAsset() {
+  handleSubmit() {
     if (this.assetForm.invalid) {
       this._snakbarService.openSnackBarAsText('Invalid form.');
       return;
@@ -71,6 +73,9 @@ export class EditAssetComponent implements OnInit {
     }
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -87,9 +92,8 @@ export class EditAssetComponent implements OnInit {
   }
 
   /**
-   *
-   * @param globalQueries
-   * @returns get hotel id
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
    */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
@@ -100,7 +104,7 @@ export class EditAssetComponent implements OnInit {
   }
 
   /**
-   * getting asset id
+   * @function getAssetId to get asset Id from routes query param.
    */
   getAssetId(): void {
     this.$subscription.add(
@@ -117,10 +121,10 @@ export class EditAssetComponent implements OnInit {
   }
 
   /**
-   *
-   * @param packageId
-   * getting asset details to patch value
+   * @function getAssetDetails to get the asset details.
+   *  @param assetId The asset id for which edit action will be done.
    */
+
   getAssetDetails(assetId: string): void {
     this.$subscription.add(
       this.assetService
@@ -134,7 +138,7 @@ export class EditAssetComponent implements OnInit {
   }
 
   /**
-   *adding new record in asset datatable
+   *  @function addAsset adding new record in asset datatable.
    */
   addAsset(): void {
     this.isSavingasset = true;
@@ -165,39 +169,37 @@ export class EditAssetComponent implements OnInit {
   }
 
   /**
-   * redirecting to asset datatable from create asset
+   * @function redirectToAssets redirecting to asset datatable from create asset.
    */
   redirectToAssets() {
     this._location.back();
   }
 
   /**
-   *
-   * @param event
-   * @function uploadFile upload File for asset.
+   * @function uploadFile To upload image and video file.
+   * @param event url of uploadFile.
    */
   uploadFile(event): void {
     let formData = new FormData();
     formData.append('files', event.file);
     if (this.assetType === 'Video') {
       let thumbnailData = new FormData();
-      thumbnailData.append('files', event.file);
+      thumbnailData.append('files', event.thumbnailFile);
       this.$subscription.add(
         forkJoin({
           videoFile: this.assetService.uploadImage(this.hotelId, formData),
           thumbnail: this.assetService.uploadImage(this.hotelId, thumbnailData),
         }).subscribe(
           (response) => {
-            this._snakbarService.openSnackBarAsText(
-              'Asset image uploaded successfully',
-              '',
-
-              { panelClass: 'success' }
-            );
             this.assetForm.patchValue({
               url: response.videoFile.fileDownloadUri,
               thumbnailUrl: response.thumbnail.fileDownloadUri,
             });
+            this._snakbarService.openSnackBarAsText(
+              'Asset uploaded successfully',
+              '',
+              { panelClass: 'success' }
+            );
           },
           ({ error }) => this._snakbarService.openSnackBarAsText(error.message)
         )
@@ -210,10 +212,8 @@ export class EditAssetComponent implements OnInit {
             this._snakbarService.openSnackBarAsText(
               'Asset image uploaded successfully',
               '',
-
               { panelClass: 'success' }
             );
-
             this.isSavingasset = false;
           },
           ({ error }) => {
@@ -223,9 +223,8 @@ export class EditAssetComponent implements OnInit {
       );
     }
   }
-
   /**
-   * @function updateAsset Editing the existing records.
+   * @function updateAsset updating asset records.
    */
   updateAsset(): void {
     this.isSavingasset = true;
@@ -256,10 +255,18 @@ export class EditAssetComponent implements OnInit {
     );
   }
 
+  /**
+   * @function handleAssetTypeChanged handling uploaded file type change.
+   * @param event file type.
+   */
   handleAssetTypeChanged(event) {
     this.updateFileType(event.value);
   }
 
+  /**
+   * @function updateFileType formatting file.
+   * @param type image or video file type.
+   */
   updateFileType(type: string): void {
     this.fileUploadData.fileType =
       type === 'Image'
@@ -267,12 +274,8 @@ export class EditAssetComponent implements OnInit {
         : ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'];
   }
 
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
-  }
-
   /**
-   * getter for image url
+   * @function assetImageUrl getter for image url.
    */
   get assetImageUrl(): string {
     return this.assetForm?.get('url').value || '';
@@ -282,7 +285,18 @@ export class EditAssetComponent implements OnInit {
     return this.assetForm?.get('thumbnailUrl').value || '';
   }
 
+  /**
+   * @function assetType returns file type.
+   * @return type.
+   */
   get assetType() {
     return this.assetForm?.get('type').value || 'Image';
+  }
+
+  /**
+   * @function ngOnDestroy unsubscribe subscriiption
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

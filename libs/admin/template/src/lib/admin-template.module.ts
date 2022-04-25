@@ -6,12 +6,18 @@ import {
   getTranslationConfigs,
 } from '@hospitality-bot/admin/shared';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { TemplateService } from './services/template.service';
-
+import { HttpClient } from '@angular/common/http';
 @NgModule({
-  imports: [CommonModule, AdminTemplateRoutingModule],
+  imports: [
+    CommonModule,
+    AdminTemplateRoutingModule,
+    AdminSharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule.forChild(getTranslationConfigs([HttpClient], ['topic'])),
+  ],
   declarations: [...AdminTemplateRoutingModule.components],
   providers: [TemplateService],
 })

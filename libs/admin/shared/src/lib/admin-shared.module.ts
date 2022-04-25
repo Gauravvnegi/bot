@@ -24,6 +24,7 @@ import { ChannelDirective } from './directives/channel.directive';
 import { ClickableDirective } from './directives/clickable.directive';
 import { UploadCsvComponent } from './components/upload-csv/upload-csv.component';
 import { UploadVideoComponent } from './components/upload-video/upload-video.component';
+import { TopicListComponent } from './topic-list/topic-list.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { UploadVideoComponent } from './components/upload-video/upload-video.com
     ClickableDirective,
     UploadCsvComponent,
     UploadVideoComponent,
+    TopicListComponent,
   ],
   exports: [
     DatatableComponent,

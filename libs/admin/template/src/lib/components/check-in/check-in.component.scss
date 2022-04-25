@@ -1,0 +1,45 @@
+.container {
+  .heading {
+    padding-left: 40px;
+    p {
+      width: 163px;
+      height: 33px;
+      margin: 44px 58px 31px 15.8px;
+      font-family: Roboto;
+      font-size: 25px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 1.5px;
+      text-align: left;
+      color: #002046;
+    }
+  }
+  .checkin-cards {
+    padding-left: 122px;
+    display: flex;
+    gap: 35px;
+    .card {
+      border: 1px solid black;
+      width: 255px;
+      height: 273px;
+    }
+  }
+  .button{
+    width: 250px;
+    height: 46px;
+    margin: 56px 37px 32px 38px;
+    border-radius: 23px;
+    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+    border: solid 1px #4b56c0;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    color: #4b56c0;
+  }
+}

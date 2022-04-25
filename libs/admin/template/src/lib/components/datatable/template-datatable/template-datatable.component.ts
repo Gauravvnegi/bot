@@ -2,10 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import * as FileSaver from 'file-saver';
 import {
-  AdminUtilityService,
   BaseDatatableComponent,
+  sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -18,8 +20,10 @@ import {
   EntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { Subscription } from 'rxjs';
-import { templateConfig } from '../../../constant/template';
+import { Observable, Subscription } from 'rxjs';
+import { TemplateService } from '../../../services/template.service';
+import { Topics } from '../../../data-models/templateConfig.model';
+import { templateConfig } from '../../../constants/template';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -31,7 +35,7 @@ import { templateConfig } from '../../../constant/template';
 })
 export class TemplateDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  @Input() tableName = 'Template';
+  tableName = 'Template';
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -44,32 +48,88 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 5;
   cols = templateConfig.datatable.cols;
-  hotelId: string;
+  globalQueries = [];
   $subscription = new Subscription();
+  hotelId: any;
 
   constructor(
     public fb: FormBuilder,
-    protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected _modal: ModalService,
     protected tabFilterService: TableService,
+    protected _modal: ModalService,
     private _router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private templateService: TemplateService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.tabFilterItems = templateConfig.datatable.tabFilterItems;
+    this.listenForGlobalFilters();
   }
 
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
-      .map((item) => ({
-        entityState: item.value,
-      }));
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getHotelId(this.globalQueries);
+      // fetch-api for records
+      this.loadInitialData([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+    });
+  }
+
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  /**
+   * @function loadInitialData To load the initial data for datatable.
+   * @param queries The filter list with date and hotel filters.
+   * @param loading The loading status.
+   */
+  loadInitialData(queries = [], loading = true): void {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.values = new Topics().deserialize(data).records;
+          //set pagination
+          this.totalRecords = data.total;
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   /**
@@ -100,13 +160,113 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
+   * @function fetchDataFrom Returns an observable for the topic list api call.
+   * @param queries The filter list with date and hotel filters.
+   * @param defaultProps The default table props to control data fetching.
+   * @returns The observable with topic list.
+   */
+  fetchDataFrom(
+    queries,
+    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+  ): Observable<any> {
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
+    };
+    return this.templateService.getHotelTopic(config, this.hotelId);
+  }
+
+  /**
+   * @function updateTopicStatus update status of a topic record.
+   * @param event active & inactive event check.
+   * @param topicId The topic id for which status update action will be done.
+   */
+  updateTopicStatus(event, topicId): void {
+    let data = {
+      active: event.checked,
+    };
+    this.templateService
+      .updateTopicStatus(this.hotelId, data, topicId)
+      .subscribe(
+        (response) => {
+          this._snackbarService.openSnackBarAsText(
+            'Successfully status updated',
+            '',
+            { panelClass: 'success' }
+          );
+          this.changePage(this.currentPage);
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      );
+  }
+
+  /**
+   * @function openCreateTopic navigate to create topic page.
+   */
+  openCreateTopic() {
+    this._router.navigate(['create'], { relativeTo: this.route });
+  }
+
+  /**
+   * @function openTopic navigate to edit topic page.
+   * @param event to stop openCreateTopic navigation.
+   * @param topic The topic for which edit action will be done.
+   */
+  openTopic(event, topic): void {
+    event.stopPropagation();
+    this._router.navigate([`edit/${topic.id}`], { relativeTo: this.route });
+  }
+
+  /**
+   * @function getSelectedQuickReplyFilters To return the selected chip list.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters(): SelectedEntityState[] {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityState: item.value,
+      }));
+  }
+
+  /**
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
   loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
-    this.$subscription.add();
+    this.$subscription.add(
+      this.fetchDataFrom(
+        [
+          ...this.globalQueries,
+          {
+            order: sharedConfig.defaultOrder,
+          },
+          ...this.getSelectedQuickReplyFilters(),
+        ],
+        {
+          offset: this.first,
+          limit: this.rowsPerPage,
+        }
+      ).subscribe(
+        (data) => {
+          this.values = new Topics().deserialize(data).records;
+          this.totalRecords = data.total;
+          data.entityTypeCounts &&
+            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          data.entityStateCounts &&
+            this.updateQuickReplyFilterCount(data.entityStateCounts);
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
   }
 
   /**
@@ -116,8 +276,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   updatePaginations(event): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
   }
 
   /**
@@ -169,29 +327,37 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.table.filter(value, field, matchMode);
   }
 
-  openInBuiltTemplate() {
-    this._router.navigate(['template'], { relativeTo: this.route });
-  }
-
   /**
    * @function exportCSV To export CSV report of the table.
    */
-  // exportCSV(): void {
-  //   this.loading = true;
+  exportCSV(): void {
+    this.loading = true;
 
-  //   const config = {
-  //     queryObj: this._adminUtilityService.makeQueryParams([
-  //       ...this.globalQueries,
-  //       {
-  //         order: sharedConfig.defaultOrder,
-  //         entityType: this.tabFilterItems[this.tabFilterIdx].value,
-  //       },
-  //       ...this.getSelectedQuickReplyFilters(),
-  //       ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
-  //     ]),
-  //   };
-  //   this.$subscription.add();
-  // }
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+        },
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
+    };
+    this.$subscription.add(
+      this.templateService.exportCSV(this.hotelId, config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
 
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
@@ -223,10 +389,17 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
+  /**
+   * @function topicConfiguration returns topicConfig object.
+   * @returns topicConfig object.
+   */
   get templateConfiguration() {
     return templateConfig;
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

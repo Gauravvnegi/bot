@@ -1,0 +1,75 @@
+@import 'main';
+.documentActionItemLabel {
+    margin-left: 0.5em;
+    font-weight: 500;
+}
+
+.request-btn__wrap {
+    padding-right: 20px;
+    .request-btn {
+        width: 145px;
+        height: 36px;
+        padding: 8.5px 0 8.5px 22.5px;
+        border-radius: 18px;
+        background-color: #4b56c0;
+        color: #eaf0f6;
+        cursor: pointer;
+    }
+}
+
+.tableHeading {
+    width: 5%;
+    background-color: #eaf0f6;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    text-align: center;
+}
+
+.icon-wrapper {
+    @include flex-space-between();
+    flex-wrap: wrap;
+    position: relative;
+    .icon {
+        width: 32%;
+        margin: 6% 0.5%;
+        @include flex-item-center();
+        flex-direction: column;
+        .table-body-journey-icon {
+            height: 14px;
+            width: 14px;
+            &:hover {
+                cursor: pointer;
+            }
+            @media screen and (max-width: 800px) {
+                height: 10px;
+                width: 10px;
+            }
+        }
+        .label {
+            font-size: 6px;
+            margin-top: 3px;
+            @media screen and (max-width: 800px) {
+                font-size: 3px;
+            }
+        }
+    }
+    .extra-width {
+        width: 24%;
+    }
+    .line {
+        position: absolute;
+        height: 2px;
+        width: 72%;
+        background-color: #edf1f5;
+        right: 17px;
+        @media screen and (max-width: 800px) {
+            width: 62%;
+        }
+    }
+    .first {
+        top: 15%;
+    }
+    .second {
+        top: 65%;
+    }
+}

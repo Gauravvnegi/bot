@@ -24,19 +24,14 @@
     <div class="fields">
       <div class="field">
         <mat-label class="mat-label">Topic:</mat-label>
-        <mat-form-field>
-          <mat-select
-            (selectionChange)="handleTopicChange($event)"
-            placeholder="Select Topic"
-          >
-            <mat-option value="" *ngIf="topicList.length === 0" disabled
-              >NO DATA</mat-option
-            >
-            <mat-option *ngFor="let topic of topicList" [value]="topic.id">{{
-              topic.name
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div style="width: 100%;">
+          <hospitality-bot-topic-dropdown
+            [hotelId]="hotelId"
+            [title]="false"
+            [id]="true"
+            (changeTopic)="handleTopicChange($event)"
+          ></hospitality-bot-topic-dropdown>
+        </div>
       </div>
       <div class="field">
         <mat-label class="mat-label">Template:</mat-label>

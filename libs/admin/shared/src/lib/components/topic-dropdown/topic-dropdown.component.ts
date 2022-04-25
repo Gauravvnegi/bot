@@ -58,4 +58,8 @@ export class TopicDropdownComponent implements OnInit {
   handleSelection(event) {
     this.changeTopic.emit({ value: event.value });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

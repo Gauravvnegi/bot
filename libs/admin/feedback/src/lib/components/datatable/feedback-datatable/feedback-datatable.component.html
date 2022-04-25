@@ -419,6 +419,7 @@
                     </div>
                   </div>
                   <div
+                    *ngIf="rowData.services?.rating?.value"
                     class="stay-booking-feedback"
                     [ngClass]="{
                       'status-opacity-reject':
@@ -532,6 +533,7 @@
                       </div>
                     </div>
                     <div
+                      *ngIf="rowData.services?.rating?.value"
                       class="stay-booking-feedback"
                       [ngClass]="{
                         'status-opacity-reject':

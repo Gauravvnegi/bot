@@ -136,12 +136,6 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    console.log(
-      template.substring(
-        template.indexOf('<div'),
-        template.lastIndexOf('</body>')
-      )
-    );
     return template.substring(
       template.indexOf('<div'),
       template.lastIndexOf('</body>')

@@ -87,7 +87,9 @@
       "@hospitality-bot/admin/library": ["libs/admin/library/src/index.ts"],
       "@hospitality-bot/admin/assets": ["libs/admin/assets/src/index.ts"],
       "@hospitality-bot/admin/topic": ["libs/admin/topic/src/index.ts"],
-      "@hospitality-bot/admin/template": ["libs/admin/template/src/index.ts"]
+      "@hospitality-bot/admin/template": ["libs/admin/template/src/index.ts"],
+      "@hospitality-bot/admin/marketing": ["libs/admin/marketing/src/index.ts"],
+      "@hospitality-bot/admin/campaign": ["libs/admin/campaign/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -50,6 +50,19 @@ export const ADMIN_ROUTES = [
 
 export const DEFAULT_ROUTES = [
   {
+    path: 'marketing',
+    title: 'Marketing',
+    url: 'assets/svg/megaphone.svg',
+    children: [
+      {
+        path: 'marketing/campaign',
+        title: 'Campaign',
+        children: null,
+        url: 'assets/svg/subscription.svg',
+      },
+    ],
+  },
+  {
     path: 'library',
     title: 'Library',
     url: 'assets/svg/books.svg',

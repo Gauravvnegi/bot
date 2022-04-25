@@ -83,7 +83,7 @@ export class UploadVideoComponent implements OnInit {
         ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         video.pause();
         const url = canvas.toDataURL('image/png');
-        return resolve({ file: this.createFileFrombase64(url, name) });
+        return resolve({ url, file: this.createFileFrombase64(url, name) });
       };
     });
   }

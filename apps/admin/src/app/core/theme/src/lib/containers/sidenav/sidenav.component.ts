@@ -154,6 +154,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
         if (librarySubItemList.length)
           return [{ ...data, children: subItemList }];
         else return [];
+      case 'marketing':
       default:
         return subscription.filter(
           (d) => ModuleNames[d.name] === data.path && d.active
@@ -187,6 +188,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
       ) {
         subItemList.push(child);
       } else if (!child.path.includes('package')) subItemList.push(child);
+    });
+    return subItemList;
+  }
+
+  checkMarketingItems(item, subscription) {
+    const subItemList = [];
+    item.children.forEach((child) => {
+      subItemList.push(child);
     });
     return subItemList;
   }

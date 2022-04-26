@@ -52,3 +52,12 @@
     }
   }
 }
+
+:host ::ng-deep {
+  .mat-select-value-text {
+    color: $black;
+  }
+  .mat-select-disabled {
+    color: $primary-gray;
+  }
+}

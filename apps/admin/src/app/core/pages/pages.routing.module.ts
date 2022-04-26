@@ -80,6 +80,13 @@ const appRoutes: Route[] = [
             (m) => m.AdminLibraryModule
           ),
       },
+      {
+        path: 'marketing',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/marketing').then(
+            (m) => m.AdminMarketingModule
+          ),
+      },
     ],
   },
 ];

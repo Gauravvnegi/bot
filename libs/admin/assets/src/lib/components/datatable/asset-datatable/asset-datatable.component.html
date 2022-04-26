@@ -252,7 +252,12 @@
       <td class="name">
         <div class="package_image_wrapper">
           <div class="image">
-            <img class="package-image" src="{{ rowData.url }}" />
+            <img
+              class="package-image"
+              src="{{
+                rowData.thumbnailUrl ? rowData.thumbnailUrl : rowData.url
+              }}"
+            />
           </div>
           <div class="text">
             <div>{{ rowData.name }}</div>

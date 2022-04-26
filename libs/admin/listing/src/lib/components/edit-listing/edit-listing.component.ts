@@ -66,7 +66,6 @@ export class EditListingComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ];
         this.getHotelId(this.globalQueries);
-        this.getTopicList(this.hotelId);
         this.getListingId();
       })
     );
@@ -76,24 +75,6 @@ export class EditListingComponent implements OnInit {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
-  }
-
-  getTopicList(hotelId) {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
-      ]),
-    };
-    this.$subscription.add(
-      this.listingService.getTopicList(hotelId, config).subscribe(
-        (response) => {
-          this.topicList = new Topics().deserialize(response).records;
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
   }
 
   getListingId(): void {

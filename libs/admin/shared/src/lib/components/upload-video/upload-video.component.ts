@@ -25,8 +25,7 @@ export class UploadVideoComponent implements OnInit {
     return { ...this.defaultValue, ...this._fileUploadData };
   }
 
-  @Output()
-  fileData = new EventEmitter();
+  @Output() fileData = new EventEmitter();
 
   error = 'Invalid FileType';
   constructor() {}
@@ -83,7 +82,7 @@ export class UploadVideoComponent implements OnInit {
         ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         video.pause();
         const url = canvas.toDataURL('image/png');
-        return resolve({ file: this.createFileFrombase64(url, name) });
+        return resolve({ url, file: this.createFileFrombase64(url, name) });
       };
     });
   }
@@ -94,11 +93,9 @@ export class UploadVideoComponent implements OnInit {
       bstr = atob(arr[1]),
       n = bstr.length,
       u8arr = new Uint8Array(n);
-
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
-
     return new File([u8arr], `${filename}.png`, { type: fileType });
   }
 

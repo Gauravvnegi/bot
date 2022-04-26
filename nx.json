@@ -131,6 +131,12 @@
     },
     "admin-template": {
       "tags": []
+    },
+    "admin-marketing": {
+      "tags": []
+    },
+    "admin-campaign": {
+      "tags": []
     }
   }
 }

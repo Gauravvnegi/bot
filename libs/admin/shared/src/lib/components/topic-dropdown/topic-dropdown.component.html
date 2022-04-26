@@ -1,0 +1,15 @@
+<div [formGroup]="parentForm" class="form-field" *ngIf="parentForm">
+  <mat-label class="mat-label" *ngIf="title">Topic:</mat-label>
+  <mat-form-field>
+    <mat-select
+      [formControlName]="name"
+      (selectionChange)="handleSelection($event)"
+    >
+      <mat-option
+        *ngFor="let topic of topicList"
+        [value]="id ? topic.id : topic.name"
+        >{{ topic.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+</div>

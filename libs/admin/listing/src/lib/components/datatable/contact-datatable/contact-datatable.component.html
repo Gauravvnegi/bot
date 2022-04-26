@@ -28,16 +28,20 @@
           <div class="header">
             <p class="heading">{{ tableName }}</p>
             <div class="manage-contacts">
-              <div
+              <img
+                class="delete"
+                src="assets/images/delete.png"
+                alt="Delete"
+                (click)="deleteContact()"
+                *ngIf="selectedRows.length"
+              />
+              <!-- <div
                 class="delete"
                 (click)="deleteContact()"
                 *ngIf="selectedRows.length"
-              >
-                <div class="manage-delete">
-                  <!-- Delete -->
-                  <img src="assets/images/delete.png" alt="Delete" />
-                </div>
-              </div>
+              > -->
+              <!-- Delete -->
+              <!-- </div> -->
               <div class="import" (click)="openImportContact($event)">
                 <img src="assets/svg/import.svg" alt="import" />
                 Import Contacts

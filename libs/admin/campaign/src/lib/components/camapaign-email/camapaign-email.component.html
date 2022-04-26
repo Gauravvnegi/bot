@@ -1,0 +1,197 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">
+        Create Campaign
+      </p>
+    </div>
+    <div class="option">
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="dropdown">
+        <div class="dropdown__item" (click)="sendTestCampaign()">
+          Send Test
+        </div>
+        <div class="dropdown__item" (click)="archiveCampaign()">
+          Archive Campaign
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
+    <div class="fields">
+      <div class="field">
+        <mat-label class="mat-label">From:</mat-label>
+        <mat-form-field>
+          <mat-select formControlName="fromId" placeholder="Select email">
+            <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
+              item.email
+            }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              campaignFG.get('fromId').touched &&
+              campaignFG.get('fromId').hasError('required')
+            "
+          >
+            From is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field">
+        <mat-label class="mat-label">Topic:</mat-label>
+        <div style="width: 100%;">
+          <hospitality-bot-topic-dropdown
+            [hotelId]="hotelId"
+            [title]="false"
+            [id]="true"
+            (changeTopic)="handleTopicChange($event)"
+          ></hospitality-bot-topic-dropdown>
+        </div>
+      </div>
+      <div class="field">
+        <mat-label class="mat-label">Insert Template:</mat-label>
+        <mat-form-field>
+          <mat-select
+            (selectionChange)="handleTemplateChange($event)"
+            placeholder="Select template"
+          >
+            <mat-option value="" *ngIf="templateList.length === 0" disabled
+              >NO DATA</mat-option
+            >
+            <mat-option
+              *ngFor="let template of templateList"
+              [value]="template.htmlTemplate"
+              >{{ template.name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">To:</mat-label>
+        <mat-form-field>
+          <mat-chip-list #chipList>
+            <mat-chip
+              *ngFor="let email of to.value"
+              (removed)="removeEmail(email, to)"
+            >
+              {{ email }}
+              <button matChipRemove class="chip-remove-btn">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              placeholder="Search by name, E-mail, Number, Conf. No., Profile ID or by subscriber group or listing"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur"
+              (matChipInputTokenEnd)="addEmail($event, to)"
+            />
+            <p>
+              <span class="carbon-copy">Bcc</span>&nbsp;
+              <span class="carbon-copy">Cc</span>
+            </p>
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Subject:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="subject"
+            placeholder="Be specific & concise to spark interest"
+          />
+          <p class="text-number">
+            {{ campaignFG.get('subject')?.value.length }}/200
+          </p>
+          <mat-error
+            *ngIf="
+              campaignFG.get('subject').touched &&
+              campaignFG.get('subject').hasError('required')
+            "
+          >
+            Subject is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              campaignFG.get('subject').touched &&
+              campaignFG.get('subject').hasError('maxlength')
+            "
+          >
+            Maximum length is 200 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Preivew Text:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="previewText"
+            placeholder="Write a summary of your email to display after the subject line"
+          />
+          <p class="text-number">
+            {{ campaignFG.get('previewText')?.value.length }}/200
+          </p>
+          <mat-error
+            *ngIf="
+              campaignFG.get('previewText').touched &&
+              campaignFG.get('previewText').hasError('required')
+            "
+          >
+            Preivew Text is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              campaignFG.get('previewText').touched &&
+              campaignFG.get('previewText').hasError('maxlength')
+            "
+          >
+            Maximum length is 200 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div>
+      <div class="ck-editor">
+        <ckeditor formControlName="message" [config]="ckeConfig"></ckeditor>
+      </div>
+      <mat-error
+        *ngIf="
+          campaignFG.get('message').touched &&
+          campaignFG.get('message').hasError('required')
+        "
+        class="message-error"
+      >
+        Message is required
+      </mat-error>
+    </div>
+  </div>
+  <div class="btn-wrapper">
+    <div
+      class="send"
+      (click)="sendMail()"
+      [ngClass]="{ active: !isSending, disabled: isSending }"
+    >
+      <div class="send__text">
+        <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
+        {{ isSending ? 'Sending' : 'Send' }}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,229 @@
+@import 'main';
+
+.wrapper {
+  padding: $padding20;
+  background-color: white;
+  margin: $margin20 0px;
+  border-radius: 5px;
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .back {
+      display: flex;
+      align-items: center;
+      .label {
+        letter-spacing: 0.96px;
+        font-weight: $bold;
+        font-size: $font16;
+      }
+      .material-icons {
+        margin-right: $margin15;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      height: 15px;
+      position: relative;
+      .icon {
+        width: 8px;
+        height: 8px;
+        margin-left: 7px;
+        background-color: #3b3b3b;
+        border-radius: 50%;
+      }
+      &:hover {
+        .dropdown {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.dropdown {
+  display: none;
+  padding: 10px;
+  position: absolute;
+  width: 203px;
+  height: 118px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  background-color: #fff;
+  right: 0;
+  top: 100%;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: #002046;
+  &__item {
+    padding: 18px 18px 12px 20px;
+    &:hover {
+      background-color: rgba(232, 238, 245, 0.25);
+    }
+  }
+}
+
+.body {
+  padding-top: 30px;
+}
+
+.fields {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+  justify-content: space-between;
+  @media (max-width: $tablet) {
+    flex-wrap: wrap;
+    gap: 60px;
+  }
+  .field {
+    display: flex;
+    align-items: center;
+    margin-right: 1.5%;
+    width: 45%;
+    @media (max-width: $tablet) {
+      @include width(42.6%);
+    }
+    .mat-label {
+      width: 150px;
+      color: #b5b5c3;
+      font-size: $font14;
+    }
+  }
+}
+
+:host ::ng-deep mat-form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: calc(100% - 200px) !important;
+}
+
+.chip-list {
+  width: 100%;
+}
+
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+  .schedule {
+    height: 46px;
+    margin: 0 60px 0 0;
+    padding: 11.9px 26px 13px;
+    border-radius: 23px;
+    border: solid 1px $primary-purple;
+    background-color: white;
+    cursor: pointer;
+    &:active {
+      transform: scale(0.97);
+    }
+    &__text {
+      font-family: Roboto;
+      font-size: $font16;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: $primary-purple;
+    }
+  }
+  .send {
+    height: 46px;
+    padding: 12px 43px 13px;
+    border-radius: 23px;
+    background-color: $primary-purple;
+    cursor: pointer;
+    &:active {
+      transform: scale(0.97);
+    }
+    &__text {
+      font-family: Roboto;
+      font-size: $font16;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: white;
+    }
+  }
+}
+
+:host ::ng-deep .full-width {
+  width: 100% !important;
+}
+
+:host ::ng-deep .full-width .mat-label {
+  width: 130px !important;
+}
+
+.full-width p {
+  padding-right: 8px;
+  text-align: right;
+  position: absolute;
+  top: 5px;
+  right: 0;
+  .carbon-copy {
+    color: $primary-purple;
+    cursor: pointer;
+  }
+  .text-number {
+    cursor: pointer;
+    color: $dark-blue;
+  }
+}
+
+.chip-remove-btn {
+  height: 30px;
+  border: none;
+  background: transparent;
+  margin-top: 2px;
+}
+
+.ck-editor {
+  width: calc(100% - 180px);
+  margin: 10px 90px 0 90px;
+  min-height: 310px;
+}
+
+.message-error {
+  font-size: 13px;
+  margin-left: 90px;
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
+  display: none !important;
+}
+
+:host ::ng-deep .mat-input-element {
+  max-width: calc(100% - 80px) !important;
+}
+
+:host ::ng-deep .mat-chip-list-wrapper {
+  max-width: 90% !important;
+}

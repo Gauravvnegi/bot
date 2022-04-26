@@ -1,7 +1,7 @@
 @import 'main';
 
 .container {
-  height: 1740px;
+  height: fit-content;
   padding: 17px 38px 21px 20px;
   border-radius: 5px;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
@@ -22,9 +22,24 @@
       display: flex;
       gap: 15px;
       padding-top: 30px;
+
+      .material-icons {
+        cursor: pointer;
+      }
     }
     .preDesigned {
-      padding: 30px 0 0 40px;
+      display: flex;
+      padding: 40px 0 0 40px;
+    }
+    .field {
+      width: 205px;
+      height: 36px;
+      margin: 0 213px 37px 23px;
+      padding: 9px 16.9px 8px 13px;
+      opacity: 0.2;
+      border-radius: 4px;
+      border: solid 1px #707070;
+      background-color: #fff;
     }
   }
 }

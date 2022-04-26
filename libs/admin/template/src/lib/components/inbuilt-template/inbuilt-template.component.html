@@ -1,10 +1,12 @@
-<!-- <div class="container">
+<div class="container">
   <div class="headings">
     <p>
       Bread Crum
     </p>
     <div class="go-back">
-      <mat-icon class="material-icons" matSuffix>keyboard_backspace </mat-icon>
+      <mat-icon class="material-icons" (click)="goBack()" matSuffix
+        >keyboard_backspace
+      </mat-icon>
       <p>
         Create Topic
       </p>
@@ -15,16 +17,9 @@
         Pre-Designed templates
       </p>
       <div class="field">
-        <mat-label class="mat-label">Topic:</mat-label>
-        <mat-form-field>
-          <mat-select>
-            <mat-option
-              *ngFor="let template of topicList"
-              [value]="topic.name"
-              >{{ topic.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
+        <mat-select>
+          <mat-option placeholder="Topic"></mat-option>
+        </mat-select>
       </div>
     </div>
 
@@ -32,4 +27,4 @@
     <hospitality-bot-pre-check-in></hospitality-bot-pre-check-in>
     <hospitality-bot-general></hospitality-bot-general>
   </div>
-</div> -->
+</div>

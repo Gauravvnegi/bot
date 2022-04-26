@@ -22,7 +22,7 @@ import {
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { TemplateService } from '../../../services/template.service';
-import { Topics } from '../../../data-models/templateConfig.model';
+import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
 
 @Component({
@@ -68,29 +68,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.tabFilterItems = templateConfig.datatable.tabFilterItems;
-    this.listenForGlobalFilters();
-  }
-
-  /**
-   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-   */
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-      // fetch-api for records
-      this.loadInitialData([
-        ...this.globalQueries,
-        {
-          order: sharedConfig.defaultOrder,
-        },
-        ...this.getSelectedQuickReplyFilters(),
-      ]);
-    });
   }
 
   /**
@@ -115,7 +92,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Topics().deserialize(data).records;
+          this.values = new Templates().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -160,10 +137,10 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function fetchDataFrom Returns an observable for the topic list api call.
+   * @function fetchDataFrom Returns an observable for the template list api call.
    * @param queries The filter list with date and hotel filters.
    * @param defaultProps The default table props to control data fetching.
-   * @returns The observable with topic list.
+   * @returns The observable with template list.
    */
   fetchDataFrom(
     queries,
@@ -173,24 +150,24 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.templateService.getHotelTopic(config, this.hotelId);
+    return this.templateService.getHotelTemplate(config, this.hotelId);
   }
 
   /**
-   * @function updateTopicStatus update status of a topic record.
+   * @function updateTemplateStatus update status of a template record.
    * @param event active & inactive event check.
-   * @param topicId The topic id for which status update action will be done.
+   * @param templateId The template id for which status update action will be done.
    */
-  updateTopicStatus(event, topicId): void {
+  updateTopicStatus(event, templateId): void {
     let data = {
       active: event.checked,
     };
     this.templateService
-      .updateTopicStatus(this.hotelId, data, topicId)
+      .updateTemplateStatus(this.hotelId, data, templateId)
       .subscribe(
         (response) => {
           this._snackbarService.openSnackBarAsText(
-            'Successfully status updated',
+            'Successfully updated status',
             '',
             { panelClass: 'success' }
           );
@@ -203,20 +180,10 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openCreateTopic navigate to create topic page.
+   * @function openCreateTemlplate navigate to create template page.
    */
-  openCreateTopic() {
-    this._router.navigate(['create'], { relativeTo: this.route });
-  }
-
-  /**
-   * @function openTopic navigate to edit topic page.
-   * @param event to stop openCreateTopic navigation.
-   * @param topic The topic for which edit action will be done.
-   */
-  openTopic(event, topic): void {
-    event.stopPropagation();
-    this._router.navigate([`edit/${topic.id}`], { relativeTo: this.route });
+  openCreateTemplate() {
+    this._router.navigate(['in-built-template'], { relativeTo: this.route });
   }
 
   /**
@@ -253,7 +220,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Topics().deserialize(data).records;
+          this.values = new Templates().deserialize(data).records;
           this.totalRecords = data.total;
           data.entityTypeCounts &&
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
@@ -390,8 +357,8 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function topicConfiguration returns topicConfig object.
-   * @returns topicConfig object.
+   * @function templateConfiguration returns templateConfig object.
+   * @returns templateConfig object.
    */
   get templateConfiguration() {
     return templateConfig;

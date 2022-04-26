@@ -9,11 +9,7 @@ import { TemplateComponent } from './components/template/template.component';
 
 const appRoutes: Route[] = [
   { path: '', component: TemplateComponent },
-  { path: 'template', component: InbuiltTemplateComponent },
-  { path: '', component: CheckInComponent },
-  { path: '', component: PreCheckInComponent },
-  { path: '', component: GeneralComponent },
-  { path: '', component: TemplateDatatableComponent },
+  { path: 'in-built-template', component: InbuiltTemplateComponent },
 ];
 
 @NgModule({
@@ -25,9 +21,9 @@ export class AdminTemplateRoutingModule {
   static components = [
     GeneralComponent,
     PreCheckInComponent,
-    CheckInComponent,
     InbuiltTemplateComponent,
     TemplateComponent,
     TemplateDatatableComponent,
+    CheckInComponent,
   ];
 }

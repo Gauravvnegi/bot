@@ -87,6 +87,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
+        ...this.getSelectedQuickReplyFilters(),
       ]);
     });
   }

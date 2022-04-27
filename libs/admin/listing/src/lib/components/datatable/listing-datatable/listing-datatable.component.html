@@ -241,7 +241,11 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openList($event, rowData.id)">
+    <tr
+      class="data-table-row"
+      (click)="openList($event, rowData.id)"
+      style="height: 80px;"
+    >
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"

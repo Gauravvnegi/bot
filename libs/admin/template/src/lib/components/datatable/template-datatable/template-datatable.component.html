@@ -218,7 +218,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openTemplate($event, rowData)">
+    <tr class="data-table-row" (click)="openEditTemplate($event, rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"

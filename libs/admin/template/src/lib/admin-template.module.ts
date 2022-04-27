@@ -5,10 +5,11 @@ import {
   AdminSharedModule,
   getTranslationConfigs,
 } from '@hospitality-bot/admin/shared';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TemplateService } from './services/template.service';
-import { HttpClient } from '@angular/common/http';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -16,9 +17,9 @@ import { HttpClient } from '@angular/common/http';
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule.forChild(getTranslationConfigs([HttpClient], ['topic'])),
+    TranslateModule.forChild(getTranslationConfigs([HttpClient], ['template'])),
   ],
   declarations: [...AdminTemplateRoutingModule.components],
-  providers: [TemplateService],
+  providers:[TemplateService]
 })
 export class AdminTemplateModule {}

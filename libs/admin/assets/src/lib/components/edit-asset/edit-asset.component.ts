@@ -7,7 +7,6 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
-
 @Component({
   selector: 'hospitality-bot-edit-asset',
   templateUrl: './edit-asset.component.html',
@@ -276,7 +275,7 @@ export class EditAssetComponent implements OnInit {
   /**
    * @function assetImageUrl getter for image url.
    */
-  get assetImageUrl(): string {
+   get assetImageUrl(): string {
     return this.assetForm?.get('url').value || '';
   }
 

@@ -192,19 +192,12 @@
       </div>
     </div>
 
-    <div>
-      <div class="ck-editor">
-        <ckeditor formControlName="message" [config]="ckeConfig"></ckeditor>
-      </div>
-      <mat-error
-        *ngIf="
-          campaignFG.get('message').touched &&
-          campaignFG.get('message').hasError('required')
-        "
-        class="message-error"
-      >
-        Message is required
-      </mat-error>
+    <div class="ck-editor">
+      <hospitality-bot-template-editor
+        [parentFG]="campaignFG"
+        [name]="'message'"
+        [template]="template"
+      ></hospitality-bot-template-editor>
     </div>
   </div>
   <div class="btn-wrapper">

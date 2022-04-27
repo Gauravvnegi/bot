@@ -3,7 +3,9 @@ import { Route, RouterModule } from '@angular/router';
 import { TemplateDatatableComponent } from './components/datatable/template-datatable/template-datatable.component';
 import { TemplateComponent } from './components/template/template.component';
 
-const appRoutes: Route[] = [{ path: '', component: TemplateComponent }];
+const appRoutes: Route[] = [
+  { path: '', component: TemplateDatatableComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],

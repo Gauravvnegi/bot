@@ -53,16 +53,11 @@
           </mat-form-field>
         </div>
         <div class="field">
-          <mat-label class="mat-label">Topic:</mat-label>
-          <mat-form-field>
-            <mat-select formControlName="topicName">
-              <mat-option
-                *ngFor="let topic of topicList"
-                [value]="topic.name"
-                >{{ topic.name }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
+          <hospitality-bot-topic-dropdown
+            [hotelId]="hotelId"
+            [name]="'topicName'"
+            [parentForm]="listFG"
+          ></hospitality-bot-topic-dropdown>
         </div>
       </div>
       <div class="fields">

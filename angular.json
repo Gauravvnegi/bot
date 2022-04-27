@@ -1488,6 +1488,70 @@
           "style": "scss"
         }
       }
+    },
+    "admin-marketing": {
+      "projectType": "library",
+      "root": "libs/admin/marketing",
+      "sourceRoot": "libs/admin/marketing/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/marketing/tsconfig.lib.json",
+              "libs/admin/marketing/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/marketing/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/marketing/jest.config.js",
+            "tsConfig": "libs/admin/marketing/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/marketing/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-campaign": {
+      "projectType": "library",
+      "root": "libs/admin/campaign",
+      "sourceRoot": "libs/admin/campaign/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/campaign/tsconfig.lib.json",
+              "libs/admin/campaign/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/campaign/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/campaign/jest.config.js",
+            "tsConfig": "libs/admin/campaign/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/campaign/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

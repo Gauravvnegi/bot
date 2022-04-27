@@ -30,12 +30,8 @@
 
             <div class="options">
               <!-- Create Asset button with ExportAll,CSV -->
-              <div
-                class="request-btn__wrap"
-                style="cursor: pointer;"
-                (click)="openCreateAsset()"
-              >
-                <div class="request-btn">
+              <div class="create-btn__wrap" (click)="openCreateAsset()">
+                <div class="create-btn">
                   {{ '+Create Asset' | translate }}
                 </div>
               </div>
@@ -256,7 +252,12 @@
       <td class="name">
         <div class="package_image_wrapper">
           <div class="image">
-            <img class="package-image" src="{{ rowData.url }}" />
+            <img
+              class="package-image"
+              src="{{
+                rowData.thumbnailUrl ? rowData.thumbnailUrl : rowData.url
+              }}"
+            />
           </div>
           <div class="text">
             <div>{{ rowData.name }}</div>
@@ -270,23 +271,20 @@
       <td class="service-details">
         {{ rowData.type }}
       </td>
-      <td
-        class="service-details"
-        style="position: relative; width: fit-content; word-wrap: break-word;"
-      >
+      <td class="service-details">
         <div class="image_url">{{ rowData.url }}</div>
         <div (click)="onCheckboxClicked($event)">
           <img
+            class="copy"
             [src]="assetConfiguration.images.copy.url"
             [alt]="assetConfiguration.images.copy.alt"
             [cdkCopyToClipboard]="rowData.url"
-            style="position: absolute; right: 7px; bottom: 7px;"
             (click)="handleCopyToClipboard($event)"
           />
         </div>
       </td>
 
-      <td class="active_class" style="text-align: center;">
+      <td class="status">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
             [checked]="rowData.status"

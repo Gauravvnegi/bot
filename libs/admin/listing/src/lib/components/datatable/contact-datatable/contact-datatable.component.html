@@ -38,29 +38,8 @@
                   <img src="assets/images/delete.png" alt="Delete" />
                 </div>
               </div>
-              <div
-                style="
-                  font-family: Roboto;
-                  font-size: 14px;
-                  font-weight: 500;
-                  font-stretch: normal;
-                  font-style: normal;
-                  line-height: 1.07;
-                  letter-spacing: 0.84px;
-                  text-align: left;
-                  color: #4b56c0;
-                  margin-right: 10px;
-                  cursor: pointer;
-                  display: flex;
-                  align-items: center;
-                "
-                (click)="openImportContact($event)"
-              >
-                <img
-                  style="margin-right: 5px; width: 15px;"
-                  src="assets/svg/import.svg"
-                  alt="import"
-                />
+              <div class="import" (click)="openImportContact($event)">
+                <img src="assets/svg/import.svg" alt="import" />
                 Import Contacts
               </div>
               <div class="add" (click)="openAddContact($event)">

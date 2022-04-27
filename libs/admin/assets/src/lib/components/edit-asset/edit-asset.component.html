@@ -1,10 +1,6 @@
 <div class="container">
   <div class="create_Assets">
-    <mat-icon
-      (click)="redirectToAssets()"
-      class="material-icons"
-      style="cursor: pointer;"
-      matSuffix
+    <mat-icon (click)="redirectToAssets()" class="material-icons back" matSuffix
       >keyboard_backspace
     </mat-icon>
 
@@ -131,7 +127,7 @@
   <div class="button">
     <button
       class="saveButton"
-      (click)="createAsset()"
+      (click)="handleSubmit()"
       [ngClass]="{ active: !isSavingasset, disabled: isSavingasset }"
     >
       <i *ngIf="isSavingasset" class="fa fa-spinner fa-spin"></i>

@@ -36,7 +36,6 @@ export class EditTopicComponent implements OnInit {
     this.initFG();
   }
 
-  // , Validators.pattern(Regex.NAME)
   initFG(): void {
     this.topicForm = this._fb.group({
       name: ['', [Validators.required]],
@@ -49,6 +48,9 @@ export class EditTopicComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -65,8 +67,8 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * returns Hotel Id
-   * @param globalQueries
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
    */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
@@ -77,7 +79,7 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * create topic and check validation
+   * @function handleSubmit handles form submission type.
    */
   handleSubmit() {
     if (this.topicForm.invalid) {
@@ -94,7 +96,7 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * add new record in topic list
+   * @function addTopic add new record in topic list.
    */
   addTopic() {
     this.isSavingTopic = true;
@@ -124,7 +126,7 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * returns topic id
+   * @function getTopicId to get topic Id from routes query param.
    */
   getTopicId(): void {
     this.$subscription.add(
@@ -141,8 +143,8 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * returns topic record details
-   * @param topicId
+   * @function getTopicDetails to get the topic details.
+   * @param topicId The topic id for which edit action will be done.
    */
   getTopicDetails(topicId: string): void {
     this.$subscription.add(
@@ -156,7 +158,7 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * edit existing topic record
+   * @function updateTopic update topic record.
    */
   updateTopic(): void {
     this.isSavingTopic = true;
@@ -187,12 +189,15 @@ export class EditTopicComponent implements OnInit {
   }
 
   /**
-   * redirect to previous page
+   * @function redirectToTable To navigate to data table page.
    */
   redirectToTable() {
     this.location.back();
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-upload-video',
@@ -25,8 +25,7 @@ export class UploadVideoComponent implements OnInit {
     return { ...this.defaultValue, ...this._fileUploadData };
   }
 
-  @Output()
-  fileData = new EventEmitter();
+  @Output() fileData = new EventEmitter();
 
   error = 'Invalid FileType';
   constructor() {}
@@ -41,30 +40,30 @@ export class UploadVideoComponent implements OnInit {
       const file = event.target.files[0];
       const fileSize = event.target.files[0].size;
       const extension = file.name.split('.')[1];
+      const name = file.name.split('.')[0];
       if (
         this.checkFileType(extension) &&
         fileSize <= +this.uploadFileData.maxFileSize
       ) {
         reader.onload = (_event) => {
           const result: string = reader.result as string;
-          this.createThumbnail(file).then((value) => {
+          this.createThumbnail(file, name).then((value) => {
             this.url = value['url'];
             const data = {
               file: file,
               imageUrl: this.url,
               pageType: this.pageType,
               documentType: this.documentType,
-              thumnailFile: value['file'],
+              thumbnailFile: value['file'],
             };
             this.fileData.emit(data);
           });
         };
-      } else {
       }
     }
   }
 
-  createThumbnail(file) {
+  createThumbnail(file, name) {
     return new Promise((resolve) => {
       const canvas = document.createElement('canvas');
       const video = document.createElement('video');
@@ -83,18 +82,21 @@ export class UploadVideoComponent implements OnInit {
         ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         video.pause();
         const url = canvas.toDataURL('image/png');
-        return resolve({ url, file: this.createFileFrombase64(url) });
+        return resolve({ url, file: this.createFileFrombase64(url, name) });
       };
     });
   }
 
-  createFileFrombase64(dataURL) {
-    var blobBin = atob(dataURL.split(',')[1]);
-    var array = [];
-    for (var i = 0; i < blobBin.length; i++) {
-      array.push(blobBin.charCodeAt(i));
+  createFileFrombase64(dataURL, filename) {
+    let arr = dataURL.split(','),
+      fileType = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
     }
-    return new Blob([new Uint8Array(array)], { type: 'image/png' });
+    return new File([u8arr], `${filename}.png`, { type: fileType });
   }
 
   checkFileType(extension: string) {

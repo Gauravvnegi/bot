@@ -199,7 +199,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    * @returns The entityIds.
    */
   setEntityId() {
-    if (this.feedbackType === this.globalFeedbackConfig.types.transactional)
+    if (
+      this.feedbackType === this.globalFeedbackConfig.types.transactional ||
+      this.feedbackType === ''
+    )
       return this.statisticService.outletIds;
     else return this.hotelId;
   }

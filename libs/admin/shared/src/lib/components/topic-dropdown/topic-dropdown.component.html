@@ -4,6 +4,7 @@
     <mat-select
       [formControlName]="name"
       (selectionChange)="handleSelection($event)"
+      placeholder="Select Topic"
     >
       <mat-option
         *ngFor="let topic of topicList"

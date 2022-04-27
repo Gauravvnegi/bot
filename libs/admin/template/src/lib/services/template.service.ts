@@ -6,16 +6,6 @@ import { Template } from '../data-models/templateConfig.model';
 @Injectable()
 export class TemplateService extends ApiService {
   /**
-   * @function getTopicList
-   * @param id
-   * @param config
-   * @returns
-   */
-  getTopicList(id: string, config): Observable<any> {
-    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
-  }
-
-  /**
    * @function getHotelTemplate get template list from api.
    * @param config dynamically getting global query filter into api.
    * @param hotelId dynamically getting hotelId into api.

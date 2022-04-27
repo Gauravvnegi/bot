@@ -4,6 +4,8 @@ import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming
 import { CampaignComponent } from './components/campaign/campaign.component';
 import { CamapaignEmailComponent } from './components/camapaign-email/camapaign-email.component';
 import { SendTestComponent } from './components/send-test/send-test.component';
+import { ToDropdownComponent } from './components/to-dropdown/to-dropdown.component';
+import { ReceiverFieldComponent } from './components/receiver-field/receiver-field.component';
 
 const appRoutes: Route[] = [
   { path: '', redirectTo: 'create' },
@@ -19,5 +21,7 @@ export class AdminCampaignRoutingModule {
     CampaignComponent,
     CamapaignEmailComponent,
     SendTestComponent,
+    ToDropdownComponent,
+    ReceiverFieldComponent,
   ];
 }

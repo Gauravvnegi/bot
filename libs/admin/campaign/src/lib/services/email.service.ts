@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class EmailService extends ApiService {
+  $enableDropdown = {
+    to: new BehaviorSubject(false),
+    cc: new BehaviorSubject(false),
+    bcc: new BehaviorSubject(false),
+  };
   getFromEmail(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/email`);
   }

@@ -1,8 +1,12 @@
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -29,16 +33,13 @@ export class CamapaignEmailComponent implements OnInit {
   fromEmailList = [];
   isSending = false;
   visible: boolean = true;
-  selectable: boolean = true;
-  removable: boolean = true;
-  addOnBlur: boolean = true;
   private $subscription = new Subscription();
+  enableDropdown = false;
 
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(
     private location: Location,
     private _fb: FormBuilder,
@@ -58,6 +59,7 @@ export class CamapaignEmailComponent implements OnInit {
     this.campaignFG = this._fb.group({
       fromId: ['', [Validators.required]],
       emailIds: this._fb.array([], Validators.required),
+      // cc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
@@ -117,37 +119,6 @@ export class CamapaignEmailComponent implements OnInit {
 
   archiveCampaign() {}
 
-  addEmail(event: MatChipInputEvent, control): void {
-    let input = event.input;
-    let value = event.value;
-
-    // Add our keyword
-    if ((value || '').trim()) {
-      if (!this.isValidEmail(value)) {
-        this._snackbarService.openSnackBarAsText('Invalid email format');
-        return;
-      } else {
-        const controlValues = control.value.filter((cValue) => cValue == value);
-        if (!controlValues.length) {
-          control.push(this._fb.control(value.trim()));
-        }
-      }
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  removeEmail(keyword: any, control: FormArray): void {
-    let index = control.value.indexOf(keyword);
-
-    if (index >= 0) {
-      control.removeAt(index);
-    }
-  }
-
   handleTopicChange(event) {
     this.$subscription.add(
       this._emailService
@@ -205,21 +176,38 @@ export class CamapaignEmailComponent implements OnInit {
     );
   }
 
-  isValidEmail(email): RegExpMatchArray {
-    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return !!email && typeof email === 'string' && email.match(emailRegex);
+  updateFieldData(event, control) {
+    if (event.action == 'add') {
+      control.push(new FormControl(event.value));
+    } else {
+      control.removeAt(
+        control.value.indexOf((item) => item.text == event.value.text)
+      );
+    }
   }
 
-  handleOnFocus(event) {
+  enableEmailControl(event, controlName: string) {
     event.stopPropagation();
-  }
-
-  hanldeOnBlur(event) {
-    event.stopPropagation();
+    this.campaignFG.addControl(
+      controlName,
+      new FormArray([], Validators.required)
+    );
+    this.disableDropdown();
   }
 
   get to() {
     return this.campaignFG.get('emailIds') as FormArray;
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout() {
+    this.disableDropdown();
+  }
+
+  disableDropdown() {
+    this._emailService.$enableDropdown.to.next(false);
+    this._emailService.$enableDropdown.cc.next(false);
+    this._emailService.$enableDropdown.bcc.next(false);
   }
 
   ngOnDestroy() {

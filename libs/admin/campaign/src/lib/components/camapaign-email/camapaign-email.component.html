@@ -77,30 +77,55 @@
     <div class="fields">
       <div class="field full-width">
         <mat-label class="mat-label">To:</mat-label>
-        <mat-form-field>
-          <mat-chip-list #chipList>
-            <mat-chip
-              *ngFor="let email of to.value"
-              (removed)="removeEmail(email, to)"
+        <div class="email-field-container">
+          <hospitality-bot-receiver-field
+            [name]="'to'"
+            [chipList]="campaignFG.get('to')?.value || []"
+            (updateChipSet)="updateFieldData($event, to)"
+          ></hospitality-bot-receiver-field>
+          <div
+            style="display: flex; position: absolute; right: 0; bottom: 25px;"
+          >
+            <div
+              style="margin-right: 10px; cursor: pointer;"
+              (click)="enableEmailControl($event, 'cc')"
+              *ngIf="!campaignFG?.get('cc')"
             >
-              {{ email }}
-              <button matChipRemove class="chip-remove-btn">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-            <input
-              placeholder="Search by name, E-mail, Number, Conf. No., Profile ID or by subscriber group or listing"
-              [matChipInputFor]="chipList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              [matChipInputAddOnBlur]="addOnBlur"
-              (matChipInputTokenEnd)="addEmail($event, to)"
-            />
-            <p>
-              <span class="carbon-copy">Bcc</span>&nbsp;
-              <span class="carbon-copy">Cc</span>
-            </p>
-          </mat-chip-list>
-        </mat-form-field>
+              Cc
+            </div>
+            <div
+              style="margin-right: 10px; cursor: pointer;"
+              (click)="enableEmailControl($event, 'bcc')"
+              *ngIf="!campaignFG?.get('bcc')"
+            >
+              Bcc
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('cc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">Cc:</mat-label>
+        <div style="width: 100%;">
+          <hospitality-bot-receiver-field
+            [name]="'cc'"
+            [chipList]="campaignFG.get('cc')?.value || []"
+            (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
+          ></hospitality-bot-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('bcc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">Bcc:</mat-label>
+        <div style="width: 100%;">
+          <hospitality-bot-receiver-field
+            [name]="'bcc'"
+            [chipList]="campaignFG.get('bcc')?.value || []"
+            (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
+          ></hospitality-bot-receiver-field>
+        </div>
       </div>
     </div>
     <div class="fields">

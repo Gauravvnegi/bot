@@ -27,3 +27,16 @@
     display: none !important;
   }
 }
+
+.search-container {
+  padding: 0;
+}
+
+.search-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  &:hover {
+    background-color: #e1e1f8;
+    border-radius: 5px;
+  }
+}

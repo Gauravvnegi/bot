@@ -204,6 +204,12 @@ export class CamapaignEmailComponent implements OnInit {
     this.disableDropdown();
   }
 
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    this.disableDropdown();
+  }
+
   disableDropdown() {
     this._emailService.$enableDropdown.to.next(false);
     this._emailService.$enableDropdown.cc.next(false);

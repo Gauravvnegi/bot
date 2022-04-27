@@ -5,9 +5,10 @@ import { EditTemplateComponent } from './components/edit-template/edit-template.
 import { CreateTemplateComponent } from './components/create-template/create-template.component';
 import { TemplateDatatableComponent } from './components/datatable/template-datatable/template-datatable.component';
 
-const appRoutes: Route[] = [{ path: '', component: TemplateDatatableComponent },
-{ path: 'create', component: CreateTemplateComponent },
-{ path: 'edit', component: EditTemplateComponent },
+const appRoutes: Route[] = [
+  { path: '', component: TemplateDatatableComponent },
+  { path: 'create', component: CreateTemplateComponent },
+  { path: 'edit', component: EditTemplateComponent },
 ];
 
 @NgModule({

@@ -58,7 +58,7 @@ export const DEFAULT_ROUTES = [
         path: 'marketing/campaign',
         title: 'Campaign',
         children: null,
-        url: 'assets/svg/subscription.svg',
+        url: 'assets/svg/advertising.svg',
       },
     ],
   },

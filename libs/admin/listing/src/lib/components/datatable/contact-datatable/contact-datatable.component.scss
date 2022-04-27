@@ -79,7 +79,7 @@
       justify-content: flex-end;
       padding-bottom: $padding10;
       .delete {
-        margin-right: $margin15;
+        margin: 5px $margin15 0 0;
         cursor: pointer;
       }
       .add {

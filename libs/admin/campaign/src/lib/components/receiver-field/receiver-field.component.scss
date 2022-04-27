@@ -1,0 +1,68 @@
+.form-field {
+  width: 100%;
+  height: auto;
+  min-height: 52px;
+  border-bottom: 1px solid #737679;
+  padding: 8px;
+  margin-bottom: 15px;
+  cursor: text;
+  position: relative;
+}
+
+.form-field .chips .chip {
+  display: inline-block;
+  width: auto;
+
+  background-color: #0077b5;
+  color: #fff;
+  border-radius: 3px;
+  margin: 2px;
+  overflow: hidden;
+}
+.form-field .chips .chip {
+  float: left;
+}
+
+.form-field .chips .chip .chip--button {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #004471;
+  display: inline-block;
+}
+.form-field .chips .chip .chip--text {
+  padding: 8px;
+  cursor: no;
+  display: inline-block;
+  pointer-events: none;
+}
+
+.form-field > input {
+  padding: 5px;
+  display: block !important;
+  box-sizing: border-box;
+  width: calc(100% - 65px);
+  height: 34px;
+  border: none;
+  margin: 5px 0 0;
+  display: inline-block;
+  background-color: transparent;
+  outline: none;
+  font-size: 16px;
+  font-family: Roboto;
+}
+
+.chips {
+  max-width: calc(100% - 65px);
+}
+
+.dropdown {
+  width: 100%;
+  position: absolute;
+  top: 60px;
+  left: 0px;
+  z-index: 112;
+  border-radius: 10px;
+  box-shadow: 3px 9px 20px 0 rgba(0, 0, 0, 0.25);
+  background-color: #fff;
+  padding: 15px;
+}

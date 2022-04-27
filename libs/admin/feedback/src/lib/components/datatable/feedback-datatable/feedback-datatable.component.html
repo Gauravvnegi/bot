@@ -422,25 +422,25 @@
                     class="stay-booking-feedback"
                     [ngClass]="{
                       'status-opacity-reject':
-                        rowData.services.rating.value < 5,
+                        rowData.services?.rating?.value < 5,
                       'status-opacity-success':
-                        rowData.services.rating.value >= 5
+                        rowData.services?.rating?.value >= 5
                     }"
                   >
                     <p
                       class="number"
                       [ngClass]="{
                         'status-background-reject':
-                          rowData.services.rating.value < 5,
+                          rowData.services?.rating?.value < 5,
                         'status-background-moderate':
-                          rowData.services.rating.value >= 5 &&
-                          rowData.services.rating.value < 9,
+                          rowData.services?.rating?.value >= 5 &&
+                          rowData.services?.rating?.value < 9,
                         'status-background-success':
-                          rowData.services.rating.value > 8
+                          rowData.services?.rating?.value > 8
                       }"
-                      *ngIf="rowData.services.rating.value"
+                      *ngIf="rowData.services?.rating?.value"
                     >
-                      {{ rowData.services.rating.value }}
+                      {{ rowData.services?.rating?.value }}
                     </p>
                   </div>
                 </div>
@@ -535,25 +535,25 @@
                       class="stay-booking-feedback"
                       [ngClass]="{
                         'status-opacity-reject':
-                          rowData.services.rating.value < 5,
+                          rowData.services?.rating?.value < 5,
                         'status-opacity-success':
-                          rowData.services.rating.value >= 5
+                          rowData.services?.rating?.value >= 5
                       }"
                     >
                       <p
                         class="number"
                         [ngClass]="{
                           'status-background-reject':
-                            rowData.services.rating.value < 5,
+                            rowData.services?.rating?.value < 5,
                           'status-background-moderate':
-                            rowData.services.rating.value >= 5 &&
-                            rowData.services.rating.value < 9,
+                            rowData.services?.rating?.value >= 5 &&
+                            rowData.services?.rating?.value < 9,
                           'status-background-success':
-                            rowData.services.rating.value > 8
+                            rowData.services?.rating?.value > 8
                         }"
-                        *ngIf="rowData.services.rating.value"
+                        *ngIf="rowData.services?.rating?.value"
                       >
-                        {{ rowData.services.rating.value }}
+                        {{ rowData.services?.rating?.value }}
                       </p>
                     </div>
                   </div>

@@ -167,17 +167,16 @@
         span {
           color: $dark-blue;
         }
-        
       }
     }
   }
   &--container {
     .main {
-      max-height: calc(100vh - 9.5vh);
+      max-height: calc(100vh - 60px);
       overflow-x: hidden;
       background-color: #f4f5f6;
       .router__wrapper {
-        min-height: calc(100vh - 19.5vh);
+        min-height: calc(100vh - 12.5vh);
         @include padding(0 1.5rem);
         @include padding-top(1.5rem);
         @media only screen and (max-width: 1300px) {

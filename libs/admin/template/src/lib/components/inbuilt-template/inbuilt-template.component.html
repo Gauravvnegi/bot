@@ -17,8 +17,10 @@
         Pre-Designed templates
       </p>
       <div class="field">
-        <mat-select>
-          <mat-option placeholder="Topic"></mat-option>
+        <mat-select placeholder="Topic">
+          <mat-option *ngFor="let topic of topicList" [value]="topic.name">{{
+            topic.name
+          }}</mat-option>
         </mat-select>
       </div>
     </div>

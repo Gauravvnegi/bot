@@ -227,7 +227,7 @@
         ></p-tableCheckbox>
       </td>
       <td class="name">
-        <div class="topic_image_wrapper">
+        <div class="template_image_wrapper">
           <div class="text">
             <div>{{ rowData.name }}</div>
           </div>
@@ -241,7 +241,7 @@
           <mat-slide-toggle
             class="active"
             [checked]="rowData.status"
-            (change)="updateTopicStatus($event, rowData.id)"
+            (change)="updateTemplateStatus($event, rowData.id)"
           ></mat-slide-toggle>
         </label>
       </td>

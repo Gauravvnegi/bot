@@ -35,3 +35,23 @@ export class Template implements Deserializable {
     return this;
   }
 }
+
+//get topic list.
+export class Topics {
+  records: Topic[];
+  deserialize(input: any) {
+    this.records = input.records.map((record: any) =>
+      new Topic().deserialize(record)
+    );
+    return this;
+  }
+}
+
+export class Topic {
+  name: string;
+
+  deserialize(input: any) {
+    Object.assign(this, set({}, 'name', get(input, ['name'])));
+    return this;
+  }
+}

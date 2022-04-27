@@ -68,8 +68,30 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.tabFilterItems = templateConfig.datatable.tabFilterItems;
+    this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getHotelId(this.globalQueries);
+      // fetch-api for records
+      this.loadInitialData([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+    });
+  }
   /**
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
@@ -158,7 +180,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param templateId The template id for which status update action will be done.
    */
-  updateTopicStatus(event, templateId): void {
+  updateTemplateStatus(event, templateId): void {
     let data = {
       active: event.checked,
     };

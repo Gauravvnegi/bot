@@ -30,16 +30,20 @@
     .preDesigned {
       display: flex;
       padding: 40px 0 0 40px;
+      p {
+        padding-top: 5px;
+      }
     }
     .field {
       width: 205px;
       height: 36px;
       margin: 0 213px 37px 23px;
-      padding: 9px 16.9px 8px 13px;
+      padding: 8px 7px 8px 13px;
       opacity: 0.2;
       border-radius: 4px;
       border: solid 1px #707070;
       background-color: #fff;
+      font-size: 14px;
     }
   }
 }

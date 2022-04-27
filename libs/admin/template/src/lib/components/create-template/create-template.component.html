@@ -58,47 +58,29 @@
         </div>
       </div>
       <div class="wrapper-text">
-        <ng-container
-          *ngIf="
-            templateForm?.get('marketingContacts')?.value.length;
-            then contactDatatable;
-            else noContact
-          "
-        ></ng-container>
-        <ng-template #contactDatatable
-          ><hospitality-bot-contact-datatable
-            [dataSource]="templateForm?.get('marketingContacts')?.value"
-            [totalRecords]="templateForm?.get('marketingContacts')?.value.length"
-            [add]="true"
-            [hotelId]="hotelId"
-            (updateContacts)="updateContactList($event)"
-          ></hospitality-bot-contact-datatable
-        ></ng-template>
-        <ng-template #noContact>
           <div class="add-text">
             Create Content
           </div>
           <div class="manually-add">
-            <div class="manually-contacts" >
+            <div class="manually-templates" >
               <img src="assets/svg/diskette.svg" alt="" />
               <div class="manually-import">
                 Saved Template
               </div>
             </div>
-            <div class="manually-contacts" >
+            <div class="manually-templates" >
               <img src="assets/svg/web-design.svg" alt="" class="built-template" />
               <div class="manually-import">
                 In-Built Template
               </div>
             </div>
-            <div class="manually-contacts" >
+            <div class="manually-templates" >
               <img src="assets/svg/design.svg" alt="" />
               <div class="manually-import">
                 Create New(HTML Editor)
               </div>
             </div>
           </div>
-        </ng-template>
       </div>
       <div class="wrapper-form">
         <div class="feilds">
@@ -113,7 +95,7 @@
       <div class="save-section">
         <div
           class="save-button"
-          (click)="createList()"
+          (click)="saveTemplate()"
           [ngClass]="{ active: !isSaving, disabled: isSaving }"
         >
           <div class="save-text">

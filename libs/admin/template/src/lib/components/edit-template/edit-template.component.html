@@ -58,43 +58,25 @@
         </div>
       </div>
       <div class="wrapper-text">
-        <ng-container
-          *ngIf="
-            templateForm?.get('marketingContacts')?.value.length;
-            then contactDatatable;
-            else noContact
-          "
-        ></ng-container>
-        <ng-template #contactDatatable
-          ><hospitality-bot-contact-datatable
-            [dataSource]="templateForm?.get('marketingContacts')?.value"
-            [totalRecords]="templateForm?.get('marketingContacts')?.value.length"
-            [add]="true"
-            [hotelId]="hotelId"
-            (updateContacts)="updateContactList($event)"
-          ></hospitality-bot-contact-datatable
-        ></ng-template>
-        <ng-template #noContact>
           <div class="add-text">
             Edit Content
           </div>
           <div class="manually-add">
-            <div class="manually-contacts" >
+            <div class="manually-templates" >
               <img src="" alt="" />
               <div class="logos">
-                <div class="logos__logo">
+                <div class="logos__logo" (click)="openTemplateView()">
                   <img src="assets/svg/view8280.svg" alt="" >
                 </div>
-                <div class="logos__logo">
+                <div class="logos__logo" (click)="openEditTemplate()">
                   <img src="assets/svg/edit8278.svg" alt="" >
                 </div>
-                <div class="logos__logo">
+                <div class="logos__logo" (click)="openDeleteTemplate()">
                   <img src="assets/svg/delete8279.svg" alt="" > 
                 </div>
               </div>
             </div>
           </div>
-        </ng-template>
       </div>
       <div class="wrapper-form">
         <div class="feilds">
@@ -109,7 +91,7 @@
       <div class="save-section">
         <div
           class="save-button"
-          (click)="createList()"
+          (click)="saveTemplate()"
           [ngClass]="{ active: !isSaving, disabled: isSaving }"
         >
           <div class="save-text">

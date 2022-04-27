@@ -122,7 +122,7 @@
   }
   .manually-add{
     display: flex;
-    .manually-contacts{
+    .manually-templates{
       opacity: 0.9;
       border-radius: 4px;
       border: solid 1px $manually-contacts;
@@ -215,7 +215,7 @@
   font-size: $font14;
   color: $primary-gray;
   margin-right: 10px;
-  width: 52%;
+  width: 30%;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }
@@ -295,7 +295,7 @@
 }
 
 :host ::ng-deep .mat-description{
-  width: 12% !important;
+  width: 8% !important;
 }
 :host ::ng-deep .mat-select-panel:not([class*="mat-elevation-z"]){
   margin-top: 3rem !important;

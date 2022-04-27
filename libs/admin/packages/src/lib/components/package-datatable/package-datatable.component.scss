@@ -17,9 +17,9 @@
     background: transparent;
     border: none;
     outline: none;
-    margin-right: 20px;
+    margin-right: $margin20;
     color: $primary-gray;
-    font-size: 14px;
+    font-size: $font14;
     &:hover {
         cursor: pointer;
         color: $primary-purple;
@@ -30,7 +30,7 @@
     display: flex;
     justify-content: center;
     width: 72vw;
-    padding: 10px 0;
+    padding: $padding10 0;
 }
 
 :host ::ng-deep .name {
@@ -57,7 +57,7 @@
             }
         }
         .text {
-            font-size: 12px;
+            font-size: $font12;
             color: $primary-black;
             max-width: 60%;
             // @media (max-width: 992px) {
@@ -83,7 +83,7 @@
 }
 
 :host ::ng-deep .brand-name {
-    font-size: 12px;
+    font-size: $font12;
     color: $primary-black;
     p {
         color: $primary-gray;
@@ -92,7 +92,7 @@
 }
 
 .amount_wrapper {
-    font-size: 12px;
+    font-size: $font12;
     color: $primary-black;
 }
 
@@ -119,7 +119,7 @@
 }
 
 :host ::ng-deep .service-details {
-    font-size: 12px;
+    font-size: $font12;
     color: $primary-black;
     p {
         color: $primary-gray;
@@ -230,11 +230,25 @@
 
 :host ::ng-deep .heading {
     color: $dark-blue;
-    font-size: 16px;
+    font-size: $font16;
     font-weight: bold;
 }
 
 :host ::ng-deep .table-header-text {
     color: $dark-blue;
-    font-size: 14px;
+    font-size: $font14;
+}
+
+:host ::ng-deep thead.p-datatable-thead {
+    border-top: 1px solid $c-gray-90 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    text-align: center;
+    background: #eaf0f6 !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+    outline: 0 none;
+    height: 80px !important;
 }

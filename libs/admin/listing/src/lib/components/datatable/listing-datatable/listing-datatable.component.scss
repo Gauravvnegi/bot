@@ -124,3 +124,34 @@
 :host ::ng-deep .table-data-head {
   color: $dark-blue !important;
 }
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td{
+  height: 80px !important;
+}
+
+th.tableHeading.p-resizable-column{
+  background: #edf1f5 !important;
+  border-top:  1px solid #e4e4e4 !important;
+}
+
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th{
+  text-align: center;
+}
+td {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  color: #484848;
+}
+
+.topic-name {
+  opacity: 0.4;
+}
+
+.status-toggle {
+  display: flex;
+  justify-content: center;
+}

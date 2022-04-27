@@ -47,18 +47,54 @@ export class UploadVideoComponent implements OnInit {
       ) {
         reader.onload = (_event) => {
           const result: string = reader.result as string;
-          this.url = result;
-          const data = {
-            file: file,
-            imageUrl: this.url,
-            pageType: this.pageType,
-            documentType: this.documentType,
-          };
-          this.fileData.emit(data);
+          this.createThumbnail(file).then((value) => {
+            this.url = value['url'];
+            const data = {
+              file: file,
+              imageUrl: this.url,
+              pageType: this.pageType,
+              documentType: this.documentType,
+              thumnailFile: value['file'],
+            };
+            this.fileData.emit(data);
+          });
         };
       } else {
       }
     }
+  }
+
+  createThumbnail(file) {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const video = document.createElement('video');
+
+      // this is important
+      video.autoplay = true;
+      video.muted = true;
+      video.src = URL.createObjectURL(file);
+
+      video.onloadeddata = () => {
+        let ctx = canvas.getContext('2d');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+        video.pause();
+        const url = canvas.toDataURL('image/png');
+        return resolve({ url, file: this.createFileFrombase64(url) });
+      };
+    });
+  }
+
+  createFileFrombase64(dataURL) {
+    var blobBin = atob(dataURL.split(',')[1]);
+    var array = [];
+    for (var i = 0; i < blobBin.length; i++) {
+      array.push(blobBin.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], { type: 'image/png' });
   }
 
   checkFileType(extension: string) {

@@ -300,3 +300,9 @@
 :host ::ng-deep .mat-select-panel:not([class*="mat-elevation-z"]){
   margin-top: 3rem !important;
 }
+.logos{
+  padding: 11px 0;
+  width: 84%;
+  display:flex; 
+  justify-content: space-around;
+}

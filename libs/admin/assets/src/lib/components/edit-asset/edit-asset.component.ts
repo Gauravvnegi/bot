@@ -1,13 +1,12 @@
+import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Location } from '@angular/common';
+import { forkJoin, Subscription } from 'rxjs';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
-import { Subscription } from 'rxjs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpBackend } from '@angular/common/http';
 @Component({
   selector: 'hospitality-bot-edit-asset',
   templateUrl: './edit-asset.component.html',
@@ -51,8 +50,8 @@ export class EditAssetComponent implements OnInit {
       type: ['', [Validators.required]],
       description: ['', [Validators.required]],
       url: ['', [Validators.required]],
-      thumbnailUrl:[''],
       status: [true, [Validators.required]],
+      thumbnailUrl: [''],
     });
   }
 
@@ -175,33 +174,58 @@ export class EditAssetComponent implements OnInit {
   /**
    *
    * @param event
-   * upload file
+   * @function uploadFile upload File for asset.
    */
   uploadFile(event): void {
     let formData = new FormData();
-    this.isSavingasset = true;
-
     formData.append('files', event.file);
-    this.$subscription.add(
-      this.assetService.uploadImage(this.hotelId, formData).subscribe(
-        (response) => {
-          this.assetForm.get('url').patchValue(response.fileDownloadUri);
-          this._snakbarService.openSnackBarAsText(
-            'Asset image uploaded successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this.isSavingasset = false;
-        },
-        ({ error }) => {
-          this._snakbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
+    if (this.assetType === 'Video') {
+      let thumbnailData = new FormData();
+      thumbnailData.append('files', event.file);
+      this.$subscription.add(
+        forkJoin({
+          videoFile: this.assetService.uploadImage(this.hotelId, formData),
+          thumbnail: this.assetService.uploadImage(this.hotelId, thumbnailData),
+        }).subscribe(
+          (response) => {
+            this._snakbarService.openSnackBarAsText(
+              'Asset image uploaded successfully',
+              '',
+
+              { panelClass: 'success' }
+            );
+            this.assetForm.patchValue({
+              url: response.videoFile.fileDownloadUri,
+              thumbnailUrl: response.thumbnail.fileDownloadUri,
+            });
+          },
+          ({ error }) => this._snakbarService.openSnackBarAsText(error.message)
+        )
+      );
+    } else {
+      this.$subscription.add(
+        this.assetService.uploadImage(this.hotelId, formData).subscribe(
+          (response) => {
+            this.assetForm.get('url').patchValue(response.fileDownloadUri);
+            this._snakbarService.openSnackBarAsText(
+              'Asset image uploaded successfully',
+              '',
+
+              { panelClass: 'success' }
+            );
+
+            this.isSavingasset = false;
+          },
+          ({ error }) => {
+            this._snakbarService.openSnackBarAsText(error.message);
+          }
+        )
+      );
+    }
   }
 
   /**
-   * editing the existing records
+   * @function updateAsset Editing the existing records.
    */
   updateAsset(): void {
     this.isSavingasset = true;
@@ -249,6 +273,10 @@ export class EditAssetComponent implements OnInit {
    */
    get assetImageUrl(): string {
     return this.assetForm?.get('url').value || '';
+  }
+
+  get thumbnailUrl() {
+    return this.assetForm?.get('thumbnailUrl').value || '';
   }
 
   get assetType() {

@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { ModalService, SnackBarService } from '@hospitality-bot/shared/material';
-import { EditContactComponent } from 'libs/admin/listing/src/lib/components/edit-contact/edit-contact.component';
 import { ImportContactComponent } from 'libs/admin/listing/src/lib/components/import-contact/import-contact.component';
 import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/template.model';
 import { TemplateService } from '../../services/template.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-edit-template',
@@ -17,7 +17,7 @@ import { TemplateService } from '../../services/template.service';
   styleUrls: ['./edit-template.component.scss']
 })
 export class EditTemplateComponent implements OnInit , OnDestroy {
-  listFG: FormGroup;
+  templateForm: FormGroup;
   private $subscription = new Subscription();
   hotelId: string;
   globalQueries = [];
@@ -30,7 +30,8 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
     private _snackbarService: SnackBarService,
     private _router: Router,
     private adminUtilityService: AdminUtilityService,
-    private templateService :TemplateService
+    private templateService :TemplateService,
+    private location: Location
   ) {
     this.initFG();
   }
@@ -40,7 +41,7 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
   }
 
   initFG(): void {
-    this.listFG = this._fb.group({
+    this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
       topicName: ['', [Validators.required]],
       description: [''],
@@ -96,7 +97,7 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
     importCompRef.componentInstance.hotelId = this.hotelId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) {
-        this.listFG.patchValue({ marketingContacts: response.data });
+        this.templateForm.patchValue({ marketingContacts: response.data });
       }
       importCompRef.close();
     });
@@ -107,12 +108,12 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
 
   updateContactList(event) {
     if (event.add) {
-      this.listFG.patchValue({ marketingContacts: event.data });
+      this.templateForm.patchValue({ marketingContacts: event.data });
     }
   }
 
   goBack(){
-
+    this.location.back();
   }
 
   ngOnDestroy(): void {

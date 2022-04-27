@@ -27,7 +27,7 @@
   }
   &-form {
     padding-left: $padding20;
-    .feilds {
+    .fields {
       display: flex;
       align-items: center;
       margin-top: 2%;
@@ -58,7 +58,7 @@
         padding-left: 11%;
         margin-bottom: 20px;
       }
-      .feild {
+      .field {
         display: flex;
         align-items: center;
         width: 31.5%;
@@ -105,8 +105,8 @@
       padding: $padding20 0;
     }
   }
-  .wrapper-text{
-    margin: 15px 0; 
+  .wrapper-text {
+    margin: 15px 0;
     padding-left: $padding20;
     .add-text {
       font-family: Roboto;
@@ -120,9 +120,9 @@
       color: $dark-blue;
     }
   }
-  .manually-add{
+  .manually-add {
     display: flex;
-    .manually-contacts{
+    .manually-contacts {
       opacity: 0.9;
       border-radius: 4px;
       border: solid 1px $manually-contacts;
@@ -142,14 +142,14 @@
       .manually-import {
         padding-top: 20px;
         font-size: 16px;
-    }
+      }
     }
   }
-  .save-section{
-    display: flex; 
-    justify-content: center; 
+  .save-section {
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
-    .save-button{
+    .save-button {
       display: flex;
       justify-content: center;
       width: 300px;
@@ -159,7 +159,7 @@
       border-radius: 23px;
       box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
       background-color: $primary-purple;
-      .save-text{
+      .save-text {
         font-size: $font16;
         font-weight: 500;
         font-stretch: normal;
@@ -269,38 +269,44 @@
   color: $dark-blue;
 }
 
-:host ::ng-deep .description{
+:host ::ng-deep .description {
   width: 100% !important;
-
 }
 
-:host ::ng-deep .description .mat-form-field-infix{
+:host ::ng-deep .description .mat-form-field-infix {
   min-width: 100%;
   letter-spacing: 0.96px;
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label{
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
   display: none !important;
 }
 
-// :host ::ng-deep .description-feilds{
+// :host ::ng-deep .description-fields{
 //   width: 100% !important;
 //   display: block !important;
 // // }
-// :host ::ng-deep .description-feild{
+// :host ::ng-deep .description-field{
 //   width: 100% !important;
 //   display: block !important;
 // }
 
-:host ::ng-deep .feild.description-feild{
+:host ::ng-deep .field.description-field {
   width: 100% !important;
   display: block;
 }
-:host ::ng-deep .mat-form-field.description{
+:host ::ng-deep .mat-form-field.description {
   width: 100% !important;
   display: block !important;
 }
 
-:host ::ng-deep .mat-description{
+:host ::ng-deep .mat-description {
   width: 12% !important;
 }

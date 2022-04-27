@@ -17,8 +17,8 @@
 
   <form [formGroup]="packageForm">
     <div class="wrapper-form">
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Package Code:</mat-label>
           <mat-form-field>
             <input matInput formControlName="packageCode" />
@@ -32,7 +32,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <mat-label class="mat-label">Package Name:</mat-label>
           <mat-form-field>
             <input matInput formControlName="name" />
@@ -46,7 +46,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <mat-label class="mat-label">Category:</mat-label>
           <mat-form-field>
             <mat-select formControlName="category">
@@ -59,7 +59,7 @@
           </mat-form-field>
         </div>
       </div>
-      <!-- <div class="feilds image-wrapper">
+      <!-- <div class="fields image-wrapper">
         <div class="image">
           <hospitality-bot-upload-file
             [fileUploadData]="fileUploadData"
@@ -70,7 +70,7 @@
           </hospitality-bot-upload-file>
         </div>
       </div> -->
-      <div class="feilds margin-adjust">
+      <div class="fields margin-adjust">
         <div class="image-button">
           <mat-label class="mat-label">Upload Image:</mat-label>
           <div class="image">
@@ -86,7 +86,7 @@
           <!-- <p class="image-name">{{ packageForm.get('imageName').value }}</p> -->
         </div>
       </div>
-      <!-- <div class="feilds margin-adjust">
+      <!-- <div class="fields margin-adjust">
         <div class="note">
           Recommended dimension (in px) : 60*60
         </div>
@@ -105,8 +105,8 @@
           </mat-error>
         </mat-form-field>
       </div> -->
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Type:</mat-label>
           <mat-form-field>
             <mat-label>Select Type</mat-label>
@@ -125,7 +125,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <mat-label class="mat-label">Price:</mat-label>
           <mat-form-field class="currency">
             <mat-label>Currency</mat-label>
@@ -161,7 +161,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <mat-label class="mat-label">Unit:</mat-label>
           <mat-form-field>
             <mat-label>Unit</mat-label>
@@ -198,7 +198,7 @@
       <div>
         <mat-slide-toggle formControlName="autoAccept"></mat-slide-toggle>
       </div> -->
-      <div class="feilds">
+      <div class="fields">
         <div class="toggle_wrapper">
           <mat-label class="mat-label">Status :</mat-label>
           <div class="status status--left">Inactive</div>
@@ -206,7 +206,7 @@
           <div class="status status--right">Active</div>
         </div>
       </div>
-      <div class="feilds">
+      <div class="fields">
         <div class="toggle_wrapper">
           <mat-label class="mat-label">Auto Accept :</mat-label>
           <div class="status status--left">Disable</div>

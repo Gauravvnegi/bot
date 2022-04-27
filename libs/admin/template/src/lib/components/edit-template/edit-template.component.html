@@ -6,11 +6,11 @@
           >keyboard_backspace</mat-icon
         >
         <p class="label">
-          Create Template
+          Edit Template
         </p>
       </div>
     </header>
-    <form [formGroup]="listFG">
+    <form [formGroup]="templateForm">
       <div class="wrapper-form">
         <div class="feilds">
           <div class="feild">
@@ -23,8 +23,8 @@
               />
               <mat-error
                 *ngIf="
-                  listFG.get('name').touched &&
-                  listFG.get('name').hasError('required')
+                  templateForm.get('name').touched &&
+                  templateForm.get('name').hasError('required')
                 "
               >
                 Name is required
@@ -60,15 +60,15 @@
       <div class="wrapper-text">
         <ng-container
           *ngIf="
-            listFG?.get('marketingContacts')?.value.length;
+            templateForm?.get('marketingContacts')?.value.length;
             then contactDatatable;
             else noContact
           "
         ></ng-container>
         <ng-template #contactDatatable
           ><hospitality-bot-contact-datatable
-            [dataSource]="listFG?.get('marketingContacts')?.value"
-            [totalRecords]="listFG?.get('marketingContacts')?.value.length"
+            [dataSource]="templateForm?.get('marketingContacts')?.value"
+            [totalRecords]="templateForm?.get('marketingContacts')?.value.length"
             [add]="true"
             [hotelId]="hotelId"
             (updateContacts)="updateContactList($event)"
@@ -76,25 +76,21 @@
         ></ng-template>
         <ng-template #noContact>
           <div class="add-text">
-            Create Content
+            Edit Content
           </div>
           <div class="manually-add">
             <div class="manually-contacts" >
-              <img src="assets/svg/diskette.svg" alt="" />
-              <div class="manually-import">
-                Saved Template
-              </div>
-            </div>
-            <div class="manually-contacts" >
-              <img src="assets/svg/web-design.svg" alt="" class="built-template" />
-              <div class="manually-import">
-                In-Built Template
-              </div>
-            </div>
-            <div class="manually-contacts" >
-              <img src="assets/svg/design.svg" alt="" />
-              <div class="manually-import">
-                Create New(HTML Editor)
+              <img src="" alt="" />
+              <div class="logos">
+                <div class="logos__logo">
+                  <img src="assets/svg/view8280.svg" alt="" >
+                </div>
+                <div class="logos__logo">
+                  <img src="assets/svg/edit8278.svg" alt="" >
+                </div>
+                <div class="logos__logo">
+                  <img src="assets/svg/delete8279.svg" alt="" > 
+                </div>
               </div>
             </div>
           </div>

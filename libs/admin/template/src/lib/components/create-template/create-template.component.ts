@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
@@ -8,6 +8,7 @@ import { TemplateService } from '../../services/template.service';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Topics } from '../../data-models/templateConfig.model';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'hospitality-bot-create-template',
@@ -21,6 +22,9 @@ export class CreateTemplateComponent implements OnInit, OnDestroy {
   globalQueries = [];
   topicList = [];
   isSaving = false;
+  isLinear = false;
+
+  @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -81,13 +85,17 @@ export class CreateTemplateComponent implements OnInit, OnDestroy {
     );
   }
 
+  move(index: number) {
+    this.stepper.selectedIndex = index;
+  }
+
   saveTemplate() {}
   goBack() {
     this.location.back();
   }
 
   openInBuiltTemplate() {
-    this._router.navigate(['../in-built-template'], { relativeTo: this.route });
+    this._router.navigate(['../template-design'], { relativeTo: this.route });
   }
 
   ngOnDestroy(): void {

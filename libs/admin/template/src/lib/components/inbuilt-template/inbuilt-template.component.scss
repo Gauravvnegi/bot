@@ -20,9 +20,12 @@
 
     .go-back {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       padding-top: 30px;
-
+      align-items: center;
+      button{
+        text-decoration: none;
+      }
       .material-icons {
         cursor: pointer;
       }

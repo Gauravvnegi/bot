@@ -66,6 +66,3 @@ export class Topic {
     return this;
   }
 }
-
-export type ITopic = Omit<Topic, 'deserialize'>;
-export type ITopics = Omit<Topics, 'deserialize'>;

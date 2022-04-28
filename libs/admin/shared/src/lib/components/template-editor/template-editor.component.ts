@@ -16,11 +16,15 @@ export class TemplateEditorComponent implements OnInit {
   };
   richText = true;
   @Input() template = '';
+  @Input() disabled = false;
+  @Input() hybrid = true;
   constructor() {}
 
   ngOnInit(): void {}
 
-  ngOnChanges() {}
+  ngOnChanges() {
+    this.ckeConfig['readOnly'] = this.disabled;
+  }
 
   changeField(value: boolean) {
     this.richText = value;

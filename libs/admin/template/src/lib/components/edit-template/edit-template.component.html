@@ -5,7 +5,12 @@
         >keyboard_backspace</mat-icon
       >
       <p class="label">
-        Edit Template
+        <ng-container *ngIf="templateId; else addTemplate">
+          Edit Template
+        </ng-container>
+        <ng-template #addTemplate>
+          Create Template
+        </ng-template>
       </p>
     </div>
   </header>
@@ -32,7 +37,7 @@
         </div>
         <div class="feild">
           <hospitality-bot-topic-dropdown
-          class="mat-label"
+            class="mat-label"
             [hotelId]="hotelId"
             [name]="'topicName'"
             [parentForm]="templateForm"
@@ -52,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="wrapper-text">
+    <!-- <div class="wrapper-text">
       <div class="add-text">
         Edit Content
       </div>
@@ -72,7 +77,33 @@
           </div>
         </div>
       </div>
+    </div> -->
+    <div class="wrapper-text">
+      <div class="add-text">
+        Create Content
+      </div>
+      <div class="manually-add">
+        <div class="manually-templates">
+          <img src="assets/svg/diskette.svg" alt="" />
+          <div class="manually-import">
+            Saved Template
+          </div>
+        </div>
+        <div class="manually-templates">
+          <img src="assets/svg/web-design.svg" alt="" class="built-template" />
+          <div class="manually-import">
+            In-Built Template
+          </div>
+        </div>
+        <div class="manually-templates">
+          <img src="assets/svg/design.svg" alt="" />
+          <div class="manually-import">
+            Create New(HTML Editor)
+          </div>
+        </div>
+      </div>
     </div>
+    
     <div class="wrapper-form">
       <div class="feilds">
         <div class="toggle_wrapper">
@@ -86,7 +117,7 @@
     <div class="save-section">
       <div
         class="save-button"
-        (click)="updateTemplate()"
+        (click)="handleSubmit()"
         [ngClass]="{ active: !isSaving, disabled: isSaving }"
       >
         <div class="save-text">

@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -7,14 +8,14 @@ import { Subscription } from 'rxjs';
 import { Template } from '../../data-models/templateConfig.model';
 import { TemplateService } from '../../services/template.service';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'hospitality-bot-create-template',
-  templateUrl: './create-template.component.html',
-  styleUrls: ['./create-template.component.scss'],
+  selector: 'hospitality-bot-template-html-editor',
+  templateUrl: './template-html-editor.component.html',
+  styleUrls: ['./template-html-editor.component.scss']
 })
-export class CreateTemplateComponent implements OnInit, OnDestroy {
+export class TemplateHtmlEditorComponent implements OnInit {
+
   templateForm: FormGroup;
   private $subscription = new Subscription();
   hotelId: string;
@@ -41,9 +42,7 @@ export class CreateTemplateComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
-      topicName: ['', [Validators.required]],
-      description: [''],
-      status: [true],
+      message: ['', [Validators.required]]
     });
   }
 

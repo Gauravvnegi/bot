@@ -155,10 +155,10 @@
     .save-button{
       display: flex;
       justify-content: center;
-      width: 300px;
+      width: 200px;
       height: 46px;
       margin: 121px 34px 0 2.5px;
-      padding: 12px 106px 13px;
+      padding: 12px;
       border-radius: 23px;
       box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
       background-color: $primary-purple;
@@ -299,4 +299,15 @@
 }
 :host ::ng-deep .mat-select-panel:not([class*="mat-elevation-z"]){
   margin-top: 3rem !important;
+}
+.import-assets{
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.07;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #4b56c0;
 }

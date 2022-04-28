@@ -22,7 +22,7 @@ export class EditTemplateComponent implements OnDestroy {
   globalQueries = [];
   topicList = [];
   isSaving = false;
-  templateId:string;
+  templateId: string;
   template: Template;
   constructor(
     private _fb: FormBuilder,
@@ -32,7 +32,7 @@ export class EditTemplateComponent implements OnDestroy {
     private templateService: TemplateService,
     private location: Location,
     private _router: Router,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initFG();
   }
@@ -98,7 +98,20 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
-  updateTemplate():void {
+  handleSubmit() {
+    if (this.templateForm.invalid) {
+      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      return;
+    }
+    const data = this.templateForm.getRawValue();
+    console.log(data);
+    if (this.templateId) {
+      this.updateTemplate();
+    } else {
+      this.createTemplate();
+    }
+  }
+  updateTemplate(): void {
     this.isSaving = true;
     const data = this.templateService.mapTemplateData(
       this.templateForm.getRawValue(),
@@ -126,6 +139,37 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
+  createTemplate() {
+    if (this.templateForm.invalid) {
+      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      return;
+    }
+    this.isSaving = true;
+    let data = this.templateService.mapTemplateData(
+      this.templateForm.getRawValue(),
+      this.hotelId
+    );
+    this.$subscription.add(
+      this.templateService.createTemplate(this.hotelId, data).subscribe(
+        (response) => {
+          this.template = new Template().deserialize(response);
+          this.templateForm.patchValue(this.template);
+          this._snackbarService.openSnackBarAsText(
+            'Template Created Successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this._router.navigate(['/pages/library/template']);
+          this.isSaving = false;
+        },
+        ({ error }) => {
+          this._snackbarService.openSnackBarAsText(error.message);
+          this.isSaving = false;
+        }
+      )
+    );
+  }
+
   openTemplateView() {}
   openEditTemplate() {}
   openDeleteTemplate() {}
@@ -141,4 +185,3 @@ export class EditTemplateComponent implements OnDestroy {
 function Input() {
   throw new Error('Function not implemented.');
 }
-

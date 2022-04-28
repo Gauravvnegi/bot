@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateTemplateComponent } from './create-template.component';
+import { TemplateHtmlEditorComponent } from './template-html-editor.component';
 
-describe('CreateTemplateComponent', () => {
-  let component: CreateTemplateComponent;
-  let fixture: ComponentFixture<CreateTemplateComponent>;
+describe('TemplateHtmlEditorComponent', () => {
+  let component: TemplateHtmlEditorComponent;
+  let fixture: ComponentFixture<TemplateHtmlEditorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateTemplateComponent ]
+      declarations: [ TemplateHtmlEditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateTemplateComponent);
+    fixture = TestBed.createComponent(TemplateHtmlEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

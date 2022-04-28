@@ -1,32 +1,38 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
-import { Topics } from '../../data-models/template.model';
 import { TemplateService } from '../../services/template.service';
 import { Location } from '@angular/common';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Template } from '../../data-models/templateConfig.model';
 
 @Component({
   selector: 'hospitality-bot-edit-template',
   templateUrl: './edit-template.component.html',
-  styleUrls: ['./edit-template.component.scss']
+  styleUrls: ['./edit-template.component.scss'],
 })
-export class EditTemplateComponent implements OnInit , OnDestroy {
+export class EditTemplateComponent implements OnDestroy {
+  id: string;
   templateForm: FormGroup;
   private $subscription = new Subscription();
   hotelId: string;
   globalQueries = [];
   topicList = [];
   isSaving = false;
+  templateId:string;
+  template: Template;
   constructor(
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private templateService :TemplateService,
-    private location: Location
+    private templateService: TemplateService,
+    private location: Location,
+    private _router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.initFG();
   }
@@ -40,7 +46,7 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
       name: ['', [Validators.required]],
       topicName: ['', [Validators.required]],
       description: [''],
-      active: [true],
+      status: [true],
     });
   }
 
@@ -52,7 +58,7 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
           ...data['dateRange'].queryValue,
         ];
         this.getHotelId(this.globalQueries);
-        this.getTopicList(this.hotelId);
+        this.getTemplateId();
       })
     );
   }
@@ -63,27 +69,68 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
     });
   }
 
-  getTopicList(hotelId) {
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
-      ]),
-    };
+  getTemplateId(): void {
     this.$subscription.add(
-      this.templateService.getTopicList(hotelId, config).subscribe(
-        (response) =>
-          (this.topicList = new Topics().deserialize(response).records),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-      )
+      this.activatedRoute.params.subscribe((params) => {
+        if (params['id']) {
+          this.templateId = params['id'];
+          this.getTemplateDetails(this.templateId);
+        } else if (this.id) {
+          this.templateId = this.id;
+          this.getTemplateDetails(this.templateId);
+        }
+      })
     );
   }
 
-  saveTemplate() {  }
-  openTemplateView(){  }
-  openEditTemplate(){ }
-  openDeleteTemplate(){ }
+  /**
+   * @function getTemplateDetails to get the topic details.
+   * @param topicId The topic id for which edit action will be done.
+   */
+  getTemplateDetails(topicId: string): void {
+    this.$subscription.add(
+      this.templateService
+        .getTemplateDetails(this.hotelId, topicId)
+        .subscribe((response) => {
+          this.template = new Template().deserialize(response);
+          this.templateForm.patchValue(this.template);
+        })
+    );
+  }
 
-  goBack(){
+  updateTemplate():void {
+    this.isSaving = true;
+    const data = this.templateService.mapTemplateData(
+      this.templateForm.getRawValue(),
+      this.hotelId,
+      this.template.id
+    );
+    this.$subscription.add(
+      this.templateService
+        .updateTemplate(this.hotelId, this.template.id, data)
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText(
+              'Template Updated Successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this._router.navigate(['/pages/library/template']);
+            this.isSaving = false;
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+            this.isSaving = false;
+          }
+        )
+    );
+  }
+
+  openTemplateView() {}
+  openEditTemplate() {}
+  openDeleteTemplate() {}
+
+  goBack() {
     this.location.back();
   }
 
@@ -91,3 +138,7 @@ export class EditTemplateComponent implements OnInit , OnDestroy {
     this.$subscription.unsubscribe();
   }
 }
+function Input() {
+  throw new Error('Function not implemented.');
+}
+

@@ -21,6 +21,7 @@ export class Template implements Deserializable {
   name: string;
   hotelId: string;
   active: boolean;
+  topicName: string;
 
   deserialize(input: any) {
     Object.assign(
@@ -30,12 +31,14 @@ export class Template implements Deserializable {
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'hotelId', get(input, ['hotelId'])),
-      set({}, 'active', get(input, ['active']))
+      set({}, 'active', get(input, ['active'])),
+      set({}, 'topicName', get(input, ['topicName']))
+
     );
     return this;
   }
 }
-export class Topics {
+export class Topics implements Deserializable {
   records: Topic[];
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
@@ -45,7 +48,7 @@ export class Topics {
   }
 }
 
-export class Topic {
+export class Topic implements Deserializable {
   id: string;
   status: boolean;
   description: string;
@@ -66,6 +69,3 @@ export class Topic {
     return this;
   }
 }
-
-export type ITopic = Omit<Topic, 'deserialize'>;
-export type ITopics = Omit<Topics, 'deserialize'>;

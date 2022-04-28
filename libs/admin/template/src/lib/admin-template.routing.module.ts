@@ -8,7 +8,7 @@ import { TemplateDatatableComponent } from './components/datatable/template-data
 const appRoutes: Route[] = [
   { path: '', component: TemplateDatatableComponent },
   { path: 'create', component: CreateTemplateComponent },
-  { path: 'edit', component: EditTemplateComponent },
+  { path: 'edit/:id', component: EditTemplateComponent },
 ];
 
 @NgModule({

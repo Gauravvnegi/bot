@@ -1,58 +1,69 @@
 <ng-container
-  *ngIf="richText; then richTextTemplate; else plainTextTemplate"
+  *ngIf="hybrid; then hybridField; else notHybridField"
 ></ng-container>
-<ng-template #richTextTemplate>
-  <div
-    style="
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      color: #4b56c0;
-      display: flex;
-      justify-content: flex-end;
-      margin: 10px 0;
-      cursor: pointer;
-    "
-    (click)="changeField(false)"
-  >
-    Plain Text
-  </div>
+<ng-template #hybridField>
+  <ng-container
+    *ngIf="richText; then richTextTemplate; else plainTextTemplate"
+  ></ng-container>
+  <ng-template #richTextTemplate>
+    <div
+      style="
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        color: #4b56c0;
+        display: flex;
+        justify-content: flex-end;
+        margin: 10px 0;
+        cursor: pointer;
+      "
+      (click)="changeField(false)"
+    >
+      Plain Text
+    </div>
+    <div [formGroup]="parentFG">
+      <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
+    </div>
+  </ng-template>
+  <ng-template #plainTextTemplate
+    ><div
+      style="
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        color: #4b56c0;
+        display: flex;
+        justify-content: flex-end;
+        margin: 10px 0;
+        cursor: pointer;
+      "
+      (click)="changeField(true)"
+    >
+      Rich Text
+    </div>
+    <div [formGroup]="parentFG" class="plain-text-container">
+      <div
+        class="editable"
+        #plainTextControl
+        [contenteditable]="!disabled"
+        [innerHTML]="template | safeHtml"
+        [disabled]="disabled"
+        (input)="onTemplateChange($event.target.innerHTML)"
+      ></div>
+    </div>
+  </ng-template>
+</ng-template>
+<ng-template #notHybridField>
   <div [formGroup]="parentFG">
     <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
-  </div>
-</ng-template>
-<ng-template #plainTextTemplate
-  ><div
-    style="
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      color: #4b56c0;
-      display: flex;
-      justify-content: flex-end;
-      margin: 10px 0;
-      cursor: pointer;
-    "
-    (click)="changeField(true)"
-  >
-    Rich Text
-  </div>
-  <div [formGroup]="parentFG" class="plain-text-container">
-    <div
-      class="editable"
-      #plainTextControl
-      contenteditable="true"
-      [innerHTML]="template | safeHtml"
-      (input)="onTemplateChange($event.target.innerHTML)"
-    ></div>
   </div>
 </ng-template>
 <mat-error

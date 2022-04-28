@@ -4,11 +4,13 @@ import { TemplateComponent } from './components/template/template.component';
 import { EditTemplateComponent } from './components/edit-template/edit-template.component';
 import { TemplateDatatableComponent } from './components/datatable/template-datatable/template-datatable.component';
 import { TemplateHtmlEditorComponent } from './components/template-html-editor/template-html-editor.component';
+import { EditContentComponent } from './components/edit-content/edit-content.component';
+import { CreateContentComponent } from './components/create-content/create-content.component';
 
 const appRoutes: Route[] = [
   { path: '', component: TemplateDatatableComponent },
   { path: 'create', component: EditTemplateComponent },
-  { path: 'edit/:id', component: EditTemplateComponent }
+  { path: 'edit/:id', component: EditTemplateComponent },
 ];
 
 @NgModule({
@@ -21,6 +23,8 @@ export class AdminTemplateRoutingModule {
     TemplateComponent,
     TemplateDatatableComponent,
     EditTemplateComponent,
-    TemplateHtmlEditorComponent
+    TemplateHtmlEditorComponent,
+    EditContentComponent,
+    CreateContentComponent
   ];
 }

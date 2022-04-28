@@ -1,3 +1,5 @@
+<mat-horizontal-stepper [@.disabled]="true"  #stepper>
+  <mat-step>
 <div class="wrapper">
   <header class="wrapper-header">
     <div class="back">
@@ -57,52 +59,57 @@
         </div>
       </div>
     </div>
-    <!-- <div class="wrapper-text">
-      <div class="add-text">
-        Edit Content
-      </div>
-      <div class="manually-add">
-        <div class="manually-templates">
-          <img src="" alt="" />
-          <div class="logos">
-            <div class="logos__logo" (click)="openTemplateView()">
-              <img src="assets/svg/view8280.svg" alt="" />
+
+    <ng-container *ngIf="templateId; else createContent">
+      <div class="wrapper-text">
+        <div class="add-text">
+          Edit Content
+        </div>
+        <div class="manually-add">
+          <div class="manually-templates">
+            <img src="" alt="" />
+            <div class="logos">
+              <div class="logos__logo" mat-raised-button  (click)="move(1)">
+                <img src="assets/svg/view8280.svg" alt="" />
+              </div>
+              <div class="logos__logo" mat-raised-button  (click)="move(1)">
+                <img src="assets/svg/edit8278.svg" alt="" />
+              </div>
+              <div class="logos__logo" (click)="openDeleteTemplate()">
+                <img src="assets/svg/delete8279.svg" alt="" />
+              </div>
             </div>
-            <div class="logos__logo" (click)="openEditTemplate()">
-              <img src="assets/svg/edit8278.svg" alt="" />
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #createContent>
+      <div class="wrapper-text">
+        <div class="add-text">
+          Create Content
+        </div>
+        <div class="manually-add">
+          <div class="manually-templates">
+            <img src="assets/svg/diskette.svg" alt="" />
+            <div class="manually-import">
+              Saved Template
             </div>
-            <div class="logos__logo" (click)="openDeleteTemplate()">
-              <img src="assets/svg/delete8279.svg" alt="" />
+          </div>
+          <div class="manually-templates">
+            <img src="assets/svg/web-design.svg" alt="" class="built-template" />
+            <div class="manually-import">
+              In-Built Template
+            </div>
+          </div>
+          <div class="manually-templates">
+            <img src="assets/svg/design.svg" alt="" />
+            <div class="manually-import">
+              Create New(HTML Editor)
             </div>
           </div>
         </div>
       </div>
-    </div> -->
-    <div class="wrapper-text">
-      <div class="add-text">
-        Create Content
-      </div>
-      <div class="manually-add">
-        <div class="manually-templates">
-          <img src="assets/svg/diskette.svg" alt="" />
-          <div class="manually-import">
-            Saved Template
-          </div>
-        </div>
-        <div class="manually-templates">
-          <img src="assets/svg/web-design.svg" alt="" class="built-template" />
-          <div class="manually-import">
-            In-Built Template
-          </div>
-        </div>
-        <div class="manually-templates">
-          <img src="assets/svg/design.svg" alt="" />
-          <div class="manually-import">
-            Create New(HTML Editor)
-          </div>
-        </div>
-      </div>
-    </div>
+    </ng-template>
     
     <div class="wrapper-form">
       <div class="feilds">
@@ -128,3 +135,8 @@
     </div>
   </form>
 </div>
+  </mat-step>
+  <mat-step >
+    <hospitality-bot-template-html-editor></hospitality-bot-template-html-editor>
+    </mat-step>
+</mat-horizontal-stepper>

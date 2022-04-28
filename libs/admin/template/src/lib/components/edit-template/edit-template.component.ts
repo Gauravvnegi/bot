@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Template } from '../../data-models/templateConfig.model';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'hospitality-bot-edit-template',
@@ -24,11 +25,11 @@ export class EditTemplateComponent implements OnDestroy {
   isSaving = false;
   templateId: string;
   template: Template;
+  @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
-    private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
     private location: Location,
     private _router: Router,
@@ -170,8 +171,10 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
-  openTemplateView() {}
-  openEditTemplate() {}
+  move(index: number) {
+    this.stepper.selectedIndex = index;
+  }
+
   openDeleteTemplate() {}
 
   goBack() {

@@ -23,6 +23,9 @@ import { ClickableDirective } from './directives/clickable.directive';
 import { UploadCsvComponent } from './components/upload-csv/upload-csv.component';
 import { UploadVideoComponent } from './components/upload-video/upload-video.component';
 import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdown.component';
+import { CKEditorModule } from 'ckeditor4-angular';
+import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
   imports: [
@@ -37,6 +40,7 @@ import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdo
     DropdownModule,
     MatChipsModule,
     MatAutocompleteModule,
+    CKEditorModule,
   ],
   declarations: [
     DatatableComponent,
@@ -53,6 +57,8 @@ import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdo
     UploadCsvComponent,
     UploadVideoComponent,
     TopicDropdownComponent,
+    TemplateEditorComponent,
+    SafeHtmlPipe,
   ],
   exports: [
     DatatableComponent,
@@ -64,6 +70,7 @@ import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdo
     PaginatorModule,
     TabMenuModule,
     DropdownModule,
+    CKEditorModule,
     NumberDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
@@ -74,6 +81,7 @@ import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdo
     ClickableDirective,
     UploadVideoComponent,
     TopicDropdownComponent,
+    TemplateEditorComponent,
   ],
 })
 export class AdminSharedModule {}

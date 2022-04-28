@@ -1,7 +1,185 @@
-<div>
-  <hospitality-bot-tab-group
-    [listItems]="tabFilterItems"
-    [selectedIndex]="tabFilterIdx"
-    (selectedTabChange)="onSelectedTabFilterChange($event)"
-  ></hospitality-bot-tab-group>
+<div
+  style="
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+  "
+>
+  <ng-container
+    *ngIf="search; then searchDropdown; else subscriberListing"
+  ></ng-container>
+  <ng-template #subscriberListing>
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+    <ng-container
+      *ngIf="tabFilterIdx; then listing; else subscriberGroup"
+    ></ng-container>
+    <ng-template #subscriberGroup>
+      <div style="margin: 20px 10px; color: #868686;">
+        You can view all subscriber groups from the
+        <span style="color: #0099ff;">Customer Page</span>
+      </div>
+      <div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>All Subscribers</div>
+          <div style="text-align: right; color: #9eaeb8;">2452 Guests</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>Resident</div>
+          <div style="text-align: right; color: #9eaeb8;">2412 Guests</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>Non-Resident</div>
+          <div style="text-align: right; color: #9eaeb8;">43 Guests</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>Due-in</div>
+          <div style="text-align: right; color: #9eaeb8;">43 Guests</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>Stay Over</div>
+          <div style="text-align: right; color: #9eaeb8;">43 Guests</div>
+        </div>
+      </div>
+      <div style="margin: 10px 0; border: 1px solid #707070;"></div>
+      <div
+        style="
+          font-size: 15px;
+          font-weight: 500;
+          line-height: 1.67;
+          letter-spacing: 0.9px;
+          text-align: center;
+          color: #9eaeb8;
+          max-width: 90%;
+          margin: auto;
+        "
+      >
+        Email is sent to latest checked-out guests or you can specify the
+        recipient in the group or individually please note email not sent to the
+        guest who have already submitted the survey.
+        <span style="color: #0099ff;">Learn More</span>
+      </div>
+    </ng-template>
+    <ng-template #listing
+      ><div style="margin: 20px 10px; color: #868686;">
+        You can create a new List from the
+        <span style="color: #0099ff;">Listing Page</span>
+      </div>
+      <div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>List 1</div>
+          <div style="text-align: right; color: #9eaeb8;">2452 Guests</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>List 2</div>
+          <div style="text-align: right; color: #9eaeb8;">2412 Guests</div>
+        </div>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 15px;
+            cursor: pointer;
+          "
+        >
+          <div>List 3</div>
+          <div style="text-align: right; color: #9eaeb8;">43 Guests</div>
+        </div>
+      </div>
+      <div style="margin: 10px 0; border: 1px solid #707070;"></div>
+      <div
+        style="
+          font-size: 15px;
+          font-weight: 500;
+          line-height: 1.67;
+          letter-spacing: 0.9px;
+          text-align: center;
+          color: #9eaeb8;
+          max-width: 90%;
+          margin: auto;
+        "
+      >
+        Email is sent to latest checked-out guests or you can specify the
+        recipient in the group or individually please note email not sent to the
+        guest who have already submitted the survey.
+        <span style="color: #0099ff;">Learn More</span>
+      </div>
+    </ng-template>
+  </ng-template>
+  <ng-template #searchDropdown>
+    <div class="search-container">
+      <div class="search-item">
+        <div style="margin-bottom: 7px;">Sagar Kumar (1244124)</div>
+        <div style="display: flex; align-items: center; color: #a3a3a3;">
+          <div style="margin-right: 13px;">Slanmusk@gmail.com</div>
+          <div style="margin-right: 13px;">9654845301</div>
+          <div style="margin-right: 13px;">AZ0K21</div>
+        </div>
+      </div>
+      <div class="search-item">
+        <div style="margin-bottom: 7px;">Sourabh (1246424)</div>
+        <div style="display: flex; align-items: center; color: #a3a3a3;">
+          <div style="margin-right: 13px;">Slanmusk@gmail.com</div>
+          <div style="margin-right: 13px;">9654845301</div>
+          <div style="margin-right: 13px;">AZ0K21</div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </div>

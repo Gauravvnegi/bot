@@ -35,7 +35,7 @@ export class CamapaignEmailComponent implements OnInit {
   visible: boolean = true;
   private $subscription = new Subscription();
   enableDropdown = false;
-
+  template = '';
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
@@ -130,7 +130,8 @@ export class CamapaignEmailComponent implements OnInit {
   }
 
   handleTemplateChange(event) {
-    this.campaignFG.get('message').patchValue(this.modifyTemplate(event.value));
+    this.template = this.modifyTemplate(event.value);
+    this.campaignFG.get('message').patchValue(this.template);
   }
 
   modifyTemplate(template: string) {
@@ -201,6 +202,12 @@ export class CamapaignEmailComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   clickout() {
+    this.disableDropdown();
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
     this.disableDropdown();
   }
 

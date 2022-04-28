@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ToDropdownComponent implements OnInit {
   @Input() value: string;
+  @Input() search = false;
   tabFilterItems = [
     {
       label: 'Subscribers Groups',
@@ -24,5 +25,7 @@ export class ToDropdownComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSelectedTabFilterChange(event) {}
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+  }
 }

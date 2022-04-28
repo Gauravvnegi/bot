@@ -1,0 +1,70 @@
+@import 'main';
+
+.container {
+  height: fit-content;
+  padding: 17px 38px 21px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  .headings {
+    margin-left: 13px;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 18px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    text-align: left;
+    color: #002046;
+
+    .go-back {
+      display: flex;
+      gap: 15px;
+      padding-top: 30px;
+
+      .material-icons {
+        cursor: pointer;
+      }
+    }
+    .preDesigned {
+      display: flex;
+      padding: 40px 0 0 40px;
+      p {
+        padding-top: 5px;
+        padding-right: 23px;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .mat-label{
+display: none;
+
+
+}
+
+:host ::ng-deep .mat-form-field-infix{
+  width: 205px;
+  height: 36px;
+  opacity: 0.2;
+  border-radius: 4px;
+  border: solid 1px #707070;
+  background-color: #fff;  
+  border-bottom: none;
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px)
+    translateZ(0.001px);
+  -ms-transform: translateY(-1.28125em) scale(0.75);
+  width: 133.3333333333%;
+  display: none;
+}

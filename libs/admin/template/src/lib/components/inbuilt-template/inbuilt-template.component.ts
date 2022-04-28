@@ -1,31 +1,33 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import { Subscription } from 'rxjs';
-import { TemplateService } from '../../services/template.service';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Subscription } from 'rxjs';
+import { Topics } from '../../data-models/templateConfig.model';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { TemplateService } from '../../services/template.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'hospitality-bot-edit-template',
-  templateUrl: './edit-template.component.html',
-  styleUrls: ['./edit-template.component.scss'],
+  selector: 'hospitality-bot-inbuilt-template',
+  templateUrl: './inbuilt-template.component.html',
+  styleUrls: ['./inbuilt-template.component.scss'],
 })
-export class EditTemplateComponent implements OnInit, OnDestroy {
-  templateForm: FormGroup;
+export class InbuiltTemplateComponent implements OnInit {
+  hotelId: any;
   private $subscription = new Subscription();
-  hotelId: string;
-  globalQueries = [];
   topicList = [];
-  isSaving = false;
+  templateForm: FormGroup;
+
+  globalQueries = [];
+
   constructor(
-    private _fb: FormBuilder,
+    private _location: Location,
     private globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
-    private location: Location
+    private _snackbarService: SnackBarService,
+    private _fb: FormBuilder
   ) {
     this.initFG();
   }
@@ -38,8 +40,6 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
       topicName: ['', [Validators.required]],
-      description: [''],
-      active: [true],
     });
   }
 
@@ -61,16 +61,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveTemplate() {}
-  openTemplateView() {}
-  openEditTemplate() {}
-  openDeleteTemplate() {}
-
   goBack() {
-    this.location.back();
-  }
-
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
+    this._location.back();
   }
 }

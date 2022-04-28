@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="headings">
+    <p>
+      Bread Crum
+    </p>
+    <div class="go-back">
+      <mat-icon class="material-icons" (click)="goBack()" matSuffix
+        >keyboard_backspace
+      </mat-icon>
+      <p>
+        Create Topic
+      </p>
+    </div>
+
+    <div class="preDesigned">
+      <p>
+        Pre-Designed templates
+      </p>
+
+      <hospitality-bot-topic-dropdown
+        class="field"
+        [hotelId]="hotelId"
+        [name]="'topicName'"
+        [parentForm]="templateForm"
+      ></hospitality-bot-topic-dropdown>
+    </div>
+
+    <hospitality-bot-check-in></hospitality-bot-check-in>
+    <hospitality-bot-pre-check-in></hospitality-bot-pre-check-in>
+    <hospitality-bot-general></hospitality-bot-general>
+  </div>
+</div>

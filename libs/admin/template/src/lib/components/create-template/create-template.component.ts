@@ -2,20 +2,19 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  SnackBarService
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { Topics } from '../../data-models/template.model';
 import { TemplateService } from '../../services/template.service';
 import { Location } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Topics } from '../../data-models/templateConfig.model';
 
 @Component({
   selector: 'hospitality-bot-create-template',
   templateUrl: './create-template.component.html',
   styleUrls: ['./create-template.component.scss'],
 })
-export class CreateTemplateComponent implements OnInit ,OnDestroy {
+export class CreateTemplateComponent implements OnInit, OnDestroy {
   templateForm: FormGroup;
   private $subscription = new Subscription();
   hotelId: string;
@@ -28,7 +27,9 @@ export class CreateTemplateComponent implements OnInit ,OnDestroy {
     private _snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
-    private location: Location
+    private location: Location,
+    private _router: Router,
+    private route: ActivatedRoute
   ) {
     this.initFG();
   }
@@ -83,6 +84,10 @@ export class CreateTemplateComponent implements OnInit ,OnDestroy {
   saveTemplate() {}
   goBack() {
     this.location.back();
+  }
+
+  openInBuiltTemplate() {
+    this._router.navigate(['../in-built-template'], { relativeTo: this.route });
   }
 
   ngOnDestroy(): void {

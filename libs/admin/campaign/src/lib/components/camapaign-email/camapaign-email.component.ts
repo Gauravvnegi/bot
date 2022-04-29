@@ -217,6 +217,8 @@ export class CamapaignEmailComponent implements OnInit {
     this._emailService.$enableDropdown.bcc.next(false);
   }
 
+  openPersonalization(event) {}
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

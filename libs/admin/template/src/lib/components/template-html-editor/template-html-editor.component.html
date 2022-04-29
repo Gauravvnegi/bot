@@ -2,10 +2,8 @@
   <header class="wrapper-header">
     <div class="back">
       <button mat-button matStepperPrevious>
-        <mat-icon class="material-icons" matSuffix 
-          >keyboard_backspace</mat-icon
-        >
-    </button>
+        <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      </button>
       <p class="label">
         Create Template
       </p>
@@ -42,8 +40,8 @@
     <div class="ck-editor">
       <hospitality-bot-template-editor
         [parentFG]="templateForm"
-        [name]="'message'"
-        [template]="template"
+        [name]="'htmlTemplate'"
+        [hybrid]="false"
       ></hospitality-bot-template-editor>
     </div>
   </form>
@@ -61,14 +59,14 @@
       </div>
     </div>
     <div
-        class="save-button"
-        (click)="createTemplate()"
-        [ngClass]="{ active: !isSaving, disabled: isSaving }"
-      >
-        <div class="save-text">
-          <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-          {{ isSaving ? 'Saving' : 'Save' }}
-        </div>
+      class="save-button"
+      (click)="createTemplate()"
+      [ngClass]="{ active: !isSaving, disabled: isSaving }"
+    >
+      <div class="save-text">
+        <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
+        {{ isSaving ? 'Saving' : 'Save' }}
       </div>
+    </div>
   </div>
 </div>

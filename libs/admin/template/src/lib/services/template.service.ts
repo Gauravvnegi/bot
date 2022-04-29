@@ -15,37 +15,36 @@ export class TemplateService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/templates${config.queryObj}`);
   }
 
-    /**
+  /**
    * @function createTemplate create new template record.
    * @param hotelId dynamically getting hotelId into api.
    * @param data getting form input data.
    * @returns post api of creating new record.
    */
-     createTemplate(hotelId, data) {
-      return this.post(`/api/v1/entity/${hotelId}/templates`, data);
-    }
-  
-    /**
+  createTemplate(hotelId, data) {
+    return this.post(`/api/v1/entity/${hotelId}/templates`, data);
+  }
+
+  /**
    * @function getTemplateDetails get template record details.
    * @param hotelId dynamically getting hotelId into api.
    * @param templateId dynamically getting templateId into api.
    * @returns get api of template details.
    */
-    getTemplateDetails(hotelId, templateId) {
-      return this.get(`/api/v1/entity/${hotelId}/templates/${templateId}`);
-    }
+  getTemplateDetails(hotelId, templateId) {
+    return this.get(`/api/v1/entity/${hotelId}/templates/${templateId}`);
+  }
 
-    /**
-     * @function updateTemplate update Templaterecord.
-     * @param hotelId dynamically getting hotelId into api.
-     * @param templateId dynamically getting templateId into api.
-     * @param data getting form input data.
-     * @returns put api of update Template record.
-     */
-     updateTemplate(hotelId, templateId, data) {
-      return this.put(`/api/v1/entity/${hotelId}/templates/${templateId}`, data);
-    }
-    
+  /**
+   * @function updateTemplate update Templaterecord.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param templateId dynamically getting templateId into api.
+   * @param data getting form input data.
+   * @returns put api of update Template record.
+   */
+  updateTemplate(hotelId, templateId, data) {
+    return this.put(`/api/v1/entity/${hotelId}/templates/${templateId}`, data);
+  }
 
   /**
    * @function updateTemplateStatus update status of a template record.
@@ -90,6 +89,9 @@ export class TemplateService extends ApiService {
     templateData.id = formValue.id;
     templateData.name = formValue.name;
     templateData.description = formValue.description;
+    templateData.topicId = formValue.topicId;
+    templateData.templateType = formValue.templateType;
+    templateData.htmlTemplate = formValue.htmlTemplate;
     return templateData;
   }
 }

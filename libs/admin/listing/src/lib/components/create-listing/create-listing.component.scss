@@ -212,7 +212,7 @@
   font-size: $font14;
   color: $primary-gray;
   margin-right: 10px;
-  width: 52%;
+  width: 31%;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }
@@ -260,7 +260,7 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font14;
+  font-size: $font16;
   color: $dark-blue;
 }
 
@@ -308,5 +308,5 @@
 }
 
 :host ::ng-deep .mat-description {
-  width: 12% !important;
+  width: 8% !important;
 }

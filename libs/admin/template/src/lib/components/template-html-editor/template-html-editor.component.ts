@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'hospitality-bot-template-html-editor',
   templateUrl: './template-html-editor.component.html',
-  styleUrls: ['./template-html-editor.component.scss']
+  styleUrls: ['./template-html-editor.component.scss'],
 })
 export class TemplateHtmlEditorComponent implements OnInit {
   id: string;
@@ -22,7 +22,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   globalQueries = [];
   topicList = [];
   isSaving = false;
-  template:Template;
+  template: Template;
 
   templateId: string;
   constructor(
@@ -44,7 +44,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   initFG(): void {
     this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
-      message: ['', [Validators.required]]
+      htmlTemplate: [''],
     });
   }
 
@@ -66,7 +66,6 @@ export class TemplateHtmlEditorComponent implements OnInit {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
-
 
   getTemplateId(): void {
     this.$subscription.add(
@@ -96,7 +95,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
         })
     );
   }
-  createTemplate(){
+  createTemplate() {
     this.isSaving = true;
     const data = this.templateService.mapTemplateData(
       this.templateForm.getRawValue(),
@@ -113,7 +112,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this._router.navigate(['/pages/library/template']);
+            // this._router.navigate(['/pages/library/template']);
             this.isSaving = false;
           },
           ({ error }) => {

@@ -9,15 +9,15 @@ import { FormGroup } from '@angular/forms';
 export class TemplateEditorComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Input() name: string;
+  @Input() template = '';
+  @Input() disabled = false;
+  @Input() hybrid = true;
   @ViewChild('plainTextControl') plainTextControl;
+  richText = true;
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
-  richText = true;
-  @Input() template = '';
-  @Input() disabled = false;
-  @Input() hybrid = true;
   constructor() {}
 
   ngOnInit(): void {}

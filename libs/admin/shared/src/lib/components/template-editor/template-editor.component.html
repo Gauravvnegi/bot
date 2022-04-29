@@ -50,14 +50,22 @@
       Rich Text
     </div>
     <div [formGroup]="parentFG" class="plain-text-container">
-      <div
-        class="editable"
-        #plainTextControl
-        contenteditable="true"
-        [innerHTML]="template | safeHtml"
-        [disabled]="disabled"
-        (input)="onTemplateChange($event.target.innerHTML)"
-      ></div>
+      <ng-container *ngIf="disabled; else editableDiv">
+        <div
+          class="editable"
+          #plainTextControl
+          [innerHTML]="template | safeHtml"
+        ></div>
+      </ng-container>
+      <ng-template #editableDiv>
+        <div
+          class="editable"
+          #plainTextControl
+          contenteditable="true"
+          [innerHTML]="template | safeHtml"
+          (input)="onTemplateChange($event.target.innerHTML)"
+        ></div>
+      </ng-template>
     </div>
   </ng-template>
 </ng-template>

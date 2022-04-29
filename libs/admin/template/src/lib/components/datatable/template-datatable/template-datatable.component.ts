@@ -211,8 +211,9 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   /**
    * @function openCreateTemlplate navigate to edit template page.
    */
-  openEditTemplate() {
-    this._router.navigate(['edit'], { relativeTo: this.route });
+  openEditTemplate(event,template):void {
+    event.stopPropagation();
+    this._router.navigate([`edit/${template.id}`], { relativeTo: this.route });
   }
 
   /**

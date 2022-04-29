@@ -1,8 +1,5 @@
 <div class="container">
   <div class="headings">
-    <p>
-      Bread Crum
-    </p>
     <div class="go-back">
       <button mat-button matStepperPrevious>
         <mat-icon class="material-icons" matSuffix
@@ -26,9 +23,59 @@
         [parentForm]="templateForm"
       ></hospitality-bot-topic-dropdown>
     </div>
-
-    <hospitality-bot-check-in></hospitality-bot-check-in>
-    <hospitality-bot-pre-check-in></hospitality-bot-pre-check-in>
-    <hospitality-bot-general></hospitality-bot-general>
   </div>
+</div>
+
+<div class="container">
+  <div class="heading">
+    <p>
+      Check-In
+    </p>
+  </div>
+  <div class="checkin-cards">
+    <div *ngFor="let template of templateList" class="card">
+      <div [innerHTML]="template.htmlTemplate"></div>
+    </div>
+  </div>
+
+  <button class="button">
+    Show More
+  </button>
+
+  <div class="line"></div>
+</div>
+
+<div class="container">
+  <div class="heading">
+    <p>
+      Pre Check-In
+    </p>
+  </div>
+
+  <div class="checkin-cards">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+  </div>
+  <button class="button">
+    Show More
+  </button>
+  <div class="line"></div>
+</div>
+
+<div class="container">
+  <div class="heading">
+    <p>
+      General
+    </p>
+  </div>
+
+  <div class="checkin-cards">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+  </div>
+  <button class="button">
+    Show More
+  </button>
 </div>

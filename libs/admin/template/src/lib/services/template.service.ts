@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
 import { Template } from '../data-models/templateConfig.model';
 
 @Injectable()
 export class TemplateService extends ApiService {
+  getTemplateList(id, config): Observable<any> {
+    return this.get(`/api/v1/entity/${id}/templates/${config.queryObj}`);
+  }
 
-getTopicList(id: string, config): Observable<any> {
-  return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
-}
   /**
    * @function getHotelTemplate get template list from api.
    * @param config dynamically getting global query filter into api.
@@ -17,6 +17,37 @@ getTopicList(id: string, config): Observable<any> {
    */
   getHotelTemplate(config, hotelId) {
     return this.get(`/api/v1/entity/${hotelId}/templates${config.queryObj}`);
+  }
+
+  /**
+   * @function createTemplate create new template record.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param data getting form input data.
+   * @returns post api of creating new record.
+   */
+  createTemplate(hotelId, data) {
+    return this.post(`/api/v1/entity/${hotelId}/templates`, data);
+  }
+
+  /**
+   * @function getTemplateDetails get template record details.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param templateId dynamically getting templateId into api.
+   * @returns get api of template details.
+   */
+  getTemplateDetails(hotelId, templateId) {
+    return this.get(`/api/v1/entity/${hotelId}/templates/${templateId}`);
+  }
+
+  /**
+   * @function updateTemplate update Templaterecord.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param templateId dynamically getting templateId into api.
+   * @param data getting form input data.
+   * @returns put api of update Template record.
+   */
+  updateTemplate(hotelId, templateId, data) {
+    return this.put(`/api/v1/entity/${hotelId}/templates/${templateId}`, data);
   }
 
   /**
@@ -62,6 +93,7 @@ getTopicList(id: string, config): Observable<any> {
     templateData.id = formValue.id;
     templateData.name = formValue.name;
     templateData.description = formValue.description;
+    templateData.htmlTemplate = formValue.htmlTemplate;
     return templateData;
   }
 }

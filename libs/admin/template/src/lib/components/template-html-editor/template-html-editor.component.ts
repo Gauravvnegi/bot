@@ -1,21 +1,20 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { Template } from '../../data-models/templateConfig.model';
 import { TemplateService } from '../../services/template.service';
 import { Location } from '@angular/common';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Template } from '../../data-models/templateConfig.model';
-import { MatStepper } from '@angular/material/stepper';
 
 @Component({
-  selector: 'hospitality-bot-edit-template',
-  templateUrl: './edit-template.component.html',
-  styleUrls: ['./edit-template.component.scss'],
+  selector: 'hospitality-bot-template-html-editor',
+  templateUrl: './template-html-editor.component.html',
+  styleUrls: ['./template-html-editor.component.scss'],
 })
-export class EditTemplateComponent implements OnDestroy {
+export class TemplateHtmlEditorComponent implements OnInit {
   id: string;
   templateForm: FormGroup;
   private $subscription = new Subscription();
@@ -23,9 +22,9 @@ export class EditTemplateComponent implements OnDestroy {
   globalQueries = [];
   topicList = [];
   isSaving = false;
-  templateId: string;
   template: Template;
-  @ViewChild('stepper') stepper: MatStepper;
+
+  templateId: string;
   constructor(
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -45,10 +44,6 @@ export class EditTemplateComponent implements OnDestroy {
   initFG(): void {
     this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
-      topicId: ['', [Validators.required]],
-      description: [''],
-      status: [true],
-      templateType: [''],
       htmlTemplate: [''],
     });
   }
@@ -100,21 +95,7 @@ export class EditTemplateComponent implements OnDestroy {
         })
     );
   }
-
-  handleSubmit() {
-    if (this.templateForm.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
-      return;
-    }
-    const data = this.templateForm.getRawValue();
-    console.log(data);
-    if (this.templateId) {
-      this.updateTemplate();
-    } else {
-      this.createTemplate();
-    }
-  }
-  updateTemplate(): void {
+  createTemplate() {
     this.isSaving = true;
     const data = this.templateService.mapTemplateData(
       this.templateForm.getRawValue(),
@@ -127,7 +108,7 @@ export class EditTemplateComponent implements OnDestroy {
         .subscribe(
           (response) => {
             this._snackbarService.openSnackBarAsText(
-              'Template Updated Successfully',
+              'Template created Successfully',
               '',
               { panelClass: 'success' }
             );
@@ -141,52 +122,7 @@ export class EditTemplateComponent implements OnDestroy {
         )
     );
   }
-
-  createTemplate() {
-    if (this.templateForm.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
-      return;
-    }
-    this.isSaving = true;
-    let data = this.templateService.mapTemplateData(
-      this.templateForm.getRawValue(),
-      this.hotelId
-    );
-    this.$subscription.add(
-      this.templateService.createTemplate(this.hotelId, data).subscribe(
-        (response) => {
-          this.template = new Template().deserialize(response);
-          this.templateForm.patchValue(this.template);
-          this._snackbarService.openSnackBarAsText(
-            'Template Created Successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this._router.navigate(['/pages/library/template']);
-          this.isSaving = false;
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-          this.isSaving = false;
-        }
-      )
-    );
-  }
-
-  move(index: number) {
-    this.stepper.selectedIndex = index;
-  }
-
-  openDeleteTemplate() {}
-
-  goBack() {
-    this.location.back();
-  }
-
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-}
-function Input() {
-  throw new Error('Function not implemented.');
 }

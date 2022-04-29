@@ -1,0 +1,72 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <button mat-button matStepperPrevious>
+        <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      </button>
+      <p class="label">
+        Create Template
+      </p>
+    </div>
+  </header>
+  <form [formGroup]="templateForm">
+    <div class="wrapper-form">
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Name:</mat-label>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Enter Template Name"
+              formControlName="name"
+            />
+            <mat-error
+              *ngIf="
+                templateForm.get('name').touched &&
+                templateForm.get('name').hasError('required')
+              "
+            >
+              Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="feild">
+          <div class="import-assets">
+            Import Assets
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ck-editor">
+      <hospitality-bot-template-editor
+        [parentFG]="templateForm"
+        [name]="'htmlTemplate'"
+        [template]="template"
+      ></hospitality-bot-template-editor>
+    </div>
+  </form>
+  <div class="save-section">
+    <div class="save-button">
+      <div class="save-text">
+        <i></i>
+        Preview and Save
+      </div>
+    </div>
+    <div class="save-button">
+      <div class="save-text">
+        <i></i>
+        Save Changes
+      </div>
+    </div>
+    <div
+      class="save-button"
+      (click)="createTemplate()"
+      [ngClass]="{ active: !isSaving, disabled: isSaving }"
+    >
+      <div class="save-text">
+        <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
+        {{ isSaving ? 'Saving' : 'Save' }}
+      </div>
+    </div>
+  </div>
+</div>

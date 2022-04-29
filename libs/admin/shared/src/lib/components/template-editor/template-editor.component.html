@@ -53,7 +53,7 @@
       <div
         class="editable"
         #plainTextControl
-        [contenteditable]="!disabled"
+        contenteditable="true"
         [innerHTML]="template | safeHtml"
         [disabled]="disabled"
         (input)="onTemplateChange($event.target.innerHTML)"

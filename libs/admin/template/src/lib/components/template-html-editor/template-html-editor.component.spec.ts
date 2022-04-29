@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreCheckInComponent } from './pre-check-in.component';
+import { TemplateHtmlEditorComponent } from './template-html-editor.component';
 
-describe('PreCheckInComponent', () => {
-  let component: PreCheckInComponent;
-  let fixture: ComponentFixture<PreCheckInComponent>;
+describe('TemplateHtmlEditorComponent', () => {
+  let component: TemplateHtmlEditorComponent;
+  let fixture: ComponentFixture<TemplateHtmlEditorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreCheckInComponent ]
+      declarations: [ TemplateHtmlEditorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PreCheckInComponent);
+    fixture = TestBed.createComponent(TemplateHtmlEditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

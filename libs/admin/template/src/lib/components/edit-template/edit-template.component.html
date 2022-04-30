@@ -1,105 +1,150 @@
-<div class="wrapper">
-    <header class="wrapper-header">
-      <div class="back">
-        <mat-icon class="material-icons" matSuffix 
-        (click)="goBack()"
-          >keyboard_backspace</mat-icon
-        >
-        <p class="label">
-          Edit Template
-        </p>
-      </div>
-    </header>
-    <form [formGroup]="templateForm">
-      <div class="wrapper-form">
-        <div class="feilds">
-          <div class="feild">
-            <mat-label class="mat-label">Name:</mat-label>
-            <mat-form-field>
-              <input
-                matInput
-                placeholder="Enter Template Name"
-                formControlName="name"
-              />
-              <mat-error
-                *ngIf="
-                  templateForm.get('name').touched &&
-                  templateForm.get('name').hasError('required')
-                "
-              >
-                Name is required
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="feild">
-            <mat-label class="mat-label">Topic:</mat-label>
-            <mat-form-field>
-              <mat-select formControlName="topicName" >
-                <mat-option 
-                  *ngFor="let topic of topicList"
-                  [value]="topic.name"
-                  >{{ topic.name }}</mat-option
+<mat-horizontal-stepper [@.disabled]="true" #stepper>
+  <mat-step>
+    <div class="wrapper">
+      <header class="wrapper-header">
+        <div class="back">
+          <mat-icon class="material-icons" matSuffix (click)="goBack()"
+            >keyboard_backspace</mat-icon
+          >
+          <p class="label">
+            <ng-container *ngIf="templateId; else addTemplate">
+              Edit Template
+            </ng-container>
+            <ng-template #addTemplate>
+              Create Template
+            </ng-template>
+          </p>
+        </div>
+      </header>
+      <form [formGroup]="templateForm">
+        <div class="wrapper-form">
+          <div class="feilds">
+            <div class="feild">
+              <mat-label class="mat-label">Name:</mat-label>
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Enter Template Name"
+                  formControlName="name"
+                />
+                <mat-error
+                  *ngIf="
+                    templateForm.get('name').touched &&
+                    templateForm.get('name').hasError('required')
+                  "
                 >
-              </mat-select>
-            </mat-form-field>
+                  Name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="feild">
+              <hospitality-bot-topic-dropdown
+                class="mat-label"
+                [hotelId]="hotelId"
+                [name]="'topicName'"
+                [parentForm]="templateForm"
+              ></hospitality-bot-topic-dropdown>
+            </div>
+          </div>
+          <div class="feilds">
+            <div class="feild description-feild">
+              <mat-label class="mat-label mat-description"
+                >Description:</mat-label
+              >
+              <mat-form-field class="description">
+                <input
+                  matInput
+                  placeholder="Write Your Description Here"
+                  formControlName="description"
+                />
+              </mat-form-field>
+            </div>
           </div>
         </div>
-        <div class="feilds">
-          <div class="feild description-feild">
-            <mat-label class="mat-label mat-description">Description:</mat-label>
-            <mat-form-field class="description">
-              <input
-                matInput
-                placeholder="Write Your Description Here"
-                formControlName="description"
-              />
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-      <div class="wrapper-text">
-          <div class="add-text">
-            Edit Content
-          </div>
-          <div class="manually-add">
-            <div class="manually-templates" >
-              <img src="" alt="" />
-              <div class="logos">
-                <div class="logos__logo" (click)="openTemplateView()">
-                  <img src="assets/svg/view8280.svg" alt="" >
+
+        <ng-container *ngIf="templateId; else createContent">
+          <div class="wrapper-text">
+            <div class="add-text">
+              Edit Content
+            </div>
+            <div class="manually-add">
+              <div class="manually-templates">
+                <div class="manually-import">
+                  <div [innerHTML]="imgTemplate"></div>
                 </div>
-                <div class="logos__logo" (click)="openEditTemplate()">
-                  <img src="assets/svg/edit8278.svg" alt="" >
-                </div>
-                <div class="logos__logo" (click)="openDeleteTemplate()">
-                  <img src="assets/svg/delete8279.svg" alt="" > 
+                <div class="logos">
+                  <div class="logos__logo" mat-raised-button (click)="move(1)">
+                    <img src="assets/svg/view8280.svg" alt="" />
+                  </div>
+                  <div class="logos__logo" mat-raised-button (click)="move(1)">
+                    <img src="assets/svg/edit8278.svg" alt="" />
+                  </div>
+                  <div class="logos__logo" (click)="openDeleteTemplate()">
+                    <img src="assets/svg/delete8279.svg" alt="" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-      </div>
-      <div class="wrapper-form">
-        <div class="feilds">
-          <div class="toggle_wrapper">
-            <mat-label class="mat-label">Active :</mat-label>
-            <div class="status status--left">Disable</div>
-            <mat-slide-toggle formControlName="active"></mat-slide-toggle>
-            <div class="status status--right">Enable</div>
+        </ng-container>
+        <ng-template #createContent>
+          <div class="wrapper-text">
+            <div class="add-text">
+              Create Content
+            </div>
+            <div class="manually-add">
+              <div class="manually-templates">
+                <img src="assets/svg/diskette.svg" alt="" />
+                <div class="manually-import">
+                  Saved Template
+                </div>
+              </div>
+              <div class="manually-templates">
+                <img
+                  src="assets/svg/web-design.svg"
+                  alt=""
+                  class="built-template"
+                />
+                <div class="manually-import">
+                  In-Built Template
+                </div>
+              </div>
+              <div class="manually-templates">
+                <img src="assets/svg/design.svg" alt="" />
+                <div class="manually-import">
+                  Create New(HTML Editor)
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="wrapper-form">
+          <div class="feilds">
+            <div class="toggle_wrapper">
+              <mat-label class="mat-label">Active :</mat-label>
+              <div class="status status--left">Disable</div>
+              <mat-slide-toggle formControlName="status"></mat-slide-toggle>
+              <div class="status status--right">Enable</div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="save-section">
-        <div
-          class="save-button"
-          (click)="saveTemplate()"
-          [ngClass]="{ active: !isSaving, disabled: isSaving }"
-        >
-          <div class="save-text">
-            <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-            {{ isSaving ? 'Saving' : 'Save' }}
+        <div class="save-section">
+          <div
+            class="save-button"
+            (click)="handleSubmit()"
+            [ngClass]="{ active: !isSaving, disabled: isSaving }"
+          >
+            <div class="save-text">
+              <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
+              {{ isSaving ? 'Saving' : 'Save' }}
+            </div>
           </div>
         </div>
-      </div>
-    </form>
-  </div>
-  
+      </form>
+    </div>
+  </mat-step>
+  <mat-step>
+    <hospitality-bot-template-html-editor></hospitality-bot-template-html-editor>
+  </mat-step>
+</mat-horizontal-stepper>

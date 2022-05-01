@@ -510,9 +510,9 @@ export const feedback = {
       ],
       both: [
         {
-          label: 'Stay Experience ',
+          label: 'Transactional ',
           content: '',
-          value: 'STAYFEEDBACK',
+          value: 'TRANSACTIONALFEEDBACK',
           disabled: false,
           total: 0,
           chips: [
@@ -575,9 +575,9 @@ export const feedback = {
           lastPage: 0,
         },
         {
-          label: 'Transactional ',
+          label: 'Stay Experience ',
           content: '',
-          value: 'TRANSACTIONALFEEDBACK',
+          value: 'STAYFEEDBACK',
           disabled: false,
           total: 0,
           chips: [

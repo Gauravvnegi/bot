@@ -46,7 +46,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
   @Input() tabFilterIdx: number = 0;
-  @Input() tabFilterItems;
+  @Input() tabFilterItems = [];
   globalFeedbackConfig = feedback;
   outlets = [];
   actionButtons = true;
@@ -83,7 +83,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.setTabFilters(this.globalFeedbackFilterType);
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -111,6 +110,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ];
         this.getHotelId(this.globalQueries);
         this.getOutlets(data['filter'].value.property.branchName);
+        const feedbackType = data['filter'].value.feedback.feedbackType;
+        if (this.tabFilterItems.length === 0)
+          this.setTabFilters(
+            feedbackType === feedback.types.transactional
+              ? feedback.types.transactional
+              : feedback.types.stay
+          );
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -148,9 +154,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
-      this.tableService.$feedbackType.subscribe((response) => {
-        this.setTabFilters(response);
-      })
+      this.tableService.$feedbackType.subscribe((response) =>
+        this.setTabFilters(response)
+      )
     );
   }
 
@@ -163,7 +169,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
     else if (feedbackType === feedback.types.stay)
       this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
-    else this.tabFilterItems = feedback.tabFilterItems.datatable.both;
     this.setTableCols();
   }
 

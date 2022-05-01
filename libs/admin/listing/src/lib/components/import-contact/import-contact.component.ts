@@ -42,7 +42,7 @@ export class ImportContactComponent implements OnInit {
   }
 
   createFA(): void {
-    this.contactFA = this._fb.array([]);
+    this.contactFA = this._fb.array([], Validators.required);
   }
 
   createContactFG(): FormGroup {
@@ -94,6 +94,13 @@ export class ImportContactComponent implements OnInit {
   }
 
   save() {
+    if (
+      this.contactFA.controls.length === 1 &&
+      this.contactFA.controls[0].value.email === ''
+    ) {
+      this._snackbarService.openSnackBarAsText('Please import a contact file.');
+      return;
+    }
     this.onImportClosed.emit({
       status: true,
       data: this.contactFA.getRawValue(),

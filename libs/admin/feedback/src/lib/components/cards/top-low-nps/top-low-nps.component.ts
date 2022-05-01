@@ -68,24 +68,7 @@ export class TopLowNpsComponent implements OnInit {
         ...this.globalQueries,
         { entityIds: this.statisticsService.outletIds },
       ];
-    else if (feedbackType === feedback.types.both) {
-      this.globalQueries = [
-        ...this.globalQueries,
-        { entityIds: this.statisticsService.outletIds },
-      ];
-      this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('hotelId')) {
-          if (
-            !this.globalQueries[
-              this.globalQueries.length - 1
-            ].entityIds.includes(element.hotelId)
-          )
-            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
-              element.hotelId
-            );
-        }
-      });
-    } else {
+    else {
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
           this.globalQueries = [

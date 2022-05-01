@@ -114,24 +114,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         ...this.globalQueries,
         { entityIds: this._statisticService.outletIds },
       ];
-    else if (feedbackType === feedback.types.both) {
-      this.globalQueries = [
-        ...this.globalQueries,
-        { entityIds: this._statisticService.outletIds },
-      ];
-      this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('hotelId')) {
-          if (
-            !this.globalQueries[
-              this.globalQueries.length - 1
-            ].entityIds.includes(element.hotelId)
-          )
-            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
-              element.hotelId
-            );
-        }
-      });
-    } else {
+    else {
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
           this.globalQueries = [

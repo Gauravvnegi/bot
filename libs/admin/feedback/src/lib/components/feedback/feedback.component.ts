@@ -106,12 +106,14 @@ export class FeedbackComponent {
       .find((brand) => brand.id === brandId)
       .branches.find((branch) => branch['id'] == branchId);
     this.outlets = branch.outlets;
-    this.statisticsService.outletIds = this.outlets
-      .map((outlet) => {
-        if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
-      })
-      .filter((id) => id !== undefined);
-
+    this.statisticsService.outletIds =
+      this.globalFeedbackFilterType === feedback.types.both
+        ? (this.statisticsService.outletIds = [branch.id])
+        : this.outlets
+            .map((outlet) => {
+              if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
+            })
+            .filter((id) => id !== undefined);
     this.setTabFilterItems(branch);
   }
 
@@ -130,10 +132,7 @@ export class FeedbackComponent {
       disabled: false,
       total: 0,
       chips: [],
-      type:
-        this.globalFeedbackFilterType === feedback.types.both
-          ? feedback.types.both
-          : feedback.types.transactional,
+      type: feedback.types.transactional,
     });
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
@@ -180,14 +179,13 @@ export class FeedbackComponent {
       this.tabFilterItems[this.tabFilterIdx].type
     );
     this.statisticsService.outletIds =
-      this.tabFilterItems[event.index].type === feedback.types.stay
+      this.tabFilterItems[event.index].type === feedback.types.stay ||
+      this.tabFilterItems[event.index].value !== 'ALL'
         ? [this.tabFilterItems[this.tabFilterIdx].value]
         : this.tabFilterItems
             .map((item) => item.value)
             .filter((value) => value != 'ALL');
-    if (this.globalFeedbackFilterType !== feedback.types.both)
-      this.statisticsService.type = this.tabFilterItems[this.tabFilterIdx].type;
-    else this.statisticsService.type = '';
+    this.statisticsService.type = this.tabFilterItems[this.tabFilterIdx].type;
     this.statisticsService.$outletChange.next({
       status: true,
       type: this.tabFilterItems[this.tabFilterIdx].type,
@@ -219,5 +217,9 @@ export class FeedbackComponent {
   checkForTransactionalSubscribed() {
     return this.subscriptionPlanService.getModuleSubscription().modules
       .FEEDBACK_TRANSACTIONAL.active;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

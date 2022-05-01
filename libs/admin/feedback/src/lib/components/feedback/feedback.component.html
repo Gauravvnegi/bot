@@ -213,17 +213,42 @@
             [paths]="['feedback.cards.' + cards.NPSAcrossServices]"
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
-          >
-          </hospitality-bot-nps-across-services>
-        </ng-container>
-        <ng-container *ngSwitchDefault>
-          <hospitality-bot-point-of-sale
+          ></hospitality-bot-nps-across-services>
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services
+          ><hospitality-bot-feedback-datatable
+            tableSubscribed
+            [paths]="
+              'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
+            "
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+            [hotelId]="hotelId"
+          ></hospitality-bot-feedback-datatable
+        ></ng-container>
+        <ng-container *ngSwitchCase="feedbackConfig.types.transactional"
+          ><hospitality-bot-point-of-sale
             cardSubscribed
             [paths]="['FEEDBACK_TRANSACTIONAL.cards.' + cards.NPSAcrossPOS]"
             [globalFeedbackFilterType]="globalFeedbackFilterType"
             [hotelId]="hotelId"
           ></hospitality-bot-point-of-sale>
-        </ng-container>
+          <hospitality-bot-gtm-across-services
+            cardSubscribed
+            [paths]="['feedback.cards.' + cards.GTMAcrossServices]"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-gtm-across-services
+          ><hospitality-bot-feedback-datatable
+            tableSubscribed
+            [paths]="
+              'FEEDBACK_TRANSACTIONAL.tables.' + tables.FEEDBACK_TRANSACTIONAL
+            "
+            [hotelId]="hotelId"
+            [globalFeedbackFilterType]="globalFeedbackFilterType"
+          ></hospitality-bot-feedback-datatable
+        ></ng-container>
       </ng-container>
       <hospitality-bot-gtm-across-services
         [globalFeedbackFilterType]="globalFeedbackFilterType"

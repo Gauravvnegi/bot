@@ -157,7 +157,7 @@ export class TopLowNpsComponent implements OnInit {
       : this.tabfeedbackType;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }

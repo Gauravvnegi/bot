@@ -133,4 +133,8 @@ export class GtmAcrossServicesComponent implements OnInit {
       ? feedback.types.transactional
       : this.tabfeedbackType;
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

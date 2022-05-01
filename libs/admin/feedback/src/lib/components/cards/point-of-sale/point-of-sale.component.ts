@@ -397,7 +397,7 @@ export class PointOfSaleComponent implements OnInit {
     return [];
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }

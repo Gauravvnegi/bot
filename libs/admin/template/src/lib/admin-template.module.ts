@@ -20,6 +20,6 @@ import { TemplateService } from './services/template.service';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['template'])),
   ],
   declarations: [...AdminTemplateRoutingModule.components],
-  providers:[TemplateService]
+  providers: [TemplateService],
 })
 export class AdminTemplateModule {}

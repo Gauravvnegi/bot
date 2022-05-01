@@ -56,6 +56,7 @@ export class ImportAssetComponent implements OnInit {
   }
 
   registerListeners() {
+    this.listenForSearchChanges();
     this.listenForGlobalFilters();
   }
 

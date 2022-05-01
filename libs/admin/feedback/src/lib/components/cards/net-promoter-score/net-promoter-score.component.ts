@@ -116,24 +116,7 @@ export class NetPromoterScoreComponent implements OnInit {
         ...this.globalQueries,
         { entityIds: this._statisticService.outletIds },
       ];
-    else if (feedbackType === feedback.types.both) {
-      this.globalQueries = [
-        ...this.globalQueries,
-        { entityIds: this._statisticService.outletIds },
-      ];
-      this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('hotelId')) {
-          if (
-            !this.globalQueries[
-              this.globalQueries.length - 1
-            ].entityIds.includes(element.hotelId)
-          )
-            this.globalQueries[this.globalQueries.length - 1].entityIds.push(
-              element.hotelId
-            );
-        }
-      });
-    } else {
+    else {
       this.globalQueries.forEach((element) => {
         if (element.hasOwnProperty('hotelId')) {
           this.globalQueries = [
@@ -279,11 +262,11 @@ export class NetPromoterScoreComponent implements OnInit {
   getFeedbackType() {
     if (this.tabfeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
-        ? ''
+        ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
     return this.tabfeedbackType === this.feedbackConfig.types.both
-      ? ''
+      ? feedback.types.transactional
       : this.tabfeedbackType;
   }
 

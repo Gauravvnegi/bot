@@ -32,7 +32,8 @@
 .sidebar {
   padding-top: 15px;
   &__container {
-    // padding-top: 40px;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
     .main_heading {
       margin-bottom: 9px;
       &_anchor {

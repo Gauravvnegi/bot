@@ -198,7 +198,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   getFeedbackType() {
     if (this.tabfeedbackType === undefined) {
       return this.globalFeedbackFilterType === feedback.types.both
-        ? ''
+        ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
     return this.tabfeedbackType === feedback.types.both

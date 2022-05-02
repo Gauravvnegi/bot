@@ -23,7 +23,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   isSaving = false;
   template: Template;
 
-  @Input() disabled:boolean;
+  @Input() isDisabled=false;
 
   enableAssetImport = false;
   templateId: string;

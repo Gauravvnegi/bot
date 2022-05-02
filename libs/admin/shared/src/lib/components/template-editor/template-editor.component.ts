@@ -12,15 +12,19 @@ export class TemplateEditorComponent implements OnInit {
   @Input() template = '';
   @Input() disabled = false;
   @Input() hybrid = true;
+
   @ViewChild('plainTextControl') plainTextControl;
   richText = true;
   ckeConfig = {
+    readOnly:false,
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.ckeConfig['readOnly'] = this.disabled;
+  }
 
   ngOnChanges() {
     this.ckeConfig['readOnly'] = this.disabled;

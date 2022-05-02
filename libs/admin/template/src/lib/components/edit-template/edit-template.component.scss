@@ -132,6 +132,8 @@
       .manually-import {
         height: 135px;
         overflow-y: hidden;
+        max-width: 100%;
+        overflow-x: hidden;
       }
       .logos {
         position: absolute;
@@ -156,6 +158,7 @@
       border-radius: 23px;
       box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
       background-color: $primary-purple;
+      cursor: pointer;
       .save-text {
         font-size: $font16;
         font-weight: 500;
@@ -191,16 +194,16 @@
     }
   }
 }
-:host ::ng-deep .mat-form-field-infix{
-  width: 331px ;
+:host ::ng-deep .mat-form-field-infix {
+  width: 331px;
   @media only screen and (max-width: 1400px) {
-    width:200px !important ;
+    width: 200px !important ;
   }
   @media only screen and (max-width: 1480px) {
-    width:170px ;
+    width: 170px;
   }
   @media only screen and (max-width: 1700px) {
-    width:270px ;
+    width: 270px;
   }
 }
 
@@ -232,7 +235,6 @@
     width: 100% !important;
   }
 }
-
 
 :host ::ng-deep .mat-select-arrow {
   border-top-color: $primary-gray;
@@ -267,7 +269,6 @@
 :host ::ng-deep input.mat-input-element {
   font-size: $font16;
   color: $dark-blue;
-  
 }
 
 :host

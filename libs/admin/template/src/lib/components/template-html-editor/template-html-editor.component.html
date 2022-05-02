@@ -49,13 +49,13 @@
           </div>
         </div>
       </div>
-      <div class="feilds">
+      <div class="feilds" *ngIf="!isDisabled">
         <div class="feild">
           <mat-label class="mat-label">Shared templates</mat-label>
           <mat-checkbox formControlName="shared"></mat-checkbox>
         </div>
       </div>
-      <div class="description">
+      <div class="description" *ngIf="!isDisabled">
         Shared templates and their contents are openly available for all users
         under your organisations.
       </div>

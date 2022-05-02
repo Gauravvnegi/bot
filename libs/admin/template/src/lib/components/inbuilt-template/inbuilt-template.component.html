@@ -1,7 +1,7 @@
 <div class="container">
   <div class="headings">
     <div class="go-back">
-      <button mat-button matStepperPrevious>
+      <button mat-button matStepperPrevious >
         <mat-icon class="material-icons" matSuffix
           >keyboard_backspace
         </mat-icon>
@@ -19,7 +19,7 @@
       <hospitality-bot-topic-dropdown
         class="field"
         [hotelId]="hotelId"
-        [name]="'topicName'"
+        [name]="'topicId'"
         [parentForm]="templateForm"
       ></hospitality-bot-topic-dropdown>
     </div>
@@ -31,22 +31,28 @@
     </p>
   </div>
   <div class="checkin-cards">
-    <div *ngFor="let template of templateList" class="card">
-      <div [innerHTML]="template.htmlTemplate"></div>
+    <div *ngFor="let template of templateList | slice : startPage:paginationLimit" class="card">
+      <div [innerHTML]="template.htmlTemplate" ></div>
     </div>
   </div>
 
-  <button class="button">
+  <button class="button"  (click)="showMoreItems()" >
     Show More
   </button>
 
   <div class="line"></div>
+
   <div class="heading">
     <p>
       Pre Check-In
     </p>
   </div>
 
+  <div class="checkin-cards">
+    <div class="card"></div>
+    <div class="card"></div>
+    <div class="card"></div>
+  </div>
   <button class="button">
     Show More
   </button>
@@ -56,6 +62,12 @@
     <p>
       General
     </p>
+  </div>
+  <div class="checkin-cards">
+    <div class="card"></div>
+    <div class="card"></div>
+
+    <div class="card"></div>
   </div>
 
   <button class="button">

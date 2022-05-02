@@ -29,15 +29,22 @@ export class InbuiltTemplateComponent implements OnInit {
   rowsPerPage: any;
   list = [];
 
+
+  startPage : Number;
+  paginationLimit:Number; 
+
   constructor(
     private _location: Location,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
     private _snackbarService: SnackBarService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+
   ) {
     this.initFG();
+    this.startPage = 0,
+    this.paginationLimit = 3
   }
 
 
@@ -130,9 +137,9 @@ export class InbuiltTemplateComponent implements OnInit {
     return this.templateService.getHotelTemplate(config, this.hotelId);
   }
 
-
-  goback() {
-    this._location.back();
+  showMoreItems()
+  {
+     this.paginationLimit = Number(this.paginationLimit) + 3;        
   }
+ }
 
-}

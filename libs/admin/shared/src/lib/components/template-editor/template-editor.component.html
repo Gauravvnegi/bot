@@ -6,23 +6,7 @@
     *ngIf="richText; then richTextTemplate; else plainTextTemplate"
   ></ng-container>
   <ng-template #richTextTemplate>
-    <div
-      style="
-        font-family: Roboto;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        color: #4b56c0;
-        display: flex;
-        justify-content: flex-end;
-        margin: 10px 0;
-        cursor: pointer;
-      "
-      (click)="changeField(false)"
-    >
+    <div class="text-field" (click)="changeField(false)">
       Plain Text
     </div>
     <div [formGroup]="parentFG">
@@ -30,23 +14,7 @@
     </div>
   </ng-template>
   <ng-template #plainTextTemplate
-    ><div
-      style="
-        font-family: Roboto;
-        font-size: 16px;
-        font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        color: #4b56c0;
-        display: flex;
-        justify-content: flex-end;
-        margin: 10px 0;
-        cursor: pointer;
-      "
-      (click)="changeField(true)"
-    >
+    ><div class="text-field" (click)="changeField(true)">
       Rich Text
     </div>
     <div [formGroup]="parentFG" class="plain-text-container">

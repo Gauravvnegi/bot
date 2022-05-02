@@ -27,7 +27,7 @@
   }
   &-form {
     padding-left: $padding20;
-    .feilds {
+    .fields {
       display: flex;
       align-items: center;
       margin-top: 2%;
@@ -58,25 +58,11 @@
         padding-left: 11%;
         margin-bottom: 20px;
       }
-      .feild {
+      .field {
         display: flex;
         align-items: center;
-        width: 31.5%;
+        width: 31%;
         margin-right: 1.5%;
-        @media (max-width: $tablet) {
-          @include width(42.6%);
-        }
-        ::ng-deep .mat-form-field-infix {
-          @media (max-width: 1024px) {
-            width: inherit;
-          }
-        }
-      }
-      .description {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        // margin-right: 1.5%;
         @media (max-width: $tablet) {
           @include width(42.6%);
         }
@@ -143,6 +129,10 @@
       .built-template {
         height: 53px;
       }
+      .manually-import {
+        height: 135px;
+        overflow-y: hidden;
+      }
       .logos {
         position: absolute;
         padding: 11px 0;
@@ -201,6 +191,18 @@
     }
   }
 }
+:host ::ng-deep .mat-form-field-infix{
+  width: 331px ;
+  @media only screen and (max-width: 1400px) {
+    width:200px !important ;
+  }
+  @media only screen and (max-width: 1480px) {
+    width:170px ;
+  }
+  @media only screen and (max-width: 1700px) {
+    width:270px ;
+  }
+}
 
 :host ::ng-deep .mat-form-field-infix {
   border-top: none;
@@ -215,18 +217,22 @@
   background-color: transparent;
 }
 
-.mat-label {
-  font-size: $font14;
+:host ::ng-deep .mat-label {
+  font-size: $font16;
   color: $primary-gray;
   margin-right: 10px;
-  width: 30%;
+  min-width: 31%;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }
   @media only screen and (max-width: 1080px) {
     font-size: $font10;
   }
+  ::ng-deep .mat-form-field-infix.description {
+    width: 100% !important;
+  }
 }
+
 
 :host ::ng-deep .mat-select-arrow {
   border-top-color: $primary-gray;
@@ -253,36 +259,15 @@
   }
 }
 
-:host ::ng-deep .upload__box {
-  border: 1px dashed $light-grey;
-}
-
-:host ::ng-deep .currency {
-  width: 28%;
-}
-
-:host ::ng-deep .rate {
-  width: 36.2%;
-  margin-left: 5px;
-}
-
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font14;
+  font-size: $font16;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
   font-size: $font16;
   color: $dark-blue;
-}
-
-:host ::ng-deep .description {
-  width: 100% !important;
-}
-
-:host ::ng-deep .description .mat-form-field-infix {
-  min-width: 100%;
-  letter-spacing: 0.96px;
+  
 }
 
 :host
@@ -295,18 +280,7 @@
   .mat-form-field-label {
   display: none !important;
 }
-:host ::ng-deep .feild.description-feild {
-  width: 100% !important;
-  display: block;
-}
-:host ::ng-deep .mat-form-field.description {
-  width: 100% !important;
-  display: block !important;
-}
 
-:host ::ng-deep .mat-description {
-  width: 8% !important;
-}
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin-top: 3rem !important;
 }
@@ -325,4 +299,19 @@
 
 :host ::ng-deep .mat-horizontal-content-container {
   padding: inherit;
+}
+:host ::ng-deep .mat-description {
+  font-size: $font16;
+  color: $primary-gray;
+  margin-right: 10px;
+  min-width: 10% !important;
+  @media only screen and (max-width: 1300px) {
+    font-size: $font13;
+  }
+  @media only screen and (max-width: 1080px) {
+    font-size: $font10;
+  }
+  ::ng-deep .mat-form-field-infix.description {
+    width: 100% !important;
+  }
 }

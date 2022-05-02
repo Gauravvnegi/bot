@@ -26,7 +26,6 @@ export class AdminTemplateRoutingModule {
     EditTemplateComponent,
     TemplateHtmlEditorComponent,
     InbuiltTemplateComponent,
-    TemplateHtmlEditorComponent,
     ImportAssetComponent,
   ];
 }

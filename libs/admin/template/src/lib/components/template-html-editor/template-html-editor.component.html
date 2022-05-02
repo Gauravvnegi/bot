@@ -1,11 +1,16 @@
 <div class="wrapper">
   <header class="wrapper-header">
     <div class="back">
-      <button mat-button matStepperPrevious>
+      <button mat-button (click)="back()">
         <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
       </button>
       <p class="label">
-        Create Template
+        <ng-container *ngIf="isDisabled; else editTemplate">
+          View Template
+        </ng-container>
+        <ng-template #editTemplate>
+          Edit Template
+        </ng-template>
       </p>
     </div>
   </header>
@@ -47,11 +52,12 @@
     </div>
     <div class="ck-editor">
       <hospitality-bot-template-editor
+        *ngIf="openEditor"
         [parentFG]="templateForm"
         [name]="'htmlTemplate'"
         [template]="template"
         [hybrid]="false"
-        [disabled]="disabled"
+        [disabled]="isDisabled"
       ></hospitality-bot-template-editor>
     </div>
   </form>

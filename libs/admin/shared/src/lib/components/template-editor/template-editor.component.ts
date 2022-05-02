@@ -17,10 +17,13 @@ export class TemplateEditorComponent implements OnInit {
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
+    readOnly: false,
   };
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.ckeConfig['readOnly'] = this.disabled;
+  }
 
   ngOnChanges() {
     this.ckeConfig['readOnly'] = this.disabled;

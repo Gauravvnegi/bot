@@ -72,10 +72,10 @@
                   <div class="logos__logo" mat-raised-button (click)="move(1)">
                     <img src="assets/svg/view8280.svg" alt="" />
                   </div>
-                  <div class="logos__logo" mat-raised-button (click)="move(2)">
+                  <div class="logos__logo" mat-raised-button (click)="moveToEditor(1)">
                     <img src="assets/svg/edit8278.svg" alt="" />
                   </div>
-                  <div class="logos__logo" (click)="openDeleteTemplate()">
+                  <div class="logos__logo" (click)="deleteTemplate()">
                     <img src="assets/svg/delete8279.svg" alt="" />
                   </div>
                 </div>
@@ -142,13 +142,7 @@
   </mat-step>
   <mat-step>
     <hospitality-bot-template-html-editor
-      [disabled]="true"
-    ></hospitality-bot-template-html-editor>
-  </mat-step>
-
-  <mat-step>
-    <hospitality-bot-template-html-editor
-      [disabled]="false"
+      [isDisabled]="contentNotEditable"
     ></hospitality-bot-template-html-editor>
   </mat-step>
 </mat-horizontal-stepper>

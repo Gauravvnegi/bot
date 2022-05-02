@@ -5,7 +5,12 @@
         <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
       </button>
       <p class="label">
-        Create Template
+        <ng-container *ngIf="isDisabled; else editTemplate">
+          View Template
+        </ng-container>
+        <ng-template #editTemplate>
+          Edit Template
+        </ng-template>
       </p>
     </div>
   </header>
@@ -50,7 +55,7 @@
         [parentFG]="templateForm"
         [name]="'htmlTemplate'"
         [hybrid]="false"
-        [disabled]="disabled"
+        [disabled]="isDisabled"
       ></hospitality-bot-template-editor>
     </div>
   </form>

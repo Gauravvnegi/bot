@@ -1,12 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Template } from '../../data-models/templateConfig.model';
 import { TemplateService } from '../../services/template.service';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
@@ -23,7 +22,9 @@ export class TemplateHtmlEditorComponent implements OnInit {
   isSaving = false;
   template: Template;
 
-  @Input() isDisabled=false;
+  @Input() isDisabled = false;
+  @Input() openEditor = false;
+  @Output() goBack = new EventEmitter();
 
   enableAssetImport = false;
   templateId: string;
@@ -32,8 +33,6 @@ export class TemplateHtmlEditorComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
     private templateService: TemplateService,
-    private location: Location,
-    private _router: Router,
     private activatedRoute: ActivatedRoute
   ) {
     this.initFG();
@@ -124,6 +123,11 @@ export class TemplateHtmlEditorComponent implements OnInit {
         )
     );
   }
+
+  back() {
+    this.goBack.emit();
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

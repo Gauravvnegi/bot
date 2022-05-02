@@ -69,10 +69,18 @@
                   <div [innerHTML]="imgTemplate"></div>
                 </div>
                 <div class="logos">
-                  <div class="logos__logo" mat-raised-button (click)="move(1)">
+                  <div
+                    class="logos__logo"
+                    mat-raised-button
+                    (click)="moveToEditor(true)"
+                  >
                     <img src="assets/svg/view8280.svg" alt="" />
                   </div>
-                  <div class="logos__logo" mat-raised-button (click)="moveToEditor(1)">
+                  <div
+                    class="logos__logo"
+                    mat-raised-button
+                    (click)="moveToEditor(false)"
+                  >
                     <img src="assets/svg/edit8278.svg" alt="" />
                   </div>
                   <div class="logos__logo" (click)="deleteTemplate()">
@@ -152,13 +160,16 @@
       </form>
     </div>
   </mat-step>
-  <mat-step>
-    <hospitality-bot-template-html-editor
-      [isDisabled]="contentNotEditable"
-    ></hospitality-bot-template-html-editor>
-  </mat-step>
 
   <mat-step>
     <hospitality-bot-inbuilt-template></hospitality-bot-inbuilt-template>
+  </mat-step>
+
+  <mat-step>
+    <hospitality-bot-template-html-editor
+      [isDisabled]="contentNotEditable"
+      (goBack)="handleBackFromEditor()"
+      [openEditor]="stepper.selectedIndex == 2"
+    ></hospitality-bot-template-html-editor>
   </mat-step>
 </mat-horizontal-stepper>

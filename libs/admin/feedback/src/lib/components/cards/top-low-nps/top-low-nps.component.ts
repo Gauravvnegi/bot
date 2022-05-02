@@ -36,6 +36,13 @@ export class TopLowNpsComponent implements OnInit {
         : feedback.tabFilterItems.topLowNPS.stay;
     this.registerListeners();
   }
+  
+  ngOnChanges() {
+    this.tabFilterItems =
+      this.globalFeedbackFilterType === feedback.types.transactional
+        ? feedback.tabFilterItems.topLowNPS.transactional
+        : feedback.tabFilterItems.topLowNPS.stay;
+  }
 
   registerListeners(): void {
     this.listenForGlobalFilters();

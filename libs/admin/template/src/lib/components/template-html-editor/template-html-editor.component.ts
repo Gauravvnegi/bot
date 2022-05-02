@@ -23,7 +23,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   topicList = [];
   isSaving = false;
   template: Template;
-
+  enableAssetImport = false;
   templateId: string;
   constructor(
     private _fb: FormBuilder,

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InbuiltTemplateComponent } from './inbuilt-template.component';
+import { ImportAssetComponent } from './import-asset.component';
 
-describe('InbuiltTemplateComponent', () => {
-  let component: InbuiltTemplateComponent;
-  let fixture: ComponentFixture<InbuiltTemplateComponent>;
+describe('ImportAssetComponent', () => {
+  let component: ImportAssetComponent;
+  let fixture: ComponentFixture<ImportAssetComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [InbuiltTemplateComponent],
+      declarations: [ImportAssetComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InbuiltTemplateComponent);
+    fixture = TestBed.createComponent(ImportAssetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

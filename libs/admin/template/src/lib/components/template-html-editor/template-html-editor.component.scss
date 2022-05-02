@@ -315,11 +315,11 @@
   display: none;
 }
 
-:host ::ng-deep .mat-horizontal-stepper-header-container{
+:host ::ng-deep .mat-horizontal-stepper-header-container {
   display: none;
 }
 
-:host ::ng-deep .mat-horizontal-content-container{
+:host ::ng-deep .mat-horizontal-content-container {
   padding: inherit;
 }
 .import-assets {
@@ -332,4 +332,5 @@
   letter-spacing: 0.84px;
   text-align: left;
   color: #4b56c0;
+  cursor: pointer;
 }

@@ -167,8 +167,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   setTabFilters(feedbackType): void {
     if (feedbackType === feedback.types.transactional)
       this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
-    else if (feedbackType === feedback.types.stay)
-      this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
+    else this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
     this.setTableCols();
   }
 
@@ -177,7 +176,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   setTableCols(): void {
     this.cols =
-      this.tabFilterItems[this.tabFilterIdx].value ===
+      this.tabFilterItems[this.tabFilterIdx]?.value ===
       this.globalFeedbackConfig.types.stay
         ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
         : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;

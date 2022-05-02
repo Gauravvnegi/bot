@@ -148,7 +148,7 @@
         <div class="save-section">
           <div
             class="save-button"
-            (click)="handleSubmit()"
+            (click)="handleSubmit($event)"
             [ngClass]="{ active: !isSaving, disabled: isSaving }"
           >
             <div class="save-text">
@@ -168,8 +168,11 @@
   <mat-step>
     <hospitality-bot-template-html-editor
       [isDisabled]="contentNotEditable"
-      (goBack)="handleBackFromEditor()"
       [openEditor]="stepper.selectedIndex == 2"
+      [templateForm]="templateForm"
+      [template]="template"
+      (goBack)="handleBackFromEditor()"
+      (saveTemplate)="handleSubmit($event)"
     ></hospitality-bot-template-html-editor>
   </mat-step>
 </mat-horizontal-stepper>

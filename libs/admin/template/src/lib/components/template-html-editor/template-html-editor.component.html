@@ -62,26 +62,24 @@
     </div>
   </form>
   <div class="save-section">
-    <div class="save-button">
+    <div class="save-button" (click)="saveAndPreview()">
       <div class="save-text">
-        <i></i>
         Preview and Save
       </div>
     </div>
-    <div class="save-button">
+    <div class="save-button" (click)="save()">
       <div class="save-text">
-        <i></i>
         Save Changes
       </div>
     </div>
     <div
       class="save-button"
-      (click)="createTemplate()"
+      (click)="saveAndNext()"
       [ngClass]="{ active: !isSaving, disabled: isSaving }"
     >
       <div class="save-text">
         <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-        {{ isSaving ? 'Saving' : 'Save' }}
+        Save and next
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@
   padding: $padding20;
   background-color: white;
   border-radius: 5px;
-  height: 740px;
+  height: calc(100vh - 9.5%);
   &-header {
     display: flex;
     justify-content: space-between;

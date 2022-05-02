@@ -51,7 +51,7 @@ export class EditTemplateComponent implements OnDestroy {
       description: [''],
       status: [true],
       templateType: [''],
-      htmlTemplate: [''],
+      htmlTemplate: ['', [Validators.required]],
     });
   }
 
@@ -104,76 +104,77 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
     if (this.templateForm.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid Form.');
       return;
     }
     const data = this.templateForm.getRawValue();
-    console.log(data);
     if (this.templateId) {
-      this.updateTemplate();
-    } else {
-      this.createTemplate();
-    }
-  }
-  updateTemplate(): void {
-    this.isSaving = true;
-    const data = this.templateService.mapTemplateData(
-      this.templateForm.getRawValue(),
-      this.hotelId,
-      this.template.id
-    );
-    this.$subscription.add(
-      this.templateService
-        .updateTemplate(this.hotelId, this.template.id, data)
-        .subscribe(
+      this.$subscription.add(
+        this.updateTemplate(data).subscribe(
           (response) => {
             this._snackbarService.openSnackBarAsText(
               'Template Updated Successfully',
               '',
               { panelClass: 'success' }
             );
-            this._router.navigate(['/pages/library/template']);
-            this.isSaving = false;
+            if (!event.data) this._router.navigate(['/pages/library/template']);
+            if (event.data.redirectToForm) this.stepper.selectedIndex = 0;
+            if (event.data.preview) this.contentNotEditable = true;
           },
           ({ error }) => {
             this._snackbarService.openSnackBarAsText(error.message);
-            this.isSaving = false;
-          }
+          },
+          () => (this.isSaving = false)
         )
+      );
+    } else {
+      this.$subscription.add(
+        this.createTemplate(data).subscribe(
+          (response) => {
+            this.template = new Template().deserialize(response);
+            this._snackbarService.openSnackBarAsText(
+              'Template Created Successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this._router.navigate(['/pages/library/template']);
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          },
+          () => (this.isSaving = false)
+        )
+      );
+    }
+  }
+
+  updateTemplate(templateFormData) {
+    this.isSaving = true;
+    const data = this.templateService.mapTemplateData(
+      templateFormData,
+      this.hotelId,
+      this.template.id
+    );
+    return this.templateService.updateTemplate(
+      this.hotelId,
+      this.template.id,
+      data
     );
   }
 
-  createTemplate() {
+  createTemplate(templateFormData) {
     if (this.templateForm.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid Form.');
       return;
     }
     this.isSaving = true;
     let data = this.templateService.mapTemplateData(
-      this.templateForm.getRawValue(),
+      templateFormData,
       this.hotelId
     );
-    this.$subscription.add(
-      this.templateService.createTemplate(this.hotelId, data).subscribe(
-        (response) => {
-          this.template = new Template().deserialize(response);
-          this.templateForm.patchValue(this.template);
-          this._snackbarService.openSnackBarAsText(
-            'Template Created Successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this._router.navigate(['/pages/library/template']);
-          this.isSaving = false;
-        },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-          this.isSaving = false;
-        }
-      )
-    );
+    return this.templateService.createTemplate(this.hotelId, data);
   }
 
   move(index: number) {

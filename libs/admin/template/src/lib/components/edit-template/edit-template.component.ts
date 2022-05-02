@@ -26,6 +26,7 @@ export class EditTemplateComponent implements OnDestroy {
   template: Template;
   imgTemplate;
   contentNotEditable: boolean;
+  createNewHtml = false;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -181,21 +182,29 @@ export class EditTemplateComponent implements OnDestroy {
 
   moveToEditor(disabled) {
     this.contentNotEditable = disabled;
-    if (this.templateForm.get('htmlTemplate').value)
-      this.stepper.selectedIndex = 2;
-    else this.stepper.selectedIndex = 1;
+    this.stepper.selectedIndex = this.htmlTemplate.value ? 2 : 1;
   }
 
   handleBackFromEditor() {
-    if (this.templateForm.get('htmlTemplate').value)
-      this.stepper.selectedIndex = 0;
-    else this.stepper.selectedIndex = 1;
+    this.stepper.selectedIndex =
+      this.htmlTemplate.value || this.createNewHtml ? 0 : 1;
+    this.createNewHtml = false;
+    this.contentNotEditable = false;
   }
 
   deleteTemplate() {}
 
+  openCreateContent(newContent: boolean) {
+    this.createNewHtml = newContent;
+    this.stepper.selectedIndex = newContent ? 2 : 1;
+  }
+
   goBack() {
     this.location.back();
+  }
+
+  get htmlTemplate() {
+    return this.templateForm.get('htmlTemplate');
   }
 
   ngOnDestroy(): void {

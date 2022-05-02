@@ -1,5 +1,5 @@
 <mat-horizontal-stepper [@.disabled]="true" #stepper>
-  <mat-step >
+  <mat-step>
     <div class="wrapper">
       <header class="wrapper-header">
         <div class="back">
@@ -58,7 +58,7 @@
           </div>
         </div>
 
-        <ng-container *ngIf="templateId; else createContent">
+        <ng-container *ngIf="htmlTemplate?.value; else createContent">
           <div class="wrapper-text">
             <div class="add-text">
               Edit Content
@@ -97,13 +97,21 @@
               Create Content
             </div>
             <div class="manually-add">
-              <div class="manually-templates" mat-raised-button (click)="move(2)" >
+              <div
+                class="manually-templates"
+                mat-raised-button
+                (click)="openCreateContent(false)"
+              >
                 <img src="assets/svg/diskette.svg" alt="" />
                 <div class="manually-import">
                   Saved Template
                 </div>
               </div>
-              <div class="manually-templates" mat-raised-button (click)="move(2)" >
+              <div
+                class="manually-templates"
+                mat-raised-button
+                (click)="openCreateContent(false)"
+              >
                 <img
                   src="assets/svg/web-design.svg"
                   alt=""
@@ -116,7 +124,7 @@
               <div
                 class="manually-templates"
                 mat-raised-button
-                (click)="move(2)"
+                (click)="openCreateContent(true)"
               >
                 <img src="assets/svg/design.svg" alt="" />
                 <div class="manually-import">

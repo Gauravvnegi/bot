@@ -97,7 +97,7 @@ export class TemplateService extends ApiService {
   mapTemplateData(formValue, hotelId, id?) {
     const templateData = new Template();
     templateData.active = formValue.status;
-    templateData.hotelId = hotelId;
+    templateData.entityId = hotelId;
     templateData.id = formValue.id;
     templateData.name = formValue.name;
     templateData.description = formValue.description;

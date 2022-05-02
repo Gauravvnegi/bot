@@ -19,7 +19,7 @@ export class Template implements Deserializable {
   status: boolean;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   active: boolean;
   topicId: string;
   templateType: string;
@@ -32,7 +32,7 @@ export class Template implements Deserializable {
       set({}, 'name', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['hotelId'])),
       set({}, 'active', get(input, ['active'])),
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'templateType', get(input, ['templateType'])),

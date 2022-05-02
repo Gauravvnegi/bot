@@ -4,6 +4,7 @@ import { AdminCampaignRoutingModule } from './admin-campaign.routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { EmailService } from './services/email.service';
+import { CampaignService } from './services/campaign.service';
 
 @NgModule({
   imports: [
@@ -14,6 +15,6 @@ import { EmailService } from './services/email.service';
     ReactiveFormsModule,
   ],
   declarations: [...AdminCampaignRoutingModule.components],
-  providers: [EmailService],
+  providers: [EmailService,CampaignService],
 })
 export class AdminCampaignModule {}

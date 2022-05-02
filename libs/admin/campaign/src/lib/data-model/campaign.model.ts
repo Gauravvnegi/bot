@@ -4,17 +4,17 @@ export interface Deserializable {
   deserialize(input: any): this;
 }
 
-export class Templates implements Deserializable {
-  records: Template[];
+export class Campaigns implements Deserializable {
+  records: Campaign[];
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
-      new Template().deserialize(record)
+      new Campaign().deserialize(record)
     );
     return this;
   }
 }
 
-export class Template implements Deserializable {
+export class Campaign implements Deserializable {
   id: string;
   status: boolean;
   description: string;

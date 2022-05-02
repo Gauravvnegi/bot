@@ -275,7 +275,7 @@ export class EditAssetComponent implements OnInit {
   /**
    * @function assetImageUrl getter for image url.
    */
-   get assetImageUrl(): string {
+  get assetImageUrl(): string {
     return this.assetForm?.get('url').value || '';
   }
 

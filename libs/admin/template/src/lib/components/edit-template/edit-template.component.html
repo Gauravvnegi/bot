@@ -89,13 +89,21 @@
               Create Content
             </div>
             <div class="manually-add">
-              <div class="manually-templates">
+              <div
+                class="manually-templates"
+                mat-raised-button
+                (click)="move(2)"
+              >
                 <img src="assets/svg/diskette.svg" alt="" />
                 <div class="manually-import">
                   Saved Template
                 </div>
               </div>
-              <div class="manually-templates">
+              <div
+                class="manually-templates"
+                mat-raised-button
+                (click)="move(2)"
+              >
                 <img
                   src="assets/svg/web-design.svg"
                   alt=""
@@ -105,7 +113,11 @@
                   In-Built Template
                 </div>
               </div>
-              <div class="manually-templates">
+              <div
+                class="manually-templates"
+                mat-raised-button
+                (click)="move(3)"
+              >
                 <img src="assets/svg/design.svg" alt="" />
                 <div class="manually-import">
                   Create New(HTML Editor)
@@ -150,5 +162,9 @@
     <hospitality-bot-template-html-editor
       [disabled]="false"
     ></hospitality-bot-template-html-editor>
+  </mat-step>
+
+  <mat-step>
+    <hospitality-bot-inbuilt-template></hospitality-bot-inbuilt-template>
   </mat-step>
 </mat-horizontal-stepper>

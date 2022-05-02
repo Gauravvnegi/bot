@@ -1,5 +1,5 @@
 <mat-horizontal-stepper [@.disabled]="true" #stepper>
-  <mat-step>
+  <mat-step >
     <div class="wrapper">
       <header class="wrapper-header">
         <div class="back">
@@ -69,10 +69,10 @@
                   <div [innerHTML]="imgTemplate"></div>
                 </div>
                 <div class="logos">
-                  <div class="logos__logo" mat-raised-button (click)="move(1)">
+                  <div class="logos__logo" mat-raised-button>
                     <img src="assets/svg/view8280.svg" alt="" />
                   </div>
-                  <div class="logos__logo" mat-raised-button (click)="move(2)">
+                  <div class="logos__logo" mat-raised-button>
                     <img src="assets/svg/edit8278.svg" alt="" />
                   </div>
                   <div class="logos__logo" (click)="openDeleteTemplate()">
@@ -89,21 +89,13 @@
               Create Content
             </div>
             <div class="manually-add">
-              <div
-                class="manually-templates"
-                mat-raised-button
-                (click)="move(2)"
-              >
+              <div class="manually-templates" mat-raised-button (click)="move(2)" >
                 <img src="assets/svg/diskette.svg" alt="" />
                 <div class="manually-import">
                   Saved Template
                 </div>
               </div>
-              <div
-                class="manually-templates"
-                mat-raised-button
-                (click)="move(2)"
-              >
+              <div class="manually-templates" mat-raised-button (click)="move(2)" >
                 <img
                   src="assets/svg/web-design.svg"
                   alt=""
@@ -113,11 +105,7 @@
                   In-Built Template
                 </div>
               </div>
-              <div
-                class="manually-templates"
-                mat-raised-button
-                (click)="move(3)"
-              >
+              <div class="manually-templates" mat-raised-button (click)="move(1)">
                 <img src="assets/svg/design.svg" alt="" />
                 <div class="manually-import">
                   Create New(HTML Editor)
@@ -152,15 +140,10 @@
       </form>
     </div>
   </mat-step>
-  <mat-step>
-    <hospitality-bot-template-html-editor
-      [disabled]="true"
-    ></hospitality-bot-template-html-editor>
-  </mat-step>
 
   <mat-step>
     <hospitality-bot-template-html-editor
-      [disabled]="false"
+      [disabled]="true"
     ></hospitality-bot-template-html-editor>
   </mat-step>
 

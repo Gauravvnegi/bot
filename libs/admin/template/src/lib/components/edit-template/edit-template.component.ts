@@ -110,6 +110,7 @@ export class EditTemplateComponent implements OnDestroy {
       return;
     }
     const data = this.templateForm.getRawValue();
+    this.isSaving = true;
     if (this.templateId) {
       this.$subscription.add(
         this.updateTemplate(data).subscribe(
@@ -151,7 +152,6 @@ export class EditTemplateComponent implements OnDestroy {
   }
 
   updateTemplate(templateFormData) {
-    this.isSaving = true;
     const data = this.templateService.mapTemplateData(
       templateFormData,
       this.hotelId,
@@ -165,11 +165,6 @@ export class EditTemplateComponent implements OnDestroy {
   }
 
   createTemplate(templateFormData) {
-    if (this.templateForm.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
-      return;
-    }
-    this.isSaving = true;
     let data = this.templateService.mapTemplateData(
       templateFormData,
       this.hotelId
@@ -193,7 +188,9 @@ export class EditTemplateComponent implements OnDestroy {
     this.contentNotEditable = false;
   }
 
-  deleteTemplate() {}
+  deleteTemplate() {
+    this.templateForm.get('htmlTemplate').setValue('');
+  }
 
   openCreateContent(newContent: boolean) {
     this.createNewHtml = newContent;

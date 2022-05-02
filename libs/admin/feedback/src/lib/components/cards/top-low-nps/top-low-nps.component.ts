@@ -31,9 +31,9 @@ export class TopLowNpsComponent implements OnInit {
 
   ngOnInit(): void {
     this.tabFilterItems =
-      this.globalFeedbackFilterType === feedback.types.stay
-        ? feedback.tabFilterItems.topLowNPS.stay
-        : feedback.tabFilterItems.topLowNPS.transactional;
+      this.globalFeedbackFilterType === feedback.types.transactional
+        ? feedback.tabFilterItems.topLowNPS.transactional
+        : feedback.tabFilterItems.topLowNPS.stay;
     this.registerListeners();
   }
 
@@ -84,6 +84,10 @@ export class TopLowNpsComponent implements OnInit {
   listenForOutletChanged() {
     this.statisticsService.$outletChange.subscribe((response) => {
       if (response.status) {
+        this.tabFilterItems =
+          response.type === feedback.types.transactional
+            ? feedback.tabFilterItems.topLowNPS.transactional
+            : feedback.tabFilterItems.topLowNPS.stay;
         this.tabfeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {

@@ -49,15 +49,27 @@
           </div>
         </div>
       </div>
+      <div class="feilds">
+        <div class="feild">
+          <mat-label class="mat-label">Shared templates</mat-label>
+          <mat-checkbox formControlName="shared"></mat-checkbox>
+        </div>
+      </div>
+      <div class="description">
+        Shared templates and their contents are openly available for all users
+        under your organisations.
+      </div>
     </div>
-    <hospitality-bot-template-editor
-      *ngIf="openEditor"
-      [parentFG]="templateForm"
-      [name]="'htmlTemplate'"
-      [template]="template"
-      [hybrid]="false"
-      [disabled]="isDisabled"
-    ></hospitality-bot-template-editor>
+    <div class="wrapper-editor">
+      <hospitality-bot-template-editor
+        *ngIf="openEditor"
+        [parentFG]="templateForm"
+        [name]="'htmlTemplate'"
+        [template]="template"
+        [hybrid]="false"
+        [disabled]="isDisabled"
+      ></hospitality-bot-template-editor>
+    </div>
   </form>
   <div class="save-section" *ngIf="!isDisabled">
     <div class="save-button" (click)="saveAndPreview()">

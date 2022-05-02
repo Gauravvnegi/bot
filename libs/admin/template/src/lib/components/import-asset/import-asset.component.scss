@@ -38,9 +38,17 @@
       width: 108px;
       height: 116px;
       padding: 15px;
+      position: relative;
       .image {
         max-height: 86px;
         max-width: 78px;
+        pointer-events: none;
+      }
+      .copy {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        cursor: pointer;
       }
     }
   }

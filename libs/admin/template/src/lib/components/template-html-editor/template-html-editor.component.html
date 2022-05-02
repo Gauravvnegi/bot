@@ -1,7 +1,9 @@
 <div class="wrapper">
   <header class="wrapper-header">
     <div class="back">
-        <mat-icon class="material-icons" matSuffix (click)="back()">keyboard_backspace</mat-icon>
+      <mat-icon class="material-icons" matSuffix (click)="back()"
+        >keyboard_backspace</mat-icon
+      >
       <p class="label">
         <ng-container *ngIf="isDisabled; else editTemplate">
           View Template
@@ -48,18 +50,16 @@
         </div>
       </div>
     </div>
-    <div class="ck-editor">
-      <hospitality-bot-template-editor
-        *ngIf="openEditor"
-        [parentFG]="templateForm"
-        [name]="'htmlTemplate'"
-        [template]="template"
-        [hybrid]="false"
-        [disabled]="isDisabled"
-      ></hospitality-bot-template-editor>
-    </div>
+    <hospitality-bot-template-editor
+      *ngIf="openEditor"
+      [parentFG]="templateForm"
+      [name]="'htmlTemplate'"
+      [template]="template"
+      [hybrid]="false"
+      [disabled]="isDisabled"
+    ></hospitality-bot-template-editor>
   </form>
-  <div class="save-section">
+  <div class="save-section" *ngIf="!isDisabled">
     <div class="save-button" (click)="saveAndPreview()">
       <div class="save-text">
         Preview and Save

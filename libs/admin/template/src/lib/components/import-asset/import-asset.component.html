@@ -46,6 +46,15 @@
         [src]="asset.type === 'Image' ? asset.url : asset.thumbnailUrl"
         alt="Asset"
       />
+      <img
+        class="copy"
+        src="assets/svg/copy.svg"
+        alt="Copy"
+        [cdkCopyToClipboard]="
+          asset.type === 'Image' ? asset.url : asset.thumbnailUrl
+        "
+        (click)="handleCopyToClipboard($event)"
+      />
     </div>
   </div>
   <div class="footer">

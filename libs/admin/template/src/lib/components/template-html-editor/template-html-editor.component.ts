@@ -25,6 +25,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
 
   @Input() disabled:boolean;
 
+  enableAssetImport = false;
   templateId: string;
   constructor(
     private _fb: FormBuilder,

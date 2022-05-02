@@ -75,6 +75,10 @@ export class TemplateService extends ApiService {
     );
   }
 
+  getAssets(hotelId: string, config) {
+    return this.get(`/api/v1/entity/${hotelId}/assets${config.queryObj}`);
+  }
+
   /**
    * @function mapTemplateData map api data into template form data.
    * @param formValue form key values.

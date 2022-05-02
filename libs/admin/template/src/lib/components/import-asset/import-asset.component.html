@@ -50,9 +50,7 @@
         class="copy"
         src="assets/svg/copy.svg"
         alt="Copy"
-        [cdkCopyToClipboard]="
-          asset.type === 'Image' ? asset.url : asset.thumbnailUrl
-        "
+        [cdkCopyToClipboard]="asset.url"
         (click)="handleCopyToClipboard($event)"
       />
     </div>

@@ -28,6 +28,7 @@ export class InbuiltTemplateComponent implements OnInit {
   first: any;
   rowsPerPage: any;
   list = [];
+
   constructor(
     private _location: Location,
     private globalFilterService: GlobalFilterService,
@@ -38,6 +39,7 @@ export class InbuiltTemplateComponent implements OnInit {
   ) {
     this.initFG();
   }
+
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
@@ -128,7 +130,9 @@ export class InbuiltTemplateComponent implements OnInit {
     return this.templateService.getHotelTemplate(config, this.hotelId);
   }
 
-  goBack() {
+
+  goback() {
     this._location.back();
   }
+
 }

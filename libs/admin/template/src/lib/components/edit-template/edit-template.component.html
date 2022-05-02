@@ -1,5 +1,5 @@
 <mat-horizontal-stepper [@.disabled]="true" #stepper>
-  <mat-step>
+  <mat-step >
     <div class="wrapper">
       <header class="wrapper-header">
         <div class="back">
@@ -97,21 +97,13 @@
               Create Content
             </div>
             <div class="manually-add">
-              <div
-                class="manually-templates"
-                mat-raised-button
-                (click)="move(2)"
-              >
+              <div class="manually-templates" mat-raised-button (click)="move(2)" >
                 <img src="assets/svg/diskette.svg" alt="" />
                 <div class="manually-import">
                   Saved Template
                 </div>
               </div>
-              <div
-                class="manually-templates"
-                mat-raised-button
-                (click)="move(2)"
-              >
+              <div class="manually-templates" mat-raised-button (click)="move(2)" >
                 <img
                   src="assets/svg/web-design.svg"
                   alt=""

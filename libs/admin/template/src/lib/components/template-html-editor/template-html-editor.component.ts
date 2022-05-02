@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Template } from '../../data-models/templateConfig.model';
@@ -23,6 +22,8 @@ export class TemplateHtmlEditorComponent implements OnInit {
   topicList = [];
   isSaving = false;
   template: Template;
+
+  @Input() disabled:boolean;
 
   templateId: string;
   constructor(

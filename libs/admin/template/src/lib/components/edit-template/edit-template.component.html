@@ -18,10 +18,10 @@
       </header>
       <form [formGroup]="templateForm">
         <div class="wrapper-form">
-          <div class="feilds">
-            <div class="feild">
+          <div class="fields">
+            <div class="field">
               <mat-label class="mat-label">Name:</mat-label>
-              <mat-form-field>
+              <mat-form-field class="input">
                 <input
                   matInput
                   placeholder="Enter Template Name"
@@ -37,28 +37,24 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="feild">
+            <div class="field">
               <hospitality-bot-topic-dropdown
                 class="mat-label"
                 [hotelId]="hotelId"
-                [name]="'topicName'"
+                [name]="'topicId'"
                 [parentForm]="templateForm"
               ></hospitality-bot-topic-dropdown>
             </div>
           </div>
-          <div class="feilds">
-            <div class="feild description-feild">
-              <mat-label class="mat-label mat-description"
-                >Description:</mat-label
-              >
-              <mat-form-field class="description">
-                <input
-                  matInput
-                  placeholder="Write Your Description Here"
-                  formControlName="description"
-                />
-              </mat-form-field>
-            </div>
+          <div class="fields">
+            <mat-label class="mat-description">Description:</mat-label>
+            <mat-form-field class="description">
+              <input
+                matInput
+                placeholder="Write Your Description Here"
+                formControlName="description"
+              />
+            </mat-form-field>
           </div>
         </div>
 
@@ -76,7 +72,7 @@
                   <div class="logos__logo" mat-raised-button (click)="move(1)">
                     <img src="assets/svg/view8280.svg" alt="" />
                   </div>
-                  <div class="logos__logo" mat-raised-button (click)="move(1)">
+                  <div class="logos__logo" mat-raised-button (click)="move(2)">
                     <img src="assets/svg/edit8278.svg" alt="" />
                   </div>
                   <div class="logos__logo" (click)="openDeleteTemplate()">
@@ -120,7 +116,7 @@
         </ng-template>
 
         <div class="wrapper-form">
-          <div class="feilds">
+          <div class="fields">
             <div class="toggle_wrapper">
               <mat-label class="mat-label">Active :</mat-label>
               <div class="status status--left">Disable</div>
@@ -145,6 +141,14 @@
     </div>
   </mat-step>
   <mat-step>
-    <hospitality-bot-template-html-editor></hospitality-bot-template-html-editor>
+    <hospitality-bot-template-html-editor
+      [disabled]="true"
+    ></hospitality-bot-template-html-editor>
+  </mat-step>
+
+  <mat-step>
+    <hospitality-bot-template-html-editor
+      [disabled]="false"
+    ></hospitality-bot-template-html-editor>
   </mat-step>
 </mat-horizontal-stepper>

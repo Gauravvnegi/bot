@@ -123,6 +123,7 @@
   .manually-add {
     display: flex;
     .manually-templates {
+      position: relative;
       opacity: 0.9;
       border-radius: 4px;
       border: solid 1px $manually-contacts;
@@ -142,9 +143,12 @@
       .built-template {
         height: 53px;
       }
-      .manually-import {
-        padding: 20px;
-        font-size: 16px;
+      .logos {
+        position: absolute;
+        padding: 11px 0;
+        width: 84%;
+        display: flex;
+        justify-content: space-around;
       }
     }
   }
@@ -306,12 +310,7 @@
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin-top: 3rem !important;
 }
-.logos {
-  padding: 11px 0;
-  width: 84%;
-  display: flex;
-  justify-content: space-around;
-}
+
 :host ::ng-deep .mat-step-icon {
   display: none;
 }

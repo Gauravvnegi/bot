@@ -231,4 +231,11 @@
 .email-field-container {
   width: 100%;
   position: relative;
+  .text-number {
+    padding-right: 8px;
+    text-align: right;
+    position: absolute;
+    top: 5px;
+    right: 0;
+  }
 }

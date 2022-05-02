@@ -14,7 +14,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { EmailList } from '../../models/email.model';
+import { EmailList } from '../../data-model/email.model';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 
@@ -216,6 +216,8 @@ export class CamapaignEmailComponent implements OnInit {
     this._emailService.$enableDropdown.cc.next(false);
     this._emailService.$enableDropdown.bcc.next(false);
   }
+
+  openPersonalization(event) {}
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { TemplateService } from '../../services/template.service';
 import { Location } from '@angular/common';
@@ -25,6 +24,7 @@ export class EditTemplateComponent implements OnDestroy {
   isSaving = false;
   templateId: string;
   template: Template;
+  imgTemplate;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -97,6 +97,7 @@ export class EditTemplateComponent implements OnDestroy {
         .subscribe((response) => {
           this.template = new Template().deserialize(response);
           this.templateForm.patchValue(this.template);
+          this.imgTemplate = response.htmlTemplate;
         })
     );
   }
@@ -186,7 +187,4 @@ export class EditTemplateComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-}
-function Input() {
-  throw new Error('Function not implemented.');
 }

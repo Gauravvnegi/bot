@@ -112,7 +112,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this._router.navigate(['/pages/library/template']);
+            // this._router.navigate(['/pages/library/template']);
             this.isSaving = false;
           },
           ({ error }) => {

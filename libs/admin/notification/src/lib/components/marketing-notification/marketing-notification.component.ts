@@ -32,6 +32,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   removable: boolean = true;
   addOnBlur: boolean = true;
   isSending = false;
+  template = '';
   constructor(
     protected _fb: FormBuilder,
     protected _location: Location,
@@ -131,7 +132,8 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   handleTemplateChange(event) {
-    this.emailFG.get('message').patchValue(this.modifyTemplate(event.value));
+    this.template = this.modifyTemplate(event.value);
+    this.emailFG.get('message').patchValue(this.template);
   }
 
   modifyTemplate(template: string) {

@@ -28,25 +28,25 @@
           <div class="header">
             <p class="heading">{{ tableName }}</p>
             <div class="options">
-              <div class="request-btn__wrap" (click)="openCreateTemplate()">
+              <div class="request-btn__wrap" (click)="openCreateTopic()">
                 <div class="request-btn">
-                  {{ '+Create Template' | translate }}
+                  {{ '+Create Topic' | translate }}
                 </div>
               </div>
               <div *ngIf="isActionButtons" class="icons">
                 <img
-                  [src]="templateConfiguration.images.download.url"
-                  [alt]="templateConfiguration.images.download.alt"
+                  [src]="campaignConfiguration.images.download.url"
+                  [alt]="campaignConfiguration.images.download.alt"
                   class="svg"
                 />
                 <img
-                  [src]="templateConfiguration.images.googleDoc.url"
-                  [alt]="templateConfiguration.images.googleDoc.alt"
+                  [src]="campaignConfiguration.images.googleDoc.url"
+                  [alt]="campaignConfiguration.images.googleDoc.alt"
                   class="svg"
                 />
                 <img
-                  [src]="templateConfiguration.images.card.url"
-                  [alt]="templateConfiguration.images.card.alt"
+                  [src]="campaignConfiguration.images.card.url"
+                  [alt]="campaignConfiguration.images.card.alt"
                   class="svg"
                 />
               </div>
@@ -59,8 +59,8 @@
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img
-                      [src]="templateConfiguration.images.export.url"
-                      [alt]="templateConfiguration.images.export.alt"
+                      [src]="campaignConfiguration.images.export.url"
+                      [alt]="campaignConfiguration.images.export.alt"
                     />
                     <span class="documentActionItemLabel">{{
                       documentActionItem.label
@@ -75,8 +75,8 @@
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img
-                      [src]="templateConfiguration.images.csv.url"
-                      [alt]="templateConfiguration.images.csv.alt"
+                      [src]="campaignConfiguration.images.csv.url"
+                      [alt]="campaignConfiguration.images.csv.alt"
                     />
                     <span class="documentActionItemLabel">{{
                       documentTypeItem.label
@@ -218,7 +218,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openEditTemplate($event, rowData)">
+    <tr class="data-table-row" (click)="openTopic($event, rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -227,10 +227,9 @@
         ></p-tableCheckbox>
       </td>
       <td class="name">
-        <div class="template_image_wrapper">
+        <div class="topic_image_wrapper">
           <div class="text">
             <div>{{ rowData.name }}</div>
-            <p class="topic-name">{{ rowData.topicName }}</p>
           </div>
         </div>
       </td>
@@ -242,7 +241,7 @@
           <mat-slide-toggle
             class="active"
             [checked]="rowData.status"
-            (change)="updateTemplateStatus($event, rowData.id)"
+            (change)="updateTopicStatus($event, rowData.id)"
           ></mat-slide-toggle>
         </label>
       </td>

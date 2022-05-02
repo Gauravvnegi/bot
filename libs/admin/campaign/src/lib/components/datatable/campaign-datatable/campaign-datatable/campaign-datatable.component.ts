@@ -2,10 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import * as FileSaver from 'file-saver';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
+  AdminUtilityService,
   BaseDatatableComponent,
   sharedConfig,
   TableService,
@@ -14,28 +13,28 @@ import {
   SnackBarService,
   ModalService,
 } from '@hospitality-bot/shared/material';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { Subscription, Observable } from 'rxjs';
+import { campaignConfig } from '../../../../constant/campaign';
+import { Campaigns } from '../../../../data-model/campaign.model';
+import * as FileSaver from 'file-saver';
 import {
-  SelectedEntityState,
   EntityType,
   EntityState,
+  SelectedEntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
-import { TemplateService } from '../../../services/template.service';
-import { Templates } from '../../../data-models/templateConfig.model';
-import { templateConfig } from '../../../constants/template';
+import { CampaignService } from '../../../../services/campaign.service';
 
 @Component({
-  selector: 'hospitality-bot-template-datatable',
-  templateUrl: './template-datatable.component.html',
+  selector: 'hospitality-bot-campaign-datatable',
+  templateUrl: './campaign-datatable.component.html',
   styleUrls: [
-    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './template-datatable.component.scss',
-  ],
+    '../../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    './campaign-datatable.component.scss'],
 })
-export class TemplateDatatableComponent extends BaseDatatableComponent
+export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Template';
+  tableName = 'Campaign';
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -47,7 +46,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 5;
-  cols = templateConfig.datatable.cols;
+  cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
@@ -61,37 +60,37 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
-    private templateService: TemplateService
+    private campaignService: CampaignService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.tabFilterItems = templateConfig.datatable.tabFilterItems;
-    this.listenForGlobalFilters();
+    this.tabFilterItems = campaignConfig.datatable.tabFilterItems;
+    // this.listenForGlobalFilters();
   }
 
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-      // fetch-api for records
-      this.loadInitialData([
-        ...this.globalQueries,
-        {
-          order: sharedConfig.defaultOrder,
-        },
-        ...this.getSelectedQuickReplyFilters(),
-      ]);
-    });
-  }
+  // listenForGlobalFilters(): void {
+  //   this.globalFilterService.globalFilter$.subscribe((data) => {
+  //     // set-global query everytime global filter changes
+  //     this.globalQueries = [
+  //       ...data['filter'].queryValue,
+  //       ...data['dateRange'].queryValue,
+  //     ];
+  //     this.getHotelId(this.globalQueries);
+  //     // fetch-api for records
+  //     this.loadInitialData([
+  //       ...this.globalQueries,
+  //       {
+  //         order: sharedConfig.defaultOrder,
+  //       },
+  //       ...this.getSelectedQuickReplyFilters(),
+  //     ]);
+  //   });
+  // }
   /**
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
@@ -114,7 +113,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Templates().deserialize(data).records;
+          this.values = new Campaigns().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -159,10 +158,10 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function fetchDataFrom Returns an observable for the template list api call.
+   * @function fetchDataFrom Returns an observable for the campaign list api call.
    * @param queries The filter list with date and hotel filters.
    * @param defaultProps The default table props to control data fetching.
-   * @returns The observable with template list.
+   * @returns The observable with campaign list.
    */
   fetchDataFrom(
     queries,
@@ -172,11 +171,11 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.templateService.getHotelTemplate(config, this.hotelId);
+    return this.campaignService.getHotelTemplate(config, this.hotelId);
   }
 
   /**
-   * @function updateTemplateStatus update status of a template record.
+   * @function updateTemplateStatus update status of a campaign record.
    * @param event active & inactive event check.
    * @param templateId The template id for which status update action will be done.
    */
@@ -184,7 +183,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     let data = {
       active: event.checked,
     };
-    this.templateService
+    this.campaignService
       .updateTemplateStatus(this.hotelId, data, templateId)
       .subscribe(
         (response) => {
@@ -202,14 +201,14 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openCreateTemlplate navigate to create template page.
+   * @function openCreateTemlplate navigate to create campaign page.
    */
   openCreateTemplate() {
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
   /**
-   * @function openCreateTemlplate navigate to edit template page.
+   * @function openCreateTemlplate navigate to edit campaign page.
    */
   openEditTemplate(event, template): void {
     event.stopPropagation();
@@ -250,7 +249,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Templates().deserialize(data).records;
+          this.values = new Campaigns().deserialize(data).records;
           this.totalRecords = data.total;
           data.entityTypeCounts &&
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
@@ -340,7 +339,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.templateService.exportCSV(this.hotelId, config).subscribe(
+      this.campaignService.exportCSV(this.hotelId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,
@@ -387,11 +386,11 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function templateConfiguration returns templateConfig object.
-   * @returns templateConfig object.
+   * @function campaignConfiguration returns campaignConfig object.
+   * @returns campaignConfig object.
    */
-  get templateConfiguration() {
-    return templateConfig;
+  get campaignConfiguration() {
+    return campaignConfig;
   }
 
   /**

@@ -147,7 +147,13 @@
 
     <div>
       <div class="ck-editor">
-        <ckeditor formControlName="message" [config]="ckeConfig"></ckeditor>
+        <hospitality-bot-template-editor
+          [parentFG]="emailFG"
+          [name]="'message'"
+          [template]="template"
+          [hybrid]="false"
+          [disabled]="false"
+        ></hospitality-bot-template-editor>
       </div>
       <mat-error
         *ngIf="

@@ -5,15 +5,18 @@ import { CamapaignEmailComponent } from './components/camapaign-email/camapaign-
 import { SendTestComponent } from './components/send-test/send-test.component';
 import { ToDropdownComponent } from './components/to-dropdown/to-dropdown.component';
 import { ReceiverFieldComponent } from './components/receiver-field/receiver-field.component';
+import { CampaignDatatableComponent } from './components/datatable/campaign-datatable/campaign-datatable/campaign-datatable.component';
 
 const appRoutes: Route[] = [
-  { path: '', redirectTo: 'create' },
+  // { path: '', redirectTo: 'create' },
+  { path: '', component: CampaignComponent },
   { path: 'create', component: CamapaignEmailComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
+  declarations: [],
 })
 export class AdminCampaignRoutingModule {
   static components = [
@@ -22,5 +25,6 @@ export class AdminCampaignRoutingModule {
     SendTestComponent,
     ToDropdownComponent,
     ReceiverFieldComponent,
+    CampaignDatatableComponent
   ];
 }

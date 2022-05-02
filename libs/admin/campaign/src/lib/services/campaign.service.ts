@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs/internal/Observable';
-import { Template } from '../data-models/templateConfig.model';
+import { Campaign } from '../data-model/campaign.model';
 
 @Injectable()
-export class TemplateService extends ApiService {
+export class CampaignService extends ApiService {
   getTemplateList(id, config): Observable<any> {
     return this.get(`/api/v1/entity/${id}/templates/${config.queryObj}`);
   }
@@ -79,27 +79,23 @@ export class TemplateService extends ApiService {
     );
   }
 
-  getAssets(hotelId: string, config) {
-    return this.get(`/api/v1/entity/${hotelId}/assets${config.queryObj}`);
-  }
-
   /**
-   * @function mapTemplateData map api data into template form data.
+   * @function mapcampaignData map api data into template form data.
    * @param formValue form key values.
    * @param hotelId hotelId for template table.
    * @param id template id.
    * @returns template data.
    */
-  mapTemplateData(formValue, hotelId, id?) {
-    const templateData = new Template();
-    templateData.active = formValue.status;
-    templateData.hotelId = hotelId;
-    templateData.id = formValue.id;
-    templateData.name = formValue.name;
-    templateData.description = formValue.description;
-    templateData.topicId = formValue.topicId;
-    templateData.templateType = formValue.templateType;
-    templateData.htmlTemplate = formValue.htmlTemplate;
-    return templateData;
+  mapcampaignData(formValue, hotelId, id?) {
+    const campaignData = new Campaign();
+    campaignData.active = formValue.status;
+    campaignData.hotelId = hotelId;
+    campaignData.id = formValue.id;
+    campaignData.name = formValue.name;
+    campaignData.description = formValue.description;
+    campaignData.topicId = formValue.topicId;
+    campaignData.templateType = formValue.templateType;
+    campaignData.htmlTemplate = formValue.htmlTemplate;
+    return campaignData;
   }
 }

@@ -63,6 +63,7 @@ export class CamapaignEmailComponent implements OnInit {
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
+      topicId: ['']
     });
   }
 

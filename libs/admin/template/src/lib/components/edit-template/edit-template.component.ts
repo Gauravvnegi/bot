@@ -120,6 +120,7 @@ export class EditTemplateComponent implements OnDestroy {
               '',
               { panelClass: 'success' }
             );
+            this.templateForm.patchValue(response);
             if (!event.data) this._router.navigate(['/pages/library/template']);
             if (event.data.redirectToForm) this.stepper.selectedIndex = 0;
             if (event.data.preview) this.contentNotEditable = true;

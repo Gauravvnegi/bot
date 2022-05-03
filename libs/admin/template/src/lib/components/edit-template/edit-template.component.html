@@ -163,9 +163,9 @@
       </div>
     </form>
   </div>
-  <hospitality-bot-inbuilt-template
-    *ngSwitchCase="1"
-  ></hospitality-bot-inbuilt-template>
+  <div *ngSwitchCase="1">
+    <hospitality-bot-inbuilt-template (change)="move(0)"></hospitality-bot-inbuilt-template>
+  </div>
   <hospitality-bot-template-html-editor
     *ngSwitchCase="2"
     [isDisabled]="contentNotEditable"

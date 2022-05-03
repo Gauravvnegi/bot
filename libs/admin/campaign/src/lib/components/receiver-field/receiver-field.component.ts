@@ -50,11 +50,7 @@ export class ReceiverFieldComponent implements OnInit {
     this.chipList = this.chipList.filter(
       (item) => item.data.name !== chip.data.name
     );
-    if (!this.chipList.length)
-      this.receiverField.nativeElement.setAttribute(
-        'style',
-        'display: block !important;'
-      );
+    if (!this.chipList.length) this.enableTextField();
   }
 
   removeField(event) {
@@ -91,10 +87,7 @@ export class ReceiverFieldComponent implements OnInit {
 
   enableReceiverField(event) {
     event.stopPropagation();
-    this.receiverField.nativeElement.setAttribute(
-      'style',
-      'display: block !important;'
-    );
+    this.enableTextField();
     this.enableDropdownItems();
     this.receiverField.nativeElement.focus();
   }
@@ -112,6 +105,14 @@ export class ReceiverFieldComponent implements OnInit {
 
   addItemFromDropdown(event) {
     this.chipList.push(event);
+    this.enableTextField();
+  }
+
+  enableTextField() {
+    this.receiverField.nativeElement.setAttribute(
+      'style',
+      'display: block !important;'
+    );
   }
 
   ngOnDestroy() {

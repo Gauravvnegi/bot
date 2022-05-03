@@ -23,4 +23,7 @@
 .plain-text-container {
   border: 1px solid #d1d1d1;
   padding: 15px;
+  max-width: 100%;
+  overflow: auto;
+  height: 500px;
 }

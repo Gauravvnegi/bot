@@ -63,7 +63,7 @@ export class CamapaignEmailComponent implements OnInit {
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
-      topicId: ['']
+      topicId: [''],
     });
   }
 
@@ -137,21 +137,26 @@ export class CamapaignEmailComponent implements OnInit {
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    return template.substring(
-      template.indexOf('<div'),
-      template.lastIndexOf('</body>')
-    );
+    console.log(template.indexOf('<div'))
+    if (template.indexOf('<div')!= -1)
+      return template.substring(
+        template.indexOf('<div'),
+        template.lastIndexOf('</body>')
+      );
+    else return template;
   }
 
   getTemplateMessage(data) {
-    return (
-      this.templateData.substring(0, this.templateData.indexOf('<div')) +
-      data.message +
-      this.templateData.substring(
-        this.templateData.lastIndexOf('</body'),
-        this.templateData.length
-      )
-    );
+    if (this.templateData.indexOf('<div'))
+      return (
+        this.templateData.substring(0, this.templateData.indexOf('<div')) +
+        data.message +
+        this.templateData.substring(
+          this.templateData.lastIndexOf('</body'),
+          this.templateData.length
+        )
+      );
+    else return data.message;
   }
 
   sendMail() {

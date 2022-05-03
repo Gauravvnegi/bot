@@ -9,8 +9,8 @@ import { CampaignDatatableComponent } from './components/datatable/campaign-data
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 
 const appRoutes: Route[] = [
-  // { path: '', redirectTo: 'create' },
-  { path: '', component: ComingSoonComponent },
+  { path: '', redirectTo: 'create' },
+  // { path: '', component: CampaignComponent },
   { path: 'create', component: CamapaignEmailComponent },
 ];
 

@@ -1,20 +1,24 @@
 <div class="form-field" (click)="enableReceiverField($event)">
   <div class="chips">
     <div class="chip" *ngFor="let chip of chipList">
-      <span class="chip--text">{{ chip.text }}</span>
+      <span class="chip--text">{{ chip.data.name }}</span>
       <span class="chip--button" (click)="removeChip(chip, $event)">x</span>
     </div>
   </div>
-  <input
-    #receiverField
-    placeholder="Search by name, E-mail, Number, Conf. No., Profile ID or by subscriber group or listing"
-    class="chip-input"
-    (keyup)="addChip($event)"
-    (blur)="removeField($event)"
-  />
-  <div class="dropdown" *ngIf="enableDropdown" (click)="handleBubbling($event)">
-    <hospitality-bot-to-dropdown
-      [value]="receiverField?.nativeElement?.value"
-    ></hospitality-bot-to-dropdown>
+  <div class="field">
+    <input
+      #receiverField
+      placeholder="Search by name, E-mail, Number, Conf. No., Profile ID or by subscriber group or listing"
+      class="chip-input"
+      (keydown)="addChip($event)"
+      (blur)="removeField($event)"
+    />
+    <div class="dropdown" *ngIf="enableDropdown" (click)="handleBubbling($event)">
+      <hospitality-bot-to-dropdown
+        [value]="receiverField?.nativeElement?.value"
+        [hotelId]="hotelId"
+        (selectedList)="addItemFromDropdown($event)"
+      ></hospitality-bot-to-dropdown>
+    </div>
   </div>
 </div>

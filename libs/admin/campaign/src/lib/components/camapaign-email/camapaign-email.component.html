@@ -4,19 +4,21 @@
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <p class="label">
-        Create Campaign
-      </p>
+      <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p>
     </div>
     <div class="option">
       <div class="icon"></div>
       <div class="icon"></div>
       <div class="icon"></div>
-      <div class="dropdown">
+      <div class="dropdown" [style.height.px]="campaignId ? 118 : 69">
         <div class="dropdown__item" (click)="sendTestCampaign()">
           Send Test
         </div>
-        <div class="dropdown__item" (click)="archiveCampaign()">
+        <div
+          class="dropdown__item"
+          (click)="archiveCampaign()"
+          *ngIf="campaignId"
+        >
           Archive Campaign
         </div>
       </div>
@@ -82,6 +84,7 @@
         <div class="email-field-container">
           <hospitality-bot-receiver-field
             [name]="'to'"
+            [hotelId]="hotelId"
             [chipList]="campaignFG.get('to')?.value || []"
             (updateChipSet)="updateFieldData($event, to)"
           ></hospitality-bot-receiver-field>
@@ -112,6 +115,7 @@
         <div style="width: 100%;">
           <hospitality-bot-receiver-field
             [name]="'cc'"
+            [hotelId]="hotelId"
             [chipList]="campaignFG.get('cc')?.value || []"
             (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
           ></hospitality-bot-receiver-field>
@@ -124,6 +128,7 @@
         <div style="width: 100%;">
           <hospitality-bot-receiver-field
             [name]="'bcc'"
+            [hotelId]="hotelId"
             [chipList]="campaignFG.get('bcc')?.value || []"
             (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
           ></hospitality-bot-receiver-field>

@@ -98,4 +98,10 @@ export class CampaignService extends ApiService {
     campaignData.htmlTemplate = formValue.htmlTemplate;
     return campaignData;
   }
+
+  getlisting(entityId: string, config) {
+    return this.get(
+      `/api/v1/marketing/entity/${entityId}/listing${config.queryObj}`
+    );
+  }
 }

@@ -20,6 +20,7 @@ export class ReceiverFieldComponent implements OnInit {
   @ViewChild('receiverField') receiverField;
   @Input() chipList = [];
   @Input() name: string;
+  @Input() hotelId: string;
   @Output() updateChipSet = new EventEmitter();
   enableDropdown = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -42,9 +43,18 @@ export class ReceiverFieldComponent implements OnInit {
     event.stopPropagation();
     this.updateChipSet.emit({
       action: 'remove',
-      value: this.chipList.filter((item) => item.text === chip.text)[0],
+      value: this.chipList.filter(
+        (item) => item.data.name === chip.data.name
+      )[0],
     });
-    this.chipList = this.chipList.filter((item) => item.text !== chip.text);
+    this.chipList = this.chipList.filter(
+      (item) => item.data.name !== chip.data.name
+    );
+    if (!this.chipList.length)
+      this.receiverField.nativeElement.setAttribute(
+        'style',
+        'display: block !important;'
+      );
   }
 
   removeField(event) {
@@ -63,7 +73,7 @@ export class ReceiverFieldComponent implements OnInit {
     event.stopPropagation();
     if (this.separatorKeysCodes.includes(event.which)) {
       this.chipList.push({
-        text: this.receiverField.nativeElement.value,
+        data: { name: this.receiverField.nativeElement.value },
         type: 'email',
       });
       this.updateChipSet.emit({
@@ -98,6 +108,10 @@ export class ReceiverFieldComponent implements OnInit {
     Object.keys(this._emailService.$enableDropdown).forEach((key) => {
       if (key != this.name) this._emailService.$enableDropdown[key].next(false);
     });
+  }
+
+  addItemFromDropdown(event) {
+    this.chipList.push(event);
   }
 
   ngOnDestroy() {

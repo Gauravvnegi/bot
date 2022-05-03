@@ -6,7 +6,12 @@
   padding: 8px;
   margin-bottom: 15px;
   cursor: text;
-  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  .field {
+    width: 100%;
+    position: relative;
+  }
 }
 
 .form-field .chips .chip {
@@ -20,7 +25,7 @@
   overflow: hidden;
 }
 .form-field .chips .chip {
-  float: left;
+  display: flex;
 }
 
 .form-field .chips .chip .chip--button {
@@ -36,7 +41,7 @@
   pointer-events: none;
 }
 
-.form-field > input {
+.form-field > .field > input {
   padding: 5px;
   display: block !important;
   box-sizing: border-box;
@@ -53,6 +58,8 @@
 
 .chips {
   max-width: calc(100% - 65px);
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .dropdown {

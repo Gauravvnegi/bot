@@ -32,7 +32,6 @@
 
       .material-icons {
         cursor: pointer;
-
       }
     }
 
@@ -69,6 +68,7 @@
     padding-left: 5px;
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 
     .card {
       cursor: pointer;
@@ -76,10 +76,7 @@
       overflow-x: hidden;
       border: 1px solid grey;
       width: 255px;
-      height: 273px;    
-      opacity: 0.3;
-
-
+      height: 273px;
     }
   }
 

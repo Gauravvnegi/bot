@@ -53,7 +53,7 @@
     letter-spacing: 1.2px;
     color: $primary-black;
     background: #f4f5f7;
-    padding: $padding15 25px $padding15 60px;
+    padding: $padding15 25px $padding15 25px;
     display: flex;
     align-items: center;
     img {
@@ -151,9 +151,9 @@
   min-width: 0;
   width: 160px;
   border: solid 1px $manually-contacts;
-  padding: 13px 7px;
   border-radius: 4px;
   color: #232323;
+  padding: 5px 0 10px 0;
 }
 
 .import-popup {
@@ -221,14 +221,14 @@
 //   width: 100px !important;
 // }
 :host ::ng-deep .mat-select {
-  padding: 3px;
+  padding: 1.5px;
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
   color: #9eaeb8;
 }
 :host ::ng-deep .mat-input-element {
-  padding: 5px 0 4px 0 !important;
+  padding: 4px 0 4px 0 !important;
 }
 :host
   ::ng-deep

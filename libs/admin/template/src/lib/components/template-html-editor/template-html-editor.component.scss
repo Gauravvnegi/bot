@@ -331,3 +331,6 @@
   margin-left: 15rem;
   cursor: pointer;
 }
+:host ::ng-deep .mat-button-focus-overlay {
+  display: none;
+}

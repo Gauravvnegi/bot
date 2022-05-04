@@ -64,6 +64,7 @@ export class CamapaignEmailComponent implements OnInit {
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
+      templateId: [' '],
     });
   }
 
@@ -137,8 +138,8 @@ export class CamapaignEmailComponent implements OnInit {
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    console.log(template.indexOf('<div'))
-    if (template.indexOf('<div')!= -1)
+    console.log(template.indexOf('<div'));
+    if (template.indexOf('<div') != -1)
       return template.substring(
         template.indexOf('<div'),
         template.lastIndexOf('</body>')

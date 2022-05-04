@@ -164,7 +164,10 @@
     </form>
   </div>
   <div *ngSwitchCase="1">
-    <hospitality-bot-inbuilt-template (change)="move(0)"></hospitality-bot-inbuilt-template>
+    <hospitality-bot-template-list-container 
+    (change)="move(0)"
+    [templateForm]="templateForm"
+    ></hospitality-bot-template-list-container>
   </div>
   <hospitality-bot-template-html-editor
     *ngSwitchCase="2"

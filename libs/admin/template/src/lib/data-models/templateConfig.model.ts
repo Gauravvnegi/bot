@@ -4,17 +4,23 @@ export interface Deserializable {
   deserialize(input: any): this;
 }
 
-export class Templates implements Deserializable {
-  records: Template[];
-  deserialize(input: any) {
-    this.records = input.records.map((record: any) =>
-      new Template().deserialize(record)
+export class Templates  {
+  records: ITemplate[];
+  // deserialize(input: any) {
+  //   this.records = new Array<ITemplate>();
+  //   input?.records?.map((record: any) =>
+  //     new Template().deserialize(record)
+  //   );
+  deserialize(input) {
+    this.records = new Array<ITemplate>();
+    input?.records?.forEach((template) =>
+      this.records.push(new Template().deserialize(template))
     );
     return this;
   }
 }
 
-export class Template implements Deserializable {
+export class Template  {
   id: string;
   status: boolean;
   description: string;
@@ -24,6 +30,7 @@ export class Template implements Deserializable {
   topicId: string;
   templateType: string;
   htmlTemplate: string;
+  template: Template;
 
   deserialize(input: any) {
     Object.assign(
@@ -36,8 +43,10 @@ export class Template implements Deserializable {
       set({}, 'active', get(input, ['active'])),
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'templateType', get(input, ['templateType'])),
-      set({}, 'htmlTemplate', get(input, ['htmlTemplate']))
+      set({}, 'htmlTemplate', get(input, ['htmlTemplate'])),
+      set({}, 'template', new Templates().deserialize(input.template).records),
     );
     return this;
   }
 }
+export type ITemplate = Omit<Template, 'deserialize'>;

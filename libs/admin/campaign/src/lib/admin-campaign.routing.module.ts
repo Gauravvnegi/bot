@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { CampaignComponent } from './components/campaign/campaign.component';
-import { CampaignEmailComponent } from './components/camapaign-email/camapaign-email.component';
+import { EditCampaignComponent } from './components/edit-campaign/edit-camapaign.component';
 import { SendTestComponent } from './components/send-test/send-test.component';
 import { ToDropdownComponent } from './components/to-dropdown/to-dropdown.component';
 import { ReceiverFieldComponent } from './components/receiver-field/receiver-field.component';
@@ -10,8 +10,8 @@ import { CampaignDatatableComponent } from './components/datatable/campaign-data
 const appRoutes: Route[] = [
   // { path: '', redirectTo: 'create' },
   { path: '', component: CampaignComponent },
-  { path: 'create', component: CampaignEmailComponent },
-  { path: 'edit/:id', component: CampaignEmailComponent },
+  { path: 'create', component: EditCampaignComponent },
+  { path: 'edit/:id', component: EditCampaignComponent },
 ];
 
 @NgModule({
@@ -21,7 +21,7 @@ const appRoutes: Route[] = [
 export class AdminCampaignRoutingModule {
   static components = [
     CampaignComponent,
-    CampaignEmailComponent,
+    EditCampaignComponent,
     SendTestComponent,
     ToDropdownComponent,
     ReceiverFieldComponent,

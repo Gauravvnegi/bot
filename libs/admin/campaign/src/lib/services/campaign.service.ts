@@ -75,6 +75,10 @@ export class CampaignService extends ApiService {
     );
   }
 
+  getCampaignById(entityId: string, campaignId: string) {
+    return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
+  }
+
   /**
    * @function mapcampaignData map api data into campaign form data.
    * @param formValue form key values.

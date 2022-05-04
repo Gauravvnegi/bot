@@ -92,6 +92,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       ]);
     });
   }
+
   /**
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.

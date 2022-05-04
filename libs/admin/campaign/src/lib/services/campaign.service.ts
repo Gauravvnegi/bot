@@ -4,7 +4,12 @@ import { Campaign } from '../data-model/campaign.model';
 
 @Injectable()
 export class CampaignService extends ApiService {
-  getlisting: any;
+  getListings(hotelId: string, config) {
+    return this.get(
+      `/api/v1/marketing/entity/${hotelId}/listing${config.queryObj}`
+    );
+  }
+
   /**
    * @function getHotelCampaign get campaign list from api.
    * @param config dynamically getting global query filter into api.

@@ -57,7 +57,7 @@ export class ToDropdownComponent implements OnInit {
     };
     this.$subscriptions.add(
       this._campaignService
-        .getlisting(this.hotelId, config)
+        .getListings(this.hotelId, config)
         .subscribe((response) => {
           this.listings.data = [...this.listings.data, ...response.records];
           this.offset = this.offset + 2;

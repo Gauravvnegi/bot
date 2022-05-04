@@ -10,6 +10,10 @@ export class EmailService extends ApiService {
     bcc: new BehaviorSubject(false),
   };
   $disableField = new BehaviorSubject(false);
+  $disablePersonalizationPopup = {
+    subject: new BehaviorSubject(false),
+    previewText: new BehaviorSubject(false),
+  };
   getFromEmail(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/email`);
   }
@@ -32,5 +36,7 @@ export class EmailService extends ApiService {
     this.$enableDropdown.to.next(false);
     this.$enableDropdown.cc.next(false);
     this.$enableDropdown.bcc.next(false);
+    this.$disablePersonalizationPopup.subject.next(true);
+    this.$disablePersonalizationPopup.previewText.next(true);
   }
 }

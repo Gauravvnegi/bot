@@ -247,7 +247,14 @@ export class EditCampaignComponent implements OnInit {
     this._emailService.disableDropdowns();
   }
 
-  openPersonalization(event) {}
+  addPersonalization(value, controlName: string) {
+    const control = this.campaignFG.get(controlName);
+    control.setValue(control.value + value);
+  }
+
+  setTemplate(event) {
+    this.campaignFG.get('message').setValue(event.templateHtml);
+  }
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

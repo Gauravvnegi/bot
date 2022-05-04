@@ -21,59 +21,27 @@
           [hotelId]="hotelId"
           [name]="'topicId'"
           [parentForm]="templateForm"
+          (changeTopic)="handleTopicChange($event)"
         ></hospitality-bot-topic-dropdown>
       </div>
     </div>
-  
-    <div class="heading">
-      <p>
-        Check-In
-      </p>
-    </div>
-    <div class="checkin-cards">
-      <div *ngFor="let temp of templateList" class="card">
-        <div *ngFor="let t of temp.template">
+
+    <div class="template-cards">
+      <div *ngFor="let temp of templateList">
+        <div class="heading">
+          <p>{{temp.topicName}}</p>
+        </div>
+        <div class="topic-cards">
+        <div *ngFor="let t of temp.templates" class="card">
           <div [innerHTML]="t.htmlTemplate"></div>
         </div>
       </div>
+      <div class="show-button">
+        <button class="button" >
+          Show More
+        </button>
+      </div>
+      </div>
     </div>
-    
-    <button class="button" >
-      Show More
-    </button>
-  
-    <div class="line"></div>
-  
-    <div class="heading">
-      <p>
-        Pre Check-In
-      </p>
-    </div>
-  
-    <div class="checkin-cards">
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
-    </div>
-    <button class="button">
-      Show More
-    </button>
-    <div class="line"></div>
-  
-    <div class="heading">
-      <p>
-        General
-      </p>
-    </div>
-    <div class="checkin-cards">
-      <div class="card"></div>
-      <div class="card"></div>
-  
-      <div class="card"></div>
-    </div>
-  
-    <button class="button">
-      Show More
-    </button>
   </div>
   

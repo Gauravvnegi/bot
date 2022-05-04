@@ -6,11 +6,6 @@ export interface Deserializable {
 
 export class Templates  {
   records: ITemplate[];
-  // deserialize(input: any) {
-  //   this.records = new Array<ITemplate>();
-  //   input?.records?.map((record: any) =>
-  //     new Template().deserialize(record)
-  //   );
   deserialize(input) {
     this.records = new Array<ITemplate>();
     input?.records?.forEach((template) =>
@@ -30,7 +25,7 @@ export class Template  {
   topicId: string;
   templateType: string;
   htmlTemplate: string;
-  template: Template;
+  templates: Template;
 
   deserialize(input: any) {
     Object.assign(

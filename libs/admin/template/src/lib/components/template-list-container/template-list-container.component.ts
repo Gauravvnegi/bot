@@ -16,7 +16,7 @@ export class TemplateListContainerComponent implements OnInit {
 
   hotelId: string;
   private $subscription = new Subscription();
-  templateList = [];
+  templateList:any;
   @Input() templateForm: FormGroup;
   templateData = '';
   template = '';
@@ -26,11 +26,11 @@ export class TemplateListContainerComponent implements OnInit {
   totalRecords: any;
   first: any;
   rowsPerPage = 3;
-
   rowsPerPageOptions = [3, 6, 9, 18];
   startPage: Number;
   paginationLimit: Number;
   @Output() change = new EventEmitter();
+  selectedTopic;
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -73,10 +73,9 @@ export class TemplateListContainerComponent implements OnInit {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = data;
-          this.templateList=this.values;
+          this.updateRecord(data);
           //set pagination
-          this.totalRecords = data.total;
+          this.totalRecords = data.totalTemplate;
           this.loading = false;
         },
         ({ error }) => {
@@ -87,7 +86,28 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
-  loadData(event: LazyLoadEvent): void {
+  handleTopicChange(event){
+    this.selectedTopic=event.value;
+    this.loadInitialData();
+  }
+
+  updateRecord(data){
+    if(this.selectedTopic)
+    {
+      data.map((item)=>{
+        if(this.selectedTopic === item.topicName){
+          console.log(item.topicName);
+          this.templateList=[item];
+        }
+      })
+    }
+    else{
+      this.templateList=data;
+    }
+
+  }
+
+  loadData(event?: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
     this.$subscription.add(
@@ -98,13 +118,12 @@ export class TemplateListContainerComponent implements OnInit {
           },
         ],
         {
-          offset: this.first,
-          limit: this.rowsPerPage,
+          offset: this?.first,
+          limit: this?.rowsPerPage,
         }
       ).subscribe(
         (data) => {
-          this.values = data;
-          this.templateList=this.values.template;
+          this.updateRecord(data);
           this.loading = false;
         },
         ({ error }) => {
@@ -118,7 +137,6 @@ export class TemplateListContainerComponent implements OnInit {
     this.first = event.first;
     this.rowsPerPage = event.rows;
   }
-
 
   fetchDataFrom(
     queries,

@@ -61,7 +61,7 @@
     }
   }
 
-  .checkin-cards {
+  .topic-cards {
     padding-left: 5px;
     display: flex;
     flex-wrap: wrap;
@@ -79,24 +79,28 @@
     }
   }
 
-  .button {
-    align-self: center;
-    width: 250px;
-    height: 46px;
-    margin: 56px 37px 32px 38px;
-    border-radius: 23px;
-    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-    border: solid 1px #4b56c0;
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    color: #4b56c0;
-    background-color: #fff;
+  .show-button {
+    display: flex;
     justify-content: center;
+    .button {
+      align-self: center;
+      width: 250px;
+      height: 46px;
+      margin: 56px 37px 32px 38px;
+      border-radius: 23px;
+      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      border: solid 1px #4b56c0;
+      font-family: Roboto;
+      font-size: 16px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      color: #4b56c0;
+      background-color: #fff;
+      justify-content: center;
+    }
   }
 
   .line {

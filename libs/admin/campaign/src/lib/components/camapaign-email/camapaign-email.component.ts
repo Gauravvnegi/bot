@@ -23,7 +23,7 @@ import { SendTestComponent } from '../send-test/send-test.component';
   templateUrl: './camapaign-email.component.html',
   styleUrls: ['./camapaign-email.component.scss'],
 })
-export class CamapaignEmailComponent implements OnInit {
+export class CampaignEmailComponent implements OnInit {
   campaignId: string;
   campaignFG: FormGroup;
   templateData = '';
@@ -137,8 +137,7 @@ export class CamapaignEmailComponent implements OnInit {
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    console.log(template.indexOf('<div'))
-    if (template.indexOf('<div')!= -1)
+    if (template.indexOf('<div') != -1)
       return template.substring(
         template.indexOf('<div'),
         template.lastIndexOf('</body>')
@@ -218,9 +217,7 @@ export class CamapaignEmailComponent implements OnInit {
   }
 
   disableDropdown() {
-    this._emailService.$enableDropdown.to.next(false);
-    this._emailService.$enableDropdown.cc.next(false);
-    this._emailService.$enableDropdown.bcc.next(false);
+    this._emailService.disableDropdowns();
   }
 
   openPersonalization(event) {}

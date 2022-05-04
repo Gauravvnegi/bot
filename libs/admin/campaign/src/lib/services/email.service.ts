@@ -9,6 +9,7 @@ export class EmailService extends ApiService {
     cc: new BehaviorSubject(false),
     bcc: new BehaviorSubject(false),
   };
+  $disableField = new BehaviorSubject(false);
   getFromEmail(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/email`);
   }
@@ -25,5 +26,11 @@ export class EmailService extends ApiService {
 
   sendEmail(hotelId: string, data) {
     return this.post(`/api/v1/entity/${hotelId}/notifications/send`, data);
+  }
+
+  disableDropdowns() {
+    this.$enableDropdown.to.next(false);
+    this.$enableDropdown.cc.next(false);
+    this.$enableDropdown.bcc.next(false);
   }
 }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CamapaignEmailComponent } from './camapaign-email.component';
+import { CampaignEmailComponent } from './camapaign-email.component';
 
-describe('CamapaignEmailComponent', () => {
-  let component: CamapaignEmailComponent;
-  let fixture: ComponentFixture<CamapaignEmailComponent>;
+describe('CampaignEmailComponent', () => {
+  let component: CampaignEmailComponent;
+  let fixture: ComponentFixture<CampaignEmailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CamapaignEmailComponent ]
+      declarations: [ CampaignEmailComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CamapaignEmailComponent);
+    fixture = TestBed.createComponent(CampaignEmailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

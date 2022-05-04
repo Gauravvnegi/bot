@@ -26,14 +26,14 @@ import * as FileSaver from 'file-saver';
 import { CampaignService } from '../../../services/campaign.service';
 
 @Component({
-  selector: 'hospitality-bot-campaign-datable',
-  templateUrl: './campaign-datable.component.html',
+  selector: 'hospitality-bot-campaign-datatable',
+  templateUrl: './campaign-datatable.component.html',
   styleUrls: [
     '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './campaign-datable.component.scss',
+    './campaign-datatable.component.scss',
   ],
 })
-export class CampaignDatableComponent extends BaseDatatableComponent
+export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   tableName = 'Campaign';
   @Input() tabFilterItems;

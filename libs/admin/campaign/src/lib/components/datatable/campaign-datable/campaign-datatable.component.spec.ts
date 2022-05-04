@@ -1,20 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CampaignDatableComponent } from './campaign-datable.component';
+import { CampaignDatatableComponent } from './campaign-datatable.component';
 
 describe('CampaignDatableComponent', () => {
-  let component: CampaignDatableComponent;
-  let fixture: ComponentFixture<CampaignDatableComponent>;
+  let component: CampaignDatatableComponent;
+  let fixture: ComponentFixture<CampaignDatatableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignDatableComponent ]
-    })
-    .compileComponents();
+      declarations: [CampaignDatatableComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CampaignDatableComponent);
+    fixture = TestBed.createComponent(CampaignDatatableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

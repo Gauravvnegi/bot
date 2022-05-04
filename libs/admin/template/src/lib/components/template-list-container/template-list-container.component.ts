@@ -1,22 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Observable, Subscription } from 'rxjs';
-import { AdminUtilityService, sharedConfig } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  sharedConfig,
+} from '@hospitality-bot/admin/shared';
 import { TemplateService } from '../../services/template.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import {  FormGroup, } from '@angular/forms';
-import { LazyLoadEvent} from 'primeng/api';
+import { FormGroup } from '@angular/forms';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
   templateUrl: './template-list-container.component.html',
-  styleUrls: ['./template-list-container.component.scss']
+  styleUrls: ['./template-list-container.component.scss'],
 })
 export class TemplateListContainerComponent implements OnInit {
-
   hotelId: string;
   private $subscription = new Subscription();
-  templateList:any;
+  templateList: any;
   @Input() templateForm: FormGroup;
   templateData = '';
   template = '';
@@ -36,15 +38,14 @@ export class TemplateListContainerComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
-    private _snackbarService: SnackBarService,
-  ) {
-  }
+    private _snackbarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
   }
 
-  initFG(): void {  }
+  initFG(): void {}
 
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -86,28 +87,25 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
-  handleTopicChange(event){
-    this.selectedTopic=event.value;
+  handleTopicChange(event) {
+    this.selectedTopic = event.value;
     this.loadInitialData();
   }
 
-  updateRecord(data){
-    if(this.selectedTopic)
-    {
-      data.map((item)=>{
-        if(this.selectedTopic === item.topicName){
+  updateRecord(data) {
+    if (this.selectedTopic) {
+      data.map((item) => {
+        if (this.selectedTopic === item.topicName) {
           console.log(item.topicName);
-          this.templateList=[item];
+          this.templateList = [item];
         }
-      })
+      });
+    } else {
+      this.templateList = data;
     }
-    else{
-      this.templateList=data;
-    }
-
   }
 
-  loadData(event?: LazyLoadEvent): void {
+  loadData(event: LazyLoadEvent): void {
     this.loading = true;
     this.updatePaginations(event);
     this.$subscription.add(
@@ -118,8 +116,8 @@ export class TemplateListContainerComponent implements OnInit {
           },
         ],
         {
-          offset: this?.first,
-          limit: this?.rowsPerPage,
+          offset: this.first,
+          limit: this.rowsPerPage,
         }
       ).subscribe(
         (data) => {
@@ -150,7 +148,6 @@ export class TemplateListContainerComponent implements OnInit {
   }
 
   goBack() {
-    this.change.emit()
+    this.change.emit();
   }
 }
-

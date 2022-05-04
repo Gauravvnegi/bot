@@ -13,24 +13,25 @@ import {
   SnackBarService,
   ModalService,
 } from '@hospitality-bot/shared/material';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
-import { Subscription, Observable } from 'rxjs';
-import { campaignConfig } from '../../../../constant/campaign';
-import { Campaigns } from '../../../../data-model/campaign.model';
-import * as FileSaver from 'file-saver';
 import {
   EntityType,
   EntityState,
   SelectedEntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
-import { CampaignService } from '../../../../services/campaign.service';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { campaignConfig } from '../../../constant/campaign';
+import { Campaigns } from '../../../data-model/campaign.model';
+import * as FileSaver from 'file-saver';
+import { CampaignService } from '../../../services/campaign.service';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
   templateUrl: './campaign-datatable.component.html',
   styleUrls: [
-    '../../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './campaign-datatable.component.scss'],
+    '../../../../../../shared/src/lib/components/datatable/datatable.component.scss',
+    './campaign-datatable.component.scss',
+  ],
 })
 export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit {
@@ -67,30 +68,31 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.tabFilterItems = campaignConfig.datatable.tabFilterItems;
-    // this.listenForGlobalFilters();
+    this.listenForGlobalFilters();
   }
 
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  // listenForGlobalFilters(): void {
-  //   this.globalFilterService.globalFilter$.subscribe((data) => {
-  //     // set-global query everytime global filter changes
-  //     this.globalQueries = [
-  //       ...data['filter'].queryValue,
-  //       ...data['dateRange'].queryValue,
-  //     ];
-  //     this.getHotelId(this.globalQueries);
-  //     // fetch-api for records
-  //     this.loadInitialData([
-  //       ...this.globalQueries,
-  //       {
-  //         order: sharedConfig.defaultOrder,
-  //       },
-  //       ...this.getSelectedQuickReplyFilters(),
-  //     ]);
-  //   });
-  // }
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getHotelId(this.globalQueries);
+      // fetch-api for records
+      this.loadInitialData([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+    });
+  }
+
   /**
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
@@ -158,10 +160,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function fetchDataFrom Returns an observable for the campaign list api call.
+   * @function fetchDataFrom Returns an observable for the Campaign list api call.
    * @param queries The filter list with date and hotel filters.
    * @param defaultProps The default table props to control data fetching.
-   * @returns The observable with campaign list.
+   * @returns The observable with Campaign list.
    */
   fetchDataFrom(
     queries,
@@ -171,20 +173,20 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.campaignService.getHotelTemplate(config, this.hotelId);
+    return this.campaignService.getHotelCampaign(config, this.hotelId);
   }
 
   /**
-   * @function updateTemplateStatus update status of a campaign record.
+   * @function updateCampaignStatus update status of a Campaign record.
    * @param event active & inactive event check.
-   * @param templateId The template id for which status update action will be done.
+   * @param campaignId The campaign id for which status update action will be done.
    */
-  updateTemplateStatus(event, templateId): void {
+  updateCampaignStatus(event, campaignId): void {
     let data = {
       active: event.checked,
     };
     this.campaignService
-      .updateTemplateStatus(this.hotelId, data, templateId)
+      .updateCampaignStatus(this.hotelId, data, campaignId)
       .subscribe(
         (response) => {
           this._snackbarService.openSnackBarAsText(
@@ -201,18 +203,21 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openCreateTemlplate navigate to create campaign page.
+   * @function openCreateCampaign to create campaign page.
    */
-  openCreateTemplate() {
+  openCreateCampaign() {
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
   /**
    * @function openCreateTemlplate navigate to edit campaign page.
    */
-  openEditTemplate(event, template): void {
+  openEditCampaign(campaign, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${template.id}`], { relativeTo: this.route });
+    this._router.navigate([`edit/${campaign.id}`], { relativeTo: this.route });
+  }
+  handleDropdownClick(event) {
+    event.stopPropagation();
   }
 
   /**

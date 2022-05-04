@@ -2,15 +2,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CampaignDatatableComponent } from './campaign-datatable.component';
 
-describe('CampaignDatatableComponent', () => {
+describe('CampaignDatableComponent', () => {
   let component: CampaignDatatableComponent;
   let fixture: ComponentFixture<CampaignDatatableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignDatatableComponent ]
-    })
-    .compileComponents();
+      declarations: [CampaignDatatableComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

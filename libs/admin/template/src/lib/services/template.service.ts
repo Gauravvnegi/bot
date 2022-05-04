@@ -6,7 +6,9 @@ import { Template } from '../data-models/templateConfig.model';
 @Injectable()
 export class TemplateService extends ApiService {
   getTemplateListByTopic(config, hotelId): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/templates/template-topic${config.queryObj}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/templates/template-topic${config.queryObj}`
+    );
   }
 
   /**
@@ -84,7 +86,9 @@ export class TemplateService extends ApiService {
   }
 
   deleteTemplateContent(entityId: string, id: string) {
-    return this.delete(`/api/v1/entity/${entityId}/templates?templateIds=${id}`);
+    return this.delete(
+      `/api/v1/entity/${entityId}/templates?templateIds=${id}`
+    );
   }
 
   /**

@@ -46,10 +46,12 @@
         }
         .status--left {
           color: $primary-gray;
+          font-size: $font16;
         }
         .status--right {
           color: $primary-black;
           margin-left: 20px;
+          font-size: $font16;
         }
       }
       .note {
@@ -209,10 +211,10 @@
 }
 
 .mat-label {
-  font-size: $font14;
+  font-size: $font16;
   color: $primary-gray;
   margin-right: 10px;
-  width: 31%;
+  width: 165px;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }

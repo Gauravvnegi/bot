@@ -13,6 +13,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   @Input() template: Template;
   @Input() isDisabled = false;
   @Input() openEditor = false;
+  @Input() templateId: string;
   @Output() goBack = new EventEmitter();
   @Output() saveTemplate = new EventEmitter();
   hotelId: string;
@@ -20,7 +21,6 @@ export class TemplateHtmlEditorComponent implements OnInit {
   topicList = [];
   isSaving = false;
   enableAssetImport = false;
-  templateId: string;
   constructor() {}
 
   ngOnInit(): void {}

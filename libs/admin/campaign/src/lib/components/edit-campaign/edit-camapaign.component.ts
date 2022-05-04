@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
@@ -15,15 +16,16 @@ import {
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { EmailList } from '../../data-model/email.model';
+import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
-  templateUrl: './camapaign-email.component.html',
-  styleUrls: ['./camapaign-email.component.scss'],
+  templateUrl: './edit-camapaign.component.html',
+  styleUrls: ['./edit-camapaign.component.scss'],
 })
-export class CamapaignEmailComponent implements OnInit {
+export class EditCampaignComponent implements OnInit {
   campaignId: string;
   campaignFG: FormGroup;
   templateData = '';
@@ -46,7 +48,9 @@ export class CamapaignEmailComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private _emailService: EmailService,
-    private _modalService: ModalService
+    private _modalService: ModalService,
+    private _campaignService: CampaignService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initFG();
   }
@@ -63,7 +67,7 @@ export class CamapaignEmailComponent implements OnInit {
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
-      topicId: ['']
+      topicId: [''],
     });
   }
 
@@ -76,6 +80,7 @@ export class CamapaignEmailComponent implements OnInit {
         ];
         this.getHotelId(this.globalQueries);
         this.getFromEmails();
+        this.getTemplateId();
       })
     );
   }
@@ -93,6 +98,27 @@ export class CamapaignEmailComponent implements OnInit {
           (this.fromEmailList = new EmailList().deserialize(response)),
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
+    );
+  }
+
+  getTemplateId(): void {
+    this.$subscription.add(
+      this.activatedRoute.params.subscribe((params) => {
+        if (params['id']) {
+          this.campaignId = params['id'];
+          this.getCampaignDetails(this.campaignId);
+        }
+      })
+    );
+  }
+
+  getCampaignDetails(id) {
+    this.$subscription.add(
+      this._campaignService
+        .getCampaignById(this.hotelId, id)
+        .subscribe((response) => {
+          console.log(response);
+        })
     );
   }
 
@@ -137,21 +163,25 @@ export class CamapaignEmailComponent implements OnInit {
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    return template.substring(
-      template.indexOf('<div'),
-      template.lastIndexOf('</body>')
-    );
+    if (template.indexOf('<div') != -1)
+      return template.substring(
+        template.indexOf('<div'),
+        template.lastIndexOf('</body>')
+      );
+    else return template;
   }
 
   getTemplateMessage(data) {
-    return (
-      this.templateData.substring(0, this.templateData.indexOf('<div')) +
-      data.message +
-      this.templateData.substring(
-        this.templateData.lastIndexOf('</body'),
-        this.templateData.length
-      )
-    );
+    if (this.templateData.indexOf('<div'))
+      return (
+        this.templateData.substring(0, this.templateData.indexOf('<div')) +
+        data.message +
+        this.templateData.substring(
+          this.templateData.lastIndexOf('</body'),
+          this.templateData.length
+        )
+      );
+    else return data.message;
   }
 
   sendMail() {
@@ -213,9 +243,7 @@ export class CamapaignEmailComponent implements OnInit {
   }
 
   disableDropdown() {
-    this._emailService.$enableDropdown.to.next(false);
-    this._emailService.$enableDropdown.cc.next(false);
-    this._emailService.$enableDropdown.bcc.next(false);
+    this._emailService.disableDropdowns();
   }
 
   openPersonalization(event) {}

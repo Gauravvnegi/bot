@@ -66,6 +66,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 
     .card {
       cursor: pointer;
@@ -75,7 +76,6 @@
       width: 255px;
       height: 273px;
       margin: 0 4rem 2rem 4rem;
-      // opacity: 0.3;
     }
   }
 

@@ -4,7 +4,7 @@ export interface Deserializable {
   deserialize(input: any): this;
 }
 
-export class Templates  {
+export class Templates {
   records: ITemplate[];
   deserialize(input) {
     this.records = new Array<ITemplate>();
@@ -15,7 +15,7 @@ export class Templates  {
   }
 }
 
-export class Template  {
+export class Template {
   id: string;
   status: boolean;
   description: string;
@@ -39,7 +39,7 @@ export class Template  {
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'templateType', get(input, ['templateType'])),
       set({}, 'htmlTemplate', get(input, ['htmlTemplate'])),
-      set({}, 'template', new Templates().deserialize(input.template).records),
+      set({}, 'template', new Templates().deserialize(input.template).records)
     );
     return this;
   }

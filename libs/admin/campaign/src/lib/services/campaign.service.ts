@@ -1,65 +1,61 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { Observable } from 'rxjs/internal/Observable';
 import { Campaign } from '../data-model/campaign.model';
 
 @Injectable()
 export class CampaignService extends ApiService {
-  getTemplateList(id, config): Observable<any> {
-    return this.get(`/api/v1/entity/${id}/templates/${config.queryObj}`);
-  }
-
+  getlisting: any;
   /**
-   * @function getHotelTemplate get template list from api.
+   * @function getHotelCampaign get campaign list from api.
    * @param config dynamically getting global query filter into api.
    * @param hotelId dynamically getting hotelId into api.
-   * @returns get api of template lists.
+   * @returns get api of campaign lists.
    */
-  getHotelTemplate(config, hotelId) {
+  getHotelCampaign(config, hotelId) {
     return this.get(`/api/v1/entity/${hotelId}/templates${config.queryObj}`);
   }
 
   /**
-   * @function createTemplate create new template record.
+   * @function createCampaign create new campaign record.
    * @param hotelId dynamically getting hotelId into api.
    * @param data getting form input data.
    * @returns post api of creating new record.
    */
-  createTemplate(hotelId, data) {
+  createCampaign(hotelId, data) {
     return this.post(`/api/v1/entity/${hotelId}/templates`, data);
   }
 
   /**
-   * @function getTemplateDetails get template record details.
+   * @function getCampaignDetails get campaign record details.
    * @param hotelId dynamically getting hotelId into api.
-   * @param templateId dynamically getting templateId into api.
-   * @returns get api of template details.
+   * @param campaignId dynamically getting campaignId into api.
+   * @returns get api of campaign details.
    */
-  getTemplateDetails(hotelId, templateId) {
-    return this.get(`/api/v1/entity/${hotelId}/templates/${templateId}`);
+  getCampaignDetails(hotelId, campaignId) {
+    return this.get(`/api/v1/entity/${hotelId}/templates/${campaignId}`);
   }
 
   /**
-   * @function updateTemplate update Templaterecord.
+   * @function updateCampaign update Campaign record.
    * @param hotelId dynamically getting hotelId into api.
-   * @param templateId dynamically getting templateId into api.
+   * @param campaignId dynamically getting campaignId into api.
    * @param data getting form input data.
-   * @returns put api of update Template record.
+   * @returns put api of update Campaign record.
    */
-  updateTemplate(hotelId, templateId, data) {
-    return this.put(`/api/v1/entity/${hotelId}/templates/${templateId}`, data);
+  updateCampaign(hotelId, campaignId, data) {
+    return this.put(`/api/v1/entity/${hotelId}/templates/${campaignId}`, data);
   }
 
   /**
-   * @function updateTemplateStatus update status of a template record.
+   * @function updateCampaignStatus update status of a campaign record.
    * @param hotelId dynamically getting hotelId into api.
    * @param data getting form input data.
-   * @param templateId dynamically getting templateId into api.
+   * @param campaignId dynamically getting campaignId into api.
    * @returns patch api of update status.
    */
-  updateTemplateStatus(hotelId, data, templateId) {
+  updateCampaignStatus(hotelId, data, campaignId) {
     return this.patch(
-      `/api/v1/entity/${hotelId}/templates/${templateId}/status`,
+      `/api/v1/entity/${hotelId}/templates/${campaignId}/status`,
       data
     );
   }
@@ -80,11 +76,11 @@ export class CampaignService extends ApiService {
   }
 
   /**
-   * @function mapcampaignData map api data into template form data.
+   * @function mapcampaignData map api data into campaign form data.
    * @param formValue form key values.
-   * @param hotelId hotelId for template table.
-   * @param id template id.
-   * @returns template data.
+   * @param hotelId hotelId for campaign table.
+   * @param id campaign id.
+   * @returns campaign data.
    */
   mapcampaignData(formValue, hotelId, id?) {
     const campaignData = new Campaign();
@@ -97,11 +93,5 @@ export class CampaignService extends ApiService {
     campaignData.templateType = formValue.templateType;
     campaignData.htmlTemplate = formValue.htmlTemplate;
     return campaignData;
-  }
-
-  getlisting(entityId: string, config) {
-    return this.get(
-      `/api/v1/marketing/entity/${entityId}/listing${config.queryObj}`
-    );
   }
 }

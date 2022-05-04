@@ -213,7 +213,7 @@
   font-size: $font16;
   color: $primary-gray;
   margin-right: 10px;
-  min-width: 31%;
+  width: 165px;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }
@@ -321,31 +321,38 @@
   width: 1305px;
   letter-spacing: 0.96px;
   @media only screen and (max-width: 1490px) {
-    width:620px !important;
+    width: 620px !important;
   }
   @media only screen and (max-width: 1580px) {
-    width:1000px !important;
+    width: 1000px !important;
   }
   @media only screen and (max-width: 1700px) {
-    width:1100px ;
+    width: 1100px;
   }
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
   display: none;
 }
-:host ::ng-deep .form-field{
-  width:470px !important;
+:host ::ng-deep .form-field {
+  width: 470px !important;
   @media only screen and (max-width: 1300px) {
-    width:50px !important;
+    width: 50px !important;
   }
   @media only screen and (max-width: 1350px) {
-    width:80px !important;
+    width: 80px !important;
   }
   @media only screen and (max-width: 1480px) {
-    width:270px !important;
+    width: 270px !important;
   }
   @media only screen and (max-width: 1700px) {
-    width:370px !important;
+    width: 370px !important;
   }
 }

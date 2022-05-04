@@ -65,6 +65,7 @@
     padding-left: 5px;
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 
     .card {
       cursor: pointer;
@@ -73,7 +74,6 @@
       border: 1px solid grey;
       width: 255px;
       height: 273px;
-      opacity: 0.3;
     }
   }
 

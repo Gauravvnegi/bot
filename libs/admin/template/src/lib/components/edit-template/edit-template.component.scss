@@ -63,6 +63,8 @@
         align-items: center;
         width: 31%;
         margin-right: 1.5%;
+        gap: 10px;
+
         @media (max-width: $tablet) {
           @include width(42.6%);
         }
@@ -315,4 +317,9 @@
   ::ng-deep .mat-form-field-infix.description {
     width: 100% !important;
   }
+}
+
+:host ::ng-deep .form-field {
+  display: flex;
+  gap: 30px;
 }

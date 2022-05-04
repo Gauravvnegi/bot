@@ -68,6 +68,7 @@ export class EditCampaignComponent implements OnInit {
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
+      templateId: [' '],
     });
   }
 

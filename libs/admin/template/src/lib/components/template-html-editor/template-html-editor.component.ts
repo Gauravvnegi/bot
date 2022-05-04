@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Template } from '../../data-models/templateConfig.model';
 
@@ -35,6 +42,16 @@ export class TemplateHtmlEditorComponent implements OnInit {
 
   saveAndNext() {
     this.saveTemplate.emit({ data: { redirectToForm: true, preview: false } });
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout() {
+    this.enableAssetImport = false;
+  }
+
+  assetImportEnable(event) {
+    event.stopPropagation();
+    this.enableAssetImport = true;
   }
 
   back() {

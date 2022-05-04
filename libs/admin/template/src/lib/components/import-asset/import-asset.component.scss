@@ -1,7 +1,7 @@
 @import 'main';
 
 .asset-container {
-  height: calc(100vh - 160px);
+  height: calc(100vh - 200px);
   width: 258px;
   box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.15);
   background-color: #fff;
@@ -32,7 +32,7 @@
     display: flex;
     flex-wrap: wrap;
     border-bottom: solid 1px #e0e0e0;
-    height: calc(100% - 262px);
+    max-height: calc(100% - 215px);
     overflow-y: scroll;
     .img-container {
       width: 108px;
@@ -52,34 +52,34 @@
       }
     }
   }
-  .footer {
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .save-btn {
-      width: 138px;
-      height: 36px;
-      padding: 10px 40.3px 11px 41.3px;
-      border-radius: 18px;
-      background-color: #4b56c0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      &__text {
-        font-family: Roboto;
-        font-size: 11px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.66px;
-        text-align: left;
-        color: #fff;
-      }
-    }
-  }
+  // .footer {
+  //   height: 60px;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   .save-btn {
+  //     width: 138px;
+  //     height: 36px;
+  //     padding: 10px 40.3px 11px 41.3px;
+  //     border-radius: 18px;
+  //     background-color: #4b56c0;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //     cursor: pointer;
+  //     &__text {
+  //       font-family: Roboto;
+  //       font-size: 11px;
+  //       font-weight: normal;
+  //       font-stretch: normal;
+  //       font-style: normal;
+  //       line-height: normal;
+  //       letter-spacing: 0.66px;
+  //       text-align: left;
+  //       color: #fff;
+  //     }
+  //   }
+  // }
 }
 
 :host ::ng-deep .mat-tab-label {
@@ -147,5 +147,16 @@
     &:hover {
       border-color: $primary-purple;
     }
+  }
+}
+
+.load-more {
+  padding: 5px 0;
+  color: #0099ff;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  &:hover {
+    background-color: #eaf3fa;
   }
 }

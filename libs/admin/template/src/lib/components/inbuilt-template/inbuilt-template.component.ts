@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Location } from '@angular/common';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Observable, Subscription } from 'rxjs';
@@ -29,9 +29,9 @@ export class InbuiltTemplateComponent implements OnInit {
   rowsPerPage: any;
   list = [];
 
-
-  startPage : Number;
-  paginationLimit:Number; 
+  startPage: Number;
+  paginationLimit: Number;
+  @Output() change = new EventEmitter();
 
   constructor(
     private _location: Location,
@@ -39,14 +39,12 @@ export class InbuiltTemplateComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
     private _snackbarService: SnackBarService,
-    private _fb: FormBuilder,
-
+    private _fb: FormBuilder
   ) {
     this.initFG();
-    this.startPage = 0,
-    this.paginationLimit = 3
+    this.startPage = 0;
+    this.paginationLimit = 3;
   }
-
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
@@ -137,9 +135,11 @@ export class InbuiltTemplateComponent implements OnInit {
     return this.templateService.getHotelTemplate(config, this.hotelId);
   }
 
-  showMoreItems()
-  {
-     this.paginationLimit = Number(this.paginationLimit) + 3;        
+  showMoreItems() {
+    this.paginationLimit = Number(this.paginationLimit) + 3;
   }
- }
 
+  goBack() {
+    this.change.emit()
+  }
+}

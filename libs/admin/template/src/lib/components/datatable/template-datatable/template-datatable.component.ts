@@ -24,6 +24,7 @@ import { Observable, Subscription } from 'rxjs';
 import { TemplateService } from '../../../services/template.service';
 import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
+import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -52,6 +53,25 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   $subscription = new Subscription();
   hotelId: any;
 
+  chips = [
+    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+    {
+      label: 'Active',
+      icon: '',
+      value: 'ACTIVE',
+      total: 0,
+      isSelected: false,
+      type: 'new',
+    },
+    {
+      label: 'In-Active ',
+      icon: '',
+      value: 'INACTIVE',
+      total: 0,
+      isSelected: false,
+      type: 'pending',
+    },
+  ];
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -61,13 +81,13 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
-    private templateService: TemplateService
+    private templateService: TemplateService,
+    private _topicService: TopicService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.tabFilterItems = templateConfig.datatable.tabFilterItems;
     this.listenForGlobalFilters();
   }
 
@@ -82,11 +102,13 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         ...data['dateRange'].queryValue,
       ];
       this.getHotelId(this.globalQueries);
+      this.tabFilterItems = [];
+      this.setTabFilterItems();
       // fetch-api for records
       this.loadInitialData([
-        ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
+          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]);
@@ -102,6 +124,42 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         this.hotelId = element.hotelId;
       }
     });
+  }
+
+  setTabFilterItems() {
+    this.tabFilterItems = [
+      {
+        label: 'All',
+        content: '',
+        value: 'ALL',
+        disabled: false,
+        total: 0,
+        chips: this.chips,
+        lastPage: 0,
+      },
+    ];
+    const topicConfig = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        { entityState: 'ACTIVE', limit: 50 },
+      ]),
+    };
+    this.$subscription.add(
+      this._topicService
+        .getHotelTopic(topicConfig, this.hotelId)
+        .subscribe((response) => {
+          response.records.forEach((topic) =>
+            this.tabFilterItems.push({
+              label: topic.name,
+              content: '',
+              value: topic.name,
+              disabled: false,
+              total: 0,
+              lastPage: 0,
+              chips: this.chips,
+            })
+          );
+        })
+    );
   }
 
   /**
@@ -238,9 +296,9 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(
         [
-          ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
+            entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
           },
           ...this.getSelectedQuickReplyFilters(),
         ],

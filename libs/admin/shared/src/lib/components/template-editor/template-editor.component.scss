@@ -1,5 +1,19 @@
 @import 'main';
 
+.text-field {
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  color: #4b56c0;
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+  cursor: pointer;
+}
 .editable {
   width: 100%;
   min-height: 310px;
@@ -9,4 +23,7 @@
 .plain-text-container {
   border: 1px solid #d1d1d1;
   padding: 15px;
+  max-width: 100%;
+  overflow: auto;
+  height: 500px;
 }

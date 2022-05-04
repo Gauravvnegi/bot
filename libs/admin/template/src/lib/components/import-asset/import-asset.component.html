@@ -1,43 +1,13 @@
-<div
-  style="
-    height: calc(100vh - 160px);
-    width: 258px;
-    box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.15);
-    background-color: #fff;
-  "
->
-  <div
-    style="
-      height: 56px;
-      display: flex;
-      align-items: center;
-      border-bottom: solid 1px #e0e0e0;
-    "
-  >
-    <div
-      style="margin: 0 13px; color: #9eaeb8; font-size: 16px; cursor: pointer;"
-    >
+<div class="asset-container">
+  <div class="asset-container__header">
+    <div class="close">
       <i class="fa fa-times" aria-hidden="true" (click)="close()"></i>
     </div>
-    <div
-      style="
-        font-family: Roboto;
-        font-size: 14px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.84px;
-        color: #002046;
-      "
-    >
+    <div class="title">
       Import Assets
     </div>
   </div>
-  <div
-    class="global_search"
-    style="padding: 15px; border-bottom: solid 1px #e0e0e0;"
-  >
+  <div class="global-search">
     <span class="p-input-icon-right">
       <i *ngIf="!searchValue" class="pi pi-search"></i>
       <mat-icon *ngIf="searchValue" (click)="clearSearch()" class="cross_icon"
@@ -69,62 +39,25 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-  <div
-    style="
-      padding: 25px 7px;
-      display: flex;
-      flex-wrap: wrap;
-      border-bottom: solid 1px #e0e0e0;
-      height: calc(100% - 262px);
-      overflow-y: scroll;
-    "
-    #assetList
-    (scroll)="onScroll($event)"
-  >
-    <div
-      *ngFor="let asset of assets; let i = index"
-      style="width: 108px; height: 116px; padding: 15px;"
-    >
+  <div class="body" #assetList (scroll)="onScroll($event)">
+    <div *ngFor="let asset of assets; let i = index" class="img-container">
       <img
-        style="max-height: 86px; max-width: 78px;"
+        class="image"
         [src]="asset.type === 'Image' ? asset.url : asset.thumbnailUrl"
         alt="Asset"
       />
+      <img
+        class="copy"
+        src="assets/svg/copy.svg"
+        alt="Copy"
+        [cdkCopyToClipboard]="asset.url"
+        (click)="handleCopyToClipboard($event)"
+      />
     </div>
   </div>
-  <div
-    style="
-      height: 60px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    "
-  >
-    <div
-      style="
-        width: 138px;
-        height: 36px;
-        padding: 10px 40.3px 11px 41.3px;
-        border-radius: 18px;
-        background-color: #4b56c0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      "
-    >
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 11px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.66px;
-          text-align: left;
-          color: #fff;
-        "
-      >
+  <div class="footer">
+    <div class="save-btn">
+      <div class="save-btn__text">
         Import
       </div>
     </div>

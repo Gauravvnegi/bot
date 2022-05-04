@@ -1,15 +1,15 @@
 <div class="wrapper">
   <header class="wrapper-header">
     <div class="back">
-      <button mat-button (click)="back()">
-        <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
-      </button>
+      <mat-icon class="material-icons" matSuffix (click)="back()"
+        >keyboard_backspace</mat-icon
+      >
       <p class="label">
         <ng-container *ngIf="isDisabled; else editTemplate">
           View Template
         </ng-container>
         <ng-template #editTemplate>
-          Edit Template
+          {{templateId ? 'Edit' : 'Create'}} Template
         </ng-template>
       </p>
     </div>
@@ -49,8 +49,18 @@
           </div>
         </div>
       </div>
+      <div class="feilds" *ngIf="!isDisabled">
+        <div class="feild">
+          <mat-label class="mat-label">Shared templates</mat-label>
+          <mat-checkbox formControlName="shared"></mat-checkbox>
+        </div>
+      </div>
+      <div class="description" *ngIf="!isDisabled">
+        Shared templates and their contents are openly available for all users
+        under your organisations.
+      </div>
     </div>
-    <div class="ck-editor">
+    <div class="wrapper-editor">
       <hospitality-bot-template-editor
         *ngIf="openEditor"
         [parentFG]="templateForm"
@@ -61,27 +71,25 @@
       ></hospitality-bot-template-editor>
     </div>
   </form>
-  <div class="save-section">
-    <div class="save-button">
+  <div class="save-section" *ngIf="!isDisabled">
+    <div class="save-button" (click)="saveAndPreview()">
       <div class="save-text">
-        <i></i>
         Preview and Save
       </div>
     </div>
-    <div class="save-button">
+    <div class="save-button" (click)="save()">
       <div class="save-text">
-        <i></i>
         Save Changes
       </div>
     </div>
     <div
       class="save-button"
-      (click)="createTemplate()"
+      (click)="saveAndNext()"
       [ngClass]="{ active: !isSaving, disabled: isSaving }"
     >
       <div class="save-text">
         <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-        {{ isSaving ? 'Saving' : 'Save' }}
+        Save and next
       </div>
     </div>
   </div>

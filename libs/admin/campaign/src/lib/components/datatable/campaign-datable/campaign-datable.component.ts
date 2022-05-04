@@ -68,7 +68,7 @@ export class CampaignDatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.tabFilterItems = campaignConfig.datatable.tabFilterItems;
-    // this.listenForGlobalFilters();
+    this.listenForGlobalFilters();
   }
 
   /**

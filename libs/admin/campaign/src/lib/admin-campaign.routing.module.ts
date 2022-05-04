@@ -8,7 +8,6 @@ import { ReceiverFieldComponent } from './components/receiver-field/receiver-fie
 import { CampaignDatableComponent } from './components/datatable/campaign-datable/campaign-datable.component';
 
 const appRoutes: Route[] = [
-  // { path: '', redirectTo: 'create' },
   { path: '', component: CampaignComponent },
   { path: 'create', component: CamapaignEmailComponent },
   { path: 'edit/:id', component: CamapaignEmailComponent },

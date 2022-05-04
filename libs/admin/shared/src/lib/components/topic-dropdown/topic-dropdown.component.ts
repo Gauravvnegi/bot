@@ -13,7 +13,7 @@ import { TopicService } from '../../services/topic.service';
 })
 export class TopicDropdownComponent implements OnInit {
   @Input() parentForm: FormGroup;
-  @Input() name: string = 'topicName';
+  @Input() name: string;
   @Input() hotelId: string;
   @Input() title = true;
   @Input() id = false;
@@ -27,15 +27,10 @@ export class TopicDropdownComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.parentForm == undefined) this.initFG();
     this.getTopicList();
   }
 
-  initFG() {
-    this.parentForm = new FormGroup({
-      topicName: new FormControl(''),
-    });
-  }
+  initFG() {}
 
   getTopicList() {
     const config = {

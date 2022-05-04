@@ -4,7 +4,7 @@
   padding: $padding20;
   background-color: white;
   border-radius: 5px;
-  height: 740px;
+  height: calc(100vh - 9.5%);
   &-header {
     display: flex;
     justify-content: space-between;
@@ -93,6 +93,17 @@
         }
       }
     }
+    .description {
+      margin: 11px 57px 22px 10%;
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.84px;
+      color: #9eaeb8;
+    }
     .image-button {
       display: flex;
       align-items: baseline;
@@ -104,6 +115,9 @@
     .margin-adjust {
       padding: $padding20 0;
     }
+  }
+  &-editor {
+    margin: 15px 15px 0 20px;
   }
   .wrapper-text {
     margin: 15px 0;
@@ -153,11 +167,12 @@
       justify-content: center;
       width: 200px;
       height: 46px;
-      margin: 121px 34px 0 2.5px;
+      margin: 56px 34px 0 2.5px;
       padding: 12px;
       border-radius: 23px;
       box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
       background-color: $primary-purple;
+      cursor: pointer;
       .save-text {
         font-size: $font16;
         font-weight: 500;

@@ -83,6 +83,10 @@ export class TemplateService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/assets${config.queryObj}`);
   }
 
+  deleteTemplateContent(entityId: string, id: string) {
+    return this.delete(`/api/v1/entity/${entityId}/templates?templateIds=${id}`);
+  }
+
   /**
    * @function mapTemplateData map api data into template form data.
    * @param formValue form key values.
@@ -93,7 +97,7 @@ export class TemplateService extends ApiService {
   mapTemplateData(formValue, hotelId, id?) {
     const templateData = new Template();
     templateData.active = formValue.status;
-    templateData.hotelId = hotelId;
+    templateData.entityId = hotelId;
     templateData.id = formValue.id;
     templateData.name = formValue.name;
     templateData.description = formValue.description;

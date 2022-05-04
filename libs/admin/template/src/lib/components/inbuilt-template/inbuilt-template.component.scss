@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   height: fit-content;
-  padding: 17px 38px 21px 20px;
   border-radius: 5px;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
@@ -23,13 +22,11 @@
 
     .go-back {
       display: flex;
-      gap: 10px;
+      padding-top: 20px;
       align-items: center;
-
-      button {
-        text-decoration: none;
+      button:hover {
+        background-color: transparent;
       }
-
       .material-icons {
         cursor: pointer;
       }
@@ -103,9 +100,7 @@
   .line {
     border: 1px solid #9eaeb8;
     width: 100%;
-    height: 1px;
     opacity: 0.3;
-    margin: 32px 0 44px 16.3px;
   }
 }
 
@@ -120,18 +115,17 @@
   border-radius: 4px;
   border: solid 1px #707070;
   background-color: #fff;
+  .mat-form-field-label {
+    border-bottom: none;
+  }
 }
 
 :host
   ::ng-deep
   .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
   .mat-form-field-label,
-.mat-form-field-appearance-legacy.mat-form-field-can-float
-  .mat-input-server:focus
-  + .mat-form-field-label-wrapper
-  .mat-form-field-label {
-  transform: translateY(-1.28125em) scale(0.75) perspective(100px)
-    translateZ(0.001px);
++ .mat-form-field-label-wrapper .mat-form-field-label {
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px);
   -ms-transform: translateY(-1.28125em) scale(0.75);
   width: 133.3333333333%;
   display: none;

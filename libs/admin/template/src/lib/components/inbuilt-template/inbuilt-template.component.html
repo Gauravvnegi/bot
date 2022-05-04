@@ -1,7 +1,7 @@
 <div class="container">
   <div class="headings">
     <div class="go-back">
-      <button mat-button matStepperPrevious>
+      <button mat-button (click)="goBack()">
         <mat-icon class="material-icons" matSuffix
           >keyboard_backspace
         </mat-icon>
@@ -19,7 +19,7 @@
       <hospitality-bot-topic-dropdown
         class="field"
         [hotelId]="hotelId"
-        [name]="'topicName'"
+        [name]="'topicId'"
         [parentForm]="templateForm"
       ></hospitality-bot-topic-dropdown>
     </div>
@@ -31,9 +31,9 @@
     </p>
   </div>
   <div class="checkin-cards">
-    <div *ngFor="let template of templateList | slice : startPage:paginationLimit" class="card">
+    <!-- <div *ngFor="let template of templateList | slice : startPage:paginationLimit" class="card">
       <div [innerHTML]="template.htmlTemplate" ></div>
-    </div>
+    </div> -->
   </div>
 
   <button class="button"  (click)="showMoreItems()" >

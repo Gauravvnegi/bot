@@ -3,7 +3,6 @@
 .upload-btn-wrapper {
   position: relative;
   overflow: hidden;
-  // margin-left: 170px;
 }
 
 .btn {
@@ -33,8 +32,6 @@
 }
 
 .import {
-  // width: 546px;
-  // padding: 30px 30px 40px 40px;
   position: relative;
   .import-close {
     cursor: pointer;
@@ -105,17 +102,7 @@
   }
 }
 
-// :host ::ng-deep .mat-form-field-underline {
-//   width: 400px !important;
-// }
-
 :host ::ng-deep .before-upload {
-  // width: 133px !important;
-  // height: 38px !important;
-  // padding: 13px 30px;
-  // border-radius: 30px;
-  // background-color: $auth-color;
-  // margin: 0 auto;
   .upload-label {
     font-size: $font16 !important;
     color: $auth-color !important;
@@ -216,10 +203,6 @@
   }
 }
 
-// :host ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
-//   cursor: pointer;
-//   width: 100px !important;
-// }
 :host ::ng-deep .mat-select {
   padding: 1.5px;
 }

@@ -12,12 +12,14 @@ export class TemplateEditorComponent implements OnInit {
   @Input() template = '';
   @Input() disabled = false;
   @Input() hybrid = true;
+  @Input() height = '500'
   @ViewChild('plainTextControl') plainTextControl;
   richText = true;
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
     readOnly: false,
+    height: 400
   };
   constructor() {}
 

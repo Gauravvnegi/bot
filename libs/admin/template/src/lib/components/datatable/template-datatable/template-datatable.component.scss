@@ -146,3 +146,6 @@
 :host ::ng-deep thead.p-datatable-thead {
   border-top: solid 1px $c-gray-90 !important;
 }
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 110px !important;}

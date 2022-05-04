@@ -13,6 +13,7 @@ import {
   AdminUtilityService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { TemplateService } from '../../services/template.service';
@@ -32,7 +33,7 @@ export class ImportAssetComponent implements OnInit {
     { src: 'assets/svg/film.svg', value: 'VIDEO', page: 0, total: 0 },
   ];
   tabFilterIdx = 0;
-  limit = 10;
+  limit = 50;
   assets = [];
   $subscription = new Subscription();
   assetFG: FormGroup;
@@ -40,7 +41,8 @@ export class ImportAssetComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
     private _templateService: TemplateService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _snackbarService: SnackBarService
   ) {
     this.createFG();
   }
@@ -181,6 +183,13 @@ export class ImportAssetComponent implements OnInit {
 
   loadSearchAsset(key) {
     this.assets = [];
+  }
+
+  handleCopyToClipboard(event) {
+    event.stopPropagation();
+    this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
+      panelClass: 'success',
+    });
   }
 
   close() {

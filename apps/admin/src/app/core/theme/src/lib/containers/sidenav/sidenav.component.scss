@@ -32,7 +32,27 @@
 .sidebar {
   padding-top: 15px;
   &__container {
-    // padding-top: 40px;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+    &::-webkit-scrollbar {
+      width: 3px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+    }
+    &:hover {
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+      }
+    }
     .main_heading {
       margin-bottom: 9px;
       &_anchor {

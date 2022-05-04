@@ -1,5 +1,87 @@
 @import 'main';
 
+.asset-container {
+  height: calc(100vh - 160px);
+  width: 258px;
+  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  &__header {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px #e0e0e0;
+    .close {
+      margin: 0 13px;
+      color: #9eaeb8;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .title {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.84px;
+      color: #002046;
+    }
+  }
+  .body {
+    padding: 25px 7px;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: solid 1px #e0e0e0;
+    height: calc(100% - 262px);
+    overflow-y: scroll;
+    .img-container {
+      width: 108px;
+      height: 116px;
+      padding: 15px;
+      position: relative;
+      .image {
+        max-height: 86px;
+        max-width: 78px;
+        pointer-events: none;
+      }
+      .copy {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+  .footer {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .save-btn {
+      width: 138px;
+      height: 36px;
+      padding: 10px 40.3px 11px 41.3px;
+      border-radius: 18px;
+      background-color: #4b56c0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &__text {
+        font-family: Roboto;
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.66px;
+        text-align: left;
+        color: #fff;
+      }
+    }
+  }
+}
+
 :host ::ng-deep .mat-tab-label {
   min-width: 128px !important;
   height: 60px !important;
@@ -22,8 +104,10 @@
   }
 }
 
-.global_search {
+.global-search {
   position: relative;
+  padding: 15px;
+  border-bottom: solid 1px #e0e0e0;
   .cross_icon {
     color: #c5c5c5;
     font-size: $font20;

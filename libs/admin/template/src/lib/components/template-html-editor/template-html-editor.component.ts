@@ -1,11 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Subscription } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 import { Template } from '../../data-models/templateConfig.model';
-import { TemplateService } from '../../services/template.service';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
@@ -14,121 +9,35 @@ import { TemplateService } from '../../services/template.service';
 })
 export class TemplateHtmlEditorComponent implements OnInit {
   id: string;
-  templateForm: FormGroup;
-  private $subscription = new Subscription();
+  @Input() templateForm: FormGroup;
+  @Input() template: Template;
+  @Input() isDisabled = false;
+  @Input() openEditor = false;
+  @Input() templateId: string;
+  @Output() goBack = new EventEmitter();
+  @Output() saveTemplate = new EventEmitter();
   hotelId: string;
   globalQueries = [];
   topicList = [];
   isSaving = false;
-  template: Template;
-
-  @Input() isDisabled = false;
-  @Input() openEditor = false;
-  @Output() goBack = new EventEmitter();
-
   enableAssetImport = false;
-  templateId: string;
-  constructor(
-    private _fb: FormBuilder,
-    private globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
-    private templateService: TemplateService,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.initFG();
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  saveAndPreview() {
+    this.saveTemplate.emit({ data: { redirectToForm: false, preview: true } });
   }
 
-  ngOnInit(): void {
-    this.listenForGlobalFilters();
+  save() {
+    this.saveTemplate.emit({ data: { redirectToForm: false, preview: false } });
   }
 
-  initFG(): void {
-    this.templateForm = this._fb.group({
-      name: ['', [Validators.required]],
-      htmlTemplate: [''],
-    });
-  }
-
-  listenForGlobalFilters(): void {
-    this.$subscription.add(
-      this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
-        this.getHotelId(this.globalQueries);
-        this.getTemplateId();
-      })
-    );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
-  }
-
-  getTemplateId(): void {
-    this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.templateId = params['id'];
-          this.getTemplateDetails(this.templateId);
-        } else if (this.id) {
-          this.templateId = this.id;
-          this.getTemplateDetails(this.templateId);
-        }
-      })
-    );
-  }
-
-  /**
-   * @function getTemplateDetails to get the topic details.
-   * @param topicId The topic id for which edit action will be done.
-   */
-  getTemplateDetails(topicId: string): void {
-    this.$subscription.add(
-      this.templateService
-        .getTemplateDetails(this.hotelId, topicId)
-        .subscribe((response) => {
-          this.template = new Template().deserialize(response);
-          this.templateForm.patchValue(this.template);
-        })
-    );
-  }
-  createTemplate() {
-    this.isSaving = true;
-    const data = this.templateService.mapTemplateData(
-      this.templateForm.getRawValue(),
-      this.hotelId,
-      this.template.id
-    );
-    this.$subscription.add(
-      this.templateService
-        .updateTemplate(this.hotelId, this.template.id, data)
-        .subscribe(
-          (response) => {
-            this._snackbarService.openSnackBarAsText(
-              'Template created Successfully',
-              '',
-              { panelClass: 'success' }
-            );
-            // this._router.navigate(['/pages/library/template']);
-            this.isSaving = false;
-          },
-          ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
-            this.isSaving = false;
-          }
-        )
-    );
+  saveAndNext() {
+    this.saveTemplate.emit({ data: { redirectToForm: true, preview: false } });
   }
 
   back() {
     this.goBack.emit();
-  }
-
-  ngOnDestroy(): void {
-    this.$subscription.unsubscribe();
   }
 }

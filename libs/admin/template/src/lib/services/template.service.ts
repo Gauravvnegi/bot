@@ -12,7 +12,7 @@ export class TemplateService extends ApiService {
 
   getTemplateListByTopic(config, hotelId): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/templates/template-topic${config.queryObj}`
+      `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
     );
   }
 

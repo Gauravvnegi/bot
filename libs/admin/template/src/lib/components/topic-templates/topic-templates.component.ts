@@ -13,14 +13,15 @@ import { TemplateService } from '../../services/template.service';
 export class TopicTemplatesComponent implements OnInit {
 
   @Input() topic:string;
+  @Input() type:string;
   hotelId: string;
   globalQueries = [];
   loading: boolean;
   templateList: any;
   first=0;
   rowsPerPage = 1;
-  rowsPerPageOptions = [1, 2, 9, 18];
-
+  totalRecords;
+  showbutton:boolean=true;
   private $subscription = new Subscription();
   
   constructor(
@@ -46,10 +47,21 @@ export class TopicTemplatesComponent implements OnInit {
       this.getHotelId(this.globalQueries);
       this.loadInitialData([
         {
-          order: sharedConfig.defaultOrder,
         },
       ]);
     });
+  }
+
+ sendTopicParam(){
+    let typeOfTemplate:string;
+    if(this.type)
+    {
+      typeOfTemplate='SAVEDTEMPLATE';
+    }
+    else{
+      typeOfTemplate='PREDESIGNTEMPLATE';
+    }
+    return typeOfTemplate;
   }
 
   getHotelId(globalQueries): void {
@@ -75,33 +87,19 @@ export class TopicTemplatesComponent implements OnInit {
   }
 
   updateRecord(data) {
-    if (this.topic) {
-      data.map((item) => {
-        if (this.topic === item.topicName) {
-          this.templateList = [item];
-        }
-        else{
-          this.templateList = data;
-        }
-      });
-    }
-    //  else {
-    //   this.templateList = data;
-    // }
+    data.map((item)=>{
+      this.totalRecords=item.totalTemplate;
+    });
+    this.templateList = data;
   }
 
   loadData(): void {
     this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(
-        [
-          {
-            order: sharedConfig.defaultOrder,
-          },
-        ],
         {
-          offset: this.first,
-          limit: this.rowsPerPage,
+          limit: this.setLimits(),
+          templateType:  this.sendTopicParam(),
         }
       ).subscribe(
         (data) => {
@@ -116,18 +114,21 @@ export class TopicTemplatesComponent implements OnInit {
     );
   }
 
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
+  setLimits(){
+    this.rowsPerPage+=this.rowsPerPage;
+    if(this.totalRecords === this.rowsPerPage){
+      this.showbutton=false;
+    }
+    
+    return this.rowsPerPage;
   }
 
   fetchDataFrom(
     queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+    defaultProps = {limit: this.rowsPerPage ,templateType: this.sendTopicParam()}
   ): Observable<any> {
-    queries.push(defaultProps);
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(queries),
+      queryObj: this.adminUtilityService.makeQueryParams([defaultProps]),
     };
     return this.templateService.getTemplateListByTopic(config, this.hotelId);
   }

@@ -8,11 +8,13 @@
         <div [innerHTML]="t.htmlTemplate"></div>
       </div>
     </div>
-    <div class="show-button">
-      <button class="button">
-        Show More
-      </button>
+    <div class="show-button" (click)="loadData()">
+      <ng-container *ngIf="showbutton; else dontShowButton">
+        <button class="button">
+          Show More
+        </button>
+      </ng-container>
+      <ng-template #dontShowButton> </ng-template>
     </div>
   </div>
-  {{ topic }}
 </div>

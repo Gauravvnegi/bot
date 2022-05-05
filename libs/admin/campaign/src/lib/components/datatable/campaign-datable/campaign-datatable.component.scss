@@ -207,8 +207,8 @@
   justify-content: center;
 
   .stats-container {
-    width: 400px;
-    gap: 30px;
+    max-width: 500px;
+    gap: 5px;
     display: flex;
     flex-wrap: wrap;
   }

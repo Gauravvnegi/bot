@@ -6,9 +6,11 @@ import { SendTestComponent } from './components/send-test/send-test.component';
 import { ToDropdownComponent } from './components/to-dropdown/to-dropdown.component';
 import { ReceiverFieldComponent } from './components/receiver-field/receiver-field.component';
 import { CampaignDatatableComponent } from './components/datatable/campaign-datable/campaign-datatable.component';
+import { ViewCampaignComponent } from './components/view-campaign/view-campaign.component';
+import { TemplateListComponent } from './components/template-list/template-list.component';
+import { PersonalizationComponent } from './components/personalization/personalization.component';
 
 const appRoutes: Route[] = [
-  // { path: '', redirectTo: 'create' },
   { path: '', component: CampaignComponent },
   { path: 'create', component: EditCampaignComponent },
   { path: 'edit/:id', component: EditCampaignComponent },
@@ -26,5 +28,8 @@ export class AdminCampaignRoutingModule {
     ToDropdownComponent,
     ReceiverFieldComponent,
     CampaignDatatableComponent,
+    ViewCampaignComponent,
+    TemplateListComponent,
+    PersonalizationComponent,
   ];
 }

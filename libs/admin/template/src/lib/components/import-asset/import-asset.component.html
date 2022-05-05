@@ -1,4 +1,4 @@
-<div class="asset-container">
+<div class="asset-container" (click)="$event.stopPropagation()">
   <div class="asset-container__header">
     <div class="close">
       <i class="fa fa-times" aria-hidden="true" (click)="close()"></i>
@@ -39,7 +39,7 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-  <div class="body" #assetList (scroll)="onScroll($event)">
+  <div class="body">
     <div *ngFor="let asset of assets; let i = index" class="img-container">
       <img
         class="image"
@@ -55,11 +55,11 @@
       />
     </div>
   </div>
-  <div class="footer">
-    <div class="save-btn">
-      <div class="save-btn__text">
-        Import
-      </div>
-    </div>
+  <div
+    *ngIf="assets.length < tabFilterItems[this.tabFilterIdx]?.total"
+    class="load-more"
+    (click)="loadMoreAssetData()"
+  >
+    Show More
   </div>
 </div>

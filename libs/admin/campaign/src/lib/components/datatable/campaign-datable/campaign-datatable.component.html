@@ -253,10 +253,46 @@
         </div>
       </td>
       <td class="guest">
-        {{ rowData.description }}
+        {{ rowData.templateId }}
       </td>
       <td class="stats">
-        {{ rowData.description }}
+        <div class="stats-container">
+          <div
+            class="stat-chip"
+            *ngFor="let key of getStatsCampaignChips(rowData)"
+            [ngClass]="{
+              delivered: key == 'delivered',
+              unopened: key == 'unopened',
+              opened: key == 'opened',
+              clicked: key == 'clicked',
+              failed: key == 'failed'
+            }"
+          >
+            <div>{{ key }}</div>
+            <div
+              class="stat-chip__value"
+              [ngClass]="{
+                delivered__value: key == 'delivered',
+                unopened__value: key == 'unopened',
+                opened__value: key == 'opened',
+                clicked__value: key == 'clicked',
+                failed__value: key == 'failed'
+              }"
+            >
+              {{ rowData.statsCampaign[key] }}
+            </div>
+          </div>
+          <div class="sent-on">
+            <div>Sent On</div>
+            <div class="date">02/04/2022</div>
+          </div>
+          <ng-template #draftDate>
+            <div>
+              <div>Draft Mode</div>
+              <div class="date">Created on 02/10/22</div>
+            </div>
+          </ng-template>
+        </div>
       </td>
 
       <td class="slide">

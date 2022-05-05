@@ -193,3 +193,88 @@
 :host ::ng-deep thead.p-datatable-thead {
   border-top: solid 1px $c-gray-90 !important;
 }
+
+.stats {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.66px;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.stat-chip {
+  height: 30.9px;
+  padding: 6.6px 7.4px 6.6px 9.7px;
+  border-radius: 15.5px;
+  background-color: rgba(0, 48, 181, 0.1);
+  display: flex;
+  align-items: center;
+  margin: 0 10px 10px 0;
+  &__value {
+    margin-left: 3px;
+    padding: 2.5px;
+    border-radius: 12px;
+    opacity: 1 !important;
+  }
+}
+
+.delivered {
+  background-color: rgba(0, 48, 181, 0.1);
+  color: #0030b5;
+  &__value {
+    color: white;
+    background-color: #0030b5;
+  }
+}
+
+.opened {
+  background-color: rgba(37, 162, 226, 0.1);
+  color: rgba(37, 162, 226);
+  &__value {
+    color: white;
+    background-color: rgba(37, 162, 226);
+  }
+}
+
+.unopened {
+  background-color: rgba(255, 143, 0, 0.1);
+  color: rgba(255, 143, 0, 1);
+  &__value {
+    color: white;
+    background-color: rgba(255, 143, 0, 1);
+  }
+}
+
+.clicked {
+  background-color: rgba(82, 179, 63, 0.1);
+  color: rgba(82, 179, 63, 1);
+  &__value {
+    color: white;
+    background-color: rgba(82, 179, 63, 1);
+  }
+}
+
+.failed {
+  background-color: rgba(240, 13, 42, 0.1);
+  color: rgba(240, 13, 42, 1);
+  &__value {
+    color: white;
+    background-color: rgba(240, 13, 42, 1);
+  }
+}
+
+.sent-on {
+  margin-bottom: 10px;
+}
+
+.date {
+  color: #484848;
+}

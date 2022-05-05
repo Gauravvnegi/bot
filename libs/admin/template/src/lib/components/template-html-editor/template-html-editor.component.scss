@@ -349,3 +349,7 @@
 :host ::ng-deep .mat-button-focus-overlay {
   display: none;
 }
+
+:host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: $primary-purple;
+}

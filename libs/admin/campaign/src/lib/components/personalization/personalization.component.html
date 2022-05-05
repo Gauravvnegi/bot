@@ -1,0 +1,17 @@
+<div style="position: relative;" (click)="openPersonalization($event)">
+  <img style="cursor: pointer;" src="assets/svg/edit.svg" alt="edit" />
+  <div class="personalization" *ngIf="enablePersonalization">
+    <div class="title">
+      Personalization
+    </div>
+    <div class="body">
+      <div
+        class="item"
+        *ngFor="let item of personalizationList"
+        (click)="addPersonalization($event, item.value)"
+      >
+        {{ item.label }}
+      </div>
+    </div>
+  </div>
+</div>

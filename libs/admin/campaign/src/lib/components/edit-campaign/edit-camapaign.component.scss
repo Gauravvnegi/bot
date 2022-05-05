@@ -238,3 +238,47 @@
     right: 0;
   }
 }
+
+.personalization {
+  width: 203px;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  background-color: #fff;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  z-index: 121;
+  display: none;
+  .title {
+    padding: 0 37px 8.2px 30.5px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    text-align: left;
+    color: #002046;
+    border-bottom: 1px solid black;
+  }
+  .body {
+    padding: 15px 10px;
+    .item {
+      padding: 5px 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: aliceblue;
+      }
+    }
+  }
+}
+
+.subject-personalization {
+  position: relative;
+}
+
+.previewText-personalization {
+  position: relative;
+}

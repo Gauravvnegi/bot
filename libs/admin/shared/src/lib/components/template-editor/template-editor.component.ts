@@ -12,15 +12,16 @@ export class TemplateEditorComponent implements OnInit {
   @Input() template = '';
   @Input() disabled = false;
   @Input() hybrid = true;
-  @Input() height = '500'
+  @Input() height = '500';
   @ViewChild('plainTextControl') plainTextControl;
   richText = true;
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
     readOnly: false,
-    height: 400
+    height: 400,
   };
+
   constructor() {}
 
   ngOnInit(): void {
@@ -33,6 +34,7 @@ export class TemplateEditorComponent implements OnInit {
 
   changeField(value: boolean) {
     this.richText = value;
+    if (!value) this.template = this.parentFG.get(this.name).value + '\n';
   }
 
   onTemplateChange(value) {

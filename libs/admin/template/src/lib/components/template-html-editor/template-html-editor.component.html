@@ -9,7 +9,7 @@
           View Template
         </ng-container>
         <ng-template #editTemplate>
-          {{templateId ? 'Edit' : 'Create'}} Template
+          {{ templateId ? 'Edit' : 'Create' }} Template
         </ng-template>
       </p>
     </div>
@@ -36,7 +36,7 @@
           </mat-form-field>
         </div>
         <div class="feild">
-          <div class="import-assets" (click)="enableAssetImport = true">
+          <div class="import-assets" (click)="assetImportEnable($event)">
             Import Assets
           </div>
           <div

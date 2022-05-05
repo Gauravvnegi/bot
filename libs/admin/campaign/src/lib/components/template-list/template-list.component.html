@@ -1,0 +1,45 @@
+<div class="container">
+  <header class="header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <mat-form-field>
+        <mat-select
+          [value]="selectedTemplate"
+          (change)="templateTypeSelection($event.value)"
+        >
+          <mat-option
+            *ngFor="let template of templateTypes"
+            [value]="template.type"
+            >{{ template.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </header>
+  <div
+    class="topic-container"
+    *ngFor="let topic of templateData | keyvalue; let last = last"
+  >
+    <div class="title">
+      {{ topic.value.label }}
+    </div>
+    <div class="template-list">
+      <div
+        class="template-container"
+        *ngFor="let template of topic.value.templates"
+        (click)="selectTemplate(template)"
+      >
+        <div class="template" [innerHtml]="template.templateHtml"></div>
+      </div>
+    </div>
+    <div
+      *ngIf="!last"
+      style="
+        height: 1px;
+        margin: 32px 0 43px 16.3px;
+        opacity: 0.3;
+        background-color: #707070;
+      "
+    ></div>
+  </div>
+</div>

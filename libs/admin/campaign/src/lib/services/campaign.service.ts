@@ -4,7 +4,12 @@ import { Campaign } from '../data-model/campaign.model';
 
 @Injectable()
 export class CampaignService extends ApiService {
-  getlisting: any;
+  getListings(hotelId: string, config) {
+    return this.get(
+      `/api/v1/marketing/entity/${hotelId}/listing${config.queryObj}`
+    );
+  }
+
   /**
    * @function getHotelCampaign get campaign list from api.
    * @param config dynamically getting global query filter into api.
@@ -12,38 +17,7 @@ export class CampaignService extends ApiService {
    * @returns get api of campaign lists.
    */
   getHotelCampaign(config, hotelId) {
-    return this.get(`/api/v1/entity/${hotelId}/templates${config.queryObj}`);
-  }
-
-  /**
-   * @function createCampaign create new campaign record.
-   * @param hotelId dynamically getting hotelId into api.
-   * @param data getting form input data.
-   * @returns post api of creating new record.
-   */
-  createCampaign(hotelId, data) {
-    return this.post(`/api/v1/entity/${hotelId}/templates`, data);
-  }
-
-  /**
-   * @function getCampaignDetails get campaign record details.
-   * @param hotelId dynamically getting hotelId into api.
-   * @param campaignId dynamically getting campaignId into api.
-   * @returns get api of campaign details.
-   */
-  getCampaignDetails(hotelId, campaignId) {
-    return this.get(`/api/v1/entity/${hotelId}/templates/${campaignId}`);
-  }
-
-  /**
-   * @function updateCampaign update Campaign record.
-   * @param hotelId dynamically getting hotelId into api.
-   * @param campaignId dynamically getting campaignId into api.
-   * @param data getting form input data.
-   * @returns put api of update Campaign record.
-   */
-  updateCampaign(hotelId, campaignId, data) {
-    return this.put(`/api/v1/entity/${hotelId}/templates/${campaignId}`, data);
+    return this.get(`/api/v1/cms/${hotelId}/campaign${config.queryObj}`);
   }
 
   /**
@@ -55,7 +29,7 @@ export class CampaignService extends ApiService {
    */
   updateCampaignStatus(hotelId, data, campaignId) {
     return this.patch(
-      `/api/v1/entity/${hotelId}/templates/${campaignId}/status`,
+      `/api/v1/cms/${hotelId}/campaign/${campaignId}/status`,
       data
     );
   }
@@ -68,7 +42,7 @@ export class CampaignService extends ApiService {
    */
   exportCSV(hotelId, config) {
     return this.get(
-      `/api/v1/entity/${hotelId}/templates/export${config.queryObj}`,
+      `/api/v1/cms/${hotelId}/campaign/export${config.queryObj}`,
       {
         responseType: 'blob',
       }
@@ -93,9 +67,7 @@ export class CampaignService extends ApiService {
     campaignData.id = formValue.id;
     campaignData.name = formValue.name;
     campaignData.description = formValue.description;
-    campaignData.topicId = formValue.topicId;
-    campaignData.templateType = formValue.templateType;
-    campaignData.htmlTemplate = formValue.htmlTemplate;
+    campaignData.templateId = formValue.templateId;
     return campaignData;
   }
 }

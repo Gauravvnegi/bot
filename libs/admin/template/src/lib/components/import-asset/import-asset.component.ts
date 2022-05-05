@@ -33,7 +33,7 @@ export class ImportAssetComponent implements OnInit {
     { src: 'assets/svg/film.svg', value: 'VIDEO', page: 0, total: 0 },
   ];
   tabFilterIdx = 0;
-  limit = 50;
+  limit = 10;
   assets = [];
   $subscription = new Subscription();
   assetFG: FormGroup;
@@ -94,7 +94,6 @@ export class ImportAssetComponent implements OnInit {
   }
 
   onTabChanged(event) {
-    this.myScrollContainer.nativeElement.scrollTop = 0;
     this.tabFilterIdx = event.index;
     this.assets = [];
     this.tabFilterItems[this.tabFilterIdx].page = 0;
@@ -190,6 +189,14 @@ export class ImportAssetComponent implements OnInit {
     this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
       panelClass: 'success',
     });
+  }
+
+  loadMoreAssetData() {
+    this.loadAssetData([
+      {
+        offset: this.tabFilterItems[this.tabFilterIdx].page * this.limit,
+      },
+    ]);
   }
 
   close() {

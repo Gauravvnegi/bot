@@ -148,4 +148,8 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  min-width: 110px !important;}
+  min-width: 110px !important;
+}
+:host ::ng-deep .mat-tab-labels {
+  display: block;
+}

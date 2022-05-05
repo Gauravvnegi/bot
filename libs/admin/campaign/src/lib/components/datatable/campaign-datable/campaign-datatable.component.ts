@@ -202,6 +202,22 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       );
   }
 
+  cloneCampaign(campaignId, data) {
+    this.$subscription.add(
+      this.campaignService
+        .cloneCampaign(this.hotelId, data, campaignId)
+        .subscribe((response) => {})
+    );
+  }
+
+  archiveCampaign(campaignId, data) {
+    this.$subscription.add(
+      this.campaignService
+        .archiveCampaign(this.hotelId, data, campaignId)
+        .subscribe((response) => {})
+    );
+  }
+
   /**
    * @function openCreateCampaign to create campaign page.
    */

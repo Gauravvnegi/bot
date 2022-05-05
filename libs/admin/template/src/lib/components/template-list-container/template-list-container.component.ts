@@ -1,14 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Observable, Subscription } from 'rxjs';
-import {
-  AdminUtilityService,
-  sharedConfig,
-} from '@hospitality-bot/admin/shared';
+import { Subscription } from 'rxjs';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { TemplateService } from '../../services/template.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FormGroup } from '@angular/forms';
-import { LazyLoadEvent } from 'primeng/api';
+import { Topics } from '../../data-models/templateConfig.model';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -18,21 +15,14 @@ import { LazyLoadEvent } from 'primeng/api';
 export class TemplateListContainerComponent implements OnInit {
   hotelId: string;
   private $subscription = new Subscription();
-  templateList: any;
   @Input() templateForm: FormGroup;
+  @Input() templateType = false;
   templateData = '';
   template = '';
   globalQueries = [];
-  loading: boolean;
-  values: any;
-  totalRecords: any;
-  first: any;
-  rowsPerPage = 3;
-  rowsPerPageOptions = [3, 6, 9, 18];
-  startPage: Number;
-  paginationLimit: Number;
   @Output() change = new EventEmitter();
-  selectedTopic;
+  topicList = [];
+  topicTemplate = 'All';
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -55,11 +45,7 @@ export class TemplateListContainerComponent implements OnInit {
         ...data['dateRange'].queryValue,
       ];
       this.getHotelId(this.globalQueries);
-      this.loadInitialData([
-        {
-          order: sharedConfig.defaultOrder,
-        },
-      ]);
+      this.getTopicList(this.hotelId);
     });
   }
 
@@ -69,84 +55,28 @@ export class TemplateListContainerComponent implements OnInit {
     });
   }
 
-  loadInitialData(queries = [], loading = true): void {
-    this.loading = loading && true;
+  getTopicList(hotelId) {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        { entityState: 'ACTIVE', limit: 50 },
+      ]),
+    };
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.updateRecord(data);
-          //set pagination
-          this.totalRecords = data.totalTemplate;
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+      this.templateService.getTopicList(hotelId, config).subscribe(
+        (response) =>
+          (this.topicList = new Topics().deserialize(response).records),
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
   }
-
-  handleTopicChange(event) {
-    this.selectedTopic = event.value;
-    this.loadInitialData();
-  }
-
-  updateRecord(data) {
-    if (this.selectedTopic) {
-      data.map((item) => {
-        if (this.selectedTopic === item.topicName) {
-          console.log(item.topicName);
-          this.templateList = [item];
-        }
-      });
+  openTopicTemplates(name?: string) {
+    console.log(name)
+    if (name) {
+      this.topicTemplate = name;
     } else {
-      this.templateList = data;
+      this.topicTemplate = 'All';
     }
   }
-
-  loadData(event: LazyLoadEvent): void {
-    this.loading = true;
-    this.updatePaginations(event);
-    this.$subscription.add(
-      this.fetchDataFrom(
-        [
-          {
-            order: sharedConfig.defaultOrder,
-          },
-        ],
-        {
-          offset: this.first,
-          limit: this.rowsPerPage,
-        }
-      ).subscribe(
-        (data) => {
-          this.updateRecord(data);
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
-  }
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-  }
-
-  fetchDataFrom(
-    queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage }
-  ): Observable<any> {
-    queries.push(defaultProps);
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(queries),
-    };
-    return this.templateService.getTemplateListByTopic(config, this.hotelId);
-  }
-
   goBack() {
     this.change.emit();
   }

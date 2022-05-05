@@ -6,6 +6,7 @@ import { TemplateDatatableComponent } from './components/datatable/template-data
 import { TemplateHtmlEditorComponent } from './components/template-html-editor/template-html-editor.component';
 import { ImportAssetComponent } from './components/import-asset/import-asset.component';
 import { TemplateListContainerComponent } from './components/template-list-container/template-list-container.component';
+import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
 
 const appRoutes: Route[] = [
   { path: '', component: TemplateDatatableComponent },
@@ -26,6 +27,7 @@ export class AdminTemplateRoutingModule {
     EditTemplateComponent,
     TemplateHtmlEditorComponent,
     ImportAssetComponent,
-    TemplateListContainerComponent
+    TemplateListContainerComponent,
+    TopicTemplatesComponent
   ];
 }

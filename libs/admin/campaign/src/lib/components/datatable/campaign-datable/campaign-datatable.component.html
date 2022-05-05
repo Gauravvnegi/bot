@@ -253,52 +253,53 @@
         </div>
       </td>
       <td class="guest">
-        {{ rowData.templateId }}
+        {{ rowData.templateName }}
       </td>
       <td class="stats">
-        <div class="stats-container">
-          <div
-            class="stat-chip"
-            *ngFor="let key of getStatsCampaignChips(rowData)"
-            [ngClass]="{
-              delivered: key == 'delivered',
-              unopened: key == 'unopened',
-              opened: key == 'opened',
-              clicked: key == 'clicked',
-              failed: key == 'failed'
-            }"
-          >
-            <div>{{ key | titlecase }}</div>
+        <ng-container *ngIf="isDraft; else chipStats">
+          <div>
+            <div>Draft Mode</div>
+            <div class="date">Created on 02/10/22</div>
+          </div>
+        </ng-container>
+        <ng-template #chipStats>
+          <div class="stats-container">
             <div
-              class="stat-chip__value"
+              class="stat-chip"
+              *ngFor="let key of getStatsCampaignChips(rowData)"
               [ngClass]="{
-                delivered__value: key == 'delivered',
-                unopened__value: key == 'unopened',
-                opened__value: key == 'opened',
-                clicked__value: key == 'clicked',
-                failed__value: key == 'failed'
+                delivered: key == 'delivered',
+                unopened: key == 'unopened',
+                opened: key == 'opened',
+                clicked: key == 'clicked',
+                failed: key == 'failed'
               }"
             >
-              {{ rowData.statsCampaign[key] }}
+              <div>{{ key }}</div>
+              <div
+                class="stat-chip__value"
+                [ngClass]="{
+                  delivered__value: key == 'delivered',
+                  unopened__value: key == 'unopened',
+                  opened__value: key == 'opened',
+                  clicked__value: key == 'clicked',
+                  failed__value: key == 'failed'
+                }"
+              >
+                {{ rowData.statsCampaign[key] }}
+              </div>
+            </div>
+            <div class="sent-on">
+              <div>Sent On</div>
+              <div class="date">02/04/2022</div>
             </div>
           </div>
-          <div class="sent-on">
-            <div>Sent On</div>
-            <div class="date">02/04/2022</div>
-          </div>
-          <ng-template #draftDate>
-            <div>
-              <div>Draft Mode</div>
-              <div class="date">Created on 02/10/22</div>
-            </div>
-          </ng-template>
-        </div>
+        </ng-template>
       </td>
 
-      <td class="slide">
+      <td class="status">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
-            class="active"
             [checked]="rowData.status"
             (change)="updateCampaignStatus($event, rowData.id)"
           ></mat-slide-toggle>
@@ -311,10 +312,16 @@
           <div class="icon"></div>
           <div class="icon"></div>
           <div class="dropdown" (click)="handleDropdownClick($event)">
-            <div class="dropdown__item">
+            <div
+              class="dropdown__item"
+              (click)="cloneCampaign(rowData.id, rowData)"
+            >
               Clone Campaign
             </div>
-            <div class="dropdown__item">
+            <div
+              class="dropdown__item"
+              (click)="archiveCampaign(rowData.id, rowData)"
+            >
               Archive Campaign
             </div>
           </div>

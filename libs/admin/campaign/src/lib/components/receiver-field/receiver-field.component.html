@@ -8,12 +8,16 @@
   <div class="field">
     <input
       #receiverField
-      placeholder="Search by name, E-mail, Number, Conf. No., Profile ID or by subscriber group or listing"
+      placeholder="Add Recipent"
       class="chip-input"
       (keydown)="addChip($event)"
       (blur)="removeField($event)"
     />
-    <div class="dropdown" *ngIf="enableDropdown" (click)="handleBubbling($event)">
+    <div
+      class="dropdown"
+      *ngIf="enableDropdown"
+      (click)="handleBubbling($event)"
+    >
       <hospitality-bot-to-dropdown
         [value]="receiverField?.nativeElement?.value"
         [hotelId]="hotelId"

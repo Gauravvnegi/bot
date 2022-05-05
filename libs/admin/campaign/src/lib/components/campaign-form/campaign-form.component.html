@@ -1,0 +1,249 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p>
+    </div>
+    <div class="option">
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="dropdown" [style.height.px]="campaignId ? 118 : 69">
+        <div class="dropdown__item" (click)="sendTestCampaign()">
+          Send Test
+        </div>
+        <div
+          class="dropdown__item"
+          (click)="archiveCampaign()"
+          *ngIf="campaignId"
+        >
+          Archive Campaign
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
+    <div class="fields">
+      <div class="field">
+        <mat-label class="mat-label">From:</mat-label>
+        <mat-form-field>
+          <mat-select formControlName="fromId" placeholder="Select email">
+            <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
+              item.email
+            }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              campaignFG.get('fromId').touched &&
+              campaignFG.get('fromId').hasError('required')
+            "
+          >
+            Form is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">To:</mat-label>
+        <div class="email-field-container">
+          <hospitality-bot-receiver-field
+            [name]="'to'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('to')?.value || []"
+            (updateChipSet)="updateFieldData($event, to)"
+          ></hospitality-bot-receiver-field>
+          <div
+            style="
+              display: flex;
+              position: absolute;
+              right: 0;
+              bottom: 25px;
+              color: #4b56c0;
+            "
+          >
+            <div
+              style="margin-right: 10px; cursor: pointer;"
+              (click)="enableEmailControl($event, 'bcc')"
+              *ngIf="!campaignFG?.get('bcc')"
+            >
+              Bcc
+            </div>
+            <div
+              style="margin-right: 10px; cursor: pointer;"
+              (click)="enableEmailControl($event, 'cc')"
+              *ngIf="!campaignFG?.get('cc')"
+            >
+              Cc
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('cc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">Cc:</mat-label>
+        <div style="width: 100%;">
+          <hospitality-bot-receiver-field
+            [name]="'cc'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('cc')?.value || []"
+            (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
+          ></hospitality-bot-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('bcc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">Bcc:</mat-label>
+        <div style="width: 100%;">
+          <hospitality-bot-receiver-field
+            [name]="'bcc'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('bcc')?.value || []"
+            (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
+          ></hospitality-bot-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Subject:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="subject"
+            placeholder="Enter Subject"
+          />
+          <div style="position: absolute; right: 0; top: 0;">
+            <div style="display: flex; align-items: center;">
+              <div style="margin-right: 3px;">
+                {{ campaignFG.get('subject')?.value.length }}/200
+              </div>
+              <hospitality-bot-personalization
+                [name]="'subject'"
+                (personalization)="addPersonalization($event, 'subject')"
+              ></hospitality-bot-personalization>
+            </div>
+          </div>
+          <mat-error
+            *ngIf="
+              campaignFG.get('subject').touched &&
+              campaignFG.get('subject').hasError('required')
+            "
+          >
+            Subject is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              campaignFG.get('subject').touched &&
+              campaignFG.get('subject').hasError('maxlength')
+            "
+          >
+            Maximum length is 200 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Preivew Text:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="previewText"
+            placeholder="Enter Preview Text"
+          />
+          <div style="position: absolute; right: 0; top: 0;">
+            <div style="display: flex; align-items: center;">
+              <div style="margin-right: 3px;">
+                {{ campaignFG.get('previewText')?.value.length }}/200
+              </div>
+              <hospitality-bot-personalization
+                [name]="'previewText'"
+                (personalization)="addPersonalization($event, 'previewText')"
+              ></hospitality-bot-personalization>
+            </div>
+          </div>
+          <mat-error
+            *ngIf="
+              campaignFG.get('previewText').touched &&
+              campaignFG.get('previewText').hasError('required')
+            "
+          >
+            Preivew Text is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              campaignFG.get('previewText').touched &&
+              campaignFG.get('previewText').hasError('maxlength')
+            "
+          >
+            Maximum length is 200 characters.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div
+      class="ck-editor"
+      *ngIf="campaignFG?.get('message')?.value; else createTemplate"
+    >
+      <hospitality-bot-template-editor
+        [parentFG]="campaignFG"
+        [name]="'message'"
+        [template]="template"
+      ></hospitality-bot-template-editor>
+    </div>
+    <ng-template #createTemplate>
+      <div class="fields">
+        <div class="field full-width">
+          <mat-label class="mat-label">Add Content :</mat-label>
+          <div
+            style="
+              height: 157px;
+              width: 100%;
+              opacity: 0.4;
+              border-radius: 4px;
+              border: solid 1px #707070;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 30px;
+              cursor: pointer;
+            "
+          >
+            <div><img src="assets/svg/default_img.svg" alt="" /></div>
+            <div
+              style="
+                height: 53px;
+                border: solid 1px #707070;
+                border-radius: 40px;
+                padding: 14px 30px;
+                margin-top: 20px;
+              "
+              (click)="openAddContent()"
+            >
+              Add Content
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <div class="btn-wrapper">
+    <div
+      class="send"
+      (click)="sendMail()"
+      [ngClass]="{ active: !isSending, disabled: isSending }"
+    >
+      <div class="send__text">
+        <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
+        {{ isSending ? 'Sending' : 'Send' }}
+      </div>
+    </div>
+  </div>
+</div>

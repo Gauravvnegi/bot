@@ -1,7 +1,9 @@
 <div class="container">
   <header class="header">
     <div class="back">
-      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
       <mat-form-field>
         <mat-select
           [value]="selectedTemplate"

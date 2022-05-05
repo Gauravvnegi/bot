@@ -12,35 +12,29 @@
     </div>
 
     <div class="preDesigned">
-      <p>
-        Pre-Designed templates
-      </p>
+      <ng-container class="head" *ngIf="templateType; else preDesignTemplate">
+        <p>Saved Templates</p>
+      </ng-container>
+      <ng-template #preDesignTemplate class="head">
+        <p>Pre-Designed Templates</p>
+      </ng-template>
 
-      <hospitality-bot-topic-dropdown
-        class="field"
-        [hotelId]="hotelId"
-        [name]="'topicId'"
-        [parentForm]="templateForm"
-        (changeTopic)="handleTopicChange($event)"
-      ></hospitality-bot-topic-dropdown>
+      <mat-form-field>
+        <mat-select placeholder="All">
+          <mat-option [value]="" (click)="openTopicTemplates()">All</mat-option>
+          <mat-option
+            *ngFor="let topic of topicList"
+            [value]="topic.name"
+            (click)="openTopicTemplates(topic.name)"
+          >
+            {{ topic.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </div>
-
-  <div class="template-cards">
-    <div *ngFor="let temp of templateList">
-      <div class="heading">
-        <p>{{ temp.topicName }}</p>
-      </div>
-      <div class="topic-cards">
-        <div *ngFor="let t of temp.templates" class="card">
-          <div [innerHTML]="t.htmlTemplate"></div>
-        </div>
-      </div>
-      <div class="show-button">
-        <button class="button">
-          Show More
-        </button>
-      </div>
-    </div>
-  </div>
+  <hospitality-bot-topic-templates
+    [topic]="topicTemplate"
+    [type]="templateType"
+  ></hospitality-bot-topic-templates>
 </div>

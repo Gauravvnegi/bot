@@ -104,7 +104,7 @@
             <div
               class="manually-templates"
               mat-raised-button
-              (click)="openCreateContent(false)"
+              (click)="openCreateContent(false, 'saved')"
             >
               <img src="assets/svg/diskette.svg" alt="" />
               <div class="manually-import">
@@ -164,9 +164,10 @@
     </form>
   </div>
   <div *ngSwitchCase="1">
-    <hospitality-bot-template-list-container 
-    (change)="move(0)"
-    [templateForm]="templateForm"
+    <hospitality-bot-template-list-container
+      (change)="move(0)"
+      [templateForm]="templateForm"
+      [templateType]="typeOfTemplate"
     ></hospitality-bot-template-list-container>
   </div>
   <hospitality-bot-template-html-editor

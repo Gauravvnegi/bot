@@ -57,14 +57,21 @@ export const campaignConfig = {
     statsTabFilterItems: [
       {
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: false },
+          {
+            label: 'Delivered',
+            icon: '',
+            value: 'DELIVERED',
+            total: 0,
+            isSelected: false,
+            type: 'pending',
+          },
           {
             label: 'Opened',
             icon: '',
             value: 'OPENED',
             total: 0,
             isSelected: false,
-            type: 'new',
+            type: 'pending',
           },
           {
             label: 'Unopened ',
@@ -102,7 +109,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '20%',
+        width: '23%',
       },
       {
         field: 'templateName',
@@ -110,7 +117,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: false,
-        width: '20%',
+        width: '18%',
       },
       {
         field: 'stats',
@@ -118,7 +125,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '40%',
+        width: '36%',
       },
       {
         field: 'active',
@@ -133,7 +140,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '6%',
+        width: '8%',
       },
     ],
   },

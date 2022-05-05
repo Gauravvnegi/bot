@@ -16,24 +16,23 @@ export class Campaigns implements Deserializable {
 
 export class Campaign implements Deserializable {
   id: string;
-  status: boolean;
-  description: string;
   name: string;
   hotelId: string;
   active: boolean;
-  templateId: string;
   statsCampaign;
+  templateName: string;
+  isDraft: boolean;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
-      set({}, 'description', get(input, ['description'])),
       set({}, 'hotelId', get(input, ['hotelId'])),
       set({}, 'active', get(input, ['active'])),
-      set({}, 'templateId', get(input, ['templateId'])),
-      set({}, 'statsCampaign', get(input, ['statsCampaign']))
+      set({}, 'statsCampaign', get(input, ['statsCampaign'])),
+      set({}, 'templateName', get(input, ['templateName'])),
+      set({}, 'isDraft', get(input, ['isDraft']))
     );
     return this;
   }

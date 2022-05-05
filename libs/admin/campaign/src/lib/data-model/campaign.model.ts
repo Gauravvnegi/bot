@@ -22,6 +22,7 @@ export class Campaign implements Deserializable {
   hotelId: string;
   active: boolean;
   templateId: string;
+  statsCampaign;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -31,7 +32,8 @@ export class Campaign implements Deserializable {
       set({}, 'description', get(input, ['description'])),
       set({}, 'hotelId', get(input, ['hotelId'])),
       set({}, 'active', get(input, ['active'])),
-      set({}, 'templateId', get(input, ['templateId']))
+      set({}, 'templateId', get(input, ['templateId'])),
+      set({}, 'statsCampaign', get(input, ['statsCampaign']))
     );
     return this;
   }

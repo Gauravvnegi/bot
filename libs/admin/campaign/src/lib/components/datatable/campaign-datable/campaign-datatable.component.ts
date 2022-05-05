@@ -36,7 +36,7 @@ import { CampaignService } from '../../../services/campaign.service';
 export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit {
   tableName = 'Campaign';
-  @Input() tabFilterItems;
+  @Input() tabFilterItems = campaignConfig.datatable.tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
   isQuickFilters = true;
@@ -214,7 +214,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   openEditCampaign(campaign, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${campaign.id}`], { relativeTo: this.route });
+    this._router.navigate([`edit/${campaign.id}`], {
+      relativeTo: this.route,
+    });
   }
   handleDropdownClick(event) {
     event.stopPropagation();
@@ -396,6 +398,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   get campaignConfiguration() {
     return campaignConfig;
+  }
+
+  getStatsCampaignChips(data) {
+    return Object.keys(data.statsCampaign);
   }
 
   /**

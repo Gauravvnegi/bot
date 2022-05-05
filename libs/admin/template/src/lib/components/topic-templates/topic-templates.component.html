@@ -1,0 +1,18 @@
+<div class="template-cards">
+  <div *ngFor="let temp of templateList">
+    <div class="heading">
+      <p>{{ temp.topicName }}</p>
+    </div>
+    <div class="topic-cards">
+      <div *ngFor="let t of temp.templates" class="card">
+        <div [innerHTML]="t.htmlTemplate"></div>
+      </div>
+    </div>
+    <div class="show-button">
+      <button class="button">
+        Show More
+      </button>
+    </div>
+  </div>
+  {{ topic }}
+</div>

@@ -35,10 +35,10 @@
     .preDesigned {
       display: flex;
       padding: 40px 0 0 40px;
-
-      p {
+      .head {
         padding-top: 5px;
         padding-right: 23px;
+        width:fit-content;
       }
     }
   }
@@ -142,4 +142,7 @@
 }
 :host ::ng-deep .mat-form-field-underline {
   display: none;
+}
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 205px;
 }

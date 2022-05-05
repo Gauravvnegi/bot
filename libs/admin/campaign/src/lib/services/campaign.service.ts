@@ -53,6 +53,12 @@ export class CampaignService extends ApiService {
     return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
   }
 
+  getTemplateByContentType(entityId: string, config) {
+    return this.get(
+      `/api/v1/entity/${entityId}/templates/topic${config.queryObj}`
+    );
+  }
+
   /**
    * @function mapcampaignData map api data into campaign form data.
    * @param formValue form key values.
@@ -70,4 +76,6 @@ export class CampaignService extends ApiService {
     campaignData.templateId = formValue.templateId;
     return campaignData;
   }
+
+  createCampaignData(values) {}
 }

@@ -71,7 +71,10 @@ export class EditCampaignComponent implements OnInit {
   }
 
   setTemplate(event) {
-    this.campaignFG.patchValue({ message: event.templateHtml });
+    this.campaignFG.patchValue({
+      message: event.htmlTemplate,
+      topicId: event.topicId,
+    });
     this.stepper.selectedIndex = 0;
   }
 

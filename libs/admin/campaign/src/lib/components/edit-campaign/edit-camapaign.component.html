@@ -19,6 +19,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="2">
     <hospitality-bot-template-list
+      [hotelId]="hotelId"
       [selectedTemplate]="createContentType"
       (templateSelection)="setTemplate($event)"
       (changeStep)="changeStep($event)"

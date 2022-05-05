@@ -17,6 +17,7 @@ export class TopicDropdownComponent implements OnInit {
   @Input() hotelId: string;
   @Input() title = true;
   @Input() id = false;
+  @Input() state: string;
   @Output() changeTopic = new EventEmitter();
   private $subscription = new Subscription();
   topicList = [];
@@ -35,7 +36,7 @@ export class TopicDropdownComponent implements OnInit {
   getTopicList() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
+        { entityState: this.state || 'ALL', limit: 50 },
       ]),
     };
     this.$subscription.add(

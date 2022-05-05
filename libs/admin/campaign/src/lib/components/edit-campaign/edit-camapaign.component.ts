@@ -41,8 +41,8 @@ export class EditCampaignComponent implements OnInit {
 
   initFG(): void {
     this.campaignFG = this._fb.group({
-      fromId: ['', [Validators.required]],
-      emailIds: this._fb.array([], Validators.required),
+      from: ['', [Validators.required]],
+      to: this._fb.array([], Validators.required),
       // cc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],

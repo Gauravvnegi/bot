@@ -29,15 +29,15 @@
       <div class="field">
         <mat-label class="mat-label">From:</mat-label>
         <mat-form-field>
-          <mat-select formControlName="fromId" placeholder="Select email">
+          <mat-select formControlName="from" placeholder="Select email">
             <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
               item.email
             }}</mat-option>
           </mat-select>
           <mat-error
             *ngIf="
-              campaignFG.get('fromId').touched &&
-              campaignFG.get('fromId').hasError('required')
+              campaignFG.get('from').touched &&
+              campaignFG.get('from').hasError('required')
             "
           >
             Form is required

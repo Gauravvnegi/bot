@@ -37,6 +37,7 @@ export class Campaign implements Deserializable {
   topicId: string;
   updatedAt: number;
   deserialize(input: any) {
+    this.to = new Array();
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
@@ -58,10 +59,29 @@ export class Campaign implements Deserializable {
       set({}, 'subject', get(input, ['subject', 'text'])),
       set({}, 'templateId', get(input, ['templateId'])),
       set({}, 'testEmails', get(input, ['testEmails'], [])),
-      set({}, 'to', get(input, ['to'])),
+      // set({}, 'to', get(input, ['to'])),
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'updatedAt', get(input, ['updatedAt']))
     );
+    Object.keys(input?.to).forEach((key) => {
+      input.to[key]?.forEach((item) => {
+        if (key == 'individual')
+          this.to.push({
+            type: 'email',
+            text: item,
+          });
+        else if (key == 'subscribers')
+          this.to.push({
+            type: 'subscribers',
+            text: item,
+          });
+        else
+          this.to.push({
+            type: 'listing',
+            text: item,
+          });
+      });
+    });
     return this;
   }
 }

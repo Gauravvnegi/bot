@@ -87,7 +87,6 @@ export class CampaignFormComponent implements OnInit {
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
           this.campaignFG.patchValue(this.campaign);
-          console.log(this.campaign);
         })
     );
   }

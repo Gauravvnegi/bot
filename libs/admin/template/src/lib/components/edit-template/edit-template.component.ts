@@ -185,8 +185,7 @@ export class EditTemplateComponent implements OnDestroy {
   }
 
   handleBackFromEditor() {
-    this.stepper.selectedIndex =
-      this.htmlTemplate.value || this.createNewHtml ? 0 : 1;
+    this.stepper.selectedIndex = 0;
     this.createNewHtml = false;
     this.contentNotEditable = false;
   }

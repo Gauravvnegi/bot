@@ -15,6 +15,11 @@ export class TemplateService extends ApiService {
       `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
     );
   }
+  getTemplateListByTopicId(config, hotelId, topicId): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
+    );
+  }
 
   /**
    * @function getHotelTemplate get template list from api.

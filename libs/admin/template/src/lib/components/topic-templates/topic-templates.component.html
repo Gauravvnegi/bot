@@ -1,20 +1,17 @@
 <div class="template-cards">
-  <div *ngFor="let temp of templateList">
-    <div class="heading">
-      <p>{{ temp.topicName }}</p>
+  <div class="heading">
+    <p>{{ name }}</p>
+  </div>
+  <div class="topic-cards">
+    <div class="card" *ngFor="let t of templateList">
+      <div [innerHTML]="t.htmlTemplate"></div>
     </div>
-    <div class="topic-cards">
-      <div *ngFor="let t of temp.templates" class="card">
-        <div [innerHTML]="t.htmlTemplate"></div>
-      </div>
-    </div>
-    <div class="show-button" (click)="loadData()">
-      <ng-container *ngIf="showbutton; else dontShowButton">
-        <button class="button">
-          Show More
-        </button>
-      </ng-container>
-      <ng-template #dontShowButton> </ng-template>
+  </div>
+  <div class="show-button" (click)="loadData()">
+    <div *ngIf="showbutton">
+      <button class="button">
+        Show More
+      </button>
     </div>
   </div>
 </div>

@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Subscription } from 'rxjs';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { Observable, Subscription } from 'rxjs';
+import {
+  AdminUtilityService,
+  sharedConfig,
+} from '@hospitality-bot/admin/shared';
 import { TemplateService } from '../../services/template.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FormGroup } from '@angular/forms';
@@ -15,14 +18,19 @@ import { Topics } from '../../data-models/templateConfig.model';
 export class TemplateListContainerComponent implements OnInit {
   hotelId: string;
   private $subscription = new Subscription();
-  @Input() templateForm: FormGroup;
-  @Input() templateType = false;
   templateData = '';
   template = '';
   globalQueries = [];
-  @Output() change = new EventEmitter();
   topicList = [];
-  topicTemplate = 'All';
+  topic = 'All';
+  loading: boolean;
+  rowsPerPage = 1;
+  templateList: any;
+  topicTemplate;
+
+  @Input() templateForm: FormGroup;
+  @Input() templateType = false;
+  @Output() change = new EventEmitter();
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -46,7 +54,44 @@ export class TemplateListContainerComponent implements OnInit {
       ];
       this.getHotelId(this.globalQueries);
       this.getTopicList(this.hotelId);
+      this.loadInitialData([
+        {
+          order: sharedConfig.defaultOrder,
+          // entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+        },
+        // ...this.getSelectedQuickReplyFilters(),
+      ]);
     });
+  }
+
+  loadInitialData(queries = [], loading = true): void {
+    this.loading = loading && true;
+    this.$subscription.add(
+      this.fetchDataFrom(queries).subscribe(
+        (data) => {
+          this.templateList = data;
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
+    );
+  }
+
+  fetchDataFrom(
+    queries,
+    defaultProps = {
+      limit: this.rowsPerPage,
+      templateType: this.sendTopicParam(),
+    }
+  ): Observable<any> {
+    queries.push(defaultProps);
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
+    };
+    return this.templateService.getTemplateListByTopic(config, this.hotelId);
   }
 
   getHotelId(globalQueries): void {
@@ -69,14 +114,33 @@ export class TemplateListContainerComponent implements OnInit {
       )
     );
   }
-  openTopicTemplates(name?: string) {
-    console.log(name)
-    if (name) {
-      this.topicTemplate = name;
+
+  openTopicTemplates(topicId?: string) {
+    if (topicId) {
+      this.topic = topicId;
+      this.templateList.map((item) => {
+        if (this.topic === item.topicId) {
+          this.topicTemplate = {
+            id: item.topicId,
+            name: item.topicName,
+            totalRecords: item.totalTemplate,
+          };
+        }
+      });
     } else {
-      this.topicTemplate = 'All';
+      this.topic = 'All';
     }
   }
+  sendTopicParam() {
+    let typeOfTemplate: string;
+    if (this.templateType) {
+      typeOfTemplate = 'SAVEDTEMPLATE';
+    } else {
+      typeOfTemplate = 'PREDESIGNTEMPLATE';
+    }
+    return typeOfTemplate;
+  }
+
   goBack() {
     this.change.emit();
   }

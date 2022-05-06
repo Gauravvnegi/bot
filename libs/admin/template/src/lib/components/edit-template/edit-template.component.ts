@@ -190,7 +190,12 @@ export class EditTemplateComponent implements OnDestroy {
     this.contentNotEditable = false;
   }
 
-  deleteTemplate() {
+  deleteTemplate(templateId) {
+    this.$subscription.add(
+      this.templateService
+        .deleteTemplateImage(this.hotelId, templateId)
+        .subscribe((response) => {})
+    );
     this.templateForm.get('htmlTemplate').setValue('');
   }
 

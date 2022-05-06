@@ -51,7 +51,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
-
+  displayDraft: boolean;
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -118,6 +118,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           this.values = new Campaigns().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
+          this.displayDraft = data.isDraft;
           data.entityTypeCounts &&
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
           data.entityStateCounts &&

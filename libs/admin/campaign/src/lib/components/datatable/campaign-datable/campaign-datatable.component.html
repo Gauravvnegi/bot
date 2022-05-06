@@ -256,7 +256,7 @@
         {{ rowData.templateName }}
       </td>
       <td class="stats">
-        <ng-container *ngIf="isDraft; else chipStats">
+        <ng-container *ngIf="displayDraft; else chipStats">
           <div>
             <div>Draft Mode</div>
             <div class="date">Created on 02/10/22</div>

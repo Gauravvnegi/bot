@@ -50,7 +50,7 @@ export class EditCampaignComponent implements OnInit {
       topicId: [''],
       templateName: [' '],
       status: [true],
-      isDraft: [''],
+      isDraft: [true],
     });
   }
 

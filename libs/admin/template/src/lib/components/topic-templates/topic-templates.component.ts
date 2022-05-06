@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService, sharedConfig } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  sharedConfig,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Observable, Subscription } from 'rxjs';
 import { TemplateService } from '../../services/template.service';
@@ -8,22 +11,21 @@ import { TemplateService } from '../../services/template.service';
 @Component({
   selector: 'hospitality-bot-topic-templates',
   templateUrl: './topic-templates.component.html',
-  styleUrls: ['./topic-templates.component.scss']
+  styleUrls: ['./topic-templates.component.scss'],
 })
 export class TopicTemplatesComponent implements OnInit {
-
-  @Input() topic:string;
-  @Input() type:string;
+  @Input() topic: string;
+  @Input() type: string;
   hotelId: string;
   globalQueries = [];
   loading: boolean;
   templateList: any;
-  first=0;
+  first = 0;
   rowsPerPage = 1;
   totalRecords;
-  showbutton:boolean=true;
+  showbutton: boolean = true;
   private $subscription = new Subscription();
-  
+
   constructor(
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
@@ -45,21 +47,16 @@ export class TopicTemplatesComponent implements OnInit {
         ...data['dateRange'].queryValue,
       ];
       this.getHotelId(this.globalQueries);
-      this.loadInitialData([
-        {
-        },
-      ]);
+      this.loadInitialData([{}]);
     });
   }
 
- sendTopicParam(){
-    let typeOfTemplate:string;
-    if(this.type)
-    {
-      typeOfTemplate='SAVEDTEMPLATE';
-    }
-    else{
-      typeOfTemplate='PREDESIGNTEMPLATE';
+  sendTopicParam() {
+    let typeOfTemplate: string;
+    if (this.type) {
+      typeOfTemplate = 'SAVEDTEMPLATE';
+    } else {
+      typeOfTemplate = 'PREDESIGNTEMPLATE';
     }
     return typeOfTemplate;
   }
@@ -87,8 +84,8 @@ export class TopicTemplatesComponent implements OnInit {
   }
 
   updateRecord(data) {
-    data.map((item)=>{
-      this.totalRecords=item.totalTemplate;
+    data.map((item) => {
+      this.totalRecords = item.totalTemplate;
     });
     this.templateList = data;
   }
@@ -96,12 +93,10 @@ export class TopicTemplatesComponent implements OnInit {
   loadData(): void {
     this.loading = true;
     this.$subscription.add(
-      this.fetchDataFrom(
-        {
-          limit: this.setLimits(),
-          templateType:  this.sendTopicParam(),
-        }
-      ).subscribe(
+      this.fetchDataFrom({
+        limit: this.setLimits(),
+        templateType: this.sendTopicParam(),
+      }).subscribe(
         (data) => {
           this.updateRecord(data);
           this.loading = false;
@@ -114,23 +109,25 @@ export class TopicTemplatesComponent implements OnInit {
     );
   }
 
-  setLimits(){
-    this.rowsPerPage+=this.rowsPerPage;
-    if(this.totalRecords === this.rowsPerPage){
-      this.showbutton=false;
+  setLimits() {
+    this.rowsPerPage += this.rowsPerPage;
+    if (this.totalRecords === this.rowsPerPage) {
+      this.showbutton = false;
     }
-    
+
     return this.rowsPerPage;
   }
 
   fetchDataFrom(
     queries,
-    defaultProps = {limit: this.rowsPerPage ,templateType: this.sendTopicParam()}
+    defaultProps = {
+      limit: this.rowsPerPage,
+      templateType: this.sendTopicParam(),
+    }
   ): Observable<any> {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([defaultProps]),
     };
     return this.templateService.getTemplateListByTopic(config, this.hotelId);
   }
-
 }

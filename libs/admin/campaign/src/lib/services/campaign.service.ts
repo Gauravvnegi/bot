@@ -29,8 +29,8 @@ export class CampaignService extends ApiService {
    */
   updateCampaignStatus(hotelId, data, campaignId) {
     return this.patch(
-      `/api/v1/cms/${hotelId}/campaign/${campaignId}?isActive=${data.active}`,
-      {}
+      `/api/v1/cms/${hotelId}/campaign/${campaignId}/toggle`,
+      data
     );
   }
 

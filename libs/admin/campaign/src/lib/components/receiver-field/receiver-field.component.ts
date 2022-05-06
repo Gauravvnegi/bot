@@ -105,6 +105,10 @@ export class ReceiverFieldComponent implements OnInit {
 
   addItemFromDropdown(event) {
     this.chipList.push(event);
+    this.updateChipSet.emit({
+      value: event,
+      action: 'add',
+    });
     this.enableTextField();
   }
 

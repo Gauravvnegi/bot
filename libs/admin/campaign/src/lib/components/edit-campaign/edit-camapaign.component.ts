@@ -1,24 +1,8 @@
-import { Location } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { EmailList } from '../../data-model/email.model';
-import { CampaignService } from '../../services/campaign.service';
-import { EmailService } from '../../services/email.service';
-import { SendTestComponent } from '../send-test/send-test.component';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
@@ -42,15 +26,11 @@ export class EditCampaignComponent implements OnInit {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
+  createContentType = '';
+  @ViewChild('stepper') stepper: MatStepper;
   constructor(
-    private location: Location,
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService,
-    private _emailService: EmailService,
-    private _modalService: ModalService,
-    private _campaignService: CampaignService,
-    private activatedRoute: ActivatedRoute
+    private globalFilterService: GlobalFilterService
   ) {
     this.initFG();
   }
@@ -61,14 +41,16 @@ export class EditCampaignComponent implements OnInit {
 
   initFG(): void {
     this.campaignFG = this._fb.group({
-      fromId: ['', [Validators.required]],
-      emailIds: this._fb.array([], Validators.required),
+      from: ['', [Validators.required]],
+      to: this._fb.array([], Validators.required),
       // cc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
-      templateId: [' '],
+      templateName: [' '],
+      status: [true],
+      isDraft: [true],
     });
   }
 
@@ -80,8 +62,6 @@ export class EditCampaignComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ];
         this.getHotelId(this.globalQueries);
-        this.getFromEmails();
-        this.getTemplateId();
       })
     );
   }
@@ -92,168 +72,17 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
-  getFromEmails() {
-    this.$subscription.add(
-      this._emailService.getFromEmail(this.hotelId).subscribe(
-        (response) =>
-          (this.fromEmailList = new EmailList().deserialize(response)),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-      )
-    );
-  }
-
-  getTemplateId(): void {
-    this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.campaignId = params['id'];
-          this.getCampaignDetails(this.campaignId);
-        }
-      })
-    );
-  }
-
-  getCampaignDetails(id) {
-    this.$subscription.add(
-      this._campaignService
-        .getCampaignById(this.hotelId, id)
-        .subscribe((response) => {
-          console.log(response);
-        })
-    );
-  }
-
-  goBack() {
-    this.location.back();
-  }
-
-  sendTestCampaign() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const sendTestCampaignCompRef = this._modalService.openDialog(
-      SendTestComponent,
-      dialogConfig
-    );
-
-    this.$subscription.add(
-      sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
-        (response) => {
-          if (response.status) console.log('Send Test', response.email);
-          sendTestCampaignCompRef.close();
-        }
-      )
-    );
-  }
-
-  archiveCampaign() {}
-
-  handleTopicChange(event) {
-    this.$subscription.add(
-      this._emailService
-        .getTemplateByTopic(this.hotelId, event.value)
-        .subscribe((response) => {
-          this.templateList = response;
-        })
-    );
-  }
-
-  handleTemplateChange(event) {
-    this.template = this.modifyTemplate(event.value);
-    this.campaignFG.get('message').patchValue(this.template);
-  }
-
-  modifyTemplate(template: string) {
-    this.templateData = template;
-    if (template.indexOf('<div') != -1)
-      return template.substring(
-        template.indexOf('<div'),
-        template.lastIndexOf('</body>')
-      );
-    else return template;
-  }
-
-  getTemplateMessage(data) {
-    if (this.templateData.indexOf('<div'))
-      return (
-        this.templateData.substring(0, this.templateData.indexOf('<div')) +
-        data.message +
-        this.templateData.substring(
-          this.templateData.lastIndexOf('</body'),
-          this.templateData.length
-        )
-      );
-    else return data.message;
-  }
-
-  sendMail() {
-    if (this.campaignFG.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid form.');
-      this.campaignFG.markAllAsTouched();
-      return;
-    }
-    const reqData = this.campaignFG.getRawValue();
-    reqData.message = this.getTemplateMessage(reqData);
-    this.isSending = true;
-    this.$subscription.add(
-      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
-        (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Email sent successfully.',
-            '',
-            { panelClass: 'success' }
-          );
-        },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
-        () => (this.isSending = false)
-      )
-    );
-  }
-
-  updateFieldData(event, control) {
-    if (event.action == 'add') {
-      control.push(new FormControl(event.value));
-    } else {
-      control.removeAt(
-        control.value.indexOf((item) => item.text == event.value.text)
-      );
-    }
-  }
-
-  enableEmailControl(event, controlName: string) {
-    event.stopPropagation();
-    this.campaignFG.addControl(
-      controlName,
-      new FormArray([], Validators.required)
-    );
-    this.disableDropdown();
-  }
-
-  get to() {
-    return this.campaignFG.get('emailIds') as FormArray;
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickout() {
-    this.disableDropdown();
-  }
-
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(
-    event: KeyboardEvent
-  ) {
-    this.disableDropdown();
-  }
-
-  disableDropdown() {
-    this._emailService.disableDropdowns();
-  }
-
-  addPersonalization(value, controlName: string) {
-    const control = this.campaignFG.get(controlName);
-    control.setValue(control.value + value);
-  }
-
   setTemplate(event) {
-    this.campaignFG.get('message').setValue(event.templateHtml);
+    this.campaignFG.patchValue({
+      message: event.htmlTemplate,
+      topicId: event.topicId,
+    });
+    this.stepper.selectedIndex = 0;
+  }
+
+  changeStep(event) {
+    this.stepper[event.step]();
+    if (event.templateType) this.createContentType = event.templateType;
   }
 
   ngOnDestroy() {

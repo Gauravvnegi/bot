@@ -41,18 +41,19 @@
   </div>
   <div class="body">
     <div *ngFor="let asset of assets; let i = index" class="img-container">
-      <img
-        class="image"
-        [src]="asset.type === 'Image' ? asset.url : asset.thumbnailUrl"
-        alt="Asset"
-      />
-      <img
+      <div class="image">
+        <img
+          [src]="asset.type === 'Image' ? asset.url : asset.thumbnailUrl"
+          alt="Asset"
+        />
+      </div>
+      <div
         class="copy"
-        src="assets/svg/copy.svg"
-        alt="Copy"
         [cdkCopyToClipboard]="asset.url"
         (click)="handleCopyToClipboard($event)"
-      />
+      >
+        <div>Copy Link</div>
+      </div>
     </div>
   </div>
   <div

@@ -1,0 +1,28 @@
+@import 'main';
+
+.wrapper {
+  padding: $padding20;
+  background-color: white;
+  margin: $margin20 0px;
+  border-radius: 5px;
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .back {
+      display: flex;
+      align-items: center;
+      .label {
+        letter-spacing: 0.96px;
+        font-weight: $bold;
+        font-size: $font16;
+      }
+      .material-icons {
+        margin-right: $margin15;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

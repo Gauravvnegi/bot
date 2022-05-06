@@ -5,10 +5,12 @@ import { EditCampaignComponent } from './components/edit-campaign/edit-camapaign
 import { SendTestComponent } from './components/send-test/send-test.component';
 import { ToDropdownComponent } from './components/to-dropdown/to-dropdown.component';
 import { ReceiverFieldComponent } from './components/receiver-field/receiver-field.component';
-import { CampaignDatatableComponent } from './components/datatable/campaign-datable/campaign-datatable.component';
 import { ViewCampaignComponent } from './components/view-campaign/view-campaign.component';
 import { TemplateListComponent } from './components/template-list/template-list.component';
 import { PersonalizationComponent } from './components/personalization/personalization.component';
+import { CampaignFormComponent } from './components/campaign-form/campaign-form.component';
+import { CreateContentComponent } from './components/create-content/create-content.component';
+import { CampaignDatatableComponent } from './components/datatable/campaign-datable/campaign-datatable.component';
 
 const appRoutes: Route[] = [
   { path: '', component: CampaignComponent },
@@ -19,6 +21,7 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
+  declarations: [],
 })
 export class AdminCampaignRoutingModule {
   static components = [
@@ -31,5 +34,7 @@ export class AdminCampaignRoutingModule {
     ViewCampaignComponent,
     TemplateListComponent,
     PersonalizationComponent,
+    CampaignFormComponent,
+    CreateContentComponent,
   ];
 }

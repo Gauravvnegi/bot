@@ -67,7 +67,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  height: 15px;
+  height: 30px;
   position: relative;
   .icon {
     width: 8px;
@@ -84,7 +84,6 @@
 }
 .dropdown {
   display: none;
-  padding: 10px;
   position: absolute;
   width: 203px;
   height: 118px;
@@ -101,6 +100,10 @@
   letter-spacing: 0.96px;
   text-align: left;
   color: #002046;
+  margin: 180px 0 35px 10px;
+  padding: 10px;
+  z-index: 10000;
+
   &__item {
     padding: 18px 14px 10px 14px;
     &:hover {
@@ -161,13 +164,11 @@
 :host ::ng-deep .slide {
   text-align: center !important;
 }
-
 :host ::ng-deep .data-table-row {
   td {
     padding: $padding20 !important;
   }
 }
-
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-purple !important;
 }
@@ -202,6 +203,15 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.66px;
+  display: flex;
+  justify-content: center;
+
+  .stats-container {
+    max-width: 500px;
+    gap: 5px;
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .stats-container {

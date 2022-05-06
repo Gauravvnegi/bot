@@ -1,7 +1,9 @@
 <div class="container">
   <header class="header">
     <div class="back">
-      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
       <mat-form-field>
         <mat-select
           [value]="selectedTemplate"
@@ -18,19 +20,21 @@
   </header>
   <div
     class="topic-container"
-    *ngFor="let topic of templateData | keyvalue; let last = last"
+    *ngFor="let topic of templateData; let last = last"
   >
     <div class="title">
-      {{ topic.value.label }}
+      {{ topic.topicName | titlecase }}
     </div>
     <div class="template-list">
-      <div
-        class="template-container"
-        *ngFor="let template of topic.value.templates"
-        (click)="selectTemplate(template)"
-      >
-        <div class="template" [innerHtml]="template.templateHtml"></div>
-      </div>
+      <ng-container *ngFor="let template of topic.templates">
+        <div
+          class="template-container"
+          (click)="selectTemplate(template, topic.topicId)"
+          *ngIf="template.htmlTemplate"
+        >
+          <div class="template" [innerHtml]="template.htmlTemplate"></div>
+        </div>
+      </ng-container>
     </div>
     <div
       *ngIf="!last"

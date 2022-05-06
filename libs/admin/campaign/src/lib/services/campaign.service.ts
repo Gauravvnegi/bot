@@ -29,11 +29,24 @@ export class CampaignService extends ApiService {
    */
   updateCampaignStatus(hotelId, data, campaignId) {
     return this.patch(
-      `/api/v1/cms/${hotelId}/campaign/${campaignId}/status`,
+      `/api/v1/cms/${hotelId}/campaign/${campaignId}/toggle`,
       data
     );
   }
 
+  cloneCampaign(hotelId, data, campaignId) {
+    return this.post(
+      `/api/v1/cms/${hotelId}/campaign/${campaignId}/clone`,
+      data
+    );
+  }
+
+  archiveCampaign(hotelId, data, campaignId) {
+    return this.patch(
+      `/api/v1/cms/${hotelId}/campaign/${campaignId}/archieve`,
+      data
+    );
+  }
   /**
    * @function exportCSV To export CSV report of the table.
    * @param hotelId dynamically getting hotelId into api.
@@ -48,9 +61,14 @@ export class CampaignService extends ApiService {
       }
     );
   }
-
   getCampaignById(entityId: string, campaignId: string) {
     return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
+  }
+
+  getTemplateByContentType(entityId: string, config) {
+    return this.get(
+      `/api/v1/entity/${entityId}/templates/topic${config.queryObj}`
+    );
   }
 
   /**
@@ -60,14 +78,17 @@ export class CampaignService extends ApiService {
    * @param id campaign id.
    * @returns campaign data.
    */
-  mapcampaignData(formValue, hotelId, id?) {
+  mapCampaignData(formValue, hotelId, id?) {
     const campaignData = new Campaign();
+    campaignData.id = formValue.id;
     campaignData.active = formValue.status;
     campaignData.hotelId = hotelId;
-    campaignData.id = formValue.id;
     campaignData.name = formValue.name;
-    campaignData.description = formValue.description;
-    campaignData.templateId = formValue.templateId;
+    campaignData.templateName = formValue.templateName;
+    campaignData.isDraft = formValue.isDraft;
+
     return campaignData;
   }
+
+  createCampaignData(values) {}
 }

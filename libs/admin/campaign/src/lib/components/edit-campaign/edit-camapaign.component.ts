@@ -9,8 +9,8 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { empty, Subscription } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
@@ -63,7 +63,6 @@ export class EditCampaignComponent implements OnInit {
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
-      templateName: [''],
       status: [true],
       isDraft: [true],
       campaignType: [''],
@@ -123,7 +122,15 @@ export class EditCampaignComponent implements OnInit {
   listenForAutoSave() {
     this.$subscription.add(
       this.campaignFG.valueChanges
-        .pipe(switchMap((formValue) => this.autoSave(formValue)))
+        .pipe(
+          switchMap((formValue) =>
+            this.autoSave(formValue).pipe(
+              catchError((err) => {
+                return empty();
+              })
+            )
+          )
+        )
         .subscribe(
           (response) => {
             this.campaignId = response.id;
@@ -160,9 +167,11 @@ export class EditCampaignComponent implements OnInit {
   }
 
   setTemplate(event) {
+    debugger;
     this.campaignFG.patchValue({
       message: event.htmlTemplate,
       topicId: event.topicId,
+      templateId: event.id,
     });
     this.stepper.selectedIndex = 0;
   }

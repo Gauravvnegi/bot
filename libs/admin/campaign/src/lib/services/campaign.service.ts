@@ -102,7 +102,10 @@ export class CampaignService extends ApiService {
     if (campaignId) {
       return this.patch(`/api/v1/cms/${hotelId}/campaign/${campaignId}`, data);
     }
-    return this.post(`/api/v1/cms/${hotelId}/campaign`, data);
+    return this.post(`/api/v1/cms/${hotelId}/campaign`, {
+      ...data,
+      isDraft: true,
+    });
   }
 
   getReceiversFromData(receivers, hotelId) {

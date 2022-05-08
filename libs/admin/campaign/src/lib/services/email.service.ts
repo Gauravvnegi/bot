@@ -42,8 +42,6 @@ export class EmailService extends ApiService {
 
   createRequestData(campaign, data) {
     const reqData = {};
-    data.cc && (reqData['cc'] = this.mapSendersData('cc', data));
-    data.bcc && (reqData['bcc'] = this.mapSendersData('bcc', data));
     reqData['to'] = this.mapSendersData('to', data);
     return {
       ...reqData,

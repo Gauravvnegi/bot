@@ -167,7 +167,6 @@ export class EditCampaignComponent implements OnInit {
   }
 
   setTemplate(event) {
-    debugger;
     this.campaignFG.patchValue({
       message: event.htmlTemplate,
       topicId: event.topicId,

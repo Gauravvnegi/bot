@@ -158,6 +158,7 @@ export class CampaignFormComponent implements OnInit {
         control.value.indexOf((item) => item.text == event.value.text)
       );
     }
+    console.log(this.campaignFG.getRawValue());
     this.autoSave();
   }
 

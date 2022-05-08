@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
 import {
   ModalService,
   SnackBarService,
@@ -17,7 +16,6 @@ import {
 import { Subscription } from 'rxjs';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
-import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 
@@ -30,8 +28,8 @@ export class CampaignFormComponent implements OnInit {
   @Input() hotelId: string;
   @Input() campaignId: string;
   @Input() campaignFG: FormGroup;
+  @Input() campaign: Campaign;
   @Output() changeStep = new EventEmitter();
-  campaign: Campaign;
   templateData = '';
   templateList = [];
   fromEmailList = [];
@@ -48,9 +46,7 @@ export class CampaignFormComponent implements OnInit {
     private location: Location,
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,
-    private _modalService: ModalService,
-    private _campaignService: CampaignService,
-    private activatedRoute: ActivatedRoute
+    private _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -62,35 +58,9 @@ export class CampaignFormComponent implements OnInit {
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) => {
           this.fromEmailList = new EmailList().deserialize(response);
-          this.getTemplateId();
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
-    );
-  }
-
-  getTemplateId(): void {
-    this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.campaignId = params['id'];
-          this.getCampaignDetails(this.campaignId);
-        }
-      })
-    );
-  }
-
-  getCampaignDetails(id) {
-    this.$subscription.add(
-      this._campaignService
-        .getCampaignById(this.hotelId, id)
-        .subscribe((response) => {
-          this.campaign = new Campaign().deserialize(response);
-          this.campaignFG.patchValue(this.campaign);
-          this._campaignService
-            .getReceiversFromData(this.campaign.receivers, this.hotelId)
-            .forEach((receiver) => this.to.push(new FormControl(receiver)));
-        })
     );
   }
 
@@ -131,7 +101,6 @@ export class CampaignFormComponent implements OnInit {
   handleTemplateChange(event) {
     this.template = this.modifyTemplate(event.value);
     this.campaignFG.get('message').patchValue(this.template);
-    this.autoSave();
   }
 
   modifyTemplate(template: string) {
@@ -188,8 +157,6 @@ export class CampaignFormComponent implements OnInit {
         control.value.indexOf((item) => item.text == event.value.text)
       );
     }
-    console.log(this.campaignFG.getRawValue());
-    this.autoSave();
   }
 
   enableEmailControl(event, controlName: string) {
@@ -223,15 +190,10 @@ export class CampaignFormComponent implements OnInit {
   addPersonalization(value, controlName: string) {
     const control = this.campaignFG.get(controlName);
     control.setValue(control.value + value);
-    this.autoSave();
   }
 
   openAddContent() {
     this.changeStep.emit({ step: 'next' });
-  }
-
-  autoSave() {
-    console.log('Auto-Save');
   }
 
   ngOnDestroy() {

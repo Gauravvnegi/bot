@@ -1,8 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Campaign } from '../../data-model/campaign.model';
+import { CampaignService } from '../../services/campaign.service';
+import { EmailService } from '../../services/email.service';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
@@ -26,11 +37,15 @@ export class EditCampaignComponent implements OnInit {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
+  campaign: Campaign;
   createContentType = '';
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private activatedRoute: ActivatedRoute,
+    private _campaignService: CampaignService,
+    private _emailService: EmailService
   ) {
     this.initFG();
   }
@@ -41,6 +56,7 @@ export class EditCampaignComponent implements OnInit {
 
   initFG(): void {
     this.campaignFG = this._fb.group({
+      id: [''],
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),
       message: ['', [Validators.required]],
@@ -50,6 +66,8 @@ export class EditCampaignComponent implements OnInit {
       templateName: [' '],
       status: [true],
       isDraft: [true],
+      campaignType: [],
+      testEmails: [],
     });
   }
 
@@ -61,6 +79,7 @@ export class EditCampaignComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ];
         this.getHotelId(this.globalQueries);
+        this.getTemplateId();
       })
     );
   }
@@ -69,6 +88,52 @@ export class EditCampaignComponent implements OnInit {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
+  }
+
+  getTemplateId(): void {
+    this.$subscription.add(
+      this.activatedRoute.params.subscribe((params) => {
+        if (params['id']) {
+          this.campaignId = params['id'];
+          this.getCampaignDetails(this.campaignId);
+        }
+      })
+    );
+  }
+
+  getCampaignDetails(id) {
+    this.$subscription.add(
+      this._campaignService
+        .getCampaignById(this.hotelId, id)
+        .subscribe((response) => {
+          this.campaign = new Campaign().deserialize(response);
+          this.campaignFG.patchValue(this.campaign);
+          this._campaignService
+            .getReceiversFromData(this.campaign.receivers, this.hotelId)
+            .forEach((receiver) =>
+              (this.campaignFG.get('to') as FormArray).push(
+                new FormControl(receiver)
+              )
+            );
+          this.listenForAutoSave();
+        })
+    );
+  }
+
+  listenForAutoSave() {
+    this.campaignFG.valueChanges
+      .pipe(
+        switchMap((formValue) =>
+          this._campaignService.save(
+            this.hotelId,
+            this._emailService.createRequestData(this.campaign, formValue),
+            this.campaignId
+          )
+        )
+      )
+      .subscribe((response) => {
+        console.log('Saved');
+      });
   }
 
   setTemplate(event) {

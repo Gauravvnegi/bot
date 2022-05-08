@@ -98,9 +98,12 @@ export class CampaignService extends ApiService {
     return campaignData;
   }
 
-  createCampaignData(values) {}
-
-  getSubscriberById(id) {}
+  save(hotelId: string, data, campaignId?) {
+    if (campaignId) {
+      return this.patch(`/api/v1/cms/${hotelId}/campaign/${campaignId}`, data);
+    }
+    return this.post(`/api/v1/cms/${hotelId}/campaign`, data);
+  }
 
   getReceiversFromData(receivers, hotelId) {
     const data = [];
@@ -117,6 +120,13 @@ export class CampaignService extends ApiService {
           data: response,
           type: 'listing',
         });
+      })
+    );
+
+    receivers.subscribers?.forEach((item, index) =>
+      data.push({
+        data: { id: item, name: `Subscriber ${index + 1}` },
+        type: 'listing',
       })
     );
     return data;

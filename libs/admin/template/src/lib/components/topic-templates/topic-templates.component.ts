@@ -1,11 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  AdminUtilityService,
-  sharedConfig,
-} from '@hospitality-bot/admin/shared';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { TemplateService } from '../../services/template.service';
 
 @Component({
@@ -14,120 +10,48 @@ import { TemplateService } from '../../services/template.service';
   styleUrls: ['./topic-templates.component.scss'],
 })
 export class TopicTemplatesComponent implements OnInit {
-  @Input() topic: string;
-  @Input() type: string;
-  hotelId: string;
-  globalQueries = [];
+  @Input() template;
+  @Input() hotelId: string;
+  @Input() templateType: string;
+  @Output() selectedTemplate = new EventEmitter();
   loading: boolean;
-  templateList: any;
-  first = 0;
-  rowsPerPage = 1;
-  totalRecords;
-  showbutton: boolean = true;
+  offset = 0;
+  limit = 3;
   private $subscription = new Subscription();
 
   constructor(
-    private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
     private _snackbarService: SnackBarService
   ) {}
 
-  ngOnInit(): void {
-    this.listenForGlobalFilters();
-  }
+  ngOnInit(): void {}
 
-  initFG(): void {}
-
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-      this.loadInitialData([{}]);
-    });
-  }
-
-  sendTopicParam() {
-    let typeOfTemplate: string;
-    if (this.type) {
-      typeOfTemplate = 'SAVEDTEMPLATE';
-    } else {
-      typeOfTemplate = 'PREDESIGNTEMPLATE';
-    }
-    return typeOfTemplate;
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
-  }
-
-  loadInitialData(queries = [], loading = true): void {
-    this.loading = loading && true;
-    this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.updateRecord(data);
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
-  }
-
-  updateRecord(data) {
-    data.map((item) => {
-      this.totalRecords = item.totalTemplate;
-    });
-    this.templateList = data;
-  }
-
-  loadData(): void {
-    this.loading = true;
-    this.$subscription.add(
-      this.fetchDataFrom({
-        limit: this.setLimits(),
-        templateType: this.sendTopicParam(),
-      }).subscribe(
-        (data) => {
-          this.updateRecord(data);
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
-  }
-
-  setLimits() {
-    this.rowsPerPage += this.rowsPerPage;
-    if (this.totalRecords === this.rowsPerPage) {
-      this.showbutton = false;
-    }
-
-    return this.rowsPerPage;
-  }
-
-  fetchDataFrom(
-    queries,
-    defaultProps = {
-      limit: this.rowsPerPage,
-      templateType: this.sendTopicParam(),
-    }
-  ): Observable<any> {
+  loadData() {
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([defaultProps]),
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          offset: this.offset + this.limit,
+          limit: this.limit,
+          entityState: 'ACTIVE',
+          templateType: this.templateType,
+        },
+      ]),
     };
-    return this.templateService.getTemplateListByTopic(config, this.hotelId);
+
+    this.$subscription.add(
+      this.templateService
+        .getTemplateListByTopicId(this.hotelId, this.template.topicId, config)
+        .subscribe(
+          (response) => {
+            this.template.templates = [...this.template.templates, ...response];
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
+  selectTemplate(template) {
+    this.selectedTemplate.emit({ status: true, data: template });
   }
 }

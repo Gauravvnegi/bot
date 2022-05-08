@@ -67,7 +67,7 @@ export class ReceiverFieldComponent implements OnInit {
       !trim(this.receiverField?.nativeElement.value).length &&
       this.chipList.length
     ) {
-      this.receiverField.nativeElement.setAttribute(
+      this.receiverField?.nativeElement.setAttribute(
         'style',
         'display: none !important;'
       );

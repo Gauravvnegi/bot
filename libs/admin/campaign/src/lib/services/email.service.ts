@@ -39,4 +39,37 @@ export class EmailService extends ApiService {
     this.$disablePersonalizationPopup.subject.next(true);
     this.$disablePersonalizationPopup.previewText.next(true);
   }
+
+  createRequestData(campaign, data) {
+    const reqData = {};
+    reqData['to'] = this.mapSendersData('to', data);
+    return {
+      ...reqData,
+      name: campaign?.name,
+      topicId: data.topicId,
+      from: data.from,
+      subject: {
+        text: data.subject,
+      },
+      previewText: data.previewText,
+      message: data.message,
+      templateId: data.templateId,
+      campaignType: data.campaignType,
+      testEmails: data.testEmails,
+    };
+  }
+
+  mapSendersData(field, data) {
+    const reqData = {
+      subscribers: [],
+      listing: [],
+      individual: [],
+    };
+    data[field]?.forEach((item) => {
+      if (item.type === 'email') reqData.individual.push(item.data.name);
+      else if (item.type === 'listing') reqData.listing.push(item.data.id);
+      else reqData.subscribers.push(item.data.id);
+    });
+    return reqData;
+  }
 }

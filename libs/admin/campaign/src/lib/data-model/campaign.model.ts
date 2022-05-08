@@ -1,3 +1,4 @@
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 
 export interface Deserializable {
@@ -62,5 +63,20 @@ export class Campaign implements Deserializable {
       set({}, 'updatedAt', get(input, ['updatedAt']))
     );
     return this;
+  }
+
+  getDraftDate(timezone = '+05:30') {
+    if (this.updatedAt) {
+      return DateService.getDateFromTimeStamp(
+        this.updatedAt,
+        'DD/M/YY',
+        timezone
+      );
+    }
+    return DateService.getDateFromTimeStamp(
+      this.createdAt,
+      'DD/M/YY',
+      timezone
+    );
   }
 }

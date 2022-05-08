@@ -256,10 +256,13 @@
         {{ rowData.templateName }}
       </td>
       <td class="stats">
-        <ng-container *ngIf="isDraft; else chipStats">
+        <ng-container *ngIf="rowData?.isDraft; else chipStats">
           <div>
             <div>Draft Mode</div>
-            <div class="date">Created on 02/10/22</div>
+            <div class="date">
+              {{ rowData.updatedAt ? 'Created On' : 'Updated On' }}
+              {{ rowData.getDraftDate(globalFilterService.timezone) }}
+            </div>
           </div>
         </ng-container>
         <ng-template #chipStats>
@@ -291,7 +294,9 @@
             </div>
             <div class="sent-on">
               <div>Sent On</div>
-              <div class="date">02/04/2022</div>
+              <div class="date">
+                {{ rowData.getDraftDate(globalFilterService.timezone) }}
+              </div>
             </div>
           </div>
         </ng-template>

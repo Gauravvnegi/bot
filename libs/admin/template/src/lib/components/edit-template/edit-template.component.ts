@@ -191,7 +191,16 @@ export class EditTemplateComponent implements OnDestroy {
   }
 
   deleteTemplate() {
-    this.templateForm.get('htmlTemplate').setValue('');
+    this.$subscription.add(
+      this.templateService
+        .deleteTemplateContent(this.hotelId, this.templateId)
+        .subscribe(
+          (resposne) => {
+            this.templateForm.patchValue({ htmlTemplate: '' });
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
   }
 
   openCreateContent(newContent: boolean, type?: string) {

@@ -63,11 +63,11 @@ export class EditCampaignComponent implements OnInit {
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
-      templateName: [' '],
+      templateName: [''],
       status: [true],
       isDraft: [true],
-      campaignType: [],
-      testEmails: [],
+      campaignType: [''],
+      testEmails: this._fb.array([]),
     });
   }
 
@@ -96,7 +96,7 @@ export class EditCampaignComponent implements OnInit {
         if (params['id']) {
           this.campaignId = params['id'];
           this.getCampaignDetails(this.campaignId);
-        }
+        } else this.listenForAutoSave();
       })
     );
   }
@@ -121,19 +121,42 @@ export class EditCampaignComponent implements OnInit {
   }
 
   listenForAutoSave() {
-    this.campaignFG.valueChanges
-      .pipe(
-        switchMap((formValue) =>
-          this._campaignService.save(
+    this.$subscription.add(
+      this.campaignFG.valueChanges
+        .pipe(switchMap((formValue) => this.autoSave(formValue)))
+        .subscribe(
+          (response) => {
+            this.campaignId = response.id;
+            this.campaignFG.patchValue(response);
+          },
+          ({ error }) => {}
+        )
+    );
+  }
+
+  autoSave(data?) {
+    if (data)
+      return this._campaignService.save(
+        this.hotelId,
+        this._emailService.createRequestData(this.campaign, data),
+        this.campaignId
+      );
+    else {
+      this.$subscription.add(
+        this._campaignService
+          .save(
             this.hotelId,
-            this._emailService.createRequestData(this.campaign, formValue),
+            this._emailService.createRequestData(this.campaign, data),
             this.campaignId
           )
-        )
-      )
-      .subscribe((response) => {
-        console.log('Saved');
-      });
+          .subscribe(
+            (response) => {
+              console.log('Saved');
+            },
+            ({ error }) => {}
+          )
+      );
+    }
   }
 
   setTemplate(event) {

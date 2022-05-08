@@ -30,6 +30,7 @@ export class CampaignFormComponent implements OnInit {
   @Input() campaignFG: FormGroup;
   @Input() campaign: Campaign;
   @Output() changeStep = new EventEmitter();
+  @Output() save = new EventEmitter();
   templateData = '';
   templateList = [];
   fromEmailList = [];
@@ -157,6 +158,7 @@ export class CampaignFormComponent implements OnInit {
         control.value.indexOf((item) => item.text == event.value.text)
       );
     }
+    this.autoSave();
   }
 
   enableEmailControl(event, controlName: string) {
@@ -194,6 +196,10 @@ export class CampaignFormComponent implements OnInit {
 
   openAddContent() {
     this.changeStep.emit({ step: 'next' });
+  }
+
+  autoSave() {
+    this.save.emit();
   }
 
   ngOnDestroy() {

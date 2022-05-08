@@ -87,7 +87,9 @@ export class CampaignFormComponent implements OnInit {
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
           this.campaignFG.patchValue(this.campaign);
-          console.log(this.campaign);
+          this._campaignService
+            .getReceiversFromData(this.campaign.receivers, this.hotelId)
+            .forEach((receiver) => this.to.push(new FormControl(receiver)));
         })
     );
   }
@@ -180,13 +182,13 @@ export class CampaignFormComponent implements OnInit {
   }
 
   updateFieldData(event, control) {
-    if (event.action == 'add') {
-      control.push(new FormControl(event.value));
-    } else {
+    if (event.action == 'add') control.push(new FormControl(event.value));
+    else {
       control.removeAt(
         control.value.indexOf((item) => item.text == event.value.text)
       );
     }
+    console.log(this.campaignFG.getRawValue());
     this.autoSave();
   }
 
@@ -200,7 +202,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   get to() {
-    return this.campaignFG.get('emailIds') as FormArray;
+    return this.campaignFG.get('to') as FormArray;
   }
 
   @HostListener('document:click', ['$event'])

@@ -5,14 +5,19 @@ import { Template } from '../data-models/templateConfig.model';
 
 @Injectable()
 export class TemplateService extends ApiService {
-
   getTopicList(id: string, config): Observable<any> {
     return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
   }
 
-  getTemplateListByTopic(config, hotelId): Observable<any> {
+  getTemplateListByTopic(hotelId, config): Observable<any> {
     return this.get(
       `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
+    );
+  }
+
+  getTemplateListByTopicId(hotelId, topicId, config) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
     );
   }
 
@@ -91,9 +96,7 @@ export class TemplateService extends ApiService {
   }
 
   deleteTemplateContent(entityId: string, id: string) {
-    return this.delete(
-      `/api/v1/entity/${entityId}/templates?templateIds=${id}`
-    );
+    return this.delete(`/api/v1/entity/${entityId}/templates/${id}`);
   }
 
   /**

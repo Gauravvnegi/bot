@@ -11,6 +11,7 @@ import { PersonalizationComponent } from './components/personalization/personali
 import { CampaignFormComponent } from './components/campaign-form/campaign-form.component';
 import { CreateContentComponent } from './components/create-content/create-content.component';
 import { CampaignDatatableComponent } from './components/datatable/campaign-datable/campaign-datatable.component';
+import { EditContentComponent } from './components/edit-content/edit-content.component';
 
 const appRoutes: Route[] = [
   { path: '', component: CampaignComponent },
@@ -21,7 +22,6 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
-  declarations: [],
 })
 export class AdminCampaignRoutingModule {
   static components = [
@@ -36,5 +36,6 @@ export class AdminCampaignRoutingModule {
     PersonalizationComponent,
     CampaignFormComponent,
     CreateContentComponent,
+    EditContentComponent,
   ];
 }

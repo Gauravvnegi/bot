@@ -29,7 +29,11 @@ export class ToDropdownComponent implements OnInit {
   tabFilterIdx = 0;
   listings = {
     data: [],
-    totalRecords: 20,
+    totalRecords: 0,
+  };
+  subscribers: {
+    data: [];
+    totalRecords: 0;
   };
   offset = 0;
   constructor(
@@ -49,7 +53,7 @@ export class ToDropdownComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         {
-          limit: 2,
+          limit: 5,
           entityState: 'ACTIVE',
           offset: this.offset,
         },
@@ -60,10 +64,8 @@ export class ToDropdownComponent implements OnInit {
         .getListings(this.hotelId, config)
         .subscribe((response) => {
           this.listings.data = [...this.listings.data, ...response.records];
-          this.offset = this.offset + 2;
-          // TO-DO: Remove it once api gets fixed
-          if (response.total == 0)
-            this.listings.totalRecords = this.listings.data.length;
+          this.offset = this.offset + 5;
+          this.listings.totalRecords = response.total;
         })
     );
   }

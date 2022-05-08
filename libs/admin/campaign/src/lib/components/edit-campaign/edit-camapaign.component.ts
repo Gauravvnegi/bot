@@ -43,7 +43,6 @@ export class EditCampaignComponent implements OnInit {
     this.campaignFG = this._fb.group({
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),
-      // cc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],

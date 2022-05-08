@@ -3,6 +3,7 @@
   (selectedTabChange)="onSelectedTabChange($event)"
   mat-stretch-tabs
   class="example-stretched-tabs mat-elevation-z4"
+  click-stop-propagation
 >
   <mat-tab
     *ngFor="let tab of listItems; let index = index"

@@ -71,6 +71,14 @@ export class CampaignService extends ApiService {
     );
   }
 
+  deleteCampaignTemplate(entityId: string, campaignId) {
+    return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
+  }
+
+  getListById(id, hotelId) {
+    return this.get(`/api/v1/marketing/entity/${hotelId}/listing/${id}`);
+  }
+
   /**
    * @function mapcampaignData map api data into campaign form data.
    * @param formValue form key values.
@@ -91,4 +99,26 @@ export class CampaignService extends ApiService {
   }
 
   createCampaignData(values) {}
+
+  getSubscriberById(id) {}
+
+  getReceiversFromData(receivers, hotelId) {
+    const data = [];
+    receivers.individual.forEach((item) => {
+      data.push({
+        data: { name: item },
+        type: 'email',
+      });
+    });
+
+    receivers.listing?.forEach((item) =>
+      this.getListById(item, hotelId).subscribe((response) => {
+        data.push({
+          data: response,
+          type: 'listing',
+        });
+      })
+    );
+    return data;
+  }
 }

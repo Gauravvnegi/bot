@@ -1,3 +1,5 @@
+@import 'main';
+
 .form-field {
   width: 100%;
   height: auto;
@@ -18,9 +20,9 @@
   display: inline-block;
   width: auto;
 
-  background-color: #0077b5;
+  background-color: $c-gray-70;
   color: #fff;
-  border-radius: 3px;
+  border-radius: 18px;
   margin: 2px;
   overflow: hidden;
 }
@@ -29,14 +31,14 @@
 }
 
 .form-field .chips .chip .chip--button {
-  padding: 8px;
+  padding: 8px 10px;
   cursor: pointer;
-  background-color: #004471;
+  background-color: $c-gray-50;
   display: inline-block;
 }
 .form-field .chips .chip .chip--text {
-  padding: 8px;
-  cursor: no;
+  padding: 8px 12px;
+  cursor: none;
   display: inline-block;
   pointer-events: none;
 }

@@ -15,9 +15,7 @@ export class EditContentComponent implements OnInit {
   currentMode = 'backdrop';
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.campaignDetails);
-  }
+  ngOnInit(): void {}
 
   openAddContent() {
     this.addContent.emit();

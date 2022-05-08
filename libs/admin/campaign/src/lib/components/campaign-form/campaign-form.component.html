@@ -53,7 +53,8 @@
             [name]="'to'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('to')?.value || []"
-            (updateChipSet)="updateFieldData($event, to)"
+            [disableInput]="(campaignFG.get('to')?.value || []).length"
+            (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"
           ></hospitality-bot-receiver-field>
           <div
             style="

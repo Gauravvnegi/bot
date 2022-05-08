@@ -27,7 +27,7 @@ export class EditTemplateComponent implements OnDestroy {
   imgTemplate;
   contentNotEditable: boolean;
   createNewHtml = false;
-  typeOfTemplate: boolean = false;
+  typeOfTemplate;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -204,13 +204,18 @@ export class EditTemplateComponent implements OnDestroy {
   }
 
   openCreateContent(newContent: boolean, type?: string) {
-    if (type) {
-      this.typeOfTemplate = true;
-    } else {
-      this.typeOfTemplate = false;
-    }
+    this.typeOfTemplate = type;
     this.createNewHtml = newContent;
     this.stepper.selectedIndex = newContent ? 2 : 1;
+  }
+
+  handleTemplateListChange(event) {
+    if (event.status) {
+      this.templateForm.patchValue({ htmlTemplate: event.data });
+      this.move(2);
+      return;
+    }
+    this.move(0);
   }
 
   goBack() {

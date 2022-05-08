@@ -104,14 +104,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       this.getHotelId(this.globalQueries);
       this.tabFilterItems = [];
       this.setTabFilterItems();
-      // fetch-api for records
-      this.loadInitialData([
-        {
-          order: sharedConfig.defaultOrder,
-          entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
-        },
-        ...this.getSelectedQuickReplyFilters(),
-      ]);
     });
   }
   /**
@@ -158,6 +150,13 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
               chips: this.chips,
             })
           );
+          this.loadInitialData([
+            {
+              order: sharedConfig.defaultOrder,
+              entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
+            },
+            ...this.getSelectedQuickReplyFilters(),
+          ]);
         })
     );
   }

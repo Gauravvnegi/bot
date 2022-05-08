@@ -191,16 +191,19 @@ export class EditTemplateComponent implements OnDestroy {
   }
 
   deleteTemplate() {
-    this.$subscription.add(
-      this.templateService
-        .deleteTemplateContent(this.hotelId, this.templateId)
-        .subscribe(
-          (resposne) => {
-            this.templateForm.patchValue({ htmlTemplate: '' });
-          },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-        )
-    );
+    if (this.templateId)
+      this.$subscription.add(
+        this.templateService
+          .deleteTemplateContent(this.hotelId, this.templateId)
+          .subscribe(
+            (resposne) => {
+              this.templateForm.patchValue({ htmlTemplate: '' });
+            },
+            ({ error }) =>
+              this._snackbarService.openSnackBarAsText(error.message)
+          )
+      );
+    else this.templateForm.patchValue({ htmlTemplate: '' });
   }
 
   openCreateContent(newContent: boolean, type?: string) {

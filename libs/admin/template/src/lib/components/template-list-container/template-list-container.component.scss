@@ -24,6 +24,9 @@
       display: flex;
       padding-top: 20px;
       align-items: center;
+      p {
+        cursor: default;
+      }
       button:hover {
         background-color: transparent;
       }
@@ -36,9 +39,14 @@
       display: flex;
       padding: 40px 0 0 40px;
       .head {
-        padding-top: 5px;
+        padding-top: 8px;
         padding-right: 23px;
-        width:fit-content;
+        width: 200px;
+      }
+      .prehead {
+        padding-top: 8px;
+        padding-right: 23px;
+        width: 296px;
       }
     }
   }

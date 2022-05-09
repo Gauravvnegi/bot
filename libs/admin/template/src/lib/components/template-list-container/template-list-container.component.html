@@ -12,11 +12,11 @@
     </div>
 
     <div class="preDesigned">
-      <ng-container class="head" *ngIf="templateType; else preDesignTemplate">
-        <p>Saved Templates</p>
+      <ng-container *ngIf="templateType; else preDesignTemplate">
+        <p class="head">Saved Templates</p>
       </ng-container>
-      <ng-template #preDesignTemplate class="head">
-        <p>Pre-Designed Templates</p>
+      <ng-template #preDesignTemplate class="pre-head">
+        <p class="prehead">Pre-Designed Templates</p>
       </ng-template>
 
       <mat-form-field>

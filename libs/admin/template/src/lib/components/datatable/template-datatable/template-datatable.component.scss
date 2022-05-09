@@ -10,7 +10,7 @@
   justify-content: space-between;
 }
 .tableHeading {
-  width: 60px;
+  width: 70px;
   background-color: #eaf0f6;
   border-top: 0 !important;
   border-bottom: 0 !important;
@@ -152,4 +152,8 @@
 }
 :host ::ng-deep .mat-tab-labels {
   display: block;
+}
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.5rem 0.5rem;
+  height: 80px;
 }

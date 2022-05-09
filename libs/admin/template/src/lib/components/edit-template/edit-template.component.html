@@ -79,17 +79,26 @@
                   mat-raised-button
                   (click)="moveToEditor(true)"
                 >
-                  <img src="assets/svg/view8280.svg" alt="" />
+                  <img
+                    [src]="templateConfiguration.images.view.url"
+                    [alt]="templateConfiguration.images.view.alt"
+                  />
                 </div>
                 <div
                   class="logos__logo"
                   mat-raised-button
                   (click)="moveToEditor(false)"
                 >
-                  <img src="assets/svg/edit8278.svg" alt="" />
+                  <img
+                    [src]="templateConfiguration.images.edit.url"
+                    [alt]="templateConfiguration.images.edit.alt"
+                  />
                 </div>
                 <div class="logos__logo" (click)="deleteTemplate()">
-                  <img src="assets/svg/delete8279.svg" alt="" />
+                  <img
+                    [src]="templateConfiguration.images.delete.url"
+                    [alt]="templateConfiguration.images.delete.alt"
+                  />
                 </div>
               </div>
             </div>
@@ -107,7 +116,10 @@
               mat-raised-button
               (click)="openCreateContent(false, 'saved')"
             >
-              <img src="assets/svg/diskette.svg" alt="" />
+              <img
+                [src]="templateConfiguration.images.saved.url"
+                [alt]="templateConfiguration.images.saved.alt"
+              />
               <div class="manually-import">
                 Saved Template
               </div>
@@ -118,9 +130,9 @@
               (click)="openCreateContent(false)"
             >
               <img
-                src="assets/svg/web-design.svg"
-                alt=""
                 class="built-template"
+                [src]="templateConfiguration.images.inbuilt.url"
+                [alt]="templateConfiguration.images.inbuilt.alt"
               />
               <div class="manually-import">
                 In-Built Template
@@ -131,7 +143,11 @@
               mat-raised-button
               (click)="openCreateContent(true)"
             >
-              <img src="assets/svg/design.svg" alt="" />
+              <img
+                class="built-template"
+                [src]="templateConfiguration.images.editTemplate.url"
+                [alt]="templateConfiguration.images.editTemplate.alt"
+              />
               <div class="manually-import">
                 Create New(HTML Editor)
               </div>

@@ -10,6 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { trim } from 'lodash';
 import { Template } from '../../data-models/templateConfig.model';
+import { templateConfig } from '../../constants/template';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
@@ -62,6 +63,10 @@ export class TemplateHtmlEditorComponent implements OnInit {
   assetImportEnable(event) {
     event.stopPropagation();
     this.enableAssetImport = true;
+  }
+
+  get templateConfiguration() {
+    return templateConfig;
   }
 
   back() {

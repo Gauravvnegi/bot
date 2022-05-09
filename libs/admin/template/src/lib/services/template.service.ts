@@ -14,7 +14,7 @@ export class TemplateService extends ApiService {
       `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
     );
   }
-
+  
   getTemplateListByTopicId(hotelId, topicId, config) {
     return this.get(
       `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`

@@ -4,6 +4,10 @@ import { Campaign } from '../data-model/campaign.model';
 
 @Injectable()
 export class CampaignService extends ApiService {
+  getTopicList(id: string, config) {
+    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
+  }
+
   getListings(hotelId: string, config) {
     return this.get(
       `/api/v1/marketing/entity/${hotelId}/listing${config.queryObj}`
@@ -68,6 +72,12 @@ export class CampaignService extends ApiService {
   getTemplateByContentType(entityId: string, config) {
     return this.get(
       `/api/v1/entity/${entityId}/templates/topic${config.queryObj}`
+    );
+  }
+
+  getTemplateListByTopicId(hotelId, topicId, config) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
     );
   }
 

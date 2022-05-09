@@ -219,6 +219,15 @@ export class EditCampaignComponent implements OnInit {
   }
 
   changeStep(event) {
+    if (event.status) {
+      this.campaignFG.patchValue({ message: event.data });
+      this.stepper.selectedIndex = 0;
+      return;
+    }
+    this.stepper.selectedIndex = 1;
+  }
+
+  handleCreateContentChange(event) {
     this.stepper[event.step]();
     if (event.templateType) this.createContentType = event.templateType;
   }

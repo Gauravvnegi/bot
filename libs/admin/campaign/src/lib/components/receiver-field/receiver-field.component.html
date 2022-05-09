@@ -2,7 +2,7 @@
   <div class="form-field disabled">
     <div class="chips">
       <div class="chip" *ngFor="let chip of chipList">
-        <span class="chip--text">{{ chip.data.name }}</span>
+        <span class="chip--text">{{ chip.data?.name }}</span>
         <span class="chip--button">x</span>
       </div>
     </div>
@@ -12,7 +12,7 @@
   <div class="form-field" (click)="enableReceiverField($event)">
     <div class="chips">
       <div class="chip" *ngFor="let chip of chipList">
-        <span class="chip--text">{{ chip.data.name }}</span>
+        <span class="chip--text">{{ chip.data?.name }}</span>
         <span class="chip--button" (click)="removeChip(chip, $event)">x</span>
       </div>
     </div>

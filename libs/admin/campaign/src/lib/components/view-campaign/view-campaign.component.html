@@ -6,6 +6,26 @@
       >
       <p class="label">View Campaign</p>
     </div>
+    <div class="option">
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div
+        class="dropdown"
+        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
+      >
+        <div class="dropdown__item" (click)="sendTestCampaign()">
+          Send Test
+        </div>
+        <div
+          class="dropdown__item"
+          (click)="archiveCampaign()"
+          *ngIf="campaignId"
+        >
+          Archive Campaign
+        </div>
+      </div>
+    </div>
   </header>
   <div class="sent-details">
     <div class="icon"></div>

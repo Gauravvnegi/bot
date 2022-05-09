@@ -150,7 +150,10 @@ export class CampaignFormComponent implements OnInit {
       this.campaignFG.markAllAsTouched();
       return;
     }
-    const reqData = this.campaignFG.getRawValue();
+    const reqData = this._emailService.createRequestData(
+      this.campaign,
+      this.campaignFG.getRawValue()
+    );
     reqData.message = this.getTemplateMessage(reqData);
     this.isSending = true;
     this.$subscription.add(

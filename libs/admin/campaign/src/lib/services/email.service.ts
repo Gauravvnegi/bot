@@ -71,6 +71,7 @@ export class EmailService extends ApiService {
       individual: [],
     };
     data[field]?.forEach((item) => {
+      debugger;
       if (item.type === 'email') reqData.individual.push(item.data.name);
       else if (item.type === 'listing') reqData.listing.push(item.data.id);
       else reqData.subscribers.push(item.data.id);

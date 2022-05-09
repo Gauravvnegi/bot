@@ -111,4 +111,8 @@ export class TemplateListContainerComponent implements OnInit {
   goBack() {
     this.change.emit({ status: false });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

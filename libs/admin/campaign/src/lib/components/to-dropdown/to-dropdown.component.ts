@@ -73,4 +73,8 @@ export class ToDropdownComponent implements OnInit {
   selectItem(type, list) {
     this.selectedList.emit({ type, data: list });
   }
+
+  ngOnDestroy() {
+    this.$subscriptions.unsubscribe();
+  }
 }

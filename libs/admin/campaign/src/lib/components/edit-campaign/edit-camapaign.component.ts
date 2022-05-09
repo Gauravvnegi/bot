@@ -123,7 +123,8 @@ export class EditCampaignComponent implements OnInit {
         this.addFormArray('to', 'toReceivers'),
         this.addFormArray('cc', 'ccReveivers'),
         this.addFormArray('bcc', 'bccReveivers'),
-      ]).then((res) => resolve(res[0]));
+        this.addtestEmails(),
+      ]).then((res) => resolve(res[3]));
     });
   }
 
@@ -148,6 +149,17 @@ export class EditCampaignComponent implements OnInit {
             );
           });
       }
+      resolve(this.campaign);
+    });
+  }
+
+  addtestEmails() {
+    return new Promise((resolve, reject) => {
+      this.campaign.testEmails.forEach((item) =>
+        (this.campaignFG.get('testEmails') as FormArray).push(
+          new FormControl(item)
+        )
+      );
       resolve(this.campaign);
     });
   }

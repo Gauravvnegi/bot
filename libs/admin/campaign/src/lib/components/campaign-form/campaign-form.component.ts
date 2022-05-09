@@ -97,7 +97,19 @@ export class CampaignFormComponent implements OnInit {
                 this.campaignFG.getRawValue()
               );
               reqData.message = this.getTemplateMessage(reqData);
-              this._emailService.sendTest(this.hotelId, reqData);
+              this.$subscription.add(
+                this._emailService.sendTest(this.hotelId, reqData).subscribe(
+                  (response) => {
+                    this._snackbarService.openSnackBarAsText(
+                      'Campaign sent to test email(s).',
+                      '',
+                      { panelClass: 'success' }
+                    );
+                  },
+                  ({ error }) =>
+                    this._snackbarService.openSnackBarAsText(error.message)
+                )
+              );
             }
           }
           sendTestCampaignCompRef.close();

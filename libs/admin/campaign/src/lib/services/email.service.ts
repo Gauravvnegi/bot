@@ -73,8 +73,8 @@ export class EmailService extends ApiService {
     };
     data[field]?.forEach((item) => {
       if (item.type === 'email') reqData.individual.push(item.data.name);
-      else if (item.type === 'listing') reqData.listing.push(item.data.id);
-      else reqData.subscribers.push(item.data.id);
+      // else if (item.type === 'listing') reqData.listing.push(item.data.id);
+      // else reqData.subscribers.push(item.data.id);
     });
     return reqData;
   }

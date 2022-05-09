@@ -54,4 +54,8 @@ export class TopicTemplatesComponent implements OnInit {
   selectTemplate(template) {
     this.selectedTemplate.emit({ status: true, data: template });
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

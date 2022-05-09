@@ -148,4 +148,8 @@ export class ViewCampaignComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

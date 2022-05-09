@@ -52,7 +52,9 @@
     <ng-template #listing>
       <div class="sub-title">
         You can create a new List from the
-        <span class="color">Listing Page</span>
+        <span class="color" (click)="redirect('/pages/library/listing')"
+          >Listing Page</span
+        >
       </div>
       <div class="listing">
         <div

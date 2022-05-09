@@ -26,6 +26,10 @@ export class EmailService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/templates/topic/${topicId}`);
   }
 
+  getAllSubscriberGroup(hotelId: string) {
+    return this.get(`/api/v1/marketing/entity/${hotelId}/subscription-group`);
+  }
+
   sendEmail(hotelId: string, data) {
     return this.post(`/api/v1/cms/${hotelId}/campaign`, {
       ...data,
@@ -50,7 +54,6 @@ export class EmailService extends ApiService {
     reqData['to'] = this.mapSendersData('to', data);
     if (data['cc']) reqData['cc'] = this.mapSendersData('cc', data);
     if (data['bcc']) reqData['bcc'] = this.mapSendersData('bcc', data);
-    debugger;
     return {
       ...reqData,
       name: campaign?.name,

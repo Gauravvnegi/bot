@@ -44,6 +44,12 @@
       }
     }
   }
+  .sent-details {
+    display: flex;
+    align-items: center;
+    margin-left: 38px;
+    opacity: 0.5;
+  }
 }
 
 .dropdown {

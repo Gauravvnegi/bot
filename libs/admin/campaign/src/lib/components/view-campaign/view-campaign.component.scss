@@ -7,6 +7,15 @@
   background-color: white;
   margin: $margin20 0px;
   border-radius: 5px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: #002046;
   &-header {
     display: flex;
     justify-content: space-between;
@@ -46,6 +55,19 @@
       }
     }
   }
+  .sent-details {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+    opacity: 0.5;
+    .icon {
+      width: 8px;
+      height: 8px;
+      margin: 0 10px;
+      background-color: #00e30f;
+      border-radius: 50%;
+    }
+  }
 }
 
 .dropdown {
@@ -76,7 +98,7 @@
 }
 
 .body {
-  padding-top: 30px;
+  padding: 0;
 }
 
 .fields {
@@ -293,4 +315,27 @@
   line-height: normal;
   letter-spacing: 0.96px;
   text-align: left;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 35px 0;
+  .stats {
+    width: 169px;
+    height: 94px;
+    padding: 24px 47px 22px 48px;
+    opacity: 0.55;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+    border: solid 1px #707070;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    &__text {
+      margin-top: 6px;
+    }
+  }
 }

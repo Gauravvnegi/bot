@@ -37,7 +37,7 @@ export class ViewCampaignComponent implements OnInit {
     private location: Location,
     private _fb: FormBuilder,
     private _snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     private _emailService: EmailService,
     private _campaignService: CampaignService,
     private activatedRoute: ActivatedRoute

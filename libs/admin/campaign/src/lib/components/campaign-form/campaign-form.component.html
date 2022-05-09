@@ -27,6 +27,17 @@
       </div>
     </div>
   </header>
+  <div class="sent-details">
+    <div>
+      Drafted on
+      {{
+        campaign.getDraftDate(
+          globalFilterService.timezone,
+          'MMM DD, YYYY hh:mm a'
+        )
+      }}
+    </div>
+  </div>
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
     <div class="fields">
       <div class="field">

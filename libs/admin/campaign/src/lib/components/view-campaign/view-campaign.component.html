@@ -7,7 +7,28 @@
       <p class="label">View Campaign</p>
     </div>
   </header>
+  <div class="sent-details">
+    <div class="icon"></div>
+    <div>
+      Sent on
+      {{
+        campaign.getDraftDate(
+          globalFilterService.timezone,
+          'MMM DD, YYYY hh:mm a'
+        )
+      }}
+    </div>
+  </div>
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
+    <div class="stats-container">
+      <div
+        class="stats"
+        *ngFor="let item of campaign?.statsCampaign | keyvalue"
+      >
+        <div>{{ item.value }}</div>
+        <div class="stats__text">{{ item.key | titlecase }}</div>
+      </div>
+    </div>
     <div class="fields">
       <div class="field">
         <mat-label class="mat-label">From:</mat-label>

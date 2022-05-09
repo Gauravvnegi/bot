@@ -10,6 +10,7 @@ import {
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
@@ -49,7 +50,8 @@ export class CampaignFormComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,
     private _modalService: ModalService,
-    private _router: Router
+    private _router: Router,
+    public globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {

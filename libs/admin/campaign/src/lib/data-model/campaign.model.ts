@@ -72,18 +72,10 @@ export class Campaign implements Deserializable {
     return this;
   }
 
-  getDraftDate(timezone = '+05:30') {
+  getDraftDate(timezone = '+05:30', format = 'DD/M/YY') {
     if (this.updatedAt) {
-      return DateService.getDateFromTimeStamp(
-        this.updatedAt,
-        'DD/M/YY',
-        timezone
-      );
+      return DateService.getDateFromTimeStamp(this.updatedAt, format, timezone);
     }
-    return DateService.getDateFromTimeStamp(
-      this.createdAt,
-      'DD/M/YY',
-      timezone
-    );
+    return DateService.getDateFromTimeStamp(this.createdAt, format, timezone);
   }
 }

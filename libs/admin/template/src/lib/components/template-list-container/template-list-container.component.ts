@@ -1,14 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Observable, Subscription } from 'rxjs';
-import {
-  AdminUtilityService,
-  sharedConfig,
-} from '@hospitality-bot/admin/shared';
-import { TemplateService } from '../../services/template.service';
-import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FormGroup } from '@angular/forms';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/templateConfig.model';
+import { TemplateService } from '../../services/template.service';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -16,132 +12,95 @@ import { Topics } from '../../data-models/templateConfig.model';
   styleUrls: ['./template-list-container.component.scss'],
 })
 export class TemplateListContainerComponent implements OnInit {
-  hotelId: string;
   private $subscription = new Subscription();
-  templateData = '';
-  template = '';
-  globalQueries = [];
-  topicList = [];
-  topic = 'All';
-  loading: boolean;
-  rowsPerPage = 1;
-  templateList: any;
-  topicTemplate;
-
+  @Input() hotelId: string;
   @Input() templateForm: FormGroup;
-  @Input() templateType = false;
+  @Input() templateType: string;
   @Output() change = new EventEmitter();
-
+  topicList = [];
+  templateTopicList = [];
   constructor(
-    private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
     private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
+    this.getTopicList();
+    this.getTemplateForAllTopics();
   }
 
-  initFG(): void {}
+  ngOnChanges() {}
 
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-      this.getTopicList(this.hotelId);
-      this.loadInitialData([
-        {
-          order: sharedConfig.defaultOrder,
-          // entityType: this.tabFilterItems[this.tabFilterIdx]?.value,
-        },
-        // ...this.getSelectedQuickReplyFilters(),
-      ]);
-    });
-  }
-
-  loadInitialData(queries = [], loading = true): void {
-    this.loading = loading && true;
-    this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.templateList = data;
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
-      )
-    );
-  }
-
-  fetchDataFrom(
-    queries,
-    defaultProps = {
-      limit: this.rowsPerPage,
-      templateType: this.sendTopicParam(),
-    }
-  ): Observable<any> {
-    queries.push(defaultProps);
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(queries),
-    };
-    return this.templateService.getTemplateListByTopic(config, this.hotelId);
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
-  }
-
-  getTopicList(hotelId) {
+  getTopicList() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
+        {
+          limit: 50,
+          entityState: 'ACTIVE',
+        },
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(hotelId, config).subscribe(
-        (response) =>
-          (this.topicList = new Topics().deserialize(response).records),
+      this.templateService.getTopicList(this.hotelId, config).subscribe(
+        (response) => {
+          this.topicList = new Topics().deserialize(response).records;
+        },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
   }
 
-  openTopicTemplates(topicId?: string) {
-    if (topicId) {
-      this.topic = topicId;
-      this.templateList.map((item) => {
-        if (this.topic === item.topicId) {
-          this.topicTemplate = {
-            id: item.topicId,
-            name: item.topicName,
-            totalRecords: item.totalTemplate,
-          };
-        }
-      });
-    } else {
-      this.topic = 'All';
-    }
+  getTemplateForAllTopics() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: 'ACTIVE',
+          limit: 3,
+          templateType: this.templateType,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.templateService
+        .getTemplateListByTopic(this.hotelId, config)
+        .subscribe((response) => {
+          this.templateTopicList = response;
+        })
+    );
   }
-  sendTopicParam() {
-    let typeOfTemplate: string;
-    if (this.templateType) {
-      typeOfTemplate = 'SAVEDTEMPLATE';
-    } else {
-      typeOfTemplate = 'PREDESIGNTEMPLATE';
-    }
-    return typeOfTemplate;
+
+  getTemplateByTopicId(topic) {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: 'ACTIVE',
+          limit: 3,
+          templateType: this.templateType,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.templateService
+        .getTemplateListByTopicId(this.hotelId, topic.id, config)
+        .subscribe((response) => {
+          this.templateTopicList = [
+            {
+              templates: response,
+              topicId: topic.id,
+              topicName: topic.name,
+              totalTemplate: response.length,
+            },
+          ];
+        })
+    );
+  }
+
+  setTemplate(event) {
+    this.change.emit(event);
   }
 
   goBack() {
-    this.change.emit();
+    this.change.emit({ status: false });
   }
 }

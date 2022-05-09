@@ -7,9 +7,11 @@
   <ng-container *ngSwitchCase="0">
     <hospitality-bot-campaign-form
       [hotelId]="hotelId"
+      [campaign]="campaign"
       [campaignId]="campaignId"
       [campaignFG]="campaignFG"
       (changeStep)="changeStep($event)"
+      (save)="autoSave()"
     ></hospitality-bot-campaign-form>
   </ng-container>
   <ng-container *ngSwitchCase="1">

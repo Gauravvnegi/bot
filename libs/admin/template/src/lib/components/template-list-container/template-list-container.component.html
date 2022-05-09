@@ -12,7 +12,9 @@
     </div>
 
     <div class="preDesigned">
-      <ng-container *ngIf="templateType; else preDesignTemplate">
+      <ng-container
+        *ngIf="templateType == 'SAVEDTEMPLATE'; else preDesignTemplate"
+      >
         <p class="head">Saved Templates</p>
       </ng-container>
       <ng-template #preDesignTemplate class="pre-head">
@@ -21,11 +23,13 @@
 
       <mat-form-field>
         <mat-select placeholder="All">
-          <mat-option [value]="" (click)="openTopicTemplates()">All</mat-option>
+          <mat-option [value]="" (click)="getTemplateForAllTopics()"
+            >All</mat-option
+          >
           <mat-option
             *ngFor="let topic of topicList"
             [value]="topic.name"
-            (click)="openTopicTemplates(topic.id)"
+            (click)="getTemplateByTopicId(topic)"
           >
             {{ topic.name }}
           </mat-option>
@@ -33,31 +37,12 @@
       </mat-form-field>
     </div>
   </div>
-  <ng-container *ngIf="topic === 'All'; else openTopicTemplate">
-    <div class="template-cards">
-      <div *ngFor="let temp of templateList">
-        <div class="heading">
-          <p>{{ temp.topicName }}</p>
-        </div>
-        <div class="topic-cards">
-          <div *ngFor="let t of temp.templates" class="card">
-            <div [innerHTML]="t.htmlTemplate"></div>
-          </div>
-        </div>
-        <div class="show-button" (click)="loadData()">
-          <!-- <div *ngIf="showbutton"> -->
-          <button class="button">
-            Show More
-          </button>
-          <!-- </div> -->
-        </div>
-      </div>
-    </div>
-  </ng-container>
-  <ng-template #openTopicTemplate>
+  <ng-container *ngFor="let template of templateTopicList">
     <hospitality-bot-topic-templates
-      [topic]="topicTemplate"
-      [type]="templateType"
+      [hotelId]="hotelId"
+      [templateType]="templateType"
+      [template]="template"
+      (selectedTemplate)="setTemplate($event)"
     ></hospitality-bot-topic-templates>
-  </ng-template>
+  </ng-container>
 </div>

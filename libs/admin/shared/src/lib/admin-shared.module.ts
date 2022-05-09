@@ -26,6 +26,7 @@ import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdo
 import { CKEditorModule } from 'ckeditor4-angular';
 import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { ClickStopPropagation } from './directives/stoppropagation.directive';
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     FeatureDirective,
     ChannelDirective,
     ClickableDirective,
+    ClickStopPropagation,
     UploadCsvComponent,
     UploadVideoComponent,
     TopicDropdownComponent,
@@ -82,6 +84,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     UploadVideoComponent,
     TopicDropdownComponent,
     TemplateEditorComponent,
+    ClickStopPropagation,
   ],
 })
 export class AdminSharedModule {}

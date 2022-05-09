@@ -114,7 +114,7 @@
             <div
               class="manually-templates"
               mat-raised-button
-              (click)="openCreateContent(false, 'saved')"
+              (click)="openCreateContent(false, 'SAVEDTEMPLATE')"
             >
               <img
                 [src]="templateConfiguration.images.saved.url"
@@ -127,7 +127,7 @@
             <div
               class="manually-templates"
               mat-raised-button
-              (click)="openCreateContent(false)"
+              (click)="openCreateContent(false, 'PREDESIGNTEMPLATE')"
             >
               <img
                 class="built-template"
@@ -182,7 +182,8 @@
   </div>
   <div *ngSwitchCase="1">
     <hospitality-bot-template-list-container
-      (change)="move(0)"
+      (change)="handleTemplateListChange($event)"
+      [hotelId]="hotelId"
       [templateForm]="templateForm"
       [templateType]="typeOfTemplate"
     ></hospitality-bot-template-list-container>

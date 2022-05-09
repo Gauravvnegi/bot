@@ -35,7 +35,7 @@
   &-form {
     padding-left: $padding20;
 
-    .feilds {
+    .fields {
       display: flex;
       align-items: center;
       margin-top: 2%;
@@ -73,7 +73,7 @@
         margin-bottom: 20px;
       }
 
-      .feild {
+      .field {
         display: flex;
         align-items: center;
         width: 31.5%;
@@ -366,7 +366,7 @@
   display: none !important;
 }
 
-:host ::ng-deep .feild.description-feild {
+:host ::ng-deep .field.description-field {
   width: 100% !important;
   display: block;
 }

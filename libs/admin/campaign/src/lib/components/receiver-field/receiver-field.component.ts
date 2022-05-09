@@ -2,6 +2,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnInit,
   Output,
@@ -21,6 +22,7 @@ export class ReceiverFieldComponent implements OnInit {
   @Input() chipList = [];
   @Input() name: string;
   @Input() hotelId: string;
+  @Input() disableInput = false;
   @Output() updateChipSet = new EventEmitter();
   enableDropdown = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -29,6 +31,13 @@ export class ReceiverFieldComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForEnableDropdown();
+  }
+
+  ngOnChanges() {
+    if (this.disableInput) {
+      this.removeField(null);
+      this.disableInput = false;
+    }
   }
 
   listenForEnableDropdown() {
@@ -55,10 +64,10 @@ export class ReceiverFieldComponent implements OnInit {
 
   removeField(event) {
     if (
-      !trim(this.receiverField.nativeElement.value).length &&
+      !trim(this.receiverField?.nativeElement.value).length &&
       this.chipList.length
     ) {
-      this.receiverField.nativeElement.setAttribute(
+      this.receiverField?.nativeElement.setAttribute(
         'style',
         'display: none !important;'
       );
@@ -74,7 +83,7 @@ export class ReceiverFieldComponent implements OnInit {
       });
       this.updateChipSet.emit({
         value: {
-          text: this.receiverField.nativeElement.value,
+          data: { name: this.receiverField.nativeElement.value },
           type: 'email',
         },
         action: 'add',
@@ -90,10 +99,6 @@ export class ReceiverFieldComponent implements OnInit {
     this.enableTextField();
     this.enableDropdownItems();
     this.receiverField.nativeElement.focus();
-  }
-
-  handleBubbling(event) {
-    event.stopPropagation();
   }
 
   enableDropdownItems() {

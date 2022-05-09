@@ -16,8 +16,8 @@
   </header>
   <form [formGroup]="templateForm">
     <div class="wrapper-form">
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Name:</mat-label>
           <mat-form-field>
             <input
@@ -35,7 +35,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <div class="import-assets" (click)="assetImportEnable($event)">
             <img
               class="import-image"
@@ -54,8 +54,8 @@
           </div>
         </div>
       </div>
-      <div class="feilds" *ngIf="!isDisabled">
-        <div class="feild">
+      <div class="fields" *ngIf="!isDisabled">
+        <div class="field">
           <mat-label class="mat-label">Shared templates</mat-label>
           <mat-checkbox formControlName="shared"></mat-checkbox>
         </div>

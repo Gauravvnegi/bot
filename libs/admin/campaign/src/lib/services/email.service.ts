@@ -46,7 +46,6 @@ export class EmailService extends ApiService {
   }
 
   createRequestData(campaign, data) {
-    debugger;
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
     if (data['cc']) this.mapSendersData('cc', data);
@@ -69,7 +68,6 @@ export class EmailService extends ApiService {
   }
 
   mapSendersData(field, data) {
-    debugger;
     const reqData = {
       subscribers: [],
       listing: [],

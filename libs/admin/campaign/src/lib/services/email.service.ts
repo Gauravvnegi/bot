@@ -29,7 +29,10 @@ export class EmailService extends ApiService {
   }
 
   sendEmail(hotelId: string, data) {
-    return this.post(`/api/v1/entity/${hotelId}/notifications/send`, data);
+    return this.post(`/api/v1/cms/${hotelId}/campaign`, {
+      ...data,
+      isDraft: false,
+    });
   }
 
   sendTest(hotelId: string, data) {

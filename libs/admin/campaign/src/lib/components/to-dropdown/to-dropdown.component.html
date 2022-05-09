@@ -17,28 +17,18 @@
         <span class="color">Customer Page</span>
       </div>
       <div class="listing">
-        <div class="item-container">
-          <div>All Subscribers</div>
-          <div class="data">2452 Guests</div>
-        </div>
         <div
           class="item-container"
-          (click)="selectItem('SUBSCRIBER', { name: 'Resident' })"
+          *ngFor="let group of subscribers | keyvalue"
+          (click)="
+            selectItem('SUBSCRIBER', {
+              name: group.key,
+              id: group.value[0]?.subsGroupId
+            })
+          "
         >
-          <div>Resident</div>
-          <div class="data">2412 Guests</div>
-        </div>
-        <div class="item-container">
-          <div>Non-Resident</div>
-          <div class="data">43 Guests</div>
-        </div>
-        <div class="item-container">
-          <div>Due-in</div>
-          <div class="data">43 Guests</div>
-        </div>
-        <div class="item-container">
-          <div>Stay Over</div>
-          <div class="data">43 Guests</div>
+          <div>{{ group.key }}</div>
+          <div class="data">{{ group.value.length }} Guests</div>
         </div>
       </div>
       <div class="division"></div>

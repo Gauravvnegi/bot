@@ -96,11 +96,10 @@
       </div>
       <!-- <div>{{ campaignDetails | json }}</div> -->
     </div>
-    <hospitality-bot-template-editor
-      [parentFG]="campaignFG"
-      [name]="'message'"
-      [template]="template"
-      [disabled]="true"
-    ></hospitality-bot-template-editor>
+    <hospitality-bot-edit-content
+      [campaignFG]="campaignFG"
+      [campaignDetails]="campaign"
+      [viewMode]="true"
+    ></hospitality-bot-edit-content>
   </div>
 </div>

@@ -232,7 +232,11 @@ export class EditCampaignComponent implements OnInit {
 
   changeStep(event) {
     if (event.status) {
-      this.campaignFG.patchValue({ message: event.data });
+      this.campaignFG.patchValue({
+        message: event.data.htmlTemplate,
+        templateId: event.data.id,
+        topicId: event.data.topicId,
+      });
       this.stepper.selectedIndex = 0;
       return;
     }

@@ -48,6 +48,8 @@ export class EmailService extends ApiService {
   createRequestData(campaign, data) {
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
+    if (data['cc']) this.mapSendersData('cc', data);
+    if (data['bcc']) this.mapSendersData('bcc', data);
     return {
       ...reqData,
       name: campaign?.name,
@@ -73,9 +75,30 @@ export class EmailService extends ApiService {
     };
     data[field]?.forEach((item) => {
       if (item.type === 'email') reqData.individual.push(item.data.name);
-      // else if (item.type === 'listing') reqData.listing.push(item.data.id);
-      // else reqData.subscribers.push(item.data.id);
+      else if (item.type === 'listing') reqData.listing.push(item.data.id);
+      else reqData.subscribers.push(item.data.id);
     });
     return reqData;
+  }
+
+  createTestResquestData(data) {
+    const reqData = {};
+    reqData['to'] = this.mapSendersData('to', data);
+    if (data['cc']) this.mapSendersData('cc', data);
+    if (data['bcc']) this.mapSendersData('bcc', data);
+    return {
+      ...reqData,
+      topicId: data.topicId,
+      from: data.from,
+      subject: {
+        text: data.subject,
+      },
+      previewText: data.previewText,
+      message: data.message,
+      templateId: data.templateId,
+      campaignType: data.campaignType,
+      testEmails: data.testEmails,
+      isDraft: data.isDraft,
+    };
   }
 }

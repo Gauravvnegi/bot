@@ -118,31 +118,50 @@ export class ViewCampaignComponent implements OnInit {
         })
     );
   }
-
   addElementToData() {
     return new Promise((resolve, reject) => {
-      this.addFormArray('to', 'toReceivers');
-      this.addFormArray('cc', 'ccReveivers');
-      this.addFormArray('bcc', 'bccReveivers');
-      resolve(this.campaign);
+      Promise.all([
+        this.addFormArray('to', 'toReceivers'),
+        this.addFormArray('cc', 'ccReveivers'),
+        this.addFormArray('bcc', 'bccReveivers'),
+        this.addtestEmails(),
+      ]).then((res) => resolve(res[3]));
     });
   }
 
   setFormData() {
-    this.addElementToData().then((res) => this.campaignFG.patchValue(res));
+    this.addElementToData().then((res) => {
+      this.campaignFG.patchValue(res);
+    });
   }
 
   addFormArray(control, dataField) {
-    if (this.campaign[dataField]) {
-      this.campaign[control] = [];
-      if (!this.campaignFG.get(control))
-        this.campaignFG.addControl(control, this._fb.array([]));
-      this._campaignService
-        .getReceiversFromData(this.campaign[dataField], this.hotelId)
-        ?.forEach((receiver) => {
-          this.campaign[control].push(new FormControl(receiver));
-        });
-    }
+    return new Promise((resolve, reject) => {
+      if (this.campaign[dataField]) {
+        this.campaign[control] = [];
+        if (!this.campaignFG.get(control))
+          this.campaignFG.addControl(control, this._fb.array([]));
+        this._campaignService
+          .getReceiversFromData(this.campaign[dataField], this.hotelId)
+          .forEach((receiver) => {
+            (this.campaignFG.get(control) as FormArray).push(
+              new FormControl(receiver)
+            );
+          });
+      }
+      resolve(this.campaign);
+    });
+  }
+
+  addtestEmails() {
+    return new Promise((resolve, reject) => {
+      this.campaign.testEmails.forEach((item) =>
+        (this.campaignFG.get('testEmails') as FormArray).push(
+          new FormControl(item)
+        )
+      );
+      resolve(this.campaign);
+    });
   }
 
   goBack() {

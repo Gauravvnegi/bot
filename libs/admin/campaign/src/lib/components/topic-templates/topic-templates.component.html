@@ -5,7 +5,7 @@
   <div
     *ngFor="let t of template.templates"
     class="card"
-    (click)="selectTemplate(t.htmlTemplate)"
+    (click)="selectTemplate(t)"
   >
     <div [innerHTML]="t.htmlTemplate" class="card__content"></div>
   </div>

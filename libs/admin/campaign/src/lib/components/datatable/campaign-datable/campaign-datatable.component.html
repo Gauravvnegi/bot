@@ -321,7 +321,12 @@
           <div class="icon"></div>
           <div class="icon"></div>
           <div class="icon"></div>
-          <div class="dropdown" (click)="handleDropdownClick($event)">
+          <div
+            class="dropdown"
+            (click)="handleDropdownClick($event)"
+            [style.top]="rowIndex == 0 ? '100%' : ''"
+            [style.bottom]="rowIndex != 0 ? '100%' : ''"
+          >
             <div
               class="dropdown__item"
               (click)="cloneCampaign(rowData.id, rowData)"
@@ -329,6 +334,7 @@
               Clone Campaign
             </div>
             <div
+              *ngIf="!rowData.isDraft"
               class="dropdown__item"
               (click)="archiveCampaign(rowData.id, rowData)"
             >

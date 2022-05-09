@@ -10,7 +10,10 @@
       <div class="icon"></div>
       <div class="icon"></div>
       <div class="icon"></div>
-      <div class="dropdown" [style.height.px]="campaignId ? 118 : 69">
+      <div
+        class="dropdown"
+        [style.height.px]="campaignId && !campaign.isDraft ? 118 : 69"
+      >
         <div class="dropdown__item" (click)="sendTestCampaign()">
           Send Test
         </div>

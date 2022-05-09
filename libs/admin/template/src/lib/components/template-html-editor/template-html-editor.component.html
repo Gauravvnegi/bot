@@ -16,8 +16,8 @@
   </header>
   <form [formGroup]="templateForm">
     <div class="wrapper-form">
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Name:</mat-label>
           <mat-form-field>
             <input
@@ -35,8 +35,13 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <div class="import-assets" (click)="assetImportEnable($event)">
+            <img
+              class="import-image"
+              [src]="templateConfiguration.images.import.url"
+              [alt]="templateConfiguration.images.import.alt"
+            />
             Import Assets
           </div>
           <div
@@ -49,8 +54,8 @@
           </div>
         </div>
       </div>
-      <div class="feilds" *ngIf="!isDisabled">
-        <div class="feild">
+      <div class="fields" *ngIf="!isDisabled">
+        <div class="field">
           <mat-label class="mat-label">Shared templates</mat-label>
           <mat-checkbox formControlName="shared"></mat-checkbox>
         </div>
@@ -83,11 +88,11 @@
       </div>
     </div>
     <div
-      class="save-button"
+      class="preview"
       (click)="saveAndNext()"
       [ngClass]="{ active: !isSaving, disabled: isSaving }"
     >
-      <div class="save-text">
+      <div class="view">
         <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
         Save and next
       </div>

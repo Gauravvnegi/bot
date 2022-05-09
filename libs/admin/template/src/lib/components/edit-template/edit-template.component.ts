@@ -8,7 +8,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Template } from '../../data-models/templateConfig.model';
 import { MatStepper } from '@angular/material/stepper';
-
+import { templateConfig } from '../../constants/template';
 @Component({
   selector: 'hospitality-bot-edit-template',
   templateUrl: './edit-template.component.html',
@@ -227,6 +227,10 @@ export class EditTemplateComponent implements OnDestroy {
 
   get htmlTemplate() {
     return this.templateForm.get('htmlTemplate');
+  }
+
+  get templateConfiguration() {
+    return templateConfig;
   }
 
   ngOnDestroy(): void {

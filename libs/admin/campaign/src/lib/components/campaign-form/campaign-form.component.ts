@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import {
   ModalService,
   SnackBarService,
@@ -47,7 +48,8 @@ export class CampaignFormComponent implements OnInit {
     private location: Location,
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,
-    private _modalService: ModalService
+    private _modalService: ModalService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -155,10 +157,11 @@ export class CampaignFormComponent implements OnInit {
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(
         (response) => {
           this._snackbarService.openSnackBarAsText(
-            'Email sent successfully.',
+            'Campaign sent successfully.',
             '',
             { panelClass: 'success' }
           );
+          this._router.navigate(['pages/marketing/campaign']);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
         () => (this.isSending = false)

@@ -1,28 +1,28 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
   background-color: white;
-  margin: $margin20 0px;
-  border-radius: 5px;
   &-header {
+    width: 550px;
+    height: 51.7px;
+    padding: 14px 17px 16.7px 20px;
+    background-color: #f4f5f7;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    .back {
-      display: flex;
-      align-items: center;
-      .label {
-        letter-spacing: 0.96px;
-        font-weight: $bold;
-        font-size: $font16;
-      }
-      .material-icons {
-        margin-right: $margin15;
-        &:hover {
-          cursor: pointer;
-        }
-      }
+    justify-content: space-between;
+    .title {
+      font-family: Roboto;
+      font-size: 16px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: #484848;
+    }
+    .close {
+      cursor: pointer;
     }
   }
 }

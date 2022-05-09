@@ -155,6 +155,7 @@ export class CampaignFormComponent implements OnInit {
       this.campaignFG.getRawValue()
     );
     reqData.message = this.getTemplateMessage(reqData);
+    reqData.isDraft = false;
     this.isSending = true;
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(

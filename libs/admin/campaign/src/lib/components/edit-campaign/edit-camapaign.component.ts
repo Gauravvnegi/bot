@@ -116,12 +116,11 @@ export class EditCampaignComponent implements OnInit {
   }
 
   setFormData(campaign) {
-    this.campaignFG.patchValue(campaign);
+    campaign.to = [];
     this._campaignService
       .getReceiversFromData(campaign.receivers, this.hotelId)
-      .forEach((receiver) =>
-        (this.campaignFG.get('to') as FormArray).push(new FormControl(receiver))
-      );
+      .forEach((receiver) => campaign.to.push(new FormControl(receiver)));
+    this.campaignFG.patchValue(campaign);
   }
 
   listenForAutoSave() {

@@ -91,6 +91,7 @@
             [name]="'cc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('cc')?.value || []"
+            [disableInput]="(campaignFG.get('cc')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
           ></hospitality-bot-receiver-field>
         </div>
@@ -104,6 +105,7 @@
             [name]="'bcc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('bcc')?.value || []"
+            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
           ></hospitality-bot-receiver-field>
         </div>

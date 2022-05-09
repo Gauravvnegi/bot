@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  SnackBarService,
-  ModalService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
@@ -27,6 +32,7 @@ export class ViewCampaignComponent implements OnInit {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
+  campaign: Campaign;
   constructor(
     private location: Location,
     private _fb: FormBuilder,
@@ -41,17 +47,23 @@ export class ViewCampaignComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.campaignFG.disable();
   }
 
   initFG(): void {
     this.campaignFG = this._fb.group({
-      fromId: ['', [Validators.required]],
-      emailIds: this._fb.array([], Validators.required),
-      // cc: this._fb.array([]),
+      from: ['', [Validators.required]],
+      to: this._fb.array([], Validators.required),
+      cc: this._fb.array([]),
+      bcc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
+      status: [true],
+      isDraft: [true],
+      campaignType: [''],
+      testEmails: this._fb.array([]),
     });
   }
 
@@ -101,8 +113,20 @@ export class ViewCampaignComponent implements OnInit {
       this._campaignService
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
-          console.log(response);
+          this.campaign = new Campaign().deserialize(response);
+          this.campaignFG.patchValue(this.campaign);
+          this._campaignService
+            .getReceiversFromData(this.campaign.receivers, this.hotelId)
+            .forEach((receiver) =>
+              (this.campaignFG.get('to') as FormArray).push(
+                new FormControl(receiver)
+              )
+            );
         })
     );
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

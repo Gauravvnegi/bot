@@ -57,7 +57,7 @@
       <div class="fields" *ngIf="!isDisabled">
         <div class="field">
           <mat-label class="mat-label">Shared templates</mat-label>
-          <mat-checkbox formControlName="shared"></mat-checkbox>
+          <mat-checkbox formControlName="isShared"></mat-checkbox>
         </div>
       </div>
       <div class="description" *ngIf="!isDisabled">
@@ -77,12 +77,12 @@
     </div>
   </form>
   <div class="save-section" *ngIf="!isDisabled">
-    <div class="save-button" (click)="saveAndPreview()">
+    <div class="save-button" (click)="saveAndPreview()" *ngIf="templateId">
       <div class="save-text">
         Preview and Save
       </div>
     </div>
-    <div class="save-button" (click)="save()">
+    <div class="save-button" (click)="save()" *ngIf="templateId">
       <div class="save-text">
         Save Changes
       </div>

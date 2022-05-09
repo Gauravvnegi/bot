@@ -15,6 +15,7 @@ import { EditContentComponent } from './components/edit-content/edit-content.com
 
 const appRoutes: Route[] = [
   { path: '', component: CampaignComponent },
+  { path: 'view/:id', component: ViewCampaignComponent },
   { path: 'create', component: EditCampaignComponent },
   { path: 'edit/:id', component: EditCampaignComponent },
 ];

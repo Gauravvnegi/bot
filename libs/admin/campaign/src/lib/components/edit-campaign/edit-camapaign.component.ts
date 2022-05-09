@@ -7,8 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { empty, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
@@ -45,7 +46,9 @@ export class EditCampaignComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
     private _campaignService: CampaignService,
-    private _emailService: EmailService
+    private _emailService: EmailService,
+    private _router: Router,
+    private _snackbarService: SnackBarService
   ) {
     this.initFG();
   }
@@ -106,17 +109,18 @@ export class EditCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
-          this.campaignFG.patchValue(this.campaign);
-          this._campaignService
-            .getReceiversFromData(this.campaign.receivers, this.hotelId)
-            .forEach((receiver) =>
-              (this.campaignFG.get('to') as FormArray).push(
-                new FormControl(receiver)
-              )
-            );
+          this.setFormData(this.campaign);
           this.listenForAutoSave();
         })
     );
+  }
+
+  setFormData(campaign) {
+    campaign.to = [];
+    this._campaignService
+      .getReceiversFromData(campaign.receivers, this.hotelId)
+      .forEach((receiver) => campaign.to.push(new FormControl(receiver)));
+    this.campaignFG.patchValue(campaign);
   }
 
   listenForAutoSave() {
@@ -133,10 +137,16 @@ export class EditCampaignComponent implements OnInit {
         )
         .subscribe(
           (response) => {
-            this.campaignId = response.id;
-            this.campaignFG.patchValue(response);
+            if (this.campaignId) {
+              console.log('Saved');
+            } else
+              this._router.navigate([
+                `/pages/marketing/campaign/edit/${response.id}`,
+              ]);
           },
-          ({ error }) => {}
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
         )
     );
   }
@@ -160,7 +170,9 @@ export class EditCampaignComponent implements OnInit {
             (response) => {
               console.log('Saved');
             },
-            ({ error }) => {}
+            ({ error }) => {
+              this._snackbarService.openSnackBarAsText(error.message);
+            }
           )
       );
     }

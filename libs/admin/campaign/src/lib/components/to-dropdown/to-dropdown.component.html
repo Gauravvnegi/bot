@@ -58,7 +58,7 @@
         <div
           class="item-container"
           *ngFor="let list of listings.data"
-          (click)="selectItem('LIST', list)"
+          (click)="selectItem('listing', list)"
         >
           <div>{{ list.name }}</div>
           <div class="data">{{ list.marketingContacts?.length }} Guests</div>

@@ -230,9 +230,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   openEditCampaign(campaign, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${campaign.id}`], {
-      relativeTo: this.route,
-    });
+    this._router.navigate(
+      [`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`],
+      {
+        relativeTo: this.route,
+      }
+    );
   }
   handleDropdownClick(event) {
     event.stopPropagation();

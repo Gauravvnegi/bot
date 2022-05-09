@@ -4,24 +4,8 @@
       <i class="fa fa-times" aria-hidden="true" (click)="close()"></i>
     </div>
     <div class="title">
-      Import Assets
+      Select Asset
     </div>
-  </div>
-  <div class="global-search">
-    <span class="p-input-icon-right">
-      <i *ngIf="!searchValue" class="pi pi-search"></i>
-      <mat-icon *ngIf="searchValue" (click)="clearSearch()" class="cross_icon"
-        >cancel</mat-icon
-      >
-      <form [formGroup]="assetFG">
-        <input
-          type="text"
-          formControlName="search"
-          pInputText
-          placeholder="Paste the URL of assets"
-        />
-      </form>
-    </span>
   </div>
   <div>
     <mat-tab-group

@@ -246,14 +246,19 @@
       </td>
       <td class="name">
         <div class="template_image_wrapper">
-          <div class="text">
+          <div
+            class="text"
+            *ngIf="rowData.name || rowData.topicName; else emptyCell"
+          >
             <div>{{ rowData.name }}</div>
             <p class="topic-name">{{ rowData.topicName }}</p>
           </div>
         </div>
       </td>
       <td class="guest">
-        {{ rowData.templateName }}
+        <div *ngIf="rowData.templateName; else emptyCell">
+          {{ rowData.templateName }}
+        </div>
       </td>
       <td class="stats">
         <ng-container *ngIf="rowData?.isDraft; else chipStats">

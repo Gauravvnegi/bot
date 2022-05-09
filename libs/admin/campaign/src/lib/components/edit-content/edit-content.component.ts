@@ -10,6 +10,7 @@ import { Campaign } from '../../data-model/campaign.model';
 export class EditContentComponent implements OnInit {
   @Input() campaignFG: FormGroup;
   @Input() campaignDetails: Campaign;
+  @Input() viewMode = false;
   @Output() addContent = new EventEmitter();
   modes = ['backdrop', 'edit', 'view'];
   currentMode = 'backdrop';

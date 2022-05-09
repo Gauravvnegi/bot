@@ -23,6 +23,7 @@ export class ReceiverFieldComponent implements OnInit {
   @Input() name: string;
   @Input() hotelId: string;
   @Input() disableInput = false;
+  @Input() disabled = false;
   @Output() updateChipSet = new EventEmitter();
   enableDropdown = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];

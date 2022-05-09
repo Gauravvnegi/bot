@@ -13,9 +13,7 @@ export class EmailService extends ApiService {
   }
 
   getTemplateByTopic(hotelId: string, topicId: string) {
-    return this.get(
-      `/api/v1/entity/${hotelId}/templates/template-topic/${topicId}`
-    );
+    return this.get(`/api/v1/entity/${hotelId}/templates/topic/${topicId}`);
   }
 
   sendEmail(hotelId: string, data) {

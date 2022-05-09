@@ -44,10 +44,7 @@
             />
             Import Assets
           </div>
-          <div
-            *ngIf="enableAssetImport"
-            style="position: absolute; z-index: 122; top: 0; right: 0;"
-          >
+          <div *ngIf="enableAssetImport" class="asset-enable">
             <hospitality-bot-import-asset
               (closeImport)="enableAssetImport = false"
             ></hospitality-bot-import-asset>

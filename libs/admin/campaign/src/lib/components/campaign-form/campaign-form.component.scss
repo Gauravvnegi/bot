@@ -106,6 +106,9 @@
       width: 150px;
       color: #b5b5c3;
       font-size: $font14;
+      .cc-width {
+        width: 100%;
+      }
     }
   }
 }
@@ -238,6 +241,17 @@
     top: 5px;
     right: 0;
   }
+  .email-style {
+    display: flex;
+    position: absolute;
+    right: 0;
+    bottom: 25px;
+    color: #4b56c0;
+    .style-click {
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  }
 }
 
 .personalization {
@@ -282,4 +296,16 @@
 
 .previewText-personalization {
   position: relative;
+}
+.description-style {
+  position: absolute;
+  right: 0;
+  top: 0;
+  .style-subject {
+    display: flex;
+    align-items: center;
+    .subject-options {
+      margin-right: 3px;
+    }
+  }
 }

@@ -10,7 +10,8 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { empty, Subscription } from 'rxjs';
+import { reject } from 'lodash';
+import { empty, of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
@@ -40,6 +41,7 @@ export class EditCampaignComponent implements OnInit {
   };
   campaign: Campaign;
   createContentType = '';
+  datamapped = false;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -115,35 +117,54 @@ export class EditCampaignComponent implements OnInit {
     );
   }
 
+  addElementToData() {
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.addFormArray('to', 'toReceivers'),
+        this.addFormArray('cc', 'ccReveivers'),
+        this.addFormArray('bcc', 'bccReveivers'),
+      ]).then((res) => resolve(res[0]));
+    });
+  }
+
   setFormData() {
-    this.addFormArray('to', 'toReveivers');
-    this.addFormArray('cc', 'ccReveivers');
-    this.addFormArray('bcc', 'bccReveivers');
-    this.campaignFG.patchValue(this.campaign);
+    this.addElementToData().then((res) => {
+      this.campaignFG.patchValue(res);
+      this.datamapped = true;
+    });
   }
 
   addFormArray(control, dataField) {
-    if (this.campaign[dataField]) {
-      this.campaign[control] = new FormArray([]);
-      this._campaignService
-        .getReceiversFromData(this.campaign[control], this.hotelId)
-        .forEach((receiver) => {
-          this.campaign[control].push(new FormControl(receiver));
-        });
-    }
+    return new Promise((resolve, reject) => {
+      if (this.campaign[dataField]) {
+        this.campaign[control] = [];
+        if (!this.campaignFG.get(control))
+          this.campaignFG.addControl(control, this._fb.array([]));
+        this._campaignService
+          .getReceiversFromData(this.campaign[dataField], this.hotelId)
+          .forEach((receiver) => {
+            (this.campaignFG.get(control) as FormArray).push(
+              new FormControl(receiver)
+            );
+          });
+      }
+      resolve(this.campaign);
+    });
   }
 
   listenForAutoSave() {
     this.$subscription.add(
       this.campaignFG.valueChanges
         .pipe(
-          switchMap((formValue) =>
-            this.autoSave(formValue).pipe(
-              catchError((err) => {
-                return empty();
-              })
-            )
-          )
+          switchMap((formValue) => {
+            if (this.datamapped)
+              return this.autoSave(formValue).pipe(
+                catchError((err) => {
+                  return empty();
+                })
+              );
+            return of(null);
+          })
         )
         .subscribe(
           (response) => {

@@ -34,11 +34,14 @@ export class Campaign implements Deserializable {
   subject;
   templateId: string;
   testEmails;
-  toReveivers;
+  toReceivers;
   topicId: string;
   updatedAt: number;
-  ccReveivers;
-  bccReveivers;
+  ccReceivers;
+  bccReceivers;
+  to;
+  cc;
+  bcc;
   deserialize(input: any) {
     Object.assign(
       this,

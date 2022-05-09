@@ -206,15 +206,29 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.campaignService
         .cloneCampaign(this.hotelId, data, campaignId)
-        .subscribe((response) => {})
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText('Campaign Cloned.', '', {
+              panelClass: 'success',
+            });
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
     );
   }
 
   archiveCampaign(campaignId, data) {
     this.$subscription.add(
       this.campaignService
-        .archiveCampaign(this.hotelId, data, campaignId)
-        .subscribe((response) => {})
+        .archiveCampaign(this.hotelId, {}, campaignId)
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
+              panelClass: 'success',
+            });
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
     );
   }
 

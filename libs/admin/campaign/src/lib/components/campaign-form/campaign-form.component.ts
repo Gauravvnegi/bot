@@ -18,6 +18,7 @@ import {
 import { Subscription } from 'rxjs';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
+import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 
@@ -51,7 +52,8 @@ export class CampaignFormComponent implements OnInit {
     private _emailService: EmailService,
     private _modalService: ModalService,
     private _router: Router,
-    public globalFilterService: GlobalFilterService
+    public globalFilterService: GlobalFilterService,
+    private campaignService: CampaignService
   ) {}
 
   ngOnInit(): void {
@@ -118,7 +120,21 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
-  archiveCampaign() {}
+  archiveCampaign() {
+    this.$subscription.add(
+      this.campaignService
+        .archiveCampaign(this.hotelId, {}, this.campaignId)
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
+              panelClass: 'success',
+            });
+            this.location.back();
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
 
   handleTopicChange(event) {
     this.$subscription.add(

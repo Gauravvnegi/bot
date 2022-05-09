@@ -1,6 +1,6 @@
 <div class="fields">
-  <div class="field full-width">
-    <ng-contaner *ngIf="!viewMode; else viewModeContent">
+  <ng-container *ngIf="!viewMode; else viewModeContent">
+    <div class="field full-width">
       <mat-label class="mat-label">Add Content :</mat-label>
       <div
         class="ck-editor"
@@ -71,8 +71,10 @@
           </div>
         </div>
       </ng-template>
-    </ng-contaner>
-    <ng-template #viewModeContent>
+    </div>
+  </ng-container>
+  <ng-template #viewModeContent>
+    <div class="field full-width">
       <mat-label class="mat-label">View Content :</mat-label>
       <div class="ck-editor">
         <div class="ck-editor__container">
@@ -85,6 +87,6 @@
           ></hospitality-bot-template-editor>
         </div>
       </div>
-    </ng-template>
-  </div>
+    </div>
+  </ng-template>
 </div>

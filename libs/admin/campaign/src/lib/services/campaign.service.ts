@@ -110,7 +110,7 @@ export class CampaignService extends ApiService {
 
   getReceiversFromData(receivers, hotelId) {
     const data = [];
-    receivers.individual.forEach((item) => {
+    receivers.individual?.forEach((item) => {
       data.push({
         data: { name: item },
         type: 'email',
@@ -118,17 +118,15 @@ export class CampaignService extends ApiService {
     });
 
     receivers.listing?.forEach((item) =>
-      this.getListById(item, hotelId).subscribe((response) => {
-        data.push({
-          data: response,
-          type: 'listing',
-        });
+      data.push({
+        data: item,
+        type: 'listing',
       })
     );
 
-    receivers.subscribers?.forEach((item, index) =>
+    receivers.subscribers?.forEach((item) =>
       data.push({
-        data: { id: item, name: `Subscriber ${index + 1}` },
+        data: item,
         type: 'listing',
       })
     );

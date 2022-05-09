@@ -109,18 +109,28 @@ export class EditCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
-          this.setFormData(this.campaign);
+          this.setFormData();
           this.listenForAutoSave();
         })
     );
   }
 
-  setFormData(campaign) {
-    campaign.to = [];
-    this._campaignService
-      .getReceiversFromData(campaign.receivers, this.hotelId)
-      .forEach((receiver) => campaign.to.push(new FormControl(receiver)));
-    this.campaignFG.patchValue(campaign);
+  setFormData() {
+    this.addFormArray('to', 'toReveivers');
+    this.addFormArray('cc', 'ccReveivers');
+    this.addFormArray('bcc', 'bccReveivers');
+    this.campaignFG.patchValue(this.campaign);
+  }
+
+  addFormArray(control, dataField) {
+    if (this.campaign[dataField]) {
+      this.campaign[control] = new FormArray([]);
+      this._campaignService
+        .getReceiversFromData(this.campaign[control], this.hotelId)
+        .forEach((receiver) => {
+          this.campaign[control].push(new FormControl(receiver));
+        });
+    }
   }
 
   listenForAutoSave() {

@@ -114,16 +114,29 @@ export class ViewCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
-          this.campaignFG.patchValue(this.campaign);
-          this._campaignService
-            .getReceiversFromData(this.campaign.receivers, this.hotelId)
-            .forEach((receiver) =>
-              (this.campaignFG.get('to') as FormArray).push(
-                new FormControl(receiver)
-              )
-            );
+          this.setFormData();
         })
     );
+  }
+
+  setFormData() {
+    this.addFormArray('to', 'toReveivers');
+    this.addFormArray('cc', 'ccReveivers');
+    this.addFormArray('bcc', 'bccReveivers');
+    this.campaignFG.patchValue(this.campaign);
+  }
+
+  addFormArray(control, dataField) {
+    if (this.campaign[dataField]) {
+      this.campaign[control] = new FormArray([]);
+      if (!this.campaignFG.get(control))
+        this.campaignFG.addControl(control, this._fb.array([]));
+      this._campaignService
+        .getReceiversFromData(this.campaign[control], this.hotelId)
+        .forEach((receiver) => {
+          this.campaign[control].push(new FormControl(receiver));
+        });
+    }
   }
 
   goBack() {

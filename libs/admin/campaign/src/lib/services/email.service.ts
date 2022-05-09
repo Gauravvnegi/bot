@@ -32,6 +32,10 @@ export class EmailService extends ApiService {
     return this.post(`/api/v1/entity/${hotelId}/notifications/send`, data);
   }
 
+  sendTest(hotelId: string, data) {
+    return this.post(`/api/v1/cms/${hotelId}/campaign/test`, data);
+  }
+
   disableDropdowns() {
     this.$enableDropdown.to.next(false);
     this.$enableDropdown.cc.next(false);

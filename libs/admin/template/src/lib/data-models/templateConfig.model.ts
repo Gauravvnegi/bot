@@ -26,6 +26,7 @@ export class Template {
   templateType: string;
   htmlTemplate: string;
   templates: Template;
+  shared: boolean;
 
   deserialize(input: any) {
     Object.assign(
@@ -39,6 +40,7 @@ export class Template {
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'templateType', get(input, ['templateType'])),
       set({}, 'htmlTemplate', get(input, ['htmlTemplate'])),
+      set({}, 'shared', get(input, ['shared'])),
       set({}, 'template', new Templates().deserialize(input.template).records)
     );
     return this;

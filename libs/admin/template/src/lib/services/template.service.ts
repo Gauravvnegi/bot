@@ -116,6 +116,7 @@ export class TemplateService extends ApiService {
     templateData.topicId = formValue.topicId;
     templateData.templateType = formValue.templateType;
     templateData.htmlTemplate = formValue.htmlTemplate;
+    templateData.shared = formValue.shared;
     return templateData;
   }
 }

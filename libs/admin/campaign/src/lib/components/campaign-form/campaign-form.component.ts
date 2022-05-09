@@ -82,11 +82,12 @@ export class CampaignFormComponent implements OnInit {
       sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
         (response) => {
           if (response.status) {
-            if (this.campaignFG.invalid)
+            if (this.campaignFG.invalid) {
+              this.campaignFG.markAllAsTouched();
               this._snackbarService.openSnackBarAsText(
                 'Please fill all the details.'
               );
-            else {
+            } else {
               const reqData = this._emailService.createRequestData(
                 this.campaign,
                 this.campaignFG.getRawValue()

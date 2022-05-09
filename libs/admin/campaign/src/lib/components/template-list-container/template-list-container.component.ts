@@ -91,7 +91,7 @@ export class TemplateListContainerComponent implements OnInit {
               templates: response,
               topicId: topic.id,
               topicName: topic.name,
-              totalTemplate: response.length,
+              totalTemplate: response.total,
             },
           ];
         })

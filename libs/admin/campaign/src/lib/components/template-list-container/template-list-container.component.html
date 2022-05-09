@@ -19,7 +19,7 @@
     </div>
     <div class="preDesigned">
       <mat-form-field class="mt-20">
-        <mat-select>
+        <mat-select [value]="selectedTopic">
           <mat-option [value]="'ALL'" (click)="getTemplateForAllTopics()"
             >All</mat-option
           >

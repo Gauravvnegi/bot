@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { trim } from 'lodash';
 import { Template } from '../../data-models/templateConfig.model';
 
 @Component({
@@ -42,7 +43,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   }
 
   saveAndNext() {
-    if (this.templateForm.get('htmlTemplate').hasError) {
+    if (trim(this.templateForm.get('htmlTemplate').value) === '') {
       this._snackbarService.openSnackBarAsText('No template content.');
       return;
     }

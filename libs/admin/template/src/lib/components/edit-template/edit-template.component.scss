@@ -16,6 +16,7 @@
         letter-spacing: 0.96px;
         font-weight: $bold;
         font-size: $font16;
+        cursor:default;
       }
       .material-icons {
         margin-right: $margin15;
@@ -116,7 +117,7 @@
       border-radius: 4px;
       border: solid 1px $manually-contacts;
       width: 255px;
-      height: 135px;
+      height: 136px;
       margin: 30px 31px 15px 0;
       cursor: pointer;
       display: flex;
@@ -129,13 +130,15 @@
       font-weight: bold;
       padding-bottom: 12px;
       .built-template {
-        height: 53px;
+        height: 52px;
       }
       .manually-import {
         height: 135px;
         overflow-y: hidden;
         max-width: 100%;
         overflow-x: hidden;
+    font-size: 16px;
+    margin-top: 17px;
       }
       .logos {
         position: absolute;
@@ -212,6 +215,7 @@
 :host ::ng-deep .mat-form-field-infix {
   border-top: none;
   letter-spacing: 0.96px;
+  width:311px;
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {

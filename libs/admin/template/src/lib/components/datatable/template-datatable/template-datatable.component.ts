@@ -48,30 +48,13 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 5;
-  cols = templateConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
 
-  chips = [
-    { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
-    {
-      label: 'Active',
-      icon: '',
-      value: 'ACTIVE',
-      total: 0,
-      isSelected: false,
-      type: 'new',
-    },
-    {
-      label: 'In-Active ',
-      icon: '',
-      value: 'INACTIVE',
-      total: 0,
-      isSelected: false,
-      type: 'pending',
-    },
-  ];
+  cols = templateConfig.datatable.cols;
+  chips = templateConfig.datatable.chips;
+
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,

@@ -76,11 +76,25 @@ export class CampaignFormComponent implements OnInit {
       SendTestComponent,
       dialogConfig
     );
+    sendTestCampaignCompRef.componentInstance.parentFG = this.campaignFG;
 
     this.$subscription.add(
       sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
         (response) => {
-          if (response.status) console.log('Send Test', response.email);
+          if (response.status) {
+            if (this.campaignFG.invalid)
+              this._snackbarService.openSnackBarAsText(
+                'Please fill all the details.'
+              );
+            else {
+              const reqData = this._emailService.createRequestData(
+                this.campaign,
+                this.campaignFG.getRawValue()
+              );
+              reqData.message = this.getTemplateMessage(reqData);
+              this._emailService.sendTest(this.hotelId, reqData);
+            }
+          }
           sendTestCampaignCompRef.close();
         }
       )

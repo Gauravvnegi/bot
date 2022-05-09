@@ -7,6 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Template } from '../../data-models/templateConfig.model';
 
 @Component({
@@ -28,7 +29,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   topicList = [];
   isSaving = false;
   enableAssetImport = false;
-  constructor() {}
+  constructor(private _snackbarService: SnackBarService) {}
 
   ngOnInit(): void {}
 
@@ -41,6 +42,14 @@ export class TemplateHtmlEditorComponent implements OnInit {
   }
 
   saveAndNext() {
+    if (this.templateForm.get('htmlTemplate').hasError) {
+      this._snackbarService.openSnackBarAsText('No template content.');
+      return;
+    }
+    if (this.templateForm.invalid) {
+      this.goBack.emit();
+      return;
+    }
     this.saveTemplate.emit({ data: { redirectToForm: true, preview: false } });
   }
 

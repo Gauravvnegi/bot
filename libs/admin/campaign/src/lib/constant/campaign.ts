@@ -123,4 +123,16 @@ export const campaignConfig = {
     inbuilt: { url: 'assets/svg/web-design.svg', alt: 'inbuilt' },
     editTemplate: { url: 'assets/svg/design.svg', alt: 'edit Template' },
   },
+  dropDownTabFilter: [
+    {
+      label: 'Subscribers Groups',
+      value: 'SUBSCRIBERGROUP',
+      chips: [],
+    },
+    {
+      label: 'Listing',
+      value: 'LISTING',
+      chips: [],
+    },
+  ],
 };

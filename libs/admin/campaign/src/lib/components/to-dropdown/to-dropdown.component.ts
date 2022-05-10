@@ -19,10 +19,10 @@ export class ToDropdownComponent implements OnInit {
   @Input() searchList: ReceiversSearchItem[];
   @Output() selectedList = new EventEmitter();
   $subscriptions = new Subscription();
-  tabFilterItems = campaignConfig.datatable.dropDownTabFilters;
+  tabFilterItems = campaignConfig.dropDownTabFilter;
   tabFilterIdx = 0;
   listings = campaignConfig.listings;
-  subscribers=campaignConfig.subscribers;
+  subscribers = campaignConfig.subscribers;
   offset = 0;
   constructor(
     private _campaignService: CampaignService,

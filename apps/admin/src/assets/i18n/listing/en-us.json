@@ -2,5 +2,48 @@
   "datatable": {
     "no_data": "No data available in table",
     "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
-  }
+  },
+
+"listingForm":{
+  "createListing": "Create Listing",
+  "editListing":"Edit Listing"
+},
+
+"+createListing":"+Create Listing",
+
+  "validationMessage": {
+    "name": "Name is required",
+    "description":"Description is required",
+    "topic": "Topic name is required",
+    "email": "Email is required",
+    "salutation": "Salutation is required",
+    "firstName": "First Name is required",
+    "lastName": "Last Name is required",
+    "mobile": "Mobile is required"
+  },
+
+  "validationAlert":{
+    "email": "Please enter the valid Email",
+    "firstName": "Please enter the valid First Name",
+    "lastName": "Please enter the valid Last Name",
+    "mobile": "Please enter the valid Mobile"
+
+  },
+
+  "contact": {
+    "import": "Import Contact",
+    "add": "+Add Contact"
+  },
+
+  "addContact": "Add Contacts",
+
+  "stats":{
+    "totalContacts":"Total Contacts",
+    "unsubscribed":"Unsubscribed",
+    "bounce":"Bounce",
+    "sendCampaign":"Send Campaign",
+    "scheduleCampaign":"Schedule Campaign"
+  },
+  
+  "checkboxMessage":" Update data for existing samples during this file import."
 }

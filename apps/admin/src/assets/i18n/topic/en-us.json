@@ -5,6 +5,15 @@
     "status_success":"Status updated successfully",
     "error_message":"Invalid"
   },
-  "createTopic": "+Create Topic"
+  "createTopic": "+Create Topic",
+  
+  "topicForm":
+  {"editTopic":"Edit Topic",
+    "createTopic":"Create Topic"
+  },
 
+  "validationMessage":{
+    "name":" Name is required",
+    "description":"Description is required"
+}
 }

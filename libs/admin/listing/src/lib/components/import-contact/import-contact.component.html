@@ -3,7 +3,7 @@
     <i class="fa fa-times" aria-hidden="true"></i>
   </div>
   <div class="import-contact">
-    Import Contacts
+    {{ 'contact.import' | translate }}
   </div>
 
   <div class="upload-btn-wrapper">
@@ -30,14 +30,14 @@
         <form>
           <input type="checkbox" (change)="enableField($event)" />
           <label>
-            Update data for existing samples during this file import.</label
-          >
+            {{ 'checkboxMessage' | translate }}
+          </label>
         </form>
       </div>
     </div>
 
     <div class="add-contact">
-      Add Contacts
+      {{ 'addContact' | translate }}
     </div>
     <div class="table-wrap">
       <table>

@@ -1,8 +1,23 @@
 {
-    "datatable": {
-        "no_data": "No data available in table",
-        "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
-    },
-    "createAsset": "+Create Asset"
+  "datatable": {
+    "no_data": "No data available in table",
+    "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
+  },
+  "createAsset": "+Create Asset",
+
+  "assetForm": {
+    "createAsset": "Create Asset",
+    "editAsset": "Edit Asset"
+  },
+
+  "uploadMessage":"Recommended Ratio : 16:9 | 3MB Max Size",
+
+  "validationMessage":{
+      "name":"Name is required",
+      "type":"Type is required",
+      "description":"Description is required"
 
 }
+
+}
+

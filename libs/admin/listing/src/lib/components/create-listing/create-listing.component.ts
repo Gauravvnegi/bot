@@ -41,8 +41,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.listFG = this._fb.group({
       name: ['', [Validators.required]],
-      topicName: [''],
-      description: [''],
+      topicName: ['', [Validators.required]],
+      description: ['', [Validators.required]],
       marketingContacts: [[]],
       active: [true],
     });

@@ -44,11 +44,11 @@
               <!-- </div> -->
               <div class="import" (click)="openImportContact($event)">
                 <img src="assets/svg/import.svg" alt="import" />
-                Import Contacts
+                {{ 'contact.import' | translate }}
               </div>
               <div class="add" (click)="openAddContact($event)">
                 <div class="add-contact">
-                  +Add Contact
+                  {{ 'contact.add' | translate }}
                 </div>
               </div>
               <div class="options" *ngIf="!add">

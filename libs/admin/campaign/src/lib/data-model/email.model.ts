@@ -55,3 +55,53 @@ export class Topic {
     return this;
   }
 }
+
+export class ReceiversSearch {
+  records: ReceiversSearchItem[];
+
+  deserialize(input) {
+    this.records = new Array<ReceiversSearchItem>();
+    input.individual?.forEach((item) =>
+      this.records.push(
+        new ReceiversSearchItem().deserialize({ ...item, type: 'email' })
+      )
+    );
+
+    input.listing?.forEach((item) =>
+      this.records.push(
+        new ReceiversSearchItem().deserialize({ ...item, type: 'listing' })
+      )
+    );
+
+    input.subscribers?.forEach((item) =>
+      this.records.push(
+        new ReceiversSearchItem().deserialize({ ...item, type: 'subscribers' })
+      )
+    );
+
+    return this;
+  }
+}
+
+export class ReceiversSearchItem {
+  id: string;
+  name: string;
+  count: number;
+  type: string;
+  firstName: string;
+  lastName: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'id', get(input, ['id'])),
+      set({}, 'count', get(input, ['count'])),
+      set({}, 'type', get(input, ['type'])),
+      set({}, 'firstName', get(input, ['firstName'])),
+      set({}, 'lastName', get(input, ['lastName']))
+    );
+    this.name = input.email ? input.email : input.name;
+
+    return this;
+  }
+}

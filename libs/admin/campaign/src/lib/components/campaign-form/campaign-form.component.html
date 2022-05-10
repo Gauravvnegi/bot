@@ -10,7 +10,10 @@
       <div class="icon"></div>
       <div class="icon"></div>
       <div class="icon"></div>
-      <div class="dropdown" [style.height.px]="campaignId ? 118 : 69">
+      <div
+        class="dropdown"
+        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
+      >
         <div class="dropdown__item" (click)="sendTestCampaign()">
           {{ 'sendText' | translate }}
         </div>
@@ -24,6 +27,17 @@
       </div>
     </div>
   </header>
+  <div class="sent-details" *ngIf="campaign">
+    <div>
+      Drafted on
+      {{
+        campaign?.getDraftDate(
+          globalFilterService.timezone,
+          'MMM DD, YYYY hh:mm a'
+        )
+      }}
+    </div>
+  </div>
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
     <div class="fields">
       <div class="field">

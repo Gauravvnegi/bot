@@ -31,8 +31,14 @@
     width: 255px;
     height: 273px;
     margin: 0 4rem 2rem 4rem;
+    position: relative;
     &__content {
       pointer-events: none;
+    }
+    .icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
   }
 }

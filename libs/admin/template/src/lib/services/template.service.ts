@@ -14,7 +14,7 @@ export class TemplateService extends ApiService {
       `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
     );
   }
-  
+
   getTemplateListByTopicId(hotelId, topicId, config) {
     return this.get(
       `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
@@ -116,7 +116,7 @@ export class TemplateService extends ApiService {
     templateData.topicId = formValue.topicId;
     templateData.templateType = formValue.templateType;
     templateData.htmlTemplate = formValue.htmlTemplate;
-    templateData.shared = formValue.shared;
+    templateData.isShared = formValue.isShared;
     return templateData;
   }
 }

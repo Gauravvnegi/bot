@@ -4,6 +4,10 @@ import { Campaign } from '../data-model/campaign.model';
 
 @Injectable()
 export class CampaignService extends ApiService {
+  getTopicList(id: string, config) {
+    return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
+  }
+
   getListings(hotelId: string, config) {
     return this.get(
       `/api/v1/marketing/entity/${hotelId}/listing${config.queryObj}`
@@ -71,6 +75,12 @@ export class CampaignService extends ApiService {
     );
   }
 
+  getTemplateListByTopicId(hotelId, topicId, config) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
+    );
+  }
+
   deleteCampaignTemplate(entityId: string, campaignId) {
     return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
   }
@@ -94,7 +104,7 @@ export class CampaignService extends ApiService {
     campaignData.name = formValue.name;
     campaignData.templateName = formValue.templateName;
     campaignData.isDraft = formValue.isDraft;
-
+    campaignData.active = campaignData.active;
     return campaignData;
   }
 
@@ -110,28 +120,32 @@ export class CampaignService extends ApiService {
 
   getReceiversFromData(receivers, hotelId) {
     const data = [];
-    receivers.individual.forEach((item) => {
+    receivers.individual?.forEach((item) => {
       data.push({
-        data: { name: item },
+        data: { name: item.name },
         type: 'email',
       });
     });
 
     receivers.listing?.forEach((item) =>
-      this.getListById(item, hotelId).subscribe((response) => {
-        data.push({
-          data: response,
-          type: 'listing',
-        });
+      data.push({
+        data: { id: item.receiverId, name: item.name },
+        type: 'listing',
       })
     );
 
-    receivers.subscribers?.forEach((item, index) =>
+    receivers.subscribers?.forEach((item) =>
       data.push({
-        data: { id: item, name: `Subscriber ${index + 1}` },
+        data: { id: item.receiverId, name: item.name },
         type: 'listing',
       })
     );
     return data;
+  }
+
+  searchReceivers(entityId, searchKey) {
+    return this.get(
+      `/api/v1/marketing/entity/${entityId}/search?key=${searchKey}`
+    );
   }
 }

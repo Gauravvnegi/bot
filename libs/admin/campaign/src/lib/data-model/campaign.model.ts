@@ -22,6 +22,7 @@ export class Campaign implements Deserializable {
   active: boolean;
   statsCampaign;
   templateName: string;
+  topicName: string;
   isDraft: boolean;
   archieved: true;
   campaignType: string;
@@ -34,9 +35,14 @@ export class Campaign implements Deserializable {
   subject;
   templateId: string;
   testEmails;
-  receivers;
+  toReceivers;
   topicId: string;
   updatedAt: number;
+  ccReceivers;
+  bccReceivers;
+  to;
+  cc;
+  bcc;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -46,6 +52,7 @@ export class Campaign implements Deserializable {
       set({}, 'active', get(input, ['active'])),
       set({}, 'statsCampaign', get(input, ['statsCampaign'])),
       set({}, 'templateName', get(input, ['templateName'])),
+      set({}, 'topicName', get(input, ['topicName'])),
       set({}, 'isDraft', get(input, ['isDraft'])),
       set({}, 'archieved', get(input, ['archieved'])),
       set({}, 'campaignType', get(input, ['campaignType'])),
@@ -58,25 +65,19 @@ export class Campaign implements Deserializable {
       set({}, 'subject', get(input, ['subject', 'text'])),
       set({}, 'templateId', get(input, ['templateId'])),
       set({}, 'testEmails', get(input, ['testEmails'], [])),
-      set({}, 'receivers', get(input, ['to'])),
+      set({}, 'toReceivers', get(input, ['to'])),
+      set({}, 'ccReceivers', get(input, ['to'])),
+      set({}, 'bccReceivers', get(input, ['to'])),
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'updatedAt', get(input, ['updatedAt']))
     );
     return this;
   }
 
-  getDraftDate(timezone = '+05:30') {
+  getDraftDate(timezone = '+05:30', format = 'DD/M/YY') {
     if (this.updatedAt) {
-      return DateService.getDateFromTimeStamp(
-        this.updatedAt,
-        'DD/M/YY',
-        timezone
-      );
+      return DateService.getDateFromTimeStamp(this.updatedAt, format, timezone);
     }
-    return DateService.getDateFromTimeStamp(
-      this.createdAt,
-      'DD/M/YY',
-      timezone
-    );
+    return DateService.getDateFromTimeStamp(this.createdAt, format, timezone);
   }
 }

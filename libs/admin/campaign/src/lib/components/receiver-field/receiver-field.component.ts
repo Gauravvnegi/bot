@@ -1,8 +1,7 @@
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { ENTER, COMMA, TAB } from '@angular/cdk/keycodes';
 import {
   Component,
   EventEmitter,
-  HostListener,
   Input,
   OnInit,
   Output,
@@ -10,6 +9,11 @@ import {
 } from '@angular/core';
 import { trim } from 'lodash';
 import { Subscription } from 'rxjs';
+import {
+  ReceiversSearch,
+  ReceiversSearchItem,
+} from '../../data-model/email.model';
+import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 
 @Component({
@@ -25,10 +29,15 @@ export class ReceiverFieldComponent implements OnInit {
   @Input() disableInput = false;
   @Input() disabled = false;
   @Output() updateChipSet = new EventEmitter();
+  searchList: ReceiversSearchItem[];
   enableDropdown = false;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   $subscription = new Subscription();
-  constructor(private _emailService: EmailService) {}
+  search = false;
+  constructor(
+    private _emailService: EmailService,
+    private _campaignService: CampaignService
+  ) {}
 
   ngOnInit(): void {
     this.listenForEnableDropdown();
@@ -90,13 +99,33 @@ export class ReceiverFieldComponent implements OnInit {
         action: 'add',
       });
       this.receiverField.nativeElement.value = '';
-    } else {
-      console.log(this.receiverField.nativeElement.value);
+      this.search = false;
+      this.enableReceiverField();
     }
   }
 
-  enableReceiverField(event) {
+  searchKey(event) {
     event.stopPropagation();
+    const key = trim(this.receiverField.nativeElement.value);
+    if (!this.separatorKeysCodes.includes(event.which) && key.length > 0) {
+      this.$subscription.add(
+        this._campaignService
+          .searchReceivers(this.hotelId, key)
+          .subscribe((response) => {
+            this.search = true;
+            this.searchList = new ReceiversSearch().deserialize(
+              response
+            ).records;
+          })
+      );
+    } else {
+      this.search = false;
+      this.searchList = new ReceiversSearch().deserialize({}).records;
+    }
+  }
+
+  enableReceiverField(event?) {
+    event?.stopPropagation();
     this.enableTextField();
     this.enableDropdownItems();
     this.receiverField.nativeElement.focus();

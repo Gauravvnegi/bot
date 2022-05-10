@@ -10,6 +10,7 @@ import {
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
@@ -17,6 +18,7 @@ import {
 import { Subscription } from 'rxjs';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
+import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 
@@ -49,7 +51,9 @@ export class CampaignFormComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,
     private _modalService: ModalService,
-    private _router: Router
+    private _router: Router,
+    public globalFilterService: GlobalFilterService,
+    private campaignService: CampaignService
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +72,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this._router.navigate(['pages/marketing/campaign']);
   }
 
   sendTestCampaign() {
@@ -95,7 +99,19 @@ export class CampaignFormComponent implements OnInit {
                 this.campaignFG.getRawValue()
               );
               reqData.message = this.getTemplateMessage(reqData);
-              this._emailService.sendTest(this.hotelId, reqData);
+              this.$subscription.add(
+                this._emailService.sendTest(this.hotelId, reqData).subscribe(
+                  (response) => {
+                    this._snackbarService.openSnackBarAsText(
+                      'Campaign sent to test email(s).',
+                      '',
+                      { panelClass: 'success' }
+                    );
+                  },
+                  ({ error }) =>
+                    this._snackbarService.openSnackBarAsText(error.message)
+                )
+              );
             }
           }
           sendTestCampaignCompRef.close();
@@ -104,7 +120,21 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
-  archiveCampaign() {}
+  archiveCampaign() {
+    this.$subscription.add(
+      this.campaignService
+        .archiveCampaign(this.hotelId, {}, this.campaignId)
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
+              panelClass: 'success',
+            });
+            this.location.back();
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
 
   handleTopicChange(event) {
     this.$subscription.add(
@@ -155,6 +185,7 @@ export class CampaignFormComponent implements OnInit {
       this.campaignFG.getRawValue()
     );
     reqData.message = this.getTemplateMessage(reqData);
+    reqData.isDraft = false;
     this.isSending = true;
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(

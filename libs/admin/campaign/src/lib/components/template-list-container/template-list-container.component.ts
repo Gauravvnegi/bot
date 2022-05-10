@@ -3,8 +3,9 @@ import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { Topics } from '../../data-models/templateConfig.model';
-import { TemplateService } from '../../services/template.service';
+import { campaignConfig } from '../../constant/campaign';
+import { Topics } from '../../data-model/email.model';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -14,14 +15,15 @@ import { TemplateService } from '../../services/template.service';
 export class TemplateListContainerComponent implements OnInit {
   private $subscription = new Subscription();
   @Input() hotelId: string;
-  @Input() templateForm: FormGroup;
   @Input() templateType: string;
   @Output() change = new EventEmitter();
+  templateTypes=campaignConfig.datatable.templateTypes;
+  selectedTopic = 'ALL';
   topicList = [];
   templateTopicList = [];
   constructor(
     private adminUtilityService: AdminUtilityService,
-    private templateService: TemplateService,
+    private campaignService: CampaignService,
     private _snackbarService: SnackBarService
   ) {}
 
@@ -29,8 +31,6 @@ export class TemplateListContainerComponent implements OnInit {
     this.getTopicList();
     this.getTemplateForAllTopics();
   }
-
-  ngOnChanges() {}
 
   getTopicList() {
     const config = {
@@ -42,7 +42,7 @@ export class TemplateListContainerComponent implements OnInit {
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(this.hotelId, config).subscribe(
+      this.campaignService.getTopicList(this.hotelId, config).subscribe(
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
         },
@@ -62,8 +62,8 @@ export class TemplateListContainerComponent implements OnInit {
       ]),
     };
     this.$subscription.add(
-      this.templateService
-        .getTemplateListByTopic(this.hotelId, config)
+      this.campaignService
+        .getTemplateByContentType(this.hotelId, config)
         .subscribe((response) => {
           this.templateTopicList = response;
         })
@@ -81,7 +81,7 @@ export class TemplateListContainerComponent implements OnInit {
       ]),
     };
     this.$subscription.add(
-      this.templateService
+      this.campaignService
         .getTemplateListByTopicId(this.hotelId, topic.id, config)
         .subscribe((response) => {
           this.templateTopicList = [
@@ -96,11 +96,21 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  templateTypeSelection(value) {
+    this.templateType = value;
+    this.selectedTopic = 'ALL';
+    this.getTemplateForAllTopics();
+  }
+
   setTemplate(event) {
     this.change.emit(event);
   }
 
   goBack() {
     this.change.emit({ status: false });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -46,9 +46,6 @@ export const ADMIN_ROUTES = [
       },
     ],
   },
-];
-
-export const DEFAULT_ROUTES = [
   {
     path: 'marketing',
     title: 'Marketing',
@@ -62,6 +59,9 @@ export const DEFAULT_ROUTES = [
       },
     ],
   },
+];
+
+export const DEFAULT_ROUTES = [
   {
     path: 'library',
     title: 'Library',

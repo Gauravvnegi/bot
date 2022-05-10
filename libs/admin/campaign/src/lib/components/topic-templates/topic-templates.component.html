@@ -5,9 +5,12 @@
   <div
     *ngFor="let t of template.templates"
     class="card"
-    (click)="selectTemplate(t.htmlTemplate)"
+    (click)="selectTemplate(t)"
   >
     <div [innerHTML]="t.htmlTemplate" class="card__content"></div>
+    <div class="icon" *ngIf="t.isShared">
+      <img src="assets/svg/shared_template.svg" alt="shared" />
+    </div>
   </div>
 </div>
 <div class="show-button" (click)="loadData()">

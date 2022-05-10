@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { TemplateService } from '../../services/template.service';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'hospitality-bot-topic-templates',
@@ -21,7 +21,7 @@ export class TopicTemplatesComponent implements OnInit {
 
   constructor(
     private adminUtilityService: AdminUtilityService,
-    private templateService: TemplateService,
+    private templateService: CampaignService,
     private _snackbarService: SnackBarService
   ) {}
 
@@ -56,5 +56,9 @@ export class TopicTemplatesComponent implements OnInit {
 
   selectTemplate(template) {
     this.selectedTemplate.emit({ status: true, data: template });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

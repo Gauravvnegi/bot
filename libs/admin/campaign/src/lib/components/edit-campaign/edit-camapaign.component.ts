@@ -10,7 +10,8 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { empty, Subscription } from 'rxjs';
+import { reject } from 'lodash';
+import { empty, of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
@@ -40,6 +41,7 @@ export class EditCampaignComponent implements OnInit {
   };
   campaign: Campaign;
   createContentType = '';
+  datamapped = true;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -70,6 +72,7 @@ export class EditCampaignComponent implements OnInit {
       isDraft: [true],
       campaignType: [''],
       testEmails: this._fb.array([]),
+      active: [true],
     });
   }
 
@@ -97,6 +100,7 @@ export class EditCampaignComponent implements OnInit {
       this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.campaignId = params['id'];
+          this.datamapped = false;
           this.getCampaignDetails(this.campaignId);
         } else this.listenForAutoSave();
       })
@@ -109,31 +113,72 @@ export class EditCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
-          this.setFormData(this.campaign);
+          this.setFormData();
           this.listenForAutoSave();
         })
     );
   }
 
-  setFormData(campaign) {
-    campaign.to = [];
-    this._campaignService
-      .getReceiversFromData(campaign.receivers, this.hotelId)
-      .forEach((receiver) => campaign.to.push(new FormControl(receiver)));
-    this.campaignFG.patchValue(campaign);
+  addElementToData() {
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.addFormArray('to', 'toReceivers'),
+        this.addFormArray('cc', 'ccReveivers'),
+        this.addFormArray('bcc', 'bccReveivers'),
+        this.addtestEmails(),
+      ]).then((res) => resolve(res[3]));
+    });
+  }
+
+  setFormData() {
+    this.addElementToData().then((res) => {
+      this.campaignFG.patchValue(res);
+      this.datamapped = true;
+    });
+  }
+
+  addFormArray(control, dataField) {
+    return new Promise((resolve, reject) => {
+      if (this.campaign[dataField]) {
+        this.campaign[control] = [];
+        if (!this.campaignFG.get(control))
+          this.campaignFG.addControl(control, this._fb.array([]));
+        this._campaignService
+          .getReceiversFromData(this.campaign[dataField], this.hotelId)
+          .forEach((receiver) => {
+            (this.campaignFG.get(control) as FormArray).push(
+              new FormControl(receiver)
+            );
+          });
+      }
+      resolve(this.campaign);
+    });
+  }
+
+  addtestEmails() {
+    return new Promise((resolve, reject) => {
+      this.campaign.testEmails.forEach((item) =>
+        (this.campaignFG.get('testEmails') as FormArray).push(
+          new FormControl(item)
+        )
+      );
+      resolve(this.campaign);
+    });
   }
 
   listenForAutoSave() {
     this.$subscription.add(
       this.campaignFG.valueChanges
         .pipe(
-          switchMap((formValue) =>
-            this.autoSave(formValue).pipe(
-              catchError((err) => {
-                return empty();
-              })
-            )
-          )
+          switchMap((formValue) => {
+            if (this.datamapped)
+              return this.autoSave(formValue).pipe(
+                catchError((err) => {
+                  return empty();
+                })
+              );
+            return of(null);
+          })
         )
         .subscribe(
           (response) => {
@@ -188,6 +233,19 @@ export class EditCampaignComponent implements OnInit {
   }
 
   changeStep(event) {
+    if (event.status) {
+      this.campaignFG.patchValue({
+        message: event.data.htmlTemplate,
+        templateId: event.data.id,
+        topicId: event.data.topicId,
+      });
+      this.stepper.selectedIndex = 0;
+      return;
+    }
+    this.stepper.selectedIndex = 1;
+  }
+
+  handleCreateContentChange(event) {
     this.stepper[event.step]();
     if (event.templateType) this.createContentType = event.templateType;
   }

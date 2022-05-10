@@ -44,6 +44,12 @@
       }
     }
   }
+  .sent-details {
+    display: flex;
+    align-items: center;
+    margin-left: 38px;
+    opacity: 0.5;
+  }
 }
 
 .dropdown {
@@ -55,7 +61,7 @@
   box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
   background-color: #fff;
   right: 0;
-  top: 100%;
+  top: 0;
   font-family: Roboto;
   font-size: 16px;
   font-weight: normal;
@@ -65,6 +71,7 @@
   letter-spacing: 0.96px;
   text-align: left;
   color: #002046;
+  z-index: 141;
   &__item {
     padding: 18px 18px 12px 20px;
     &:hover {
@@ -99,9 +106,9 @@
       width: 150px;
       color: #b5b5c3;
       font-size: $font14;
-      .cc-width {
-        width: 100%;
-      }
+    }
+    .cc-width {
+      width: 100%;
     }
   }
 }

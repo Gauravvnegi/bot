@@ -48,6 +48,7 @@ export class ToDropdownComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    if (this.listings.data.length == 0) this.loadListings();
   }
 
   loadSubscribers() {

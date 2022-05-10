@@ -10,9 +10,9 @@
   cursor: text;
   display: flex;
   flex-wrap: wrap;
+  position: relative;
   .field {
     width: 100%;
-    position: relative;
   }
 }
 
@@ -43,7 +43,7 @@
   pointer-events: none;
 }
 
-.form-field > .field > input {
+.form-field > .chips > .field > input {
   padding: 5px;
   display: block !important;
   box-sizing: border-box;
@@ -67,7 +67,7 @@
 .dropdown {
   width: 100%;
   position: absolute;
-  top: 60px;
+  top: calc(100% + 10px);
   left: 0px;
   z-index: 112;
   border-radius: 10px;

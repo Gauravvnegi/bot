@@ -15,25 +15,25 @@
         <span class="chip--text">{{ chip.data?.name }}</span>
         <span class="chip--button" (click)="removeChip(chip, $event)">x</span>
       </div>
-    </div>
-    <div class="field">
-      <input
-        #receiverField
-        placeholder="Add Recipient"
-        class="chip-input"
-        (keydown)="addChip($event)"
-        (blur)="removeField($event)"
-        (keyup)="searchKey($event)"
-      />
-      <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
-        <hospitality-bot-to-dropdown
-          [value]="receiverField?.nativeElement?.value"
-          [hotelId]="hotelId"
-          [search]="search"
-          [searchList]="searchList"
-          (selectedList)="addItemFromDropdown($event)"
-        ></hospitality-bot-to-dropdown>
+      <div class="field">
+        <input
+          #receiverField
+          placeholder="Add Recipient"
+          class="chip-input"
+          (keydown)="addChip($event)"
+          (blur)="removeField($event)"
+          (keyup)="searchKey($event)"
+        />
       </div>
+    </div>
+    <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
+      <hospitality-bot-to-dropdown
+        [value]="receiverField?.nativeElement?.value"
+        [hotelId]="hotelId"
+        [search]="search"
+        [searchList]="searchList"
+        (selectedList)="addItemFromDropdown($event)"
+      ></hospitality-bot-to-dropdown>
     </div>
   </div>
 </ng-template>

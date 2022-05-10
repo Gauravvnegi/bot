@@ -7,7 +7,7 @@
         </mat-icon>
       </button>
       <p>
-        Create Template
+        {{ 'templateForm.createTemplate' | translate }}
       </p>
     </div>
 
@@ -15,10 +15,12 @@
       <ng-container
         *ngIf="templateType == 'SAVEDTEMPLATE'; else preDesignTemplate"
       >
-        <p class="head">Saved Templates</p>
+        <p class="head">{{ 'templateType.savedTemplate' | translate }}</p>
       </ng-container>
       <ng-template #preDesignTemplate class="pre-head">
-        <p class="prehead">Pre-Designed Templates</p>
+        <p class="prehead">
+          {{ 'templateType.preDesignedTemplate' | translate }}
+        </p>
       </ng-template>
 
       <mat-form-field>

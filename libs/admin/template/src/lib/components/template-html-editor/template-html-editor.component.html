@@ -6,7 +6,7 @@
       >
       <p class="label">
         <ng-container *ngIf="isDisabled; else editTemplate">
-          View Template
+          {{ 'viewTemplate' | translate }}
         </ng-container>
         <ng-template #editTemplate>
           {{ templateId ? 'Edit' : 'Create' }} Template
@@ -42,7 +42,7 @@
               [src]="templateConfiguration.images.import.url"
               [alt]="templateConfiguration.images.import.alt"
             />
-            Import Assets
+            {{ 'importAsset' | translate }}
           </div>
           <div *ngIf="enableAssetImport" class="asset-enable">
             <hospitality-bot-import-asset
@@ -76,12 +76,12 @@
   <div class="save-section" *ngIf="!isDisabled">
     <div class="save-button" (click)="saveAndPreview()" *ngIf="templateId">
       <div class="save-text">
-        Preview and Save
+        {{ 'editTemplateButtons.preview&Save' | translate }}
       </div>
     </div>
     <div class="save-button" (click)="save()" *ngIf="templateId">
       <div class="save-text">
-        Save Changes
+        {{ 'editTemplateButtons.saveChanges' | translate }}
       </div>
     </div>
     <div
@@ -91,7 +91,7 @@
     >
       <div class="view">
         <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-        Save and next
+        {{ 'editTemplateButtons.save&Next' | translate }}
       </div>
     </div>
   </div>

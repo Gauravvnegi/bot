@@ -2,5 +2,35 @@
   "datatable": {
     "no_data": "No data available in table",
     "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
+  },
+
+  "createTemplate": "+Create Template",
+
+  "templateForm": {
+    "createTemplate": "Create Template",
+    "editTemplate": "Edit Template"
+  },
+
+  "createContent": {
+    "savedTemplate": "Saved Template",
+    "inBuiltTemplate": "In-Built Template",
+    "createNew": "Create New(HTML Editor)"
+  },
+
+  "importAsset": "Import Assets",
+
+  "showMore": "Show More",
+
+  "viewTemplate": "View Template",
+
+  "editTemplateButtons": {
+    "preview&Save": "Preview and Save",
+    "saveChanges": "Save Changes",
+    "save&Next": "Save and Next"
+  },
+  
+  "templateType": {
+    "savedTemplate": "Saved Templates",
+    "preDesignedTemplate": "Pre-Designed Templates"
   }
 }

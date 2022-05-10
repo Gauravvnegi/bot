@@ -22,6 +22,7 @@ export class Campaign implements Deserializable {
   active: boolean;
   statsCampaign;
   templateName: string;
+  topicName: string;
   isDraft: boolean;
   archieved: true;
   campaignType: string;
@@ -51,6 +52,7 @@ export class Campaign implements Deserializable {
       set({}, 'active', get(input, ['active'])),
       set({}, 'statsCampaign', get(input, ['statsCampaign'])),
       set({}, 'templateName', get(input, ['templateName'])),
+      set({}, 'topicName', get(input, ['topicName'])),
       set({}, 'isDraft', get(input, ['isDraft'])),
       set({}, 'archieved', get(input, ['archieved'])),
       set({}, 'campaignType', get(input, ['campaignType'])),

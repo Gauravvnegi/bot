@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import { CampaignService } from '../../services/campaign.service';
 
 @Component({
@@ -14,27 +15,10 @@ export class ToDropdownComponent implements OnInit {
   @Input() hotelId: string;
   @Output() selectedList = new EventEmitter();
   $subscriptions = new Subscription();
-  tabFilterItems = [
-    {
-      label: 'Subscribers Groups',
-      value: 'SUBSCRIBERGROUP',
-      chips: [],
-    },
-    {
-      label: 'Listing',
-      value: 'LISTING',
-      chips: [],
-    },
-  ];
+  tabFilterItems = campaignConfig.datatable.dropDownTabFilters;
   tabFilterIdx = 0;
-  listings = {
-    data: [],
-    totalRecords: 0,
-  };
-  subscribers: {
-    data: [];
-    totalRecords: 0;
-  };
+  listings = campaignConfig.listings;
+  subscribers=campaignConfig.subscribers;
   offset = 0;
   constructor(
     private _campaignService: CampaignService,

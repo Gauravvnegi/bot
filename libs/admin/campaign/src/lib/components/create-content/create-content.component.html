@@ -9,15 +9,24 @@
   </header>
   <div class="body">
     <div class="btn" (click)="openTemplateList('SAVEDTEMPLATE')">
-      <img src="assets/svg/diskette.svg" alt="" />
+      <img
+        [src]="campaignConfiguration.images.saved.url"
+        [alt]="campaignConfiguration.images.saved.alt"
+      />
       <div class="text">Saved Template</div>
     </div>
     <div class="btn" (click)="openTemplateList('PREDESIGNTEMPLATE')">
-      <img src="assets/svg/web-design.svg" alt="" class="built-template" />
+      <img
+        [src]="campaignConfiguration.images.inbuilt.url"
+        [alt]="campaignConfiguration.images.inbuilt.alt"
+      />
       <div class="text">In-Built Template</div>
     </div>
     <div class="btn" [routerLink]="['/pages/library/template/create']">
-      <img src="assets/svg/design.svg" alt="" />
+      <img
+        [src]="campaignConfiguration.images.editTemplate.url"
+        [alt]="campaignConfiguration.images.editTemplate.alt"
+      />
       <div class="text">
         Create New (HTML Editor)
       </div>

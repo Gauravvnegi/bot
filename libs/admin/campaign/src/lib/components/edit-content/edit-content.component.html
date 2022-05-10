@@ -24,22 +24,22 @@
               <div class="controls">
                 <div class="btn">
                   <img
-                    src="assets/svg/view8280.svg"
-                    alt=""
+                    [src]="campaignConfiguration.images.view.url"
+                    [alt]="campaignConfiguration.images.view.alt"
                     (click)="changeMode('view')"
                   />
                 </div>
                 <div class="btn">
                   <img
-                    src="assets/svg/edit8278.svg"
-                    alt=""
+                    [src]="campaignConfiguration.images.edit.url"
+                    [alt]="campaignConfiguration.images.edit.alt"
                     (click)="changeMode('edit')"
                   />
                 </div>
                 <div class="btn">
                   <img
-                    src="assets/svg/delete8279.svg"
-                    alt=""
+                    [src]="campaignConfiguration.images.delete.url"
+                    [alt]="campaignConfiguration.images.delete.alt"
                     (click)="deleteContent()"
                   />
                 </div>

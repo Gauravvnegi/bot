@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
 
 @Component({
@@ -25,7 +26,9 @@ export class EditContentComponent implements OnInit {
   changeMode(mode) {
     this.currentMode = mode;
   }
-
+  get campaignConfiguration(){
+    return campaignConfig;
+  }
   deleteContent() {
     this.campaignFG.patchValue({ message: '' });
   }

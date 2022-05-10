@@ -101,7 +101,18 @@ export const campaignConfig = {
         lastPage: 0,
       },
     ],
-
+    dropDownTabFilters:[
+      {
+        label: 'Subscribers Groups',
+        value: 'SUBSCRIBERGROUP',
+        chips: [],
+      },
+      {
+        label: 'Listing',
+        value: 'LISTING',
+        chips: [],
+      },
+    ],
     cols: [
       {
         field: 'name',
@@ -143,6 +154,18 @@ export const campaignConfig = {
         width: '8%',
       },
     ],
+    templateTypes: [
+      { name: 'Saved Template', type: 'SAVEDTEMPLATE' },
+      { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' },
+    ],
+  },
+  listings : {
+    data: [],
+    totalRecords: 0,
+  },
+  subscribers: {
+    data: [],
+    totalRecords: 0,
   },
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },
@@ -152,5 +175,11 @@ export const campaignConfig = {
     export: { url: 'assets/svg/Export.svg', alt: 'Export' },
     csv: { url: 'assets/svg/CSV.svg', alt: 'CSV' },
     filter: { url: 'assets/svg/Filter-Icon.svg', alt: 'Filter' },
+    edit: { url: 'assets/svg/edit8278.svg', alt: 'edit' },
+    view: { url: 'assets/svg/view8280.svg', alt: 'view' },
+    delete: { url: 'assets/svg/delete8279.svg', alt: 'delete' },
+    saved: { url: 'assets/svg/diskette.svg', alt: 'saved' },
+    inbuilt: { url: 'assets/svg/web-design.svg', alt: 'inbuilt' },
+    editTemplate: { url: 'assets/svg/design.svg', alt: 'edit Template' },
   },
 };

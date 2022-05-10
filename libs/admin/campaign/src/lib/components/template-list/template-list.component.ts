@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import { camapign } from '../../constant/demo-data';
 import { CampaignService } from '../../services/campaign.service';
 
@@ -10,10 +11,8 @@ import { CampaignService } from '../../services/campaign.service';
   styleUrls: ['./template-list.component.scss'],
 })
 export class TemplateListComponent implements OnInit {
-  templateTypes = [
-    { name: 'Saved Template', type: 'SAVEDTEMPLATE' },
-    { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' },
-  ];
+  
+  templateTypes=campaignConfig.datatable.templateTypes;
   @Input() hotelId: string;
   @Input() selectedTemplate: string = '';
   templateData = [];

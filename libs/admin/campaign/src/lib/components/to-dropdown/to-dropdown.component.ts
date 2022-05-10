@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { ReceiversSearchItem } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 
@@ -14,6 +15,7 @@ export class ToDropdownComponent implements OnInit {
   @Input() value: string;
   @Input() search = false;
   @Input() hotelId: string;
+  @Input() searchList: ReceiversSearchItem[];
   @Output() selectedList = new EventEmitter();
   $subscriptions = new Subscription();
   tabFilterItems = [

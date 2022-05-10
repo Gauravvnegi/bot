@@ -23,11 +23,14 @@
         class="chip-input"
         (keydown)="addChip($event)"
         (blur)="removeField($event)"
+        (keyup)="searchKey($event)"
       />
       <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
         <hospitality-bot-to-dropdown
           [value]="receiverField?.nativeElement?.value"
           [hotelId]="hotelId"
+          [search]="search"
+          [searchList]="searchList"
           (selectedList)="addItemFromDropdown($event)"
         ></hospitality-bot-to-dropdown>
       </div>

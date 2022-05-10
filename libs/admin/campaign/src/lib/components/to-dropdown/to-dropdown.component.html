@@ -74,21 +74,24 @@
   </ng-template>
   <ng-template #searchDropdown>
     <div class="search-container">
-      <div class="search-item">
-        <div class="title">Sagar Kumar (1244124)</div>
-        <div class="description">
-          <div class="margin">Slanmusk@gmail.com</div>
-          <div class="margin">9654845301</div>
-          <div class="margin">AZ0K21</div>
-        </div>
-      </div>
-      <div class="search-item">
-        <div class="title">Sourabh (1246424)</div>
-        <div class="description">
-          <div class="margin">Slanmusk@gmail.com</div>
-          <div class="margin">9654845301</div>
-          <div class="margin">AZ0K21</div>
-        </div>
+      <div
+        class="search-item"
+        *ngFor="let item of searchList"
+        (click)="selectItem(item.type, item)"
+      >
+        <ng-container *ngIf="item.type == 'email'; else noEmail">
+          <div class="title">{{ item.name }}</div>
+          <div class="description" *ngIf="item.firstName">
+            <div class="margin">{{ item.firstName }} {{ item.lastName }}</div>
+            <div class="margin">{{ item.email }}</div>
+          </div>
+        </ng-container>
+        <ng-template #noEmail>
+          <div class="listing">
+            <div>{{ item.name }}</div>
+            <div>{{ item.count }}</div>
+          </div>
+        </ng-template>
       </div>
     </div>
   </ng-template>

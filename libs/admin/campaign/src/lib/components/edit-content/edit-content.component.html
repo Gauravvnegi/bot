@@ -1,7 +1,7 @@
 <div class="fields">
   <ng-container *ngIf="!viewMode; else viewModeContent">
     <div class="field full-width">
-      <mat-label class="mat-label">Add Content :</mat-label>
+      <mat-label class="mat-label">{{ 'content.add' | translate }} :</mat-label>
       <div
         class="ck-editor"
         *ngIf="campaignFG?.get('message')?.value; else createTemplate"
@@ -10,7 +10,6 @@
           <div>
             {{ campaignDetails.templateName }}
           </div>
-          <!-- <div>{{ campaignDetails | json }}</div> -->
         </div>
         <div class="ck-editor__container">
           <ng-container [ngSwitch]="currentMode">
@@ -67,7 +66,7 @@
         <div class="add-content">
           <div><img src="assets/svg/default_img.svg" alt="" /></div>
           <div class="add-content__btn" (click)="openAddContent()">
-            Add Content
+            {{ 'content.add' | translate }}
           </div>
         </div>
       </ng-template>
@@ -75,7 +74,9 @@
   </ng-container>
   <ng-template #viewModeContent>
     <div class="field full-width">
-      <mat-label class="mat-label">View Content :</mat-label>
+      <mat-label class="mat-label">
+        {{ 'content.view' | translate }} :</mat-label
+      >
       <div class="ck-editor">
         <div class="ck-editor__container">
           <hospitality-bot-template-editor

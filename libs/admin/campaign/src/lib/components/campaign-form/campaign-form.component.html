@@ -12,14 +12,14 @@
       <div class="icon"></div>
       <div class="dropdown" [style.height.px]="campaignId ? 118 : 69">
         <div class="dropdown__item" (click)="sendTestCampaign()">
-          Send Test
+          {{ 'sendText' | translate }}
         </div>
         <div
           class="dropdown__item"
           (click)="archiveCampaign()"
           *ngIf="campaignId"
         >
-          Archive Campaign
+          {{ 'campaign.archive' | translate }}
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
               campaignFG.get('from').hasError('required')
             "
           >
-            Form is required
+            {{ 'fromRequired' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -129,7 +129,7 @@
               campaignFG.get('subject').hasError('required')
             "
           >
-            Subject is required
+            {{ 'subjectRequired' | translate }}
           </mat-error>
           <mat-error
             *ngIf="
@@ -137,14 +137,14 @@
               campaignFG.get('subject').hasError('maxlength')
             "
           >
-            Maximum length is 200 characters.
+            {{ 'subjectLength' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Preivew Text:</mat-label>
+        <mat-label class="mat-label">Preview Text:</mat-label>
         <mat-form-field class="description">
           <input
             matInput
@@ -168,7 +168,7 @@
               campaignFG.get('previewText').hasError('required')
             "
           >
-            Preivew Text is required
+            {{ 'previewRequired' | translate }}
           </mat-error>
           <mat-error
             *ngIf="
@@ -176,7 +176,7 @@
               campaignFG.get('previewText').hasError('maxlength')
             "
           >
-            Maximum length is 200 characters.
+            {{ 'subjectLength' | translate }}
           </mat-error>
         </mat-form-field>
       </div>

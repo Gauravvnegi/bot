@@ -72,7 +72,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this._router.navigate(['pages/marketing/campaign']);
   }
 
   sendTestCampaign() {

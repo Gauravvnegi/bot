@@ -15,19 +15,12 @@
       <ng-container
         *ngIf="templateType == 'SAVEDTEMPLATE'; else preDesignTemplate"
       >
-<<<<<<< HEAD
         <p class="head">{{ 'templateType.savedTemplate' | translate }}</p>
       </ng-container>
       <ng-template #preDesignTemplate class="pre-head">
         <p class="prehead">
           {{ 'templateType.preDesignedTemplate' | translate }}
         </p>
-=======
-        <p class="head">Saved Templates</p>
-      </ng-container>
-      <ng-template #preDesignTemplate class="pre-head">
-        <p class="prehead">Pre-Designed Templates</p>
->>>>>>> n-dev/sprint-23
       </ng-template>
 
       <mat-form-field>

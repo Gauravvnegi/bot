@@ -85,13 +85,11 @@
       <div class="field full-width">
         <mat-label class="mat-label">Cc:</mat-label>
         <div class="width">
-          <hospitality-bot-to-receiver-field
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
             [name]="'cc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('cc')?.value || []"
-            [disableInput]="(campaignFG.get('cc')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-to-receiver-field>
+          ></hospitality-bot-email-chip-list>
         </div>
       </div>
     </div>
@@ -99,13 +97,11 @@
       <div class="field full-width">
         <mat-label class="mat-label">Bcc:</mat-label>
         <div class="width">
-          <hospitality-bot-to-receiver-field
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
             [name]="'bcc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('bcc')?.value || []"
-            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-to-receiver-field>
+          ></hospitality-bot-email-chip-list>
         </div>
       </div>
     </div>

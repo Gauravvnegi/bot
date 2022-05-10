@@ -334,7 +334,7 @@
               {{ 'campaign.clone' | translate }}
             </div>
             <div
-              *ngIf="!rowData.isDraft"
+              *ngIf="!rowData.isDraft || !rowData.archieved"
               class="dropdown__item"
               (click)="archiveCampaign(rowData.id, rowData)"
             >

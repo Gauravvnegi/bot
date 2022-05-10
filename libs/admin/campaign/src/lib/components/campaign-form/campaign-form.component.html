@@ -20,7 +20,7 @@
         <div
           class="dropdown__item"
           (click)="archiveCampaign()"
-          *ngIf="campaignId"
+          *ngIf="campaignId && !campaign?.isDraft"
         >
           {{ 'campaign.archive' | translate }}
         </div>
@@ -113,13 +113,6 @@
             [parentFG]="campaignFG"
             [name]="'cc'"
           ></hospitality-bot-email-chip-list>
-          <!-- <hospitality-bot-to-receiver-field
-            [name]="'cc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('cc')?.value || []"
-            [disableInput]="(campaignFG.get('cc')?.value || []).length"
-            (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
-          ></hospitality-bot-to-receiver-field> -->
         </div>
       </div>
     </div>
@@ -131,13 +124,6 @@
             [parentFG]="campaignFG"
             [name]="'bcc'"
           ></hospitality-bot-email-chip-list>
-          <!-- <hospitality-bot-to-receiver-field
-            [name]="'bcc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('bcc')?.value || []"
-            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
-            (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
-          ></hospitality-bot-to-receiver-field> -->
         </div>
       </div>
     </div>

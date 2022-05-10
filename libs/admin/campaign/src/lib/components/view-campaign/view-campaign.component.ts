@@ -124,6 +124,7 @@ export class ViewCampaignComponent implements OnInit {
         })
     );
   }
+
   addElementToData() {
     return new Promise((resolve, reject) => {
       Promise.all([
@@ -174,10 +175,10 @@ export class ViewCampaignComponent implements OnInit {
         .archiveCampaign(this.hotelId, {}, this.campaignId)
         .subscribe(
           (response) => {
+            this.setDataAfterUpdate(response);
             this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
               panelClass: 'success',
             });
-            this.location.back();
           },
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )
@@ -198,12 +199,12 @@ export class ViewCampaignComponent implements OnInit {
         (response) => {
           if (response.status) {
             const reqData = this._emailService.createRequestData(
-              this.campaign,
               this.campaignFG.getRawValue()
             );
             this.$subscription.add(
               this._emailService.sendTest(this.hotelId, reqData).subscribe(
                 (response) => {
+                  this.setDataAfterUpdate(response);
                   this._snackbarService.openSnackBarAsText(
                     'Campaign sent to test email(s).',
                     '',
@@ -219,6 +220,13 @@ export class ViewCampaignComponent implements OnInit {
         }
       )
     );
+  }
+
+  setDataAfterUpdate(response) {
+    if (response?.value) {
+      this.campaign = new Campaign().deserialize(response?.value);
+      this.setFormData();
+    }
   }
 
   goBack() {

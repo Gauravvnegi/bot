@@ -49,7 +49,7 @@ export class EmailService extends ApiService {
     this.$disablePersonalizationPopup.previewText.next(true);
   }
 
-  createRequestData(campaign, data) {
+  createRequestData(data) {
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
     if (data['cc']) reqData['cc'] = data.cc;

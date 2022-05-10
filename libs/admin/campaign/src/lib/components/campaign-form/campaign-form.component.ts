@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -47,7 +46,6 @@ export class CampaignFormComponent implements OnInit {
     extraAllowedContent: '*(*);*{*}',
   };
   constructor(
-    private location: Location,
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,
     private _modalService: ModalService,
@@ -89,7 +87,6 @@ export class CampaignFormComponent implements OnInit {
         (response) => {
           if (response.status) {
             const reqData = this._emailService.createRequestData(
-              this.campaign,
               this.campaignFG.getRawValue()
             );
             reqData.message = this.getTemplateMessage(reqData);
@@ -122,7 +119,6 @@ export class CampaignFormComponent implements OnInit {
             this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
               panelClass: 'success',
             });
-            this.location.back();
           },
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )
@@ -174,7 +170,6 @@ export class CampaignFormComponent implements OnInit {
       return;
     }
     const reqData = this._emailService.createRequestData(
-      this.campaign,
       this.campaignFG.getRawValue()
     );
     reqData.message = this.getTemplateMessage(reqData);

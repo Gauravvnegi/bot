@@ -182,6 +182,7 @@ export class EditCampaignComponent implements OnInit {
         .subscribe(
           (response) => {
             if (this.campaignId) {
+              this.setDataAfterUpdate(response);
               console.log('Saved');
             } else
               this._router.navigate([
@@ -199,7 +200,7 @@ export class EditCampaignComponent implements OnInit {
     if (data)
       return this._campaignService.save(
         this.hotelId,
-        this._emailService.createRequestData(this.campaign, data),
+        this._emailService.createRequestData(data),
         this.campaignId
       );
     else {
@@ -207,12 +208,13 @@ export class EditCampaignComponent implements OnInit {
         this._campaignService
           .save(
             this.hotelId,
-            this._emailService.createRequestData(this.campaign, data),
+            this._emailService.createRequestData(this.campaignFG.getRawValue()),
             this.campaignId
           )
           .subscribe(
             (response) => {
               console.log('Saved');
+              this.setDataAfterUpdate(response);
             },
             ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);
@@ -247,6 +249,13 @@ export class EditCampaignComponent implements OnInit {
   handleCreateContentChange(event) {
     this.stepper[event.step]();
     if (event.templateType) this.createContentType = event.templateType;
+  }
+
+  setDataAfterUpdate(response) {
+    if (response?.value) {
+      this.campaign = new Campaign().deserialize(response?.value);
+      this.setFormData();
+    }
   }
 
   ngOnDestroy() {

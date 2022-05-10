@@ -189,9 +189,9 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'])),
-      set({}, 'firstName', trim(get(input, ['firstName']))),
-      set({}, 'lastName', trim(get(input, ['lastName']))),
+      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'firstName', trim(get(input, ['firstName'], ''))),
+      set({}, 'lastName', trim(get(input, ['lastName'], ''))),
       set(
         {},
         'countryCode',

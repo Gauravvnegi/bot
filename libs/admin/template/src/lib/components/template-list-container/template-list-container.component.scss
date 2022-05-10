@@ -127,7 +127,7 @@
   height: 36px;
   opacity: 0.2;
   border-radius: 4px;
-  border: solid 1px #707070;
+  border: solid 1.7px #555555;
   background-color: #fff;
   .mat-form-field-label {
     border-bottom: none;
@@ -218,4 +218,8 @@
   border: 1px solid #9eaeb8;
   width: 100%;
   opacity: 0.3;
+}
+:host ::ng-deep .mat-select-value{
+  padding-left: 13px;
+  color: #002046 !important;
 }

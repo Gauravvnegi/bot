@@ -22,8 +22,8 @@
       </ng-template>
 
       <mat-form-field>
-        <mat-select placeholder="All">
-          <mat-option [value]="" (click)="getTemplateForAllTopics()"
+        <mat-select [value]="selectedTopic">
+          <mat-option [value]="'All'" (click)="getTemplateForAllTopics()"
             >All</mat-option
           >
           <mat-option

@@ -4,9 +4,8 @@
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <mat-form-field class="template-name">
+      <div class="template-name">
         <mat-select
-          class="template-option"
           [value]="templateType"
           (selectionChange)="templateTypeSelection($event.value)"
         >
@@ -16,7 +15,7 @@
             >{{ template.name }}</mat-option
           >
         </mat-select>
-      </mat-form-field>
+      </div>
     </div>
     <div class="header__preDesigned">
       <div class="topic">Topic</div>

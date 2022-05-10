@@ -71,13 +71,13 @@
       <div class="field full-width">
         <mat-label class="mat-label">To:</mat-label>
         <div class="email-field-container">
-          <hospitality-bot-receiver-field
+          <hospitality-bot-to-receiver-field
             [name]="'to'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('to')?.value || []"
             [disableInput]="(campaignFG.get('to')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-receiver-field>
+          ></hospitality-bot-to-receiver-field>
         </div>
       </div>
     </div>
@@ -85,13 +85,13 @@
       <div class="field full-width">
         <mat-label class="mat-label">Cc:</mat-label>
         <div class="width">
-          <hospitality-bot-receiver-field
+          <hospitality-bot-to-receiver-field
             [name]="'cc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('cc')?.value || []"
             [disableInput]="(campaignFG.get('cc')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-receiver-field>
+          ></hospitality-bot-to-receiver-field>
         </div>
       </div>
     </div>
@@ -99,13 +99,13 @@
       <div class="field full-width">
         <mat-label class="mat-label">Bcc:</mat-label>
         <div class="width">
-          <hospitality-bot-receiver-field
+          <hospitality-bot-to-receiver-field
             [name]="'bcc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('bcc')?.value || []"
             [disableInput]="(campaignFG.get('bcc')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-receiver-field>
+          ></hospitality-bot-to-receiver-field>
         </div>
       </div>
     </div>

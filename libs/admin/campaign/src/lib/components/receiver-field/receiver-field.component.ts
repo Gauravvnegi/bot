@@ -17,7 +17,7 @@ import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 
 @Component({
-  selector: 'hospitality-bot-receiver-field',
+  selector: 'hospitality-bot-to-receiver-field',
   templateUrl: './receiver-field.component.html',
   styleUrls: ['./receiver-field.component.scss'],
 })

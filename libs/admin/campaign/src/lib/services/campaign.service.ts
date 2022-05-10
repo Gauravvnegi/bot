@@ -119,7 +119,7 @@ export class CampaignService extends ApiService {
     });
   }
 
-  getReceiversFromData(receivers, hotelId) {
+  getReceiversFromData(receivers) {
     const data = [];
     receivers.individual?.forEach((item) => {
       data.push({

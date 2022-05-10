@@ -79,13 +79,13 @@
       <div class="field full-width">
         <mat-label class="mat-label">To:</mat-label>
         <div class="email-field-container">
-          <hospitality-bot-receiver-field
+          <hospitality-bot-to-receiver-field
             [name]="'to'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('to')?.value || []"
             [disableInput]="(campaignFG.get('to')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"
-          ></hospitality-bot-receiver-field>
+          ></hospitality-bot-to-receiver-field>
           <div class="email-style">
             <div
               class="style-click"
@@ -109,13 +109,17 @@
       <div class="field full-width">
         <mat-label class="mat-label">Cc:</mat-label>
         <div class="cc-width">
-          <hospitality-bot-receiver-field
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
+            [name]="'cc'"
+          ></hospitality-bot-email-chip-list>
+          <!-- <hospitality-bot-to-receiver-field
             [name]="'cc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('cc')?.value || []"
             [disableInput]="(campaignFG.get('cc')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
-          ></hospitality-bot-receiver-field>
+          ></hospitality-bot-to-receiver-field> -->
         </div>
       </div>
     </div>
@@ -123,13 +127,17 @@
       <div class="field full-width">
         <mat-label class="mat-label">Bcc:</mat-label>
         <div class="cc-width">
-          <hospitality-bot-receiver-field
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
+            [name]="'bcc'"
+          ></hospitality-bot-email-chip-list>
+          <!-- <hospitality-bot-to-receiver-field
             [name]="'bcc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('bcc')?.value || []"
             [disableInput]="(campaignFG.get('bcc')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
-          ></hospitality-bot-receiver-field>
+          ></hospitality-bot-to-receiver-field> -->
         </div>
       </div>
     </div>

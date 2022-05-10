@@ -27,6 +27,7 @@ import { CKEditorModule } from 'ckeditor4-angular';
 import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
+import { EmailChipListComponent } from './components/email-chip-list/email-chip-list.component';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { ClickStopPropagation } from './directives/stoppropagation.directive';
     TopicDropdownComponent,
     TemplateEditorComponent,
     SafeHtmlPipe,
+    EmailChipListComponent,
   ],
   exports: [
     DatatableComponent,
@@ -85,6 +87,7 @@ import { ClickStopPropagation } from './directives/stoppropagation.directive';
     TopicDropdownComponent,
     TemplateEditorComponent,
     ClickStopPropagation,
+    EmailChipListComponent,
   ],
 })
 export class AdminSharedModule {}

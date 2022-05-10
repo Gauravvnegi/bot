@@ -124,10 +124,8 @@ export class EditCampaignComponent implements OnInit {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.addFormArray('to', 'toReceivers'),
-        this.addFormArray('cc', 'ccReveivers'),
-        this.addFormArray('bcc', 'bccReveivers'),
         this.addtestEmails(),
-      ]).then((res) => resolve(res[3]));
+      ]).then((res) => resolve(res[1]));
     });
   }
 
@@ -145,7 +143,7 @@ export class EditCampaignComponent implements OnInit {
         if (!this.campaignFG.get(control))
           this.campaignFG.addControl(control, this._fb.array([]));
         this._campaignService
-          .getReceiversFromData(this.campaign[dataField], this.hotelId)
+          .getReceiversFromData(this.campaign[dataField])
           .forEach((receiver) => {
             (this.campaignFG.get(control) as FormArray).push(
               new FormControl(receiver)

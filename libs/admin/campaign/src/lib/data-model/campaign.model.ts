@@ -38,11 +38,9 @@ export class Campaign implements Deserializable {
   toReceivers;
   topicId: string;
   updatedAt: number;
-  ccReceivers;
-  bccReceivers;
   to;
-  cc;
-  bcc;
+  cc: string[];
+  bcc: string[];
   deserialize(input: any) {
     Object.assign(
       this,
@@ -66,8 +64,8 @@ export class Campaign implements Deserializable {
       set({}, 'templateId', get(input, ['templateId'])),
       set({}, 'testEmails', get(input, ['testEmails'], [])),
       set({}, 'toReceivers', get(input, ['to'])),
-      set({}, 'ccReceivers', get(input, ['to'])),
-      set({}, 'bccReceivers', get(input, ['to'])),
+      set({}, 'cc', get(input, ['cc'])),
+      set({}, 'bcc', get(input, ['bcc'])),
       set({}, 'topicId', get(input, ['topicId'])),
       set({}, 'updatedAt', get(input, ['updatedAt']))
     );

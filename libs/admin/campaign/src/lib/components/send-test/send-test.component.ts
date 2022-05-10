@@ -12,11 +12,6 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 export class SendTestComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Output() closeSendTest = new EventEmitter();
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  visible: boolean = true;
-  selectable: boolean = true;
-  removable: boolean = true;
-  addOnBlur: boolean = true;
   isSending = false;
   constructor(
     private _fb: FormBuilder,
@@ -24,42 +19,6 @@ export class SendTestComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-
-  addEmail(event: MatChipInputEvent, control): void {
-    let input = event.input;
-    let value = event.value;
-
-    // Add our keyword
-    if ((value || '').trim()) {
-      if (!this.isValidEmail(value)) {
-        this._snackbarService.openSnackBarAsText('Invalid email format');
-        return;
-      } else {
-        const controlValues = control.value.filter((cValue) => cValue == value);
-        if (!controlValues.length) {
-          control.push(this._fb.control(value.trim()));
-        }
-      }
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  removeEmail(keyword: any, control: FormArray): void {
-    let index = control.value.indexOf(keyword);
-
-    if (index >= 0) {
-      control.removeAt(index);
-    }
-  }
-
-  isValidEmail(email): RegExpMatchArray {
-    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return !!email && typeof email === 'string' && email.match(emailRegex);
-  }
 
   sendMail() {
     if (this.parentFG.get('testEmails').value.length == 0) {

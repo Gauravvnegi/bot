@@ -88,31 +88,24 @@ export class CampaignFormComponent implements OnInit {
       sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
         (response) => {
           if (response.status) {
-            if (this.campaignFG.invalid) {
-              this.campaignFG.markAllAsTouched();
-              this._snackbarService.openSnackBarAsText(
-                'Please fill all the details.'
-              );
-            } else {
-              const reqData = this._emailService.createRequestData(
-                this.campaign,
-                this.campaignFG.getRawValue()
-              );
-              reqData.message = this.getTemplateMessage(reqData);
-              this.$subscription.add(
-                this._emailService.sendTest(this.hotelId, reqData).subscribe(
-                  (response) => {
-                    this._snackbarService.openSnackBarAsText(
-                      'Campaign sent to test email(s).',
-                      '',
-                      { panelClass: 'success' }
-                    );
-                  },
-                  ({ error }) =>
-                    this._snackbarService.openSnackBarAsText(error.message)
-                )
-              );
-            }
+            const reqData = this._emailService.createRequestData(
+              this.campaign,
+              this.campaignFG.getRawValue()
+            );
+            reqData.message = this.getTemplateMessage(reqData);
+            this.$subscription.add(
+              this._emailService.sendTest(this.hotelId, reqData).subscribe(
+                (response) => {
+                  this._snackbarService.openSnackBarAsText(
+                    'Campaign sent to test email(s).',
+                    '',
+                    { panelClass: 'success' }
+                  );
+                },
+                ({ error }) =>
+                  this._snackbarService.openSnackBarAsText(error.message)
+              )
+            );
           }
           sendTestCampaignCompRef.close();
         }

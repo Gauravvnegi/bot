@@ -13,28 +13,12 @@
         <mat-label class="mat-label">
           {{ 'mail.add' | translate }}
         </mat-label>
-        <mat-form-field>
-          <mat-chip-list #sendTest>
-            <mat-chip
-              *ngFor="let email of parentFG?.get('testEmails').value"
-              (removed)="removeEmail(email, parentFG?.get('testEmails'))"
-            >
-              {{ email }}
-              <button matChipRemove class="chip-remove-btn">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-            <input
-              placeholder="Send upto 5 emails at once"
-              [matChipInputFor]="sendTest"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              [matChipInputAddOnBlur]="addOnBlur"
-              (matChipInputTokenEnd)="
-                addEmail($event, parentFG?.get('testEmails'))
-              "
-            />
-          </mat-chip-list>
-        </mat-form-field>
+        <div style="width: calc(100% - 150px);">
+          <hospitality-bot-email-chip-list
+            [parentFG]="parentFG"
+            [name]="'testEmails'"
+          ></hospitality-bot-email-chip-list>
+        </div>
       </div>
     </div>
   </div>

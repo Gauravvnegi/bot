@@ -1,14 +1,10 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
@@ -29,7 +25,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private listingService: ListingService,
     private globalFilterService: GlobalFilterService,
-    private _modal: ModalService,
     private _location: Location,
     private _listingService: ListingService,
     private _snackbarService: SnackBarService,
@@ -46,7 +41,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   initFG(): void {
     this.listFG = this._fb.group({
       name: ['', [Validators.required]],
-      topicName: ['', [Validators.required]],
+      topicName: [''],
       description: [''],
       marketingContacts: [[]],
       active: [true],

@@ -1,16 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { IList, List, Topics } from '../../data-models/listing.model';
+import { IList, List } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 
 @Component({
@@ -30,14 +25,11 @@ export class EditListingComponent implements OnInit {
   loading = false;
   constructor(
     private _fb: FormBuilder,
-    private listingService: ListingService,
     private globalFilterService: GlobalFilterService,
-    private _modal: ModalService,
     private _listingService: ListingService,
     private _snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private _location: Location,
-    private adminUtilityService: AdminUtilityService,
     private _router: Router
   ) {
     this.initFG();
@@ -51,7 +43,7 @@ export class EditListingComponent implements OnInit {
     this.listFG = this._fb.group({
       id: [''],
       name: ['', [Validators.required]],
-      topicName: ['', [Validators.required]],
+      topicName: [''],
       description: [''],
       marketingContacts: [[]],
       active: [true],

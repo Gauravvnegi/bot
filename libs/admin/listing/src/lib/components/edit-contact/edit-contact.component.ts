@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Regex } from '@hospitality-bot/shared';
-import { ListingService } from '../../services/listing.service';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',

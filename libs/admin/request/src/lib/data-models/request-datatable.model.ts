@@ -127,7 +127,7 @@ export class Guest implements Deserializable {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'])),
+      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName']))
     );

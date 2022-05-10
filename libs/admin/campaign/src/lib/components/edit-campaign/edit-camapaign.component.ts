@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
@@ -43,6 +44,7 @@ export class EditCampaignComponent implements OnInit {
   datamapped = true;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
+    private location: Location,
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
@@ -186,7 +188,12 @@ export class EditCampaignComponent implements OnInit {
             if (this.campaignId) {
               console.log('Saved');
               this.setDataAfterUpdate(response);
-            } else this.setDataAfterSave(response);
+            } else {
+              this.location.replaceState(
+                `/pages/marketing/campaign/edit/${response.id}`
+              );
+              this.setDataAfterSave(response);
+            }
           },
           ({ error }) => {
             this._snackbarService.openSnackBarAsText(error.message);

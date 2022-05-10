@@ -203,10 +203,7 @@ export class CampaignFormComponent implements OnInit {
 
   enableEmailControl(event, controlName: string) {
     event.stopPropagation();
-    this.campaignFG.addControl(
-      controlName,
-      new FormArray([], Validators.required)
-    );
+    this.campaignFG.addControl(controlName, new FormArray([]));
     this.disableDropdown();
   }
 

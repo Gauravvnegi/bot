@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import { Topics } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 
@@ -16,10 +17,7 @@ export class TemplateListContainerComponent implements OnInit {
   @Input() hotelId: string;
   @Input() templateType: string;
   @Output() change = new EventEmitter();
-  templateTypes = [
-    { name: 'Saved Template', type: 'SAVEDTEMPLATE' },
-    { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' },
-  ];
+  templateTypes=campaignConfig.datatable.templateTypes;
   selectedTopic = 'ALL';
   topicList = [];
   templateTopicList = [];

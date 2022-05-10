@@ -2,5 +2,38 @@
   "datatable": {
     "no_data": "No data available in table",
     "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
-  }
+  },
+  "toDrop": {
+    "viewSubscriber": "You can view all subscriber groups from the",
+    "viewlist": "You can create a new List from the",
+    "infoMessage": "Email is sent to latest checked-out guests or you can specify the recipient in the group or individually please note email not sent to the  guest who have already submitted the survey.",
+    "show": "Show More",
+    "learn": "Learn More"
+  },
+  "mail": {
+    "send": "Send test Email",
+    "add": "Email Address:"
+  },
+  "content": {
+    "create": "Create Content",
+    "add": "Add Content",
+    "view": "View Content"
+  },
+  "template": {
+    "saved": "Saved Template",
+    "inbuilt": "In-Built Template",
+    "createHtml": "Create New(HTML Editor)"
+  },
+  "campaign": {
+    "create": "+Create Campaign",
+    "archive": "Archive Campaign",
+    "clone": "Clone Campaign",
+    "view": "View Campaign"
+  },
+  "sendText": "Send Text",
+  "fromRequired": "From is required",
+  "subjectRequired": "Subject is required",
+  "subjectLength": "Maximum length is 200 characters.",
+  "previewRequired": "Preview Text is required",
+  "personlize": "Personalization"
 }

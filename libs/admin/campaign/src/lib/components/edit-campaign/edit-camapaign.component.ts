@@ -61,6 +61,7 @@ export class EditCampaignComponent implements OnInit {
 
   initFG(): void {
     this.campaignFG = this._fb.group({
+      name: ['', [Validators.required]],
       templateId: [''],
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),

@@ -35,5 +35,6 @@
   "subjectRequired": "Subject is required",
   "subjectLength": "Maximum length is 200 characters.",
   "previewRequired": "Preview Text is required",
-  "personlize": "Personalization"
+  "personlize": "Personalization",
+  "nameRequired": "Name is required"
 }

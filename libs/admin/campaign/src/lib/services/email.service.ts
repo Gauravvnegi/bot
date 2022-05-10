@@ -56,7 +56,7 @@ export class EmailService extends ApiService {
     if (data['bcc']) reqData['bcc'] = this.mapSendersData('bcc', data);
     return {
       ...reqData,
-      name: campaign?.name,
+      name: data.name,
       topicId: data.topicId,
       from: data.from,
       subject: {

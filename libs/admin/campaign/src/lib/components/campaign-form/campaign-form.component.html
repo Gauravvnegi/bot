@@ -41,6 +41,22 @@
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
     <div class="fields">
       <div class="field">
+        <mat-label class="mat-label">Name:</mat-label>
+        <mat-form-field class="description">
+          <input matInput formControlName="name" placeholder="Enter Name" />
+          <mat-error
+            *ngIf="
+              campaignFG.get('name').touched &&
+              campaignFG.get('name').hasError('required')
+            "
+          >
+            {{ 'nameRequired' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field">
         <mat-label class="mat-label">From:</mat-label>
         <mat-form-field>
           <mat-select formControlName="from" placeholder="Select email">

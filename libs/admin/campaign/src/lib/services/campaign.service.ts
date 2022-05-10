@@ -105,6 +105,7 @@ export class CampaignService extends ApiService {
     campaignData.templateName = formValue.templateName;
     campaignData.isDraft = formValue.isDraft;
     campaignData.active = campaignData.active;
+    campaignData.name = campaignData.name;
     return campaignData;
   }
 

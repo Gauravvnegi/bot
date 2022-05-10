@@ -11,8 +11,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 30px 20px 0 20px;
-    .back {
+    margin: 11px 20px 0 20px;
+    &__back {
       display: flex;
       align-items: center;
       .label {
@@ -27,37 +27,10 @@
         }
       }
     }
-  }
-  .headings {
-    margin-left: 13px;
-    font-family: Roboto;
-    font-weight: bold;
-    font-size: 18px;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
-    color: #002046;
-
-    .go-back {
+    &__preDesigned {
       display: flex;
-      padding-top: 20px;
+      justify-content: space-between;
       align-items: center;
-      p {
-        cursor: default;
-      }
-      button:hover {
-        background-color: transparent;
-      }
-      .material-icons {
-        cursor: pointer;
-      }
-    }
-
-    .preDesigned {
-      display: flex;
-      padding: 40px 0 0 40px;
       .head {
         padding-top: 8px;
         padding-right: 23px;
@@ -68,24 +41,17 @@
         padding-right: 23px;
         width: 296px;
       }
-    }
-  }
-
-  .heading {
-    padding-left: 40px;
-
-    p {
-      height: 33px;
-      margin: 44px 58px 31px 0;
-      font-family: Roboto;
-      font-size: 25px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 1.5px;
-      text-align: left;
-      color: #002046;
+      .topic{
+        font-size: 16px;
+        font-family: Roboto;
+        padding-right: 12px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        color: #002046;
+      }
     }
   }
 
@@ -146,8 +112,9 @@
   width: 205px;
   height: 36px;
   opacity: 0.2;
+  font-size: 16px;
   border-radius: 4px;
-  border: solid 1px #707070;
+  border: solid 1.5px #262626;
   background-color: #fff;
   .mat-form-field-label {
     border-bottom: none;
@@ -240,6 +207,22 @@
   opacity: 0.3;
 }
 
-.mt-20 {
-  margin-top: 20px;
+:host ::ng-deep .mat-select-value{
+  padding-left: 10px;
+}
+
+:host ::ng-deep .template-name {
+  font-family: Roboto !important;
+  font-size: 16px !important;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px !important;
+  text-align: left;
+  color: #002046 !important;
+  .template-option {
+    // display: none !important;
+    border: none !important;
+  }
 }

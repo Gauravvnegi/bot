@@ -1,11 +1,12 @@
 <div class="container">
   <header class="header">
-    <div class="back">
+    <div class="header__back">
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <mat-form-field class="mt-20">
+      <mat-form-field class="template-name">
         <mat-select
+          class="template-option"
           [value]="templateType"
           (selectionChange)="templateTypeSelection($event.value)"
         >
@@ -17,21 +18,24 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div class="preDesigned">
-      <mat-form-field class="mt-20">
-        <mat-select [value]="selectedTopic">
-          <mat-option [value]="'ALL'" (click)="getTemplateForAllTopics()"
-            >All</mat-option
-          >
-          <mat-option
-            *ngFor="let topic of topicList"
-            [value]="topic.name"
-            (click)="getTemplateByTopicId(topic)"
-          >
-            {{ topic.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="header__preDesigned">
+      <div class="topic">Topic</div>
+      <div class="mt-20">
+        <mat-form-field>
+          <mat-select [value]="selectedTopic">
+            <mat-option [value]="'ALL'" (click)="getTemplateForAllTopics()"
+              >All</mat-option
+            >
+            <mat-option
+              *ngFor="let topic of topicList"
+              [value]="topic.name"
+              (click)="getTemplateByTopicId(topic)"
+            >
+              {{ topic.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </header>
 

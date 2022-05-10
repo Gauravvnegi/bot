@@ -5,8 +5,7 @@
   height: auto;
   min-height: 52px;
   border-bottom: 1px solid #737679;
-  padding: 8px;
-  margin-bottom: 15px;
+  padding: 16px 0px;
   cursor: text;
   display: flex;
   flex-wrap: wrap;
@@ -44,7 +43,6 @@
 }
 
 .form-field > .field > input {
-  padding: 5px;
   display: block !important;
   box-sizing: border-box;
   width: calc(100% - 65px);

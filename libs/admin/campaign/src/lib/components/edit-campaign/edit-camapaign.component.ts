@@ -10,7 +10,6 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { reject } from 'lodash';
 import { empty, of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
@@ -258,7 +257,6 @@ export class EditCampaignComponent implements OnInit {
   setDataAfterUpdate(response) {
     if (response?.value) {
       this.campaign = new Campaign().deserialize(response?.value);
-      this.setFormData();
     }
   }
 

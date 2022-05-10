@@ -227,7 +227,6 @@ export class ViewCampaignComponent implements OnInit {
   setDataAfterUpdate(response) {
     if (response?.value) {
       this.campaign = new Campaign().deserialize(response?.value);
-      this.setFormData();
     }
   }
 

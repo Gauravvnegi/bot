@@ -30,7 +30,7 @@
             <div class="options">
               <div class="request-btn__wrap" (click)="openCreateCampaign()">
                 <div class="request-btn">
-                  {{ '+Create Campaign' | translate }}
+                  {{ 'campaign.create' | translate }}
                 </div>
               </div>
               <div *ngIf="isActionButtons" class="icons">
@@ -331,14 +331,14 @@
               class="dropdown__item"
               (click)="cloneCampaign(rowData.id, rowData)"
             >
-              Clone Campaign
+              {{ 'campaign.clone' | translate }}
             </div>
             <div
               *ngIf="!rowData.isDraft"
               class="dropdown__item"
               (click)="archiveCampaign(rowData.id, rowData)"
             >
-              Archive Campaign
+              {{ 'campaign.archive' | translate }}
             </div>
           </div>
         </div>

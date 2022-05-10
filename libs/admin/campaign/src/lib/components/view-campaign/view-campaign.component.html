@@ -4,7 +4,9 @@
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <p class="label">View Campaign</p>
+      <p class="label">
+        {{ 'campaign.view' | translate }}
+      </p>
     </div>
     <div class="option">
       <div class="icon"></div>
@@ -121,7 +123,7 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Preivew Text:</mat-label>
+        <mat-label class="mat-label">Preview Text:</mat-label>
         <mat-form-field class="description">
           <input
             matInput

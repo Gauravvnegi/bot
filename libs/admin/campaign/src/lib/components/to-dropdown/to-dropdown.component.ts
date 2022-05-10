@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import { ReceiversSearchItem } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
@@ -18,24 +19,10 @@ export class ToDropdownComponent implements OnInit {
   @Input() searchList: ReceiversSearchItem[];
   @Output() selectedList = new EventEmitter();
   $subscriptions = new Subscription();
-  tabFilterItems = [
-    {
-      label: 'Subscribers Groups',
-      value: 'SUBSCRIBERGROUP',
-      chips: [],
-    },
-    {
-      label: 'Listing',
-      value: 'LISTING',
-      chips: [],
-    },
-  ];
+  tabFilterItems = campaignConfig.datatable.dropDownTabFilters;
   tabFilterIdx = 0;
-  listings = {
-    data: [],
-    totalRecords: 0,
-  };
-  subscribers = {};
+  listings = campaignConfig.listings;
+  subscribers=campaignConfig.subscribers;
   offset = 0;
   constructor(
     private _campaignService: CampaignService,

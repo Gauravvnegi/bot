@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-
+import { campaignConfig } from '../../constant/campaign';
 @Component({
   selector: 'hospitality-bot-create-content',
   templateUrl: './create-content.component.html',
@@ -13,6 +13,10 @@ export class CreateContentComponent implements OnInit {
 
   goBack() {
     this.changeStep.emit({ step: 'previous' });
+  }
+
+  get campaignConfiguration() {
+    return campaignConfig;
   }
 
   openTemplateList(type) {

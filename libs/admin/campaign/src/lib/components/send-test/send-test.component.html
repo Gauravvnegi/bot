@@ -1,6 +1,8 @@
 <div class="wrapper">
   <header class="wrapper-header">
-    <div class="title">Send test Email</div>
+    <div class="title">
+      {{ 'mail.send' | translate }}
+    </div>
     <div (click)="close()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
@@ -8,7 +10,9 @@
   <div class="body" [formGroup]="parentFG">
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Email Address:</mat-label>
+        <mat-label class="mat-label">
+          {{ 'mail.add' | translate }}
+        </mat-label>
         <mat-form-field>
           <mat-chip-list #sendTest>
             <mat-chip

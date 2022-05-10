@@ -22,7 +22,7 @@
         <div
           class="dropdown__item"
           (click)="archiveCampaign()"
-          *ngIf="campaignId && !campaign.archieved"
+          *ngIf="campaignId && !campaign?.archieved"
         >
           Archive Campaign
         </div>

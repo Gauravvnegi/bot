@@ -60,8 +60,6 @@ export class ViewCampaignComponent implements OnInit {
     this.campaignFG = this._fb.group({
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),
-      cc: this._fb.array([]),
-      bcc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
@@ -120,6 +118,10 @@ export class ViewCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          if (this.campaign.cc)
+            this.campaignFG.addControl('cc', this._fb.array([]));
+          if (this.campaign.bcc)
+            this.campaignFG.addControl('bcc', this._fb.array([]));
           this.setFormData();
         })
     );

@@ -114,6 +114,10 @@ export class EditCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          if (this.campaign.cc)
+            this.campaignFG.addControl('cc', this._fb.array([]));
+          if (this.campaign.bcc)
+            this.campaignFG.addControl('bcc', this._fb.array([]));
           this.setFormData();
           this.listenForAutoSave();
         })

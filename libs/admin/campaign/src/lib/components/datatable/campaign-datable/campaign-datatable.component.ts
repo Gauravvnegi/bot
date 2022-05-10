@@ -51,7 +51,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
-
+  displayDraft: boolean;
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -118,6 +118,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           this.values = new Campaigns().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
+          this.displayDraft = data.isDraft;
           data.entityTypeCounts &&
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
           data.entityStateCounts &&
@@ -208,11 +209,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .cloneCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText('Campaign Cloned.', '', {
+            this._snackbarService.openSnackBarAsText('Campaign Cloned', '', {
               panelClass: 'success',
             });
+            this.changePage(this.currentPage);
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
         )
     );
   }
@@ -220,14 +224,17 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   archiveCampaign(campaignId, data) {
     this.$subscription.add(
       this.campaignService
-        .archiveCampaign(this.hotelId, {}, campaignId)
+        .archiveCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
+            this._snackbarService.openSnackBarAsText('Campaign Archived', '', {
               panelClass: 'success',
             });
+            this.changePage(this.currentPage);
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
         )
     );
   }

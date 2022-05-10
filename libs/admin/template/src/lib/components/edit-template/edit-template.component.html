@@ -12,10 +12,10 @@
         >
         <p class="label">
           <ng-container *ngIf="templateId; else addTemplate">
-            Edit Template
+            {{ 'templateForm.editTemplate' | translate }}
           </ng-container>
           <ng-template #addTemplate>
-            Create Template
+            {{ 'templateForm.createTemplate' | translate }}
           </ng-template>
         </p>
       </div>
@@ -121,7 +121,7 @@
                 [alt]="templateConfiguration.images.saved.alt"
               />
               <div class="manually-import">
-                Saved Template
+                {{ 'createContent.savedTemplate' | translate }}
               </div>
             </div>
             <div
@@ -135,7 +135,7 @@
                 [alt]="templateConfiguration.images.inbuilt.alt"
               />
               <div class="manually-import">
-                In-Built Template
+                {{ 'createContent.inBuiltTemplate' | translate }}
               </div>
             </div>
             <div
@@ -149,7 +149,7 @@
                 [alt]="templateConfiguration.images.editTemplate.alt"
               />
               <div class="manually-import">
-                Create New(HTML Editor)
+                {{ 'createContent.createNew' | translate }}
               </div>
             </div>
           </div>

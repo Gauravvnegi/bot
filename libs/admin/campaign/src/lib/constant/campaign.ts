@@ -54,65 +54,6 @@ export const campaignConfig = {
       },
     ],
 
-    statsTabFilterItems: [
-      {
-        chips: [
-          {
-            label: 'Delivered',
-            icon: '',
-            value: 'DELIVERED',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
-          },
-          {
-            label: 'Opened',
-            icon: '',
-            value: 'OPENED',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
-          },
-          {
-            label: 'Unopened ',
-            icon: '',
-            value: 'UNOPENED',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
-          },
-          {
-            label: 'Clicked',
-            icon: '',
-            value: 'CLICKED',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
-          },
-          {
-            label: 'Failed',
-            icon: '',
-            value: 'FAILED',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
-          },
-        ],
-        lastPage: 0,
-      },
-    ],
-    dropDownTabFilters:[
-      {
-        label: 'Subscribers Groups',
-        value: 'SUBSCRIBERGROUP',
-        chips: [],
-      },
-      {
-        label: 'Listing',
-        value: 'LISTING',
-        chips: [],
-      },
-    ],
     cols: [
       {
         field: 'name',
@@ -159,7 +100,7 @@ export const campaignConfig = {
       { name: 'Pre-defined Template', type: 'PREDESIGNTEMPLATE' },
     ],
   },
-  listings : {
+  listings: {
     data: [],
     totalRecords: 0,
   },

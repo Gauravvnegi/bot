@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { empty, of, Subscription } from 'rxjs';
@@ -48,7 +48,6 @@ export class EditCampaignComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private _campaignService: CampaignService,
     private _emailService: EmailService,
-    private _router: Router,
     private _snackbarService: SnackBarService
   ) {
     this.initFG();
@@ -185,12 +184,9 @@ export class EditCampaignComponent implements OnInit {
         .subscribe(
           (response) => {
             if (this.campaignId) {
-              this.setDataAfterUpdate(response);
               console.log('Saved');
-            } else
-              this._router.navigate([
-                `/pages/marketing/campaign/edit/${response.id}`,
-              ]);
+              this.setDataAfterUpdate(response);
+            } else this.setDataAfterSave(response);
           },
           ({ error }) => {
             this._snackbarService.openSnackBarAsText(error.message);
@@ -256,7 +252,15 @@ export class EditCampaignComponent implements OnInit {
 
   setDataAfterUpdate(response) {
     if (response?.value) {
-      this.campaign = new Campaign().deserialize(response?.value);
+      this.campaignId = response.value.id;
+      this.campaign = new Campaign().deserialize(response.value);
+    }
+  }
+
+  setDataAfterSave(response) {
+    if (response) {
+      this.campaignId = response.id;
+      this.campaign = new Campaign().deserialize(response);
     }
   }
 

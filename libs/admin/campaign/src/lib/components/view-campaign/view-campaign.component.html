@@ -1,1 +1,146 @@
-<p>view-campaign works!</p>
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">View Campaign</p>
+    </div>
+    <div class="option">
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div
+        class="dropdown"
+        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
+      >
+        <div class="dropdown__item" (click)="sendTestCampaign()">
+          Send Test
+        </div>
+        <div
+          class="dropdown__item"
+          (click)="archiveCampaign()"
+          *ngIf="campaignId"
+        >
+          Archive Campaign
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="sent-details">
+    <div class="icon"></div>
+    <div>
+      Sent on
+      {{
+        campaign?.getDraftDate(
+          globalFilterService.timezone,
+          'MMM DD, YYYY hh:mm a'
+        )
+      }}
+    </div>
+  </div>
+  <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
+    <div class="stats-container">
+      <div
+        class="stats"
+        *ngFor="let item of campaign?.statsCampaign | keyvalue"
+      >
+        <div>{{ item.value }}</div>
+        <div class="stats__text">{{ item.key | titlecase }}</div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field">
+        <mat-label class="mat-label">From:</mat-label>
+        <mat-form-field>
+          <mat-select
+            formControlName="from"
+            placeholder="Select email"
+            [disabled]="true"
+          >
+            <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
+              item.email
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">To:</mat-label>
+        <div class="email-field-container">
+          <hospitality-bot-receiver-field
+            [name]="'to'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('to')?.value || []"
+            [disableInput]="(campaignFG.get('to')?.value || []).length"
+            [disabled]="true"
+          ></hospitality-bot-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('cc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">Cc:</mat-label>
+        <div class="width">
+          <hospitality-bot-receiver-field
+            [name]="'cc'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('cc')?.value || []"
+            [disableInput]="(campaignFG.get('cc')?.value || []).length"
+            [disabled]="true"
+          ></hospitality-bot-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('bcc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">Bcc:</mat-label>
+        <div class="width">
+          <hospitality-bot-receiver-field
+            [name]="'bcc'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('bcc')?.value || []"
+            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
+            [disabled]="true"
+          ></hospitality-bot-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Subject:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="subject"
+            placeholder="Enter Subject"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">Preivew Text:</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="previewText"
+            placeholder="Enter Preview Text"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="info-container" *ngIf="campaignDetails">
+      <div>
+        {{ campaignDetails.templateName }}
+      </div>
+      <!-- <div>{{ campaignDetails | json }}</div> -->
+    </div>
+    <hospitality-bot-edit-content
+      [campaignFG]="campaignFG"
+      [campaignDetails]="campaign"
+      [viewMode]="true"
+    ></hospitality-bot-edit-content>
+  </div>
+</div>

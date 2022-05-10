@@ -66,7 +66,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
-      topicId: ['']
+      topicId: [''],
     });
   }
 
@@ -127,7 +127,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       this._emailService
         .getTemplateByTopic(this.hotelId, event.value)
         .subscribe((response) => {
-          this.templateList = response;
+          this.templateList = response.records;
         })
     );
   }
@@ -139,21 +139,25 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    return template.substring(
-      template.indexOf('<div'),
-      template.lastIndexOf('</body>')
-    );
+    if (template.indexOf('<body>') != -1)
+      return template.substring(
+        template.indexOf('<div'),
+        template.lastIndexOf('</body>')
+      );
+    else return template;
   }
 
   getTemplateMessage(data) {
-    return (
-      this.templateData.substring(0, this.templateData.indexOf('<div')) +
-      data.message +
-      this.templateData.substring(
-        this.templateData.lastIndexOf('</body'),
-        this.templateData.length
-      )
-    );
+    if (this.templateData.indexOf('<body>'))
+      return (
+        this.templateData.substring(0, this.templateData.indexOf('<div')) +
+        data.message +
+        this.templateData.substring(
+          this.templateData.lastIndexOf('</body'),
+          this.templateData.length
+        )
+      );
+    return data.message;
   }
 
   sendMail() {

@@ -246,14 +246,19 @@
       </td>
       <td class="name">
         <div class="template_image_wrapper">
-          <div class="text">
+          <div
+            class="text"
+            *ngIf="rowData.name || rowData.topicName; else emptyCell"
+          >
             <div>{{ rowData.name }}</div>
             <p class="topic-name">{{ rowData.topicName }}</p>
           </div>
         </div>
       </td>
       <td class="guest">
-        {{ rowData.templateName }}
+        <div *ngIf="rowData.templateName; else emptyCell">
+          {{ rowData.templateName }}
+        </div>
       </td>
       <td class="stats">
         <ng-container *ngIf="rowData?.isDraft; else chipStats">
@@ -316,7 +321,12 @@
           <div class="icon"></div>
           <div class="icon"></div>
           <div class="icon"></div>
-          <div class="dropdown" (click)="handleDropdownClick($event)">
+          <div
+            class="dropdown"
+            (click)="handleDropdownClick($event)"
+            [style.top]="rowIndex == 0 ? '100%' : ''"
+            [style.bottom]="rowIndex != 0 ? '100%' : ''"
+          >
             <div
               class="dropdown__item"
               (click)="cloneCampaign(rowData.id, rowData)"
@@ -324,6 +334,7 @@
               Clone Campaign
             </div>
             <div
+              *ngIf="!rowData.isDraft"
               class="dropdown__item"
               (click)="archiveCampaign(rowData.id, rowData)"
             >

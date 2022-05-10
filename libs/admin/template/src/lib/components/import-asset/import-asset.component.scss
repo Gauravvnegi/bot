@@ -32,7 +32,7 @@
     display: flex;
     flex-wrap: wrap;
     border-bottom: solid 1px #e0e0e0;
-    height: calc(100vh - 217px);
+    height: calc(100vh - 150px);
     overflow-y: auto;
     .img-container {
       width: 112px;
@@ -71,34 +71,6 @@
       }
     }
   }
-  // .footer {
-  //   height: 60px;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   .save-btn {
-  //     width: 138px;
-  //     height: 36px;
-  //     padding: 10px 40.3px 11px 41.3px;
-  //     border-radius: 18px;
-  //     background-color: #4b56c0;
-  //     display: flex;
-  //     align-items: center;
-  //     justify-content: center;
-  //     cursor: pointer;
-  //     &__text {
-  //       font-family: Roboto;
-  //       font-size: 11px;
-  //       font-weight: normal;
-  //       font-stretch: normal;
-  //       font-style: normal;
-  //       line-height: normal;
-  //       letter-spacing: 0.66px;
-  //       text-align: left;
-  //       color: #fff;
-  //     }
-  //   }
-  // }
 }
 
 :host ::ng-deep .mat-tab-label {

@@ -10,21 +10,20 @@
       [campaign]="campaign"
       [campaignId]="campaignId"
       [campaignFG]="campaignFG"
-      (changeStep)="changeStep($event)"
+      (changeStep)="handleCreateContentChange($event)"
       (save)="autoSave()"
     ></hospitality-bot-campaign-form>
   </ng-container>
   <ng-container *ngSwitchCase="1">
     <hospitality-bot-create-content
-      (changeStep)="changeStep($event)"
+      (changeStep)="handleCreateContentChange($event)"
     ></hospitality-bot-create-content>
   </ng-container>
   <ng-container *ngSwitchCase="2">
-    <hospitality-bot-template-list
+    <hospitality-bot-template-list-container
       [hotelId]="hotelId"
-      [selectedTemplate]="createContentType"
-      (templateSelection)="setTemplate($event)"
-      (changeStep)="changeStep($event)"
-    ></hospitality-bot-template-list>
+      [templateType]="createContentType"
+      (change)="changeStep($event)"
+    ></hospitality-bot-template-list-container>
   </ng-container>
 </ng-container>

@@ -209,11 +209,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .cloneCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText(
-              'Campaign cloned Successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this._snackbarService.openSnackBarAsText('Campaign Cloned', '', {
+              panelClass: 'success',
+            });
             this.changePage(this.currentPage);
           },
           ({ error }) => {
@@ -229,11 +227,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .archiveCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText(
-              'Campaign archived Successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this._snackbarService.openSnackBarAsText('Campaign Archived', '', {
+              panelClass: 'success',
+            });
             this.changePage(this.currentPage);
           },
           ({ error }) => {
@@ -255,9 +251,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   openEditCampaign(campaign, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${campaign.id}`], {
-      relativeTo: this.route,
-    });
+    this._router.navigate(
+      [`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`],
+      {
+        relativeTo: this.route,
+      }
+    );
   }
   handleDropdownClick(event) {
     event.stopPropagation();

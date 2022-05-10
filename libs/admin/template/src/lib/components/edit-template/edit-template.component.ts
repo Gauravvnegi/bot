@@ -53,7 +53,7 @@ export class EditTemplateComponent implements OnDestroy {
       status: [true],
       templateType: [''],
       htmlTemplate: ['', [Validators.required]],
-      shared: [''],
+      isShared: [''],
     });
   }
 

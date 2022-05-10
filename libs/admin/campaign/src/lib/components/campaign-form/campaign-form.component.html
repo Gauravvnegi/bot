@@ -10,7 +10,10 @@
       <div class="icon"></div>
       <div class="icon"></div>
       <div class="icon"></div>
-      <div class="dropdown" [style.height.px]="campaignId ? 118 : 69">
+      <div
+        class="dropdown"
+        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
+      >
         <div class="dropdown__item" (click)="sendTestCampaign()">
           Send Test
         </div>
@@ -24,6 +27,17 @@
       </div>
     </div>
   </header>
+  <div class="sent-details" *ngIf="campaign">
+    <div>
+      Drafted on
+      {{
+        campaign?.getDraftDate(
+          globalFilterService.timezone,
+          'MMM DD, YYYY hh:mm a'
+        )
+      }}
+    </div>
+  </div>
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
     <div class="fields">
       <div class="field">
@@ -56,24 +70,16 @@
             [disableInput]="(campaignFG.get('to')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"
           ></hospitality-bot-receiver-field>
-          <div
-            style="
-              display: flex;
-              position: absolute;
-              right: 0;
-              bottom: 25px;
-              color: #4b56c0;
-            "
-          >
+          <div class="email-style">
             <div
-              style="margin-right: 10px; cursor: pointer;"
+              class="style-click"
               (click)="enableEmailControl($event, 'bcc')"
               *ngIf="!campaignFG?.get('bcc')"
             >
               Bcc
             </div>
             <div
-              style="margin-right: 10px; cursor: pointer;"
+              class="style-click"
               (click)="enableEmailControl($event, 'cc')"
               *ngIf="!campaignFG?.get('cc')"
             >
@@ -86,11 +92,12 @@
     <div class="fields" *ngIf="campaignFG?.get('cc')">
       <div class="field full-width">
         <mat-label class="mat-label">Cc:</mat-label>
-        <div style="width: 100%;">
+        <div class="cc-width">
           <hospitality-bot-receiver-field
             [name]="'cc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('cc')?.value || []"
+            [disableInput]="(campaignFG.get('cc')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
           ></hospitality-bot-receiver-field>
         </div>
@@ -99,11 +106,12 @@
     <div class="fields" *ngIf="campaignFG?.get('bcc')">
       <div class="field full-width">
         <mat-label class="mat-label">Bcc:</mat-label>
-        <div style="width: 100%;">
+        <div class="cc-width">
           <hospitality-bot-receiver-field
             [name]="'bcc'"
             [hotelId]="hotelId"
             [chipList]="campaignFG.get('bcc')?.value || []"
+            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
             (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
           ></hospitality-bot-receiver-field>
         </div>
@@ -118,9 +126,9 @@
             formControlName="subject"
             placeholder="Enter Subject"
           />
-          <div style="position: absolute; right: 0; top: 0;">
-            <div style="display: flex; align-items: center;">
-              <div style="margin-right: 3px;">
+          <div class="description-style">
+            <div class="style-subject">
+              <div class="subject-options">
                 {{ campaignFG.get('subject')?.value.length }}/200
               </div>
               <hospitality-bot-personalization
@@ -157,9 +165,9 @@
             formControlName="previewText"
             placeholder="Enter Preview Text"
           />
-          <div style="position: absolute; right: 0; top: 0;">
-            <div style="display: flex; align-items: center;">
-              <div style="margin-right: 3px;">
+          <div class="description-style">
+            <div class="style-subject">
+              <div class="subject-options">
                 {{ campaignFG.get('previewText')?.value.length }}/200
               </div>
               <hospitality-bot-personalization

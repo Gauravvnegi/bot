@@ -44,10 +44,7 @@
             />
             {{ 'importAsset' | translate }}
           </div>
-          <div
-            *ngIf="enableAssetImport"
-            style="position: absolute; z-index: 122; top: 0; right: 0;"
-          >
+          <div *ngIf="enableAssetImport" class="asset-enable">
             <hospitality-bot-import-asset
               (closeImport)="enableAssetImport = false"
             ></hospitality-bot-import-asset>
@@ -57,7 +54,7 @@
       <div class="fields" *ngIf="!isDisabled">
         <div class="field">
           <mat-label class="mat-label">Shared templates</mat-label>
-          <mat-checkbox formControlName="shared"></mat-checkbox>
+          <mat-checkbox formControlName="isShared"></mat-checkbox>
         </div>
       </div>
       <div class="description" *ngIf="!isDisabled">
@@ -77,12 +74,12 @@
     </div>
   </form>
   <div class="save-section" *ngIf="!isDisabled">
-    <div class="save-button" (click)="saveAndPreview()">
+    <div class="save-button" (click)="saveAndPreview()" *ngIf="templateId">
       <div class="save-text">
         {{ 'editTemplateButtons.preview&Save' | translate }}
       </div>
     </div>
-    <div class="save-button" (click)="save()">
+    <div class="save-button" (click)="save()" *ngIf="templateId">
       <div class="save-text">
         {{ 'editTemplateButtons.saveChanges' | translate }}
       </div>

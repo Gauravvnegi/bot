@@ -90,8 +90,8 @@
         }
 
         .import-image {
-          width: 13px;
-          height: 13.1px;
+          width: 17px;
+          height: 14.1px;
         }
       }
 
@@ -361,8 +361,14 @@
   letter-spacing: 0.96px;
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
-.mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
   display: none !important;
 }
 
@@ -420,4 +426,10 @@
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
   background-color: $primary-purple;
+}
+.asset-enable {
+  position: absolute;
+  z-index: 122;
+  top: 0;
+  right: 0;
 }

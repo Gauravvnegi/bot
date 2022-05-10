@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  SnackBarService,
   ModalService,
+  SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { SendTestComponent } from '../send-test/send-test.component';
 
 @Component({
   selector: 'hospitality-bot-view-campaign',
@@ -27,31 +37,39 @@ export class ViewCampaignComponent implements OnInit {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
+  campaign: Campaign;
   constructor(
     private location: Location,
     private _fb: FormBuilder,
     private _snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     private _emailService: EmailService,
     private _campaignService: CampaignService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private _modalService: ModalService
   ) {
     this.initFG();
   }
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.campaignFG.disable();
   }
 
   initFG(): void {
     this.campaignFG = this._fb.group({
-      fromId: ['', [Validators.required]],
-      emailIds: this._fb.array([], Validators.required),
-      // cc: this._fb.array([]),
+      from: ['', [Validators.required]],
+      to: this._fb.array([], Validators.required),
+      cc: this._fb.array([]),
+      bcc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
+      status: [true],
+      isDraft: [true],
+      campaignType: [''],
+      testEmails: this._fb.array([]),
     });
   }
 
@@ -101,8 +119,115 @@ export class ViewCampaignComponent implements OnInit {
       this._campaignService
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
-          console.log(response);
+          this.campaign = new Campaign().deserialize(response);
+          this.setFormData();
         })
     );
+  }
+  addElementToData() {
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.addFormArray('to', 'toReceivers'),
+        this.addFormArray('cc', 'ccReveivers'),
+        this.addFormArray('bcc', 'bccReveivers'),
+        this.addtestEmails(),
+      ]).then((res) => resolve(res[3]));
+    });
+  }
+
+  setFormData() {
+    this.addElementToData().then((res) => {
+      this.campaignFG.patchValue(res);
+    });
+  }
+
+  addFormArray(control, dataField) {
+    return new Promise((resolve, reject) => {
+      if (this.campaign[dataField]) {
+        this.campaign[control] = [];
+        if (!this.campaignFG.get(control))
+          this.campaignFG.addControl(control, this._fb.array([]));
+        this._campaignService
+          .getReceiversFromData(this.campaign[dataField], this.hotelId)
+          .forEach((receiver) => {
+            (this.campaignFG.get(control) as FormArray).push(
+              new FormControl(receiver)
+            );
+          });
+      }
+      resolve(this.campaign);
+    });
+  }
+
+  addtestEmails() {
+    return new Promise((resolve, reject) => {
+      this.campaign.testEmails.forEach((item) =>
+        (this.campaignFG.get('testEmails') as FormArray).push(
+          new FormControl(item)
+        )
+      );
+      resolve(this.campaign);
+    });
+  }
+
+  archiveCampaign() {
+    this.$subscription.add(
+      this._campaignService
+        .archiveCampaign(this.hotelId, {}, this.campaignId)
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
+              panelClass: 'success',
+            });
+            this.location.back();
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
+  sendTestCampaign() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const sendTestCampaignCompRef = this._modalService.openDialog(
+      SendTestComponent,
+      dialogConfig
+    );
+    sendTestCampaignCompRef.componentInstance.parentFG = this.campaignFG;
+
+    this.$subscription.add(
+      sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
+        (response) => {
+          if (response.status) {
+            const reqData = this._emailService.createRequestData(
+              this.campaign,
+              this.campaignFG.getRawValue()
+            );
+            this.$subscription.add(
+              this._emailService.sendTest(this.hotelId, reqData).subscribe(
+                (response) => {
+                  this._snackbarService.openSnackBarAsText(
+                    'Campaign sent to test email(s).',
+                    '',
+                    { panelClass: 'success' }
+                  );
+                },
+                ({ error }) =>
+                  this._snackbarService.openSnackBarAsText(error.message)
+              )
+            );
+          }
+          sendTestCampaignCompRef.close();
+        }
+      )
+    );
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

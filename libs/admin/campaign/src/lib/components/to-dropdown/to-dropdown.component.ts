@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { ReceiversSearchItem } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
+import { EmailService } from '../../services/email.service';
 
 @Component({
   selector: 'hospitality-bot-to-dropdown',
@@ -12,6 +15,7 @@ export class ToDropdownComponent implements OnInit {
   @Input() value: string;
   @Input() search = false;
   @Input() hotelId: string;
+  @Input() searchList: ReceiversSearchItem[];
   @Output() selectedList = new EventEmitter();
   $subscriptions = new Subscription();
   tabFilterItems = [
@@ -31,22 +35,32 @@ export class ToDropdownComponent implements OnInit {
     data: [],
     totalRecords: 0,
   };
-  subscribers: {
-    data: [];
-    totalRecords: 0;
-  };
+  subscribers = {};
   offset = 0;
   constructor(
     private _campaignService: CampaignService,
-    private _adminUtilityService: AdminUtilityService
+    private _adminUtilityService: AdminUtilityService,
+    private _router: Router,
+    private _emailService: EmailService
   ) {}
 
   ngOnInit(): void {
-    this.loadListings();
+    this.loadSubscribers();
   }
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    if (this.listings.data.length == 0) this.loadListings();
+  }
+
+  loadSubscribers() {
+    this.$subscriptions.add(
+      this._emailService
+        .getAllSubscriberGroup(this.hotelId)
+        .subscribe((response) => {
+          this.subscribers = response;
+        })
+    );
   }
 
   loadListings() {
@@ -72,5 +86,13 @@ export class ToDropdownComponent implements OnInit {
 
   selectItem(type, list) {
     this.selectedList.emit({ type, data: list });
+  }
+
+  redirect(url) {
+    this._router.navigate([url]);
+  }
+
+  ngOnDestroy() {
+    this.$subscriptions.unsubscribe();
   }
 }

@@ -23,13 +23,18 @@ export class EmailService extends ApiService {
   }
 
   getTemplateByTopic(hotelId: string, topicId: string) {
-    return this.get(
-      `/api/v1/entity/${hotelId}/templates/template-topic/${topicId}`
-    );
+    return this.get(`/api/v1/entity/${hotelId}/templates/topic/${topicId}`);
+  }
+
+  getAllSubscriberGroup(hotelId: string) {
+    return this.get(`/api/v1/marketing/entity/${hotelId}/subscription-group`);
   }
 
   sendEmail(hotelId: string, data) {
-    return this.post(`/api/v1/entity/${hotelId}/notifications/send`, data);
+    return this.post(`/api/v1/cms/${hotelId}/campaign`, {
+      ...data,
+      isDraft: false,
+    });
   }
 
   sendTest(hotelId: string, data) {
@@ -47,6 +52,8 @@ export class EmailService extends ApiService {
   createRequestData(campaign, data) {
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
+    if (data['cc']) reqData['cc'] = this.mapSendersData('cc', data);
+    if (data['bcc']) reqData['bcc'] = this.mapSendersData('bcc', data);
     return {
       ...reqData,
       name: campaign?.name,
@@ -60,6 +67,7 @@ export class EmailService extends ApiService {
       templateId: data.templateId,
       campaignType: data.campaignType,
       testEmails: data.testEmails,
+      isDraft: data.isDraft,
     };
   }
 
@@ -75,5 +83,26 @@ export class EmailService extends ApiService {
       else reqData.subscribers.push(item.data.id);
     });
     return reqData;
+  }
+
+  createTestResquestData(data) {
+    const reqData = {};
+    reqData['to'] = this.mapSendersData('to', data);
+    if (data['cc']) reqData['cc'] = this.mapSendersData('cc', data);
+    if (data['bcc']) reqData['bcc'] = this.mapSendersData('bcc', data);
+    return {
+      ...reqData,
+      topicId: data.topicId,
+      from: data.from,
+      subject: {
+        text: data.subject,
+      },
+      previewText: data.previewText,
+      message: data.message,
+      templateId: data.templateId,
+      campaignType: data.campaignType,
+      testEmails: data.testEmails,
+      isDraft: data.isDraft,
+    };
   }
 }

@@ -88,7 +88,7 @@ export class TemplateListContainerComponent implements OnInit {
         .subscribe((response) => {
           this.templateTopicList = [
             {
-              templates: response,
+              templates: response.records,
               topicId: topic.id,
               topicName: topic.name,
               totalTemplate: response.total,

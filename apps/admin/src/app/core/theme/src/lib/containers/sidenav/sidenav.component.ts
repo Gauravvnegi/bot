@@ -154,10 +154,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
         if (librarySubItemList.length)
           return [{ ...data, children: subItemList }];
         else return [];
-      case 'marketing':
       default:
         return subscription.filter(
-          (d) => ModuleNames[d.name] === data.path && d.active
+          (d) => ModuleNames[d.name] == data.path && d.active
         );
     }
   }

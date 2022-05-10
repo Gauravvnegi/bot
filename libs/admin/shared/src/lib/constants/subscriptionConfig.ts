@@ -7,6 +7,7 @@ export enum ModuleNames {
   NOTIFICATIONS = 'notification',
   ROLE_MANAGEMENT = 'roles-permissions',
   FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
+  MARKETING = 'marketing',
 }
 
 export enum Integrations {
@@ -206,5 +207,10 @@ export const ModuleConfig = {
     cards: [],
     tables: [],
     filters: {},
+  },
+  [ModuleNames.MARKETING]: {
+    cards: [],
+    tables: [],
+    filters: [],
   },
 };

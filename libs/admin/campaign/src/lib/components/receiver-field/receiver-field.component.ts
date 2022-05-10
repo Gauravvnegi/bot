@@ -118,6 +118,9 @@ export class ReceiverFieldComponent implements OnInit {
             ).records;
           })
       );
+    } else {
+      this.search = false;
+      this.searchList = new ReceiversSearch().deserialize({}).records;
     }
   }
 

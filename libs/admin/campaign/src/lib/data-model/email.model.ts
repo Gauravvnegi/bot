@@ -61,19 +61,19 @@ export class ReceiversSearch {
 
   deserialize(input) {
     this.records = new Array<ReceiversSearchItem>();
-    input.individual.forEach((item) =>
+    input.individual?.forEach((item) =>
       this.records.push(
         new ReceiversSearchItem().deserialize({ ...item, type: 'email' })
       )
     );
 
-    input.listing.forEach((item) =>
+    input.listing?.forEach((item) =>
       this.records.push(
         new ReceiversSearchItem().deserialize({ ...item, type: 'listing' })
       )
     );
 
-    input.subscribers.forEach((item) =>
+    input.subscribers?.forEach((item) =>
       this.records.push(
         new ReceiversSearchItem().deserialize({ ...item, type: 'subscribers' })
       )

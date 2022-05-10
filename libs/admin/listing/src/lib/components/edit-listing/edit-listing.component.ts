@@ -44,7 +44,7 @@ export class EditListingComponent implements OnInit {
       id: [''],
       name: ['', [Validators.required]],
       topicName: [''],
-      description: [''],
+      description: ['', [Validators.required]],
       marketingContacts: [[]],
       active: [true],
     });

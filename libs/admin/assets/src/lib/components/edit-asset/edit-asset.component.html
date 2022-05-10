@@ -6,10 +6,10 @@
 
     <p>
       <ng-container *ngIf="assetId; else addAsset">
-        Edit Asset
+        {{ 'assetForm.editAsset' | translate }}
       </ng-container>
       <ng-template #addAsset>
-        Create Asset
+        {{ 'assetForm.createAsset' | translate }}
       </ng-template>
     </p>
   </div>
@@ -26,7 +26,7 @@
               assetForm.get('name').hasError('required')
             "
           >
-            Name is required
+            {{ 'validationMessage.name' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -48,7 +48,7 @@
               assetForm.get('type').hasError('required')
             "
           >
-            Type is required
+            {{ 'validationMessage.type' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -68,7 +68,7 @@
             assetForm.get('description').hasError('required')
           "
         >
-          Description is required
+          {{ 'validationMessage.description' | translate }}
         </mat-error>
       </mat-form-field>
     </div>
@@ -111,7 +111,7 @@
               </hospitality-bot-upload-video>
             </ng-template>
           </div>
-          <div class="message">Recommended Ratio : 16:9 | 3MB Max Size</div>
+          <div class="message">{{ 'uploadMessage' | translate }}</div>
         </div>
       </div>
     </div>

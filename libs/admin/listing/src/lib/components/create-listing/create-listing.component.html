@@ -5,7 +5,7 @@
         >keyboard_backspace</mat-icon
       >
       <p class="label">
-        Create Listing
+        {{ 'listingForm.createListing' | translate }}
       </p>
     </div>
   </header>
@@ -26,7 +26,7 @@
                 listFG.get('name').hasError('required')
               "
             >
-              Name is required
+              {{ 'validationMessage.name' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -46,7 +46,7 @@
                 listFG.get('topicName').hasError('required')
               "
             >
-              Topic Name is required
+              {{ 'validationMessage.topic' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -60,6 +60,14 @@
               placeholder="Write Your Description Here"
               formControlName="description"
             />
+            <mat-error
+              *ngIf="
+                listFG.get('description').touched &&
+                listFG.get('description').hasError('required')
+              "
+            >
+              {{ 'validationMessage.description' | translate }}
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

@@ -3,7 +3,7 @@
 </div>
 <div class="add-popup">
   <div class="add-contact">
-    Add Contacts
+    {{ 'addContact' | translate }}
   </div>
   <div class="table-wrap">
     <table *ngIf="contactFA?.controls.length">
@@ -37,7 +37,7 @@
                     contactFG.get('email').hasError('required')
                   "
                 >
-                  Email is required
+                  {{ 'validationMessage.email' | translate }}
                 </mat-error>
                 <mat-error
                   *ngIf="
@@ -45,7 +45,7 @@
                     contactFG.get('email').hasError('pattern')
                   "
                 >
-                  Please enter the valid Email
+                  {{ 'validationAlert.email' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -53,10 +53,7 @@
           <td>
             <div class="add-contacts-field small">
               <mat-form-field>
-                <mat-select
-                  formControlName="salutation"
-                  placeholder="Mr."
-                >
+                <mat-select formControlName="salutation" placeholder="Mr.">
                   <mat-option
                     *ngFor="let salutation of salutationList"
                     [value]="salutation.value"
@@ -69,7 +66,7 @@
                     contactFG.get('salutation').hasError('required')
                   "
                 >
-                  Salutation is required
+                  {{ 'validationMessage.salutation' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -88,7 +85,7 @@
                     contactFG.get('firstName').hasError('required')
                   "
                 >
-                  First Name is required
+                  {{ 'validationMessage.firstname' | translate }}
                 </mat-error>
                 <mat-error
                   *ngIf="
@@ -96,7 +93,7 @@
                     contactFG.get('firstName').hasError('pattern')
                   "
                 >
-                  Please enter the valid First name
+                  {{ 'validationAlert.firstName' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -115,7 +112,7 @@
                     contactFG.get('lastName').hasError('required')
                   "
                 >
-                  Last Name is required
+                  {{ 'validationMessage.lastname' | translate }}
                 </mat-error>
                 <mat-error
                   *ngIf="
@@ -123,7 +120,7 @@
                     contactFG.get('lastName').hasError('pattern')
                   "
                 >
-                  Please enter the valid Last name
+                  {{ 'validationAlert.lastName' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -149,7 +146,7 @@
                     contactFG.get('mobile').hasError('required')
                   "
                 >
-                  Mobile is required
+                  {{ 'validationMessage.mobile' | translate }}
                 </mat-error>
                 <mat-error
                   *ngIf="
@@ -157,7 +154,7 @@
                     contactFG.get('mobile').hasError('pattern')
                   "
                 >
-                  Please enter the valid Mobile Number
+                  {{ 'validationAlert.mobile' | translate }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -172,7 +169,7 @@
     </table>
   </div>
   <div class="ad-contact" (click)="generateContactField()">
-    +Add Contact
+    {{ 'contact.add' | translate }}
   </div>
   <div class="submit">
     <div class="submit-contact" (click)="submitContact()">

@@ -5,30 +5,30 @@
         >keyboard_backspace</mat-icon
       >
       <p class="label">
-        Edit Listing
+        {{ 'listingForm.editListing' | translate }}
       </p>
     </div>
   </header>
   <div class="stats-container">
     <div class="stats">
       <div class="stats__value">{{ listData?.stats.totalContacts }}</div>
-      <div class="stats__text">Total Contacts</div>
+      <div class="stats__text">{{ 'stats.totalContacts' | translate }}</div>
     </div>
     <div class="stats">
       <div class="stats__value">{{ listData?.stats.unsubscribed }}</div>
-      <div class="stats__text">Unsubscribed</div>
+      <div class="stats__text">{{ 'stats.unsubscribed' | translate }}</div>
     </div>
     <div class="stats">
       <div class="stats__value">{{ listData?.stats.bounce }}</div>
-      <div class="stats__text">Bounce</div>
+      <div class="stats__text">{{ 'stats.bounce' | translate }}</div>
     </div>
     <div class="stats">
       <div class="stats__value">{{ listData?.stats.sendCampaign }}</div>
-      <div class="stats__text">Send Campaign</div>
+      <div class="stats__text">{{ 'stats.sendCampaign' | translate }}</div>
     </div>
     <div class="stats">
       <div class="stats__value">{{ listData?.stats.scheduleCampaign }}</div>
-      <div class="stats__text">Schedule Campaign</div>
+      <div class="stats__text">{{ 'stats.scheduleCampaign' | translate }}</div>
     </div>
   </div>
   <form [formGroup]="listFG">
@@ -48,7 +48,7 @@
                 listFG.get('name').hasError('required')
               "
             >
-              Name is required
+              {{ 'validationMessage.name' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -69,6 +69,14 @@
               placeholder="Write Your Description Here"
               formControlName="description"
             />
+            <mat-error
+              *ngIf="
+                listFG.get('description').touched &&
+                listFG.get('description').hasError('required')
+              "
+            >
+              {{ 'validationMessage.description' | translate }}
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

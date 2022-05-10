@@ -5,10 +5,10 @@
     </mat-icon>
     <p>
       <ng-container *ngIf="topicId; else addTopic">
-        Edit Topic
+        {{ 'topicForm.editTopic' | translate }}
       </ng-container>
       <ng-template #addTopic>
-        Create Topic
+        {{ 'topicForm.createTopic' | translate }}
       </ng-template>
     </p>
   </div>
@@ -28,7 +28,7 @@
               topicForm.get('name').hasError('required')
             "
           >
-            Name is required
+            {{ 'validationMessage.name' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -40,6 +40,14 @@
             formControlName="description"
             placeholder="Write Your Description Here"
           />
+          <mat-error
+            *ngIf="
+              topicForm.get('description').touched &&
+              topicForm.get('description').hasError('required')
+            "
+          >
+            {{ 'validationMessage.description' | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
       <div class="toggle_wrapper">

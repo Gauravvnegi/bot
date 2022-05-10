@@ -41,7 +41,7 @@ export class EditCampaignComponent implements OnInit {
   };
   campaign: Campaign;
   createContentType = '';
-  datamapped = false;
+  datamapped = true;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -72,6 +72,7 @@ export class EditCampaignComponent implements OnInit {
       isDraft: [true],
       campaignType: [''],
       testEmails: this._fb.array([]),
+      active: [true],
     });
   }
 
@@ -99,6 +100,7 @@ export class EditCampaignComponent implements OnInit {
       this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.campaignId = params['id'];
+          this.datamapped = false;
           this.getCampaignDetails(this.campaignId);
         } else this.listenForAutoSave();
       })

@@ -207,7 +207,19 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.campaignService
         .cloneCampaign(this.hotelId, data, campaignId)
-        .subscribe((response) => {})
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText(
+              'Campaign cloned Successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.changePage(this.currentPage);
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
+        )
     );
   }
 
@@ -215,7 +227,19 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.campaignService
         .archiveCampaign(this.hotelId, data, campaignId)
-        .subscribe((response) => {})
+        .subscribe(
+          (response) => {
+            this._snackbarService.openSnackBarAsText(
+              'Campaign archived Successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.changePage(this.currentPage);
+          },
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+          }
+        )
     );
   }
 

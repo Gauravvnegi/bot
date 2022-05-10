@@ -8,7 +8,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Template } from '../../data-models/templateConfig.model';
 import { MatStepper } from '@angular/material/stepper';
-
+import { templateConfig } from '../../constants/template';
 @Component({
   selector: 'hospitality-bot-edit-template',
   templateUrl: './edit-template.component.html',
@@ -27,7 +27,7 @@ export class EditTemplateComponent implements OnDestroy {
   imgTemplate;
   contentNotEditable: boolean;
   createNewHtml = false;
-  typeOfTemplate: boolean = false;
+  typeOfTemplate;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
     private _fb: FormBuilder,
@@ -190,23 +190,35 @@ export class EditTemplateComponent implements OnDestroy {
     this.contentNotEditable = false;
   }
 
-  deleteTemplate(templateId) {
-    this.$subscription.add(
-      this.templateService
-        .deleteTemplateImage(this.hotelId, templateId)
-        .subscribe((response) => {})
-    );
-    this.templateForm.get('htmlTemplate').setValue('');
+  deleteTemplate() {
+    if (this.templateId)
+      this.$subscription.add(
+        this.templateService
+          .deleteTemplateContent(this.hotelId, this.templateId)
+          .subscribe(
+            (resposne) => {
+              this.templateForm.patchValue({ htmlTemplate: '' });
+            },
+            ({ error }) =>
+              this._snackbarService.openSnackBarAsText(error.message)
+          )
+      );
+    else this.templateForm.patchValue({ htmlTemplate: '' });
   }
 
   openCreateContent(newContent: boolean, type?: string) {
-    if (type) {
-      this.typeOfTemplate = true;
-    } else {
-      this.typeOfTemplate = false;
-    }
+    this.typeOfTemplate = type;
     this.createNewHtml = newContent;
     this.stepper.selectedIndex = newContent ? 2 : 1;
+  }
+
+  handleTemplateListChange(event) {
+    if (event.status) {
+      this.templateForm.patchValue({ htmlTemplate: event.data });
+      this.move(2);
+      return;
+    }
+    this.move(0);
   }
 
   goBack() {
@@ -215,6 +227,10 @@ export class EditTemplateComponent implements OnDestroy {
 
   get htmlTemplate() {
     return this.templateForm.get('htmlTemplate');
+  }
+
+  get templateConfiguration() {
+    return templateConfig;
   }
 
   ngOnDestroy(): void {

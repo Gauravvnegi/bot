@@ -71,6 +71,14 @@ export class CampaignService extends ApiService {
     );
   }
 
+  deleteCampaignTemplate(entityId: string, campaignId) {
+    return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
+  }
+
+  getListById(id, hotelId) {
+    return this.get(`/api/v1/marketing/entity/${hotelId}/listing/${id}`);
+  }
+
   /**
    * @function mapcampaignData map api data into campaign form data.
    * @param formValue form key values.
@@ -90,5 +98,40 @@ export class CampaignService extends ApiService {
     return campaignData;
   }
 
-  createCampaignData(values) {}
+  save(hotelId: string, data, campaignId?) {
+    if (campaignId) {
+      return this.patch(`/api/v1/cms/${hotelId}/campaign/${campaignId}`, data);
+    }
+    return this.post(`/api/v1/cms/${hotelId}/campaign`, {
+      ...data,
+      isDraft: true,
+    });
+  }
+
+  getReceiversFromData(receivers, hotelId) {
+    const data = [];
+    receivers.individual.forEach((item) => {
+      data.push({
+        data: { name: item },
+        type: 'email',
+      });
+    });
+
+    receivers.listing?.forEach((item) =>
+      this.getListById(item, hotelId).subscribe((response) => {
+        data.push({
+          data: response,
+          type: 'listing',
+        });
+      })
+    );
+
+    receivers.subscribers?.forEach((item, index) =>
+      data.push({
+        data: { id: item, name: `Subscriber ${index + 1}` },
+        type: 'listing',
+      })
+    );
+    return data;
+  }
 }

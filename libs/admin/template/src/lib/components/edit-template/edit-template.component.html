@@ -12,10 +12,10 @@
         >
         <p class="label">
           <ng-container *ngIf="templateId; else addTemplate">
-            Edit Template
+            {{ 'templateForm.editTemplate' | translate }}
           </ng-container>
           <ng-template #addTemplate>
-            Create Template
+            {{ 'templateForm.createTemplate' | translate }}
           </ng-template>
         </p>
       </div>
@@ -79,17 +79,26 @@
                   mat-raised-button
                   (click)="moveToEditor(true)"
                 >
-                  <img src="assets/svg/view8280.svg" alt="" />
+                  <img
+                    [src]="templateConfiguration.images.view.url"
+                    [alt]="templateConfiguration.images.view.alt"
+                  />
                 </div>
                 <div
                   class="logos__logo"
                   mat-raised-button
                   (click)="moveToEditor(false)"
                 >
-                  <img src="assets/svg/edit8278.svg" alt="" />
+                  <img
+                    [src]="templateConfiguration.images.edit.url"
+                    [alt]="templateConfiguration.images.edit.alt"
+                  />
                 </div>
-                <div class="logos__logo" (click)="deleteTemplate(templateId)">
-                  <img src="assets/svg/delete8279.svg" alt="" />
+                <div class="logos__logo" (click)="deleteTemplate()">
+                  <img
+                    [src]="templateConfiguration.images.delete.url"
+                    [alt]="templateConfiguration.images.delete.alt"
+                  />
                 </div>
               </div>
             </div>
@@ -105,25 +114,28 @@
             <div
               class="manually-templates"
               mat-raised-button
-              (click)="openCreateContent(false, 'saved')"
+              (click)="openCreateContent(false, 'SAVEDTEMPLATE')"
             >
-              <img src="assets/svg/diskette.svg" alt="" />
+              <img
+                [src]="templateConfiguration.images.saved.url"
+                [alt]="templateConfiguration.images.saved.alt"
+              />
               <div class="manually-import">
-                Saved Template
+                {{ 'createContent.savedTemplate' | translate }}
               </div>
             </div>
             <div
               class="manually-templates"
               mat-raised-button
-              (click)="openCreateContent(false)"
+              (click)="openCreateContent(false, 'PREDESIGNTEMPLATE')"
             >
               <img
-                src="assets/svg/web-design.svg"
-                alt=""
                 class="built-template"
+                [src]="templateConfiguration.images.inbuilt.url"
+                [alt]="templateConfiguration.images.inbuilt.alt"
               />
               <div class="manually-import">
-                In-Built Template
+                {{ 'createContent.inBuiltTemplate' | translate }}
               </div>
             </div>
             <div
@@ -131,9 +143,13 @@
               mat-raised-button
               (click)="openCreateContent(true)"
             >
-              <img src="assets/svg/design.svg" alt="" />
+              <img
+                class="built-template"
+                [src]="templateConfiguration.images.editTemplate.url"
+                [alt]="templateConfiguration.images.editTemplate.alt"
+              />
               <div class="manually-import">
-                Create New(HTML Editor)
+                {{ 'createContent.createNew' | translate }}
               </div>
             </div>
           </div>
@@ -166,7 +182,8 @@
   </div>
   <div *ngSwitchCase="1">
     <hospitality-bot-template-list-container
-      (change)="move(0)"
+      (change)="handleTemplateListChange($event)"
+      [hotelId]="hotelId"
       [templateForm]="templateForm"
       [templateType]="typeOfTemplate"
     ></hospitality-bot-template-list-container>

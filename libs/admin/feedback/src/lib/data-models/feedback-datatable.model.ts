@@ -176,18 +176,18 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'anniversaryDate', get(input, ['anniversaryDate'])),
-      set({}, 'countryCode', get(input, ['countryCode'])),
-      set({}, 'created', get(input, ['created'])),
-      set({}, 'dateOfBirth', get(input, ['dateOfBirth'])),
-      set({}, 'emailId', get(input, ['emailId'])),
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'lastName', get(input, ['lastName'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'])),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'])),
-      set({}, 'place', get(input, ['place'])),
-      set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'])),
-      set({}, 'updated', get(input, ['updated']))
+      set({}, 'countryCode', get(input, ['countryCode'], '')),
+      set({}, 'created', get(input, ['created'], '')),
+      set({}, 'dateOfBirth', get(input, ['dateOfBirth'], '')),
+      set({}, 'emailId', get(input, ['emailId'], '')),
+      set({}, 'firstName', get(input, ['firstName'], '')),
+      set({}, 'id', get(input, ['id'], '')),
+      set({}, 'lastName', get(input, ['lastName'], '')),
+      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'phoneNumber', get(input, ['phoneNumber'], '')),
+      set({}, 'place', get(input, ['place'], '')),
+      set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
+      set({}, 'updated', get(input, ['updated'], ''))
     );
     return this;
   }

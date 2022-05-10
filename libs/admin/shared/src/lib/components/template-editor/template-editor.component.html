@@ -6,17 +6,14 @@
     *ngIf="richText; then richTextTemplate; else plainTextTemplate"
   ></ng-container>
   <ng-template #richTextTemplate>
-    <div class="text-field" (click)="changeField(false)">
-      Plain Text
-    </div>
     <div [formGroup]="parentFG">
       <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
     </div>
-  </ng-template>
-  <ng-template #plainTextTemplate
-    ><div class="text-field" (click)="changeField(true)">
-      Rich Text
+    <div class="text-field" (click)="changeField(false)">
+      Plain Text
     </div>
+  </ng-template>
+  <ng-template #plainTextTemplate>
     <div [formGroup]="parentFG" class="plain-text-container">
       <ng-container *ngIf="disabled; else editableDiv">
         <div
@@ -34,6 +31,9 @@
           (input)="onTemplateChange($event.target.innerHTML)"
         ></div>
       </ng-template>
+    </div>
+    <div class="text-field" (click)="changeField(true)">
+      Rich Text
     </div>
   </ng-template>
 </ng-template>

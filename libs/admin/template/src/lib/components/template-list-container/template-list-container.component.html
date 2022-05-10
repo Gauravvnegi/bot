@@ -7,25 +7,31 @@
         </mat-icon>
       </button>
       <p>
-        Create Template
+        {{ 'templateForm.createTemplate' | translate }}
       </p>
     </div>
 
     <div class="preDesigned">
-      <ng-container class="head" *ngIf="templateType; else preDesignTemplate">
-        <p>Saved Templates</p>
+      <ng-container
+        *ngIf="templateType == 'SAVEDTEMPLATE'; else preDesignTemplate"
+      >
+        <p class="head">{{ 'templateType.savedTemplate' | translate }}</p>
       </ng-container>
-      <ng-template #preDesignTemplate class="head">
-        <p>Pre-Designed Templates</p>
+      <ng-template #preDesignTemplate class="pre-head">
+        <p class="prehead">
+          {{ 'templateType.preDesignedTemplate' | translate }}
+        </p>
       </ng-template>
 
       <mat-form-field>
         <mat-select placeholder="All">
-          <mat-option [value]="" (click)="openTopicTemplates()">All</mat-option>
+          <mat-option [value]="" (click)="getTemplateForAllTopics()"
+            >All</mat-option
+          >
           <mat-option
             *ngFor="let topic of topicList"
             [value]="topic.name"
-            (click)="openTopicTemplates(topic.name)"
+            (click)="getTemplateByTopicId(topic)"
           >
             {{ topic.name }}
           </mat-option>
@@ -33,8 +39,12 @@
       </mat-form-field>
     </div>
   </div>
-  <hospitality-bot-topic-templates
-    [topic]="topicTemplate"
-    [type]="templateType"
-  ></hospitality-bot-topic-templates>
+  <ng-container *ngFor="let template of templateTopicList">
+    <hospitality-bot-topic-templates
+      [hotelId]="hotelId"
+      [templateType]="templateType"
+      [template]="template"
+      (selectedTemplate)="setTemplate($event)"
+    ></hospitality-bot-topic-templates>
+  </ng-container>
 </div>

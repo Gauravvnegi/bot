@@ -17,6 +17,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { TemplateService } from '../../services/template.service';
+import { templateConfig } from '../../constants/template';
 
 @Component({
   selector: 'hospitality-bot-import-asset',
@@ -28,10 +29,7 @@ export class ImportAssetComponent implements OnInit {
   @Output() closeImport = new EventEmitter();
   searchValue = false;
   hotelId: string;
-  tabFilterItems = [
-    { src: 'assets/svg/photo.svg', value: 'IMAGE', page: 0, total: 0 },
-    { src: 'assets/svg/film.svg', value: 'VIDEO', page: 0, total: 0 },
-  ];
+  tabFilterItems = templateConfig.datatable.assetsTabFilterItems;
   tabFilterIdx = 0;
   limit = 10;
   assets = [];

@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Subscription } from 'rxjs';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import { TemplateService } from '../../services/template.service';
-import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FormGroup } from '@angular/forms';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/templateConfig.model';
+import { TemplateService } from '../../services/template.service';
 
 @Component({
   selector: 'hospitality-bot-template-list-container',
@@ -13,71 +12,95 @@ import { Topics } from '../../data-models/templateConfig.model';
   styleUrls: ['./template-list-container.component.scss'],
 })
 export class TemplateListContainerComponent implements OnInit {
-  hotelId: string;
   private $subscription = new Subscription();
+  @Input() hotelId: string;
   @Input() templateForm: FormGroup;
-  @Input() templateType = false;
-  templateData = '';
-  template = '';
-  globalQueries = [];
+  @Input() templateType: string;
   @Output() change = new EventEmitter();
   topicList = [];
-  topicTemplate = 'All';
-
+  templateTopicList = [];
   constructor(
-    private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
     private _snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
+    this.getTopicList();
+    this.getTemplateForAllTopics();
   }
 
-  initFG(): void {}
+  ngOnChanges() {}
 
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-      this.getTopicList(this.hotelId);
-    });
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
-  }
-
-  getTopicList(hotelId) {
+  getTopicList() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
+        {
+          limit: 50,
+          entityState: 'ACTIVE',
+        },
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(hotelId, config).subscribe(
-        (response) =>
-          (this.topicList = new Topics().deserialize(response).records),
+      this.templateService.getTopicList(this.hotelId, config).subscribe(
+        (response) => {
+          this.topicList = new Topics().deserialize(response).records;
+        },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
   }
-  openTopicTemplates(name?: string) {
-    console.log(name)
-    if (name) {
-      this.topicTemplate = name;
-    } else {
-      this.topicTemplate = 'All';
-    }
+
+  getTemplateForAllTopics() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: 'ACTIVE',
+          limit: 3,
+          templateType: this.templateType,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.templateService
+        .getTemplateListByTopic(this.hotelId, config)
+        .subscribe((response) => {
+          this.templateTopicList = response;
+        })
+    );
   }
+
+  getTemplateByTopicId(topic) {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: 'ACTIVE',
+          limit: 3,
+          templateType: this.templateType,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.templateService
+        .getTemplateListByTopicId(this.hotelId, topic.id, config)
+        .subscribe((response) => {
+          this.templateTopicList = [
+            {
+              templates: response,
+              topicId: topic.id,
+              topicName: topic.name,
+              totalTemplate: response.length,
+            },
+          ];
+        })
+    );
+  }
+
+  setTemplate(event) {
+    this.change.emit(event);
+  }
+
   goBack() {
-    this.change.emit();
+    this.change.emit({ status: false });
   }
 }

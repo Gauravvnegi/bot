@@ -21,17 +21,9 @@ export class SendTestComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _snackbarService: SnackBarService
-  ) {
-    this.initFG();
-  }
+  ) {}
 
   ngOnInit(): void {}
-
-  initFG() {
-    this.parentFG = this._fb.group({
-      email: this._fb.array([], Validators.required),
-    });
-  }
 
   addEmail(event: MatChipInputEvent, control): void {
     let input = event.input;
@@ -70,10 +62,11 @@ export class SendTestComponent implements OnInit {
   }
 
   sendMail() {
-    this.closeSendTest.emit({
-      email: this.parentFG.getRawValue().email,
-      status: true,
-    });
+    if (this.parentFG.get('testEmails').value.length == 0) {
+      this._snackbarService.openSnackBarAsText('Please enter an email.');
+      return;
+    }
+    this.closeSendTest.emit({ status: true });
   }
 
   close() {

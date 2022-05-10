@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
 import {
   ModalService,
   SnackBarService,
@@ -17,7 +16,6 @@ import {
 import { Subscription } from 'rxjs';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
-import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 
@@ -30,8 +28,9 @@ export class CampaignFormComponent implements OnInit {
   @Input() hotelId: string;
   @Input() campaignId: string;
   @Input() campaignFG: FormGroup;
+  @Input() campaign: Campaign;
   @Output() changeStep = new EventEmitter();
-  campaign: Campaign;
+  @Output() save = new EventEmitter();
   templateData = '';
   templateList = [];
   fromEmailList = [];
@@ -48,9 +47,7 @@ export class CampaignFormComponent implements OnInit {
     private location: Location,
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,
-    private _modalService: ModalService,
-    private _campaignService: CampaignService,
-    private activatedRoute: ActivatedRoute
+    private _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -62,33 +59,9 @@ export class CampaignFormComponent implements OnInit {
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) => {
           this.fromEmailList = new EmailList().deserialize(response);
-          this.getTemplateId();
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
-    );
-  }
-
-  getTemplateId(): void {
-    this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.campaignId = params['id'];
-          this.getCampaignDetails(this.campaignId);
-        }
-      })
-    );
-  }
-
-  getCampaignDetails(id) {
-    this.$subscription.add(
-      this._campaignService
-        .getCampaignById(this.hotelId, id)
-        .subscribe((response) => {
-          this.campaign = new Campaign().deserialize(response);
-          this.campaignFG.patchValue(this.campaign);
-          console.log(this.campaign);
-        })
     );
   }
 
@@ -103,11 +76,26 @@ export class CampaignFormComponent implements OnInit {
       SendTestComponent,
       dialogConfig
     );
+    sendTestCampaignCompRef.componentInstance.parentFG = this.campaignFG;
 
     this.$subscription.add(
       sendTestCampaignCompRef.componentInstance.closeSendTest.subscribe(
         (response) => {
-          if (response.status) console.log('Send Test', response.email);
+          if (response.status) {
+            if (this.campaignFG.invalid) {
+              this.campaignFG.markAllAsTouched();
+              this._snackbarService.openSnackBarAsText(
+                'Please fill all the details.'
+              );
+            } else {
+              const reqData = this._emailService.createRequestData(
+                this.campaign,
+                this.campaignFG.getRawValue()
+              );
+              reqData.message = this.getTemplateMessage(reqData);
+              this._emailService.sendTest(this.hotelId, reqData);
+            }
+          }
           sendTestCampaignCompRef.close();
         }
       )
@@ -129,7 +117,6 @@ export class CampaignFormComponent implements OnInit {
   handleTemplateChange(event) {
     this.template = this.modifyTemplate(event.value);
     this.campaignFG.get('message').patchValue(this.template);
-    this.autoSave();
   }
 
   modifyTemplate(template: string) {
@@ -180,13 +167,13 @@ export class CampaignFormComponent implements OnInit {
   }
 
   updateFieldData(event, control) {
-    if (event.action == 'add') {
-      control.push(new FormControl(event.value));
-    } else {
+    if (event.action == 'add') control.push(new FormControl(event.value));
+    else {
       control.removeAt(
         control.value.indexOf((item) => item.text == event.value.text)
       );
     }
+    console.log(this.campaignFG.getRawValue());
     this.autoSave();
   }
 
@@ -200,7 +187,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   get to() {
-    return this.campaignFG.get('emailIds') as FormArray;
+    return this.campaignFG.get('to') as FormArray;
   }
 
   @HostListener('document:click', ['$event'])
@@ -221,7 +208,6 @@ export class CampaignFormComponent implements OnInit {
   addPersonalization(value, controlName: string) {
     const control = this.campaignFG.get(controlName);
     control.setValue(control.value + value);
-    this.autoSave();
   }
 
   openAddContent() {
@@ -229,7 +215,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   autoSave() {
-    console.log('Auto-Save');
+    this.save.emit();
   }
 
   ngOnDestroy() {

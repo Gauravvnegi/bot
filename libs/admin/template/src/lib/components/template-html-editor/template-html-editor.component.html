@@ -6,7 +6,7 @@
       >
       <p class="label">
         <ng-container *ngIf="isDisabled; else editTemplate">
-          View Template
+          {{ 'viewTemplate' | translate }}
         </ng-container>
         <ng-template #editTemplate>
           {{ templateId ? 'Edit' : 'Create' }} Template
@@ -16,8 +16,8 @@
   </header>
   <form [formGroup]="templateForm">
     <div class="wrapper-form">
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Name:</mat-label>
           <mat-form-field>
             <input
@@ -35,9 +35,14 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild">
+        <div class="field">
           <div class="import-assets" (click)="assetImportEnable($event)">
-            Import Assets
+            <img
+              class="import-image"
+              [src]="templateConfiguration.images.import.url"
+              [alt]="templateConfiguration.images.import.alt"
+            />
+            {{ 'importAsset' | translate }}
           </div>
           <div
             *ngIf="enableAssetImport"
@@ -49,8 +54,8 @@
           </div>
         </div>
       </div>
-      <div class="feilds" *ngIf="!isDisabled">
-        <div class="feild">
+      <div class="fields" *ngIf="!isDisabled">
+        <div class="field">
           <mat-label class="mat-label">Shared templates</mat-label>
           <mat-checkbox formControlName="shared"></mat-checkbox>
         </div>
@@ -74,22 +79,22 @@
   <div class="save-section" *ngIf="!isDisabled">
     <div class="save-button" (click)="saveAndPreview()">
       <div class="save-text">
-        Preview and Save
+        {{ 'editTemplateButtons.preview&Save' | translate }}
       </div>
     </div>
     <div class="save-button" (click)="save()">
       <div class="save-text">
-        Save Changes
+        {{ 'editTemplateButtons.saveChanges' | translate }}
       </div>
     </div>
     <div
-      class="save-button"
+      class="preview"
       (click)="saveAndNext()"
       [ngClass]="{ active: !isSaving, disabled: isSaving }"
     >
-      <div class="save-text">
+      <div class="view">
         <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-        Save and next
+        {{ 'editTemplateButtons.save&Next' | translate }}
       </div>
     </div>
   </div>

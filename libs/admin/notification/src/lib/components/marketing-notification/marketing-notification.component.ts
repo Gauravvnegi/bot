@@ -127,7 +127,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       this._emailService
         .getTemplateByTopic(this.hotelId, event.value)
         .subscribe((response) => {
-          this.templateList = response;
+          this.templateList = response.records;
         })
     );
   }
@@ -139,7 +139,7 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   modifyTemplate(template: string) {
     this.templateData = template;
-    if (template.indexOf('<body>'))
+    if (template.indexOf('<body>') != -1)
       return template.substring(
         template.indexOf('<div'),
         template.lastIndexOf('</body>')

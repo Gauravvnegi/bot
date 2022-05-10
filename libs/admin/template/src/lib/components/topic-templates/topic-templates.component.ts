@@ -44,7 +44,10 @@ export class TopicTemplatesComponent implements OnInit {
         .getTemplateListByTopicId(this.hotelId, this.template.topicId, config)
         .subscribe(
           (response) => {
-            this.template.templates = [...this.template.templates, ...response];
+            this.template.templates = [
+              ...this.template.templates,
+              ...response.records,
+            ];
           },
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )

@@ -104,7 +104,7 @@ export class CampaignService extends ApiService {
     campaignData.name = formValue.name;
     campaignData.templateName = formValue.templateName;
     campaignData.isDraft = formValue.isDraft;
-
+    campaignData.active = campaignData.active;
     return campaignData;
   }
 
@@ -122,24 +122,30 @@ export class CampaignService extends ApiService {
     const data = [];
     receivers.individual?.forEach((item) => {
       data.push({
-        data: { name: item },
+        data: { name: item.name },
         type: 'email',
       });
     });
 
     receivers.listing?.forEach((item) =>
       data.push({
-        data: item,
+        data: { id: item.receiverId, name: item.name },
         type: 'listing',
       })
     );
 
     receivers.subscribers?.forEach((item) =>
       data.push({
-        data: item,
+        data: { id: item.receiverId, name: item.name },
         type: 'listing',
       })
     );
     return data;
+  }
+
+  searchReceivers(entityId, searchKey) {
+    return this.get(
+      `/api/v1/marketing/entity/${entityId}/search?key=${searchKey}`
+    );
   }
 }

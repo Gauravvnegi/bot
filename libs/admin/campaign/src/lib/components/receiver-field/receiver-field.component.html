@@ -11,9 +11,9 @@
 <ng-template #normalField>
   <div class="form-field" (click)="enableReceiverField($event)">
     <div class="chips">
-      <div class="chip" *ngFor="let chip of chipList">
+      <div class="chip" *ngFor="let chip of chipList; let i = index">
         <span class="chip--text">{{ chip.data?.name }}</span>
-        <span class="chip--button" (click)="removeChip(chip, $event)">x</span>
+        <span class="chip--button" (click)="removeChip(i, $event)">x</span>
       </div>
       <div class="field">
         <input

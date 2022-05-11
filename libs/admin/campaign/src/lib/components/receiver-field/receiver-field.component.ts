@@ -60,11 +60,14 @@ export class ReceiverFieldComponent implements OnInit {
 
   removeChip(chip, event) {
     event.stopPropagation();
+    const index = this.chipList.findIndex((item) =>
+      chip.data.id
+        ? item.data.id === chip.data.id
+        : item.data.name === chip.data.name
+    );
     this.updateChipSet.emit({
       action: 'remove',
-      value: this.chipList.filter(
-        (item) => item.data.name === chip.data.name
-      )[0],
+      value: index,
     });
     this.chipList = this.chipList.filter(
       (item) => item.data.name !== chip.data.name

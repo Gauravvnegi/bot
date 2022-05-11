@@ -193,11 +193,7 @@ export class CampaignFormComponent implements OnInit {
 
   updateFieldData(event, control) {
     if (event.action == 'add') control.push(new FormControl(event.value));
-    else {
-      control.removeAt(
-        control.value.indexOf((item) => item.text == event.value.text)
-      );
-    }
+    else control.removeAt(event.value);
     this.autoSave();
   }
 

@@ -186,14 +186,6 @@
           <mat-error
             *ngIf="
               campaignFG.get('previewText').touched &&
-              campaignFG.get('previewText').hasError('required')
-            "
-          >
-            {{ 'previewRequired' | translate }}
-          </mat-error>
-          <mat-error
-            *ngIf="
-              campaignFG.get('previewText').touched &&
               campaignFG.get('previewText').hasError('maxlength')
             "
           >

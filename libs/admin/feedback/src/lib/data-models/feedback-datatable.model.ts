@@ -320,6 +320,18 @@ export class StayFeedback {
     return this.services.filter((service) => service.rating === 'EI');
   }
 
+  getSortedServices() {
+    let sortOrder = ['EI', 'ME', 'EE'];
+    this.services.sort((a, b) => {
+      if (a.rating == b.rating) {
+        return a.rating.localeCompare(b.rating);
+      } else {
+        return sortOrder.indexOf(a.rating) - sortOrder.indexOf(b.rating);
+      }
+    });
+    return this.services;
+  }
+
   getServiceComment(serviceName) {
     return this.commentList[serviceName.split(' ').join('_') + '_COMMENT'];
   }

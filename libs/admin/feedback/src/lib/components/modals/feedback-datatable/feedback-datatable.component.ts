@@ -89,6 +89,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       type: '',
       defaultLabel: 'Export Summary',
     });
+    this.getConfig();
   }
 
   initData() {

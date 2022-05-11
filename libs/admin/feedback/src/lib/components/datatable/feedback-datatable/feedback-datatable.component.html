@@ -653,7 +653,10 @@
                   </div>
                 </div>
                 <ng-container
-                  *ngFor="let service of rowData.services; let i = index"
+                  *ngFor="
+                    let service of rowData.getSortedServices();
+                    let i = index
+                  "
                 >
                   <div class="feedback-service__container" *ngIf="i < 2">
                     <div class="feedback-service__container__label others">

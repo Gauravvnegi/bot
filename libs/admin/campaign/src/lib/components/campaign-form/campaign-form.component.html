@@ -10,10 +10,7 @@
       <div class="icon"></div>
       <div class="icon"></div>
       <div class="icon"></div>
-      <div
-        class="dropdown"
-        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 125"
-      >
+      <div class="dropdown">
         <div class="dropdown__item" (click)="sendTestCampaign()">
           {{ 'sendText' | translate }}
         </div>

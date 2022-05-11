@@ -102,10 +102,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   getConfig() {
-    this.configService.$config.subscribe((response) => {
-      if (response) this.colorMap = response?.feedbackColorMap;
-      console.log(this.colorMap);
-    });
+    this.$subscription.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) this.colorMap = response?.feedbackColorMap;
+        console.log(this.colorMap);
+      })
+    );
   }
 
   /**

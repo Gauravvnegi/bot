@@ -308,10 +308,6 @@ export class StayFeedback {
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
-
-    console.log(
-      this.getSortedServices().filter((service) => service.rating === 'EI')
-    );
     return this;
   }
 

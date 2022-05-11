@@ -8,6 +8,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-create-listing',
@@ -29,6 +30,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private _listingService: ListingService,
     private _snackbarService: SnackBarService,
     private _router: Router,
+    protected _translateService: TranslateService,
     private adminUtilityService: AdminUtilityService
   ) {
     this.initFG();
@@ -77,7 +79,16 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       this.listingService.getTopicList(hotelId, config).subscribe(
         (response) =>
           (this.topicList = new Topics().deserialize(response).records),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => {
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.topicList_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+        }
       )
     );
   }
@@ -112,14 +123,29 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.isSaving = true;
     this._listingService.createList(this.hotelId, data).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarAsText(
-          `${response.name} is created.`,
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.success.listing_created',
+            priorityMessage: `${response.name} is Created.`,
+          },
           '',
-          { panelClass: 'success' }
-        );
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+      ({ error }) => {
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.listing_not_created',
+            priorityMessage: error.message,
+          },
+          ''
+        )
+        .subscribe();
+      },
       () => (this.isSaving = false)
     );
   }

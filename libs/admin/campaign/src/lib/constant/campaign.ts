@@ -57,7 +57,7 @@ export const campaignConfig = {
     cols: [
       {
         field: 'name',
-        header: 'Name/Topic',
+        header: 'Name',
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
@@ -77,7 +77,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '36%',
+        width: '26%',
       },
       {
         field: 'active',

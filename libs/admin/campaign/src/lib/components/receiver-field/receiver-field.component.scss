@@ -46,17 +46,15 @@
 }
 
 .form-field > .chips > .field > input {
-  padding: 5px;
   display: block !important;
   box-sizing: border-box;
   width: calc(100% - 65px);
-  height: 34px;
   border: none;
-  margin: 5px 0 0;
+  margin: -8px 0 0;
   display: inline-block;
   background-color: transparent;
   outline: none;
-  font-size: 16px;
+  font-size: 18px;
   font-family: Roboto;
 }
 

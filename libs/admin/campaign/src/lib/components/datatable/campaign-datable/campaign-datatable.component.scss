@@ -10,7 +10,7 @@
   justify-content: space-between;
 }
 .tableHeading {
-  width: 60px;
+  width: 72px;
   background-color: #eaf0f6;
   border-top: 0 !important;
   border-bottom: 0 !important;
@@ -83,6 +83,7 @@
   }
 }
 .dropdown {
+  text-align: center !important;
   display: none;
   position: absolute;
   width: 203px;
@@ -187,7 +188,7 @@
   color: $dark-blue !important;
 }
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  font-size: $font14 !important;
+  font-size: $font16 !important;
 }
 :host ::ng-deep thead.p-datatable-thead {
   border-top: solid 1px $c-gray-90 !important;
@@ -201,8 +202,6 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.66px;
-  display: flex;
-  justify-content: center;
 
   .stats-container {
     max-width: 500px;
@@ -281,8 +280,26 @@
 
 .sent-on {
   margin-bottom: 10px;
+  display: flex;
+}
+.draft-on {
+  margin-bottom: 10px;
+  display: flex;
+  text-align: left;
+}
+
+.draft-date {
+  text-align: left !important;
+  padding-left: 4px;
+  color: #484848;
 }
 
 .date {
   color: #484848;
+}
+.template-name {
+  font-size: 14px;
+}
+.status {
+  text-align: center !important;
 }

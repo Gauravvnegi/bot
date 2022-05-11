@@ -38,12 +38,13 @@
     </div>
   </header>
 
-  <ng-container *ngFor="let template of templateTopicList">
+  <ng-container *ngFor="let template of templateTopicList; last as isLast">
     <hospitality-bot-topic-templates
       [hotelId]="hotelId"
       [templateType]="templateType"
       [template]="template"
       (selectedTemplate)="setTemplate($event)"
     ></hospitality-bot-topic-templates>
+    <div *ngIf="!isLast" class="line"></div>
   </ng-container>
 </div>

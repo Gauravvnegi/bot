@@ -7,6 +7,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { IList, List } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -30,6 +31,7 @@ export class EditListingComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private _location: Location,
+    protected _translateService: TranslateService,
     private _router: Router
   ) {
     this.initFG();
@@ -91,7 +93,14 @@ export class EditListingComponent implements OnInit {
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.listing_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -127,14 +136,29 @@ export class EditListingComponent implements OnInit {
     this.isSaving = true;
     this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarAsText(
-          `${response.name} is updated.`,
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.success.listing_updated',
+            priorityMessage: `${response.name} Updated Successfully.`,
+          },
           '',
-          { panelClass: 'success' }
-        );
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+      ({ error }) => {
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.listing_not_updated',
+            priorityMessage: error.message,
+          },
+          ''
+        )
+        .subscribe();
+      },
       () => (this.isSaving = false)
     );
   }

@@ -7,6 +7,8 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'hospitality-bot-edit-asset',
   templateUrl: './edit-asset.component.html',
@@ -34,7 +36,7 @@ export class EditAssetComponent implements OnInit {
     private _fb: FormBuilder,
     private _snakbarService: SnackBarService,
     private assetService: AssetService,
-
+    protected _translateService: TranslateService,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -149,17 +151,30 @@ export class EditAssetComponent implements OnInit {
         (response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
-          this._snakbarService.openSnackBarAsText(
-            'asset added successfully',
+          this._snakbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.asset_created',
+              priorityMessage: 'Asset Created Successfully.',
+            },
             '',
-            { panelClass: 'success' }
-          );
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
           this.router.navigate(['/pages/library/assets']);
 
           this.isSavingasset = false;
         },
         ({ error }) => {
-          this._snakbarService.openSnackBarAsText(error.message);
+          this._snakbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.asset_not_created',
+            priorityMessage:error.message,
+          },
+          ''
+        )
+        .subscribe();
           this.isSavingasset = false;
         }
       )
@@ -193,13 +208,28 @@ export class EditAssetComponent implements OnInit {
               url: response.videoFile.fileDownloadUri,
               thumbnailUrl: response.thumbnail.fileDownloadUri,
             });
-            this._snakbarService.openSnackBarAsText(
-              'Asset uploaded successfully',
+            this._snakbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.success.upload',
+                priorityMessage: 'Asset Uploaded Successfully.',
+              },
               '',
-              { panelClass: 'success' }
-            );
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
           },
-          ({ error }) => this._snakbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snakbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.upload_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+        }
         )
       );
     } else {
@@ -207,15 +237,28 @@ export class EditAssetComponent implements OnInit {
         this.assetService.uploadImage(this.hotelId, formData).subscribe(
           (response) => {
             this.assetForm.get('url').patchValue(response.fileDownloadUri);
-            this._snakbarService.openSnackBarAsText(
-              'Asset image uploaded successfully',
+            this._snakbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.success.upload',
+                priorityMessage: 'Asset Uploaded Successfully.',
+              },
               '',
-              { panelClass: 'success' }
-            );
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
             this.isSavingasset = false;
           },
           ({ error }) => {
-            this._snakbarService.openSnackBarAsText(error.message);
+            this._snakbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.upload_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
           }
         )
       );
@@ -236,17 +279,30 @@ export class EditAssetComponent implements OnInit {
         .updateAsset(this.hotelId, data, this.hotelasset.id)
         .subscribe(
           (response) => {
-            this._snakbarService.openSnackBarAsText(
-              'Asset updated successfully',
+            this._snakbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.success.asset_update',
+                priorityMessage: 'Asset Updated Successfully.',
+              },
               '',
-              { panelClass: 'success' }
-            );
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
             this.router.navigate(['/pages/library/assets']);
 
             this.isSavingasset = false;
           },
           ({ error }) => {
-            this._snakbarService.openSnackBarAsText(error.message);
+            this._snakbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.asset_not_updated',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
             this.isSavingasset = false;
           }
         )

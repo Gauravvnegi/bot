@@ -27,6 +27,7 @@ export class Template {
   htmlTemplate: string;
   templates: Template;
   isShared: boolean;
+  topicName:string;
 
   deserialize(input: any) {
     Object.assign(
@@ -38,6 +39,7 @@ export class Template {
       set({}, 'entityId', get(input, ['hotelId'])),
       set({}, 'active', get(input, ['active'])),
       set({}, 'topicId', get(input, ['topicId'])),
+      set({}, 'topicName', get(input, ['topicName'])),
       set({}, 'templateType', get(input, ['templateType'])),
       set({}, 'htmlTemplate', get(input, ['htmlTemplate'])),
       set({}, 'isShared', get(input, ['isShared'])),

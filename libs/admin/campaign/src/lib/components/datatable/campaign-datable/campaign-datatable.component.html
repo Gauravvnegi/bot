@@ -250,8 +250,7 @@
             class="text"
             *ngIf="rowData.name || rowData.topicName; else emptyCell"
           >
-            <div>{{ rowData.name }}</div>
-            <p class="topic-name">{{ rowData.topicName }}</p>
+            <div class="template-name">{{ rowData.name }}</div>
           </div>
         </div>
       </td>
@@ -262,9 +261,9 @@
       </td>
       <td class="stats">
         <ng-container *ngIf="rowData?.isDraft; else chipStats">
-          <div>
+          <div class="draft-on">
             <div>Draft Mode</div>
-            <div class="date">
+            <div class="draft-date">
               {{ rowData.updatedAt ? 'Created On' : 'Updated On' }}
               {{ rowData.getDraftDate(globalFilterService.timezone) }}
             </div>

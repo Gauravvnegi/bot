@@ -49,7 +49,7 @@ export class EditTemplateComponent implements OnDestroy {
     this.templateForm = this._fb.group({
       name: ['', [Validators.required]],
       topicId: ['', [Validators.required]],
-      description: [''],
+      description: ['', [Validators.required]],
       status: [true],
       templateType: [''],
       htmlTemplate: ['', [Validators.required]],

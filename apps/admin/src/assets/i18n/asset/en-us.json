@@ -3,6 +3,24 @@
     "no_data": "No data available in table",
     "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
   },
+
+  "formFieldLabels":{
+    "name":"Name:",
+    "type":"Type:",
+    "description":"Description:",
+    "active":"Active:"
+    },
+
+"type":{
+  "image":"Image",
+  "video":"Video"
+},
+
+"active":{
+  "enable":"Enable",
+  "disable":"Disable"
+},
+
   "createAsset": "+Create Asset",
 
   "assetForm": {

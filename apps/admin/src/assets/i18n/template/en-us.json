@@ -4,6 +4,23 @@
     "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
   },
 
+  "formFieldLabels": {
+    "name": "Name:",
+    "type": "Type:",
+    "description": "Description:",
+    "active": "Active:"
+  },
+
+  "type": {
+    "image": "Image",
+    "video": "Video"
+  },
+
+  "active": {
+    "disable": "Disable",
+    "enable": "Enable"
+  },
+
   "createTemplate": "+Create Template",
 
   "templateForm": {
@@ -28,9 +45,25 @@
     "saveChanges": "Save Changes",
     "save&Next": "Save and Next"
   },
-  
+
   "templateType": {
     "savedTemplate": "Saved Templates",
     "preDesignedTemplate": "Pre-Designed Templates"
-  }
+  },
+
+  "validationMessage": {
+    "name": "Name is required",
+    "description":"Description is required",
+    "topic":"Topic name is required"
+  },
+
+  "contentForm": {
+    "editContent": "Edit Content",
+    "createContent": "Create Content"
+  },
+
+  "selectAsset": "Select Asset",
+  "copyLink": "Copy Link",
+  "sharedTemplates": "Shared templates",
+  "descriptionMessage": "Shared templates and their contents are openly available for all users under your organisations."
 }

@@ -4,7 +4,7 @@
       <i class="fa fa-times" aria-hidden="true" (click)="close()"></i>
     </div>
     <div class="title">
-      Select Asset
+      {{ 'selectAsset' | translate }}
     </div>
   </div>
   <div>
@@ -36,7 +36,7 @@
         [cdkCopyToClipboard]="asset.url"
         (click)="handleCopyToClipboard($event)"
       >
-        <div>Copy Link</div>
+        <div>{{ 'copyLink' | translate }}</div>
       </div>
     </div>
   </div>

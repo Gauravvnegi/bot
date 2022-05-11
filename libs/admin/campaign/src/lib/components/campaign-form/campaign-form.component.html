@@ -29,7 +29,7 @@
   </header>
   <div class="sent-details" *ngIf="campaign">
     <div>
-      Drafted on
+      {{ 'draftedOn' | translate }}
       {{
         campaign?.getDraftDate(
           globalFilterService.timezone,
@@ -41,8 +41,10 @@
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
     <div class="fields">
       <div class="field">
-        <mat-label class="mat-label">Name:</mat-label>
-        <mat-form-field class="description">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.name' | translate
+        }}</mat-label>
+        <mat-form-field class="name">
           <input matInput formControlName="name" placeholder="Enter Name" />
           <mat-error
             *ngIf="
@@ -50,14 +52,16 @@
               campaignFG.get('name').hasError('required')
             "
           >
-            {{ 'nameRequired' | translate }}
+            {{ 'validationMessage.name' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="fields">
       <div class="field">
-        <mat-label class="mat-label">From:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.from' | translate
+        }}</mat-label>
         <mat-form-field>
           <mat-select formControlName="from" placeholder="Select email">
             <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
@@ -70,7 +74,7 @@
               campaignFG.get('from').hasError('required')
             "
           >
-            {{ 'fromRequired' | translate }}
+            {{ 'validationMessage.from' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -113,13 +117,6 @@
             [parentFG]="campaignFG"
             [name]="'cc'"
           ></hospitality-bot-email-chip-list>
-          <!-- <hospitality-bot-to-receiver-field
-            [name]="'cc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('cc')?.value || []"
-            [disableInput]="(campaignFG.get('cc')?.value || []).length"
-            (updateChipSet)="updateFieldData($event, campaignFG.get('cc'))"
-          ></hospitality-bot-to-receiver-field> -->
         </div>
       </div>
     </div>
@@ -131,13 +128,6 @@
             [parentFG]="campaignFG"
             [name]="'bcc'"
           ></hospitality-bot-email-chip-list>
-          <!-- <hospitality-bot-to-receiver-field
-            [name]="'bcc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('bcc')?.value || []"
-            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
-            (updateChipSet)="updateFieldData($event, campaignFG.get('bcc'))"
-          ></hospitality-bot-to-receiver-field> -->
         </div>
       </div>
     </div>
@@ -167,7 +157,7 @@
               campaignFG.get('subject').hasError('required')
             "
           >
-            {{ 'subjectRequired' | translate }}
+            {{ 'validationMessage.subject' | translate }}
           </mat-error>
           <mat-error
             *ngIf="
@@ -175,7 +165,7 @@
               campaignFG.get('subject').hasError('maxlength')
             "
           >
-            {{ 'subjectLength' | translate }}
+            {{ 'validationMessage.subjectLength' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -206,7 +196,7 @@
               campaignFG.get('previewText').hasError('required')
             "
           >
-            {{ 'previewRequired' | translate }}
+            {{ 'validationMessage.previewText' | translate }}
           </mat-error>
           <mat-error
             *ngIf="
@@ -214,7 +204,7 @@
               campaignFG.get('previewText').hasError('maxlength')
             "
           >
-            {{ 'subjectLength' | translate }}
+            {{ 'validationMessage.subjectLength' | translate }}
           </mat-error>
         </mat-form-field>
       </div>

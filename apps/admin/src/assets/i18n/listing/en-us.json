@@ -4,6 +4,25 @@
     "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
   },
 
+  
+"formFieldLabels":{
+"name":"Name:",
+"topic":"Topic:",
+"description":"Description:",
+"active":"Active:",
+"email":"Email*",
+"salutation":"Salutation*",
+"firstName":"First Name*",
+"lastName":"Last Name*",
+"companyName":"Comapany Name",
+"mobile":"Mobile"
+},
+
+"active":{
+  "disable":"Disable",
+  "enable":"Enable"
+},
+
 "listingForm":{
   "createListing": "Create Listing",
   "editListing":"Edit Listing"
@@ -45,5 +64,10 @@
     "scheduleCampaign":"Schedule Campaign"
   },
   
-  "checkboxMessage":" Update data for existing samples during this file import."
+  "checkboxMessage":" Update data for existing samples during this file import.",
+
+  "sampleType":"Sample Type:",
+  "noData":"NO DATA",
+  "import":"Import",
+  "save":"Save"
 }

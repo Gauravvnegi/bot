@@ -17,14 +17,14 @@
         [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
       >
         <div class="dropdown__item" (click)="sendTestCampaign()">
-          Send Test
+          {{ 'viewCampaign.sendTest' | translate }}
         </div>
         <div
           class="dropdown__item"
           (click)="archiveCampaign()"
           *ngIf="campaignId"
         >
-          Archive Campaign
+          {{ 'formFieldLabels.archiveCampaign' | translate }}
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@
   <div class="sent-details">
     <div class="icon"></div>
     <div>
-      Sent on
+      {{ 'viewCampaign.sentOn' | translate }}
       {{
         campaign?.getDraftDate(
           globalFilterService.timezone,
@@ -53,7 +53,9 @@
     </div>
     <div class="fields">
       <div class="field">
-        <mat-label class="mat-label">From:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.from' | translate
+        }}</mat-label>
         <mat-form-field>
           <mat-select
             formControlName="from"
@@ -69,7 +71,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">To:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.to' | translate
+        }}</mat-label>
         <div class="email-field-container">
           <hospitality-bot-to-receiver-field
             [name]="'to'"
@@ -83,7 +87,9 @@
     </div>
     <div class="fields" *ngIf="campaignFG?.get('cc')">
       <div class="field full-width">
-        <mat-label class="mat-label">Cc:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.cc' | translate
+        }}</mat-label>
         <div class="width">
           <hospitality-bot-to-receiver-field
             [name]="'cc'"
@@ -97,7 +103,9 @@
     </div>
     <div class="fields" *ngIf="campaignFG?.get('bcc')">
       <div class="field full-width">
-        <mat-label class="mat-label">Bcc:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.bcc' | translate
+        }}</mat-label>
         <div class="width">
           <hospitality-bot-to-receiver-field
             [name]="'bcc'"
@@ -111,7 +119,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Subject:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.subject' | translate
+        }}</mat-label>
         <mat-form-field class="description">
           <input
             matInput
@@ -123,7 +133,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Preview Text:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.previewText' | translate
+        }}</mat-label>
         <mat-form-field class="description">
           <input
             matInput
@@ -137,7 +149,6 @@
       <div>
         {{ campaignDetails.templateName }}
       </div>
-      <!-- <div>{{ campaignDetails | json }}</div> -->
     </div>
     <hospitality-bot-edit-content
       [campaignFG]="campaignFG"

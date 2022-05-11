@@ -14,7 +14,7 @@
     <ng-template #subscriberGroup>
       <div class="sub-title">
         {{ 'toDrop.viewSubscriber' | translate }}
-        <span class="color">Customer Page</span>
+        <span class="color">{{ 'toDrop.customerPage' | translate }}</span>
       </div>
       <div class="listing">
         <div
@@ -28,7 +28,9 @@
           "
         >
           <div>{{ group.key }}</div>
-          <div class="data">{{ group.value.length }} Guests</div>
+          <div class="data">
+            {{ group.value.length }} {{ 'toDrop.guests' | translate }}
+          </div>
         </div>
       </div>
       <div class="division"></div>
@@ -40,7 +42,7 @@
     <ng-template #listing>
       <div class="sub-title">
         {{ 'toDrop.viewlist' | translate }}
-        <span class="color">Listing Page</span>
+        <span class="color">{{ 'toDrop.listingPage' | translate }}</span>
       </div>
       <div class="listing">
         <div
@@ -49,7 +51,10 @@
           (click)="selectItem('listing', list)"
         >
           <div>{{ list.name }}</div>
-          <div class="data">{{ list.marketingContacts?.length }} Guests</div>
+          <div class="data">
+            {{ list.marketingContacts?.length }}
+            {{ 'toDrop.guests' | translate }}
+          </div>
         </div>
       </div>
       <div

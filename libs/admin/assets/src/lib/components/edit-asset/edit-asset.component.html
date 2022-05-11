@@ -17,7 +17,9 @@
   <div class="wrapper-form" [formGroup]="assetForm" *ngIf="assetForm">
     <div class="fields">
       <div class="field">
-        <mat-label class="mat-label">Name:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.name' | translate
+        }}</mat-label>
         <mat-form-field>
           <input matInput formControlName="name" placeholder="Random Image" />
           <mat-error
@@ -32,15 +34,21 @@
       </div>
 
       <div class="field">
-        <mat-label class="mat-label">Type:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.type' | translate
+        }}</mat-label>
         <mat-form-field>
           <mat-select
             formControlName="type"
             placeholder="Select"
             (selectionChange)="handleAssetTypeChanged($event)"
           >
-            <mat-option value="Image">Image</mat-option>
-            <mat-option value="Video">Video</mat-option>
+            <mat-option value="Image">{{
+              'type.image' | translate
+            }}</mat-option>
+            <mat-option value="Video">{{
+              'type.video' | translate
+            }}</mat-option>
           </mat-select>
           <mat-error
             *ngIf="
@@ -55,7 +63,9 @@
     </div>
 
     <div class="full-width">
-      <mat-label class="mat-label">Description:</mat-label>
+      <mat-label class="mat-label">{{
+        'formFieldLabels.description' | translate
+      }}</mat-label>
       <mat-form-field class="description">
         <input
           matInput
@@ -79,8 +89,12 @@
             ><ng-container
               *ngIf="assetType === 'Image'; then imageLabel; else videoLabel"
             ></ng-container>
-            <ng-template #imageLabel>Image:</ng-template>
-            <ng-template #videoLabel>Video:</ng-template>
+            <ng-template #imageLabel
+              >{{ 'type.image' | translate }}:</ng-template
+            >
+            <ng-template #videoLabel
+              >{{ 'type.video' | translate }}:</ng-template
+            >
           </mat-label>
         </div>
         <div class="image-button">
@@ -117,10 +131,12 @@
     </div>
 
     <div class="toggle_wrapper">
-      <mat-label class="mat-label">Active :</mat-label>
-      <div class="status status--left">Disable</div>
+      <mat-label class="mat-label">{{
+        'formFieldLabels.active' | translate
+      }}</mat-label>
+      <div class="status status--left">{{ 'active.disable' | translate }}</div>
       <mat-slide-toggle formControlName="status"></mat-slide-toggle>
-      <div class="status status--right">Enable</div>
+      <div class="status status--right">{{ 'active.enable' | translate }}</div>
     </div>
   </div>
 

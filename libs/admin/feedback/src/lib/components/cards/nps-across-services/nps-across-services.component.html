@@ -113,29 +113,13 @@
                 <!-- <p class="service">{{ npsProgressData.npsStats[key].label }}</p> -->
                 <div class="details_box">
                   <div class="details">
-                    <div
-                      class="dot"
-                      [style.background]="
-                        (npsProgressData.npsStats[key].score >= 0 &&
-                          npsProgressData.npsStats[key].score < 31) ||
-                        npsProgressData.npsStats[key].score < -69
-                          ? '#4BA0F5'
-                          : '#3DB76B'
-                      "
-                    ></div>
-                    <div class="details__label">
-                      {{
-                        npsProgressData.npsStats[key].score <= 30 &&
-                        npsProgressData.npsStats[key].score >= -30
-                          ? 'Neutral'
-                          : 'Positive'
-                      }}
-                    </div>
+                    <div class="dot" [style.background]="'#3DB76B'"></div>
+                    <div class="details__label">Positive</div>
                     <div class="percentage">
                       {{
                         npsProgressData.npsStats[key].score >= 0
                           ? npsProgressData.npsStats[key].score
-                          : 100 + npsProgressData.npsStats[key].score
+                          : 0
                       }}
                     </div>
                   </div>
@@ -145,7 +129,7 @@
                     <div class="percentage">
                       {{
                         npsProgressData.npsStats[key].score > 0
-                          ? 100 - npsProgressData.npsStats[key].score
+                          ? 0
                           : npsProgressData.npsStats[key].score * -1
                       }}
                     </div>
@@ -158,27 +142,19 @@
                   [style.height]="
                     (npsProgressData.npsStats[key].score === 0
                       ? 100 - 1
-                      : npsProgressData.npsStats[key].score >= 0
+                      : npsProgressData.npsStats[key].score > 0
                       ? 100 - npsProgressData.npsStats[key].score
-                      : npsProgressData.npsStats[key].score * -1) + '%'
+                      : 100) + '%'
                   "
                 ></div>
                 <div
-                  [style.background]="
-                    (npsProgressData.npsStats[key].score > 0 &&
-                      npsProgressData.npsStats[key].score < 31) ||
-                    npsProgressData.npsStats[key].score < -69
-                      ? '#4BA0F5'
-                      : npsProgressData.npsStats[key].score === 0
-                      ? '#d6d6d6'
-                      : '#3DB76B'
-                  "
+                  [style.background]="'#3DB76B'"
                   [style.height]="
                     (npsProgressData.npsStats[key].score === 0
                       ? 1
-                      : npsProgressData.npsStats[key].score >= 0
+                      : npsProgressData.npsStats[key].score > 0
                       ? npsProgressData.npsStats[key].score
-                      : 100 + npsProgressData.npsStats[key].score) + '%'
+                      : 0) + '%'
                   "
                 ></div>
               </div>
@@ -192,9 +168,9 @@
                   [style.height]="
                     (npsProgressData.npsStats[key].score === 0
                       ? 1
-                      : npsProgressData.npsStats[key].score >= 0
-                      ? 100 - npsProgressData.npsStats[key].score
-                      : npsProgressData.npsStats[key].score * -1) + '%'
+                      : npsProgressData.npsStats[key].score < 0
+                      ? npsProgressData.npsStats[key].score * -1
+                      : 0) + '%'
                   "
                 ></div>
                 <div
@@ -202,9 +178,9 @@
                   [style.height]="
                     (npsProgressData.npsStats[key].score === 0
                       ? 100 - 1
-                      : npsProgressData.npsStats[key].score >= 0
-                      ? npsProgressData.npsStats[key].score
-                      : 100 + npsProgressData.npsStats[key].score) + '%'
+                      : npsProgressData.npsStats[key].score < 0
+                      ? 100 + npsProgressData.npsStats[key].score
+                      : 100) + '%'
                   "
                 ></div>
               </div>

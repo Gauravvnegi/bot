@@ -299,25 +299,26 @@ export class StayFeedback {
       set({}, 'status', get(input, ['status']))
     );
     const service = get(this.bookingDetails, ['services']);
-    Object.keys(service).forEach((key) => {
-      if (key.includes('COMMENT')) this.commentList[key] = service[key];
-      else {
-        this.services.push(
-          new Service().deserialize({ ...service[key], label: key })
-        );
-      }
-    });
+    service.forEach((item) =>
+      this.services.push(new Service().deserialize(item))
+    );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
+
+    console.log(
+      this.getSortedServices().filter((service) => service.rating === 'EI')
+    );
     return this;
   }
 
   getNegativeRatedService() {
-    return this.services.filter((service) => service.rating === 'EI');
+    return this.getSortedServices().filter(
+      (service) => service.rating === 'EI'
+    );
   }
 
   getSortedServices() {

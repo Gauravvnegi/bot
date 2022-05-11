@@ -653,7 +653,7 @@
                 </div>
                 <ng-container
                   *ngFor="
-                    let service of rowData.getSortedServices();
+                    let service of rowData.getNegativeRatedService();
                     let i = index
                   "
                 >
@@ -691,8 +691,8 @@
                         <p class="number">
                           +{{
                             rowData.services.length -
-                              (rowData.getNegativeRatedService() < 2
-                                ? rowData.getNegativeRatedService()
+                              (rowData.getNegativeRatedService().length < 2
+                                ? rowData.getNegativeRatedService().length
                                 : 2)
                           }}
                         </p>

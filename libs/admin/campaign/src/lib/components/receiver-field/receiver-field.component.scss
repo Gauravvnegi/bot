@@ -4,12 +4,11 @@
   width: 100%;
   height: auto;
   min-height: 52px;
-  border-bottom: 1px solid #737679;
-  padding: 16px 0px;
   cursor: text;
   display: flex;
   flex-wrap: wrap;
   position: relative;
+  padding-bottom: 1.25em;
   .field {
     width: 100%;
   }
@@ -62,9 +61,12 @@
 }
 
 .chips {
-  max-width: calc(100% - 65px);
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
+  border-bottom: 1px solid #737679;
+  padding-bottom: 6px;
+  padding-right: 65px;
 }
 
 .dropdown {
@@ -75,7 +77,7 @@
   z-index: 112;
   border-radius: 10px;
   box-shadow: 3px 9px 20px 0 rgba(0, 0, 0, 0.25);
-  background-color: #fff;
+  background-color: $white;
   padding: 15px;
 }
 

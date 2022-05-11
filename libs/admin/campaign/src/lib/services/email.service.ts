@@ -105,4 +105,18 @@ export class EmailService extends ApiService {
       isDraft: data.isDraft,
     };
   }
+
+  checkForEmptyForm(values) {
+    return (
+      values.name.length ||
+      values.to.length ||
+      values.testEmails.length ||
+      values.from.length ||
+      values.previewText.length ||
+      values.subject.length ||
+      values.message.length ||
+      (values.cc && values.cc.length) ||
+      (values.bcc && values.bcc.length)
+    );
+  }
 }

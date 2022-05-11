@@ -70,7 +70,7 @@ export class CampaignFormComponent implements OnInit {
   }
 
   goBack() {
-    this._router.navigate(['pages/marketing/campaign']);
+    this.save.emit({ close: true });
   }
 
   sendTestCampaign() {
@@ -194,7 +194,6 @@ export class CampaignFormComponent implements OnInit {
   updateFieldData(event, control) {
     if (event.action == 'add') control.push(new FormControl(event.value));
     else control.removeAt(event.value);
-    this.autoSave();
   }
 
   enableEmailControl(event, controlName: string) {
@@ -229,10 +228,6 @@ export class CampaignFormComponent implements OnInit {
 
   openAddContent() {
     this.changeStep.emit({ step: 'next' });
-  }
-
-  autoSave() {
-    this.save.emit();
   }
 
   ngOnDestroy() {

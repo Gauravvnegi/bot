@@ -18,6 +18,7 @@ export class ToDropdownComponent implements OnInit {
   @Input() hotelId: string;
   @Input() searchList: ReceiversSearchItem[];
   @Output() selectedList = new EventEmitter();
+  @Output() closeDropdown = new EventEmitter();
   $subscriptions = new Subscription();
   tabFilterItems = campaignConfig.dropDownTabFilter;
   tabFilterIdx = 0;
@@ -77,6 +78,11 @@ export class ToDropdownComponent implements OnInit {
 
   redirect(url) {
     this._router.navigate([url]);
+  }
+
+  close(event) {
+    event.stopPropagation();
+    this.closeDropdown.emit(event);
   }
 
   ngOnDestroy() {

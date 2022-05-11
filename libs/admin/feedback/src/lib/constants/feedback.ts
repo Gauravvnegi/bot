@@ -293,8 +293,8 @@ export const feedback = {
       ],
       stay: [
         {
-          field: 'guestData.bookingNo',
-          header: 'Booking No./ Outlet',
+          field: 'tableOrRoomNumber',
+          header: 'Room No',
           isSort: true,
           sortType: 'string',
           dynamicWidth: false,

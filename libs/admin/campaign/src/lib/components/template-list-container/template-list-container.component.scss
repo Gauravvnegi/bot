@@ -95,12 +95,6 @@
       justify-content: center;
     }
   }
-
-  .line {
-    border: 1px solid #9eaeb8;
-    width: 100%;
-    opacity: 0.3;
-  }
 }
 
 :host ::ng-deep .mat-label {
@@ -237,4 +231,10 @@
   letter-spacing: 0.96px !important;
   text-align: left;
   color: #002046 !important;
+}
+.line {
+  border: 1px solid #9eaeb8;
+    opacity: 0.3;
+    margin: 0 2rem;
+    width:94%;
 }

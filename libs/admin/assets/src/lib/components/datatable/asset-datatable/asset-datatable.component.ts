@@ -22,6 +22,7 @@ import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../../constants/asset';
 import { AssetService } from '../../../services/asset.service';
 import { Assets } from '../../../data-models/assetConfig.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -59,7 +60,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
     protected tabFilterService: TableService,
-    private assetService: AssetService
+    private assetService: AssetService,
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }
@@ -125,8 +127,14 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.loading = false;this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.loading_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -183,7 +191,14 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.loading_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -250,8 +265,14 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.loading = false;this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.exportCSV_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -268,15 +289,28 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     };
     this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarAsText(
-          'Status updated successfully',
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.success.asset_status_updated',
+            priorityMessage: 'Status Updated Successfully.',
+          },
           '',
-          { panelClass: 'success' }
-        );
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
         this.changePage(this.currentPage);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
+        this._snackbarService.openSnackBarWithTranslate(
+        {
+          translateKey: 'message.error.asset_status_update_fail',
+          priorityMessage: error.message,
+        },
+        ''
+      )
+      .subscribe();
       }
     );
   }
@@ -403,9 +437,17 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   handleCopyToClipboard(event) {
     event.stopPropagation();
-    this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
-      panelClass: 'success',
-    });
+    this._snackbarService.openSnackBarWithTranslate(
+      {
+        translateKey: 'message.success.asset_url',
+        priorityMessage: 'Asset Url Copied.',
+      },
+      '',
+      {
+        panelClass: 'success',
+      }
+    )
+    .subscribe();
   }
 
   /**

@@ -24,6 +24,7 @@ import { Observable, Subscription } from 'rxjs';
 import { TopicService } from '../../../services/topic.service';
 import { Topics } from '../../../data-models/topicConfig.model';
 import { topicConfig } from '../../../constants/topic';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-topic-datatable',
@@ -61,7 +62,8 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
-    private topicService: TopicService
+    private topicService: TopicService,
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }
@@ -126,7 +128,14 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.loading_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -187,15 +196,28 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     };
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarAsText(
-          'Successfully status updated',
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.success.topic_status_updated',
+            priorityMessage: 'Status Updated Successfully..',
+          },
           '',
-          { panelClass: 'success' }
-        );
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
         this.changePage(this.currentPage);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
+        this._snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.topic_status_update_fail',
+            priorityMessage: error.message,
+          },
+          ''
+        )
+        .subscribe();
       }
     );
   }
@@ -261,7 +283,14 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.loading_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -351,7 +380,14 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.exportCSV_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );

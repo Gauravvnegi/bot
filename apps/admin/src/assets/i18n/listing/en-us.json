@@ -45,5 +45,24 @@
     "scheduleCampaign":"Schedule Campaign"
   },
   
-  "checkboxMessage":" Update data for existing samples during this file import."
+  "checkboxMessage":" Update data for existing samples during this file import.",
+  "message": {
+    "success": {
+      "listing_created": "Listing Created Successfully.",
+      "listing_updated": "Listing Updated Successfully.",
+      "listing_status_updated": "Status updated.",
+      "contact_delete":"Contact deleted."
+    },
+    "error": {
+      "listing_not_created": "Listing Not Created.",
+      "listing_not_updated": "Listing Not Updated.",
+      "listing_status_update_fail": "Status Not Updated.",
+      "exportCSV_fail": "Export CSV Failed.",
+      "topicList_fail":"Can not get Topic List",
+      "listing_fail":"Can not get Listing details.",
+      "contact_not_delete":"Contact Not Deleted.",
+      "contact_not_add":"Contact Not Added.",
+      "contact_not_import":"Contact Not Imported."
+    }
+  }
 }

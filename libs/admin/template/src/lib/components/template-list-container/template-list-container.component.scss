@@ -110,12 +110,6 @@
       justify-content: center;
     }
   }
-
-  .line {
-    border: 1px solid #9eaeb8;
-    width: 100%;
-    opacity: 0.3;
-  }
 }
 
 :host ::ng-deep .mat-label {
@@ -222,4 +216,10 @@
 :host ::ng-deep .mat-select-value{
   padding-left: 13px;
   color: #002046 !important;
+}
+.line {
+  border: 1px solid #9eaeb8;
+    opacity: 0.3;
+    margin: 0 2rem;
+    width:94%;
 }

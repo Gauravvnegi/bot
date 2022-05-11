@@ -20,6 +20,7 @@ import { Contact, List } from '../../../data-models/listing.model';
 import { ListingService } from '../../../services/listing.service';
 import { EditContactComponent } from '../../edit-contact/edit-contact.component';
 import { ImportContactComponent } from '../../import-contact/import-contact.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-contact-datatable',
@@ -49,6 +50,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     protected _adminUtilityService: AdminUtilityService,
     private _listingService: ListingService,
     private _snackbarService: SnackBarService,
+    protected _translateService: TranslateService,
     private _modal: ModalService
   ) {
     super(fb, tabFilterService);
@@ -135,7 +137,14 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           },
           ({ error }) => {
             this.loading = false;
-            this._snackbarService.openSnackBarAsText(error.message);
+            this._snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.exportCSV_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
           }
         )
     );
@@ -152,13 +161,29 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           )
           .subscribe(
             (response) => {
-              this._snackbarService.openSnackBarAsText('Contact deleted', '', {
-                panelClass: 'success',
-              });
+              this._snackbarService.openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.success.contact_delete',
+                  priorityMessage: 'Contact deleted',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
               this.updateDataSourceAfterDelete(ids);
             },
-            ({ error }) =>
-              this._snackbarService.openSnackBarAsText(error.message)
+            ({ error }) =>{
+              this._snackbarService.openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.error.contact_not_delete',
+                  priorityMessage: error.message,
+                },
+                ''
+              )
+              .subscribe();
+            }
           )
       );
     } else this.updateDataSourceAfterDelete(ids, this.selectedRows);
@@ -201,8 +226,16 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                   (response) => {
                     this.handleContactAddEvent(response);
                   },
-                  ({ error }) =>
-                    this._snackbarService.openSnackBarAsText(error.message)
+                  ({ error }) =>{
+                    this._snackbarService.openSnackBarWithTranslate(
+                      {
+                        translateKey: 'message.error.contact_not_add',
+                        priorityMessage: error.message,
+                      },
+                      ''
+                    )
+                    .subscribe();
+                  }
                 )
             );
           } else this.handleContactAddEvent(response.data);
@@ -286,7 +319,16 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this.updateContacts.emit();
             },
             ({ error }) =>
-              this._snackbarService.openSnackBarAsText(error.message)
+              {
+                this._snackbarService.openSnackBarWithTranslate(
+                  {
+                    translateKey: 'message.error.contact_not_import',
+                    priorityMessage: error.message,
+                  },
+                  ''
+                )
+                .subscribe();
+              }
           )
       );
     }

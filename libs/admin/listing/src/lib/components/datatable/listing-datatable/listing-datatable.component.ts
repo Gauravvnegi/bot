@@ -24,6 +24,7 @@ import { listingConfig } from '../../../constants/listing';
 import { ListingService } from '../../../services/listing.service';
 import { ListTable } from '../../../data-models/listing.model';
 import * as FileSaver from 'file-saver';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-listing-datatable',
@@ -60,6 +61,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     protected router: Router,
     private route: ActivatedRoute,
+    protected _translateService: TranslateService,
     private listingService: ListingService
   ) {
     super(fb, tabFilterService);
@@ -332,7 +334,14 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.exportCSV_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
         }
       )
     );
@@ -379,14 +388,29 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText(
-              `${rowData.name}'s status changed.`,
+            this._snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.success.listing_status_updated',
+                priorityMessage: `${rowData.name}'s status changed.`,
+              },
               '',
-              { panelClass: 'success' }
-            );
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
             this.changePage(this.currentPage);
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.listing_status_updated_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+          }
         )
     );
   }

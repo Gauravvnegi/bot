@@ -5,6 +5,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ContactList, IContact } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-import-contact',
@@ -24,6 +25,7 @@ export class ImportContactComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _listingService: ListingService,
+    protected _translateService: TranslateService,
     private _snackbarService: SnackBarService
   ) {
     this.createFA();
@@ -88,7 +90,16 @@ export class ImportContactComponent implements OnInit {
           });
           this.contactFA.controls.forEach((control) => control.disable());
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => {
+          this._snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.contact_not_import',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+        }
       )
     );
   }

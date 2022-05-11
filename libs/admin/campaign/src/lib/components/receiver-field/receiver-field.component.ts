@@ -54,6 +54,9 @@ export class ReceiverFieldComponent implements OnInit {
     this.$subscription.add(
       this._emailService.$enableDropdown[this.name].subscribe((response) => {
         this.enableDropdown = response;
+        if (!response) {
+          this.removeField(null);
+        }
       })
     );
   }
@@ -129,11 +132,18 @@ export class ReceiverFieldComponent implements OnInit {
     });
   }
 
+  disableDropdownItems(event) {
+    event.stopPropagation();
+    this._emailService.$enableDropdown[this.name].next(false);
+  }
+
   addItemFromDropdown(event) {
     this.updateChipSet.emit({
       value: event,
       action: 'add',
     });
+    this.receiverField.nativeElement.value = '';
+    this.search = false;
     this.enableTextField();
   }
 

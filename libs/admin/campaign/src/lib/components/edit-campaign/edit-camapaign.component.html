@@ -11,7 +11,7 @@
       [campaignId]="campaignId"
       [campaignFG]="campaignFG"
       (changeStep)="handleCreateContentChange($event)"
-      (save)="autoSave()"
+      (save)="saveAndCloseForm($event)"
     ></hospitality-bot-campaign-form>
   </ng-container>
   <ng-container *ngSwitchCase="1">

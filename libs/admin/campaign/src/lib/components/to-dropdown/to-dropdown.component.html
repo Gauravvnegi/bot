@@ -7,11 +7,18 @@
     "
   ></ng-container>
   <ng-template #subscriberListing>
-    <hospitality-bot-tab-group
-      [listItems]="tabFilterItems"
-      [selectedIndex]="tabFilterIdx"
-      (selectedTabChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-tab-group>
+    <div class="header">
+      <div class="tab-group">
+        <hospitality-bot-tab-group
+          [listItems]="tabFilterItems"
+          [selectedIndex]="tabFilterIdx"
+          (selectedTabChange)="onSelectedTabFilterChange($event)"
+        ></hospitality-bot-tab-group>
+      </div>
+      <div class="close">
+        <mat-icon (click)="close($event)">cancel</mat-icon>
+      </div>
+    </div>
     <ng-container
       *ngIf="tabFilterIdx; then listing; else subscriberGroup"
     ></ng-container>

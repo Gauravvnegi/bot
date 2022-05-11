@@ -8,11 +8,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { empty, of, Subscription } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
+import { empty, interval, of, Subscription } from 'rxjs';
+import { catchError, debounceTime } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
@@ -43,6 +44,8 @@ export class EditCampaignComponent implements OnInit {
   createContentType = '';
   datamapped = true;
   @ViewChild('stepper') stepper: MatStepper;
+  private $autoSaveSubscription = new Subscription();
+  private $formChangeDetection = new Subscription();
   constructor(
     private location: Location,
     private _fb: FormBuilder,
@@ -50,7 +53,8 @@ export class EditCampaignComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private _campaignService: CampaignService,
     private _emailService: EmailService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _router: Router
   ) {
     this.initFG();
   }
@@ -103,9 +107,41 @@ export class EditCampaignComponent implements OnInit {
           this.campaignId = params['id'];
           this.datamapped = false;
           this.getCampaignDetails(this.campaignId);
-        } else this.listenForAutoSave();
+        } else this.listenForFormChanges();
       })
     );
+  }
+
+  listenForFormChanges() {
+    this.$formChangeDetection = this.campaignFG.valueChanges
+      .pipe(
+        debounceTime(20000),
+        switchMap((formValue) => {
+          if (this.datamapped)
+            return this.autoSave(formValue).pipe(
+              catchError((err) => {
+                return empty();
+              })
+            );
+          return of(null);
+        })
+      )
+      .subscribe(
+        (response) => {
+          if (this.campaignId) {
+            console.log('Saved');
+            this.setDataAfterUpdate(response);
+          } else {
+            this.location.replaceState(
+              `/pages/marketing/campaign/edit/${response.id}`
+            );
+            this.setDataAfterSave(response);
+          }
+          this.$formChangeDetection.unsubscribe();
+          this.listenForAutoSave();
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      );
   }
 
   getCampaignDetails(id) {
@@ -178,20 +214,9 @@ export class EditCampaignComponent implements OnInit {
   }
 
   listenForAutoSave() {
-    this.$subscription.add(
-      this.campaignFG.valueChanges
-        .pipe(
-          switchMap((formValue) => {
-            if (this.datamapped)
-              return this.autoSave(formValue).pipe(
-                catchError((err) => {
-                  return empty();
-                })
-              );
-            return of(null);
-          })
-        )
-        .subscribe(
+    this.$autoSaveSubscription.add(
+      interval(20000).subscribe((x) => {
+        this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (response) => {
             if (this.campaignId) {
               console.log('Saved');
@@ -211,7 +236,8 @@ export class EditCampaignComponent implements OnInit {
               })
               .subscribe();
           }
-        )
+        );
+      })
     );
   }
 
@@ -246,6 +272,11 @@ export class EditCampaignComponent implements OnInit {
           )
       );
     }
+    return this._campaignService.save(
+      this.hotelId,
+      this._emailService.createRequestData(data),
+      this.campaignId
+    );
   }
 
   setTemplate(event) {
@@ -289,7 +320,26 @@ export class EditCampaignComponent implements OnInit {
     }
   }
 
+  saveAndCloseForm(event) {
+    if (
+      this.campaignId ||
+      this._emailService.checkForEmptyForm(this.campaignFG.getRawValue())
+    )
+      this.$subscription.add(
+        this.autoSave(this.campaignFG.getRawValue()).subscribe(
+          (response) => this._router.navigate(['/pages/marketing/campaign']),
+          ({ error }) => {
+            this._snackbarService.openSnackBarAsText(error.message);
+            this._router.navigate(['/pages/marketing/campaign']);
+          }
+        )
+      );
+    else this._router.navigate(['/pages/marketing/campaign']);
+  }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+    this.$autoSaveSubscription.unsubscribe();
+    this.$formChangeDetection.unsubscribe();
   }
 }

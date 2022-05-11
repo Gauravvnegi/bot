@@ -64,6 +64,25 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.96px;
+  .header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .tab-group {
+      width: calc(100% - 30px);
+    }
+    .close {
+      width: 30px;
+      text-align: center;
+      mat-icon {
+        cursor: pointer;
+        color: gray;
+        &:hover {
+          color: #4b56c0;
+        }
+      }
+    }
+  }
   .sub-title {
     margin: 20px 10px;
     color: #868686;

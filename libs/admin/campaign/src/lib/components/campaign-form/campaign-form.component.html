@@ -4,7 +4,20 @@
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p>
+      <!-- <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p> -->
+      <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
+        <mat-form-field class="description">
+          <input matInput formControlName="name" placeholder="Enter Name" />
+          <mat-error
+            *ngIf="
+              campaignFG.get('name').touched &&
+              campaignFG.get('name').hasError('required')
+            "
+          >
+            {{ 'nameRequired' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
     </div>
     <div class="option">
       <div class="icon"></div>

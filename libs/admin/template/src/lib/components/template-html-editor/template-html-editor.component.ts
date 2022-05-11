@@ -45,7 +45,12 @@ export class TemplateHtmlEditorComponent implements OnInit {
 
   saveAndNext() {
     if (trim(this.templateForm.get('htmlTemplate').value) === '') {
-      this._snackbarService.openSnackBarAsText('No template content.');
+      this._snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.success.noContent',
+          priorityMessage: 'No template content',
+        })
+        .subscribe();
       return;
     }
     if (this.templateForm.invalid) {

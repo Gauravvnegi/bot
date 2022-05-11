@@ -64,7 +64,14 @@ export class CampaignFormComponent implements OnInit {
         (response) => {
           this.fromEmailList = new EmailList().deserialize(response);
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: '',
+              priorityMessage: error.message,
+            })
+            .subscribe();
+        }
       )
     );
   }
@@ -93,14 +100,27 @@ export class CampaignFormComponent implements OnInit {
             this.$subscription.add(
               this._emailService.sendTest(this.hotelId, reqData).subscribe(
                 (response) => {
-                  this._snackbarService.openSnackBarAsText(
-                    'Campaign sent to test email(s).',
-                    '',
-                    { panelClass: 'success' }
-                  );
+                  this._snackbarService
+                    .openSnackBarWithTranslate(
+                      {
+                        translateKey: 'messages.success.sendTestcampaign',
+                        priorityMessage: 'Campaign sent to test email(s)',
+                      },
+                      '',
+                      {
+                        panelClass: 'success',
+                      }
+                    )
+                    .subscribe();
                 },
-                ({ error }) =>
-                  this._snackbarService.openSnackBarAsText(error.message)
+                ({ error }) => {
+                  this._snackbarService
+                    .openSnackBarWithTranslate({
+                      translateKey: '',
+                      priorityMessage: error.message,
+                    })
+                    .subscribe();
+                }
               )
             );
           }
@@ -116,9 +136,18 @@ export class CampaignFormComponent implements OnInit {
         .archiveCampaign(this.hotelId, {}, this.campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
-              panelClass: 'success',
-            });
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.success.campaignArchived',
+                  priorityMessage: 'Campaign Archived',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
           },
           ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
         )
@@ -178,14 +207,28 @@ export class CampaignFormComponent implements OnInit {
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Campaign sent successfully.',
-            '',
-            { panelClass: 'success' }
-          );
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.campaignSent',
+                priorityMessage: 'Campiagn Sent successfully',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
           this._router.navigate(['pages/marketing/campaign']);
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
+        },
         () => (this.isSending = false)
       )
     );
@@ -194,6 +237,7 @@ export class CampaignFormComponent implements OnInit {
   updateFieldData(event, control) {
     if (event.action == 'add') control.push(new FormControl(event.value));
     else control.removeAt(event.value);
+    // this.autoSave();
   }
 
   enableEmailControl(event, controlName: string) {

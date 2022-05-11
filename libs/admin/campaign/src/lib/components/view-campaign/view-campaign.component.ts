@@ -182,7 +182,14 @@ export class ViewCampaignComponent implements OnInit {
               panelClass: 'success',
             });
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: '',
+                priorityMessage: error.message,
+              })
+              .subscribe();
+          }
         )
     );
   }
@@ -207,14 +214,27 @@ export class ViewCampaignComponent implements OnInit {
               this._emailService.sendTest(this.hotelId, reqData).subscribe(
                 (response) => {
                   this.setDataAfterUpdate(response);
-                  this._snackbarService.openSnackBarAsText(
-                    'Campaign sent to test email(s).',
-                    '',
-                    { panelClass: 'success' }
-                  );
+                  this._snackbarService
+                    .openSnackBarWithTranslate(
+                      {
+                        translateKey: 'messages.success.sendTestcampaign',
+                        priorityMessage: 'Campaign sent to test email(s)',
+                      },
+                      '',
+                      {
+                        panelClass: 'success',
+                      }
+                    )
+                    .subscribe();
                 },
-                ({ error }) =>
-                  this._snackbarService.openSnackBarAsText(error.message)
+                ({ error }) => {
+                  this._snackbarService
+                    .openSnackBarWithTranslate({
+                      translateKey: '',
+                      priorityMessage: error.message,
+                    })
+                    .subscribe();
+                }
               )
             );
           }

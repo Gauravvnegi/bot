@@ -39,7 +39,7 @@
   </header>
   <div class="sent-details" *ngIf="campaign">
     <div>
-      Drafted on
+      {{ 'draftedOn' | translate }}
       {{
         campaign?.getDraftDate(
           globalFilterService.timezone,
@@ -51,7 +51,9 @@
   <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
     <div class="fields">
       <div class="field">
-        <mat-label class="mat-label">From:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.from' | translate
+        }}</mat-label>
         <mat-form-field>
           <mat-select formControlName="from" placeholder="Select email">
             <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
@@ -64,14 +66,16 @@
               campaignFG.get('from').hasError('required')
             "
           >
-            {{ 'fromRequired' | translate }}
+            {{ 'validationMessage.from' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">To:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.to' | translate
+        }}</mat-label>
         <div class="email-field-container">
           <hospitality-bot-to-receiver-field
             [name]="'to'"
@@ -101,7 +105,9 @@
     </div>
     <div class="fields" *ngIf="campaignFG?.get('cc')">
       <div class="field full-width">
-        <mat-label class="mat-label">Cc:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.cc' | translate
+        }}</mat-label>
         <div class="cc-width">
           <hospitality-bot-email-chip-list
             [parentFG]="campaignFG"
@@ -112,7 +118,9 @@
     </div>
     <div class="fields" *ngIf="campaignFG?.get('bcc')">
       <div class="field full-width">
-        <mat-label class="mat-label">Bcc:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.bcc' | translate
+        }}</mat-label>
         <div class="cc-width">
           <hospitality-bot-email-chip-list
             [parentFG]="campaignFG"
@@ -123,7 +131,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Subject:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.subject' | translate
+        }}</mat-label>
         <mat-form-field class="description">
           <input
             matInput
@@ -147,7 +157,7 @@
               campaignFG.get('subject').hasError('required')
             "
           >
-            {{ 'subjectRequired' | translate }}
+            {{ 'validationMessage.subject' | translate }}
           </mat-error>
           <mat-error
             *ngIf="
@@ -155,14 +165,16 @@
               campaignFG.get('subject').hasError('maxlength')
             "
           >
-            {{ 'subjectLength' | translate }}
+            {{ 'validationMessage.subjectLength' | translate }}
           </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Preview Text:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.previewText' | translate
+        }}</mat-label>
         <mat-form-field class="description">
           <input
             matInput
@@ -186,7 +198,7 @@
               campaignFG.get('previewText').hasError('maxlength')
             "
           >
-            {{ 'subjectLength' | translate }}
+            {{ 'validationMessage.subjectLength' | translate }}
           </mat-error>
         </mat-form-field>
       </div>

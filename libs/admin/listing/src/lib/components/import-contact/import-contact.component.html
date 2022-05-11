@@ -18,10 +18,12 @@
     <div class="sample">
       <div class="simple-fields">
         <div class="field">
-          <mat-label class="mat-label">Sample Type:</mat-label>
+          <mat-label class="mat-label">{{
+            'sampleType' | translate
+          }}</mat-label>
           <mat-form-field>
             <mat-select placeholder="Select Sample" disabled="true"
-              ><mat-option>NO DATA</mat-option>
+              ><mat-option>{{ 'noData' | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -43,12 +45,12 @@
       <table>
         <thead>
           <tr>
-            <th>Email*</th>
-            <th>Salutation*</th>
-            <th>First Name*</th>
-            <th>Last Name*</th>
-            <th>Company Name</th>
-            <th>Mobile*</th>
+            <th>{{ 'formFieldLabels.email' | translate }}</th>
+            <th>{{ 'formFieldLabels.salutation' | translate }}</th>
+            <th>{{ 'formFieldLabels.firstName' | translate }}</th>
+            <th>{{ 'formFieldLabels.lastName' | translate }}</th>
+            <th>{{ 'formFieldLabels.companyName' | translate }}</th>
+            <th>{{ 'formFieldLabels.mobile' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +134,7 @@
   <div class="import-save">
     <div class="save-btn" (click)="save()">
       <div class="save">
-        Import
+        {{ 'import' | translate }}
       </div>
     </div>
   </div>

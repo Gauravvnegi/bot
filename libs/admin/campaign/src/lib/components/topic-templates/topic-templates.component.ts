@@ -49,7 +49,15 @@ export class TopicTemplatesComponent implements OnInit {
               ...response.records,
             ];
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this.loading = false;
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: 'Cannot load Data',
+                priorityMessage: error.message,
+              })
+              .subscribe();
+          }
         )
     );
   }

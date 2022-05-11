@@ -227,7 +227,14 @@ export class EditCampaignComponent implements OnInit {
               this.setDataAfterSave(response);
             }
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: '',
+                priorityMessage: error.message,
+              })
+              .subscribe();
+          }
         );
       })
     );

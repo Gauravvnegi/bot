@@ -18,7 +18,9 @@
     <div class="wrapper-form">
       <div class="fields">
         <div class="field">
-          <mat-label class="mat-label">Name:</mat-label>
+          <mat-label class="mat-label">{{
+            'formFieldLabels.name' | translate
+          }}</mat-label>
           <mat-form-field>
             <input
               matInput
@@ -31,7 +33,7 @@
                 templateForm.get('name').hasError('required')
               "
             >
-              Name is required
+              {{ 'validationMessage.name' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -53,13 +55,14 @@
       </div>
       <div class="fields" *ngIf="!isDisabled">
         <div class="field">
-          <mat-label class="mat-label">Shared templates</mat-label>
+          <mat-label class="mat-label">{{
+            'sharedTemplates' | translate
+          }}</mat-label>
           <mat-checkbox formControlName="isShared"></mat-checkbox>
         </div>
       </div>
       <div class="description" *ngIf="!isDisabled">
-        Shared templates and their contents are openly available for all users
-        under your organisations.
+        {{ 'descriptionMessage' | translate }}
       </div>
     </div>
     <div class="wrapper-editor">

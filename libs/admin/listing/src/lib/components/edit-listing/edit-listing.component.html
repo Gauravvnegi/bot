@@ -35,7 +35,9 @@
     <div class="wrapper-form">
       <div class="fields">
         <div class="field">
-          <mat-label class="mat-label">Name:</mat-label>
+          <mat-label class="mat-label">{{
+            'formFieldLabels.name' | translate
+          }}</mat-label>
           <mat-form-field>
             <input
               matInput
@@ -62,7 +64,9 @@
       </div>
       <div class="fields">
         <div class="field">
-          <mat-label class="mat-label">Description:</mat-label>
+          <mat-label class="mat-label">{{
+            'formFieldLabels.description' | translate
+          }}</mat-label>
           <mat-form-field class="description">
             <input
               matInput
@@ -94,10 +98,16 @@
     <div class="wrapper-form">
       <div class="fields">
         <div class="toggle_wrapper">
-          <mat-label class="mat-label">Active :</mat-label>
-          <div class="status status--left">Disable</div>
+          <mat-label class="mat-label">{{
+            'formFieldLabels.active' | translate
+          }}</mat-label>
+          <div class="status status--left">
+            {{ 'active.disable' | translate }}
+          </div>
           <mat-slide-toggle formControlName="active"></mat-slide-toggle>
-          <div class="status status--right">Enable</div>
+          <div class="status status--right">
+            {{ 'active.enable' | translate }}
+          </div>
         </div>
       </div>
     </div>

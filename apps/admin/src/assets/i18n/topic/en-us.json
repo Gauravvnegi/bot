@@ -13,18 +13,29 @@
     "name": " Name is required",
     "description": "Description is required"
   },
+  "formFieldLabels": {
+    "name": "Name:",
+    "type": "Type:",
+    "description": "Description:",
+    "active": "Active:"
+  },
+
+  "active": {
+    "disable": "Disable",
+    "enable": "Enable"
+  },
   "message": {
     "success": {
-      "topic_created":"Topic Created Successfully.",
-      "topic_updated":"Topic Updated Successfully.",
+      "topic_created": "Topic Created Successfully.",
+      "topic_updated": "Topic Updated Successfully.",
       "topic_status_updated": "Status updated Successfully.."
     },
     "error": {
-      "topic_not_created":"Topic Not Created.",
-      "topic_not_updated":"Topic Not Updated.",
-      "topic_status_update_fail":"Status Not Updated.",
-      "exportCSV_fail":"Export CSV Failed.",
-      "loading_fail":"Loading Fail."
+      "topic_not_created": "Topic Not Created.",
+      "topic_not_updated": "Topic Not Updated.",
+      "topic_status_update_fail": "Status Not Updated.",
+      "exportCSV_fail": "Export CSV Failed.",
+      "loading_fail": "Loading Fail."
     }
   }
 }

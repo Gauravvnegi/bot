@@ -184,9 +184,18 @@ export class ImportAssetComponent implements OnInit {
 
   handleCopyToClipboard(event) {
     event.stopPropagation();
-    this._snackbarService.openSnackBarAsText('Asset url copied.', '', {
-      panelClass: 'success',
-    });
+    this._snackbarService
+      .openSnackBarWithTranslate(
+        {
+          translateKey: 'messages.success.urlCopied',
+          priorityMessage: 'Asset url copied',
+        },
+        '',
+        {
+          panelClass: 'success',
+        }
+      )
+      .subscribe();
   }
 
   loadMoreAssetData() {

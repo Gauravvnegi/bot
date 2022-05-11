@@ -160,11 +160,11 @@ export class FeedbackDistribution {
 
   deserialize(input) {
     this.data = new Array<Distribution>();
-    Object.keys(input.feedbacks).forEach((key) => {
+    Object.keys(input.feedbacks).forEach((key) =>
       this.data.push(
         new Distribution().deserialize({ ...input.feedbacks[key], key })
-      );
-    });
+      )
+    );
     Object.assign(this, set({}, 'totalCount', get(input, ['totalResponse'])));
     return this;
   }

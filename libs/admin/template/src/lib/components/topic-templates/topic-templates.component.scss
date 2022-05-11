@@ -27,7 +27,8 @@
     cursor: pointer;
     overflow-y: hidden;
     overflow-x: hidden;
-    border: 1px solid grey;
+    box-shadow: rgb(82 82 82 / 10%) 1px -3px 0px -3px, rgb(87 86 86 / 10%) 0px -1px 4px -2px, rgb(70 70 70 / 10%) 0px 3px 14px 2px;
+    border-radius: 5px;
     width: 255px;
     height: 273px;
     margin: 0 4rem 2rem 4rem;
@@ -63,6 +64,7 @@
 
 .line {
   border: 1px solid #9eaeb8;
-  width: 100%;
-  opacity: 0.3;
+    /* width: 100%; */
+    opacity: 0.3;
+    margin: 0 2rem;
 }

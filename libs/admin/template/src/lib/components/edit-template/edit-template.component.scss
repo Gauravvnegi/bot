@@ -215,7 +215,7 @@
 :host ::ng-deep .mat-form-field-infix {
   border-top: none;
   letter-spacing: 0.96px;
-  width:311px;
+  width:90%;
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
@@ -247,7 +247,7 @@
 }
 
 :host ::ng-deep .mat-form-field {
-  width: 100%;
+  width: 90%;
 }
 
 .full-width {
@@ -326,4 +326,7 @@
 :host ::ng-deep .form-field {
   display: flex;
   gap: 30px;
+}
+.field-topic {
+  width: 100%;
 }

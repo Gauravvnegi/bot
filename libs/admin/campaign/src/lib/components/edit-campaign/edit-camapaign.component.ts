@@ -114,9 +114,9 @@ export class EditCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
-          if (this.campaign.cc)
+          if (this.campaign.cc && this.campaign.cc.length)
             this.campaignFG.addControl('cc', this._fb.array([]));
-          if (this.campaign.bcc)
+          if (this.campaign.bcc && this.campaign.bcc.length)
             this.campaignFG.addControl('bcc', this._fb.array([]));
           this.setFormData();
           this.listenForAutoSave();
@@ -128,7 +128,7 @@ export class EditCampaignComponent implements OnInit {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.addFormArray('to', 'toReceivers'),
-        this.addtestEmails(),
+        this.addEmailControls(),
       ]).then((res) => resolve(res[1]));
     });
   }
@@ -158,13 +158,21 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
-  addtestEmails() {
+  addEmailControls() {
     return new Promise((resolve, reject) => {
       this.campaign.testEmails.forEach((item) =>
         (this.campaignFG.get('testEmails') as FormArray).push(
           new FormControl(item)
         )
       );
+      if (this.campaignFG.get('cc'))
+        this.campaign.cc.forEach((item) =>
+          (this.campaignFG.get('cc') as FormArray).push(new FormControl(item))
+        );
+      if (this.campaignFG.get('bcc'))
+        this.campaign.cc.forEach((item) =>
+          (this.campaignFG.get('bcc') as FormArray).push(new FormControl(item))
+        );
       resolve(this.campaign);
     });
   }

@@ -165,7 +165,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       )
     );
@@ -228,15 +233,28 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       .updateTemplateStatus(this.hotelId, data, templateId)
       .subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Successfully updated status',
-            '',
-            { panelClass: 'success' }
-          );
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.status_updated',
+                priorityMessage: 'Status updated successfully',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
           this.changePage(this.currentPage);
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.loading = false;
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       );
   }
@@ -300,7 +318,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       )
     );
@@ -390,7 +413,12 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.exportCSV',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       )
     );

@@ -12,6 +12,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 export class EmailChipListComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Input() name: string;
+  @Input() disabled = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   visible: boolean = true;
   selectable: boolean = true;
@@ -23,6 +24,10 @@ export class EmailChipListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  ngOnChanges() {
+    if (this.disabled) this.parentFG.get(this.name).disable();
+  }
 
   addEmail(event: MatChipInputEvent, control): void {
     let input = event.input;

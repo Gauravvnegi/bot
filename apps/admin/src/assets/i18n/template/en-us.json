@@ -53,8 +53,8 @@
 
   "validationMessage": {
     "name": "Name is required",
-    "description":"Description is required",
-    "topic":"Topic name is required"
+    "description": "Description is required",
+    "topic": "Topic name is required"
   },
 
   "contentForm": {
@@ -65,5 +65,20 @@
   "selectAsset": "Select Asset",
   "copyLink": "Copy Link",
   "sharedTemplates": "Shared templates",
-  "descriptionMessage": "Shared templates and their contents are openly available for all users under your organisations."
+  "descriptionMessage": "Shared templates and their contents are openly available for all users under your organisations.",
+
+  "messages": {
+    "success": {
+      "status_updated": "Status updated",
+      "updateTemplate": "Template Updated successfully",
+      "createTemplate": "Template Created successfully",
+      "deleteTemplate": "Template Deleted successfully",
+      "urlCopied":"Asset url copied",
+      "noContent":"No template content"
+    },
+    "error": {
+      "exportCSV": "Failed to export CSV",
+      "loadData": "Failed to load data"
+    }
+  }
 }

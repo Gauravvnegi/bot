@@ -14,7 +14,7 @@
       <div class="icon"></div>
       <div
         class="dropdown"
-        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
+        [style.height.px]="campaignId && !campaign?.archieved ? 118 : 69"
       >
         <div class="dropdown__item" (click)="sendTestCampaign()">
           {{ 'viewCampaign.sendTest' | translate }}
@@ -22,7 +22,7 @@
         <div
           class="dropdown__item"
           (click)="archiveCampaign()"
-          *ngIf="campaignId"
+          *ngIf="campaignId && !campaign?.archieved"
         >
           {{ 'formFieldLabels.archiveCampaign' | translate }}
         </div>
@@ -91,13 +91,11 @@
           'formFieldLabels.cc' | translate
         }}</mat-label>
         <div class="width">
-          <hospitality-bot-to-receiver-field
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
             [name]="'cc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('cc')?.value || []"
-            [disableInput]="(campaignFG.get('cc')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-to-receiver-field>
+          ></hospitality-bot-email-chip-list>
         </div>
       </div>
     </div>
@@ -107,13 +105,11 @@
           'formFieldLabels.bcc' | translate
         }}</mat-label>
         <div class="width">
-          <hospitality-bot-to-receiver-field
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
             [name]="'bcc'"
-            [hotelId]="hotelId"
-            [chipList]="campaignFG.get('bcc')?.value || []"
-            [disableInput]="(campaignFG.get('bcc')?.value || []).length"
             [disabled]="true"
-          ></hospitality-bot-to-receiver-field>
+          ></hospitality-bot-email-chip-list>
         </div>
       </div>
     </div>

@@ -8,11 +8,11 @@
     "name": "Name:",
     "from": "From:",
     "to": "To:",
-    "cc":"Cc:",
-    "bcc":"Bcc:",
-    "subject":"Subject:",
+    "cc": "Cc:",
+    "bcc": "Bcc:",
+    "subject": "Subject:",
     "previewText": "Preview Text:",
-    "archiveCampaign":"Archive Campaign"
+    "archiveCampaign": "Archive Campaign"
   },
 
   "toDrop": {
@@ -21,9 +21,9 @@
     "infoMessage": "Email is sent to latest checked-out guests or you can specify the recipient in the group or individually please note email not sent to the  guest who have already submitted the survey.",
     "show": "Show More",
     "learn": "Learn More",
-    "customerPage":"Customer Page",
-    "guests":"Guests",
-    "listingPage":"Listing Page"
+    "customerPage": "Customer Page",
+    "guests": "Guests",
+    "toDrop": "Listing Page"
   },
   "mail": {
     "send": "Send test Email",
@@ -54,14 +54,31 @@
     "subjectLength": "Maximum length is 200 characters."
   },
 
-"viewCampaign":{
-"sendTest":"Send Test",
-"sentOn":"Sent on"
-},
+  "viewCampaign": {
+    "sendTest": "Send Test",
+    "sentOn": "Sent on"
+  },
 
   "sendText": "Send Text",
-  "draftedOn":"Drafted on",
+  "draftedOn": "Drafted on",
   "personlize": "Personalization",
-  "cancel":"Cancel"
+  "cancel": "Cancel",
 
+  "messages": {
+    "success": {
+      "status_updated": "Status updated",
+      "updateTemplate": "Template Updated successfully",
+      "createTemplate": "Template Created successfully",
+      "sendTestcampaign":"Campaign sent to test email(s)",
+      "campaignArchived":"Campaign Archived",
+      "campaignSent":"Campiagn Sent successfully",
+      "sendMail":"Please enter an email",
+      "campaignCloned":"Campaign Cloned"
+    },
+    "error": {
+      "exportCSV": "Failed to export CSV",
+      "loadData": "Failed to load data"
+
+    }
+  }
 }

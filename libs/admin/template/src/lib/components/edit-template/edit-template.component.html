@@ -44,13 +44,15 @@
             </mat-form-field>
           </div>
           <div class="field">
-            <hospitality-bot-topic-dropdown
-              [name]="'topicId'"
-              [parentForm]="templateForm"
-              [hotelId]="hotelId"
-              [id]="true"
-              [state]="templateId ? 'ALL' : 'ACTIVE'"
-            ></hospitality-bot-topic-dropdown>
+            <div class="field-topic">
+              <hospitality-bot-topic-dropdown
+                [name]="'topicId'"
+                [parentForm]="templateForm"
+                [hotelId]="hotelId"
+                [id]="true"
+                [state]="templateId ? 'ALL' : 'ACTIVE'"
+              ></hospitality-bot-topic-dropdown>
+            </div>
           </div>
         </div>
         <div class="fields">

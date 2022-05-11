@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
@@ -7,10 +8,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { reject } from 'lodash';
 import { empty, of, Subscription } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
@@ -44,12 +44,12 @@ export class EditCampaignComponent implements OnInit {
   datamapped = true;
   @ViewChild('stepper') stepper: MatStepper;
   constructor(
+    private location: Location,
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
     private _campaignService: CampaignService,
     private _emailService: EmailService,
-    private _router: Router,
     private _snackbarService: SnackBarService
   ) {
     this.initFG();
@@ -114,6 +114,10 @@ export class EditCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          if (this.campaign.cc && this.campaign.cc.length)
+            this.campaignFG.addControl('cc', this._fb.array([]));
+          if (this.campaign.bcc && this.campaign.bcc.length)
+            this.campaignFG.addControl('bcc', this._fb.array([]));
           this.setFormData();
           this.listenForAutoSave();
         })
@@ -124,7 +128,7 @@ export class EditCampaignComponent implements OnInit {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.addFormArray('to', 'toReceivers'),
-        this.addtestEmails(),
+        this.addEmailControls(),
       ]).then((res) => resolve(res[1]));
     });
   }
@@ -154,13 +158,21 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
-  addtestEmails() {
+  addEmailControls() {
     return new Promise((resolve, reject) => {
       this.campaign.testEmails.forEach((item) =>
         (this.campaignFG.get('testEmails') as FormArray).push(
           new FormControl(item)
         )
       );
+      if (this.campaignFG.get('cc'))
+        this.campaign.cc.forEach((item) =>
+          (this.campaignFG.get('cc') as FormArray).push(new FormControl(item))
+        );
+      if (this.campaignFG.get('bcc'))
+        this.campaign.cc.forEach((item) =>
+          (this.campaignFG.get('bcc') as FormArray).push(new FormControl(item))
+        );
       resolve(this.campaign);
     });
   }
@@ -183,13 +195,21 @@ export class EditCampaignComponent implements OnInit {
           (response) => {
             if (this.campaignId) {
               console.log('Saved');
-            } else
-              this._router.navigate([
-                `/pages/marketing/campaign/edit/${response.id}`,
-              ]);
+              this.setDataAfterUpdate(response);
+            } else {
+              this.location.replaceState(
+                `/pages/marketing/campaign/edit/${response.id}`
+              );
+              this.setDataAfterSave(response);
+            }
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: '',
+                priorityMessage: error.message,
+              })
+              .subscribe();
           }
         )
     );
@@ -199,7 +219,7 @@ export class EditCampaignComponent implements OnInit {
     if (data)
       return this._campaignService.save(
         this.hotelId,
-        this._emailService.createRequestData(this.campaign, data),
+        this._emailService.createRequestData(data),
         this.campaignId
       );
     else {
@@ -207,15 +227,21 @@ export class EditCampaignComponent implements OnInit {
         this._campaignService
           .save(
             this.hotelId,
-            this._emailService.createRequestData(this.campaign, data),
+            this._emailService.createRequestData(this.campaignFG.getRawValue()),
             this.campaignId
           )
           .subscribe(
             (response) => {
               console.log('Saved');
+              this.setDataAfterUpdate(response);
             },
             ({ error }) => {
-              this._snackbarService.openSnackBarAsText(error.message);
+              this._snackbarService
+                .openSnackBarWithTranslate({
+                  translateKey: 'Cannot Auto Save',
+                  priorityMessage: error.message,
+                })
+                .subscribe();
             }
           )
       );
@@ -247,6 +273,20 @@ export class EditCampaignComponent implements OnInit {
   handleCreateContentChange(event) {
     this.stepper[event.step]();
     if (event.templateType) this.createContentType = event.templateType;
+  }
+
+  setDataAfterUpdate(response) {
+    if (response?.value) {
+      this.campaignId = response.value.id;
+      this.campaign = new Campaign().deserialize(response.value);
+    }
+  }
+
+  setDataAfterSave(response) {
+    if (response) {
+      this.campaignId = response.id;
+      this.campaign = new Campaign().deserialize(response);
+    }
   }
 
   ngOnDestroy() {

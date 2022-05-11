@@ -84,7 +84,7 @@ export class Contact {
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'mobile', get(input, ['mobile'])),
       set({}, 'id', get(input, ['id'], index)),
-      set({}, 'salutation', get(input, ['salutation']))
+      set({}, 'salutation', get(input, ['salutation'], ''))
     );
     return this;
   }

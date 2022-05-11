@@ -1,6 +1,10 @@
 <div class="container">
   <ng-container
-    *ngIf="search; then searchDropdown; else subscriberListing"
+    *ngIf="
+      search && searchList?.length;
+      then searchDropdown;
+      else subscriberListing
+    "
   ></ng-container>
   <ng-template #subscriberListing>
     <hospitality-bot-tab-group
@@ -42,7 +46,9 @@
     <ng-template #listing>
       <div class="sub-title">
         {{ 'toDrop.viewlist' | translate }}
-        <span class="color">{{ 'toDrop.listingPage' | translate }}</span>
+        <span class="color" (click)="redirect('/pages/library/listing')">{{
+          'toDrop.toDrop' | translate
+        }}</span>
       </div>
       <div class="listing">
         <div
@@ -88,7 +94,7 @@
         <ng-template #noEmail>
           <div class="listing">
             <div>{{ item.name }}</div>
-            <div>{{ item.count }}</div>
+            <div>{{ item.count }} Guests</div>
           </div>
         </ng-template>
       </div>

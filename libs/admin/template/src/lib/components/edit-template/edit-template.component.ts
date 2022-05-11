@@ -117,11 +117,18 @@ export class EditTemplateComponent implements OnDestroy {
       this.$subscription.add(
         this.updateTemplate(data).subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText(
-              'Template Updated Successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.success.updateTemplate',
+                  priorityMessage: 'Template updated successfully',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this.templateForm.patchValue(response);
             if (!event.data) this._router.navigate(['/pages/library/template']);
             if (event.data.redirectToForm) this.stepper.selectedIndex = 0;
@@ -138,15 +145,27 @@ export class EditTemplateComponent implements OnDestroy {
         this.createTemplate(data).subscribe(
           (response) => {
             this.template = new Template().deserialize(response);
-            this._snackbarService.openSnackBarAsText(
-              'Template Created Successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.success.createTemplate',
+                  priorityMessage: 'Template Created successfully',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this._router.navigate(['/pages/library/template']);
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: 'messages.error.createTemplate',
+                priorityMessage: error.message,
+              })
+              .subscribe();
           },
           () => (this.isSaving = false)
         )
@@ -198,9 +217,27 @@ export class EditTemplateComponent implements OnDestroy {
           .subscribe(
             (resposne) => {
               this.templateForm.patchValue({ htmlTemplate: '' });
+              this._snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: 'messages.success.deleteTemplate',
+                    priorityMessage: 'Template Deleted successfully',
+                  },
+                  '',
+                  {
+                    panelClass: 'success',
+                  }
+                )
+                .subscribe();
             },
-            ({ error }) =>
-              this._snackbarService.openSnackBarAsText(error.message)
+            ({ error }) => {
+              this._snackbarService
+                .openSnackBarWithTranslate({
+                  translateKey: 'messages.success.deleteTemplate',
+                  priorityMessage: error.message,
+                })
+                .subscribe();
+            }
           )
       );
     else this.templateForm.patchValue({ htmlTemplate: '' });

@@ -1,5 +1,5 @@
 <mat-form-field>
-  <mat-chip-list #sendTest>
+  <mat-chip-list #sendTest multiple [formControl]="parentFG?.get(name)">
     <mat-chip
       *ngFor="let email of parentFG?.get(name).value"
       (removed)="removeEmail(email, parentFG?.get(name))"

@@ -49,7 +49,14 @@ export class TopicTemplatesComponent implements OnInit {
               ...response.records,
             ];
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: 'messages.error.loadData',
+                priorityMessage: error.message,
+              })
+              .subscribe();
+          }
         )
     );
   }

@@ -16,7 +16,8 @@
 <div class="show-button" (click)="loadData()">
   <ng-container *ngIf="template.templates?.length < template.totalTemplate">
     <button class="button">
-      Show More
+      {{ 'toDrop.show' | translate }}
     </button>
   </ng-container>
 </div>
+<div class="line"></div>

@@ -220,7 +220,7 @@ export class GuestDetailsConfig implements Deserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'code', get(input, ['code'])),
-      set({}, 'title', get(input, ['nameTitle'])),
+      set({}, 'title', get(input, ['nameTitle'], '')),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'countryCode', this.getNationality(get(contactDetails, ['cc']))),

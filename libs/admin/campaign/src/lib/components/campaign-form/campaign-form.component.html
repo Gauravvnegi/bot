@@ -10,17 +10,14 @@
       <div class="icon"></div>
       <div class="icon"></div>
       <div class="icon"></div>
-      <div
-        class="dropdown"
-        [style.height.px]="campaignId && !campaign?.isDraft ? 118 : 69"
-      >
+      <div class="dropdown">
         <div class="dropdown__item" (click)="sendTestCampaign()">
           {{ 'sendText' | translate }}
         </div>
         <div
           class="dropdown__item"
           (click)="archiveCampaign()"
-          *ngIf="campaignId"
+          *ngIf="campaignId && !campaign?.isDraft"
         >
           {{ 'campaign.archive' | translate }}
         </div>
@@ -81,7 +78,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">To:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.to' | translate
+        }}</mat-label>
         <div class="email-field-container">
           <hospitality-bot-to-receiver-field
             [name]="'to'"
@@ -111,7 +110,9 @@
     </div>
     <div class="fields" *ngIf="campaignFG?.get('cc')">
       <div class="field full-width">
-        <mat-label class="mat-label">Cc:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.cc' | translate
+        }}</mat-label>
         <div class="cc-width">
           <hospitality-bot-email-chip-list
             [parentFG]="campaignFG"
@@ -122,7 +123,9 @@
     </div>
     <div class="fields" *ngIf="campaignFG?.get('bcc')">
       <div class="field full-width">
-        <mat-label class="mat-label">Bcc:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.bcc' | translate
+        }}</mat-label>
         <div class="cc-width">
           <hospitality-bot-email-chip-list
             [parentFG]="campaignFG"
@@ -133,7 +136,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Subject:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.subject' | translate
+        }}</mat-label>
         <mat-form-field class="description">
           <input
             matInput
@@ -172,7 +177,9 @@
     </div>
     <div class="fields">
       <div class="field full-width">
-        <mat-label class="mat-label">Preview Text:</mat-label>
+        <mat-label class="mat-label">{{
+          'formFieldLabels.previewText' | translate
+        }}</mat-label>
         <mat-form-field class="description">
           <input
             matInput

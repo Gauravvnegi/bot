@@ -17,6 +17,7 @@ export class TemplateListContainerComponent implements OnInit {
   @Input() templateForm: FormGroup;
   @Input() templateType: string;
   @Output() change = new EventEmitter();
+  selectedTopic="All";
   topicList = [];
   templateTopicList = [];
   constructor(

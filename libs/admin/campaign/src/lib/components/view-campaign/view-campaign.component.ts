@@ -60,8 +60,6 @@ export class ViewCampaignComponent implements OnInit {
     this.campaignFG = this._fb.group({
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),
-      cc: this._fb.array([]),
-      bcc: this._fb.array([]),
       message: ['', [Validators.required]],
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
@@ -120,10 +118,15 @@ export class ViewCampaignComponent implements OnInit {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          if (this.campaign.cc)
+            this.campaignFG.addControl('cc', this._fb.array([]));
+          if (this.campaign.bcc)
+            this.campaignFG.addControl('bcc', this._fb.array([]));
           this.setFormData();
         })
     );
   }
+
   addElementToData() {
     return new Promise((resolve, reject) => {
       Promise.all([
@@ -174,12 +177,19 @@ export class ViewCampaignComponent implements OnInit {
         .archiveCampaign(this.hotelId, {}, this.campaignId)
         .subscribe(
           (response) => {
+            this.setDataAfterUpdate(response);
             this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
               panelClass: 'success',
             });
-            this.location.back();
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) => {
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: '',
+                priorityMessage: error.message,
+              })
+              .subscribe();
+          }
         )
     );
   }
@@ -198,20 +208,33 @@ export class ViewCampaignComponent implements OnInit {
         (response) => {
           if (response.status) {
             const reqData = this._emailService.createRequestData(
-              this.campaign,
               this.campaignFG.getRawValue()
             );
             this.$subscription.add(
               this._emailService.sendTest(this.hotelId, reqData).subscribe(
                 (response) => {
-                  this._snackbarService.openSnackBarAsText(
-                    'Campaign sent to test email(s).',
-                    '',
-                    { panelClass: 'success' }
-                  );
+                  this.setDataAfterUpdate(response);
+                  this._snackbarService
+                    .openSnackBarWithTranslate(
+                      {
+                        translateKey: 'messages.success.sendTestcampaign',
+                        priorityMessage: 'Campaign sent to test email(s)',
+                      },
+                      '',
+                      {
+                        panelClass: 'success',
+                      }
+                    )
+                    .subscribe();
                 },
-                ({ error }) =>
-                  this._snackbarService.openSnackBarAsText(error.message)
+                ({ error }) => {
+                  this._snackbarService
+                    .openSnackBarWithTranslate({
+                      translateKey: '',
+                      priorityMessage: error.message,
+                    })
+                    .subscribe();
+                }
               )
             );
           }
@@ -219,6 +242,12 @@ export class ViewCampaignComponent implements OnInit {
         }
       )
     );
+  }
+
+  setDataAfterUpdate(response) {
+    if (response?.value) {
+      this.campaign = new Campaign().deserialize(response?.value);
+    }
   }
 
   goBack() {

@@ -22,7 +22,18 @@ export class SendTestComponent implements OnInit {
 
   sendMail() {
     if (this.parentFG.get('testEmails').value.length == 0) {
-      this._snackbarService.openSnackBarAsText('Please enter an email.');
+      this._snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'messages.success.sendMail',
+            priorityMessage: 'Please enter an email',
+          },
+          '',
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
       return;
     }
     this.closeSendTest.emit({ status: true });

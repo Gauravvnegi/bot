@@ -58,17 +58,12 @@ export class ReceiverFieldComponent implements OnInit {
     );
   }
 
-  removeChip(chip, event) {
+  removeChip(index, event) {
     event.stopPropagation();
     this.updateChipSet.emit({
       action: 'remove',
-      value: this.chipList.filter(
-        (item) => item.data.name === chip.data.name
-      )[0],
+      value: index,
     });
-    this.chipList = this.chipList.filter(
-      (item) => item.data.name !== chip.data.name
-    );
     if (!this.chipList.length) this.enableTextField();
   }
 
@@ -87,10 +82,6 @@ export class ReceiverFieldComponent implements OnInit {
   addChip(event) {
     event.stopPropagation();
     if (this.separatorKeysCodes.includes(event.which)) {
-      this.chipList.push({
-        data: { name: this.receiverField.nativeElement.value },
-        type: 'email',
-      });
       this.updateChipSet.emit({
         value: {
           data: { name: this.receiverField.nativeElement.value },
@@ -139,7 +130,6 @@ export class ReceiverFieldComponent implements OnInit {
   }
 
   addItemFromDropdown(event) {
-    this.chipList.push(event);
     this.updateChipSet.emit({
       value: event,
       action: 'add',

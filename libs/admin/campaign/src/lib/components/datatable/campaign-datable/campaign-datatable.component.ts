@@ -125,7 +125,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       )
     );
@@ -188,15 +193,28 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       .updateCampaignStatus(this.hotelId, data, campaignId)
       .subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Successfully updated status',
-            '',
-            { panelClass: 'success' }
-          );
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.status_updated',
+                priorityMessage: 'Status updated successfully',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
           this.changePage(this.currentPage);
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.loading = false;
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       );
   }
@@ -207,13 +225,28 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .cloneCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText('Campaign Cloned', '', {
-              panelClass: 'success',
-            });
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.success.campaignCloned',
+                  priorityMessage: 'Campaign Cloned',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this.changePage(this.currentPage);
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
+            this.loading = false;
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: '',
+                priorityMessage: error.message,
+              })
+              .subscribe();
           }
         )
     );
@@ -225,13 +258,28 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         .archiveCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarAsText('Campaign Archived', '', {
-              panelClass: 'success',
-            });
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.success.campaignArchived',
+                  priorityMessage: 'Campaign Archived',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this.changePage(this.currentPage);
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
+            this.loading = false;
+            this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey: '',
+                priorityMessage: error.message,
+              })
+              .subscribe();
           }
         )
     );
@@ -304,7 +352,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: '',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       )
     );
@@ -394,7 +447,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.exportCSV',
+              priorityMessage: error.message,
+            })
+            .subscribe();
         }
       )
     );

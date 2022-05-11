@@ -4,46 +4,48 @@
   width: 100%;
   height: auto;
   min-height: 52px;
-  border-bottom: 1px solid #737679;
-  padding: 8px;
-  margin-bottom: 15px;
   cursor: text;
   display: flex;
   flex-wrap: wrap;
+  position: relative;
+  padding-bottom: 1.25em;
   .field {
     width: 100%;
-    position: relative;
   }
 }
 
 .form-field .chips .chip {
   display: inline-block;
   width: auto;
-
-  background-color: $c-gray-70;
-  color: #fff;
+  background-color: #e0e0e0;
+  color: $black;
   border-radius: 18px;
   margin: 2px;
   overflow: hidden;
+  &:hover {
+    background-color: #ccc7c7;
+  }
 }
 .form-field .chips .chip {
   display: flex;
 }
 
 .form-field .chips .chip .chip--button {
-  padding: 8px 10px;
+  padding: 4px 10px;
   cursor: pointer;
-  background-color: $c-gray-50;
   display: inline-block;
+  color: gray;
+  line-height: 18px;
 }
 .form-field .chips .chip .chip--text {
-  padding: 8px 12px;
+  padding: 4px 12px;
   cursor: none;
   display: inline-block;
   pointer-events: none;
+  line-height: 29px;
 }
 
-.form-field > .field > input {
+.form-field > .chips > .field > input {
   padding: 5px;
   display: block !important;
   box-sizing: border-box;
@@ -59,20 +61,23 @@
 }
 
 .chips {
-  max-width: calc(100% - 65px);
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
+  border-bottom: 1px solid #737679;
+  padding-bottom: 6px;
+  padding-right: 65px;
 }
 
 .dropdown {
   width: 100%;
   position: absolute;
-  top: 60px;
+  top: calc(100% + 10px);
   left: 0px;
   z-index: 112;
   border-radius: 10px;
   box-shadow: 3px 9px 20px 0 rgba(0, 0, 0, 0.25);
-  background-color: #fff;
+  background-color: $white;
   padding: 15px;
 }
 

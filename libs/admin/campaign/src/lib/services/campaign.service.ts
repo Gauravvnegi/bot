@@ -138,7 +138,7 @@ export class CampaignService extends ApiService {
     receivers.subscribers?.forEach((item) =>
       data.push({
         data: { id: item.receiverId, name: item.name },
-        type: 'listing',
+        type: 'subscribers',
       })
     );
     return data;

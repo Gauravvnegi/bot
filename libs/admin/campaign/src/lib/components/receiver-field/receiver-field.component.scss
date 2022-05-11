@@ -18,28 +18,32 @@
 .form-field .chips .chip {
   display: inline-block;
   width: auto;
-
-  background-color: $c-gray-70;
-  color: #fff;
+  background-color: #e0e0e0;
+  color: $black;
   border-radius: 18px;
   margin: 2px;
   overflow: hidden;
+  &:hover {
+    background-color: #ccc7c7;
+  }
 }
 .form-field .chips .chip {
   display: flex;
 }
 
 .form-field .chips .chip .chip--button {
-  padding: 8px 10px;
+  padding: 4px 10px;
   cursor: pointer;
-  background-color: $c-gray-50;
   display: inline-block;
+  color: gray;
+  line-height: 18px;
 }
 .form-field .chips .chip .chip--text {
-  padding: 8px 12px;
+  padding: 4px 12px;
   cursor: none;
   display: inline-block;
   pointer-events: none;
+  line-height: 29px;
 }
 
 .form-field > .chips > .field > input {

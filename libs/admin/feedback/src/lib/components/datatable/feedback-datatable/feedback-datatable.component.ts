@@ -9,6 +9,7 @@ import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  ConfigService,
   FeedbackService,
   HotelDetailService,
   sharedConfig,
@@ -58,7 +59,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   hotelId: string;
   rowsPerPage: number = 25;
-
+  colorMap;
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
 
@@ -77,7 +78,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected tableService: FeedbackTableService,
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected configService: ConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -96,6 +98,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForFeedbackTypeChanged();
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
+    this.getConfig();
+  }
+
+  getConfig() {
+    this.configService.$config.subscribe((response) => {
+      if (response) this.colorMap = response?.feedbackColorMap;
+      console.log(this.colorMap);
+    });
   }
 
   /**

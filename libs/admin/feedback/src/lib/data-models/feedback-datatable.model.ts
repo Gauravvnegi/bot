@@ -268,7 +268,7 @@ export class StayFeedback {
   ratings: number;
   read: boolean;
   serviceType: string;
-  services: StayService[];
+  services: Service[];
   session: string;
   size: number;
   tableOrRoomNumber: string;
@@ -279,7 +279,7 @@ export class StayFeedback {
   created: number;
 
   deserialize(input, outlets) {
-    this.services = new Array<StayService>();
+    this.services = new Array<Service>();
     this.commentList = {};
     Object.assign(
       this,
@@ -298,12 +298,12 @@ export class StayFeedback {
       set({}, 'transactionalService', get(input, ['transactionalService'])),
       set({}, 'status', get(input, ['status']))
     );
-    const service = JSON.parse(get(input, ['services']));
+    const service = get(this.bookingDetails, ['services']);
     Object.keys(service).forEach((key) => {
       if (key.includes('COMMENT')) this.commentList[key] = service[key];
       else {
         this.services.push(
-          new StayService().deserialize({ ...service[key], label: key })
+          new Service().deserialize({ ...service[key], label: key })
         );
       }
     });
@@ -316,12 +316,8 @@ export class StayFeedback {
     return this;
   }
 
-  getSortedServices() {
-    return this.services.sort((a, b) => (a.value > b.value ? 1 : -1));
-  }
-
   getNegativeRatedService() {
-    return this.services.filter((service) => service.value < 5);
+    return this.services.filter((service) => service.rating === 'EI');
   }
 
   getServiceComment(serviceName) {

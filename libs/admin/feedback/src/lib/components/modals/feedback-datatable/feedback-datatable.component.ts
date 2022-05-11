@@ -12,6 +12,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  ConfigService,
   FeedbackService,
   HotelDetailService,
   sharedConfig,
@@ -59,6 +60,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     statisticService: StatisticsService,
     _hotelDetailService: HotelDetailService,
     _translateService: TranslateService,
+    protected configService: ConfigService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     super(
@@ -72,7 +74,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       tableService,
       statisticService,
       _hotelDetailService,
-      _translateService
+      _translateService,
+      configService
     );
   }
 

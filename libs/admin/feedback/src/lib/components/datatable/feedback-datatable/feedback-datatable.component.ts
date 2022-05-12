@@ -361,7 +361,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     else
       this.values = new StayFeedbackTable().deserialize(
         data,
-        this.outlets
+        this.outlets,
+        this.colorMap
       ).records;
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;

@@ -710,10 +710,7 @@
                         >
                           <p
                             class="number status-background-success"
-                            [style.background]="
-                              (colorMap?.transactionalFeedbacks)[service.rating]
-                                .colorCode
-                            "
+                            [style.background]="service.colorCode"
                           >
                             {{ service.rating }}
                           </p>

@@ -70,16 +70,12 @@
               </button>
             </mat-chip>
             <input
-              placeholder="Search by name, E-mail, Number, Conf. No., Profile ID or by subscriber group or listing"
+              placeholder="Enter Email"
               [matChipInputFor]="chipList"
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               [matChipInputAddOnBlur]="addOnBlur"
               (matChipInputTokenEnd)="addEmail($event, to)"
             />
-            <p>
-              <span class="carbon-copy">Bcc</span>&nbsp;
-              <span class="carbon-copy">Cc</span>
-            </p>
           </mat-chip-list>
         </mat-form-field>
       </div>

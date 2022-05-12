@@ -118,7 +118,7 @@
     width: 145px;
     height: 36px;
     margin: 0 20px 0 254px;
-    padding: 8.5px 10.5px 8.5px 10.5px;
+    padding: 9.5px 12.5px 8.5px 13.5px;
     border-radius: 18px;
     background-color: #4b56c0;
     color: white;
@@ -302,4 +302,7 @@
 }
 .status {
   text-align: center !important;
+}
+.guest {
+  font-size: 14px;
 }

@@ -50,6 +50,9 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -63,12 +66,20 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
+  /**
+   * @function getTopicList to get topic record list.
+   * @param hotelId the hotel id for which getTopicList will be done..
+   */
   getTopicList(hotelId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
@@ -80,19 +91,23 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         (response) =>
           (this.topicList = new Topics().deserialize(response).records),
         ({ error }) => {
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.topicList_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.topicList_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
   }
 
+  /**
+   * @function createList create new record in listing.
+   */
   createList() {
     if (
       this.listFG.invalid ||
@@ -123,43 +138,55 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.isSaving = true;
     this._listingService.createList(this.hotelId, data).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.success.listing_created',
-            priorityMessage: `${response.name} is Created.`,
-          },
-          '',
-          {
-            panelClass: 'success',
-          }
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.listing_created',
+              priorityMessage: `${response.name} is Created.`,
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.error.listing_not_created',
-            priorityMessage: error.message,
-          },
-          ''
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.listing_not_created',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
       },
       () => (this.isSaving = false)
     );
   }
 
+  /**
+   * @function updateContactList update contact list.
+   * @param event event for which update action will be done.
+   */
   updateContactList(event) {
     if (event.add) {
       this.listFG.patchValue({ marketingContacts: event.data });
     }
   }
 
-  goBack() {
+  /**
+   * @function redirectToTable To navigate to data table page.
+   */
+  redirectToTable() {
     this._location.back();
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

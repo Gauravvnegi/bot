@@ -150,6 +150,9 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function deleteContact to delete contact form a record.
+   */
   deleteContact() {
     const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
     if (!this.add) {
@@ -189,6 +192,11 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     } else this.updateDataSourceAfterDelete(ids, this.selectedRows);
   }
 
+  /**
+   * @function updateDataSourceAfterDelete to update data source after delete a record.
+   * @param ids id for which delete action will be done.
+   * @param selectedRows selected row for which delete action will be done.
+   */
   updateDataSourceAfterDelete(ids, selectedRows = []) {
     if (selectedRows.length)
       this.dataSource = this.dataSource.filter(
@@ -204,6 +212,10 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     this.changePage(this.currentPage);
   }
 
+  /**
+   * @function openAddContact opens add contact page.
+   * @param event event for which add contact action will be done.
+   */
   openAddContact(event) {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
@@ -245,6 +257,10 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function handleContactAddEvent handles contact add event.
+   * @param data the data of a record for which add contact event will be done. 
+   */
   handleContactAddEvent(data) {
     data.forEach((item) =>
       this.dataSource.push(new Contact().deserialize(item, 0))
@@ -261,6 +277,10 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function openImportContact opens contacts to import.
+   * @param event event for which import action will be done.
+   */
   openImportContact(event) {
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
@@ -280,6 +300,10 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * @function handleContactImport handles contact import.
+   * @param data the data for which handleContactImport will be done.
+   */
   handleContactImport(data) {
     if (this.add) {
       this.dataSource = [...this.dataSource, ...data];
@@ -334,10 +358,17 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  /**
+   * @function listingConfiguration returns listingConfig object.
+   * @returns listingConfig object.
+   */
   get listingConfiguration() {
     return listingConfig;
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

@@ -19,37 +19,37 @@
   }
 }
 
-.topic-cards {
-  position: relative;
-  padding-left: 5px;
+.template-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-  .card {
-    cursor: pointer;
-    overflow-y: hidden;
-    overflow-x: hidden;
-    box-shadow: rgb(82 82 82 / 10%) 1px -3px 0px -3px, rgb(87 86 86 / 10%) 0px -1px 4px -2px, rgb(70 70 70 / 10%) 0px 3px 14px 2px;
-    border-radius: 5px;
-    width: 255px;
-    height: 273px;
-    margin: 0 4rem 2rem 4rem;
-    &__content {
-      pointer-events: none;
+  .topic-cards {
+    padding-left: 5px;
+    margin-bottom: 2rem;
+    .card {
+      position: relative;
+      cursor: pointer;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      box-shadow: rgb(82 82 82 / 10%) 1px -3px 0px -3px, rgb(87 86 86 / 10%) 0px -1px 4px -2px, rgb(70 70 70 / 10%) 0px 3px 14px 2px;
+      border-radius: 5px;
+      width: 255px;
+      height: 273px;
+      margin: 0 4rem 2rem 4rem;
+      &__content {
+        pointer-events: none;
+      }
+      .icon {
+        position: absolute;
+        top: 0%;
+        right: 0%;
+        padding:4px;
+      }
     }
-    .icon {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .t-name {
+      font-size: 14px;
+      text-align: center;
     }
-  }
-  .t-name {
-    position: absolute;
-    bottom: 0%;
-    padding-left: 20px;
-    font-size: 14px;
   }
 }
 

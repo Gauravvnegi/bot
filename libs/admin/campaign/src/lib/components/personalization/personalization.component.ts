@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { camapign } from '../../constant/demo-data';
 import { EmailService } from '../../services/email.service';
+import { campaignConfig } from '../../constant/campaign';
 
 @Component({
   selector: 'hospitality-bot-personalization',
@@ -39,6 +40,10 @@ export class PersonalizationComponent implements OnInit {
     if (this.name === 'subject')
       this._emailService.$disablePersonalizationPopup.previewText.next(true);
     else this._emailService.$disablePersonalizationPopup.subject.next(true);
+  }
+
+  get campaignConfiguration() {
+    return campaignConfig;
   }
 
   ngOnDestroy() {

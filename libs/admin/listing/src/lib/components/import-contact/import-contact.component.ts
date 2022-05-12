@@ -61,19 +61,34 @@ export class ImportContactComponent implements OnInit {
     });
   }
 
+   /**
+   * @function generateContactField generates add contact fields.
+   */
   generateContactField() {
     this.contactFA.push(this.createContactFG());
   }
 
+  /**
+   * @function removeContactField removes add contact field.
+   * @param index the index number for which remove contact action will be done.
+   * @returns return true if there is only one contact field.
+   */
   removeContactField(index: number) {
     if (this.contactFA.controls.length === 1) return;
     this.contactFA.removeAt(index);
   }
 
+  /**
+   * @function close closes contact page.
+   */
   close() {
     this.onImportClosed.emit({ status: false });
   }
 
+  /**
+   * @function importContact imports contact into record.
+   * @param event event for which import action will be done.
+   */
   importContact(event) {
     let formData = new FormData();
     formData.append('file', event.file);
@@ -104,12 +119,23 @@ export class ImportContactComponent implements OnInit {
     );
   }
 
+  /**
+   * @function save save contact data into a record.
+   * @return returns to perivous page contact is not imported.
+   */
   save() {
     if (
       this.contactFA.controls.length === 1 &&
       this.contactFA.controls[0].value.email === ''
     ) {
-      this._snackbarService.openSnackBarAsText('Please import a contact file.');
+      this._snackbarService.openSnackBarWithTranslate(
+        {
+          translateKey: 'message.error.contact_not_import',
+          priorityMessage: 'Please import a contact file.',
+        },
+        ''
+      )
+      .subscribe();
       return;
     }
     this.onImportClosed.emit({
@@ -118,12 +144,19 @@ export class ImportContactComponent implements OnInit {
     });
   }
 
+  /**
+   * @function enableField enables contact field.
+   * @param event event for which field will be enable.
+   */
   enableField(event) {
     if (event.target.checked)
       this.contactFA.controls.forEach((control) => control.enable());
     else this.contactFA.controls.forEach((control) => control.disable());
   }
 
+   /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

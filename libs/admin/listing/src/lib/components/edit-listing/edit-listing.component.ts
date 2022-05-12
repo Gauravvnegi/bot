@@ -52,6 +52,9 @@ export class EditListingComponent implements OnInit {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -65,12 +68,19 @@ export class EditListingComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
+  /**
+   * @function getListingId to get listing Id from routes query param.
+   */
   getListingId(): void {
     this.$subscription.add(
       this.activatedRoute.params.subscribe((params) => {
@@ -82,6 +92,10 @@ export class EditListingComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getListDetails to get the listing details.
+   * @param id The id for which edit action will be done.
+   */
   getListDetails(id) {
     this.loading = true;
     this.$subscription.add(
@@ -106,6 +120,9 @@ export class EditListingComponent implements OnInit {
     );
   }
 
+  /**
+   * @function updateList update listing record.
+   */
   updateList() {
     if (
       this.listFG.invalid ||
@@ -163,14 +180,24 @@ export class EditListingComponent implements OnInit {
     );
   }
 
+  /**
+   * @function updateContactList updates contact list.
+   * @param event event for which updation will be done.
+   */
   updateContactList(event) {
     this.getListDetails(this.listId);
   }
 
-  goBack() {
+  /**
+   * @function redirectToTable To navigate to data table page.
+   */
+   redirectToTable() {
     this._location.back();
   }
 
+   /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

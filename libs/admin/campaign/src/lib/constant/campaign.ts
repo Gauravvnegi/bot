@@ -31,7 +31,7 @@ export const campaignConfig = {
             value: 'DRAFT',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'failed',
           },
           {
             label: 'Sent',
@@ -39,7 +39,7 @@ export const campaignConfig = {
             value: 'SENT',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'completed',
           },
           {
             label: 'Archive',
@@ -47,7 +47,7 @@ export const campaignConfig = {
             value: 'ARCHIVE',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'initiated',
           },
         ],
         lastPage: 0,
@@ -74,7 +74,7 @@ export const campaignConfig = {
       {
         field: 'stats',
         header: 'Stats',
-        isSort: true,
+        isSort: false,
         sortType: 'string',
         dynamicWidth: true,
         width: '26%',
@@ -89,7 +89,7 @@ export const campaignConfig = {
       {
         field: 'action',
         header: 'Action',
-        isSort: true,
+        isSort: false,
         sortType: 'string',
         dynamicWidth: true,
         width: '8%',
@@ -122,6 +122,7 @@ export const campaignConfig = {
     saved: { url: 'assets/svg/diskette.svg', alt: 'saved' },
     inbuilt: { url: 'assets/svg/web-design.svg', alt: 'inbuilt' },
     editTemplate: { url: 'assets/svg/design.svg', alt: 'edit Template' },
+    write: { url:'assets/svg/edit-layer92.svg', alt: ' write'}
   },
   dropDownTabFilter: [
     {

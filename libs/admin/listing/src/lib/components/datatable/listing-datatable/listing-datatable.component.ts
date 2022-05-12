@@ -142,6 +142,10 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function setRecords set records after getting reponse from an api.
+   * @param data data is a response which comes from an api call.
+   */
   setRecords(data): void {
     this.values = new ListTable().deserialize(data).records;
     this.totalRecords = data.total;
@@ -334,14 +338,15 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.exportCSV_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.exportCSV_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -377,10 +382,18 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
+  /**
+   * @function openCreateListing navigate to create listing page.
+   */
   openCreateListing() {
     this.router.navigate(['create'], { relativeTo: this.route });
   }
 
+  /**
+   * @function updateStatus update status of a record.
+   * @param event active & inactive event check.
+   * @param rowData The data of row for which status update action will be done.
+   */
   updateStatus(event, rowData) {
     // event.stopPropagation();
     this.$subscription.add(
@@ -388,42 +401,56 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: 'message.success.listing_status_updated',
-                priorityMessage: `${rowData.name}'s status changed.`,
-              },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.success.listing_status_updated',
+                  priorityMessage: `${rowData.name}'s status changed.`,
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this.changePage(this.currentPage);
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.listing_status_updated_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.error.listing_status_updated_fail',
+                  priorityMessage: error.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
   }
 
+   /**
+   * @function openList navigate to edit listing page.
+   * @param event to stop openCreateList navigation.
+   * @param id The id for which edit action will be done.
+   */
   openList(event, id) {
     event.stopPropagation();
     this.router.navigate([`edit/${id}`], { relativeTo: this.route });
   }
 
+  /**
+   * @function listingConfiguration returns listingConfig object.
+   * @returns listingConfig object.
+   */
   get listingConfiguration() {
     return listingConfig;
   }
 
+  /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

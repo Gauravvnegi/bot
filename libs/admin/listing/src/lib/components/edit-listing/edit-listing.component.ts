@@ -128,7 +128,15 @@ export class EditListingComponent implements OnInit {
       this.listFG.invalid ||
       this.listFG.get('marketingContacts').value.length === 0
     ) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.invalid',
+              priorityMessage: 'Invalid Form.',
+            },
+            ''
+          )
+          .subscribe();
       return;
     }
     const data = this.listFG.getRawValue();

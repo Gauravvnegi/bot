@@ -1,6 +1,7 @@
 export const listingConfig = {
   datatable: {
     title: 'Listings',
+    limit:5,
     tabFilterItems: [
       {
         label: 'All',
@@ -99,6 +100,11 @@ export const listingConfig = {
         dynamicWidth: true,
       },
     ],
+  },
+  list:{
+    limit:50,
+    entityState:'ACTIVE',
+    chipValue:'ALL',
   },
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },

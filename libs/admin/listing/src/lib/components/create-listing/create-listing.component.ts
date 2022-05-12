@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
+import { listingConfig } from '../../constants/listing';
 
 @Component({
   selector: 'hospitality-bot-create-listing',
@@ -22,6 +23,8 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   globalQueries = [];
   topicList = [];
   isSaving = false;
+  limit=listingConfig.list.limit;
+  state=listingConfig.list.entityState;
   constructor(
     private _fb: FormBuilder,
     private listingService: ListingService,
@@ -83,7 +86,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   getTopicList(hotelId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
+        { entityState: this.state, limit: this.limit },
       ]),
     };
     this.$subscription.add(
@@ -113,7 +116,15 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       this.listFG.invalid ||
       this.listFG.get('marketingContacts').value.length === 0
     ) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.invalid',
+              priorityMessage: 'Invalid Form.',
+            },
+            ''
+          )
+          .subscribe();
       return;
     }
     const data = this.listFG.getRawValue();

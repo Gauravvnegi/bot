@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ContactList, IContact } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
+import { contactConfig } from '../../constants/contact';
 
 @Component({
   selector: 'hospitality-bot-import-contact',
@@ -15,10 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class ImportContactComponent implements OnInit {
   @Output() onImportClosed = new EventEmitter();
   @Input() hotelId: string;
-  fileUploadData = {
-    fileSize: 3145728,
-    fileType: ['csv'],
-  };
+  fileUploadData = contactConfig.datatable.fileUploadData;
   contacts: IContact[];
   fileName = '';
   $subscription = new Subscription();
@@ -32,11 +30,7 @@ export class ImportContactComponent implements OnInit {
   }
 
   contactFA: FormArray;
-  salutationList = [
-    { name: 'Mr.', value: 'Mr.' },
-    { name: 'Mrs.', value: 'Mrs.' },
-    { name: 'Miss', value: 'Miss' },
-  ];
+  salutationList =contactConfig.datatable.salutationList;
 
   ngOnInit(): void {
     this.generateContactField();

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Regex } from '@hospitality-bot/shared';
+import { contactConfig } from '../../constants/contact';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -14,11 +15,7 @@ export class EditContactComponent implements OnInit {
   @Input() add: boolean;
   @Input() hotelId: string;
   contactFA: FormArray;
-  salutationList = [
-    { name: 'Mr.', value: 'Mr.' },
-    { name: 'Mrs.', value: 'Mrs.' },
-    { name: 'Miss', value: 'Miss' },
-  ];
+  salutationList = contactConfig.datatable.salutationList;
   constructor(private _fb: FormBuilder) {
     this.createFA();
   }

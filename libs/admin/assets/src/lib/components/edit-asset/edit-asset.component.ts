@@ -8,6 +8,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
 import { TranslateService } from '@ngx-translate/core';
+import { assetConfig } from '../../constants/asset';
 
 @Component({
   selector: 'hospitality-bot-edit-asset',
@@ -16,14 +17,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EditAssetComponent implements OnInit {
   @Input() id: string;
-  fileUploadData = {
-    fileSize: 3145728,
-    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
-  };
+  fileUploadData = assetConfig.fileUploadData;
 
   assetForm: FormGroup;
   isSavingasset = false;
-
+  videoFile=assetConfig.type.video;
   private $subscription: Subscription = new Subscription();
   hotelasset: Asset;
   hotelId: any;
@@ -195,7 +193,7 @@ export class EditAssetComponent implements OnInit {
   uploadFile(event): void {
     let formData = new FormData();
     formData.append('files', event.file);
-    if (this.assetType === 'Video') {
+    if (this.assetType === this.videoFile) {
       let thumbnailData = new FormData();
       thumbnailData.append('files', event.thumbnailFile);
       this.$subscription.add(
@@ -324,8 +322,8 @@ export class EditAssetComponent implements OnInit {
   updateFileType(type: string): void {
     this.fileUploadData.fileType =
       type === 'Image'
-        ? ['png', 'jpg', 'jpeg', 'gif', 'eps']
-        : ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'];
+        ? assetConfig.size.image
+        : assetConfig.size.video;
   }
 
   /**
@@ -344,7 +342,7 @@ export class EditAssetComponent implements OnInit {
    * @return type.
    */
   get assetType() {
-    return this.assetForm?.get('type').value || 'Image';
+    return this.assetForm?.get('type').value || assetConfig.type.image;
   }
 
   /**

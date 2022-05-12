@@ -79,7 +79,8 @@
       "listing_fail": "Can not get Listing details.",
       "contact_not_delete": "Contact Not Deleted.",
       "contact_not_add": "Contact Not Added.",
-      "contact_not_import": "Contact Not Imported."
+      "contact_not_import": "Contact Not Imported.",
+      "invalid":"Invalid Form."
     }
   },
 

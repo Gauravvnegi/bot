@@ -20,6 +20,7 @@ import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-campaign-form',
@@ -51,7 +52,8 @@ export class CampaignFormComponent implements OnInit {
     private _modalService: ModalService,
     private _router: Router,
     public globalFilterService: GlobalFilterService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -67,7 +69,7 @@ export class CampaignFormComponent implements OnInit {
         ({ error }) => {
           this._snackbarService
             .openSnackBarWithTranslate({
-              translateKey: '',
+              translateKey: 'messages.error.fail',
               priorityMessage: error.message,
             })
             .subscribe();

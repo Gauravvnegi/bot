@@ -1,5 +1,8 @@
 export const assetConfig = {
   datatable: {
+    title: 'Asset',
+    limit: 5,
+    chipValue: 'ALL',
     tabFilterItems: [
       {
         label: 'All',
@@ -120,6 +123,18 @@ export const assetConfig = {
         dynamicWidth: true,
       },
     ],
+  },
+  fileUploadData: {
+    fileSize: 3145728,
+    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
+  },
+  type: {
+    video: 'Video',
+    image: 'Image',
+  },
+  size: {
+    image: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
+    video: ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'],
   },
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },

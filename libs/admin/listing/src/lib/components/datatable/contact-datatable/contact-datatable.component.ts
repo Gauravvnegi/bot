@@ -40,7 +40,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   @Input() hotelId: string;
   @Output() updateContacts = new EventEmitter();
   @Input() list: List;
-  tableName: string = 'Manage Contacts';
+  tableName: string = contactConfig.datatable.title;
   cols = contactConfig.datatable.cols;
   $subscription = new Subscription();
   globalQueries = [];
@@ -285,7 +285,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
+    dialogConfig.width = contactConfig.datatable.dialogWidth;
     const importCompRef = this._modal.openDialog(
       ImportContactComponent,
       dialogConfig

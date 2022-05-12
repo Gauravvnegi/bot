@@ -77,8 +77,8 @@
     },
     "error": {
       "exportCSV": "Failed to export CSV",
-      "loadData": "Failed to load data"
-
+      "loadData": "Failed to load data",
+      "fail":"Try again."
     }
   }
 }

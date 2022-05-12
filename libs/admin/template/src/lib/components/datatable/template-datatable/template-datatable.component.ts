@@ -25,6 +25,7 @@ import { TemplateService } from '../../../services/template.service';
 import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
 import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -65,7 +66,8 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     private _router: Router,
     private route: ActivatedRoute,
     private templateService: TemplateService,
-    private _topicService: TopicService
+    private _topicService: TopicService,
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }

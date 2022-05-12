@@ -166,11 +166,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const subItemList = [];
     item.children.forEach((child) => {
       if (
-        child.path.includes('request') &&
+        child.path.includes(ModuleNames.REQUEST) &&
         this.checkSubscriptionByPath(ModuleNames.REQUEST, subscription).length
-      ) {
+      )
         subItemList.push(child);
-      } else if (!child.path.includes('request')) subItemList.push(child);
+      else if (!child.path.includes(ModuleNames.REQUEST))
+        subItemList.push(child);
     });
     return subItemList;
   }

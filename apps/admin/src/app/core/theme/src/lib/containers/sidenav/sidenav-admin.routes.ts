@@ -59,9 +59,6 @@ export const ADMIN_ROUTES = [
       },
     ],
   },
-];
-
-export const DEFAULT_ROUTES = [
   {
     path: 'library',
     title: 'Library',
@@ -99,6 +96,9 @@ export const DEFAULT_ROUTES = [
       },
     ],
   },
+];
+
+export const DEFAULT_ROUTES = [
   {
     path: 'subscription',
     title: 'Subscription',

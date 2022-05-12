@@ -149,10 +149,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
         if (subItemList.length) {
           return [{ ...data, children: subItemList }];
         } else return [];
+      case 'marketing':
+        return this.checkSubscriptionByPath(
+          ModuleNames.MARKETING,
+          subscription
+        );
       case 'library':
         const librarySubItemList = this.checkLibraryItems(data, subscription);
         if (librarySubItemList.length)
-          return [{ ...data, children: subItemList }];
+          return [{ ...data, children: librarySubItemList }];
         else return [];
       default:
         return subscription.filter(
@@ -166,9 +171,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     item.children.forEach((child) => {
       if (
         child.path.includes('request') &&
-        subscription.filter(
-          (d) => ModuleNames[d.name] === 'request' && d.active
-        ).length
+        this.checkSubscriptionByPath(ModuleNames.REQUEST, subscription).length
       ) {
         subItemList.push(child);
       } else if (!child.path.includes('request')) subItemList.push(child);
@@ -179,23 +182,50 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkLibraryItems(item, subscription) {
     const subItemList = [];
     item.children.forEach((child) => {
-      if (
-        child.path.includes('package') &&
-        subscription.filter(
-          (d) => ModuleNames[d.name] === 'package' && d.active
-        ).length
-      ) {
-        subItemList.push(child);
-      } else if (!child.path.includes('package')) subItemList.push(child);
+      switch (child.path) {
+        case 'library/package':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.PACKAGES, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/listing':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/topic':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/template':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/assets':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length ||
+            this.checkSubscriptionByPath(ModuleNames.PACKAGES, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+      }
     });
     return subItemList;
   }
 
-  checkMarketingItems(item, subscription) {
-    const subItemList = [];
-    item.children.forEach((child) => {
-      subItemList.push(child);
-    });
-    return subItemList;
+  checkSubscriptionByPath(path, subscription) {
+    return subscription.filter((d) => ModuleNames[d.name] === path && d.active);
   }
 }

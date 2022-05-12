@@ -56,14 +56,22 @@ export class LoadGuard implements CanActivate {
 
   validate(subscription, route): boolean {
     if (subscription && subscription.modules) {
-      if (!subscription.modules[route.routeConfig.path].active) {
-        if (route.routeConfig.path === 'feedback') {
+      if (!subscription.modules[route.routeConfig.path]?.active) {
+        if (route.routeConfig.path === 'feedback')
           return get(subscription, [
             'modules',
             'FEEDBACK_TRANSACTIONAL',
             'active',
           ]);
-        }
+        else if (
+          ['listing', 'topic', 'template'].includes(route.routeConfig.path)
+        )
+          return get(subscription, ['modules', 'marketing', 'active']);
+        else if (route.routeConfig.path === 'assets')
+          return (
+            get(subscription, ['modules', 'package', 'active']) ||
+            get(subscription, ['modules', 'marketing', 'active'])
+          );
         this.goBack(route.routeConfig.path);
       }
       return subscription.modules[route.routeConfig.path].active;

@@ -135,7 +135,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   subscriptionCheck(data, subscription) {
     switch (data.path) {
-      case 'feedback':
+      case ModuleNames.FEEDBACK:
         return subscription.filter(
           (d) =>
             (ModuleNames[d.name] === data.path && d.active) ||
@@ -146,19 +146,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
           data,
           subscription
         );
-        if (subItemList.length) {
-          return [{ ...data, children: subItemList }];
-        } else return [];
-      case 'marketing':
+        return subItemList.length ? [{ ...data, children: subItemList }] : [];
+      case ModuleNames.MARKETING:
         return this.checkSubscriptionByPath(
           ModuleNames.MARKETING,
           subscription
         );
       case 'library':
-        const librarySubItemList = this.checkLibraryItems(data, subscription);
-        if (librarySubItemList.length)
-          return [{ ...data, children: librarySubItemList }];
-        else return [];
+        const libraryList = this.checkLibraryItems(data, subscription);
+        return libraryList.length ? [{ ...data, children: libraryList }] : [];
       default:
         return subscription.filter(
           (d) => ModuleNames[d.name] == data.path && d.active

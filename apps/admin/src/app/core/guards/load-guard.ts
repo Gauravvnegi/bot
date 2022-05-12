@@ -6,7 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { ModuleNames, UserService } from '@hospitality-bot/admin/shared';
 import { get } from 'lodash';
 import { forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -60,17 +60,21 @@ export class LoadGuard implements CanActivate {
         if (route.routeConfig.path === 'feedback')
           return get(subscription, [
             'modules',
-            'FEEDBACK_TRANSACTIONAL',
+            ModuleNames.FEEDBACK_TRANSACTIONAL,
             'active',
           ]);
         else if (
           ['listing', 'topic', 'template'].includes(route.routeConfig.path)
         )
-          return get(subscription, ['modules', 'marketing', 'active']);
+          return get(subscription, [
+            'modules',
+            ModuleNames.MARKETING,
+            'active',
+          ]);
         else if (route.routeConfig.path === 'assets')
           return (
-            get(subscription, ['modules', 'package', 'active']) ||
-            get(subscription, ['modules', 'marketing', 'active'])
+            get(subscription, ['modules', ModuleNames.PACKAGES, 'active']) ||
+            get(subscription, ['modules', ModuleNames.MARKETING, 'active'])
           );
         this.goBack(route.routeConfig.path);
       }
@@ -82,6 +86,6 @@ export class LoadGuard implements CanActivate {
   }
 
   goBack(path) {
-    if (path !== 'dashboard') this.location.back();
+    if (path !== ModuleNames.RESERVATION) this.location.back();
   }
 }

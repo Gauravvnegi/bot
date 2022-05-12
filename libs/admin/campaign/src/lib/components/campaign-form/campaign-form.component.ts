@@ -154,42 +154,15 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
-  handleTopicChange(event) {
-    this.$subscription.add(
-      this._emailService
-        .getTemplateByTopic(this.hotelId, event.value)
-        .subscribe((response) => {
-          this.templateList = response;
-        })
-    );
-  }
-
-  handleTemplateChange(event) {
-    this.template = this.modifyTemplate(event.value);
-    this.campaignFG.get('message').patchValue(this.template);
-  }
-
-  modifyTemplate(template: string) {
-    this.templateData = template;
-    if (template.indexOf('<div') != -1)
-      return template.substring(
-        template.indexOf('<div'),
-        template.lastIndexOf('</body>')
-      );
-    else return template;
-  }
-
   getTemplateMessage(data) {
-    if (this.templateData.indexOf('<div'))
-      return (
-        this.templateData.substring(0, this.templateData.indexOf('<div')) +
-        data.message +
-        this.templateData.substring(
-          this.templateData.lastIndexOf('</body'),
-          this.templateData.length
-        )
-      );
-    else return data.message;
+    let message = data.message;
+    if (
+      !this.templateData.includes(
+        `<img src = "emailUrl" alt = "" width = "1" height = "1">`
+      )
+    )
+      message += `<img src="emailUrl" alt="" width="1" height="1">`;
+    return message;
   }
 
   sendMail() {
@@ -237,7 +210,6 @@ export class CampaignFormComponent implements OnInit {
   updateFieldData(event, control) {
     if (event.action == 'add') control.push(new FormControl(event.value));
     else control.removeAt(event.value);
-    // this.autoSave();
   }
 
   enableEmailControl(event, controlName: string) {

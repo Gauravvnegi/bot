@@ -68,6 +68,7 @@ export class ViewCampaignComponent implements OnInit {
       isDraft: [true],
       campaignType: [''],
       testEmails: this._fb.array([]),
+      name: [''],
     });
   }
 

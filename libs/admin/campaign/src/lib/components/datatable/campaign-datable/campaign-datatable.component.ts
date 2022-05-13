@@ -114,14 +114,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Campaigns().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
@@ -134,6 +127,16 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       )
     );
+  }
+
+  setRecords(data) {
+    this.values = new Campaigns().deserialize(data).records;
+    this.totalRecords = data.total;
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.loading = false;
   }
 
   /**
@@ -342,13 +345,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Campaigns().deserialize(data).records;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;

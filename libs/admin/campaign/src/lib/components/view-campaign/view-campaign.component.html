@@ -4,9 +4,11 @@
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <p class="label">
-        {{ 'campaign.view' | translate }}
-      </p>
+      <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
+        <mat-form-field class="description">
+          <input matInput formControlName="name" placeholder="Enter Name" />
+        </mat-form-field>
+      </div>
     </div>
     <div class="option">
       <div class="icon"></div>

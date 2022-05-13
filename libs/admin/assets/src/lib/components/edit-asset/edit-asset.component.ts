@@ -21,7 +21,6 @@ export class EditAssetComponent implements OnInit {
 
   assetForm: FormGroup;
   isSavingasset = false;
-  videoFile=assetConfig.type.video;
   private $subscription: Subscription = new Subscription();
   hotelasset: Asset;
   hotelId: any;
@@ -193,7 +192,7 @@ export class EditAssetComponent implements OnInit {
   uploadFile(event): void {
     let formData = new FormData();
     formData.append('files', event.file);
-    if (this.assetType === this.videoFile) {
+    if (this.assetType === assetConfig.type.video) {
       let thumbnailData = new FormData();
       thumbnailData.append('files', event.thumbnailFile);
       this.$subscription.add(

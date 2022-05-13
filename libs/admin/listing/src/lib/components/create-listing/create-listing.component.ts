@@ -23,8 +23,6 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   globalQueries = [];
   topicList = [];
   isSaving = false;
-  limit=listingConfig.list.limit;
-  state=listingConfig.list.entityState;
   constructor(
     private _fb: FormBuilder,
     private listingService: ListingService,
@@ -86,7 +84,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   getTopicList(hotelId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: this.state, limit: this.limit },
+        { entityState: listingConfig.list.entityState, limit: listingConfig.list.limit },
       ]),
     };
     this.$subscription.add(

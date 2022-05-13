@@ -50,7 +50,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   rowsPerPage = listingConfig.datatable.limit;
   cols = listingConfig.datatable.cols;
   hotelId: string;
-  chipValue=listingConfig.list.chipValue;
   $subscription = new Subscription();
 
   constructor(
@@ -362,7 +361,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== this.chipValue) {
+        if (chip.value !== listingConfig.list.chipValue.all) {
           chip.isSelected = false;
         }
       });

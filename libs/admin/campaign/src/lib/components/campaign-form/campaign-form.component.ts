@@ -118,7 +118,7 @@ export class CampaignFormComponent implements OnInit {
                 ({ error }) => {
                   this._snackbarService
                     .openSnackBarWithTranslate({
-                      translateKey: '',
+                      translateKey: 'messages.error.fail',
                       priorityMessage: error.message,
                     })
                     .subscribe();
@@ -169,7 +169,12 @@ export class CampaignFormComponent implements OnInit {
 
   sendMail() {
     if (this.campaignFG.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid form.');
+      this._snackbarService
+              .openSnackBarWithTranslate({
+                translateKey:'messages.error.fail',
+                priorityMessage: 'Invalid form.',
+              })
+              .subscribe();
       this.campaignFG.markAllAsTouched();
       return;
     }

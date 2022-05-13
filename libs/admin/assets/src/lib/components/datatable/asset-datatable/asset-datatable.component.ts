@@ -358,7 +358,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== assetConfig.datatable.chipValue) {
+        if (chip.value !== assetConfig.datatable.chipValue.all) {
           chip.isSelected = false;
         }
       });

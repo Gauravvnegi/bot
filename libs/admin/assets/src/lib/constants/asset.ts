@@ -2,7 +2,9 @@ export const assetConfig = {
   datatable: {
     title: 'Asset',
     limit: 5,
-    chipValue: 'ALL',
+    chipValue:{
+      all:'ALL'
+    }, 
     tabFilterItems: [
       {
         label: 'All',

@@ -52,7 +52,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
-  chipValue=topicConfig.datatable.chipValue.all;
 
   constructor(
     public fb: FormBuilder,
@@ -403,7 +402,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== this.chipValue) {
+        if (chip.value !== topicConfig.datatable.chipValue.all) {
           chip.isSelected = false;
         }
       });

@@ -232,7 +232,7 @@ export class EditCampaignComponent implements OnInit {
           ({ error }) => {
             this._snackbarService
               .openSnackBarWithTranslate({
-                translateKey: '',
+                translateKey:'messages.error.fail',
                 priorityMessage: error.message,
               })
               .subscribe();

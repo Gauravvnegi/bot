@@ -127,14 +127,24 @@ export class TransactionalService {
 
 export class Service {
   serviceName: string;
-  rating: string;
+  rating;
+  colorCode: string;
 
-  deserialize(input) {
+  deserialize(input, colorMap?) {
     Object.assign(
       this,
       set({}, 'serviceName', get(input, 'serviceName')),
       set({}, 'rating', get(input, 'rating'))
     );
+    if (colorMap) {
+      if (isNaN(this.rating))
+        this.colorCode =
+          colorMap['transactionalFeedbacks'][this.rating].colorCode;
+      else {
+        this.colorCode = colorMap['stayFeedbacks'][this.rating].colorCode;
+        this.rating = parseInt(this.rating);
+      }
+    }
     return this;
   }
 }
@@ -243,13 +253,13 @@ export class StayFeedbackTable {
   entityStateCounts: EntityStateCounts;
   records: Feedback[];
 
-  deserialize(input, outlets) {
+  deserialize(input, outlets, colorMap) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
     this.records = input.records.map((record) =>
-      new StayFeedback().deserialize(record, outlets)
+      new StayFeedback().deserialize(record, outlets, colorMap)
     );
     return this;
   }
@@ -278,7 +288,7 @@ export class StayFeedback {
   commentList;
   created: number;
 
-  deserialize(input, outlets) {
+  deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
     this.commentList = {};
     Object.assign(
@@ -298,9 +308,9 @@ export class StayFeedback {
       set({}, 'transactionalService', get(input, ['transactionalService'])),
       set({}, 'status', get(input, ['status']))
     );
-    const service = get(this.bookingDetails, ['services']);
-    service.forEach((item) =>
-      this.services.push(new Service().deserialize(item))
+    const serviceList = get(input, ['serviceMap'], ['services']);
+    serviceList.forEach((item) =>
+      this.services.push(new Service().deserialize(item, colorMap))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
@@ -308,28 +318,28 @@ export class StayFeedback {
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
-
-    console.log(
-      this.getSortedServices().filter((service) => service.rating === 'EI')
-    );
     return this;
   }
 
   getNegativeRatedService() {
-    return this.getSortedServices().filter(
-      (service) => service.rating === 'EI'
+    return this.getSortedServices().filter((service) =>
+      isNaN(this.services[0].rating)
+        ? service.rating === 'EI'
+        : service.rating < 5
     );
   }
 
   getSortedServices() {
     let sortOrder = ['EI', 'ME', 'EE'];
-    this.services.sort((a, b) => {
-      if (a.rating == b.rating) {
-        return a.rating.localeCompare(b.rating);
-      } else {
-        return sortOrder.indexOf(a.rating) - sortOrder.indexOf(b.rating);
-      }
-    });
+    if (isNaN(this.services[0].rating))
+      this.services.sort((a, b) => {
+        if (a.rating == b.rating) {
+          return a.rating.localeCompare(b.rating);
+        } else {
+          return sortOrder.indexOf(a.rating) - sortOrder.indexOf(b.rating);
+        }
+      });
+    else this.services.sort((a, b) => a.rating - b.rating);
     return this.services;
   }
 

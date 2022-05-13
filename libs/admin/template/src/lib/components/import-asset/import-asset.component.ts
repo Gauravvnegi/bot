@@ -61,7 +61,6 @@ export class ImportAssetComponent implements OnInit {
    * @function registerListeners function to listen for search changes and global filters.
    */
   registerListeners() {
-    this.listenForSearchChanges();
     this.listenForGlobalFilters();
   }
 

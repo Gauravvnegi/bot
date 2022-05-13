@@ -19,16 +19,19 @@ const appRoutes: Route[] = [
       import('@hospitality-bot/admin/listing').then(
         (m) => m.AdminListingModule
       ),
+    canActivate: [LoadGuard],
   },
   {
     path: 'assets',
     loadChildren: () =>
       import('@hospitality-bot/admin/assets').then((m) => m.AdminAssetsModule),
+    canActivate: [LoadGuard],
   },
   {
     path: 'topic',
     loadChildren: () =>
       import('@hospitality-bot/admin/topic').then((m) => m.AdminTopicModule),
+    canActivate: [LoadGuard],
   },
   {
     path: 'template',
@@ -36,6 +39,7 @@ const appRoutes: Route[] = [
       import('@hospitality-bot/admin/template').then(
         (m) => m.AdminTemplateModule
       ),
+    canActivate: [LoadGuard],
   },
 ];
 

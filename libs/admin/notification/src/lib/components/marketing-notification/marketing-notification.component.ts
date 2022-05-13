@@ -67,6 +67,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       subject: ['', [Validators.required, Validators.maxLength(200)]],
       previewText: ['', Validators.maxLength(200)],
       topicId: [''],
+      templateId: [''],
     });
   }
 
@@ -128,36 +129,13 @@ export class MarketingNotificationComponent extends NotificationComponent
         .getTemplateByTopic(this.hotelId, event.value)
         .subscribe((response) => {
           this.templateList = response.records;
+          this.emailFG.get('templateId').setValue('');
         })
     );
   }
 
   handleTemplateChange(event) {
-    this.template = this.modifyTemplate(event.value);
-    this.emailFG.get('message').patchValue(this.template);
-  }
-
-  modifyTemplate(template: string) {
-    this.templateData = template;
-    if (template.indexOf('<body>') != -1)
-      return template.substring(
-        template.indexOf('<div'),
-        template.lastIndexOf('</body>')
-      );
-    else return template;
-  }
-
-  getTemplateMessage(data) {
-    if (this.templateData.indexOf('<body>'))
-      return (
-        this.templateData.substring(0, this.templateData.indexOf('<div')) +
-        data.message +
-        this.templateData.substring(
-          this.templateData.lastIndexOf('</body'),
-          this.templateData.length
-        )
-      );
-    return data.message;
+    this.emailFG.get('message').patchValue(event.value.htmlTemplate);
   }
 
   sendMail() {
@@ -166,8 +144,23 @@ export class MarketingNotificationComponent extends NotificationComponent
       this.emailFG.markAllAsTouched();
       return;
     }
-    const reqData = this.emailFG.getRawValue();
-    reqData.message = this.getTemplateMessage(reqData);
+    const {
+      fromId,
+      emailIds,
+      message,
+      subject,
+      previewText,
+      topicId,
+    } = this.emailFG.getRawValue();
+    const reqData = {
+      fromId,
+      emailIds,
+      message,
+      subject,
+      previewText,
+      topicId,
+    };
+    delete reqData['tempalteId'];
     this.isSending = true;
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(

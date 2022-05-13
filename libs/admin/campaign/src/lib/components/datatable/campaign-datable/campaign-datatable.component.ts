@@ -450,6 +450,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
         },
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

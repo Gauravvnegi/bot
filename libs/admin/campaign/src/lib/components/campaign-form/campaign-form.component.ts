@@ -186,16 +186,14 @@ export class CampaignFormComponent implements OnInit {
    *@function getTemplateMessage function to get message from tempalate.
    */
   getTemplateMessage(data) {
-    if (this.templateData.indexOf('<div'))
-      return (
-        this.templateData.substring(0, this.templateData.indexOf('<div')) +
-        data.message +
-        this.templateData.substring(
-          this.templateData.lastIndexOf('</body'),
-          this.templateData.length
-        )
-      );
-    else return data.message;
+    let message = data.message;
+    if (
+      !this.templateData.includes(
+        `<img src = "emailUrl" alt = "" width = "1" height = "1">`
+      )
+    )
+      message += `<img src="emailUrl" alt="" width="1" height="1">`;
+    return message;
   }
 
   /**

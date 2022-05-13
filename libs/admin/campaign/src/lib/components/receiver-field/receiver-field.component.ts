@@ -50,6 +50,9 @@ export class ReceiverFieldComponent implements OnInit {
     }
   }
 
+  /**
+   * @function listenForEnableDropdown function to listen for dropdown enable.
+   */
   listenForEnableDropdown() {
     this.$subscription.add(
       this._emailService.$enableDropdown[this.name].subscribe((response) => {
@@ -61,6 +64,11 @@ export class ReceiverFieldComponent implements OnInit {
     );
   }
 
+  /**
+   * @function removeChip function to remove chip.
+   * @param index particular chip index value.
+   * @param event event object to stop propagation.
+   */
   removeChip(index, event) {
     event.stopPropagation();
     this.updateChipSet.emit({
@@ -70,6 +78,10 @@ export class ReceiverFieldComponent implements OnInit {
     if (!this.chipList.length) this.enableTextField();
   }
 
+  /**
+   * @function removeField function to remove the form field.
+   * @param event event for the same.
+   */
   removeField(event) {
     if (
       !trim(this.receiverField?.nativeElement.value).length &&
@@ -82,6 +94,10 @@ export class ReceiverFieldComponent implements OnInit {
     }
   }
 
+  /**
+   * @function addChip function to add chip set.
+   * @param event event to stop propagation.
+   */
   addChip(event) {
     event.stopPropagation();
     if (this.separatorKeysCodes.includes(event.which)) {
@@ -98,6 +114,10 @@ export class ReceiverFieldComponent implements OnInit {
     }
   }
 
+  /**
+   * @function searchKey function to search on the basis of key.
+   * @param event event object to stop propagation.
+   */
   searchKey(event) {
     event.stopPropagation();
     const key = trim(this.receiverField.nativeElement.value);
@@ -118,6 +138,10 @@ export class ReceiverFieldComponent implements OnInit {
     }
   }
 
+  /**
+   * @function enableReceiverField function to enable receiver field.
+   * @param event event object to stop propagation.
+   */
   enableReceiverField(event?) {
     event?.stopPropagation();
     this.enableTextField();
@@ -125,6 +149,9 @@ export class ReceiverFieldComponent implements OnInit {
     this.receiverField.nativeElement.focus();
   }
 
+  /**
+   * @function enableDropdownItems function to enable dropdown items.
+   */
   enableDropdownItems() {
     this._emailService.$enableDropdown[this.name].next(true);
     Object.keys(this._emailService.$enableDropdown).forEach((key) => {
@@ -132,11 +159,19 @@ export class ReceiverFieldComponent implements OnInit {
     });
   }
 
+  /**
+   * @function disableDropdownItems function to disable dropdown items.
+   * @param event event object to stop propagation.
+   */
   disableDropdownItems(event) {
     event.stopPropagation();
     this._emailService.$enableDropdown[this.name].next(false);
   }
 
+  /**
+   * @function addItemFromDropdown function to add item from dropdown.
+   * @param event event object to store value.
+   */
   addItemFromDropdown(event) {
     this.updateChipSet.emit({
       value: event,
@@ -147,6 +182,9 @@ export class ReceiverFieldComponent implements OnInit {
     this.enableTextField();
   }
 
+  /**
+   * @function enableTextField function to enable text field.
+   */
   enableTextField() {
     this.receiverField.nativeElement.setAttribute(
       'style',
@@ -154,6 +192,9 @@ export class ReceiverFieldComponent implements OnInit {
     );
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscription
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

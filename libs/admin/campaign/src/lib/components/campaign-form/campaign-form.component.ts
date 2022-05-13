@@ -14,7 +14,9 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
@@ -51,13 +53,17 @@ export class CampaignFormComponent implements OnInit {
     private _modalService: ModalService,
     private _router: Router,
     public globalFilterService: GlobalFilterService,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.getFromEmails();
   }
 
+  /**
+   * @function getFromEmail function to get email across particular hotel id.
+   */
   getFromEmails() {
     this.$subscription.add(
       this._emailService.getFromEmail(this.hotelId).subscribe(
@@ -76,10 +82,16 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   * @function goBack function to go back to previous page.
+   */
   goBack() {
     this.save.emit({ close: true });
   }
 
+  /**
+   *@function sendTestCampaign function to send test campaign email.
+   */
   sendTestCampaign() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -130,6 +142,9 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   * @function archiveCampaign function to archive campaign.
+   */
   archiveCampaign() {
     this.$subscription.add(
       this.campaignService
@@ -154,21 +169,9 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
-  handleTopicChange(event) {
-    this.$subscription.add(
-      this._emailService
-        .getTemplateByTopic(this.hotelId, event.value)
-        .subscribe((response) => {
-          this.templateList = response;
-        })
-    );
-  }
-
-  handleTemplateChange(event) {
-    this.template = this.modifyTemplate(event.value);
-    this.campaignFG.get('message').patchValue(this.template);
-  }
-
+  /**
+   * @function modifyTemplate function to modify template.
+   */
   modifyTemplate(template: string) {
     this.templateData = template;
     if (template.indexOf('<div') != -1)
@@ -179,6 +182,9 @@ export class CampaignFormComponent implements OnInit {
     else return template;
   }
 
+  /**
+   *@function getTemplateMessage function to get message from tempalate.
+   */
   getTemplateMessage(data) {
     if (this.templateData.indexOf('<div'))
       return (
@@ -192,6 +198,10 @@ export class CampaignFormComponent implements OnInit {
     else return data.message;
   }
 
+  /**
+   * @function sendMail function to send campaign email.
+   * @returns error on form invalid.
+   */
   sendMail() {
     if (this.campaignFG.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid form.');
@@ -234,20 +244,40 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   * @function updateFieldData function to update form field data.
+   * @param event event object for form control.
+   */
   updateFieldData(event, control) {
-    if (event.action == 'add') control.push(new FormControl(event.value));
+    if (event.action == campaignConfig.add)
+      control.push(new FormControl(event.value));
     else control.removeAt(event.value);
-    // this.autoSave();
+    this.autoSave();
   }
 
+  /**
+   * @function enableEmailControl function to enable email control.
+   * @param event event object for stop propogation.
+   * @param controlName campaignFG
+   */
   enableEmailControl(event, controlName: string) {
     event.stopPropagation();
     this.campaignFG.addControl(controlName, new FormArray([]));
     this.disableDropdown();
   }
 
+  /**
+   * @function to function to get 'to' value.
+   */
   get to() {
     return this.campaignFG.get('to') as FormArray;
+  }
+
+  /**
+   * @function autoSave function to auto save.
+   */
+  autoSave() {
+    this.save.emit();
   }
 
   @HostListener('document:click', ['$event'])
@@ -261,19 +291,32 @@ export class CampaignFormComponent implements OnInit {
     this.disableDropdown();
   }
 
+  /**
+   * @function disableDropdown function to disable dropdown.
+   */
   disableDropdown() {
     this._emailService.disableDropdowns();
   }
 
+  /**
+   * @function addPersonalization function to add personalization.
+   * @param controlName campaignFG
+   */
   addPersonalization(value, controlName: string) {
     const control = this.campaignFG.get(controlName);
     control.setValue(control.value + value);
   }
 
+  /**
+   * @function openAddContent function to open add-content.
+   */
   openAddContent() {
     this.changeStep.emit({ step: 'next' });
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscriiption
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

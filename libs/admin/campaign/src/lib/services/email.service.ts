@@ -14,22 +14,50 @@ export class EmailService extends ApiService {
     subject: new BehaviorSubject(false),
     previewText: new BehaviorSubject(false),
   };
+
+  /**
+   * @function getFromEmail get email on basis of hotel id.
+   * @param hotelId dynamically getting hotelId.
+   * @returns get api for email.
+   */
   getFromEmail(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/email`);
   }
 
+  /**
+   * @function getTopicList function to get topic list
+   * @param id dynamically getting hotelId.
+   * @returns get api for getting topic list.
+   */
   getTopicList(id: string): Observable<any> {
     return this.get(`/api/v1/entity/${id}/topics`);
   }
 
+  /**
+   * @function getTemplateByTopic function to get template by topic.
+   * @param hotelId dynamically getting hotel id.
+   * @param topicId dynamically getting topic id.
+   * @returns
+   */
   getTemplateByTopic(hotelId: string, topicId: string) {
     return this.get(`/api/v1/entity/${hotelId}/templates/topic/${topicId}`);
   }
 
+  /**
+   * @function getAllSubscriberGroup function to get subscribers group.
+   * @param hotelId dynamically getting hotel id.
+   * @returns get api of getting subscribers group.
+   */
   getAllSubscriberGroup(hotelId: string) {
     return this.get(`/api/v1/marketing/entity/${hotelId}/subscription-group`);
   }
 
+  /**
+   * @function sendEmail function to send email.
+   * @param hotelId dynamically getting hotel id.
+   * @param data getting form input data.
+   * @returns post api to send email.
+   */
   sendEmail(hotelId: string, data) {
     return this.post(`/api/v1/cms/${hotelId}/campaign`, {
       ...data,
@@ -37,10 +65,19 @@ export class EmailService extends ApiService {
     });
   }
 
+  /**
+   * @function sendTest function to send test email.
+   * @param hotelId dynamically getting hotel id.
+   * @param data getting form input data.
+   * @returns post api of sending test email.
+   */
   sendTest(hotelId: string, data) {
     return this.post(`/api/v1/cms/${hotelId}/campaign/test`, data);
   }
 
+  /**
+   * @function disableDropdowns function to disable dropdowns.
+   */
   disableDropdowns() {
     this.$enableDropdown.to.next(false);
     this.$enableDropdown.cc.next(false);
@@ -49,6 +86,10 @@ export class EmailService extends ApiService {
     this.$disablePersonalizationPopup.previewText.next(true);
   }
 
+  /**
+   * @function createRequestData function to create request data.
+   * @param data data object to form fields.
+   */
   createRequestData(data) {
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
@@ -71,6 +112,12 @@ export class EmailService extends ApiService {
     };
   }
 
+  /**
+   * @function mapSendersData function to map senders data.
+   * @param field different senders fields
+   * @param data senders data.
+   * @returns
+   */
   mapSendersData(field, data) {
     const reqData = {
       subscribers: [],
@@ -85,6 +132,10 @@ export class EmailService extends ApiService {
     return reqData;
   }
 
+  /**
+   * @function createTestResquestData function to create test request data.
+   * @param data data object bind to particular field.
+   */
   createTestResquestData(data) {
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
@@ -106,6 +157,10 @@ export class EmailService extends ApiService {
     };
   }
 
+  /**
+   *@function checkForEmptyForm function to check for empty forms.
+   * @param values values object to bind values with individual form fileds.
+   */
   checkForEmptyForm(values) {
     return (
       values.name.length ||

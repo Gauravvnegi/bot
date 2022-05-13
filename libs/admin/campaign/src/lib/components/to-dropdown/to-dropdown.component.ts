@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { ReceiversSearchItem } from '../../data-model/email.model';
@@ -20,8 +21,8 @@ export class ToDropdownComponent implements OnInit {
   @Output() selectedList = new EventEmitter();
   @Output() closeDropdown = new EventEmitter();
   $subscriptions = new Subscription();
-  tabFilterItems = campaignConfig.dropDownTabFilter;
   tabFilterIdx = 0;
+  tabFilterItems = campaignConfig.dropDownTabFilter;
   listings = campaignConfig.listings;
   subscribers = campaignConfig.subscribers;
   offset = 0;
@@ -29,18 +30,26 @@ export class ToDropdownComponent implements OnInit {
     private _campaignService: CampaignService,
     private _adminUtilityService: AdminUtilityService,
     private _router: Router,
-    private _emailService: EmailService
+    private _emailService: EmailService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.loadSubscribers();
   }
 
+  /**
+   * @function onSelectedTabFilterChange function to update listing on selected tab filter change.
+   * @param event event object to get index.
+   */
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
     if (this.listings.data.length == 0) this.loadListings();
   }
 
+  /**
+   * @function loadSubscribers function to load subscribers.
+   */
   loadSubscribers() {
     this.$subscriptions.add(
       this._emailService
@@ -51,12 +60,15 @@ export class ToDropdownComponent implements OnInit {
     );
   }
 
+  /**
+   * @function loadListings function to load listing data.
+   */
   loadListings() {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         {
-          limit: 5,
-          entityState: 'ACTIVE',
+          limit: campaignConfig.rowsPerPage.datatableLimit,
+          entityState: campaignConfig.topicConfig.active,
           offset: this.offset,
         },
       ]),
@@ -72,19 +84,35 @@ export class ToDropdownComponent implements OnInit {
     );
   }
 
+  /**
+   * @function selectItem function to select list items.
+   * @param type type of item.
+   * @param list list content.
+   */
   selectItem(type, list) {
     this.selectedList.emit({ type, data: list });
   }
 
+  /**
+   * @function redirect function to redirect to url
+   * @param url particular url.
+   */
   redirect(url) {
     this._router.navigate([url]);
   }
 
+  /**
+   * @function close function to close dropdown.
+   * @param event event object to stop propagation.
+   */
   close(event) {
     event.stopPropagation();
     this.closeDropdown.emit(event);
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscription
+   */
   ngOnDestroy() {
     this.$subscriptions.unsubscribe();
   }

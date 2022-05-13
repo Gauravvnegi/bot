@@ -20,6 +20,7 @@ import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { SendTestComponent } from '../send-test/send-test.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-view-campaign',
@@ -46,7 +47,8 @@ export class ViewCampaignComponent implements OnInit {
     private _emailService: EmailService,
     private _campaignService: CampaignService,
     private activatedRoute: ActivatedRoute,
-    private _modalService: ModalService
+    private _modalService: ModalService,
+    protected _translateService: TranslateService
   ) {
     this.initFG();
   }
@@ -71,6 +73,9 @@ export class ViewCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -85,12 +90,20 @@ export class ViewCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getHotelId function to get hotel id.
+   * @param globalQueries set-global query everytime global filter changes
+
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
+  /**
+   * @function getFromEmail function to get email across particular hotel id.
+   */
   getFromEmails() {
     this.$subscription.add(
       this._emailService.getFromEmail(this.hotelId).subscribe(
@@ -101,6 +114,9 @@ export class ViewCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getTemplateId function to get template id.
+   */
   getTemplateId(): void {
     this.$subscription.add(
       this.activatedRoute.params.subscribe((params) => {
@@ -112,6 +128,10 @@ export class ViewCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getCampaignDetails funcction to get campaign details.
+   * @param id campaign id.
+   */
   getCampaignDetails(id) {
     this.$subscription.add(
       this._campaignService
@@ -127,6 +147,10 @@ export class ViewCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function addElementToData function to add element to data.
+   * @returns new promise value.
+   */
   addElementToData() {
     return new Promise((resolve, reject) => {
       Promise.all([
@@ -136,12 +160,20 @@ export class ViewCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function setFormData function to set form data.
+   */
   setFormData() {
     this.addElementToData().then((res) => {
       this.campaignFG.patchValue(res);
     });
   }
 
+  /**
+   * @function addFormArray function to add form array.
+   * @param control campaignFG.
+   * @param dataField have form data.
+   */
   addFormArray(control, dataField) {
     return new Promise((resolve, reject) => {
       if (this.campaign[dataField]) {
@@ -160,6 +192,9 @@ export class ViewCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function addtestEmails function to add test emails.
+   */
   addtestEmails() {
     return new Promise((resolve, reject) => {
       this.campaign.testEmails.forEach((item) =>
@@ -171,6 +206,9 @@ export class ViewCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function archieve function to archive a particular campaign.
+   */
   archiveCampaign() {
     this.$subscription.add(
       this._campaignService
@@ -194,6 +232,9 @@ export class ViewCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function sendTestCampaign function to send test campaign email.
+   */
   sendTestCampaign() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -244,16 +285,26 @@ export class ViewCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function setDataAfterUpdate function to set data after updating campaign data.
+   * @param response that we receive after updating.
+   */
   setDataAfterUpdate(response) {
     if (response?.value) {
       this.campaign = new Campaign().deserialize(response?.value);
     }
   }
 
+  /**
+   * @function goBack function to go-back to previous page.
+   */
   goBack() {
     this.location.back();
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscription
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

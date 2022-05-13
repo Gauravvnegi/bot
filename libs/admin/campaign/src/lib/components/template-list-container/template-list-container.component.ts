@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { Topics } from '../../data-model/email.model';
@@ -17,14 +18,16 @@ export class TemplateListContainerComponent implements OnInit {
   @Input() hotelId: string;
   @Input() templateType: string;
   @Output() change = new EventEmitter();
-  templateTypes=campaignConfig.datatable.templateTypes;
-  selectedTopic = 'ALL';
+  templateTypes = campaignConfig.datatable.templateTypes;
+  selectedTopic = campaignConfig.chipValue.all;
+  active = campaignConfig.topicConfig.active;
   topicList = [];
   templateTopicList = [];
   constructor(
     private adminUtilityService: AdminUtilityService,
     private campaignService: CampaignService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -32,12 +35,15 @@ export class TemplateListContainerComponent implements OnInit {
     this.getTemplateForAllTopics();
   }
 
+  /**
+   * @function getTopicList function to get topic list.
+   */
   getTopicList() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           limit: 50,
-          entityState: 'ACTIVE',
+          entityState: this.active,
         },
       ]),
     };
@@ -51,11 +57,14 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getTemplateForAllTopics function to get template across respective topic.
+   */
   getTemplateForAllTopics() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: 'ACTIVE',
+          entityState: this.active,
           limit: 3,
           templateType: this.templateType,
         },
@@ -70,11 +79,15 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getTemplateByTopicId function to get template across a particular topic id.
+   * @param topic topic data.
+   */
   getTemplateByTopicId(topic) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: 'ACTIVE',
+          entityState: this.active,
           limit: 3,
           templateType: this.templateType,
         },
@@ -96,20 +109,34 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  /**
+   * @function templateTypeSelection function to select template type.
+   * @param value template type value.
+   */
   templateTypeSelection(value) {
     this.templateType = value;
-    this.selectedTopic = 'ALL';
+    this.selectedTopic = this.selectedTopic;
     this.getTemplateForAllTopics();
   }
 
+  /**
+   * @function setTemplate function to set template.
+   * @param event event object of set template.
+   */
   setTemplate(event) {
     this.change.emit(event);
   }
 
+  /**
+   * @function goBack function to go back to previous page.
+   */
   goBack() {
     this.change.emit({ status: false });
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscription
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

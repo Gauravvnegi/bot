@@ -11,6 +11,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { empty, interval, of, Subscription } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
@@ -53,7 +54,8 @@ export class EditCampaignComponent implements OnInit {
     private _campaignService: CampaignService,
     private _emailService: EmailService,
     private _snackbarService: SnackBarService,
-    private _router: Router
+    private _router: Router,
+    protected _translateService: TranslateService
   ) {
     this.initFG();
   }
@@ -80,6 +82,9 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -93,12 +98,19 @@ export class EditCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
+  /**
+   * @function getTemplateId to get template Id from routes query param.
+   */
   getTemplateId(): void {
     this.$subscription.add(
       this.activatedRoute.params.subscribe((params) => {
@@ -111,6 +123,9 @@ export class EditCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function listenForFormChanges To listen for global changes across form data.
+   */
   listenForFormChanges() {
     this.$formChangeDetection = this.campaignFG.valueChanges
       .pipe(
@@ -143,6 +158,10 @@ export class EditCampaignComponent implements OnInit {
       );
   }
 
+  /**
+   * @function getCampaignDetails o get campaign detail.
+   * @param id campaign id for which the action will be taken.
+   */
   getCampaignDetails(id) {
     this.$subscription.add(
       this._campaignService
@@ -159,6 +178,10 @@ export class EditCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function addElementToData function to add element to data.
+   * @returns resolves promise.
+   */
   addElementToData() {
     return new Promise((resolve, reject) => {
       Promise.all([
@@ -168,6 +191,9 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function setFormData function to set form data.
+   */
   setFormData() {
     this.addElementToData().then((res) => {
       this.campaignFG.patchValue(res);
@@ -175,6 +201,12 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function addFormArray function to add form data to an array.
+   * @param control campaignFG.
+   * @param dataField field where the form data is stored.
+   * @returns resolved promise.
+   */
   addFormArray(control, dataField) {
     return new Promise((resolve, reject) => {
       if (this.campaign[dataField]) {
@@ -193,6 +225,10 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function addEmailControls function to get form control for emails.
+   * @returns resolved promise.
+   */
   addEmailControls() {
     return new Promise((resolve, reject) => {
       this.campaign.testEmails.forEach((item) =>
@@ -212,6 +248,9 @@ export class EditCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function listenForAutoSave function to listen for auto save form data.
+   */
   listenForAutoSave() {
     this.$autoSaveSubscription.add(
       interval(20000).subscribe((x) => {
@@ -240,6 +279,11 @@ export class EditCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function autoSave function to auto save the data.
+   * @param data data to be saved.
+   * @returns save.
+   */
   autoSave(data?) {
     return this._campaignService.save(
       this.hotelId,
@@ -248,6 +292,10 @@ export class EditCampaignComponent implements OnInit {
     );
   }
 
+  /**
+   * @function setTemplate function to set template.
+   * @param event event object to patch values.
+   */
   setTemplate(event) {
     this.campaignFG.patchValue({
       message: event.htmlTemplate,
@@ -257,6 +305,11 @@ export class EditCampaignComponent implements OnInit {
     this.stepper.selectedIndex = 0;
   }
 
+  /**
+   * @function changeStep function to change form steps.
+   * @param event event object to change form step.
+   * @returns
+   */
   changeStep(event) {
     if (event.status) {
       this.campaignFG.patchValue({
@@ -270,11 +323,19 @@ export class EditCampaignComponent implements OnInit {
     this.stepper.selectedIndex = 1;
   }
 
+  /**
+   * @function handleCreateContentChange function to handle created content change.
+   * @param event event object for the stepper.
+   */
   handleCreateContentChange(event) {
     this.stepper[event.step]();
     if (event.templateType) this.createContentType = event.templateType;
   }
 
+  /**
+   * @function setDataAfterUpdate function to set form data after update.
+   * @param response updated form.
+   */
   setDataAfterUpdate(response) {
     if (response?.value) {
       this.campaignId = response.value.id;
@@ -282,6 +343,10 @@ export class EditCampaignComponent implements OnInit {
     }
   }
 
+  /**
+   * @function setDataAfterSave function to set form data after saving.
+   * @param response saved data.
+   */
   setDataAfterSave(response) {
     if (response) {
       this.campaignId = response.id;
@@ -289,6 +354,9 @@ export class EditCampaignComponent implements OnInit {
     }
   }
 
+  /**
+   * @function saveAndCloseForm function for saving and closing the form.
+   */
   saveAndCloseForm(event) {
     if (
       this.campaignId ||
@@ -306,6 +374,9 @@ export class EditCampaignComponent implements OnInit {
     else this._router.navigate(['/pages/marketing/campaign']);
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscriiption
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
     this.$autoSaveSubscription.unsubscribe();

@@ -21,8 +21,6 @@ export class TemplateListContainerComponent implements OnInit {
   selectedTopic = templateConfig.selectedTopic.all;
   topicList = [];
   templateTopicList = [];
-  rowsPerPage = templateConfig.rowsPerPage.limit;
-  active = templateConfig.topicConfig.active;
 
   constructor(
     private adminUtilityService: AdminUtilityService,
@@ -45,7 +43,7 @@ export class TemplateListContainerComponent implements OnInit {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           limit: templateConfig.topicConfig.limit,
-          entityState: this.active,
+          entityState: templateConfig.topicConfig.active,
         },
       ]),
     };
@@ -66,8 +64,8 @@ export class TemplateListContainerComponent implements OnInit {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: this.active,
-          limit: this.rowsPerPage,
+          entityState: templateConfig.topicConfig.active,
+          limit: templateConfig.rowsPerPage.limit,
           templateType: this.templateType,
         },
       ]),
@@ -89,8 +87,8 @@ export class TemplateListContainerComponent implements OnInit {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: this.active,
-          limit: this.rowsPerPage,
+          entityState: templateConfig.topicConfig.active,
+          limit: templateConfig.rowsPerPage.limit,
           templateType: this.templateType,
         },
       ]),

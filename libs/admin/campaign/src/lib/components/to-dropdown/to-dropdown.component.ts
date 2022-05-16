@@ -67,7 +67,7 @@ export class ToDropdownComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         {
-          limit: campaignConfig.rowsPerPage.datatableLimit,
+          limit: campaignConfig.rowsPerPage.rows,
           entityState: campaignConfig.topicConfig.active,
           offset: this.offset,
         },
@@ -78,7 +78,7 @@ export class ToDropdownComponent implements OnInit {
         .getListings(this.hotelId, config)
         .subscribe((response) => {
           this.listings.data = [...this.listings.data, ...response.records];
-          this.offset = this.offset + 5;
+          this.offset = this.offset + campaignConfig.rowsPerPage.rows;
           this.listings.totalRecords = response.total;
         })
     );

@@ -14,6 +14,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { empty, interval, of, Subscription } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
+import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
@@ -72,8 +73,14 @@ export class EditCampaignComponent implements OnInit {
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),
       message: ['', [Validators.required]],
-      subject: ['', [Validators.required, Validators.maxLength(200)]],
-      previewText: ['', Validators.maxLength(200)],
+      subject: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(campaignConfig.validator.length),
+        ],
+      ],
+      previewText: ['', Validators.maxLength(campaignConfig.validator.length)],
       topicId: [''],
       status: [true],
       isDraft: [true],
@@ -125,12 +132,12 @@ export class EditCampaignComponent implements OnInit {
   }
 
   /**
-   * @function listenForFormChanges To listen for global changes across form data.
+   * @function listenForFormChanges Save campaign form data on change after 20sec interval.
    */
   listenForFormChanges() {
     this.$formChangeDetection = this.campaignFG.valueChanges
       .pipe(
-        debounceTime(20000),
+        debounceTime(campaignConfig.autosave.time),
         switchMap((formValue) => {
           if (this.datamapped)
             return this.autoSave(formValue).pipe(
@@ -250,11 +257,11 @@ export class EditCampaignComponent implements OnInit {
   }
 
   /**
-   * @function listenForAutoSave function to listen for auto save form data.
+   * @function listenForAutoSave function for auto saving form data after 20sec intervals.
    */
   listenForAutoSave() {
     this.$autoSaveSubscription.add(
-      interval(20000).subscribe((x) => {
+      interval(campaignConfig.autosave.time).subscribe((x) => {
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (response) => {
             if (this.campaignId) {

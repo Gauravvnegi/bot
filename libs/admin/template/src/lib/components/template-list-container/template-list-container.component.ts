@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { templateConfig } from '../../constants/template';
 import { Topics } from '../../data-models/templateConfig.model';
 import { TemplateService } from '../../services/template.service';
 
@@ -17,9 +18,12 @@ export class TemplateListContainerComponent implements OnInit {
   @Input() templateForm: FormGroup;
   @Input() templateType: string;
   @Output() change = new EventEmitter();
-  selectedTopic="All";
+  selectedTopic = templateConfig.selectedTopic.all;
   topicList = [];
   templateTopicList = [];
+  rowsPerPage = templateConfig.rowsPerPage.limit;
+  active = templateConfig.topicConfig.active;
+
   constructor(
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
@@ -33,12 +37,15 @@ export class TemplateListContainerComponent implements OnInit {
 
   ngOnChanges() {}
 
+  /**
+   * @function getTopicList function to get topic list.
+   */
   getTopicList() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          limit: 50,
-          entityState: 'ACTIVE',
+          limit: templateConfig.topicConfig.limit,
+          entityState: this.active,
         },
       ]),
     };
@@ -52,12 +59,15 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getTemplateForAllTopics function to get template for all topics.
+   */
   getTemplateForAllTopics() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: 'ACTIVE',
-          limit: 3,
+          entityState: this.active,
+          limit: this.rowsPerPage,
           templateType: this.templateType,
         },
       ]),
@@ -71,12 +81,16 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getTemplateByTopicId function to get template by topic id.
+   * @param topic topic data.
+   */
   getTemplateByTopicId(topic) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: 'ACTIVE',
-          limit: 3,
+          entityState: this.active,
+          limit: this.rowsPerPage,
           templateType: this.templateType,
         },
       ]),
@@ -97,10 +111,16 @@ export class TemplateListContainerComponent implements OnInit {
     );
   }
 
+  /**
+   * @function setTemplate function to set template.
+   */
   setTemplate(event) {
     this.change.emit(event);
   }
 
+  /**
+   * @function goBack function to go back to previous page.
+   */
   goBack() {
     this.change.emit({ status: false });
   }

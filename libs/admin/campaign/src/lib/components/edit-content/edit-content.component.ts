@@ -13,22 +13,37 @@ export class EditContentComponent implements OnInit {
   @Input() campaignDetails: Campaign;
   @Input() viewMode = false;
   @Output() addContent = new EventEmitter();
-  modes = ['backdrop', 'edit', 'view'];
-  currentMode = 'backdrop';
+  modes = campaignConfig.modes;
+  currentMode = campaignConfig.currentMode;
   constructor() {}
 
   ngOnInit(): void {}
 
+  /**
+   * @function openAddContent function to add open-content.
+   */
   openAddContent() {
     this.addContent.emit();
   }
 
+  /**
+   * @function changeMode function to change mode.
+   * @param mode param to store current mode.
+   */
   changeMode(mode) {
     this.currentMode = mode;
   }
-  get campaignConfiguration(){
+
+  /**
+   * @function campaignConfiguration function to configure campaign.
+   */
+  get campaignConfiguration() {
     return campaignConfig;
   }
+
+  /**
+   * @function deleteContent function to delete content.
+   */
   deleteContent() {
     this.campaignFG.patchValue({ message: '' });
   }

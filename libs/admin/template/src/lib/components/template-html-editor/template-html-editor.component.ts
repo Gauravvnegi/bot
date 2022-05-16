@@ -11,6 +11,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { trim } from 'lodash';
 import { Template } from '../../data-models/templateConfig.model';
 import { templateConfig } from '../../constants/template';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
@@ -31,18 +32,30 @@ export class TemplateHtmlEditorComponent implements OnInit {
   topicList = [];
   isSaving = false;
   enableAssetImport = false;
-  constructor(private _snackbarService: SnackBarService) {}
+  constructor(
+    private _snackbarService: SnackBarService,
+    protected translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {}
 
+  /**
+   * @function saveAndPreview function to save and preview tempalte.
+   */
   saveAndPreview() {
     this.saveTemplate.emit({ data: { redirectToForm: false, preview: true } });
   }
 
+  /**
+   * @function save function to save template.
+   */
   save() {
     this.saveTemplate.emit({ data: { redirectToForm: false, preview: false } });
   }
 
+  /**
+   * @function saveAndNext function to save and move to next page.
+   */
   saveAndNext() {
     if (trim(this.templateForm.get('htmlTemplate').value) === '') {
       this._snackbarService
@@ -65,15 +78,25 @@ export class TemplateHtmlEditorComponent implements OnInit {
     this.enableAssetImport = false;
   }
 
+  /**
+   * @function assetImportEnable function to enable import asset.
+   * @param event event object to stop propagation.
+   */
   assetImportEnable(event) {
     event.stopPropagation();
     this.enableAssetImport = true;
   }
 
+  /**
+   * @function templateConfiguration function to get template configuration.
+   */
   get templateConfiguration() {
     return templateConfig;
   }
 
+  /**
+   * @function back function to move back.
+   */
   back() {
     this.goBack.emit();
   }

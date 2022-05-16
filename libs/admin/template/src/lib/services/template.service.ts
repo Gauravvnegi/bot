@@ -5,16 +5,35 @@ import { Template } from '../data-models/templateConfig.model';
 
 @Injectable()
 export class TemplateService extends ApiService {
+  /**
+   *@function getTopicList function to get topic list.
+   * @param id dynamically getting id into api.
+   * @param config dynamically getting global query filter into api.
+   * @returns api to get topic list.
+   */
   getTopicList(id: string, config): Observable<any> {
     return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
   }
 
+  /**
+   * @function getTemplateListByTopic function to get template list by topic.
+   * @param hotelId dynamically getting hotel id into api.
+   * @param config dynamically getting global query filter into api.
+   * @returns get api for getting template list by topic.
+   */
   getTemplateListByTopic(hotelId, config): Observable<any> {
     return this.get(
       `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
     );
   }
 
+  /**
+   * @function getTemplateByTopicId function to get template by particular topic id.
+   * @param hotelId dynamically getting hotel id into api.
+   * @param topicId dynamically getting topic id into api.
+   * @param config dynamically getting global query filter into api.
+   * @returns get api for getting template list by particular topic id.
+   */
   getTemplateListByTopicId(hotelId, topicId, config) {
     return this.get(
       `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
@@ -91,10 +110,22 @@ export class TemplateService extends ApiService {
     );
   }
 
+  /**
+   * @function getAssets function to get Assets.
+   * @param hotelId dynamically getting hotelId into api.
+   * @param config dynamically getting global query filter into api.
+   * @returns get api for getting assets.
+   */
   getAssets(hotelId: string, config) {
     return this.get(`/api/v1/entity/${hotelId}/assets${config.queryObj}`);
   }
 
+  /**
+   * @function deleteTemplateContent function to delete template content.
+   * @param entityId dynamically getting entity id into api.
+   * @param id dynamically getting id into api.
+   * @returns delete api for deleting template content.
+   */
   deleteTemplateContent(entityId: string, id: string) {
     return this.delete(`/api/v1/entity/${entityId}/templates/${id}`);
   }

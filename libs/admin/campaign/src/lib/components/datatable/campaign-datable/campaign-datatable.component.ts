@@ -24,6 +24,7 @@ import { campaignConfig } from '../../../constant/campaign';
 import { Campaigns } from '../../../data-model/campaign.model';
 import * as FileSaver from 'file-saver';
 import { CampaignService } from '../../../services/campaign.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
@@ -35,7 +36,7 @@ import { CampaignService } from '../../../services/campaign.service';
 })
 export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Campaign';
+  tableName = campaignConfig.datatable.title;
   @Input() tabFilterItems = campaignConfig.datatable.tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -46,7 +47,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
+  rowsPerPage = campaignConfig.rowsPerPage.datatableLimit;
   cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
@@ -60,7 +61,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }
@@ -222,6 +224,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       );
   }
 
+  /**
+   * @function cloneCampaign function to clone campaign.
+   * @param campaignId campaign id of a particular campaign.
+   * @param data campaign data.
+   */
   cloneCampaign(campaignId, data) {
     this.$subscription.add(
       this.campaignService
@@ -255,6 +262,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function archiveCampaign function to archive campaign.
+   * @param campaignId campaign id of a particular campaign.
+   * @param data campaign data.
+   */
   archiveCampaign(campaignId, data) {
     this.$subscription.add(
       this.campaignService
@@ -307,6 +319,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       }
     );
   }
+
+  /**
+   * @function handleDropdownClick function to handle dropdown.
+   * @param event event object for stop propogation.
+   */
   handleDropdownClick(event) {
     event.stopPropagation();
   }
@@ -465,7 +482,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== campaignConfig.chipValue.all) {
           chip.isSelected = false;
         }
       });
@@ -494,6 +511,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     return campaignConfig;
   }
 
+  /**
+   * @function getStatsCampaignChips function to get stats campaign chips.
+   * @param data campaign stats data.
+   * @returns statsCampaign key object.
+   */
   getStatsCampaignChips(data) {
     return Object.keys(data.statsCampaign);
   }

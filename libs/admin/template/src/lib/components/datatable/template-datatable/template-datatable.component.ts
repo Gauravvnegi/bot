@@ -25,6 +25,8 @@ import { TemplateService } from '../../../services/template.service';
 import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
 import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
+import { campaignConfig } from 'libs/admin/campaign/src/lib/constant/campaign';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -36,7 +38,7 @@ import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
 })
 export class TemplateDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Template';
+  tableName = campaignConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -47,13 +49,13 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
+  rowsPerPage = templateConfig.rowsPerPage.datatableLimit;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
-
   cols = templateConfig.datatable.cols;
   chips = templateConfig.datatable.chips;
+  selectedTopic = templateConfig.selectedTopic.all;
 
   constructor(
     public fb: FormBuilder,
@@ -65,7 +67,8 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     private _router: Router,
     private route: ActivatedRoute,
     private templateService: TemplateService,
-    private _topicService: TopicService
+    private _topicService: TopicService,
+    protected translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }
@@ -101,21 +104,17 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     });
   }
 
+  /**
+   * @function setTabFilterItems function to set tab filter items.
+   */
   setTabFilterItems() {
-    this.tabFilterItems = [
-      {
-        label: 'All',
-        content: '',
-        value: 'ALL',
-        disabled: false,
-        total: 0,
-        chips: this.chips,
-        lastPage: 0,
-      },
-    ];
+    this.tabFilterItems = templateConfig.datatable.tabFilterItems;
     const topicConfig = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
+        {
+          entityState: templateConfig.topicConfig.active,
+          limit: templateConfig.topicConfig.limit,
+        },
       ]),
     };
     this.$subscription.add(
@@ -276,7 +275,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
 
   /**
    * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
+   * @returns The selected chips value.
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
@@ -433,7 +432,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== this.selectedTopic) {
           chip.isSelected = false;
         }
       });

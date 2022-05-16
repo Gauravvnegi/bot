@@ -74,13 +74,14 @@
   overflow-x: hidden;
   overflow-y: hidden;
   &--header {
-    padding: 6px $padding10;
+    padding: 6px 0 6px $padding10;
     position: relative;
     @media (max-width: $tablet) {
       @include width(93%);
       @include margin-left(auto);
     }
     .options {
+      display: flex;
       @include flex-between-center();
       @media (max-width: $tablet) {
         @include height(53px);
@@ -104,9 +105,10 @@
 
       .header--button {
         padding: 0px $padding10;
-        @include width(100%);
+        // @include width(100%);
         @include height(42px);
-        border: 2px solid $light-grey;
+        // border: 2px solid $light-grey;
+        border: none;
         font-size: 12px;
         color: $primary-purple;
         @include flex-between-center();
@@ -138,13 +140,15 @@
       }
       .filter-wrapper {
         position: absolute;
-        top: 98%;
-        left: 1%;
+        top: 137%;
+        right: 40%;
+        height: 92vh;
         box-shadow: 0px 0px 5px 0px darkgray;
-        @include width(45vw);
+        @include width(24vw);
         background-color: $white;
         border-radius: $border5;
         z-index: 22;
+        
       }
       .date-range {
         @media screen and (max-width: 800px) {
@@ -251,4 +255,15 @@
 }
 :host::ng-deep .mat-tab-label-active img {
   filter: grayscale(0) !important;
+}
+.options1 {
+  flex: 9;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+.options2 {
+  display: flex;
+    justify-content: flex-end;
+    flex: 2;
 }

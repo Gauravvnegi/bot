@@ -47,8 +47,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = campaignConfig.rowsPerPage.datatableLimit;
-  cols = campaignConfig.datatable.cols;
+  rowsPerPage = campaignConfig.rowsPerPage.rows;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
@@ -394,7 +393,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param eventThe The event for sort click action.
    */
   customSort(event: SortEvent): void {
-    const col = this.cols.filter((data) => data.field === event.field)[0];
+    const col = campaignConfig.datatable.cols.filter(
+      (data) => data.field === event.field
+    )[0];
     let field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)

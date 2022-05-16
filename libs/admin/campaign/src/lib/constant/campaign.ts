@@ -121,7 +121,7 @@ export const campaignConfig = {
   },
 
   rowsPerPage: {
-    datatableLimit: 5,
+    rows: 5,
   },
 
   templateCard: {
@@ -131,6 +131,14 @@ export const campaignConfig = {
   modes: ['backdrop', 'edit', 'view'],
   currentMode: 'backdrop',
   add: 'add',
+
+  validator: {
+    length: 200,
+  },
+
+  autosave: {
+    time: 20000,
+  },
 
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },

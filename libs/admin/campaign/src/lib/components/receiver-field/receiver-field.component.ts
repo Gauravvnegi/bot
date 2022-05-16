@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { trim } from 'lodash';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import {
   ReceiversSearch,
   ReceiversSearchItem,
@@ -175,7 +176,7 @@ export class ReceiverFieldComponent implements OnInit {
   addItemFromDropdown(event) {
     this.updateChipSet.emit({
       value: event,
-      action: 'add',
+      action: campaignConfig.add,
     });
     this.receiverField.nativeElement.value = '';
     this.search = false;

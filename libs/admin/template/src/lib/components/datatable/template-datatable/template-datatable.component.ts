@@ -55,7 +55,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   hotelId: any;
   cols = templateConfig.datatable.cols;
   chips = templateConfig.datatable.chips;
-  selectedTopic = templateConfig.selectedTopic.all;
 
   constructor(
     public fb: FormBuilder,
@@ -432,7 +431,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== this.selectedTopic) {
+        if (chip.value !== templateConfig.selectedTopic.all) {
           chip.isSelected = false;
         }
       });

@@ -18,7 +18,6 @@ export class TopicTemplatesComponent implements OnInit {
   @Output() selectedTemplate = new EventEmitter();
   loading: boolean;
   offset = 0;
-  limit = templateConfig.rowsPerPage.limit;
   private $subscription = new Subscription();
 
   constructor(
@@ -37,8 +36,8 @@ export class TopicTemplatesComponent implements OnInit {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          offset: this.offset + this.limit,
-          limit: this.limit,
+          offset: this.offset + templateConfig.rowsPerPage.limit,
+          limit: templateConfig.rowsPerPage.limit,
           entityState: templateConfig.topicConfig.limit,
           templateType: this.templateType,
         },

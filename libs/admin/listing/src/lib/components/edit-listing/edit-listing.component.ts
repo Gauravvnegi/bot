@@ -79,7 +79,7 @@ export class EditListingComponent implements OnInit {
   }
 
   /**
-   * @function getListingId to get listing Id from routes query param.
+   * @function getListingId To get listing Id from routes query param.
    */
   getListingId(): void {
     this.$subscription.add(
@@ -93,7 +93,7 @@ export class EditListingComponent implements OnInit {
   }
 
   /**
-   * @function getListDetails to get the listing details.
+   * @function getListDetails To get the listing details.
    * @param id The id for which edit action will be done.
    */
   getListDetails(id) {
@@ -121,7 +121,7 @@ export class EditListingComponent implements OnInit {
   }
 
   /**
-   * @function updateList update listing record.
+   * @function updateList To update listing record.
    */
   updateList() {
     if (
@@ -189,15 +189,15 @@ export class EditListingComponent implements OnInit {
   }
 
   /**
-   * @function updateContactList updates contact list.
-   * @param event event for which updation will be done.
+   * @function updateContactList To update contact list.
+   * @param event The event for which updation will be done.
    */
   updateContactList(event) {
     this.getListDetails(this.listId);
   }
 
   /**
-   * @function redirectToTable To navigate to data table page.
+   * @function redirectToTable To navigate back to data table page.
    */
    redirectToTable() {
     this._location.back();

@@ -5,7 +5,7 @@
         >keyboard_backspace</mat-icon
       >
       <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p>
-      <!-- <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
+      <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
         <mat-form-field class="description">
           <input matInput formControlName="name" placeholder="Enter Name" />
           <mat-error
@@ -17,7 +17,7 @@
             {{ 'nameRequired' | translate }}
           </mat-error>
         </mat-form-field>
-      </div> -->
+      </div>
     </div>
     <div class="option">
       <div class="icon"></div>

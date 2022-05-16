@@ -73,7 +73,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
 
   /**
    * @function customSort To sort the rows of the table.
-   * @param eventThe The event for sort click action.
+   * @param event The event for sort click action.
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
@@ -137,21 +137,22 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           },
           ({ error }) => {
             this.loading = false;
-            this._snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.exportCSV_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.error.exportCSV_fail',
+                  priorityMessage: error.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
   }
 
   /**
-   * @function deleteContact to delete contact form a record.
+   * @function deleteContact To delete marketing contact fields value from record.
    */
   deleteContact() {
     const ids = this.selectedRows.map((item) => ({ contact_id: item.id }));
@@ -164,28 +165,30 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           )
           .subscribe(
             (response) => {
-              this._snackbarService.openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.success.contact_delete',
-                  priorityMessage: 'Contact deleted',
-                },
-                '',
-                {
-                  panelClass: 'success',
-                }
-              )
-              .subscribe();
+              this._snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: 'message.success.contact_delete',
+                    priorityMessage: 'Contact deleted',
+                  },
+                  '',
+                  {
+                    panelClass: 'success',
+                  }
+                )
+                .subscribe();
               this.updateDataSourceAfterDelete(ids);
             },
-            ({ error }) =>{
-              this._snackbarService.openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.contact_not_delete',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
+            ({ error }) => {
+              this._snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: 'message.error.contact_not_delete',
+                    priorityMessage: error.message,
+                  },
+                  ''
+                )
+                .subscribe();
             }
           )
       );
@@ -193,9 +196,9 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updateDataSourceAfterDelete to update data source after delete a record.
-   * @param ids id for which delete action will be done.
-   * @param selectedRows selected row for which delete action will be done.
+   * @function updateDataSourceAfterDelete To update contact data table after deleting a marketing contact field's value from record.
+   * @param ids Contact field is deleted of the respective ids.
+   * @param selectedRows Contact field is deleted from the selected rows.
    */
   updateDataSourceAfterDelete(ids, selectedRows = []) {
     if (selectedRows.length)
@@ -213,8 +216,8 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openAddContact opens add contact page.
-   * @param event event for which add contact action will be done.
+   * @function openAddContact To open add contacts page.
+   * @param event The event to stop propagation of the same event from being called.
    */
   openAddContact(event) {
     event.stopPropagation();
@@ -238,15 +241,16 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                   (response) => {
                     this.handleContactAddEvent(response);
                   },
-                  ({ error }) =>{
-                    this._snackbarService.openSnackBarWithTranslate(
-                      {
-                        translateKey: 'message.error.contact_not_add',
-                        priorityMessage: error.message,
-                      },
-                      ''
-                    )
-                    .subscribe();
+                  ({ error }) => {
+                    this._snackbarService
+                      .openSnackBarWithTranslate(
+                        {
+                          translateKey: 'message.error.contact_not_add',
+                          priorityMessage: error.message,
+                        },
+                        ''
+                      )
+                      .subscribe();
                   }
                 )
             );
@@ -258,8 +262,8 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function handleContactAddEvent handles contact add event.
-   * @param data the data of a record for which add contact event will be done. 
+   * @function handleContactAddEvent To add new contact to record.
+   * @param data The data of a record for which this action will be done.
    */
   handleContactAddEvent(data) {
     data.forEach((item) =>
@@ -278,8 +282,8 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openImportContact opens contacts to import.
-   * @param event event for which import action will be done.
+   * @function openImportContact To open contacts list to import.
+   * @param event The event to stop propagation of the same event from being called.
    */
   openImportContact(event) {
     event.stopPropagation();
@@ -293,16 +297,15 @@ export class ContactDatatableComponent extends BaseDatatableComponent
 
     importCompRef.componentInstance.hotelId = this.hotelId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
-      if (response.status) {
-        this.handleContactImport(response.data);
-      }
+      if (response.status) this.handleContactImport(response.data);
+
       importCompRef.close();
     });
   }
 
   /**
-   * @function handleContactImport handles contact import.
-   * @param data the data for which handleContactImport will be done.
+   * @function handleContactImport To handle import of new contact field.
+   * @param data The data for which handleContactImport will be done.
    */
   handleContactImport(data) {
     if (this.add) {
@@ -342,9 +345,9 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this.changePage(this.currentPage);
               this.updateContacts.emit();
             },
-            ({ error }) =>
-              {
-                this._snackbarService.openSnackBarWithTranslate(
+            ({ error }) => {
+              this._snackbarService
+                .openSnackBarWithTranslate(
                   {
                     translateKey: 'message.error.contact_not_import',
                     priorityMessage: error.message,
@@ -352,22 +355,22 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                   ''
                 )
                 .subscribe();
-              }
+            }
           )
       );
     }
   }
 
   /**
-   * @function listingConfiguration returns listingConfig object.
-   * @returns listingConfig object.
+   * @function listingConfiguration To return listingConfig object.
+   * @returns ListingConfig object.
    */
   get listingConfiguration() {
     return listingConfig;
   }
 
   /**
-   * @function ngOnDestroy to unsubscribe subscription.
+   * @function ngOnDestroy To unsubscribe subscription.
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

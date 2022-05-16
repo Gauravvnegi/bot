@@ -68,7 +68,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @function getHotelId To set the hotel id after extracting it from flobal filter array.
    * @param globalQueries The filter list with date and hotel filters.
    */
   getHotelId(globalQueries): void {
@@ -78,13 +78,16 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getTopicList to get topic record list.
-   * @param hotelId the hotel id for which getTopicList will be done..
+   * @function getTopicList To get topic record list.
+   * @param hotelId The hotel id for which getTopicList will be done.
    */
   getTopicList(hotelId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: listingConfig.list.entityState, limit: listingConfig.list.limit },
+        {
+          entityState: listingConfig.list.entityState,
+          limit: listingConfig.list.limit,
+        },
       ]),
     };
     this.$subscription.add(
@@ -107,7 +110,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function createList create new record in listing.
+   * @function createList To create a new listing record.
    */
   createList() {
     if (
@@ -115,14 +118,14 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       this.listFG.get('marketingContacts').value.length === 0
     ) {
       this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.invalid',
-              priorityMessage: 'Invalid Form.',
-            },
-            ''
-          )
-          .subscribe();
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.invalid',
+            priorityMessage: 'Invalid Form.',
+          },
+          ''
+        )
+        .subscribe();
       return;
     }
     const data = this.listFG.getRawValue();
@@ -177,24 +180,22 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function updateContactList update contact list.
-   * @param event event for which update action will be done.
+   * @function updateContactList To update marketing contact field's value.
+   * @param event The event for which update contact field action will be done.
    */
   updateContactList(event) {
-    if (event.add) {
-      this.listFG.patchValue({ marketingContacts: event.data });
-    }
+    if (event.add) this.listFG.patchValue({ marketingContacts: event.data });
   }
 
   /**
-   * @function redirectToTable To navigate to data table page.
+   * @function redirectToTable To navigate back to the data table page.
    */
   redirectToTable() {
     this._location.back();
   }
 
   /**
-   * @function ngOnDestroy to unsubscribe subscription
+   * @function ngOnDestroy To unsubscribe subscription.
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

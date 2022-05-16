@@ -47,7 +47,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
+  rowsPerPage = listingConfig.datatable.limit;
   cols = listingConfig.datatable.cols;
   hotelId: string;
   $subscription = new Subscription();
@@ -102,9 +102,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
+      if (element.hasOwnProperty('hotelId')) 
         this.hotelId = element.hotelId;
-      }
+      
     });
   }
 
@@ -142,6 +142,10 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function setRecords To set records after getting reponse from an api.
+   * @param data The data is a response which comes from an api call.
+   */
   setRecords(data): void {
     this.values = new ListTable().deserialize(data).records;
     this.totalRecords = data.total;
@@ -334,14 +338,15 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.exportCSV_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.exportCSV_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -356,9 +361,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== listingConfig.list.chipValue.all) 
           chip.isSelected = false;
-        }
+        
       });
       this.tabFilterItems[this.tabFilterIdx].chips[
         quickReplyTypeIdx
@@ -377,53 +382,75 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.changePage(0);
   }
 
+  /**
+   * @function openCreateListing To navigate to create listing page.
+   */
   openCreateListing() {
     this.router.navigate(['create'], { relativeTo: this.route });
   }
 
+  /**
+   * @function updateStatus To update status of a existing record.
+   * @param event Active & InActive event check.
+   * @param rowData The data of row for which status update action will be done.
+   */
   updateStatus(event, rowData) {
-    // event.stopPropagation();
+    event.stopPropagation();
     this.$subscription.add(
       this.listingService
         .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: 'message.success.listing_status_updated',
-                priorityMessage: `${rowData.name}'s status changed.`,
-              },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.success.listing_status_updated',
+                  priorityMessage: `${rowData.name}'s status changed.`,
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this.changePage(this.currentPage);
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.listing_status_updated_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.error.listing_status_updated_fail',
+                  priorityMessage: error.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
   }
 
+   /**
+   * @function openList To navigate to edit listing page.
+   * @param event To stop openCreateList navigation.
+   * @param id The id for which edit action will be done.
+   */
   openList(event, id) {
     event.stopPropagation();
     this.router.navigate([`edit/${id}`], { relativeTo: this.route });
   }
 
+  /**
+   * @function listingConfiguration To return listingConfig object.
+   * @returns ListingConfig object.
+   */
   get listingConfiguration() {
     return listingConfig;
   }
 
+  /**
+   * @function ngOnDestroy To unsubscribe subscription.
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
+import { listingConfig } from '../../constants/listing';
 
 @Component({
   selector: 'hospitality-bot-create-listing',
@@ -50,6 +51,9 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -63,16 +67,27 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extracting it from flobal filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
+  /**
+   * @function getTopicList To get topic record list.
+   * @param hotelId The hotel id for which getTopicList will be done.
+   */
   getTopicList(hotelId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityState: 'ACTIVE', limit: 50 },
+        {
+          entityState: listingConfig.list.entityState,
+          limit: listingConfig.list.limit,
+        },
       ]),
     };
     this.$subscription.add(
@@ -80,25 +95,37 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         (response) =>
           (this.topicList = new Topics().deserialize(response).records),
         ({ error }) => {
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.topicList_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.topicList_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
   }
 
+  /**
+   * @function createList To create a new listing record.
+   */
   createList() {
     if (
       this.listFG.invalid ||
       this.listFG.get('marketingContacts').value.length === 0
     ) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      this._snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.invalid',
+            priorityMessage: 'Invalid Form.',
+          },
+          ''
+        )
+        .subscribe();
       return;
     }
     const data = this.listFG.getRawValue();
@@ -123,43 +150,53 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.isSaving = true;
     this._listingService.createList(this.hotelId, data).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.success.listing_created',
-            priorityMessage: `${response.name} is Created.`,
-          },
-          '',
-          {
-            panelClass: 'success',
-          }
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.listing_created',
+              priorityMessage: `${response.name} is Created.`,
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.error.listing_not_created',
-            priorityMessage: error.message,
-          },
-          ''
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.listing_not_created',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
       },
       () => (this.isSaving = false)
     );
   }
 
+  /**
+   * @function updateContactList To update marketing contact field's value.
+   * @param event The event for which update contact field action will be done.
+   */
   updateContactList(event) {
-    if (event.add) {
-      this.listFG.patchValue({ marketingContacts: event.data });
-    }
+    if (event.add) this.listFG.patchValue({ marketingContacts: event.data });
   }
 
-  goBack() {
+  /**
+   * @function redirectToTable To navigate back to the data table page.
+   */
+  redirectToTable() {
     this._location.back();
   }
 
+  /**
+   * @function ngOnDestroy To unsubscribe subscription.
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

@@ -36,7 +36,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Topic';
+  tableName = topicConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -47,7 +47,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
+  rowsPerPage = topicConfig.datatable.limit;
   cols = topicConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
@@ -402,7 +402,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== topicConfig.datatable.chipValue.all) {
           chip.isSelected = false;
         }
       });

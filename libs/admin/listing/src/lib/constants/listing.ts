@@ -1,6 +1,7 @@
 export const listingConfig = {
   datatable: {
     title: 'Listings',
+    limit:5,
     tabFilterItems: [
       {
         label: 'All',
@@ -26,38 +27,6 @@ export const listingConfig = {
             isSelected: false,
             type: 'pending',
           },
-          // {
-          //   label: 'General ',
-          //   icon: '',
-          //   value: 'GENERAL',
-          //   total: 0,
-          //   isSelected: false,
-          //   type: 'initiated',
-          // },
-          // {
-          //   label: 'Holidays ',
-          //   icon: '',
-          //   value: 'HOLIDAYS',
-          //   total: 0,
-          //   isSelected: false,
-          //   type: 'initiated',
-          // },
-          // {
-          //   label: 'Promotions',
-          //   icon: '',
-          //   value: 'PROMOTIONS',
-          //   total: 0,
-          //   isSelected: false,
-          //   type: 'initiated',
-          // },
-          // {
-          //   label: 'Highlights',
-          //   icon: '',
-          //   value: 'HIGHLIGHTS',
-          //   total: 0,
-          //   isSelected: false,
-          //   type: 'initiated',
-          // },
         ],
         lastPage: 0,
       },
@@ -99,6 +68,13 @@ export const listingConfig = {
         dynamicWidth: true,
       },
     ],
+  },
+  list:{
+    limit:50,
+    entityState:'ACTIVE',
+    chipValue:{
+      all:'ALL'
+    },
   },
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },

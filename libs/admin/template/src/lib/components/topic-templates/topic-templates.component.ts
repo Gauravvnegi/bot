@@ -44,7 +44,6 @@ export class TopicTemplatesComponent implements OnInit {
         },
       ]),
     };
-
     this.$subscription.add(
       this.templateService
         .getTemplateListByTopicId(this.hotelId, this.template.topicId, config)

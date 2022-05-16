@@ -1,5 +1,8 @@
 <div class="container" (click)="openPersonalization($event)">
-  <img class="container__img" src="assets/svg/edit.svg" alt="edit" />
+  <img
+    [src]="campaignConfiguration.images.write.url"
+    [alt]="campaignConfiguration.images.write.alt"
+  />
   <div class="personalization" *ngIf="enablePersonalization">
     <div class="title">
       {{ 'personlize' | translate }}

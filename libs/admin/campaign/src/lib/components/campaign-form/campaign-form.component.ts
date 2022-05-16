@@ -14,7 +14,6 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
@@ -22,6 +21,7 @@ import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-campaign-form',
@@ -73,7 +73,7 @@ export class CampaignFormComponent implements OnInit {
         ({ error }) => {
           this._snackbarService
             .openSnackBarWithTranslate({
-              translateKey: '',
+              translateKey: 'messages.error.fail',
               priorityMessage: error.message,
             })
             .subscribe();
@@ -128,7 +128,7 @@ export class CampaignFormComponent implements OnInit {
                 ({ error }) => {
                   this._snackbarService
                     .openSnackBarWithTranslate({
-                      translateKey: '',
+                      translateKey: 'messages.error.fail',
                       priorityMessage: error.message,
                     })
                     .subscribe();
@@ -202,7 +202,12 @@ export class CampaignFormComponent implements OnInit {
    */
   sendMail() {
     if (this.campaignFG.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid form.');
+      this._snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.error.fail',
+          priorityMessage: 'Invalid form.',
+        })
+        .subscribe();
       this.campaignFG.markAllAsTouched();
       return;
     }

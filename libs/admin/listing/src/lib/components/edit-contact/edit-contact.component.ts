@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Regex } from '@hospitality-bot/shared';
+import { contactConfig } from '../../constants/contact';
 
 @Component({
   selector: 'hospitality-bot-edit-contact',
@@ -14,11 +15,7 @@ export class EditContactComponent implements OnInit {
   @Input() add: boolean;
   @Input() hotelId: string;
   contactFA: FormArray;
-  salutationList = [
-    { name: 'Mr.', value: 'Mr.' },
-    { name: 'Mrs.', value: 'Mrs.' },
-    { name: 'Miss', value: 'Miss' },
-  ];
+  salutationList = contactConfig.datatable.salutationList;
   constructor(private _fb: FormBuilder) {
     this.createFA();
   }
@@ -47,19 +44,34 @@ export class EditContactComponent implements OnInit {
     });
   }
 
+  /**
+   * @function generateContactField To generates new add contact fields.
+   */
   generateContactField() {
     this.contactFA.push(this.createContactFG());
   }
 
+  /**
+   * @function removeContactField To removes add contact field.
+   * @param index The index number for which remove contact action will be done.
+   * @returns Return true if there is only one contact field.
+   */
   removeContactField(index: number) {
     if (this.contactFA.controls.length === 1) return;
     this.contactFA.removeAt(index);
   }
 
+  /**
+   * @function close To close add contact page.
+   */
   close() {
     this.onContactClosed.emit({ status: false });
   }
 
+  /**
+   * @function submitContact To add contact in a record.
+   * @returns Returns back to previous page if contact is invalid.
+   */
   submitContact() {
     if (this.contactFA.invalid) {
       this.contactFA.markAllAsTouched();

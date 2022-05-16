@@ -2,13 +2,11 @@
   <div class="heading">
     <p>{{ template.topicName }}</p>
   </div>
-  <div class="topic-cards">
-    <div
-      *ngFor="let t of template.templates"
-      class="card"
-      (click)="selectTemplate(t.htmlTemplate)"
-    >
-      <div [innerHTML]="t.htmlTemplate" class="card__content"></div>
+  <div class="template-container">
+    <div class="topic-cards" *ngFor="let t of template.templates">
+      <div class="card" (click)="selectTemplate(t.htmlTemplate)">
+        <div [innerHTML]="t.htmlTemplate" class="card__content"></div>
+      </div>
       <div class="template-name">
         {{ t.name }}
       </div>

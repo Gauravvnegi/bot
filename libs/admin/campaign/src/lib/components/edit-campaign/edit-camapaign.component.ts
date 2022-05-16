@@ -17,6 +17,7 @@ import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
@@ -269,7 +270,7 @@ export class EditCampaignComponent implements OnInit {
           ({ error }) => {
             this._snackbarService
               .openSnackBarWithTranslate({
-                translateKey: '',
+                translateKey:'messages.error.fail',
                 priorityMessage: error.message,
               })
               .subscribe();

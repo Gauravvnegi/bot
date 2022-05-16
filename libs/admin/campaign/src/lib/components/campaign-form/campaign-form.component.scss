@@ -245,7 +245,7 @@
     display: flex;
     position: absolute;
     right: 0;
-    bottom: 25px;
+    bottom: 32px;
     color: #4b56c0;
     .style-click {
       margin-left: 10px;
@@ -312,4 +312,7 @@
 
 .name-field {
   width: 25vw;
+}
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  height: 1px !important;
 }

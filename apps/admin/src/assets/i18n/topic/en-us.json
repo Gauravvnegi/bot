@@ -35,7 +35,8 @@
       "topic_not_updated": "Topic Not Updated.",
       "topic_status_update_fail": "Status Not Updated.",
       "exportCSV_fail": "Export CSV Failed.",
-      "loading_fail": "Loading Fail."
+      "loading_fail": "Loading Fail.",
+      "invalid":"Invalid Form"
     }
   }
 }

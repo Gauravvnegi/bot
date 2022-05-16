@@ -68,7 +68,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     private route: ActivatedRoute,
     private templateService: TemplateService,
     private _topicService: TopicService,
-    protected translateService: TranslateService
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }

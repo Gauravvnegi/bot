@@ -1,5 +1,10 @@
 export const topicConfig = {
     datatable: {
+      title: 'Topic',
+      limit:5,
+      chipValue:{
+        all:'ALL'
+      },
         tabFilterItems: [
           {
             label: 'All',
@@ -51,6 +56,7 @@ export const topicConfig = {
             dynamicWidth: true,
           },
         ],
+        
       },
       images: {
         info: { url: 'assets/svg/info.svg', alt: 'Info' },

@@ -34,7 +34,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Asset';
+  tableName = assetConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -45,7 +45,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
+  rowsPerPage = assetConfig.datatable.limit;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
@@ -358,7 +358,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== assetConfig.datatable.chipValue.all) {
           chip.isSelected = false;
         }
       });

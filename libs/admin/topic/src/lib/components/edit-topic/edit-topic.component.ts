@@ -85,7 +85,14 @@ export class EditTopicComponent implements OnInit {
    */
   handleSubmit() {
     if (this.topicForm.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      this._snackbarService.openSnackBarWithTranslate(
+        {
+          translateKey: 'message.error.invalid',
+          priorityMessage: 'Invalid Form.',
+        },
+        ''
+      )
+      .subscribe();
       return;
     }
     const data = this.topicForm.getRawValue();

@@ -1,5 +1,6 @@
 export const contactConfig = {
   datatable: {
+    title:'Manage Contacts',
     cols: [
       {
         field: 'email',
@@ -50,5 +51,15 @@ export const contactConfig = {
         width: '170px',
       },
     ],
+    dialogWidth:'550',
+    salutationList : [
+      { name: 'Mr.', value: 'Mr.' },
+      { name: 'Mrs.', value: 'Mrs.' },
+      { name: 'Miss', value: 'Miss' },
+    ],
+    fileUploadData : {
+      fileSize: 3145728,
+      fileType: ['csv'],
+    },
   },
 };

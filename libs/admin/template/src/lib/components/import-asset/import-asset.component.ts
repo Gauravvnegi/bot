@@ -43,16 +43,7 @@ export class ImportAssetComponent implements OnInit {
     private _fb: FormBuilder,
     private _snackbarService: SnackBarService,
     protected translateService: TranslateService
-  ) {
-    this.createFG();
-  }
-
-  createFG() {
-    this.assetFG = this._fb.group({
-      search: [''],
-    });
-  }
-
+  ) {}
   ngOnInit(): void {
     this.registerListeners();
   }
@@ -172,29 +163,6 @@ export class ImportAssetComponent implements OnInit {
         },
       ]);
     }
-  }
-
-  /**
-   * @function listenForSearchChanges function to listen for search changes.
-   */
-  listenForSearchChanges() {
-    const formChanges$ = this.assetFG.valueChanges.pipe(
-      filter(() => !!(this.assetFG.get('search') as FormControl).value)
-    );
-
-    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
-      // setting minimum search character limit to 3
-      if (response?.search.length >= 3) {
-        console.log(response?.search);
-      } else {
-        this.tabFilterItems[this.tabFilterIdx].page = 0;
-        this.loadAssetData([
-          {
-            offset: 0,
-          },
-        ]);
-      }
-    });
   }
 
   loadSearchAsset(key) {

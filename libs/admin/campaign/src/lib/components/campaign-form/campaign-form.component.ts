@@ -170,19 +170,6 @@ export class CampaignFormComponent implements OnInit {
   }
 
   /**
-   * @function modifyTemplate function to modify template.
-   */
-  modifyTemplate(template: string) {
-    this.templateData = template;
-    if (template.indexOf('<div') != -1)
-      return template.substring(
-        template.indexOf('<div'),
-        template.lastIndexOf('</body>')
-      );
-    else return template;
-  }
-
-  /**
    *@function getTemplateMessage function to get message from tempalate.
    */
   getTemplateMessage(data) {
@@ -255,7 +242,6 @@ export class CampaignFormComponent implements OnInit {
     if (event.action == campaignConfig.add)
       control.push(new FormControl(event.value));
     else control.removeAt(event.value);
-    this.autoSave();
   }
 
   /**
@@ -274,13 +260,6 @@ export class CampaignFormComponent implements OnInit {
    */
   get to() {
     return this.campaignFG.get('to') as FormArray;
-  }
-
-  /**
-   * @function autoSave function to auto save.
-   */
-  autoSave() {
-    this.save.emit();
   }
 
   @HostListener('document:click', ['$event'])

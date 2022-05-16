@@ -22,14 +22,12 @@
       ></hospitality-bot-users-usage>
     </div>
     <div class="usages__item" featureSubscribed [feature]="'modules.guest'">
-      <!-- <div class="usages__item"> -->
       <hospitality-bot-guest-usage
         [data]="subscriptionPlanUsage?.guests"
         [chartData]="planUsageChartData.guestCount"
         [usage]="planUsagePercentage.guestUsagePercentage"
       ></hospitality-bot-guest-usage>
     </div>
-    <!-- <div class="usages__item"> -->
     <div class="usages__item" featureSubscribed [feature]="'integrations.ocr'">
       <hospitality-bot-ocr-usage
         [data]="subscriptionPlanUsage?.ocr"

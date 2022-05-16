@@ -19,10 +19,9 @@ export class TemplateListContainerComponent implements OnInit {
   @Input() templateType: string;
   @Output() change = new EventEmitter();
   templateTypes = campaignConfig.datatable.templateTypes;
-  selectedTopic = campaignConfig.chipValue.all;
-  active = campaignConfig.topicConfig.active;
   topicList = [];
   templateTopicList = [];
+  selectedTopic: string;
   constructor(
     private adminUtilityService: AdminUtilityService,
     private campaignService: CampaignService,
@@ -42,8 +41,8 @@ export class TemplateListContainerComponent implements OnInit {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          limit: 50,
-          entityState: this.active,
+          limit: campaignConfig.topicConfig.limit,
+          entityState: campaignConfig.topicConfig.active,
         },
       ]),
     };
@@ -64,8 +63,8 @@ export class TemplateListContainerComponent implements OnInit {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: this.active,
-          limit: 3,
+          entityState: campaignConfig.topicConfig.active,
+          limit: campaignConfig.templateCard.limit,
           templateType: this.templateType,
         },
       ]),
@@ -87,8 +86,8 @@ export class TemplateListContainerComponent implements OnInit {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          entityState: this.active,
-          limit: 3,
+          entityState: campaignConfig.topicConfig.active,
+          limit: campaignConfig.templateCard.limit,
           templateType: this.templateType,
         },
       ]),
@@ -115,7 +114,7 @@ export class TemplateListContainerComponent implements OnInit {
    */
   templateTypeSelection(value) {
     this.templateType = value;
-    this.selectedTopic = this.selectedTopic;
+    this.selectedTopic = campaignConfig.chipValue.all;
     this.getTemplateForAllTopics();
   }
 

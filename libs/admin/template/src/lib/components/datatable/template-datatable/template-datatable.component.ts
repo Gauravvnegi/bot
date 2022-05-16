@@ -25,7 +25,6 @@ import { TemplateService } from '../../../services/template.service';
 import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
 import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
-import { campaignConfig } from 'libs/admin/campaign/src/lib/constant/campaign';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -38,7 +37,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class TemplateDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = campaignConfig.datatable.title;
+  tableName = templateConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -88,7 +87,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         ...data['dateRange'].queryValue,
       ];
       this.getHotelId(this.globalQueries);
-      this.tabFilterItems = [];
       this.setTabFilterItems();
     });
   }
@@ -108,7 +106,16 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @function setTabFilterItems function to set tab filter items.
    */
   setTabFilterItems() {
-    this.tabFilterItems = templateConfig.datatable.tabFilterItems;
+    this.tabFilterItems = [
+      {
+        label: 'All',
+        content: '',
+        value: 'ALL',
+        disabled: false,
+        total: 0,
+        chips: this.chips,
+      },
+    ];
     const topicConfig = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {

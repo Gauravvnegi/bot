@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { templateConfig } from '../../constants/template';
 import { TemplateService } from '../../services/template.service';
 
 @Component({
@@ -16,24 +18,28 @@ export class TopicTemplatesComponent implements OnInit {
   @Output() selectedTemplate = new EventEmitter();
   loading: boolean;
   offset = 0;
-  limit = 3;
+  limit = templateConfig.rowsPerPage.limit;
   private $subscription = new Subscription();
 
   constructor(
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    protected translateService: TranslateService
   ) {}
 
   ngOnInit(): void {}
 
+  /**
+   * @function loadData To load data for the table after any event.
+   */
   loadData() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           offset: this.offset + this.limit,
           limit: this.limit,
-          entityState: 'ACTIVE',
+          entityState: templateConfig.topicConfig.limit,
           templateType: this.templateType,
         },
       ]),
@@ -61,6 +67,10 @@ export class TopicTemplatesComponent implements OnInit {
     );
   }
 
+  /**
+   * @function selectTemplate function to select template.
+   * @param template data stores in template object.
+   */
   selectTemplate(template) {
     this.selectedTemplate.emit({ status: true, data: template });
   }

@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { TemplateService } from '../../services/template.service';
 import { templateConfig } from '../../constants/template';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-import-asset',
@@ -31,7 +32,7 @@ export class ImportAssetComponent implements OnInit {
   hotelId: string;
   tabFilterItems = templateConfig.datatable.assetsTabFilterItems;
   tabFilterIdx = 0;
-  limit = 10;
+  limit = templateConfig.importAsset.limit;
   assets = [];
   $subscription = new Subscription();
   assetFG: FormGroup;
@@ -40,13 +41,25 @@ export class ImportAssetComponent implements OnInit {
     private _globalFilterService: GlobalFilterService,
     private _templateService: TemplateService,
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService
-  ) {}
+    private _snackbarService: SnackBarService,
+    protected translateService: TranslateService
+  ) {
+    this.createFG();
+  }
+
+  createFG() {
+    this.assetFG = this._fb.group({
+      search: [''],
+    });
+  }
 
   ngOnInit(): void {
     this.registerListeners();
   }
 
+  /**
+   * @function registerListeners function to listen for search changes and global filters.
+   */
   registerListeners() {
     this.listenForGlobalFilters();
   }
@@ -70,6 +83,7 @@ export class ImportAssetComponent implements OnInit {
       })
     );
   }
+
   /**
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
@@ -82,6 +96,9 @@ export class ImportAssetComponent implements OnInit {
     });
   }
 
+  /**
+   * @function onTabChanged function to handle tab change event.
+   */
   onTabChanged(event) {
     this.tabFilterIdx = event.index;
     this.assets = [];
@@ -93,6 +110,10 @@ export class ImportAssetComponent implements OnInit {
     ]);
   }
 
+  /**
+   * @function loadAssetData function to load asset data.
+   * @param filters object to filter data Asset data.
+   */
   loadAssetData(filters) {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -132,6 +153,10 @@ export class ImportAssetComponent implements OnInit {
     });
   }
 
+  /**
+   * @function HostListener for scroll event.
+   * @param event scroll event.
+   */
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     if (
@@ -149,10 +174,36 @@ export class ImportAssetComponent implements OnInit {
     }
   }
 
+  /**
+   * @function listenForSearchChanges function to listen for search changes.
+   */
+  listenForSearchChanges() {
+    const formChanges$ = this.assetFG.valueChanges.pipe(
+      filter(() => !!(this.assetFG.get('search') as FormControl).value)
+    );
+
+    formChanges$.pipe(debounceTime(1000)).subscribe((response) => {
+      // setting minimum search character limit to 3
+      if (response?.search.length >= 3) {
+        console.log(response?.search);
+      } else {
+        this.tabFilterItems[this.tabFilterIdx].page = 0;
+        this.loadAssetData([
+          {
+            offset: 0,
+          },
+        ]);
+      }
+    });
+  }
+
   loadSearchAsset(key) {
     this.assets = [];
   }
 
+  /**
+   * @function handleCopyToClipboard function to handle copy to clipboard action.
+   */
   handleCopyToClipboard(event) {
     event.stopPropagation();
     this._snackbarService
@@ -169,6 +220,9 @@ export class ImportAssetComponent implements OnInit {
       .subscribe();
   }
 
+  /**
+   * @function loadMoreAssetData function to load more Asset data.
+   */
   loadMoreAssetData() {
     this.loadAssetData([
       {
@@ -177,6 +231,9 @@ export class ImportAssetComponent implements OnInit {
     ]);
   }
 
+  /**
+   * @function close function to close imports.
+   */
   close() {
     this.closeImport.emit();
   }

@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Template } from '../../data-models/templateConfig.model';
 import { MatStepper } from '@angular/material/stepper';
 import { templateConfig } from '../../constants/template';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'hospitality-bot-edit-template',
   templateUrl: './edit-template.component.html',
@@ -36,7 +37,8 @@ export class EditTemplateComponent implements OnDestroy {
     private templateService: TemplateService,
     private location: Location,
     private _router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    protected translateService: TranslateService
   ) {
     this.initFG();
   }
@@ -57,6 +59,9 @@ export class EditTemplateComponent implements OnDestroy {
     });
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -70,12 +75,19 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
+  /**
+   * @function getAssetId to get template Id from routes query param.
+   */
   getTemplateId(): void {
     this.$subscription.add(
       this.activatedRoute.params.subscribe((params) => {
@@ -106,6 +118,9 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
+  /**
+   * @function handleSubmit validating and handling form submission.
+   */
   handleSubmit(event) {
     if (this.templateForm.invalid) {
       this._snackbarService.openSnackBarAsText('Invalid Form.');
@@ -173,6 +188,9 @@ export class EditTemplateComponent implements OnDestroy {
     }
   }
 
+  /**
+   * @function updateTemplate updating template records.
+   */
   updateTemplate(templateFormData) {
     const data = this.templateService.mapTemplateData(
       templateFormData,
@@ -186,6 +204,11 @@ export class EditTemplateComponent implements OnDestroy {
     );
   }
 
+  /**
+   * @function createTemplate function to create new template.
+   * @param templateFormData contains template form data.
+   * @returns create template api.
+   */
   createTemplate(templateFormData) {
     let data = this.templateService.mapTemplateData(
       templateFormData,
@@ -194,28 +217,42 @@ export class EditTemplateComponent implements OnDestroy {
     return this.templateService.createTemplate(this.hotelId, data);
   }
 
+  /**
+   * @function move function to move to particular index.
+   * @param index particular page index.
+   */
   move(index: number) {
     this.stepper.selectedIndex = index;
   }
 
+  /**
+   * @function moveToEditor function to move to editor.
+   * @param disabled content not editable.
+   */
   moveToEditor(disabled) {
     this.contentNotEditable = disabled;
     this.stepper.selectedIndex = this.htmlTemplate.value ? 2 : 1;
   }
 
+  /**
+   * @function handleBackFromEditor function to move back from editor.
+   */
   handleBackFromEditor() {
     this.stepper.selectedIndex = 0;
     this.createNewHtml = false;
     this.contentNotEditable = false;
   }
 
+  /**
+   * @function deleteTemplate function to delete template.
+   */
   deleteTemplate() {
     if (this.templateId)
       this.$subscription.add(
         this.templateService
           .deleteTemplateContent(this.hotelId, this.templateId)
           .subscribe(
-            (resposne) => {
+            (response) => {
               this.templateForm.patchValue({ htmlTemplate: '' });
               this._snackbarService
                 .openSnackBarWithTranslate(
@@ -243,12 +280,20 @@ export class EditTemplateComponent implements OnDestroy {
     else this.templateForm.patchValue({ htmlTemplate: '' });
   }
 
+  /**
+   * @function openCreateContent function to move to create content page.
+   * @param newContent to create new template.
+   * @param type type of template.
+   */
   openCreateContent(newContent: boolean, type?: string) {
     this.typeOfTemplate = type;
     this.createNewHtml = newContent;
     this.stepper.selectedIndex = newContent ? 2 : 1;
   }
 
+  /**
+   * @function handleTemplateListChange function to handle template list change.
+   */
   handleTemplateListChange(event) {
     if (event.status) {
       this.templateForm.patchValue({ htmlTemplate: event.data });
@@ -258,18 +303,30 @@ export class EditTemplateComponent implements OnDestroy {
     this.move(0);
   }
 
+  /**
+   * @function goBack function to move back to previous page.
+   */
   goBack() {
     this.location.back();
   }
 
+  /**
+   * @function htmlTemplate function to get html template.
+   */
   get htmlTemplate() {
     return this.templateForm.get('htmlTemplate');
   }
 
+  /**
+   *@function templateConfiguration function to get template configuration.
+   */
   get templateConfiguration() {
     return templateConfig;
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscription
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

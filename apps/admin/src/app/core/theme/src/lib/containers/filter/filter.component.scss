@@ -1,9 +1,11 @@
 @import 'main';
 
 .filter--header {
+  background-color: $primary-purple;
   padding: $padding15 $padding10;
+  color:white;
   @include flex-between-center();
-  border-bottom: 1px solid #c5c5c5;
+  border-bottom: 1px solid $primary-purple;
   .close--wrapper {
     display: flex;
     align-items: center;
@@ -28,18 +30,21 @@
     align-items: center;
     color: #c5c5c5;
     .material-icon {
+      // color: white;
+      color:#c5c5c5;
       font-size: $font20;
       height: auto;
       width: auto;
       margin-left: $margin10;
       &:hover {
         cursor: pointer;
-        color: $primary-purple;
+        // color: $primary-purple;
       }
     }
     .filter {
       font-weight: 400;
       margin: 0;
+      color:white;
       font-size: $font16;
       &:hover{
         color: $primary-purple;
@@ -50,6 +55,9 @@
     cursor: pointer;
   }
 }
+.filter--form {
+  border:1px solid $primary-purple;
+}
 
 :host ::ng-deep .mat-tab-group {
   flex-direction: initial;
@@ -59,7 +67,7 @@
 :host ::ng-deep .mat-tab-label {
   text-align: initial;
   display: block;
-  padding: $padding15;
+  padding: 20px;
   opacity: 1;
   height: auto;
   color: #c5c5c5;
@@ -94,7 +102,7 @@
   font-weight: $medium;
   border-radius: 25px;
   padding: 12px 0px;
-  width: $normal-button-width;
+  width: 10vw;
   position: absolute;
   bottom: 10px;
   right: 21%;
@@ -137,8 +145,10 @@
 
 :host ::ng-deep .mat-tab-header {
   border-bottom: none;
-  border-right: 1px solid #c5c5c5;
-  min-height: 50vh;
+  // border-right: 1px solid #c5c5c5;
+  border-right: 1px solid $primary-purple;
+  min-height: 86.5vh;
+  width: 3rem;
 }
 
 :host ::ng-deep .mat-tab-body-content {
@@ -183,10 +193,10 @@
   margin: 20px 0;
 }
 
-:host ::ng-deep .mat-tab-label .mat-tab-label-content {
-  display: flex;
-  justify-content: space-between;
-}
+// :host ::ng-deep .mat-tab-label .mat-tab-label-content {
+//   display: flex;
+//   justify-content: space-between;
+// }
 
 :host ::ng-deep {
   .mat-radio-group {
@@ -202,4 +212,7 @@
   .mat-radio-checked .mat-radio-inner-circle {
     background-color: #4b56c0;
   }
+}
+:host  ::ng-deep .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+  display:none;
 }

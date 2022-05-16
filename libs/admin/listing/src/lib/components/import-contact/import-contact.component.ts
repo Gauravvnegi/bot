@@ -56,16 +56,16 @@ export class ImportContactComponent implements OnInit {
   }
 
    /**
-   * @function generateContactField generates add contact fields.
+   * @function generateContactField To generate new add contact fields.
    */
   generateContactField() {
     this.contactFA.push(this.createContactFG());
   }
 
   /**
-   * @function removeContactField removes add contact field.
-   * @param index the index number for which remove contact action will be done.
-   * @returns return true if there is only one contact field.
+   * @function removeContactField To remove add contact field.
+   * @param index The index number for which remove contact action will be done.
+   * @returns Return true if there is only one contact field.
    */
   removeContactField(index: number) {
     if (this.contactFA.controls.length === 1) return;
@@ -73,15 +73,15 @@ export class ImportContactComponent implements OnInit {
   }
 
   /**
-   * @function close closes contact page.
+   * @function close To close import contact page.
    */
   close() {
     this.onImportClosed.emit({ status: false });
   }
 
   /**
-   * @function importContact imports contact into record.
-   * @param event event for which import action will be done.
+   * @function importContact To import new marking contact field value into record.
+   * @param event The event for which import action will be done.
    */
   importContact(event) {
     let formData = new FormData();
@@ -93,9 +93,9 @@ export class ImportContactComponent implements OnInit {
           this.contacts = new ContactList().deserialize(response).records;
           this.contacts.forEach((contact, index) => {
             this.contactFA.controls[index].patchValue(contact);
-            if (index < this.contacts.length - 1) {
+            if (index < this.contacts.length - 1) 
               this.contactFA.push(this.createContactFG());
-            }
+            
           });
           this.contactFA.controls.forEach((control) => control.disable());
         },
@@ -114,8 +114,8 @@ export class ImportContactComponent implements OnInit {
   }
 
   /**
-   * @function save save contact data into a record.
-   * @return returns to perivous page contact is not imported.
+   * @function save To save contact field value into a record.
+   * @return Returns to perivous page contact is not imported.
    */
   save() {
     if (
@@ -139,8 +139,8 @@ export class ImportContactComponent implements OnInit {
   }
 
   /**
-   * @function enableField enables contact field.
-   * @param event event for which field will be enable.
+   * @function enableField To enable contact field.
+   * @param event The event for which field will be enable.
    */
   enableField(event) {
     if (event.target.checked)
@@ -149,7 +149,7 @@ export class ImportContactComponent implements OnInit {
   }
 
    /**
-   * @function ngOnDestroy to unsubscribe subscription
+   * @function ngOnDestroy To unsubscribe subscription
    */
   ngOnDestroy() {
     this.$subscription.unsubscribe();

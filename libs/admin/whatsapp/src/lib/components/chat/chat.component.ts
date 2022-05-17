@@ -12,14 +12,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
-import { IChats, Chats, Chat } from '../../models/message.model';
+import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -29,6 +31,7 @@ import { IChats, Chats, Chat } from '../../models/message.model';
 export class ChatComponent
   implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() selectedChat;
+  @Input() data;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   hotelId: string;
@@ -40,8 +43,13 @@ export class ChatComponent
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
-
+  requestList;
+  selectedIndex = 0;
+  buttonConfig = [
+    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+  ];
   constructor(
+    private modalService: ModalService,
     private messageService: MessageService,
     private fb: FormBuilder,
     private snackBarService: SnackBarService,
@@ -333,6 +341,63 @@ export class ChatComponent
           (response) => this.liveChatFG.patchValue(response),
           ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
         )
+    );
+  }
+
+  handleButtonClick(): void {
+    this.openRaiseRequest();
+  }
+
+  getRequestList() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          hotelId: this.hotelId,
+          confirmationNumber: this.data.reservationId,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.messageService.getRequestByConfNo(config).subscribe(
+        (response) => {
+          this.requestList = new RequestList().deserialize(response).data;
+        },
+        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+  openRaiseRequest() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '50%';
+    const raiseRequestCompRef = this.modalService.openDialog(
+      RaiseRequestComponent,
+      dialogConfig
+    );
+
+    this.$subscription.add(
+      raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
+        (res) => {
+          if (res.status) {
+            this.getRequestList();
+            const values = {
+              reservationId: res.data.number,
+            };
+            this.$subscription.add(
+              this.messageService
+                .updateGuestDetail(this.hotelId, this.data.receiverId, values)
+                .subscribe(
+                  (response) => {
+                    this.messageService.refreshData$.next(true);
+                  },
+                  ({ error }) =>
+                    this.snackBarService.openSnackBarAsText(error.message)
+                )
+            );
+          }
+          raiseRequestCompRef.close();
+        }
+      )
     );
   }
 

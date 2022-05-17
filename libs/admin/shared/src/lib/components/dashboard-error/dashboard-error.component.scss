@@ -1,0 +1,36 @@
+@import 'main';
+
+.sorry-message {
+  left: 0;
+  right: 0;
+
+  .ellipse {
+    position: relative;
+    text-align: center;
+    margin-top: 40vh;
+    .heda-freedie {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        left: 0;
+        right: 0;
+        align-items: end;
+        top: -188px;
+      .sorry-heda {
+        padding-top: 65px;
+        margin-right: 98px;
+      }
+
+      .sorry-freedie {
+      }
+
+      .tree-left {
+          margin-right:50px;
+      }
+
+      .tree-right {
+          margin-left:20px;
+      }
+    }
+  }
+}

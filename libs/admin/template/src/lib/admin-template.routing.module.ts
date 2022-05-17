@@ -7,9 +7,10 @@ import { TemplateHtmlEditorComponent } from './components/template-html-editor/t
 import { ImportAssetComponent } from './components/import-asset/import-asset.component';
 import { TemplateListContainerComponent } from './components/template-list-container/template-list-container.component';
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
+import { DashboardErrorComponent } from 'libs/admin/shared/src/lib/components/dashboard-error/dashboard-error.component';
 
 const appRoutes: Route[] = [
-  { path: '', component: TemplateDatatableComponent },
+  { path: '', component: DashboardErrorComponent },
   { path: 'create', component: EditTemplateComponent },
   { path: 'edit/:id', component: EditTemplateComponent },
   

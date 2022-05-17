@@ -1,5 +1,7 @@
 export const campaignConfig = {
   datatable: {
+    title: 'Campaign',
+
     tabFilterItems: [
       {
         label: 'All',
@@ -108,6 +110,36 @@ export const campaignConfig = {
     data: [],
     totalRecords: 0,
   },
+
+  chipValue: {
+    all: 'All',
+  },
+
+  topicConfig: {
+    limit: 50,
+    active: 'ACTIVE',
+  },
+
+  rowsPerPage: {
+    rows: 5,
+  },
+
+  templateCard: {
+    limit: 3,
+  },
+
+  modes: ['backdrop', 'edit', 'view'],
+  currentMode: 'backdrop',
+  add: 'add',
+
+  validator: {
+    length: 200,
+  },
+
+  autosave: {
+    time: 20000,
+  },
+
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },
     download: { url: 'assets/svg/Download.svg', alt: 'Download' },

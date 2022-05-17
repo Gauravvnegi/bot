@@ -24,6 +24,7 @@ import { campaignConfig } from '../../../constant/campaign';
 import { Campaigns } from '../../../data-model/campaign.model';
 import * as FileSaver from 'file-saver';
 import { CampaignService } from '../../../services/campaign.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
@@ -35,7 +36,7 @@ import { CampaignService } from '../../../services/campaign.service';
 })
 export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  tableName = 'Campaign';
+  tableName = campaignConfig.datatable.title;
   @Input() tabFilterItems = campaignConfig.datatable.tabFilterItems;
   @Input() tabFilterIdx: number = 0;
   actionButtons = true;
@@ -46,8 +47,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = 5;
-  cols = campaignConfig.datatable.cols;
+  rowsPerPage = campaignConfig.rowsPerPage.rows;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
@@ -60,7 +60,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     protected _modal: ModalService,
     private _router: Router,
     private route: ActivatedRoute,
-    private campaignService: CampaignService
+    private campaignService: CampaignService,
+    protected _translateService: TranslateService
   ) {
     super(fb, tabFilterService);
   }
@@ -114,14 +115,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Campaigns().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
@@ -134,6 +128,16 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       )
     );
+  }
+
+  setRecords(data) {
+    this.values = new Campaigns().deserialize(data).records;
+    this.totalRecords = data.total;
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.loading = false;
   }
 
   /**
@@ -219,6 +223,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       );
   }
 
+  /**
+   * @function cloneCampaign function to clone campaign.
+   * @param campaignId campaign id of a particular campaign.
+   * @param data campaign data.
+   */
   cloneCampaign(campaignId, data) {
     this.$subscription.add(
       this.campaignService
@@ -252,6 +261,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function archiveCampaign function to archive campaign.
+   * @param campaignId campaign id of a particular campaign.
+   * @param data campaign data.
+   */
   archiveCampaign(campaignId, data) {
     this.$subscription.add(
       this.campaignService
@@ -304,6 +318,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       }
     );
   }
+
+  /**
+   * @function handleDropdownClick function to handle dropdown.
+   * @param event event object for stop propogation.
+   */
   handleDropdownClick(event) {
     event.stopPropagation();
   }
@@ -342,13 +361,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Campaigns().deserialize(data).records;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
@@ -377,7 +390,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param eventThe The event for sort click action.
    */
   customSort(event: SortEvent): void {
-    const col = this.cols.filter((data) => data.field === event.field)[0];
+    const col = campaignConfig.datatable.cols.filter(
+      (data) => data.field === event.field
+    )[0];
     let field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
@@ -433,6 +448,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
         },
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -467,7 +483,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== campaignConfig.chipValue.all) {
           chip.isSelected = false;
         }
       });
@@ -496,6 +512,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     return campaignConfig;
   }
 
+  /**
+   * @function getStatsCampaignChips function to get stats campaign chips.
+   * @param data campaign stats data.
+   * @returns statsCampaign key object.
+   */
   getStatsCampaignChips(data) {
     return Object.keys(data.statsCampaign);
   }

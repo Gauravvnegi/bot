@@ -21,6 +21,9 @@ export class PersonalizationComponent implements OnInit {
     this.listenForPersonalizationDisable();
   }
 
+  /**
+   * @function listenForPersonalizationDisable TO listen for personalization disable.
+   */
   listenForPersonalizationDisable() {
     this._emailService.$disablePersonalizationPopup[this.name].subscribe(
       (response) => {
@@ -29,11 +32,17 @@ export class PersonalizationComponent implements OnInit {
     );
   }
 
+  /**
+   * @function addPersonalization TO add Personalization.
+   */
   addPersonalization(event, value) {
     event.stopPropagation();
     this.personalization.emit(value);
   }
 
+  /**
+   * @function openPersonalization function to open personalization on the basis of name.
+   */
   openPersonalization(event) {
     event.stopPropagation();
     this.enablePersonalization = !this.enablePersonalization;
@@ -46,6 +55,9 @@ export class PersonalizationComponent implements OnInit {
     return campaignConfig;
   }
 
+  /**
+   * @function ngOnDestroy unsubscribe subscription
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

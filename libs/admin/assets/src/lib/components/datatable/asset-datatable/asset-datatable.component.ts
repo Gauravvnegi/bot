@@ -45,7 +45,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = assetConfig.datatable.limit;
+  rowsPerPage = 5;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: any;
@@ -127,14 +127,16 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.loading_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this.loading = false;
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.loading_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -191,14 +193,15 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.loading_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.loading_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -265,14 +268,16 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.exportCSV_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this.loading = false;
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.exportCSV_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -289,28 +294,30 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     };
     this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.success.asset_status_updated',
-            priorityMessage: 'Status Updated Successfully.',
-          },
-          '',
-          {
-            panelClass: 'success',
-          }
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.asset_status_updated',
+              priorityMessage: 'Status Updated Successfully.',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
         this.changePage(this.currentPage);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarWithTranslate(
-        {
-          translateKey: 'message.error.asset_status_update_fail',
-          priorityMessage: error.message,
-        },
-        ''
-      )
-      .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.asset_status_update_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }
@@ -437,17 +444,18 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   handleCopyToClipboard(event) {
     event.stopPropagation();
-    this._snackbarService.openSnackBarWithTranslate(
-      {
-        translateKey: 'message.success.asset_url',
-        priorityMessage: 'Asset Url Copied.',
-      },
-      '',
-      {
-        panelClass: 'success',
-      }
-    )
-    .subscribe();
+    this._snackbarService
+      .openSnackBarWithTranslate(
+        {
+          translateKey: 'message.success.asset_url',
+          priorityMessage: 'Asset Url Copied.',
+        },
+        '',
+        {
+          panelClass: 'success',
+        }
+      )
+      .subscribe();
   }
 
   /**

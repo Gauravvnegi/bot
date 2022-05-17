@@ -187,7 +187,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     else
       this.values = new StayFeedbackTable().deserialize(
         data,
-        this.outlets
+        this.outlets,
+        this.colorMap
       ).records;
     this.totalRecords = data.total;
     data.entityTypeCounts &&

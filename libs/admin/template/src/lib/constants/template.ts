@@ -1,5 +1,6 @@
 export const templateConfig = {
   datatable: {
+    title: 'Template',
     tabFilterItems: [
       {
         label: 'All',
@@ -75,6 +76,25 @@ export const templateConfig = {
       },
     ],
   },
+
+  topicConfig: {
+    limit: 50,
+    active: 'ACTIVE',
+  },
+
+  rowsPerPage: {
+    datatableLimit: 5,
+    limit: 3,
+  },
+
+  selectedTopic: {
+    all: 'All',
+  },
+
+  importAsset: {
+    limit: 10,
+  },
+
   images: {
     info: { url: 'assets/svg/info.svg', alt: 'Info' },
     download: { url: 'assets/svg/Download.svg', alt: 'Download' },

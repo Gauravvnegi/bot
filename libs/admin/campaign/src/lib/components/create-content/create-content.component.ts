@@ -11,14 +11,23 @@ export class CreateContentComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * @function goBack function to go back on previous page.
+   */
   goBack() {
     this.changeStep.emit({ step: 'previous' });
   }
 
+  /**
+   * @function campaignConfiguration campaign config.
+   */
   get campaignConfiguration() {
     return campaignConfig;
   }
 
+  /**
+   * @function openTemplateList function to open template list.
+   */
   openTemplateList(type) {
     this.changeStep.emit({ step: 'next', templateType: type });
   }

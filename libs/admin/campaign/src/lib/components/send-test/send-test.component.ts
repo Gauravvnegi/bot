@@ -1,8 +1,7 @@
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-send-test',
@@ -15,11 +14,15 @@ export class SendTestComponent implements OnInit {
   isSending = false;
   constructor(
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {}
 
+  /**
+   * @function sendMail function to send campaign email.
+   */
   sendMail() {
     if (this.parentFG.get('testEmails').value.length == 0) {
       this._snackbarService
@@ -39,6 +42,9 @@ export class SendTestComponent implements OnInit {
     this.closeSendTest.emit({ status: true });
   }
 
+  /**
+   * @function close function to close send status on status false.
+   */
   close() {
     this.closeSendTest.emit({ status: false });
   }

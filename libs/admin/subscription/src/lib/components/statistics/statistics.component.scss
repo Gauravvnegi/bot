@@ -116,7 +116,6 @@
   }
 }
 :host ::ng-deep .channels {
-  margin-top: 36px;
   &__container {
     &__image {
       margin: auto;
@@ -156,54 +155,10 @@
 
 :host ::ng-deep .draggable {
   height: 144px;
-  .slick-track {
-    position: absolute;
-    div:focus {
-      border: none;
-      outline: none;
-    }
-  }
 }
 
 :host ::ng-deep .slick-dots {
   display: none !important;
-}
-
-:host ::ng-deep .slick-prev {
-  z-index: 2;
-  &::before {
-    font-size: 28px;
-    background: #00000033;
-    border-radius: 25px;
-    box-shadow: rgb(0 0 0 / 14%) 0px 0px 14px;
-  }
-}
-:host ::ng-deep .slick-next {
-  z-index: 2;
-  &::before {
-    font-size: 28px;
-    background: #00000033;
-    border-radius: 25px;
-    box-shadow: rgb(0 0 0 / 14%) 0px 0px 14px;
-  }
-}
-
-:host ::ng-deep .slick-dotted.slick-slider {
-  margin-bottom: 0;
-}
-
-:host ::ng-deep .slick-prev {
-  left: -7px;
-  top: 40%;
-  height: 29px;
-  width: 28px;
-}
-
-:host ::ng-deep .slick-next {
-  right: -7px;
-  top: 40%;
-  height: 29px;
-  width: 28px;
 }
 
 // tooltip css for all cards in subscription page

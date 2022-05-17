@@ -578,12 +578,9 @@
           <div class="package-date">
             {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
           </div>
-          <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
         </td>
         <td class="comments">{{ rowData.guestData.overAllNps }}</td>
         <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-
-        <!-- status-image-initiated -->
         <td class="status-image">
           <ng-container *ngIf="rowData.notes?.remarks; else addNote">
             <div
@@ -667,10 +664,7 @@
                     <div class="stay-booking-feedback status-opacity-success">
                       <p
                         class="number status-background-success"
-                        [style.background]="
-                          (colorMap?.transactionalFeedbacks)[service.rating]
-                            .colorCode
-                        "
+                        [style.background]="service.colorCode"
                       >
                         {{ service.rating }}
                       </p>

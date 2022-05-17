@@ -135,7 +135,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   subscriptionCheck(data, subscription) {
     switch (data.path) {
-      case 'feedback':
+      case ModuleNames.FEEDBACK:
         return subscription.filter(
           (d) =>
             (ModuleNames[d.name] === data.path && d.active) ||
@@ -146,14 +146,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
           data,
           subscription
         );
-        if (subItemList.length) {
-          return [{ ...data, children: subItemList }];
-        } else return [];
+        return subItemList.length ? [{ ...data, children: subItemList }] : [];
+      case ModuleNames.MARKETING:
+        return this.checkSubscriptionByPath(
+          ModuleNames.MARKETING,
+          subscription
+        );
       case 'library':
-        const librarySubItemList = this.checkLibraryItems(data, subscription);
-        if (librarySubItemList.length)
-          return [{ ...data, children: subItemList }];
-        else return [];
+        const libraryList = this.checkLibraryItems(data, subscription);
+        return libraryList.length ? [{ ...data, children: libraryList }] : [];
       default:
         return subscription.filter(
           (d) => ModuleNames[d.name] == data.path && d.active
@@ -165,13 +166,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const subItemList = [];
     item.children.forEach((child) => {
       if (
-        child.path.includes('request') &&
-        subscription.filter(
-          (d) => ModuleNames[d.name] === 'request' && d.active
-        ).length
-      ) {
+        child.path.includes(ModuleNames.REQUEST) &&
+        this.checkSubscriptionByPath(ModuleNames.REQUEST, subscription).length
+      )
         subItemList.push(child);
-      } else if (!child.path.includes('request')) subItemList.push(child);
+      else if (!child.path.includes(ModuleNames.REQUEST))
+        subItemList.push(child);
     });
     return subItemList;
   }
@@ -179,23 +179,50 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkLibraryItems(item, subscription) {
     const subItemList = [];
     item.children.forEach((child) => {
-      if (
-        child.path.includes('package') &&
-        subscription.filter(
-          (d) => ModuleNames[d.name] === 'package' && d.active
-        ).length
-      ) {
-        subItemList.push(child);
-      } else if (!child.path.includes('package')) subItemList.push(child);
+      switch (child.path) {
+        case 'library/package':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.PACKAGES, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/listing':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/topic':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/template':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+        case 'library/assets':
+          if (
+            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
+              .length ||
+            this.checkSubscriptionByPath(ModuleNames.PACKAGES, subscription)
+              .length
+          )
+            subItemList.push(child);
+          break;
+      }
     });
     return subItemList;
   }
 
-  checkMarketingItems(item, subscription) {
-    const subItemList = [];
-    item.children.forEach((child) => {
-      subItemList.push(child);
-    });
-    return subItemList;
+  checkSubscriptionByPath(path, subscription) {
+    return subscription.filter((d) => ModuleNames[d.name] === path && d.active);
   }
 }

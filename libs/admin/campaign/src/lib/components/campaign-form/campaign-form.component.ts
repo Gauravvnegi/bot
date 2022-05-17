@@ -15,6 +15,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
 import { EmailList } from '../../data-model/email.model';
 import { CampaignService } from '../../services/campaign.service';
@@ -60,6 +61,9 @@ export class CampaignFormComponent implements OnInit {
     this.getFromEmails();
   }
 
+  /**
+   * @function getFromEmail function to get email across particular hotel id.
+   */
   getFromEmails() {
     this.$subscription.add(
       this._emailService.getFromEmail(this.hotelId).subscribe(
@@ -78,10 +82,16 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   * @function goBack function to go back to previous page.
+   */
   goBack() {
     this.save.emit({ close: true });
   }
 
+  /**
+   *@function sendTestCampaign function to send test campaign email.
+   */
   sendTestCampaign() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -132,6 +142,9 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   * @function archiveCampaign function to archive campaign.
+   */
   archiveCampaign() {
     this.$subscription.add(
       this.campaignService
@@ -156,6 +169,9 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   *@function getTemplateMessage function to get message from tempalate.
+   */
   getTemplateMessage(data) {
     let message = data.message;
     if (
@@ -167,14 +183,18 @@ export class CampaignFormComponent implements OnInit {
     return message;
   }
 
+  /**
+   * @function sendMail function to send campaign email.
+   * @returns error on form invalid.
+   */
   sendMail() {
     if (this.campaignFG.invalid) {
       this._snackbarService
-              .openSnackBarWithTranslate({
-                translateKey:'messages.error.fail',
-                priorityMessage: 'Invalid form.',
-              })
-              .subscribe();
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.error.fail',
+          priorityMessage: 'Invalid form.',
+        })
+        .subscribe();
       this.campaignFG.markAllAsTouched();
       return;
     }
@@ -214,17 +234,30 @@ export class CampaignFormComponent implements OnInit {
     );
   }
 
+  /**
+   * @function updateFieldData function to update form field data.
+   * @param event event object for form control.
+   */
   updateFieldData(event, control) {
-    if (event.action == 'add') control.push(new FormControl(event.value));
+    if (event.action == campaignConfig.add)
+      control.push(new FormControl(event.value));
     else control.removeAt(event.value);
   }
 
+  /**
+   * @function enableEmailControl function to enable email control.
+   * @param event event object for stop propogation.
+   * @param controlName campaignFG
+   */
   enableEmailControl(event, controlName: string) {
     event.stopPropagation();
     this.campaignFG.addControl(controlName, new FormArray([]));
     this.disableDropdown();
   }
 
+  /**
+   * @function to function to get 'to' value.
+   */
   get to() {
     return this.campaignFG.get('to') as FormArray;
   }
@@ -240,18 +273,32 @@ export class CampaignFormComponent implements OnInit {
     this.disableDropdown();
   }
 
+  /**
+   * @function disableDropdown function to disable dropdown.
+   */
   disableDropdown() {
     this._emailService.disableDropdowns();
   }
 
+  /**
+   * @function addPersonalization function to add personalization.
+   * @param controlName campaignFG
+   */
   addPersonalization(value, controlName: string) {
     const control = this.campaignFG.get(controlName);
     control.setValue(control.value + value);
   }
 
+  /**
+   * @function openAddContent function to open add-content.
+   */
   openAddContent() {
     this.changeStep.emit({ step: 'next' });
   }
+
+  /**
+   * @function ngOnDestroy unsubscribe subscriiption
+   */
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

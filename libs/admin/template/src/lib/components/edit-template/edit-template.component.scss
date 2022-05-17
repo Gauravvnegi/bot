@@ -7,7 +7,6 @@
   height: 740px;
   &-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     .back {
       display: flex;
@@ -25,6 +24,12 @@
         }
       }
     }
+  }
+  .sent-details {
+    display: flex;
+    align-items: center;
+    margin-left: 38px;
+    opacity: 0.5;
   }
   &-form {
     padding-left: $padding20;
@@ -311,8 +316,8 @@
   font-size: $font16;
   color: $primary-gray;
   min-width: 2% !important;
-  width:8.7%;
-  margin-bottom:19px;
+  width: 8.7%;
+  margin-bottom: 19px;
   @media only screen and (max-width: 1300px) {
     font-size: $font13;
   }
@@ -326,7 +331,7 @@
 
 :host ::ng-deep .form-field {
   display: flex;
-  gap: 30px;
+  gap: 13px;
 }
 .field-topic {
   width: 100%;
@@ -337,5 +342,5 @@
   margin-top: 2%;
 }
 :host ::ng-deep .mat-slide-toggle-label {
-  display:block;
+  display: block;
 }

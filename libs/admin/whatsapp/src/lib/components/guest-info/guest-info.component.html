@@ -51,7 +51,7 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-<div class="guestInfoEditWrapper">
+<div class="guestInfoEditWrapper" *ngIf="!(selectedIndex === 2)">
   <div
     class="guestInfoEditContainer"
     *ngIf="buttonConfig[selectedIndex].button"

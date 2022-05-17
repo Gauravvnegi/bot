@@ -1,7 +1,7 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  min-width: 7vw !important;
+  min-width: 4.5vw !important;
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
@@ -79,4 +79,10 @@
     @include height(63px);
     align-items: center;
   }
+}
+:host ::ng-deep .mat-tab-header {
+  border:none !important;
+}
+:host ::ng-deep .mat-tab-nav-bar, .mat-tab-header {
+  border:none !important;
 }

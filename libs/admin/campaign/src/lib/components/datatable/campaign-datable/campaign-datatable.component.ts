@@ -48,6 +48,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = campaignConfig.rowsPerPage.rows;
+  cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
   hotelId: string;
@@ -395,7 +396,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   exportCSV(): void {
     this.loading = true;
-
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -445,7 +445,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         quickReplyTypeIdx
       ].isSelected;
     }
-
     this.changePage(0);
   }
 

@@ -47,7 +47,7 @@
               [parentForm]="searchFG"
               [name]="'search'"
               [parentSearchVisible]="isGlobalSearchVisible"
-              (parentFilterVisible)="switchVisibility()"
+              (parentFilterVisible)="enableGlobalSearch()"
             ></admin-search-bar>
           </div>
           <div class="filter-range-wrapper">
@@ -55,7 +55,7 @@
               class="date-range temp-width"
               [timezone]="timezone"
               (onDateRangeFilter)="applyDateRangeFilter($event)"
-              (removeVisibility)="noFilterNoSearch()"
+              (removeVisibility)="disableFilter()"
             ></hospitality-bot-daterange>
           </div>
         </div>
@@ -68,7 +68,7 @@
           </div>
           <div class="filter-range-wrapper">
             <div style="position: relative;" class="temp-width">
-              <div (click)="toggleGlobalFilter()" class="header--button">
+              <div (click)="enableGlobalFilter()" class="header--button">
                 <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
               </div>
               <div
@@ -80,7 +80,7 @@
               >
                 <admin-filter
                   [initialFilterValue]="initialFilterValue"
-                  (onCloseFilter)="closeGlobalFilter()"
+                  (onCloseFilter)="isGlobalFilterVisible = false"
                   (onApplyFilter)="applyFilter($event)"
                   (onResetFilter)="resetFilter($event)"
                 ></admin-filter>

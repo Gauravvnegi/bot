@@ -4,10 +4,6 @@
     id="sidebar"
     [style.background-color]="backgroundColor"
   >
-    <!-- <div
-      class="sidebar-background"
-      [style.background-image]="'url(' + background_image + ')'"
-    ></div> -->
     <hospitality-bot-sidenav></hospitality-bot-sidenav>
   </div>
   <div class="main-panel" id="main-panel">
@@ -45,40 +41,14 @@
             : { visibility: 'hidden', height: '0px' }
         "
       >
-        <div class="global_search">
-          <admin-search-bar
-            [parentForm]="searchFG"
-            [name]="'search'"
-            [parentSearchVisible]="isGlobalSearchVisible"
-            (parentFilterVisible)="switchVisibility()"
-          ></admin-search-bar>
-        </div>
-        <div class="filter-range-wrapper">
-          <div style="position: relative;" class="temp-width">
-            <button (click)="toggleGlobalFilter()" class="header--button">
-              <p class="filter-button--text">
-                {{ filterConfig.branchName }}&nbsp;<b
-                  class="layoutFilterContent"
-                  >{{ filterConfig.totalFilterContent() }}
-                </b>
-              </p>
-              <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
-            </button>
-            <div
-              class="filter-wrapper"
-              *ngIf="
-                isGlobalFilterVisible &&
-                (filterService.emitFilterValue$ | async) as initialFilterValue
-              "
-            >
-              <admin-filter
-                [initialFilterValue]="initialFilterValue"
-                (onCloseFilter)="closeGlobalFilter()"
-                (onApplyFilter)="applyFilter($event)"
-                (onResetFilter)="resetFilter($event)"
-              ></admin-filter>
-            </div>
-          </div>
+        <div class="options1">
+          <div class="global_search">
+            <admin-search-bar
+              [parentForm]="searchFG"
+              [name]="'search'"
+              [parentSearchVisible]="isGlobalSearchVisible"
+              (parentFilterVisible)="switchVisibility()"
+            ></admin-search-bar>
           </div>
           <div class="filter-range-wrapper">
             <hospitality-bot-daterange
@@ -88,11 +58,35 @@
               (removeVisibility)="noFilterNoSearch()"
             ></hospitality-bot-daterange>
           </div>
-        <div class="dropdown-wrapper">
-          <admin-profile-dropdown
-            [items]="profile"
-            (onProfileAction)="profileAction($event)"
-          ></admin-profile-dropdown>
+        </div>
+        <div class="options2">
+          <div class="dropdown-wrapper">
+            <admin-profile-dropdown
+              [items]="profile"
+              (onProfileAction)="profileAction($event)"
+            ></admin-profile-dropdown>
+          </div>
+          <div class="filter-range-wrapper">
+            <div style="position: relative;" class="temp-width">
+              <div (click)="toggleGlobalFilter()" class="header--button">
+                <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
+              </div>
+              <div
+                class="filter-wrapper"
+                *ngIf="
+                  isGlobalFilterVisible &&
+                  (filterService.emitFilterValue$ | async) as initialFilterValue
+                "
+              >
+                <admin-filter
+                  [initialFilterValue]="initialFilterValue"
+                  (onCloseFilter)="closeGlobalFilter()"
+                  (onApplyFilter)="applyFilter($event)"
+                  (onResetFilter)="resetFilter($event)"
+                ></admin-filter>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <mat-progress-bar

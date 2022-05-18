@@ -36,14 +36,19 @@
       width: auto;
       margin-left: $margin10;
       &:hover {
+        color: white;
         cursor: pointer;
       }
     }
     .filter {
       font-weight: 400;
       margin: 0;
-      color:white;
+      color: #c5c5c5;
       font-size: $font16;
+      &:hover {
+        color: white;
+        cursor: pointer;
+      }
     }
   }
   &:hover {
@@ -57,6 +62,7 @@
 :host ::ng-deep .mat-tab-group {
   flex-direction: initial;
   position: relative;
+  background-color: white;
 }
 
 :host ::ng-deep .mat-tab-label {
@@ -98,6 +104,7 @@
   border-radius: 25px;
   padding: 12px 0px;
   width: 10vw;
+  margin-bottom: 28px;
   position: absolute;
   bottom: 10px;
   right: 21%;
@@ -132,9 +139,8 @@
 
 :host ::ng-deep .mat-tab-header {
   border-bottom: none;
-  // border-right: 1px solid #c5c5c5;
   border-right: 1px solid $primary-purple;
-  min-height: 86.5vh;
+  min-height: 100vh;
   width: 3rem;
 }
 

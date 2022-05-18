@@ -115,12 +115,12 @@
         background-color: $white;
         border-radius: $borderRadius5;
         position: relative;
-        &:hover {
-          cursor: pointer;
-          background-color: rgba(232, 238, 245, 0.25);
-          color: white;
-          border: 2px solid $primary-purple;
-        }
+        // &:hover {
+        //   cursor: pointer;
+        //   background-color: rgba(232, 238, 245, 0.25);
+        //   color: white;
+        //   border: 2px solid $primary-purple;
+        // }
         &:focus {
           outline: none;
         }
@@ -140,15 +140,16 @@
       }
       .filter-wrapper {
         position: absolute;
-        top: 137%;
-        right: 40%;
-        height: 92vh;
+        top: -1vh;
+        right: 0;
+        height: 100vh;
+        // top:55px;
+        // right: 0;
+        // height: calc(100vh - 55px) !important;
         box-shadow: 0px 0px 3px 0px $primary-purple;
         @include width(24vw);
         background-color: $white;
-        border-radius: $border5;
         z-index: 22;
-        
       }
       .date-range {
         @media screen and (max-width: 800px) {
@@ -264,6 +265,6 @@
 }
 .options2 {
   display: flex;
-    justify-content: flex-end;
-    flex: 2;
+  justify-content: flex-end;
+  flex: 2;
 }

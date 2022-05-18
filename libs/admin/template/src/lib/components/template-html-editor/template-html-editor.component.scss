@@ -8,7 +8,6 @@
 
   &-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     .back {
@@ -37,9 +36,7 @@
 
     .fields {
       display: flex;
-      align-items: center;
       margin-top: 2%;
-      justify-content: space-between;
 
       @media (max-width: $tablet) {
         flex-wrap: wrap;
@@ -131,6 +128,12 @@
       line-height: normal;
       letter-spacing: 0.84px;
       color: #9eaeb8;
+    }
+    .import-assets {
+      display: flex;
+      justify-content: end;
+      gap: 2px;
+      padding-right: 20px;
     }
 
     .image-button {

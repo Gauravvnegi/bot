@@ -136,6 +136,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   onTabChanged(event) {
+    debugger;
     this.selectedIndex = event.index;
   }
 
@@ -146,9 +147,6 @@ export class GuestInfoComponent implements OnInit, OnChanges {
         break;
       case 1:
         this.updateGuestDetails();
-        break;
-      case 2:
-        this.openRaiseRequest();
         break;
     }
   }

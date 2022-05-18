@@ -24,8 +24,8 @@
   "createTemplate": "+Create Template",
 
   "templateForm": {
-    "createTemplate": "Create Template",
-    "editTemplate": "Edit Template"
+    "createTemplate": "Template Name",
+    "editTemplate": "Template Name"
   },
 
   "createContent": {
@@ -39,6 +39,8 @@
   "showMore": "Show More",
 
   "viewTemplate": "View Template",
+
+  "createdOn": "Created on",
 
   "editTemplateButtons": {
     "preview&Save": "Preview and Save",
@@ -73,8 +75,8 @@
       "updateTemplate": "Template Updated successfully",
       "createTemplate": "Template Created successfully",
       "deleteTemplate": "Template Deleted successfully",
-      "urlCopied":"Asset url copied",
-      "noContent":"No template content"
+      "urlCopied": "Asset url copied",
+      "noContent": "No template content"
     },
     "error": {
       "exportCSV": "Failed to export CSV",

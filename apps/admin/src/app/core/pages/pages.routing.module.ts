@@ -6,6 +6,7 @@ import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { LoadGuard } from '../guards/load-guard';
+import { DashboardErrorComponent } from 'libs/admin/shared/src/lib/components/dashboard-error/dashboard-error.component';
 
 const appRoutes: Route[] = [
   {
@@ -87,6 +88,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminMarketingModule
           ),
       },
+      { path: '**', pathMatch: 'full', component: DashboardErrorComponent },
     ],
   },
 ];

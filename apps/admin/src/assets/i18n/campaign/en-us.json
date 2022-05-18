@@ -59,7 +59,7 @@
     "sentOn": "Sent on"
   },
 
-  "sendText": "Send Text",
+  "sendTest": "Send Test",
   "draftedOn": "Drafted on",
   "personlize": "Personalization",
   "cancel": "Cancel",
@@ -69,16 +69,16 @@
       "status_updated": "Status updated",
       "updateTemplate": "Template Updated successfully",
       "createTemplate": "Template Created successfully",
-      "sendTestcampaign":"Campaign sent to test email(s)",
-      "campaignArchived":"Campaign Archived",
-      "campaignSent":"Campiagn Sent successfully",
-      "sendMail":"Please enter an email",
-      "campaignCloned":"Campaign Cloned"
+      "sendTestcampaign": "Campaign sent to test email(s)",
+      "campaignArchived": "Campaign Archived",
+      "campaignSent": "Campiagn Sent successfully",
+      "sendMail": "Please enter an email",
+      "campaignCloned": "Campaign Cloned"
     },
     "error": {
       "exportCSV": "Failed to export CSV",
       "loadData": "Failed to load data",
-      "fail":"Try again."
+      "fail": "Try again."
     }
   }
 }

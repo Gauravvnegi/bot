@@ -48,9 +48,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = campaignConfig.rowsPerPage.rows;
+  cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  hotelId: string;
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -76,13 +77,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
       this.globalQueries = [
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
       this.getHotelId(this.globalQueries);
-      // fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
         {
@@ -114,30 +113,25 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = loading && true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.setRecords(data);
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        }
+        (data) => this.setRecords(data),
+        ({ error }) =>
+          this.showMessage({ ...error, key: 'messages.error.loadData' }),
+        () => (this.loading = false)
       )
     );
   }
 
-  setRecords(data) {
+  /**
+   * @function setRecords To set the datatable records.
+   * @param data Campaign list response data.
+   */
+  setRecords(data): void {
     this.values = new Campaigns().deserialize(data).records;
     this.totalRecords = data.total;
     data.entityTypeCounts &&
       this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
     data.entityStateCounts &&
       this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.loading = false;
   }
 
   /**
@@ -189,38 +183,30 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param campaignId The campaign id for which status update action will be done.
    */
-  updateCampaignStatus(event, campaignId): void {
+  updateCampaignStatus(event, campaignId: string): void {
     let data = {
       active: event.checked,
     };
-    this.campaignService
-      .updateCampaignStatus(this.hotelId, data, campaignId)
-      .subscribe(
-        (response) => {
-          this._snackbarService
-            .openSnackBarWithTranslate(
+    this.loading = true;
+    this.$subscription.add(
+      this.campaignService
+        .updateCampaignStatus(this.hotelId, data, campaignId)
+        .subscribe(
+          (response) => {
+            this.showMessage(
               {
-                translateKey: 'messages.success.status_updated',
-                priorityMessage: 'Status updated successfully',
+                key: 'messages.success.status_updated',
+                message: 'Status updated successfully',
               },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
-          this.changePage(this.currentPage);
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        }
-      );
+              'success'
+            );
+            this.changePage(this.currentPage);
+          },
+          ({ error }) =>
+            this.showMessage({ ...error, key: 'messages.error.loadData' }),
+          () => (this.loading = false)
+        )
+    );
   }
 
   /**
@@ -228,35 +214,24 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param campaignId campaign id of a particular campaign.
    * @param data campaign data.
    */
-  cloneCampaign(campaignId, data) {
+  cloneCampaign(campaignId, data): void {
+    this.loading = true;
     this.$subscription.add(
       this.campaignService
         .cloneCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.success.campaignCloned',
-                  priorityMessage: 'Campaign Cloned',
-                },
-                '',
-                {
-                  panelClass: 'success',
-                }
-              )
-              .subscribe();
+            this.showMessage(
+              {
+                key: 'messages.success.campaignCloned',
+                message: 'Campaign Cloned',
+              },
+              'success'
+            );
             this.changePage(this.currentPage);
           },
-          ({ error }) => {
-            this.loading = false;
-            this._snackbarService
-              .openSnackBarWithTranslate({
-                translateKey: '',
-                priorityMessage: error.message,
-              })
-              .subscribe();
-          }
+          ({ error }) => this.showMessage(error),
+          () => (this.loading = false)
         )
     );
   }
@@ -266,35 +241,24 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param campaignId campaign id of a particular campaign.
    * @param data campaign data.
    */
-  archiveCampaign(campaignId, data) {
+  archiveCampaign(campaignId, data): void {
+    this.loading = true;
     this.$subscription.add(
       this.campaignService
         .archiveCampaign(this.hotelId, data, campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.success.campaignArchived',
-                  priorityMessage: 'Campaign Archived',
-                },
-                '',
-                {
-                  panelClass: 'success',
-                }
-              )
-              .subscribe();
+            this.showMessage(
+              {
+                key: 'messages.success.campaignArchived',
+                message: 'Campaign Archived.',
+              },
+              'success'
+            );
             this.changePage(this.currentPage);
           },
-          ({ error }) => {
-            this.loading = false;
-            this._snackbarService
-              .openSnackBarWithTranslate({
-                translateKey: '',
-                priorityMessage: error.message,
-              })
-              .subscribe();
-          }
+          ({ error }) => this.showMessage({ ...error, key: '' }),
+          () => (this.loading = false)
         )
     );
   }
@@ -302,7 +266,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   /**
    * @function openCreateCampaign to create campaign page.
    */
-  openCreateCampaign() {
+  openCreateCampaign(): void {
     this._router.navigate(['create'], { relativeTo: this.route });
   }
 
@@ -323,7 +287,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function handleDropdownClick function to handle dropdown.
    * @param event event object for stop propogation.
    */
-  handleDropdownClick(event) {
+  handleDropdownClick(event): void {
     event.stopPropagation();
   }
 
@@ -360,18 +324,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           limit: this.rowsPerPage,
         }
       ).subscribe(
-        (data) => {
-          this.setRecords(data);
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: '',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        }
+        (data) => this.setRecords(data),
+        ({ error }) => this.showMessage({ ...error, key: '' }),
+        () => (this.loading = false)
       )
     );
   }
@@ -441,7 +396,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   exportCSV(): void {
     this.loading = true;
-
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
@@ -454,22 +408,14 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this.campaignService.exportCSV(this.hotelId, config).subscribe(
-        (response) => {
+        (response) =>
           FileSaver.saveAs(
             response,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this._snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.exportCSV',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        }
+          ),
+        ({ error }) =>
+          this.showMessage({ ...error, key: 'messages.error.exportCSV' }),
+        () => (this.loading = false)
       )
     );
   }
@@ -483,9 +429,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     //toggle isSelected
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== campaignConfig.chipValue.all) {
+        if (chip.value !== campaignConfig.chipValue.all)
           chip.isSelected = false;
-        }
       });
       this.tabFilterItems[this.tabFilterIdx].chips[
         quickReplyTypeIdx
@@ -500,7 +445,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         quickReplyTypeIdx
       ].isSelected;
     }
-
     this.changePage(0);
   }
 
@@ -517,8 +461,25 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param data campaign stats data.
    * @returns statsCampaign key object.
    */
-  getStatsCampaignChips(data) {
+  getStatsCampaignChips(data): string[] {
     return Object.keys(data.statsCampaign);
+  }
+
+  /**
+   * @function showMessage To show the translated message.
+   * @param messageObj The message object.
+   */
+  showMessage(messageObj, panelClass = 'danger'): void {
+    this._snackbarService
+      .openSnackBarWithTranslate(
+        {
+          translateKey: messageObj.key,
+          priorityMessage: messageObj.message,
+        },
+        '',
+        { panelClass }
+      )
+      .subscribe();
   }
 
   /**

@@ -21,12 +21,12 @@ import { TranslateService } from '@ngx-translate/core';
 export class TemplateHtmlEditorComponent implements OnInit {
   id: string;
   @Input() templateForm: FormGroup;
-  @Input() template: Template;
   @Input() isDisabled = false;
   @Input() openEditor = false;
   @Input() templateId: string;
   @Output() goBack = new EventEmitter();
   @Output() saveTemplate = new EventEmitter();
+  template: Template;
   hotelId: string;
   globalQueries = [];
   topicList = [];

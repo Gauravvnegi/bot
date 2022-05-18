@@ -25,9 +25,9 @@ export class FirebaseMessagingService {
     private _snackbarService: SnackBarService,
     private _modalService: ModalService
   ) {
-    this.fireMessaging.tokenChanges.subscribe((response) => {
-      console.log('Token Refreshed');
-    });
+    this.fireMessaging.tokenChanges.subscribe((response) =>
+      console.log('Messaging token Refreshed')
+    );
   }
 
   //#region Private Methods
@@ -35,28 +35,23 @@ export class FirebaseMessagingService {
     this.subscription.add(
       this.fireMessaging.requestToken.subscribe(
         (token) => {
-          if (token) {
+          if (token)
             this.messageTabService
               .registerFirebaseMessage(config, {
                 token: token,
                 type: 'web',
               })
               .subscribe(
-                (response) => {
-                  console.log('Token stored on server');
-                },
-                ({ err }) => {
+                (response) => console.log('Token stored on server'),
+                ({ error }) =>
                   console.error(
                     'Unable to store token on server ==> ',
-                    err.message
-                  );
-                }
+                    error.message
+                  )
               );
-          } else this.openNotificationAlert();
+          else this.openNotificationAlert();
         },
-        (err) => {
-          console.error('Unable to get permission to notify.', err);
-        }
+        (error) => console.error('Unable to get permission to notify.', error)
       )
     );
   }
@@ -101,7 +96,6 @@ export class FirebaseMessagingService {
     let sound = new Howl({
       src: ['assets/audio/notification.mp3'],
     });
-
     sound.play();
   }
   //#endregion Public Methods

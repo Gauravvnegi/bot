@@ -1,10 +1,11 @@
 import { get, set } from 'lodash';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 export interface Deserializable {
   deserialize(input: any): this;
 }
 
-export class Templates {
+export class Templates implements Deserializable {
   records: ITemplate[];
   deserialize(input) {
     this.records = new Array<ITemplate>();
@@ -15,7 +16,7 @@ export class Templates {
   }
 }
 
-export class Template {
+export class Template implements Deserializable {
   id: string;
   status: boolean;
   description: string;
@@ -27,7 +28,9 @@ export class Template {
   htmlTemplate: string;
   templates: Template;
   isShared: boolean;
-  topicName:string;
+  topicName: string;
+  updatedAt: number;
+  createdAt: number;
 
   deserialize(input: any) {
     Object.assign(
@@ -43,9 +46,17 @@ export class Template {
       set({}, 'templateType', get(input, ['templateType'])),
       set({}, 'htmlTemplate', get(input, ['htmlTemplate'])),
       set({}, 'isShared', get(input, ['isShared'])),
-      set({}, 'template', new Templates().deserialize(input.template).records)
+      set({}, 'template', new Templates().deserialize(input.template).records),
+      set({}, 'updatedAt', get(input, ['updatedAt'])),
+      set({}, 'createdAt', get(input, ['createdAt']))
     );
     return this;
+  }
+  getDraftDate(timezone = '+05:30', format = 'DD/M/YY') {
+    if (this.updatedAt) {
+      return DateService.getDateFromTimeStamp(this.updatedAt, format, timezone);
+    }
+    return DateService.getDateFromTimeStamp(this.createdAt, format, timezone);
   }
 }
 export class Topics {

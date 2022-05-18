@@ -4,7 +4,7 @@
       <mat-icon class="material-icons" matSuffix (click)="goBack()"
         >keyboard_backspace</mat-icon
       >
-      <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p>
+      <!-- <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p> -->
       <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
         <mat-form-field class="description">
           <input matInput formControlName="name" placeholder="Enter Name" />
@@ -25,7 +25,7 @@
       <div class="icon"></div>
       <div class="dropdown">
         <div class="dropdown__item" (click)="sendTestCampaign()">
-          {{ 'sendText' | translate }}
+          {{ 'sendTest' | translate }}
         </div>
         <div
           class="dropdown__item"

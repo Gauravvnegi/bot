@@ -227,7 +227,7 @@ export class EditPackageComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate([
-            '/pages/package/edit',
+            '/pages/library/package/edit',
             this.hotelPackage.amenityPackage.id,
           ]);
           this.isSavingPackage = false;
@@ -241,6 +241,7 @@ export class EditPackageComponent implements OnInit {
   }
 
   redirectToPackages() {
+    debugger;
     this.router.navigate(['/pages/library/package']);
   }
 

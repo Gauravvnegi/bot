@@ -28,6 +28,7 @@ import { TemplateEditorComponent } from './components/template-editor/template-e
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { EmailChipListComponent } from './components/email-chip-list/email-chip-list.component';
+import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { EmailChipListComponent } from './components/email-chip-list/email-chip-
     TemplateEditorComponent,
     SafeHtmlPipe,
     EmailChipListComponent,
+    DashboardErrorComponent,
   ],
   exports: [
     DatatableComponent,

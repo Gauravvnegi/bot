@@ -38,33 +38,38 @@
 }
 
 .mr-10 {
-  width: 500px;
   display: flex;
-  .guestInfoEditWrapper {
+  .req_button {
     display: flex;
-    justify-content: center;
+    gap: 20px;
     align-items: center;
 
-    .guestInfoEditContainer {
-      width: 138px;
-      height: 36px;
-      background: $button-blue 0% 0% no-repeat padding-box;
-      border: 1px solid #e1e1f2;
-      border-radius: 100px;
-      opacity: 1;
+    .guestInfoEditWrapper {
       display: flex;
-      align-items: center;
       justify-content: center;
-      cursor: pointer;
-      img {
-        filter: brightness(0) invert(1);
-      }
-
-      .guestInfoEditText {
-        font: normal normal normal 11px/15px Roboto;
-        letter-spacing: 0.66px;
-        color: $white;
+      align-items: center;
+      padding-right: 33px;
+      .guestInfoEditContainer {
+        width: 138px;
+        height: 36px;
+        background: $button-blue 0% 0% no-repeat padding-box;
+        border: 1px solid #e1e1f2;
+        border-radius: 100px;
         opacity: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        img {
+          filter: brightness(0) invert(1);
+        }
+
+        .guestInfoEditText {
+          font: normal normal normal 11px/15px Roboto;
+          letter-spacing: 0.66px;
+          color: $white;
+          opacity: 1;
+        }
       }
     }
   }

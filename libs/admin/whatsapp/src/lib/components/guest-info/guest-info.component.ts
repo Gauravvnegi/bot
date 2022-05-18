@@ -136,7 +136,6 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   onTabChanged(event) {
-    debugger;
     this.selectedIndex = event.index;
   }
 

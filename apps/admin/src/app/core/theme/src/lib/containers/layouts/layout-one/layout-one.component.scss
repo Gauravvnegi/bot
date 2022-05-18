@@ -105,9 +105,7 @@
 
       .header--button {
         padding: 0px $padding10;
-        // @include width(100%);
         @include height(42px);
-        // border: 2px solid $light-grey;
         border: none;
         font-size: 12px;
         color: $primary-purple;
@@ -115,12 +113,9 @@
         background-color: $white;
         border-radius: $borderRadius5;
         position: relative;
-        // &:hover {
-        //   cursor: pointer;
-        //   background-color: rgba(232, 238, 245, 0.25);
-        //   color: white;
-        //   border: 2px solid $primary-purple;
-        // }
+        &:hover {
+          cursor: pointer;
+        }
         &:focus {
           outline: none;
         }
@@ -143,11 +138,8 @@
         top: -1vh;
         right: 0;
         height: 100vh;
-        // top:55px;
-        // right: 0;
-        // height: calc(100vh - 55px) !important;
         box-shadow: 0px 0px 3px 0px $primary-purple;
-        @include width(24vw);
+        @include width(299px);
         background-color: $white;
         z-index: 22;
       }

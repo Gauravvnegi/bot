@@ -225,10 +225,15 @@ export class PerformanceNPS {
     this.performances = new Array<Touchpoint>();
     Object.assign(this, set({}, 'label', get(input, ['label'])));
 
-    input.npsPerformace.forEach((data) => this.performances.push({ ...data }));
-    // input.npsPerformace.sort(function (a, b) {
-    //   return b.score - a.score;
-    // });
+    input.npsPerformace.forEach((data) => {
+      this.performances.push({
+        ...data,
+        colorCode: data.score > 0 ? '#1AB99F' : '#EF1D45',
+      });
+    });
+    input.npsPerformace.sort(function (a, b) {
+      return b.score - a.score;
+    });
     return this;
   }
 }

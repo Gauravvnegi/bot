@@ -111,9 +111,10 @@
   border-bottom: 1px solid $tab-bottom-border;
 }
 
-:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-purple !important;
 }
 
-
-
+:host ::ng-deep .stat-body-container {
+  overflow-y: auto;
+}

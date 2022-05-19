@@ -241,7 +241,6 @@ export class EditPackageComponent implements OnInit {
   }
 
   redirectToPackages() {
-    debugger;
     this.router.navigate(['/pages/library/package']);
   }
 

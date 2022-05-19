@@ -31,17 +31,11 @@ export class TopLowNpsComponent implements OnInit {
 
   ngOnInit(): void {
     this.tabFilterItems =
-      this.globalFeedbackFilterType === feedback.types.transactional
-        ? feedback.tabFilterItems.topLowNPS.transactional
-        : feedback.tabFilterItems.topLowNPS.stay;
+      this.globalFeedbackFilterType === feedback.types.stay ||
+      this.globalFeedbackFilterType === feedback.types.both
+        ? feedback.tabFilterItems.topLowNPS.stay
+        : feedback.tabFilterItems.topLowNPS.transactional;
     this.registerListeners();
-  }
-  
-  ngOnChanges() {
-    this.tabFilterItems =
-      this.globalFeedbackFilterType === feedback.types.transactional
-        ? feedback.tabFilterItems.topLowNPS.transactional
-        : feedback.tabFilterItems.topLowNPS.stay;
   }
 
   registerListeners(): void {
@@ -61,9 +55,19 @@ export class TopLowNpsComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.globalFeedbackFilterType =
-          data['filter'].value.feedback.feedbackType;
-        this.tabfeedbackType = this.globalFeedbackFilterType;
+        if (
+          this.globalFeedbackFilterType !=
+          data['filter'].value.feedback.feedbackType
+        ) {
+          this.globalFeedbackFilterType =
+            data['filter'].value.feedback.feedbackType;
+          this.tabfeedbackType = undefined;
+          this.tabFilterItems =
+            this.globalFeedbackFilterType === feedback.types.stay ||
+            this.globalFeedbackFilterType === feedback.types.both
+              ? feedback.tabFilterItems.topLowNPS.stay
+              : feedback.tabFilterItems.topLowNPS.transactional;
+        }
         this.setEntityId(data['filter'].value.feedback.feedbackType);
       })
     );
@@ -159,12 +163,12 @@ export class TopLowNpsComponent implements OnInit {
 
   getFeedbackType() {
     if (this.tabfeedbackType === undefined) {
-      return this.globalFeedbackFilterType === feedback.types.both
-        ? ''
+      return this.globalFeedbackFilterType === this.feedbackConfig.types.both
+        ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === feedback.types.both
-      ? ''
+    return this.tabfeedbackType === this.feedbackConfig.types.both
+      ? feedback.types.transactional
       : this.tabfeedbackType;
   }
 

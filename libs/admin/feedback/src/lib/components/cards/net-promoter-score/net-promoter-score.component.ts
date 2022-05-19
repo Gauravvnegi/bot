@@ -50,6 +50,7 @@ export class NetPromoterScoreComponent implements OnInit {
   chart: BarChart = {
     data: [
       {
+        fill: false,
         data: [''],
         label: 'Overall NPS',
       },
@@ -60,6 +61,12 @@ export class NetPromoterScoreComponent implements OnInit {
     legend: false,
     type: chartConfig.type.line,
   };
+
+  public barColor: any[] = [
+    {
+      backgroundColor: [],
+    },
+  ];
 
   constructor(
     protected fb: FormBuilder,
@@ -178,6 +185,11 @@ export class NetPromoterScoreComponent implements OnInit {
             : null
         )
       );
+      if (this.npsChartData.npsGraph[d] >= 0) {
+        this.barColor[0].backgroundColor.push('#0C8054');
+      } else {
+        this.barColor[0].backgroundColor.push('#FF0000');
+      }
       this.chart.data[0].data.push(this.npsChartData.npsGraph[d]);
     });
   }

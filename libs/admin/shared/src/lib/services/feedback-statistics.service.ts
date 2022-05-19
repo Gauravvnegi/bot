@@ -75,10 +75,6 @@ export class StatisticsService extends ApiService {
     return this.get(`/api/v1/feedback-stats/shared${config.queryObj}`);
   }
 
-  getPOSStats(config): Observable<any> {
-    return this.get(`/api/v1/feedback-stats/npos${config.queryObj}`);
-  }
-
   getBifurcationStats(config): Observable<any> {
     return this.get(`/api/v1/feedback-stats/bifurcations${config.queryObj}`);
   }

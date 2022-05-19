@@ -365,9 +365,9 @@ export const feedback = {
           isSelected: true,
         },
         {
-          label: 'Experience',
+          label: 'Department',
           icon: '',
-          value: 'EXPERIENCE',
+          value: 'DEPARTMENT',
           total: 0,
           isSelected: false,
         },

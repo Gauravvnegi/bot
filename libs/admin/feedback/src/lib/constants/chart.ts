@@ -106,13 +106,13 @@ export const chartConfig = {
   colors: {
     distribution: [
       {
-        backgroundColor: ['#D5D1D1'],
+        // backgroundColor: ['#D5D1D1'],
         borderColor: ['#D5D1D1'],
       },
     ],
     shared: [
       {
-        backgroundColor: ['#D5D1D1'],
+        // backgroundColor: ['#D5D1D1'],
         borderColor: ['#D5D1D1'],
       },
     ],

@@ -107,7 +107,6 @@ export class PointOfSaleComponent implements OnInit {
         )
           this.setTabFilterItems(this.branchId, this.chips);
         this.setEntityId();
-        this.getStats();
       })
     );
   }
@@ -158,7 +157,6 @@ export class PointOfSaleComponent implements OnInit {
     this._statisticService.$outletChange.subscribe((response) => {
       if (response) {
         this.setTabFilterItems(this.branchId, []);
-        this.getStats();
       }
     });
   }
@@ -173,37 +171,6 @@ export class PointOfSaleComponent implements OnInit {
       .map((item) => ({
         entityState: item.value,
       }));
-  }
-
-  /**
-   * @function getStats To get POS data fro the api.
-   */
-  getStats() {
-    const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(
-        this.tabFilterItems.length
-          ? [
-              ...this.globalQueries,
-              {
-                entityIds: [this.tabFilterItems[this.tabFilterIdx].value],
-                graphType: this.chartType === 'bar' ? 'vertical' : '',
-                feedbackType: this.globalFeedbackConfig.types.transactional,
-              },
-              ...this.getSelectedQuickReplyFilters(),
-            ]
-          : this.globalQueries
-      ),
-    };
-    this.$subscription.add(
-      this._statisticService.getPOSStats(config).subscribe((response) => {
-        if (this.chartType === 'bar') {
-          this.stats = new NPOSVertical().deserialize(response);
-          this.setProgresses(this.stats);
-        } else this.stats = new NPOS().deserialize(response);
-        if (this.tabFilterItems.length === 0 || this.chips.length === 0)
-          this.addChipsToFilters();
-      })
-    );
   }
 
   /**
@@ -286,7 +253,6 @@ export class PointOfSaleComponent implements OnInit {
     this.tabFilterIdx = event.index;
     this.tabFilterItems[this.tabFilterIdx].chips = [];
     this.chips = [];
-    this.getStats();
   }
 
   /**
@@ -315,7 +281,6 @@ export class PointOfSaleComponent implements OnInit {
       ].isSelected;
     }
     this.updateQuickReplyActionFilters();
-    this.getStats();
   }
 
   /**
@@ -377,7 +342,6 @@ export class PointOfSaleComponent implements OnInit {
    */
   setChartType(chartType: string): void {
     this.chartType = chartType;
-    this.getStats();
   }
 
   get quickReplyActionFilters(): FormControl {

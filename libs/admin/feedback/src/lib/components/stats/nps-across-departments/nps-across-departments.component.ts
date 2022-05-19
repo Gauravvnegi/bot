@@ -114,9 +114,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
         if (response.status != this.tabfeedbackType) {
           this.tabFilterItems = [];
           this.tabFilterIdx = 0;
+          this.tabfeedbackType = response.type;
           this.getNPSDepartments();
         } else {
-          this.tabfeedbackType = response.type;
           this.getNPSChartData();
         }
       }

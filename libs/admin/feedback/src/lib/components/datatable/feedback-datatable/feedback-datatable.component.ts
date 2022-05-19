@@ -105,7 +105,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.configService.$config.subscribe((response) => {
         if (response) this.colorMap = response?.feedbackColorMap;
-        console.log(this.colorMap);
       })
     );
   }

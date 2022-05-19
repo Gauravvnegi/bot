@@ -12,7 +12,6 @@ const appRoutes: Route[] = [
   { path: '', component: TemplateDatatableComponent },
   { path: 'create', component: EditTemplateComponent },
   { path: 'edit/:id', component: EditTemplateComponent },
-  
 ];
 
 @NgModule({

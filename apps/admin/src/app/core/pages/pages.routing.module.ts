@@ -6,6 +6,7 @@ import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { LoadGuard } from '../guards/load-guard';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
   {
@@ -13,7 +14,6 @@ const appRoutes: Route[] = [
     component: PagesComponent,
     resolve: {
       adminDetails: AdminDetailResolver,
-      // feedbackConfig: FeedbackConfigResolver,
     },
     children: [
       {
@@ -87,6 +87,8 @@ const appRoutes: Route[] = [
             (m) => m.AdminMarketingModule
           ),
       },
+      { path: '**', redirectTo: '404' },
+      { path: '404', component: DashboardErrorComponent },
     ],
   },
 ];

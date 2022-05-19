@@ -147,7 +147,7 @@ export class EditCategoryComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate([
-            '/pages/package/category',
+            '/pages/library/package/category',
             this.hotelCategory.category.id,
           ]);
           this.isSavingCategory = false;
@@ -186,7 +186,7 @@ export class EditCategoryComponent implements OnInit {
               { panelClass: 'success' }
             );
             this.router.navigate([
-              '/pages/package/category',
+              '/pages/library/package/category',
               this.hotelCategory.category.id,
             ]);
             this.isSavingCategory = false;
@@ -227,7 +227,7 @@ export class EditCategoryComponent implements OnInit {
   }
 
   redirectToCategories() {
-    this.router.navigate(['/pages/package/']);
+    this.router.navigate(['/pages/library/package/']);
   }
 
   private performActionIfNotValid(status: any[]): any[] {

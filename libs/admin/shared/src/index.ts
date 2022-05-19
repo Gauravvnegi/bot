@@ -12,3 +12,4 @@ export * from './lib/services/validator-service';
 export * from './lib/types/chart.type';
 export * from './lib/configs/translate';
 export * from './lib/services/config.service';
+export * from './lib/components/dashboard-error/dashboard-error.component';

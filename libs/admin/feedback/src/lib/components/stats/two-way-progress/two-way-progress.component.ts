@@ -49,7 +49,7 @@ export class TwoWayProgressComponent implements OnInit {
       feedback.defaultColor;
     if (this.settings.neutral === largest) {
       this.settings.score >= 0
-        ? (positiveCanvasContext.strokeStyle = feedback.neutralColor)
+        ? (positiveCanvasContext.strokeStyle = feedback.positiveColor)
         : (negativeCanvasContext.strokeStyle = feedback.negativeColor);
     } else if (this.settings.positive === largest) {
       this.settings.score >= 0

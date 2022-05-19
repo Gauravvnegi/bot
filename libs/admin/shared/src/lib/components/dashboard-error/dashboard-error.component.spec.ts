@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PointOfSaleComponent } from './point-of-sale.component';
+import { DashboardErrorComponent } from './dashboard-error.component';
 
-describe('PointOfSaleComponent', () => {
-  let component: PointOfSaleComponent;
-  let fixture: ComponentFixture<PointOfSaleComponent>;
+describe('DashboardErrorComponent', () => {
+  let component: DashboardErrorComponent;
+  let fixture: ComponentFixture<DashboardErrorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointOfSaleComponent ]
+      declarations: [ DashboardErrorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PointOfSaleComponent);
+    fixture = TestBed.createComponent(DashboardErrorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

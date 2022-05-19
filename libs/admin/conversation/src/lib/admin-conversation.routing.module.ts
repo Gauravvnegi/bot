@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
 import { ConversationComponent } from './components/conversation/conversation.component';
 
 const appRoutes: Route[] = [
@@ -31,6 +32,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule
           ),
+        canActivate: [LoadGuard],
       },
     ],
   },

@@ -18,6 +18,7 @@ import { FeedbackDatatableComponent } from './components/datatable/feedback-data
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
+import { DepartmentBarGraphComponent } from './components/cards/department-bar-graph/department-bar-graph.component';
 
 const appRoutes: Route[] = [
   {
@@ -48,5 +49,6 @@ export class AdminFeedbackRoutingModule {
     PointOfSaleComponent,
     StackedBarGraphComponent,
     GtmAcrossServicesComponent,
+    DepartmentBarGraphComponent,
   ];
 }

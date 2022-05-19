@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import {
@@ -31,6 +31,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   globalQueries = [];
   selectedInterval: string;
   loading: boolean = false;
+  tabFilterItems = [];
+  tabFilterIdx = 0;
+  tabfeedbackType;
+  chartTypes = [feedback.chartType.bar, feedback.chartType.line];
 
   documentActionTypes = [
     {
@@ -57,6 +61,13 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    if (
+      this.globalFeedbackFilterType ===
+        this.feedbackConfig.types.transactional ||
+      this.globalFeedbackFilterType === this.feedbackConfig.types.both
+    ) {
+      this.listenForOutletChanged();
+    }
   }
 
   listenForGlobalFilters() {
@@ -75,21 +86,59 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.setEntityId();
-        this.getNPSChartData();
+        if (
+          this.globalFeedbackFilterType !=
+          data['filter'].value.feedback.feedbackType
+        ) {
+          this.globalFeedbackFilterType =
+            data['filter'].value.feedback.feedbackType;
+          this.tabFilterItems = [];
+          this.tabFilterIdx = 0;
+          this.tabfeedbackType = undefined;
+        }
+        this.setEntityId(data['filter'].value.feedback.feedbackType);
+        if (this.tabFilterItems.length == 0) this.getNPSDepartments();
+        else this.getNPSChartData();
       })
     );
   }
 
-  setEntityId() {
-    this.globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.globalQueries = [
-          ...this.globalQueries,
-          { entityIds: element.hotelId },
-        ];
+  listenForOutletChanged() {
+    this._statisticService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.globalQueries.forEach((element) => {
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this._statisticService.outletIds;
+          }
+        });
+        if (response.status != this.tabfeedbackType) {
+          this.tabFilterItems = [];
+          this.tabFilterIdx = 0;
+          this.getNPSDepartments();
+        } else {
+          this.tabfeedbackType = response.type;
+          this.getNPSChartData();
+        }
       }
     });
+  }
+
+  setEntityId(feedbackType) {
+    if (feedbackType === feedback.types.transactional)
+      this.globalQueries = [
+        ...this.globalQueries,
+        { entityIds: this._statisticService.outletIds },
+      ];
+    else {
+      this.globalQueries.forEach((element) => {
+        if (element.hasOwnProperty('hotelId')) {
+          this.globalQueries = [
+            ...this.globalQueries,
+            { entityIds: element.hotelId },
+          ];
+        }
+      });
+    }
   }
 
   /**
@@ -99,7 +148,167 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     this.npsFG = this.fb.group({
       documentType: ['csv'],
       documentActionType: ['Export All'],
+      quickReplyActionFilters: [[]],
+      npsChartType: ['bar'],
     });
+  }
+
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+    this.getNPSChartData();
+  }
+
+  getNPSDepartments() {
+    this.loading = true;
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          feedbackType: this.getFeedbackType(),
+          department: 'TEST',
+          order: sharedConfig.defaultOrder,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this._statisticService.getDepartmentsStatistics(config).subscribe(
+        (response) =>
+          this.setTabFilterItems(response).then((res) => {
+            this.getNPSChartData();
+          }),
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            })
+            .subscribe(),
+        () => (this.loading = false)
+      )
+    );
+  }
+
+  setTabFilterItems(data) {
+    return new Promise((resolve) => {
+      Object.keys(data.departments).forEach((departmentKey: string, i) => {
+        this.tabFilterItems.push({
+          label: data.departments[departmentKey],
+          value: departmentKey,
+          content: '',
+          disabled: false,
+          total: 0,
+          lastPage: 0,
+          chips: [
+            {
+              label: 'All',
+              icon: '',
+              value: 'ALL',
+              total: 0,
+              isSelected: true,
+              type: '',
+            },
+          ],
+        });
+      });
+      resolve(null);
+    });
+  }
+
+  createChipsForDepartment(data) {
+    return new Promise((resolve) => {
+      const chips = [
+        {
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+          type: '',
+        },
+      ];
+      Object.keys(data.services).forEach((serviceKey) => {
+        chips.push({
+          label: data.services[serviceKey],
+          icon: '',
+          value: serviceKey,
+          total: 0,
+          isSelected: false,
+          type: 'initiated',
+        });
+      });
+      resolve(chips);
+    });
+  }
+
+  isQuickReplyFilterSelected(quickReplyFilter): boolean {
+    return true;
+  }
+
+  /**
+   * @function toggleQuickReplyFilter To handle the chip click for a tab.
+   * @param quickReplyTypeIdx The chip index.
+   * @param quickReplyType The chip type.
+   */
+  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
+    if (quickReplyTypeIdx == 0) {
+      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+        if (chip.value !== 'ALL') {
+          chip.isSelected = false;
+        }
+      });
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
+      this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
+        quickReplyTypeIdx
+      ].isSelected;
+    }
+    this.updateQuickReplyActionFilters();
+  }
+
+  /**
+   * @function updateQuickReplyActionFilters To set the selected chip values to the form.
+   */
+  updateQuickReplyActionFilters(): void {
+    let value = [];
+    this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((chip) => chip.isSelected)
+      .forEach((d) => {
+        value.push(d.value);
+      });
+    this.quickReplyActionFilters.patchValue(value);
+    this.getNPSChartData();
+  }
+
+  /**
+   * @function getSelectedQuickReplyFilters To get the selected chip list.
+   * @returns The quick reply filter array.
+   */
+  getSelectedQuickReplyFilters() {
+    if (this.npsFG.get('npsChartType').value == feedback.chartType.bar.value)
+      return this.tabFilterItems.length
+        ? this.tabFilterItems[this.tabFilterIdx].chips
+            .filter((item) => item.isSelected == true)
+            .map((item) => ({
+              services: item.value,
+            }))
+        : '';
+    return [{ services: 'ALL' }];
+  }
+
+  /**
+   * @function setChartType The function to set chart type and refresh data.
+   * @param value The chart type value.
+   */
+  setChartType(value: string) {
+    this.npsFG.patchValue({ npsChartType: value });
+    this.getNPSChartData();
   }
 
   /**
@@ -110,7 +319,12 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { feedbackType: this.feedbackConfig.types.stay },
+        {
+          feedbackType: this.getFeedbackType(),
+          order: sharedConfig.defaultOrder,
+          department: this.tabFilterItems[this.tabFilterIdx].value,
+        },
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
     this.$subscription.add(
@@ -119,10 +333,15 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
           this.npsChartData = new NPSDepartments().deserialize(
             response.npsStats
           );
-          this.loading = false;
+          if (
+            this.tabFilterItems[this.tabFilterIdx].chips.length == 1 &&
+            this.npsFG.get('npsChartType').value == feedback.chartType.bar.value
+          )
+            this.createChipsForDepartment(response).then((res) => {
+              this.tabFilterItems[this.tabFilterIdx].chips = res;
+            });
         },
-        ({ error }) => {
-          this.loading = false;
+        ({ error }) =>
           this._snackbarService
             .openSnackBarWithTranslate(
               {
@@ -131,8 +350,8 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
               },
               ''
             )
-            .subscribe();
-        }
+            .subscribe(),
+        () => (this.loading = false)
       )
     );
   }
@@ -145,8 +364,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
+          feedbackType: this.getFeedbackType(),
           order: sharedConfig.defaultOrder,
-          feedbackType: this._statisticService.type,
+          department: this.tabFilterItems[this.tabFilterIdx].value,
         },
       ]),
     };
@@ -170,6 +390,24 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
             .subscribe()
       )
     );
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === this.feedbackConfig.types.both
+        ? feedback.types.stay
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === this.feedbackConfig.types.both
+      ? feedback.types.transactional
+      : this.tabfeedbackType;
+  }
+
+  /**
+   * @function quickReplyActionFilters To get the quickReplyActionFilters control.
+   */
+  get quickReplyActionFilters(): FormControl {
+    return this.npsFG.get('quickReplyActionFilters') as FormControl;
   }
 
   ngOnDestroy(): void {

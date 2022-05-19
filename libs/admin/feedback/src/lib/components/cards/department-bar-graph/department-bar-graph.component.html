@@ -1,0 +1,106 @@
+<div class="progress_data_wrapper">
+  <div class="progress_data_wrapper__graph_pointer_wrapper">
+    <div class="pointer" *ngFor="let percent of feedbackConfig.percentValues">
+      <p class="label">{{ percent }}</p>
+      <p class="bar">-</p>
+    </div>
+  </div>
+
+  <div class="progress_data_wrapper__back_bars">
+    <div class="seperator"></div>
+    <ng-container *ngFor="let data of npsChartData?.departments">
+      <div class="dotted_seperator"></div>
+    </ng-container>
+    <div class="horizontal_seperator"></div>
+  </div>
+
+  <!-- Progress Bars -->
+  <div class="progress_data_wrapper__progress_services_bars_wrapper">
+    <ng-container *ngFor="let data of npsChartData?.departments; let i = index">
+      <div
+        class="progress_bar_data"
+        [style.width]="100 / npsChartData.departments.length + '%'"
+      >
+        <div class="progess_bars">
+          <div class="bar">
+            <div class="progress">
+              <div
+                class="tranparent-bg"
+                [style.height]="(data.score > 0 ? 100 - data.score : 100) + '%'"
+              ></div>
+              <div
+                *ngIf="data.score > 0"
+                [style.background]="'#3DB76B'"
+                [style.height]="data.score + '%'"
+                class="colored-bg"
+              >
+                <div
+                  class="status_box"
+                  *ngIf="data.score != 0"
+                  [ngStyle]="{
+                    left:
+                      i == npsChartData.departments.length - 1
+                        ? '-50%'
+                        : '105%',
+                    top:
+                      i == npsChartData.departments.length - 1 ? '50%' : '30%'
+                  }"
+                >
+                  <p class="journey">
+                    {{ data.label }}
+                  </p>
+                  <div class="details_box">
+                    <div class="details">
+                      <div class="dot" [style.background]="'#3DB76B'"></div>
+                      <div class="details__label">Positive</div>
+                      <div class="percentage">
+                        {{ data.score }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="progress">
+              <div
+                *ngIf="data.score < 0"
+                [style.background]="data.score === 0 ? '#d6d6d6' : '#ea0431'"
+                [style.height]="data.score * -1 + '%'"
+                class="colored-bg"
+              >
+                <div
+                  class="status_box"
+                  [ngStyle]="{
+                    left:
+                      i == npsChartData.departments.length - 1
+                        ? '-50%'
+                        : '100%',
+                    top: '30%'
+                  }"
+                >
+                  <p class="journey">
+                    {{ data.label }}
+                  </p>
+                  <div class="details_box">
+                    <div class="details">
+                      <div class="dot"></div>
+                      <div class="details__label">Negative</div>
+                      <div class="percentage">
+                        {{ data.score }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tranparent-bg"
+                [style.height]="(data.score < 0 ? 100 + data.score : 100) + '%'"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="label">{{ data.label }}</div>
+      </div>
+    </ng-container>
+  </div>
+</div>

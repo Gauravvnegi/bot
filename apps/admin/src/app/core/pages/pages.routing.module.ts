@@ -87,7 +87,16 @@ const appRoutes: Route[] = [
             (m) => m.AdminMarketingModule
           ),
       },
-      { path: '**', pathMatch: 'full', component: DashboardErrorComponent },
+      {
+        path: '404',
+        component: DashboardErrorComponent,
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        canActivate:[LoadGuard],
+        redirectTo:'404',
+      },
     ],
   },
 ];

@@ -65,12 +65,20 @@ export class LoadGuard implements CanActivate {
           ]);
         else if (
           ['listing', 'topic', 'template'].includes(route.routeConfig.path)
-        )
-          return get(subscription, [
-            'modules',
-            ModuleNames.MARKETING,
-            'active',
-          ]);
+        ){
+          if( subscription.modules.marketing.active === false )
+          {
+            this._router.navigate(['/pages/404']);
+            return;
+          }
+          else {
+            return get(subscription, [
+              'modules',
+              ModuleNames.MARKETING,
+              'active',
+            ]);
+          }
+        }
         else if (route.routeConfig.path === 'assets')
           return (
             get(subscription, ['modules', ModuleNames.PACKAGES, 'active']) ||

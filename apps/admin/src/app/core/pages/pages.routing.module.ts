@@ -6,7 +6,7 @@ import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { LoadGuard } from '../guards/load-guard';
-import { DashboardErrorComponent } from 'libs/admin/shared/src/lib/components/dashboard-error/dashboard-error.component';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
   {
@@ -87,16 +87,8 @@ const appRoutes: Route[] = [
             (m) => m.AdminMarketingModule
           ),
       },
-      {
-        path: '404',
-        component: DashboardErrorComponent,
-      },
-      {
-        path: '**',
-        pathMatch: 'full',
-        canActivate:[LoadGuard],
-        redirectTo:'404',
-      },
+      { path: '**', redirectTo: '404' },
+      { path: '404', component: DashboardErrorComponent },
     ],
   },
 ];

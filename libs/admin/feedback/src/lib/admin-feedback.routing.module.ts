@@ -6,18 +6,16 @@ import {
   GtmAcrossServicesComponent,
   NetPromoterScoreComponent,
   NpsAcrossDepartmentsComponent,
-  NpsAcrossServicesComponent,
   OverallReceivedBifurcationComponent,
   SharedComponent,
   TopLowNpsComponent,
   TwoWayProgressComponent,
-} from './components/cards';
-import { PointOfSaleComponent } from './components/cards/point-of-sale/point-of-sale.component';
-import { StackedBarGraphComponent } from './components/cards/stacked-bar-graph/stacked-bar-graph.component';
+} from './components/stats';
 import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
+import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
 
 const appRoutes: Route[] = [
   {
@@ -37,7 +35,6 @@ export class AdminFeedbackRoutingModule {
     GlobalNpsComponent,
     NetPromoterScoreComponent,
     NpsAcrossDepartmentsComponent,
-    NpsAcrossServicesComponent,
     OverallReceivedBifurcationComponent,
     SharedComponent,
     TopLowNpsComponent,
@@ -45,8 +42,7 @@ export class AdminFeedbackRoutingModule {
     FeedbackDatatableComponent,
     FeedbackDatatableModalComponent,
     FeedbackNotesComponent,
-    PointOfSaleComponent,
-    StackedBarGraphComponent,
     GtmAcrossServicesComponent,
+    DepartmentBarGraphComponent,
   ];
 }

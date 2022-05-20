@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { LibraryComponent } from './components/library/library.component';
 import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
-  { path: '', redirectTo: 'package' },
+  { path: '', pathMatch: 'full', redirectTo: 'package' },
   {
     path: 'package',
     loadChildren: () =>
@@ -41,6 +42,8 @@ const appRoutes: Route[] = [
       ),
     canActivate: [LoadGuard],
   },
+  { path: '**', pathMatch: 'full', redirectTo: '404' },
+  { path: '404', component: DashboardErrorComponent },
 ];
 
 @NgModule({

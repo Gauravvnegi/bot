@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PointOfSaleComponent } from './point-of-sale.component';
+import { DepartmentBarGraphComponent } from './department-bar-graph.component';
 
-describe('PointOfSaleComponent', () => {
-  let component: PointOfSaleComponent;
-  let fixture: ComponentFixture<PointOfSaleComponent>;
+describe('DepartmentBarGraphComponent', () => {
+  let component: DepartmentBarGraphComponent;
+  let fixture: ComponentFixture<DepartmentBarGraphComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointOfSaleComponent ]
+      declarations: [ DepartmentBarGraphComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PointOfSaleComponent);
+    fixture = TestBed.createComponent(DepartmentBarGraphComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

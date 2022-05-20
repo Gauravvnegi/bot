@@ -57,43 +57,39 @@ export class LoadGuard implements CanActivate {
   validate(subscription, route): boolean {
     if (subscription && subscription.modules) {
       if (!subscription.modules[route.routeConfig.path]?.active) {
-        if (route.routeConfig.path === 'feedback')
-          return get(subscription, [
-            'modules',
-            ModuleNames.FEEDBACK_TRANSACTIONAL,
-            'active',
-          ]);
-        else if (
-          ['listing', 'topic', 'template'].includes(route.routeConfig.path)
-        ){
-          if( subscription.modules.marketing.active === false )
-          {
-            this._router.navigate(['/pages/404']);
-            return;
-          }
-          else {
-            return get(subscription, [
+        if (route.routeConfig.path === 'feedback') {
+          if (
+            get(subscription, [
               'modules',
-              ModuleNames.MARKETING,
+              ModuleNames.FEEDBACK_TRANSACTIONAL,
               'active',
-            ]);
-          }
-        }
-        else if (route.routeConfig.path === 'assets')
-          return (
+            ])
+          )
+            return true;
+          else this.openErrorPage();
+        } else if (
+          ['listing', 'topic', 'template'].includes(route.routeConfig.path)
+        ) {
+          if (get(subscription, ['modules', ModuleNames.MARKETING, 'active']))
+            return true;
+          else this.openErrorPage();
+        } else if (route.routeConfig.path === 'assets') {
+          if (
             get(subscription, ['modules', ModuleNames.PACKAGES, 'active']) ||
             get(subscription, ['modules', ModuleNames.MARKETING, 'active'])
-          );
-        this.goBack(route.routeConfig.path);
+          )
+            return true;
+          else this.openErrorPage();
+        } else this.openErrorPage();
       }
       return subscription.modules[route.routeConfig.path].active;
     } else {
-      this.goBack(route.routeConfig.path);
+      this.openErrorPage();
       return false;
     }
   }
 
-  goBack(path) {
-    if (path !== ModuleNames.RESERVATION) this.location.back();
+  openErrorPage() {
+    this._router.navigate(['/pages/404']);
   }
 }

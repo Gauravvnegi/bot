@@ -228,7 +228,7 @@ export class PerformanceNPS {
     input.npsPerformace.forEach((data) => {
       this.performances.push({
         ...data,
-        colorCode: data.score > 0 ? '#1AB99F' : '#EF1D45',
+        colorCode: data.score > 0 ? '#508919' : '#CD3A2D',
       });
     });
     input.npsPerformace.sort(function (a, b) {

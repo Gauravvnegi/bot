@@ -35,7 +35,6 @@ export class NetPromoterScoreComponent implements OnInit {
   selectedInterval: string;
   npsChartData: NPS;
   globalQueries = [];
-
   chartTypes = [feedback.chartType.bar, feedback.chartType.line];
 
   documentActionTypes = [
@@ -58,8 +57,14 @@ export class NetPromoterScoreComponent implements OnInit {
     options: chartConfig.options.nps,
     colors: chartConfig.colors.nps,
     legend: false,
-    type: chartConfig.type.line,
+    type: chartConfig.type.bar,
   };
+
+  public barColor: any[] = [
+    {
+      backgroundColor: [],
+    },
+  ];
 
   constructor(
     protected fb: FormBuilder,
@@ -178,6 +183,11 @@ export class NetPromoterScoreComponent implements OnInit {
             : null
         )
       );
+      if (this.npsChartData.npsGraph[d] >= 0) {
+        this.barColor[0].backgroundColor.push('#0C8054');
+      } else {
+        this.barColor[0].backgroundColor.push('#FF0000');
+      }
       this.chart.data[0].data.push(this.npsChartData.npsGraph[d]);
     });
   }

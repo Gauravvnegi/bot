@@ -50,6 +50,7 @@ export class NetPromoterScoreComponent implements OnInit {
     data: [
       {
         data: [''],
+        fill: false,
         label: 'Overall NPS',
       },
     ],
@@ -57,7 +58,7 @@ export class NetPromoterScoreComponent implements OnInit {
     options: chartConfig.options.nps,
     colors: chartConfig.colors.nps,
     legend: false,
-    type: chartConfig.type.bar,
+    type: chartConfig.type.line,
   };
 
   public barColor: any[] = [

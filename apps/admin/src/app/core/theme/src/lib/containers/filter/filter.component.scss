@@ -148,6 +148,8 @@
   padding-bottom: 4rem;
 }
 .tab-head {
+  background-color: #e8eef5;
+  color: #4b56c0;
   padding: $padding15;
   font-family: Roboto;
   font-size: 16px;
@@ -157,7 +159,6 @@
   line-height: normal;
   letter-spacing: 0.96px;
   text-align: left;
-  color: #00162b;
   border-bottom: 1px solid $primary-purple;
   &__padding{
     padding: $padding15;

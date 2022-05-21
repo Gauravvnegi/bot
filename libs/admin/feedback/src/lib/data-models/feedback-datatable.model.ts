@@ -309,7 +309,7 @@ export class StayFeedback {
       set({}, 'status', get(input, ['status']))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
-    serviceList.forEach((item) =>
+    serviceList?.forEach((item) =>
       this.services.push(new Service().deserialize(item, colorMap))
     );
     this.outlet = outlets.filter(
@@ -323,7 +323,7 @@ export class StayFeedback {
 
   getNegativeRatedService() {
     return this.getSortedServices().filter((service) =>
-      isNaN(this.services[0].rating)
+      isNaN(this.services[0]?.rating)
         ? service.rating === 'EI'
         : service.rating < 5
     );
@@ -331,16 +331,16 @@ export class StayFeedback {
 
   getSortedServices() {
     let sortOrder = ['EI', 'ME', 'EE'];
-    if (isNaN(this.services[0].rating))
+    if (isNaN(this.services[0]?.rating))
       this.services.sort((a, b) => {
         if (a.rating == b.rating) {
-          return a.rating.localeCompare(b.rating);
+          return a.rating?.localeCompare(b.rating);
         } else {
-          return sortOrder.indexOf(a.rating) - sortOrder.indexOf(b.rating);
+          return sortOrder?.indexOf(a.rating) - sortOrder.indexOf(b.rating);
         }
       });
-    else this.services.sort((a, b) => a.rating - b.rating);
-    return this.services;
+    else this?.services.sort((a, b) => a.rating - b.rating);
+    return this?.services;
   }
 
   getServiceComment(serviceName) {

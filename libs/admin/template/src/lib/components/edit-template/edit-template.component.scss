@@ -344,3 +344,7 @@
 :host ::ng-deep .mat-slide-toggle-label {
   display: block;
 }
+
+:host ::ng-deep .mat-form-field-wrapper {
+  width: 25vw;
+}

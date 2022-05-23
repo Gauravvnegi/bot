@@ -50,7 +50,6 @@ export class NetPromoterScoreComponent implements OnInit {
     data: [
       {
         data: [''],
-        fill: false,
         label: 'Overall NPS',
       },
     ],

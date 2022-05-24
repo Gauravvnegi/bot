@@ -270,3 +270,10 @@
 :host ::ng-deep .mat-tab-header {
   border-bottom: solid 1px #e0e0e0 !important;
 }
+:host ::ng-deep .mat-tab-list {
+  width: 100%;
+}
+:host ::ng-deep .mat-tab-labels {
+  display: flex;
+  justify-content: space-evenly;
+}

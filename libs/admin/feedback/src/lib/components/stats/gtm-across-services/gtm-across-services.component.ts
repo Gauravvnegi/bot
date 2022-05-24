@@ -4,11 +4,16 @@ import {
   StatisticsService,
   AdminUtilityService,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
 import { GTM } from '../../../data-models/statistics.model';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-gtm-across-services',
@@ -23,12 +28,15 @@ export class GtmAcrossServicesComponent implements OnInit {
   globalQueries = [];
   progress = 0;
   statistics: GTM;
+  keyLabels = [];
+
   constructor(
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _adminUtilityService: AdminUtilityService,
     protected _snackbarService: SnackBarService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    protected _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -118,6 +126,10 @@ export class GtmAcrossServicesComponent implements OnInit {
         .getGTMAcrossServices(config)
         .subscribe((response) => {
           this.statistics = new GTM().deserialize(response);
+          this.keyLabels = [
+            { label: "Closed", key: "CLOSED" },
+            { label: "Remaining", key: "REMAINING" },
+          ];
           this.setProgress();
         })
     );
@@ -132,5 +144,44 @@ export class GtmAcrossServicesComponent implements OnInit {
     return this.tabfeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
       : this.tabfeedbackType;
+  }
+
+  openTableModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    dialogConfig.data = {
+      tableName: 'Feedback GTM across services',
+      tabFilterItems: this.createTabFilterItem(),
+      tabFilterIdx: 0,
+      globalFeedbackFilterType: this.globalFeedbackFilterType,
+      config: [{ feedbackGraph: 'GUESTTOMEET' }],
+      feedbackType: this.getFeedbackType(),
+    };
+    const detailCompRef = this._modalService.openDialog(
+      FeedbackDatatableModalComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.onModalClose.subscribe((res) => {
+      // remove loader for detail close
+      detailCompRef.close();
+    });
+  }
+
+  createTabFilterItem() {
+    return this.keyLabels.map((keyObj) => {
+      return {
+        label: keyObj.label,
+        content: '',
+        value: keyObj.key,
+        disabled: false,
+        total: 0,
+        chips: this.feedbackConfig.chips.feedbackDatatable,
+      };
+    });
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

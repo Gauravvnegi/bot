@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -21,62 +22,7 @@ export class NotificationComponent implements OnInit {
   hotelId: string;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
-  chart: any = {
-    chartData: [
-      // { data: [80], label: 'Pre-Check-In', fill: false },
-      // { data: [160], label: 'Post Check-In', fill: false },
-      // { data: [78], label: 'Post Check-Out', fill: false },
-      {
-        data: [0, 0, 0],
-        label: '',
-      },
-    ],
-    chartLabels: ['Pre-Check-In', 'Post Check-In', 'Post Check-Out'],
-    chartOptions: {
-      responsive: true,
-      cornerRadius: 20,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 10,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            maxBarThickness: 30,
-            barPercentage: 0.4,
-            display: false,
-            gridLines: {
-              display: true,
-            },
-          },
-        ],
-      },
-    },
-    chartColors: [
-      {
-        borderColor: ['#3270eb', '#15eda3', '#ff9867'],
-        backgroundColor: ['#3270eb', '#15eda3', '#ff9867'],
-      },
-    ],
-    chartLegend: false,
-    chartType: 'horizontalBar',
-  };
+  chart = analytics.notificationChart;
   stats: Notification;
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -136,7 +82,7 @@ export class NotificationComponent implements OnInit {
 
   initGraphData() {
     this.chart.chartLabels = [];
-    this.chart.chartData[0].data = [[]];
+    this.chart.chartData[0].data = [];
     this.chart.chartColors[0].backgroundColor = [];
     this.chart.chartColors[0].borderColor = [];
 

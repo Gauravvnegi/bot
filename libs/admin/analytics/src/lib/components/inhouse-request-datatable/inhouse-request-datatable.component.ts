@@ -11,6 +11,7 @@ import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { analytics } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -38,71 +39,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   ) {
     super(fb, tabFilterService);
   }
-
-  cols = [
-    {
-      field: 'itemCode',
-      header: 'Item & Priority Code / Qty',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'confirmationNumber',
-      header: 'Booking No. / Rooms',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestDetails.primaryGuest.getFullName()',
-      header: 'Guest/ company',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Phone No./ Email',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Item Name/ Desc./ Status/ Job Duration',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'remarks',
-      header: 'Assigned To/ Op & Cl - Dt & Tm',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: '',
-      header: 'Actions',
-      isSort: false,
-      sortType: '',
-    },
-  ];
-
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-      chips: [
-        {
-          label: 'All',
-          icon: '',
-          value: 'ALL',
-          total: 0,
-          isSelected: true,
-          type: '',
-        },
-      ],
-    },
-  ];
+  cols = analytics.cols;
+  tabFilterItems = analytics.tabFilterItems;
 
   hotelId: string;
 

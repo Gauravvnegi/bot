@@ -328,6 +328,52 @@ export const analytics = {
       ],
     },
   ],
+
+  preArrivalChart: {
+    chartData: [{ data: [], label: 'To Do', fill: false }],
+    chartLabels: [],
+    chartOptions: {
+      responsive: true,
+      elements: {
+        line: {
+          tension: 0,
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: true,
+            },
+            ticks: {
+              min: 0,
+            },
+          },
+        ],
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+    },
+    chartColors: [],
+    chartLegend: false,
+    chartType: 'line',
+  },
+
   whatsappChart: {
     chartData: [
       { data: [], label: 'Sent', fill: true },

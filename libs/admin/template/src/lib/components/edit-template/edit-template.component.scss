@@ -24,6 +24,9 @@
         }
       }
     }
+    .name_field {
+      width: 25wh;
+    }
   }
   .sent-details {
     display: flex;
@@ -345,6 +348,6 @@
   display: block;
 }
 
-:host ::ng-deep .mat-form-field-wrapper {
+.name-field {
   width: 25vw;
 }

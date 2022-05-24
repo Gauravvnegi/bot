@@ -11,7 +11,6 @@ import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-materi
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { AdminGuestDetailModule } from '@hospitality-bot/admin/guest-detail';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,7 +27,6 @@ import { FeedbackTableService } from './services/table.service';
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
     SlickCarouselModule,
-    AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],

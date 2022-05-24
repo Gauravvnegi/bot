@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent as GuestDetailComponent } from 'libs/admin/guest-detail/src/lib/components/details/details.component';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';

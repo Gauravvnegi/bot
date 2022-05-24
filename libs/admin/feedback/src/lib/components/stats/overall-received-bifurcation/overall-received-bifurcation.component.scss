@@ -107,7 +107,6 @@
           font-size: 12px;
           letter-spacing: 0.72px;
           color: $quote-color;
-          margin-left: 25px;
         }
       }
     }
@@ -153,9 +152,3 @@
 .comparison-positive {
   color: $comparison-positive;
 }
-// :host ::ng-deep .val {
-//   color: $dark-blue !important;
-// }
-// :host ::ng-deep .label {
-//   color:$note1 !important;
-// }

@@ -116,4 +116,13 @@
 
 :host ::ng-deep .stat-body-container {
   overflow-y: auto;
+  max-height: 269px;
+}
+:host ::ng-deep .mat-tab-labels {
+  display: flex;
+  justify-content: space-around;
+}
+:host ::ng-deep .mat-tab-label {
+  min-width: 50% !important;
+  padding: 0 !important;
 }

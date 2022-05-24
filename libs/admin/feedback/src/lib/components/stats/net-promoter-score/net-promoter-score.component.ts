@@ -49,6 +49,7 @@ export class NetPromoterScoreComponent implements OnInit {
   chart: BarChart = {
     data: [
       {
+        fill: true,
         data: [''],
         label: 'Overall NPS',
       },

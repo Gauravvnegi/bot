@@ -16,6 +16,7 @@ import { FeedbackNotesComponent } from './components/feedback-notes/feedback-not
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
+import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
 
 const appRoutes: Route[] = [
   {
@@ -44,5 +45,6 @@ export class AdminFeedbackRoutingModule {
     FeedbackNotesComponent,
     GtmAcrossServicesComponent,
     DepartmentBarGraphComponent,
+    ActionOverlayComponent,
   ];
 }

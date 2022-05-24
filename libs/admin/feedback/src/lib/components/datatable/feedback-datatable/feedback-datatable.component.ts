@@ -1,4 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -738,5 +744,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout() {
+    this.tableService.$disableContextMenus.next(true);
   }
 }

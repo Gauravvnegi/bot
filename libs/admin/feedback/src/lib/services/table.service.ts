@@ -11,6 +11,7 @@ import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';
 @Injectable()
 export class FeedbackTableService extends ApiService {
   $feedbackType = new BehaviorSubject('');
+  $disableContextMenus = new BehaviorSubject(false);
   /**
    * @function To get guest feedback list.
    * @param config The filter config data.

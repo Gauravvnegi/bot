@@ -34,7 +34,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   tabFilterItems = [];
   tabFilterIdx = 0;
   tabfeedbackType;
-  chartTypes = [feedback.chartType.bar, feedback.chartType.line];
+  chartTypes = [feedback.chartType.bar, feedback.chartType.sentiment];
 
   documentActionTypes = [
     {

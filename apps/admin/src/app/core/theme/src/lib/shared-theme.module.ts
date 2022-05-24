@@ -4,7 +4,6 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AdminGuestDetailModule } from 'libs/admin/guest-detail/src/lib/admin-guest-detail.module';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { DropdownModule } from 'primeng/dropdown';
@@ -33,7 +32,6 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
     DropdownModule,
     SharedMaterialModule,
     TabViewModule,
-    AdminGuestDetailModule,
     AngularFireMessagingModule,
   ],
   declarations: [

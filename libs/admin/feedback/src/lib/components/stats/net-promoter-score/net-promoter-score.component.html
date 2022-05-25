@@ -64,7 +64,7 @@
       [datasets]="chart.data"
       [labels]="chart.labels"
       [options]="chart.options"
-      [colors]="barColor"
+      [colors]="chart.type === 'bar' ? barColor : chart.colors"
       [legend]="chart.legend"
       [chartType]="chart.type"
     >

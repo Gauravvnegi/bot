@@ -50,8 +50,8 @@
     }
   }
   &-body {
-    height: calc(100% - 65px);
-    overflow-y: auto;
+    height: calc(100% - 112px);
+    overflow: auto;
     border-right: solid 1px #e0e0e0;
     &-card {
       height: 138px;
@@ -259,10 +259,10 @@
   font-weight: 500;
 }
 .right-side-subheader {
-  height: 60px;
+  // height: 60px;
   display: flex;
   border: solid 1px #e0e0e0;
-  border-left:none;
+  border-left: none;
   align-items: center;
   border-bottom: none;
   max-width: 100%;
@@ -272,6 +272,7 @@
 }
 :host ::ng-deep .mat-tab-list {
   width: 100%;
+  padding: 5px;
 }
 :host ::ng-deep .mat-tab-labels {
   display: flex;

@@ -11,6 +11,15 @@ import { ManagingOption } from '../../types/auth.type';
 export class AuthComponent implements OnInit {
   authConstants = authConstants;
 
+  slideConfig = {
+    slidesToShow: 1, 
+    slidesToScroll: 1, 
+    arrows: false,
+    dots: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  };
+
   constructor() {}
 
   ngOnInit(): void {}

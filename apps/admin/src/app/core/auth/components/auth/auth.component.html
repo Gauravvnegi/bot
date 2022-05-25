@@ -31,6 +31,45 @@
     </div>
   </div>
   <div class="wrapper--right">
+    <ngx-slick-carousel
+      class="wrapper--right--carousel"
+      #slickModal="slick-carousel"
+      [config]="slideConfig"
+    >
+      <div ngxSlickItem></div>
+      <div ngxSlickItem class="carousel--free">
+        <div
+          style="
+            background-image: linear-gradient(132deg, #01a4e9 1%, #0074a6 106%);
+            opacity: 0.4;
+            width: 100%;
+            height: 100%;
+          "
+        ></div>
+        <div
+          class="freedie"
+          style="position: absolute; bottom: 14px; padding: 10px; left: 40%;"
+        >
+          <img src="assets/svg/freedie-login.svg" alt="freedie-login" />
+        </div>
+      </div>
+      <div ngxSlickItem class="carousel--hed">
+        <div
+          style="
+            background-image: linear-gradient(312deg, #ac14b7 99%, #765bd5 1%);
+            opacity: 0.4;
+            width: 100%;
+            height: 100%;
+          "
+        ></div>
+        <div
+          class="heda"
+          style="position: absolute; bottom: 14px; padding: 10px; left: 54%;"
+        >
+          <img src="assets/svg/heda-login.svg" alt="heda-login" />
+        </div>
+      </div>
+    </ngx-slick-carousel>
     <header class="wrapper--right-header">
       <a
         [href]="authConstants.linkUrl.aboutUs"
@@ -64,7 +103,6 @@
       <div class="image">
         <img [src]="authConstants.imgUrl.botshotLogo" alt="Botshot" />
       </div>
-      ©&nbsp;{{ currentDate }}, {{ 'copyright_text' | translate }}
     </div>
   </div>
 </div>

@@ -24,6 +24,9 @@
         }
       }
     }
+    .name_field {
+      width: 25wh;
+    }
   }
   .sent-details {
     display: flex;
@@ -343,4 +346,8 @@
 }
 :host ::ng-deep .mat-slide-toggle-label {
   display: block;
+}
+
+.name-field {
+  width: 25vw;
 }

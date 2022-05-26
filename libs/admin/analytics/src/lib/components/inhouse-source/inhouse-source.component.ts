@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { analytics } from '@hospitality-bot/admin/shared';
+import { analytics } from 'libs/admin/shared/src/lib/constants/charts';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -19,7 +19,6 @@ export class InhouseSourceComponent implements OnInit {
   globalFilters;
   graphData;
   chart = analytics.inhouseSourceChart;
-
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
@@ -68,34 +67,34 @@ export class InhouseSourceComponent implements OnInit {
   }
 
   private initGraphData(): void {
-    this.chart.Data = [[]];
-    this.chart.Labels = [];
-    this.chart.Colors[0].backgroundColor = [];
-    this.chart.Colors[0].borderColor = [];
+    this.chart.data = [[]];
+    this.chart.labels = [];
+    this.chart.colors[0].backgroundColor = [];
+    this.chart.colors[0].borderColor = [];
     const keys = Object.keys(this.graphData.inhouseRequestSourceStats);
     keys.forEach((key, index) => {
       if (this.graphData.inhouseRequestSourceStats[key].value) {
-        this.chart.Data[0].push(
+        this.chart.data[0].push(
           this.graphData.inhouseRequestSourceStats[key].value
         );
-        this.chart.Labels.push(key);
-        this.chart.Colors[0].backgroundColor.push(
+        this.chart.labels.push(key);
+        this.chart.colors[0].backgroundColor.push(
           this.getFilteredConfig(key).color
         );
-        this.chart.Colors[0].borderColor.push(
+        this.chart.colors[0].borderColor.push(
           this.getFilteredConfig(key).color
         );
       }
     });
-    if (!this.chart.Data[0].reduce((a, b) => a + b, 0)) {
-      this.chart.Data = [[100]];
-      this.chart.Colors = [
+    if (!this.chart.data[0].reduce((a, b) => a + b, 0)) {
+      this.chart.data = [[100]];
+      this.chart.colors = [
         {
           backgroundColor: ['#D5D1D1'],
           borderColor: ['#D5D1D1'],
         },
       ];
-      this.chart.Labels = ['No data'];
+      this.chart.labels = ['No data'];
     }
   }
 

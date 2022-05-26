@@ -176,62 +176,11 @@ export class CampaignFormComponent implements OnInit {
     let message = data.message;
     if (
       !this.templateData.includes(
-        `<img src = "emailUrl" alt = "" width = "1" height = "1">`
+        `<img src="emailUrl" alt = "" width = "1" height = "1">`
       )
     )
       message += `<img src="emailUrl" alt="" width="1" height="1">`;
     return message;
-  }
-
-  /**
-   * @function sendMail function to send campaign email.
-   * @returns error on form invalid.
-   */
-  sendMail() {
-    if (this.campaignFG.invalid) {
-      this._snackbarService
-        .openSnackBarWithTranslate({
-          translateKey: 'messages.error.fail',
-          priorityMessage: 'Invalid form.',
-        })
-        .subscribe();
-      this.campaignFG.markAllAsTouched();
-      return;
-    }
-    const reqData = this._emailService.createRequestData(
-      this.campaignFG.getRawValue()
-    );
-    reqData.message = this.getTemplateMessage(reqData);
-    reqData.isDraft = false;
-    this.isSending = true;
-    this.$subscription.add(
-      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
-        (response) => {
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.success.campaignSent',
-                priorityMessage: 'Campiagn Sent successfully',
-              },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
-          this._router.navigate(['pages/marketing/campaign']);
-        },
-        ({ error }) => {
-          this._snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        },
-        () => (this.isSending = false)
-      )
-    );
   }
 
   /**

@@ -13,6 +13,7 @@ import { CampaignDatatableComponent } from './components/datatable/campaign-data
 import { EditContentComponent } from './components/edit-content/edit-content.component';
 import { TemplateListContainerComponent } from './components/template-list-container/template-list-container.component';
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
+import { ScheduleCampaignComponent } from './components/schedule-campaign/schedule-campaign.component';
 
 const appRoutes: Route[] = [
   { path: '', component: CampaignComponent },
@@ -40,5 +41,6 @@ export class AdminCampaignRoutingModule {
     EditContentComponent,
     TemplateListContainerComponent,
     TopicTemplatesComponent,
+    ScheduleCampaignComponent,
   ];
 }

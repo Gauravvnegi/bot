@@ -23,7 +23,7 @@ export class RequestDetailComponent implements OnInit {
   $subscription = new Subscription();
   hotelId: string;
   @Output() guestInfo = new EventEmitter();
-
+  
   requestFG: FormGroup;
   constructor(
     private _requestService: RequestService,
@@ -87,7 +87,6 @@ export class RequestDetailComponent implements OnInit {
   checkForData() {
     return this.data && Object.keys(this.data).length;
   }
-
 
   openGuestInfo(): void {
     this.guestInfo.emit({ openGuestInfo: true });

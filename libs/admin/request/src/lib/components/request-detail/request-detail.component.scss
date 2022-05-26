@@ -94,6 +94,7 @@ td {
   }
   &-body {
     height: calc(100% - 65px);
+    overflow: auto;
     padding: 20px 25px;
     font-family: Roboto;
     font-stretch: normal;
@@ -189,5 +190,6 @@ td {
   }
 }
 .man-icon {
+  cursor: pointer;
   padding-left: 15px;
 }

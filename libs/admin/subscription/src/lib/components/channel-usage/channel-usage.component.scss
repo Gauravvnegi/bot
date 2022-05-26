@@ -1,37 +1,27 @@
-.channels__container {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  .channels__container__image {
-    .channels__container__image__enabled {
-      @media screen and (max-width: 1300px) {
-        height: 30px;
-        width: 30px;
+.slide {
+  width: 33%;
+  .channels__container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    .channels__container__image {
+      .channels__container__image__enabled {
+        height: 38px;
+        width: 38px;
       }
-      height: 38px;
-      width: 38px;
-    }
-    .channels__container__image__disabled {
-      @media screen and (max-width: 1300px) {
-        height: 30px;
-        width: 30px;
+      .channels__container__image__disabled {
+        height: 38px;
+        width: 38px;
       }
-      height: 38px;
-      width: 38px;
     }
   }
 }
-
 :host ::ng-deep .carousel {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  height: 139px;
-  width: 297px;
-  margin-left: 26px;
-  gap: 33px;
-  justify-content: space-evenly;
+  row-gap: 20px;
 }
 
 :host ::ng-deep .channels__container__image__disabled {
@@ -39,5 +29,5 @@
 }
 
 :host ::ng-deep .channel-stat-value {
-  margin: 34px 46px 0 0;
+  margin: 24px 46px 0 0;
 }

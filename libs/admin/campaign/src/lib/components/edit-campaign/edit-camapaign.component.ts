@@ -426,7 +426,11 @@ export class EditCampaignComponent implements OnInit {
             )
             .subscribe(
               (response) => {
-                this._snackbarService.openSnackBarAsText('Campaign scheduled.');
+                this._snackbarService.openSnackBarAsText(
+                  'Campaign scheduled.',
+                  '',
+                  { panelClass: 'success' }
+                );
                 this._router.navigate(['pages/marketing/campaign']);
               },
               ({ error }) =>

@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit {
     arrows: false,
     dots: true,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 1000,
   };
 
   constructor() {}

@@ -85,7 +85,7 @@ export const chartConfig = {
               display: true,
             },
             ticks: {
-              min: -100,
+              min: 0,
               max: 100,
             },
           },

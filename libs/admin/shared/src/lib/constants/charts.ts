@@ -209,9 +209,6 @@ export const analytics = {
 
   notificationChart: {
     chartData: [
-      // { data: [80], label: 'Pre-Check-In', fill: false },
-      // { data: [160], label: 'Post Check-In', fill: false },
-      // { data: [78], label: 'Post Check-Out', fill: false },
       {
         data: [0, 0, 0],
         label: '',

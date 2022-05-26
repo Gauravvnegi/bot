@@ -12,7 +12,7 @@ import { CountryCode } from '../../../../../../shared/models/country-code.model'
 import { Regex } from '../../../../../../shared/constants/regex';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -48,6 +48,7 @@ export class EditUserPermissionComponent implements OnInit {
   optionChange = new EventEmitter();
 
   constructor(
+    private router: Router,
     private _fb: FormBuilder,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
@@ -228,7 +229,10 @@ export class EditUserPermissionComponent implements OnInit {
   get permissionConfigsFA() {
     return this.userForm.get('permissionConfigs') as FormArray;
   }
-
+  openRolesPermission(event) {
+    event.stopPropagation();
+    this.router.navigate(['/pages/roles-permissions']);
+  }
   goback() {
     this._location.back();
   }

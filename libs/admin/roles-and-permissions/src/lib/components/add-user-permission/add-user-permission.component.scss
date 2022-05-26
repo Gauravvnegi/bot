@@ -3,95 +3,124 @@
 .wrapper {
   padding: $padding20;
   background-color: white;
-  margin: $margin20 0px;
   border-radius: 5px;
+
   &-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     .back {
       display: flex;
       align-items: center;
+
       .label {
         letter-spacing: 0.96px;
         font-weight: $bold;
         font-size: $font16;
       }
+
       .material-icons {
         margin-right: $margin15;
+
         &:hover {
           cursor: pointer;
         }
       }
     }
+
     .edit-wrapper {
       display: flex;
       align-items: center;
+      width: 257px;
+      height: 41px;
 
       .manage-box {
-        padding: $padding10 $padding15;
-        font-size: $font12;
-        color: $dark-grey;
+        width: 100%;
+        height: 100%;
+        padding: 12px 15px;
         background-color: #f5f5f5;
         border-radius: 25px;
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        letter-spacing: 0.84px;
+        text-align: left;
+        color: #727272;
       }
+
       .text {
         margin-left: 15px;
         font-size: $font14;
         color: $primary-gray;
+
         &:hover {
           cursor: pointer;
         }
       }
     }
   }
+
   &-form {
     padding-left: 20px;
     border-bottom: 2px solid rgb(61, 187, 230, 0.1);
+
     .fields {
       display: flex;
       align-items: center;
       // justify-content: space-between;
       margin-top: 5%;
+
       .note {
         color: $primary-gray;
         font-size: $font14;
         padding-left: 7%;
         margin-bottom: 20px;
       }
+
       .field {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
       }
+
       .material-icons {
         margin-left: 15px;
+
         &:hover {
           cursor: pointer;
         }
       }
     }
+
     .image-wrapper {
       display: flex;
       align-items: center;
       justify-content: inherit;
       padding-left: 7%;
+
       .image {
         height: 150px;
         width: 200px;
+
         img {
           height: 100%;
           width: 100%;
         }
       }
     }
+
     .image-button {
       display: flex;
       align-items: center;
+
       .text {
         font-size: $font14;
         color: $primary-gray;
       }
+
       .button {
         border-radius: 20px;
         padding: 10px 35px;
@@ -102,47 +131,86 @@
         font-size: $font14;
         margin: 0 15px;
         border: none;
+
         &:hover {
           cursor: pointer;
           opacity: 1;
         }
       }
+
       .image-name {
         font-size: $font16;
         letter-spacing: 0.96px;
       }
     }
+
     .margin-adjust {
       margin-top: 20px;
     }
   }
+
   &-manage-permission {
-    .header {
-      font-size: $font16;
-      font-weight: $bold;
-      margin: 3.5% 0;
+    margin-top: 20px;
+    padding: 20px 10px 58px 26px;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 0 rgb(0 0 0 / 5%);
+    border: solid 1px #707070;
+    background-color: #fff;
+    .head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 42px;
+      .title {
+        font-size: $font16;
+        font-weight: $bold;
+        font-family: Roboto;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: #002046;
+      }
+      .manage {
+        cursor: pointer;
+        font-family: Roboto;
+        font-size: $font16;
+        font-weight: $bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: #4b56c0;
+      }
     }
+
     .permission-table-header {
       display: flex;
+
       .left-table {
         width: 22%;
         border-right: 2px solid rgb(61, 187, 230, 0.1);
+
         .image {
           padding: 0 $padding15;
           margin: 5px 0;
           width: 100%;
           height: 118px;
+
           img {
             height: 100%;
             width: 100%;
           }
         }
+
         &-header {
           font-size: $font16;
           font-weight: $bold;
           margin: $margin15 0px;
           padding: 0 $padding15;
         }
+
         &-entity {
           padding: 0px $padding15;
           font-size: $font14;
@@ -151,19 +219,23 @@
           color: $primary-black;
           letter-spacing: 0.84px;
           height: 65px;
+
           @media only screen and (max-width: 1200px) {
             font-size: $font12;
           }
         }
       }
+
       .right-table {
         width: 100%;
+
         .box-wrapper {
           display: flex;
           align-items: center;
           margin-bottom: 44px;
           padding-left: 2%;
           justify-content: space-around;
+
           .box {
             width: 50%;
             height: 132px;
@@ -173,16 +245,19 @@
             position: relative;
             text-align: center;
             padding: $padding10;
+
             .label {
               font-size: 18px;
               letter-spacing: 1px;
               font-weight: $bold;
               margin-top: 9%;
+
               @media only screen and (max-width: 1250px) {
                 font-size: $font12;
                 margin-top: 14%;
               }
             }
+
             .paragraph {
               color: #787e81;
               font-size: 15px;
@@ -190,10 +265,12 @@
               margin: 0 auto;
               width: 60%;
               padding: 15px 0;
+
               @media only screen and (max-width: 1200px) {
                 font-size: $font10;
               }
             }
+
             .float-box {
               height: 61px;
               width: 61px;
@@ -206,18 +283,21 @@
               position: absolute;
               top: -30%;
               left: 42%;
+
               img {
                 width: 37px;
                 height: 34px;
                 position: absolute;
                 top: 14px;
               }
+
               @media only screen and (max-width: 1200px) {
                 left: 33%;
               }
             }
           }
         }
+
         .checkbox-wrapper {
           // padding: 15px;
           padding-left: 2%;
@@ -248,6 +328,7 @@
   color: $primary-gray1;
   margin-right: 10px;
   letter-spacing: 0.84pt;
+
   @media only screen and (max-width: 1250px) {
     font-size: 9px;
   }
@@ -280,6 +361,7 @@
   justify-content: center;
   margin: 15px 0;
   margin-top: 50px;
+
   button {
     @include admin-panel-button();
   }
@@ -305,6 +387,7 @@
 
 .width-trio {
   width: 37%;
+
   .mat-form-field {
     width: 49%;
   }

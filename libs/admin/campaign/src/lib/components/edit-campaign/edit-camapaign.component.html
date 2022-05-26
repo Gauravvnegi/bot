@@ -29,7 +29,7 @@
     </ng-container>
   </ng-container>
 
-  <div class="btn-wrapper">
+  <div class="btn-wrapper" *ngIf="stepper.selectedIndex === 0">
     <div
       class="schedule"
       (click)="scheduleCampaign()"

@@ -75,6 +75,10 @@ export class EmailService extends ApiService {
     return this.post(`/api/v1/cms/${hotelId}/campaign/test`, data);
   }
 
+  scheduleCampaign(hotelId: string, data) {
+    return this.post(`/api/v1/cms/${hotelId}/campaign`, data);
+  }
+
   /**
    * @function disableDropdowns function to disable dropdowns.
    */
@@ -109,6 +113,46 @@ export class EmailService extends ApiService {
       campaignType: data.campaignType,
       testEmails: data.testEmails,
       isDraft: data.isDraft,
+    };
+  }
+
+  createScheduleRequestData(data, time) {
+    debugger;
+    const reqData = {};
+    reqData['to'] = this.mapSendersData('to', data);
+    if (data['cc']) reqData['cc'] = data.cc;
+    if (data['bcc']) reqData['bcc'] = data.bcc;
+    console.log({
+      ...reqData,
+      name: data.name,
+      topicId: data.topicId,
+      from: data.from,
+      subject: {
+        text: data.subject,
+      },
+      previewText: data.previewText,
+      message: data.message,
+      templateId: data.templateId,
+      campaignType: data.campaignType,
+      testEmails: data.testEmails,
+      dateTime: time,
+      isSchedule: true,
+    });
+    return {
+      ...reqData,
+      name: data.name,
+      topicId: data.topicId,
+      from: data.from,
+      subject: {
+        text: data.subject,
+      },
+      previewText: data.previewText,
+      message: data.message,
+      templateId: data.templateId,
+      campaignType: data.campaignType,
+      testEmails: data.testEmails,
+      dateTime: time,
+      isSchedule: true,
     };
   }
 

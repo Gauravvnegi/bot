@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -23,6 +23,8 @@ export class RequestDetailComponent implements OnInit {
   $subscription = new Subscription();
   hotelId: string;
 
+  @Output() guestInfo = new EventEmitter();
+  
   requestFG: FormGroup;
   constructor(
     private _requestService: RequestService,
@@ -70,8 +72,6 @@ export class RequestDetailComponent implements OnInit {
   }
 
   getHotelId(globalQueries): void {
-    //todo
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -87,6 +87,10 @@ export class RequestDetailComponent implements OnInit {
 
   checkForData() {
     return this.data && Object.keys(this.data).length;
+  }
+
+  openGuestInfo(): void {
+    this.guestInfo.emit({ openGuestInfo: true });
   }
 
   handleStatusChange(event) {

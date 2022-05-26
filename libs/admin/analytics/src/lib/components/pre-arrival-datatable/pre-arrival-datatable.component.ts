@@ -11,6 +11,7 @@ import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
+import { analytics } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -40,70 +41,9 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     super(fb, tabFilterService);
   }
 
-  cols = [
-    {
-      field: 'itemCode',
-      header: 'Item & Priority Code / Qty',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'confirmationNumber',
-      header: 'Booking No. / Rooms',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestDetails.primaryGuest.getFullName()',
-      header: 'Guest/ company',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Phone No./ Email',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Item Name/ Desc./ Status/ Job Duration',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'remarks',
-      header: 'Open & Close- Date & Time',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: '',
-      header: 'Actions',
-      isSort: false,
-      sortType: '',
-    },
-  ];
+  cols = analytics.preArrivalCols;
 
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-      chips: [
-        {
-          label: 'All',
-          icon: '',
-          value: 'ALL',
-          total: 0,
-          isSelected: true,
-          type: '',
-        },
-      ],
-    },
-  ];
+  tabFilterItems = analytics.PreArrivaltabFilterItems;
   hotelId: string;
 
   ngOnInit(): void {

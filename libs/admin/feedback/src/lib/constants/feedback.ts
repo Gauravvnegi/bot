@@ -144,6 +144,12 @@ export const feedback = {
       url: 'assets/svg/line-graph.svg',
       backgroundColor: '#DEFFF3',
     },
+    sentiment: {
+      name: 'Sentiment',
+      value: 'sentiment',
+      url: 'assets/svg/reload.svg',
+      backgroundColor: '#DEFFF3',
+    },
   },
   colorConfig: {
     distribution: {

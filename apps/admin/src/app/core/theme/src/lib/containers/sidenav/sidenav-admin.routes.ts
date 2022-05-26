@@ -52,6 +52,12 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/megaphone.svg',
     children: [
       {
+        path: 'marketing/dashboard',
+        title: 'Dashboard',
+        children: null,
+        url: 'assets/svg/dashboard.svg',
+      },
+      {
         path: 'marketing/campaign',
         title: 'Campaign',
         children: null,

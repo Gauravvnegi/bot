@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -37,82 +38,10 @@ export class PreArrivalPackagesComponent implements OnInit {
     };
   })(this);
 
-  legendData = [
-    {
-      label: 'To DO',
-      bubbleColor: '#fb3d4e',
-      img: 'assets/svg/test-4.svg',
-    },
-    {
-      label: 'Active',
-      bubbleColor: '#4A73FB',
-      img: 'assets/svg/test.svg',
-    },
-    {
-      label: 'Closed',
-      bubbleColor: '#F25E5E',
-      img: 'assets/svg/test-2.svg',
-    },
-    {
-      label: 'Timeout',
-      bubbleColor: '#30D8B6',
-      img: 'assets/svg/test-3.svg',
-    },
-  ];
-
-  chartTypes = [
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
-  ];
-
-  chart: any = {
-    chartData: [{ data: [], label: 'To Do', fill: false }],
-    chartLabels: [],
-    chartOptions: {
-      responsive: true,
-      elements: {
-        line: {
-          tension: 0,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-            },
-          },
-        ],
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      legendCallback: this.getLegendCallback,
-    },
-    chartColors: [],
-    chartLegend: false,
-    chartType: 'line',
-  };
-
+  legendData = analytics.legendData;
+  chartTypes = analytics.chartTypes;
+  chart = analytics.preArrivalChart;
   tabFilterItems = [];
-
   tabFilterIdx = 0;
   hotelId: string;
 

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -17,32 +18,8 @@ export class InhouseSourceComponent implements OnInit {
   $subscription = new Subscription();
   globalFilters;
   graphData;
-  chart: any = {
-    Labels: ['No Data'],
-    Data: [[100]],
-    Type: 'doughnut',
-    Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: {
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      responsive: true,
-      cutoutPercentage: 75,
-    },
-  };
+  chart = analytics.inhouseSourceChart;
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,

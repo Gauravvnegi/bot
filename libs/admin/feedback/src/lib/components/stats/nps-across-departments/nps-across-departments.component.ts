@@ -34,7 +34,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   tabFilterItems = [];
   tabFilterIdx = 0;
   tabfeedbackType;
-  chartTypes = [feedback.chartType.bar, feedback.chartType.line];
+  chartTypes = [feedback.chartType.bar, feedback.chartType.sentiment];
 
   documentActionTypes = [
     {
@@ -111,6 +111,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
             element.entityIds = this._statisticService.outletIds;
           }
         });
+        debugger;
         if (response.status != this.tabfeedbackType) {
           this.tabFilterItems = [];
           this.tabFilterIdx = 0;
@@ -191,24 +192,28 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
   setTabFilterItems(data) {
     return new Promise((resolve) => {
       Object.keys(data.departments).forEach((departmentKey: string, i) => {
-        this.tabFilterItems.push({
-          label: data.departments[departmentKey],
-          value: departmentKey,
-          content: '',
-          disabled: false,
-          total: 0,
-          lastPage: 0,
-          chips: [
-            {
-              label: 'All',
-              icon: '',
-              value: 'ALL',
-              total: 0,
-              isSelected: true,
-              type: '',
-            },
-          ],
-        });
+        if (
+          !this.tabFilterItems.filter((item) => item.value === departmentKey)
+            .length
+        )
+          this.tabFilterItems.push({
+            label: data.departments[departmentKey],
+            value: departmentKey,
+            content: '',
+            disabled: false,
+            total: 0,
+            lastPage: 0,
+            chips: [
+              {
+                label: 'All',
+                icon: '',
+                value: 'ALL',
+                total: 0,
+                isSelected: true,
+                type: '',
+              },
+            ],
+          });
       });
       resolve(null);
     });

@@ -100,7 +100,7 @@
         [npsChartData]="npsChartData"
       ></hospitality-bot-department-bar-graph>
     </ng-container>
-    <ng-container *ngSwitchCase="'line'"
+    <ng-container *ngSwitchCase="'sentiment'"
       ><div class="progress_container">
         <div class="progress_container__carousel_box" *ngIf="npsChartData">
           <div class="slide" *ngFor="let progress of npsChartData.departments">

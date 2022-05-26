@@ -49,8 +49,8 @@ export class NetPromoterScoreComponent implements OnInit {
   chart: BarChart = {
     data: [
       {
+        fill: true,
         data: [''],
-        fill: false,
         label: 'Overall NPS',
       },
     ],
@@ -172,6 +172,7 @@ export class NetPromoterScoreComponent implements OnInit {
     const botKeys = Object.keys(this.npsChartData.npsGraph);
     this.chart.data[0].data = [];
     this.chart.labels = [];
+    this.barColor[0].backgroundColor = [];
     botKeys.forEach((d, i) => {
       this.chart.labels.push(
         this.dateService.convertTimestampToLabels(

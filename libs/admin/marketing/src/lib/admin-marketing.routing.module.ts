@@ -1,9 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { MarketingComponent } from './components/marketing/marketing.component';
 
 const appRoutes: Route[] = [
-  { path: '', redirectTo: 'campaign' },
+  { path: '', redirectTo: 'dashboard' },
+  // {
+  //   path: 'dashboard',
+  //   loadChildren: () =>
+  //     import('@hospitality-bot/admin/marketing-dashboard').then(
+  //       (m) => m.AdminMarketingDashboardModule
+  //     ),
+  // },
+  {
+    path: 'dashboard',
+    component: ComingSoonComponent,
+  },
   {
     path: 'campaign',
     loadChildren: () =>

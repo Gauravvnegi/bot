@@ -319,8 +319,10 @@ export class EditCampaignComponent implements OnInit {
    */
   changeStep(event) {
     if (event.status) {
-      this.campaign.templateName = event.data.name;
-      this.campaign.topicName = event.data.topicName;
+      if (this.campaign) {
+        this.campaign.templateName = event.data.name;
+        this.campaign.topicName = event.data.topicName;
+      }
       this.campaignFG.patchValue({
         message: event.data.htmlTemplate,
         templateId: event.data.id,

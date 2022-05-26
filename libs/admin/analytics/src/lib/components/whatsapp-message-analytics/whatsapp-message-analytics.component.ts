@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { BaseChartDirective } from 'ng2-charts';
@@ -24,22 +25,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
   hotelId: string;
   $subscription = new Subscription();
 
-  legendData = [
-    {
-      label: 'Sent',
-      borderColor: '#0749fc',
-      backgroundColor: '#0749fc',
-      dashed: true,
-      src: 'delivered',
-    },
-    {
-      label: 'Delivered',
-      borderColor: '#f2509b',
-      backgroundColor: '#f2509b',
-      dashed: false,
-      src: 'sent',
-    },
-  ];
+  legendData = analytics.whatsappLegendData;
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -51,75 +37,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
     };
   })(this);
 
-  chart: any = {
-    chartData: [
-      { data: [], label: 'Sent', fill: true },
-      { data: [], label: 'Delivered', fill: true },
-    ],
-    chartLabels: [],
-    chartOptions: {
-      responsive: true,
-      elements: {
-        line: {
-          tension: 0,
-        },
-        point: {
-          radius: 4,
-          borderWidth: 2,
-          hitRadius: 5,
-          hoverRadius: 5,
-          hoverBorderWidth: 2,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-              stepSize: 1,
-            },
-          },
-        ],
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      legendCallback: this.getLegendCallback,
-    },
-    chartColors: [
-      {
-        borderColor: '#FFBF04',
-        backgroundColor: '#FFC10780',
-        pointBackgroundColor: '#FFBF04',
-        pointBorderColor: '#ffffff',
-      },
-      {
-        borderColor: '#52B33F',
-        backgroundColor: '#31BB9280',
-        pointBackgroundColor: '#52B33F',
-        pointBorderColor: '#ffffff',
-      },
-    ],
-    chartLegend: false,
-    chartType: 'line',
-  };
+  chart = analytics.whatsappChart;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,

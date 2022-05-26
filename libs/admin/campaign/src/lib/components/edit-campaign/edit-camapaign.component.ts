@@ -415,7 +415,28 @@ export class EditCampaignComponent implements OnInit {
     detailCompRef.componentInstance.scheduleFG = this.scheduleFG;
     detailCompRef.componentInstance.onScheduleClose.subscribe((response) => {
       if (response.status) {
-        console.log(this.scheduleFG.getRawValue());
+        this.$subscription.add(
+          this._emailService
+            .scheduleCampaign(
+              this.hotelId,
+              this._emailService.createScheduleRequestData(
+                this.campaignFG.getRawValue(),
+                this.scheduleFG.get('time').value
+              )
+            )
+            .subscribe(
+              (response) => {
+                this._snackbarService.openSnackBarAsText(
+                  'Campaign scheduled.',
+                  '',
+                  { panelClass: 'success' }
+                );
+                this._router.navigate(['pages/marketing/campaign']);
+              },
+              ({ error }) =>
+                this._snackbarService.openSnackBarAsText(error.message)
+            )
+        );
       } else this.scheduleFG.reset();
       detailCompRef.close();
     });

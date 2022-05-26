@@ -181,17 +181,17 @@ export const analytics = {
   ],
 
   inhouseSourceChart: {
-    Labels: ['No Data'],
-    Data: [[100]],
-    Type: 'doughnut',
-    Legend: false,
-    Colors: [
+    labels: ['No Data'],
+    data: [[100]],
+    type: 'doughnut',
+    legend: false,
+    colors: [
       {
         backgroundColor: ['#D5D1D1'],
         borderColor: ['#D5D1D1'],
       },
     ],
-    Options: {
+    options: {
       tooltips: {
         backgroundColor: 'white',
         bodyFontColor: 'black',
@@ -202,9 +202,9 @@ export const analytics = {
         xPadding: 10,
         yPadding: 10,
       },
+      responsive: true,
+      cutoutPercentage: 75,
     },
-    responsive: true,
-    cutoutPercentage: 75,
   },
 
   notificationChart: {

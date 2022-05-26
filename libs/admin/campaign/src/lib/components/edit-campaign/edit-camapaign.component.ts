@@ -439,7 +439,6 @@ export class EditCampaignComponent implements OnInit {
     const reqData = this._emailService.createRequestData(
       this.campaignFG.getRawValue()
     );
-    reqData.message = this.getTemplateMessage(reqData);
     reqData.isDraft = false;
     this.isSending = true;
     this.$subscription.add(
@@ -470,20 +469,6 @@ export class EditCampaignComponent implements OnInit {
         () => (this.isSending = false)
       )
     );
-  }
-
-  /**
-   *@function getTemplateMessage function to get message from tempalate.
-   */
-  getTemplateMessage(data) {
-    let message = data.message;
-    if (
-      !this.templateData.includes(
-        `<img src = "emailUrl" alt = "" width = "1" height = "1">`
-      )
-    )
-      message += `<img src="emailUrl" alt="" width="1" height="1">`;
-    return message;
   }
 
   /**

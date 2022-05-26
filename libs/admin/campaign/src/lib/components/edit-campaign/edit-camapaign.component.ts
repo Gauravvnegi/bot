@@ -7,10 +7,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { empty, interval, of, Subscription } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
@@ -18,6 +22,7 @@ import { campaignConfig } from '../../constant/campaign';
 import { Campaign } from '../../data-model/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
+import { ScheduleCampaignComponent } from '../schedule-campaign/schedule-campaign.component';
 
 @Component({
   selector: 'hospitality-bot-camapaign-email',
@@ -27,6 +32,7 @@ import { EmailService } from '../../services/email.service';
 export class EditCampaignComponent implements OnInit {
   campaignId: string;
   campaignFG: FormGroup;
+  scheduleFG: FormGroup;
   templateData = '';
   hotelId: string;
   templateList = [];
@@ -56,7 +62,8 @@ export class EditCampaignComponent implements OnInit {
     private _emailService: EmailService,
     private _snackbarService: SnackBarService,
     private _router: Router,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private _modalService: ModalService
   ) {
     this.initFG();
   }
@@ -68,7 +75,7 @@ export class EditCampaignComponent implements OnInit {
   initFG(): void {
     this.campaignFG = this._fb.group({
       name: ['', [Validators.required]],
-      templateId: [''],
+      templateId: ['', Validators.required],
       from: ['', [Validators.required]],
       to: this._fb.array([], Validators.required),
       message: ['', [Validators.required]],
@@ -80,12 +87,16 @@ export class EditCampaignComponent implements OnInit {
         ],
       ],
       previewText: ['', Validators.maxLength(campaignConfig.validator.length)],
-      topicId: [''],
+      topicId: ['', Validators.required],
       status: [true],
       isDraft: [true],
       campaignType: [''],
       testEmails: this._fb.array([]),
       active: [true],
+    });
+    this.scheduleFG = this._fb.group({
+      scheduleDate: [0, Validators.required],
+      time: ['', Validators.required],
     });
   }
 
@@ -383,6 +394,96 @@ export class EditCampaignComponent implements OnInit {
         )
       );
     else this._router.navigate(['/pages/marketing/campaign']);
+  }
+
+  /**
+   * @function scheduleCampaign To schedule campaign.
+   */
+  scheduleCampaign() {
+    if (this.campaignFG.invalid) {
+      this._snackbarService.openSnackBarAsText('Invalid form.');
+      return;
+    }
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '550';
+    dialogConfig.disableClose = true;
+    const detailCompRef = this._modalService.openDialog(
+      ScheduleCampaignComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.scheduleFG = this.scheduleFG;
+    detailCompRef.componentInstance.onScheduleClose.subscribe((response) => {
+      if (response.status) {
+        console.log(this.scheduleFG.getRawValue());
+      } else this.scheduleFG.reset();
+      detailCompRef.close();
+    });
+  }
+
+  /**
+   * @function sendMail function to send campaign email.
+   * @returns error on form invalid.
+   */
+  sendMail() {
+    if (this.campaignFG.invalid) {
+      this._snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.error.fail',
+          priorityMessage: 'Invalid form.',
+        })
+        .subscribe();
+      this.campaignFG.markAllAsTouched();
+      return;
+    }
+    const reqData = this._emailService.createRequestData(
+      this.campaignFG.getRawValue()
+    );
+    reqData.message = this.getTemplateMessage(reqData);
+    reqData.isDraft = false;
+    this.isSending = true;
+    this.$subscription.add(
+      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
+        (response) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.success.campaignSent',
+                priorityMessage: 'Campiagn Sent successfully',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+          this._router.navigate(['pages/marketing/campaign']);
+        },
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate({
+              translateKey: 'messages.error.loadData',
+              priorityMessage: error.message,
+            })
+            .subscribe();
+        },
+        () => (this.isSending = false)
+      )
+    );
+  }
+
+  /**
+   *@function getTemplateMessage function to get message from tempalate.
+   */
+  getTemplateMessage(data) {
+    let message = data.message;
+    if (
+      !this.templateData.includes(
+        `<img src = "emailUrl" alt = "" width = "1" height = "1">`
+      )
+    )
+      message += `<img src="emailUrl" alt="" width="1" height="1">`;
+    return message;
   }
 
   /**

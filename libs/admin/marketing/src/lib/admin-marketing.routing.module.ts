@@ -1,20 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
 import { MarketingComponent } from './components/marketing/marketing.component';
 
 const appRoutes: Route[] = [
-  { path: '', redirectTo: 'dashboard' },
-  // {
-  //   path: 'dashboard',
-  //   loadChildren: () =>
-  //     import('@hospitality-bot/admin/marketing-dashboard').then(
-  //       (m) => m.AdminMarketingDashboardModule
-  //     ),
-  // },
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
   {
     path: 'dashboard',
-    component: ComingSoonComponent,
+    loadChildren: () =>
+      import('@hospitality-bot/admin/marketing-dashboard').then(
+        (m) => m.AdminMarketingDashboardModule
+      ),
+    canActivate: [LoadGuard],
   },
   {
     path: 'campaign',

@@ -6,7 +6,7 @@
   }
 }
 
-:host ::ng-deep .slick-track{
+:host ::ng-deep .slick-track {
   width: 6000px !important;
 }
 
@@ -162,7 +162,7 @@
   }
 }
 
-:host ::ng-deep .slick-dotted.slick-slider{
+:host ::ng-deep .slick-dotted.slick-slider {
   margin-bottom: 0;
 }
 
@@ -188,13 +188,13 @@
   }
 }
 
-:host ::ng-deep .slick-dotted.slick-slider{
+:host ::ng-deep .slick-dotted.slick-slider {
   @media only screen and (max-width: $M) {
     margin-bottom: 0px;
   }
 }
 
-:host ::ng-deep .activated{
+:host ::ng-deep .activated {
   border: 2px solid $primary-blue !important;
   .slider__text {
     background-color: $primary-blue !important;
@@ -202,16 +202,41 @@
   }
 }
 
-:host ::ng-deep .tick{
+:host ::ng-deep .tick {
   position: absolute;
   top: 8px;
   right: 8px;
-  img{
+  img {
     height: $full-width;
     width: $full-width;
   }
 }
 
-:host ::ng-deep .ngx-timepicker-control__input{
+:host ::ng-deep .ngx-timepicker-control__input {
   background: transparent !important;
+}
+
+.tab-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  .tab-item {
+    font-size: 18px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #121212;
+    margin: 5px 25px 5px 10px;
+    cursor: pointer;
+  }
+}
+
+.tab-active {
+  border-bottom: 1px solid #ff9600;
+  color: #ff9600 !important;
+  margin-bottom: 10px;
+  transform: scale(1.1);
 }

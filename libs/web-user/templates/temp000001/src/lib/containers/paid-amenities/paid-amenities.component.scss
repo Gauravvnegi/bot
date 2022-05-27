@@ -213,3 +213,28 @@
     width: $full-width;
   }
 }
+
+.tab-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  .tab-item {
+    font-size: 18px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #121212;
+    margin: 5px 25px 5px 10px;
+    cursor: pointer;
+  }
+}
+
+.tab-active {
+  border-bottom: 1px solid #ff9600;
+  color: #ff9600 !important;
+  margin-bottom: 10px;
+  transform: scale(1.1);
+}

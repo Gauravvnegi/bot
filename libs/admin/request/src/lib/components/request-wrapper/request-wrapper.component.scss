@@ -60,7 +60,7 @@
     @include margin-top(15px);
   }
   &-left {
-    width: 337px;
+    width: 360px;
     @media (max-width: $tablet) {
       @include width(30.3%);
     }

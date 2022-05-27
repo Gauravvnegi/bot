@@ -172,6 +172,17 @@
       max-height: calc(100vh - 60px);
       overflow-x: hidden;
       background-color: #f4f5f6;
+      position: relative;
+      .blackscreen {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        opacity: 0.3;
+        background-color: black;
+        z-index: 2;
+        display: none;
+      }
+
       .router__wrapper {
         min-height: calc(100vh - 12.5vh);
         @include padding(0 1.5rem);
@@ -255,8 +266,16 @@
   align-items: center;
   padding: 0 10px;
 }
+
 .options2 {
   display: flex;
   justify-content: flex-end;
   flex: 2;
+}
+
+.disabled {
+  pointer-events: none;
+  .blackscreen {
+    display: block !important;
+  }
 }

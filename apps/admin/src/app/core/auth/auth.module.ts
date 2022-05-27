@@ -15,7 +15,6 @@ import { ResendPasswordComponent } from './components/resend-password/resend-pas
 import { TranslateModule } from '@ngx-translate/core';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-
 @NgModule({
   declarations: [
     AuthComponent,

@@ -52,6 +52,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   };
 
   tabFilterItems = [];
+  dropdownItems = [];
   tabFilterIdx = 0;
 
   constructor(
@@ -79,6 +80,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
         value: slide.packageCode,
         label: slide.label,
         total: 0,
+        index: i,
       });
       this.parentForm.addControl(slide.packageCode, this.getAmenitiesFG());
       if (slide.subPackages?.length > 0) {
@@ -191,8 +193,17 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     );
   }
 
+  get tabListItems() {
+    return this.tabFilterItems.slice(0, 4);
+  }
+
   handleTabSelectionChange(event) {
     this.tabFilterIdx = event.index;
+    this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
+  }
+
+  handleMoreServicesSelect(event) {
+    this.tabFilterIdx = event.value.index;
     this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
   }
 }

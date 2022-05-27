@@ -24,7 +24,6 @@
 }
 
 .whole-package-wrapper {
-  // background-color: #f8f8f8;
   padding: 30px 20px;
   border-radius: 5px;
   position: relative;
@@ -44,12 +43,12 @@
       align-items: center;
       width: 342px;
       height: 119px;
-      margin: 59px 53px 60px 0;
+      margin: 0 53px 60px 0;
       border-radius: 5px;
       background-color: #f8f8f8;
       .image {
         height: 89px;
-        width: 89px;
+        width: 104px;
         border-radius: 3px;
         margin: 15px;
         img {
@@ -78,6 +77,9 @@
             letter-spacing: normal;
             text-align: left;
             color: #121212;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             @media only screen and (max-width: $M) {
               font-size: 14px;
             }

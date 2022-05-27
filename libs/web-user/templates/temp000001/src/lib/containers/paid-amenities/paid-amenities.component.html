@@ -1,9 +1,39 @@
 <div>
   <h3>What would you like to book for special amenities ?</h3>
-  <hospitality-bot-tab-group
-    [listItems]="tabFilterItems"
-    [selectedIndex]="tabFilterIdx"
-    (selectedTabChange)="handleTabSelectionChange($event)"
-  ></hospitality-bot-tab-group>
+  <div
+    style="
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      width: 100%;
+    "
+  >
+    <div class="tab-group">
+      <div
+        class="tab-item"
+        *ngFor="let tab of tabFilterItems.slice(0, 4); let i = index"
+        (click)="handleTabSelectionChange({ index: i })"
+        [ngClass]="{ 'tab-active': tabFilterIdx === i }"
+      >
+        {{ tab.label }}
+      </div>
+    </div>
+    <ng-container *ngIf="tabFilterItems.slice(4, tabFilterItems.length).length">
+      <mat-form-field class="more-services">
+        <mat-select
+          placeholder="More Services"
+          [value]="tabFilterItems[tabFilterIdx]"
+          (selectionChange)="handleMoreServicesSelect($event)"
+        >
+          <mat-option
+            *ngFor="let item of tabFilterItems.slice(4, tabFilterItems.length)"
+            [value]="item"
+            >{{ item.label }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+  </div>
   <ng-container #packageRenderer> </ng-container>
 </div>

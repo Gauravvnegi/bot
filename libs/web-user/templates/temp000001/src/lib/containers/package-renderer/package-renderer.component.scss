@@ -1,11 +1,5 @@
 @import 'temp000001';
 
-// .paid__service__wrapper {
-//   &--heading {
-//     font-size: $font-medium;
-//   }
-// }
-
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
   background-color: $primary-blue;
 }
@@ -30,7 +24,6 @@
 }
 
 .whole-package-wrapper {
-  // background-color: #f8f8f8;
   padding: 30px 20px;
   border-radius: 5px;
   position: relative;
@@ -50,12 +43,12 @@
       align-items: center;
       width: 342px;
       height: 119px;
-      margin: 59px 53px 60px 0;
+      margin: 0 53px 60px 0;
       border-radius: 5px;
       background-color: #f8f8f8;
       .image {
         height: 89px;
-        width: 89px;
+        width: 104px;
         border-radius: 3px;
         margin: 15px;
         img {
@@ -84,6 +77,10 @@
             letter-spacing: normal;
             text-align: left;
             color: #121212;
+            max-height: 50px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             @media only screen and (max-width: $M) {
               font-size: 14px;
             }
@@ -188,203 +185,6 @@
   @include primary-button();
   width: 150px !important;
 }
-
-// :host ::ng-deep .draggable {
-//   margin: 3% 0px;
-//   .slick-track {
-//     height: 54vh;
-//     min-width: 1300px;
-//     display: inline-block;
-//     div:focus {
-//       border: none;
-//       outline: none;
-//     }
-//     @media only screen and (max-width: $M) {
-//       height: 33vh;
-//     }
-//   }
-//   .slick-current + .slick-active {
-//     margin: 0px 30px;
-//     @media only screen and (max-width: $M) {
-//       margin: 0px;
-//     }
-//   }
-//   @media only screen and (max-width: $M) {
-//     margin: 3% 15%;
-//   }
-// }
-
-// :host ::ng-deep .slick-dots {
-//   display: none !important;
-// }
-
-// :host ::ng-deep .paid__service__data {
-//   width: 83%;
-//   border: 1px solid lightgray;
-//   border-radius: 5px;
-//   box-shadow: 0px 0px 1px 0px lightgray;
-//   .slider__image {
-//     height: 200px;
-//     width: $full-width;
-//     position: relative;
-//     img {
-//       height: 100%;
-//       width: $full-width;
-//     }
-//     .amount {
-//       position: absolute;
-//       right: 0px;
-//       bottom: 0px;
-//       background-color: rgb(12, 12, 12, 0.69);
-//       color: white;
-//       padding: 5px;
-//     }
-//   }
-//   .slider__text {
-//     padding: $padding-small;
-//     .label {
-//       font-size: $font-medium;
-//       font-weight: $bolder;
-//       margin-bottom: $margin-small;
-//     }
-//     .description {
-//       font-size: $font-responsive-small;
-//       font-weight: $medium;
-//     }
-//   }
-//   &:hover {
-//     cursor: pointer;
-//     box-shadow: 0px 0px 15px 0px lightgray;
-//   }
-//   @media only screen and (max-width: $M) {
-//     width: 93%;
-//     margin: 0px 3%;
-//     .slider__image {
-//       height: 130px;
-//       .amount {
-//         font-size: $font-small;
-//         padding: 1px;
-//       }
-//     }
-//     .slider__text {
-//       padding: 5px;
-//       line-height: 15px;
-//       .label {
-//         font-size: $font-small;
-//       }
-//       .description {
-//         font-size: $font-responsive-small;
-//       }
-//     }
-//   }
-// }
-
-// :host ::ng-deep .active {
-//   border: 2px solid $primary-blue !important;
-//   position: relative;
-//   .slider__text {
-//     background-color: $primary-blue !important;
-//     color: white !important;
-//   }
-//   &::after {
-//     content: '';
-//     position: absolute;
-//     bottom: -26px;
-//     right: 46%;
-//     width: 0;
-//     height: 0;
-//     border-left: 20px solid transparent;
-//     border-right: 20px solid transparent;
-//     border-top: 27px solid $primary-blue;
-//     clear: both;
-//   }
-//   @media only screen and (max-width: $M) {
-//     &::after {
-//       bottom: -10px;
-//       border-left: 10px solid transparent;
-//       border-right: 10px solid transparent;
-//       border-top: 15px solid $primary-blue;
-//     }
-//   }
-// }
-
-// :host ::ng-deep .slick-prev {
-//   z-index: 2;
-//   &::before {
-//     font-size: 47px;
-//     color: lightgray;
-//     @media only screen and (max-width: $M) {
-//       font-size: 30px;
-//     }
-//   }
-//   &:hover {
-//     &::before {
-//       color: $primary-blue;
-//     }
-//   }
-// }
-
-// :host ::ng-deep .slick-next {
-//   z-index: 2;
-//   &::before {
-//     font-size: 47px;
-//     color: lightgray;
-//     @media only screen and (max-width: $M) {
-//       font-size: 30px;
-//     }
-//   }
-//   &:hover {
-//     &::before {
-//       color: $primary-blue;
-//     }
-//   }
-// }
-
-// :host ::ng-deep .slick-prev {
-//   left: -32px;
-//   top: 40%;
-//   height: 50px;
-//   width: 50px;
-//   @media only screen and (max-width: $M) {
-//     left: -10px;
-//     top: 50%;
-//   }
-// }
-
-// :host ::ng-deep .slick-next {
-//   right: -26px;
-//   top: 40%;
-//   height: 50px;
-//   width: 50px;
-//   @media only screen and (max-width: $M) {
-//     right: -10px;
-//     top: 50%;
-//   }
-// }
-
-// :host ::ng-deep .slick-dotted.slick-slider{
-//   @media only screen and (max-width: $M) {
-//     margin-bottom: 0px;
-//   }
-// }
-
-// :host ::ng-deep .activated{
-//   border: 2px solid $primary-blue !important;
-//   .slider__text {
-//     background-color: $primary-blue !important;
-//     color: white !important;
-//   }
-// }
-
-// :host ::ng-deep .tick{
-//   position: absolute;
-//   top: 8px;
-//   right: 8px;
-//   img{
-//     height: $full-width;
-//     width: $full-width;
-//   }
-// }
 
 .subPackage_img {
   width: 50px;

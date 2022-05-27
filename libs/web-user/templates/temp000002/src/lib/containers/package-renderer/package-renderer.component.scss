@@ -24,7 +24,7 @@
 }
 
 .whole-package-wrapper {
-  background-color: #f8f8f8;
+  // background-color: #f8f8f8;
   padding: 30px 20px;
   border-radius: 5px;
   position: relative;
@@ -41,40 +41,110 @@
     flex-wrap: wrap;
     .checkbox {
       display: flex;
-      flex: 1 0 30%;
-      margin-right: 2%;
-      margin-bottom: 5%;
-      @media only screen and (max-width: $L) {
-        flex: 1 0 50%;
-      }
+      align-items: center;
+      width: 342px;
+      height: 119px;
+      margin: 59px 53px 60px 0;
+      border-radius: 5px;
+      background-color: #f8f8f8;
       .image {
-        margin: 0 12px;
-        height: 75px;
-        width: 75px;
+        height: 89px;
+        width: 89px;
         border-radius: 3px;
+        margin: 15px;
         img {
           height: 100%;
           width: 100%;
         }
       }
-      .text {
-        @media only screen and (max-width: $M) {
-          width: 60%;
-        }
-        .label {
-          font-weight: 600;
-          font-size: 16px;
+      .text-container {
+        width: calc(100% - 119px);
+        height: calc(100% - 30px);
+        padding: 15px 15px 15px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .text {
           @media only screen and (max-width: $M) {
-            font-size: 14px;
+            width: 60%;
+          }
+          .label {
+            font-family: Montserrat;
+            font-size: 18px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #121212;
+            @media only screen and (max-width: $M) {
+              font-size: 14px;
+            }
+          }
+          .rate {
+            margin-top: 5px;
+            color: $primary-blue;
+            font-weight: 600;
+            @media only screen and (max-width: $M) {
+              font-size: 12px;
+            }
           }
         }
-        .rate {
-          margin-top: 5px;
-          color: $primary-blue;
-          font-weight: 600;
-          @media only screen and (max-width: $M) {
+        .btn-container {
+          display: flex;
+          justify-content: flex-end;
+          .btn {
+            width: 69px;
+            height: 26px;
+            border-radius: 4px;
+            background-color: #3588c4;
+            font-family: Montserrat;
             font-size: 12px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.67;
+            letter-spacing: normal;
+            text-align: left;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            cursor: pointer;
+            mat-icon {
+              font-size: 13px;
+              height: 13px;
+              width: 13px;
+            }
           }
+          .remove-btn {
+            width: 69px;
+            height: 26px;
+            border-radius: 4px;
+            font-family: Montserrat;
+            font-size: 12px;
+            font-weight: 600;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.67;
+            letter-spacing: normal;
+            text-align: left;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            cursor: pointer;
+            background-color: #c43535;
+          }
+        }
+        .button {
+          width: 69px;
+          height: 26px;
+          margin: 18px 0 0 39px;
+          padding: 5px 14px 5px 14.9px;
+          border-radius: 4px;
+          background-color: #3588c4;
         }
       }
       @media only screen and (max-width: 800px) {

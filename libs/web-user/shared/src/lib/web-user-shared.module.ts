@@ -44,6 +44,7 @@ import { LoaderComponent } from './presentational/loader/loader.component';
 import { CheckinDateAlertComponent } from './presentational/checkin-date-alert/checkin-date-alert.component';
 import { ImageHandlingComponent } from './presentational/image-handling/image-handling.component';
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
+import { TabGroupComponent } from './presentational/tab-group/tab-group.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   let { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -121,6 +122,7 @@ export interface IThemeConfig {
     LoaderComponent,
     CheckinDateAlertComponent,
     ImageHandlingComponent,
+    TabGroupComponent,
   ],
   exports: [
     SharedMaterialModule,
@@ -162,6 +164,7 @@ export interface IThemeConfig {
     LoaderComponent,
     CheckinDateAlertComponent,
     ImageHandlingComponent,
+    TabGroupComponent,
   ],
 })
 export class WebUserSharedModule {

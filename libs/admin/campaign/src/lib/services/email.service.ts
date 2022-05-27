@@ -117,7 +117,6 @@ export class EmailService extends ApiService {
   }
 
   createScheduleRequestData(data, time) {
-    debugger;
     const reqData = {};
     reqData['to'] = this.mapSendersData('to', data);
     if (data['cc']) reqData['cc'] = data.cc;

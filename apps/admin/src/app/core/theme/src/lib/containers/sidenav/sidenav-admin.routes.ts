@@ -48,7 +48,7 @@ export const ADMIN_ROUTES = [
   },
   {
     path: 'marketing',
-    title: 'Marketing',
+    title: 'eMark-IT',
     url: 'assets/svg/megaphone.svg',
     children: [
       {

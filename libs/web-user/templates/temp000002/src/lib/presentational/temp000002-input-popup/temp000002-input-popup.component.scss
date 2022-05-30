@@ -1,12 +1,21 @@
 @import 'temp000002';
 
 :host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-start {
-    border-color: $primary-blue;
-  }
-  :host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-end {
-    border-color: $primary-blue;
-  }
-  
-  :host ::ng-deep .mat-raised-button {
-    @include primary-button();
-  }
+  border-color: $primary-blue;
+}
+:host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-end {
+  border-color: $primary-blue;
+}
+
+:host ::ng-deep .mat-raised-button {
+  @include primary-button();
+}
+
+.cross {
+  right: 20px !important;
+  top: 0 !important;
+}
+
+.popup__wrapper {
+  padding: 10px 20px 20px 20px;
+}

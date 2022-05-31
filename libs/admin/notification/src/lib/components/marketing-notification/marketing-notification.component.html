@@ -59,7 +59,7 @@
       <div class="field full-width">
         <mat-label class="mat-label">To:</mat-label>
         <mat-form-field>
-          <mat-chip-list #chipList>
+          <mat-chip-list #chipList [disabled]="true">
             <mat-chip
               *ngFor="let email of to.value"
               (removed)="removeEmail(email, to)"

@@ -26,7 +26,15 @@
         <hospitality-bot-request-list></hospitality-bot-request-list>
       </div>
       <div class="request-body-right">
-        <hospitality-bot-request-detail></hospitality-bot-request-detail>
+        <hospitality-bot-request-detail
+          (guestInfo)="openGuestInfo($event)"
+        ></hospitality-bot-request-detail>
+      </div>
+      <div class="guest-info-enable" *ngIf="guestInfoEnable">
+        <hospitality-bot-guest-info
+          (closeInfo)="closeGuestInfo($event)"
+          [data]="Id"
+        ></hospitality-bot-guest-info>
       </div>
     </div>
   </ng-container>

@@ -1,0 +1,50 @@
+.guest-person {
+  padding: 15px;
+
+  .person-title {
+    font: normal normal bold 14px/18px 'Roboto';
+    letter-spacing: 0.84px;
+  }
+  .person-image {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+
+    .default {
+      width: 40px;
+      height: 39.8px;
+      background-color: olivedrab;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .guest-name {
+    margin-left: 15px;
+    font: normal normal normal 12px/14px 'Roboto';
+    letter-spacing: 0.72px;
+  }
+  .contact-detials {
+    margin-top: 15px;
+    font: normal normal normal 14px/18px 'Roboto';
+    letter-spacing: 0.84px;
+    color: #b5b5c3;
+  }
+  .label {
+    font: normal normal bold 10px/14px 'Roboto';
+    letter-spacing: 0.6px;
+    text-align: left;
+    color: #99a6b5;
+    margin-top: 15px;
+  }
+  .label-text {
+    font: normal normal bold 12px/14px 'Roboto';
+    letter-spacing: 0.72px;
+    text-align: left;
+    margin-top: 5px;
+  }
+  .border-line {
+    border: solid 1px #e0e0e0;
+  }
+}

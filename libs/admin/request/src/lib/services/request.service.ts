@@ -8,6 +8,11 @@ import { RequestData } from '../../../../notification/src/lib/data-models/reques
 export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
   refreshData = new BehaviorSubject(false);
+
+  getReservationDetails(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
+  }
+
   getAllRequests(config): Observable<any> {
     return this.get(`/api/v1/request/${config.queryObj}`);
   }
@@ -52,6 +57,10 @@ export class RequestService extends ApiService {
     return this.get(
       `/api/v1/hotel/${hotelId}/templates/${templateId}?journey=${journey}`
     );
+  }
+
+  updatePreArrivalRequest(id, data) {
+    return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
   }
 
   getNotificationConfig(hotelId: string): Observable<any> {
@@ -101,5 +110,13 @@ export class RequestService extends ApiService {
 
   searchBooking(config) {
     return this.get(`/api/v1/reservation/room${config}`);
+  }
+
+  getGuestReservations(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}/reservations`);
+  }
+
+  getGuestById(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}`);
   }
 }

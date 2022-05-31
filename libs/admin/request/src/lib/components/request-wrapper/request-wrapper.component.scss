@@ -5,7 +5,7 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color:#002046;
+  color: #002046;
   font-size: 14px;
   font-weight: bold;
 }
@@ -74,6 +74,15 @@
     }
   }
 }
+
+.guest-info-enable {
+  width: 23%;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid #9eaeb8;
+  max-width: 259px;
+}
+
 ::ng-deep .mat-tab-labels {
   @media (max-width: $tablet) {
     @include height(63px);
@@ -81,8 +90,9 @@
   }
 }
 :host ::ng-deep .mat-tab-header {
-  border:none !important;
+  border: none !important;
 }
-:host ::ng-deep .mat-tab-nav-bar, .mat-tab-header {
-  border:none !important;
+:host ::ng-deep .mat-tab-nav-bar,
+.mat-tab-header {
+  border: none !important;
 }

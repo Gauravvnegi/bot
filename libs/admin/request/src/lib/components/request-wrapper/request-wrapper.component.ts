@@ -11,6 +11,7 @@ import { RaiseRequestComponent } from '../raise-request/raise-request.component'
   styleUrls: ['./request-wrapper.component.scss'],
 })
 export class RequestWrapperComponent implements OnInit {
+  guestInfoEnable = false;
   private $subscription = new Subscription();
   tabFilterItems = [
     {
@@ -36,6 +37,17 @@ export class RequestWrapperComponent implements OnInit {
     this.tabFilterIdx = event.index;
   }
 
+  openGuestInfo(event) {
+    if (event.openGuestInfo) {
+      this.guestInfoEnable = true;
+    }
+  }
+
+  closeGuestInfo(event) {
+    if (event.close) {
+      this.guestInfoEnable = false;
+    }
+  }
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;

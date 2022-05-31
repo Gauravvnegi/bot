@@ -24,7 +24,7 @@ export class RequestDetailComponent implements OnInit {
   hotelId: string;
 
   @Output() guestInfo = new EventEmitter();
-  
+
   requestFG: FormGroup;
   constructor(
     private _requestService: RequestService,

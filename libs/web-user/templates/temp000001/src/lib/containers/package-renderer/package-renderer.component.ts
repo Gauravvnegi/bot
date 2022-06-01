@@ -162,14 +162,14 @@ export class PackageRendererComponent
     }
   }
 
-  onSubPackageStatusChange(data) {
-    if (data.currentValue) {
-      this.servicePackage(data.formGroup.get('packageCode').value);
-    } else {
-      this.removeComponentFromContainer(
-        data.formGroup.get('packageCode').value
-      );
-    }
+  onSubPackageStatusChange(formGroup) {
+    formGroup.patchValue({ isSelected: true });
+    this.servicePackage(formGroup.get('packageCode').value);
+  }
+
+  onRemoveButtonClicked(formGroup) {
+    this.removeComponentFromContainer(formGroup.get('packageCode').value);
+    formGroup.patchValue({ isSelected: false });
   }
 
   removeComponentFromContainer(packageCode) {
@@ -232,6 +232,7 @@ export class PackageRendererComponent
         .updateAmenity(this._reservationService.reservationId, data)
         .subscribe(
           (response) => {
+            this.packageComponentRefObj.destroy();
             this._paidService.updateAmenitiesDS(response);
             this._paidService.updateDSForRemovedAmenity(
               data.packagesToBeRemove
@@ -239,7 +240,10 @@ export class PackageRendererComponent
             this.resetSubPackageForm(data.packagesToBeRemove);
             this.selectedSubPackageArray = [];
             this.selectedService = '';
-            this.onPackageUpdate.emit(true);
+            this.onPackageUpdate.emit({
+              status: true,
+              data: this.parentForm.getRawValue(),
+            });
             this._translateService
               .get('MESSAGES.SUCCESS.AMENITY_UPDATE_COMPLETE')
               .subscribe((translatedMsg) => {

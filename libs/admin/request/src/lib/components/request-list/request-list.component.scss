@@ -180,7 +180,6 @@
 }
 
 .loading {
-  // margin: 20px auto;
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
@@ -275,5 +274,11 @@
 }
 :host ::ng-deep .mat-tab-labels {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+}
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: flex;
 }

@@ -364,16 +364,16 @@ export const feedback = {
       ],
       transactional: [
         {
-          label: 'Service',
+          label: 'Department',
           icon: '',
-          value: 'SERVICE',
+          value: 'DEPARTMENT',
           total: 0,
           isSelected: true,
         },
         {
-          label: 'Department',
+          label: 'Service',
           icon: '',
-          value: 'DEPARTMENT',
+          value: 'SERVICE',
           total: 0,
           isSelected: false,
         },

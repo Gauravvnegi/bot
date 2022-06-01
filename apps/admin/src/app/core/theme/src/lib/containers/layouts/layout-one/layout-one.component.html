@@ -41,7 +41,7 @@
             : { visibility: 'hidden', height: '0px' }
         "
       >
-        <div class="options1">
+        <div class="options1" [ngClass]="{ disabled: isGlobalFilterVisible }">
           <div class="global_search">
             <admin-search-bar
               [parentForm]="searchFG"
@@ -68,7 +68,7 @@
           </div>
           <div class="filter-range-wrapper">
             <div style="position: relative;" class="temp-width">
-              <div (click)="enableGlobalFilter()" class="header--button">
+              <div (click)="enableGlobalFilter(main)" class="header--button">
                 <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
               </div>
               <div
@@ -77,6 +77,7 @@
                   isGlobalFilterVisible &&
                   (filterService.emitFilterValue$ | async) as initialFilterValue
                 "
+                [@slideInOut]
               >
                 <admin-filter
                   [initialFilterValue]="initialFilterValue"
@@ -97,8 +98,12 @@
         mode="query"
       ></mat-progress-bar>
     </div>
-    <div class="main-panel--container">
-      <div class="main">
+    <div
+      class="main-panel--container"
+      [ngClass]="{ disabled: isGlobalFilterVisible }"
+    >
+      <div class="main" #main>
+        <div class="blackscreen"></div>
         <div class="router__wrapper">
           <router-outlet></router-outlet>
         </div>

@@ -24,7 +24,6 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
 
   @ViewChild('packageRenderer', { read: ViewContainerRef })
   packageRendererContainer;
-  @ViewChild('slickModal') slickModal: SlickCarouselComponent;
 
   protected $subscription: Subscription = new Subscription();
 
@@ -52,6 +51,10 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     ],
   };
 
+  tabFilterItems = [];
+  dropdownItems = [];
+  tabFilterIdx = 0;
+
   constructor(
     protected _fb: FormBuilder,
     protected _paidService: PaidService,
@@ -62,17 +65,30 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     this.addAmenityToForm();
   }
 
+  ngAfterViewInit(): void {
+    this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
+  }
+
   initPaidAmenitiesForm() {
     this.parentForm = this._fb.group({});
   }
 
   addAmenityToForm() {
-    this.paidAmenities.forEach((slide) => {
+    this.tabFilterItems = [];
+    this.paidAmenities.forEach((slide, i) => {
+      this.tabFilterItems.push({
+        value: slide.packageCode,
+        label: slide.label,
+        total: 0,
+        index: i,
+      });
       this.parentForm.addControl(slide.packageCode, this.getAmenitiesFG());
       if (slide.subPackages?.length > 0) {
         this.addSubPackageToAmenity(slide);
       }
       this.getAminityForm(slide.packageCode).patchValue(slide);
+      if (this.packageRendererContainer && i == 0)
+        this.openPackage(slide.packageCode);
     });
   }
 
@@ -106,9 +122,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  openPackage(packageCode, e) {
+  openPackage(packageCode) {
     this.selectedService = packageCode;
-    this.pauseSlickCarousel();
     this.clearPackageRendererContainer();
     let serviceFormGroup = this.getAminityForm(packageCode);
     this.selectedSlide = this.paidAmenities.find(
@@ -119,12 +134,6 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       serviceFormGroup,
       this.selectedSlide
     );
-    const classes =
-      e.children && e.children[0].attributes[1].nodeValue.split(' ');
-    if (classes && !classes.includes('active')) {
-      e.children[0].attributes[1].nodeValue =
-        e.children[0].attributes[1].nodeValue + ' active';
-    }
   }
 
   createComponent(component, serviceFormGroup, selectedSlide) {
@@ -144,9 +153,9 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   listenForPackageUpdate() {
     this.$subscription.add(
       this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(
-        () => {
+        (response) => {
           this.packageRendererComponentRefObj.destroy();
-          this.playSlickCarousel();
+          this.openPackage(response.data.packageCode);
         }
       )
     );
@@ -158,57 +167,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     }
   }
 
-  afterChange(e) {
-    let draggableList = (e.event.target as HTMLElement).getElementsByClassName(
-      'slick-list draggable'
-    );
-    if (draggableList && draggableList.length) {
-      let draggableEL = draggableList[0];
-      const elements = Array.from(
-        (draggableEL.firstChild as HTMLElement).getElementsByClassName(
-          'slick-cloned'
-        )
-      );
-
-      for (const element of elements) {
-        const slidePackageCode = (element.firstChild as HTMLElement).getAttribute(
-          'data-slidedata'
-        );
-
-        const classes = element.children[0].attributes[1].nodeValue.split(' ');
-        if (this.selectedService === slidePackageCode) {
-          if (!classes.includes('active')) {
-            element.children[0].attributes[1].nodeValue =
-              element.children[0].attributes[1].nodeValue + ' active';
-          }
-        } else {
-          if (classes.includes('active')) {
-            element.children[0].attributes[1].nodeValue = classes
-              .filter((value) => value !== 'active')
-              .join(' ');
-          }
-        }
-
-        if (slidePackageCode) {
-          element.addEventListener(
-            'click',
-            this.openPackage.bind(this, slidePackageCode, element)
-          );
-        }
-      }
-    }
-  }
-
   trackByPackageId(index: number, paidPackage: any) {
     return paidPackage['id'];
-  }
-
-  pauseSlickCarousel() {
-    this.slickModal.slickPause();
-  }
-
-  playSlickCarousel() {
-    this.slickModal.slickPlay();
   }
 
   getAminityForm(packageCode) {
@@ -231,5 +191,19 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       this._paidService.paidAmenities &&
       this._paidService.paidAmenities.paidService
     );
+  }
+
+  get tabListItems() {
+    return this.tabFilterItems.slice(0, 4);
+  }
+
+  handleTabSelectionChange(event) {
+    this.tabFilterIdx = event.index;
+    this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
+  }
+
+  handleMoreServicesSelect(event) {
+    this.tabFilterIdx = event.value.index;
+    this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
   }
 }

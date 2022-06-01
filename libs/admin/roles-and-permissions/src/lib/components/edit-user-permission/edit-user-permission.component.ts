@@ -229,10 +229,12 @@ export class EditUserPermissionComponent implements OnInit {
   get permissionConfigsFA() {
     return this.userForm.get('permissionConfigs') as FormArray;
   }
+  
   openRolesPermission(event) {
     event.stopPropagation();
     this.router.navigate(['/pages/roles-permissions']);
   }
+
   goback() {
     this._location.back();
   }

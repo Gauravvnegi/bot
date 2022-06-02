@@ -151,7 +151,6 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   updateGuestDetails() {
-    debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '50%';

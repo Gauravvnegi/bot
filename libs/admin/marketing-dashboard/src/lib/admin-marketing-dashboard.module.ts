@@ -4,6 +4,7 @@ import { SharedModule } from 'primeng/api';
 import { AdminSharedModule,  } from '@hospitality-bot/admin/shared';
 import { AdminMarketingDashboardRoutingModule } from './admin-marketing-dashboard.routing.module';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { MarketingService } from './services/stats.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -13,6 +14,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     NgCircleProgressModule.forRoot(),
   ],
   declarations: [...AdminMarketingDashboardRoutingModule.components,],
+  providers: [MarketingService],
 })
 export class AdminMarketingDashboardModule {}
 

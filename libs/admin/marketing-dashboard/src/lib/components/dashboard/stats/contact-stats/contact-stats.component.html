@@ -23,21 +23,131 @@
     </div>
     <div class="contact-graph-wraper-total">
       <div class="contact-graph-wraper-total-number">
-        404
+        {{ stats.total }}
       </div>
       <div class="contact-graph-wraper-total-text">
         Total Contacts
       </div>
     </div>
     <div class="stat-val-container">
-      <div
-        class="stat-val"
-        *ngFor="let item of contactValue"
-        [style.border-left]="'5px solid ' + item.color"
-      >
+      <div class="stat-val">
+        <div class="label">{{ stats.subscribed.label }}</div>
+        <div class="value">
+          <div>
+            {{ stats.subscribed.score }}
+          </div>
+          <div
+            class="value__percent"
+            [ngStyle]="
+              stats.subscribed.comparisonPercent >= 0
+                ? { color: 'green' }
+                : { color: 'red' }
+            "
+          >
+            (
+            <div class="value__percent__width">
+              {{ stats.subscribed.comparisonPercent }}
+            </div>
+            %)
+            <ng-container
+              *ngIf="
+                stats.subscribed.comparisonPercent >= 0;
+                then uparrow;
+                else down
+              "
+            >
+            </ng-container>
+            <ng-template #uparrow>
+              <img src="assets/svg/uparrow.svg" />
+            </ng-template>
+            <ng-template #down>
+              <img src="assets/svg/down-percentage.svg" />
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="stat-val">
+        <div class="label">{{ stats.unsubscribed.label }}</div>
+        <div class="value">
+          <div>
+            {{ stats.unsubscribed.score }}
+          </div>
+          <div
+            class="value__percent"
+            [ngStyle]="
+              stats.unsubscribed.comparisonPercent >= 0
+                ? { color: 'green' }
+                : { color: 'red' }
+            "
+          >
+            (
+            <div class="value__percent__width">
+              {{ stats.unsubscribed.comparisonPercent }}
+            </div>
+            %)
+            <ng-container
+              *ngIf="
+                stats.unsubscribed.comparisonPercent >= 0;
+                then uparrow;
+                else down
+              "
+            >
+            </ng-container>
+            <ng-template #uparrow>
+              <img src="assets/svg/uparrow.svg" />
+            </ng-template>
+            <ng-template #down>
+              <img src="assets/svg/down-percentage.svg" />
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="stat-val">
+        <div class="label">{{ stats.bounced.label }}</div>
+        <div class="value">
+          <div>
+            {{ stats.bounced.score }}
+          </div>
+          <div
+            class="value__percent"
+            [ngStyle]="
+              stats.bounced.comparisonPercent >= 0
+                ? { color: 'green' }
+                : { color: 'red' }
+            "
+          >
+            (
+            <div class="value__percent__width">
+              {{ stats.bounced.comparisonPercent }}
+            </div>
+            %)
+            <ng-container
+              *ngIf="
+                stats.bounced.comparisonPercent >= 0;
+                then uparrow;
+                else down
+              "
+            >
+            </ng-container>
+            <ng-template #uparrow>
+              <img src="assets/svg/uparrow.svg" />
+            </ng-template>
+            <ng-template #down>
+              <img src="assets/svg/down-percentage.svg" />
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="stat-val" [style.border-left]="'5px solid ' + item.color">
         <div class="label">{{ item.label }}</div>
         <div class="value">{{ item.progress }}%</div>
       </div>
+
+      <div class="stat-val" [style.border-left]="'5px solid ' + item.color">
+        <div class="label">{{ item.label }}</div>
+        <div class="value">{{ item.progress }}%</div>
+      </div> -->
     </div>
   </div>
 </div>

@@ -86,11 +86,24 @@
           color: $quote-color;
         }
         .value {
+          display: flex;
+          width: 69px;
+          justify-content: end;
           font-size: 12px;
           font-weight: bold;
           letter-spacing: 0.72px;
           text-align: right;
           color: #002046;
+          &__percent {
+            display: flex;
+            &__width {
+              white-space: normal;
+              display: block;
+              height: 15px;
+              overflow: hidden;
+              word-break: break-all;
+            }
+          }
         }
       }
     }

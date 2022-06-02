@@ -1,24 +1,24 @@
 <div class="wrapper">
   <div class="stats-container">
     <div class="stats">
-      <div class="stats__text">text</div>
-      <div class="stats__value">value</div>
+      <div class="stats__text">{{ stats.totalSent.label }}</div>
+      <div class="stats__value">{{ stats.totalSent.score }}</div>
     </div>
     <div class="stats">
-      <div class="stats__text">text</div>
-      <div class="stats__value">value</div>
+      <div class="stats__text">{{ stats.openRate.label }}</div>
+      <div class="stats__value">{{ stats.openRate.score }}%</div>
     </div>
     <div class="stats">
-      <div class="stats__text">text</div>
-      <div class="stats__value">value</div>
+      <div class="stats__text">{{ stats.conversionRate.label }}</div>
+      <div class="stats__value">{{ stats.conversionRate.score }}%</div>
     </div>
     <div class="stats">
-      <div class="stats__text">text</div>
-      <div class="stats__value">value</div>
+      <div class="stats__text">{{ stats.totalClicked.label }}</div>
+      <div class="stats__value">{{ stats.totalClicked.score }}</div>
     </div>
     <div class="stats">
-      <div class="stats__text">text</div>
-      <div class="stats__value">value</div>
+      <div class="stats__text">{{ stats.ctr.label }}</div>
+      <div class="stats__value">{{ stats.ctr.score }}%</div>
     </div>
   </div>
 </div>

@@ -1,6 +1,7 @@
 .guest-person {
   padding: 15px;
-
+  height: calc(100vh - 307px);
+  overflow-y: auto;
   .person-title {
     font: normal normal bold 14px/18px 'Roboto';
     letter-spacing: 0.84px;

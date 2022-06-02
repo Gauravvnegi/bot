@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { RequestService } from '../../services/request.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Guest, GuestDetails } from '../../data-models/request.model';
+import { Guest, GuestDetails, Requests } from '../../data-models/request.model';
 
 @Component({
   selector: 'hospitality-bot-guest-info',
@@ -85,6 +85,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
           this.data = response;
           this.guestId = response['guestDetails']?.primaryGuest?.id;
           this.loadGuestInfo();
+          this.loadGuestRequests();
         }
       })
     );
@@ -142,6 +143,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
             response,
             this.colorMap
           );
+
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {
@@ -156,5 +158,14 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.bookingFG = this._fb.group({
       booking: [''],
     });
+  }
+
+  loadGuestRequests() {
+    this.$subscription.add(
+      this.requestService.getGuestRequestData(this.guestId).subscribe(
+        (response) => (this.requestList = new Requests().deserialize(response)),
+        ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+      )
+    );
   }
 }

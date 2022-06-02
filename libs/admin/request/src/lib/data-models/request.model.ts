@@ -1,9 +1,9 @@
+import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set, trim } from 'lodash';
 import {
   Booking,
   Feedback,
   Room,
-  Status,
 } from '../../../../dashboard/src/lib/data-models/reservation-table.model';
 
 export interface Deserializable {
@@ -12,6 +12,7 @@ export interface Deserializable {
 
 export class GuestDetails {
   records: GuestDetail[];
+  id: string;
 
   deserialize(input, colorMap) {
     this.records = new Array();
@@ -73,7 +74,6 @@ export class Guest implements Deserializable {
   id;
   nameTitle;
   name: string;
-
   firstName: string;
   lastName: string;
   countryCode: string;
@@ -83,6 +83,7 @@ export class Guest implements Deserializable {
   nationality: string;
   nps: string;
   churn: string;
+  numberOfBookings: number;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -102,7 +103,12 @@ export class Guest implements Deserializable {
       set({}, 'documents', get(input, ['documents'])),
       set({}, 'nationality', get(input, ['nationality'])),
       set({}, 'nps', get(input, ['attributes', 'overAllNps'])),
-      set({}, 'churn', get(input, ['attributes', 'churnProbalilty']))
+      set({}, 'churn', get(input, ['attributes', 'churnProbalilty'])),
+      set(
+        {},
+        'numberOfBookings',
+        get(input, ['attributes', 'numberOfBookings'])
+      )
     );
     return this;
   }
@@ -132,5 +138,68 @@ export class Guest implements Deserializable {
       })
       .join('')
       .toUpperCase();
+  }
+}
+
+export class Requests implements Deserializable {
+  records: Request[];
+  deserialize(input) {
+    this.records = new Array<Request>();
+    input.forEach((item) => this.records.push(new Request().deserialize(item)));
+    return this;
+  }
+}
+
+export class Request implements Deserializable {
+  action: string;
+  itemCode: number;
+  jobDuration: number;
+  itemName: string;
+  closedTime: number;
+  requestTime: number;
+  status: string;
+  priority: string;
+  id: number;
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'action', get(input, ['action'])),
+      set({}, 'itemCode', get(input, ['itemCode'])),
+      set({}, 'jobDuration', get(input, ['jobDuration'])),
+      set({}, 'itemName', get(input, ['itemName'])),
+      set({}, 'closedTime', get(input, ['closedTime'])),
+      set({}, 'requestTime', get(input, ['requestTime'])),
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'priority', get(input, ['priority'])),
+      set({}, 'id', get(input, ['id']))
+    );
+
+    return this;
+  }
+
+  getRequestDateTime(timezone = '+05:30') {
+    return `${DateService.getDateFromTimeStamp(
+      this.requestTime,
+      'D-M-YYYY',
+      timezone
+    )} at ${DateService.getDateFromTimeStamp(
+      this.requestTime,
+      'h:mm a',
+      timezone
+    )}`;
+  }
+
+  getClosedTime(timezone = '+05:30') {
+    if (this.closedTime)
+      return `${DateService.getDateFromTimeStamp(
+        this.closedTime,
+        'D-M-YYYY',
+        timezone
+      )} at ${DateService.getDateFromTimeStamp(
+        this.closedTime,
+        'h:mm a',
+        timezone
+      )}`;
+    else '------';
   }
 }

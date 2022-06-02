@@ -27,7 +27,7 @@
     Phone No.
   </div>
   <div class="label-text">
-    <!-- {{ data.contactDetails.contactNumber }} -->
+    {{ data.phoneNumber }}
   </div>
   <div class="label">
     Email
@@ -42,18 +42,18 @@
     No. of stays
   </div>
   <div class="label-text">
-    {{ data || 'Unknown' }}
+    {{ data.numberOfBookings }}
   </div>
   <div class="label">
     NPS
   </div>
   <div class="label-text">
-    {{ data.nps || 'Unknown' }}
+    {{ data.nps }}
   </div>
   <div class="label">
     Curn probabilty prediction
   </div>
   <div class="label-text">
-    {{ data.churn || 'Unknown' }}
+    {{ data.churn }}
   </div>
 </div>

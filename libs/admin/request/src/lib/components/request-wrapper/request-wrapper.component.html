@@ -22,10 +22,14 @@
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">
     <div class="request-body">
-      <div class="request-body-left">
+      <div class="request-body-left" [ngClass]="{ disabled: guestInfoEnable }">
+        <div class="blackscreen"></div>
+
         <hospitality-bot-request-list></hospitality-bot-request-list>
       </div>
-      <div class="request-body-right">
+      <div class="request-body-right" [ngClass]="{ disabled: guestInfoEnable }">
+        <div class="blackscreen"></div>
+
         <hospitality-bot-request-detail
           (guestInfo)="openGuestInfo($event)"
         ></hospitality-bot-request-detail>

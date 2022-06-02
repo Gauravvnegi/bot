@@ -1,13 +1,13 @@
-<div class="guest-request" [formGroup]="requestFG">
+<div class="guest-request">
   <div class="guest-request-title">
     Requests
   </div>
   <div
-    *ngIf="requestList && requestList.length && requestFG; else noRequest"
+    *ngIf="requestList?.records; else noRequest"
     class="guest-request-items-wrap"
   >
     <div
-      *ngFor="let request of requestList"
+      *ngFor="let request of requestList.records"
       class="guest-request-items-wrap-item"
     >
       <div class="row guest-request-items-wrap-item-row">
@@ -54,12 +54,8 @@
       <mat-select
         class="status"
         placeholder=""
-        [formControlName]="request.id"
-        [disabled]="
-          request.action === 'Closed' ||
-          request.action === 'Timeout' ||
-          request.action === 'Reject'
-        "
+        [value]="request.action"
+        [disabled]="true"
         (selectionChange)="handleStatusChange(request, $event)"
       >
         <ng-container

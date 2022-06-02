@@ -4,7 +4,7 @@
   </div>
   <!-- Current Booking -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="currentBooking?.length">
       Current Booking
     </div>
     <div class="past">
@@ -30,7 +30,7 @@
 
   <!-- Past Booking -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="pastBooking?.length">
       Past Booking
     </div>
     <div class="past">
@@ -56,7 +56,7 @@
 
   <!-- Upcoming Booking  -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="upcomingBooking?.length">
       Upcoming Booking
     </div>
     <div class="past">

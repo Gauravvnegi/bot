@@ -236,6 +236,12 @@
           Manage Users Roles & Permission
         </p>
       </div>
+      <div *ngIf="isTabFilters">
+        <hospitality-bot-tab-group
+          [listItems]="tabFilterItems"
+          [selectedIndex]="tabFilterIdx"
+        ></hospitality-bot-tab-group>
+      </div>
       <div class="permission-table-header">
         <div class="left-table">
           <div class="image">

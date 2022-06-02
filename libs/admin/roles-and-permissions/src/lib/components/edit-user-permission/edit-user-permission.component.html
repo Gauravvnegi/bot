@@ -206,7 +206,7 @@
         </div>
       </div>
       <div class="fields"></div>
-      <div class="fields image-wrapper">
+      <!-- <div class="fields image-wrapper">
         <div class="image">
           <img src="assets/dummy.png" alt="image" />
         </div>
@@ -224,7 +224,7 @@
         <div class="note">
           Recommended dimension (in px) : 60*60
         </div>
-      </div>
+      </div> -->
     </div>
     <!-- <pre>
       {{ userForm.getRawValue() | json }}
@@ -239,6 +239,12 @@
         <p class="manage" (click)="openRolesPermission($event)">
           Manage Users Roles & Permission
         </p>
+      </div>
+      <div *ngIf="isTabFilters">
+        <hospitality-bot-tab-group
+          [listItems]="tabFilterItems"
+          [selectedIndex]="tabFilterIdx"
+        ></hospitality-bot-tab-group>
       </div>
       <div class="permission-table-header">
         <div class="left-table">

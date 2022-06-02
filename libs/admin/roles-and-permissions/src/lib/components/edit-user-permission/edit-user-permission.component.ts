@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
+import { userPermission } from '../../constants/user';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
@@ -28,6 +29,9 @@ import { Subject } from 'rxjs';
 export class EditUserPermissionComponent implements OnInit {
   brandNames: [];
   branchNames: [];
+  tabFilterItems;
+  isTabFilters = true;
+  tabFilterIdx:number = 0;
   countries = new CountryCode().getByLabelAndValue();
   userPermissions;
   isUpdatingPermissions = false;
@@ -105,6 +109,7 @@ export class EditUserPermissionComponent implements OnInit {
       });
     this.initManager();
     this.registerListeners();
+    this.tabFilterItems = userPermission.tabFilterItems;
   }
 
   initManager() {

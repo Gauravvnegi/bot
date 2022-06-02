@@ -32,7 +32,6 @@
     .edit-wrapper {
       display: flex;
       align-items: center;
-      width: 257px;
       height: 41px;
 
       .manage-box {
@@ -187,7 +186,7 @@
 
     .permission-table-header {
       display: flex;
-
+      margin-top: 65px;
       .left-table {
         width: 22%;
         border-right: 2px solid rgb(61, 187, 230, 0.1);
@@ -393,6 +392,13 @@
   }
 }
 
-// .color-added {
-//   background-color: #f8f8f8;
-// }
+:host ::ng-deep .mat-form-field-flex {
+  height: 43px;
+}
+
+:host ::ng-deep .mat-input-element {
+  font-size: 16px;
+}
+:host ::ng-deep .mat-select-value {
+  font-size: 16px;
+}

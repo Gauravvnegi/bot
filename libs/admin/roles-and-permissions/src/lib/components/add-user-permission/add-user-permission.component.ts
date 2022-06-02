@@ -15,6 +15,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { userPermission } from '../../constants/user';
 @Component({
   selector: 'hospitality-bot-add-user-permission',
   templateUrl: './add-user-permission.component.html',
@@ -23,6 +24,9 @@ import { Router } from '@angular/router';
 export class AddUserPermissionComponent implements OnInit {
   brandNames: [];
   branchNames: [];
+  tabFilterItems;
+  isTabFilters = true;
+  tabFilterIdx:number = 0;
   countries = new CountryCode().getByLabelAndValue();
   userPermissions;
   isSavingPermissions = false;
@@ -89,6 +93,7 @@ export class AddUserPermissionComponent implements OnInit {
     this.initUserPermissions();
     this.initManager();
     this.registerListeners();
+    this.tabFilterItems = userPermission.tabFilterItems;
   }
 
   initManager() {

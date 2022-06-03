@@ -36,6 +36,7 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
   }
 
   openDetailPage(item) {
+    debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';

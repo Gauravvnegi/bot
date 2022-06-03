@@ -64,14 +64,43 @@
     @media (max-width: $tablet) {
       @include width(30.3%);
     }
+    position: relative;
+    .blackscreen {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      opacity: 0.3;
+      background-color: black;
+      z-index: 4;
+      display: none;
+    }
   }
   &-right {
     width: calc(100% - 337px);
     @media (max-width: $tablet) {
       @include width(100%);
     }
+    position: relative;
+    .blackscreen {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      opacity: 0.3;
+      background-color: black;
+      z-index: 4;
+      display: none;
+    }
   }
 }
+
+.guest-info-enable {
+  width: 23%;
+  height: 100%;
+  background: #ffffff;
+  border-left: 1px solid #9eaeb8;
+  max-width: 259px;
+}
+
 ::ng-deep .mat-tab-labels {
   @media (max-width: $tablet) {
     @include height(63px);
@@ -84,4 +113,10 @@
 :host ::ng-deep .mat-tab-nav-bar,
 .mat-tab-header {
   border: none !important;
+}
+.disabled {
+  pointer-events: none;
+  .blackscreen {
+    display: block !important;
+  }
 }

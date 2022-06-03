@@ -23,7 +23,7 @@ export class RequestDetailComponent implements OnInit {
   $subscription = new Subscription();
   hotelId: string;
   @Output() guestInfo = new EventEmitter();
-  
+
   requestFG: FormGroup;
   constructor(
     private _requestService: RequestService,

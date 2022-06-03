@@ -9,11 +9,14 @@
         *ngIf="data.profileUrl; else defaultAvatar"
       />
       <ng-template #defaultAvatar
-        ><div>{{ data.getProfileNickName() }}</div></ng-template
+        ><div>
+          {{ data.getProfileNickName() }}
+        </div></ng-template
       >
     </div>
     <div class="guest-name">
-      {{ data.name || 'Unknown Person' }}
+      {{ data.firstName || 'Unknown Person' }}
+      {{ data.lastName }}
     </div>
   </div>
   <div class="border-line"></div>
@@ -24,12 +27,33 @@
     Phone No.
   </div>
   <div class="label-text">
-    {{ data.contactNumber }}
+    {{ data.phoneNumber }}
   </div>
   <div class="label">
     Email
   </div>
   <div class="label-text">
     {{ data.email || 'Unknown' }}
+  </div>
+  <div class="contact-detials">
+    Other Details
+  </div>
+  <div class="label">
+    No. of stays
+  </div>
+  <div class="label-text">
+    {{ data.numberOfBookings }}
+  </div>
+  <div class="label">
+    NPS
+  </div>
+  <div class="label-text">
+    {{ data.nps }}
+  </div>
+  <div class="label">
+    Curn probabilty prediction
+  </div>
+  <div class="label-text">
+    {{ data.churn }}
   </div>
 </div>

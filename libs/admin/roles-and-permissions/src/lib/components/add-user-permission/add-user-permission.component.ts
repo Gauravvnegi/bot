@@ -14,8 +14,6 @@ import { ManagePermissionService } from '../../services/manage-permission.servic
 import { SnackBarService } from 'libs/shared/material/src';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
-import { userPermission } from '../../constants/user';
 @Component({
   selector: 'hospitality-bot-add-user-permission',
   templateUrl: './add-user-permission.component.html',
@@ -24,9 +22,6 @@ import { userPermission } from '../../constants/user';
 export class AddUserPermissionComponent implements OnInit {
   brandNames: [];
   branchNames: [];
-  tabFilterItems;
-  isTabFilters = true;
-  tabFilterIdx:number = 0;
   countries = new CountryCode().getByLabelAndValue();
   userPermissions;
   isSavingPermissions = false;
@@ -44,7 +39,6 @@ export class AddUserPermissionComponent implements OnInit {
 
   value;
   constructor(
-    private router: Router,
     private _fb: FormBuilder,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
@@ -93,7 +87,6 @@ export class AddUserPermissionComponent implements OnInit {
     this.initUserPermissions();
     this.initManager();
     this.registerListeners();
-    this.tabFilterItems = userPermission.tabFilterItems;
   }
 
   initManager() {
@@ -218,11 +211,6 @@ export class AddUserPermissionComponent implements OnInit {
 
   get permissionConfigsFA() {
     return this.userForm.get('permissionConfigs') as FormArray;
-  }
-
-  openRolesPermission(event) {
-    event.stopPropagation();
-    this.router.navigate(['/pages/roles-permissions']);
   }
 
   goback() {

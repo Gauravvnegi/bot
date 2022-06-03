@@ -182,7 +182,6 @@ export class GuestInfoComponent implements OnInit, OnChanges {
 
     detailCompRef.componentInstance.data = this.data;
     detailCompRef.componentInstance.onModalClose.subscribe((res) => {
-      // remove loader for detail close
       detailCompRef.close();
     });
   }

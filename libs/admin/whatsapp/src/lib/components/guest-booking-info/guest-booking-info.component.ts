@@ -74,7 +74,6 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
       item.reservation.booking.bookingNumber;
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
-        // remove loader for detail close
         detailCompRef.close();
       })
     );

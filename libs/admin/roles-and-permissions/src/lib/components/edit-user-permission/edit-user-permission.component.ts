@@ -12,11 +12,10 @@ import { CountryCode } from '../../../../../../shared/models/country-code.model'
 import { Regex } from '../../../../../../shared/constants/regex';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
-import { userPermission } from '../../constants/user';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
@@ -29,9 +28,6 @@ import { userPermission } from '../../constants/user';
 export class EditUserPermissionComponent implements OnInit {
   brandNames: [];
   branchNames: [];
-  tabFilterItems;
-  isTabFilters = true;
-  tabFilterIdx:number = 0;
   countries = new CountryCode().getByLabelAndValue();
   userPermissions;
   isUpdatingPermissions = false;
@@ -52,7 +48,6 @@ export class EditUserPermissionComponent implements OnInit {
   optionChange = new EventEmitter();
 
   constructor(
-    private router: Router,
     private _fb: FormBuilder,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
@@ -109,7 +104,6 @@ export class EditUserPermissionComponent implements OnInit {
       });
     this.initManager();
     this.registerListeners();
-    this.tabFilterItems = userPermission.tabFilterItems;
   }
 
   initManager() {
@@ -235,11 +229,6 @@ export class EditUserPermissionComponent implements OnInit {
     return this.userForm.get('permissionConfigs') as FormArray;
   }
   
-  openRolesPermission(event) {
-    event.stopPropagation();
-    this.router.navigate(['/pages/roles-permissions']);
-  }
-
   goback() {
     this._location.back();
   }

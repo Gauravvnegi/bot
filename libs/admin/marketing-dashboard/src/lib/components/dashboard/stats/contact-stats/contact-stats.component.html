@@ -1,0 +1,43 @@
+<div class="contact">
+  <div class="contact-stats-header">
+    Contact Stats
+  </div>
+  <div class="contact-graph-wraper">
+    <div class="contact-graph-wraper-graph" *ngFor="let item of contactValue">
+      <circle-progress
+        [radius]="item.radius"
+        [percent]="item.progress"
+        [space]="-5"
+        [outerStrokeWidth]="5"
+        [innerStrokeWidth]="5"
+        [outerStrokeColor]="item.color"
+        [innerStrokeColor]="'#e7e8ea'"
+        [outerStrokeLinecap]="'square'"
+        [animation]="true"
+        [animationDuration]="300"
+        [showTitle]="false"
+        [showSubtitle]="false"
+        [showUnits]="false"
+        [showZeroOuterStroke]="false"
+      ></circle-progress>
+    </div>
+    <div class="contact-graph-wraper-total">
+      <div class="contact-graph-wraper-total-number">
+        404
+      </div>
+      <div class="contact-graph-wraper-total-text">
+        Total Contacts
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div
+        class="stat-val"
+        *ngFor="let item of contactValue"
+        [style.border-left]="'5px solid ' + item.color"
+      >
+        <div class="label">{{ item.label }}</div>
+        <div class="value">{{ item.progress }}%</div>
+      </div>
+    </div>
+  </div>
+</div>

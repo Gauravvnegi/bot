@@ -22,7 +22,6 @@ export class RequestDetailComponent implements OnInit {
   ];
   $subscription = new Subscription();
   hotelId: string;
-
   @Output() guestInfo = new EventEmitter();
 
   requestFG: FormGroup;
@@ -116,6 +115,7 @@ export class RequestDetailComponent implements OnInit {
             '',
             { panelClass: 'success' }
           ),
+          
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });
           this._snackbarService.openSnackBarAsText(error.message);

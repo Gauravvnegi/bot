@@ -127,6 +127,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.$subscription.add(
       this.messageService.getRequestByConfNo(config).subscribe(
         (response) => {
+          debugger
           this.requestList = new RequestList().deserialize(response).data;
           this.guestId = this.requestList[0].guestDetails?.primaryGuest?.id;
           this.loadGuestReservations();
@@ -140,6 +141,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.$subscription.add(
       this.messageService.getGuestReservations(this.guestId).subscribe(
         (response) => {
+          debugger;
           this.guestReservations = new GuestDetails().deserialize(
             response,
             this.colorMap

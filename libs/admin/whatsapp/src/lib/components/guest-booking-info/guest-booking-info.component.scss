@@ -69,3 +69,17 @@
 :host ::ng-deep .mat-icon {
   color: #5f65b0;
 }
+.no-booking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  color: $dark-grey;
+  margin-top: 67px;
+}

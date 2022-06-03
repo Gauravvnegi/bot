@@ -1,262 +1,10 @@
-<!-- <div class="p-15">
-  <div class="booking-title">
-    Booking Info
-  </div>
-  <div class="user-journey-title">
-    User Journey
-  </div>
-  <div class="icon-wrapper" *ngIf="reservationData; else noUserJourney">
-    <div class="line first"></div>
-    <div class="line second"></div>
-    <div class="icon">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/Document.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.stepsStatus.documents == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.stepsStatus.documents == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.stepsStatus.documents == 'FAILED',
-          'status-image-success':
-            reservationData?.status.stepsStatus.documents == 'COMPLETED'
-        }"
-      />
-      <p
-        class="label"
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.stepsStatus.documents == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.stepsStatus.documents == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.stepsStatus.documents == 'FAILED',
-          'status-text-success':
-            reservationData?.status.stepsStatus.documents == 'COMPLETED'
-        }"
-      >
-        Document
-      </p>
-    </div>
-    <div class="icon">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/Payment.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.stepsStatus.payment == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.stepsStatus.payment == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.stepsStatus.payment == 'FAILED',
-          'status-image-success':
-            reservationData?.status.stepsStatus.payment == 'COMPLETED'
-        }"
-      />
-      <p
-        class="label"
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.stepsStatus.payment == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.stepsStatus.payment == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.stepsStatus.payment == 'FAILED',
-          'status-text-success':
-            reservationData?.status.stepsStatus.payment == 'COMPLETED'
-        }"
-      >
-        Payment
-      </p>
-    </div>
-    <div class="icon">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/Feedback.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.stepsStatus.feedback == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.stepsStatus.feedback == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.stepsStatus.feedback == 'FAILED',
-          'status-image-success':
-            reservationData?.status.stepsStatus.feedback == 'COMPLETED'
-        }"
-      />
-      <p
-        class="label"
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.stepsStatus.feedback == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.stepsStatus.feedback == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.stepsStatus.feedback == 'FAILED',
-          'status-text-success':
-            reservationData?.status.stepsStatus.feedback == 'COMPLETED'
-        }"
-      >
-        Feedback
-      </p>
-    </div>
-    <div class="icon extra-width">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/New-Journey.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.journeyStatus.new == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.journeyStatus.new == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.journeyStatus.new == 'FAILED',
-          'status-image-success':
-            reservationData?.status.journeyStatus.new == 'COMPLETED'
-        }"
-      />
-      <p
-        class="label"
-        *ngIf="reservationData?.currentJourney.currentJourneyName == 'NEW'"
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.journeyStatus.new == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.journeyStatus.new == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.journeyStatus.new == 'FAILED',
-          'status-text-success':
-            reservationData?.status.journeyStatus.new == 'COMPLETED'
-        }"
-      >
-        New
-      </p>
-    </div>
-    <div class="icon extra-width">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/precheckin.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.journeyStatus.preCheckin == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.journeyStatus.preCheckin == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.journeyStatus.preCheckin == 'FAILED',
-          'status-image-success':
-            reservationData?.status.journeyStatus.preCheckin == 'COMPLETED'
-        }"
-      />
-      <p
-        class="label"
-        *ngIf="
-          reservationData?.currentJourney.currentJourneyName == 'PRECHECKIN'
-        "
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.journeyStatus.preCheckin == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.journeyStatus.preCheckin == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.journeyStatus.preCheckin == 'FAILED',
-          'status-text-success':
-            reservationData?.status.journeyStatus.preCheckin == 'COMPLETED'
-        }"
-      >
-        PreCheck-in
-      </p>
-    </div>
-    <div class="icon extra-width">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/checkin.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.journeyStatus.checkin == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.journeyStatus.checkin == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.journeyStatus.checkin == 'FAILED',
-          'status-image-success':
-            reservationData?.status.journeyStatus.checkin == 'COMPLETED'
-        }"
-      />
-      <p
-        *ngIf="reservationData?.currentJourney.currentJourneyName == 'CHECKIN'"
-        class="label"
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.journeyStatus.checkin == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.journeyStatus.checkin == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.journeyStatus.checkin == 'FAILED',
-          'status-text-success':
-            reservationData?.status.journeyStatus.checkin == 'COMPLETED'
-        }"
-      >
-        Check-In
-      </p>
-    </div>
-    <div class="icon extra-width">
-      <img
-        class="table-body-journey-icon"
-        src="assets/svg/checkout.svg"
-        [ngClass]="{
-          'status-image-initiated':
-            reservationData?.status.journeyStatus.checkout == 'INITIATED',
-          'status-image-pending':
-            reservationData?.status.journeyStatus.checkout == 'PENDING',
-          'status-image-reject':
-            reservationData?.status.journeyStatus.checkout == 'FAILED',
-          'status-image-success':
-            reservationData?.status.journeyStatus.checkout == 'COMPLETED'
-        }"
-      />
-      <p
-        *ngIf="reservationData?.currentJourney.currentJourneyName == 'CHECKOUT'"
-        class="label"
-        [ngClass]="{
-          'status-text-initiated':
-            reservationData?.status.journeyStatus.checkout == 'INITIATED',
-          'status-text-pending':
-            reservationData?.status.journeyStatus.checkout == 'PENDING',
-          'status-text-reject':
-            reservationData?.status.journeyStatus.checkout == 'FAILED',
-          'status-text-success':
-            reservationData?.status.journeyStatus.checkout == 'COMPLETED'
-        }"
-      >
-        Check-Out
-      </p>
-    </div>
-  </div>
-  <ng-template #noUserJourney
-    ><div class="text mb-15">Unknown</div></ng-template
-  >
-  <div class="guestBoookingUnderline"></div>
-  <div class="text-small">
-    Room No.
-  </div>
-  <div class="text">
-    {{ data.roomNo || 'Unknown' }}
-  </div>
-  <div class="text-small">
-    Reservation ID
-  </div>
-  <div class="text">
-    {{ data.reservationId || 'Unknown' }}
-  </div>
-</div> -->
-
-<div class="container">
+<div class="container" *ngIf="booking; else noBooking">
   <div class="booking-title">
     Booking Info
   </div>
   <!-- Current Booking -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="currentBooking?.length">
       Current Booking
     </div>
     <div class="past">
@@ -282,7 +30,7 @@
 
   <!-- Past Booking -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="pastBooking?.length">
       Past Booking
     </div>
     <div class="past">
@@ -308,7 +56,7 @@
 
   <!-- Upcoming Booking  -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="upcomingBooking?.length">
       Upcoming Booking
     </div>
     <div class="past">
@@ -332,3 +80,8 @@
     </div>
   </div>
 </div>
+<ng-template #noBooking>
+  <div class="no-booking">
+    No Booking Found
+  </div>
+</ng-template>

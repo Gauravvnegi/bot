@@ -36,7 +36,6 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
   }
 
   openDetailPage(item) {
-    debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -48,7 +47,6 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
     detailCompRef.componentInstance.guestId = this.data.id;
     detailCompRef.componentInstance.bookingNumber =
       item.reservation.booking.bookingNumber;
-    console.log(this.data);
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close

@@ -17,10 +17,12 @@ import { ModalService } from '@hospitality-bot/shared/material';
 })
 export class GuestBookingInfoComponent implements OnInit, OnChanges {
   @Input() data;
+  @Input() guestId;
   @Input() hotelId;
   @Input() reservation;
   $subscription = new Subscription();
   reservationData;
+  booking= false;
   currentBooking = [];
   pastBooking = [];
   upcomingBooking = [];
@@ -36,59 +38,28 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.data?.reservationId) {
-      this.searchReservation();
+      this.pastBooking = this.reservation.records.filter(
+        (item) => item.reservation.type === 'PAST'
+      );
+  
+      this.currentBooking = this.reservation.records.filter(
+        (item) => item.reservation.type === 'CURRENT'
+      );
+  
+      this.upcomingBooking = this.reservation.records.filter(
+        (item) => item.reservation.type === 'UPCOMING'
+      );
+        this.booking=true;
+          
     } else {
-      this.reservationData = undefined;
+      this.reservation = undefined;
+      this.pastBooking= this.currentBooking = this.upcomingBooking = [];
+      this.booking = false;
     }
 
-    this.pastBooking = this.reservation.records.filter(
-      (item) => item.reservation.type === 'PAST'
-    );
-
-    this.currentBooking = this.reservation.records.filter(
-      (item) => item.reservation.type === 'CURRENT'
-    );
-
-    this.upcomingBooking = this.reservation.records.filter(
-      (item) => item.reservation.type === 'UPCOMING'
-    );
   }
-
-  searchReservation() {
-    this.$subscription.add(
-      this.messageService
-        .searchBooking(
-          this.adminUtilityService.makeQueryParams([
-            {
-              key: this.data.reservationId,
-              hotel_id: this.hotelId,
-            },
-          ])
-        )
-        .subscribe((response) => {
-          if (response && response.reservations) {
-            this.getReservationDetail(response.reservations[0].id);
-          }
-        })
-    );
-  }
-
-  getReservationDetail(id) {
-    this.messageService.getReservationDetails(id).subscribe(
-      (response) => {
-        this.reservationData = new Reservation().deserialize(
-          response,
-          this.globalFilterService.timezone
-        );
-      },
-      ({ error }) => {
-        this._snackBarService.openSnackBarAsText(error.message);
-      }
-    );
-  }
-
+  
   openDetailPage(item) {
-    debugger;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -97,10 +68,10 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
       dialogConfig
     );
 
-    detailCompRef.componentInstance.guestId = this.data.reservationId;
+    detailCompRef.componentInstance.guestId = this.guestId;
+
     detailCompRef.componentInstance.bookingNumber =
       item.reservation.booking.bookingNumber;
-    console.log(this.data);
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close

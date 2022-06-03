@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { Observable, Subscription } from 'rxjs';
@@ -14,6 +15,7 @@ import { MarketingService } from '../../../../services/stats.service';
 export class StatsViewComponent implements OnInit {
 
   globalQueries = [];
+  selectedInterval;
   hotelId: any;
   stats: MarketingStats;
   $subscription = new Subscription();
@@ -22,7 +24,8 @@ export class StatsViewComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private marketingService: MarketingService,
-    protected _snackbarService: SnackBarService,
+    protected _snackbarService: SnackBarService,    
+    private dateService: DateService
   ) { }
 
   ngOnInit(): void {
@@ -30,19 +33,30 @@ export class StatsViewComponent implements OnInit {
   }
 
   listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getHotelId(this.globalQueries);
-      this.loadInitialData([
-        {
-        },
-      ])
-    });
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this.globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.getMarketingCards();
+      })
+    );
   }
+
   /**
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
@@ -55,35 +69,19 @@ export class StatsViewComponent implements OnInit {
     });
   }
 
-  loadInitialData(queries = []): void {
+  getMarketingCards(): void {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
+    };
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.stats = new MarketingStats().deserialize(data);
+      this.marketingService.getMarketingCards(this.hotelId, config).subscribe(
+        (response) => {
+          this.stats = new MarketingStats().deserialize(response);
+          console.log(this.stats);
         },
-        ({ error }) => {
-          this._snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'no data',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        }
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
-  }
-  fetchDataFrom(
-    queries,
-    defaultProps = {
-      toDate: 1653893078000,
-      fromDate: 1651387478000
-    }
-  ): Observable<any> {
-    queries.push(defaultProps);
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(queries),
-    };
-    return this.marketingService.getMarketingCards(this.hotelId, config);
   }
 
 }

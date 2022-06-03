@@ -1,6 +1,5 @@
-import { MatExpansionPanelDescription } from '@angular/material/expansion';
+
 import { get, set } from 'lodash';
-import { ObjectUnsubscribedError } from 'rxjs';
 
 export interface Deserializable {
   deserialize(input: any): this;
@@ -111,16 +110,6 @@ export class TotalSent implements Deserializable {
   }
 }
 
-// export class ContactStats implements Deserializable {
-//   contactStats: ContactStat;
-//   deserialize(input: any) {
-//     Object.assign(
-//       this,
-//       set({}, 'contactStats', new ContactStat().deserialize(input))
-//     );
-//     return this;
-//   }
-// }
 export class ContactStat implements Deserializable {
   bounced: Bounced;
   unsubscribed: Unsubscribed;

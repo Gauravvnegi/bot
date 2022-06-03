@@ -5,6 +5,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription, Observable } from 'rxjs';
 import { MarketingService } from '../../../../services/stats.service';
 import { ContactStat } from '../../../../data-models/stats.model';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'hospitality-bot-contact-stats',
@@ -12,100 +13,97 @@ import { ContactStat } from '../../../../data-models/stats.model';
   styleUrls: ['./contact-stats.component.scss'],
 })
 export class ContactStatsComponent implements OnInit {
-  contactValue = [{
+  contactValue = [
+    {
       graphvalue: 75,
       label: 'TESTING',
       radius: 75,
       color: '#52B33F',
-      progress:65,
-},
-{
-  graphvalue: 75,
-  label: 'TESTING2',
-  radius: 85,
-  color: '#FF8F00',
-  progress:35,
-},
-{
-  graphvalue: 75,
-  label: 'TESTING3',
-  radius: 95,
-  color: '#CC052B',
-  progress:85,
-}];
+      progress: 65,
+    },
+    {
+      graphvalue: 75,
+      label: 'TESTING2',
+      radius: 85,
+      color: '#FF8F00',
+      progress: 35,
+    },
+    {
+      graphvalue: 75,
+      label: 'TESTING3',
+      radius: 95,
+      color: '#CC052B',
+      progress: 85,
+    },
+  ];
 
-globalQueries = [];
-hotelId: any;
-stats: ContactStat;
-$subscription = new Subscription();
+  selectedInterval;
+  globalQueries = [];
+  hotelId: any;
+  stats: ContactStat;
+  $subscription = new Subscription();
 
-constructor(
-  private adminUtilityService: AdminUtilityService,
-  private globalFilterService: GlobalFilterService,
-  private marketingService: MarketingService,
-  protected _snackbarService: SnackBarService,
-) { }
+  constructor(
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService,
+    private marketingService: MarketingService,
+    protected _snackbarService: SnackBarService,
+    private dateService: DateService
+  ) {}
 
-ngOnInit(): void {
-  this.listenForGlobalFilters();
-}
-
-listenForGlobalFilters(): void {
-  this.globalFilterService.globalFilter$.subscribe((data) => {
-    // set-global query everytime global filter changes
-    this.globalQueries = [
-      ...data['filter'].queryValue,
-      ...data['dateRange'].queryValue,
-    ];
-    this.getHotelId(this.globalQueries);
-    this.loadInitialData([
-      {
-      },
-    ])
-  });
-}
-/**
- * @function getHotelId To set the hotel id after extracting from filter array.
- * @param globalQueries The filter list with date and hotel filters.
- */
-getHotelId(globalQueries): void {
-  globalQueries.forEach((element) => {
-    if (element.hasOwnProperty('hotelId')) {
-      this.hotelId = element.hotelId;
-    }
-  });
-}
-
-loadInitialData(queries = []): void {
-  this.$subscription.add(
-    this.fetchDataFrom(queries).subscribe(
-      (data) => {
-        this.stats = new ContactStat().deserialize(data['Contact Stats']);
-        console.log(this.stats)
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate({
-            translateKey: 'no data',
-            priorityMessage: error.message,
-          })
-          .subscribe();
-      }
-    )
-  );
-}
-fetchDataFrom(
-  queries,
-  defaultProps = {
-    toDate:1651041888000,
-    fromDate:1651041868000
+  ngOnInit(): void {
+    this.listenForGlobalFilters();
   }
-): Observable<any> {
-  queries.push(defaultProps);
-  const config = {
-    queryObj: this.adminUtilityService.makeQueryParams(queries),
-  };
-  return this.marketingService.getContactStats(this.hotelId, config);
-}
 
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this.globalFilterService.timezone
+          ),
+        };
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.getContactStats();
+      })
+    );
+  }
+
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  getContactStats(): void {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
+    };
+    this.$subscription.add(
+      this.marketingService.getContactStats(this.hotelId, config).subscribe(
+        (response) => {
+          this.stats = new ContactStat().deserialize(response['Contact Stats']);
+          console.log(this.stats);
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
 }

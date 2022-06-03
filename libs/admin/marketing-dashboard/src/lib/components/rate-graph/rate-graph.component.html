@@ -1,0 +1,31 @@
+<div class="sentAnalytics">
+  <div class="analyticsHeading">
+    <p>Open Rate vs Click Rate</p>
+  </div>
+  <div class="line-chart">
+    <canvas
+      baseChart
+      class="canvas"
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+  </div>
+
+  <div class="stat-labels-container">
+    <div
+      class="stat-label"
+      (click)="legendOnClick(legendIndex)"
+      *ngFor="let legend of legendData; let legendIndex = index"
+    >
+      <input class="legends" type="checkbox" />
+      <img src="assets/svg/{{ legend.src }}.svg" />
+
+      <p class="stat-label-title">{{ legend.label }}</p>
+    </div>
+  </div>
+</div>

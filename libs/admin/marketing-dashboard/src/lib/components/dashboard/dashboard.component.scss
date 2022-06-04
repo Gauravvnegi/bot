@@ -5,9 +5,13 @@
   border-radius: 5px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
-  .rateGraph {
+  .rate-contact-stat {
+    display: flex;
     width: 100%;
     padding-top: 30px;
+    .rateGraph {
+      width: calc(100% - 264px);
+    }
   }
   .subscriberGraph {
     padding-top: 20px;

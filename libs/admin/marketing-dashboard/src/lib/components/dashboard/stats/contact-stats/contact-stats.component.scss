@@ -1,15 +1,16 @@
 @import 'main';
 
 .contact {
-  @include margin(20px);
+  margin: 0 20px 0 0;
   @include padding(20px);
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
-  background-color: #fff;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 244px;
-  height: 518px;
+  height: 100%;
   &-stats-header {
     font-family: Roboto;
     font-size: 16px;

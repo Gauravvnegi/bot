@@ -1,5 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
+import { Subscription } from 'rxjs';
+import { RateGraphStats } from '../../data-models/graph.model';
+import { GraphService } from '../../services/stats.service';
 
 @Component({
   selector: 'hospitality-bot-rate-graph',
@@ -28,17 +35,10 @@ export class RateGraphComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [10, 20, 35, 45, 59, 90], label: 'Sent', fill: true },
-      { data: [5, 15, 25, 40, 50, 70], label: 'Delivered', fill: true },
+      { data: [], label: 'Click Rate', fill: true },
+      { data: [], label: 'Open Rate', fill: true },
     ],
-    chartLabels: [
-      'Campaign 1',
-      'Campaign 2',
-      'Campaign 3',
-      'Campaign 4',
-      'Campaign 5',
-      'Campaign 6',
-    ],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {
@@ -101,7 +101,96 @@ export class RateGraphComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
-  constructor() {}
+  globalQueries;
+  selectedInterval;
+  @Input() hotelId: string;
+  $subscription = new Subscription();
+  rateGraph: RateGraphStats;
+  constructor(
+    private _adminUtilityService: AdminUtilityService,
+    private _snackbarService: SnackBarService,
+    private statsService: GraphService,
+    private _globalFilterService: GlobalFilterService,
+    private dateService: DateService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
+          ),
+        };
+
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.rateGraphStats();
+      })
+    );
+  }
+
+  rateGraphStats(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
+    this.$subscription.add(
+      this.statsService.rateGraphStats(this.hotelId, config).subscribe(
+        (response) => {
+          this.rateGraph = new RateGraphStats().deserialize(response);
+          this.initChartData();
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  initChartData() {
+    this.chart.chartLabels = this.rateGraph.labels;
+    this.chart.chartData[0].data = this.rateGraph.clickRate;
+    this.chart.chartData[1].data = this.rateGraph.openRate;
+  }
+  legendOnClick = (index) => {
+    let ci = this.baseChart.chart;
+    let alreadyHidden =
+      ci.getDatasetMeta(index).hidden === null
+        ? false
+        : ci.getDatasetMeta(index).hidden;
+
+    ci.data.datasets.forEach((e, i) => {
+      let meta = ci.getDatasetMeta(i);
+
+      if (i == index) {
+        if (!alreadyHidden) {
+          meta.hidden = true;
+        } else {
+          meta.hidden = false;
+        }
+      }
+    });
+
+    ci.update();
+  };
 }

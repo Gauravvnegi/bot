@@ -1,5 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { BaseChartDirective } from 'ng2-charts';
+import { Subscription } from 'rxjs';
+import { GraphService } from '../../services/stats.service';
+import { DateService } from '@hospitality-bot/shared/utils';
+import { SubscriberGraphStats } from '../../data-models/graph.model';
 
 @Component({
   selector: 'hospitality-bot-subscribers-graph',
@@ -28,17 +35,10 @@ export class SubscribersGraphComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [60, 80, 60, 65, 40, 60], label: 'Sent', fill: false },
-      { data: [40, 60, 40, 45, 20, 55], label: 'Delivered', fill: false },
+      { data: [], label: 'Unsubscribers', fill: false },
+      { data: [], label: 'Subscribers', fill: false },
     ],
-    chartLabels: [
-      'Campaign 1',
-      'Campaign 2',
-      'Campaign 3',
-      'Campaign 4',
-      'Campaign 5',
-      'Campaign 6',
-    ],
+    chartLabels: [],
     chartOptions: {
       responsive: true,
       elements: {
@@ -101,7 +101,98 @@ export class SubscribersGraphComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
-  constructor() {}
+  selectedInterval;
+  globalQueries;
+  @Input() hotelId;
+  subscriberGraph: SubscriberGraphStats;
+  $subscription = new Subscription();
+  constructor(
+    private _adminUtilityService: AdminUtilityService,
+    private _snackbarService: SnackBarService,
+    private statsService: GraphService,
+    private _globalFilterService: GlobalFilterService,
+    private dateService: DateService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        let calenderType = {
+          calenderType: this.dateService.getCalendarType(
+            data['dateRange'].queryValue[0].toDate,
+            data['dateRange'].queryValue[1].fromDate,
+            this._globalFilterService.timezone
+          ),
+        };
+
+        this.selectedInterval = calenderType.calenderType;
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+          calenderType,
+        ];
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
+        this.subscriberGraphStats();
+      })
+    );
+  }
+
+  subscriberGraphStats(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+    };
+    this.$subscription.add(
+      this.statsService.subscriberGraphStats(this.hotelId, config).subscribe(
+        (response) => {
+          this.subscriberGraph = new SubscriberGraphStats().deserialize(
+            response
+          );
+          this.initChartData();
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
+  initChartData() {
+    this.chart.chartLabels = this.subscriberGraph.labels;
+    this.chart.chartData[0].data = this.subscriberGraph.unsubscribers;
+    this.chart.chartData[1].data = this.subscriberGraph.subscribers;
+  }
+  legendOnClick = (index) => {
+    let ci = this.baseChart.chart;
+    let alreadyHidden =
+      ci.getDatasetMeta(index).hidden === null
+        ? false
+        : ci.getDatasetMeta(index).hidden;
+
+    ci.data.datasets.forEach((e, i) => {
+      let meta = ci.getDatasetMeta(i);
+
+      if (i == index) {
+        if (!alreadyHidden) {
+          meta.hidden = true;
+        } else {
+          meta.hidden = false;
+        }
+      }
+    });
+
+    ci.update();
+  };
 }

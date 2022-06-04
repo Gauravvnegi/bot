@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'primeng/api';
-import { AdminSharedModule,  } from '@hospitality-bot/admin/shared';
+import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminMarketingDashboardRoutingModule } from './admin-marketing-dashboard.routing.module';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { CampaignService } from 'libs/admin/campaign/src/lib/services/campaign.service';
-import { AnalyticsService } from 'libs/admin/analytics/src/lib/services/analytics.service';
 import { ChartsModule } from 'ng2-charts';
+import { GraphService } from './services/stats.service';
 
 @NgModule({
   imports: [
@@ -17,8 +16,7 @@ import { ChartsModule } from 'ng2-charts';
     AdminSharedModule,
     NgCircleProgressModule.forRoot(),
   ],
-  declarations: [...AdminMarketingDashboardRoutingModule.components,],
-  providers: [AnalyticsService,CampaignService],
+  declarations: [...AdminMarketingDashboardRoutingModule.components],
+  providers: [GraphService],
 })
 export class AdminMarketingDashboardModule {}
-

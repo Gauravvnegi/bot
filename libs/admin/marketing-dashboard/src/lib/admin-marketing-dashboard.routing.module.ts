@@ -9,7 +9,7 @@ import { RateGraphComponent } from './components/rate-graph/rate-graph.component
 import { SubscribersGraphComponent } from './components/subscribers-graph/subscribers-graph.component';
 
 const appRoutes: Route[] = [
-  { path: '', component: ComingSoonComponent },
+  { path: '', component: MarketingDashboardComponent },
 ];
 
 @NgModule({
@@ -19,8 +19,8 @@ const appRoutes: Route[] = [
 })
 export class AdminMarketingDashboardRoutingModule {
   static components = [
-    MarketingDashboardComponent ,
-    StatsViewComponent, 
+    MarketingDashboardComponent,
+    StatsViewComponent,
     ContactStatsComponent,
     RateGraphComponent,
     MarketingDashboardComponent,

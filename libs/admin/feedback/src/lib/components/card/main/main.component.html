@@ -1,0 +1,17 @@
+<div class="container">
+  <div *ngIf="tabFilterItems" class="header">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="body">
+    <div class="body__container">
+      <hospitality-bot-feedback-list
+        [entityType]="tabFilterItems[tabFilterIdx]?.value"
+      ></hospitality-bot-feedback-list>
+      <div style="width: calc(100% - 345px);"></div>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { FeedbackTableService } from './services/table.service';
+import { CardService } from './services/card.service';
 
 @NgModule({
   imports: [
@@ -31,6 +32,6 @@ import { FeedbackTableService } from './services/table.service';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
-  providers: [StatisticsService, FeedbackTableService],
+  providers: [StatisticsService, FeedbackTableService, CardService],
 })
 export class AdminFeedbackModule {}

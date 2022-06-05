@@ -151,6 +151,20 @@ export const feedback = {
       backgroundColor: '#DEFFF3',
     },
   },
+  tableTypes: {
+    table: {
+      name: 'table',
+      value: 'table',
+      url: 'assets/svg/bar-graph.svg',
+      backgroundColor: '#1AB99F',
+    },
+    card: {
+      name: 'card',
+      value: 'card',
+      url: 'assets/svg/line-graph.svg',
+      backgroundColor: '#DEFFF3',
+    },
+  },
   colorConfig: {
     distribution: {
       VERYPOOR: '#CC052B',

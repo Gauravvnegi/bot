@@ -1,0 +1,43 @@
+@import 'main';
+
+.list-container {
+  width: 345px;
+  height: 100%;
+  opacity: 1;
+  border-right: 2px solid #f4f5f6;
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 2px solid #f4f5f6;
+    &__search {
+      width: 289px;
+    }
+    &__filter {
+      cursor: pointer;
+      margin: 0 3px;
+    }
+  }
+  .body {
+    overflow-y: scroll;
+  }
+}
+
+:host ::ng-deep {
+  .mat-tab-group {
+    padding: 0;
+  }
+  .mat-tab-label {
+    min-width: fit-content !important;
+    height: 53px !important;
+  }
+  .mat-tab-label-active {
+    border-bottom: 2px solid $primary-purple;
+    color: $primary-purple;
+  }
+  .mat-tab-header {
+    border-bottom: 2px solid #f4f5f6 !important;
+  }
+}

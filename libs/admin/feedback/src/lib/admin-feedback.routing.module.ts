@@ -16,6 +16,11 @@ import { FeedbackNotesComponent } from './components/feedback-notes/feedback-not
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
+import { MainComponent } from './components/card/main/main.component';
+import { FeedbackListComponent } from './components/card/feedback-list/feedback-list.component';
+import { FeedbackDetailComponent } from './components/card/feedback-detail/feedback-detail.component';
+import { FeedbackFilterComponent } from './components/card/feedback-filter/feedback-filter.component';
+import { SearchComponent } from './components/card/search/search.component';
 
 const appRoutes: Route[] = [
   {
@@ -44,5 +49,10 @@ export class AdminFeedbackRoutingModule {
     FeedbackNotesComponent,
     GtmAcrossServicesComponent,
     DepartmentBarGraphComponent,
+    MainComponent,
+    FeedbackListComponent,
+    FeedbackDetailComponent,
+    FeedbackFilterComponent,
+    SearchComponent,
   ];
 }

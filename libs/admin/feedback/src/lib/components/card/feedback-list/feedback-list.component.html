@@ -1,0 +1,31 @@
+<div class="list-container">
+  <div class="header">
+    <div class="header__search">
+      <hospitality-bot-search
+        [parentFG]="parentFG"
+        [hotelId]="hotelId"
+        [globalQueries]="globalQueries"
+        [filterData]="filterData"
+        (clear)="clearSearch()"
+        (search)="getSearchValue($event)"
+      ></hospitality-bot-search>
+    </div>
+    <div class="header__filter">
+      <img
+        src="assets/svg/Filter-Icon.svg"
+        alt="filter"
+        (click)="showFilter = true"
+      />
+    </div>
+  </div>
+  <hospitality-bot-tab-group
+    [listItems]="tabFilterItems"
+    [selectedIndex]="tabFilterIdx"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+  <div class="body">
+    <div *ngFor="let item of feedbackList" style="height: 163px;">
+      {{ item | json }}
+    </div>
+  </div>
+</div>

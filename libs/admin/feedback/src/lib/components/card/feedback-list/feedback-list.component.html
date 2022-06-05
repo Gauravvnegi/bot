@@ -24,8 +24,26 @@
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
   <div class="body">
-    <div *ngFor="let item of feedbackList" style="height: 163px;">
-      {{ item | json }}
+    <div
+      *ngFor="let item of feedbackList"
+      class="item"
+      (click)="setSelectedItem(item)"
+      [ngStyle]="
+        selectedFeedback &&
+        selectedFeedback.id === item.id && { background: '#f1f1f1' }
+      "
+    >
+      <div class="item__logo">
+        {{ item.getProfileNickName() }}
+      </div>
+      <div class="item__body">
+        <div class="item__body__room">
+          <div>{{ item.getTableOrRoomNo(feedbackType) }}</div>
+        </div>
+        <div class="item__body__name">
+          {{ item.feedback.guest.getFullName() }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

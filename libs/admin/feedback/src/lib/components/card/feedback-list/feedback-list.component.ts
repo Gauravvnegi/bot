@@ -9,6 +9,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { Observable, Subscription } from 'rxjs';
+import { FeedbackList } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
 
@@ -19,6 +20,8 @@ import { FeedbackTableService } from '../../../services/table.service';
 })
 export class FeedbackListComponent implements OnInit {
   @Input() entityType;
+  @Input() outlets;
+  @Input() colorMap;
   feedbackType: string;
   filterData = {
     sort: '',
@@ -60,8 +63,8 @@ export class FeedbackListComponent implements OnInit {
       chips: [],
     },
   ];
-
-  tabFilterIdx: number = 0;
+  selectedFeedback;
+  tabFilterIdx: number = 3;
   hotelId: string;
   $subscription = new Subscription();
   globalQueries = [];
@@ -83,7 +86,7 @@ export class FeedbackListComponent implements OnInit {
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
-    this.cardService.selectedRequest.next(null);
+    this.cardService.selectedFeedback.next(null);
   }
 
   initFG() {
@@ -109,7 +112,7 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
-        this.cardService.selectedRequest.next(null);
+        this.cardService.selectedFeedback.next(null);
         this.getFeedbackList([
           ...this.globalQueries,
           {
@@ -157,7 +160,13 @@ export class FeedbackListComponent implements OnInit {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {
-          console.log(response);
+          this.feedbackList = new FeedbackList().deserialize(
+            response,
+            this.outlets,
+            this.feedbackType,
+            this.colorMap
+          ).records;
+          console.log(this.feedbackList);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
         () => (this.loading = false)
@@ -212,5 +221,10 @@ export class FeedbackListComponent implements OnInit {
         entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
       },
     ]);
+  }
+
+  setSelectedItem(item) {
+    this.cardService.selectedFeedback.next(item);
+    this.selectedFeedback = item;
   }
 }

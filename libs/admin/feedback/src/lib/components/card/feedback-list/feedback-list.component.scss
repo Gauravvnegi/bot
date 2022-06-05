@@ -22,6 +22,46 @@
   }
   .body {
     overflow-y: scroll;
+    max-height: calc(100% - 117px);
+    .item {
+      height: 163px;
+      border-bottom: 1px solid #f4f5f6;
+      padding: 10px;
+      display: flex;
+      cursor: pointer;
+      &__logo {
+        height: 45px;
+        width: 45px;
+        border-radius: 50%;
+        background-color: olivedrab;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      &__body {
+        margin-left: 10px;
+        &__room {
+          font-size: 10px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.6px;
+          color: #99a6b5;
+          margin-top: 3px;
+          margin-bottom: 13px;
+          display: flex;
+          align-items: center;
+        }
+        &__name {
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.72px;
+          color: #002046;
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 }
 

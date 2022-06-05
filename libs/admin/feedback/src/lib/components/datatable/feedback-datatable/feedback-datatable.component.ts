@@ -99,7 +99,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.getConfig();
-    this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('card'));
   }
 
   setTableType(value) {

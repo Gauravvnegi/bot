@@ -10,8 +10,12 @@
     <div class="body__container">
       <hospitality-bot-feedback-list
         [entityType]="tabFilterItems[tabFilterIdx]?.value"
+        [outlets]="outlets"
+        [colorMap]="colorMap"
       ></hospitality-bot-feedback-list>
-      <div style="width: calc(100% - 345px);"></div>
+      <div style="width: calc(100% - 345px);">
+        <hospitality-bot-feedback-detail></hospitality-bot-feedback-detail>
+      </div>
     </div>
   </div>
 </div>

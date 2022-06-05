@@ -4,7 +4,7 @@ import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
 import { MarketingComponent } from './components/marketing/marketing.component';
 
 const appRoutes: Route[] = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: '', redirectTo: 'dashboard' },
   {
     path: 'dashboard',
     loadChildren: () =>

@@ -14,29 +14,6 @@ import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service
   styleUrls: ['./contact-stats.component.scss'],
 })
 export class ContactStatsComponent implements OnInit {
-  // contactValue = [
-  //   {
-  //     graphvalue: 75,
-  //     label: 'TESTING',
-  //     radius: 75,
-  //     color: '#52B33F',
-  //     progress: 65,
-  //   },
-  //   {
-  //     graphvalue: 75,
-  //     label: 'TESTING2',
-  //     radius: 85,
-  //     color: '#FF8F00',
-  //     progress: 35,
-  //   },
-  //   {
-  //     graphvalue: 75,
-  //     label: 'TESTING3',
-  //     radius: 95,
-  //     color: '#CC052B',
-  //     progress: 85,
-  //   },
-  // ];
   contactValue = [];
   contactConfiguration;
   selectedInterval;
@@ -103,7 +80,6 @@ export class ContactStatsComponent implements OnInit {
     this.$subscription.add(
       this.marketingService.getContactStats(this.hotelId, config).subscribe(
         (response) => {
-          debugger;
           this.contactStats = new ContactStat().deserialize(response);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)

@@ -10,10 +10,9 @@ import { MarketingService } from '../../../../services/stats.service';
 @Component({
   selector: 'hospitality-bot-stats-view',
   templateUrl: './stats-view.component.html',
-  styleUrls: ['./stats-view.component.scss']
+  styleUrls: ['./stats-view.component.scss'],
 })
 export class StatsViewComponent implements OnInit {
-
   globalQueries = [];
   selectedInterval;
   hotelId: any;
@@ -24,9 +23,9 @@ export class StatsViewComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private marketingService: MarketingService,
-    protected _snackbarService: SnackBarService,    
+    protected _snackbarService: SnackBarService,
     private dateService: DateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
@@ -82,5 +81,4 @@ export class StatsViewComponent implements OnInit {
       )
     );
   }
-
 }

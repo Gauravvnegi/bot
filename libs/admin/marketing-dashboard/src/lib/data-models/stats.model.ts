@@ -5,105 +5,27 @@ export interface Deserializable {
 }
 
 export class MarketingStats implements Deserializable {
-  openRate: OpenRate;
-  ctr: CTR;
-  totalClicked: TotalClicked;
-  conversionRate: ConversionRate;
-  totalSent: TotalSent;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'openRate', new OpenRate().deserialize(input)),
-      set({}, 'ctr', new CTR().deserialize(input)),
-      set({}, 'totalClicked', new TotalClicked().deserialize(input)),
-      set({}, 'conversionRate', new ConversionRate().deserialize(input)),
-      set({}, 'totalSent', new TotalSent().deserialize(input))
-    );
+  chips: ChipStats[];
+
+  deserialize(input) {
+    this.chips = new Array<ChipStats>();
+    Object.keys(input).forEach((key) => {
+      this.chips.push(new ChipStats().deserialize(input[key]));
+    });
     return this;
   }
 }
-export class OpenRate implements Deserializable {
+
+export class ChipStats {
   label: string;
   score: number;
   comparisonPercent: number;
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'label', get(input, ['Total Open Rate', 'label'])),
-      set({}, 'score', get(input, ['Total Open Rate', 'score'])),
-      set(
-        {},
-        'comparisonPercent',
-        get(input, ['Total Open Rate', 'comparisonPercent'])
-      )
-    );
-    return this;
-  }
-}
-export class CTR implements Deserializable {
-  label: string;
-  score: number;
-  comparisonPercent: number;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'label', get(input, ['CTR', 'label'])),
-      set({}, 'score', get(input, ['CTR', 'score'])),
-      set({}, 'comparisonPercent', get(input, ['CTR', 'comparisonPercent']))
-    );
-    return this;
-  }
-}
-export class TotalClicked implements Deserializable {
-  label: string;
-  score: number;
-  comparisonPercent: number;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'label', get(input, ['Total Clicks', 'label'])),
-      set({}, 'score', get(input, ['Total Clicks', 'score'])),
-      set(
-        {},
-        'comparisonPercent',
-        get(input, ['Total Clicks', 'comparisonPercent'])
-      )
-    );
-    return this;
-  }
-}
-export class ConversionRate implements Deserializable {
-  label: string;
-  score: number;
-  comparisonPercent: number;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'label', get(input, ['Conversion Rate', 'label'])),
-      set({}, 'score', get(input, ['Conversion Rate', 'score'])),
-      set(
-        {},
-        'comparisonPercent',
-        get(input, ['Conversion Rate', 'comparisonPercent'])
-      )
-    );
-    return this;
-  }
-}
-export class TotalSent implements Deserializable {
-  label: string;
-  score: number;
-  comparisonPercent: number;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'label', get(input, ['Total Email Sent', 'label'])),
-      set({}, 'score', get(input, ['Total Email Sent', 'score'])),
-      set(
-        {},
-        'comparisonPercent',
-        get(input, ['Total Email Sent', 'comparisonPercent'])
-      )
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent']))
     );
     return this;
   }

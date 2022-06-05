@@ -15,7 +15,6 @@ import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service
 })
 export class ContactStatsComponent implements OnInit {
   contactValue = [];
-  contactConfiguration;
   selectedInterval;
   globalQueries = [];
   hotelId: any;
@@ -33,7 +32,6 @@ export class ContactStatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
-    this.getColorConfig();
   }
 
   listenForGlobalFilters(): void {
@@ -85,11 +83,5 @@ export class ContactStatsComponent implements OnInit {
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
-  }
-
-  getColorConfig() {
-    this.configService.$config.subscribe((response) => {
-      if (response) this.contactConfiguration = response.marketingDashboard;
-    });
   }
 }

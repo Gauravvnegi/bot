@@ -3,14 +3,17 @@
     Contact Stats
   </div>
   <div class="contact-graph-wraper">
-    <div class="contact-graph-wraper-graph" *ngFor="let item of contactValue">
+    <div
+      class="contact-graph-wraper-graph"
+      *ngFor="let item of contactStats.stats"
+    >
       <circle-progress
         [radius]="item.radius"
-        [percent]="item.progress"
+        [percent]="item.score"
         [space]="-5"
         [outerStrokeWidth]="5"
         [innerStrokeWidth]="5"
-        [outerStrokeColor]="item.color"
+        [outerStrokeColor]="item.colorCode"
         [innerStrokeColor]="'#e7e8ea'"
         [outerStrokeLinecap]="'square'"
         [animation]="true"
@@ -23,131 +26,49 @@
     </div>
     <div class="contact-graph-wraper-total">
       <div class="contact-graph-wraper-total-number">
-        {{ stats.total }}
+        {{ contactStats.totalContact }}
       </div>
       <div class="contact-graph-wraper-total-text">
         Total Contacts
       </div>
     </div>
     <div class="stat-val-container">
-      <div class="stat-val">
-        <div class="label">{{ stats.subscribed.label }}</div>
-        <div class="value">
-          <div>
-            {{ stats.subscribed.score }}
-          </div>
-          <div
-            class="value__percent"
-            [ngStyle]="
-              stats.subscribed.comparisonPercent >= 0
-                ? { color: 'green' }
-                : { color: 'red' }
-            "
-          >
-            (
-            <div class="value__percent__width">
-              {{ stats.subscribed.comparisonPercent }}
-            </div>
-            %)
-            <ng-container
-              *ngIf="
-                stats.subscribed.comparisonPercent >= 0;
-                then uparrow;
-                else down
-              "
-            >
-            </ng-container>
-            <ng-template #uparrow>
-              <img src="assets/svg/uparrow.svg" />
-            </ng-template>
-            <ng-template #down>
-              <img src="assets/svg/down-percentage.svg" />
-            </ng-template>
-          </div>
-        </div>
-      </div>
-      <div class="stat-val">
-        <div class="label">{{ stats.unsubscribed.label }}</div>
-        <div class="value">
-          <div>
-            {{ stats.unsubscribed.score }}
-          </div>
-          <div
-            class="value__percent"
-            [ngStyle]="
-              stats.unsubscribed.comparisonPercent >= 0
-                ? { color: 'green' }
-                : { color: 'red' }
-            "
-          >
-            (
-            <div class="value__percent__width">
-              {{ stats.unsubscribed.comparisonPercent }}
-            </div>
-            %)
-            <ng-container
-              *ngIf="
-                stats.unsubscribed.comparisonPercent >= 0;
-                then uparrow;
-                else down
-              "
-            >
-            </ng-container>
-            <ng-template #uparrow>
-              <img src="assets/svg/uparrow.svg" />
-            </ng-template>
-            <ng-template #down>
-              <img src="assets/svg/down-percentage.svg" />
-            </ng-template>
-          </div>
-        </div>
-      </div>
-      <div class="stat-val">
-        <div class="label">{{ stats.bounced.label }}</div>
-        <div class="value">
-          <div>
-            {{ stats.bounced.score }}
-          </div>
-          <div
-            class="value__percent"
-            [ngStyle]="
-              stats.bounced.comparisonPercent >= 0
-                ? { color: 'green' }
-                : { color: 'red' }
-            "
-          >
-            (
-            <div class="value__percent__width">
-              {{ stats.bounced.comparisonPercent }}
-            </div>
-            %)
-            <ng-container
-              *ngIf="
-                stats.bounced.comparisonPercent >= 0;
-                then uparrow;
-                else down
-              "
-            >
-            </ng-container>
-            <ng-template #uparrow>
-              <img src="assets/svg/uparrow.svg" />
-            </ng-template>
-            <ng-template #down>
-              <img src="assets/svg/down-percentage.svg" />
-            </ng-template>
-          </div>
-        </div>
-      </div>
-
-      <!-- <div class="stat-val" [style.border-left]="'5px solid ' + item.color">
+      <div
+        class="stat-val"
+        *ngFor="let item of contactStats.stats"
+        [style.border-left]="'5px solid ' + item.colorCode"
+      >
         <div class="label">{{ item.label }}</div>
-        <div class="value">{{ item.progress }}%</div>
+        <div class="value">
+          <div>
+            {{ item.score }}
+          </div>
+          <div
+            class="value__percent"
+            [ngStyle]="
+              item.comparisonPercent >= 0
+                ? { color: 'green' }
+                : { color: 'red' }
+            "
+          >
+            (
+            <div class="value__percent__width">
+              {{ item.comparisonPercent }}
+            </div>
+            %)
+            <ng-container
+              *ngIf="item.comparisonPercent >= 0; then uparrow; else down"
+            >
+            </ng-container>
+            <ng-template #uparrow>
+              <img src="assets/svg/uparrow.svg" />
+            </ng-template>
+            <ng-template #down>
+              <img src="assets/svg/down-percentage.svg" />
+            </ng-template>
+          </div>
+        </div>
       </div>
-
-      <div class="stat-val" [style.border-left]="'5px solid ' + item.color">
-        <div class="label">{{ item.label }}</div>
-        <div class="value">{{ item.progress }}%</div>
-      </div> -->
     </div>
   </div>
 </div>

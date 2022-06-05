@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MarketingService } from '../../../../services/stats.service';
 import { ContactStat } from '../../../../data-models/stats.model';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 
 @Component({
   selector: 'hospitality-bot-contact-stats',
@@ -13,37 +14,39 @@ import { DateService } from '@hospitality-bot/shared/utils';
   styleUrls: ['./contact-stats.component.scss'],
 })
 export class ContactStatsComponent implements OnInit {
-  contactValue = [
-    {
-      graphvalue: 75,
-      label: 'TESTING',
-      radius: 75,
-      color: '#52B33F',
-      progress: 65,
-    },
-    {
-      graphvalue: 75,
-      label: 'TESTING2',
-      radius: 85,
-      color: '#FF8F00',
-      progress: 35,
-    },
-    {
-      graphvalue: 75,
-      label: 'TESTING3',
-      radius: 95,
-      color: '#CC052B',
-      progress: 85,
-    },
-  ];
-
+  // contactValue = [
+  //   {
+  //     graphvalue: 75,
+  //     label: 'TESTING',
+  //     radius: 75,
+  //     color: '#52B33F',
+  //     progress: 65,
+  //   },
+  //   {
+  //     graphvalue: 75,
+  //     label: 'TESTING2',
+  //     radius: 85,
+  //     color: '#FF8F00',
+  //     progress: 35,
+  //   },
+  //   {
+  //     graphvalue: 75,
+  //     label: 'TESTING3',
+  //     radius: 95,
+  //     color: '#CC052B',
+  //     progress: 85,
+  //   },
+  // ];
+  contactValue = [];
+  contactConfiguration;
   selectedInterval;
   globalQueries = [];
   hotelId: any;
-  stats: ContactStat;
+  contactStats: ContactStat;
   $subscription = new Subscription();
 
   constructor(
+    private configService: ConfigService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private marketingService: MarketingService,
@@ -53,6 +56,7 @@ export class ContactStatsComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForGlobalFilters();
+    this.getColorConfig();
   }
 
   listenForGlobalFilters(): void {
@@ -99,11 +103,17 @@ export class ContactStatsComponent implements OnInit {
     this.$subscription.add(
       this.marketingService.getContactStats(this.hotelId, config).subscribe(
         (response) => {
-          this.stats = new ContactStat().deserialize(response['Contact Stats']);
-          console.log(this.stats);
+          debugger;
+          this.contactStats = new ContactStat().deserialize(response);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  getColorConfig() {
+    this.configService.$config.subscribe((response) => {
+      if (response) this.contactConfiguration = response.marketingDashboard;
+    });
   }
 }

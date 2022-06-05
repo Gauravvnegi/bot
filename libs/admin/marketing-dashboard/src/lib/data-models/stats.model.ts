@@ -1,4 +1,3 @@
-
 import { get, set } from 'lodash';
 
 export interface Deserializable {
@@ -110,81 +109,47 @@ export class TotalSent implements Deserializable {
   }
 }
 
+const circleRadius = {
+  BOUNCED: 95,
+  SUBSCRIBED: 85,
+  UNSUBSCRIBED: 75,
+};
+
 export class ContactStat implements Deserializable {
-  bounced: Bounced;
-  unsubscribed: Unsubscribed;
-  subscribed :Subscribed;
-  total:number;
-  deserialize(input: any) {
-    Object.assign(this,
-        set({}, 'total', get(input, ['TOTAL_CONTACT'])),
-         set({}, 'bounced', new Bounced().deserialize(input)),
-         set({}, 'unsubscribed', new Unsubscribed().deserialize(input)),
-         set({}, 'subscribed', new Subscribed().deserialize(input)),
-         );
-    
+  totalContact: number;
+  stats: StatsContact[];
+
+  deserialize(input) {
+    this.stats = new Array<StatsContact>();
+    const data = input['Contact Stats'];
+    Object.keys(data).forEach((key) => {
+      if (key != 'TOTAL_CONTACT') {
+        this.stats.push(
+          new StatsContact().deserialize(data[key], circleRadius[key])
+        );
+      }
+    });
+    Object.assign(this, set({}, 'totalContact', get(data, ['TOTAL_CONTACT'])));
     return this;
   }
 }
 
-export class Bounced implements Deserializable {
+export class StatsContact {
   label: string;
   score: number;
   comparisonPercent: number;
-  colourCode: string;
-  deserialize(input: any) {
+  colorCode: string;
+  radius: number;
+  deserialize(input: any, radius: number) {
     Object.assign(
       this,
-      set({}, 'label', get(input, ['BOUNCED', 'label'])),
-      set({}, 'score', get(input, ['BOUNCED', 'score'])),
-      set(
-        {},
-        'comparisonPercent',
-        get(input, ['BOUNCED', 'comparisonPercent'])
-      ),
-      set({}, 'colourCode', get(input, ['BOUNCED', 'colourCode']))
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set({}, 'colorCode', get(input, ['colourCode']))
     );
+
+    this.radius = radius;
     return this;
   }
-}
-
-export class Unsubscribed implements Deserializable {
-    label: string;
-    score: number;
-    comparisonPercent: number;
-    colourCode: string;
-    deserialize(input: any) {
-      Object.assign(
-        this,
-        set({}, 'label', get(input, ['UNSUBSCRIBED', 'label'])),
-        set({}, 'score', get(input, ['UNSUBSCRIBED', 'score'])),
-        set(
-          {},
-          'comparisonPercent',
-          get(input, ['UNSUBSCRIBED', 'comparisonPercent'])
-        ),
-        set({}, 'colourCode', get(input, ['UNSUBSCRIBED', 'colourCode']))
-      );
-      return this;
-    } 
-}
-export class Subscribed implements Deserializable {
-    label: string;
-    score: number;
-    comparisonPercent: number;
-    colourCode: string;
-    deserialize(input: any) {
-      Object.assign(
-        this,
-        set({}, 'label', get(input, ['SUBSCRIBED', 'label'])),
-        set({}, 'score', get(input, ['SUBSCRIBED', 'score'])),
-        set(
-          {},
-          'comparisonPercent',
-          get(input, ['SUBSCRIBED', 'comparisonPercent'])
-        ),
-        set({}, 'colourCode', get(input, ['SUBSCRIBED', 'colourCode']))
-      );
-      return this;
-    } 
 }

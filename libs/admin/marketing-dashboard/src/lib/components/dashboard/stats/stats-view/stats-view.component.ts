@@ -77,7 +77,6 @@ export class StatsViewComponent implements OnInit {
       this.marketingService.getMarketingCards(this.hotelId, config).subscribe(
         (response) => {
           this.stats = new MarketingStats().deserialize(response);
-          console.log(this.stats);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )

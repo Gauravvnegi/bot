@@ -2,15 +2,16 @@
   width: 100%;
   height: fit-content;
   padding: 20px 20px 58px;
+  margin-top: 25px;
   border-radius: 5px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
   .rate-contact-stat {
     display: flex;
     width: 100%;
-    padding-top: 30px;
+    justify-content: space-between;
     .rateGraph {
-      width: calc(100% - 264px);
+      width: calc(100% - 288px);
     }
   }
   .subscriberGraph {

@@ -2,30 +2,30 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { RateGraphStats } from '../../data-models/graph.model';
-import { GraphService } from '../../services/stats.service';
+import { DateService } from '@hospitality-bot/shared/utils';
+import { SubscriberGraphStats } from '../../../../data-models/graph.model';
+import { MarketingService } from '../../../../services/stats.service';
 
 @Component({
-  selector: 'hospitality-bot-rate-graph',
-  templateUrl: './rate-graph.component.html',
-  styleUrls: ['./rate-graph.component.scss'],
+  selector: 'hospitality-bot-subscribers-graph',
+  templateUrl: './subscribers-graph.component.html',
+  styleUrls: ['./subscribers-graph.component.scss'],
 })
-export class RateGraphComponent implements OnInit {
+export class SubscribersGraphComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   legendData: any = [
     {
-      label: 'Open Rate',
+      label: 'Subscribers',
       borderColor: '#0749fc',
       backgroundColor: '#0749fc',
       dashed: true,
       src: 'delivered',
     },
     {
-      label: 'Click Rate',
+      label: 'Unsubscribers',
       borderColor: '#f2509b',
       backgroundColor: '#f2509b',
       dashed: false,
@@ -35,8 +35,8 @@ export class RateGraphComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [], label: 'Click Rate', fill: true },
-      { data: [], label: 'Open Rate', fill: true },
+      { data: [], label: 'Unsubscribers', fill: false },
+      { data: [], label: 'Subscribers', fill: false },
     ],
     chartLabels: [],
     chartOptions: {
@@ -101,15 +101,15 @@ export class RateGraphComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
-  globalQueries;
   selectedInterval;
-  @Input() hotelId: string;
+  globalQueries;
+  @Input() hotelId;
+  subscriberGraph: SubscriberGraphStats;
   $subscription = new Subscription();
-  rateGraph: RateGraphStats;
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _snackbarService: SnackBarService,
-    private statsService: GraphService,
+    private statsService: MarketingService,
     private _globalFilterService: GlobalFilterService,
     private dateService: DateService
   ) {}
@@ -139,19 +139,21 @@ export class RateGraphComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
-        this.rateGraphStats();
+        this.subscriberGraphStats();
       })
     );
   }
 
-  rateGraphStats(): void {
+  subscriberGraphStats(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this.statsService.rateGraphStats(this.hotelId, config).subscribe(
+      this.statsService.subscriberGraphStats(this.hotelId, config).subscribe(
         (response) => {
-          this.rateGraph = new RateGraphStats().deserialize(response);
+          this.subscriberGraph = new SubscriberGraphStats().deserialize(
+            response
+          );
           this.initChartData();
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
@@ -168,9 +170,9 @@ export class RateGraphComponent implements OnInit {
   }
 
   initChartData() {
-    this.chart.chartLabels = this.rateGraph.labels;
-    this.chart.chartData[0].data = this.rateGraph.clickRate;
-    this.chart.chartData[1].data = this.rateGraph.openRate;
+    this.chart.chartLabels = this.subscriberGraph.labels;
+    this.chart.chartData[0].data = this.subscriberGraph.unsubscribers;
+    this.chart.chartData[1].data = this.subscriberGraph.subscribers;
   }
   legendOnClick = (index) => {
     let ci = this.baseChart.chart;

@@ -34,7 +34,7 @@
           (guestInfo)="openGuestInfo($event)"
         ></hospitality-bot-request-detail>
       </div>
-      <div class="guest-info-enable" *ngIf="guestInfoEnable">
+      <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
         <hospitality-bot-guest-info
           (closeInfo)="closeGuestInfo($event)"
           [data]="Id"

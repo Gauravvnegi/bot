@@ -43,7 +43,7 @@ export class ContactStat implements Deserializable {
 
   deserialize(input) {
     this.stats = new Array<StatsContact>();
-    const data = input['Contact Stats'];
+    const data = input['CONTACT_STATS'];
     Object.keys(data).forEach((key) => {
       if (key != 'TOTAL_CONTACT') {
         this.stats.push(

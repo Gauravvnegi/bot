@@ -1,1 +1,39 @@
-<div>{{ feedback | json }}</div>
+<div class="chat-height">
+  <div class="guestInfoOpen">
+    <div class="guestInfoOpen-guest-wrap">
+      <div class="guestInfoAvatar">
+        <img />
+        <ng-template
+          ><div class="label">
+            {{ feedback?.getTableOrRoomNo() }}
+          </div></ng-template
+        >
+      </div>
+      <div class="selectedChat"></div>
+    </div>
+    <div
+      class="mr-10"
+      [formGroup]=""
+      channelSubscribed
+      [paths]="'WHATSAPP_BOT'"
+    >
+      <div class="req_button">
+        Export Feedback
+        <img class="icon" src="assets/images/guest-info-icon .png" [alt]="" />
+      </div>
+    </div>
+  </div>
+  <div class="guestInfoOpen">
+    <div class="feedback_labels">
+      <div>BNO:{{ feedback?.feedback.guestData.bookingNo }}</div>
+      <div>RNO:{{ feedback?.getTableOrRoomNo() }}</div>
+      <div>{{ feedback?.jobDuration }}</div>
+      <div></div>
+    </div>
+    <div class="guestInfoOpen-guest-wrap"></div>
+    <div class="mr-10"></div>
+  </div>
+</div>
+<ng-template #noChat>
+  <div class="noChat"></div>
+</ng-template>

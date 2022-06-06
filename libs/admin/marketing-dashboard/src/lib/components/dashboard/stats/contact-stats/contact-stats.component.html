@@ -5,7 +5,7 @@
   <div class="contact-graph-wraper">
     <div
       class="contact-graph-wraper-graph"
-      *ngFor="let item of contactStats.stats"
+      *ngFor="let item of contactStats?.stats"
     >
       <circle-progress
         [radius]="item.radius"
@@ -26,7 +26,7 @@
     </div>
     <div class="contact-graph-wraper-total">
       <div class="contact-graph-wraper-total-number">
-        {{ contactStats.totalContact }}
+        {{ contactStats?.totalContact }}
       </div>
       <div class="contact-graph-wraper-total-text">
         Total Contacts
@@ -35,7 +35,7 @@
     <div class="stat-val-container">
       <div
         class="stat-val"
-        *ngFor="let item of contactStats.stats"
+        *ngFor="let item of contactStats?.stats"
         [style.border-left]="'5px solid ' + item.colorCode"
       >
         <div class="label">{{ item.label }}</div>

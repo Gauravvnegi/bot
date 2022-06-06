@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CardService } from '../../../services/card.service';
 
@@ -8,7 +8,7 @@ import { CardService } from '../../../services/card.service';
   styleUrls: ['./feedback-detail.component.scss'],
 })
 export class FeedbackDetailComponent implements OnInit {
-  feedback;
+  @Input() feedback;
   $subscription = new Subscription();
   constructor(private cardService: CardService) {}
 

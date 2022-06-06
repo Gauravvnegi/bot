@@ -6,13 +6,9 @@
     <span>{{ headerName }}</span>
   </div>
 
-  <div
-    *ngIf="!isCustomHeader"
-    (click)="openModal()"
-    class="template__header--status"
-  >
+  <div *ngIf="!isCustomHeader" class="template__header--status">
     <p>Status :&nbsp;<b>Draft&nbsp;</b></p>
-    <mat-icon class="icon">launch</mat-icon>
+    <mat-icon class="icon" (click)="openModal()">launch</mat-icon>
   </div>
 </div>
 

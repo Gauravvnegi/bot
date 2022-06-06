@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div class="stats-container">
-    <div class="stats" *ngFor="let item of stats.chips">
+    <div class="stats" *ngFor="let item of stats?.chips">
       <div class="stats__text">{{ item.label }}</div>
       <div class="stats__value">{{ item.score }}</div>
     </div>

@@ -3,18 +3,17 @@ export interface Deserializable {
 }
 
 export class RateGraphStats {
-  labels: string[];
+  label: string[];
   clickRate: number[];
   openRate: number[];
   deserialize(input) {
-    this.labels = new Array<string>();
+    this.label = new Array<string>();
     this.clickRate = new Array<number>();
     this.openRate = new Array<number>();
     input.forEach((item) => {
-      const key = Object.keys(item)[0];
-      this.labels.push(key);
-      this.clickRate.push(item[key]['Click Rate']);
-      this.openRate.push(item[key]['Total Open Rate']);
+      this.label.push(item['label']);
+      this.clickRate.push(item['clickRate']);
+      this.openRate.push(item['openRate']);
     });
     return this;
   }

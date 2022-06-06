@@ -99,6 +99,7 @@ export class EmailService extends ApiService {
     reqData['to'] = this.mapSendersData('to', data);
     if (data['cc']) reqData['cc'] = data.cc;
     if (data['bcc']) reqData['bcc'] = data.bcc;
+    if (data.id.length) reqData['id'] = data.id;
     return {
       ...reqData,
       name: data.name,
@@ -121,22 +122,7 @@ export class EmailService extends ApiService {
     reqData['to'] = this.mapSendersData('to', data);
     if (data['cc']) reqData['cc'] = data.cc;
     if (data['bcc']) reqData['bcc'] = data.bcc;
-    console.log({
-      ...reqData,
-      name: data.name,
-      topicId: data.topicId,
-      from: data.from,
-      subject: {
-        text: data.subject,
-      },
-      previewText: data.previewText,
-      message: data.message,
-      templateId: data.templateId,
-      campaignType: data.campaignType,
-      testEmails: data.testEmails,
-      dateTime: time,
-      isSchedule: true,
-    });
+    if (data.id.length) reqData['id'] = data.id;
     return {
       ...reqData,
       name: data.name,

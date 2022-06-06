@@ -6,14 +6,24 @@
   border-radius: 5px 5px 0px 0px;
   height: calc(100vh - 133px);
   // margin: -10px;
+
   @media (max-width: $tablet) {
     margin: -10px;
   }
-
   &-sidebar {
     width: 25%;
     height: 100%;
     border-right: 1px solid #9eaeb8;
+    position: relative;
+    .blackscreen {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      opacity: 0.3;
+      background-color: black;
+      z-index: 4;
+      display: none;
+    }
   }
 
   .no-selected-guest {
@@ -73,4 +83,20 @@
 }
 ::ng-deep .heigit-100 {
   height: 100%;
+  position: relative;
+  .blackscreen {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+    background-color: black;
+    z-index: 4;
+    display: none;
+  }
+}
+.disabled {
+  pointer-events: none;
+  .blackscreen {
+    display: block !important;
+  }
 }

@@ -5,7 +5,6 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import {
-  IMessageOverallAnalytic,
   IMessageOverallAnalytics,
   ISentdeliveredChart,
   MessageOverallAnalytics,

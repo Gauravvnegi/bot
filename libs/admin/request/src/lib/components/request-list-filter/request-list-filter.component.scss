@@ -1,6 +1,8 @@
 @import 'main';
 .container {
   border-right: solid 1px #e0e0e0;
+  height: 100%;
+  overflow-y: auto;
 }
 .sortFilt {
   height: 62px;
@@ -33,8 +35,8 @@
         letter-spacing: 0.56px;
         color: #9eaeb8;
         margin-right: 5px;
-        &:hover{
-          color:$primary-purple;
+        &:hover {
+          color: $primary-purple;
         }
       }
     }
@@ -44,7 +46,7 @@
   font-size: 22px;
   cursor: pointer;
   color: #9eaeb8;
-  &:hover{
+  &:hover {
     color: $primary-purple;
   }
 }
@@ -141,7 +143,7 @@
 
 .material-icon {
   color: #9eaeb8;
-  &:hover{
+  &:hover {
     color: $primary-purple;
   }
 }

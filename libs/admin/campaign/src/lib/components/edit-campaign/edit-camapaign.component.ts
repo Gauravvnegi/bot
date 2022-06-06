@@ -74,6 +74,7 @@ export class EditCampaignComponent implements OnInit {
 
   initFG(): void {
     this.campaignFG = this._fb.group({
+      id: [''],
       name: ['', [Validators.required]],
       templateId: ['', Validators.required],
       from: ['', [Validators.required]],
@@ -164,6 +165,8 @@ export class EditCampaignComponent implements OnInit {
             console.log('Saved');
             this.setDataAfterUpdate(response);
           } else {
+            this.campaignFG.patchValue({ id: response.id });
+            this.campaignId = response.id;
             this.location.replaceState(
               `/pages/marketing/campaign/edit/${response.id}`
             );
@@ -278,10 +281,12 @@ export class EditCampaignComponent implements OnInit {
               console.log('Saved');
               this.setDataAfterUpdate(response);
             } else {
+              this.campaignFG.patchValue({ id: response.id });
+              this.campaignId = response.id;
+              this.setDataAfterSave(response);
               this.location.replaceState(
                 `/pages/marketing/campaign/edit/${response.id}`
               );
-              this.setDataAfterSave(response);
             }
           },
           ({ error }) => {

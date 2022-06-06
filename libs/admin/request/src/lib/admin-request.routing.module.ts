@@ -8,6 +8,10 @@ import { RequestDetailComponent } from './components/request-detail/request-deta
 import { RaiseRequestComponent } from './components/raise-request/raise-request.component';
 import { RequestListFilterComponent } from './components/request-list-filter/request-list-filter.component';
 import { SearchComponent } from './components/search/search.component';
+import { GuestInfoComponent } from './components/guest-info/guest-info.component';
+import { GuestPersonalInfoComponent } from './components/guest-personal-info/guest-personal-info.component';
+import { GuestRequestsComponent } from './components/guest-requests/guest-requests.component';
+import { GuestBookingInfoComponent } from './components/guest-booking-info/guest-booking-info.component';
 
 const appRoutes: Route[] = [
   {
@@ -37,5 +41,9 @@ export class AdminRequestRoutingModule {
     RaiseRequestComponent,
     RequestListFilterComponent,
     SearchComponent,
+    GuestInfoComponent,
+    GuestPersonalInfoComponent,
+    GuestBookingInfoComponent,
+    GuestRequestsComponent,
   ];
 }

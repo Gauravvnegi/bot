@@ -18,10 +18,12 @@
       >
         {{ tab.label }}
       </div>
-    </div>
-    <ng-container *ngIf="tabFilterItems.slice(4, tabFilterItems.length).length">
-      <mat-form-field class="more-services">
+      <ng-container
+        *ngIf="tabFilterItems.slice(4, tabFilterItems.length).length"
+      >
+        <!-- <mat-form-field class="more-services"> -->
         <mat-select
+          class="more-services panel"
           placeholder="More Services"
           [value]="tabFilterItems[tabFilterIdx]"
           (selectionChange)="handleMoreServicesSelect($event)"
@@ -29,11 +31,13 @@
           <mat-option
             *ngFor="let item of tabFilterItems.slice(4, tabFilterItems.length)"
             [value]="item"
+            class=""
             >{{ item.label }}</mat-option
           >
         </mat-select>
-      </mat-form-field>
-    </ng-container>
+        <!-- </mat-form-field> -->
+      </ng-container>
+    </div>
   </div>
   <ng-container #packageRenderer> </ng-container>
 </div>

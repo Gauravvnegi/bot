@@ -2,7 +2,9 @@
   <div
     class="whatsapp-wrapper-sidebar"
     [style.width]="guestInfoEnable ? '25%' : '30%'"
+    [ngClass]="{ disabled: guestInfoEnable }"
   >
+    <div class="blackscreen"></div>
     <hospitality-bot-chat-list
       [selected]="selectedChat"
       (selectedChat)="setSelectedChat($event)"
@@ -13,18 +15,15 @@
       [style.width]="guestInfoEnable ? '100%' : '100%'"
       class="heigit-100"
       [style.max-width]="guestInfoEnable ? '100%' : '100%'"
+      [ngClass]="{ disabled: guestInfoEnable }"
     >
+      <div class="blackscreen"></div>
       <hospitality-bot-chat
         [selectedChat]="selectedChat"
         (guestInfo)="openGuestInfo($event)"
       ></hospitality-bot-chat>
     </div>
-    <div
-      class="guest-info-enable"
-      [ngClass]="{
-        'visuallyhidden hidden': !guestInfoEnable
-      }"
-    >
+    <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
       <hospitality-bot-guest-info
         [data]="selectedChat"
         (closeInfo)="closeGuestInfo($event)"

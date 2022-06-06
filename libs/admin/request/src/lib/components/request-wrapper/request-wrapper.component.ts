@@ -4,11 +4,23 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
 import { RaiseRequestComponent } from '../raise-request/raise-request.component';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'hospitality-bot-request-wrapper',
   templateUrl: './request-wrapper.component.html',
   styleUrls: ['./request-wrapper.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)' }),
+        animate('200ms ease-in', style({ transform: 'translateX(0%)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ transform: 'translateX(100%)' })),
+      ]),
+    ]),
+  ],
 })
 export class RequestWrapperComponent implements OnInit {
   guestInfoEnable = false;

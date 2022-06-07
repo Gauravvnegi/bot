@@ -86,6 +86,8 @@ export class StatisticsService extends ApiService {
   }
 
   getGTMAcrossServices(config) {
-    return this.get(`/api/v1/feedback-stats/guest-to-meet${config.queryObj}`);
+    // return this.get(`/api/v1/feedback-stats/guest-to-meet${config.queryObj}`);
+
+    return this.get(`/api/v1/feedback/guests-card${config.queryObj}`);
   }
 }

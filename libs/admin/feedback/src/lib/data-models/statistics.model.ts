@@ -384,111 +384,111 @@ export class Status {
   }
 }
 
-// export class GTM {
-//   comparisonPercent: number;
-//   CLOSED: number;
-//   REMAINING: number;
-//   score: number;
+export class GTM {
+  comparisonPercent: number;
+  CLOSED: number;
+  REMAINING: number;
+  score: number;
 
-//   deserialize(input) {
-//     Object.assign(
-//       this,
-//       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
-//       set({}, 'CLOSED', get(input, ['gtmStatData', 'CLOSED'])),
-//       set({}, 'REMAINING', get(input, ['gtmStatData', 'REMAINING'])),
-//       set({}, 'score', get(input, ['score']))
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set({}, 'CLOSED', get(input, ['gtmStatData', 'CLOSED'])),
+      set({}, 'REMAINING', get(input, ['gtmStatData', 'REMAINING'])),
+      set({}, 'score', get(input, ['score']))
+    );
+
+    return this;
+  }
+}
+
+// export interface Deserializable {
+//   deserialize(input: any): this;
+// }
+
+// export class GTMSTatData implements Deserializable {
+//   total: number;
+//   records: GTMFeedback[];
+//   entityTypeCounts: string[];
+//   entityStateCounts: string[];
+//   deserialize(input: any) {
+//     this.entityTypeCounts = new Array<string>();
+//     this.entityStateCounts = new Array<string>();
+//     Object.keys(input).forEach((key) => {
+//       if (key == 'entityTypeCounts') {
+//         this.entityTypeCounts.push(input[key]);
+//       }
+//       if (key == 'entityStateCounts') {
+//         this.entityStateCounts.push(input[key]);
+//       }
+//     });
+
+//     this.records = input.records.map((record: any) =>
+//       new GTMFeedback().deserialize(record)
 //     );
 
+//     Object.assign(this, set({}, 'total', get(input, ['total'])));
 //     return this;
 //   }
 // }
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
+// export class GTMFeedback implements Deserializable {
+//   id: number;
+//   status: string;
+//   userId: string;
+//   feedbackId: string;
+//   departmentName: string;
+//   departmentLabel: string;
+//   guestId: GTMGuest[];
+//   rating: number;
+//   comments: string;
+//   bookingDetail: string;
+//   services: string;
+//   entityId: string;
+//   feedbackType: string;
+//   deserialize(input: any) {
+//     Object.assign(
+//       this,
+//       set({}, 'id', get(input, ['id'])),
+//       set({}, 'status', get(input, ['status'])),
+//       set({}, 'userId', get(input, ['userId'])),
+//       set({}, 'feedbackId', get(input, ['feedbackId'])),
+//       set({}, 'departmentName', get(input, ['departmentName'])),
+//       set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+//       set({}, 'guestId', new GTMGuest().deserialize(input.feedback.guestId)),
+//       set({}, 'rating', get(input, ['rating'])),
+//       set({}, 'comments', get(input, ['comments'])),
+//       set({}, 'bookingDetail', get(input, ['bookingDetails'])),
+//       set({}, 'services', get(input, ['services'])),
+//       set({}, 'entityId', get(input, ['entityId'])),
+//       set({}, 'feedbackType', get(input, ['feedbackType']))
+//     );
+//     return this;
+//   }
+// }
 
-export class GTM implements Deserializable {
-  total: number;
-  records: GTMFeedback[];
-  entityTypeCounts: string[];
-  entityStateCounts: string[];
-  deserialize(input: any) {
-    this.entityTypeCounts = new Array<string>();
-    this.entityStateCounts = new Array<string>();
-    Object.keys(input).forEach((key) => {
-      if (key == 'entityTypeCounts') {
-        this.entityTypeCounts.push(input[key]);
-      }
-      if (key == 'entityStateCounts') {
-        this.entityStateCounts.push(input[key]);
-      }
-    });
+// export class GTMGuest {
+//   firstName: string;
+//   lastName: string;
+//   nameTitle: string;
+//   countryCode: string;
+//   phoneNumber: string;
+//   emailID: string;
 
-    this.records = input.records.map((record: any) =>
-      new GTMFeedback().deserialize(record)
-    );
-
-    Object.assign(this, set({}, 'total', get(input, ['total'])));
-    return this;
-  }
-}
-
-export class GTMFeedback implements Deserializable {
-  id: number;
-  status: string;
-  userId: string;
-  feedbackId: string;
-  departmentName: string;
-  departmentLabel: string;
-  guestId: GTMGuest[];
-  rating: number;
-  comments: string;
-  bookingDetail: string;
-  services: string;
-  entityId: string;
-  feedbackType: string;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'status', get(input, ['status'])),
-      set({}, 'userId', get(input, ['userId'])),
-      set({}, 'feedbackId', get(input, ['feedbackId'])),
-      set({}, 'departmentName', get(input, ['departmentName'])),
-      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
-      set({}, 'guestId', new GTMGuest().deserialize(input.feedback.guestId)),
-      set({}, 'rating', get(input, ['rating'])),
-      set({}, 'comments', get(input, ['comments'])),
-      set({}, 'bookingDetail', get(input, ['bookingDetails'])),
-      set({}, 'services', get(input, ['services'])),
-      set({}, 'entityId', get(input, ['entityId'])),
-      set({}, 'feedbackType', get(input, ['feedbackType']))
-    );
-    return this;
-  }
-}
-
-export class GTMGuest {
-  firstName: string;
-  lastName: string;
-  nameTitle: string;
-  countryCode: string;
-  phoneNumber: string;
-  emailID: string;
-
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'lastName', get(input, ['lastName'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'])),
-      set({}, 'countryCode', get(input, ['countryCode'])),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'])),
-      set({}, 'emailID', get(input, ['emailID']))
-    );
-    return this;
-  }
-}
+//   deserialize(input: any) {
+//     Object.assign(
+//       this,
+//       set({}, 'firstName', get(input, ['firstName'])),
+//       set({}, 'lastName', get(input, ['lastName'])),
+//       set({}, 'nameTitle', get(input, ['nameTitle'])),
+//       set({}, 'countryCode', get(input, ['countryCode'])),
+//       set({}, 'phoneNumber', get(input, ['phoneNumber'])),
+//       set({}, 'emailID', get(input, ['emailID']))
+//     );
+//     return this;
+//   }
+// }
 
 export const SharedColors = {
   Received: '#4ba0f5',
@@ -508,10 +508,13 @@ export const SharedColors = {
   LUNCH: '#f18533',
   BREAKFAST: '#4974e0',
   DINNER: '#3db76b',
-  INPROGRESS: '#31bb92',
-  RESOLVED: '#ff6804',
+  INPROGRESS: '#4ba0f5',
+  RESOLVED: '#31bb92',
   OPEN: '#4ba0f5',
   CLOSED: '#ff6804',
+  TODO: '#c5c5c5',
+  TIMEOUT: '#ef1d45',
+  NOACTION: '#ff8f00',
 };
 
 export class NPOSVertical {

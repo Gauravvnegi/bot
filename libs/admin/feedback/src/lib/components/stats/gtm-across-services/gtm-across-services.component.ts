@@ -102,13 +102,13 @@ export class GtmAcrossServicesComponent implements OnInit {
   }
 
   setProgress() {
-    // if (this.statistics?.REMAINING) {
-    //   this.progress = Math.abs(
-    //     (this.statistics?.CLOSED / this.statistics?.score) * 100
-    //   );
-    // } else {
-    //   this.progress = 0;
-    // }
+    if (this.statistics?.REMAINING) {
+      this.progress = Math.abs(
+        (this.statistics?.CLOSED / this.statistics?.score) * 100
+      );
+    } else {
+      this.progress = 0;
+    }
   }
 
   getGTMAcrossService() {
@@ -117,7 +117,6 @@ export class GtmAcrossServicesComponent implements OnInit {
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
-          feedbackGraph: 'GUESTTOMEET',
         },
       ]),
     };
@@ -126,9 +125,7 @@ export class GtmAcrossServicesComponent implements OnInit {
       this.statisticsService
         .getGTMAcrossServices(config)
         .subscribe((response) => {
-          debugger;
           this.statistics = new GTM().deserialize(response);
-          console.log(this.statistics);
           this.keyLabels = [
             { label: 'Closed', key: 'CLOSED' },
             { label: 'Remaining', key: 'REMAINING' },

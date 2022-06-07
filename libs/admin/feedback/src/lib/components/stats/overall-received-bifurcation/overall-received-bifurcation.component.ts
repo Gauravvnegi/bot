@@ -29,6 +29,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   selectedInterval;
   globalQueries;
   stats: Bifurcation;
+  keyLabels = [];
   feedbackChart = {
     Labels: [],
     Data: [[]],
@@ -157,6 +158,10 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         .getBifurcationStats(config)
         .subscribe((response) => {
           this.stats = new Bifurcation().deserialize(response);
+          this.keyLabels = [
+            { label: 'GTM', key: 'GTM' },
+            { label: 'ALL', key: 'ALL' },
+          ];
           this.initFeedbackChart(
             this.stats.feedbacks.reduce(
               (accumulator, current) => accumulator + current.score,
@@ -228,7 +233,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   }
 
   createTabFilterItem() {
-    return this.stats.feedbacks.map((keyObj) => {
+    return this.keyLabels.map((keyObj) => {
       return {
         label: keyObj.label,
         content: '',
@@ -238,6 +243,16 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         chips: this.feedbackConfig.chips.feedbackDatatable,
       };
     });
+    // return this.stats.feedbacks.map((keyObj) => {
+    //   return {
+    //     label: keyObj.label,
+    //     content: '',
+    //     value: keyObj.key,
+    //     disabled: false,
+    //     total: 0,
+    //     chips: this.feedbackConfig.chips.feedbackDatatable,
+    //   };
+    // });
   }
   ngOnDestroy() {
     this.$subscription.unsubscribe();

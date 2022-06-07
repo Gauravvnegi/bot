@@ -222,7 +222,7 @@ export const feedback = {
         value: 'TODO',
         total: 0,
         isSelected: false,
-        type: 'completed',
+        type: 'initiated',
       },
       {
         label: 'In-Progress ',
@@ -230,7 +230,7 @@ export const feedback = {
         value: 'INPROGRESS',
         total: 0,
         isSelected: false,
-        type: 'initiated',
+        type: 'completed',
       },
       {
         label: 'Resolved ',
@@ -238,7 +238,7 @@ export const feedback = {
         value: 'RESOLVED',
         total: 0,
         isSelected: false,
-        type: 'pending',
+        type: 'failed',
       },
       {
         label: 'No Action ',
@@ -246,7 +246,7 @@ export const feedback = {
         value: 'NOACTION',
         total: 0,
         isSelected: false,
-        type: 'failed',
+        type: 'pending',
       },
     ],
   },

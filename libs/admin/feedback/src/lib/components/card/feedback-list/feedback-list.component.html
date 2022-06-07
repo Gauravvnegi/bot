@@ -1,11 +1,13 @@
-<div class="list-container">
+<div
+  class="list-container"
+  [ngStyle]="
+    !showFilter ? { display: 'block' } : { display: 'none', height: '0px' }
+  "
+>
   <div class="header">
     <div class="header__search">
       <hospitality-bot-search
         [parentFG]="parentFG"
-        [hotelId]="hotelId"
-        [globalQueries]="globalQueries"
-        [filterData]="filterData"
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
       ></hospitality-bot-search>
@@ -43,7 +45,42 @@
         <div class="item__body__name">
           {{ item.feedback.guest.getFullName() }}
         </div>
+        <div class="item__body__remarks">
+          <ng-container
+            *ngIf="item.remarks && item.remarks.length; else noContent"
+            >{{ item.remarks[0].remarks }}</ng-container
+          >
+        </div>
+        <div class="item__body__status">
+          <div>{{ item.getStatus(tabFilterItems) }}</div>
+          <div class="divider"></div>
+          <div>SLA: {{ item.getSLA() }}</div>
+          <div class="divider"></div>
+          <div>JD: ---</div>
+        </div>
+        <div class="item__body__assignee">
+          <div>{{ item.userName }} ({{ item.departmentLabel }})</div>
+          <div>{{ item.getTime(_globalFilterService.timezone) }}</div>
+        </div>
       </div>
     </div>
   </div>
+</div>
+<ng-template #noContent>---</ng-template>
+<div
+  class="list-container"
+  [ngStyle]="
+    showFilter
+      ? {
+          visibility: 'visible',
+          marginRight: '1px solid #9eaeb8'
+        }
+      : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
+  "
+>
+  <hospitality-bot-feedback-list-filter
+    [parentFG]="parentFG"
+    (filterApplied)="handleFilter($event)"
+    (close)="showFilter = false"
+  ></hospitality-bot-feedback-list-filter>
 </div>

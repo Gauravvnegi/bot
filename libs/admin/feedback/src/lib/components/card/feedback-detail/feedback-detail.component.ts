@@ -18,7 +18,7 @@ export class FeedbackDetailComponent implements OnInit {
 
   listenForSelectedFeedback() {
     this.$subscription.add(
-      this.cardService.selectedFeedback.subscribe(
+      this.cardService.$selectedFeedback.subscribe(
         (response) => (this.feedback = response)
       )
     );

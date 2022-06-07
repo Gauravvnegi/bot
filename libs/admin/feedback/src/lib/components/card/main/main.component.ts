@@ -5,6 +5,8 @@ import {
   HotelDetailService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { card } from '../../../constants/card';
+import { CardService } from '../../../services/card.service';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -14,24 +16,14 @@ import { Subscription } from 'rxjs';
 export class MainComponent implements OnInit {
   outlets = [];
   colorMap;
-  tabFilterItems = [
-    {
-      label: 'GTM',
-      value: 'GTM',
-      total: 0,
-    },
-    {
-      label: 'All',
-      value: 'ALL',
-      total: 0,
-    },
-  ];
+  tabFilterItems = card.tabFilterItems;
   tabFilterIdx = 1;
   $subscription = new Subscription();
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private cardService: CardService
   ) {}
 
   ngOnInit(): void {
@@ -76,5 +68,8 @@ export class MainComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.cardService.$selectedEntityType.next(
+      this.tabFilterItems[event.index].value
+    );
   }
 }

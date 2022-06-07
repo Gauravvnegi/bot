@@ -12,17 +12,10 @@ import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 })
 export class SearchComponent implements OnInit {
   @Input() parentFG: FormGroup;
-  @Input() hotelId: string;
-  @Input() globalQueries;
-  @Input() filterData;
-  @Input() entityType: string;
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
   searchValue = false;
-  constructor(
-    private _adminUtilityService: AdminUtilityService,
-    private snackbarService: SnackBarService
-  ) {}
+  constructor(private snackbarService: SnackBarService) {}
 
   ngOnInit(): void {
     this.listenForSearchChanges();

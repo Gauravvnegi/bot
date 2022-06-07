@@ -21,6 +21,7 @@ import { FeedbackListComponent } from './components/card/feedback-list/feedback-
 import { FeedbackDetailComponent } from './components/card/feedback-detail/feedback-detail.component';
 import { FeedbackFilterComponent } from './components/card/feedback-filter/feedback-filter.component';
 import { SearchComponent } from './components/card/search/search.component';
+import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
 
 const appRoutes: Route[] = [
   {
@@ -54,5 +55,6 @@ export class AdminFeedbackRoutingModule {
     FeedbackDetailComponent,
     FeedbackFilterComponent,
     SearchComponent,
+    FeedbackListFilterComponent,
   ];
 }

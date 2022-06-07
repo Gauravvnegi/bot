@@ -9,6 +9,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { Observable, Subscription } from 'rxjs';
+import { card } from '../../../constants/card';
 import { FeedbackList } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
@@ -23,48 +24,10 @@ export class FeedbackListComponent implements OnInit {
   @Input() outlets;
   @Input() colorMap;
   feedbackType: string;
-  filterData = {
-    sort: '',
-    order: 'DESC',
-    priorityType: '',
-  };
   parentFG: FormGroup;
-  tabFilterItems = [
-    {
-      label: 'To-Do',
-      content: '',
-      value: 'PENDING',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Timeout',
-      content: '',
-      value: 'TIMEOUT',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Resolved',
-      content: '',
-      value: 'RESOLVED',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ];
+  tabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
-  tabFilterIdx: number = 3;
+  tabFilterIdx: number = 5;
   hotelId: string;
   $subscription = new Subscription();
   globalQueries = [];
@@ -72,6 +35,10 @@ export class FeedbackListComponent implements OnInit {
   loading = false;
   showFilter = false;
   feedbackList;
+  pagination = {
+    offset: 0,
+    limit: 5,
+  };
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -86,7 +53,7 @@ export class FeedbackListComponent implements OnInit {
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
-    this.cardService.selectedFeedback.next(null);
+    this.cardService.$selectedFeedback.next(null);
   }
 
   initFG() {
@@ -97,6 +64,9 @@ export class FeedbackListComponent implements OnInit {
 
   registerListeners() {
     this.listenForGlobalFilters();
+    this.listenForOutletChanged();
+    this.listenForFeedbackTypeChanged();
+    this.listenForEntityTypeChange();
   }
 
   listenForGlobalFilters() {
@@ -112,8 +82,8 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
-        this.cardService.selectedFeedback.next(null);
-        this.getFeedbackList([
+        this.cardService.$selectedFeedback.next(null);
+        this.loadInitialData([
           ...this.globalQueries,
           {
             order: sharedConfig.defaultOrder,
@@ -154,7 +124,26 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
-  getFeedbackList(queries = []) {
+  listenForEntityTypeChange() {
+    this.$subscription.add(
+      this.cardService.$selectedEntityType.subscribe((response) => {
+        if (response) {
+          this.entityType = response;
+          this.loadInitialData([
+            ...this.globalQueries,
+            {
+              order: sharedConfig.defaultOrder,
+              feedbackType: this.feedbackType,
+              entityType: this.entityType,
+              entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+            },
+          ]);
+        }
+      })
+    );
+  }
+
+  loadInitialData(queries = []) {
     this.loading = true;
 
     this.$subscription.add(
@@ -173,6 +162,8 @@ export class FeedbackListComponent implements OnInit {
       )
     );
   }
+
+  loadMore() {}
 
   fetchDataFrom(queries): Observable<any> {
     const config = {
@@ -212,7 +203,7 @@ export class FeedbackListComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-    this.getFeedbackList([
+    this.loadInitialData([
       ...this.globalQueries,
       {
         order: sharedConfig.defaultOrder,
@@ -224,7 +215,9 @@ export class FeedbackListComponent implements OnInit {
   }
 
   setSelectedItem(item) {
-    this.cardService.selectedFeedback.next(item);
+    this.cardService.$selectedFeedback.next(item);
     this.selectedFeedback = item;
   }
+
+  handleFilter(event) {}
 }

@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 import { Feedback, StayFeedback } from './feedback-datatable.model';
 
@@ -80,5 +81,32 @@ export class FeedbackRecord {
       })
       .join('')
       .toUpperCase();
+  }
+
+  getSLA() {
+    if (this.sla)
+      return `${Math.round(((this.sla % 86400000) % 3600000) / 60000)}m`;
+    else '------';
+  }
+
+  getStatus(array) {
+    return array.filter((item) => item.value === this.status)[0]?.label;
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }

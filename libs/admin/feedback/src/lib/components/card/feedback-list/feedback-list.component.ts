@@ -1,4 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -23,6 +30,7 @@ export class FeedbackListComponent implements OnInit {
   @Input() entityType;
   @Input() outlets;
   @Input() colorMap;
+  @ViewChild('feedbackListContainer') private myScrollContainer: ElementRef;
   feedbackType: string;
   parentFG: FormGroup;
   tabFilterItems = card.list.tabFilterItems;
@@ -34,11 +42,14 @@ export class FeedbackListComponent implements OnInit {
   enableSearchField = false;
   loading = false;
   showFilter = false;
+  userList;
   feedbackList;
+  filterData = {};
   pagination = {
     offset: 0,
-    limit: 5,
+    limit: 20,
   };
+  totalRecords = 100;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -83,16 +94,28 @@ export class FeedbackListComponent implements OnInit {
         ]);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
         this.cardService.$selectedFeedback.next(null);
-        this.loadInitialData([
-          ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            feedbackType: this.feedbackType,
-            entityType: this.entityType,
-            entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
-          },
-        ]);
+        this.getUsersList();
+        this.filterData = {
+          ...this.filterData,
+          order: sharedConfig.defaultOrder,
+          feedbackType: this.feedbackType,
+          entityType: this.entityType,
+          entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+        };
+        this.pagination = {
+          offset: 0,
+          limit: 20,
+        };
+        this.loadData();
       })
+    );
+  }
+
+  getUsersList() {
+    this.$subscription.add(
+      this.cardService
+        .getUsersList(this.hotelId)
+        .subscribe((response) => (this.userList = response))
     );
   }
 
@@ -129,15 +152,8 @@ export class FeedbackListComponent implements OnInit {
       this.cardService.$selectedEntityType.subscribe((response) => {
         if (response) {
           this.entityType = response;
-          this.loadInitialData([
-            ...this.globalQueries,
-            {
-              order: sharedConfig.defaultOrder,
-              feedbackType: this.feedbackType,
-              entityType: this.entityType,
-              entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
-            },
-          ]);
+          this.filterData = { ...this.filterData, entityType: response };
+          this.loadData();
         }
       })
     );
@@ -149,21 +165,29 @@ export class FeedbackListComponent implements OnInit {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {
-          this.feedbackList = new FeedbackList().deserialize(
-            response,
-            this.outlets,
-            this.feedbackType,
-            this.colorMap
-          ).records;
-          console.log(this.feedbackList);
+          this.feedbackList =
+            this.pagination.offset > 0
+              ? [
+                  ...this.feedbackList,
+                  ...new FeedbackList().deserialize(
+                    response,
+                    this.outlets,
+                    this.feedbackType,
+                    this.colorMap
+                  ).records,
+                ]
+              : new FeedbackList().deserialize(
+                  response,
+                  this.outlets,
+                  this.feedbackType,
+                  this.colorMap
+                ).records;
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
         () => (this.loading = false)
       )
     );
   }
-
-  loadMore() {}
 
   fetchDataFrom(queries): Observable<any> {
     const config = {
@@ -173,8 +197,6 @@ export class FeedbackListComponent implements OnInit {
   }
 
   getHotelId(globalQueries): void {
-    //todo
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -195,23 +217,25 @@ export class FeedbackListComponent implements OnInit {
 
   getSearchValue(event) {
     if (event.status) {
+      this.feedbackList = new FeedbackList().deserialize(
+        { records: event.response },
+        this.outlets,
+        this.feedbackType,
+        this.colorMap
+      ).records;
     } else {
       this.loading = true;
-      // this.loadData(0, 10);
+      this.loadData();
     }
   }
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-    this.loadInitialData([
-      ...this.globalQueries,
-      {
-        order: sharedConfig.defaultOrder,
-        feedbackType: this.feedbackType,
-        entityType: this.entityType,
-        entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
-      },
-    ]);
+    this.filterData = {
+      ...this.filterData,
+      entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+    };
+    this.loadData();
   }
 
   setSelectedItem(item) {
@@ -219,5 +243,65 @@ export class FeedbackListComponent implements OnInit {
     this.selectedFeedback = item;
   }
 
-  handleFilter(event) {}
+  handleFilter(event) {
+    if (event.status) {
+      this.filterData = { ...this.filterData, ...event.data };
+      this.loadData();
+    }
+    this.showFilter = false;
+  }
+
+  loadData() {
+    if (this.search.length) {
+      this.$subscription.add(
+        this.cardService
+          .searchFeedbacks({
+            queryObj: this._adminUtilityService.makeQueryParams([
+              ...this.globalQueries,
+              this.filterData,
+              { key: this.search },
+            ]),
+          })
+          .subscribe(
+            (response) =>
+              (this.feedbackList = new FeedbackList().deserialize(
+                { records: response },
+                this.outlets,
+                this.feedbackType,
+                this.colorMap
+              ).records)
+          )
+      );
+    } else {
+      this.loadInitialData([
+        ...this.globalQueries,
+        this.filterData,
+        this.pagination,
+      ]);
+    }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    if (!this.search.length)
+      if (
+        this.myScrollContainer &&
+        this.myScrollContainer.nativeElement.offsetHeight +
+          this.myScrollContainer.nativeElement.scrollTop ===
+          this.myScrollContainer.nativeElement.scrollHeight
+      ) {
+        if (this.totalRecords > this.feedbackList.length) {
+          this.pagination.offset = this.feedbackList.length;
+          this.loadData();
+        }
+      }
+  }
+
+  get search(): string {
+    return this.parentFG.get('search')?.value;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

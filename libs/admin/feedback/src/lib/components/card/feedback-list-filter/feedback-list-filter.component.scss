@@ -50,6 +50,9 @@
     color: $primary-purple;
   }
 }
+.filter-body {
+  height: calc(100% - 62px);
+}
 .sortFilterWrapper {
   height: 100%;
   width: 100%;
@@ -108,6 +111,13 @@
       letter-spacing: 0.84px;
       color: #002046;
       opacity: 1;
+    }
+    .assignee-dropdown {
+      width: 156px;
+      padding: 8px 15px 7px 14px;
+      border-radius: 5px;
+      border: solid 1px #d9d9d9;
+      margin-bottom: 20px;
     }
   }
   .applyBtnWrapper {

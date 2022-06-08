@@ -19,7 +19,6 @@ import { DepartmentBarGraphComponent } from './components/stats/department-bar-g
 import { MainComponent } from './components/card/main/main.component';
 import { FeedbackListComponent } from './components/card/feedback-list/feedback-list.component';
 import { FeedbackDetailComponent } from './components/card/feedback-detail/feedback-detail.component';
-import { FeedbackFilterComponent } from './components/card/feedback-filter/feedback-filter.component';
 import { SearchComponent } from './components/card/search/search.component';
 import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
 
@@ -53,7 +52,6 @@ export class AdminFeedbackRoutingModule {
     MainComponent,
     FeedbackListComponent,
     FeedbackDetailComponent,
-    FeedbackFilterComponent,
     SearchComponent,
     FeedbackListFilterComponent,
   ];

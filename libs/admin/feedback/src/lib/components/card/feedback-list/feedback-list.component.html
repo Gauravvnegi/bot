@@ -8,6 +8,9 @@
     <div class="header__search">
       <hospitality-bot-search
         [parentFG]="parentFG"
+        [globalQueries]="globalQueries"
+        [feedbackType]="feedbackType"
+        [filterData]="filterData"
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
       ></hospitality-bot-search>
@@ -25,45 +28,53 @@
     [selectedIndex]="tabFilterIdx"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
-  <div class="body">
-    <div
-      *ngFor="let item of feedbackList"
-      class="item"
-      (click)="setSelectedItem(item)"
-      [ngStyle]="
-        selectedFeedback &&
-        selectedFeedback.id === item.id && { background: '#f1f1f1' }
-      "
-    >
-      <div class="item__logo">
-        {{ item.getProfileNickName() }}
+  <div class="body" #feedbackListContainer (scroll)="onScroll($event)">
+    <ng-container *ngFor="let feedbackItem of feedbackList">
+      <div
+        class="item"
+        (click)="setSelectedItem(feedbackItem)"
+        [ngStyle]="
+          selectedFeedback &&
+          selectedFeedback.id === feedbackItem.id && { background: '#f1f1f1' }
+        "
+      >
+        <div class="item__logo">
+          {{ feedbackItem.getProfileNickName() }}
+        </div>
+        <div class="item__body">
+          <div class="item__body__room">
+            <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+          </div>
+          <div class="item__body__name">
+            {{ feedbackItem.feedback.guest.getFullName() }}
+          </div>
+          <div class="item__body__remarks">
+            <ng-container
+              *ngIf="
+                feedbackItem.remarks && feedbackItem.remarks.length;
+                else noContent
+              "
+              >{{ feedbackItem.remarks[0].remarks }}</ng-container
+            >
+          </div>
+          <div class="item__body__status">
+            <div>{{ feedbackItem.getStatus(tabFilterItems) }}</div>
+            <div class="divider"></div>
+            <div>SLA: {{ feedbackItem.getSLA() }}</div>
+            <div class="divider"></div>
+            <div>JD: ---</div>
+          </div>
+          <div class="item__body__assignee">
+            <div>
+              {{ feedbackItem.userName }} ({{ feedbackItem.departmentLabel }})
+            </div>
+            <div class="item__body__assignee__date">
+              {{ feedbackItem.getTime(_globalFilterService.timezone) }}
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="item__body">
-        <div class="item__body__room">
-          <div>{{ item.getTableOrRoomNo(feedbackType) }}</div>
-        </div>
-        <div class="item__body__name">
-          {{ item.feedback.guest.getFullName() }}
-        </div>
-        <div class="item__body__remarks">
-          <ng-container
-            *ngIf="item.remarks && item.remarks.length; else noContent"
-            >{{ item.remarks[0].remarks }}</ng-container
-          >
-        </div>
-        <div class="item__body__status">
-          <div>{{ item.getStatus(tabFilterItems) }}</div>
-          <div class="divider"></div>
-          <div>SLA: {{ item.getSLA() }}</div>
-          <div class="divider"></div>
-          <div>JD: ---</div>
-        </div>
-        <div class="item__body__assignee">
-          <div>{{ item.userName }} ({{ item.departmentLabel }})</div>
-          <div>{{ item.getTime(_globalFilterService.timezone) }}</div>
-        </div>
-      </div>
-    </div>
+    </ng-container>
   </div>
 </div>
 <ng-template #noContent>---</ng-template>
@@ -80,6 +91,8 @@
 >
   <hospitality-bot-feedback-list-filter
     [parentFG]="parentFG"
+    [hotelId]="hotelId"
+    [userList]="userList"
     (filterApplied)="handleFilter($event)"
     (close)="showFilter = false"
   ></hospitality-bot-feedback-list-filter>

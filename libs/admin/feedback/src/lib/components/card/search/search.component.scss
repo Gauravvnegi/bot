@@ -5,14 +5,11 @@
   input {
     width: 100%;
     border: none;
-    padding: 5px;
+    padding: 5px 28px 5px 5px;
     border: 1px solid #d9d9d9;
     border-radius: 5px;
     font-size: 14px;
     height: 42px;
-    @media only screen and (max-width: 1300px) {
-      width: 22vw;
-    }
     &::placeholder {
       font-style: italic;
       font-size: 12px;

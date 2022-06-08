@@ -88,6 +88,9 @@
           justify-content: space-between;
           align-items: center;
           color: #727272;
+          &__date {
+            width: 44px;
+          }
         }
       }
     }

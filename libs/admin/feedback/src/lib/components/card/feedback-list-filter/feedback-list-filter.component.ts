@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { CardService } from '../../../services/card.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-list-filter',
@@ -8,52 +10,66 @@ import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 })
 export class FeedbackListFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
+  @Input() hotelId: string;
+  @Input() userList;
   @Output() filterApplied = new EventEmitter();
   @Output() close = new EventEmitter();
   sortList = [
-    { label: 'Latest', value: '', order: '' },
-    { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
-    { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
-    { label: 'Function Code', value: 'itemCode', order: 'ASC' },
-    // { label: 'SLA Low -> High', value: 'sla', order: 'ASC' },
+    { label: 'Latest', value: 'created', order: 'DESC' },
+    { label: 'Room Ascending', value: 'room', order: 'ASC' },
+    { label: 'Room Descending', value: 'room', order: 'DESC' },
+    { label: 'Phone No.', value: 'phone', order: 'ASC' },
+    { label: 'Name A -> Z', value: 'name', order: 'ASC' },
+    { label: 'Name Z -> A', value: 'name', order: 'DESC' },
   ];
-
-  filterData = { status: ['ASAP', 'High', 'Medium'], department: [] };
-  constructor(private fb: FormBuilder) {}
+  $subscription = new Subscription();
+  filterData = { department: [] };
+  constructor(private fb: FormBuilder, private cardService: CardService) {}
 
   ngOnInit(): void {
-    this.initFG();
+    this.getDepartmentList();
+  }
+
+  getDepartmentList() {
+    this.$subscription.add(
+      this.cardService.getDepartmentList(this.hotelId).subscribe((response) => {
+        this.filterData.department = response;
+        this.initFG();
+      })
+    );
   }
 
   initFG(): void {
-    this.parentFG.addControl('sortBy', new FormControl([]));
+    this.parentFG.addControl('sortBy', new FormControl({}));
+    this.parentFG.addControl('assignee', new FormControl(''));
     this.parentFG.addControl(
-      'filterByStatus',
-      this.fb.array(this.filterData.status.map((x) => false))
+      'department',
+      this.fb.array(this.filterData.department.map((x) => false))
     );
   }
 
   applyFilter() {
     const values = this.parentFG.getRawValue();
-    values.filterBy = this.convertFilterToValue();
+    values.department = this.convertDepartmentFilterToValue();
     this.filterApplied.emit({
       status: true,
       data: {
-        sort: values.sortBy.label,
+        sort: values.sortBy.value,
         order: values.sortBy.order,
-        priorityType: values.filterBy,
+        department: values.department,
+        assignee: values.assignee,
       },
     });
   }
 
   setSortBy(item) {
-    this.sortControl.setValue({ label: item.value, order: item.order });
+    this.sortControl.setValue({ value: item.value, order: item.order });
     this.parentFG.markAsTouched();
   }
 
-  convertFilterToValue() {
-    return this.filterFormArray.value
-      .map((x, i) => x && this.filterData.status[i])
+  convertDepartmentFilterToValue() {
+    return this.department.value
+      .map((x, i) => x && this.filterData.department[i].id)
       .filter((x) => !!x);
   }
 
@@ -64,15 +80,24 @@ export class FeedbackListFilterComponent implements OnInit {
   clearFilter() {
     this.parentFG.patchValue({
       sortBy: [],
-      filterBy: this.filterData.status.map((x) => false),
+      department: this.filterData.department.map((x) => false),
+      assignee: '',
     });
+  }
+
+  setAssignee(event) {
+    this.parentFG.patchValue({ assignee: event.value });
   }
 
   get sortControl(): FormControl {
     return this.parentFG?.get('sortBy') as FormControl;
   }
 
-  get filterFormArray(): FormArray {
-    return this.parentFG.controls.filterBy as FormArray;
+  get department(): FormArray {
+    return this.parentFG.controls.department as FormArray;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

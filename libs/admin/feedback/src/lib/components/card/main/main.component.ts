@@ -72,4 +72,8 @@ export class MainComponent implements OnInit {
       this.tabFilterItems[event.index].value
     );
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

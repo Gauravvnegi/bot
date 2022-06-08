@@ -1,15 +1,19 @@
-<div class="stats" *ngIf="stats" click-allow (click)="openTableModal()">
+<div class="stats" *ngIf="stats" click-allow>
+  <!-- (click)="openTableModal()" -->
   <div class="stats__head">
     <div class="stats__head__title">
       {{ 'bifurcation.title' | translate }}
     </div>
-    <div class="stats__head__select">
-      <mat-form-field>
-        <mat-select matNativeControl required>
-          <mat-option value="GTM">GTM</mat-option>
-          <mat-option value="ALL">ALL</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div>
+      <mat-select
+        class="stats__head__select"
+        formControlName="bifurcation"
+        (selectionChange)="handleBifurcationChange($event)"
+      >
+        <mat-option [value]="item.key" *ngFor="let item of keyLabels">{{
+          item.label
+        }}</mat-option>
+      </mat-select>
     </div>
   </div>
   <div class="stats__container">

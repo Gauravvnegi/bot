@@ -12,10 +12,19 @@
   &__head {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     &__title {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0.96px;
       color: $dark-blue;
+    }
+    &__select {
+      width: 115px;
+      padding: 3px 11px 3px;
+      border-radius: 5px;
+      border: solid 1px $c-gray-85;
+      top: 0;
+      right: 0;
     }
   }
   &__container {
@@ -155,4 +164,21 @@
 
 .comparison-positive {
   color: $comparison-positive;
+}
+:host ::ng-deep .mat-select-value-text {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 46px;
+  height: 19px;
+  margin: 0 28px 0 0;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.07;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #00162b;
+  text-overflow: ellipsis;
 }

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -16,6 +17,7 @@ import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { Bifurcation } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'hospitality-bot-overall-received-bifurcation',
@@ -24,12 +26,17 @@ import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable
 })
 export class OverallReceivedBifurcationComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+
   tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
   stats: Bifurcation;
-  keyLabels = [];
+  bifurcationFG: FormGroup;
+  keyLabels = [
+    { label: 'GTM', key: 'GTM' },
+    { label: 'ALL', key: 'ALL' },
+  ];
   feedbackChart = {
     Labels: [],
     Data: [[]],
@@ -52,11 +59,22 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     protected _snackbarService: SnackBarService,
     protected dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    protected _modalService: ModalService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
     this.registerListeners();
+  }
+
+  /**
+   * @function initFG Initializes the form group.
+   */
+  initFG(): void {
+    this.bifurcationFG = this.fb.group({
+      bifurcation: ['GTM'],
+    });
   }
 
   registerListeners(): void {
@@ -93,7 +111,11 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            { entityIds: this._statisticService.outletIds },
+            {
+              entityIds: this._statisticService.outletIds,
+              entityType:
+                this.bifurcationFG?.get('bifurcation')?.value || 'GTM',
+            },
           ];
         this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getStats();
@@ -101,6 +123,19 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     );
   }
 
+  /**
+   * @function handleChannelChange Handles the channel dropdown value change.
+   * @param event The material select change event.
+   */
+  handleBifurcationChange(event: MatSelectChange): void {
+    this.globalQueries = [
+      ...this.globalQueries,
+      {
+        entityType: event.value,
+      },
+    ];
+    this.getStats();
+  }
   listenForReadStatusChange() {
     this.$subscription.add(
       this._statisticService.markReadStatusChanged.subscribe((response) => {
@@ -158,10 +193,6 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         .getBifurcationStats(config)
         .subscribe((response) => {
           this.stats = new Bifurcation().deserialize(response);
-          this.keyLabels = [
-            { label: 'GTM', key: 'GTM' },
-            { label: 'ALL', key: 'ALL' },
-          ];
           this.initFeedbackChart(
             this.stats.feedbacks.reduce(
               (accumulator, current) => accumulator + current.score,

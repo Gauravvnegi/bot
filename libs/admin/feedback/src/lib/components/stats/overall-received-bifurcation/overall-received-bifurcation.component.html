@@ -1,6 +1,16 @@
 <div class="stats" *ngIf="stats" click-allow (click)="openTableModal()">
-  <div class="stats__title">
-    {{ 'bifurcation.title' | translate }}
+  <div class="stats__head">
+    <div class="stats__head__title">
+      {{ 'bifurcation.title' | translate }}
+    </div>
+    <div class="stats__head__select">
+      <mat-form-field>
+        <mat-select matNativeControl required>
+          <mat-option value="GTM">GTM</mat-option>
+          <mat-option value="ALL">ALL</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
   <div class="stats__container">
     <div class="stats__container__graph">

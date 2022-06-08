@@ -9,10 +9,14 @@
   @media screen and (max-width: 800px) {
     height: 185px;
   }
-  &__title {
-    font: normal normal bold 16px/21px Roboto;
-    letter-spacing: 0.96px;
-    color: $dark-blue;
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    &__title {
+      font: normal normal bold 16px/21px Roboto;
+      letter-spacing: 0.96px;
+      color: $dark-blue;
+    }
   }
   &__container {
     display: flex;

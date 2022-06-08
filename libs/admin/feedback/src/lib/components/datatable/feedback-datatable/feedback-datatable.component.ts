@@ -63,8 +63,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
 
-  chips = feedback.chips.feedbackDatatable;
-
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
@@ -250,6 +248,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       .filter((item) => item.isSelected == true)
       .map((item) => ({
         entityState: item.value,
+        // entityType: item.value,
       }));
   }
 
@@ -303,8 +302,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    return this.tableService.getBifurationGTMData(config);
   }
 
   /**

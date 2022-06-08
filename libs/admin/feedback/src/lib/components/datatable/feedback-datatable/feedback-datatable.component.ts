@@ -82,10 +82,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected configService: ConfigService
   ) {
     super(fb, tabFilterService);
-    this.tableFG?.addControl('tableType', new FormControl('card'));
   }
 
   ngOnInit(): void {
+    this.tableFG?.addControl('tableType', new FormControl('table'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -104,7 +104,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   setTableType(value) {
     this.tableFG.patchValue({ tableType: value });
-    if (value !== 'card')
+    if (value === feedback.tableTypes.table)
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
@@ -140,7 +140,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               : feedback.types.stay
           );
         //fetch-api for records
-        if (this.tableFG.get('tableType')?.value !== 'card')
+        if (this.tableFG.get('tableType')?.value === feedback.tableTypes.table)
           this.loadInitialData([
             ...this.globalQueries,
             { order: sharedConfig.defaultOrder },

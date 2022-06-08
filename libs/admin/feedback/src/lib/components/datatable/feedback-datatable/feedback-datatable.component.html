@@ -1,7 +1,7 @@
 <div
   class="caption__wrapper"
   [ngClass]="{
-    'header-background': tableFG?.get('tableType').value === 'table'
+    'header-background': tableFG?.get('tableType').value !== 'card'
   }"
 >
   <form [formGroup]="tableFG">
@@ -113,7 +113,7 @@
         *ngIf="
           isTabFilters &&
           tabFilterItems &&
-          tableFG?.get('tableType').value === 'table'
+          tableFG?.get('tableType').value !== 'card'
         "
       >
         <hospitality-bot-tab-group
@@ -126,7 +126,7 @@
     <div
       *ngIf="
         tabFilterItems[tabFilterIdx]?.chips?.length &&
-        tableFG?.get('tableType').value === 'table'
+        tableFG?.get('tableType').value !== 'card'
       "
       class="caption__wrapper--buttons"
     >
@@ -177,8 +177,13 @@
   </form>
 </div>
 <ng-container
-  *ngIf="tableFG?.get('tableType').value === 'table'; else cardView"
+  *ngIf="tableFG?.get('tableType').value === 'card'; else tableView"
 >
+  <div style="margin: 0 -20px;">
+    <hospitality-bot-main></hospitality-bot-main>
+  </div>
+</ng-container>
+<ng-template #tableView>
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -813,8 +818,4 @@
   <ng-template #emptyCell>
     <div class="emptyCell">&mdash;</div>
   </ng-template>
-</ng-container>
-<ng-template #cardView
-  ><div style="margin: 0 -20px;">
-    <hospitality-bot-main></hospitality-bot-main></div
-></ng-template>
+</ng-template>

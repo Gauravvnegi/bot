@@ -110,3 +110,29 @@ export class FeedbackRecord {
     return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }
+
+export class UserList {
+  records: User[];
+
+  deserialize(input) {
+    this.records = new Array<User>();
+    input?.forEach((item) => this.records.push(new User().deserialize(item)));
+    return this.records;
+  }
+}
+
+export class User {
+  id: string;
+  firstName: string;
+  lastName: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'id', get(input, ['id', ''])),
+      set({}, 'firstName', get(input, ['firstName', ''])),
+      set({}, 'lastName', get(input, ['lastName', '']))
+    );
+    return this;
+  }
+}

@@ -17,7 +17,11 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { Observable, Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
-import { FeedbackList } from '../../../data-models/feedback-card.model';
+import {
+  FeedbackList,
+  User,
+  UserList,
+} from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
 
@@ -42,7 +46,7 @@ export class FeedbackListComponent implements OnInit {
   enableSearchField = false;
   loading = false;
   showFilter = false;
-  userList;
+  userList: User[];
   feedbackList;
   filterData = {};
   pagination = {
@@ -115,7 +119,9 @@ export class FeedbackListComponent implements OnInit {
     this.$subscription.add(
       this.cardService
         .getUsersList(this.hotelId)
-        .subscribe((response) => (this.userList = response))
+        .subscribe(
+          (response) => (this.userList = new UserList().deserialize(response))
+        )
     );
   }
 

@@ -379,8 +379,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ).records;
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    data.entityTypeCounts &&
+      this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
   }

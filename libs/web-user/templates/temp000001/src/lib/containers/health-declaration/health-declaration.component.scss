@@ -21,6 +21,7 @@
 mat-icon {
   @include mat-icon();
   color: $primary-blue;
+  padding: 10px;
 }
 
 .example-button-row {

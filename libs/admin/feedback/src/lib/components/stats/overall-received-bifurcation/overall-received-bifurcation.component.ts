@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
-import { Bifurcation } from '../../../data-models/statistics.model';
+import { Bifurcation, GTM } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 import { MatSelectChange } from '@angular/material/select';
 
@@ -26,7 +26,7 @@ import { MatSelectChange } from '@angular/material/select';
 })
 export class OverallReceivedBifurcationComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-
+  entityType: string = 'GTM';
   tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
@@ -113,8 +113,6 @@ export class OverallReceivedBifurcationComponent implements OnInit {
             ...this.globalQueries,
             {
               entityIds: this._statisticService.outletIds,
-              entityType:
-                this.bifurcationFG?.get('bifurcation')?.value || 'GTM',
             },
           ];
         this.setEntityId(data['filter'].value.feedback.feedbackType);
@@ -123,17 +121,15 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     );
   }
 
+  stopOpenModal(event) {
+    event.stopPropagation();
+  }
   /**
    * @function handleChannelChange Handles the channel dropdown value change.
    * @param event The material select change event.
    */
   handleBifurcationChange(event: MatSelectChange): void {
-    this.globalQueries = [
-      ...this.globalQueries,
-      {
-        entityType: event.value,
-      },
-    ];
+    this.entityType = event.value;
     this.getStats();
   }
   listenForReadStatusChange() {
@@ -185,6 +181,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
+          entityType: this.entityType,
         },
       ]),
     };
@@ -242,7 +239,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       : this.tabfeedbackType;
   }
 
-  openTableModal() {
+  openTableModal(event) {
+    event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';

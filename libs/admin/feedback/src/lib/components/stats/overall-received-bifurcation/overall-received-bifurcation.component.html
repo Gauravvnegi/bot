@@ -1,11 +1,11 @@
-<div class="stats" *ngIf="stats" click-allow>
-  <!-- (click)="openTableModal()" -->
-  <div class="stats__head">
+<div class="stats" *ngIf="stats" click-allow (click)="openTableModal($event)">
+  <div class="stats__head" [formGroup]="bifurcationFG">
     <div class="stats__head__title">
       {{ 'bifurcation.title' | translate }}
     </div>
     <div>
       <mat-select
+        (click)="stopOpenModal($event)"
         class="stats__head__select"
         formControlName="bifurcation"
         (selectionChange)="handleBifurcationChange($event)"

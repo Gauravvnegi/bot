@@ -49,7 +49,7 @@ export class FeedbackListComponent implements OnInit {
     offset: 0,
     limit: 20,
   };
-  totalRecords = 100;
+  totalRecords = 0;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -182,6 +182,7 @@ export class FeedbackListComponent implements OnInit {
                   this.feedbackType,
                   this.colorMap
                 ).records;
+          this.totalRecords = response.total;
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
         () => (this.loading = false)

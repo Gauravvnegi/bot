@@ -251,16 +251,23 @@ export class StayFeedbackTable {
   total: number;
   entityTypeCounts;
   entityStateCounts: EntityStateCounts;
-  records: Feedback[];
+  records: StayFeedback[];
 
   deserialize(input, outlets, colorMap) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
-    this.records = input.records.map((record) =>
-      new StayFeedback().deserialize(record, outlets, colorMap)
-    );
+    this.records = new Array<StayFeedback>();
+    input.records.forEach((item) => {
+      this.records.push(
+        new StayFeedback().deserialize(
+          item.feedback ? item.feedback : item,
+          outlets,
+          colorMap
+        )
+      );
+    });
     return this;
   }
 }

@@ -568,10 +568,10 @@
   align-items: center;
 }
 
-:host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-purple !important;
 }
-:host ::ng-deep .heading{
+:host ::ng-deep .heading {
   color: $dark-blue !important;
   font-size: 16px;
   font-weight: bold;

@@ -20,6 +20,10 @@ export class FeedbackTableService extends ApiService {
     return this.get(`/api/v1/feedback/guests${config.queryObj}`);
   }
 
+  getBifurationGTMData(config) {
+    return this.get(`/api/v1/feedback/guests-card${config.queryObj}`);
+  }
+
   /**
    * @function updateNotes To update notes for a feedback.
    * @param id The feedback id.

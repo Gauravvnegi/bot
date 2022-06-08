@@ -48,6 +48,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   @Input() feedbackType;
   @Input() tabFilterItems: any;
   @Output() onModalClose = new EventEmitter();
+  feedbackGraph: string;
   constructor(
     public fb: FormBuilder,
     _adminUtilityService: AdminUtilityService,
@@ -98,6 +99,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.tabFilterIdx = this.data.tabFilterIdx;
     this.globalFeedbackFilterType = this.data.globalFeedbackFilterType;
     this.config = this.data.config;
+    this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
     this.rowsPerPage = 5;
   }
@@ -173,8 +175,14 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         },
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    if (
+      this.feedbackGraph === 'GUESTTOMEET' ||
+      this.feedbackGraph === 'BIFURCATIONS'
+    ) {
+      return this.tableService.getBifurationGTMData(config);
+    } else {
+      return this.tableService.getGuestFeedbacks(config);
+    }
   }
 
   /**

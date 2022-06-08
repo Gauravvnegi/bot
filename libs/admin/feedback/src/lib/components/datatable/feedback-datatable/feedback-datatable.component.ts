@@ -63,8 +63,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
 
-  chips = feedback.chips.feedbackDatatable;
-
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
@@ -282,6 +280,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
   }
 
+  getEntityType(): SelectedChip[] {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityType: item.value,
+      }));
+  }
+
   /**
    * @function fetchDataFrom To fetch api data.
    * @param queries The filter data.
@@ -301,10 +307,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
           entityIds: this.setEntityId(),
         },
+        ...this.getEntityType(),
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    return this.tableService.getBifurationGTMData(config);
   }
 
   /**

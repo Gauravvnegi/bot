@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -14,8 +15,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
-import { Bifurcation } from '../../../data-models/statistics.model';
+import { Bifurcation, GTM } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'hospitality-bot-overall-received-bifurcation',
@@ -24,11 +26,17 @@ import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable
 })
 export class OverallReceivedBifurcationComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  entityType: string = 'GTM';
   tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
   stats: Bifurcation;
+  bifurcationFG: FormGroup;
+  keyLabels = [
+    { label: 'GTM', key: 'GTM' },
+    { label: 'ALL', key: 'ALL' },
+  ];
   feedbackChart = {
     Labels: [],
     Data: [[]],
@@ -51,11 +59,22 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     protected _snackbarService: SnackBarService,
     protected dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    protected _modalService: ModalService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
     this.registerListeners();
+  }
+
+  /**
+   * @function initFG Initializes the form group.
+   */
+  initFG(): void {
+    this.bifurcationFG = this.fb.group({
+      bifurcation: ['GTM'],
+    });
   }
 
   registerListeners(): void {
@@ -92,7 +111,9 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            { entityIds: this._statisticService.outletIds },
+            {
+              entityIds: this._statisticService.outletIds,
+            },
           ];
         this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getStats();
@@ -100,6 +121,17 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     );
   }
 
+  stopOpenModal(event) {
+    event.stopPropagation();
+  }
+  /**
+   * @function handleChannelChange Handles the channel dropdown value change.
+   * @param event The material select change event.
+   */
+  handleBifurcationChange(event: MatSelectChange): void {
+    this.entityType = event.value;
+    this.getStats();
+  }
   listenForReadStatusChange() {
     this.$subscription.add(
       this._statisticService.markReadStatusChanged.subscribe((response) => {
@@ -149,6 +181,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
+          entityType: this.entityType,
         },
       ]),
     };
@@ -206,7 +239,8 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       : this.tabfeedbackType;
   }
 
-  openTableModal() {
+  openTableModal(event) {
+    event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -228,7 +262,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   }
 
   createTabFilterItem() {
-    return this.stats.feedbacks.map((keyObj) => {
+    return this.keyLabels.map((keyObj) => {
       return {
         label: keyObj.label,
         content: '',
@@ -238,6 +272,16 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         chips: this.feedbackConfig.chips.feedbackDatatable,
       };
     });
+    // return this.stats.feedbacks.map((keyObj) => {
+    //   return {
+    //     label: keyObj.label,
+    //     content: '',
+    //     value: keyObj.key,
+    //     disabled: false,
+    //     total: 0,
+    //     chips: this.feedbackConfig.chips.feedbackDatatable,
+    //   };
+    // });
   }
   ngOnDestroy() {
     this.$subscription.unsubscribe();

@@ -84,4 +84,11 @@ export class ContactStatsComponent implements OnInit {
       )
     );
   }
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

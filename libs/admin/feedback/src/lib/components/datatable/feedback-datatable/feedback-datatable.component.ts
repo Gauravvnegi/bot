@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -62,6 +62,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   colorMap;
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
+  tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
+  chips = feedback.chips.feedbackDatatable;
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -83,6 +85,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.tableFG?.addControl('tableType', new FormControl('table'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -97,6 +100,16 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.getConfig();
+  }
+
+  setTableType(value) {
+    this.tableFG.patchValue({ tableType: value });
+    if (value === feedback.tableTypes.table)
+      this.loadInitialData([
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
   }
 
   getConfig() {
@@ -127,11 +140,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               : feedback.types.stay
           );
         //fetch-api for records
-        this.loadInitialData([
-          ...this.globalQueries,
-          { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
+        if (this.tableFG.get('tableType')?.value === feedback.tableTypes.table)
+          this.loadInitialData([
+            ...this.globalQueries,
+            { order: sharedConfig.defaultOrder },
+            ...this.getSelectedQuickReplyFilters(),
+          ]);
       })
     );
   }
@@ -371,8 +385,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ).records;
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    data.entityTypeCounts &&
+      this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
   }

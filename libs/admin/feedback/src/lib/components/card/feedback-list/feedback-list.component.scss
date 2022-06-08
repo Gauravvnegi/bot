@@ -1,0 +1,115 @@
+@import 'main';
+
+.list-container {
+  width: 345px;
+  height: 100%;
+  opacity: 1;
+  border-right: 2px solid #f4f5f6;
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 2px solid #f4f5f6;
+    &__search {
+      width: 289px;
+    }
+    &__filter {
+      cursor: pointer;
+      margin: 0 3px;
+    }
+  }
+  .body {
+    overflow-y: auto;
+    height: calc(100% - 117px);
+    .item {
+      height: 163px;
+      border-bottom: 1px solid #f4f5f6;
+      padding: 10px;
+      display: flex;
+      cursor: pointer;
+      &__logo {
+        height: 45px;
+        width: 45px;
+        border-radius: 50%;
+        background-color: olivedrab;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      &__body {
+        width: calc(100% - 45px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 10px;
+        font-family: Roboto;
+        font-size: 12px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.72px;
+        &__room {
+          font-size: 10px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.6px;
+          color: #99a6b5;
+          margin-top: 3px;
+          margin-bottom: 13px;
+          display: flex;
+          align-items: center;
+        }
+        &__name {
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.72px;
+          color: #002046;
+          margin-bottom: 5px;
+        }
+        &__remarks {
+          color: #002046;
+        }
+        &__status {
+          display: flex;
+          align-items: center;
+          .divider {
+            height: 15px;
+            border: 1px solid #e0e0e0;
+            margin: 0 10px;
+          }
+        }
+        &__assignee {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: #727272;
+          &__date {
+            width: 44px;
+          }
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep {
+  .mat-tab-group {
+    padding: 0;
+  }
+  .mat-tab-label {
+    min-width: fit-content !important;
+    height: 53px !important;
+  }
+  .mat-tab-label-active {
+    border-bottom: 2px solid $primary-purple;
+    color: $primary-purple;
+  }
+  .mat-tab-header {
+    border-bottom: 2px solid #f4f5f6 !important;
+  }
+}

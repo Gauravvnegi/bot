@@ -1,0 +1,99 @@
+<div
+  class="list-container"
+  [ngStyle]="
+    !showFilter ? { display: 'block' } : { display: 'none', height: '0px' }
+  "
+>
+  <div class="header">
+    <div class="header__search">
+      <hospitality-bot-search
+        [parentFG]="parentFG"
+        [globalQueries]="globalQueries"
+        [feedbackType]="feedbackType"
+        [filterData]="filterData"
+        (clear)="clearSearch()"
+        (search)="getSearchValue($event)"
+      ></hospitality-bot-search>
+    </div>
+    <div class="header__filter">
+      <img
+        src="assets/svg/Filter-Icon.svg"
+        alt="filter"
+        (click)="showFilter = true"
+      />
+    </div>
+  </div>
+  <hospitality-bot-tab-group
+    [listItems]="tabFilterItems"
+    [selectedIndex]="tabFilterIdx"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+  <div class="body" #feedbackListContainer (scroll)="onScroll($event)">
+    <ng-container *ngFor="let feedbackItem of feedbackList">
+      <div
+        class="item"
+        (click)="setSelectedItem(feedbackItem)"
+        [ngStyle]="
+          selectedFeedback &&
+          selectedFeedback.id === feedbackItem.id && { background: '#f1f1f1' }
+        "
+      >
+        <div class="item__logo">
+          {{ feedbackItem.getProfileNickName() }}
+        </div>
+        <div class="item__body">
+          <div class="item__body__room">
+            <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+          </div>
+          <div class="item__body__name">
+            {{ feedbackItem.feedback.guest.getFullName() }}
+          </div>
+          <div class="item__body__remarks">
+            <ng-container
+              *ngIf="
+                feedbackItem.remarks && feedbackItem.remarks.length;
+                else noContent
+              "
+              >{{ feedbackItem.remarks[0].remarks }}</ng-container
+            >
+          </div>
+          <div class="item__body__status">
+            <div>{{ feedbackItem.getStatus(tabFilterItems) }}</div>
+            <div class="divider"></div>
+            <div>SLA: {{ feedbackItem.getSLA() }}</div>
+            <div class="divider"></div>
+            <div>JD: ---</div>
+          </div>
+          <div class="item__body__assignee">
+            <div>
+              {{ feedbackItem.userName }} ({{ feedbackItem.departmentLabel }})
+            </div>
+            <div class="item__body__assignee__date">
+              {{ feedbackItem.getTime(_globalFilterService.timezone) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<ng-template #noContent>---</ng-template>
+<div
+  class="list-container"
+  [ngStyle]="
+    showFilter
+      ? {
+          visibility: 'visible',
+          marginRight: '1px solid #9eaeb8'
+        }
+      : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
+  "
+>
+  <hospitality-bot-feedback-list-filter
+    [parentFG]="parentFG"
+    [hotelId]="hotelId"
+    [userList]="userList"
+    (filterApplied)="handleFilter($event)"
+    (close)="showFilter = false"
+  ></hospitality-bot-feedback-list-filter>
+</div>

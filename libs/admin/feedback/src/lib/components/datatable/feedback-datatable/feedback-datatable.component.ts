@@ -22,12 +22,14 @@ import {
 } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
+import { merge } from 'lodash';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import {
   Feedback,
   FeedbackTable,
   Notes,
+  DatatableStatus,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
@@ -65,6 +67,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;
 
+  // feedbackStatus;
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
@@ -377,12 +380,23 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.globalFeedbackConfig.types.transactional
     )
       this.values = new FeedbackTable().deserialize(data, this.outlets).records;
-    else
+    else {
       this.values = new StayFeedbackTable().deserialize(
         data,
         this.outlets,
         this.colorMap
       ).records;
+      // this.feedbackStatus = new DatatableStatus().deserialize(data).records;
+      // let mergeData = [];
+      // for (let i = 0; i < this.values.length; i++) {
+      //   mergeData.push({
+      //     ...this.values[i],
+      //     ...this.feedbackStatus[i],
+      //   });
+      // }
+      // this.values = mergeData;
+      console.log(this.values);
+    }
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
     data.entityTypeCounts &&

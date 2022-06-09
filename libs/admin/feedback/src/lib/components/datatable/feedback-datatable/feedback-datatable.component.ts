@@ -375,14 +375,13 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.globalFeedbackConfig.types.transactional
     )
       this.values = new FeedbackTable().deserialize(data, this.outlets).records;
-    else {
+    else
       this.values = new StayFeedbackTable().deserialize(
         data,
         this.outlets,
         this.colorMap
       ).records;
-      console.log(this.values);
-    }
+
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
     data.entityTypeCounts &&

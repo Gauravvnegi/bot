@@ -3,17 +3,14 @@
   type="button"
   cdkOverlayOrigin
   #trigger="cdkOverlayOrigin"
-  style="
-    outline: none;
-    border-radius: 14px;
-    border: solid 1px #4b56c0;
-    background-color: #4b56c0;
-    padding: 8px 9.8px 7px 5px;
-    color: #fff;
-    cursor: pointer;
-  "
 >
-  In-Progress
+  {{ rowDataStatus }}
+  <ng-container *ngIf="isOpen; else opened">
+    <mat-icon class="material-icons" matSuffix>chevron_left</mat-icon>
+  </ng-container>
+  <ng-template #opened>
+    <mat-icon class="material-icons" matSuffix>chevron_right</mat-icon>
+  </ng-template>
 </button>
 
 <!-- This template displays the overlay content and is connected to the button -->
@@ -49,8 +46,9 @@
             text-align: left;
             color: #4b56c0;
           "
+          (click)="updateStatus()"
         >
-          Mark Resolved
+          {{ type }}
         </div>
       </div>
       <div

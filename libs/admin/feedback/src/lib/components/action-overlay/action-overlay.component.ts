@@ -1,6 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { I } from '@angular/cdk/keycodes';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FeedbackTableService } from '../../services/table.service';
+import { Subscription } from 'rxjs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-action-overlay',
@@ -9,11 +13,19 @@ import { FeedbackTableService } from '../../services/table.service';
 })
 export class ActionOverlayComponent implements OnInit {
   isOpen = false;
+  type: string;
+  globalQueries = [];
+  @Input() rowDataStatus;
+  @Input() guestId;
   @Output() openDetail = new EventEmitter();
   feedbackStatusFG: FormGroup;
+  private $subscription: Subscription = new Subscription();
   constructor(
     private tableService: FeedbackTableService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private feedbackService: FeedbackTableService,
+    protected _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService
   ) {
     this.initFG();
   }
@@ -25,7 +37,14 @@ export class ActionOverlayComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.statusType();
     this.listenForDisableMenu();
+  }
+
+  statusType() {
+    if (this.rowDataStatus == 'TODO') this.type = 'INPROGRESS';
+    else if (this.rowDataStatus === 'INPROGRESS') this.type = 'RESOLVED';
+    else this.type = this.rowDataStatus;
   }
 
   handleButtonClick(event) {
@@ -38,6 +57,39 @@ export class ActionOverlayComponent implements OnInit {
     this.tableService.$disableContextMenus.subscribe((response) => {
       if (response && this.isOpen) this.isOpen = false;
     });
+  }
+
+  updateStatus(): void {
+    let data = {
+      status: this.type,
+    };
+    this.feedbackService.updateStatus(this.guestId, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   openDetailPage(event) {

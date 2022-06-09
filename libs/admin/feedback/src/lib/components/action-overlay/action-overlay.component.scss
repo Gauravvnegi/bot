@@ -1,3 +1,18 @@
+.btn {
+  display: flex;
+  outline: none;
+  min-width: 124px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 24px;
+  font-size: 11px;
+  border: solid 1px #4b56c0;
+  background-color: white;
+  padding: 4px;
+  color: #4b56c0;
+  cursor: pointer;
+}
+
 .example-list {
   text-align: center;
   width: 175px;
@@ -14,4 +29,14 @@
 
 .comment {
   width: 100%;
+}
+
+.material-icons {
+  cursor: pointer;
+  color: #4b56c0;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 }

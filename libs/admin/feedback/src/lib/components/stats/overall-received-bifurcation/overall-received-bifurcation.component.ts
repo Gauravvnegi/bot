@@ -272,16 +272,6 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         chips: this.feedbackConfig.chips.feedbackDatatable,
       };
     });
-    // return this.stats.feedbacks.map((keyObj) => {
-    //   return {
-    //     label: keyObj.label,
-    //     content: '',
-    //     value: keyObj.key,
-    //     disabled: false,
-    //     total: 0,
-    //     chips: this.feedbackConfig.chips.feedbackDatatable,
-    //   };
-    // });
   }
   ngOnDestroy() {
     this.$subscription.unsubscribe();

@@ -13,9 +13,16 @@ export class FeedbackTable {
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
-    this.records = input.records.map((record) =>
-      new Feedback().deserialize(record, outlets)
-    );
+
+    this.records = new Array<Feedback>();
+    input.records.forEach((item) => {
+      this.records.push(
+        new Feedback().deserialize(
+          item.feedback ? item.feedback : item,
+          outlets
+        )
+      );
+    });
     return this;
   }
 }

@@ -258,32 +258,6 @@ export class Notes {
   }
 }
 
-export class DatatableStatus implements Deserializable {
-  records: Status[];
-  deserialize(input: any) {
-    this.records = input.records.map((record: any) =>
-      new Status().deserialize(record)
-    );
-    return this;
-  }
-}
-
-export class Status implements Deserializable {
-  statusId: string;
-  statusType: string;
-  newRemarks: any;
-
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'statusId', get(input, ['id'])),
-      set({}, 'statusType', get(input, ['status'])),
-      set({}, 'newRemarks', get(input, ['remarks']))
-    );
-    return this;
-  }
-}
-
 export class StayFeedbackTable {
   total: number;
   entityTypeCounts;
@@ -299,7 +273,9 @@ export class StayFeedbackTable {
     input.records.forEach((item) => {
       this.records.push(
         new StayFeedback().deserialize(
-          item.feedback ? { ...item.feedback } : item,
+          item.feedback
+            ? { ...item.feedback, status: item.status, id: item.id }
+            : item,
           outlets,
           colorMap
         )

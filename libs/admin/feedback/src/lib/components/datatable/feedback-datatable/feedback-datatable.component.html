@@ -736,7 +736,7 @@
               class="view-notes"
               (click)="openEditNotes($event, rowData, rowData.notes)"
             >
-              <!-- {{ feedbackStatus?..status }} -->
+              {{ rowData.status }}
             </div></ng-container
           >
           <ng-template #addNote
@@ -744,7 +744,7 @@
               class="add-notes"
               (click)="openEditNotes($event, rowData, rowData.notes)"
             >
-              <!-- {{ 'datatable.add_notes' | translate }} -->
+              {{ rowData.status }}
             </div></ng-template
           >
 

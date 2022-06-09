@@ -54,4 +54,7 @@ export class AdminFeedbackRoutingModule {
     FeedbackListComponent,
     FeedbackListFilterComponent,
     ActionOverlayComponent,
+    FeedbackDetailComponent,
+    SearchComponent,
+  ];
 }

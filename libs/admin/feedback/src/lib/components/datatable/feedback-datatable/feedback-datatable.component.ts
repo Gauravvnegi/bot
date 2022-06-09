@@ -35,7 +35,6 @@ import {
   Feedback,
   FeedbackTable,
   Notes,
-  DatatableStatus,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
@@ -72,8 +71,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   stayCols = feedback.cols.feedbackDatatable.stay;
   tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;
-
-  // feedbackStatus;
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
@@ -392,15 +389,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
-      // this.feedbackStatus = new DatatableStatus().deserialize(data).records;
-      // let mergeData = [];
-      // for (let i = 0; i < this.values.length; i++) {
-      //   mergeData.push({
-      //     ...this.values[i],
-      //     ...this.feedbackStatus[i],
-      //   });
-      // }
-      // this.values = mergeData;
       console.log(this.values);
     }
     this.totalRecords = data.total;

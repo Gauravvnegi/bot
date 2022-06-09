@@ -17,6 +17,15 @@
       border-radius: 5px 5px 0px 0px;
       opacity: 1;
       display: flex;
+      .guest-info-enable {
+        position: absolute;
+        right: 24px;
+        background: #ffffff;
+        width: 23%;
+        max-width: 259px;
+        box-shadow: 0 3px 6px 0 rgb(0 0 0 / 5%);
+        height: 655px;
+      }
     }
   }
 }

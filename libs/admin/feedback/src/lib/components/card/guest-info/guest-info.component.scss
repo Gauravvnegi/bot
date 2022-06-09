@@ -1,0 +1,68 @@
+@import 'main';
+:host ::ng-deep .mat-tab-labels {
+  justify-content: space-around;
+}
+
+:host ::ng-deep .mat-tab-label {
+  min-width: 35px !important;
+  img {
+    filter: grayscale(100%);
+  }
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  img {
+    filter: sepia(100%) hue-rotate(190deg) saturate(500%);
+  }
+}
+
+.guestInfoWrapper {
+  height: calc(100% - 124px);
+  width: 100%;
+}
+.guestInfoEditWrapper {
+  height: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.guestInfoEditContainer {
+  width: 138px;
+  height: 36px;
+  background: $button-blue 0% 0% no-repeat padding-box;
+  border: 1px solid #e1e1f2;
+  border-radius: 100px;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  img {
+    filter: brightness(0) invert(1);
+  }
+}
+.guestInfoEditText {
+  font: normal normal normal 11px/15px Roboto;
+  letter-spacing: 0.66px;
+  color: $white;
+  opacity: 1;
+}
+
+.guest-info {
+  height: 62px;
+  width: 100%;
+  border-bottom: 1px solid #9eaeb8;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  .close-icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+}
+
+:host ::ng-deep .guestInfoWrapper {
+  border-bottom: none !important;
+}

@@ -20,6 +20,10 @@ import { MainComponent } from './components/card/main/main.component';
 import { FeedbackListComponent } from './components/card/feedback-list/feedback-list.component';
 import { FeedbackDetailComponent } from './components/card/feedback-detail/feedback-detail.component';
 import { SearchComponent } from './components/card/search/search.component';
+import { FeedbackDetailFooterComponent } from './components/card/feedback-detail-footer/feedback-detail-footer.component';
+import { GuestInfoComponent } from './components/card/guest-info/guest-info.component';
+import { GuestPersonalInfoComponent } from './components/card/guest-personal-info/guest-personal-info.component';
+import { GuestBookingInfoComponent } from './components/card/guest-booking-info/guest-booking-info.component';
 import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
 
 const appRoutes: Route[] = [
@@ -32,6 +36,7 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
+  declarations: [],
 })
 export class AdminFeedbackRoutingModule {
   static components = [
@@ -53,6 +58,10 @@ export class AdminFeedbackRoutingModule {
     FeedbackListComponent,
     FeedbackDetailComponent,
     SearchComponent,
+    FeedbackDetailFooterComponent,
+    GuestInfoComponent,
+    GuestPersonalInfoComponent,
+    GuestBookingInfoComponent,
     FeedbackListFilterComponent,
   ];
 }

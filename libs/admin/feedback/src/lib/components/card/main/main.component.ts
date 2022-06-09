@@ -17,7 +17,7 @@ export class MainComponent implements OnInit {
   outlets = [];
   colorMap;
   tabFilterItems = card.tabFilterItems;
-  tabFilterIdx = 1;
+  tabFilterIdx = 0;
   $subscription = new Subscription();
   constructor(
     private _globalFilterService: GlobalFilterService,

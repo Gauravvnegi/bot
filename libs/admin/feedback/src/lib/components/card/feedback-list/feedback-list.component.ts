@@ -39,7 +39,7 @@ export class FeedbackListComponent implements OnInit {
   parentFG: FormGroup;
   tabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
-  tabFilterIdx: number = 5;
+  tabFilterIdx: number = 0;
   hotelId: string;
   $subscription = new Subscription();
   globalQueries = [];
@@ -232,6 +232,7 @@ export class FeedbackListComponent implements OnInit {
       ).records;
     } else {
       this.loading = true;
+      this.pagination.offset = 0;
       this.loadData();
     }
   }

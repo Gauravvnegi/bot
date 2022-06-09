@@ -267,7 +267,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
       .map((item) => ({
-        entityState: item.value,
+        entityType: item.value,
       }));
   }
 
@@ -300,14 +300,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
   }
 
-  getEntityType(): SelectedChip[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
-      .map((item) => ({
-        entityType: item.value,
-      }));
-  }
-
   /**
    * @function fetchDataFrom To fetch api data.
    * @param queries The filter data.
@@ -327,7 +319,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
           entityIds: this.setEntityId(),
         },
-        ...this.getEntityType(),
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
     return this.tableService.getBifurationGTMData(config);

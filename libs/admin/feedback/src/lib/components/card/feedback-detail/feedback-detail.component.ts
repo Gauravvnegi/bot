@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CardService } from '../../../services/card.service';
 
@@ -8,7 +8,8 @@ import { CardService } from '../../../services/card.service';
   styleUrls: ['./feedback-detail.component.scss'],
 })
 export class FeedbackDetailComponent implements OnInit {
-  feedback;
+  @Input() feedback;
+  @Output() guestInfo = new EventEmitter();
   $subscription = new Subscription();
   constructor(private cardService: CardService) {}
 
@@ -22,5 +23,9 @@ export class FeedbackDetailComponent implements OnInit {
         (response) => (this.feedback = response)
       )
     );
+  }
+
+  openGuestInfo(): void {
+    this.guestInfo.emit({ openGuestInfo: true });
   }
 }

@@ -8,13 +8,25 @@
   </div>
   <div class="body">
     <div class="body__container">
+      <div class="blackscreen"></div>
       <hospitality-bot-feedback-list
         [entityType]="tabFilterItems[tabFilterIdx]?.value"
         [outlets]="outlets"
         [colorMap]="colorMap"
       ></hospitality-bot-feedback-list>
       <div style="width: calc(100% - 345px);">
-        <hospitality-bot-feedback-detail></hospitality-bot-feedback-detail>
+        <div class="blackscreen"></div>
+        <hospitality-bot-feedback-detail
+          (guestInfo)="openGuestInfo($event)"
+        ></hospitality-bot-feedback-detail>
+      </div>
+      <div>
+        <div class="guest-info-enable" *ngIf="guestInfoEnable">
+          <hospitality-bot-guest-info
+            (closeInfo)="closeGuestInfo($event)"
+            [guestData]="guestData"
+          ></hospitality-bot-guest-info>
+        </div>
       </div>
     </div>
   </div>

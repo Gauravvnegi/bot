@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  guestInfoEnable = false;
   outlets = [];
   colorMap;
   tabFilterItems = [
@@ -76,5 +77,17 @@ export class MainComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+  }
+
+  openGuestInfo(event) {
+    if (event.openGuestInfo) {
+      this.guestInfoEnable = true;
+    }
+  }
+
+  closeGuestInfo(event) {
+    if (event.close) {
+      this.guestInfoEnable = false;
+    }
   }
 }

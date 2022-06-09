@@ -27,4 +27,10 @@ export class UserService extends ApiService {
       `/api/v1/countries/support-applications?nationality=${nationality}`
     );
   }
+
+  getUserPermission(feedbackType: string) {
+    return this.get(
+      `/api/v1/user/${this.getLoggedInUserid()}/module-permission?module=${feedbackType}'`
+    );
+  }
 }

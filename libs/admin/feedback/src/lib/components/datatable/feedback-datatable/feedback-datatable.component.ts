@@ -110,6 +110,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         { order: sharedConfig.defaultOrder },
         ...this.getSelectedQuickReplyFilters(),
       ]);
+    else this.selectedRows = [];
   }
 
   getConfig() {

@@ -2,19 +2,24 @@
   <div class="booking-title">
     Booking Info
   </div>
+  <!-- Current Booking -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="currentBooking?.length">
       Current Booking
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of currentBooking">
         <div>
           <div class="subHeading">Reservation ID</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div>
           <div class="subHeading">Room No.</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
           <mat-icon>east</mat-icon>
@@ -23,19 +28,24 @@
     </div>
   </div>
 
+  <!-- Past Booking -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="pastBooking?.length">
       Past Booking
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of pastBooking">
         <div>
           <div class="subHeading">Reservation ID</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div>
           <div class="subHeading">Room No.</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.rooms.roomNumber }}
+          </div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
           <mat-icon>east</mat-icon>
@@ -44,19 +54,24 @@
     </div>
   </div>
 
+  <!-- Upcoming Booking  -->
   <div>
-    <div class="user-journey-title">
+    <div class="user-journey-title" *ngIf="upcomingBooking?.length">
       Upcoming Booking
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of upcomingBooking">
         <div>
           <div class="subHeading">Reservation ID</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div>
           <div class="subHeading">Room No.</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.rooms.roomNumber }}
+          </div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
           <mat-icon>east</mat-icon>

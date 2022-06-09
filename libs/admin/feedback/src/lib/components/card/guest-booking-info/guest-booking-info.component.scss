@@ -1,6 +1,6 @@
 @import 'main';
 .container {
-  height: calc(100vh - 360px);
+  max-height: 500px;
   overflow-y: auto;
   .booking-title {
     font-family: Roboto;

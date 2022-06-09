@@ -85,7 +85,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
 
   listenForSelectedRequest() {
     this.$subscription.add(
-      this.feedbackService.selectedFeedback.subscribe((response) => {
+      this.feedbackService.$selectedFeedback.subscribe((response) => {
         if (response) {
           this.data = response;
           this.guestId = response['feedback']?.guest?.id;
@@ -162,5 +162,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.bookingFG = this._fb.group({
       booking: [''],
     });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

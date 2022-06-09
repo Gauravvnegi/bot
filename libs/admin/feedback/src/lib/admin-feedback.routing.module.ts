@@ -21,6 +21,7 @@ import { FeedbackListComponent } from './components/card/feedback-list/feedback-
 import { FeedbackDetailComponent } from './components/card/feedback-detail/feedback-detail.component';
 import { SearchComponent } from './components/card/search/search.component';
 import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
+import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
 
 const appRoutes: Route[] = [
   {
@@ -51,8 +52,6 @@ export class AdminFeedbackRoutingModule {
     DepartmentBarGraphComponent,
     MainComponent,
     FeedbackListComponent,
-    FeedbackDetailComponent,
-    SearchComponent,
     FeedbackListFilterComponent,
-  ];
+    ActionOverlayComponent,
 }

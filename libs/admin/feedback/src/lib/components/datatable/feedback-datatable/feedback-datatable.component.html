@@ -557,8 +557,11 @@
         </td>
         <td class="comments">{{ rowData.guestData.overAllNps }}</td>
         <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-        <td class="status-image">
-          <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+        <td class="status-image" (click)="$event.stopPropagation()">
+          <hospitality-bot-action-overlay
+            (openDetail)="openDetailPage($event, rowData)"
+          ></hospitality-bot-action-overlay>
+          <!-- <ng-container *ngIf="rowData.notes?.remarks; else addNote">
             <div
               class="view-notes"
               (click)="openEditNotes($event, rowData, rowData.notes)"
@@ -573,7 +576,7 @@
             >
               {{ 'datatable.add_notes' | translate }}
             </div></ng-template
-          >
+          > -->
         </td>
       </tr>
     </ng-container>
@@ -726,8 +729,9 @@
         <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
 
         <!-- status-image-initiated -->
-        <td class="status-image">
-          <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+        <td class="status-image" (click)="$event.stopPropagation()">
+          <hospitality-bot-action-overlay></hospitality-bot-action-overlay>
+          <!-- <ng-container *ngIf="rowData.notes?.remarks; else addNote">
             <div
               class="view-notes"
               (click)="openEditNotes($event, rowData, rowData.notes)"

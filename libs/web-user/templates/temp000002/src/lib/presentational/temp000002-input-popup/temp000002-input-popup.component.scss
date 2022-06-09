@@ -12,7 +12,8 @@
 }
 
 .cross {
-  right: 20px !important;
+  position: absolute;
+  right: 10px !important;
   top: 0 !important;
   padding: 9px 0px 9px 9px;
  
@@ -23,8 +24,10 @@
 
 .popup__wrapper {
   position: relative;
-  width: auto;
-  min-height: 41vh !important;}
+  width: 21rem;
+  min-height: 50vh !important;
+  margin: 0 auto;
+}
 .cross_holder{
   position: absolute;
   width: 100%;
@@ -45,11 +48,22 @@
   box-sizing: border-box;
 }
 @media screen and (max-width:500px) {
+  .popup__wrapper {
+    padding: 0 $padding-large;
+  width: 15rem;
+  min-height: 50vh !important;
+  margin: 0 auto;
+}
   .popup__wrapper--heading{
     margin: 0 !important;
   }
   .cross {
-    right: 10px !important;
+    right: -3px !important;
     top: 0 !important;
+    &:hover {
+      cursor: pointer;
+    }
   }
+  
+  
 }

@@ -35,8 +35,8 @@ export class FeedbackListComponent implements OnInit {
   @Input() entityType;
   @Input() outlets;
   @Input() colorMap;
+  @Input() feedbackType: string;
   @ViewChild('feedbackListContainer') private myScrollContainer: ElementRef;
-  feedbackType: string;
   parentFG: FormGroup;
   tabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
@@ -82,7 +82,6 @@ export class FeedbackListComponent implements OnInit {
   registerListeners() {
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
-    this.listenForFeedbackTypeChanged();
     this.listenForEntityTypeChange();
   }
 
@@ -98,7 +97,6 @@ export class FeedbackListComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
-        this.feedbackType = data['filter'].value.feedback.feedbackType;
         this.cardService.$selectedFeedback.next(null);
         this.getUserPermission();
         this.getUsersList();
@@ -152,17 +150,6 @@ export class FeedbackListComponent implements OnInit {
           });
         }
       })
-    );
-  }
-
-  /**
-   * @function listenForFeedbackTypeChanged To listen the local tab change.
-   */
-  listenForFeedbackTypeChanged(): void {
-    this.$subscription.add(
-      this.tableService.$feedbackType.subscribe(
-        (response) => (this.feedbackType = response)
-      )
     );
   }
 

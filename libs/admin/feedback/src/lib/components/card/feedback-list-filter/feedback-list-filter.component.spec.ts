@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FeedbackFilterComponent } from './feedback-filter.component';
+import { FeedbackListFilterComponent } from './feedback-list-filter.component';
 
-describe('FeedbackFilterComponent', () => {
-  let component: FeedbackFilterComponent;
-  let fixture: ComponentFixture<FeedbackFilterComponent>;
+describe('FeedbackListFilterComponent', () => {
+  let component: FeedbackListFilterComponent;
+  let fixture: ComponentFixture<FeedbackListFilterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeedbackFilterComponent ]
+      declarations: [ FeedbackListFilterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FeedbackFilterComponent);
+    fixture = TestBed.createComponent(FeedbackListFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

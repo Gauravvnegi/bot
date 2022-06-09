@@ -5,6 +5,8 @@ import {
   HotelDetailService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
+import { card } from '../../../constants/card';
+import { CardService } from '../../../services/card.service';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -15,29 +17,20 @@ export class MainComponent implements OnInit {
   guestInfoEnable = false;
   outlets = [];
   colorMap;
-  tabFilterItems = [
-    {
-      label: 'GTM',
-      value: 'GTM',
-      total: 0,
-    },
-    {
-      label: 'All',
-      value: 'ALL',
-      total: 0,
-    },
-  ];
-  tabFilterIdx = 1;
+  tabFilterItems = card.tabFilterItems;
+  tabFilterIdx = 0;
   $subscription = new Subscription();
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private cardService: CardService
   ) {}
 
   ngOnInit(): void {
     this.getConfig();
     this.listenForGlobalFilters();
+    this.listenForTabFilterCounts();
   }
 
   getConfig() {
@@ -55,6 +48,18 @@ export class MainComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.getOutlets(data['filter'].value.property.branchName);
+      })
+    );
+  }
+
+  listenForTabFilterCounts() {
+    this.$subscription.add(
+      this.cardService.$tabValues.subscribe((response) => {
+        if (response) {
+          this.tabFilterItems.forEach(
+            (tab) => (tab.total = response[tab.value])
+          );
+        }
       })
     );
   }
@@ -77,6 +82,13 @@ export class MainComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.cardService.$selectedEntityType.next(
+      this.tabFilterItems[event.index].value
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 
   openGuestInfo(event) {

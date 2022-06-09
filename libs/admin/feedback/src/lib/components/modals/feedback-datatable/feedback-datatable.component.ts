@@ -23,6 +23,8 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+
+import { SelectedChip } from '../../../types/feedback.type';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import {
@@ -48,6 +50,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   @Input() feedbackType;
   @Input() tabFilterItems: any;
   @Output() onModalClose = new EventEmitter();
+  feedbackGraph: string;
   constructor(
     public fb: FormBuilder,
     _adminUtilityService: AdminUtilityService,
@@ -98,6 +101,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.tabFilterIdx = this.data.tabFilterIdx;
     this.globalFeedbackFilterType = this.data.globalFeedbackFilterType;
     this.config = this.data.config;
+    this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
     this.rowsPerPage = 5;
   }
@@ -173,8 +177,14 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         },
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    if (
+      this.feedbackGraph === 'GUESTTOMEET' ||
+      this.feedbackGraph === 'BIFURCATIONS'
+    ) {
+      return this.tableService.getBifurationGTMData(config);
+    } else {
+      return this.tableService.getGuestFeedbacks(config);
+    }
   }
 
   /**
@@ -275,6 +285,18 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         }
       )
     );
+  }
+
+  /**
+   * @function getSelectedQuickReplyFilters To get the selected chips.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters(): SelectedChip[] {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityState: item.value,
+      }));
   }
 
   /**

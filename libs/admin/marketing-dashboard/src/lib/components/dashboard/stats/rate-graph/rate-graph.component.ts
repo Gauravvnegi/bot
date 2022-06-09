@@ -35,8 +35,8 @@ export class RateGraphComponent implements OnInit {
 
   chart: any = {
     chartData: [
-      { data: [], label: 'Click Rate', fill: true },
-      { data: [], label: 'Open Rate', fill: true },
+      { data: [], label: 'clickRate', fill: true },
+      { data: [], label: 'openRate', fill: true },
     ],
     chartLabels: [],
     chartOptions: {
@@ -168,7 +168,7 @@ export class RateGraphComponent implements OnInit {
   }
 
   initChartData() {
-    this.chart.chartLabels = this.rateGraph.labels;
+    this.chart.chartLabels = this.rateGraph.label;
     this.chart.chartData[0].data = this.rateGraph.clickRate;
     this.chart.chartData[1].data = this.rateGraph.openRate;
   }
@@ -193,4 +193,11 @@ export class RateGraphComponent implements OnInit {
 
     ci.update();
   };
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

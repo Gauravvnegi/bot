@@ -1,0 +1,88 @@
+<div class="filter-container">
+  <div class="sortFilt">
+    <div class="sortFilt-text">
+      Sort & Filters
+    </div>
+    <div class="sortFilt-clear">
+      <div class="sortFilt-clear-all" (click)="clearFilter()">
+        <p class="filter">Clear All</p>
+        <mat-icon class="material-icon" matSuffix>undo</mat-icon>
+      </div>
+      <div class="division"></div>
+      <div class="cross" (click)="closeFilter()">
+        &#10006;
+      </div>
+    </div>
+  </div>
+  <div class="filter-body">
+    <div class="sortFilterWrapper" *ngIf="parentFG">
+      <div class="sortFilterContainer" [formGroup]="parentFG">
+        <div class="sortBy">
+          Sort By
+        </div>
+        <div class="sortTypes">
+          <div
+            [ngStyle]="
+              sortControl?.value.value === item.value &&
+              sortControl?.value.order === item.order
+                ? {
+                    background: '#0020461a 0% 0% no-repeat padding-box',
+                    border: '1px solid #0020464d',
+                    color: 'black'
+                  }
+                : {
+                    background: '#AEAEAE1A 0% 0% no-repeat padding-box',
+                    border: '1px solid #AEAEAE1A',
+                    color: '#9f9f9f'
+                  }
+            "
+            class="sortItemWrapper"
+            *ngFor="let item of sortList"
+            (click)="setSortBy(item)"
+          >
+            <div class="sortItem">
+              {{ item.label }}
+            </div>
+          </div>
+        </div>
+        <div class="filterUnderline"></div>
+        <div class="filterBy">
+          Filter By Assignee
+        </div>
+        <mat-select
+          class="assignee-dropdown"
+          [value]="parentFG?.get('assignee')?.value"
+          (selectionChange)="setAssignee($event)"
+        >
+          <mat-option *ngFor="let assignee of userList" [value]="assignee.id">
+            {{ assignee.firstName }} {{ assignee.lastName }}
+          </mat-option>
+        </mat-select>
+        <div class="filterBy">
+          Filter By Department
+        </div>
+        <div
+          *ngFor="let filter of filterData.department; let i = index"
+          formArrayName="department"
+          class="filterItemWrapper"
+        >
+          <div>
+            <input
+              class="filterCheckbox"
+              type="checkbox"
+              [formControlName]="i"
+            />
+          </div>
+          <div class="filterItem">
+            {{ filter.label }}
+          </div>
+        </div>
+      </div>
+      <div class="applyBtnWrapper">
+        <div class="applyBtn" (click)="applyFilter()">
+          <div>Apply</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

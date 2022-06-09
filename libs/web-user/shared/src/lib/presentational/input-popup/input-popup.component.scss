@@ -1,35 +1,43 @@
 @import 'main';
 
 
+
 .popup__wrapper {
   position: relative;
-  width: 50vw;
-  max-height: 41vh;
+  width: 21rem;
+  min-height: 50vh !important;
+  margin: 0 auto;
   .cross {
     position: absolute;
-    right: -12px;
-    top: -32px;
+    right: 10px;
+    top: 0px;
     &:hover {
       cursor: pointer;
     }
     @media screen and (max-width: 500px) {
-      right: 0px;
-      top: -20px;
+      right: -3px;
+      top: 0px;
+      
     }
   }
   &--heading {
     text-align: center;
-    margin: $margin-medium 0px;
-    margin-bottom: 25px;
+    white-space: nowrap;
+    margin-right: 10px;
     font-weight: $bolder;
     @media screen and (max-width: 500px) {
       font-size: $font-small;
+      margin:  0px;
+      white-space: nowrap;
+    margin-bottom: 0px;
+    margin-right: 10px;
     }
   }
   @media screen and (max-width: 500px) {
     padding: 0 $padding-large;
-    width: auto;
-    min-height: 40vh;
+    width: 15rem;
+    min-height: 50vh;
+    margin: 0 auto;
   }
 }
 

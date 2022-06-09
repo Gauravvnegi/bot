@@ -4,6 +4,7 @@ import {
 } from 'libs/admin/dashboard/src/lib/data-models/reservation-table.model';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { get, set, trim } from 'lodash';
+import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 import { Feedback, StayFeedback } from './feedback-datatable.model';
 
@@ -88,6 +89,59 @@ export class FeedbackRecord {
       })
       .join('')
       .toUpperCase();
+  }
+
+  getSLA() {
+    if (this.sla)
+      return `${Math.round(((this.sla % 86400000) % 3600000) / 60000)}m`;
+    else '------';
+  }
+
+  getStatus(array) {
+    return array.filter((item) => item.value === this.status)[0]?.label;
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
+  }
+}
+
+export class UserList {
+  records: User[];
+
+  deserialize(input) {
+    this.records = new Array<User>();
+    input?.forEach((item) => this.records.push(new User().deserialize(item)));
+    return this.records;
+  }
+}
+
+export class User {
+  id: string;
+  firstName: string;
+  lastName: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'id', get(input, ['id', ''])),
+      set({}, 'firstName', get(input, ['firstName', ''])),
+      set({}, 'lastName', get(input, ['lastName', '']))
+    );
+    return this;
   }
 }
 

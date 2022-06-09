@@ -85,6 +85,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.tableFG?.addControl('tableType', new FormControl('table'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -99,12 +100,16 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.getConfig();
-    this.tableFG?.addControl('tableType', new FormControl('card'));
   }
 
   setTableType(value) {
     this.tableFG.patchValue({ tableType: value });
-    console.log(this.tableFG.getRawValue());
+    if (value === feedback.tableTypes.table)
+      this.loadInitialData([
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
   }
 
   getConfig() {
@@ -135,11 +140,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               : feedback.types.stay
           );
         //fetch-api for records
-        this.loadInitialData([
-          ...this.globalQueries,
-          { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
+        if (this.tableFG.get('tableType')?.value === feedback.tableTypes.table)
+          this.loadInitialData([
+            ...this.globalQueries,
+            { order: sharedConfig.defaultOrder },
+            ...this.getSelectedQuickReplyFilters(),
+          ]);
       })
     );
   }
@@ -255,7 +261,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
       .map((item) => ({
-        entityState: item.value,
+        entityType: item.value,
       }));
   }
 
@@ -307,10 +313,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
           entityIds: this.setEntityId(),
         },
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    return this.tableService.getBifurationGTMData(config);
   }
 
   /**
@@ -371,8 +377,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ).records;
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    data.entityTypeCounts &&
+      this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
   }

@@ -1,4 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -9,7 +16,12 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { Observable, Subscription } from 'rxjs';
-import { FeedbackList } from '../../../data-models/feedback-card.model';
+import { card } from '../../../constants/card';
+import {
+  FeedbackList,
+  User,
+  UserList,
+} from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
 
@@ -22,56 +34,26 @@ export class FeedbackListComponent implements OnInit {
   @Input() entityType;
   @Input() outlets;
   @Input() colorMap;
+  @ViewChild('feedbackListContainer') private myScrollContainer: ElementRef;
   feedbackType: string;
-  filterData = {
-    sort: '',
-    order: 'DESC',
-    priorityType: '',
-  };
   parentFG: FormGroup;
-  tabFilterItems = [
-    {
-      label: 'To-Do',
-      content: '',
-      value: 'PENDING',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Timeout',
-      content: '',
-      value: 'TIMEOUT',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Resolved',
-      content: '',
-      value: 'RESOLVED',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ];
+  tabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
-  tabFilterIdx: number = 3;
+  tabFilterIdx: number = 0;
   hotelId: string;
   $subscription = new Subscription();
   globalQueries = [];
   enableSearchField = false;
   loading = false;
   showFilter = false;
+  userList: User[];
   feedbackList;
+  filterData = {};
+  pagination = {
+    offset: 0,
+    limit: 20,
+  };
+  totalRecords = 0;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -86,7 +68,7 @@ export class FeedbackListComponent implements OnInit {
   ngOnInit(): void {
     this.initFG();
     this.registerListeners();
-    this.cardService.selectedFeedback.next(null);
+    this.cardService.$selectedFeedback.next(null);
   }
 
   initFG() {
@@ -97,6 +79,9 @@ export class FeedbackListComponent implements OnInit {
 
   registerListeners() {
     this.listenForGlobalFilters();
+    this.listenForOutletChanged();
+    this.listenForFeedbackTypeChanged();
+    this.listenForEntityTypeChange();
   }
 
   listenForGlobalFilters() {
@@ -112,17 +97,31 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
-        this.cardService.selectedFeedback.next(null);
-        this.getFeedbackList([
-          ...this.globalQueries,
-          {
-            order: sharedConfig.defaultOrder,
-            feedbackType: this.feedbackType,
-            entityType: this.entityType,
-            entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
-          },
-        ]);
+        this.cardService.$selectedFeedback.next(null);
+        this.getUsersList();
+        this.filterData = {
+          ...this.filterData,
+          order: sharedConfig.defaultOrder,
+          feedbackType: this.feedbackType,
+          entityType: this.entityType,
+          entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+        };
+        this.pagination = {
+          offset: 0,
+          limit: 20,
+        };
+        this.loadData();
       })
+    );
+  }
+
+  getUsersList() {
+    this.$subscription.add(
+      this.cardService
+        .getUsersList(this.hotelId)
+        .subscribe(
+          (response) => (this.userList = new UserList().deserialize(response))
+        )
     );
   }
 
@@ -154,24 +153,54 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
-  getFeedbackList(queries = []) {
-    this.loading = true;
+  listenForEntityTypeChange() {
+    this.$subscription.add(
+      this.cardService.$selectedEntityType.subscribe((response) => {
+        if (response) {
+          this.entityType = response;
+          this.filterData = { ...this.filterData, entityType: response };
+          this.loadData();
+        }
+      })
+    );
+  }
 
+  loadInitialData(queries = []) {
+    this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {
-          this.feedbackList = new FeedbackList().deserialize(
-            response,
-            this.outlets,
-            this.feedbackType,
-            this.colorMap
-          ).records;
-          console.log(this.feedbackList);
+          this.feedbackList =
+            this.pagination.offset > 0
+              ? [
+                  ...this.feedbackList,
+                  ...new FeedbackList().deserialize(
+                    response,
+                    this.outlets,
+                    this.feedbackType,
+                    this.colorMap
+                  ).records,
+                ]
+              : new FeedbackList().deserialize(
+                  response,
+                  this.outlets,
+                  this.feedbackType,
+                  this.colorMap
+                ).records;
+          this.totalRecords = response.total;
+          response.entityTypeCounts &&
+            this.cardService.$tabValues.next(response.entityTypeCounts);
+          response.entityStateCounts &&
+            this.updateTabFilterCounts(response.entityStateCounts);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
         () => (this.loading = false)
       )
     );
+  }
+
+  updateTabFilterCounts(object) {
+    this.tabFilterItems.forEach((item) => (item.total = object[item.value]));
   }
 
   fetchDataFrom(queries): Observable<any> {
@@ -182,8 +211,6 @@ export class FeedbackListComponent implements OnInit {
   }
 
   getHotelId(globalQueries): void {
-    //todo
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -204,27 +231,116 @@ export class FeedbackListComponent implements OnInit {
 
   getSearchValue(event) {
     if (event.status) {
+      this.feedbackList = new FeedbackList().deserialize(
+        { records: event.response },
+        this.outlets,
+        this.feedbackType,
+        this.colorMap
+      ).records;
     } else {
       this.loading = true;
-      // this.loadData(0, 10);
+      this.pagination.offset = 0;
+      this.loadData();
     }
   }
 
   onSelectedTabFilterChange(event) {
+    this.clearRecords();
     this.tabFilterIdx = event.index;
-    this.getFeedbackList([
-      ...this.globalQueries,
-      {
-        order: sharedConfig.defaultOrder,
-        feedbackType: this.feedbackType,
-        entityType: this.entityType,
-        entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
-      },
-    ]);
+    this.filterData = {
+      ...this.filterData,
+      entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+    };
+    this.pagination.offset = 0;
+    this.loadData();
   }
 
   setSelectedItem(item) {
-    this.cardService.selectedFeedback.next(item);
+    this.cardService.$selectedFeedback.next(item);
     this.selectedFeedback = item;
+  }
+
+  handleFilter(event) {
+    if (event.status) {
+      this.filterData = { ...this.filterData, ...event.data };
+      this.loadData();
+    }
+    this.showFilter = false;
+  }
+
+  loadData() {
+    if (this.search.length) {
+      this.loading = true;
+      this.clearRecords();
+      this.filterData = {
+        ...this.filterData,
+        entityState: '',
+      };
+      this.$subscription.add(
+        this.cardService
+          .searchFeedbacks({
+            queryObj: this._adminUtilityService.makeQueryParams([
+              ...this.globalQueries,
+              this.filterData,
+              { key: this.search },
+            ]),
+          })
+          .subscribe(
+            (response) =>
+              (this.feedbackList = new FeedbackList().deserialize(
+                { records: response },
+                this.outlets,
+                this.feedbackType,
+                this.colorMap
+              ).records),
+            ({ error }) =>
+              this._snackbarService.openSnackBarAsText(error.message),
+            () => (this.loading = false)
+          )
+      );
+    } else {
+      this.filterData = {
+        ...this.filterData,
+        entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+      };
+      this.loadInitialData([
+        ...this.globalQueries,
+        this.filterData,
+        this.pagination,
+      ]);
+    }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    if (!this.search.length)
+      if (
+        this.myScrollContainer &&
+        this.myScrollContainer.nativeElement.offsetHeight +
+          this.myScrollContainer.nativeElement.scrollTop ===
+          this.myScrollContainer.nativeElement.scrollHeight
+      ) {
+        if (this.totalRecords > this.feedbackList.length) {
+          this.pagination.offset = this.feedbackList.length;
+          this.loadData();
+        }
+      }
+  }
+
+  clearRecords() {
+    this.feedbackList = new FeedbackList().deserialize(
+      { records: [] },
+      this.outlets,
+      this.feedbackType,
+      this.colorMap
+    );
+  }
+
+  get search(): string {
+    return this.parentFG.get('search')?.value;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -21,8 +21,8 @@
     }
   }
   .body {
-    overflow-y: scroll;
-    max-height: calc(100% - 117px);
+    overflow-y: auto;
+    height: calc(100% - 117px);
     .item {
       height: 163px;
       border-bottom: 1px solid #f4f5f6;
@@ -39,7 +39,18 @@
         display: flex;
       }
       &__body {
+        width: calc(100% - 45px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         margin-left: 10px;
+        font-family: Roboto;
+        font-size: 12px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.72px;
         &__room {
           font-size: 10px;
           font-weight: bold;
@@ -64,6 +75,27 @@
           display: flex;
           gap: 20px;
           font-size: 12px;
+        }
+        &__remarks {
+          color: #002046;
+        }
+        &__status {
+          display: flex;
+          align-items: center;
+          .divider {
+            height: 15px;
+            border: 1px solid #e0e0e0;
+            margin: 0 10px;
+          }
+        }
+        &__assignee {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: #727272;
+          &__date {
+            width: 44px;
+          }
         }
       }
     }

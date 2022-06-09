@@ -195,4 +195,11 @@ export class SubscribersGraphComponent implements OnInit {
 
     ci.update();
   };
+
+  /**
+   * @function ngOnDestroy to unsubscribe subscription
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

@@ -4,6 +4,7 @@ import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { empty, of } from 'rxjs';
 import { debounceTime, switchMap, catchError } from 'rxjs/operators';
+import { CardService } from '../../../services/card.service';
 
 @Component({
   selector: 'hospitality-bot-search',
@@ -12,16 +13,16 @@ import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 })
 export class SearchComponent implements OnInit {
   @Input() parentFG: FormGroup;
-  @Input() hotelId: string;
   @Input() globalQueries;
+  @Input() feedbackType: string;
   @Input() filterData;
-  @Input() entityType: string;
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
   searchValue = false;
   constructor(
-    private _adminUtilityService: AdminUtilityService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private cardService: CardService,
+    private _adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
@@ -30,7 +31,13 @@ export class SearchComponent implements OnInit {
 
   listenForSearchChanges(): void {
     const formChanges$ = this.parentFG.valueChanges;
-    const findSearch$ = ({ search }: { search: string }) => of([]);
+    const findSearch$ = ({ search }: { search: string }) =>
+      this.cardService.searchFeedbacks({
+        queryObj: this._adminUtilityService.makeQueryParams([
+          ...this.globalQueries,
+          { key: search, feedbackType: this.feedbackType, ...this.filterData },
+        ]),
+      });
     formChanges$
       .pipe(
         debounceTime(1000),

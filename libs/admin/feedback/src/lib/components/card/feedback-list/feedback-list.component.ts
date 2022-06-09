@@ -167,7 +167,6 @@ export class FeedbackListComponent implements OnInit {
 
   loadInitialData(queries = []) {
     this.loading = true;
-
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {
@@ -189,11 +188,19 @@ export class FeedbackListComponent implements OnInit {
                   this.colorMap
                 ).records;
           this.totalRecords = response.total;
+          response.entityTypeCounts &&
+            this.cardService.$tabValues.next(response.entityTypeCounts);
+          response.entityStateCounts &&
+            this.updateTabFilterCounts(response.entityStateCounts);
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
         () => (this.loading = false)
       )
     );
+  }
+
+  updateTabFilterCounts(object) {
+    this.tabFilterItems.forEach((item) => (item.total = object[item.value]));
   }
 
   fetchDataFrom(queries): Observable<any> {
@@ -238,11 +245,13 @@ export class FeedbackListComponent implements OnInit {
   }
 
   onSelectedTabFilterChange(event) {
+    this.clearRecords();
     this.tabFilterIdx = event.index;
     this.filterData = {
       ...this.filterData,
       entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
     };
+    this.pagination.offset = 0;
     this.loadData();
   }
 
@@ -261,6 +270,12 @@ export class FeedbackListComponent implements OnInit {
 
   loadData() {
     if (this.search.length) {
+      this.loading = true;
+      this.clearRecords();
+      this.filterData = {
+        ...this.filterData,
+        entityState: '',
+      };
       this.$subscription.add(
         this.cardService
           .searchFeedbacks({
@@ -277,10 +292,17 @@ export class FeedbackListComponent implements OnInit {
                 this.outlets,
                 this.feedbackType,
                 this.colorMap
-              ).records)
+              ).records),
+            ({ error }) =>
+              this._snackbarService.openSnackBarAsText(error.message),
+            () => (this.loading = false)
           )
       );
     } else {
+      this.filterData = {
+        ...this.filterData,
+        entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+      };
       this.loadInitialData([
         ...this.globalQueries,
         this.filterData,
@@ -303,6 +325,15 @@ export class FeedbackListComponent implements OnInit {
           this.loadData();
         }
       }
+  }
+
+  clearRecords() {
+    this.feedbackList = new FeedbackList().deserialize(
+      { records: [] },
+      this.outlets,
+      this.feedbackType,
+      this.colorMap
+    );
   }
 
   get search(): string {

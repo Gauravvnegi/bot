@@ -15,7 +15,7 @@ export const card = {
     tabFilterItems: [
       {
         label: 'To-Do',
-        value: 'PENDING',
+        value: 'TODO',
         total: 0,
       },
       {

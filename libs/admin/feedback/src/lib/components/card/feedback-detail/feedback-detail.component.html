@@ -1,1 +1,60 @@
-<div>{{ feedback | json }}</div>
+<div
+  class="chat-height"
+  *ngIf="feedback; else noFeedbackData"
+  style="position: relative;"
+>
+  <div class="guestInfoOpen">
+    <div class="guestInfoOpen-guest-wrap">
+      <div class="guestInfoAvatar">
+        {{ feedback?.getProfileNickName() }}
+      </div>
+      <div class="selectedChat"></div>
+      {{ feedback?.feedback.guest.getFullName() }}
+    </div>
+    <div
+      class="mr-10"
+      [formGroup]=""
+      channelSubscribed
+      [paths]="'WHATSAPP_BOT'"
+    >
+      <div class="req_button">
+        <img class="paper" src="assets/images/paper.png" alt="" />
+        <p>Export Feedback</p>
+        <img
+          class="icon"
+          src="assets/images/guest-info-icon .png"
+          [alt]=""
+          (click)="openGuestInfo()"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="guestInfoOpen">
+    <div class="feedback_labels">
+      <div>BNO:{{ feedback?.feedback.guestData.bookingNo }}</div>
+      <div>{{ feedback?.getTableOrRoomNo() }}</div>
+      <div>{{ feedback?.jobDuration }}</div>
+      <div class="overall">overall</div>
+      <div class="number"></div>
+    </div>
+    <div class="guestInfoOpen-guest-wrap"></div>
+    <div class="mr-10"></div>
+  </div>
+  <div class="search_field"></div>
+  <hospitality-bot-feedback-detail-footer
+    [feedback]="feedback"
+  ></hospitality-bot-feedback-detail-footer>
+</div>
+<ng-template #noFeedbackData>
+  <div class="no-data">
+    <div class="no-data__img">
+      <img src="assets/svg/no_request.svg" alt="No feedback" />
+    </div>
+    <div class="no-data__title">
+      Select an item to read
+    </div>
+    <div class="no-data__description">
+      Nothing is selected
+    </div>
+  </div>
+</ng-template>

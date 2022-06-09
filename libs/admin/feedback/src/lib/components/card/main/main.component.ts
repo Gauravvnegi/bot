@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
@@ -14,6 +14,7 @@ import { CardService } from '../../../services/card.service';
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  guestInfoEnable = false;
   outlets = [];
   colorMap;
   tabFilterItems = card.tabFilterItems;
@@ -29,6 +30,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.getConfig();
     this.listenForGlobalFilters();
+    this.listenForTabFilterCounts();
   }
 
   getConfig() {
@@ -46,6 +48,18 @@ export class MainComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.getOutlets(data['filter'].value.property.branchName);
+      })
+    );
+  }
+
+  listenForTabFilterCounts() {
+    this.$subscription.add(
+      this.cardService.$tabValues.subscribe((response) => {
+        if (response) {
+          this.tabFilterItems.forEach(
+            (tab) => (tab.total = response[tab.value])
+          );
+        }
       })
     );
   }
@@ -75,5 +89,17 @@ export class MainComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  openGuestInfo(event) {
+    if (event.openGuestInfo) {
+      this.guestInfoEnable = true;
+    }
+  }
+
+  closeGuestInfo(event) {
+    if (event.close) {
+      this.guestInfoEnable = false;
+    }
   }
 }

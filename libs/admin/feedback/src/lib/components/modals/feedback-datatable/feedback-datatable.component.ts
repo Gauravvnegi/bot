@@ -23,6 +23,8 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+
+import { SelectedChip } from '../../../types/feedback.type';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import {
@@ -283,6 +285,18 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         }
       )
     );
+  }
+
+  /**
+   * @function getSelectedQuickReplyFilters To get the selected chips.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters(): SelectedChip[] {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityState: item.value,
+      }));
   }
 
   /**

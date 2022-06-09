@@ -155,13 +155,13 @@ export const feedback = {
     table: {
       name: 'table',
       value: 'table',
-      url: 'assets/svg/bar-graph.svg',
+      url: 'assets/svg/tablet.svg',
       backgroundColor: '#1AB99F',
     },
     card: {
       name: 'card',
       value: 'card',
-      url: 'assets/svg/line-graph.svg',
+      url: 'assets/svg/table_card.svg',
       backgroundColor: '#DEFFF3',
     },
   },

@@ -29,6 +29,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.getConfig();
     this.listenForGlobalFilters();
+    this.listenForTabFilterCounts();
   }
 
   getConfig() {
@@ -46,6 +47,18 @@ export class MainComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.getOutlets(data['filter'].value.property.branchName);
+      })
+    );
+  }
+
+  listenForTabFilterCounts() {
+    this.$subscription.add(
+      this.cardService.$tabValues.subscribe((response) => {
+        if (response) {
+          this.tabFilterItems.forEach(
+            (tab) => (tab.total = response[tab.value])
+          );
+        }
       })
     );
   }

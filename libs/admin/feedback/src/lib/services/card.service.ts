@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 export class CardService extends ApiService {
   $selectedFeedback = new BehaviorSubject(null);
   $selectedEntityType = new BehaviorSubject(null);
+  $tabValues = new BehaviorSubject(null);
   getFeedbackList(config) {
     return this.get(`/api/v1/feedback/guests-card${config.queryObj}`);
   }

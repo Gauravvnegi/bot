@@ -166,7 +166,7 @@ export class FeedbackListComponent implements OnInit {
   }
 
   loadInitialData(queries = []) {
-    this.loading = true;
+    if (this.feedbackList && !this.feedbackList.length) this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {

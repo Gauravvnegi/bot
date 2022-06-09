@@ -66,3 +66,13 @@
 :host ::ng-deep .guestInfoWrapper {
   border-bottom: none !important;
 }
+
+:host ::ng-deep {
+  .mat-tab-group {
+    padding: 0;
+  }
+  .mat-tab-label {
+    min-width: fit-content !important;
+    height: 45px !important;
+  }
+}

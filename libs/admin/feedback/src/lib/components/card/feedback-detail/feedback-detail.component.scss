@@ -36,15 +36,6 @@
       border-radius: 14px;
       background-color: #0030b5;
     }
-    .number {
-      width: 22.5px;
-      height: 22.5px;
-      margin: 2.8px 0 2.8px 8.3px;
-      padding: 5px 8.5px 4.5px 8px;
-      border: solid 1px #f8b633;
-      background-color: rgba(248, 182, 51, 0.3);
-      border-radius: 100%;
-    }
   }
 }
 
@@ -258,4 +249,180 @@
 
 :host ::ng-deep mr-10 ng-untouched ng-pristine ng-valid {
   display: inline !important;
+}
+
+.feedback-chat {
+  height: calc(100% - 180px);
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 13px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    &:hover {
+      background: #8f8f8f;
+    }
+    background: #c3c2c2;
+    border-radius: 10px;
+  }
+  &__ratings {
+    height: 367px;
+    margin: 15px 7px 5px 12px;
+    padding: 1px 0 1px 25px;
+    background-color: #f4f5f7;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 13px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      &:hover {
+        background: #8f8f8f;
+      }
+      background: #c3c2c2;
+      border-radius: 10px;
+    }
+  }
+}
+.feedback {
+  display: flex;
+  align-items: center;
+  .pdf {
+    width: 24px;
+  }
+}
+.feedback-service {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: calc(100% - 24px);
+  &__container {
+    display: flex;
+    align-items: center;
+    padding: 2px 0;
+    position: relative;
+    &:hover {
+      .service-list-popup {
+        display: block;
+      }
+    }
+    &__label {
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 20px;
+      background-color: $list-popup;
+      padding: 4px 10px;
+      display: flex;
+      align-items: center;
+      &__text {
+        color: $primary-purple;
+        padding-top: 2px;
+      }
+    }
+    &__comment {
+      display: none;
+      font-size: 11px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      letter-spacing: 0.66px;
+      text-align: center;
+      border-radius: 14px;
+      background-color: $list-popup;
+      padding: 3px;
+    }
+    &__extra {
+      position: relative;
+      .label {
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 0;
+        letter-spacing: 0.66px;
+        text-align: center;
+        text-decoration: underline;
+        color: $primary-purple;
+      }
+      &:hover {
+        .service-list-popup {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.stay-booking-feedback {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  padding: 0px;
+  border-radius: 10px;
+  position: relative;
+  background-color: $booking-feedback;
+  min-width: 18px;
+  height: 18px;
+  margin: 0 3px;
+  &:hover {
+    cursor: pointer;
+    .feedback-msg {
+      display: block;
+    }
+  }
+  .feedback-msg {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    font-size: 12px;
+    color: $dark-grey;
+    background-color: $white;
+    left: 0%;
+    padding: 7px;
+    box-shadow: 0px 0px 5px 0px $light-grey;
+    border-radius: 5px;
+    display: none;
+  }
+  .feedback-icon {
+    height: 14px;
+    margin: 0 2px;
+  }
+  .number {
+    padding: 5px 0;
+    color: $white;
+    margin: 0 0px;
+    text-align: center;
+    min-width: 20px;
+    border-radius: 50%;
+    font-size: $font8;
+  }
+
+  @media screen and (max-width: 1050px) {
+    margin: 0;
+    margin-top: 7px;
+    .feedback-icon {
+      height: 12px;
+    }
+    .number {
+      font-size: 10px;
+      padding: 2px 0;
+      min-width: 15px;
+    }
+  }
 }

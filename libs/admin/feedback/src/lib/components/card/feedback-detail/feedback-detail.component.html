@@ -31,16 +31,45 @@
   </div>
   <div class="guestInfoOpen">
     <div class="feedback_labels">
-      <div>BNO:{{ feedback?.feedback.guestData.bookingNo }}</div>
+      <div *ngIf="feedback?.feedback.guestData.bookingNo">
+        BNO:{{ feedback?.feedback.guestData.bookingNo }}
+      </div>
       <div>{{ feedback?.getTableOrRoomNo() }}</div>
-      <div>{{ feedback?.jobDuration }}</div>
-      <div class="overall">overall</div>
-      <div class="number"></div>
+      <div>{{ feedback.getCreatedDate(_globalFilterService.timezone) }}</div>
+      <div class="feedback">
+        <div class="feedback-service">
+          <div class="feedback-service__container">
+            <div class="feedback-service__container__label others">
+              <div class="feedback-service__container__label__text">
+                Overall
+              </div>
+              <div class="stay-booking-feedback">
+                <p class="number">+{{ feedback.feedback.services.length }}</p>
+              </div>
+            </div>
+            <div class="stay-booking-feedback status-opacity-success">
+              <p
+                class="number status-background-success"
+                [style.background]="
+                  (colorMap?.stayFeedbacks)[feedback.feedback.ratings].colorCode
+                "
+                *ngIf="feedback.feedback.ratings"
+              >
+                {{ feedback.feedback.ratings }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="guestInfoOpen-guest-wrap"></div>
     <div class="mr-10"></div>
   </div>
-  <div class="search_field"></div>
+  <div class="feedback-chat">
+    <div class="feedback-chat__ratings">
+      {{ feedback.feedback | json }}
+    </div>
+  </div>
   <hospitality-bot-feedback-detail-footer
     [feedback]="feedback"
   ></hospitality-bot-feedback-detail-footer>

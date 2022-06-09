@@ -17,6 +17,7 @@
       <div style="width: calc(100% - 345px);">
         <div class="blackscreen"></div>
         <hospitality-bot-feedback-detail
+          [colorMap]="colorMap"
           (guestInfo)="openGuestInfo($event)"
         ></hospitality-bot-feedback-detail>
       </div>

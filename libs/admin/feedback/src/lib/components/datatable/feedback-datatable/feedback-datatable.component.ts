@@ -85,7 +85,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('card'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,

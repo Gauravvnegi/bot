@@ -200,7 +200,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
-    console.log(this.values);
     this.totalRecords = data.total;
     data.entityTypeCounts &&
       this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);

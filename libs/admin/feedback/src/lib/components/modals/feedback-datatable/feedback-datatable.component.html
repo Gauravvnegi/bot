@@ -48,36 +48,6 @@
                 <p class="heading">
                   {{ tableName }}
                 </p>
-                <div class="mark-btn-container">
-                  <div class="btn read" *ngIf="selectedRows.length > 0">
-                    <img
-                      [src]="
-                        globalFeedbackConfig.images.datatable.mark_as_read.url
-                      "
-                      [alt]="
-                        globalFeedbackConfig.images.datatable.mark_as_read.alt
-                      "
-                      (click)="updateFeedbackStatus(true)"
-                    />
-                    <span class="btn_text">
-                      {{ 'datatable.mark_as_read' | translate }}
-                    </span>
-                  </div>
-                  <div class="btn" *ngIf="selectedRows.length > 0">
-                    <img
-                      [src]="
-                        globalFeedbackConfig.images.datatable.mark_as_unread.url
-                      "
-                      [alt]="
-                        globalFeedbackConfig.images.datatable.mark_as_unread.alt
-                      "
-                      (click)="this.updateFeedbackStatus(false)"
-                    />
-                    <span class="btn_text">
-                      {{ 'datatable.mark_as_unread' | translate }}
-                    </span>
-                  </div>
-                </div>
                 <div class="options">
                   <div *ngIf="isActionButtons" class="icons">
                     <img

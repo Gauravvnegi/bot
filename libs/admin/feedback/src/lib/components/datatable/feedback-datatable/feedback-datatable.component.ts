@@ -1,4 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
@@ -64,7 +70,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   stayCols = feedback.cols.feedbackDatatable.stay;
   tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;
-
   globalQueries = [];
   $subscription = new Subscription();
   constructor(
@@ -312,7 +317,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
           entityIds: this.setEntityId(),
         },
-        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
     return this.tableService.getBifurationGTMData(config);
@@ -380,6 +384,45 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
+  }
+
+  updateFeedbackState(event) {
+    let data = {
+      status: event.statusType,
+    };
+    let id = event.id;
+    this.tableService.updateFeedbackState(id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.loadInitialData([
+          ...this.globalQueries,
+          { order: sharedConfig.defaultOrder },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   /**
@@ -558,7 +601,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== 'GTM') {
           chip.isSelected = false;
         }
       });
@@ -751,5 +794,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout() {
+    this.tableService.$disableContextMenus.next(true);
   }
 }

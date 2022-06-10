@@ -381,12 +381,10 @@
             feedbackType === globalFeedbackConfig.types.transactional;
             else stayTable
           "
-          (click)="openDetailPage($event, rowData)"
         >
           <tr
             class="data-table-row"
             [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
-            (click)="openDetailPage($event, rowData)"
           >
             <!-- <tr class="data-table-row"> -->
             <td class="table--checkbox">
@@ -595,22 +593,24 @@
 
             <!-- status-image-initiated -->
             <td class="status-image">
-              <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+              <ng-container
+                *ngIf="rowData.departmentId === undefined; else dropDown"
+              >
                 <div
-                  class="view-notes"
-                  (click)="openEditNotes($event, rowData, rowData.notes)"
+                  class="detailPage"
+                  (click)="openDetailPage($event, rowData)"
                 >
-                  {{ 'datatable.view_notes' | translate }}
-                </div></ng-container
-              >
-              <ng-template #addNote
-                ><div
-                  class="add-notes"
-                  (click)="openEditNotes($event, rowData, rowData.notes)"
-                >
-                  {{ 'datatable.add_notes' | translate }}
-                </div></ng-template
-              >
+                  View Detail
+                </div>
+              </ng-container>
+              <ng-template #dropDown>
+                <hospitality-bot-action-overlay
+                  [rowDataStatus]="rowData.status"
+                  [guestId]="rowData.departmentId"
+                  (openDetail)="openDetailPage($event, rowData)"
+                  (statusUpdate)="updateFeedbackState($event)"
+                ></hospitality-bot-action-overlay>
+              </ng-template>
             </td>
           </tr>
         </ng-container>
@@ -619,15 +619,10 @@
           <tr
             class="data-table-row"
             [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
-            (click)="openDetailPage($event, rowData)"
           >
             <!-- <tr class="data-table-row"> -->
             <td class="table--checkbox">
-              <p-tableCheckbox
-                [value]="rowData"
-                [index]="rowIndex"
-                (click)="onCheckboxClicked($event)"
-              >
+              <p-tableCheckbox [value]="rowData" [index]="rowIndex">
               </p-tableCheckbox>
             </td>
             <td class="guest">
@@ -793,22 +788,24 @@
 
             <!-- status-image-initiated -->
             <td class="status-image">
-              <ng-container *ngIf="rowData.notes?.remarks; else addNote">
+              <ng-container
+                *ngIf="rowData.departmentId === undefined; else dropDown"
+              >
                 <div
-                  class="view-notes"
-                  (click)="openEditNotes($event, rowData, rowData.notes)"
+                  class="detailPage"
+                  (click)="openDetailPage($event, rowData)"
                 >
-                  {{ 'datatable.view_notes' | translate }}
-                </div></ng-container
-              >
-              <ng-template #addNote
-                ><div
-                  class="add-notes"
-                  (click)="openEditNotes($event, rowData, rowData.notes)"
-                >
-                  {{ 'datatable.add_notes' | translate }}
-                </div></ng-template
-              >
+                  View Detail
+                </div>
+              </ng-container>
+              <ng-template #dropDown>
+                <hospitality-bot-action-overlay
+                  [rowDataStatus]="rowData.status"
+                  [guestId]="rowData.departmentId"
+                  (openDetail)="openDetailPage($event, rowData)"
+                  (statusUpdate)="updateFeedbackState($event)"
+                ></hospitality-bot-action-overlay>
+              </ng-template>
             </td>
           </tr>
         </ng-template>

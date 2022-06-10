@@ -8,7 +8,7 @@ import {
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
@@ -20,7 +20,6 @@ import {
   sharedConfig,
   StatisticsService,
   TableService,
-  UserService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -85,8 +84,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
     protected _translateService: TranslateService,
-    protected configService: ConfigService,
-    protected userService: UserService
+    protected configService: ConfigService
   ) {
     super(fb, tabFilterService);
   }
@@ -380,7 +378,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
-    this.totalRecords = data.total;
+    this.totalRecords =
+      data.entityTypeCounts[
+        this.tabFilterItems[this.tabFilterIdx].chips.filter(
+          (item) => item.isSelected
+        )[0].value
+      ];
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
     data.entityTypeCounts &&
       this.updateQuickReplyFilterCount(data.entityTypeCounts);

@@ -28,7 +28,6 @@ import {
 } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
-import { merge } from 'lodash';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import {
@@ -319,7 +318,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
           entityIds: this.setEntityId(),
         },
-        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
     return this.tableService.getBifurationGTMData(config);
@@ -566,7 +564,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     if (quickReplyTypeIdx == 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== 'GTM') {
           chip.isSelected = false;
         }
       });

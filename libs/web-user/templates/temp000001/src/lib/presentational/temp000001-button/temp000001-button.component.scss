@@ -6,7 +6,7 @@
     left: -24px;
   }
   @media (max-width: 767px) {
-    left: inherit;
+    // left: inherit;
   }
 }
 :host ::ng-deep .next-button {
@@ -15,8 +15,15 @@
     left: -24px;
   }
   @media (max-width: 767px) {
+    // left: inherit;
+  }
+}
+@media  (min-width:300px) and (max-width:600px){
+  :host ::ng-deep .back-button {left: inherit;}
+  :host ::ng-deep .next-button {
     left: inherit;
   }
+  
 }
 
 :host ::ng-deep .mat-button-wrapper {

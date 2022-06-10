@@ -80,7 +80,7 @@
         "
       >
         <div *ngFor="let service of feedback.feedback.services.services">
-          <div>{{ service.serviceName }}</div>
+          <div class="rating__name">{{ service.serviceName }}</div>
           <div *ngFor="let n of num">
             <div class="rating"></div>
           </div>
@@ -90,8 +90,10 @@
       <ng-template #stayServices>
         <div class="rating--card">
           <div *ngFor="let service of feedback.feedback.services">
-            <div>{{ service.serviceName }}</div>
-            <div style="display: flex;">
+            <div class="rating__name">{{ service.serviceName }}</div>
+            <div
+              style="display: flex; padding-top: 20px; padding-bottom: 30px;"
+            >
               <div *ngFor="let n of num">
                 <div
                   class="rating"

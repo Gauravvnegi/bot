@@ -17,7 +17,6 @@ import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
 import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
-import { FeedbackRateComponent } from './components/card/feedback-rate/feedback-rate.component';
 import {
   MainComponent,
   FeedbackListComponent,
@@ -71,6 +70,5 @@ export class AdminFeedbackRoutingModule {
     GuestBookingInfoComponent,
     FeedbackListFilterComponent,
     FeedbackDetailModalComponent,
-    FeedbackRateComponent,
   ];
 }

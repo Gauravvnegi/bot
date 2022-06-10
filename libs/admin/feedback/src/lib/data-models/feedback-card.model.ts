@@ -117,6 +117,10 @@ export class FeedbackRecord {
     }
     return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
+
+  getCreatedDate(timezone = '+05:30') {
+    return moment(this.created).utcOffset(timezone).format('DD/MM/YYYY');
+  }
 }
 
 export class UserList {

@@ -12,6 +12,7 @@ import {
   AdminUtilityService,
   sharedConfig,
   StatisticsService,
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
@@ -34,8 +35,8 @@ export class FeedbackListComponent implements OnInit {
   @Input() entityType;
   @Input() outlets;
   @Input() colorMap;
+  @Input() feedbackType: string;
   @ViewChild('feedbackListContainer') private myScrollContainer: ElementRef;
-  feedbackType: string;
   parentFG: FormGroup;
   tabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
@@ -62,7 +63,8 @@ export class FeedbackListComponent implements OnInit {
     private firebaseMessagingService: FirebaseMessagingService,
     private cardService: CardService,
     private statisticService: StatisticsService,
-    private tableService: FeedbackTableService
+    private tableService: FeedbackTableService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +82,6 @@ export class FeedbackListComponent implements OnInit {
   registerListeners() {
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
-    this.listenForFeedbackTypeChanged();
     this.listenForEntityTypeChange();
   }
 
@@ -96,8 +97,8 @@ export class FeedbackListComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ]);
-        this.feedbackType = data['filter'].value.feedback.feedbackType;
         this.cardService.$selectedFeedback.next(null);
+        this.getUserPermission();
         this.getUsersList();
         this.filterData = {
           ...this.filterData,
@@ -125,6 +126,16 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
+  getUserPermission() {
+    this.$subscription.add(
+      this.userService
+        .getUserPermission(this.feedbackType)
+        .subscribe((response) => {
+          console.log(response);
+        })
+    );
+  }
+
   /**
    * @function listenForOutletChanged To listen for outlet tab change.
    */
@@ -142,17 +153,6 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
-  /**
-   * @function listenForFeedbackTypeChanged To listen the local tab change.
-   */
-  listenForFeedbackTypeChanged(): void {
-    this.$subscription.add(
-      this.tableService.$feedbackType.subscribe(
-        (response) => (this.feedbackType = response)
-      )
-    );
-  }
-
   listenForEntityTypeChange() {
     this.$subscription.add(
       this.cardService.$selectedEntityType.subscribe((response) => {
@@ -166,7 +166,7 @@ export class FeedbackListComponent implements OnInit {
   }
 
   loadInitialData(queries = []) {
-    this.loading = true;
+    if (this.feedbackList && !this.feedbackList.length) this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (response) => {

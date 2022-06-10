@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
+import { feedback } from '../../../constants/feedback';
 import { CardService } from '../../../services/card.service';
 
 @Component({
@@ -9,9 +11,15 @@ import { CardService } from '../../../services/card.service';
 })
 export class FeedbackDetailComponent implements OnInit {
   @Input() feedback;
+  @Input() colorMap;
+  @Input() feedbackType;
   @Output() guestInfo = new EventEmitter();
+  globalFeedbackConfig = feedback;
   $subscription = new Subscription();
-  constructor(private cardService: CardService) {}
+  constructor(
+    private cardService: CardService,
+    public _globalFilterService: GlobalFilterService
+  ) {}
 
   ngOnInit(): void {
     this.listenForSelectedFeedback();

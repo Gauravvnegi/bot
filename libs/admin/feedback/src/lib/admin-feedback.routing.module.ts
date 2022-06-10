@@ -26,6 +26,7 @@ import { GuestPersonalInfoComponent } from './components/card/guest-personal-inf
 import { GuestBookingInfoComponent } from './components/card/guest-booking-info/guest-booking-info.component';
 import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
 import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
+import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
 
 const appRoutes: Route[] = [
   {
@@ -66,5 +67,6 @@ export class AdminFeedbackRoutingModule {
     GuestPersonalInfoComponent,
     GuestBookingInfoComponent,
     FeedbackListFilterComponent,
+    FeedbackDetailModalComponent,
   ];
 }

@@ -7,6 +7,7 @@ import {
 import { Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
 import { CardService } from '../../../services/card.service';
+import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-main',
@@ -19,18 +20,21 @@ export class MainComponent implements OnInit {
   colorMap;
   tabFilterItems = card.tabFilterItems;
   tabFilterIdx = 0;
+  feedbackType: string;
   $subscription = new Subscription();
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private configService: ConfigService,
-    private cardService: CardService
+    private cardService: CardService,
+    private tableService: FeedbackTableService
   ) {}
 
   ngOnInit(): void {
     this.getConfig();
     this.listenForGlobalFilters();
     this.listenForTabFilterCounts();
+    this.listenForFeedbackTypeChanged();
   }
 
   getConfig() {
@@ -48,6 +52,7 @@ export class MainComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         this.getOutlets(data['filter'].value.property.branchName);
+        this.feedbackType = data['filter'].value.feedback.feedbackType;
       })
     );
   }
@@ -61,6 +66,17 @@ export class MainComponent implements OnInit {
           );
         }
       })
+    );
+  }
+
+  /**
+   * @function listenForFeedbackTypeChanged To listen the local tab change.
+   */
+  listenForFeedbackTypeChanged(): void {
+    this.$subscription.add(
+      this.tableService.$feedbackType.subscribe(
+        (response) => (this.feedbackType = response)
+      )
     );
   }
 

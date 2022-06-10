@@ -535,6 +535,74 @@
                       </p>
                     </div>
                   </div>
+                  <ng-container
+                    *ngFor="
+                      let service of rowData.services.getNegativeRatedService();
+                      let i = index
+                    "
+                  >
+                    <div class="feedback-service__container" *ngIf="i < 2">
+                      <div class="feedback-service__container__label">
+                        <div class="feedback-service__container__label__text">
+                          {{ service.serviceName | titlecase }}
+                        </div>
+                      </div>
+                      <div
+                        class="stay-booking-feedback"
+                        [ngClass]="{
+                          'status-opacity-reject': service.rating === 'EI',
+                          'status-opacity-success': service.rating >= 5
+                        }"
+                      >
+                        <p
+                          class="number"
+                          [ngClass]="{
+                            'status-background-reject': service.rating === 'EI',
+                            'status-background-moderate':
+                              service.rating === 'ME',
+                            'status-background-success': service.rating === 'EE'
+                          }"
+                        >
+                          {{ service.rating }}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      class="feedback-service__container"
+                      *ngIf="
+                        i == 1 &&
+                        rowData.services.getNegativeRatedService()?.length >= 2
+                      "
+                    >
+                      <div class="feedback-service__container__label others">
+                        <div class="feedback-service__container__label__text">
+                          Others
+                        </div>
+                        <div class="stay-booking-feedback">
+                          <p class="number">
+                            +{{ rowData.services.services.length - 2 }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-container
+                      *ngIf="
+                        i == 0 &&
+                        rowData.services.getNegativeRatedService()?.length == 1
+                      "
+                    >
+                      <div class="feedback-service__container__label others">
+                        <div class="feedback-service__container__label__text">
+                          Others
+                        </div>
+                        <div class="stay-booking-feedback">
+                          <p class="number">
+                            +{{ rowData.services.services.length - 1 }}
+                          </p>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
                 </div>
               </ng-template>
             </ng-container>

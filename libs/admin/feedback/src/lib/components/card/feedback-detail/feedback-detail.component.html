@@ -1,0 +1,109 @@
+<div
+  class="chat-height"
+  *ngIf="feedback; else noFeedbackData"
+  style="position: relative;"
+>
+  <div class="guestInfoOpen">
+    <div class="guestInfoOpen-guest-wrap">
+      <div class="guestInfoAvatar">
+        {{ feedback?.getProfileNickName() }}
+      </div>
+      <div class="selectedChat"></div>
+      {{ feedback?.feedback.guest.getFullName() }}
+    </div>
+    <div class="mr-10">
+      <div class="req_button">
+        <img class="paper" src="assets/images/paper.png" alt="" />
+        <p>Export Feedback</p>
+        <img
+          class="icon"
+          src="assets/images/guest-info-icon .png"
+          [alt]=""
+          (click)="openGuestInfo()"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="guestInfoOpen">
+    <div class="feedback_labels">
+      <div *ngIf="feedback?.feedback.guestData.bookingNo">
+        BNO:{{ feedback?.feedback.guestData.bookingNo }}
+      </div>
+      <div>{{ feedback?.getTableOrRoomNo() }}</div>
+      <div>{{ feedback.getCreatedDate(_globalFilterService.timezone) }}</div>
+      <div class="feedback">
+        <div class="feedback-service">
+          <div class="feedback-service__container">
+            <div class="feedback-service__container__label others">
+              <div class="feedback-service__container__label__text">
+                Overall
+              </div>
+              <div class="stay-booking-feedback">
+                <p
+                  class="number"
+                  *ngIf="
+                    feedbackType === globalFeedbackConfig.types.transactional;
+                    else stayFeedbakServiceLength
+                  "
+                >
+                  +{{ feedback.feedback.services.services.length }}
+                </p>
+              </div>
+              <ng-template #stayFeedbakServiceLength>
+                <p class="number">+{{ feedback.feedback.services.length }}</p>
+              </ng-template>
+            </div>
+            <div class="stay-booking-feedback status-opacity-success">
+              <p
+                class="number status-background-success"
+                [style.background]="
+                  (colorMap?.stayFeedbacks)[feedback.feedback.ratings].colorCode
+                "
+                *ngIf="feedback.feedback.ratings"
+              >
+                {{ feedback.feedback.ratings }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="guestInfoOpen-guest-wrap"></div>
+    <div class="mr-10"></div>
+  </div>
+  <div class="feedback-chat">
+    <div class="feedback-chat__ratings">
+      <ng-container
+        *ngIf="
+          feedbackType === globalFeedbackConfig.types.transactional;
+          else stayServices
+        "
+      >
+        <div *ngFor="let service of feedback.feedback.services.services">
+          {{ service | json }}
+        </div>
+      </ng-container>
+      <ng-template #stayServices>
+        <div *ngFor="let service of feedback.feedback.services">
+          {{ service | json }}
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <hospitality-bot-feedback-detail-footer
+    [feedback]="feedback"
+  ></hospitality-bot-feedback-detail-footer>
+</div>
+<ng-template #noFeedbackData>
+  <div class="no-data">
+    <div class="no-data__img">
+      <img src="assets/svg/no_request.svg" alt="No feedback" />
+    </div>
+    <div class="no-data__title">
+      Select an item to read
+    </div>
+    <div class="no-data__description">
+      Nothing is selected
+    </div>
+  </div>
+</ng-template>

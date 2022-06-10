@@ -48,6 +48,17 @@
                 : item.score / 2) +
               'px'
             "
+            [ngStyle]="{
+              left:
+                5 +
+                (item.score < 0
+                  ? (item.score * -1) / 2
+                  : item.score < 6
+                  ? 3
+                  : item.score / 2) +
+                'px',
+              color: item.score > 10 || item.score < -20 ? 'white' : 'black'
+            }"
           >
             {{ item.score }}
           </div>

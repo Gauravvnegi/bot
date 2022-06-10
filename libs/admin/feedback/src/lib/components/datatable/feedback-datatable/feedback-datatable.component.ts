@@ -1,11 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -33,6 +32,7 @@ import {
 import { FeedbackTableService } from '../../../services/table.service';
 import { EntityState, SelectedChip } from '../../../types/feedback.type';
 import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
+import { FeedbackDetailModalComponent } from '../../modals/feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
@@ -62,7 +62,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   colorMap;
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
-
+  tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;
 
   globalQueries = [];
@@ -85,6 +85,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.tableFG?.addControl('tableType', new FormControl('table'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -99,6 +100,17 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.getConfig();
+  }
+
+  setTableType(value) {
+    this.tableFG.patchValue({ tableType: value });
+    if (value === feedback.tableTypes.table)
+      this.loadInitialData([
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+    else this.selectedRows = [];
   }
 
   getConfig() {
@@ -128,7 +140,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               ? feedback.types.transactional
               : feedback.types.stay
           );
-        //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
@@ -249,7 +260,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return this.tabFilterItems[this.tabFilterIdx].chips
       .filter((item) => item.isSelected == true)
       .map((item) => ({
-        entityState: item.value,
+        entityType: item.value,
       }));
   }
 
@@ -301,10 +312,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
           entityIds: this.setEntityId(),
         },
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    return this.tableService.getBifurationGTMData(config);
   }
 
   /**
@@ -365,8 +376,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ).records;
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    data.entityTypeCounts &&
+      this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
   }
@@ -703,15 +714,17 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
+    dialogConfig.data = {
+      feedback: rowData,
+      colorMap: this.colorMap,
+      feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+      isModal: true,
+    };
+
     const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
+      FeedbackDetailModalComponent,
       dialogConfig
     );
-
-    detailCompRef.componentInstance.guestId = rowData.guest.id;
-    detailCompRef.componentInstance.feedbackId = rowData.id;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close

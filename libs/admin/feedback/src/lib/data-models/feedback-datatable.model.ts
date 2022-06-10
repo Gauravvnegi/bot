@@ -1,6 +1,7 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
+import { feedback } from '../constants/feedback';
 
 export class FeedbackTable {
   total: number;
@@ -13,18 +14,25 @@ export class FeedbackTable {
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
-    this.records = input.records.map((record) =>
-      new Feedback().deserialize(record, outlets)
-    );
+
+    this.records = new Array<Feedback>();
+    input.records.forEach((item) => {
+      this.records.push(
+        new Feedback().deserialize(
+          item.feedback ? item.feedback : item,
+          outlets
+        )
+      );
+    });
     return this;
   }
 }
 
 export class Feedback {
-  bookingDetails: string;
+  bookingDetails;
   comments: string;
   created: number;
-  feedback: string;
+  feedback;
   guestData: StayGuestData;
   guest: Guest;
   hotelId: string;
@@ -97,6 +105,23 @@ export class Feedback {
 
   getCreatedTime(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('HH:mm');
+  }
+
+  getTableOrRoomNo(feedbackType) {
+    return feedbackType === feedback.types.stay
+      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
+      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.guest.firstName, this.guest.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }
 
@@ -251,16 +276,23 @@ export class StayFeedbackTable {
   total: number;
   entityTypeCounts;
   entityStateCounts: EntityStateCounts;
-  records: Feedback[];
+  records: StayFeedback[];
 
   deserialize(input, outlets, colorMap) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
-    this.records = input.records.map((record) =>
-      new StayFeedback().deserialize(record, outlets, colorMap)
-    );
+    this.records = new Array<StayFeedback>();
+    input.records.forEach((item) => {
+      this.records.push(
+        new StayFeedback().deserialize(
+          item.feedback ? item.feedback : item,
+          outlets,
+          colorMap
+        )
+      );
+    });
     return this;
   }
 }
@@ -353,6 +385,23 @@ export class StayFeedback {
 
   getCreatedTime(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('HH:mm');
+  }
+
+  getTableOrRoomNo(feedbackType) {
+    return feedbackType === feedback.types.stay
+      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
+      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.guest.firstName, this.guest.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }
 

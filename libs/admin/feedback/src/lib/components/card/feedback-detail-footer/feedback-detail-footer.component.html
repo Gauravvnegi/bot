@@ -1,4 +1,4 @@
-<div class="footer">
+<div class="footer" [ngClass]="{ disabled: !getDepartmentAllowed() }">
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
   <div class="button">Mark Resolved</div>
   <input class="input" type="text" placeholder="Type Message" />

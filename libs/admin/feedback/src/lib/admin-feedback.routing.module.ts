@@ -16,17 +16,19 @@ import { FeedbackNotesComponent } from './components/feedback-notes/feedback-not
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
-import { MainComponent } from './components/card/main/main.component';
-import { FeedbackListComponent } from './components/card/feedback-list/feedback-list.component';
-import { FeedbackDetailComponent } from './components/card/feedback-detail/feedback-detail.component';
-import { SearchComponent } from './components/card/search/search.component';
-import { FeedbackDetailFooterComponent } from './components/card/feedback-detail-footer/feedback-detail-footer.component';
-import { GuestInfoComponent } from './components/card/guest-info/guest-info.component';
-import { GuestPersonalInfoComponent } from './components/card/guest-personal-info/guest-personal-info.component';
-import { GuestBookingInfoComponent } from './components/card/guest-booking-info/guest-booking-info.component';
-import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
-import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
 import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
+import {
+  MainComponent,
+  FeedbackListComponent,
+  FeedbackDetailComponent,
+  SearchComponent,
+  FeedbackDetailFooterComponent,
+  GuestInfoComponent,
+  GuestPersonalInfoComponent,
+  GuestBookingInfoComponent,
+  FeedbackListFilterComponent,
+} from './components/card';
+import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
 
 const appRoutes: Route[] = [
   {

@@ -92,9 +92,13 @@ export class FeedbackRecord {
   }
 
   getSLA() {
-    if (this.sla)
-      return `${Math.round(((this.sla % 86400000) % 3600000) / 60000)}m`;
-    else '------';
+    if (this.sla) {
+      if (this.sla > 60 || this.sla < -60)
+        return `${Math.floor(this.sla / 60)}h ${Math.trunc(
+          (this.sla > 0 ? this.sla : this.sla * -1) % 60
+        )}m`;
+      return `${this.sla}m`;
+    } else '------';
   }
 
   getStatus(array) {
@@ -341,5 +345,47 @@ export class Request implements Deserializable {
         timezone
       )}`;
     else '------';
+  }
+}
+
+export class Departmentpermissions {
+  records: Departmentpermission[];
+
+  deserialize(input) {
+    this.records = new Array<Departmentpermission>();
+    input.forEach((item) =>
+      this.records.push(new Departmentpermission().deserialize(item))
+    );
+
+    return this.records;
+  }
+}
+
+export class Departmentpermission {
+  created: number;
+  department: string;
+  entityId: string;
+  id: string;
+  manage: number;
+  module: string;
+  updated: number;
+  userId: string;
+  view: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'created', get(input, ['created'])),
+      set({}, 'department', get(input, ['department'])),
+      set({}, 'entityId', get(input, ['entityId'])),
+      set({}, 'id', get(input, ['id'])),
+      set({}, 'manage', get(input, ['manage'])),
+      set({}, 'module', get(input, ['module'])),
+      set({}, 'updated', get(input, ['updated'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'view', get(input, ['view']))
+    );
+
+    return this;
   }
 }

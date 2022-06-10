@@ -40,3 +40,8 @@ button {
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

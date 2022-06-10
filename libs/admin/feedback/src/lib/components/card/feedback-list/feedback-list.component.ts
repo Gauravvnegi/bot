@@ -12,7 +12,6 @@ import {
   AdminUtilityService,
   sharedConfig,
   StatisticsService,
-  UserService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
@@ -24,7 +23,6 @@ import {
   UserList,
 } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
-import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-list',
@@ -62,9 +60,7 @@ export class FeedbackListComponent implements OnInit {
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private cardService: CardService,
-    private statisticService: StatisticsService,
-    private tableService: FeedbackTableService,
-    private userService: UserService
+    private statisticService: StatisticsService
   ) {}
 
   ngOnInit(): void {
@@ -98,7 +94,6 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.cardService.$selectedFeedback.next(null);
-        this.getUserPermission();
         this.getUsersList();
         this.filterData = {
           ...this.filterData,
@@ -123,16 +118,6 @@ export class FeedbackListComponent implements OnInit {
         .subscribe(
           (response) => (this.userList = new UserList().deserialize(response))
         )
-    );
-  }
-
-  getUserPermission() {
-    this.$subscription.add(
-      this.userService
-        .getUserPermission(this.feedbackType)
-        .subscribe((response) => {
-          console.log(response);
-        })
     );
   }
 

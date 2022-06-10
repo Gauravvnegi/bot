@@ -20,6 +20,7 @@ import {
   sharedConfig,
   StatisticsService,
   TableService,
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -84,7 +85,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
     protected _translateService: TranslateService,
-    protected configService: ConfigService
+    protected configService: ConfigService,
+    protected userService: UserService
   ) {
     super(fb, tabFilterService);
   }

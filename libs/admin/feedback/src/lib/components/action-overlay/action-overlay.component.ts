@@ -5,6 +5,11 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FeedbackTableService } from '../../services/table.service';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { UserService } from '@hospitality-bot/admin/shared';
+import {
+  Departmentpermission,
+  Departmentpermissions,
+} from '../../data-models/feedback-card.model';
 
 @Component({
   selector: 'hospitality-bot-action-overlay',
@@ -15,8 +20,11 @@ export class ActionOverlayComponent implements OnInit {
   isOpen = false;
   type: string;
   globalQueries = [];
+  userPermissions: Departmentpermission[];
   @Input() rowDataStatus;
   @Input() guestId;
+  @Input() feedbackType;
+  @Input() departmentName;
   @Output() openDetail = new EventEmitter();
   @Output() statusUpdate = new EventEmitter();
   feedbackStatusFG: FormGroup;
@@ -26,7 +34,8 @@ export class ActionOverlayComponent implements OnInit {
     private _fb: FormBuilder,
     private feedbackService: FeedbackTableService,
     protected _snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    private userService: UserService
   ) {
     this.initFG();
   }
@@ -67,5 +76,30 @@ export class ActionOverlayComponent implements OnInit {
   openDetailPage(event) {
     this.isOpen = false;
     this.openDetail.emit(event);
+  }
+
+  getUserPermission() {
+    this.$subscription.add(
+      this.userService
+        .getUserPermission(this.feedbackType)
+        .subscribe((response) => {
+          this.userPermissions = new Departmentpermissions().deserialize(
+            response.userCategoryPermission
+          );
+          this.userService.$userPermissions.next(this.userPermissions);
+        })
+    );
+  }
+
+  getDepartmentAllowed() {
+    return (
+      this.userPermissions &&
+      this.userPermissions.filter((x) => x.department === this.departmentName)
+        .length
+    );
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

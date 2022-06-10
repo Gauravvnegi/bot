@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
+import {
+  Departmentpermission,
+  Departmentpermissions,
+} from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 
 @Component({
@@ -15,14 +20,17 @@ export class FeedbackDetailComponent implements OnInit {
   @Input() feedbackType;
   @Output() guestInfo = new EventEmitter();
   globalFeedbackConfig = feedback;
+  userPermissions: Departmentpermission[];
   $subscription = new Subscription();
   constructor(
     private cardService: CardService,
-    public _globalFilterService: GlobalFilterService
+    public _globalFilterService: GlobalFilterService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.listenForSelectedFeedback();
+    this.getUserPermission();
   }
 
   listenForSelectedFeedback() {
@@ -30,6 +38,19 @@ export class FeedbackDetailComponent implements OnInit {
       this.cardService.$selectedFeedback.subscribe(
         (response) => (this.feedback = response)
       )
+    );
+  }
+
+  getUserPermission() {
+    this.$subscription.add(
+      this.userService
+        .getUserPermission(this.feedbackType)
+        .subscribe((response) => {
+          this.userPermissions = new Departmentpermissions().deserialize(
+            response.userCategoryPermission
+          );
+          this.userService.$userPermissions.next(this.userPermissions);
+        })
     );
   }
 

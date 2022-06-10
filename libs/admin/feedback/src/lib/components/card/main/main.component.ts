@@ -8,11 +8,23 @@ import { Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'hospitality-bot-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)' }),
+        animate('200ms ease-in', style({ transform: 'translateX(0%)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ transform: 'translateX(100%)' })),
+      ]),
+    ]),
+  ],
 })
 export class MainComponent implements OnInit {
   guestInfoEnable = false;

@@ -1,5 +1,4 @@
 @import 'main';
-
 .list-container {
   width: 345px;
   height: 100%;
@@ -232,4 +231,11 @@
     text-align: left;
     color: #c5c5c5;
   }
+}
+
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: flex;
 }

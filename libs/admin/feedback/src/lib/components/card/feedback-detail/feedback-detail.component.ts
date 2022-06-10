@@ -10,6 +10,7 @@ import { CardService } from '../../../services/card.service';
   styleUrls: ['./feedback-detail.component.scss'],
 })
 export class FeedbackDetailComponent implements OnInit {
+  num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   @Input() feedback;
   @Input() colorMap;
   @Input() feedbackType;
@@ -35,5 +36,9 @@ export class FeedbackDetailComponent implements OnInit {
 
   openGuestInfo(): void {
     this.guestInfo.emit({ openGuestInfo: true });
+  }
+
+  numSequence(n: number): Array<number> {
+    return Array(n);
   }
 }

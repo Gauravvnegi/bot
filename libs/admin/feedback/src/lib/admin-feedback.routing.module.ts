@@ -25,7 +25,7 @@ import { GuestInfoComponent } from './components/card/guest-info/guest-info.comp
 import { GuestPersonalInfoComponent } from './components/card/guest-personal-info/guest-personal-info.component';
 import { GuestBookingInfoComponent } from './components/card/guest-booking-info/guest-booking-info.component';
 import { FeedbackListFilterComponent } from './components/card/feedback-list-filter/feedback-list-filter.component';
-import { FeedbackDetailModalComponent } from './components/modals/feedback-detail/feedback-detail.component';
+import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
 
 const appRoutes: Route[] = [
   {

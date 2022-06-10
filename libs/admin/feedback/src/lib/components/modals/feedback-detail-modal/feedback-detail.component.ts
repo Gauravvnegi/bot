@@ -13,7 +13,7 @@ import { feedback } from '../../../constants/feedback';
 import { CardService } from '../../../services/card.service';
 
 @Component({
-  selector: 'hospitality-bot-feedback-detail',
+  selector: 'hospitality-bot-feedback-detail-modal',
   templateUrl: './feedback-detail.component.html',
   styleUrls: ['./feedback-detail.component.scss'],
 })

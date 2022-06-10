@@ -32,7 +32,7 @@ import {
 import { FeedbackTableService } from '../../../services/table.service';
 import { EntityState, SelectedChip } from '../../../types/feedback.type';
 import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
-import { FeedbackDetailModalComponent } from '../../modals/feedback-detail/feedback-detail.component';
+import { FeedbackDetailModalComponent } from '../../modals/feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable',

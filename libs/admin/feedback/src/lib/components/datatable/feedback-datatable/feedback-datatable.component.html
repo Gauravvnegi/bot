@@ -628,25 +628,10 @@
         <td class="status-image" (click)="$event.stopPropagation()">
           <hospitality-bot-action-overlay
             [rowDataStatus]="rowData.status"
-            [guestId]="rowData.id"
+            [guestId]="rowData.departmentId"
             (openDetail)="openDetailPage($event, rowData)"
+            (statusUpdate)="updateFeedbackState($event)"
           ></hospitality-bot-action-overlay>
-          <!-- <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-            <div
-              class="view-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.view_notes' | translate }}
-            </div></ng-container
-          >
-          <ng-template #addNote
-            ><div
-              class="add-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.add_notes' | translate }}
-            </div></ng-template
-          > -->
         </td>
       </tr>
     </ng-container>
@@ -802,42 +787,10 @@
         <td class="status-image" (click)="$event.stopPropagation()">
           <hospitality-bot-action-overlay
             [rowDataStatus]="rowData.status"
-            [guestId]="rowData.id"
+            [guestId]="rowData.departmentId"
             (openDetail)="openDetailPage($event, rowData)"
+            (statusUpdate)="updateFeedbackState($event)"
           ></hospitality-bot-action-overlay>
-          <!-- <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-            <div
-              class="view-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ rowData.status }}
-            </div></ng-container
-          >
-          <ng-template #addNote
-            ><div
-              class="add-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ rowData.status }}
-            </div></ng-template
-          >
-
-          <!-- <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-            <div
-              class="view-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.view_notes' | translate }}
-            </div></ng-container
-          >
-          <ng-template #addNote
-            ><div
-              class="add-notes"
-              (click)="openEditNotes($event, rowData, rowData.notes)"
-            >
-              {{ 'datatable.add_notes' | translate }}
-            </div></ng-template
-          > -->
         </td>
       </tr>
     </ng-template>

@@ -378,13 +378,51 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
-
     this.totalRecords = data.total;
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
     data.entityTypeCounts &&
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
+  }
+
+  updateFeedbackState(event) {
+    let data = {
+      status: event.statusType,
+    };
+    let id = event.id;
+    this.tableService.updateFeedbackState(id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.loadInitialData([
+          ...this.globalQueries,
+          { order: sharedConfig.defaultOrder },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   /**

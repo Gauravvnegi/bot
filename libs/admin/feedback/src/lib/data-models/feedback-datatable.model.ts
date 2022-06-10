@@ -23,7 +23,13 @@ export class FeedbackTable {
     input.records.forEach((item) => {
       this.records.push(
         new Feedback().deserialize(
-          item.feedback ? item.feedback : item,
+          item.feedback
+            ? {
+                ...item.feedback,
+                status: item.status,
+                departmentId: item.id,
+              }
+            : item,
           outlets
         )
       );
@@ -51,7 +57,7 @@ export class Feedback {
   updated: number;
   notes: Notes;
   status: string;
-
+  departmentId: string;
   deserialize(input, outlets) {
     Object.assign(
       this,
@@ -78,7 +84,8 @@ export class Feedback {
       set({}, 'session', get(input, ['session'])),
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'departmentId', get(input, ['departmentId']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
@@ -292,7 +299,11 @@ export class StayFeedbackTable {
       this.records.push(
         new StayFeedback().deserialize(
           item.feedback
-            ? { ...item.feedback, status: item.status, id: item.id }
+            ? {
+                ...item.feedback,
+                status: item.status,
+                departmentId: item.id,
+              }
             : item,
           outlets,
           colorMap
@@ -325,7 +336,7 @@ export class StayFeedback {
   status: string;
   commentList;
   created: number;
-
+  departmentId: string;
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
     this.commentList = {};
@@ -344,7 +355,8 @@ export class StayFeedback {
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
       set({}, 'transactionalService', get(input, ['transactionalService'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'departmentId', get(input, ['departmentId']))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
     serviceList?.forEach((item) =>

@@ -18,6 +18,7 @@ export class ActionOverlayComponent implements OnInit {
   @Input() rowDataStatus;
   @Input() guestId;
   @Output() openDetail = new EventEmitter();
+  @Output() statusUpdate = new EventEmitter();
   feedbackStatusFG: FormGroup;
   private $subscription: Subscription = new Subscription();
   constructor(
@@ -59,37 +60,8 @@ export class ActionOverlayComponent implements OnInit {
     });
   }
 
-  updateStatus(): void {
-    let data = {
-      status: this.type,
-    };
-    this.feedbackService.updateStatus(this.guestId, data).subscribe(
-      (response) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'Status Updated Successfully.',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: error.message,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
-    );
+  updateStatus() {
+    this.statusUpdate.emit({ statusType: this.type, id: this.guestId });
   }
 
   openDetailPage(event) {

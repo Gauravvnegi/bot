@@ -21,10 +21,6 @@ export class FeedbackTableService extends ApiService {
     return this.get(`/api/v1/feedback/guests${config.queryObj}`);
   }
 
-  updateStatus(id, data) {
-    return this.patch(`/api/v1/feedback/${id}/notes`, data);
-  }
-
   getBifurationGTMData(config) {
     return this.get(`/api/v1/feedback/guests-card${config.queryObj}`);
   }
@@ -36,6 +32,10 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with updated notes data.
    */
   updateNotes(id: string, data: UpdateNoteData): Observable<any> {
+    return this.patch(`/api/v1/feedback/${id}/notes`, data);
+  }
+
+  updateFeedbackState(id, data): Observable<any> {
     return this.patch(`/api/v1/feedback/${id}/notes`, data);
   }
 

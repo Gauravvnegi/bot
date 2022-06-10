@@ -200,6 +200,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
+    console.log(this.values);
     this.totalRecords = data.total;
     data.entityTypeCounts &&
       this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
@@ -207,6 +208,45 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       this.updateQuickReplyFilterCount(data.entityStateCounts);
 
     this.loading = false;
+  }
+
+  updateFeedbackState(event) {
+    let data = {
+      status: event.statusType,
+    };
+    let id = event.id;
+    this.tableService.updateFeedbackState(id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.loadInitialData([
+          ...this.globalQueries,
+          { order: sharedConfig.defaultOrder },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   /**
@@ -342,5 +382,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+      if (chip.value !== 'ALL') {
+        chip.isSelected = false;
+      } else chip.isSelected = true;
+    });
   }
 }

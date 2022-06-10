@@ -607,7 +607,7 @@
                 <hospitality-bot-action-overlay
                   [rowDataStatus]="rowData.status"
                   [guestId]="rowData.departmentId"
-                  [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
+                  [feedbackType]="feedbackType"
                   [departmentName]="rowData.departmentName"
                   (openDetail)="openDetailPage($event, rowData)"
                   (statusUpdate)="updateFeedbackState($event)"
@@ -804,7 +804,7 @@
                 <hospitality-bot-action-overlay
                   [rowDataStatus]="rowData.status"
                   [guestId]="rowData.departmentId"
-                  [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
+                  [feedbackType]="feedbackType"
                   [departmentName]="rowData.departmentName"
                   (openDetail)="openDetailPage($event, rowData)"
                   (statusUpdate)="updateFeedbackState($event)"

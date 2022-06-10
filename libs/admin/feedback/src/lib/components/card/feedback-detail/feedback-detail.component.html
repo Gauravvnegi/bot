@@ -80,12 +80,37 @@
         "
       >
         <div *ngFor="let service of feedback.feedback.services.services">
-          {{ service | json }}
+          <div class="rating__name">{{ service.serviceName }}</div>
+          <div *ngFor="let n of num">
+            <div class="rating"></div>
+          </div>
+          {{ service.rating }}
         </div>
       </ng-container>
       <ng-template #stayServices>
-        <div *ngFor="let service of feedback.feedback.services">
-          {{ service | json }}
+        <div class="rating--card">
+          <div *ngFor="let service of feedback.feedback.services">
+            <div class="rating__name">{{ service.serviceName }}</div>
+            <div
+              style="display: flex; padding-top: 20px; padding-bottom: 30px;"
+            >
+              <div *ngFor="let n of num">
+                <div
+                  class="rating"
+                  [ngStyle]="
+                    n <= service.rating
+                      ? {
+                          'background-color': service.colorCode,
+                          color: 'white'
+                        }
+                      : {}
+                  "
+                >
+                  {{ n }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </ng-template>
     </div>

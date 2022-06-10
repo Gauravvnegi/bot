@@ -1,6 +1,7 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
+import { feedback } from '../constants/feedback';
 
 export class FeedbackTable {
   total: number;
@@ -28,10 +29,10 @@ export class FeedbackTable {
 }
 
 export class Feedback {
-  bookingDetails: string;
+  bookingDetails;
   comments: string;
   created: number;
-  feedback: string;
+  feedback;
   guestData: StayGuestData;
   guest: Guest;
   hotelId: string;
@@ -104,6 +105,23 @@ export class Feedback {
 
   getCreatedTime(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('HH:mm');
+  }
+
+  getTableOrRoomNo(feedbackType) {
+    return feedbackType === feedback.types.stay
+      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
+      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.guest.firstName, this.guest.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }
 
@@ -367,6 +385,23 @@ export class StayFeedback {
 
   getCreatedTime(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('HH:mm');
+  }
+
+  getTableOrRoomNo(feedbackType) {
+    return feedbackType === feedback.types.stay
+      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
+      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.guest.firstName, this.guest.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }
 

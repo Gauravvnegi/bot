@@ -82,7 +82,7 @@
       }
     }
     @media only screen and (max-width: $M) {
-      justify-content: initial;
+      justify-content: flex-end;
       .text {
         font-size: $font-responsive-smaller;
       }
@@ -93,10 +93,16 @@
   }
   @media only screen and (max-width: $M) {
     padding: 5px;
-    margin-bottom: 15%;
+    margin-bottom: 2.8rem;
   }
   @media only screen and (max-width: $S) {
     grid-template-columns: 100%;
     text-align: center;
+    
+  }
+}
+@media screen and (max-width:$S) {
+  .footer__wrapper--contact-details{
+    justify-content: center !important;
   }
 }

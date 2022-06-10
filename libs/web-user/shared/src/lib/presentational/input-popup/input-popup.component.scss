@@ -4,45 +4,44 @@
 
 .popup__wrapper {
   position: relative;
-  width: 21rem;
-  min-height: 50vh !important;
-  margin: 0 auto;
+  width: 30rem !important;
+  min-height: 40vh !important;
   .cross {
     position: absolute;
     right: 10px;
     top: 0px;
-    &:hover {
+    width: 2rem;
+    &:hover { 
       cursor: pointer;
     }
     @media screen and (max-width: 500px) {
-      right: -3px;
+      right: -15px;
       top: 0px;
-      
     }
   }
   &--heading {
-    text-align: center;
+   
     white-space: nowrap;
-    margin-right: 10px;
+    margin: $margin-medium 0px;
+    // margin-bottom: 25px;
     font-weight: $bolder;
+    padding-left: 1rem;
     @media screen and (max-width: 500px) {
       font-size: $font-small;
-      margin:  0px;
-      white-space: nowrap;
-    margin-bottom: 0px;
-    margin-right: 10px;
+      
     }
   }
   @media screen and (max-width: 500px) {
-    padding: 0 $padding-large;
-    width: 15rem;
-    min-height: 50vh;
-    margin: 0 auto;
+    // padding: 0 $padding-large;
+    
+    min-height: 40vh;
+    box-sizing: border-box;
   }
 }
 
 :host ::ng-deep .text-area-heading{
   margin-bottom: 5px;
+  padding-left: 1rem;
   mat-label{
     font-size: $font-small;
     @media screen and (max-width: 500px) {
@@ -82,4 +81,15 @@
 
 :host ::ng-deep .mat-raised-button {
   @include primary-button();
+}
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper{
+  margin-left:1rem;
+  margin-right: 1rem;
+}
+
+@media screen and (max-width:650px) {
+  .popup__wrapper {
+    position: relative;
+    width: 75vw !important;
+    min-height: 50vh !important;}
 }

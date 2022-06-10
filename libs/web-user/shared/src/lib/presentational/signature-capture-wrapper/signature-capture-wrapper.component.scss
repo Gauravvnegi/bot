@@ -78,6 +78,7 @@
   background-color: rgb(243, 241, 241);
   border-radius: $border-radius-small;
   min-height: 50px;
+  margin-bottom: 1rem;
   @include flex-all-center();
   &:hover {
     cursor: pointer;

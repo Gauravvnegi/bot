@@ -85,7 +85,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tableFG?.addControl('tableType', new FormControl('card'));
+    this.tableFG?.addControl('tableType', new FormControl('table'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -140,13 +140,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               ? feedback.types.transactional
               : feedback.types.stay
           );
-        //fetch-api for records
-        if (this.tableFG.get('tableType')?.value === feedback.tableTypes.table)
-          this.loadInitialData([
-            ...this.globalQueries,
-            { order: sharedConfig.defaultOrder },
-            ...this.getSelectedQuickReplyFilters(),
-          ]);
+        this.loadInitialData([
+          ...this.globalQueries,
+          { order: sharedConfig.defaultOrder },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
       })
     );
   }

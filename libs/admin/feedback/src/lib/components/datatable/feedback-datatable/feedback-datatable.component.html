@@ -411,7 +411,6 @@
         <tr
           class="data-table-row"
           [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
-          (click)="openDetailPage($event, rowData)"
         >
           <!-- <tr class="data-table-row"> -->
           <td class="table--checkbox">
@@ -606,23 +605,15 @@
           </td>
           <td class="comments">{{ rowData.guestData.overAllNps }}</td>
           <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-          <td class="status-image">
-            <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-              <div
-                class="view-notes"
-                (click)="openEditNotes($event, rowData, rowData.notes)"
-              >
-                {{ 'datatable.view_notes' | translate }}
-              </div></ng-container
-            >
-            <ng-template #addNote
-              ><div
-                class="add-notes"
-                (click)="openEditNotes($event, rowData, rowData.notes)"
-              >
-                {{ 'datatable.add_notes' | translate }}
-              </div></ng-template
-            >
+          <td class="status-image" (click)="$event.stopPropagation()">
+            <hospitality-bot-action-overlay
+              [rowDataStatus]="rowData.status"
+              [guestId]="rowData.departmentId"
+              [departmentName]="rowData.departmentName"
+              [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
+              (openDetail)="openDetailPage($event, rowData)"
+              (statusUpdate)="updateFeedbackState($event)"
+            ></hospitality-bot-action-overlay>
           </td>
         </tr>
       </ng-container>
@@ -630,7 +621,6 @@
         <tr
           class="data-table-row"
           [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
-          (click)="openDetailPage($event, rowData)"
         >
           <!-- <tr class="data-table-row"> -->
           <td class="table--checkbox">
@@ -776,23 +766,15 @@
           <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
 
           <!-- status-image-initiated -->
-          <td class="status-image">
-            <ng-container *ngIf="rowData.notes?.remarks; else addNote">
-              <div
-                class="view-notes"
-                (click)="openEditNotes($event, rowData, rowData.notes)"
-              >
-                {{ 'datatable.view_notes' | translate }}
-              </div></ng-container
-            >
-            <ng-template #addNote
-              ><div
-                class="add-notes"
-                (click)="openEditNotes($event, rowData, rowData.notes)"
-              >
-                {{ 'datatable.add_notes' | translate }}
-              </div></ng-template
-            >
+          <td class="status-image" (click)="$event.stopPropagation()">
+            <hospitality-bot-action-overlay
+              [rowDataStatus]="rowData.status"
+              [guestId]="rowData.departmentId"
+              [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
+              [departmentName]="rowData.departmentName"
+              (openDetail)="openDetailPage($event, rowData)"
+              (statusUpdate)="updateFeedbackState($event)"
+            ></hospitality-bot-action-overlay>
           </td>
         </tr>
       </ng-template>

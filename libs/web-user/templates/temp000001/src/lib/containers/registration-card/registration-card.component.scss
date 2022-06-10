@@ -2,6 +2,7 @@
 
 .save-button {
   @include flex-justify-center();
+  padding-bottom: 1rem;
 }
 
 .reg-card-wrapper{
@@ -16,7 +17,7 @@
 .close_wrapper {
   position: absolute;
   right: 14px;
-  top: -13px;
+  top: 0px;
 }
 
 .payment-wrapper {
@@ -37,7 +38,7 @@
 }
 
 .modal-header {
-  padding: 2px 8px;
+  padding: 10px 0px;
   @include flex-space-between();
 
 	padding-bottom: $padding-small;
@@ -75,6 +76,7 @@
 
 .signature-container {
   padding-top: $padding-large;
+  margin-left: 5%;
 }
 
 .container {
@@ -123,4 +125,14 @@ pdf-viewer {
 
 :host ::ng-deep .signature-image-container{
   margin-top: $margin-large;
+ 
+  margin-right: 1rem;
+}
+@media screen and (max-width:650px) {
+  .close_wrapper {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+  
 }

@@ -1,0 +1,79 @@
+<button
+  (click)="handleButtonClick($event)"
+  type="button"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+>
+  {{ rowDataStatus }}
+  <ng-container *ngIf="isOpen; else opened">
+    <mat-icon class="material-icons" matSuffix>chevron_left</mat-icon>
+  </ng-container>
+  <ng-template #opened>
+    <mat-icon class="material-icons" matSuffix>chevron_right</mat-icon>
+  </ng-template>
+</button>
+
+<!-- This template displays the overlay content and is connected to the button -->
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isOpen"
+>
+  <form [formGroup]="feedbackStatusFG">
+    <div class="example-list" (click)="$event.stopPropagation()">
+      <mat-form-field
+        appearance="outline"
+        class="comment"
+        [ngClass]="{ disabled: !getDepartmentAllowed() }"
+      >
+        <textarea matInput placeholder="Type your comment"></textarea>
+      </mat-form-field>
+      <div
+        [ngClass]="{ disabled: !getDepartmentAllowed() }"
+        style="
+          padding: 6px 9px;
+          opacity: 0.4;
+          border-radius: 14px;
+          border: solid 1px #4b56c0;
+          background-color: #fff;
+          cursor: pointer;
+        "
+      >
+        <div
+          style="
+            font-family: Roboto;
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: 0.72px;
+            text-align: left;
+            color: #4b56c0;
+          "
+          (click)="updateStatus()"
+        >
+          {{ type }}
+        </div>
+      </div>
+      <div
+        style="border: 1px solid #707070; width: 100%; margin: 10px 0;"
+      ></div>
+      <div
+        style="
+          font-size: 12px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: 0.72px;
+          color: #002046;
+          cursor: pointer;
+        "
+        (click)="openDetailPage($event)"
+      >
+        View Details
+      </div>
+    </div>
+  </form>
+</ng-template>

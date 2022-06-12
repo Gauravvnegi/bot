@@ -80,25 +80,43 @@
         "
       >
         <div *ngFor="let service of feedback.feedback.services.services">
-          <div class="rating__name">{{ service.serviceName }}</div>
-          <div *ngFor="let n of num">
-            <div class="rating"></div>
+          <div class="rating__card">
+            <div class="rating__name">{{ service.serviceName }}</div>
+            <div class="emoji">
+              <img
+                [src]="feedbackConfig.images.happy.url"
+                [alt]="feedbackConfig.images.happy.alt"
+                [ngClass]="{ 'gray-image': service.rating != 'EE' }"
+              />
+              <img
+                [src]="feedbackConfig.images.sceptic.url"
+                [alt]="feedbackConfig.images.sceptic.alt"
+                [ngClass]="{ 'gray-image': service.rating != 'ME' }"
+              />
+              <img
+                [src]="feedbackConfig.images.sad.url"
+                [alt]="feedbackConfig.images.sad.alt"
+                [ngClass]="{ 'gray-image': service.rating != 'EI' }"
+              />
+            </div>
           </div>
-          {{ service.rating }}
         </div>
       </ng-container>
       <ng-template #stayServices>
         <div class="rating--card">
           <div *ngFor="let service of feedback.feedback.services">
             <div class="rating__name">{{ service.serviceName }}</div>
-            <div
-              style="display: flex; padding-top: 20px; padding-bottom: 30px;"
-            >
+            <div class="rating__value">
               <div *ngFor="let n of num">
                 <div
                   class="rating"
                   [ngStyle]="
-                    n <= service.rating
+                    n < service.rating
+                      ? {
+                          'background-color': 'blue',
+                          color: 'white'
+                        }
+                      : n == service.rating
                       ? {
                           'background-color': service.colorCode,
                           color: 'white'

@@ -62,4 +62,8 @@ export class FeedbackDetailComponent implements OnInit {
   numSequence(n: number): Array<number> {
     return Array(n);
   }
+
+  get feedbackConfig() {
+    return feedback;
+  }
 }

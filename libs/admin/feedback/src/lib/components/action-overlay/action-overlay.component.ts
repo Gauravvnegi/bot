@@ -1,10 +1,8 @@
-import { I } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FeedbackTableService } from '../../services/table.service';
 import { Subscription } from 'rxjs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { UserService } from '@hospitality-bot/admin/shared';
 import {
   Departmentpermission,
@@ -32,9 +30,7 @@ export class ActionOverlayComponent implements OnInit {
   constructor(
     private tableService: FeedbackTableService,
     private _fb: FormBuilder,
-    private feedbackService: FeedbackTableService,
     protected _snackbarService: SnackBarService,
-    private globalFilterService: GlobalFilterService,
     private userService: UserService
   ) {
     this.initFG();

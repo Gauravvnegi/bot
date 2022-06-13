@@ -80,25 +80,57 @@
         "
       >
         <div *ngFor="let service of feedback.feedback.services.services">
-          <div class="rating__name">{{ service.serviceName }}</div>
-          <div *ngFor="let n of num">
-            <div class="rating"></div>
+          <div class="rating__card">
+            <div class="rating__name">{{ service.serviceName }}</div>
+            <div class="emoji">
+              <img
+                [src]="feedbackConfig.images.happy.url"
+                [alt]="feedbackConfig.images.happy.alt"
+                [ngClass]="{ 'gray-image': service.rating != 'EE' }"
+              />
+              <img
+                [src]="feedbackConfig.images.sceptic.url"
+                [alt]="feedbackConfig.images.sceptic.alt"
+                [ngClass]="{ 'gray-image': service.rating != 'ME' }"
+              />
+              <img
+                [src]="feedbackConfig.images.sad.url"
+                [alt]="feedbackConfig.images.sad.alt"
+                [ngClass]="{ 'gray-image': service.rating != 'EI' }"
+              />
+            </div>
           </div>
-          {{ service.rating }}
         </div>
       </ng-container>
       <ng-template #stayServices>
         <div class="rating--card">
           <div *ngFor="let service of feedback.feedback.services">
             <div class="rating__name">{{ service.serviceName }}</div>
-            <div
-              style="display: flex; padding-top: 20px; padding-bottom: 30px;"
-            >
-              <div *ngFor="let n of num">
+            <div class="rating__value">
+              <div
+                class="rating__box"
+                *ngFor="let n of num"
+                [ngClass]="{ font: n < service.rating }"
+                [ngStyle]="
+                  n < service.rating
+                    ? {
+                        'background-color': service.colorCode,
+                        color: '',
+                        opacity: 0.5
+                      }
+                    : {}
+                "
+              >
                 <div
                   class="rating"
+                  [ngClass]="{ border: n > service.rating }"
                   [ngStyle]="
-                    n <= service.rating
+                    n < service.rating
+                      ? {
+                          'background-color': service.colorCode,
+                          color: ''
+                        }
+                      : n == service.rating
                       ? {
                           'background-color': service.colorCode,
                           color: 'white'
@@ -113,6 +145,18 @@
           </div>
         </div>
       </ng-template>
+    </div>
+  </div>
+
+  <div class="userComments">
+    <div class="time">
+      {{ feedback.getTime(_globalFilterService.timezone) }}
+    </div>
+    <div class="comment">
+      {{ feedback?.feedback.comments }}
+    </div>
+    <div class="userImage">
+      {{ feedback?.getProfileNickName() }}
     </div>
   </div>
   <hospitality-bot-feedback-detail-footer

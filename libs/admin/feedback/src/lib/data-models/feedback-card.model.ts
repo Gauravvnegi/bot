@@ -46,6 +46,7 @@ export class FeedbackRecord {
   updated: number;
   userId: string;
   userName: string;
+  comments: string;
 
   deserialize(input, outlets, feedbackType, colorMap) {
     Object.assign(
@@ -62,7 +63,8 @@ export class FeedbackRecord {
       set({}, 'timeOut', get(input, ['timeOut'])),
       set({}, 'updated', get(input, ['updated'])),
       set({}, 'userId', get(input, ['userId'])),
-      set({}, 'userName', get(input, ['userName']))
+      set({}, 'userName', get(input, ['userName'])),
+      set({}, 'comments', get(input, [' feedback', 'comments']))
     );
     this.feedback =
       feedbackType === feedback.types.transactional

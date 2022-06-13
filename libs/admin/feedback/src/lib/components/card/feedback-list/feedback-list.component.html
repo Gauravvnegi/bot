@@ -59,10 +59,11 @@
             <div class="item__body__remarks">
               <ng-container
                 *ngIf="
-                  feedbackItem.remarks && feedbackItem.remarks.length;
+                  feedbackItem.feedback.comments &&
+                    feedbackItem.feedback.comments.length;
                   else noContent
                 "
-                >{{ feedbackItem.remarks[0].remarks }}</ng-container
+                >{{ feedbackItem.feedback.comments }}</ng-container
               >
             </div>
             <div class="item__body__status">

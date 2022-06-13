@@ -116,24 +116,92 @@
   }
 }
 
-.rating__name {
-  font-family: Roboto;
-  font-size: 16px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.32px;
-  text-align: left;
-  color: #9eaeb8;
+.rating__card {
+  padding-top: 20px;
+  .rating__name {
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.32px;
+    text-align: left;
+    color: #9eaeb8;
+  }
+
+  .emoji {
+    display: flex;
+    gap: 50px;
+    padding-top: 10px;
+  }
+}
+.rating__value {
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  font-size: 12px;
+  width: 80%;
+
+  .rating__box {
+    width: 10%;
+  }
 }
 .rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
-  margin: 0 0 0 32px;
-  padding: 12px 17px;
   border-radius: 5px;
-  border: solid 1px #ced5d9;
+}
+
+.userComments {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 313px;
+  height: 69px;
+  margin: 14.6px 7px 17.4px 14px;
+  padding: 8px 8px 8px 8px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  .time {
+    width: 47px;
+    height: 13px;
+    font-family: Roboto;
+    font-size: 10px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.6px;
+    text-align: right;
+    color: #c7c7c7;
+  }
+  .comment {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.72px;
+    text-align: left;
+    color: #002046;
+  }
+  .userImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    background-color: greenyellow;
+  }
 }
 
 .search_field {
@@ -272,7 +340,7 @@
 }
 
 .feedback-chat {
-  height: calc(100% - 180px);
+  height: calc(100% - 300px);
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 13px;
@@ -445,4 +513,12 @@
       min-width: 15px;
     }
   }
+}
+
+.gray-image {
+  filter: grayscale(100%);
+}
+
+.border {
+  border: 1px solid #ced5d9;
 }

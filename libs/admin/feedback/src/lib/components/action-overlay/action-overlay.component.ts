@@ -82,7 +82,7 @@ export class ActionOverlayComponent implements OnInit {
           this.userPermissions = new Departmentpermissions().deserialize(
             response.userCategoryPermission
           );
-          this.userService.$userPermissions.next(this.userPermissions);
+          this.userService.userPermissions = response;
         })
     );
   }

@@ -147,6 +147,18 @@
       </ng-template>
     </div>
   </div>
+
+  <div class="userComments">
+    <div class="time">
+      {{ feedback.getTime(_globalFilterService.timezone) }}
+    </div>
+    <div class="comment">
+      {{ feedback?.feedback.comments }}
+    </div>
+    <div class="userImage">
+      {{ feedback?.getProfileNickName() }}
+    </div>
+  </div>
   <hospitality-bot-feedback-detail-footer
     [feedback]="feedback"
     [userPermissions]="userPermissions"

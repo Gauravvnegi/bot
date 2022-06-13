@@ -107,14 +107,28 @@
           <div *ngFor="let service of feedback.feedback.services">
             <div class="rating__name">{{ service.serviceName }}</div>
             <div class="rating__value">
-              <div *ngFor="let n of num">
+              <div
+                class="rating__box"
+                *ngFor="let n of num"
+                [ngClass]="{ font: n < service.rating }"
+                [ngStyle]="
+                  n < service.rating
+                    ? {
+                        'background-color': service.colorCode,
+                        color: '',
+                        opacity: 0.5
+                      }
+                    : {}
+                "
+              >
                 <div
                   class="rating"
+                  [ngClass]="{ border: n > service.rating }"
                   [ngStyle]="
                     n < service.rating
                       ? {
-                          'background-color': 'blue',
-                          color: 'white'
+                          'background-color': service.colorCode,
+                          color: ''
                         }
                       : n == service.rating
                       ? {
